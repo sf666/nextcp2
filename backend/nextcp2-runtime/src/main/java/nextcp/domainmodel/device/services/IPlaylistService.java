@@ -1,0 +1,51 @@
+package nextcp.domainmodel.device.services;
+
+import java.util.List;
+
+import nextcp.dto.ContainerItemDto;
+import nextcp.dto.MusicItemDto;
+import nextcp.dto.PlaylistState;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist.actions.InsertInput;
+
+public interface IPlaylistService
+{
+
+    void setShuffle(boolean inp);
+
+    void pause();
+
+    long getTracksMax();
+
+    boolean getShuffle();
+
+    void deleteAll();
+
+    boolean getRepeat();
+
+    void deleteId(long id);
+
+    void play();
+
+    void next();
+
+    void stop();
+
+    void setRepeat(boolean repeat);
+
+    void previous();
+
+    void seekId(long id);
+
+    void seekSecondRelative(int sec);
+
+    void seekSecondAbsolute(long sec);
+
+    PlaylistState getState();
+
+    List<MusicItemDto> getPlaylistItems();
+
+    void insertContainer(ContainerItemDto items);
+
+    long insert(InsertInput inp);
+
+}

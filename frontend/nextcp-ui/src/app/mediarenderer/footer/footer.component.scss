@@ -1,0 +1,151 @@
+@import "custom_variables";
+@import 'app-variables';
+@import 'pantone';
+
+$col-1 : $amber-pantone-3;
+$col-2 : $amber-pantone-4;
+$col-3 : $amber-pantone-5;
+$col-4 : $amber-pantone-6;
+
+$col-grey : $col-4;
+
+.footer {
+    font-weight     : 200;
+    font-size       : 1.2rem;
+    position        : fixed;
+    left            : 0;
+    bottom          : 0;
+    width           : 100%;
+    background-color: rgba($color: $pantone-Neutral-Black-C, $alpha: 0.95);
+    color           : white;
+    text-align      : left;
+}
+
+.mediaRendererLabel {
+    color: $col-grey;
+}
+
+.icon-button {
+    margin-left: 1rem;
+    color      : $pantone-406-C;
+    width      : 2rem;
+    height     : 2rem;
+
+    &.active {
+        color: $blue-pantone-2;
+    }
+
+    &:first-child {
+        margin-left: 0
+    }
+}
+
+.icon-main {
+    color: $col-grey;
+}
+
+.progress-bar {
+    height: 2px;
+    width : 100%;
+}
+
+.left-footer {
+    flex      : 1 1 auto;
+    width     : 100%;
+    min-height: 0;
+    min-width : 400px;
+}
+
+.middle-footer {
+    flex-grow  : 0;
+    flex-shrink: 0;
+    flex-basis: 430px;
+    border-left: 1px solid $col-4;
+}
+
+.right-footer {
+    //    flex-basis : 25em; // auto
+    flex-grow  : 0;
+    border-left: 1px solid $col-4;
+}
+
+.currentTime {
+    color: $col-4;
+}
+
+.audioInfoLabel {
+    color: $col-4;
+    width: 8rem;
+}
+
+.unit {
+    color       : $col-4;
+    margin-left : 8px;
+    width       : 2.5rem;
+    margin-right: 8px;
+}
+
+.audioInfoValue {
+    color          : $col-2;
+    width          : 4.5rem;
+    align-self     : flex-end;
+    text-align     : end;
+    text-align-last: end;
+}
+
+.finishedTime {
+    color: $col-2;
+}
+
+img {
+    height: $footerHeight;
+}
+
+.standbyOn {
+    color: $pantone-Bright-Red-C;
+}
+
+.standbyOff {
+    color: $pantone-802-C;
+}
+
+
+.spacer {
+    height: $footerHeight;
+}
+
+.albumAndTitle {
+    margin-left  : 1.5rem;
+    margin-top   : 0.2rem;
+    font-family  : 'Quicksand', sans-serif;
+    margin-bottom: 0.2rem;
+}
+
+.minWidth {
+    min-width    : 0;
+    min-height   : 0;
+}
+
+.title {
+    color      : $col-1;
+    font-size  : 1.3rem;
+    font-weight: 400;
+}
+
+.album {
+    color      : $col-2;
+    font-weight: 500;
+}
+
+.artist {
+    color      : $pantone-406-C;
+    font-weight: 500;
+}
+
+.no-wrap {
+    white-space  : nowrap;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+    min-height   : 0;
+    min-width    : 0;
+}

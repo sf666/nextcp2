@@ -1,0 +1,39 @@
+@import 'material-design-theme';
+
+/* You can add global styles to this file, and also import other style files */
+/* We add global bootstrap theme */
+
+// Bootstrap & Optional Bootstrap-Theme
+// file 'bootstrap.min.css was replaced by a theme from https://bootswatch.com/
+// Generated from https://bootstrap.build/app and changed "font-weight" to 300
+
+@import 'pantone';
+
+// Customisation 1: First import overridden variables from theme superhero ... 
+@import 'custom_variables';
+@import 'superhero_variables';
+
+// Original Bootstrap : Required bootstrap modules
+
+@import "node_modules/bootstrap/scss/_functions.scss";
+@import "node_modules/bootstrap/scss/_variables.scss";
+@import "node_modules/bootstrap/scss/mixins";
+
+// Customisation 2: Import custom theme 
+@import 'superhero';
+@import 'custom_theme';
+
+// Original Bootstrap : Load 
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+// cool table look and feel
+@import 'appTable';
+
+// Toastr style
+@import '~ngx-toastr/toastr-bs4-alert';
+
+@import 'app-variables';
+@import 'app-styles';
+
+html, body { height: 100%; }
+body { margin: 0; }

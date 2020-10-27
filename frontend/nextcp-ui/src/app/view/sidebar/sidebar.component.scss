@@ -1,0 +1,31 @@
+@import "custom_variables";
+@import 'app-variables';
+@import 'pantone';
+
+$col-1 : $amber-pantone-3;
+$col-2 : $amber-pantone-4;
+$col-3 : $amber-pantone-5;
+$col-4 : $amber-pantone-6;
+$col-grey : $col-4;
+
+.standbyOn {
+    color: $pantone-Bright-Red-C;
+}
+
+.standbyOff {
+    color: $pantone-802-C;
+}
+
+.volume-bar {
+    padding-left: 8px;
+    margin: 8px;
+    border-left: 1px solid $pantone-Black-2-C;
+}
+
+.sidebar-row {
+    width: 204px;
+}
+
+.sidebar-slider {
+    min-width: 116px;
+}

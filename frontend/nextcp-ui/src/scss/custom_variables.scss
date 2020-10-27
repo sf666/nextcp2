@@ -1,0 +1,46 @@
+@import "pantone";
+
+//
+// color lines used in this application
+// =======================================================================================================
+
+$blue-pantone-0: $pantone-290-C;
+$blue-pantone-1: $pantone-291-C;
+$blue-pantone-2: $pantone-292-C;
+$blue-pantone-3: $pantone-293-C;
+$blue-pantone-4: $pantone-294-C;
+$blue-pantone-5: $pantone-295-C;
+$blue-pantone-6: $pantone-296-C;
+
+$grey-pantone-1: $pantone-Cool-Gray-1-C;
+$grey-pantone-2: $pantone-Cool-Gray-2-C;
+$grey-pantone-3: $pantone-Cool-Gray-3-C;
+$grey-pantone-4: $pantone-Cool-Gray-4-C;
+$grey-pantone-5: $pantone-Cool-Gray-5-C;
+$grey-pantone-6: $pantone-Cool-Gray-6-C;
+$grey-pantone-7: $pantone-Cool-Gray-7-C;
+$grey-pantone-8: $pantone-Cool-Gray-8-C;
+$grey-pantone-9: $pantone-Cool-Gray-9-C;
+$grey-pantone-10: $pantone-Cool-Gray-10-C;
+$grey-pantone-11: $pantone-Cool-Gray-11-C;
+
+$amber-pantone-0: $pantone-1205-C;
+$amber-pantone-1: $pantone-1215-C;
+$amber-pantone-2: $pantone-1225-C;
+$amber-pantone-3: $pantone-1235-C;
+$amber-pantone-4: $pantone-1245-C;
+$amber-pantone-5: $pantone-1255-C;
+$amber-pantone-6: $pantone-1265-C;
+
+
+$black-pantone-2 : $pantone-Black-2-C;
+$black-pantone-2 : $pantone-Black-3-C;
+$black-pantone-4 : $pantone-Black-4-C;
+$black-pantone-5 : $pantone-Black-5-C;
+$black-pantone-6 : $pantone-Black-6-C;
+$black-pantone-7 : $pantone-Black-7-C;
+
+// Bootstrap variables
+
+$body-bg   : $black-pantone-6;
+$body-color: $grey-pantone-2;

@@ -1,0 +1,11 @@
+package nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions;
+
+/**
+ * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
+ */
+public class PauseInput
+{
+
+    public Long InstanceID = null;
+
+}

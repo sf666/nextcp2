@@ -1,0 +1,34 @@
+{
+  "/DeviceRegistry/*": {
+    "target": "http://localhost:8085",
+    "secure": false
+  },
+  "/ContentDirectoryService/*": {
+    "target": "http://localhost:8085",
+    "secure": false
+  },
+  "/AvTransportService/*": {
+    "target": "http://localhost:8085",
+    "secure": false
+  },
+  "/SSE/*": {
+    "target": "http://localhost:8085",
+    "secure": false
+  },
+  "/ConfigurationService/*": {
+    "target": "http://localhost:8085",
+    "secure": false
+  },
+  "/RadioService/*": {
+    "target": "http://localhost:8085",
+    "secure": false
+  },
+  "/DeviceRendererService/*": {
+    "target": "http://localhost:8085",
+    "secure": false
+  },
+  "/PlaylistService/*": {
+    "target": "http://localhost:8085",
+    "secure": false
+  }
+}

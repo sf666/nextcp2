@@ -1,0 +1,92 @@
+@import "pantone";
+@import "custom_variables";
+
+// Overwrite custon bootstrap values
+// this file will be processed by bootstrap. 
+//
+// Attention: Import this file before importing : "../node_modules/bootstrap/scss/bootstrap"
+
+$theme-colors: ("primary": $amber-pantone-3,
+    "secondary": $grey-pantone-8,
+    "success": $pantone-Bright-Green-C,
+    "info": $pantone-306-C,
+    "warning" : $pantone-Red-0331-C,
+    "danger": $pantone-Bright-Red-C,
+    "light": $grey-pantone-2,
+    "dark": $grey-pantone-11);
+
+//  Bootstrap navigation 
+// ========================================================================================================
+
+// $blue-pantone-6: $pantone-296-C
+
+$nav-link-disabled-color: $grey-pantone-8;
+
+$nav-tabs-border-color            : $grey-pantone-4;
+$nav-tabs-link-hover-border-color : $grey-pantone-4 $grey-pantone-4 $nav-tabs-border-color;
+$nav-tabs-link-active-color       : $grey-pantone-9;
+$nav-tabs-link-active-bg          : $body-bg;
+$nav-tabs-link-active-border-color: $grey-pantone-5 $grey-pantone-5 $nav-tabs-link-active-bg;
+
+$nav-pills-border-radius    : $border-radius;
+$nav-pills-link-active-color: $component-active-color;
+$nav-pills-link-active-bg   : $component-active-bg;
+
+$nav-divider-color: $grey-pantone-3;
+
+
+// Navbar
+
+$navbar-brand-font-size          : $font-size-lg;
+$navbar-toggler-font-size        : $font-size-lg;
+$navbar-dark-color               : $grey-pantone-5;
+$navbar-dark-hover-color         : $amber-pantone-1;
+$navbar-dark-active-color        : $amber-pantone-3;
+$navbar-dark-disabled-color      : rgba($white, .25);
+$navbar-dark-toggler-icon-bg     : url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'><path stroke='#{$navbar-dark-color}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>");
+$navbar-dark-toggler-border-color: rgba($white, .1);
+
+$navbar-light-color               : rgba($black, .5);
+$navbar-light-hover-color         : rgba($black, .7);
+$navbar-light-active-color        : rgba($black, .9);
+$navbar-light-disabled-color      : rgba($black, .3);
+$navbar-light-toggler-icon-bg     : url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'><path stroke='#{$navbar-light-color}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>");
+$navbar-light-toggler-border-color: rgba($black, .1);
+
+$navbar-light-brand-color      : $navbar-light-active-color;
+$navbar-light-brand-hover-color: $navbar-light-active-color;
+$navbar-dark-brand-color       : $grey-pantone-8;
+$navbar-dark-brand-hover-color : $navbar-dark-active-color;
+
+
+
+//  Bootstrap DropDown 
+// ========================================================================================================
+
+$dropdown-color           : $amber-pantone-3;
+$dropdown-bg              : $pantone-7554-C;
+$dropdown-border-color    : $pantone-1265-C;
+$dropdown-border-radius   : $border-radius;
+$dropdown-border-width    : $border-width;
+$dropdown-divider-bg      : $pantone-1225-C;
+$dropdown-divider-margin-y: $nav-divider-margin-y;
+$dropdown-box-shadow      : 0 .5rem 1rem rgba($black, .175);
+
+$dropdown-link-color      : $amber-pantone-1;
+$dropdown-link-hover-color: $amber-pantone-6;
+$dropdown-link-hover-bg   : $amber-pantone-2;
+
+$dropdown-link-active-color: $component-active-color;
+$dropdown-link-active-bg   : $component-active-bg;
+
+$dropdown-link-disabled-color: $grey-pantone-2;
+
+$dropdown-header-color: $amber-pantone-4;
+
+$dropdown-inner-border-radius: subtract($dropdown-border-radius, $dropdown-border-width);
+
+
+//  Bootstrap Button
+// ========================================================================================================
+
+$btn-font-weight: 300;

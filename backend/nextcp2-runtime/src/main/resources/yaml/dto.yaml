@@ -1,0 +1,244 @@
+#
+# device driver DTO
+#
+
+DeviceDriverCapability:
+    deviceType: String
+    deviceDescription: String
+
+#
+# config
+#
+
+Config:
+   generateUpnpCode: Boolean
+   generateUpnpCodePath: String
+   libraryPath: String
+   embeddedServerPort: Integer
+   sseEmitterTimeout: Long
+   log4jConfigFile: String
+   loggingDateTimeFormat: String
+   clientConfig: List<UiClientConfig>
+   radioStation: List<RadioStation>
+   rendererDevices: List<RendererDeviceConfiguration>
+   ratingSupport: RatingSupport
+   
+RatingSupport:
+   musicRootPath: String
+   databaseFilename: String
+   supportedFileTypes: String
+   
+UiClientConfig:
+   uuid: String
+   clientName: String
+   defaultMediaServer: MediaServerDto
+   defaultMediaRenderer: MediaRendererDto
+
+
+RendererDeviceConfiguration:
+   mediaRenderer: MediaRendererDto
+   ip: String
+   displayString: String
+   active: Boolean
+   hasOpenHomeDeviceDriver: Boolean
+   deviceDriverType: String   
+   connectionString: String
+
+
+#
+# StateVariables
+#
+PlaylistState:
+    udn: String
+    TracksMax: Long
+    Shuffle: Boolean
+    Repeat: Boolean
+    TransportState: String
+    ProtocolInfo: String
+    Id: Long
+
+
+UpnpAvTransportState:
+   mediaRenderer: MediaRendererDto 
+   AbsoluteTimePosition: String
+   CurrentTrackURI: String
+   CurrentTrackMetaData: MusicItemDto
+   RelativeCounterPosition: Integer
+   TransportStatus: String
+   AVTransportURIMetaData: MusicItemDto
+   TransportState: String
+   CurrentTrack: Long
+   PlaybackStorageMedium: String
+   PossibleRecordQualityModes: String
+   NextAVTransportURIMetaData: String
+   NumberOfTracks: Long
+   CurrentMediaDuration: String
+   NextAVTransportURI: String
+   RecordStorageMedium: String
+   AVTransportURI: String
+   TransportPlaySpeed: String
+   AbsoluteCounterPosition: Integer
+   RelativeTimePosition: String
+   CurrentPlayMode: String
+   CurrentTrackDuration: String
+   PossiblePlaybackStorageMedia: String
+   CurrentRecordQualityMode: String
+   RecordMediumWriteStatus: String
+   CurrentTransportActions: String
+   PossibleRecordStorageMedia: String
+    
+#
+# Transfer classes for some ui views
+#
+DeviceDriverState:
+   rendererUDN: String
+   volume: Integer
+   standby: Boolean
+
+
+MediaServerDto:
+   udn: String
+   friendlyName: String
+
+
+MediaRendererDto:
+   udn: String
+   friendlyName: String
+
+
+ContainerItemDto:
+   currentContainer: ContainerDto
+   containerDto: List<ContainerDto>
+   albumDto: List<ContainerDto>
+   musicItemDto: List<MusicItemDto>
+
+
+ContainerDto:
+   id: String 
+   parentID: String
+   title: String
+   objectClass: String
+  
+   childCount: Integer
+   createClass: String
+   searchClass: String
+   searchable: Boolean
+
+# adding album attributes 
+
+   mediaServerUDN: String
+   albumartUri: String
+   artist: String
+   rating: Integer
+   creator: String
+
+AudioFormat:
+   nrAudioChannels: Long 
+   sampleFrequency: Long 
+   bitsPerSample: Long 
+   bitrate: Long 
+   filetype: String 
+
+RadioStation:
+   id: Long
+   stationName: String
+   resourceUrl: String
+   artworkUrl: String
+   
+MusicItemDto:
+   mediaServerUDN: String
+   streamingURL: String
+   objectID: String
+   objectClass: String
+   parentId: String
+   refId: String
+   
+   currentTrackMetadata: String
+   creator: String
+   title: String
+   artistName: String
+   numberOfThisDisc: String
+   originalTrackNumber: String
+   album: String
+   date: String
+   audioFormat: AudioFormat
+   albumArtUrl: String
+   rating: Integer
+   
+RendererPlaylist:
+   udn: String
+   musicItemDto: List<MusicItemDto>
+   
+ # static track information
+TrackInfoDto:
+   mediaRendererUdn: String
+   streaming: Boolean
+   detailsCount: Long
+   metatextCount: Long
+   metadata: String
+   trackCount: Long
+   uri: String
+   codecName: String
+   metatext: String
+   currentTrack: MusicItemDto   
+   
+TrackTimeDto:
+   mediaRendererUdn: String
+   duration : Long
+   durationDisp: String
+   seconds: Long
+   secondsDisp: String
+   trackCount: Long
+   percent: Integer
+
+InputSourceDto:
+   id: Integer
+   Name: String
+   Type: String
+   Visible: Boolean
+      
+ #
+ # Client Request classes
+ #
+
+GenericNumberRequest:
+   deviceUDN: String
+   value : Long
+ 
+GenericBooleanRequest:
+   deviceUDN: String
+   value : Boolean
+
+GenericStringRequest:
+   deviceUDN: String
+   value : String
+
+PlaylistAddContainerRequest:
+   containerDto: ContainerDto
+   mediaRendererUdn : String
+
+BrowseRequestDto:
+   mediaServerUDN: String
+   objectID: String
+   sortCriteria: String
+   
+PlayRequestDto:
+   mediaRendererDto: MediaRendererDto
+   streamUrl: String
+   streamMetadata: String
+
+PlayRadioDto:
+   mediaRendererDto: MediaRendererDto
+   radioStation: RadioStation
+   
+PlayOpenHomeRadioDto:
+   mediaRendererDto: MediaRendererDto
+   radioStation: MusicItemDto
+
+MediaRendererSwitchPower:  
+   rendererUDN: String
+   standby: Boolean
+ 
+MediaRendererSetVolume:  
+   rendererUDN: String
+   volume: Integer

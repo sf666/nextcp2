@@ -1,0 +1,22 @@
+@import "pantone";
+@import "custom_variables";
+
+.nav-background {
+    background-color: $pantone-532-C; // $pantone-Black-2-C;
+}
+
+.topTextAlign {
+    vertical-align: top;
+}
+
+.mapButton {
+    vertical-align: top;
+}
+
+.menu-spacer {
+    margin-left: 32px;
+}
+
+.active {
+    color  : $amber-pantone-3 !important;
+}

@@ -1,0 +1,192 @@
+@import "pantone";
+
+//
+// application classes for individual components
+// ===================================================================================
+
+// Some classes from bootstrap are overwritten.
+//
+// Attention: Import this file before importing : "../node_modules/bootstrap/scss/bootstrap"
+
+// overwrite material design ... 
+
+// Section 
+.section {
+    font-weight: 300;
+    width      : 100%;
+
+    &.input {
+        -webkit-box-flex: 1;
+        -webkit-flex    : 1;
+        -ms-flex        : 1;
+        flex            : 1;
+    }
+
+    &.line {
+        margin-top: 1rem;
+    }
+
+    &.head {
+        font-size: 1.35rem;
+
+        padding-top   : 1.2rem;
+        padding-bottom: 0.2rem;
+        padding-left  : $paddingLeftColumn;
+
+        margin-bottom: 0.8rem;
+
+        border-bottom: 1px solid $border-primary;
+    }
+
+    &.label {
+        font-size: $fontNormal;
+
+        padding-top   : 0.6rem !important;
+        padding-bottom: 0.6rem !important;
+
+        height: 3.2rem;
+    }
+
+    // 2 cols, label and display value (all in all 4 cols)
+    &.item-2-label {
+        display  : inline-block;
+        font-size: $fontNormal;
+        width    : 20%;
+    }
+
+    &.item-2-disp {
+        display  : inline-block;
+        font-size: $fontNormal;
+        width    : 30%;
+    }
+
+    &.item-label {
+        display     : inline-block;
+        font-size   : $fontNormal;
+        width       : 30%;
+        padding-left: $paddingLeftColumn;
+    }
+
+    &.item-disp {
+        display      : inline-block;
+        font-size    : $fontNormal;
+        width        : 70%;
+        padding-right: 20rem;
+    }
+
+    &.padding {
+        padding-left: $paddingLeftColumn;
+    }
+}
+
+.section-button {
+    color: $section-button-col;
+
+    &.sec-border {
+        border-radius   : 1rem;
+        border          : 2px solid $section-button-col;
+        background-color: $section-button-col-back;
+
+        &:hover {
+            background-color: $section-button-col-back-hover;
+            transition      : all 200ms ease-in-out;
+        }
+
+    }
+
+    &.text {
+        font-size    : 1rem;
+        color        : $section-button-col;
+        margin-left  : 0.3rem;
+        margin-right : 0.7rem;
+        margin-top   : 0.3rem;
+        margin-bottom: 0.3rem;
+    }
+}
+
+
+// Alignment for text columns
+.contentDirectoryObject {
+    padding-left: $paddingLeftColumn;
+    font-size   : $fontNormal;
+    height      : 2rem;
+}
+
+
+input {
+    &.form {
+        width    : 100%;
+        font-size: 1rem;
+    }
+}
+
+// using direct flex wrap class instead of bootstrap class
+.cardLayout {
+    display  : flex;
+    flex-flow: row wrap;
+}
+
+//
+// Extending / patching external libraries 
+// =========================================================================================================================
+
+//
+// Toastr tuning
+//
+.toast-container .ngx-toastr {
+    width: 600px;
+}
+
+
+//
+// Bootstrap card extension
+// 
+
+// some formatting
+.my-Card {
+    @extend .card;
+
+    //    color           : $grey-pantone-1;
+    background-color: $grey-pantone-11;
+    position        : relative;
+    margin          : 0.3rem;
+    width           : $cardWidth;
+}
+
+.my-card-body {
+    position        : absolute;
+    bottom          : 0;
+    background-color: rgba($color: $pantone-Neutral-Black-C, $alpha: 0.90);
+    /* Black see-through */
+    color           : #f1f1f1;
+    width           : 100%;
+    transition      : .5s ease;
+    font-size       : 20px;
+    font-weight     : 300;
+    text-align      : center;
+    font-family     : 'Quicksand', sans-serif;
+    opacity         : 0.8;
+}
+
+.my-card-title {
+    margin     : 0.2rem;
+    opacity    : 1.0;
+    font-size  : 1.1rem;
+    font-weight: 300;
+}
+
+// added hover effect für bootstrap card images
+$imgCardWidth : calc(#{$cardWidth} - 2*#{$cardBorderWidth});
+
+img {
+    &.card-img-top {
+        opacity   : 1.0;
+        object-fit: cover;
+        width     : $imgCardWidth;
+        height    : $imgCardWidth;
+
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+}

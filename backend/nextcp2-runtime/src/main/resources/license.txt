@@ -1,0 +1,8 @@
+Image file : Compact_disc.svg
+    LicenseType : creative-commons license, Attribution-Share Alike 2.5 Generic license
+
+Google Material Design Icons fonts are licensed under the CC-BY-4.0:
+    https://github.com/google/material-design-icons/blob/master/LICENSE
+
+Bootstrap Material Icons CSS and Sass files are licensed under the MIT License:
+    http://opensource.org/licenses/mit-license.html

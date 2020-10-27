@@ -1,0 +1,28 @@
+<div *ngIf="albumList?.length > 0">
+    <div class="section head">Alben</div>
+
+    <div class="cardLayout">
+        <div class="my-Card" *ngFor="let container of albumList">
+            <img src="{{container.albumartUri}}" class="card-img-top cropImgSquareCard" alt="{{container.title}}">
+            <div class="my-card-body">
+                <div class="my-card-title">{{container.title}}</div>
+            </div>
+
+            <div class="play-overlay d-flex flex-column justify-content-center align-items-center">
+                <div class="d-flex justify-content-center align-items-center">
+                    <mat-icon (click)="browseTo(container)" class="play-overlay-button" svgIcon="folder-move-outline"
+                        aria-label="step into folder">
+                    </mat-icon>
+                </div>
+                <div class="d-flex justify-content-center align-items-center">
+                    <mat-icon (click)="playAlbum(container)" class="play-overlay-button" svgIcon="play"
+                        aria-label="app to playlist and play">
+                    </mat-icon>
+                    <mat-icon (click)="playlistService.addContainerToPlaylist(container)" class="play-overlay-button"
+                        svgIcon="playlist-plus" aria-label="add to playlist">
+                    </mat-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

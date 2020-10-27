@@ -1,0 +1,39 @@
+<div class="section head" style="width: 100%;">Input Source</div>
+<div class="flex-row flex-wrap">
+    <mat-form-field appearance="fill">
+        <mat-label>Media Server</mat-label>
+        <mat-select [(ngModel)]="mediaServerUdn">
+            <mat-option *ngFor="let server of deviceService.getMediaServerList()" [value]="server.udn">
+                {{server.friendlyName}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+
+<div class="section head">Output</div>
+<mat-form-field appearance="fill">
+    <mat-label>Media Renderer</mat-label>
+    <mat-select [(ngModel)]="mediaRendererUdn">
+        <mat-option *ngFor="let device of deviceService.getEnabledMediaRendererList()" [value]="device.udn">
+            {{device.friendlyName}}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+
+<div class="d-flex sidebar-row" *ngIf="hasDeviceDriver()">
+    <div class="align-self-center d-flex flex-row" (click)="powerClicked()">
+        <mat-icon class="{{getStandbyClass()}} align-self-center" svgIcon="power-standby" aria-hidden="false"
+            aria-label="POWER icon">
+        </mat-icon>
+    </div>
+    <div class="d-flex justify-content-between align-self-center volume-bar">
+        <mat-icon class="icon-main align-self-center" svgIcon="volume-low" aria-hidden="false"
+            aria-label="low volume icon">
+        </mat-icon>
+        <mat-slider class="align-self-center sidebar-slider" [value]="rendererService.deviceDriverState.volume"
+            (change)="volChanged($event)" min="0" max="90" step="1" value="0"></mat-slider>
+        <mat-icon class="icon-main align-self-center" svgIcon="volume-high" aria-hidden="false"
+            aria-label="high volume icon">
+        </mat-icon>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+/target/
+.settings
+build
+backend/nextcp2-runtime/src/main/resources/static
+local_deploy.sh
+release.properties
+*.releaseBackup

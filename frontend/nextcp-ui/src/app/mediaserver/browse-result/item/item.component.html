@@ -1,0 +1,38 @@
+<div *ngIf="contentDirectoryService.currentContainerList.musicItemDto?.length > 0">
+    <div class="section head d-flex">
+        <div>Tracks</div>
+        <div class="d-flex justify-content-center" style="width: 100%;">
+            <div (click)="playAllTracks()" class="d-flex section-button sec-border">
+                <div class="ml-2">
+                    <mat-icon class="icon-button main" svgIcon="play" aria-label="play">
+                    </mat-icon>
+                </div>
+                <div class="section-button text">play all tracks</div>
+            </div>
+            <div (click)="addAllTracks()" class="ml-2 d-flex section-button sec-border">
+                <div class="ml-2">
+                    <mat-icon class="icon-button main" svgIcon="playlist-plus" aria-label="playlist-plus">
+                    </mat-icon>
+                </div>
+                <div class="section-button text">add all tracks</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cardLayout">
+        <div class="my-Card" *ngFor="let item of contentDirectoryService.currentContainerList.musicItemDto">
+            <img src="{{item.albumArtUrl}}" class="card-img-top cropImgSquareCard" alt="{{item.title}}">
+            <div class="my-card-body">
+                <div class="my-card-title">{{item.title}}</div>
+            </div>
+            <div class="play-overlay d-flex justify-content-center align-items-center">
+                <mat-icon (click)="avtransportService.playResource(item)" class="play-overlay-button" svgIcon="play"
+                    aria-label="play">
+                </mat-icon>
+                <mat-icon (click)="playlistService.addToPlaylist(item)" class="play-overlay-button"
+                    svgIcon="playlist-plus" aria-label="play">
+                </mat-icon>
+            </div>
+        </div>
+    </div>
+</div>

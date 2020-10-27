@@ -1,0 +1,53 @@
+@import "custom_variables";
+@import "pantone";
+
+$imgWidthHeight   : 7rem;
+$img-border-width : 0px;
+
+img {
+    width : $imgWidthHeight;
+    height: $imgWidthHeight;
+}
+
+// square image (this is useful if input image is a rectangle)
+.cropImg {
+    object-fit: cover;
+    width     : calc('$imgWidthHeight  - 2*$img-border-width');
+    height    : calc('$imgWidthHeight  - 2*$img-border-width');
+}
+
+.playlistItem {
+    margin: 0.5rem;
+
+    &.active {
+        color: $pantone-333-C;
+    }
+}
+
+.title {
+    font-size : 1.4rem;
+    color     : $amber-pantone-5;
+    margin-top: 0.3rem;
+
+    &.active {
+        color: $pantone-333-C;
+    }
+}
+
+
+.foot {
+    margin-bottom: 0.7rem;
+}
+
+
+.album {
+    font-size  : 1rem;
+    color      : $amber-pantone-5;
+    font-weight: 500;
+}
+
+.artist {
+    font-size  : 1rem;
+    color      : $pantone-406-C;
+    font-weight: 500;
+}

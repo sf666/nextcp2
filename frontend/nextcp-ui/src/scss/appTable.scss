@@ -1,0 +1,68 @@
+/* 
+    Self made Table scss dfinitions.
+
+    Usuage here: https://codepen.io/bogdandin/pen/KyWEpY
+*/
+
+// TODO own color schema
+@import 'superhero_variables';
+
+.pl-table {
+  .row {
+    margin     : 5px 0;
+    padding    : 0 20px;
+    align-items: center;
+  }
+
+  .col {
+    padding      : 0 10px;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+  }
+
+  .pl-thead {
+    background-color: $gray-600;
+    font-size     : 15px;
+    margin        : 15px 0;
+
+    &.tall {
+      margin        : 0;
+      padding       : 5px 0;
+      text-transform: initial;
+
+      .col {
+        border-right: 1px solid rgba(255, 255, 255, 0.2);
+        text-align  : center;
+        align-self  : stretch;
+
+        &:last-child {
+          border: none;
+        }
+
+        .large {
+          font-size: 21px;
+        }
+      }
+    }
+  }
+
+  .pl-tbody {
+    .row {
+      padding-top     : 7px;
+      padding-bottom  : 7px;
+      font-size       : 13px;
+      background-color: $gray-700;
+      &.odd {
+        background-color: $gray-800;
+      }
+      &.even {
+        background-color: $gray-700;
+      }
+    }
+
+    &.scroll {
+      max-height: 300px;
+      overflow-x: scroll;
+    }
+  }
+}

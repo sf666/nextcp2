@@ -1,0 +1,23 @@
+@import "custom_variables";
+//
+// variables used by the application 
+// ===================================================================
+
+$paddingLeftColumn             : 1rem;
+$fontNormal                    : 1.1rem;
+$cardWidth                     : 16rem;
+$cardBorderWidth               : 1px;
+$footerHeight                  : 6rem;
+$section-button-col            : $pantone-429-C;
+$section-button-col-back       : $pantone-433-C;
+$section-button-col-back-hover : $pantone-309-C;
+$border-primary                : $blue-pantone-2;
+
+// import additional font
+// 
+
+// usage:     
+//         font-family: 'Quicksand', sans-serif;
+//
+// $web-font-path-quicksand: "../assets/fonts/quicksand.css" !default;
+// @import url(../assets/fonts/quicksand.scss);
