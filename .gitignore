@@ -5,3 +5,9 @@ backend/nextcp2-runtime/src/main/resources/static
 local_deploy.sh
 release.properties
 *.releaseBackup
+backend/bin
+backend/nextcp2-assembly/bin
+backend/nextcp2-device-driver/nextcp2-ma9000/bin
+backend/nextcp2-modelgen/bin
+backend/nextcp2-rating/bin
+backend/nextcp2-runtime/bin

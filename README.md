@@ -1,12 +1,31 @@
-# build instructions
+# nextCP/2
+
+nextCP/2 is a Java and Typescript based project implementing features of an UPnP control point.
+
+Please see the [Wiki](https://github.com/sf666/nextcp2/wiki) for some documentation
+
+## installation
+
+- Download from the [release](https://github.com/sf666/nextcp2/releases) page the latest nextcp2.jar file and optinally device drivers.
+- optionally create a [config file](https://github.com/sf666/nextcp2/wiki/config-file). If no config file is specified, a default config file will be created next to the jar file.
+- start the application
+
+```
+java -jar [-DconfigFile=path_to_config_file] nextcp2.jar
+```
+
 
 ## system requirements
 
-* JDK 8 (for dependent libraries)
-* JDK 11
-* maven 3.6
-* npm 6.14
-* GIT client
+- JDK 8 (for dependent libraries)
+- JDK 11
+- maven 3.6
+- npm 6.14
+- GIT client
+
+## browser requirements
+
+- Web browser needs support for server-sent-events
 
 ## Install maven dependencies
 
@@ -78,6 +97,8 @@ sdk use java <identifier>
 
 call `build.sh`
 
+Build artifacts are located in the `build` directory.
+
 ### manual building
 
 Since the frontend is deployed into the backend, it has to be build first.
@@ -106,13 +127,19 @@ mvn package
 
 ### build artifact
 
-#### Main application
+Build artifacts are located in the maven `target` directories. 
+
+- The runnable application jar is build in the module `backend/nextcp2-assembly/target`
+- Device Driver are build in the modules below `backend/nextcp2-device-driver`
+
+
+#### main application
 
 After a successfull build, the main application build artifact will be located here `backend/nextcp2-assembly/target`
 
 #### McIntosch device driver
 
-This device driver controls/receives (bi-directional) a McIntosch device connected to a RS232/TCP-IP transceiver.
+This device driver controls (bi-directional) a McIntosch device connected to a RS232/TCP-IP transceiver.
 
 Current implemented features:
 
@@ -122,13 +149,30 @@ Current implemented features:
 After a successfull build, the device driver (tested with McIntosh MA9000 amplifier) is located here: `backend/nextcp2-device-driver/nextcp2-ma9000/target/`.
 
 
-# run application
+# running the application
 
-To run the snapshot :
+To run the snapshot call :
+
+```
+java -jar [-DconfigFile=path_to_config_file] nextcp2.jar
+```
+
+or if build manually, replace `nextcp2.jar` with the your current version of the `nextcp2-assembly-spring-boot` file, i.e.
 
 ```
 java -jar [-DconfigFile=path_to_config_file] nextcp2-assembly-spring-boot-2.0.0-SNAPSHOT.jar
 ```
+
+By default the application will start on the current interface on port `8085`. 
+
+Open your browser and connect to the application:
+
+```
+http://localhost:8085
+```
+
+If nextcp runs on a remote maschine, replace `localhost` by the IP address of your remote maschine.
+
 
 ## config file 
 
@@ -141,9 +185,11 @@ The application tries to load the config file from the following locations in th
 
 If no config file is found, a config file will be generated at this location : 'WORK_DIR/nextcp2Config.json'.
 
-# Developer notice
+See the Wiki [config file page](https://github.com/sf666/nextcp2/wiki/config-file) for documentation.
 
-## Debugging
+# developer notice
+
+## debugging
 
 For debugging within an IDE start the backend first. The main Spring-Boot startup class is
 
