@@ -16,6 +16,7 @@ Please see the [Wiki](https://github.com/sf666/nextcp2/wiki) for some documentat
 java -jar [-DconfigFile=path_to_config_file] nextcp2.jar
 ```
 
+If no config file is given or found, a config-file will be generated next to the JAR file on the first startup. In this case the application will complain about missing configuration elements. Stop the application, adopt the config to your system and start it again. The configiguration file is [documented here](https://github.com/sf666/nextcp2/wiki/config-file).
 
 ## system requirements
 
