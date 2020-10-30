@@ -42,6 +42,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { SearchComponent } from './view/search/search.component';
 
 @NgModule({
    declarations: [
@@ -63,6 +64,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
       RadioComponent,
       PlaylistComponent,
       SidebarComponent,
+      SearchComponent,
 
    ],
    imports: [

@@ -1,3 +1,4 @@
+import { SearchComponent } from './view/search/search.component';
 import { PlaylistComponent } from './view/playlist/playlist.component';
 import { RadioComponent } from './view/radio/radio.component';
 import { SettingsComponent } from './view/settings/settings.component';
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'player', component: MediarendererComponent },
   { path: 'settings', component: SettingsComponent },
   { path: 'radio', component: RadioComponent },
+  { path: 'search', component: SearchComponent },
   { path: 'playlist', component: PlaylistComponent },  
   { path: '', redirectTo: '/music-library', pathMatch: 'full' },
 ];

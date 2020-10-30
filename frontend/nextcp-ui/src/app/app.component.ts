@@ -13,6 +13,8 @@ export class AppComponent {
   opened: boolean;
   events: string[] = [];
 
+  showFiller = false;
+  
   constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
     // Globally register SVG mat-icon 
     iconRegistry.addSvgIconSet(sanitizer.bypassSecurityTrustResourceUrl('assets/icon-set.svg'));

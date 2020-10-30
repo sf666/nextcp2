@@ -9,28 +9,48 @@
         <h1>nextCP/2</h1>
 
         <span class="menu-spacer"></span>
-        <div>
-            <a mat-button routerLinkActive="active" [routerLink]="'/music-library'">
-                <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="music-box-multiple-outline"></mat-icon>Music Library
-            </a>
-            <a mat-button routerLinkActive="active" [routerLink]="'/playlist'">
-                <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="playlist-music-outline"></mat-icon>Playlist
-            </a>
-            <a mat-button routerLinkActive="active" [routerLink]="'/player'">
-                <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="surround-sound"></mat-icon>Player
-            </a>
-            <a mat-button routerLinkActive="active" [routerLink]="'/radio'">
-                <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="radio"></mat-icon>Radio
-            </a>
-            <a mat-button routerLinkActive="active" [routerLink]="'/settings'">
-                <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="cog-outline"></mat-icon>Settings
-            </a>
+        <a mat-button routerLinkActive="active" [routerLink]="'/music-library'">
+            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="music-box-multiple-outline"></mat-icon>
+            Music Library
+        </a>
+        <a mat-button routerLinkActive="active" [routerLink]="'/playlist'">
+            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="playlist-music-outline"></mat-icon>
+            Playlist
+        </a>
+        <a mat-button routerLinkActive="active" [routerLink]="'/player'">
+            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="surround-sound"></mat-icon>Player
+        </a>
+        <a mat-button routerLinkActive="active" [routerLink]="'/radio'">
+            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="radio"></mat-icon>Radio
+        </a>
+        <a mat-button routerLinkActive="active" [routerLink]="'/search'">
+            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="card-search-outline"></mat-icon>Search
+        </a>
+        <a mat-button routerLinkActive="active" [routerLink]="'/settings'">
+            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="cog-outline"></mat-icon>Settings
+        </a>
+        <span class="middle-spacer"></span>
+        
+        <div class="nav-search-container">
+            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="card-search-outline"></mat-icon>
+            <input class="nav-search" type="search" matInput placeholder="search">
         </div>
+
     </mat-toolbar-row>
 </mat-toolbar>
 
 <!--
+[(ngModel)]="configService.clientConfig.clientName"
+
+        <div class="nav-container">
+            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="card-search-outline"></mat-icon>
+            <input class="nav-search" type="search" matInput placeholder=" title / album / artist">
+        </div>
+
+
+
 <mat-sidenav-container>
+
     <mat-sidenav #snav>
         <mat-nav-list>
 
