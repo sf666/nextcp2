@@ -1,4 +1,4 @@
-package nextcp.config;
+package nextcp;
 
 import org.eclipse.jetty.server.Server;
 import org.slf4j.Logger;
