@@ -43,6 +43,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { SearchComponent } from './view/search/search.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ModalSearchResultComponent } from './view/modal-search-result/modal-search-result.component';
+
 
 @NgModule({
    declarations: [
@@ -65,6 +68,7 @@ import { SearchComponent } from './view/search/search.component';
       PlaylistComponent,
       SidebarComponent,
       SearchComponent,
+      ModalSearchResultComponent,
 
    ],
    imports: [
@@ -87,6 +91,7 @@ import { SearchComponent } from './view/search/search.component';
       MatToolbarModule,
       MatListModule,
       MatSidenavModule,
+      MatDialogModule,
 
       // Other
       BrowserModule,

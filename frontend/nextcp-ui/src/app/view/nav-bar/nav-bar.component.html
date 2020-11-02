@@ -1,4 +1,4 @@
-<mat-toolbar class="nav-background">
+<mat-toolbar id="nextcp-nav-bar" class="nav-background">
     <mat-toolbar-row>
         <!--
         <button mat-icon-button>
@@ -33,91 +33,9 @@
         
         <div class="nav-search-container">
             <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="card-search-outline"></mat-icon>
-            <input class="nav-search" type="search" matInput placeholder="search">
+            <input class="nav-search" [(ngModel)]="quickSearchString" type="search" matInput placeholder="search" #searchInput>
         </div>
-
     </mat-toolbar-row>
+    <app-modal-search-result *ngIf="searchResultVisible === true"></app-modal-search-result>
 </mat-toolbar>
 
-<!--
-[(ngModel)]="configService.clientConfig.clientName"
-
-        <div class="nav-container">
-            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="card-search-outline"></mat-icon>
-            <input class="nav-search" type="search" matInput placeholder=" title / album / artist">
-        </div>
-
-
-
-<mat-sidenav-container>
-
-    <mat-sidenav #snav>
-        <mat-nav-list>
-
-            <a mat-list-item [routerLink]="'/accounts'"> Accounts </a>
-            <a mat-list-item [routerLink]="'/create-account'"> Create Account </a>
-            <a mat-list-item [routerLink]="'/contacts'"> Contacts </a>
-            <a mat-list-item [routerLink]="'/create-contact'"> Create Contact </a>
-            <a mat-list-item [routerLink]="'/activities'"> Activities </a>
-            <a mat-list-item [routerLink]="'/create-activity'"> Create Activity </a>
-            <a mat-list-item (click)="snav.toggle()" href="" mat-list-item>Close</a>
-
-        </mat-nav-list>
-    </mat-sidenav>
-    <mat-sidenav-content>
-        <div style="height: 88vh;">
-
-            <router-outlet></router-outlet>
-        </div>
-    </mat-sidenav-content>
-</mat-sidenav-container>    
-
-
-
-
-<nav class="navbar navbar-expand-lg navbar-dark nav-background">
-    <mat-icon class="mr-1" svgIcon="surround-sound"></mat-icon>
-    <a class="navbar-brand" routerLink="/app-main-screen">
-        nextCP/2
-    </a>
-
-    <button class="navbar-toggler" type="button" (click)="toggleNavbar()">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" [ngClass]="{ 'show': navbarOpen }">
-        <ul class="navbar-nav mr-auto">
-
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/music-library" routerLinkActive="active">
-                    <mat-icon class="mr-1" svgIcon="music-box-multiple-outline"></mat-icon>Music Library
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/playlist" routerLinkActive="active">
-                    <mat-icon class="mr-1" svgIcon="playlist-music-outline"></mat-icon>Playlist
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/player" routerLinkActive="active">
-                    <mat-icon class="mr-1" svgIcon="surround-sound"></mat-icon>Player
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/radio" routerLinkActive="active">
-                    <mat-icon class="mr-1" svgIcon="radio"></mat-icon>Radio
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/settings" routerLinkActive="active">
-                    <mat-icon class="mr-1" svgIcon="cog-outline"></mat-icon>Settings
-                </a>
-            </li>
-        </ul>
-    </div>
-</nav>
--->
