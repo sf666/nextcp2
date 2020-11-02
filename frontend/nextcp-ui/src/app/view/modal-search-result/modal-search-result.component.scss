@@ -1,0 +1,18 @@
+.search-container {
+    width           : 450px;
+    height          : calc(100vh - 185px);
+    position        : fixed;
+    top             : 70px;
+    right           : 16px;
+    display         : flex;
+    flex-flow       : column nowrap;
+    border-radius   : 8px;
+    background-color: #242528;
+    z-index         : 70;
+
+    overflow  : hidden;
+    overflow-y: auto;
+
+    transform-origin: 50% 0;
+    transition      : all .2s ease;
+}
