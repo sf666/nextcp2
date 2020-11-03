@@ -6,10 +6,10 @@
             <div class="search-show-all">show all</div>
         </div>
 
-        <div *ngIf="contentDirectoryService.quickSearchResultList?.musicItems?.length > 0">
+        <div *ngIf="contentDirectoryService.quickSearchResultList?.musicItems?.length > 0; else noContentBlock">
             <div *ngFor="let item of contentDirectoryService.quickSearchResultList?.musicItems"
                 class="playlistItem d-flex" (click)="musicItemSelected(item)">
-                <img src="{{item.albumArtUrl}}" class="cropImg align-self-center" alt="{{item.title}}">
+                <img src="{{item.albumArtUrl}}" class="cropImg align-self-center" alt="">
 
                 <div class="ml-3 d-flex flex-column justify-content-between">
                     <div class="title">{{item.title}}</div>
@@ -19,55 +19,60 @@
         </div>
     </div>
 
-    <div class="d-flex justify-content-between">
-        <div class="search-title">Album</div>
-        <div class="search-show-all">show all</div>
-    </div>
-    <div *ngIf="contentDirectoryService.quickSearchResultList?.albumItems?.length > 0">
-        <div *ngFor="let item of contentDirectoryService.quickSearchResultList?.albumItems"
-            class="playlistItem d-flex" (click)="albumItemSelected(item)">
-            <!--
-            <img src="{{item.albumArtUrl}}" class="cropImg align-self-center" alt="{{item.title}}">
-            -->
-            <div class="ml-3 d-flex flex-column justify-content-between">
-                <div class="title">{{item.title}}</div>
+    <div class="section-box">
+        <div class="d-flex justify-content-between mb-3">
+            <div class="search-title">Album</div>
+            <div class="search-show-all">show all</div>
+        </div>
+        <div *ngIf="contentDirectoryService.quickSearchResultList?.albumItems?.length > 0; else noContentBlock">
+            <div *ngFor="let item of contentDirectoryService.quickSearchResultList?.albumItems"
+                class="playlistItem d-flex" (click)="albumItemSelected(item)">
+                <img src="{{item.albumartUri}}" class="cropImg align-self-center" alt="">
+                <div class="ml-3 d-flex flex-column justify-content-between">
+                    <div class="title">{{item.title}}</div>
+                    <div class="artist">from {{item.artist}}</div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="d-flex justify-content-between">
-        <div class="search-title">Playlist</div>
-        <div class="search-show-all">show all</div>
-    </div>
-    <div *ngIf="contentDirectoryService.quickSearchResultList?.playlistItems?.length > 0">
-        <div *ngFor="let item of contentDirectoryService.quickSearchResultList?.playlistItems"
-            class="playlistItem d-flex" (click)="playlistItemSelected(item)">
-            <!--
-            <img src="{{item.albumArtUrl}}" class="cropImg align-self-center" alt="{{item.title}}">
-            -->
-            <div class="ml-3 d-flex flex-column justify-content-between">
-                <div class="title">{{item.title}}</div>
+    <div class="section-box">
+        <div class="d-flex justify-content-between mb-3">
+            <div class="search-title">Playlist</div>
+            <div class="search-show-all">show all</div>
+        </div>
+        <div *ngIf="contentDirectoryService.quickSearchResultList?.playlistItems?.length > 0; else noContentBlock">
+            <div *ngFor="let item of contentDirectoryService.quickSearchResultList?.playlistItems"
+                class="playlistItem d-flex" (click)="playlistItemSelected(item)">
+                <img src="{{item.albumartUri}}" class="cropImg align-self-center" alt="">
+                <div class="ml-3 d-flex flex-column justify-content-between">
+                    <div class="title">{{item.title}}</div>
+                </div>
             </div>
         </div>
     </div>
 
 
-    <div class="d-flex justify-content-between">
-        <div class="search-title">Artist</div>
-        <div class="search-show-all">show all</div>
-    </div>
-
-    <div *ngIf="contentDirectoryService.quickSearchResultList?.artistItems?.length > 0">
-        <div *ngFor="let item of contentDirectoryService.quickSearchResultList?.artistItems"
-            class="playlistItem d-flex" (click)="artistItemSelected(item)">
-<!--
-            <img src="" class="cropImg align-self-center" alt="{{item.title}}">
+    <div class="section-box">
+        <div class="d-flex justify-content-between mb-3">
+            <div class="search-title">Artist</div>
+            <div class="search-show-all">show all</div>
+        </div>
+        <div *ngIf="contentDirectoryService.quickSearchResultList?.artistItems?.length > 0; else noContentBlock">
+            <div *ngFor="let item of contentDirectoryService.quickSearchResultList?.artistItems"
+                class="playlistItem d-flex" (click)="artistItemSelected(item)">
+                <!--
+            <img src="" class="cropImg align-self-center" alt="">
 -->
-            <div class="ml-3 d-flex flex-column justify-content-between">
-                <div class="title">{{item.title}}</div>
-                <div class="artist">Artist</div>
+                <div class="ml-3 d-flex flex-column justify-content-between">
+                    <div class="title">{{item.title}}</div>
+                    <div class="artist">Artist</div>
+                </div>
             </div>
         </div>
     </div>
 
+    <ng-template #noContentBlock>
+        <div class="no-match">no match</div>
+    </ng-template>
 </div>

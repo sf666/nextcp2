@@ -133,9 +133,9 @@ public class DtoBuilder
             }
             if (container.getArtists().length > 0)
             {
-                dto.artist = container.getArtists()[0].getName() + "[" + container.getArtists()[0].getRole() + "]";
+                dto.artist = container.getFirstArtist().getName();                
             }
-            // TODO extracting more info's neccesary ?
+            // TODO extracting more info's necessary ... Role, etc. ?
         }
         catch (MalformedURLException e)
         {
@@ -151,18 +151,14 @@ public class DtoBuilder
         dto.id = container.getId();
         dto.parentID = container.getParentID();
         dto.objectClass = container.getClazz().getValue();
-        Optional<Property> uri = extractProperty("albumArtURI", container.getProperties());
-        if (uri.isPresent())
-        {
-            dto.albumartUri = uri.get().toString();
-        }
-        else
-        {
-            dto.albumartUri = ASSET_FOLDER + "/directory-icon.png";
-        }
+        
         if (container instanceof MusicAlbum)
         {
             return addMusicAlbum((MusicAlbum) container, dto);
+        }
+        if (dto.albumartUri == null)
+        {
+            dto.albumartUri = ASSET_FOLDER + "/directory-icon.png";
         }
         return dto;
     }
