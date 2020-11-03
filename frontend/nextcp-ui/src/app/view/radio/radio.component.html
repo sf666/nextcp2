@@ -2,7 +2,7 @@
 
 <div class="cardLayout">
     <div class="my-Card" *ngFor="let item of configurationService.serverConfig.radioStation">
-        <img src="{{item.artworkUrl}}" class="card-img-top cropImgSquareCard" alt="{{item.stationName}}">
+        <img src="{{item.artworkUrl}}" class="card-img-top" alt="{{item.stationName}}">
         <div class="my-card-body">
             <div class="my-card-title">{{item.stationName}}</div>
         </div>
@@ -16,7 +16,7 @@
 
 <div class="cardLayout">
     <div class="my-Card" *ngFor="let item of radioService.radioItems">
-        <img src="{{item.albumArtUrl}}" class="card-img-top cropImgSquareCard" alt="{{item.title}}">
+        <img src="{{item.albumArtUrl}}" class="card-img-top" alt="{{item.title}}">
         <div class="my-card-body">
             <div class="my-card-title">{{item.title}}</div>
         </div>
