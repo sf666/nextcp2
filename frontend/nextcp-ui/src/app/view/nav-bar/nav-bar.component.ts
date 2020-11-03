@@ -10,6 +10,7 @@ import { FocusMonitor } from '@angular/cdk/a11y';
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.scss']
 })
+
 export class NavBarComponent {
 
   navbarOpen = false;
@@ -36,7 +37,7 @@ export class NavBarComponent {
       this.searchResultVisible = false;
     } else {
       this.searchResultVisible = true;
-      if (value && value.length > 3) {
+      if (value && value.length > 2) {
         this.contentDirectoryService.quickSearch(value, "", this.deviceService.selectedMediaServerDevice.udn);
       }
     }
