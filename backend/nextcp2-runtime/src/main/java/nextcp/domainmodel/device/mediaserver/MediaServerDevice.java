@@ -20,9 +20,12 @@ import nextcp.dto.ContainerDto;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MediaServerDto;
 import nextcp.dto.MusicItemDto;
+import nextcp.dto.QuickSearchResultDto;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.ContentDirectoryService;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.BrowseInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.BrowseOutput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.SearchInput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.SearchOutput;
 import nextcp.util.BackendException;
 
 /**
@@ -50,6 +53,110 @@ public class MediaServerDevice extends BaseDevice
         return contentDirectoryService;
     }
 
+    public QuickSearchResultDto quickSearch(String quickSearch)
+    {
+        QuickSearchResultDto container = initEmptySearchResultContainer();
+
+        searchAndAddMusicItems(quickSearch, container);
+        searchAndAddArtistContainer(quickSearch, container);
+        return container;
+
+        /**
+         * if (!StringUtils.isBlank(searchRequest.date_from) && SearchCaps.contains("dc:date")) { sb.append(String.format(" and dc:date >= \"%s\"", searchRequest.date_from)); } if
+         * (!StringUtils.isBlank(searchRequest.date_to) && SearchCaps.contains("dc:date")) { sb.append(String.format(" and dc:date <= \"%s\"", searchRequest.date_to)); } if
+         * (!StringUtils.isBlank(searchRequest.creator) && SearchCaps.contains("dc:creator")) { sb.append(String.format(" and dc:creator contains \"%s\"", searchRequest.title)); }
+         * if (!StringUtils.isBlank(searchRequest.artist) && SearchCaps.contains("upnp:artist")) { sb.append(String.format(" and upnp:artist contains \"%s\"",
+         * searchRequest.artist)); } if (!StringUtils.isBlank(searchRequest.album) && SearchCaps.contains("upnp:album")) { sb.append(String.format(" or ( upnp:class =
+         * \"object.container.album.musicAlbum\" and upnp:album contains \"%s\" )", searchRequest.album)); } if (!StringUtils.isBlank(searchRequest.genre) &&
+         * SearchCaps.contains("upnp:genre")) { sb.append(String.format(" and upnp:genre contains \"%s\"", searchRequest.genre)); }
+         * 
+         * sb.append(" )");
+         * 
+         * BrowseResponse response = search(searchRequest.containerID, sb.toString(), "*", 0, 0, "");
+         * 
+         * if (response != null) { log.info("Search finished with " + response.getTotalMatches() + " entries."); for (DIDLObject item : response.getResult()) { if
+         * (item.getObjectClass().contains(DIDLConstants.UPNP_CLASS_MUSIC_TRACK)) { resultList.add(new FileContainerDto((DIDLMusicTrack) item, getDeviceUdn(), 0, true)); } } } else
+         * { log.info("Search finished with no result."); }
+         */
+
+    }
+
+    private void searchAndAddArtistContainer(String quickSearch, QuickSearchResultDto container)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("( upnp:class derivedfrom \"object.container.person\""); // upnp:class derivedfrom “object.container.person”
+        sb.append(String.format(" and dc:title contains \"%s\")", quickSearch));
+
+        SearchInput searchInput = new SearchInput();
+        searchInput.ContainerID = "0";
+        searchInput.SearchCriteria = sb.toString();
+        searchInput.StartingIndex = 0L;
+        searchInput.Filter = "*";
+        searchInput.RequestedCount = 3L;
+        searchInput.SortCriteria = "";
+
+        SearchOutput out = contentDirectoryService.search(searchInput);
+
+        DIDLContent didl;
+        try
+        {
+            didl = generateDidlContent(out.Result);
+            addContainerObjects(container.artistItems, didl);
+        }
+        catch (Exception e)
+        {
+            log.warn("search error", e);
+        }
+    }
+
+    private void addContainerObjects(List<ContainerDto> container, DIDLContent didl)
+    {
+        for (Container didlObject : didl.getContainers())
+        {
+            ContainerDto containerDto = getDtoBuilder().buildContainerDto(didlObject);
+            containerDto.mediaServerUDN = getUDN().getIdentifierString();
+            container.add(containerDto);
+        }
+    }
+
+    private void searchAndAddMusicItems(String quickSearch, QuickSearchResultDto container)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("( upnp:class = \"object.item.audioItem.musicTrack\""); // upnp:class derivedfrom “object.container.person”
+        sb.append(String.format(" and dc:title contains \"%s\")", quickSearch));
+
+        SearchInput searchInput = new SearchInput();
+        searchInput.ContainerID = "0";
+        searchInput.SearchCriteria = sb.toString();
+        searchInput.StartingIndex = 0L;
+        searchInput.Filter = "*";
+        searchInput.RequestedCount = 3L;
+        searchInput.SortCriteria = "";
+
+        SearchOutput out = contentDirectoryService.search(searchInput);
+
+        DIDLContent didl;
+        try
+        {
+            didl = generateDidlContent(out.Result);
+            addItemObjects(container.musicItems, didl);
+        }
+        catch (Exception e)
+        {
+            log.warn("search error", e);
+        }
+    }
+
+    private QuickSearchResultDto initEmptySearchResultContainer()
+    {
+        QuickSearchResultDto dto = new QuickSearchResultDto();
+        dto.albumItems = new ArrayList<ContainerDto>();
+        dto.artistItems = new ArrayList<ContainerDto>();
+        dto.musicItems = new ArrayList();
+        dto.playlistItems = new ArrayList();
+        return dto;
+    }
+
     public ContainerItemDto browseChildren(BrowseInput inp)
     {
         ContainerDto curContainer = getCurrentMeta(inp);
@@ -64,14 +171,14 @@ public class MediaServerDevice extends BaseDevice
                 log.info("Response Objects: " + out.NumberReturned);
             }
 
-            ContainerItemDto result = initEmptyContainerItemDto();
             DIDLContent didl = generateDidlContent(out.Result);
+            ContainerItemDto result = initEmptyContainerItemDto();
 
             result.currentContainer = curContainer;
             addContainerObjects(result, didl);
-            addDirectoryUpContainer(inp, result, curContainer);
-            addItemObjects(result, didl);
+            addItemObjects(result.musicItemDto, didl);
 
+            addDirectoryUpContainer(inp, result, curContainer);
             return result;
         }
         catch (Exception e)
@@ -120,22 +227,22 @@ public class MediaServerDevice extends BaseDevice
         return result;
     }
 
-    private void addItemObjects(ContainerItemDto result, DIDLContent didl)
+    private void addItemObjects(List<MusicItemDto> result, DIDLContent didl)
     {
         for (Item item : didl.getItems())
         {
             MusicItemDto itemDto = getDtoBuilder().buildItemDto(item, getUDN().getIdentifierString());
-            result.musicItemDto.add(itemDto);
+            result.add(itemDto);
         }
     }
 
     private void addContainerObjects(ContainerItemDto result, DIDLContent didl)
     {
-        for (Container container : didl.getContainers())
+        for (Container didlObject : didl.getContainers())
         {
-            ContainerDto containerDto = getDtoBuilder().buildContainerDto(container);
+            ContainerDto containerDto = getDtoBuilder().buildContainerDto(didlObject);
             containerDto.mediaServerUDN = getUDN().getIdentifierString();
-            if (container instanceof MusicAlbum)
+            if (didlObject instanceof MusicAlbum)
             {
                 result.albumDto.add(containerDto);
             }

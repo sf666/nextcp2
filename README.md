@@ -227,7 +227,7 @@ This file has many elements of
     [PROPERTY]: [TYPE]
 ```
 
-Call `DtoModelGen` each time you modify the yaml file. Files will be generated in the maven project `nextcp2-modelgen` into the package `nextcp.dto`.
+Call `DtoModelGen` each time you modify the yaml file. Generate the file into the maven project `nextcp2-modelgen` in the package `nextcp.dto` by pointing to this absolt path as first parameter.
 
 ```diff
 ! ATTENTION: Never modify the generated DTOs files since changes to them will be overwritten by the next call to the generator.

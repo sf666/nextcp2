@@ -15,6 +15,8 @@ import nextcp.domainmodel.device.DeviceRegistry;
 import nextcp.domainmodel.device.mediaserver.MediaServerDevice;
 import nextcp.dto.BrowseRequestDto;
 import nextcp.dto.ContainerItemDto;
+import nextcp.dto.QuickSearchRequestDto;
+import nextcp.dto.QuickSearchResultDto;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.BrowseInput;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -43,4 +45,18 @@ public class RestContentDirectoryService
         return device.browseChildren(inp);
     }
 
+    @PostMapping("/quickSearch")
+    public QuickSearchResultDto quickSearch(@RequestBody QuickSearchRequestDto searchRequest)
+    {
+        if (StringUtils.isBlank(searchRequest.mediaServerUDN))
+        {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "media server ID shall not be empty");
+        }
+        MediaServerDevice device = deviceRegistry.getMediaServerByUDN(new UDN(searchRequest.mediaServerUDN));
+        if (device == null)
+        {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "unknown media server : " + searchRequest.mediaServerUDN);
+        }
+        return device.quickSearch(searchRequest.searchRequest);
+    }
 }

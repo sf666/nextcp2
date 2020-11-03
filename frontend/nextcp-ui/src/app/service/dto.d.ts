@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2020-10-27 14:48:55.
+// Generated using typescript-generator version 2.0.400 on 2020-11-03 10:18:30.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -153,6 +153,19 @@ export interface PlaylistState {
     TransportState: string;
     ProtocolInfo: string;
     Id: number;
+}
+
+export interface QuickSearchRequestDto {
+    mediaServerUDN: string;
+    searchRequest: string;
+    sortCriteria: string;
+}
+
+export interface QuickSearchResultDto {
+    musicItems: MusicItemDto[];
+    albumItems: ContainerDto[];
+    artistItems: ContainerDto[];
+    playlistItems: ContainerDto[];
 }
 
 export interface RadioState {

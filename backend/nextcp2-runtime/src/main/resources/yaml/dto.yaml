@@ -221,6 +221,18 @@ BrowseRequestDto:
    mediaServerUDN: String
    objectID: String
    sortCriteria: String
+
+QuickSearchRequestDto:
+   mediaServerUDN: String
+   searchRequest: String
+   sortCriteria: String
+
+QuickSearchResultDto:
+    musicItems: List<MusicItemDto>
+    albumItems: List<ContainerDto>
+    artistItems: List<ContainerDto>
+    playlistItems: List<ContainerDto>
+   
    
 PlayRequestDto:
    mediaRendererDto: MediaRendererDto

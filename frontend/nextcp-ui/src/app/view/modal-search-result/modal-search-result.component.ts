@@ -1,3 +1,5 @@
+import { MusicItemDto } from './../../service/dto.d';
+import { ContentDirectoryService } from './../../service/content-directory.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -5,16 +7,15 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './modal-search-result.component.html',
   styleUrls: ['./modal-search-result.component.scss']
 })
-export class ModalSearchResultComponent implements OnInit {
+export class ModalSearchResultComponent {
 
   public searchVisible : boolean;
 
-  constructor() { 
-    this.searchVisible = false;
+  constructor(public contentDirectoryService: ContentDirectoryService) { 
+    this.searchVisible = false;    
   }
 
-
-  ngOnInit(): void {
+  musicItemSelected(musicItem : MusicItemDto) {
+    
   }
-
 }

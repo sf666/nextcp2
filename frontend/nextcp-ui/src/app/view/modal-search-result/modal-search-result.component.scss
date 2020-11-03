@@ -1,4 +1,8 @@
+@import 'pantone';
+
 .search-container {
+    font-size: 1rem;
+
     width           : 450px;
     height          : calc(100vh - 185px);
     position        : fixed;
@@ -7,7 +11,7 @@
     display         : flex;
     flex-flow       : column nowrap;
     border-radius   : 8px;
-    background-color: #242528;
+    background-color: $pantone-Neutral-Black-C; // $pantone-Neutral-Black-C , #242528
     z-index         : 70;
 
     overflow  : hidden;
@@ -15,4 +19,38 @@
 
     transform-origin: 50% 0;
     transition      : all .2s ease;
+}
+
+.section-box {
+    margin-top   : 2 rem;
+    margin-bottom: 1.5rem;
+
+    &:first-child {
+        margin-top: 1rem;
+    }
+}
+
+.search-title {
+    font-size  : 1rem;
+    font-weight: 400;
+}
+
+.search-show-all {
+    font-size  : 1rem;
+    font-weight: 400;
+    color      : rgba(229, 238, 255, .6);
+}
+
+img {
+    width : 3rem;
+    height: 3rem;
+}
+
+.title {
+    font-size  : 1rem;
+    font-weight: 600;
+}
+
+.artist {
+    color: rgba(229, 238, 255, .6);
 }
