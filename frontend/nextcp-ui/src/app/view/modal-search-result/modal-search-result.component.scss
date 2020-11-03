@@ -47,11 +47,13 @@ img {
 }
 
 .title {
+    @extend .no-wrap;
     font-size  : 0.9rem;
     font-weight: 500;
 }
 
 .artist {
+    @extend .no-wrap;
     font-size  : 0.9rem;
     font-weight: 300;
     color: rgba(229, 238, 255, .6);
@@ -62,3 +64,17 @@ img {
     font-weight: 300;
     color: rgba(229, 238, 255, .6);
 }
+
+.no-wrap {
+    white-space  : nowrap;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+    min-height   : 0;
+    min-width    : 0;
+}
+
+.min-width {
+    min-width    : 0;
+    min-height   : 0;
+}
+
