@@ -1,4 +1,4 @@
-import { MusicItemDto } from './../../service/dto.d';
+import { MusicItemDto, ContainerItemDto } from './../../service/dto.d';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -9,13 +9,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ModalSearchResultComponent {
 
-  public searchVisible : boolean;
+  public searchVisible: boolean;
 
-  constructor(public contentDirectoryService: ContentDirectoryService) { 
-    this.searchVisible = false;    
+  constructor(public contentDirectoryService: ContentDirectoryService) {
+    this.searchVisible = false;
   }
 
-  musicItemSelected(musicItem : MusicItemDto) {
-    
+  musicItemSelected(musicItem: MusicItemDto) {
+
   }
+
+  albumItemSelected(musicItem: ContainerItemDto) {
+
+  }
+
+  playlistItemSelected(musicItem: ContainerItemDto) {
+
+  }
+
+  artistItemSelected(musicItem: ContainerItemDto) {
+
+  }
+
 }

@@ -25,8 +25,6 @@ import nextcp.dto.QuickSearchResultDto;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.ContentDirectoryService;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.BrowseInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.BrowseOutput;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.SearchInput;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.SearchOutput;
 import nextcp.util.BackendException;
 
 /**

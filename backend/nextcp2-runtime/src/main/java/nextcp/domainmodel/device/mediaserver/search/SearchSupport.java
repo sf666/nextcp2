@@ -41,26 +41,49 @@ public class SearchSupport
 
         searchAndAddMusicItems(quickSearch, container);
         searchAndAddArtistContainer(quickSearch, container);
+        searchAndAddAlbumContainer(quickSearch, container);
+        searchAndAddPlaylistContainer(quickSearch, container);
         return container;
 
-        /**
-         * if (!StringUtils.isBlank(searchRequest.date_from) && SearchCaps.contains("dc:date")) { sb.append(String.format(" and dc:date >= \"%s\"", searchRequest.date_from)); } if
-         * (!StringUtils.isBlank(searchRequest.date_to) && SearchCaps.contains("dc:date")) { sb.append(String.format(" and dc:date <= \"%s\"", searchRequest.date_to)); } if
-         * (!StringUtils.isBlank(searchRequest.creator) && SearchCaps.contains("dc:creator")) { sb.append(String.format(" and dc:creator contains \"%s\"", searchRequest.title)); }
-         * if (!StringUtils.isBlank(searchRequest.artist) && SearchCaps.contains("upnp:artist")) { sb.append(String.format(" and upnp:artist contains \"%s\"",
-         * searchRequest.artist)); } if (!StringUtils.isBlank(searchRequest.album) && SearchCaps.contains("upnp:album")) { sb.append(String.format(" or ( upnp:class =
-         * \"object.container.album.musicAlbum\" and upnp:album contains \"%s\" )", searchRequest.album)); } if (!StringUtils.isBlank(searchRequest.genre) &&
-         * SearchCaps.contains("upnp:genre")) { sb.append(String.format(" and upnp:genre contains \"%s\"", searchRequest.genre)); }
-         * 
-         * sb.append(" )");
-         * 
-         * BrowseResponse response = search(searchRequest.containerID, sb.toString(), "*", 0, 0, "");
-         * 
-         * if (response != null) { log.info("Search finished with " + response.getTotalMatches() + " entries."); for (DIDLObject item : response.getResult()) { if
-         * (item.getObjectClass().contains(DIDLConstants.UPNP_CLASS_MUSIC_TRACK)) { resultList.add(new FileContainerDto((DIDLMusicTrack) item, getDeviceUdn(), 0, true)); } } } else
-         * { log.info("Search finished with no result."); }
-         */
+    }
 
+    private void searchAndAddPlaylistContainer(String quickSearch, QuickSearchResultDto container)
+    {
+        searchAndAddArtistContainer(quickSearch, container.playlistItems, "object.container.playlistContainer");
+    }
+
+    private void searchAndAddAlbumContainer(String quickSearch, QuickSearchResultDto container)
+    {
+        searchAndAddArtistContainer(quickSearch, container.albumItems, "object.container.album");
+    }
+
+    private void searchAndAddArtistContainer(String quickSearch, QuickSearchResultDto container)
+    {
+        searchAndAddArtistContainer(quickSearch, container.artistItems, "object.container.person");
+    }
+
+    private void searchAndAddArtistContainer(String quickSearch, List<ContainerDto> container, String upnpClass)
+    {
+        SearchInput searchInput = new SearchInput();
+        searchInput.ContainerID = "0";
+        searchInput.SearchCriteria = String.format("( upnp:class derivedfrom \"%s\" and dc:title contains \"%s\")", upnpClass, quickSearch);
+        searchInput.StartingIndex = 0L;
+        searchInput.Filter = "*";
+        searchInput.RequestedCount = 3L;
+        searchInput.SortCriteria = "";
+
+        SearchOutput out = contentDirectoryService.search(searchInput);
+
+        DIDLContent didl;
+        try
+        {
+            didl = didlContent.generateDidlContent(out.Result);
+            addContainerObjects(container, didl);
+        }
+        catch (Exception e)
+        {
+            log.warn("search error", e);
+        }
     }
 
     private void searchAndAddMusicItems(String quickSearch, QuickSearchResultDto container)
@@ -96,37 +119,9 @@ public class SearchSupport
         QuickSearchResultDto dto = new QuickSearchResultDto();
         dto.albumItems = new ArrayList<ContainerDto>();
         dto.artistItems = new ArrayList<ContainerDto>();
-        dto.musicItems = new ArrayList();
-        dto.playlistItems = new ArrayList();
+        dto.musicItems = new ArrayList<>();
+        dto.playlistItems = new ArrayList<>();
         return dto;
-    }
-
-    private void searchAndAddArtistContainer(String quickSearch, QuickSearchResultDto container)
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.append("( upnp:class derivedfrom \"object.container.person\""); // upnp:class derivedfrom “object.container.person”
-        sb.append(String.format(" and dc:title contains \"%s\")", quickSearch));
-
-        SearchInput searchInput = new SearchInput();
-        searchInput.ContainerID = "0";
-        searchInput.SearchCriteria = sb.toString();
-        searchInput.StartingIndex = 0L;
-        searchInput.Filter = "*";
-        searchInput.RequestedCount = 3L;
-        searchInput.SortCriteria = "";
-
-        SearchOutput out = contentDirectoryService.search(searchInput);
-
-        DIDLContent didl;
-        try
-        {
-            didl = didlContent.generateDidlContent(out.Result);
-            addContainerObjects(container.artistItems, didl);
-        }
-        catch (Exception e)
-        {
-            log.warn("search error", e);
-        }
     }
 
     private void addContainerObjects(List<ContainerDto> container, DIDLContent didl)
@@ -148,3 +143,21 @@ public class SearchSupport
         }
     }
 }
+
+/**
+ * if (!StringUtils.isBlank(searchRequest.date_from) && SearchCaps.contains("dc:date")) { sb.append(String.format(" and dc:date >= \"%s\"", searchRequest.date_from)); } if
+ * (!StringUtils.isBlank(searchRequest.date_to) && SearchCaps.contains("dc:date")) { sb.append(String.format(" and dc:date <= \"%s\"", searchRequest.date_to)); } if
+ * (!StringUtils.isBlank(searchRequest.creator) && SearchCaps.contains("dc:creator")) { sb.append(String.format(" and dc:creator contains \"%s\"", searchRequest.title)); } if
+ * (!StringUtils.isBlank(searchRequest.artist) && SearchCaps.contains("upnp:artist")) { sb.append(String.format(" and upnp:artist contains \"%s\"", searchRequest.artist)); } if
+ * (!StringUtils.isBlank(searchRequest.album) && SearchCaps.contains("upnp:album")) { sb.append(String.format(" or ( upnp:class = \"object.container.album.musicAlbum\" and
+ * upnp:album contains \"%s\" )", searchRequest.album)); } if (!StringUtils.isBlank(searchRequest.genre) && SearchCaps.contains("upnp:genre")) { sb.append(String.format(" and
+ * upnp:genre contains \"%s\"", searchRequest.genre)); }
+ * 
+ * sb.append(" )");
+ * 
+ * BrowseResponse response = search(searchRequest.containerID, sb.toString(), "*", 0, 0, "");
+ * 
+ * if (response != null) { log.info("Search finished with " + response.getTotalMatches() + " entries."); for (DIDLObject item : response.getResult()) { if
+ * (item.getObjectClass().contains(DIDLConstants.UPNP_CLASS_MUSIC_TRACK)) { resultList.add(new FileContainerDto((DIDLMusicTrack) item, getDeviceUdn(), 0, true)); } } } else {
+ * log.info("Search finished with no result."); }
+ */
