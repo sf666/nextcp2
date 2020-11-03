@@ -42,19 +42,18 @@
 }
 
 img {
-    width : 3rem;
-    height: 3rem;
+    height: 100%;
 }
 
 .title {
     @extend .no-wrap;
-    font-size  : 0.9rem;
+    font-size  : 0.8rem;
     font-weight: 500;
 }
 
 .artist {
     @extend .no-wrap;
-    font-size  : 0.9rem;
+    font-size  : 0.8rem;
     font-weight: 300;
     color: rgba(229, 238, 255, .6);
 }
@@ -78,3 +77,6 @@ img {
     min-height   : 0;
 }
 
+.search-row {
+    padding-bottom: 8px;
+}
