@@ -13,6 +13,7 @@ import org.fourthline.cling.support.model.DIDLObject;
 import org.fourthline.cling.support.model.DIDLObject.Property;
 import org.fourthline.cling.support.model.Res;
 import org.fourthline.cling.support.model.container.MusicAlbum;
+import org.fourthline.cling.support.model.container.PlaylistContainer;
 import org.fourthline.cling.support.model.item.AudioItem;
 import org.fourthline.cling.support.model.item.Item;
 import org.fourthline.cling.support.model.item.MusicTrack;
@@ -133,7 +134,7 @@ public class DtoBuilder
             }
             if (container.getArtists().length > 0)
             {
-                dto.artist = container.getFirstArtist().getName();                
+                dto.artist = container.getFirstArtist().getName();
             }
             // TODO extracting more info's necessary ... Role, etc. ?
         }
@@ -151,11 +152,21 @@ public class DtoBuilder
         dto.id = container.getId();
         dto.parentID = container.getParentID();
         dto.objectClass = container.getClazz().getValue();
-        
+
+        // Add album art in any case if possible
+        Optional<Property> uri = extractProperty("albumArtURI", container.getProperties());
+        if (uri.isPresent())
+        {
+            dto.albumartUri = uri.get().toString();
+        }
+
+        // Add music album infos
         if (container instanceof MusicAlbum)
         {
-            return addMusicAlbum((MusicAlbum) container, dto);
+            addMusicAlbum((MusicAlbum) container, dto);
         }
+
+        // apply some defaults
         if (dto.albumartUri == null)
         {
             dto.albumartUri = ASSET_FOLDER + "/directory-icon.png";
