@@ -10,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 
 import nextcp.rest.DtoBuilder;
+import nextcp.util.DidlContent;
 
 public class BaseDevice
 {
     private RemoteDevice device;
+    private DidlContent didlContent = new DidlContent();
 
     @Autowired
     private UpnpService upnpService;
@@ -81,11 +83,9 @@ public class BaseDevice
         return getDevice().getDetails().getFriendlyName();
     }
 
-    protected DIDLContent generateDidlContent(String didlContent) throws Exception
+    protected DIDLContent generateDidlContent(String didlContentXml) throws Exception
     {
-        DIDLParser didlParser = new DIDLParser();
-        DIDLContent didl = didlParser.parse(didlContent);
-        return didl;
+        return didlContent.generateDidlContent(didlContentXml);
     }
 
 }
