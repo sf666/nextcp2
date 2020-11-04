@@ -49,13 +49,13 @@ img {
 
 .title {
     @extend .no-wrap;
-    font-size  : 0.8rem;
+    font-size  : 0.9rem;
     font-weight: 500;
 }
 
 .artist {
     @extend .no-wrap;
-    font-size  : 0.8rem;
+    font-size  : 0.9rem;
     font-weight: 300;
     color      : rgba(229, 238, 255, .6);
 }
@@ -80,5 +80,5 @@ img {
 }
 
 .search-row {
-    padding-bottom: 8px;
+    padding-bottom: 16px;
 }

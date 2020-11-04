@@ -1,0 +1,8 @@
+<div class="d-flex outer-container">
+    <img src="{{searchItemService.musicItem?.albumArtUrl}}" class="cropImg align-self-center" alt="">
+    <div class="d-flex flex-column ml-4">
+        <div class="title">{{searchItemService.musicItem?.title}}</div>
+        <div class="regular">by <span class="highlight">{{searchItemService.musicItem?.artistName}}</span></div>
+        <div class="regular">from the album <span class="highlight">{{searchItemService.musicItem?.album}}</span></div>
+    </div>
+</div>

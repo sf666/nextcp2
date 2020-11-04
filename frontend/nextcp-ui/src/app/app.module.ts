@@ -45,6 +45,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { SearchComponent } from './view/search/search.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ModalSearchResultComponent } from './view/modal-search-result/modal-search-result.component';
+import { SearchResultItemMultiComponent } from './view/search/search-result-item-multi/search-result-item-multi.component';
+import { SearchResultItemSingleComponent } from './view/search/search-result-item-single/search-result-item-single.component';
 
 
 @NgModule({
@@ -69,6 +71,8 @@ import { ModalSearchResultComponent } from './view/modal-search-result/modal-sea
       SidebarComponent,
       SearchComponent,
       ModalSearchResultComponent,
+      SearchResultItemMultiComponent,
+      SearchResultItemSingleComponent,
 
    ],
    imports: [

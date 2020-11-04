@@ -185,6 +185,7 @@ public class DtoBuilder
         itemDto.title = item.getTitle();
         itemDto.parentId = item.getParentID();
         itemDto.objectClass = item.getClazz().getValue();
+        itemDto.objectID = item.getId();
         itemDto.refId = item.getRefID();
         itemDto.mediaServerUDN = mediaServerUdn;
 
@@ -255,6 +256,8 @@ public class DtoBuilder
         {
             itemDto.artistName = item.getFirstArtist().getName();
         }
+        itemDto.originalTrackNumber = "" + item.getOriginalTrackNumber();
+
     }
 
     public String generateMetadataFromItem(AudioItem item)
