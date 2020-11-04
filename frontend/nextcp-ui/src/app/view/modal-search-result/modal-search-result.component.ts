@@ -21,8 +21,7 @@ export class ModalSearchResultComponent {
   musicItemSelected(musicItem: MusicItemDto) {
     console.debug("search item selected : " + musicItem);
     this.searchItemService.musicItem = musicItem;
-    this.contentDirectoryService.quickSearchQueryString = "";
-    this.contentDirectoryService.quickSearchPanelVisible = false;
+    this.contentDirectoryService.clearSearch();
     this.router.navigateByUrl('searchResultSingleItem');
   }
 

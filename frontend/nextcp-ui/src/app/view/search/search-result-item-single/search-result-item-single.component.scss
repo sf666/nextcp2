@@ -33,9 +33,19 @@ img {
 }
 
 .buttons {
-    background-color: rgba(229,238,255,.2);    
+    background-color: rgba(229, 238, 255, .2);
 }
 
 .middle-spacer {
     flex: 1 1 auto;
+}
+
+.buttons {
+    margin-left: 1rem;
+    text-align : left;
+    min-width  : 130px;
+
+    &:first-child {
+        margin-left: 0;
+    }
 }

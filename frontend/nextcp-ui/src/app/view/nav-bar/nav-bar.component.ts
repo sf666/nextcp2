@@ -34,6 +34,10 @@ export class NavBarComponent {
       }
     }
   }
+
+  clearSearch() {
+    this.quickSearchString = "";
+  }
 }
 
 /**
@@ -42,17 +46,6 @@ export class NavBarComponent {
     this.screenHeight = window.innerHeight;
   }
 
-  ngOnInit(): void {
-    if (this.modalDialog == null) {
-      this.dialogConfig = new MatDialogConfig();
-      this.dialogConfig.hasBackdrop = false;
-      this.dialogConfig.restoreFocus = true;
-      this.dialogConfig.autoFocus = false;
-      this.dialogConfig.id = "modal-search";
-      this.dialogConfig.panelClass = "searchModalClass";
-    }
-  }
+  
 
 */
-
-

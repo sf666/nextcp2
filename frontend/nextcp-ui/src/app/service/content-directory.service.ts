@@ -1,3 +1,4 @@
+import { SearchItemService } from './search/search-item.service';
 import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
 import { ContainerItemDto, BrowseRequestDto, MediaServerDto, ContainerDto, QuickSearchRequestDto, QuickSearchResultDto } from './dto.d';
@@ -21,6 +22,7 @@ export class ContentDirectoryService {
 
   constructor(
     private httpService: HttpService,
+    private searchItemService: SearchItemService,
     private deviceService: DeviceService) {
 
     // Initialize empty result object
@@ -34,6 +36,11 @@ export class ContentDirectoryService {
   mediaServerChanged(data: MediaServerDto): void {
     // Update to root folder of media server
     this.browseChildrenByRequest(this.createBrowseRequest("0", "", data.udn));
+  }
+
+  public clearSearch() {
+    this.quickSearchResultList = this.generateEmptyQuickSearchResultDto();
+    this.quickSearchPanelVisible = false;
   }
 
   public browseChildren(objectID: string, sortCriteria: string, mediaServerUdn: string): void {

@@ -114,7 +114,7 @@ export class ConfigurationService {
 
   public isRenderDeviceActive(deviceUdn: string): boolean {
     var configEntry = this.serverConfig?.rendererDevices.filter(conf => conf.mediaRenderer.udn == deviceUdn);
-    if (configEntry.length == 0) {
+    if (!configEntry || configEntry.length == 0) {
       return false;
     }
     return configEntry[0].active;
