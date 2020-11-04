@@ -1,18 +1,51 @@
-<div>
+<div class="outer-container">
     <div class="d-flex">
-        <div class="currentFolderAlbum">
+        <div>
             <img src="{{currentContainer.albumartUri}}" class="card-img-top" alt="{{currentContainer.title}}">
         </div>
-        <div class="ml-2 mt-3 d-flex flex-column justify-content-center" >
-            <div class="currentContainerTitle">{{currentContainer.title}}</div>
+        <div *ngIf="isLeaf(); else containerTitle" class="d-flex flex-column pl-4">
+            <div class="title album">{{currentContainer.title}}</div>
+            <div *ngIf="currentContainer.artist" class="regular">by <span class="highlight">{{currentContainer.artist}}</span></div>
+            <div class="d-flex mt-4">
+                <button mat-flat-button class="buttons" (click)="gotoParant()">
+                    <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="arrow-up-bold-box-outline"></mat-icon>
+                    parent
+                </button>
+                <button mat-flat-button class="buttons" (click)="playPlaylist(currentContainer)">
+                    <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="play"></mat-icon>
+                    play
+                </button>
+                <button mat-flat-button class="buttons" (click)="playPlaylist(currentContainer)">
+                    <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="shuffle-variant"></mat-icon>
+                    shuffle
+                </button>
+                <button mat-flat-button class="buttons" (click)="playPlaylist(currentContainer)">
+                    <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="playlist-plus"
+                        aria-label="add to playlist">
+                    </mat-icon>
+                    add tracks
+                </button>
+            </div>
         </div>
     </div>
 </div>
+<ng-template #containerTitle>
+    <div class="d-flex flex-column justify-content-center">
+        <div class="title">{{currentContainer.title}}</div>
+        <div class="pt-4">
+            <button *ngIf="showParentUpButton()" mat-flat-button class="buttons" (click)="gotoParant()">
+                <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="arrow-up-bold-box-outline"></mat-icon>
+                parent
+            </button>
+        </div>
+    </div>
+</ng-template>
 
 <div *ngIf="containerList?.length > 0">
     <div class="section head">Folder</div>
     <div class="cardLayout">
-        <div class="my-Card" id="{{container.id}}" (click)="browseTo(container)" *ngFor="let container of containerList">
+        <div class="my-Card" id="{{container.id}}" (click)="browseTo(container)"
+            *ngFor="let container of containerList">
             <img src="{{container.albumartUri}}" class="card-img-top" alt="{{container.title}}">
             <div class="my-card-body">
                 <div class="my-card-title">{{container.title}}</div>

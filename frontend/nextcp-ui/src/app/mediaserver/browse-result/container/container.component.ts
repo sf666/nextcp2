@@ -42,6 +42,10 @@ export class ContainerComponent implements AfterViewChecked {
     return this.contentDirectoryService.currentContainerList.containerDto.filter(item => item.objectClass === "object.container.playlistContainer");
   }
 
+  public containerListWithoutMinimServerTags(): ContainerDto[] {
+    return this.contentDirectoryService.currentContainerList.containerDto.filter(item => !item.title.startsWith(">> "));
+  }
+
   public get currentContainerLabel(): string {
     return this.contentDirectoryService.currentContainerList.currentContainer.title;
   }
@@ -62,5 +66,19 @@ export class ContainerComponent implements AfterViewChecked {
 
   playPlaylist(container) {
     this.playlistService.addContainerToPlaylistAndPlay(container);
+  }
+
+  isLeaf(): boolean {
+    let isLeaf = this.containerListWithoutMinimServerTags().length < 1;
+    return isLeaf;
+  }
+
+  showParentUpButton(): boolean {
+    return this.contentDirectoryService.currentContainerList.currentContainer.id !== '0';
+  }
+
+  gotoParant() {
+    this.contentDirectoryService.browseChildren(this.contentDirectoryService.currentContainerList.currentContainer.parentID, "",
+      this.contentDirectoryService.currentContainerList.currentContainer.mediaServerUDN);
   }
 }

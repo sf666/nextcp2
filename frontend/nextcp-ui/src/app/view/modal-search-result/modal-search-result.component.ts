@@ -1,6 +1,7 @@
+import { SearchContainerService } from './../../service/search/search-container.service';
 import { SearchItemService } from './../../service/search/search-item.service';
 import { Router} from '@angular/router';
-import { MusicItemDto, ContainerItemDto } from './../../service/dto.d';
+import { MusicItemDto, ContainerDto } from './../../service/dto.d';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { Component } from '@angular/core';
 
@@ -15,6 +16,7 @@ export class ModalSearchResultComponent {
   constructor(
     public contentDirectoryService: ContentDirectoryService,
     private searchItemService: SearchItemService,
+    private searchContainerService: SearchContainerService,
     private router: Router) {
   }
 
@@ -25,16 +27,25 @@ export class ModalSearchResultComponent {
     this.router.navigateByUrl('searchResultSingleItem');
   }
 
-  albumItemSelected(musicItem: ContainerItemDto) {
-
+  albumItemSelected(albumItem: ContainerDto) {
+    console.debug("album selected : " + albumItem);
+    this.searchContainerService.containerItem = albumItem;
+    this.contentDirectoryService.clearSearch();
+    this.router.navigateByUrl('searchResultContainer');
   }
 
-  playlistItemSelected(musicItem: ContainerItemDto) {
-
+  playlistItemSelected(playlistItem: ContainerDto) {
+    console.debug("album selected : " + playlistItem);
+    this.searchContainerService.containerItem = playlistItem;
+    this.contentDirectoryService.clearSearch();
+    this.router.navigateByUrl('searchResultContainer');
   }
 
-  artistItemSelected(musicItem: ContainerItemDto) {
-
+  artistItemSelected(artistItem: ContainerDto) {
+    console.debug("album selected : " + artistItem);
+    this.searchContainerService.containerItem = artistItem;
+    this.contentDirectoryService.clearSearch();
+    this.router.navigateByUrl('searchResultContainer');
   }
 
 }

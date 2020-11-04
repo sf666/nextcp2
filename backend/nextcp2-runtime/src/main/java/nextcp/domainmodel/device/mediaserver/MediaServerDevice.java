@@ -81,7 +81,7 @@ public class MediaServerDevice extends BaseDevice
             addContainerObjects(result, didl);
             addItemObjects(result.musicItemDto, didl);
 
-            addDirectoryUpContainer(inp, result, curContainer);
+            //addDirectoryUpContainer(inp, result, curContainer);
             return result;
         }
         catch (Exception e)

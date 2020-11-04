@@ -1,0 +1,51 @@
+img {
+    height    : 250px;
+    width     : 250px;
+    object-fit: cover;
+}
+
+.title {
+    font-size  : 1.3rem;
+    font-weight: 500;
+}
+
+.plainText {
+    font-size  : 1rem;
+    font-weight: 300;
+}
+
+.regular {
+    @extend .plainText;
+    font-size  : 1rem;
+    font-weight: 300;
+    color      : rgba(229, 238, 255, .6);
+}
+
+
+.highlight {
+    @extend .plainText;
+    color: white;
+}
+
+.outer-container {
+    margin-left: 90px;
+    margin-top : 120px;
+}
+
+.buttons {
+    background-color: rgba(229, 238, 255, .2);
+}
+
+.middle-spacer {
+    flex: 1 1 auto;
+}
+
+.buttons {
+    margin-left: 1rem;
+    text-align : left;
+    min-width  : 130px;
+
+    &:first-child {
+        margin-left: 0;
+    }
+}

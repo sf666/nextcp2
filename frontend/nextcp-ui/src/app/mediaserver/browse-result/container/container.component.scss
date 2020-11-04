@@ -28,6 +28,46 @@
     }
 }
 
-.currentContainerTitle {
-    font-size: 4rem;    
+.title {
+    font-size: 2.2rem;
+    font-weight: 300;
+    align-self: center;
+    &.album{
+        align-self: start;
+    }
+}
+
+.outer-container {
+    margin-left: 60px;
+    margin-top : 30px;
+}
+
+
+.plainText {
+    font-size  : 1rem;
+    font-weight: 300;
+}
+
+.regular {
+    @extend .plainText;
+    font-size  : 1rem;
+    font-weight: 300;
+    color      : rgba(229, 238, 255, .6);
+}
+
+
+.highlight {
+    @extend .plainText;
+    color: white;
+}
+
+
+.buttons {
+    margin-left: 1rem;
+    text-align : left;
+    min-width  : 130px;
+
+    &:first-child {
+        margin-left: 0;
+    }
 }

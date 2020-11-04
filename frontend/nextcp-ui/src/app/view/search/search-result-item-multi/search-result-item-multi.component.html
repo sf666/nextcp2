@@ -1,1 +1,10 @@
-<p>search-result-item-multi works!</p>
+<div class="d-flex flex-column outer-container">
+    <div class="d-flex">
+        <img src="{{searchContainerService.containerItem?.albumartUri}}" class="cropImg align-self-center" alt="">
+        <div class="d-flex flex-column ml-4">
+            <div class="title">{{searchContainerService.containerItem?.title}}</div>
+            <div class="regular">by <span class="highlight">{{searchContainerService.containerItem?.creator}}</span>
+            </div>
+        </div>
+    </div>
+</div>

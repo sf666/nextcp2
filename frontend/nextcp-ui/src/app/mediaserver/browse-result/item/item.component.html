@@ -1,22 +1,6 @@
 <div *ngIf="contentDirectoryService.currentContainerList.musicItemDto?.length > 0">
     <div class="section head d-flex">
         <div>Tracks</div>
-        <div class="d-flex justify-content-center" style="width: 100%;">
-            <div (click)="playAllTracks()" class="d-flex section-button sec-border">
-                <div class="ml-2">
-                    <mat-icon class="icon-button main" svgIcon="play" aria-label="play">
-                    </mat-icon>
-                </div>
-                <div class="section-button text">play all tracks</div>
-            </div>
-            <div (click)="addAllTracks()" class="ml-2 d-flex section-button sec-border">
-                <div class="ml-2">
-                    <mat-icon class="icon-button main" svgIcon="playlist-plus" aria-label="playlist-plus">
-                    </mat-icon>
-                </div>
-                <div class="section-button text">add all tracks</div>
-            </div>
-        </div>
     </div>
 
     <div class="cardLayout">
