@@ -1,6 +1,6 @@
+import { AvtransportService } from './../../../service/avtransport.service';
 import { SearchItemService } from './../../../service/search/search-item.service';
-import { MusicItemDto } from './../../../service/dto.d';
-import { Component, OnInit, Injectable, AfterViewInit } from '@angular/core';
+import { Component} from '@angular/core';
 
 @Component({
   selector: 'app-search-result-item-single',
@@ -9,12 +9,10 @@ import { Component, OnInit, Injectable, AfterViewInit } from '@angular/core';
 })
 export class SearchResultItemSingleComponent {
 
-  musicItem: MusicItemDto;
-
-  constructor(public searchItemService: SearchItemService) {
+  constructor(public searchItemService: SearchItemService, private avtransportService: AvtransportService) {
   }
 
   play() {
-
+    this.avtransportService.playResource(this.searchItemService.musicItem);
   }
 }
