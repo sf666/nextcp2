@@ -9,9 +9,12 @@ import { Component, OnInit, Injectable, AfterViewInit } from '@angular/core';
 })
 export class SearchResultItemSingleComponent {
 
-  musicItem : MusicItemDto;
+  musicItem: MusicItemDto;
 
-  constructor(public searchItemService: SearchItemService) { 
+  constructor(public searchItemService: SearchItemService) {
   }
 
+  play() {
+
+  }
 }

@@ -12,7 +12,12 @@ export class ContentDirectoryService {
 
   baseUri = '/ContentDirectoryService';
   public currentContainerList: ContainerItemDto;
+
+  // QuickSearch Support
   public quickSearchResultList: QuickSearchResultDto;
+  public quickSearchQueryString: string;
+  public quickSearchPanelVisible: boolean;
+
 
   constructor(
     private httpService: HttpService,
@@ -21,6 +26,7 @@ export class ContentDirectoryService {
     // Initialize empty result object
     this.currentContainerList = this.generateEmptyContainerItemDto();
     this.quickSearchResultList = this.generateEmptyQuickSearchResultDto();
+    this.quickSearchPanelVisible = false;
 
     deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));
   }

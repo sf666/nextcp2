@@ -36,6 +36,6 @@
             <input class="nav-search" [(ngModel)]="quickSearchString" type="search" matInput placeholder="search" #searchInput>
         </div>
     </mat-toolbar-row>
-    <app-modal-search-result *ngIf="searchResultVisible === true"></app-modal-search-result>
+    <app-modal-search-result *ngIf="contentDirectoryService.quickSearchPanelVisible"></app-modal-search-result>
 </mat-toolbar>
 

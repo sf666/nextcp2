@@ -1,9 +1,6 @@
 import { DeviceService } from './../../service/device.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
-import { ModalSearchResultComponent } from './../modal-search-result/modal-search-result.component';
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { DialogRole, MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { FocusMonitor } from '@angular/cdk/a11y';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'nav-bar',
@@ -14,13 +11,8 @@ import { FocusMonitor } from '@angular/cdk/a11y';
 export class NavBarComponent {
 
   navbarOpen = false;
-  modalDialog: MatDialogRef<ModalSearchResultComponent>;
-  dialogConfig: MatDialogConfig;
-  searchResultVisible : boolean;
-  private quickSearch: string;
 
-  constructor(private contentDirectoryService: ContentDirectoryService, private deviceService : DeviceService) {
-    this.searchResultVisible = false;
+  constructor(public contentDirectoryService: ContentDirectoryService, private deviceService: DeviceService) {
   }
 
   toggleNavbar() {
@@ -28,16 +20,16 @@ export class NavBarComponent {
   }
 
   get quickSearchString() {
-    return this.quickSearch;
+    return this.contentDirectoryService.quickSearchQueryString;
   }
 
   set quickSearchString(value: string) {
-    this.quickSearch = value;
+    this.contentDirectoryService.quickSearchQueryString = value;
     if (value == '') {
-      this.searchResultVisible = false;
+      this.contentDirectoryService.quickSearchPanelVisible = false;
     } else {
-      this.searchResultVisible = true;
       if (value && value.length > 2) {
+        this.contentDirectoryService.quickSearchPanelVisible = true;
         this.contentDirectoryService.quickSearch(value, "", this.deviceService.selectedMediaServerDevice.udn);
       }
     }
