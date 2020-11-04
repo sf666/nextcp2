@@ -19,7 +19,7 @@
                     <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="shuffle-variant"></mat-icon>
                     shuffle
                 </button>
-                <button mat-flat-button class="buttons" (click)="playPlaylist(currentContainer)">
+                <button mat-flat-button class="buttons" (click)="playlistService.addContainerToPlaylist(currentContainer)">
                     <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="playlist-plus"
                         aria-label="add to playlist">
                     </mat-icon>
