@@ -31,6 +31,7 @@ export class ContainerComponent implements AfterViewChecked {
         this.scrollID = '';
       }
     }
+    document.getElementById('browse-result-main').style.backgroundImage = 'url("' + this.currentContainer.albumartUri + '")';
   }
 
 

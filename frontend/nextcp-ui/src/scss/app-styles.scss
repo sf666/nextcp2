@@ -190,3 +190,23 @@ img {
         }
     }
 }
+
+// Global buttons definitios
+.buttons {
+    background-color: rgba(229, 238, 255, .2);
+}
+
+.plainTextBase {
+    font-size  : 0.82rem;
+    font-weight: 500;
+}
+
+.regularText {
+    @extend .plainTextBase;
+    color: rgba(229, 238, 255, .6);
+}
+
+.regularHighlight {
+    @extend .plainTextBase;
+    color: var(--snow-white);
+}
