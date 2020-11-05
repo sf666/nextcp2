@@ -5,7 +5,7 @@
 }
 
 .mainContent {
-    margin-left: 20px;
+    margin-left: $sidebar-width;
     margin-top: $nav-height;
     width:calc(100vw - $sidebar-width);
 }

@@ -1,5 +1,5 @@
-@import "custom_variables";
 @import 'app-variables';
+@import "custom_variables";
 @import 'pantone';
 
 $col-1 : $amber-pantone-3;
@@ -22,10 +22,6 @@ $col-grey : $col-4;
     border-left: 1px solid $pantone-Black-2-C;
 }
 
-.sidebar-row {
-    width: 204px;
-}
-
 .app-label {
     font-size: 1.8rem;
     font-weight: 300;
@@ -39,13 +35,17 @@ $col-grey : $col-4;
 }
 
 .sidebar {
-//    z-index: var(--z-index-sidebar);
+    position: fixed;
+    left: 0;
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
     width: $sidebar-width;
-    height: 100%;
-    max-height: 100%;
+    height: calc(100vh - 86px);
+    max-height: 100vh;
     background: #242428;
-    transition: 50ms ease-in;    
+    transition: 50ms ease-in;
+    overflow-y: auto;
+    overflow-x: scroll;
+    z-index: 80;
 }

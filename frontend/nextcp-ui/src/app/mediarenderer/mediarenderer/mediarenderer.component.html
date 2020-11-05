@@ -20,7 +20,7 @@
     </mat-select>
 </mat-form-field>
 
-<div class="d-flex sidebar-row" *ngIf="hasDeviceDriver()">
+<div class="d-flex" *ngIf="hasDeviceDriver()">
     <div class="align-self-center d-flex flex-row" (click)="powerClicked()">
         <mat-icon class="{{getStandbyClass()}} align-self-center" svgIcon="power-standby" aria-hidden="false"
             aria-label="POWER icon">

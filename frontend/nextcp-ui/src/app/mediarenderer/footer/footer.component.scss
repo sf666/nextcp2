@@ -61,17 +61,11 @@ $col-grey: $col-4;
     flex-grow  : 0;
     flex-shrink: 0;
     flex-basis : 430px;
-    border-left: 1px solid $col-4;
 }
 
 .right-footer {
     //    flex-basis : 25em; // auto
-    flex-grow  : 0;
-    border-left: 1px solid $col-4;
-}
-
-.currentTime {
-    color: $col-4;
+    flex-grow: 0;
 }
 
 .audioInfoLabel {
@@ -94,8 +88,20 @@ $col-grey: $col-4;
     text-align-last: end;
 }
 
+
+.baseFontsize {
+    font-size  : 0.82rem;
+    font-weight: 400;
+}
+
+.currentTime {
+    @extend .baseFontsize;
+    color: var(--grey-5);
+}
+
 .finishedTime {
-    color: $col-2;
+    @extend .baseFontsize;
+    color: var(--glas-white);
 }
 
 img {
@@ -119,27 +125,18 @@ img {
     margin-top   : 0.2rem;
     font-family  : "Quicksand", sans-serif;
     margin-bottom: 0.2rem;
+    align-self   : center;
+}
+
+.title {
+    @extend .baseFontsize;
+    font-size: 0.95rem;
+    color    : var(--snow-white);
 }
 
 .minWidth {
     min-width : 0;
     min-height: 0;
-}
-
-.title {
-    color      : $col-1;
-    font-size  : 1.3rem;
-    font-weight: 400;
-}
-
-.album {
-    color      : $col-2;
-    font-weight: 500;
-}
-
-.artist {
-    color      : $pantone-406-C;
-    font-weight: 500;
 }
 
 .no-wrap {
@@ -148,4 +145,14 @@ img {
     text-overflow: ellipsis;
     min-height   : 0;
     min-width    : 0;
+}
+
+.center {
+    text-align: center;
+}
+
+.lower-row {
+    display   : flex;
+    height    : 100%;
+    align-self: top;
 }

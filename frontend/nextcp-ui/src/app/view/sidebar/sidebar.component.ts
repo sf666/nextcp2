@@ -18,27 +18,7 @@ export class SidebarComponent  {
     deviceService.mediaServerChanged$.subscribe(data => this._mediaServerUdn = data.udn);
   }
 
-  hasDeviceDriver(): boolean {
-    return (this.rendererService.deviceDriverState?.rendererUDN?.length > 0);
-  }
-
-  public getStandbyClass() {
-    if (this.rendererService.deviceDriverState.standby) {
-      return "standbyOn";
-    }
-    else {
-      return "standbyOff";
-    }
-  }
-
-  powerClicked() {
-    this.rendererService.powerPressed();
-  }
-
-  volChanged(event: MatSliderChange) {
-    this.rendererService.setVolume(event.value);
-  }
-
+ 
     /**
      * Getter mediaServerUdn
      * @return {string}

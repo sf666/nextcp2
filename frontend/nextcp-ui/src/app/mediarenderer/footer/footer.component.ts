@@ -1,3 +1,4 @@
+import { MatSliderChange } from '@angular/material/slider';
 import { PlaylistService } from './../../service/playlist.service';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
@@ -14,13 +15,23 @@ export class FooterComponent {
 
   private baseURI = 'DeviceRendererService';
 
+  currentMediaRendererName : string;
 
   constructor(
     public avtransportService: AvtransportService,
     public deviceService: DeviceService,
     public playlistService: PlaylistService,
-    public rendererService: RendererService
-  ) {
+    public rendererService: RendererService) {
+      deviceService.mediaRendererChanged$.subscribe(data => this.currentMediaRendererName = data.friendlyName);
+  }
+
+  public getCurrentMediaRendererName() {
+    if (this.currentMediaRendererName) {
+      return this.currentMediaRendererName;
+    }
+    else {
+      "select media renderer";
+    }
   }
 
   public get avTransportState(): UpnpAvTransportState {
@@ -69,6 +80,30 @@ export class FooterComponent {
     }
   }
 
+  //
+  // Footer right : device audio and power control
+  //
+
+  hasDeviceDriver(): boolean {
+    return (this.rendererService.deviceDriverState?.rendererUDN?.length > 0);
+  }
+
+  powerClicked() {
+    this.rendererService.powerPressed();
+  }
+
+  volChanged(event: MatSliderChange) {
+    this.rendererService.setVolume(event.value);
+  }
+
+  public getStandbyClass() {
+    if (this.rendererService.deviceDriverState.standby) {
+      return "standbyOn";
+    }
+    else {
+      return "standbyOff";
+    }
+  }
 
   //
   // for demontration purpose : locally provided actions intended to be used by the template

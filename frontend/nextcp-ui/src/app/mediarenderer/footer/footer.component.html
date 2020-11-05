@@ -14,41 +14,76 @@
             <div class="d-flex flex-column minWidth albumAndTitle">
                 <div class="title no-wrap">{{getCurrentSongTitle()}}</div>
                 <div class="d-flex flex-column no-wrap">
-                    <div class="album align-self-start">
-                        {{rendererService.trackInfo?.currentTrack?.album}}</div>
-                    <div class="artist align-self-start">
-                        {{rendererService.trackInfo?.currentTrack?.artistName}}</div>
+                    <div class="currentTime align-self-start">
+                        by <span class="finishedTime">{{rendererService.trackInfo?.currentTrack?.artistName}}</span></div>
+                    <div class="currentTime align-self-start">
+                        from the album <span class="finishedTime">{{rendererService.trackInfo?.currentTrack?.album}}</span></div>
                 </div>
             </div>
         </div>
 
         <!-- Middle footer section -->
-        <div class="m-2 middle-footer d-flex flex-row justify-content-between">
-            <div class="ml-4 mr-2 d-flex align-self-center">
-                <mat-icon class="icon-button secondary {{shuffleClass}}" svgIcon="shuffle"
-                    (click)="playlistService.toggleShuffle()" aria-label="shuffle"></mat-icon>
-                <mat-icon class="icon-button secondary" svgIcon="skip-backward" (click)="playlistService.previous()"
-                    aria-label="skip-backward"></mat-icon>
-                <mat-icon *ngIf="!avtransportService.isPlaying()" (click)="playlistService.play()"
-                    class="icon-button main" svgIcon="play" aria-label="play"></mat-icon>
-                <mat-icon *ngIf="avtransportService.isPlaying()" (click)="playlistService.pause()"
-                    class="icon-button main" svgIcon="pause" aria-label="play"></mat-icon>
-                <mat-icon class="icon-button secondary" svgIcon="skip-forward" (click)="playlistService.next()"
-                    aria-label="skip-forward"></mat-icon>
-                <mat-icon class="icon-button secondary {{repeatClass}}" svgIcon="repeat"
-                    (click)="playlistService.toggleRepeat()" aria-label="repeat"></mat-icon>
-            </div>
-            <div class="mr-2 ml-4 d-flex align-self-center" *ngIf="!streaming()">
-                <div class="currentTime">{{rendererService.trackTime.secondsDisp}}</div>
-                <div class="ml-2 currentTime">/</div>
-                <div class="ml-2 finishedTime">{{rendererService.trackTime.durationDisp}}</div>
-            </div>
-            <div class="mr-2 ml-4 d-flex align-self-center" *ngIf="streaming()">
-                <div class="currentTime">streaming</div>
+        <div class="m-2 middle-footer flex-column align-items-center">
+            <div class="lower-row">
+                <div class="ml-4 mr-2 d-flex align-self-center">
+                    <mat-icon class="icon-button secondary {{shuffleClass}}" svgIcon="shuffle"
+                        (click)="playlistService.toggleShuffle()" aria-label="shuffle"></mat-icon>
+                    <mat-icon class="icon-button secondary" svgIcon="skip-backward" (click)="playlistService.previous()"
+                        aria-label="skip-backward"></mat-icon>
+                    <mat-icon *ngIf="!avtransportService.isPlaying()" (click)="playlistService.play()"
+                        class="icon-button main" svgIcon="play" aria-label="play"></mat-icon>
+                    <mat-icon *ngIf="avtransportService.isPlaying()" (click)="playlistService.pause()"
+                        class="icon-button main" svgIcon="pause" aria-label="play"></mat-icon>
+                    <mat-icon class="icon-button secondary" svgIcon="skip-forward" (click)="playlistService.next()"
+                        aria-label="skip-forward"></mat-icon>
+                    <mat-icon class="icon-button secondary {{repeatClass}}" svgIcon="repeat"
+                        (click)="playlistService.toggleRepeat()" aria-label="repeat"></mat-icon>
+                </div>
+                <div class="mr-2 ml-4 d-flex align-self-center align-items-center" *ngIf="!streaming()">
+                    <div class="currentTime">{{rendererService.trackTime.secondsDisp}}</div>
+                    <div class="ml-2 currentTime">/</div>
+                    <div class="ml-2 finishedTime">{{rendererService.trackTime.durationDisp}}</div>
+                </div>
+                <div class="mr-2 ml-4 d-flex align-self-center align-items-center" *ngIf="streaming()">
+                    <div class="currentTime">streaming</div>
+                </div>
             </div>
         </div>
 
         <!-- right footer section -->
+
+        <div class="m-2 pl-2 right-footer mr-4 d-flex flex-column">
+            <div class="finishedTime center">
+                {{getCurrentMediaRendererName()}}
+            </div>
+            <div class="d-flex lower-row" *ngIf="hasDeviceDriver()">
+                <div class="align-self-center d-flex flex-row" (click)="powerClicked()">
+                    <mat-icon class="{{getStandbyClass()}} align-self-center" svgIcon="power-standby"
+                        aria-hidden="false" aria-label="POWER icon">
+                    </mat-icon>
+                </div>
+                <div class="d-flex justify-content-between align-self-center volume-bar">
+                    <mat-icon class="icon-main align-self-center" svgIcon="volume-low" aria-hidden="false"
+                        aria-label="low volume icon">
+                    </mat-icon>
+                    <mat-slider class="align-self-center sidebar-slider"
+                        [value]="rendererService.deviceDriverState.volume" (change)="volChanged($event)" min="0"
+                        max="90" step="1" value="0"></mat-slider>
+                    <mat-icon class="icon-main align-self-center" svgIcon="volume-high" aria-hidden="false"
+                        aria-label="high volume icon">
+                    </mat-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 
+
+
+
+
+OLD:
 
         <div class="m-2 pl-2 right-footer mr-4 d-flex flex-column">
 
@@ -82,5 +117,7 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
+
+
+
+-->

@@ -14,9 +14,11 @@ export class MediarendererComponent {
   private _mediaServerUdn: string;
   private _mediaRendererUdn: string;
 
-  constructor(public deviceService: DeviceService, public rendererService: RendererService) {
-    deviceService.mediaRendererChanged$.subscribe(data => this._mediaRendererUdn = data.udn);
-    deviceService.mediaServerChanged$.subscribe(data => this._mediaServerUdn = data.udn);
+  constructor(
+    public deviceService: DeviceService, 
+    public rendererService: RendererService) {
+      deviceService.mediaRendererChanged$.subscribe(data => this._mediaRendererUdn = data.udn);
+      deviceService.mediaServerChanged$.subscribe(data => this._mediaServerUdn = data.udn);
   }
 
   hasDeviceDriver(): boolean {

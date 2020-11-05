@@ -1,5 +1,12 @@
 @import "pantone";
 
+:root {
+    --snow-white   : rgb(255, 255, 250);
+    --glas-white   : rgba(255, 255, 255, 0.5);
+    --primary-color: rgb(0, 255, 255);
+    --grey-5       : rgb(76 78 84);
+}
+
 //
 // application classes for individual components
 // ===================================================================================
