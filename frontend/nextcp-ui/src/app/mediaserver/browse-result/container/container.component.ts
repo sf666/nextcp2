@@ -64,7 +64,13 @@ export class ContainerComponent implements AfterViewChecked {
     this.contentDirectoryService.browseChildren(containerDto.id, containerDto.parentID, containerDto.mediaServerUDN);
   }
 
+  shufflePlaylist(container) {
+    this.playlistService.setShuffle(true);
+    this.playlistService.addContainerToPlaylistAndPlay(container);
+  }
+
   playPlaylist(container) {
+    this.playlistService.setShuffle(false);
     this.playlistService.addContainerToPlaylistAndPlay(container);
   }
 

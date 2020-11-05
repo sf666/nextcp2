@@ -2,8 +2,11 @@ package nextcp.domainmodel.device.mediarenderer.ohinfo;
 
 import nextcp.domainmodel.device.mediarenderer.MediaRendererDevice;
 import nextcp.dto.TrackInfoDto;
+import nextcp.dto.TrackTimeDto;
 import nextcp.upnp.modelGen.avopenhomeorg.info.InfoServiceEventListenerImpl;
 import nextcp.upnp.modelGen.avopenhomeorg.info.InfoServiceStateVariable;
+import nextcp.upnp.modelGen.avopenhomeorg.time.TimeServiceStateVariable;
+import nextcp.util.DisplayUtils;
 
 public class OhInfoServiceEventListener extends InfoServiceEventListenerImpl
 {
@@ -36,6 +39,7 @@ public class OhInfoServiceEventListener extends InfoServiceEventListenerImpl
         dto.metatextCount = state.MetatextCount;
         dto.trackCount = state.TrackCount;
         dto.uri = state.Uri;
+        dto.duration = DisplayUtils.convertToDigitString(state.Duration);
         dto.currentTrack = device.getDtoBuilder().extractXmlAsMusicItem(state.Metatext);
         return dto;
     }

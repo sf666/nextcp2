@@ -25,6 +25,13 @@ public class OhTimeServiceEventListener extends TimeServiceEventListenerImpl
     {
         super.eventProcessed();
         TimeServiceStateVariable state = getStateVariable();
+        TrackTimeDto dto = generateTractTimeDto(state);
+
+        eventPublisher.publishEvent(dto);
+    }
+
+    private TrackTimeDto generateTractTimeDto(TimeServiceStateVariable state)
+    {
         TrackTimeDto dto = new TrackTimeDto();
         dto.mediaRendererUdn = device.getUDN().getIdentifierString();
 
@@ -42,8 +49,7 @@ public class OhTimeServiceEventListener extends TimeServiceEventListenerImpl
         }
         dto.secondsDisp = DisplayUtils.convertToDigitString(state.Seconds);
         dto.percent = calcPercent(state.Seconds, state.Duration);
-
-        eventPublisher.publishEvent(dto);
+        return dto;
     }
 
     private int calcPercent(Long seconds, Long duration)

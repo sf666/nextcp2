@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2020-11-03 10:18:30.
+// Generated using typescript-generator version 2.0.400 on 2020-11-05 08:02:33.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -216,6 +216,7 @@ export interface TrackInfoDto {
     codecName: string;
     metatext: string;
     currentTrack: MusicItemDto;
+    duration: string;
 }
 
 export interface TrackTimeDto {

@@ -18,12 +18,13 @@ public class TrackInfoDto
     public String codecName;
     public String metatext;
     public MusicItemDto currentTrack;
+    public String duration;
 
     public TrackInfoDto()
     {
     }
 
-    public TrackInfoDto(String mediaRendererUdn, Boolean streaming, Long detailsCount, Long metatextCount, String metadata, Long trackCount, String uri, String codecName, String metatext, MusicItemDto currentTrack)
+    public TrackInfoDto(String mediaRendererUdn, Boolean streaming, Long detailsCount, Long metatextCount, String metadata, Long trackCount, String uri, String codecName, String metatext, MusicItemDto currentTrack, String duration)
     {
         this.mediaRendererUdn = mediaRendererUdn;
         this.streaming = streaming;
@@ -35,6 +36,7 @@ public class TrackInfoDto
         this.codecName = codecName;
         this.metatext = metatext;
         this.currentTrack = currentTrack;
+        this.duration = duration;
     }
     
     @Override
@@ -52,6 +54,7 @@ public class TrackInfoDto
         sb.append("codecName=").append(this.codecName).append(", ");
         sb.append("metatext=").append(this.metatext).append(", ");
         sb.append("currentTrack=").append(this.currentTrack).append(", ");
+        sb.append("duration=").append(this.duration).append(", ");
         sb.append("]");
         return sb.toString();
     }

@@ -32,8 +32,8 @@ export class RendererService {
 
     sseService.mediaRendererTrackInfoChanged$.subscribe(data => {
       if (deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
-        //        console.log(data);
         this.trackInfo = data;
+        this.trackTime.durationDisp = data.duration;
       };
     });
 
@@ -135,6 +135,7 @@ export class RendererService {
       metatextCount: 0,
       trackCount: 0,
       uri: '',
+      duration: '',
       currentTrack: this.emptyMusicItem(),
     }
   }

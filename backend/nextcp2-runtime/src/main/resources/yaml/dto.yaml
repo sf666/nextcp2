@@ -180,7 +180,8 @@ TrackInfoDto:
    uri: String
    codecName: String
    metatext: String
-   currentTrack: MusicItemDto   
+   currentTrack: MusicItemDto
+   duration: String   
    
 TrackTimeDto:
    mediaRendererUdn: String
