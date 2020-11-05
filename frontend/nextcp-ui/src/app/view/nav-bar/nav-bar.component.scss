@@ -1,24 +1,21 @@
 @import "pantone";
 @import "custom_variables";
+@import "app-variables";
 
-.nav-background {
-    background-color: $pantone-532-C; // $pantone-Black-2-C;
+.navbar {
+    margin-top      : 12px;
+    display         : flex;
+    background-color: black;
+    position        : fixed;
+    top             : 0px;
+    right           : 0px;
+    width           : calc(100% - 250px); // calc(100% - $sidebar-width) doesn't work, dunno why.
+    z-index         : 3;
 }
 
-.topTextAlign {
-    vertical-align: top;
-}
-
-.mapButton {
-    vertical-align: top;
-}
-
-.menu-spacer {
-    margin-left: 32px;
-}
-
-.active {
-    color: $amber-pantone-3 !important;
+.search-icon {
+    padding-top: 1px;
+    align-self : center;
 }
 
 input {
@@ -38,6 +35,7 @@ input {
 }
 
 .nav-search-container {
+    display           : flex;
     box-sizing        : border-box;
     -webkit-app-region: no-drag;
 
@@ -50,36 +48,4 @@ input {
     border-radius   : 8px;
     cursor          : text;
     transition      : background-color .2s ease-out;
-}
-
-.middle-spacer {
-    flex: 1 1 auto;
-}
-
-/**
-    align-items     : center;
-    padding         : 0 7px;
-    background-color: rgba(229, 238, 255, .2);
-    border-radius   : 8px;
-    cursor          : text;
-    transition      : background-color .2s ease-out;
-*/
-
-.example-container {
-    width : 400px;
-    height: 200px;
-    margin: 12px;
-    border: 1px solid #555;
-}
-
-mat-drawer-content {
-    padding       : 12px;
-    display       : flex;
-    flex-direction: column;
-    align-items   : flex-start;
-}
-
-.search-icon {
-    padding-top: 1px;
-    align-self: flex-start;
 }

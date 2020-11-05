@@ -1,21 +1,15 @@
 @import "app-variables";
 
-$sidebarWidth : 250px;
-
 .footer-block {
     height: $footerHeight;
 }
 
-.sidebar {
-    width           : $sidebarWidth;
-    padding         : 12px;
-    display         : flex;
-    flex-direction  : column;
-    align-items     : flex-start;
-    background-color: rgba($color: black, $alpha: 0.20);
-    position        : fixed;
+.mainContent {
+    margin-left: 20px;
+    margin-top: $nav-height;
+    width:calc(100vw - $sidebar-width);
 }
 
-.mainContent {
-    margin-left: $sidebarWidth;
+.app-root {
+    height: 100vh;
 }

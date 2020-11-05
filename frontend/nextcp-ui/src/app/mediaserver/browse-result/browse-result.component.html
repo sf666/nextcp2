@@ -1,9 +1,9 @@
-<div class="bg-img" id="browse-result-main">
+<div *ngIf="showBlur()" class="bg-img" id="browse-result-main">
     <div class="bg-blur">
     </div>
 </div>
 
-<div clss="bg-default">
+<div class="bg-default">
     <browseResultContainer></browseResultContainer>
     <browseResultAlbum></browseResultAlbum>
     <browseResultItem></browseResultItem>

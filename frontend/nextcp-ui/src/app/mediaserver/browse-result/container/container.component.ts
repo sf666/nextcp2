@@ -79,13 +79,4 @@ export class ContainerComponent implements AfterViewChecked {
     let isLeaf = this.containerListWithoutMinimServerTags().length < 1;
     return isLeaf;
   }
-
-  showParentUpButton(): boolean {
-    return this.contentDirectoryService.currentContainerList.currentContainer.id !== '0';
-  }
-
-  gotoParant() {
-    this.contentDirectoryService.browseChildren(this.contentDirectoryService.currentContainerList.currentContainer.parentID, "",
-      this.contentDirectoryService.currentContainerList.currentContainer.mediaServerUDN);
-  }
 }

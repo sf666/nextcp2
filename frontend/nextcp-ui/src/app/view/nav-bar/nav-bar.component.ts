@@ -12,7 +12,9 @@ export class NavBarComponent {
 
   navbarOpen = false;
 
-  constructor(public contentDirectoryService: ContentDirectoryService, private deviceService: DeviceService) {
+  constructor(
+    public contentDirectoryService: ContentDirectoryService, 
+    private deviceService: DeviceService) {
   }
 
   toggleNavbar() {
@@ -38,6 +40,15 @@ export class NavBarComponent {
   clearSearch() {
     this.quickSearchString = "";
   }
+
+  isDisabled(): boolean {
+    return this.contentDirectoryService.currentContainerList.currentContainer.id === '0';
+  }
+
+  gotoParent() {
+    this.contentDirectoryService.browseChildren(this.contentDirectoryService.currentContainerList.currentContainer.parentID, "",
+      this.contentDirectoryService.currentContainerList.currentContainer.mediaServerUDN);
+  }  
 }
 
 /**

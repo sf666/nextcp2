@@ -1,34 +1,24 @@
-<mat-toolbar id="nextcp-nav-bar" class="nav-background">
-    <mat-toolbar-row>
-        <!--
-        <button mat-icon-button>
-            <mat-icon (click)="snav.toggle()">menu</mat-icon>
+<div class="navbar">
+    <div>
+        <button mat-mini-fab [disabled]="isDisabled()" (click)="gotoParent()">
+            <mat-icon svgIcon="arrow-left"></mat-icon>
         </button>
-        -->
+    </div>
 
-        <h1>nextCP/2</h1>
+    <div>
+        <div class="nav-search-container">
+            <mat-icon class="mr-1 search-icon" svgIcon="card-search-outline"></mat-icon>
+            <input class="nav-search" [(ngModel)]="quickSearchString" matInput placeholder="search"
+                #searchInput>
+            <mat-icon class="mr-1 search-icon" svgIcon="close" (click)="clearSearch()"></mat-icon>
+        </div>
+    </div>
+</div>
+<app-modal-search-result *ngIf="contentDirectoryService.quickSearchPanelVisible"></app-modal-search-result>
+<!-- 
 
-        <span class="menu-spacer"></span>
-        <a mat-button routerLinkActive="active" [routerLink]="'/music-library'">
-            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="music-box-multiple-outline"></mat-icon>
-            Music Library
-        </a>
-        <a mat-button routerLinkActive="active" [routerLink]="'/playlist'">
-            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="playlist-music-outline"></mat-icon>
-            Playlist
-        </a>
-        <a mat-button routerLinkActive="active" [routerLink]="'/player'">
-            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="surround-sound"></mat-icon>Player
-        </a>
-        <a mat-button routerLinkActive="active" [routerLink]="'/radio'">
-            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="radio"></mat-icon>Radio
-        </a>
-        <a mat-button routerLinkActive="active" [routerLink]="'/search'">
-            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="card-search-outline"></mat-icon>Search
-        </a>
-        <a mat-button routerLinkActive="active" [routerLink]="'/settings'">
-            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="cog-outline"></mat-icon>Settings
-        </a>
+    <mat-toolbar id="nextcp-nav-bar" class="nav-background">
+    <mat-toolbar-row>
         <span class="middle-spacer"></span>
         
         <div class="nav-search-container d-flex">
@@ -40,3 +30,6 @@
     <app-modal-search-result *ngIf="contentDirectoryService.quickSearchPanelVisible"></app-modal-search-result>
 </mat-toolbar>
 
+
+
+-->

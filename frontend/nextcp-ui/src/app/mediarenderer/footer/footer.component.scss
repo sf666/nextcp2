@@ -1,13 +1,13 @@
 @import "custom_variables";
-@import 'app-variables';
-@import 'pantone';
+@import "app-variables";
+@import "pantone";
 
-$col-1 : $amber-pantone-3;
-$col-2 : $amber-pantone-4;
-$col-3 : $amber-pantone-5;
-$col-4 : $amber-pantone-6;
+$col-1: $amber-pantone-3;
+$col-2: $amber-pantone-4;
+$col-3: $amber-pantone-5;
+$col-4: $amber-pantone-6;
 
-$col-grey : $col-4;
+$col-grey: $col-4;
 
 .footer {
     font-weight     : 200;
@@ -19,6 +19,7 @@ $col-grey : $col-4;
     background-color: rgba($color: $pantone-Neutral-Black-C, $alpha: 0.95);
     color           : white;
     text-align      : left;
+    z-index         : 2;
 }
 
 .mediaRendererLabel {
@@ -36,7 +37,7 @@ $col-grey : $col-4;
     }
 
     &:first-child {
-        margin-left: 0
+        margin-left: 0;
     }
 }
 
@@ -59,7 +60,7 @@ $col-grey : $col-4;
 .middle-footer {
     flex-grow  : 0;
     flex-shrink: 0;
-    flex-basis: 430px;
+    flex-basis : 430px;
     border-left: 1px solid $col-4;
 }
 
@@ -109,7 +110,6 @@ img {
     color: $pantone-802-C;
 }
 
-
 .spacer {
     height: $footerHeight;
 }
@@ -117,13 +117,13 @@ img {
 .albumAndTitle {
     margin-left  : 1.5rem;
     margin-top   : 0.2rem;
-    font-family  : 'Quicksand', sans-serif;
+    font-family  : "Quicksand", sans-serif;
     margin-bottom: 0.2rem;
 }
 
 .minWidth {
-    min-width    : 0;
-    min-height   : 0;
+    min-width : 0;
+    min-height: 0;
 }
 
 .title {

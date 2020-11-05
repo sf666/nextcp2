@@ -8,4 +8,9 @@ import { Component } from '@angular/core';
 export class BrowseResultComponent {
 
   constructor() { }
+  
+  public showBlur() {
+    return true;
+  }
+  
 }

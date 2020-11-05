@@ -1,10 +1,11 @@
-<div id="nextcp-root" class="container-fluid">
-  <nav-bar></nav-bar>
-  <div class="d-flex">
+<div id="nextcp-root" class="app-root">
+  <div class="d-flex w-100 h-100">
     <div class="sidebar">
       <app-sidebar></app-sidebar>
+      <div class="footer-block">&nbsp;</div>
     </div>
-    <div class="mainContent w-100">
+    <div class="mainContent">
+      <nav-bar></nav-bar>
       <router-outlet></router-outlet>
     </div>
   </div>
