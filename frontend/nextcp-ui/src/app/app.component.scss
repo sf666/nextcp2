@@ -6,6 +6,8 @@
     position  : fixed;
     top       : var(--nav-height);
     left      : var(--sidebar-width);
+    width : calc(100vw - var(--sidebar-width));
+    height: calc(100vh - var(--nav-height) - var(--footer-heihgt));
     max-width : calc(100vw - var(--sidebar-width));
     max-height: calc(100vh - var(--nav-height) - var(--footer-heihgt));
     overflow-y: scroll;

@@ -29,7 +29,6 @@ export class NavBarComponent {
             }
           }
         });
-
   }
 
   get quickSearchString() {
