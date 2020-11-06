@@ -23,8 +23,4 @@ export class PlaylistComponent implements OnInit {
       return "active";
     }
   }
-
-  clear(): void {
-    this.playlistService.deleteAll();
-  }
 }

@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2020-11-06 09:05:30.
+// Generated using typescript-generator version 2.0.400 on 2020-11-06 13:10:12.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -208,7 +208,6 @@ export interface RendererPlaylist {
 
 export interface TrackInfoDto {
     mediaRendererUdn: string;
-    streaming: boolean;
     detailsCount: number;
     metatextCount: number;
     metadata: string;
@@ -228,6 +227,7 @@ export interface TrackTimeDto {
     secondsDisp: string;
     trackCount: number;
     percent: number;
+    streaming: boolean;
 }
 
 export interface UiClientConfig {

@@ -1,35 +1,57 @@
 <div class="navbar">
-    <div>
-        <button *ngIf="showBackButton" mat-mini-fab [disabled]="isDisabled()" (click)="gotoParent()">
+    <div *ngIf="musicLibraryVisible; else playlist">
+        <button mat-mini-fab [disabled]="isDisabled()" (click)="gotoParent()">
             <mat-icon svgIcon="arrow-left"></mat-icon>
         </button>
     </div>
 
-    <div>
-        <div class="nav-search-container">
-            <mat-icon class="mr-1 search-icon" svgIcon="card-search-outline"></mat-icon>
-            <input class="nav-search" [(ngModel)]="quickSearchString" matInput placeholder="search"
-                #searchInput>
-            <mat-icon class="mr-1 search-icon" svgIcon="close" (click)="clearSearch()"></mat-icon>
-        </div>
+    <div class="nav-search-container">
+        <mat-icon class="mr-1 search-icon" svgIcon="card-search-outline"></mat-icon>
+        <input class="nav-search" [(ngModel)]="quickSearchString" matInput placeholder="search" #searchInput>
+        <mat-icon class="mr-1 search-icon" svgIcon="close" (click)="clearSearch()"></mat-icon>
     </div>
 </div>
+
 <app-modal-search-result *ngIf="contentDirectoryService.quickSearchPanelVisible"></app-modal-search-result>
-<!-- 
 
-    <mat-toolbar id="nextcp-nav-bar" class="nav-background">
-    <mat-toolbar-row>
-        <span class="middle-spacer"></span>
-        
-        <div class="nav-search-container d-flex">
-            <mat-icon  class="mr-1 search-icon" svgIcon="card-search-outline"></mat-icon>
-            <input class="nav-search" [(ngModel)]="quickSearchString" type="search" matInput placeholder="search" #searchInput>
-            <mat-icon class="mr-1 search-icon" svgIcon="close" (click)="clearSearch()"></mat-icon>
-        </div>
-    </mat-toolbar-row>
-    <app-modal-search-result *ngIf="contentDirectoryService.quickSearchPanelVisible"></app-modal-search-result>
-</mat-toolbar>
+<ng-template #playlist>
+    <div class="headLeftContainer" *ngIf="playlistVisible; else player">
+        <div class="headFont">Playlist Tracks</div>
+        <button mat-flat-button class="ml-4 headButton" (click)="playlistService.deleteAll()">
+            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="close"></mat-icon>
+            clear tracks
+        </button>
+    </div>
+</ng-template>
 
+<ng-template #player>
+    <div *ngIf="playerVisible; else radio">
+        <div class="headFont">Player</div>
+    </div>
+</ng-template>
 
+<ng-template #radio>
+    <div *ngIf="radioVisible; else searchSingle">
+        <div class="headFont">Radio</div>
+    </div>
+</ng-template>
 
--->
+<ng-template #searchSingle>
+    <div *ngIf="searchResultSingleVisible; else settings">&nbsp;</div>
+</ng-template>
+
+<ng-template #settings>
+    <div *ngIf="settingsVisible; else searchMulti">
+        <div class="headFont">Settings</div>
+    </div>
+</ng-template>
+
+<ng-template #searchMulti>
+    <div *ngIf="searchResultMultiVisible; else default">&nbsp;</div>
+</ng-template>
+
+<ng-template #default>
+    <div>&nbsp;</div>
+</ng-template>
+
+<app-modal-search-result *ngIf="contentDirectoryService.quickSearchPanelVisible"></app-modal-search-result>

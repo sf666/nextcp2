@@ -4,6 +4,7 @@
 
 .navbar {
     display         : flex;
+    flex-direction  : row;
     background-color: black;
     position        : fixed;
     top             : 0px;
@@ -12,6 +13,24 @@
     height          : var(--nav-height);
     z-index         : 3;
 }
+
+.headFont {    
+    font-size: 1.5rem;
+    color: rgba(229, 238, 255, .6);
+}
+
+.headButton {
+    color: rgba(229, 238, 255, .6);
+}
+
+.headLeftContainer {
+    display       : flex;
+    flex-direction: row;
+}
+
+//
+// Search component start
+//
 
 .search-icon {
     padding-top: 1px;
@@ -42,6 +61,7 @@ input {
     width    : 100%;
     max-width: 388px;
 
+    align-self      : center;
     align-items     : center;
     padding         : 0 7px;
     background-color: rgba(229, 238, 255, .2);
@@ -49,3 +69,7 @@ input {
     cursor          : text;
     transition      : background-color .2s ease-out;
 }
+
+//
+// Search component end
+//

@@ -110,7 +110,10 @@ export class FooterComponent {
   // =========================================================================================================
 
   streaming() {
-    return this.rendererService.trackInfo.streaming;
+    let streaming : boolean;
+    streaming = this.rendererService?.trackTime?.streaming;
+    console.log("Streaming x : " + streaming);
+    return streaming;
   }
 
   //

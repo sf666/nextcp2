@@ -9,7 +9,6 @@ public class TrackInfoDto
 {
 
     public String mediaRendererUdn;
-    public Boolean streaming;
     public Long detailsCount;
     public Long metatextCount;
     public String metadata;
@@ -24,10 +23,9 @@ public class TrackInfoDto
     {
     }
 
-    public TrackInfoDto(String mediaRendererUdn, Boolean streaming, Long detailsCount, Long metatextCount, String metadata, Long trackCount, String uri, String codecName, String metatext, MusicItemDto currentTrack, String duration)
+    public TrackInfoDto(String mediaRendererUdn, Long detailsCount, Long metatextCount, String metadata, Long trackCount, String uri, String codecName, String metatext, MusicItemDto currentTrack, String duration)
     {
         this.mediaRendererUdn = mediaRendererUdn;
-        this.streaming = streaming;
         this.detailsCount = detailsCount;
         this.metatextCount = metatextCount;
         this.metadata = metadata;
@@ -45,7 +43,6 @@ public class TrackInfoDto
         StringBuilder sb = new StringBuilder();
         sb.append("TrackInfoDto [");
         sb.append("mediaRendererUdn=").append(this.mediaRendererUdn).append(", ");
-        sb.append("streaming=").append(this.streaming).append(", ");
         sb.append("detailsCount=").append(this.detailsCount).append(", ");
         sb.append("metatextCount=").append(this.metatextCount).append(", ");
         sb.append("metadata=").append(this.metadata).append(", ");

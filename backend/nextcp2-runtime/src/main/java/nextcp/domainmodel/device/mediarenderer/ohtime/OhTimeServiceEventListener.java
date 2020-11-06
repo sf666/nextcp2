@@ -42,10 +42,15 @@ public class OhTimeServiceEventListener extends TimeServiceEventListenerImpl
         dto.durationDisp = DisplayUtils.convertToDigitString(state.Duration);
         if ("00:00".equals(dto.durationDisp))
         {
+            dto.streaming = true;
             if (state.Seconds != null && state.Seconds > 0)
             {
                 dto.durationDisp = "streaming";
             }
+        }
+        else
+        {
+            dto.streaming = false;
         }
         dto.secondsDisp = DisplayUtils.convertToDigitString(state.Seconds);
         dto.percent = calcPercent(state.Seconds, state.Duration);

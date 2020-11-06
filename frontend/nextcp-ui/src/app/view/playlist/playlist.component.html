@@ -1,17 +1,3 @@
-
-<div class="section head d-flex">
-    <div>Tracks</div>
-    <div class="d-flex justify-content-center ml-4" style="width: 100%;">
-        <div (click)="clear()" class="d-flex section-button sec-border">
-            <div class="ml-2">
-                <mat-icon class="icon-button main" svgIcon="close" aria-label="play">
-                </mat-icon>
-            </div>
-            <div class="section-button text">clear playlist</div>
-        </div>
-    </div>
-</div>
-
 <div *ngIf="playlistService.playlistItems?.length > 0">
     <div *ngFor="let item of playlistService.playlistItems" class="playlistItem d-flex {{getActiveClass(item)}}"
         (click)="playlistService.seekId(item.objectID)">

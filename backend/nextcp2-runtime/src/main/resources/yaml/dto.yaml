@@ -172,7 +172,6 @@ RendererPlaylist:
  # static track information
 TrackInfoDto:
    mediaRendererUdn: String
-   streaming: Boolean
    detailsCount: Long
    metatextCount: Long
    metadata: String
@@ -191,6 +190,7 @@ TrackTimeDto:
    secondsDisp: String
    trackCount: Long
    percent: Integer
+   streaming: Boolean
 
 InputSourceDto:
    id: Integer

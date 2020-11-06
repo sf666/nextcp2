@@ -15,12 +15,13 @@ public class TrackTimeDto
     public String secondsDisp;
     public Long trackCount;
     public Integer percent;
+    public Boolean streaming;
 
     public TrackTimeDto()
     {
     }
 
-    public TrackTimeDto(String mediaRendererUdn, Long duration, String durationDisp, Long seconds, String secondsDisp, Long trackCount, Integer percent)
+    public TrackTimeDto(String mediaRendererUdn, Long duration, String durationDisp, Long seconds, String secondsDisp, Long trackCount, Integer percent, Boolean streaming)
     {
         this.mediaRendererUdn = mediaRendererUdn;
         this.duration = duration;
@@ -29,6 +30,7 @@ public class TrackTimeDto
         this.secondsDisp = secondsDisp;
         this.trackCount = trackCount;
         this.percent = percent;
+        this.streaming = streaming;
     }
     
     @Override
@@ -43,6 +45,7 @@ public class TrackTimeDto
         sb.append("secondsDisp=").append(this.secondsDisp).append(", ");
         sb.append("trackCount=").append(this.trackCount).append(", ");
         sb.append("percent=").append(this.percent).append(", ");
+        sb.append("streaming=").append(this.streaming).append(", ");
         sb.append("]");
         return sb.toString();
     }

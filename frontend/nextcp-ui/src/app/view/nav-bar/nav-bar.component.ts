@@ -1,3 +1,4 @@
+import { PlaylistService } from './../../service/playlist.service';
 import { Router, NavigationStart, Event as NavigationEvent } from '@angular/router';
 import { DeviceService } from './../../service/device.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
@@ -13,22 +14,43 @@ export class NavBarComponent {
 
   showBackButton = false;
 
+  private currentPath: string;
+
   constructor(
     public contentDirectoryService: ContentDirectoryService,
     private router: Router,
+    public playlistService: PlaylistService,
     private deviceService: DeviceService) {
 
-    this.router.events
-      .subscribe(
-        (event: NavigationEvent) => {
-          if (event instanceof NavigationStart) {
-            if (event.url === '/music-library') {
-              this.showBackButton = true;
-            } else {
-              this.showBackButton = false;
-            }
-          }
-        });
+    this.router.events.subscribe((event: NavigationEvent) => {
+      if (event instanceof NavigationStart) {
+        this.currentPath = event.url;
+      }
+    });
+  }
+
+  // UI state management for navbar 
+
+  get musicLibraryVisible(): boolean {
+    return this.currentPath === '/music-library';
+  }
+  get playlistVisible(): boolean {
+    return this.currentPath === '/playlist';
+  }
+  get playerVisible(): boolean {
+    return this.currentPath === '/player';
+  }
+  get radioVisible(): boolean {
+    return this.currentPath === '/radio';
+  }
+  get searchResultSingleVisible(): boolean {
+    return this.currentPath === '/searchResultSingleItem';
+  }
+  get searchResultMultiVisible(): boolean {
+    return this.currentPath === '/searchResultContainer';
+  }
+  get settingsVisible(): boolean {
+    return this.currentPath === '/settings';
   }
 
   get quickSearchString() {

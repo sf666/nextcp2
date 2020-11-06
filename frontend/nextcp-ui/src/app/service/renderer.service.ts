@@ -115,6 +115,7 @@ export class RendererService {
   emptyTrackTime(): TrackTimeDto {
     return {
       duration: 0,
+      streaming: false,
       durationDisp: '00:00',
       mediaRendererUdn: '',
       percent: 0,
@@ -127,7 +128,6 @@ export class RendererService {
   emptyTrackInfo(): TrackInfoDto {
     return {
       mediaRendererUdn: '',
-      streaming: false,
       codecName: '',
       detailsCount: 0,
       metadata: '',

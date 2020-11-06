@@ -14,13 +14,24 @@
             <div class="d-flex flex-column minWidth albumAndTitle">
                 <div class="title no-wrap">{{getCurrentSongTitle()}}</div>
                 <div class="d-flex flex-column no-wrap">
-                    <div class="currentTime align-self-start">
-                        by <span class="finishedTime">{{rendererService.trackInfo?.currentTrack?.artistName}}</span></div>
-                    <div class="currentTime align-self-start">
-                        from the album <span class="finishedTime">{{rendererService.trackInfo?.currentTrack?.album}}</span></div>
+                    <div class="currentTime align-self-start"
+                        *ngIf="rendererService.trackInfo?.currentTrack?.artistName ; else emptyDiv">
+                        by <span class="finishedTime">{{rendererService.trackInfo?.currentTrack?.artistName}}</span>
+                    </div>
+                    <div class="currentTime align-self-start" *ngIf="rendererService.trackInfo?.currentTrack?.album; else emptyDiv">
+                        <div *ngIf="!streaming(); else stream">
+                            from the album <span class="finishedTime">{{rendererService.trackInfo?.currentTrack?.album}}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <ng-template #stream>
+            <div>
+                broadcasted by <span class="finishedTime">{{rendererService.trackInfo?.currentTrack?.album}}</span>
+            </div>
+        </ng-template>
 
         <!-- Middle footer section -->
         <div class="m-2 middle-footer flex-column align-items-center">
@@ -39,17 +50,18 @@
                     <mat-icon class="icon-button secondary {{repeatClass}}" svgIcon="repeat"
                         (click)="playlistService.toggleRepeat()" aria-label="repeat"></mat-icon>
                 </div>
-                <div class="mr-2 ml-4 d-flex align-self-center align-items-center" *ngIf="!streaming()">
+                <div class="timeDispContainer">
                     <div class="currentTime">{{rendererService.trackTime.secondsDisp}}</div>
                     <div class="ml-2 currentTime">/</div>
-                    <div class="ml-2 finishedTime">{{rendererService.trackTime.durationDisp}}</div>
-                </div>
-                <div class="mr-2 ml-4 d-flex align-self-center align-items-center" *ngIf="streaming()">
-                    <div class="currentTime">streaming</div>
+                    <div class="ml-2 finishedTime" *ngIf="!streaming(); else streamDisplayString">{{rendererService.trackTime.durationDisp}}</div>
                 </div>
             </div>
         </div>
 
+        <ng-template #streamDisplayString>
+            <div class="ml-2 finishedTime">streaming</div>
+        </ng-template>
+        
         <!-- right footer section -->
 
         <div class="m-2 pl-2 right-footer mr-4 d-flex flex-column">
@@ -78,46 +90,6 @@
     </div>
 </div>
 
-<!-- 
-
-
-
-
-OLD:
-
-        <div class="m-2 pl-2 right-footer mr-4 d-flex flex-column">
-
-            <div class="d-flex justify-content-between">
-                <div class="audioInfoLabel">sample freq.</div>
-                <div class="d-flex justify-content-between">
-                    <div class="audioInfoValue ">
-                        {{getSampleFreq() | number}}
-                    </div>
-                    <div class="unit">[kHz]</div>
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-between">
-                <div class="audioInfoLabel">bits/sample</div>
-                <div class="d-flex justify-content-between">
-                    <div class="audioInfoValue align-self-end">
-                        {{getBitsPerSample() | number}}
-                    </div>
-                    <div class="unit">[bit]</div>
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-between">
-                <div class="audioInfoLabel">bitrate</div>
-                <div class="d-flex justify-content-between">
-                    <div class="audioInfoValue">
-                        {{getBitrate() | number}}
-                    </div>
-                    <div class="unit justify-content-end">[kbit/s]</div>
-                </div>
-            </div>
-        </div>
-
-
-
--->
+<ng-template #emptyDiv>
+    <div>&nbsp;</div>
+</ng-template>
