@@ -21,6 +21,21 @@
 
 // overwrite material design ... 
 
+.no-wrap {
+    white-space  : nowrap;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+    min-height   : 0;
+    min-width    : 0;
+}
+
+.minWidth {
+    min-width : 0;
+    min-height: 0;
+}
+
+
+
 // Section 
 .section {
     font-weight: 300;

@@ -1,8 +1,9 @@
 <div class="navbar">
-    <div *ngIf="musicLibraryVisible; else playlist">
+    <div class="headLeftContainer minWidth" *ngIf="musicLibraryVisible; else playlist">
         <button mat-mini-fab [disabled]="isDisabled()" (click)="gotoParent()">
-            <mat-icon svgIcon="arrow-left"></mat-icon>
+            <mat-icon style="vertical-align: top;" svgIcon="arrow-left"></mat-icon>
         </button>
+        <div class="headFont no-wrap">{{currentContainer.title}}</div>
     </div>
 
     <div class="nav-search-container">

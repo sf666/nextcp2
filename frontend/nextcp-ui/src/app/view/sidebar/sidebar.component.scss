@@ -9,7 +9,7 @@ $col-4    : $amber-pantone-6;
 $col-grey : $col-4;
 
 a {
-    padding-top: 1rem;
+    margin-top: 1rem;
 }
 
 .standbyOn {
@@ -39,17 +39,16 @@ a {
 }
 
 .sidebar {
-    position      : fixed;
-    left          : 0;
-    display       : flex;
-    flex-direction: column;
-    flex-shrink   : 0;
-    width         : var(--sidebar-width);
-    height        : calc(100vh - 86px);
-    max-height    : 100vh;
-    background    : #242428;
-    transition    : 50ms ease-in;
-    overflow-y    : auto;
-    overflow-x    : scroll;
+    position        : fixed;
+    display         : flex;
+    flex-direction  : column;
+    left            : 0;
+    flex-shrink     : 0;
+    width           : var(--sidebar-width);
+    height          : calc(100vh - var(--footer-heihgt));
+    max-height      : 100vh;
+    background      : #242428;
+    transition      : 50ms ease-in;
+    overflow-y      : auto;
     //z-index       : 20;
 }

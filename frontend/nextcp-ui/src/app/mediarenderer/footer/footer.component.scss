@@ -32,6 +32,7 @@ mat-slider {
     justify-content: space-around;
     width          : 150px;
     min-width      : 150px;
+    margin-left    : 1.5rem;
 }
 
 .mediaRendererLabel {
@@ -103,7 +104,7 @@ mat-slider {
 
 .baseFontsize {
     font-size  : 1rem;
-    font-weight: 400;
+    font-weight: 300;
 }
 
 .currentTime {

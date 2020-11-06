@@ -1,3 +1,4 @@
+import { ContainerDto } from './../../service/dto.d';
 import { PlaylistService } from './../../service/playlist.service';
 import { Router, NavigationStart, Event as NavigationEvent } from '@angular/router';
 import { DeviceService } from './../../service/device.service';
@@ -53,6 +54,12 @@ export class NavBarComponent {
     return this.currentPath === '/settings';
   }
 
+  // music-library
+  public get currentContainer(): ContainerDto {
+    return this.contentDirectoryService.currentContainerList.currentContainer;
+  }  
+
+  // Search
   get quickSearchString() {
     return this.contentDirectoryService.quickSearchQueryString;
   }
