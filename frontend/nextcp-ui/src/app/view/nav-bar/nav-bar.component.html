@@ -1,6 +1,6 @@
 <div class="navbar">
     <div>
-        <button mat-mini-fab [disabled]="isDisabled()" (click)="gotoParent()">
+        <button *ngIf="showBackButton" mat-mini-fab [disabled]="isDisabled()" (click)="gotoParent()">
             <mat-icon svgIcon="arrow-left"></mat-icon>
         </button>
     </div>

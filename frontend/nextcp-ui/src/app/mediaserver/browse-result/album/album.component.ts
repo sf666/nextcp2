@@ -25,7 +25,7 @@ export class AlbumComponent {
   }
 
   playAlbum(container) {
-    this.playlistService.addContainerToPlaylistAndPlay(container);
+    this.playlistService.addContainerToPlaylistAndPlay(container, false);
   }
-  
+
 }

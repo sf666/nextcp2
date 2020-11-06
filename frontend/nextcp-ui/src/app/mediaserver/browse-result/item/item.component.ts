@@ -16,7 +16,7 @@ export class ItemComponent {
     public playlistService: PlaylistService) { }
 
   playAllTracks() : void {
-      this.playlistService.addContainerToPlaylistAndPlay(this.contentDirectoryService.currentContainerList.currentContainer);
+      this.playlistService.addContainerToPlaylistAndPlay(this.contentDirectoryService.currentContainerList.currentContainer, false);
   }
 
   addAllTracks(): void {

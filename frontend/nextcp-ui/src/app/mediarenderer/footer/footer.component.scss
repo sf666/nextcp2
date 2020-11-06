@@ -22,6 +22,10 @@ $col-grey: $col-4;
     z-index         : 80;
 }
 
+mat-slider {
+    height: 40px;
+}
+
 .mediaRendererLabel {
     color: $col-grey;
 }
@@ -147,8 +151,12 @@ img {
     min-width    : 0;
 }
 
-.center {
+.renderer-label {
     text-align: center;
+    font-size: 0.8rem;
+    font-weight: 300;
+    padding-bottom: 3px;
+    border-bottom: 1px solid var(--grey-5);    
 }
 
 .lower-row {

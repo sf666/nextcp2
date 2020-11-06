@@ -62,13 +62,11 @@ export class ContainerComponent implements AfterViewChecked {
   }
 
   shufflePlaylist(container) {
-    this.playlistService.setShuffle(true);
-    this.playlistService.addContainerToPlaylistAndPlay(container);
+    this.playlistService.addContainerToPlaylistAndPlay(container, true);
   }
 
   playPlaylist(container) {
-    this.playlistService.setShuffle(false);
-    this.playlistService.addContainerToPlaylistAndPlay(container);
+    this.playlistService.addContainerToPlaylistAndPlay(container, false);
   }
 
   isLeaf(): boolean {

@@ -1,3 +1,4 @@
+import { Router, NavigationStart, Event as NavigationEvent } from '@angular/router';
 import { DeviceService } from './../../service/device.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { Component } from '@angular/core';
@@ -10,15 +11,25 @@ import { Component } from '@angular/core';
 
 export class NavBarComponent {
 
-  navbarOpen = false;
+  showBackButton = false;
 
   constructor(
-    public contentDirectoryService: ContentDirectoryService, 
+    public contentDirectoryService: ContentDirectoryService,
+    private router: Router,
     private deviceService: DeviceService) {
-  }
 
-  toggleNavbar() {
-    this.navbarOpen = !this.navbarOpen;
+    this.router.events
+      .subscribe(
+        (event: NavigationEvent) => {
+          if (event instanceof NavigationStart) {
+            if (event.url === '/music-library') {
+              this.showBackButton = true;
+            } else {
+              this.showBackButton = false;
+            }
+          }
+        });
+
   }
 
   get quickSearchString() {
@@ -48,7 +59,7 @@ export class NavBarComponent {
   gotoParent() {
     this.contentDirectoryService.browseChildren(this.contentDirectoryService.currentContainerList.currentContainer.parentID, "",
       this.contentDirectoryService.currentContainerList.currentContainer.mediaServerUDN);
-  }  
+  }
 }
 
 /**
@@ -56,7 +67,4 @@ export class NavBarComponent {
   onResize(event) {
     this.screenHeight = window.innerHeight;
   }
-
-  
-
 */

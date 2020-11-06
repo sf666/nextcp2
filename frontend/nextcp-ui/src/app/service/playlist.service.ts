@@ -135,16 +135,18 @@ export class PlaylistService implements OnInit {
     const uri = '/insertContainer';
     const playlistAddContainerRequest: PlaylistAddContainerRequest = {
       containerDto: containerDto,
+      shuffle: false,
       mediaRendererUdn: this.getSelectedMediaRendererUdn()
     }
 
     this.httpService.postWithSuccessMessage(this.baseUri, uri, playlistAddContainerRequest, 'Playlist', 'Songs successfully added.', "Error adding songs to playlist.").subscribe();
   }
 
-  public addContainerToPlaylistAndPlay(containerDto: ContainerDto) {
+  public addContainerToPlaylistAndPlay(containerDto: ContainerDto, _shuffle: boolean) {
     const uri = '/insertAndPlayContainer';
     const playlistAddContainerRequest: PlaylistAddContainerRequest = {
       containerDto: containerDto,
+      shuffle: _shuffle,
       mediaRendererUdn: this.getSelectedMediaRendererUdn()
     }
 
