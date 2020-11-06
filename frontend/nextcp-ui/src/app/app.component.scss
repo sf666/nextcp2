@@ -1,15 +1,41 @@
-@import "app-variables";
-
 .footer-block {
-    height: $footerHeight;
+    height: var(--footerHeight);
 }
 
 .mainContent {
-    margin-left: $sidebar-width;
-    margin-top: $nav-height;
-    width:calc(100vw - $sidebar-width);
+    position  : fixed;
+    top       : var(--nav-height);
+    left      : var(--sidebar-width);
+    max-width : calc(100vw - var(--sidebar-width));
+    max-height: calc(100vh - var(--nav-height) - var(--footer-heihgt));
+    overflow-y: scroll;
 }
 
 .app-root {
     height: 100vh;
 }
+
+.bg-img {
+
+    display : block;
+    left    : var(--sidebar-width);
+    right   : 0px;
+    position: fixed;
+
+    filter           : contrast(200%) blur(80px) brightness(0.20) contrast(110%) opacity(90%);
+    -webkit-filter   : contrast(200%) blur(80px) brightness(0.20) contrast(110%) opacity(90%);
+    height           : 100%;
+    background-repeat: 100vh;
+    background-size  : cover;
+    z-index          : 0;
+
+}
+
+/**
+    --footer-heihgt: 5rem;
+    --sidebar-width: 250px;
+    --nav-height   : 40px;
+
+    calc(100vh - 40px - 5rem);
+
+*/

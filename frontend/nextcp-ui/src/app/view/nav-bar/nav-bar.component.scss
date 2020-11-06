@@ -3,13 +3,13 @@
 @import "app-variables";
 
 .navbar {
-    margin-top      : 12px;
     display         : flex;
     background-color: black;
     position        : fixed;
     top             : 0px;
     right           : 0px;
-    width           : calc(100% - 250px); // calc(100% - $sidebar-width) doesn't work, dunno why.
+    width           : calc(100% - var(--sidebar-width));
+    height          : var(--nav-height);
     z-index         : 3;
 }
 

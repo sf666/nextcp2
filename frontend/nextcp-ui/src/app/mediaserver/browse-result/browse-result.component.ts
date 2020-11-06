@@ -9,8 +9,4 @@ export class BrowseResultComponent {
 
   constructor() { }
   
-  public showBlur() {
-    return true;
-  }
-  
 }

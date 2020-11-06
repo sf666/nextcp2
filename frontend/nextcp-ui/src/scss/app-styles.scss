@@ -5,6 +5,10 @@
     --glas-white   : rgba(255, 255, 255, 0.5);
     --primary-color: rgb(0, 255, 255);
     --grey-5       : rgb(76 78 84);
+
+    --footer-heihgt: 5rem;
+    --sidebar-width: 250px;
+    --nav-height   : 75px;
 }
 
 //
@@ -203,8 +207,13 @@ img {
     background-color: rgba(229, 238, 255, .2);
 }
 
+.col-greyed {
+    color: rgba(229, 238, 255, .6);
+
+}
+
 .plainTextBase {
-    font-size  : 0.82rem;
+    font-size  : 1 rem;
     font-weight: 500;
 }
 

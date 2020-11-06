@@ -29,7 +29,8 @@
 }
 
 .item-table {
-    font-size     : 0.5rem;
+    font-size     : 1rem;
+    font-weight   : 400;
     text-align    : left;
     align-self    : stretch;
     text-transform: initial;
@@ -54,7 +55,8 @@
     }
 
     .item-thead {
-        font-size     : 0.5rem;
+        font-size     : 1rem;
+        font-weight   : 400;
         margin        : 15px 0;
         text-align    : left;
         align-self    : stretch;
@@ -62,7 +64,8 @@
     }
 
     .item-tbody {
-        font-size     : 0.5rem;
+        font-size     : 1rem;
+        font-weight   : 400;
         text-align    : left;
         align-self    : stretch;
         text-transform: initial;
