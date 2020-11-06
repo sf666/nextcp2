@@ -98,12 +98,18 @@ public class RestPlaylistService extends BaseRestService
 
     private MediaRendererDevice addSongsToRenderDevice(PlaylistAddContainerRequest req, MediaRendererDevice rendererDevice)
     {
-        MediaServerDevice serverDevice = deviceRegistry.getMediaServerByUDN(new UDN(req.containerDto.mediaServerUDN));
-        BrowseInput browseInp = new BrowseInput();
-        browseInp.ObjectID = req.containerDto.id;
-        ContainerItemDto itemsToAdd = serverDevice.browseChildren(browseInp);
+        ContainerItemDto itemsToAdd = getChildElements(req.containerDto.mediaServerUDN, req.containerDto.id);
         rendererDevice.getPlaylistServiceBridge().insertContainer(itemsToAdd);
         return rendererDevice;
+    }
+
+    private ContainerItemDto getChildElements(String udn, String containerID)
+    {
+        MediaServerDevice serverDevice = deviceRegistry.getMediaServerByUDN(new UDN(udn));
+        BrowseInput browseInp = new BrowseInput();
+        browseInp.ObjectID = containerID;
+        ContainerItemDto itemsToAdd = serverDevice.browseChildren(browseInp);
+        return itemsToAdd;
     }
 
     @PostMapping("/insertAndPlayContainer")
@@ -113,9 +119,12 @@ public class RestPlaylistService extends BaseRestService
         {
             MediaRendererDevice rendererDevice = getMediaRendererByUdn(req.mediaRendererUdn);
             checkDevice(rendererDevice);
-            rendererDevice.getPlaylistServiceBridge().deleteAll();
-            addSongsToRenderDevice(req, rendererDevice);
-            rendererDevice.getPlaylistServiceBridge().play();
+            if (req.shuffle != null) 
+            {
+                rendererDevice.getPlaylistServiceBridge().setShuffle(req.shuffle);
+            }
+            ContainerItemDto itemsToAdd = getChildElements(req.containerDto.mediaServerUDN, req.containerDto.id);
+            rendererDevice.getPlaylistServiceBridge().insertAndPlayContainer(itemsToAdd);
         }
         catch (Exception e)
         {

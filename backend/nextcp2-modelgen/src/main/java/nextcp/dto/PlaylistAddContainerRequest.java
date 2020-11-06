@@ -8,6 +8,7 @@ import java.util.List;
 public class PlaylistAddContainerRequest
 {
 
+    public Boolean shuffle;
     public ContainerDto containerDto;
     public String mediaRendererUdn;
 
@@ -15,8 +16,9 @@ public class PlaylistAddContainerRequest
     {
     }
 
-    public PlaylistAddContainerRequest(ContainerDto containerDto, String mediaRendererUdn)
+    public PlaylistAddContainerRequest(Boolean shuffle, ContainerDto containerDto, String mediaRendererUdn)
     {
+        this.shuffle = shuffle;
         this.containerDto = containerDto;
         this.mediaRendererUdn = mediaRendererUdn;
     }
@@ -26,6 +28,7 @@ public class PlaylistAddContainerRequest
     {
         StringBuilder sb = new StringBuilder();
         sb.append("PlaylistAddContainerRequest [");
+        sb.append("shuffle=").append(this.shuffle).append(", ");
         sb.append("containerDto=").append(this.containerDto).append(", ");
         sb.append("mediaRendererUdn=").append(this.mediaRendererUdn).append(", ");
         sb.append("]");

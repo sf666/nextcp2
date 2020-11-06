@@ -1,9 +1,10 @@
+import { ScrollViewService } from './../../../util/scroll-view.service';
+import { BackgroundImageService } from './../../../util/background-image.service';
 import { delay } from './../../../global';
-import { AvtransportService } from './../../../service/avtransport.service';
 import { PlaylistService } from './../../../service/playlist.service';
 import { ContainerDto } from './../../../service/dto.d';
 import { ContentDirectoryService } from './../../../service/content-directory.service';
-import { Component, OnChanges, SimpleChanges, DoCheck, AfterViewInit, AfterContentChecked, AfterViewChecked } from '@angular/core';
+import { Component,AfterViewChecked } from '@angular/core';
 
 @Component({
   selector: 'browseResultContainer',
@@ -16,22 +17,17 @@ export class ContainerComponent implements AfterViewChecked {
 
   constructor(
     private contentDirectoryService: ContentDirectoryService,
-    private avtransportService: AvtransportService,
+    private backgroundImageService: BackgroundImageService,
+    private scrollViewService: ScrollViewService,
     public playlistService: PlaylistService) { }
 
   ngAfterViewChecked(): void {
     if (this.scrollID) {
-      let elmnt = document.getElementById(this.scrollID);
-      if (elmnt) {
-        elmnt.scrollIntoView({
-          behavior: "auto",
-          block: "center",
-          inline: "center",
-        });
-        this.scrollID = '';
-      }
+      this.scrollViewService.scrollIntoViewID(this.scrollID);
+      this.scrollID = '';
     }
-    document.getElementById('browse-result-main').style.backgroundImage = 'url("' + this.currentContainer.albumartUri + '")';
+
+    this.backgroundImageService.setBackgroundImageMainScreen(this.currentContainer.albumartUri);
   }
 
 

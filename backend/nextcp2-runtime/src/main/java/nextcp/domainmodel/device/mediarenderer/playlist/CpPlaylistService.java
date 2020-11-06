@@ -691,4 +691,12 @@ public class CpPlaylistService extends AvTransportEventListener implements IPlay
         return 0;
     }
 
+    @Override
+    public void insertAndPlayContainer(ContainerItemDto items)
+    {
+        deleteAll();
+        insertContainer(items);
+        play();
+    }
+
 }

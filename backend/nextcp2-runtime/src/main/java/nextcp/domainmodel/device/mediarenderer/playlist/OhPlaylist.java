@@ -307,4 +307,12 @@ public class OhPlaylist implements IPlaylistService
     {
         return playlistIds.getFirst();
     }
+
+    @Override
+    public void insertAndPlayContainer(ContainerItemDto items)
+    {
+        deleteAll();
+        insertContainer(items);
+        play();        
+    }
 }

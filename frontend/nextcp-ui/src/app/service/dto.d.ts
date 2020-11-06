@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2020-11-05 08:02:33.
+// Generated using typescript-generator version 2.0.400 on 2020-11-06 09:05:30.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -141,6 +141,7 @@ export interface PlayRequestDto {
 }
 
 export interface PlaylistAddContainerRequest {
+    shuffle: boolean;
     containerDto: ContainerDto;
     mediaRendererUdn: string;
 }

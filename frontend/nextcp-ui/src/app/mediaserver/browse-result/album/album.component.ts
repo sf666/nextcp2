@@ -24,10 +24,8 @@ export class AlbumComponent {
     this.contentDirectoryService.browseChildren(containerDto.id, containerDto.parentID, containerDto.mediaServerUDN);
   }
 
-
   playAlbum(container) {
-    this.playlistService.deleteAll();
-    this.playlistService.addContainerToPlaylist(container);
-    delay(400).then(() => this.playlistService.play());
+    this.playlistService.addContainerToPlaylistAndPlay(container);
   }
+  
 }

@@ -40,12 +40,14 @@ public interface IPlaylistService
 
     void seekSecondAbsolute(long sec);
 
+    long insert(InsertInput inp);
+
     PlaylistState getState();
 
     List<MusicItemDto> getPlaylistItems();
 
     void insertContainer(ContainerItemDto items);
 
-    long insert(InsertInput inp);
-
+    void insertAndPlayContainer(ContainerItemDto items);
+    
 }
