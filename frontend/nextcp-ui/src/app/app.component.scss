@@ -14,7 +14,17 @@
 }
 
 .app-root {
-    height: 100vh;
+    background-color: rgba(0, 0, 0, 1);
+}
+
+.bg-img::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backdrop-filter: contrast(200%) blur(80px) brightness(0.20) contrast(110%) opacity(100%);
+    backdrop-filter        : contrast(200%) blur(80px) brightness(0.20) contrast(110%) opacity(100%);
+    pointer-events: none;
 }
 
 .bg-img {
@@ -24,17 +34,26 @@
     right   : 0px;
     position: fixed;
 
-    filter           : contrast(200%) blur(80px) brightness(0.20) contrast(110%) opacity(90%);
-    -webkit-filter   : contrast(200%) blur(80px) brightness(0.20) contrast(110%) opacity(90%);
     background-repeat: 100vh;
     background-size  : cover;
+    background-color : rgb(0, 0, 0);
 
     width     : calc(100vw - var(--sidebar-width));
     height    : calc(100vh - var(--nav-height) - var(--footer-heihgt));
     max-width : calc(100vw - var(--sidebar-width));
     max-height: calc(100vh - var(--nav-height) - var(--footer-heihgt));
+}
 
-    z-index: -10;
+.bg-img-footer::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color:rgba(0,0,0,.5);
+    -webkit-backdrop-filter: blur(64px) saturate(120%);
+    backdrop-filter        : blur(64px) saturate(120%);
+    pointer-events: none;
+    z-index: 2;
 }
 
 .bg-img-footer {
@@ -49,10 +68,8 @@
     background-repeat  : 100vh;
     background-size    : cover;
     background-position: 0 -500px;
-
-    filter           : blur(64px) saturate(200%);
-    -webkit-filter   : blur(64px) saturate(200%);
+ 
     height           : 100%;
     background-repeat: 100vh;
-    z-index: -20;
+    z-index: 3;
 }

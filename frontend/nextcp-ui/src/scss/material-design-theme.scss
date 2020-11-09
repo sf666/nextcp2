@@ -1,5 +1,5 @@
 //
-// Read https://dev.to/nephiw/theming-material-design-mm3 in case of having rouble applying an individual color theme.
+// Read https://dev.to/nephiw/theming-material-design-mm3 in case of having trouble applying an individual color theme.
 //
 
 //
@@ -12,8 +12,6 @@
 @import '~@angular/material/theming';
 @import "../assets/fonts/quicksand.scss";
 
-// Plus imports for other components in your app.
-
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
@@ -22,6 +20,49 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
+
+$my-app-primary: mat-palette($mat-pink);
+$my-app-accent:  mat-palette($mat-cyan, 800, 900, A100);
+$my-app-warn:    mat-palette($mat-deep-orange);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$my-app-theme: mat-dark-theme($my-app-primary, $my-app-accent, $my-app-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($my-app-theme);
+
+//
+// Custom typography theme
+//
+
+
+// display-4	.mat-display-4	Large, one-off header, usually at the top of the page (e.g. a hero header).
+// display-3	.mat-display-3	Large, one-off header, usually at the top of the page (e.g. a hero header).
+// display-2	.mat-display-2	Large, one-off header, usually at the top of the page (e.g. a hero header).
+// display-1	.mat-display-1	Large, one-off header, usually at the top of the page (e.g. a hero header).
+// headline	.mat-h1, .mat-headline	Section heading corresponding to the <h1> tag.
+// title	.mat-h2, .mat-title	Section heading corresponding to the <h2> tag.
+// subheading-2	.mat-h3, .mat-subheading-2	Section heading corresponding to the <h3> tag.
+// subheading-1	.mat-h4, .mat-subheading-1	Section heading corresponding to the <h4> tag.
+// body-1	.mat-body, .mat-body-1	Base body text.
+// body-2	.mat-body-strong, .mat-body-2	Bolder body text.
+// caption	.mat-small, .mat-caption	Smaller body and hint text.
+// button	None. Used only in components.	Buttons and anchors.
+// input	None. Used only in components.	Form input fields.
+
+// Define a custom typography config that overrides the font-family
+
+$custom-typography: mat-typography-config($font-family : 'Quicksand, sans-serif',
+);
+// Override typography for all Angular Material, including mat-base-typography and all components.
+@include angular-material-typography($custom-typography);
+
+
+/*
+
+// DEMO: This is how a custom color palette is being defined :
 
 $app-primary: (50: $pantone-1205-C,
   100: $pantone-1215-C,
@@ -53,103 +94,4 @@ $app-primary: (50: $pantone-1205-C,
     A700: $light-primary-text,
   ));
 
-$app-secondary: (50: $pantone-5455-C,
-  100: $pantone-5445-C,
-  200: $pantone-5435-C,
-  300: $pantone-5425-C,
-  400: $pantone-5415-C,
-  500: $pantone-5405-C,
-  600: $pantone-5395-C,
-  700: $pantone-313-C,
-  800: $pantone-314-C,
-  900: $pantone-315-C,
-  A100: $pantone-638-C,
-  A200: $pantone-639-C,
-  A400: $pantone-640-C,
-  A700: $pantone-641-C,
-  contrast: (50: $dark-primary-text,
-    100: $dark-primary-text,
-    200: $dark-primary-text,
-    300: $light-primary-text,
-    400: $light-primary-text,
-    500: $light-primary-text,
-    600: $light-primary-text,
-    700: $light-primary-text,
-    800: $light-primary-text,
-    900: $light-primary-text,
-    A100: $dark-primary-text,
-    A200: $light-primary-text,
-    A400: $light-primary-text,
-    A700: $light-primary-text,
-  ));
-
-$app-warn: (50: $pantone-196-C,
-  100: $pantone-182-C,
-  200: $pantone-183-C,
-  300: $pantone-184-C,
-  400: $pantone-185-C,
-  500: $pantone-199-C,
-  600: $pantone-186-C,
-  700: $pantone-187-C,
-  800: $pantone-188-C,
-  900: $pantone-202-C,
-  A100: $pantone-524-C,
-  A200: $pantone-523-C,
-  A400: $pantone-522-C,
-  A700: $pantone-521-C,
-  contrast: (50: $dark-primary-text,
-    100: $dark-primary-text,
-    200: $dark-primary-text,
-    300: $light-primary-text,
-    400: $light-primary-text,
-    500: $light-primary-text,
-    600: $light-primary-text,
-    700: $light-primary-text,
-    800: $light-primary-text,
-    900: $light-primary-text,
-    A100: $dark-primary-text,
-    A200: $light-primary-text,
-    A400: $light-primary-text,
-    A700: $light-primary-text,
-  ));
-
-
-$candy-app-primary: mat-palette($app-primary);
-$candy-app-accent : mat-palette($app-secondary, A200, A100, A400);
-
-// The warn palette is optional (defaults to red).
-$candy-app-warn: mat-palette($app-warn);
-
-// Create the theme object (a Sass map containing all of the palettes).
-$candy-app-theme: mat-dark-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
-
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include angular-material-theme($candy-app-theme);
-
-//
-// Custom typography theme
-//
-
-
-// display-4	.mat-display-4	Large, one-off header, usually at the top of the page (e.g. a hero header).
-// display-3	.mat-display-3	Large, one-off header, usually at the top of the page (e.g. a hero header).
-// display-2	.mat-display-2	Large, one-off header, usually at the top of the page (e.g. a hero header).
-// display-1	.mat-display-1	Large, one-off header, usually at the top of the page (e.g. a hero header).
-// headline	.mat-h1, .mat-headline	Section heading corresponding to the <h1> tag.
-// title	.mat-h2, .mat-title	Section heading corresponding to the <h2> tag.
-// subheading-2	.mat-h3, .mat-subheading-2	Section heading corresponding to the <h3> tag.
-// subheading-1	.mat-h4, .mat-subheading-1	Section heading corresponding to the <h4> tag.
-// body-1	.mat-body, .mat-body-1	Base body text.
-// body-2	.mat-body-strong, .mat-body-2	Bolder body text.
-// caption	.mat-small, .mat-caption	Smaller body and hint text.
-// button	None. Used only in components.	Buttons and anchors.
-// input	None. Used only in components.	Form input fields.
-
-// Define a custom typography config that overrides the font-family
-
-$custom-typography: mat-typography-config($font-family : 'Quicksand, sans-serif',
-);
-// Override typography for all Angular Material, including mat-base-typography and all components.
-@include angular-material-typography($custom-typography);
+*/

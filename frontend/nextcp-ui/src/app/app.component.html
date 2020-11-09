@@ -1,17 +1,19 @@
-<div *ngIf="showBlur()" class="bg-img" id="main-screen">
+<div class="app-root">
+  <div *ngIf="showBlur()" class="bg-img" id="main-screen">
+  </div>
+  
+  <div class="bg-img-footer" id="footer-background">
+  </div>
+  
+  
+  <nav-bar></nav-bar>
+  
+  <app-sidebar></app-sidebar>
+  
+  <div class="mainContent">
+    <router-outlet></router-outlet>
+  </div>
+  
+  
+  <renderer-footer></renderer-footer>  
 </div>
-
-<div class="bg-img-footer" id="footer-background">
-</div>
-
-
-<nav-bar></nav-bar>
-
-<app-sidebar></app-sidebar>
-
-<div class="mainContent">
-  <router-outlet></router-outlet>
-</div>
-
-
-<renderer-footer></renderer-footer>

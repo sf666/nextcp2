@@ -40,13 +40,14 @@ a {
 
 .sidebar {
     position        : fixed;
-    display         : flex;
-    flex-direction  : column;
+    top             : 0;
     left            : 0;
-    flex-shrink     : 0;
     width           : var(--sidebar-width);
     height          : calc(100vh - var(--footer-heihgt));
-    max-height      : 100vh;
+
+    display         : flex;
+    flex-direction  : column;
+    flex-shrink     : 0;
     background      : #242428;
     transition      : 50ms ease-in;
     overflow-y      : auto;
