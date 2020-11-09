@@ -62,8 +62,7 @@
     bottom    : 0px;
     max-height: var(--footer-heihgt);
     height    : var(--footer-heihgt);
-    width     : calc(100vw - var(--sidebar-width));
-    max-width : calc(100vw - var(--sidebar-width));
+    width     : 100vw;
 
     background-repeat  : 100vh;
     background-size    : cover;
