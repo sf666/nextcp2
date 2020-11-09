@@ -15,9 +15,9 @@ $col-grey: $col-4;
     position        : fixed;
     left            : 0;
     bottom          : 0;
+    height          : var(--footer-heihgt);
     width           : 100%;
-    background-color: rgba($color: $pantone-Neutral-Black-C, $alpha: 0.95);
-    color           : white;
+    background-color: rgba(0, 0, 0, 0.5);
     text-align      : left;
     z-index         : 80;
 }
@@ -33,10 +33,6 @@ mat-slider {
     width          : 150px;
     min-width      : 150px;
     margin-left    : 1.5rem;
-}
-
-.mediaRendererLabel {
-    color: $col-grey;
 }
 
 .icon-button {

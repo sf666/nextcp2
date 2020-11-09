@@ -6,8 +6,8 @@
     position  : fixed;
     top       : var(--nav-height);
     left      : var(--sidebar-width);
-    width : calc(100vw - var(--sidebar-width));
-    height: calc(100vh - var(--nav-height) - var(--footer-heihgt));
+    width     : calc(100vw - var(--sidebar-width));
+    height    : calc(100vh - var(--nav-height) - var(--footer-heihgt));
     max-width : calc(100vw - var(--sidebar-width));
     max-height: calc(100vh - var(--nav-height) - var(--footer-heihgt));
     overflow-y: scroll;
@@ -18,26 +18,41 @@
 }
 
 .bg-img {
-
     display : block;
     left    : var(--sidebar-width);
+    top     : var(--nav-height);
     right   : 0px;
     position: fixed;
 
     filter           : contrast(200%) blur(80px) brightness(0.20) contrast(110%) opacity(90%);
     -webkit-filter   : contrast(200%) blur(80px) brightness(0.20) contrast(110%) opacity(90%);
-    height           : 100%;
     background-repeat: 100vh;
     background-size  : cover;
-    z-index          : 0;
 
+    width     : calc(100vw - var(--sidebar-width));
+    height    : calc(100vh - var(--nav-height) - var(--footer-heihgt));
+    max-width : calc(100vw - var(--sidebar-width));
+    max-height: calc(100vh - var(--nav-height) - var(--footer-heihgt));
+
+    z-index: -10;
 }
 
-/**
-    --footer-heihgt: 5rem;
-    --sidebar-width: 250px;
-    --nav-height   : 40px;
+.bg-img-footer {
+    display   : block;
+    position  : fixed;
+    bottom    : 0px;
+    max-height: var(--footer-heihgt);
+    height    : var(--footer-heihgt);
+    width     : calc(100vw - var(--sidebar-width));
+    max-width : calc(100vw - var(--sidebar-width));
 
-    calc(100vh - 40px - 5rem);
+    background-repeat  : 100vh;
+    background-size    : cover;
+    background-position: 0 -500px;
 
-*/
+    filter           : blur(64px) saturate(200%);
+    -webkit-filter   : blur(64px) saturate(200%);
+    height           : 100%;
+    background-repeat: 100vh;
+    z-index: -20;
+}

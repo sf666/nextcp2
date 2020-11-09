@@ -8,8 +8,11 @@ export class BackgroundImageService {
   constructor() { }
 
   public setBackgroundImageMainScreen(url: string) : void {
-    document.getElementById('browse-result-main').style.backgroundImage = 'url("' + url + '")';
+    document.getElementById('main-screen').style.backgroundImage = 'url("' + url + '")';
   }
-  
+
+  public setFooterBackgroundImage(url: string) : void {
+    document.getElementById('footer-background').style.backgroundImage = 'url("' + url + '")';
+  }  
 }
 

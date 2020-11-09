@@ -1,3 +1,4 @@
+import { BackgroundImageService } from './../util/background-image.service';
 import { HttpService } from './http.service';
 import { DeviceService } from './device.service';
 import { DeviceDriverState, MediaRendererSwitchPower, MediaRendererSetVolume, MediaRendererDto, TrackInfoDto, TrackTimeDto, InputSourceDto, MusicItemDto, AudioFormat } from './dto.d';
@@ -23,6 +24,7 @@ export class RendererService {
   constructor(
     sseService: SseService,
     private deviceService: DeviceService,
+    private backgroundImageService: BackgroundImageService,
     private httpService: HttpService) {
 
     this.trackInfo = this.emptyTrackInfo();
@@ -33,6 +35,9 @@ export class RendererService {
     sseService.mediaRendererTrackInfoChanged$.subscribe(data => {
       if (deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
         this.trackInfo = data;
+        if (data.currentTrack?.albumArtUrl) {
+          this.backgroundImageService.setFooterBackgroundImage(data.currentTrack?.albumArtUrl);
+        }
         this.trackTime.durationDisp = data.duration;
       };
     });

@@ -1,20 +1,17 @@
-<div *ngIf="showBlur()" class="bg-img" id="browse-result-main">
-  <div class="bg-blur">
-  </div>
+<div *ngIf="showBlur()" class="bg-img" id="main-screen">
 </div>
 
-<div id="nextcp-root" class="app-root">
-  <div class="d-flex w-100 h-100">
-    <div class="">
-      <app-sidebar></app-sidebar>
-      <div class="footer-block">&nbsp;</div>
-    </div>
-    <div class="mainContent">
-      <nav-bar></nav-bar>
-      <router-outlet></router-outlet>
-    </div>
-  </div>
+<div class="bg-img-footer" id="footer-background">
 </div>
+
+
+<nav-bar></nav-bar>
+
+<app-sidebar></app-sidebar>
+
+<div class="mainContent">
+  <router-outlet></router-outlet>
+</div>
+
 
 <renderer-footer></renderer-footer>
-<div class="footer-block">&nbsp;</div>
