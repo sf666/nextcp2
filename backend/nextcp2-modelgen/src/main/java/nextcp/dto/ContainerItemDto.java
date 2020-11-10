@@ -8,6 +8,7 @@ import java.util.List;
 public class ContainerItemDto
 {
 
+    public String parentFolderTitle;
     public ContainerDto currentContainer;
     public List<ContainerDto> containerDto;
     public List<ContainerDto> albumDto;
@@ -17,8 +18,9 @@ public class ContainerItemDto
     {
     }
 
-    public ContainerItemDto(ContainerDto currentContainer, List<ContainerDto> containerDto, List<ContainerDto> albumDto, List<MusicItemDto> musicItemDto)
+    public ContainerItemDto(String parentFolderTitle, ContainerDto currentContainer, List<ContainerDto> containerDto, List<ContainerDto> albumDto, List<MusicItemDto> musicItemDto)
     {
+        this.parentFolderTitle = parentFolderTitle;
         this.currentContainer = currentContainer;
         this.containerDto = containerDto;
         this.albumDto = albumDto;
@@ -30,6 +32,7 @@ public class ContainerItemDto
     {
         StringBuilder sb = new StringBuilder();
         sb.append("ContainerItemDto [");
+        sb.append("parentFolderTitle=").append(this.parentFolderTitle).append(", ");
         sb.append("currentContainer=").append(this.currentContainer).append(", ");
         sb.append("containerDto=").append(this.containerDto).append(", ");
         sb.append("albumDto=").append(this.albumDto).append(", ");

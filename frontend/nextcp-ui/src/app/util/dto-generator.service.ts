@@ -40,6 +40,7 @@ export class DtoGeneratorService {
 
   public generateEmptyContainerItemDto(): ContainerItemDto {
     return {
+      parentFolderTitle: '',
       currentContainer: this.generateEmptyContainerDto(),
       containerDto: [],
       musicItemDto: [],

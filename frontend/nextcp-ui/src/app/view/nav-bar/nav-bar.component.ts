@@ -62,6 +62,10 @@ export class NavBarComponent {
     return this.contentDirectoryService.currentContainerList.currentContainer;
   }  
 
+  public get parentTitle(): string {
+    return this.contentDirectoryService.currentContainerList.parentFolderTitle;
+  }  
+
   // Search
   get quickSearchString() {
     return this.contentDirectoryService.quickSearchQueryString;

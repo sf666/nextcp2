@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2020-11-09 16:43:48.
+// Generated using typescript-generator version 2.0.400 on 2020-11-10 15:42:10.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -45,6 +45,7 @@ export interface ContainerDto {
 }
 
 export interface ContainerItemDto {
+    parentFolderTitle: string;
     currentContainer: ContainerDto;
     containerDto: ContainerDto[];
     albumDto: ContainerDto[];

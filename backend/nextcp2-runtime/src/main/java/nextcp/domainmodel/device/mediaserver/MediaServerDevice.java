@@ -64,7 +64,7 @@ public class MediaServerDevice extends BaseDevice
     {
         return searchSupportDelegate.searchAllItems(quickSearch, requestCount);
     }
-    
+
     public QuickSearchResultDto searchAllArtists(String quickSearch, long requestCount)
     {
         return searchSupportDelegate.searchAllArtists(quickSearch, requestCount);
@@ -79,7 +79,6 @@ public class MediaServerDevice extends BaseDevice
     {
         return searchSupportDelegate.searchAllPlaylist(quickSearch, requestCount);
     }
-    
 
     public ContainerItemDto browseChildren(BrowseInput inp)
     {
@@ -99,11 +98,40 @@ public class MediaServerDevice extends BaseDevice
             ContainerItemDto result = initEmptyContainerItemDto();
 
             result.currentContainer = curContainer;
+            result.parentFolderTitle = getParentName(curContainer);
             addContainerObjects(result, didl);
             addItemObjects(result.musicItemDto, didl);
 
             // addDirectoryUpContainer(inp, result, curContainer);
             return result;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage());
+        }
+    }
+
+    private String getParentName(ContainerDto current)
+    {
+        if (current.id.equals("0"))
+        {
+            return "";
+        }
+        BrowseInput bi = new BrowseInput();
+        bi.ObjectID = current.parentID;
+        bi.SortCriteria = "";
+        bi.BrowseFlag = "BrowseMetadata";
+        checkInp(bi);
+        try
+        {
+            BrowseOutput out = contentDirectoryService.browse(bi);
+            if (out.NumberReturned == 1)
+            {
+                DIDLContent didl = generateDidlContent(out.Result);
+                return getDtoBuilder().buildContainerDto(didl.getFirstContainer()).title;
+            }
+            return "";
         }
         catch (Exception e)
         {

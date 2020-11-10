@@ -212,7 +212,6 @@ $imgCardWidth : calc(#{$cardWidth} - 2*#{$cardBorderWidth});
 
 img {
     &.card-img-top {
-        opacity   : 1.0;
         object-fit: cover;
         width     : $imgCardWidth;
         height    : $imgCardWidth;

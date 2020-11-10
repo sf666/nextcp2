@@ -107,6 +107,7 @@ MediaRendererDto:
 
 
 ContainerItemDto:
+   parentFolderTitle: String
    currentContainer: ContainerDto
    containerDto: List<ContainerDto>
    albumDto: List<ContainerDto>

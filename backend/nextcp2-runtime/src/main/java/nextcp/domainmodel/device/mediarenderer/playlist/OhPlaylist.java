@@ -115,7 +115,7 @@ public class OhPlaylist implements IPlaylistService
         {
             return playlistService.insert(inp).NewId;
         }
-        
+
         return 0;
     }
 
@@ -294,7 +294,9 @@ public class OhPlaylist implements IPlaylistService
             insertInput.Metadata = music.currentTrackMetadata;
             insertInput.Uri = music.streamingURL;
             insertInput.AfterId = lastid;
-            lastid = insert(insertInput);
+            
+            // Workaround for some rare situations where a media player is reporting negative IDs.
+            lastid = Math.max(0, insert(insertInput));
         }
     }
 
@@ -313,6 +315,6 @@ public class OhPlaylist implements IPlaylistService
     {
         deleteAll();
         insertContainer(items);
-        play();        
+        play();
     }
 }

@@ -1,5 +1,15 @@
 @import "pantone";
 
+.img-top {
+    background-repeat: 100vh;
+    background-size  : cover;
+    background-color : rgba(0, 0, 0, 0.5);
+    background-image : url(/assets/folder-bg.png);
+
+    width     : 12rem;
+    height    : 12rem;
+}
+
 .play-overlay-button {
     color    : white;
     opacity  : 1;
@@ -29,10 +39,11 @@
 }
 
 .title {
-    font-size: 2.2rem;
-    font-weight: 300;
-    align-self: center;
-    &.album{
+    font-size  : 2rem;
+    font-weight: 700;
+    align-self : center;
+
+    &.album {
         align-self: start;
     }
 }
