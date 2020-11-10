@@ -18,12 +18,12 @@
 
 .headFont {
     font-size   : 1.5rem;
-    color       : rgba(229, 238, 255, .6);
+    color       : var(--glas-white-3);
     padding-left: 1.5rem;
 }
 
 .headButton {
-    color: rgba(229, 238, 255, .6);
+    color       : var(--glas-white-3);
 }
 
 .headLeftContainer {

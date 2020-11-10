@@ -174,11 +174,14 @@ input {
 .my-Card {
     @extend .card;
 
-    //    color           : $grey-pantone-1;
-    background-color: $grey-pantone-11;
-    position        : relative;
-    margin          : 0.3rem;
-    width           : $cardWidth;
+    background-repeat: 100vh;
+    background-size  : cover;
+    background-color : rgba(0, 0, 0, 0.5);
+    background-image : url(/assets/folder-bg.png);
+
+    position: relative;
+    margin  : 0.3rem;
+    width   : $cardWidth;
 }
 
 .my-card-body {
@@ -197,10 +200,11 @@ input {
 }
 
 .my-card-title {
-    margin     : 0.2rem;
-    opacity    : 1.0;
-    font-size  : 1.1rem;
-    font-weight: 300;
+    padding         : 2px;
+    font-size       : 1.1rem;
+    font-weight     : 300;
+    background-color: rgba(0, 0, 0, 0.5);
+    background-image: url(/assets/folder-bg.png);
 }
 
 // added hover effect für bootstrap card images
@@ -212,9 +216,10 @@ img {
         object-fit: cover;
         width     : $imgCardWidth;
         height    : $imgCardWidth;
+        transition: all 300ms;
 
         &:hover {
-            opacity: 0.7;
+            transform: scale(1.1);
         }
     }
 }
