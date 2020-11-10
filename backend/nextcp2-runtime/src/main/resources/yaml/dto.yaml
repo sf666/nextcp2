@@ -112,6 +112,7 @@ ContainerItemDto:
    containerDto: List<ContainerDto>
    albumDto: List<ContainerDto>
    musicItemDto: List<MusicItemDto>
+   minimServerSupportTags: List<ContainerDto>
 
 
 ContainerDto:

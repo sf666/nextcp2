@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2020-11-10 15:42:10.
+// Generated using typescript-generator version 2.0.400 on 2020-11-10 16:18:14.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -50,6 +50,7 @@ export interface ContainerItemDto {
     containerDto: ContainerDto[];
     albumDto: ContainerDto[];
     musicItemDto: MusicItemDto[];
+    minimServerSupportTags: ContainerDto[];
 }
 
 export interface DeviceDriverCapability {
