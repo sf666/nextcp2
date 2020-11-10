@@ -53,6 +53,9 @@ export class NavBarComponent {
   get settingsVisible(): boolean {
     return this.currentPath === '/settings';
   }
+  get inputOutputVisible(): boolean {
+    return this.currentPath === '/input-output';
+  }  
 
   // music-library
   public get currentContainer(): ContainerDto {

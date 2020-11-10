@@ -10,20 +10,10 @@ $col-grey : $col-4;
 
 a {
     margin-top: 1rem;
+    line-height: 1rem;
 }
-
-.standbyOn {
-    color: $pantone-Bright-Red-C;
-}
-
-.standbyOff {
-    color: $pantone-802-C;
-}
-
-.volume-bar {
-    padding-left: 8px;
-    margin      : 8px;
-    border-left : 1px solid $pantone-Black-2-C;
+.icn {
+    margin-right: 1rem;
 }
 
 .app-label {

@@ -1,3 +1,4 @@
+import { InputOutputSourceComponent } from './view/input-output-source/input-output-source.component';
 import { SearchResultItemMultiComponent } from './view/search/search-result-item-multi/search-result-item-multi.component';
 import { SearchResultItemSingleComponent } from './view/search/search-result-item-single/search-result-item-single.component';
 import { SearchComponent } from './view/search/search.component';
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'radio', component: RadioComponent },
   { path: 'search', component: SearchComponent },
   { path: 'playlist', component: PlaylistComponent },  
+  { path: 'input-output', component: InputOutputSourceComponent },    
   { path: 'searchResultSingleItem', component: SearchResultItemSingleComponent },  
   { path: 'searchResultContainer', component: SearchResultItemMultiComponent },  
   { path: '', redirectTo: '/music-library', pathMatch: 'full' },

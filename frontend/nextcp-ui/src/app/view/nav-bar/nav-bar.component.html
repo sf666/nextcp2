@@ -48,7 +48,13 @@
 </ng-template>
 
 <ng-template #searchMulti>
-    <div *ngIf="searchResultMultiVisible; else default">&nbsp;</div>
+    <div *ngIf="searchResultMultiVisible; else inputOutput">&nbsp;</div>
+</ng-template>
+
+<ng-template #inputOutput>
+    <div *ngIf="inputOutputVisible; else default">
+        <div class="headFont">Input &amp; Output</div>
+    </div>
 </ng-template>
 
 <ng-template #default>

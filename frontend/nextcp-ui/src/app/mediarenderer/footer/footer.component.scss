@@ -27,16 +27,18 @@ mat-slider {
 }
 
 .timeDispContainer {
-    display              : flex;
-    align-self           : center;
-    width                : 150px;
-    min-width            : 150px;
-    margin-left          : 1.5rem;
+    display        : flex;
+    flex-direction : row;
+    justify-content: end;
+    align-self     : center; // vertical center
+    width          : 150px;
+    min-width      : 150px;
+    margin-left    : 1.5rem;
 }
 
 .icon-button {
     margin-left: 1rem;
-    color      : $pantone-406-C;
+    color      : var(--glas-white);
     width      : 2rem;
     height     : 2rem;
 
@@ -50,7 +52,7 @@ mat-slider {
 }
 
 .icon-main {
-    color: $col-grey;
+    color: var(--glas-white);
 }
 
 .progress-bar {
@@ -104,13 +106,13 @@ mat-slider {
 
 .currentTime {
     @extend .baseFontsize;
-    color: rgba(229, 238, 255, .3);
+    color                : rgba(229, 238, 255, .3);
     font-feature-settings: "tnum";
 }
 
 .finishedTime {
     @extend .baseFontsize;
-    color: var(--glas-white);
+    color                : var(--glas-white);
     font-feature-settings: "tnum";
 }
 
@@ -140,7 +142,7 @@ img {
 .title {
     @extend .baseFontsize;
     font-size: 1.2rem;
-    color    : var(--snow-white);
+    color    : var(--snow-white-3);
 }
 
 .minWidth {
@@ -160,8 +162,9 @@ img {
     text-align    : center;
     font-size     : 0.8rem;
     font-weight   : 300;
+    color         : var(--glas-white-3);
     padding-bottom: 3px;
-    border-bottom : 1px solid var(--grey-5);
+    border-bottom : 1px solid var(--glas-white);
 }
 
 .lower-row {

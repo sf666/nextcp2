@@ -47,6 +47,7 @@ import { SearchComponent } from './view/search/search.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SearchResultItemMultiComponent } from './view/search/search-result-item-multi/search-result-item-multi.component';
 import { SearchResultItemSingleComponent } from './view/search/search-result-item-single/search-result-item-single.component';
+import { InputOutputSourceComponent } from './view/input-output-source/input-output-source.component';
 
 
 @NgModule({
@@ -73,6 +74,7 @@ import { SearchResultItemSingleComponent } from './view/search/search-result-ite
       ModalSearchResultComponent,
       SearchResultItemMultiComponent,
       SearchResultItemSingleComponent,
+      InputOutputSourceComponent,
 
    ],
    imports: [
