@@ -104,7 +104,7 @@ mat-slider {
 
 .currentTime {
     @extend .baseFontsize;
-    color: var(--grey-5);
+    color: rgba(229, 238, 255, .3);
     font-feature-settings: "tnum";
 }
 
