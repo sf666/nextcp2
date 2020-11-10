@@ -25,6 +25,7 @@ import { FooterComponent } from './mediarenderer/footer/footer.component';
 import { SettingsComponent } from './view/settings/settings.component';
 import { RadioComponent } from './view/radio/radio.component';
 import { PlaylistComponent } from './view/playlist/playlist.component';
+import { ModalSearchResultComponent } from './view/search/modal-search-result/modal-search-result.component';
 
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
@@ -44,7 +45,6 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { SearchComponent } from './view/search/search.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { ModalSearchResultComponent } from './view/modal-search-result/modal-search-result.component';
 import { SearchResultItemMultiComponent } from './view/search/search-result-item-multi/search-result-item-multi.component';
 import { SearchResultItemSingleComponent } from './view/search/search-result-item-single/search-result-item-single.component';
 

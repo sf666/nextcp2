@@ -52,11 +52,85 @@ public class RestContentDirectoryService
         {
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "media server ID shall not be empty");
         }
+
         MediaServerDevice device = deviceRegistry.getMediaServerByUDN(new UDN(searchRequest.mediaServerUDN));
         if (device == null)
         {
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "unknown media server : " + searchRequest.mediaServerUDN);
         }
-        return device.quickSearch(searchRequest.searchRequest);
+        return device.quickSearch(searchRequest.searchRequest, adjustRequestCount(searchRequest.requestCount));
+    }
+
+    @PostMapping("/searchAllItems")
+    public QuickSearchResultDto searchAllItems(@RequestBody QuickSearchRequestDto searchRequest)
+    {
+        if (StringUtils.isBlank(searchRequest.mediaServerUDN))
+        {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "media server ID shall not be empty");
+        }
+        MediaServerDevice device = deviceRegistry.getMediaServerByUDN(new UDN(searchRequest.mediaServerUDN));
+        if (device == null)
+        {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "unknown media server : " + searchRequest.mediaServerUDN);
+        }
+        return device.searchAllItems(searchRequest.searchRequest, adjustRequestCount(searchRequest.requestCount));
+    }
+
+    @PostMapping("/searchAllPlaylist")
+    public QuickSearchResultDto searchAllPlaylist(@RequestBody QuickSearchRequestDto searchRequest)
+    {
+        if (StringUtils.isBlank(searchRequest.mediaServerUDN))
+        {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "media server ID shall not be empty");
+        }
+        MediaServerDevice device = deviceRegistry.getMediaServerByUDN(new UDN(searchRequest.mediaServerUDN));
+        if (device == null)
+        {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "unknown media server : " + searchRequest.mediaServerUDN);
+        }
+        return device.searchAllPlaylist(searchRequest.searchRequest, adjustRequestCount(searchRequest.requestCount));
+    }
+
+    @PostMapping("/searchAllAlbum")
+    public QuickSearchResultDto searchAllAlbum(@RequestBody QuickSearchRequestDto searchRequest)
+    {
+        if (StringUtils.isBlank(searchRequest.mediaServerUDN))
+        {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "media server ID shall not be empty");
+        }
+        MediaServerDevice device = deviceRegistry.getMediaServerByUDN(new UDN(searchRequest.mediaServerUDN));
+        if (device == null)
+        {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "unknown media server : " + searchRequest.mediaServerUDN);
+        }
+        return device.searchAllAlbum(searchRequest.searchRequest, adjustRequestCount(searchRequest.requestCount));
+    }
+
+    @PostMapping("/searchAllArtists")
+    public QuickSearchResultDto searchAllArtists(@RequestBody QuickSearchRequestDto searchRequest)
+    {
+        if (StringUtils.isBlank(searchRequest.mediaServerUDN))
+        {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "media server ID shall not be empty");
+        }
+        MediaServerDevice device = deviceRegistry.getMediaServerByUDN(new UDN(searchRequest.mediaServerUDN));
+        if (device == null)
+        {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "unknown media server : " + searchRequest.mediaServerUDN);
+        }
+        return device.searchAllArtists(searchRequest.searchRequest, adjustRequestCount(searchRequest.requestCount));
+    }
+
+    private long adjustRequestCount(Long givenRequestCount)
+    {
+        if (givenRequestCount == null)
+        {
+            return 3;
+        }
+
+        givenRequestCount = Math.min(10, givenRequestCount);
+        givenRequestCount = Math.max(2, givenRequestCount);
+        return givenRequestCount;
+
     }
 }

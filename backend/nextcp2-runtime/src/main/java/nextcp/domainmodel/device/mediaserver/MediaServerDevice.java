@@ -47,7 +47,7 @@ public class MediaServerDevice extends BaseDevice
     private void init()
     {
         this.contentDirectoryService = new ContentDirectoryService(getUpnpService(), getDevice());
-        searchSupportDelegate = new SearchSupport(contentDirectoryService, this);        
+        searchSupportDelegate = new SearchSupport(contentDirectoryService, this);
     }
 
     public ContentDirectoryService getContentDirectoryService()
@@ -55,10 +55,31 @@ public class MediaServerDevice extends BaseDevice
         return contentDirectoryService;
     }
 
-    public QuickSearchResultDto quickSearch(String quickSearch)
+    public QuickSearchResultDto quickSearch(String quickSearch, long requestCount)
     {
-        return searchSupportDelegate.quickSearch(quickSearch);
+        return searchSupportDelegate.quickSearch(quickSearch, requestCount);
     }
+
+    public QuickSearchResultDto searchAllItems(String quickSearch, long requestCount)
+    {
+        return searchSupportDelegate.searchAllItems(quickSearch, requestCount);
+    }
+    
+    public QuickSearchResultDto searchAllArtists(String quickSearch, long requestCount)
+    {
+        return searchSupportDelegate.searchAllArtists(quickSearch, requestCount);
+    }
+
+    public QuickSearchResultDto searchAllAlbum(String quickSearch, long requestCount)
+    {
+        return searchSupportDelegate.searchAllAlbum(quickSearch, requestCount);
+    }
+
+    public QuickSearchResultDto searchAllPlaylist(String quickSearch, long requestCount)
+    {
+        return searchSupportDelegate.searchAllPlaylist(quickSearch, requestCount);
+    }
+    
 
     public ContainerItemDto browseChildren(BrowseInput inp)
     {
@@ -81,7 +102,7 @@ public class MediaServerDevice extends BaseDevice
             addContainerObjects(result, didl);
             addItemObjects(result.musicItemDto, didl);
 
-            //addDirectoryUpContainer(inp, result, curContainer);
+            // addDirectoryUpContainer(inp, result, curContainer);
             return result;
         }
         catch (Exception e)

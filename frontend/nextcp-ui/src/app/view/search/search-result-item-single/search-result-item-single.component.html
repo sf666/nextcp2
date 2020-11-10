@@ -1,4 +1,4 @@
-<div class="d-flex flex-column outer-container">
+<div *ngIf="searchItemService.musicItem" class="d-flex flex-column outer-container">
     <div class="d-flex">
         <img src="{{searchItemService.musicItem?.albumArtUrl}}" class="cropImg align-self-center" alt="">
         <div class="d-flex flex-column ml-4">
@@ -19,3 +19,4 @@
         </div>
     </div>
 </div>
+

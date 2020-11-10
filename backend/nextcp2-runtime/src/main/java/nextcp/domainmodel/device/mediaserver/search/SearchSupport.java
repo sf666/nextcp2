@@ -35,41 +35,41 @@ public class SearchSupport
         this.mediaServerDevice = mediaServerDevice;
     }
 
-    public QuickSearchResultDto quickSearch(String quickSearch)
+    public QuickSearchResultDto quickSearch(String quickSearch, long requestCount)
     {
         QuickSearchResultDto container = initEmptySearchResultContainer();
 
-        searchAndAddMusicItems(quickSearch, container);
-        searchAndAddArtistContainer(quickSearch, container);
-        searchAndAddAlbumContainer(quickSearch, container);
-        searchAndAddPlaylistContainer(quickSearch, container);
+        searchAndAddMusicItems(quickSearch, container, requestCount);
+        searchAndAddArtistContainer(quickSearch, container, requestCount);
+        searchAndAddAlbumContainer(quickSearch, container, requestCount);
+        searchAndAddPlaylistContainer(quickSearch, container, requestCount);
         return container;
 
     }
 
-    private void searchAndAddPlaylistContainer(String quickSearch, QuickSearchResultDto container)
+    private void searchAndAddPlaylistContainer(String quickSearch, QuickSearchResultDto container, long requestCount)
     {
-        searchAndAddArtistContainer(quickSearch, container.playlistItems, "object.container.playlistContainer");
+        searchAndAddArtistContainer(quickSearch, container.playlistItems, "object.container.playlistContainer", requestCount);
     }
 
-    private void searchAndAddAlbumContainer(String quickSearch, QuickSearchResultDto container)
+    private void searchAndAddAlbumContainer(String quickSearch, QuickSearchResultDto container, long requestCount)
     {
-        searchAndAddArtistContainer(quickSearch, container.albumItems, "object.container.album");
+        searchAndAddArtistContainer(quickSearch, container.albumItems, "object.container.album", requestCount);
     }
 
-    private void searchAndAddArtistContainer(String quickSearch, QuickSearchResultDto container)
+    private void searchAndAddArtistContainer(String quickSearch, QuickSearchResultDto container, long requestCount)
     {
-        searchAndAddArtistContainer(quickSearch, container.artistItems, "object.container.person");
+        searchAndAddArtistContainer(quickSearch, container.artistItems, "object.container.person", requestCount);
     }
 
-    private void searchAndAddArtistContainer(String quickSearch, List<ContainerDto> container, String upnpClass)
+    private void searchAndAddArtistContainer(String quickSearch, List<ContainerDto> container, String upnpClass, long requestCount)
     {
         SearchInput searchInput = new SearchInput();
         searchInput.ContainerID = "0";
         searchInput.SearchCriteria = String.format("( upnp:class derivedfrom \"%s\" and dc:title contains \"%s\")", upnpClass, quickSearch);
         searchInput.StartingIndex = 0L;
         searchInput.Filter = "*";
-        searchInput.RequestedCount = 3L;
+        searchInput.RequestedCount = requestCount;
         searchInput.SortCriteria = "";
 
         SearchOutput out = contentDirectoryService.search(searchInput);
@@ -86,7 +86,7 @@ public class SearchSupport
         }
     }
 
-    private void searchAndAddMusicItems(String quickSearch, QuickSearchResultDto container)
+    private void searchAndAddMusicItems(String quickSearch, QuickSearchResultDto container, Long requestCount)
     {
         StringBuilder sb = new StringBuilder();
         sb.append("( upnp:class = \"object.item.audioItem.musicTrack\""); // upnp:class derivedfrom “object.container.person”
@@ -97,7 +97,7 @@ public class SearchSupport
         searchInput.SearchCriteria = sb.toString();
         searchInput.StartingIndex = 0L;
         searchInput.Filter = "*";
-        searchInput.RequestedCount = 3L;
+        searchInput.RequestedCount = requestCount;
         searchInput.SortCriteria = "";
 
         SearchOutput out = contentDirectoryService.search(searchInput);
@@ -141,6 +141,46 @@ public class SearchSupport
             MusicItemDto itemDto = mediaServerDevice.getDtoBuilder().buildItemDto(item, mediaServerDevice.getUDN().getIdentifierString());
             result.add(itemDto);
         }
+    }
+
+    //
+    // search all from one type
+    //
+
+    public QuickSearchResultDto searchAllItems(String quickSearch, long requestCount)
+    {
+        QuickSearchResultDto container = initEmptySearchResultContainer();
+
+        searchAndAddMusicItems(quickSearch, container, requestCount);
+
+        return container;
+    }
+
+    public QuickSearchResultDto searchAllArtists(String quickSearch, long requestCount)
+    {
+        QuickSearchResultDto container = initEmptySearchResultContainer();
+
+        searchAndAddArtistContainer(quickSearch, container, requestCount);
+
+        return container;
+    }
+
+    public QuickSearchResultDto searchAllAlbum(String quickSearch, long requestCount)
+    {
+        QuickSearchResultDto container = initEmptySearchResultContainer();
+
+        searchAndAddAlbumContainer(quickSearch, container, requestCount);
+
+        return container;
+    }
+
+    public QuickSearchResultDto searchAllPlaylist(String quickSearch, long requestCount)
+    {
+        QuickSearchResultDto container = initEmptySearchResultContainer();
+
+        searchAndAddPlaylistContainer(quickSearch, container, requestCount);
+
+        return container;
     }
 }
 

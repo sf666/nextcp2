@@ -8,6 +8,7 @@ import java.util.List;
 public class QuickSearchRequestDto
 {
 
+    public Long requestCount;
     public String mediaServerUDN;
     public String searchRequest;
     public String sortCriteria;
@@ -16,8 +17,9 @@ public class QuickSearchRequestDto
     {
     }
 
-    public QuickSearchRequestDto(String mediaServerUDN, String searchRequest, String sortCriteria)
+    public QuickSearchRequestDto(Long requestCount, String mediaServerUDN, String searchRequest, String sortCriteria)
     {
+        this.requestCount = requestCount;
         this.mediaServerUDN = mediaServerUDN;
         this.searchRequest = searchRequest;
         this.sortCriteria = sortCriteria;
@@ -28,6 +30,7 @@ public class QuickSearchRequestDto
     {
         StringBuilder sb = new StringBuilder();
         sb.append("QuickSearchRequestDto [");
+        sb.append("requestCount=").append(this.requestCount).append(", ");
         sb.append("mediaServerUDN=").append(this.mediaServerUDN).append(", ");
         sb.append("searchRequest=").append(this.searchRequest).append(", ");
         sb.append("sortCriteria=").append(this.sortCriteria).append(", ");

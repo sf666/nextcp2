@@ -1,16 +1,18 @@
 @import 'pantone';
 
 .search-container {
-    font-size: 1rem;
+    display      : flex;
+    flex-flow    : column nowrap;
+    border-radius: 8px;
 
+    font-size  : 1rem;
+    font-weight: 300;
+
+    position        : fixed;
     width           : 450px;
     height          : calc(100vh - 185px);
-    position        : fixed;
     top             : 70px;
     right           : 16px;
-    display         : flex;
-    flex-flow       : column nowrap;
-    border-radius   : 8px;
     background-color: #242528; // $pantone-Neutral-Black-C , #242528
     z-index         : 70;
 
@@ -32,18 +34,18 @@
 
 .search-title {
     font-size  : 1rem;
-    font-weight: 400;
+    font-weight: 500;
 }
 
 .search-show-all {
     font-size  : 1rem;
-    font-weight: 400;
+    font-weight: 300;
     color      : rgba(229, 238, 255, .6);
 }
 
 img {
-    height: 62px;
-    width: 62px;
+    height    : 62px;
+    width     : 62px;
     object-fit: cover;
 }
 
@@ -81,4 +83,11 @@ img {
 
 .search-row {
     padding-bottom: 16px;
+}
+
+.searchImgHeight {
+    max-width: 4rem;
+    max-height: 4rem;
+    width: 4rem;
+    height: 4rem;
 }

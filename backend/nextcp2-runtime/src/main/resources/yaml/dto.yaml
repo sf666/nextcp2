@@ -225,6 +225,7 @@ BrowseRequestDto:
    sortCriteria: String
 
 QuickSearchRequestDto:
+   requestCount : Long
    mediaServerUDN: String
    searchRequest: String
    sortCriteria: String

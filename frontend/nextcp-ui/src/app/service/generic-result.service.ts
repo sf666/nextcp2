@@ -35,7 +35,7 @@ export class GenericResultService {
 
   public displayHttpError(err, toastrMessage) {
     if (err.status == 504) {
-      this.displayErrorMessage("Server unavailable. Please check if your computer ist connected and the backend server process is online.", "gateway error");
+      this.displayErrorMessage("Server unavailable. Please check if your computer is connected to your LAN and nextcp/2 server process is online.", "gateway error");
     }
     else {
       this.toastr.error(err.error.message, toastrMessage);

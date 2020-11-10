@@ -10,14 +10,14 @@ $col-4: $amber-pantone-6;
 $col-grey: $col-4;
 
 .footer {
-    font-weight     : 200;
+    font-weight     : 300;
     font-size       : 1.2rem;
     position        : fixed;
     left            : 0;
     bottom          : 0;
     height          : var(--footer-heihgt);
     width           : 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
     text-align      : left;
     z-index         : 80;
 }
@@ -106,15 +106,12 @@ mat-slider {
     @extend .baseFontsize;
     color: var(--grey-5);
     font-feature-settings: "tnum";
-    font-weight          : 500;
 }
 
 .finishedTime {
     @extend .baseFontsize;
     color: var(--glas-white);
     font-feature-settings: "tnum";
-    font-weight          : 500;
-
 }
 
 img {
@@ -136,7 +133,6 @@ img {
 .albumAndTitle {
     margin-left  : 1.5rem;
     margin-top   : 0.2rem;
-    font-family  : "Quicksand", sans-serif;
     margin-bottom: 0.2rem;
     align-self   : center;
 }

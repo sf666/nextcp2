@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2020-11-06 13:10:12.
+// Generated using typescript-generator version 2.0.400 on 2020-11-09 16:43:48.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -157,6 +157,7 @@ export interface PlaylistState {
 }
 
 export interface QuickSearchRequestDto {
+    requestCount: number;
     mediaServerUDN: string;
     searchRequest: string;
     sortCriteria: string;

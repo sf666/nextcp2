@@ -52,13 +52,14 @@ export class ContainerComponent implements AfterViewChecked {
   }
 
   public browseTo(containerDto: ContainerDto) {
+    // TODO: scroll to last parent doesn't work any more ... fix it.
     if (containerDto.parentID === "[PARENT]") {
       this.scrollID = this.contentDirectoryService.currentContainerList.currentContainer.id;
     }
     else {
       this.scrollID = '';
     }
-    this.contentDirectoryService.browseChildren(containerDto.id, containerDto.parentID, containerDto.mediaServerUDN);
+    this.contentDirectoryService.browseChildrenByContiner(containerDto);
   }
 
   shufflePlaylist(container) {

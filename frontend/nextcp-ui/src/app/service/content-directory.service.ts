@@ -1,9 +1,10 @@
+import { Router } from '@angular/router';
+import { DtoGeneratorService } from './../util/dto-generator.service';
 import { SearchItemService } from './search/search-item.service';
 import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
 import { ContainerItemDto, BrowseRequestDto, MediaServerDto, ContainerDto, QuickSearchRequestDto, QuickSearchResultDto } from './dto.d';
 import { Injectable } from '@angular/core';
-import Stack from "ts-data.stack";
 
 @Injectable({
   providedIn: 'root'
@@ -23,11 +24,13 @@ export class ContentDirectoryService {
   constructor(
     private httpService: HttpService,
     private searchItemService: SearchItemService,
+    private dtoGeneratorService: DtoGeneratorService,
+    private router: Router,
     private deviceService: DeviceService) {
 
     // Initialize empty result object
-    this.currentContainerList = this.generateEmptyContainerItemDto();
-    this.quickSearchResultList = this.generateEmptyQuickSearchResultDto();
+    this.currentContainerList = this.dtoGeneratorService.generateEmptyContainerItemDto();
+    this.quickSearchResultList = this.dtoGeneratorService.generateEmptyQuickSearchResultDto();
     this.quickSearchPanelVisible = false;
 
     deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));
@@ -39,7 +42,7 @@ export class ContentDirectoryService {
   }
 
   public clearSearch() {
-    this.quickSearchResultList = this.generateEmptyQuickSearchResultDto();
+    this.quickSearchResultList = this.dtoGeneratorService.generateEmptyQuickSearchResultDto();
     this.quickSearchPanelVisible = false;
   }
 
@@ -47,13 +50,8 @@ export class ContentDirectoryService {
     this.browseChildrenByRequest(this.createBrowseRequest(objectID, sortCriteria, mediaServerUdn));
   }
 
-  public quickSearch(searchQuery: string, sortCriteria: string, mediaServerUdn: string): void {
-    this.quickSearchByDto(this.generateQuickSearchDto(searchQuery, mediaServerUdn, sortCriteria));
-  }
-
-  public quickSearchByDto(quickSearchDto: QuickSearchRequestDto): void {
-    const uri = '/quickSearch';
-    this.httpService.post<QuickSearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => this.quickSearchResultList = data);
+  public browseChildrenByContiner(containerDto: ContainerDto): void {
+    this.browseChildrenByRequest(this.createBrowseRequest(containerDto.id, "", containerDto.mediaServerUDN));
   }
 
   public browseChildrenByRequest(browseRequestDto: BrowseRequestDto): void {
@@ -75,47 +73,59 @@ export class ContentDirectoryService {
     return br;
   }
 
-  public generateEmptyQuickSearchResultDto(): QuickSearchResultDto {
-    return {
-      albumItems: [],
-      artistItems: [],
-      musicItems: [],
-      playlistItems: []
-    }
+  //
+  // Search Section
+  //
+  public quickSearch(searchQuery: string, sortCriteria: string, mediaServerUdn: string): void {
+    this.quickSearchByDto(this.dtoGeneratorService.generateQuickSearchDto(searchQuery, mediaServerUdn, sortCriteria));
   }
 
-  public generateEmptyContainerItemDto(): ContainerItemDto {
-    return {
-      currentContainer: this.generateEmptyContainerDto(),
-      containerDto: [],
-      musicItemDto: [],
-      albumDto: []
-    }
+  public quickSearchByDto(quickSearchDto: QuickSearchRequestDto): void {
+    const uri = '/quickSearch';
+    this.httpService.post<QuickSearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => this.quickSearchResultList = data);
   }
 
-  public generateQuickSearchDto(_searchRequest: string, _mediaServerUDN: string, _sortCriteria): QuickSearchRequestDto {
-    return {
-      mediaServerUDN: _mediaServerUDN,
-      searchRequest: _searchRequest,
-      sortCriteria: _sortCriteria
-    }
+  public searchAllItems(quickSearchDto: QuickSearchRequestDto): void {
+    const uri = '/searchAllItems';
+    this.httpService.post<QuickSearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
+      this.searchItemService._musicItemList = data;
+      this.router.navigateByUrl('searchResultContainer');
+    });
   }
 
-  public generateEmptyContainerDto(): ContainerDto {
-    return {
-      albumartUri: '',
-      artist: '',
-      childCount: 0,
-      createClass: '',
-      creator: '',
-      id: '',
-      mediaServerUDN: '',
-      objectClass: '',
-      parentID: '',
-      rating: 0,
-      searchClass: '',
-      searchable: false,
-      title: ''
-    };
+  public searchAllPlaylist(quickSearchDto: QuickSearchRequestDto): void {
+    const uri = '/searchAllPlaylist';
+    this.httpService.post<QuickSearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
+      this.searchItemService._musicItemList = data;
+      this.router.navigateByUrl('searchResultContainer');
+    });
   }
+
+  public searchAllAlbum(quickSearchDto: QuickSearchRequestDto): void {
+    const uri = '/searchAllAlbum';
+    this.httpService.post<QuickSearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
+      this.searchItemService._musicItemList = data;
+      this.router.navigateByUrl('searchResultContainer');
+    });
+  }
+
+  public searchAllArtists(quickSearchDto: QuickSearchRequestDto): void {
+    const uri = '/searchAllArtists';
+    this.httpService.post<QuickSearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
+      this.searchItemService._musicItemList = data;
+      this.router.navigateByUrl('searchResultContainer');
+    });
+  }
+
 }
+/**
+
+@PostMapping("/searchAllItems")
+
+@PostMapping("/searchAllPlaylist")
+
+@PostMapping("/searchAllAlbum")
+
+@PostMapping("/searchAllArtists")
+
+*/
