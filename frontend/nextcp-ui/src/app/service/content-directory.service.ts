@@ -88,7 +88,8 @@ export class ContentDirectoryService {
   public searchAllItems(quickSearchDto: QuickSearchRequestDto): void {
     const uri = '/searchAllItems';
     this.httpService.post<QuickSearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
-      this.searchItemService._musicItemList = data;
+      this.searchItemService.musicItemList = data;
+      this.clearSearch();
       this.router.navigateByUrl('searchResultContainer');
     });
   }
@@ -96,7 +97,8 @@ export class ContentDirectoryService {
   public searchAllPlaylist(quickSearchDto: QuickSearchRequestDto): void {
     const uri = '/searchAllPlaylist';
     this.httpService.post<QuickSearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
-      this.searchItemService._musicItemList = data;
+      this.searchItemService.musicItemList = data;
+      this.clearSearch();
       this.router.navigateByUrl('searchResultContainer');
     });
   }
@@ -104,7 +106,8 @@ export class ContentDirectoryService {
   public searchAllAlbum(quickSearchDto: QuickSearchRequestDto): void {
     const uri = '/searchAllAlbum';
     this.httpService.post<QuickSearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
-      this.searchItemService._musicItemList = data;
+      this.searchItemService.musicItemList = data;
+      this.clearSearch();
       this.router.navigateByUrl('searchResultContainer');
     });
   }
@@ -112,7 +115,8 @@ export class ContentDirectoryService {
   public searchAllArtists(quickSearchDto: QuickSearchRequestDto): void {
     const uri = '/searchAllArtists';
     this.httpService.post<QuickSearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
-      this.searchItemService._musicItemList = data;
+      this.searchItemService.musicItemList = data;
+      this.clearSearch();
       this.router.navigateByUrl('searchResultContainer');
     });
   }

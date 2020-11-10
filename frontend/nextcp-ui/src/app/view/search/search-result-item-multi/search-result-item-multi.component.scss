@@ -1,51 +1,63 @@
-img {
-    height    : 250px;
-    width     : 250px;
-    object-fit: cover;
+.section-box {
+    margin-top   : 2 rem;
+    margin-bottom: 1.5rem;
+
+    &:first-child {
+        margin-top: 1rem;
+    }
 }
 
-.title {
-    font-size  : 1.3rem;
+.search-title {
+    font-size  : 1rem;
     font-weight: 500;
 }
 
-.plainText {
-    font-size  : 1rem;
-    font-weight: 300;
-}
+.item-table {
+    font-size     : 1rem;
+    font-weight   : 300;
+    text-align    : left;
+    align-self    : stretch;
+    text-transform: initial;
+    margin-left   : 3rem;
+    margin-top    : 2rem;
+    width         : 100%;
 
-.regular {
-    @extend .plainText;
-    font-size  : 1rem;
-    font-weight: 300;
-    color      : rgba(229, 238, 255, .6);
-}
+    .row {
+        margin     : 5px 0;
+        padding    : 0 20px;
+        align-items: center;
+    }
 
+    .col {
+        padding      : 0 10px;
+        overflow     : hidden;
+        text-overflow: ellipsis;
+    }
 
-.highlight {
-    @extend .plainText;
-    color: white;
-}
+    .small-col {
+        max-width : 20px;
+        text-align: right;
+    }
 
-.outer-container {
-    margin-left: 90px;
-    margin-top : 120px;
-}
+    .item-thead {
+        font-size     : 1rem;
+        font-weight   : 300;
+        margin        : 15px 0;
+        text-align    : left;
+        align-self    : stretch;
+        text-transform: initial;
+    }
 
-.buttons {
-    background-color: rgba(229, 238, 255, .2);
-}
+    .item-tbody {
+        font-size     : 1rem;
+        font-weight   : 300;
+        text-align    : left;
+        align-self    : stretch;
+        text-transform: initial;
 
-.middle-spacer {
-    flex: 1 1 auto;
-}
-
-.buttons {
-    margin-left: 1rem;
-    text-align : left;
-    min-width  : 130px;
-
-    &:first-child {
-        margin-left: 0;
+        .row {
+            padding-top   : 7px;
+            padding-bottom: 7px;
+        }
     }
 }

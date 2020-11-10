@@ -1,7 +1,6 @@
 import { ContentDirectoryService } from './../../../service/content-directory.service';
 import { ContainerDto, MusicItemDto } from './../../../service/dto.d';
 import { SearchItemService } from './../../../service/search/search-item.service';
-import { SearchContainerService } from './../../../service/search/search-container.service';
 import { DtoGeneratorService } from './../../../util/dto-generator.service';
 import { DeviceService } from './../../../service/device.service';
 import { Router } from '@angular/router';
@@ -20,7 +19,6 @@ export class ModalSearchResultComponent {
     private searchItemService: SearchItemService,
     private dtoGeneratorService: DtoGeneratorService,
     private deviceService: DeviceService,
-    private searchContainerService: SearchContainerService,
     private router: Router) {
   }
 
@@ -37,7 +35,6 @@ export class ModalSearchResultComponent {
 
   albumItemSelected(albumItem: ContainerDto) {
     console.debug("album selected : " + albumItem);
-    this.searchContainerService.containerItem = albumItem;
     this.contentDirectoryService.clearSearch();
     this.contentDirectoryService.browseChildrenByContiner(albumItem);
     this.router.navigateByUrl('music-library');
@@ -45,14 +42,12 @@ export class ModalSearchResultComponent {
 
   playlistItemSelected(playlistItem: ContainerDto) {
     console.debug("album selected : " + playlistItem);
-    this.searchContainerService.containerItem = playlistItem;
     this.contentDirectoryService.browseChildrenByContiner(playlistItem);
     this.router.navigateByUrl('music-library');
   }
 
   artistItemSelected(artistItem: ContainerDto) {
     console.debug("album selected : " + artistItem);
-    this.searchContainerService.containerItem = artistItem;
     this.contentDirectoryService.browseChildrenByContiner(artistItem);
     this.router.navigateByUrl('music-library');
   }

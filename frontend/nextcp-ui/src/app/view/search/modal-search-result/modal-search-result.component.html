@@ -22,7 +22,7 @@
     <div class="section-box">
         <div class="d-flex justify-content-between mb-3">
             <div class="search-title">Album</div>
-            <div class="search-show-all">show all</div>
+            <div class="search-show-all" (click)="showAllAlbum()">show all</div>
         </div>
         <div *ngIf="contentDirectoryService.quickSearchResultList?.albumItems?.length > 0; else noContentBlock">
             <div *ngFor="let item of contentDirectoryService.quickSearchResultList?.albumItems"
@@ -39,7 +39,7 @@
     <div class="section-box">
         <div class="d-flex justify-content-between mb-3">
             <div class="search-title">Playlist</div>
-            <div class="search-show-all">show all</div>
+            <div class="search-show-all" (click)="showAllPlaylist()">show all</div>
         </div>
         <div *ngIf="contentDirectoryService.quickSearchResultList?.playlistItems?.length > 0; else noContentBlock">
             <div *ngFor="let item of contentDirectoryService.quickSearchResultList?.playlistItems"
@@ -55,7 +55,7 @@
     <div class="section-box">
         <div class="d-flex justify-content-between mb-3">
             <div class="search-title">Artist</div>
-            <div class="search-show-all">show all</div>
+            <div class="search-show-all" (click)="showAllItemArtist()">show all</div>
         </div>
         <div class="search-row" *ngIf="contentDirectoryService.quickSearchResultList?.artistItems?.length > 0; else noContentBlock">
             <div *ngFor="let item of contentDirectoryService.quickSearchResultList?.artistItems"

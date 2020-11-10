@@ -1,4 +1,4 @@
-import { SearchContainerService } from './../../../service/search/search-container.service';
+import { SearchItemService } from './../../../service/search/search-item.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -8,5 +8,5 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SearchResultItemMultiComponent {
 
-  constructor(public searchContainerService: SearchContainerService) { }
+  constructor(public searchItemService: SearchItemService) { }
 }

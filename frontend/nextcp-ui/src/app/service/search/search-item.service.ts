@@ -8,8 +8,8 @@ export class SearchItemService {
 
   _searchQuery: string;
 
-  _musicItem: MusicItemDto;
-  _musicItemList: QuickSearchResultDto;
+  private _musicItem: MusicItemDto;
+  private _musicItemList: QuickSearchResultDto;
 
   constructor() { }
 
