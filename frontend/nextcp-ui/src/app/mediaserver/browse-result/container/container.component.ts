@@ -2,9 +2,9 @@ import { ScrollViewService } from './../../../util/scroll-view.service';
 import { BackgroundImageService } from './../../../util/background-image.service';
 import { delay } from './../../../global';
 import { PlaylistService } from './../../../service/playlist.service';
-import { ContainerDto } from './../../../service/dto.d';
+import { ContainerDto, ContainerItemDto } from './../../../service/dto.d';
 import { ContentDirectoryService } from './../../../service/content-directory.service';
-import { Component,AfterViewChecked } from '@angular/core';
+import { Component, AfterViewChecked } from '@angular/core';
 
 @Component({
   selector: 'browseResultContainer',
@@ -39,6 +39,18 @@ export class ContainerComponent implements AfterViewChecked {
     return this.contentDirectoryService.currentContainerList.containerDto.filter(item => item.objectClass === "object.container.playlistContainer");
   }
 
+  public get itemsCount(): number {
+    if (this.contentDirectoryService.currentContainerList?.musicItemDto?.length) {
+      return this.contentDirectoryService.currentContainerList.musicItemDto.length;
+    } else {
+      return 0;
+    }
+  }
+
+  public get hasChilds() {
+    return this.containerList?.length > 0 || this.playlistList?.length > 0 || this.itemsCount > 0;
+  }
+
   public containerListWithoutMinimServerTags(): ContainerDto[] {
     return this.contentDirectoryService.currentContainerList.containerDto.filter(item => !item.title.startsWith(">> "));
   }
@@ -49,6 +61,10 @@ export class ContainerComponent implements AfterViewChecked {
 
   public get currentContainer(): ContainerDto {
     return this.contentDirectoryService.currentContainerList.currentContainer;
+  }
+
+  public get currentObjectList(): ContainerItemDto {
+    return this.contentDirectoryService.currentContainerList;
   }
 
   public browseTo(containerDto: ContainerDto) {

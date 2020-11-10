@@ -6,8 +6,8 @@
     background-color : rgba(0, 0, 0, 0.5);
     background-image : url(/assets/folder-bg.png);
 
-    width     : 12rem;
-    height    : 12rem;
+    width : 12rem;
+    height: 12rem;
 }
 
 .play-overlay-button {
@@ -38,14 +38,21 @@
     }
 }
 
-.title {
-    font-size  : 2rem;
-    font-weight: 700;
-    align-self : center;
+.infobox {
+    padding-left: 2rem;
+    padding-top : 1rem;
+    align-self  : center;
+}
 
-    &.album {
-        align-self: start;
-    }
+.title {
+    font-size     : 1.5rem;
+    font-weight   : 400;
+    align-self    : flex-start;
+    padding-bottom: 0.7rem;
+}
+
+.album {
+    padding-bottom: 0.7rem;
 }
 
 .outer-container {

@@ -7,7 +7,8 @@
             <div class="d-flex flex-column">
                 <div class="title">{{currentContainer.title}}</div>
             </div>
-            <div *ngIf="currentContainer.artist" class="regular">by <span class="highlight">{{currentContainer.artist}}</span></div>
+            <div *ngIf="currentContainer.artist" class="regular">by <span
+                    class="highlight">{{currentContainer.artist}}</span></div>
             <div class="d-flex mt-4">
                 <button mat-flat-button class="buttons" (click)="playPlaylist(currentContainer)">
                     <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="play"></mat-icon>
@@ -17,7 +18,8 @@
                     <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="shuffle-variant"></mat-icon>
                     shuffle
                 </button>
-                <button mat-flat-button class="buttons" (click)="playlistService.addContainerToPlaylist(currentContainer)">
+                <button mat-flat-button class="buttons"
+                    (click)="playlistService.addContainerToPlaylist(currentContainer)">
                     <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="playlist-plus"
                         aria-label="add to playlist">
                     </mat-icon>
@@ -29,8 +31,11 @@
 </div>
 
 <ng-template #containerTitle>
-    <div class="d-flex flex-column justify-content-center">
-        <div class="title">{{currentContainer.title}}</div>
+    <div class="d-flex flex-column infobox">
+        <div class="title">{{currentContainer.title}} <span *ngIf="hasChilds" class="regular"> has</span></div>
+        <div *ngIf="containerList.length > 0" class="album">{{containerList.length}} <span class="regular">Folders</span></div>
+        <div *ngIf="playlistList.length > 0" class="album">{{playlistList.length}} <span class="regular">Playlists</span></div>
+        <div *ngIf="itemsCount > 0" class="album">{{itemsCount}} Tracks</div>
     </div>
 </ng-template>
 

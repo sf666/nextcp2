@@ -122,14 +122,4 @@ export class ContentDirectoryService {
   }
 
 }
-/**
 
-@PostMapping("/searchAllItems")
-
-@PostMapping("/searchAllPlaylist")
-
-@PostMapping("/searchAllAlbum")
-
-@PostMapping("/searchAllArtists")
-
-*/
