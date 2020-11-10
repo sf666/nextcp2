@@ -1,3 +1,5 @@
+@import 'appTable';
+
 .section-box {
     margin-top   : 2 rem;
     margin-bottom: 1.5rem;
@@ -10,54 +12,4 @@
 .search-title {
     font-size  : 1rem;
     font-weight: 500;
-}
-
-.item-table {
-    font-size     : 1rem;
-    font-weight   : 300;
-    text-align    : left;
-    align-self    : stretch;
-    text-transform: initial;
-    margin-left   : 3rem;
-    margin-top    : 2rem;
-    width         : 100%;
-
-    .row {
-        margin     : 5px 0;
-        padding    : 0 20px;
-        align-items: center;
-    }
-
-    .col {
-        padding      : 0 10px;
-        overflow     : hidden;
-        text-overflow: ellipsis;
-    }
-
-    .small-col {
-        max-width : 20px;
-        text-align: right;
-    }
-
-    .item-thead {
-        font-size     : 1rem;
-        font-weight   : 300;
-        margin        : 15px 0;
-        text-align    : left;
-        align-self    : stretch;
-        text-transform: initial;
-    }
-
-    .item-tbody {
-        font-size     : 1rem;
-        font-weight   : 300;
-        text-align    : left;
-        align-self    : stretch;
-        text-transform: initial;
-
-        .row {
-            padding-top   : 7px;
-            padding-bottom: 7px;
-        }
-    }
 }

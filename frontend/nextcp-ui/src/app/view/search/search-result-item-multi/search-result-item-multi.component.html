@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="item-tbody">
-                <div class="row" *ngFor="let item of searchItemService.musicItemList.musicItems; index as idx">
+                <div class="row" (click)="browseToContainer(item)" *ngFor="let item of searchItemService.musicItemList.musicItems; index as idx">
                     <div class="col col-greyed small-col">{{idx+1}}</div>
                     <div class="col ">{{item.title}}</div>
                     <div class="col ">{{item.artistName}}</div>
@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div class="item-tbody">
-                <div class="row" *ngFor="let item of searchItemService.musicItemList.albumItems; index as idx">
+                <div class="row" (click)="browseToContainer(item)" *ngFor="let item of searchItemService.musicItemList.albumItems; index as idx">
                     <div class="col col-greyed small-col">{{idx+1}}</div>
                     <div class="col ">{{item.title}}</div>
                     <div class="col ">{{item.artist}}</div>
@@ -67,7 +67,7 @@
                 </div>
             </div>
             <div class="item-tbody">
-                <div class="row" *ngFor="let item of searchItemService.musicItemList.playlistItems; index as idx">
+                <div class="row" (click)="browseToContainer(item)" *ngFor="let item of searchItemService.musicItemList.playlistItems; index as idx">
                     <div class="col col-greyed small-col">{{idx+1}}</div>
                     <div class="col ">{{item.title}}</div>
                     <div class="col ">{{item.artist}}</div>
@@ -94,7 +94,7 @@
                 </div>
             </div>
             <div class="item-tbody">
-                <div class="row" *ngFor="let item of searchItemService.musicItemList.artistItems; index as idx">
+                <div class="row" (click)="browseToContainer(item)" *ngFor="let item of searchItemService.musicItemList.artistItems; index as idx">
                     <div class="col col-greyed small-col">{{idx+1}}</div>
                     <div class="col ">{{item.title}}</div>
                     <div class="col ">{{item.artist}}</div>

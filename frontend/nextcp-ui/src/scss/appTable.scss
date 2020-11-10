@@ -1,68 +1,53 @@
-/* 
-    Self made Table scss dfinitions.
+.item-table {
+  font-size     : 1rem;
+  font-weight   : 300;
+  text-align    : left;
+  align-self    : stretch;
+  text-transform: initial;
+  margin-left   : 3rem;
+  margin-top    : 2rem;
+  width         : 100%;
 
-    Usuage here: https://codepen.io/bogdandin/pen/KyWEpY
-*/
-
-// TODO own color schema
-@import 'superhero_variables';
-
-.pl-table {
   .row {
-    margin     : 5px 0;
-    padding    : 0 20px;
-    align-items: center;
+      margin     : 5px 0;
+      padding    : 0 20px;
+      align-items: center;
   }
 
   .col {
-    padding      : 0 10px;
-    overflow     : hidden;
-    text-overflow: ellipsis;
+      padding      : 0 10px;
+      overflow     : hidden;
+      text-overflow: ellipsis;
   }
 
-  .pl-thead {
-    background-color: $gray-600;
-    font-size     : 15px;
-    margin        : 15px 0;
+  .small-col {
+      max-width : 20px;
+      text-align: right;
+  }
 
-    &.tall {
-      margin        : 0;
-      padding       : 5px 0;
+  .item-thead {
+      font-size     : 1rem;
+      font-weight   : 300;
+      margin        : 15px 0;
+      text-align    : left;
+      align-self    : stretch;
+      text-transform: initial;
+  }
+
+  .item-tbody {
+      font-size     : 1rem;
+      font-weight   : 300;
+      text-align    : left;
+      align-self    : stretch;
       text-transform: initial;
 
-      .col {
-        border-right: 1px solid rgba(255, 255, 255, 0.2);
-        text-align  : center;
-        align-self  : stretch;
+      .row {
+          padding-top   : 7px;
+          padding-bottom: 7px;
 
-        &:last-child {
-          border: none;
-        }
-
-        .large {
-          font-size: 21px;
-        }
+          &:hover {
+              background: rgba(88, 109, 148, 0.2);
+          }
       }
-    }
-  }
-
-  .pl-tbody {
-    .row {
-      padding-top     : 7px;
-      padding-bottom  : 7px;
-      font-size       : 13px;
-      background-color: $gray-700;
-      &.odd {
-        background-color: $gray-800;
-      }
-      &.even {
-        background-color: $gray-700;
-      }
-    }
-
-    &.scroll {
-      max-height: 300px;
-      overflow-x: scroll;
-    }
   }
 }
