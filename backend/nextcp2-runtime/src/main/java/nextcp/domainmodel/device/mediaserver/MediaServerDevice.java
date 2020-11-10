@@ -176,6 +176,8 @@ public class MediaServerDevice extends BaseDevice
         result.containerDto = new ArrayList<>();
         result.musicItemDto = new ArrayList<>();
         result.albumDto = new ArrayList<>();
+        result.parentFolderTitle = "";
+        result.minimServerSupportTags = new ArrayList<ContainerDto>();
         return result;
     }
 
@@ -193,15 +195,6 @@ public class MediaServerDevice extends BaseDevice
             {
                 result.containerDto.add(containerDto);
             }
-        }
-    }
-
-    private void addDirectoryUpContainer(BrowseInput inp, ContainerItemDto result, ContainerDto curContainer)
-    {
-        if (!inp.ObjectID.equals("0"))
-        {
-            result.containerDto.add(0, new ContainerDto(curContainer.parentID, "[PARENT]", "\u21EA [parent directory]", "", 0, "", "", false, getUDN().getIdentifierString(),
-                    "assets/directory-up.png", "", 0, ""));
         }
     }
 

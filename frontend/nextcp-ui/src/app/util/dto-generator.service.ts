@@ -43,6 +43,7 @@ export class DtoGeneratorService {
       parentFolderTitle: '',
       currentContainer: this.generateEmptyContainerDto(),
       containerDto: [],
+      minimServerSupportTags: [],
       musicItemDto: [],
       albumDto: []
     }
