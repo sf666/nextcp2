@@ -29,7 +29,7 @@ mat-slider {
 .timeDispContainer {
     display        : flex;
     flex-direction : row;
-    justify-content: end;
+    justify-content: flex-end;
     align-self     : center; // vertical center
     width          : 150px;
     min-width      : 150px;
@@ -117,7 +117,9 @@ mat-slider {
 }
 
 img {
-    height: var(--footer-heihgt);
+    height          : calc(var(--footer-heihgt) - 2px);
+    width           : calc(var(--footer-heihgt) - 2px);
+    //    align-self: center;
 }
 
 .standbyOn {

@@ -1,4 +1,5 @@
 @import "pantone";
+@import "buttons";
 
 .img-top {
     background-repeat: 100vh;
@@ -77,15 +78,4 @@
 .highlight {
     @extend .plainText;
     color: white;
-}
-
-
-.buttons {
-    margin-left: 1rem;
-    text-align : left;
-    min-width  : 130px;
-
-    &:first-child {
-        margin-left: 0;
-    }
 }

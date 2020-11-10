@@ -1,0 +1,16 @@
+// Global buttons definitios
+.my-buttons {
+    background-color: rgba(229, 238, 255, .1);
+    color           : rgba(229, 238, 255, .7);
+    text-align      : left;
+    min-width       : 8rem;
+    margin-right    : 16px;
+
+    &:first-child {
+        margin-left: 0;
+    }
+}
+
+.mat-icon {
+    vertical-align: top;
+}

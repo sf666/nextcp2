@@ -39,6 +39,10 @@ export class ContainerComponent implements AfterViewChecked {
     return this.contentDirectoryService.currentContainerList.containerDto.filter(item => item.objectClass === "object.container.playlistContainer");
   }
 
+  public get minimTagsList(): ContainerDto[] {
+    return this.contentDirectoryService.currentContainerList.minimServerSupportTags;
+  }
+
   public get itemsCount(): number {
     if (this.contentDirectoryService.currentContainerList?.musicItemDto?.length) {
       return this.contentDirectoryService.currentContainerList.musicItemDto.length;

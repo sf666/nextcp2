@@ -33,6 +33,7 @@ export class NavBarComponent {
   // UI state management for navbar 
 
   get musicLibraryVisible(): boolean {
+   //  console.log("current path : " + this.currentPath);
     return this.currentPath === '/music-library';
   }
   get playlistVisible(): boolean {

@@ -98,7 +98,7 @@ public class MediaServerDevice extends BaseDevice
             ContainerItemDto result = initEmptyContainerItemDto();
 
             result.currentContainer = curContainer;
-            result.parentFolderTitle = getParentName(curContainer);
+            result.parentFolderTitle = removeMinimTagChars(getParentName(curContainer));
             addContainerObjects(result, didl);
             addItemObjects(result.musicItemDto, didl);
 
@@ -110,6 +110,21 @@ public class MediaServerDevice extends BaseDevice
             e.printStackTrace();
             throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage());
         }
+    }
+
+    /**
+     * Removes '// ' in front of the title
+     * 
+     * @param title
+     * @return
+     */
+    private String removeMinimTagChars(String title)
+    {
+        if (title.length() > 3)
+        {
+            return title.substring(3);
+        }
+        return title;
     }
 
     private String getParentName(ContainerDto current)
@@ -153,6 +168,11 @@ public class MediaServerDevice extends BaseDevice
             {
                 DIDLContent didl = generateDidlContent(out.Result);
                 result = getDtoBuilder().buildContainerDto(didl.getFirstContainer());
+                // minimserver support
+                if (result.title.startsWith(">>"))
+                {
+                    result.title = removeMinimTagChars(result.title);
+                }
             }
             result.mediaServerUDN = getUDN().getIdentifierString();
             return result;
@@ -187,13 +207,25 @@ public class MediaServerDevice extends BaseDevice
         {
             ContainerDto containerDto = getDtoBuilder().buildContainerDto(didlObject);
             containerDto.mediaServerUDN = getUDN().getIdentifierString();
-            if (didlObject instanceof MusicAlbum)
+            if (didlObject.getTitle().startsWith(">>"))
             {
-                result.albumDto.add(containerDto);
+                // minim server support for tags ...
+                if (!didlObject.getId().endsWith("$hchide"))
+                {
+                    containerDto.title = containerDto.title.substring(3);
+                    result.minimServerSupportTags.add(containerDto);
+                }
             }
             else
             {
-                result.containerDto.add(containerDto);
+                if (didlObject instanceof MusicAlbum)
+                {
+                    result.albumDto.add(containerDto);
+                }
+                else
+                {
+                    result.containerDto.add(containerDto);
+                }
             }
         }
     }

@@ -1,3 +1,4 @@
+import { MusicItemDto } from './../../../service/dto.d';
 import { PlaylistService } from './../../../service/playlist.service';
 import { AvtransportService } from './../../../service/avtransport.service';
 import { ContentDirectoryService } from './../../../service/content-directory.service';
@@ -31,4 +32,7 @@ export class ItemComponent {
     return true;
   }
 
+  play(musicItemDto: MusicItemDto) {
+    this.avtransportService.playResource(musicItemDto);
+  }
 }
