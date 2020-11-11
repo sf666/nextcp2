@@ -1,3 +1,4 @@
+import { CdsBrowsePathService } from './../../../util/cds-browse-path.service';
 import { ScrollViewService } from './../../../util/scroll-view.service';
 import { BackgroundImageService } from './../../../util/background-image.service';
 import { delay } from './../../../global';
@@ -13,20 +14,17 @@ import { Component, AfterViewChecked } from '@angular/core';
 })
 export class ContainerComponent implements AfterViewChecked {
 
-  private scrollID: string = '';
-
   constructor(
     private contentDirectoryService: ContentDirectoryService,
     private backgroundImageService: BackgroundImageService,
     private scrollViewService: ScrollViewService,
+    private cdsBrowsePathService: CdsBrowsePathService,
     public playlistService: PlaylistService) { }
 
   ngAfterViewChecked(): void {
-    if (this.scrollID) {
-      this.scrollViewService.scrollIntoViewID(this.scrollID);
-      this.scrollID = '';
+    if (this.cdsBrowsePathService.scrollToID().length > 0) {
+      this.scrollViewService.scrollIntoViewID(this.cdsBrowsePathService.scrollToID());
     }
-
     this.backgroundImageService.setBackgroundImageMainScreen(this.currentContainer.albumartUri);
   }
 
@@ -72,13 +70,6 @@ export class ContainerComponent implements AfterViewChecked {
   }
 
   public browseTo(containerDto: ContainerDto) {
-    // TODO: scroll to last parent doesn't work any more ... fix it.
-    if (containerDto.parentID === "[PARENT]") {
-      this.scrollID = this.contentDirectoryService.currentContainerList.currentContainer.id;
-    }
-    else {
-      this.scrollID = '';
-    }
     this.contentDirectoryService.browseChildrenByContiner(containerDto);
   }
 

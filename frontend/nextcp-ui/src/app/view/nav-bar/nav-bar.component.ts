@@ -1,3 +1,4 @@
+import { CdsBrowsePathService } from './../../util/cds-browse-path.service';
 import { ContainerDto } from './../../service/dto.d';
 import { PlaylistService } from './../../service/playlist.service';
 import { Router, NavigationStart, Event as NavigationEvent } from '@angular/router';
@@ -20,6 +21,7 @@ export class NavBarComponent {
   constructor(
     public contentDirectoryService: ContentDirectoryService,
     private router: Router,
+    private cdsBrowsePathService: CdsBrowsePathService,
     public playlistService: PlaylistService,
     private deviceService: DeviceService) {
 

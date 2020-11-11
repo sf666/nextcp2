@@ -1,3 +1,4 @@
+import { CdsBrowsePathService } from './../util/cds-browse-path.service';
 import { Router } from '@angular/router';
 import { DtoGeneratorService } from './../util/dto-generator.service';
 import { SearchItemService } from './search/search-item.service';
@@ -25,6 +26,8 @@ export class ContentDirectoryService {
     private httpService: HttpService,
     private searchItemService: SearchItemService,
     private dtoGeneratorService: DtoGeneratorService,
+    private cdsBrowsePathService: CdsBrowsePathService,
+
     private router: Router,
     private deviceService: DeviceService) {
 
@@ -47,14 +50,24 @@ export class ContentDirectoryService {
   }
 
   public browseChildren(objectID: string, sortCriteria: string, mediaServerUdn: string): void {
+    this.updateBrowsePath(objectID);
     this.browseChildrenByRequest(this.createBrowseRequest(objectID, sortCriteria, mediaServerUdn));
   }
 
   public browseChildrenByContiner(containerDto: ContainerDto): void {
+    this.updateBrowsePath(containerDto.id);
     this.browseChildrenByRequest(this.createBrowseRequest(containerDto.id, "", containerDto.mediaServerUDN));
   }
 
-  public browseChildrenByRequest(browseRequestDto: BrowseRequestDto): void {
+  private updateBrowsePath(id: string) {
+    if (this.cdsBrowsePathService.peekCurrentPathID().length < id.length) {
+      this.cdsBrowsePathService.stepIn(id);
+    } else {
+      this.cdsBrowsePathService.stepOut();
+    }
+  }
+
+  private browseChildrenByRequest(browseRequestDto: BrowseRequestDto): void {
     const uri = '/browseChildren';
     this.httpService.post<ContainerItemDto>(this.baseUri, uri, browseRequestDto).subscribe(data => this.updateContainer(data));
   }
@@ -64,12 +77,12 @@ export class ContentDirectoryService {
   }
 
   private createBrowseRequest(objectID: string, sortCriteria: string, mediaServerUdn: string): BrowseRequestDto {
-
     let br: BrowseRequestDto = {
       mediaServerUDN: mediaServerUdn,
       objectID: objectID,
       sortCriteria: sortCriteria
     }
+
     return br;
   }
 

@@ -120,7 +120,7 @@ public class MediaServerDevice extends BaseDevice
      */
     private String removeMinimTagChars(String title)
     {
-        if (title.length() > 3)
+        if (title.startsWith(">> "))
         {
             return title.substring(3);
         }
@@ -169,10 +169,7 @@ public class MediaServerDevice extends BaseDevice
                 DIDLContent didl = generateDidlContent(out.Result);
                 result = getDtoBuilder().buildContainerDto(didl.getFirstContainer());
                 // minimserver support
-                if (result.title.startsWith(">>"))
-                {
-                    result.title = removeMinimTagChars(result.title);
-                }
+                result.title = removeMinimTagChars(result.title);
             }
             result.mediaServerUDN = getUDN().getIdentifierString();
             return result;

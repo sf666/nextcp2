@@ -53,8 +53,7 @@
 <div *ngIf="containerList?.length > 0">
     <div class="section head">Folder</div>
     <div class="cardLayout">
-        <div class="my-Card" id="{{container.id}}" (click)="browseTo(container)"
-            *ngFor="let container of containerList">
+        <div class="my-Card" id="{{container.id}}" (click)="browseTo(container)" *ngFor="let container of containerList">
             <img src="{{container.albumartUri}}" class="card-img-top" alt="{{container.title}}">
             <div class="my-card-body">
                 <div class="my-card-title">{{container.title}}</div>
@@ -67,7 +66,7 @@
     <div class="section head">Playlists</div>
 
     <div class="cardLayout">
-        <div class="my-Card" *ngFor="let container of playlistList">
+        <div id="{{container.id}}" class="my-Card" *ngFor="let container of playlistList">
             <img src="{{container.albumartUri}}" class="card-img-top" alt="{{container.title}}">
             <div class="my-card-body">
                 <div class="my-card-title">{{container.title}}</div>

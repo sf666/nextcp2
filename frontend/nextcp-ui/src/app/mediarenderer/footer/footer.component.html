@@ -9,7 +9,7 @@
     <div class="d-flex flex-row justify-content-between">
         <!-- left footer section -->
         <div class="d-flex left-footer">
-            <img src="{{getImgSrc()}}">
+            <img *ngIf="trackInfoAvailable" src="{{getImgSrc()}}">
 
             <div class="d-flex flex-column minWidth albumAndTitle">
                 <div class="title no-wrap">{{getCurrentSongTitle()}}</div>

@@ -71,8 +71,11 @@ export class FooterComponent {
     }
   }
 
+  public get trackInfoAvailable() : boolean {
+    return this.rendererService.trackInfo?.currentTrack?.title?.length > 0;
+  }
   public getCurrentSongTitle(): string {
-    if (this.rendererService.trackInfo?.currentTrack?.title) {
+    if (this.trackInfoAvailable) {
       return this.rendererService.trackInfo?.currentTrack?.title;
     }
     else {

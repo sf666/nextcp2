@@ -11,7 +11,7 @@
                 </div>
             </div>
             <div class="item-tbody">
-                <div class="row" (click)="play(item)" *ngFor="let item of contentDirectoryService.currentContainerList.musicItemDto">
+                <div id="{{item.objectID}}" class="row" (click)="play(item)" *ngFor="let item of contentDirectoryService.currentContainerList.musicItemDto">
                     <div class="col col-greyed small-col">{{item.originalTrackNumber}}</div>
                     <div class="col ">{{item.title}}</div>
                     <div class="col ">{{item.artistName}}</div>
@@ -24,7 +24,7 @@
 
     <ng-template #mixedTitles>
         <div class="cardLayout">
-            <div class="my-Card" *ngFor="let item of contentDirectoryService.currentContainerList.musicItemDto">
+            <div id="{{item.objectID}}" class="my-Card" *ngFor="let item of contentDirectoryService.currentContainerList.musicItemDto">
                 <img src="{{item.albumArtUrl}}" class="card-img-top" alt="{{item.title}}">
                 <div class="my-card-body">
                     <div class="my-card-title">{{item.title}}</div>
