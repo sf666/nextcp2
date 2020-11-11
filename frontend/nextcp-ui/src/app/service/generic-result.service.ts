@@ -37,6 +37,9 @@ export class GenericResultService {
     if (err.status == 504) {
       this.displayErrorMessage("Server unavailable. Please check if your computer is connected to your LAN and nextcp/2 server process is online.", "gateway error");
     }
+    else if (err.status == 417) {
+      this.toastr.error(err.error.message, "invalid request");
+    }
     else {
       this.toastr.error(err.error.message, toastrMessage);
     }

@@ -1,4 +1,4 @@
-<div *ngIf="contentDirectoryService.currentContainerList.musicItemDto?.length > 0">
+<div id="{{topDivId}}" tabindex="-1" *ngIf="contentDirectoryService.currentContainerList.musicItemDto?.length > 0">
     <div *ngIf="allTracksSameAlbum(); else mixedTitles">
         <div class="item-table">
             <div class="item-thead">

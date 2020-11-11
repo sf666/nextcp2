@@ -21,12 +21,13 @@ export class ContainerComponent implements AfterViewChecked {
     public playlistService: PlaylistService) { }
 
   ngAfterViewChecked(): void {
+    console.log("ContainerComponent : scroll to id ... " + this.cdsBrowsePathService.scrollToID());
+
     if (this.cdsBrowsePathService.scrollToID().length > 0) {
       this.scrollViewService.scrollIntoViewID(this.cdsBrowsePathService.scrollToID());
     }
     this.backgroundImageService.setBackgroundImageMainScreen(this.currentContainer.albumartUri);
   }
-
 
   public get containerList(): ContainerDto[] {
     return this.contentDirectoryService.currentContainerList.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer");

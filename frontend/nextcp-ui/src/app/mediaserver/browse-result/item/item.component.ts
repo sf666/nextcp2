@@ -1,20 +1,30 @@
+import { ScrollViewService } from './../../../util/scroll-view.service';
 import { MusicItemDto } from './../../../service/dto.d';
 import { PlaylistService } from './../../../service/playlist.service';
 import { AvtransportService } from './../../../service/avtransport.service';
 import { ContentDirectoryService } from './../../../service/content-directory.service';
-import { Component } from '@angular/core';
+import { Component, AfterViewChecked } from '@angular/core';
 
 @Component({
   selector: 'browseResultItem',
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.scss']
 })
-export class ItemComponent {
+export class ItemComponent implements AfterViewChecked {
 
   constructor(
     public contentDirectoryService: ContentDirectoryService, 
+    private scrollViewService: ScrollViewService,
     public avtransportService: AvtransportService,
     public playlistService: PlaylistService) { }
+
+  ngAfterViewChecked(): void {
+    this.scrollViewService.scrollIntoViewID(this.topDivId);
+  }
+
+  get topDivId(): string {
+    return "top-div";
+  }
 
   playAllTracks() : void {
       this.playlistService.addContainerToPlaylistAndPlay(this.contentDirectoryService.currentContainerList.currentContainer, false);

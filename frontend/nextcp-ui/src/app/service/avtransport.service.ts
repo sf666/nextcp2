@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { HttpService } from './http.service';
 import { SseService } from './sse/sse.service';
 import { MusicItemDto, PlayRequestDto, MediaRendererDto, UpnpAvTransportState, RadioStation, PlayRadioDto } from './dto.d';
@@ -17,6 +18,7 @@ export class AvtransportService {
   constructor(
     private sse: SseService,
     private httpService: HttpService,
+    private toastr: ToastrService,
     private deviceService: DeviceService) {
 
     // Register for application event (user selected new media player within the UI)
@@ -75,13 +77,17 @@ export class AvtransportService {
   public playResource(musicItemDto: MusicItemDto) {
     const uri = '/playResource';
 
-    const playReq: PlayRequestDto = {
-      mediaRendererDto: this.selectedMediaRenderer,
-      streamMetadata: musicItemDto.currentTrackMetadata,
-      streamUrl: musicItemDto.streamingURL
-    }
+    if (this.selectedMediaRenderer?.udn?.length > 0) {
+      const playReq: PlayRequestDto = {
+        mediaRendererDto: this.selectedMediaRenderer,
+        streamMetadata: musicItemDto.currentTrackMetadata,
+        streamUrl: musicItemDto.streamingURL
+      }
 
-    this.httpService.post(this.baseUri, uri, playReq).subscribe();
+      this.httpService.post(this.baseUri, uri, playReq).subscribe();
+    } else {
+      this.toastr.error("select media renderer before playing songs","media renderer");
+    }
   }
 
   playRadio(radio: RadioStation) {

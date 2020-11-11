@@ -40,7 +40,7 @@ public class RestAvTransportService extends BaseRestService
     {
         if (playRequest.mediaRendererDto == null)
         {
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "playing failed. Media renderer is not set.");
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Playing failed. Media renderer is not set.");
         }
 
         MediaRendererDevice device = getMediaRendererByUdn(playRequest.mediaRendererDto.udn);
