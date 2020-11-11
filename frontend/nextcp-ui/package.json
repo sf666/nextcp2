@@ -24,6 +24,7 @@
     "@angular/router": "~10.1.0",
     "@material/linear-progress": "^7.0.0",
     "@ng-bootstrap/ng-bootstrap": "^7.0.0",
+    "body-scroll-lock": "^3.1.5",
     "bootstrap": "^4.5.2",
     "ngx-toastr": "^13.0.0",
     "rxjs": "~6.6.3",

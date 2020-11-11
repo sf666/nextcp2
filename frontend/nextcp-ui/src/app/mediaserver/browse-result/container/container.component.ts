@@ -1,7 +1,6 @@
 import { CdsBrowsePathService } from './../../../util/cds-browse-path.service';
 import { ScrollViewService } from './../../../util/scroll-view.service';
 import { BackgroundImageService } from './../../../util/background-image.service';
-import { delay } from './../../../global';
 import { PlaylistService } from './../../../service/playlist.service';
 import { ContainerDto, ContainerItemDto } from './../../../service/dto.d';
 import { ContentDirectoryService } from './../../../service/content-directory.service';

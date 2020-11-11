@@ -36,7 +36,7 @@ export class NavBarComponent {
 
   get musicLibraryVisible(): boolean {
    //  console.log("current path : " + this.currentPath);
-    return this.currentPath === '/music-library';
+    return this.currentPath === '/music-library' || this.currentPath === '/'; // router default view
   }
   get playlistVisible(): boolean {
     return this.currentPath === '/playlist';

@@ -1,5 +1,4 @@
 import { CdsBrowsePathService } from './../../../util/cds-browse-path.service';
-import { delay } from './../../../global';
 import { PlaylistService } from './../../../service/playlist.service';
 import { ContainerDto } from './../../../service/dto.d';
 import { ContentDirectoryService } from './../../../service/content-directory.service';
