@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 
 import nextcp.domainmodel.device.mediarenderer.MediaRendererDevice;
-import nextcp.domainmodel.device.mediarenderer.avtransport.AvTransportEventListener;
+import nextcp.domainmodel.device.mediarenderer.avtransport.BaseAvTransportChangeEventImpl;
 import nextcp.domainmodel.device.mediarenderer.playlist.playStrategy.IPlaylistFillStrategy;
 import nextcp.domainmodel.device.mediarenderer.playlist.playStrategy.RandomPlaybackStrategy;
 import nextcp.domainmodel.device.mediarenderer.playlist.playStrategy.SequencialPlaybackStrategy;
@@ -28,7 +28,7 @@ import nextcp.util.BackendException;
  * central playlist service. Implementation sucks a little.
  * 
  */
-public class CpPlaylistService extends AvTransportEventListener implements IPlaylistService
+public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements IPlaylistService
 {
     public enum TransportState
     {
@@ -42,7 +42,6 @@ public class CpPlaylistService extends AvTransportEventListener implements IPlay
 
     private static final Long MAX_TRACKS = 16384L;
 
-    private MediaRendererDevice device = null;
     //
     // state handling
     // ===========================================================================================
@@ -67,10 +66,12 @@ public class CpPlaylistService extends AvTransportEventListener implements IPlay
     private String nextSongUrl = null;
 
     private int currentSongIdx = 0;
-
+    
+    private MediaRendererDevice device ; 
+    
     public CpPlaylistService(MediaRendererDevice device)
     {
-        super(device);
+        this.device = device;
         state.udn = device.getUdnAsString();
         state.Id = 0L;
         state.ProtocolInfo = "";
@@ -88,6 +89,11 @@ public class CpPlaylistService extends AvTransportEventListener implements IPlay
                 getEventPublisher().publishEvent(state);
             }
         }
+    }
+
+    protected MediaRendererDevice getDevice()
+    {
+        return device;
     }
 
     private ApplicationEventPublisher getEventPublisher()
@@ -109,13 +115,11 @@ public class CpPlaylistService extends AvTransportEventListener implements IPlay
         oldPlaybackItems.clear();
 
         updateSongUrls();
-    }
-
+    }    
+    
     @Override
     public void transportStateChange(String value)
     {
-        super.transportStateChange(value);
-
         if ("PAUSED_PLAYBACK".equalsIgnoreCase(value))
         {
             proceedToNextSongToPlayNoNextUriSupport();
@@ -700,3 +704,4 @@ public class CpPlaylistService extends AvTransportEventListener implements IPlay
     }
 
 }
+

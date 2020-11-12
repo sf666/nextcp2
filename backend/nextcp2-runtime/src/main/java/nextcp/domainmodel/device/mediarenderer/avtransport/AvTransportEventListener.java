@@ -1,6 +1,10 @@
 package nextcp.domainmodel.device.mediarenderer.avtransport;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -21,15 +25,10 @@ import nextcp.domainmodel.device.mediarenderer.avtransport.event.AvTransportCurr
 import nextcp.domainmodel.device.mediarenderer.avtransport.event.AvTransportStateChangedEvent;
 import nextcp.domainmodel.device.mediarenderer.avtransport.event.AvTransportTransportStateChangeEvent;
 import nextcp.dto.TrackInfoDto;
-import nextcp.upnp.modelGen.avopenhomeorg.info.actions.CountersOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.info.actions.DetailsOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.info.actions.MetatextOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.info.actions.TrackOutput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport.AVTransportServiceEventListenerImpl;
 
 /**
- * Overwrite event class for notification reason ... Don't forget to call super implementation for overridden classes
- * 
+ * Do not overwrite this class.
  */
 public class AvTransportEventListener extends AVTransportServiceEventListenerImpl
 {
@@ -39,24 +38,31 @@ public class AvTransportEventListener extends AVTransportServiceEventListenerImp
 
     private AvTransportState currentAvTransportState = new AvTransportState();
 
-    public AvTransportState getCurrentAvTransportState()
-    {
-        return currentAvTransportState;
-    }
+    private List<IAVTransportEvents> avEventListener = new ArrayList<IAVTransportEvents>();
 
     public AvTransportEventListener(MediaRendererDevice device)
     {
         this.device = device;
     }
 
-    private ApplicationEventPublisher getEventPublisher()
+    public AvTransportState getCurrentAvTransportState()
     {
-        return device.getEventPublisher();
+        return currentAvTransportState;
     }
 
     protected MediaRendererDevice getDevice()
     {
         return device;
+    }
+
+    public void addEventListener(IAVTransportEvents listener)
+    {
+        this.avEventListener.add(listener);
+    }
+
+    public void removeEventListener(IAVTransportEvents listener)
+    {
+        this.avEventListener.remove(listener);
     }
 
     @Override
@@ -77,48 +83,91 @@ public class AvTransportEventListener extends AVTransportServiceEventListenerImp
         // AvTransport doesn't use "regular" upnp eventing, because of virtual instanceID's support.
         // All state changes are beeing send in the lastChange attribute.
 
-        Document doc = getStAXParsedDocument(value);
+        Document doc = getStAXParsedDocument(value, false);
+        if (doc == null)
+        {
+            doc = getStAXParsedDocument(fixEscapeErrors(value), true);
+            if (doc == null)
+            {
+                log.warn("cannot process xml document.");
+            }
+        }
         Element instanceID = getInstanceIDElement(doc);
 
-        AvTransportState transportState = new AvTransportState();
-        transportState.InstanceId = Long.parseLong(instanceID.getAttributeValue("val"));
-        for (Element element : instanceID.getChildren())
+        if (instanceID != null && instanceID.getAttributeValue("val") != null)
         {
-            String key = element.getName();
-            String val = element.getAttributeValue("val");
-            processEventAttribute(key, val, transportState);
+            long InstanceId = Long.parseLong(instanceID.getAttributeValue("val"));
+            // todo: have a map with instance-id's
+            for (Element element : instanceID.getChildren())
+            {
+                String key = element.getName();
+                String val = element.getAttributeValue("val");
+                updateLocalAvTransportState(key, val, currentAvTransportState); // TODO use correct instance id
+            }
         }
-        
+        else
+        {
+            log.warn("no InstanceId in AVTransport message ... ");
+        }
+
         // notify dependent classes
-        processEvent(transportState);
-        currentAvTransportState = transportState;
-        
-        publishCurrentAvTransportState(transportState);
-        getEventPublisher().publishEvent(getAsTrackInfo(transportState));
+        avEventListener.stream().forEach(e -> e.processingFinished(currentAvTransportState));
     }
 
-    private void publishCurrentAvTransportState(AvTransportState transportState)
+    /**
+     * Some devices, like Naim Mu-So QB escape XML message incorrectly
+     * 
+     * @param value
+     * @return
+     */
+    String fixEscapeErrors(String value)
     {
-        AvTransportStateChangedEvent event = new AvTransportStateChangedEvent();
-        event.state = transportState;
-        event.device = device;
-        getEventPublisher().publishEvent(event);
+        // TODO: check if we have a Naim device ? ...
+        StringBuilder sb = new StringBuilder(value.length() + 40);
+        BufferedReader sr = new BufferedReader(new StringReader(value));
+        String line = "";
+        do
+        {
+            try
+            {
+                if (line.contains("<CurrentTrackMetaData val="))
+                {
+                    replaceLine(sb, line, "CurrentTrackMetaData");
+                }
+                else if (line.contains("<AVTransportURIMetaData val="))
+                {
+                    replaceLine(sb, line, "AVTransportURIMetaData");
+                }
+                else if (line.contains("<NextAVTransportURIMetaData val="))
+                {
+                    replaceLine(sb, line, "NextAVTransportURIMetaData");
+                }
+                else
+                {
+                    sb.append(line);
+                }
+                line = sr.readLine();
+            }
+            catch (IOException e)
+            {
+                log.warn("cannot apply fix");
+                return value;
+            }
+        }
+        while (line != null);
+
+        return sb.toString();
     }
-    
-    private TrackInfoDto getAsTrackInfo(AvTransportState transportState)
+
+    private void replaceLine(StringBuilder sb, String line, String ident)
     {
-        TrackInfoDto dto = new TrackInfoDto();
-
-        dto.mediaRendererUdn = device.getUdnAsString();
-        dto.metatext = transportState.CurrentTrackMetaData;
-        dto.uri = transportState.CurrentTrackURI;
-        dto.currentTrack = device.getDtoBuilder().extractXmlAsMusicItem(transportState.CurrentTrackMetaData);
-
-        return dto;
-        
+        sb.append("  <").append(ident).append(" val=\"");
+        String val = line.substring(line.indexOf('"') + 1, line.lastIndexOf('"'));
+        sb.append(StringEscapeUtils.escapeXml(val));
+        sb.append("\"/>");
     }
 
-    private Element getInstanceIDElement(Document doc)
+    Element getInstanceIDElement(Document doc)
     {
         try
         {
@@ -131,9 +180,8 @@ public class AvTransportEventListener extends AVTransportServiceEventListenerImp
         }
     }
 
-    private Document getStAXParsedDocument(final String text)
+    Document getStAXParsedDocument(final String text, boolean printError)
     {
-
         Document document = null;
         try
         {
@@ -144,426 +192,127 @@ public class AvTransportEventListener extends AVTransportServiceEventListenerImp
         }
         catch (JDOMException | XMLStreamException e)
         {
-            e.printStackTrace();
+            if (printError)
+            {
+                log.warn("couldn't parse Message from media renderer. Text :", e);
+                log.warn(text);
+            }
         }
         return document;
     }
 
-    public void currentTrackURIChange(String value)
-    {
-        AvTransportCurrentTrackUriChangeEvent event = new AvTransportCurrentTrackUriChangeEvent();
-        event.currentTrackUri = value;
-        getEventPublisher().publishEvent(event);
-    }
-
-    public void transportStateChange(String value)
-    {
-        AvTransportTransportStateChangeEvent event = new AvTransportTransportStateChangeEvent();
-        event.currentState = value;
-        event.mediaRendererUdn = device.getUDN().getIdentifierString();
-        getEventPublisher().publishEvent(event);
-    }
-
-    private void processEventAttribute(String key, String val, AvTransportState transportState)
+    private void updateLocalAvTransportState(String key, String val, AvTransportState transportState)
     {
         switch (key)
         {
             case "AbsoluteTimePosition":
                 transportState.AbsoluteTimePosition = val;
+                avEventListener.stream().forEach(e -> e.absoluteTimePositionChange(val));
                 break;
             case "CurrentTrackURI":
-                transportState.CurrentTrackURI = val; // empty, or current URI
+                transportState.CurrentTrackURI = val;
+                avEventListener.stream().forEach(e -> e.currentTrackURIChange(val));
+
                 break;
             case "CurrentTrackMetaData":
                 transportState.CurrentTrackMetaData = val;
+                avEventListener.stream().forEach(e -> e.currentTrackMetaDataChange(val));
                 break;
             case "RelativeCounterPosition":
                 transportState.RelativeCounterPosition = Integer.parseInt(val);
+                avEventListener.stream().forEach(e -> e.relativeCounterPositionChange(transportState.RelativeCounterPosition));
                 break;
             case "TransportStatus":
                 transportState.TransportStatus = val;
+                avEventListener.stream().forEach(e -> e.transportStatusChange(val));
                 break;
             case "AVTransportURIMetaData":
                 transportState.AVTransportURIMetaData = val;
+                avEventListener.stream().forEach(e -> e.aVTransportURIMetaDataChange(val));
                 break;
             case "TransportState":
                 transportState.TransportState = val; // PLAYING, STOPPED, etc.
+                avEventListener.stream().forEach(e -> e.transportStateChange(val));
                 break;
             case "CurrentTrack":
                 transportState.CurrentTrack = Long.parseLong(val);
+                avEventListener.stream().forEach(e -> e.currentTrackChange(transportState.CurrentTrack));
                 break;
             case "PlaybackStorageMedium":
                 transportState.PlaybackStorageMedium = val;
+                avEventListener.stream().forEach(e -> e.playbackStorageMediumChange(val));
                 break;
             case "PossibleRecordQualityModes":
                 transportState.PossibleRecordQualityModes = val;
+                avEventListener.stream().forEach(e -> e.possibleRecordQualityModesChange(val));
                 break;
             case "NextAVTransportURIMetaData":
                 transportState.NextAVTransportURIMetaData = val;
+                avEventListener.stream().forEach(e -> e.nextAVTransportURIChange(val));
                 break;
             case "NumberOfTracks":
                 transportState.NumberOfTracks = Long.parseLong(val);
+                avEventListener.stream().forEach(e -> e.numberOfTracksChange(transportState.NumberOfTracks));
                 break;
             case "CurrentMediaDuration":
                 transportState.CurrentMediaDuration = val;
+                avEventListener.stream().forEach(e -> e.currentMediaDurationChange(val));
                 break;
             case "NextAVTransportURI":
                 transportState.NextAVTransportURI = val;
+                avEventListener.stream().forEach(e -> e.nextAVTransportURIMetaDataChange(val));
                 break;
             case "RecordStorageMedium":
                 transportState.RecordStorageMedium = val;
+                avEventListener.stream().forEach(e -> e.recordStorageMediumChange(val));
                 break;
             case "AVTransportURI":
                 transportState.AVTransportURI = val;
+                avEventListener.stream().forEach(e -> e.aVTransportURIChange(val));
                 break;
             case "TransportPlaySpeed":
                 transportState.TransportPlaySpeed = val;
+                avEventListener.stream().forEach(e -> e.transportPlaySpeedChange(val));
                 break;
             case "AbsoluteCounterPosition":
                 transportState.AbsoluteCounterPosition = Integer.parseInt(val);
+                avEventListener.stream().forEach(e -> e.absoluteCounterPositionChange(transportState.AbsoluteCounterPosition));
                 break;
             case "RelativeTimePosition":
                 transportState.RelativeTimePosition = val;
+                avEventListener.stream().forEach(e -> e.relativeTimePositionChange(val));
                 break;
             case "CurrentPlayMode":
                 transportState.CurrentPlayMode = val;
+                avEventListener.stream().forEach(e -> e.currentPlayModeChange(val));
                 break;
             case "CurrentTrackDuration":
                 transportState.CurrentTrackDuration = val;
+                avEventListener.stream().forEach(e -> e.currentTrackDurationChange(val));
                 break;
             case "PossiblePlaybackStorageMedia":
                 transportState.PossiblePlaybackStorageMedia = val;
+                avEventListener.stream().forEach(e -> e.possiblePlaybackStorageMediaChange(val));
                 break;
             case "CurrentRecordQualityMode":
                 transportState.CurrentRecordQualityMode = val;
+                avEventListener.stream().forEach(e -> e.currentRecordQualityModeChange(val));
                 break;
             case "RecordMediumWriteStatus":
                 transportState.RecordMediumWriteStatus = val;
+                avEventListener.stream().forEach(e -> e.recordMediumWriteStatusChange(val));
                 break;
             case "CurrentTransportActions":
                 transportState.CurrentTransportActions = val;
+                avEventListener.stream().forEach(e -> e.currentTransportActionsChange(val));
                 break;
             case "PossibleRecordStorageMedia":
                 transportState.PossibleRecordStorageMedia = val;
+                avEventListener.stream().forEach(e -> e.possibleRecordStorageMediaChange(val));
                 break;
             default:
                 log.warn("unknown state variable : " + key);
         }
-    }
 
-    // TODO instanceID support: keep track of state variable per instance. This impementation uses only one instance.
-    private void processEvent(AvTransportState newState)
-    {
-        if (!this.currentAvTransportState.AbsoluteCounterPosition.equals(newState.AbsoluteCounterPosition))
-        {
-            absoluteCounterPositionChange(newState.AbsoluteCounterPosition);
-        }
-        else if (!this.currentAvTransportState.AbsoluteTimePosition.equals(newState.AbsoluteTimePosition))
-        {
-            absoluteTimePositionChange(newState.AbsoluteTimePosition);
-        }
-        else if (!this.currentAvTransportState.AVTransportURI.equals(newState.AVTransportURI))
-        {
-            aVTransportURIChange(newState.AVTransportURI);
-        }
-        else if (!this.currentAvTransportState.AVTransportURIMetaData.equals(newState.AVTransportURIMetaData))
-        {
-            aVTransportURIMetaDataChange(newState.AVTransportURIMetaData);
-        }
-        else if (!this.currentAvTransportState.CurrentMediaDuration.equals(newState.CurrentMediaDuration))
-        {
-            currentMediaDurationChange(newState.CurrentMediaDuration);
-        }
-        else if (!this.currentAvTransportState.CurrentPlayMode.equals(newState.CurrentPlayMode))
-        {
-            currentPlayModeChange(newState.CurrentPlayMode);
-        }
-        else if (!this.currentAvTransportState.CurrentRecordQualityMode.equals(newState.CurrentRecordQualityMode))
-        {
-            currentRecordQualityModeChange(newState.CurrentRecordQualityMode);
-        }
-        else if (!this.currentAvTransportState.CurrentTrack.equals(newState.CurrentTrack))
-        {
-            currentTrackChange(newState.CurrentTrack);
-        }
-        else if (!this.currentAvTransportState.CurrentTrackDuration.equals(newState.CurrentTrackDuration))
-        {
-            currentTrackDurationChange(newState.CurrentTrackDuration);
-        }
-        else if (!this.currentAvTransportState.CurrentTrackMetaData.equals(newState.CurrentTrackMetaData))
-        {
-            currentTrackMetaDataChange(newState.CurrentTrackMetaData);
-        }
-        else if (!this.currentAvTransportState.CurrentTrackURI.equals(newState.CurrentTrackURI))
-        {
-            currentTrackURIChange(newState.CurrentTrackURI);
-        }
-        else if (!this.currentAvTransportState.CurrentTransportActions.equals(newState.CurrentTransportActions))
-        {
-            currentTransportActionsChange(newState.CurrentTransportActions);
-        }
-        else if (!this.currentAvTransportState.NextAVTransportURI.equals(newState.NextAVTransportURI))
-        {
-            nextAVTransportURIChange(newState.NextAVTransportURI);
-        }
-        else if (!this.currentAvTransportState.NextAVTransportURIMetaData.equals(newState.NextAVTransportURIMetaData))
-        {
-            nextAVTransportURIMetaDataChange(newState.NextAVTransportURIMetaData);
-        }
-        else if (!this.currentAvTransportState.NumberOfTracks.equals(newState.NumberOfTracks))
-        {
-            numberOfTracksChange(newState.NumberOfTracks);
-        }
-        else if (!this.currentAvTransportState.PlaybackStorageMedium.equals(newState.PlaybackStorageMedium))
-        {
-            playbackStorageMediumChange(newState.PlaybackStorageMedium);
-        }
-        else if (!this.currentAvTransportState.PossiblePlaybackStorageMedia.equals(newState.PossiblePlaybackStorageMedia))
-        {
-            possiblePlaybackStorageMediaChange(newState.PossiblePlaybackStorageMedia);
-        }
-        else if (!this.currentAvTransportState.PossibleRecordQualityModes.equals(newState.PossibleRecordQualityModes))
-        {
-            possibleRecordQualityModesChange(newState.PossibleRecordQualityModes);
-        }
-        else if (!this.currentAvTransportState.PossibleRecordStorageMedia.equals(newState.PossibleRecordStorageMedia))
-        {
-            possibleRecordStorageMediaChange(newState.PossibleRecordStorageMedia);
-        }
-        else if (!this.currentAvTransportState.RecordMediumWriteStatus.equals(newState.RecordMediumWriteStatus))
-        {
-            recordMediumWriteStatusChange(newState.RecordMediumWriteStatus);
-        }
-        else if (!this.currentAvTransportState.RecordStorageMedium.equals(newState.RecordStorageMedium))
-        {
-            recordStorageMediumChange(newState.RecordStorageMedium);
-        }
-        else if (!this.currentAvTransportState.RelativeCounterPosition.equals(newState.RelativeCounterPosition))
-        {
-            relativeCounterPositionChange(newState.RelativeCounterPosition);
-        }
-        else if (!this.currentAvTransportState.RelativeTimePosition.equals(newState.RelativeTimePosition))
-        {
-            relativeTimePositionChange(newState.RelativeTimePosition);
-        }
-        else if (!this.currentAvTransportState.TransportPlaySpeed.equals(newState.TransportPlaySpeed))
-        {
-            transportPlaySpeedChange(newState.TransportPlaySpeed);
-        }
-        else if (!this.currentAvTransportState.TransportState.equals(newState.TransportState))
-        {
-            transportStateChange(newState.TransportState);
-        }
-        else if (!this.currentAvTransportState.TransportStatus.equals(newState.TransportStatus))
-        {
-            transportStatusChange(newState.TransportStatus);
-        }
-    }
-
-    public void transportStatusChange(String transportStatus)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("transportStatusChange : " + transportStatus);
-        }
-    }
-
-    public void transportPlaySpeedChange(String transportPlaySpeed)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("transportPlaySpeed : " + transportPlaySpeed);
-        }
-
-    }
-
-    public void relativeTimePositionChange(String relativeTimePosition)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("relativeTimePosition : " + relativeTimePosition);
-        }
-
-    }
-
-    public void relativeCounterPositionChange(Integer relativeCounterPosition)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("relativeCounterPosition : " + relativeCounterPosition);
-        }
-
-    }
-
-    public void recordStorageMediumChange(String recordStorageMedium)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("recordStorageMedium : " + recordStorageMedium);
-        }
-
-    }
-
-    public void recordMediumWriteStatusChange(String recordMediumWriteStatus)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("recordMediumWriteStatus : " + recordMediumWriteStatus);
-        }
-    }
-
-    public void possibleRecordStorageMediaChange(String possibleRecordStorageMedia)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("possibleRecordStorageMedia : " + possibleRecordStorageMedia);
-        }
-    }
-
-    public void possibleRecordQualityModesChange(String possibleRecordQualityModes)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("possibleRecordQualityModes : " + possibleRecordQualityModes);
-        }
-
-    }
-
-    public void possiblePlaybackStorageMediaChange(String possiblePlaybackStorageMedia)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("possiblePlaybackStorageMedia : " + possiblePlaybackStorageMedia);
-        }
-
-    }
-
-    public void playbackStorageMediumChange(String playbackStorageMedium)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("playbackStorageMedium : " + playbackStorageMedium);
-        }
-
-    }
-
-    public void numberOfTracksChange(Long numberOfTracks)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("numberOfTracks : " + numberOfTracks);
-        }
-
-    }
-
-    public void nextAVTransportURIMetaDataChange(String nextAVTransportURIMetaData)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("nextAVTransportURIMetaData : " + nextAVTransportURIMetaData);
-        }
-
-    }
-
-    public void nextAVTransportURIChange(String nextAVTransportURI)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("nextAVTransportURI : " + nextAVTransportURI);
-        }
-
-    }
-
-    public void currentTransportActionsChange(String currentTransportActions)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("currentTransportActions : " + currentTransportActions);
-        }
-
-    }
-
-    public void currentTrackMetaDataChange(String currentTrackMetaData)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("currentTrackMetaData : " + currentTrackMetaData);
-        }
-    }
-
-    public void currentTrackDurationChange(String currentTrackDuration)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("currentTrackDuration : " + currentTrackDuration);
-        }
-
-    }
-
-    public void currentRecordQualityModeChange(String currentRecordQualityMode)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("currentRecordQualityMode : " + currentRecordQualityMode);
-        }
-
-    }
-
-    public void currentTrackChange(Long currentTrack)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("currentTrack : " + currentTrack);
-        }
-    }
-
-    public void currentPlayModeChange(String currentPlayMode)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("currentPlayMode : " + currentPlayMode);
-        }
-    }
-
-    public void currentMediaDurationChange(String currentMediaDuration)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("currentMediaDuration : " + currentMediaDuration);
-        }
-    }
-
-    public void aVTransportURIMetaDataChange(String aVTransportURIMetaData)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("aVTransportURIMetaData : " + aVTransportURIMetaData);
-        }
-    }
-
-    public void aVTransportURIChange(String aVTransportURI)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("aVTransportURI : " + aVTransportURI);
-        }
-
-    }
-
-    public void absoluteTimePositionChange(String absoluteTimePosition)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("absoluteTimePosition : " + absoluteTimePosition);
-        }
-
-    }
-
-    public void absoluteCounterPositionChange(Integer absoluteCounterPosition)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("absoluteCounterPosition : " + absoluteCounterPosition);
-        }
     }
 }

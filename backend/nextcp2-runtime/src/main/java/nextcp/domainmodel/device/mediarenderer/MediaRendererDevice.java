@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import nextcp.config.ConfigService;
 import nextcp.domainmodel.device.BaseDevice;
 import nextcp.domainmodel.device.mediarenderer.avtransport.AvTransportEventListener;
+import nextcp.domainmodel.device.mediarenderer.avtransport.AvTransportEventPublisher;
 import nextcp.domainmodel.device.mediarenderer.avtransport.Upnp_AVTransportBridge;
 import nextcp.domainmodel.device.mediarenderer.ohinfo.OhInfoServiceEventListener;
 import nextcp.domainmodel.device.mediarenderer.ohinfo.Oh_InfoServiceImpl;
@@ -104,6 +105,7 @@ public class MediaRendererDevice extends BaseDevice
         {
             avTransportBridge = new Upnp_AVTransportBridge(upnp_avTransportService);
             avTransportEventListener = new AvTransportEventListener(this);
+            avTransportEventListener.addEventListener(new AvTransportEventPublisher(this));
             upnp_avTransportService.addSubscriptionEventListener(avTransportEventListener);
         }
         else
@@ -148,7 +150,7 @@ public class MediaRendererDevice extends BaseDevice
             {
                 CpPlaylistService playlist = new CpPlaylistService(this);
                 playlistService = playlist;
-                upnp_avTransportService.addSubscriptionEventListener(playlist);
+                avTransportEventListener.addEventListener(playlist);
             }
         }
 
@@ -222,7 +224,7 @@ public class MediaRendererDevice extends BaseDevice
 
     public boolean hasOhPlaylistService()
     {
-//        return false;
+        // return false;
         return oh_playlistService != null;
     }
 

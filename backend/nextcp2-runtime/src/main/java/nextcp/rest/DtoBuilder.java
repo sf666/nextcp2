@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.fourthline.cling.support.contentdirectory.DIDLParser;
 import org.fourthline.cling.support.model.DIDLContent;
@@ -100,9 +101,20 @@ public class DtoBuilder
         {
             return null;
         }
-
+        
+        if (xml.startsWith("&lt;"))
+        {
+            xml = StringEscapeUtils.unescapeXml(xml);
+        }
         try
         {
+            if (!xml.contains("<upnp:class"))
+            {
+                log.debug("fixing missing upnp:class element in DIDL object ...");
+                xml = xml.replace("<item>", "<item>\n<upnp:class>\n" + 
+                        "object.item.audioItem.musicTrack\n" + 
+                        "</upnp:class>");
+            }
             DIDLContent didlMeta = generateDidlContent(xml);
             MusicItemDto itemDto = buildItemDto(didlMeta.getItems().get(0), "");
             return itemDto;

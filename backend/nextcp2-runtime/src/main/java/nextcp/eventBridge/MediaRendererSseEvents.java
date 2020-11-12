@@ -5,6 +5,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 import nextcp.domainmodel.device.mediarenderer.avtransport.event.AvTransportStateChangedEvent;
+import nextcp.domainmodel.device.mediarenderer.avtransport.event.AvTransportTransportStateChangeEvent;
 import nextcp.domainmodel.device.mediarenderer.playlist.PlaylistChangedEvent;
 import nextcp.dto.DeviceDriverState;
 import nextcp.dto.PlaylistState;

@@ -56,7 +56,7 @@ export class AvtransportService {
   // ================================================================================
 
   public isPlaying(): boolean {
-    const playing: boolean = this.upnpAvTransportState?.TransportState === 'PLAYING';
+    let playing: boolean = this.upnpAvTransportState?.TransportState === 'PLAYING';
     return playing;
   }
 
