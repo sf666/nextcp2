@@ -66,9 +66,9 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
     private String nextSongUrl = null;
 
     private int currentSongIdx = 0;
-    
-    private MediaRendererDevice device ; 
-    
+
+    private MediaRendererDevice device;
+
     public CpPlaylistService(MediaRendererDevice device)
     {
         this.device = device;
@@ -115,8 +115,8 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
         oldPlaybackItems.clear();
 
         updateSongUrls();
-    }    
-    
+    }
+
     @Override
     public void transportStateChange(String value)
     {
@@ -185,7 +185,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 
             if (isPlaylistPlaying())
             {
-                if (getCurrentTrack().streamingURL.equals(value))
+                if (getCurrentTrack() != null && getCurrentTrack().streamingURL.equals(value))
                 {
                     log.debug("media renderer device is playing current song : " + value);
                 }
@@ -213,7 +213,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
      */
     public void initPlaylist()
     {
-        reset();
+        currentSongIdx = 0;
         playbackItems = getFillStrategy().init(playlistItems);
         updateSongUrls();
     }
@@ -704,4 +704,3 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
     }
 
 }
-
