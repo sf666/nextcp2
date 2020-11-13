@@ -88,7 +88,7 @@ export class FooterComponent {
   //
 
   hasDeviceDriver(): boolean {
-    return (this.rendererService.deviceDriverState?.rendererUDN?.length > 0);
+    return (this.rendererService.deviceDriverState?.hasDeviceDriver);
   }
 
   powerClicked() {

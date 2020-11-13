@@ -60,7 +60,7 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
     @Override
     public DeviceDriverState getDeviceDriverState()
     {
-        return new DeviceDriverState(device.getUdnAsString(), volume, standby);
+        return new DeviceDriverState(true, device.getUdnAsString(), volume, standby);
     }
 
     @Override

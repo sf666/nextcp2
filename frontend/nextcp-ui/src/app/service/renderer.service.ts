@@ -19,7 +19,7 @@ export class RendererService {
   public trackInfo: TrackInfoDto;
   public trackTime: TrackTimeDto;
   public inputSourceList: InputSourceDto;
-  public deviceDriverState: DeviceDriverState = { standby: true, volume: 0, rendererUDN: '' }; // default display values
+  public deviceDriverState: DeviceDriverState = { hasDeviceDriver: false, standby: true, volume: 0, rendererUDN: '' };
 
   constructor(
     sseService: SseService,
@@ -72,8 +72,7 @@ export class RendererService {
       if (this.deviceService.isMediaRendererSelected(data.rendererUDN)) {
         this.deviceDriverState = data;
       }
-    }
-    );
+    });
   }
 
   private updateRenderDeviceDriverState(data: DeviceDriverState) {

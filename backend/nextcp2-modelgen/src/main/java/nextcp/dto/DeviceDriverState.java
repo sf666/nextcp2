@@ -8,6 +8,7 @@ import java.util.List;
 public class DeviceDriverState
 {
 
+    public Boolean hasDeviceDriver;
     public String rendererUDN;
     public Integer volume;
     public Boolean standby;
@@ -16,8 +17,9 @@ public class DeviceDriverState
     {
     }
 
-    public DeviceDriverState(String rendererUDN, Integer volume, Boolean standby)
+    public DeviceDriverState(Boolean hasDeviceDriver, String rendererUDN, Integer volume, Boolean standby)
     {
+        this.hasDeviceDriver = hasDeviceDriver;
         this.rendererUDN = rendererUDN;
         this.volume = volume;
         this.standby = standby;
@@ -28,6 +30,7 @@ public class DeviceDriverState
     {
         StringBuilder sb = new StringBuilder();
         sb.append("DeviceDriverState [");
+        sb.append("hasDeviceDriver=").append(this.hasDeviceDriver).append(", ");
         sb.append("rendererUDN=").append(this.rendererUDN).append(", ");
         sb.append("volume=").append(this.volume).append(", ");
         sb.append("standby=").append(this.standby).append(", ");

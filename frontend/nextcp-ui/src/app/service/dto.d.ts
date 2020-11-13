@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2020-11-10 16:18:14.
+// Generated using typescript-generator version 2.0.400 on 2020-11-13 07:54:29.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -59,6 +59,7 @@ export interface DeviceDriverCapability {
 }
 
 export interface DeviceDriverState {
+    hasDeviceDriver: boolean;
     rendererUDN: string;
     volume: number;
     standby: boolean;

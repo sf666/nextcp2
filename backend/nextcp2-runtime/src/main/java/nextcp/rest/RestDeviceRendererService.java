@@ -79,13 +79,13 @@ public class RestDeviceRendererService
         if (device.hasDeviceDriver())
         {
             log.info(String.format("Getting device state for device %s : %s", dto.friendlyName, device.getDeviceDriver().getDeviceDriverState()));
-            DeviceDriverState dd = device.getDeviceDriver().getDeviceDriverState(); 
+            DeviceDriverState dd = device.getDeviceDriver().getDeviceDriverState();
             return dd;
         }
         else
         {
             log.info(String.format("device %s has no active device driver service", dto.friendlyName));
-            return new DeviceDriverState();
+            return new DeviceDriverState(false, dto.udn, null, null);
         }
     }
 
@@ -111,7 +111,7 @@ public class RestDeviceRendererService
         MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(dto.udn));
         checkDevice(device, "get device input sources");
         return null;
-//        return device.getProductService().get
+        // return device.getProductService().get
     }
 
     private void checkDevice(MediaRendererDevice device, String action)

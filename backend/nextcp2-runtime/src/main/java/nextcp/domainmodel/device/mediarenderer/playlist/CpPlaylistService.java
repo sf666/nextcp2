@@ -698,7 +698,6 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
     @Override
     public void insertAndPlayContainer(ContainerItemDto items)
     {
-        deleteAll();
         insertContainer(items);
         play();
     }

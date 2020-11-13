@@ -91,6 +91,7 @@ UpnpAvTransportState:
 # Transfer classes for some ui views
 #
 DeviceDriverState:
+   hasDeviceDriver: Boolean
    rendererUDN: String
    volume: Integer
    standby: Boolean
