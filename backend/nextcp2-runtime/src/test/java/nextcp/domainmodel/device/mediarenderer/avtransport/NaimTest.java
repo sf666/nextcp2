@@ -1,18 +1,15 @@
 package nextcp.domainmodel.device.mediarenderer.avtransport;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import java.io.StringReader;
-
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.StAXEventBuilder;
 import org.junit.jupiter.api.Test;
+
+import nextcp.dto.MusicItemDto;
+import nextcp.rest.DtoBuilder;
 
 public class NaimTest
 {
@@ -43,5 +40,14 @@ public class NaimTest
         Document doc = av.getStAXParsedDocument(av.fixEscapeErrors(eventText), true);
         Element instanceID = av.getInstanceIDElement(doc);
         assertNotNull(instanceID);
+    }
+
+    @Test
+    public void metadataTest()
+    {
+        String meta = "<DIDL-Lite xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\"><item><dc:title>Thrift Shop</dc:title><upnp:artist>Macklemore &amp; Ryan Lewis feat. Wanz</upnp:artist><upnp:genre>Pop Rap</upnp:genre><upnp:album>The Heist</upnp:album><upnp:albumArtURI>http://10.138.12.15:9790/minimserver/*/music/Musiksammlung/Single/Macklemore*20*26*20Ryan*20Lewis/The*20Heist/03*20-*20Thrift*20Shop*20(feat.*20Wanz).flac/$!picture-6411-70666.jpg</upnp:albumArtURI><res size=\"28864996\" duration=\"0:03:56\" protocolInfo=\"http-get:*:audio/x-flac:*\">http://192.168.112.5:9790/minimserver/*/music/Musiksammlung/Single/Macklemore*20*26*20Ryan*20Lewis/The*20Heist/03*20-*20Thrift*20Shop*20(feat.*20Wanz).flac</res></item></DIDL-Lite>";
+        DtoBuilder dtoBuilder = new DtoBuilder();
+        MusicItemDto song = dtoBuilder.extractXmlAsMusicItem(meta);
+        assertFalse(song.albumArtUrl.isEmpty());
     }
 }

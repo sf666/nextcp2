@@ -111,8 +111,8 @@ public class DtoBuilder
             if (!xml.contains("<upnp:class"))
             {
                 log.debug("fixing missing upnp:class element in DIDL object ...");
-                xml = xml.replace("<item>", "<item>\n<upnp:class>\n" + 
-                        "object.item.audioItem.musicTrack\n" + 
+                xml = xml.replace("<item>", "<item>\n<upnp:class>" + 
+                        "object.item.audioItem.musicTrack" + 
                         "</upnp:class>");
             }
             DIDLContent didlMeta = generateDidlContent(xml);
