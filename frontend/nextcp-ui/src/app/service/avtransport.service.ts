@@ -49,8 +49,9 @@ export class AvtransportService {
 
   public getInitialAvTransportState() {
     const uri = '/MediaRendererAvTransportState';
-    this.httpService.post<UpnpAvTransportState>(this.baseUri, uri, this.selectedMediaRenderer).subscribe(data => { this.updateTransportState(data) });
+    this.httpService.post<UpnpAvTransportState>(this.baseUri, uri, this.selectedMediaRenderer).subscribe();
   }
+
   //
   // Status Infos
   // ================================================================================

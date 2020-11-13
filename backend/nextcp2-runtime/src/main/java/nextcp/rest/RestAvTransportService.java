@@ -99,14 +99,15 @@ public class RestAvTransportService extends BaseRestService
      * @return
      */
     @PostMapping("/MediaRendererAvTransportState")
-    public UpnpAvTransportState getMediaRendererAvTransportState(@RequestBody MediaRendererDto renderer)
+    public void getMediaRendererAvTransportState(@RequestBody MediaRendererDto renderer)
     {
         MediaRendererDevice device = getMediaRendererByUdn(renderer.udn);
         if (device == null)
         {
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Tranport state cannot be retrieved: Select an available media renderer.");
         }
-        return dtoBuilder.buildAvTransportStateDto(device.getAvTransportEventListener().getCurrentAvTransportState(), device);
+        device.getAvTransportEventPublisher().publishAllAvEvents();
+//        return dtoBuilder.buildAvTransportStateDto(device.getAvTransportEventListener().getCurrentAvTransportState(), device);
     }
 
 }

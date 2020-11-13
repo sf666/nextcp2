@@ -9,6 +9,9 @@ import nextcp.dto.TrackInfoDto;
 public class AvTransportEventPublisher extends BaseAvTransportChangeEventImpl
 {
     private MediaRendererDevice device = null;
+    
+    private AvTransportState currentAvTransportState = new AvTransportState(); // Init with empty state object 
+
 
     public AvTransportEventPublisher(MediaRendererDevice device)
     {
@@ -20,13 +23,16 @@ public class AvTransportEventPublisher extends BaseAvTransportChangeEventImpl
         return device.getEventPublisher();
     }
 
-
     @Override
     public void processingFinished(AvTransportState currentAvTransportState)
     {
+        this.currentAvTransportState = currentAvTransportState;
+        publishAllAvEvents();
+    }
+
+    public void publishAllAvEvents()
+    {
         publishGlobalAvTransportState(currentAvTransportState);
-        
-        // Update also TrackInfo 
         getEventPublisher().publishEvent(getAsTrackInfo(currentAvTransportState));
     }
 
@@ -49,4 +55,10 @@ public class AvTransportEventPublisher extends BaseAvTransportChangeEventImpl
 
         return dto;
     }
+    
+    public AvTransportState getCurrentAvTransportState()
+    {
+        return currentAvTransportState;
+    }
+    
 }

@@ -63,6 +63,7 @@ public class MediaRendererDevice extends BaseDevice
 
     // Event Listener for services. Service state variable is held here.
     private AvTransportEventListener avTransportEventListener = null;
+    private AvTransportEventPublisher avTransportEventPublisher = null;
     private OhInfoServiceEventListener ohInfoServiceEventListener = null;
     private OhTimeServiceEventListener ohTimeServiceEventListener = null;
     private OhProductServiceEventListener ohProductServiceEventListener = null;
@@ -105,7 +106,8 @@ public class MediaRendererDevice extends BaseDevice
         {
             avTransportBridge = new Upnp_AVTransportBridge(upnp_avTransportService);
             avTransportEventListener = new AvTransportEventListener(this);
-            avTransportEventListener.addEventListener(new AvTransportEventPublisher(this));
+            avTransportEventPublisher = new AvTransportEventPublisher(this);
+            avTransportEventListener.addEventListener(avTransportEventPublisher);
             upnp_avTransportService.addSubscriptionEventListener(avTransportEventListener);
         }
         else
@@ -268,6 +270,15 @@ public class MediaRendererDevice extends BaseDevice
             }
         }
         return deviceDriver;
+    }
+
+    public AvTransportEventPublisher getAvTransportEventPublisher()
+    {
+        if (avTransportEventPublisher == null)
+        {
+            throw new BackendException(BackendException.SERVICE_UNAVAILABLE_AVTRANSPORT, "AV Transport Service unavailable");
+        }
+        return avTransportEventPublisher;
     }
 
     public AvTransportEventListener getAvTransportEventListener()
