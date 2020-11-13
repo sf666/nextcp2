@@ -291,7 +291,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
         {
             return null;
         }
-        return playlistItems.get(currentSongIdx);
+        return playlistItems.get(playbackItems.get(currentSongIdx));
     }
 
     /**

@@ -21,7 +21,7 @@ export class ContainerComponent implements AfterViewChecked {
     public playlistService: PlaylistService) { }
 
   ngAfterViewChecked(): void {
-    console.log("ContainerComponent : scroll to id ... " + this.cdsBrowsePathService.scrollToID());
+    console.log("ContainerComponent : scroll to id ... : " + this.cdsBrowsePathService.scrollToID());
 
     if (this.cdsBrowsePathService.scrollToID().length > 0) {
       this.scrollViewService.scrollIntoViewID(this.cdsBrowsePathService.scrollToID());

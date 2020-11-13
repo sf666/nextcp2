@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -38,7 +39,7 @@ public class AvTransportEventListener extends AVTransportServiceEventListenerImp
 
     private AvTransportState currentAvTransportState = new AvTransportState();
 
-    private List<IAVTransportEvents> avEventListener = new ArrayList<IAVTransportEvents>();
+    private CopyOnWriteArrayList<IAVTransportEvents> avEventListener = new CopyOnWriteArrayList<IAVTransportEvents>();
 
     public AvTransportEventListener(MediaRendererDevice device)
     {

@@ -121,6 +121,7 @@ public class RestPlaylistService extends BaseRestService
             checkDevice(rendererDevice);
             if (req.shuffle != null) 
             {
+                rendererDevice.getPlaylistServiceBridge().deleteAll();
                 rendererDevice.getPlaylistServiceBridge().setShuffle(req.shuffle);
             }
             ContainerItemDto itemsToAdd = getChildElements(req.containerDto.mediaServerUDN, req.containerDto.id);
