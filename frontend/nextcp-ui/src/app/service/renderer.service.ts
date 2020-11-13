@@ -70,6 +70,7 @@ export class RendererService {
     const uri = '/getDeviceState';
     this.httpService.post<DeviceDriverState>(this.baseUri, uri, device).subscribe(data => {
       if (this.deviceService.isMediaRendererSelected(data.rendererUDN)) {
+        console.log("updated device driver state for " + data.rendererUDN + " to " + data.hasDeviceDriver);
         this.deviceDriverState = data;
       }
     });
