@@ -15,14 +15,14 @@ export class FooterComponent {
 
   private baseURI = 'DeviceRendererService';
 
-  currentMediaRendererName : string;
+  currentMediaRendererName: string;
 
   constructor(
     public avtransportService: AvtransportService,
     public deviceService: DeviceService,
     public playlistService: PlaylistService,
     public rendererService: RendererService) {
-      deviceService.mediaRendererChanged$.subscribe(data => this.currentMediaRendererName = data.friendlyName);
+    deviceService.mediaRendererChanged$.subscribe(data => this.currentMediaRendererName = data.friendlyName);
   }
 
   public getCurrentMediaRendererName() {
@@ -71,7 +71,7 @@ export class FooterComponent {
     }
   }
 
-  public get trackInfoAvailable() : boolean {
+  public get trackInfoAvailable(): boolean {
     return this.rendererService.trackInfo?.currentTrack?.title?.length > 0;
   }
   public getCurrentSongTitle(): string {
@@ -113,11 +113,18 @@ export class FooterComponent {
   // =========================================================================================================
 
   streaming() {
-    let streaming : boolean;
+    let streaming: boolean;
     streaming = this.rendererService?.trackTime?.streaming;
     return streaming;
   }
 
+  getFinishTime(): string {
+    if (this.rendererService.trackTime?.durationDisp) {
+      return this.rendererService.trackTime.durationDisp;
+    } else {
+      return "00:00";
+    }
+  }
   //
   // styling of elements depending on state information
   // =========================================================================================================

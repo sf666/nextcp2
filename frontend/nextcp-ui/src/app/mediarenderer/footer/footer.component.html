@@ -53,7 +53,7 @@
                 <div class="timeDispContainer">
                     <div class="currentTime">{{rendererService.trackTime.secondsDisp}}</div>
                     <div class="ml-2 currentTime">/</div>
-                    <div class="ml-2 finishedTime" *ngIf="!streaming(); else streamDisplayString">{{rendererService.trackTime.durationDisp}}</div>
+                    <div class="ml-2 finishedTime" *ngIf="!streaming(); else streamDisplayString">{{getFinishTime()}}</div>
                 </div>
             </div>
         </div>

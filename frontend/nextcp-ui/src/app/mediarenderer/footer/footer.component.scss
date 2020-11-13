@@ -75,7 +75,8 @@ mat-slider {
 
 .right-footer {
     //    flex-basis : 25em; // auto
-    flex-grow: 1;
+    flex-grow : 1;
+    align-self: center;
 }
 
 .audioInfoLabel {
@@ -177,5 +178,5 @@ img {
 }
 
 .volume-bar {
-    border-top : 1px solid var(--glas-white);
+    border-top: 1px solid var(--glas-white);
 }
