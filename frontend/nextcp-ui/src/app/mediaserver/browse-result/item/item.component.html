@@ -6,7 +6,7 @@
                     <div class="col small-col">#</div>
                     <div class="col">Title</div>
                     <div class="col">Artist</div>
-                    <div class="col">Duration</div>
+                    <div class="col text-right">Duration</div>
                     <div class="col"></div>
                 </div>
             </div>
@@ -15,7 +15,7 @@
                     <div class="col col-greyed small-col">{{item.originalTrackNumber}}</div>
                     <div class="col ">{{item.title}}</div>
                     <div class="col ">{{item.artistName}}</div>
-                    <div class="col ">N/A</div>
+                    <div class="col text-right">{{getDuration(item)}}</div>
                     <div class="col col-greyed ">...</div>
                 </div>
             </div>

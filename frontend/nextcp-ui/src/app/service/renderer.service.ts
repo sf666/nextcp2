@@ -172,7 +172,9 @@ export class RendererService {
       bitsPerSample: 0,
       filetype: '',
       nrAudioChannels: 2,
-      sampleFrequency: 0
+      sampleFrequency: 0,
+      durationDisp: '',
+      durationInSeconds: 0
     }
   }
 }

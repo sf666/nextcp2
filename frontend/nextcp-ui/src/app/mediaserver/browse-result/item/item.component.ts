@@ -13,7 +13,7 @@ import { Component, AfterViewChecked } from '@angular/core';
 export class ItemComponent implements AfterViewChecked {
 
   constructor(
-    public contentDirectoryService: ContentDirectoryService, 
+    public contentDirectoryService: ContentDirectoryService,
     private scrollViewService: ScrollViewService,
     public avtransportService: AvtransportService,
     public playlistService: PlaylistService) { }
@@ -26,8 +26,8 @@ export class ItemComponent implements AfterViewChecked {
     return "top-div";
   }
 
-  playAllTracks() : void {
-      this.playlistService.addContainerToPlaylistAndPlay(this.contentDirectoryService.currentContainerList.currentContainer, false);
+  playAllTracks(): void {
+    this.playlistService.addContainerToPlaylistAndPlay(this.contentDirectoryService.currentContainerList.currentContainer, false);
   }
 
   addAllTracks(): void {
@@ -44,5 +44,14 @@ export class ItemComponent implements AfterViewChecked {
 
   play(musicItemDto: MusicItemDto) {
     this.avtransportService.playResource(musicItemDto);
+  }
+
+  getDuration(item: MusicItemDto): string {
+    let date = new Date(Date.UTC(0, 0, 0, 0, 0, item.audioFormat.durationInSeconds));
+    let s = (date.getUTCHours() > 0 ?
+      date.getUTCHours().toString() + ':' + date.getUTCMinutes().toString().padStart(2, '0') :
+      date.getUTCMinutes().toString()) +
+      ':' + date.getUTCSeconds().toString().padStart(2, '0');
+    return s;
   }
 }

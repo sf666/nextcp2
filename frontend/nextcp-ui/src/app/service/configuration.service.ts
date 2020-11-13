@@ -91,6 +91,11 @@ export class ConfigurationService {
 
   private applyConfig(data: Config) {
     this.serverConfig = data;
+
+    this.serverConfig.rendererDevices = this.serverConfig?.rendererDevices.sort((n1, n2) => {
+      return n1.displayString.localeCompare(n2.displayString);
+    });
+
     if (isAssigned(this.getClientConfig(this.clientConfig.uuid))) {
       this.clientConfig = this.getClientConfig(this.clientConfig.uuid);
       this.clientConfigChanged$.next(this.clientConfig);

@@ -140,7 +140,9 @@ AudioFormat:
    sampleFrequency: Long 
    bitsPerSample: Long 
    bitrate: Long 
-   filetype: String 
+   filetype: String
+   durationDisp: String
+   durationInSeconds: Long 
 
 RadioStation:
    id: Long

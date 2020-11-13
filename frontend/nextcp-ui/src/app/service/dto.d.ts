@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2020-11-13 07:54:29.
+// Generated using typescript-generator version 2.0.400 on 2020-11-13 10:57:25.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -6,6 +6,8 @@ export interface AudioFormat {
     bitsPerSample: number;
     bitrate: number;
     filetype: string;
+    durationDisp: string;
+    durationInSeconds: number;
 }
 
 export interface BrowseRequestDto {

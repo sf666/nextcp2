@@ -1,6 +1,8 @@
 package nextcp.rest;
 
 import java.net.MalformedURLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -14,7 +16,6 @@ import org.fourthline.cling.support.model.DIDLObject;
 import org.fourthline.cling.support.model.DIDLObject.Property;
 import org.fourthline.cling.support.model.Res;
 import org.fourthline.cling.support.model.container.MusicAlbum;
-import org.fourthline.cling.support.model.container.PlaylistContainer;
 import org.fourthline.cling.support.model.item.AudioItem;
 import org.fourthline.cling.support.model.item.Item;
 import org.fourthline.cling.support.model.item.MusicTrack;
@@ -39,6 +40,8 @@ public class DtoBuilder
     private static final Logger log = LoggerFactory.getLogger(DtoBuilder.class.getName());
 
     public static final String ASSET_FOLDER = "assets";
+
+    private SimpleDateFormat dispParse = new SimpleDateFormat("HH:mm:ss.SSS Z");
 
     /**
      * Generates XML MEtadata
@@ -101,7 +104,7 @@ public class DtoBuilder
         {
             return null;
         }
-        
+
         if (xml.startsWith("&lt;"))
         {
             xml = StringEscapeUtils.unescapeXml(xml);
@@ -111,9 +114,7 @@ public class DtoBuilder
             if (!xml.contains("<upnp:class"))
             {
                 log.debug("fixing missing upnp:class element in DIDL object ...");
-                xml = xml.replace("<item>", "<item>\n<upnp:class>" + 
-                        "object.item.audioItem.musicTrack" + 
-                        "</upnp:class>");
+                xml = xml.replace("<item>", "<item>\n<upnp:class>" + "object.item.audioItem.musicTrack" + "</upnp:class>");
             }
             DIDLContent didlMeta = generateDidlContent(xml);
             MusicItemDto itemDto = buildItemDto(didlMeta.getItems().get(0), "");
@@ -290,7 +291,7 @@ public class DtoBuilder
         }
     }
 
-    private AudioFormat extractAudioFormat(Res res)
+    AudioFormat extractAudioFormat(Res res)
     {
         AudioFormat af = null;
         if (res.getBitrate() != null)
@@ -300,8 +301,38 @@ public class DtoBuilder
             af.bitsPerSample = res.getBitsPerSample();
             af.nrAudioChannels = res.getNrAudioChannels();
             af.sampleFrequency = res.getSampleFrequency();
+            af.durationDisp = res.getDuration();
+            if (!StringUtils.isBlank(af.durationDisp))
+            {
+                String s = normalizeDuration(res.getDuration());
+                try
+                {
+                    af.durationInSeconds = dispParse.parse(s).getTime() / 1000;
+                }
+                catch (ParseException e)
+                {
+                    log.warn("cannot parse duration : " + s);
+                }
+            }
         }
         return af;
+    }
+
+    private String normalizeDuration(String duration)
+    {
+        StringBuilder sb = new StringBuilder();
+        if (StringUtils.countMatches(duration, ":") == 1)
+        {
+            sb.append("00:");
+        }
+        sb.append(duration);
+        int idx = duration.indexOf('.');
+        if (idx == -1)
+        {
+            sb.append(".000");
+        }
+        sb.append(" UTC");
+        return sb.toString();
     }
 
     protected DIDLContent generateDidlContent(String didlContent) throws Exception

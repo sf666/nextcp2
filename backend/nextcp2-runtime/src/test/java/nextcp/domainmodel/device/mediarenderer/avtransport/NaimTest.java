@@ -49,5 +49,5 @@ public class NaimTest
         DtoBuilder dtoBuilder = new DtoBuilder();
         MusicItemDto song = dtoBuilder.extractXmlAsMusicItem(meta);
         assertFalse(song.albumArtUrl.isEmpty());
-    }
+    }    
 }
