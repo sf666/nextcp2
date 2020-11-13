@@ -403,7 +403,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
     {
         if (peekNextSongIndex() != null)
         {
-            return playlistItems.get(peekNextSongIndex());
+            return playlistItems.get(playbackItems.get(peekNextSongIndex()));
         }
         else
         {
