@@ -34,6 +34,7 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
 
         state.rendererUDN = rendererUdn;
         state.volume = 0;
+        state.hasDeviceDriver = true;
         this.callback = callback;
         device = new McIntoshDeviceConnection(this);
         device.open(hostAddress);

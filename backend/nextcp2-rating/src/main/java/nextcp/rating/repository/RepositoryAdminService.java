@@ -153,7 +153,7 @@ public class RepositoryAdminService
         }
         catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException e)
         {
-            log.warn("cannot read audio tag", e);
+            log.debug("cannot read audio tag", e);
         }
     }
 
@@ -170,7 +170,7 @@ public class RepositoryAdminService
                 currentVersion++;
                 String sqlScriptPath = String.format("/sql/%d.sql", currentVersion);
                 runScript(sqlScriptPath);
-            }            
+            }
         }
         catch (Exception e)
         {
