@@ -94,6 +94,7 @@ export class ContentDirectoryService {
   }
 
   public quickSearchByDto(quickSearchDto: QuickSearchRequestDto): void {
+
     const uri = '/quickSearch';
     this.httpService.post<QuickSearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => this.quickSearchResultList = data);
   }

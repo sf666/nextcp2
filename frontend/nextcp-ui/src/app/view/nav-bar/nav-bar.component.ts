@@ -5,6 +5,8 @@ import { Router, NavigationStart, Event as NavigationEvent } from '@angular/rout
 import { DeviceService } from './../../service/device.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { Component } from '@angular/core';
+import * as _ from "lodash";
+
 
 @Component({
   selector: 'nav-bar',
@@ -17,6 +19,8 @@ export class NavBarComponent {
   showBackButton = false;
 
   private currentPath: string;
+  private currentSearchText: string;
+  private throttledSearch = _.throttle(this.doSearch, 500);
 
   constructor(
     public contentDirectoryService: ContentDirectoryService,
@@ -35,7 +39,7 @@ export class NavBarComponent {
   // UI state management for navbar 
 
   get musicLibraryVisible(): boolean {
-   //  console.log("current path : " + this.currentPath);
+    //  console.log("current path : " + this.currentPath);
     return this.currentPath === '/music-library' || this.currentPath === '/'; // router default view
   }
   get playlistVisible(): boolean {
@@ -58,16 +62,16 @@ export class NavBarComponent {
   }
   get inputOutputVisible(): boolean {
     return this.currentPath === '/input-output';
-  }  
+  }
 
   // music-library
   public get currentContainer(): ContainerDto {
     return this.contentDirectoryService.currentContainerList.currentContainer;
-  }  
+  }
 
   public get parentTitle(): string {
     return this.contentDirectoryService.currentContainerList.parentFolderTitle;
-  }  
+  }
 
   // Search
   get quickSearchString() {
@@ -81,9 +85,14 @@ export class NavBarComponent {
     } else {
       if (value && value.length > 2) {
         this.contentDirectoryService.quickSearchPanelVisible = true;
-        this.contentDirectoryService.quickSearch(value, "", this.deviceService.selectedMediaServerDevice.udn);
+        this.currentSearchText = value;
+        this.throttledSearch();
       }
     }
+  }
+
+  private doSearch(): void {
+    this.contentDirectoryService.quickSearch(this.currentSearchText, "", this.deviceService.selectedMediaServerDevice.udn);
   }
 
   clearSearch() {

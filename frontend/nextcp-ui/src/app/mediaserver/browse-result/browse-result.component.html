@@ -1,5 +1,12 @@
-<div class="bg-default">
+<div class="bg-default" *ngIf="isRendererSelected(); else selectServer">
     <browseResultContainer></browseResultContainer>
     <browseResultAlbum></browseResultAlbum>
     <browseResultItem></browseResultItem>
 </div>
+
+<ng-template #selectServer >
+    <div class="regularText infotext">
+        Please select a media server in the <a href="#/input-output">I/O settings</a> or define a default media server
+        in the <a href="#/settings">App settings</a>.
+    </div>
+</ng-template>
