@@ -21,9 +21,14 @@
   }
 
   .small-col {
-      max-width : 20px;
+      max-width : 60px;
       text-align: right;
   }
+
+  .medium-col {
+    max-width : 130px;
+    text-align: right;
+}
 
   .item-thead {
       font-size     : 1rem;
