@@ -66,6 +66,7 @@ input {
     display           : flex;
     box-sizing        : border-box;
     -webkit-app-region: no-drag;
+    -moz-app-region   : no-drag;
 
     width    : 100%;
     max-width: 388px;
