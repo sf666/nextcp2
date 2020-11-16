@@ -179,7 +179,7 @@ input {
 .my-Card {
     @extend .card;
 
-    background-repeat: 100vh;
+    background-repeat: calc(var(--vh, 1vh) * 100);
     background-size  : cover;
     background-color : rgba(0, 0, 0, 0.5);
     background-image : url(/assets/folder-bg.png);

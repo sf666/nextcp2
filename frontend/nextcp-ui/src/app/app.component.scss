@@ -35,14 +35,14 @@
     right   : 0px;
     position: fixed;
 
-    background-repeat: 100vh;
+    background-repeat: calc(var(--vh, 1vh) * 100);
     background-size  : cover;
     background-color : rgb(0, 0, 0);
 
     width     : calc(100vw - var(--sidebar-width));
-    height    : calc(100vh - var(--nav-height) - var(--footer-heihgt));
+    height    : calc(var(--vh, 1vh) * 100 - var(--nav-height) - var(--footer-heihgt));
     max-width : calc(100vw - var(--sidebar-width));
-    max-height: calc(100vh - var(--nav-height) - var(--footer-heihgt));
+    max-height: calc(var(--vh, 1vh) * 100 - var(--nav-height) - var(--footer-heihgt));
 }
 
 .bg-img-footer::before {
@@ -66,11 +66,11 @@
     height    : var(--footer-heihgt);
     width     : 100vw;
 
-    background-repeat  : 100vh;
+    background-repeat  : calc(var(--vh, 1vh) * 100);
     background-size    : cover;
     background-position: 0 -500px;
 
     height           : 100%;
-    background-repeat: 100vh;
+    background-repeat: calc(var(--vh, 1vh) * 100);
     z-index          : 3;
 }

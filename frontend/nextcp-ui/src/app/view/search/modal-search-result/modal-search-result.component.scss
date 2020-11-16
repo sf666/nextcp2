@@ -10,7 +10,7 @@
 
     position        : fixed;
     width           : 450px;
-    height          : calc(100vh - 185px);
+    height          : calc(var(--vh, 1vh) * 100 - 185px);
     top             : 70px;
     right           : 16px;
     background-color: #242528; // $pantone-Neutral-Black-C , #242528
