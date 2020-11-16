@@ -99,10 +99,3 @@ export class NavBarComponent {
       this.contentDirectoryService.currentContainerList.currentContainer.mediaServerUDN);
   }
 }
-
-/**
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.screenHeight = window.innerHeight;
-  }
-*/

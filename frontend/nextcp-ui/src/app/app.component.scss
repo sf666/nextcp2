@@ -6,11 +6,11 @@
     position  : fixed;
     top       : var(--nav-height);
     left      : var(--sidebar-width);
+    height    : 90vh;
+    height    : calc(var(--vh, 1vh) * 100 - var(--nav-height) - var(--footer-heihgt));
     width     : calc(100vw - var(--sidebar-width));
-    height    : calc(100vh - var(--nav-height) - var(--footer-heihgt));
-    max-width : calc(100vw - var(--sidebar-width));
-    max-height: calc(100vh - var(--nav-height) - var(--footer-heihgt));
     overflow-y: scroll;
+
 }
 
 .app-root {
@@ -18,13 +18,13 @@
 }
 
 .bg-img::before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    content                : "";
+    position               : absolute;
+    width                  : 100%;
+    height                 : 100%;
     -webkit-backdrop-filter: contrast(200%) blur(80px) brightness(0.20) contrast(110%) opacity(100%);
     backdrop-filter        : contrast(200%) blur(80px) brightness(0.20) contrast(110%) opacity(100%);
-    pointer-events: none;
+    pointer-events         : none;
 }
 
 .bg-img {
@@ -45,15 +45,15 @@
 }
 
 .bg-img-footer::before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color:rgba(0,0,0,.5);
+    content                : "";
+    position               : absolute;
+    width                  : 100%;
+    height                 : 100%;
+    background-color       : rgba(0, 0, 0, .5);
     -webkit-backdrop-filter: blur(64px) saturate(120%);
     backdrop-filter        : blur(64px) saturate(120%);
-    pointer-events: none;
-    z-index: 2;
+    pointer-events         : none;
+    z-index                : 2;
 }
 
 .bg-img-footer {
@@ -67,8 +67,8 @@
     background-repeat  : 100vh;
     background-size    : cover;
     background-position: 0 -500px;
- 
+
     height           : 100%;
     background-repeat: 100vh;
-    z-index: 3;
+    z-index          : 3;
 }
