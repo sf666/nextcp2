@@ -42,12 +42,14 @@ export class ModalSearchResultComponent {
 
   playlistItemSelected(playlistItem: ContainerDto) {
     console.debug("album selected : " + playlistItem);
+    this.contentDirectoryService.clearSearch();
     this.contentDirectoryService.browseChildrenByContiner(playlistItem);
     this.router.navigateByUrl('music-library');
   }
 
   artistItemSelected(artistItem: ContainerDto) {
     console.debug("album selected : " + artistItem);
+    this.contentDirectoryService.clearSearch();
     this.contentDirectoryService.browseChildrenByContiner(artistItem);
     this.router.navigateByUrl('music-library');
   }
@@ -63,21 +65,25 @@ export class ModalSearchResultComponent {
     this.contentDirectoryService.searchAllItems(
       this.dtoGeneratorService.generateQuickSearchDto(
         this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, ""));
+    this.contentDirectoryService.hideQuickSearchPanel();
   }
 
   showAllAlbum() {
     this.contentDirectoryService.searchAllAlbum(
       this.dtoGeneratorService.generateQuickSearchDto(
         this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, ""));
+    this.contentDirectoryService.hideQuickSearchPanel();
   }
   showAllItemArtist() {
     this.contentDirectoryService.searchAllArtists(
       this.dtoGeneratorService.generateQuickSearchDto(
         this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, ""));
+    this.contentDirectoryService.hideQuickSearchPanel();
   }
   showAllPlaylist() {
     this.contentDirectoryService.searchAllPlaylist(
       this.dtoGeneratorService.generateQuickSearchDto(
         this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, ""));
+    this.contentDirectoryService.hideQuickSearchPanel();
   }
 }

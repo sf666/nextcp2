@@ -78,7 +78,6 @@ export class RendererService {
 
   private updateRenderDeviceDriverState(data: DeviceDriverState) {
     if (this.deviceService.isMediaRendererSelected(data.rendererUDN)) {
-      console.log("new device driver state : " + data);
       this.deviceDriverState = data;
     }
   }

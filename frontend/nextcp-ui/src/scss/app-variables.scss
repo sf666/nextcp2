@@ -13,12 +13,5 @@ $section-button-col-back       : $pantone-433-C;
 $section-button-col-back-hover : $pantone-309-C;
 $border-primary                : $blue-pantone-2;
 
-
-// import additional font
-// 
-
-// usage:     
-//         font-family: 'Quicksand', sans-serif;
-//
-// $web-font-path-quicksand: "../assets/fonts/quicksand.css" !default;
-// @import url(../assets/fonts/quicksand.scss);
+// added hover effect für bootstrap card images
+$imgCardWidth : calc(#{$cardWidth} - 2*#{$cardBorderWidth});

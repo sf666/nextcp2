@@ -1,4 +1,5 @@
 @import "pantone";
+@import "app-variables";
 
 :root {
     --snow-white   : rgb(255, 255, 250);
@@ -157,6 +158,7 @@ input {
 .cardLayout {
     display  : flex;
     flex-flow: row wrap;
+    background-color: rgba(0, 0, 0, 0);
 }
 
 //
@@ -211,9 +213,6 @@ input {
     background-color: rgba(0, 0, 0, 0.5);
     background-image: url(/assets/folder-bg.png);
 }
-
-// added hover effect für bootstrap card images
-$imgCardWidth : calc(#{$cardWidth} - 2*#{$cardBorderWidth});
 
 img {
     &.card-img-top {

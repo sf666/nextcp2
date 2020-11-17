@@ -44,6 +44,15 @@ export class ContentDirectoryService {
     this.browseChildrenByRequest(this.createBrowseRequest("0", "", data.udn));
   }
 
+  public showQuickSearchPanel() {
+    this.quickSearchPanelVisible = true;
+  }
+
+
+  public hideQuickSearchPanel() {
+    this.quickSearchPanelVisible = false;
+  }
+
   public clearSearch() {
     this.quickSearchResultList = this.dtoGeneratorService.generateEmptyQuickSearchResultDto();
     this.quickSearchPanelVisible = false;

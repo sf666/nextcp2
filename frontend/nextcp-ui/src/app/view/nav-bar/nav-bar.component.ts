@@ -73,7 +73,15 @@ export class NavBarComponent {
     return this.contentDirectoryService.currentContainerList.parentFolderTitle;
   }
 
+  gotoParent() {
+    this.contentDirectoryService.browseChildren(this.contentDirectoryService.currentContainerList.currentContainer.parentID, "",
+      this.contentDirectoryService.currentContainerList.currentContainer.mediaServerUDN);
+  }
+
+  //
   // Search
+  // =========================================================================
+
   get quickSearchString() {
     return this.contentDirectoryService.quickSearchQueryString;
   }
@@ -91,6 +99,17 @@ export class NavBarComponent {
     }
   }
 
+  keyUp(event: any) {
+    if (event.key === 'Escape') {
+      this.contentDirectoryService.clearSearch();
+      this.quickSearchString = '';
+    }
+  }
+
+  focus() {
+    this.quickSearchString = this.quickSearchString;
+  }
+
   private doSearch(): void {
     this.contentDirectoryService.quickSearch(this.currentSearchText, "", this.deviceService.selectedMediaServerDevice.udn);
   }
@@ -101,10 +120,5 @@ export class NavBarComponent {
 
   isDisabled(): boolean {
     return this.contentDirectoryService.currentContainerList.currentContainer.id === '0';
-  }
-
-  gotoParent() {
-    this.contentDirectoryService.browseChildren(this.contentDirectoryService.currentContainerList.currentContainer.parentID, "",
-      this.contentDirectoryService.currentContainerList.currentContainer.mediaServerUDN);
   }
 }

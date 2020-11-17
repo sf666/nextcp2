@@ -1,14 +1,29 @@
 @import "pantone";
 @import "buttons";
+@import "app-variables";
+
 
 .img-top {
     background-repeat: calc(var(--vh, 1vh) * 100);
-    background-size  : cover;
+    object-fit       : cover;
     background-color : rgba(0, 0, 0, 0.5);
     background-image : url(/assets/folder-bg.png);
 
     width : 12rem;
     height: 12rem;
+}
+
+img {
+    &.card-img-top {
+        object-fit: cover;
+        width     : $imgCardWidth;
+        height    : $imgCardWidth;
+        transition: all 300ms;
+
+        &:hover {
+            transform: scale(1.06);
+        }
+    }
 }
 
 .play-overlay-button {
@@ -57,7 +72,7 @@
 }
 
 .outer-container {
-    position: relative;
+    position   : relative;
     margin-left: 60px;
     margin-top : 30px;
 }
