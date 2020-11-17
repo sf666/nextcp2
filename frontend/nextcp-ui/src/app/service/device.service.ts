@@ -47,6 +47,10 @@ export class DeviceService {
     return udn === this._selectedMediaRendererDevice.udn;
   }
 
+  public isAnyMediaRendererSelected() : boolean {
+    return this._selectedMediaRendererDevice.udn.length > 0;
+  }
+
   private mediaserverListChanged(data: MediaServerDto[]): void {
     this.mediaServerList = data;
     this.applyDefaultServer();
@@ -125,6 +129,10 @@ export class DeviceService {
       this.selectedMediaServerDevice = serverDevice[0];
     }
   }
+
+  //
+  // API calls
+  //
 
   private getAllMediaServer() {
     const uri = '/mediaServer';

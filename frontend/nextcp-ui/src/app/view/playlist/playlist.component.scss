@@ -4,6 +4,11 @@
 $imgWidthHeight   : 7rem;
 $img-border-width : 0px;
 
+.infotext {
+    margin-top : 2rem;
+    margin-left: 4rem;
+}
+
 img {
     width : $imgWidthHeight;
     height: $imgWidthHeight;

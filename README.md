@@ -35,28 +35,28 @@ If no config file is given or found, a config-file will be generated next to the
 ```diff
 ! ATTENTION: Lemma needs JDK 8 to build!
 ```
+
 Before calling the `./build_dependencies.sh` script or installing build dependencies manually, switch to JDK 8.
 
 Switching between Java versions can be done with SDKMAN : https://sdkman.io/install
 
 list available JDK installations with
 
-```
+```bash
 sdk list java
 ```
 
 and select one Java 8 version by typing
 
-```
+```bash
 sdk use java <identifier>
 ```
 
 ### automated dependencies installation
 
-
 Install dependent libraries by calling the script 
 
-```
+```bash
 ./build_dependencies.sh
 ```
 
@@ -65,13 +65,13 @@ Install dependent libraries by calling the script
 
 Install dependent libraries by checking out the repositories in a different directory, following the build instructions of each library. Install each library by calling
 
-```
+```bash
 mvn install
 ```
 
 Repositories to clone:
  
-```
+```bash
 git clone https://github.com/sf666/lemma.git
 git clone https://github.com/sf666/seamless.git
 git clone https://github.com/sf666/cling.git
@@ -86,13 +86,13 @@ Switching between Java versions can be done with SDKMAN : https://sdkman.io/inst
 
 list available JDK installations with
 
-```
+```bash
 sdk list java
 ```
 
 select one Java 11 or higher Java version by typing
 
-```
+```bash
 sdk use java <identifier>
 ```
 
@@ -108,7 +108,7 @@ Since the frontend is deployed into the backend, it has to be build first.
 
 #### build frontend
 
-```
+```bash
 cd frontend/nextcp-ui
 ./ng build
 ```
@@ -121,7 +121,7 @@ UI will be build into the backend folder : `backend/nextcp2-runtime/src/main/res
 
 #### build backend
 
-```
+```bash
 cd backend/
 mvn clean
 mvn install
@@ -134,7 +134,6 @@ Build artifacts are located in the maven `target` directories.
 
 - The runnable application jar is build in the module `backend/nextcp2-assembly/target`
 - Device Driver are build in the modules below `backend/nextcp2-device-driver`
-
 
 #### main application
 
@@ -151,18 +150,17 @@ Current implemented features:
 
 After a successfull build, the device driver (tested with McIntosh MA9000 amplifier) is located here: `backend/nextcp2-device-driver/nextcp2-ma9000/target/`.
 
-
 # running the application
 
 To run the snapshot - in this example with 256m memory - call :
 
-```
+```bash
 java -Xms256m -Xmx256m -jar [-DconfigFile=path_to_config_file] nextcp2.jar
 ```
 
 or if build manually, replace `nextcp2.jar` with the your current version of the `nextcp2-assembly-spring-boot` file, i.e.
 
-```
+```bash
 java -Xms256m -Xmx256m -jar [-DconfigFile=path_to_config_file] nextcp2-assembly-spring-boot-2.0.0-SNAPSHOT.jar
 ```
 

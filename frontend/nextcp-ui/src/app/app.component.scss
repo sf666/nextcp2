@@ -8,7 +8,7 @@
     left      : var(--sidebar-width);
     height    : 90vh;
     height    : calc(var(--vh, 1vh) * 100 - var(--nav-height) - var(--footer-heihgt));
-    width     : auto;
+    width     : 100%;
     overflow-y: scroll;
 
 }

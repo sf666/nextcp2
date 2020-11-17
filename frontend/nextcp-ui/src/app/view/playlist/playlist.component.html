@@ -1,13 +1,30 @@
-<div *ngIf="playlistService.playlistItems?.length > 0">
-    <div *ngFor="let item of playlistService.playlistItems" class="playlistItem d-flex {{getActiveClass(item)}}"
-        (click)="playlistService.seekId(item.objectID)">
-        <img src="{{item.albumArtUrl}}" class="cropImg" alt="{{item.title}}">
-        <div class="ml-3 d-flex flex-column justify-content-between">
-            <div class="title {{getActiveClass(item)}}">{{item.title}}</div>
-            <div class="foot">
-                <div class="album align-self-start">{{item.album}}</div>
-                <div class="artist align-self-start">{{item.artistName}}</div>
+<div class="playlistMainScreen">
+    <div *ngIf="deviceService.isAnyMediaRendererSelected(); else noMediaRenderer">
+        <div *ngIf="hasPlaylistItems; else noPlaylistItems">
+            <div *ngFor="let item of playlistService.playlistItems" class="playlistItem d-flex {{getActiveClass(item)}}"
+                (click)="playlistService.seekId(item.objectID)">
+                <img src="{{item.albumArtUrl}}" class="cropImg" alt="{{item.title}}">
+                <div class="ml-3 d-flex flex-column justify-content-between">
+                    <div class="title {{getActiveClass(item)}}">{{item.title}}</div>
+                    <div class="foot">
+                        <div class="album align-self-start">{{item.album}}</div>
+                        <div class="artist align-self-start">{{item.artistName}}</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<ng-template #noMediaRenderer>
+    <div class="regularText infotext">
+        Please select a media renderer in the <a href="#/input-output">I/O settings</a> or define a default media renderer
+        in the <a href="#/settings">App settings</a>.
+    </div>
+</ng-template>
+
+<ng-template #noPlaylistItems>
+    <div class="regularText infotext">
+        The active playlist is empty.
+    </div>
+</ng-template>
