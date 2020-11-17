@@ -140,9 +140,9 @@ Build artifacts are located in the maven `target` directories.
 
 After a successfull build, the main application build artifact will be located here `backend/nextcp2-assembly/target`
 
-#### McIntosch device driver
+#### McIntosh device driver
 
-This device driver controls (bi-directional) a McIntosch device connected to a RS232/TCP-IP transceiver.
+This device driver controls (bi-directional) a McIntosh device connected to a RS232/TCP-IP transceiver like this on: __USR-TCP232-302__.
 
 Current implemented features:
 
@@ -154,16 +154,16 @@ After a successfull build, the device driver (tested with McIntosh MA9000 amplif
 
 # running the application
 
-To run the snapshot call :
+To run the snapshot - in this example with 256m memory - call :
 
 ```
-java -jar [-DconfigFile=path_to_config_file] nextcp2.jar
+java -Xms256m -Xmx256m -jar [-DconfigFile=path_to_config_file] nextcp2.jar
 ```
 
 or if build manually, replace `nextcp2.jar` with the your current version of the `nextcp2-assembly-spring-boot` file, i.e.
 
 ```
-java -jar [-DconfigFile=path_to_config_file] nextcp2-assembly-spring-boot-2.0.0-SNAPSHOT.jar
+java -Xms256m -Xmx256m -jar [-DconfigFile=path_to_config_file] nextcp2-assembly-spring-boot-2.0.0-SNAPSHOT.jar
 ```
 
 By default the application will start on the current interface on port `8085`. 
@@ -177,7 +177,7 @@ http://localhost:8085
 If nextcp runs on a remote maschine, replace `localhost` by the IP address of your remote maschine.
 
 
-## config file 
+## config file
 
 The application tries to load the config file from the following locations in this order:
 
@@ -206,7 +206,7 @@ To start the front-end in Visual Studio Code switch to TERMINAL change into the 
 npm start
 ```
 
-Launch your favorite Browser from the Visual Studio Code debug perspective.
+Launch your favorite chromium browser from the Visual Studio Code debug perspective.
 
 ## code generation
 
