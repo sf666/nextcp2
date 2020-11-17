@@ -7,11 +7,13 @@
         <div *ngIf="isLeaf(); else containerTitle" class="d-flex flex-column pl-4">
             <div class="d-flex flex-column">
                 <div class="title">{{currentContainer.title}}</div>
-                <div class="pt-2 regular">Playlist contains <span class="highlight">{{itemsCount}}</span> title</div>
-                <div *ngIf="totalPlaytime.length > 0" class="pt-1 regular">Total play time <span class="highlight">{{totalPlaytime}}</span></div>
-            </div>
-            <div *ngIf="currentContainer.artist" class="regular">by <span
-                    class="highlight">{{currentContainer.artist}}</span>
+                <div *ngIf="currentContainer.artist" class="regular">by <span
+                        class="highlight">{{currentContainer.artist}}</span>
+                </div>
+                <div *ngIf="itemsCount > 0" class="pt-3 regular">{{containerType}} contains <span
+                        class="highlight">{{itemsCount}}</span> title</div>
+                <div *ngIf="totalPlaytime.length > 0" class="pt-1 regular">Total play time <span
+                        class="highlight">{{totalPlaytime}}</span></div>
             </div>
             <div class="d-flex mt-4">
                 <button mat-flat-button class="my-buttons" (click)="playPlaylist(currentContainer)">
@@ -45,12 +47,11 @@
 
 <ng-template #containerTitle>
     <div class="d-flex flex-column infobox">
-        <div class="title">{{currentContainer.title}} <span *ngIf="hasChilds" class="regular pl-2"> has</span></div>
-        <div *ngIf="containerList.length > 0" class="album">{{containerList.length}} <span
-                class="regular pl-2">Folders</span></div>
-        <div *ngIf="playlistList.length > 0" class="album">{{playlistList.length}} <span
-                class="regular pl-2">Playlists</span></div>
-        <div *ngIf="itemsCount > 0" class="album">{{itemsCount}} Tracks</div>
+        <div class="title">{{currentContainer.title}} <span class="regular pl-2">consists of</span></div>
+        <div *ngIf="albumList?.length > 0" class="regular"><span class="highlight pr-2">{{albumList?.length}}</span> Playlist<span *ngIf="albumList?.length > 1">s</span></div>
+        <div *ngIf="playlistList.length > 0" class="regular"><span class="highlight pr-2">{{playlistList.length}}</span> Playlist<span *ngIf="playlistList.length > 1">s</span></div>
+        <div *ngIf="containerList.length > 0" class="regular"><span class="highlight pr-2">{{containerList.length}}</span> Folder<span *ngIf="containerList.length > 1">s</span></div>
+        <div *ngIf="itemsCount > 0" class="regular"><span class="highlight pr-2">{{itemsCount}}</span> Track<span *ngIf="itemsCount > 1">s</span></div>
     </div>
 </ng-template>
 

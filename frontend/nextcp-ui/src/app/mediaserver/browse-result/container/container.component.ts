@@ -49,16 +49,25 @@ export class ContainerComponent implements AfterViewChecked {
     }
   }
 
+  get containerType(): string {
+    if (this.contentDirectoryService.currentContainerList.currentContainer.objectClass === "object.container.playlistContainer") {
+      return "Playlist";
+    } else if (this.contentDirectoryService.currentContainerList.currentContainer.objectClass === "object.container.album.musicAlbum") {
+      return "Album";
+    } else {
+      return "Folder";
+    }
+  }
+
   get totalPlaytime(): string {
-    let completeTime : number;
+    let completeTime: number;
     completeTime = 0;
     if (this.contentDirectoryService.currentContainerList?.musicItemDto) {
       this.contentDirectoryService.currentContainerList.musicItemDto.forEach(
         el => completeTime = completeTime + el.audioFormat.durationInSeconds
       );
     }
-    if (completeTime)
-    {
+    if (completeTime) {
       return this.timeDisplayService.convertLongToDateString(completeTime);
     }
     return "";
@@ -68,6 +77,10 @@ export class ContainerComponent implements AfterViewChecked {
     return this.containerList?.length > 0 || this.playlistList?.length > 0 || this.itemsCount > 0;
   }
 
+  public get albumList(): ContainerDto[] {
+    return this.contentDirectoryService.currentContainerList.albumDto;
+  }
+  
   public containerListWithoutMinimServerTags(): ContainerDto[] {
     return this.contentDirectoryService.currentContainerList.containerDto.filter(item => !item.title.startsWith(">> "));
   }
