@@ -7,9 +7,12 @@
         <div *ngIf="isLeaf(); else containerTitle" class="d-flex flex-column pl-4">
             <div class="d-flex flex-column">
                 <div class="title">{{currentContainer.title}}</div>
+                <div class="pt-2 regular">Playlist contains <span class="highlight">{{itemsCount}}</span> title</div>
+                <div *ngIf="totalPlaytime.length > 0" class="pt-1 regular">Total play time <span class="highlight">{{totalPlaytime}}</span></div>
             </div>
             <div *ngIf="currentContainer.artist" class="regular">by <span
-                    class="highlight">{{currentContainer.artist}}</span></div>
+                    class="highlight">{{currentContainer.artist}}</span>
+            </div>
             <div class="d-flex mt-4">
                 <button mat-flat-button class="my-buttons" (click)="playPlaylist(currentContainer)">
                     <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="play"></mat-icon>
@@ -21,7 +24,8 @@
                 </button>
                 <button mat-flat-button class="my-buttons"
                     (click)="playlistService.addContainerToPlaylist(currentContainer)">
-                    <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="playlist-plus" aria-label="add to playlist">
+                    <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="playlist-plus"
+                        aria-label="add to playlist">
                     </mat-icon>
                     add tracks
                 </button>
@@ -53,7 +57,8 @@
 <div *ngIf="containerList?.length > 0">
     <div class="section head">Folder</div>
     <div class="cardLayout">
-        <div class="my-Card" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)" *ngFor="let container of containerList">
+        <div class="my-Card" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)"
+            *ngFor="let container of containerList">
             <img src="{{container.albumartUri}}" class="card-img-top" alt="{{container.title}}">
             <div class="my-card-body">
                 <div class="my-card-title">{{container.title}}</div>

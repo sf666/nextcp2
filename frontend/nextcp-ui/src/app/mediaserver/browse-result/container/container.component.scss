@@ -93,5 +93,5 @@ img {
 
 .highlight {
     @extend .plainText;
-    color: white;
+    color: var(--snow-white);
 }

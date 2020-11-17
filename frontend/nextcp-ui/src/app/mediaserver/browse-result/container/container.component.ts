@@ -1,3 +1,4 @@
+import { TimeDisplayService } from './../../../util/time-display.service';
 import { CdsBrowsePathService } from './../../../util/cds-browse-path.service';
 import { ScrollViewService } from './../../../util/scroll-view.service';
 import { BackgroundImageService } from './../../../util/background-image.service';
@@ -18,6 +19,7 @@ export class ContainerComponent implements AfterViewChecked {
     private backgroundImageService: BackgroundImageService,
     private scrollViewService: ScrollViewService,
     private cdsBrowsePathService: CdsBrowsePathService,
+    private timeDisplayService: TimeDisplayService,
     public playlistService: PlaylistService) { }
 
   ngAfterViewChecked(): void {
@@ -45,6 +47,21 @@ export class ContainerComponent implements AfterViewChecked {
     } else {
       return 0;
     }
+  }
+
+  get totalPlaytime(): string {
+    let completeTime : number;
+    completeTime = 0;
+    if (this.contentDirectoryService.currentContainerList?.musicItemDto) {
+      this.contentDirectoryService.currentContainerList.musicItemDto.forEach(
+        el => completeTime = completeTime + el.audioFormat.durationInSeconds
+      );
+    }
+    if (completeTime)
+    {
+      return this.timeDisplayService.convertLongToDateString(completeTime);
+    }
+    return "";
   }
 
   public get hasChilds() {

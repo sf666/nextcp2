@@ -1,3 +1,4 @@
+import { TimeDisplayService } from './../../../util/time-display.service';
 import { ScrollViewService } from './../../../util/scroll-view.service';
 import { MusicItemDto } from './../../../service/dto.d';
 import { PlaylistService } from './../../../service/playlist.service';
@@ -16,6 +17,7 @@ export class ItemComponent implements AfterViewChecked {
     public contentDirectoryService: ContentDirectoryService,
     private scrollViewService: ScrollViewService,
     public avtransportService: AvtransportService,
+    private timeDisplayService: TimeDisplayService,
     public playlistService: PlaylistService) { }
 
   ngAfterViewChecked(): void {
@@ -47,11 +49,6 @@ export class ItemComponent implements AfterViewChecked {
   }
 
   getDuration(item: MusicItemDto): string {
-    let date = new Date(Date.UTC(0, 0, 0, 0, 0, item.audioFormat.durationInSeconds));
-    let s = (date.getUTCHours() > 0 ?
-      date.getUTCHours().toString() + ':' + date.getUTCMinutes().toString().padStart(2, '0') :
-      date.getUTCMinutes().toString()) +
-      ':' + date.getUTCSeconds().toString().padStart(2, '0');
-    return s;
+    return this.timeDisplayService.convertLongToDateString(item.audioFormat.durationInSeconds);
   }
 }
