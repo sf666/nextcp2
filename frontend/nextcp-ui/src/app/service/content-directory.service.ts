@@ -1,3 +1,4 @@
+import { Subject } from 'rxjs';
 import { CdsBrowsePathService } from './../util/cds-browse-path.service';
 import { Router } from '@angular/router';
 import { DtoGeneratorService } from './../util/dto-generator.service';
@@ -21,6 +22,7 @@ export class ContentDirectoryService {
   public quickSearchQueryString: string;
   public quickSearchPanelVisible: boolean;
 
+  currentContainerListChanged$ : Subject<ContainerItemDto> = new Subject();
 
   constructor(
     private httpService: HttpService,
@@ -83,6 +85,7 @@ export class ContentDirectoryService {
 
   updateContainer(data: ContainerItemDto): void {
     this.currentContainerList = data;
+    this.currentContainerListChanged$.next(data);
   }
 
   private createBrowseRequest(objectID: string, sortCriteria: string, mediaServerUdn: string): BrowseRequestDto {

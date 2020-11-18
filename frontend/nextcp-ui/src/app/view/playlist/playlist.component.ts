@@ -1,3 +1,5 @@
+import { ScrollViewService } from './../../util/scroll-view.service';
+import { SseService } from './../../service/sse/sse.service';
 import { DeviceService } from './../../service/device.service';
 import { MusicItemDto } from './../../service/dto.d';
 import { PlaylistService } from '../../service/playlist.service';
@@ -12,7 +14,14 @@ export class PlaylistComponent implements OnInit {
 
   constructor(
     public deviceService: DeviceService,
+    private sseService: SseService,
+    scrollViewService: ScrollViewService,
     public playlistService: PlaylistService) {
+    sseService.mediaRendererPlaylistStateChanged$.subscribe(data => {
+      if (deviceService.isMediaRendererSelected(data.udn)) {
+        scrollViewService.scrollIntoViewID("PL-" + data.Id);
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -26,7 +35,7 @@ export class PlaylistComponent implements OnInit {
     }
   }
 
-  get hasPlaylistItems() : boolean {
+  get hasPlaylistItems(): boolean {
     return this.playlistService.playlistItems?.length > 0;
   }
 }

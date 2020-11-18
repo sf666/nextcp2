@@ -5,7 +5,7 @@ import { BackgroundImageService } from './../../../util/background-image.service
 import { PlaylistService } from './../../../service/playlist.service';
 import { ContainerDto, ContainerItemDto } from './../../../service/dto.d';
 import { ContentDirectoryService } from './../../../service/content-directory.service';
-import { Component, AfterViewChecked } from '@angular/core';
+import { Component, AfterViewChecked, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'browseResultContainer',
@@ -23,9 +23,6 @@ export class ContainerComponent implements AfterViewChecked {
     public playlistService: PlaylistService) { }
 
   ngAfterViewChecked(): void {
-    if (this.cdsBrowsePathService.scrollToID().length > 0) {
-      this.scrollViewService.scrollIntoViewID(this.cdsBrowsePathService.scrollToID());
-    }
     this.backgroundImageService.setBackgroundImageMainScreen(this.currentContainer.albumartUri);
   }
 
@@ -80,7 +77,7 @@ export class ContainerComponent implements AfterViewChecked {
   public get albumList(): ContainerDto[] {
     return this.contentDirectoryService.currentContainerList.albumDto;
   }
-  
+
   public containerListWithoutMinimServerTags(): ContainerDto[] {
     return this.contentDirectoryService.currentContainerList.containerDto.filter(item => !item.title.startsWith(">> "));
   }

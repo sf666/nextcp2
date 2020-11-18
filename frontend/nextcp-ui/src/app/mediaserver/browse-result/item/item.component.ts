@@ -4,14 +4,14 @@ import { MusicItemDto } from './../../../service/dto.d';
 import { PlaylistService } from './../../../service/playlist.service';
 import { AvtransportService } from './../../../service/avtransport.service';
 import { ContentDirectoryService } from './../../../service/content-directory.service';
-import { Component, AfterViewChecked } from '@angular/core';
+import { Component, AfterViewChecked, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'browseResultItem',
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.scss']
 })
-export class ItemComponent implements AfterViewChecked {
+export class ItemComponent {
 
   constructor(
     public contentDirectoryService: ContentDirectoryService,
@@ -20,9 +20,6 @@ export class ItemComponent implements AfterViewChecked {
     private timeDisplayService: TimeDisplayService,
     public playlistService: PlaylistService) { }
 
-  ngAfterViewChecked(): void {
-    this.scrollViewService.scrollIntoViewID(this.topDivId);
-  }
 
   get topDivId(): string {
     return "top-div";

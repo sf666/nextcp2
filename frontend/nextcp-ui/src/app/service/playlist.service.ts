@@ -1,3 +1,4 @@
+import { Subject } from 'rxjs';
 import { SseService } from './sse/sse.service';
 import { GenericResultService } from './generic-result.service';
 import { GenericBooleanRequest, GenericNumberRequest, MusicItemDto, PlayRequestDto, PlaylistState, ContainerDto, PlaylistAddContainerRequest } from './dto.d';
@@ -37,7 +38,7 @@ export class PlaylistService implements OnInit {
 
     sseService.mediaRendererPlaylistItemsChanged$.subscribe(data => {
       if (deviceService.isMediaRendererSelected(data.udn)) {
-        this.playlistItems = data.musicItemDto
+        this.playlistItems = data.musicItemDto;
       };
     });
 

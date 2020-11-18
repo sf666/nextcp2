@@ -48,6 +48,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { SearchResultItemMultiComponent } from './view/search/search-result-item-multi/search-result-item-multi.component';
 import { SearchResultItemSingleComponent } from './view/search/search-result-item-single/search-result-item-single.component';
 import { InputOutputSourceComponent } from './view/input-output-source/input-output-source.component';
+import { DomChangedDirective } from './directive/watch-dom-tree.directive';
 
 
 @NgModule({
@@ -75,6 +76,7 @@ import { InputOutputSourceComponent } from './view/input-output-source/input-out
       SearchResultItemMultiComponent,
       SearchResultItemSingleComponent,
       InputOutputSourceComponent,
+      DomChangedDirective,
 
    ],
    imports: [

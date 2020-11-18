@@ -4,7 +4,7 @@
             <div *ngFor="let item of playlistService.playlistItems" class="playlistItem d-flex {{getActiveClass(item)}}"
                 (click)="playlistService.seekId(item.objectID)">
 
-                <img src="{{item.albumArtUrl}}" class="cropImg" alt="{{item.title}}">
+                <img src="{{item.albumArtUrl}}" class="cropImg" alt="{{item.title}}" id="PL-{{item.objectID}}" tabindex="-1">
                 <div class="d-flex flex-column minWidth albumAndTitle">
                     <div class="title no-wrap">{{item.title}}</div>
                     <div class="d-flex flex-column no-wrap">

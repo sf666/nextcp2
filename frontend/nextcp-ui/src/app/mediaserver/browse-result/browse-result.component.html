@@ -1,4 +1,4 @@
-<div class="bg-default" *ngIf="isRendererSelected(); else selectServer">
+<div domTreeChange (dom-changed)="domChange($event)" class="bg-default" *ngIf="isRendererSelected(); else selectServer">
     <browseResultContainer></browseResultContainer>
     <browseResultAlbum></browseResultAlbum>
     <browseResultItem></browseResultItem>

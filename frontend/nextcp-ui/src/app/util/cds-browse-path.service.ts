@@ -32,7 +32,7 @@ export class CdsBrowsePathService {
     return this.visitedPathFromRoot.peek();
   }
 
-  public scrollToID(): string {
+  get scrollToID(): string {
     return this.scrollId;
   }
 }
