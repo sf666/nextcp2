@@ -1,3 +1,4 @@
+import { MinimTagComponent } from './mediaserver/popup/minim-tag/minim-tag.component';
 import { SidebarComponent } from './view/sidebar/sidebar.component';
 import { RendererDropdownComponent } from './mediarenderer/dropdown/dropdown.component';
 import { MediaServerComponent } from './mediaserver/mediaServer/mediaServer.component';
@@ -27,6 +28,7 @@ import { RadioComponent } from './view/radio/radio.component';
 import { PlaylistComponent } from './view/playlist/playlist.component';
 import { ModalSearchResultComponent } from './view/search/modal-search-result/modal-search-result.component';
 
+
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 // Material Design
@@ -44,7 +46,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { SearchComponent } from './view/search/search.component';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule} from '@angular/material/dialog';
 import { SearchResultItemMultiComponent } from './view/search/search-result-item-multi/search-result-item-multi.component';
 import { SearchResultItemSingleComponent } from './view/search/search-result-item-single/search-result-item-single.component';
 import { InputOutputSourceComponent } from './view/input-output-source/input-output-source.component';
@@ -77,6 +79,7 @@ import { DomChangedDirective } from './directive/watch-dom-tree.directive';
       SearchResultItemSingleComponent,
       InputOutputSourceComponent,
       DomChangedDirective,
+      MinimTagComponent,
 
    ],
    imports: [

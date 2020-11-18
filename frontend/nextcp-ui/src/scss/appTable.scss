@@ -1,58 +1,62 @@
 .item-table {
-  font-size     : 1rem;
-  font-weight   : 300;
-  text-align    : left;
-  align-self    : stretch;
-  text-transform: initial;
-  margin-left   : 3rem;
-  margin-top    : 2rem;
-  width         : 100%;
+    font-size     : 1rem;
+    font-weight   : 300;
+    text-align    : left;
+    align-self    : stretch;
+    text-transform: initial;
+    margin-left   : 3rem;
+    margin-top    : 2rem;
 
-  .row {
-      margin     : 5px 0;
-      padding    : 0 20px;
-      align-items: center;
-  }
+    .row {
+        margin     : 5px 0;
+        padding    : 0 20px;
+        align-items: center;
+    }
 
-  .col {
-      padding      : 0 10px;
-      overflow     : hidden;
-      text-overflow: ellipsis;
-  }
+    .col {
+        padding      : 0 10px;
+        overflow     : hidden;
+        text-overflow: ellipsis;
+    }
 
-  .small-col {
-      max-width : 60px;
-      text-align: right;
-  }
+    .small-col {
+        max-width : 60px;
+        text-align: right;
+    }
 
-  .medium-col {
-    max-width : 130px;
-    text-align: right;
-}
+    .mid-col {
+        max-width : 100px;
+        text-align: right;
+    }
 
-  .item-thead {
-      font-size     : 1rem;
-      font-weight   : 300;
-      margin        : 15px 0;
-      text-align    : left;
-      align-self    : stretch;
-      text-transform: initial;
-  }
+    .medium-col {
+        max-width : 130px;
+        text-align: right;
+    }
 
-  .item-tbody {
-      font-size     : 1rem;
-      font-weight   : 300;
-      text-align    : left;
-      align-self    : stretch;
-      text-transform: initial;
+    .item-thead {
+        font-size     : 1rem;
+        font-weight   : 300;
+        margin        : 15px 0;
+        text-align    : left;
+        align-self    : stretch;
+        text-transform: initial;
+    }
 
-      .row {
-          padding-top   : 7px;
-          padding-bottom: 7px;
+    .item-tbody {
+        font-size     : 1rem;
+        font-weight   : 300;
+        text-align    : left;
+        align-self    : stretch;
+        text-transform: initial;
 
-          &:hover {
-              background: rgba(88, 109, 148, 0.2);
-          }
-      }
-  }
+        .row {
+            padding-top   : 7px;
+            padding-bottom: 7px;
+
+            &:hover {
+                background: rgba(88, 109, 148, 0.2);
+            }
+        }
+    }
 }

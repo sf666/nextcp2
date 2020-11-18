@@ -1,0 +1,10 @@
+<!-- minim server support -->
+<div *ngIf="minimTagsList?.length > 0">
+    <div class="d-flex flex-column mt-4">
+        <div *ngFor="let container of minimTagsList">
+            <button mat-flat-button class="my-buttons" (click)="browseTo(container)">
+                <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="tag"></mat-icon> {{container.title}}
+            </button>
+        </div>
+    </div>
+</div>

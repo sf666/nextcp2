@@ -1,3 +1,4 @@
+import { MinimTagComponent } from './../../popup/minim-tag/minim-tag.component';
 import { TimeDisplayService } from './../../../util/time-display.service';
 import { CdsBrowsePathService } from './../../../util/cds-browse-path.service';
 import { ScrollViewService } from './../../../util/scroll-view.service';
@@ -5,7 +6,8 @@ import { BackgroundImageService } from './../../../util/background-image.service
 import { PlaylistService } from './../../../service/playlist.service';
 import { ContainerDto, ContainerItemDto } from './../../../service/dto.d';
 import { ContentDirectoryService } from './../../../service/content-directory.service';
-import { Component, AfterViewChecked, AfterViewInit } from '@angular/core';
+import { Component, AfterViewChecked, AfterViewInit, ElementRef } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'browseResultContainer',
@@ -17,8 +19,7 @@ export class ContainerComponent implements AfterViewChecked {
   constructor(
     private contentDirectoryService: ContentDirectoryService,
     private backgroundImageService: BackgroundImageService,
-    private scrollViewService: ScrollViewService,
-    private cdsBrowsePathService: CdsBrowsePathService,
+    private dialog: MatDialog,
     private timeDisplayService: TimeDisplayService,
     public playlistService: PlaylistService) { }
 
@@ -109,5 +110,16 @@ export class ContainerComponent implements AfterViewChecked {
   isLeaf(): boolean {
     let isLeaf = this.containerListWithoutMinimServerTags().length < 1;
     return isLeaf;
+  }
+
+  openMinimTagDialog(event: any) {
+    const target = new ElementRef(event.currentTarget);
+    const dialogRef = this.dialog.open(MinimTagComponent, {
+      data: { trigger: target },
+      panelClass: 'popup'
+    });
+    dialogRef.afterClosed().subscribe(_res => {
+      console.log(_res);
+    });
   }
 }

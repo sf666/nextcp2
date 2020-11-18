@@ -31,27 +31,29 @@
                     </mat-icon>
                     add tracks
                 </button>
-            </div>
-        </div>
-    </div>
-    <div *ngIf="minimTagsList?.length > 0">
-        <div class="d-flex flex-wrap mt-4">
-            <div *ngFor="let container of minimTagsList">
-                <button mat-flat-button class="my-buttons" (click)="browseTo(container)">
-                    <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="tag"></mat-icon> {{container.title}}
+                <!-- minim server support -->
+                <button *ngIf="minimTagsList?.length > 0" mat-flat-button class="my-buttons"
+                    (click)="openMinimTagDialog($event)">
+                    <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="tag"></mat-icon>Tags
                 </button>
             </div>
         </div>
     </div>
+
 </div>
 
 <ng-template #containerTitle>
     <div class="d-flex flex-column infobox">
         <div class="title">{{currentContainer.title}} <span class="regular pl-2">consists of</span></div>
-        <div *ngIf="albumList?.length > 0" class="regular"><span class="highlight pr-2">{{albumList?.length}}</span> Playlist<span *ngIf="albumList?.length > 1">s</span></div>
-        <div *ngIf="playlistList.length > 0" class="regular"><span class="highlight pr-2">{{playlistList.length}}</span> Playlist<span *ngIf="playlistList.length > 1">s</span></div>
-        <div *ngIf="containerList.length > 0" class="regular"><span class="highlight pr-2">{{containerList.length}}</span> Folder<span *ngIf="containerList.length > 1">s</span></div>
-        <div *ngIf="itemsCount > 0" class="regular"><span class="highlight pr-2">{{itemsCount}}</span> Track<span *ngIf="itemsCount > 1">s</span></div>
+        <div *ngIf="albumList?.length > 0" class="regular"><span class="highlight pr-2">{{albumList?.length}}</span>
+            Playlist<span *ngIf="albumList?.length > 1">s</span></div>
+        <div *ngIf="playlistList.length > 0" class="regular"><span class="highlight pr-2">{{playlistList.length}}</span>
+            Playlist<span *ngIf="playlistList.length > 1">s</span></div>
+        <div *ngIf="containerList.length > 0" class="regular"><span
+                class="highlight pr-2">{{containerList.length}}</span> Folder<span
+                *ngIf="containerList.length > 1">s</span></div>
+        <div *ngIf="itemsCount > 0" class="regular"><span class="highlight pr-2">{{itemsCount}}</span> Track<span
+                *ngIf="itemsCount > 1">s</span></div>
     </div>
 </ng-template>
 

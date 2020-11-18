@@ -9,6 +9,9 @@
     --primary-color: rgb(0, 255, 255);
     --grey-5       : rgb(76 78 84);
 
+    --bg-grey-2: rgba(229, 238, 255, .2);
+    --bg-grey-6: rgba(0, 0, 0, .4);
+
     --footer-heihgt: 5rem;
     --sidebar-width: 250px;
     --nav-height   : 75px;
@@ -156,8 +159,8 @@ input {
 
 // using direct flex wrap class instead of bootstrap class
 .cardLayout {
-    display  : flex;
-    flex-flow: row wrap;
+    display         : flex;
+    flex-flow       : row wrap;
     background-color: rgba(0, 0, 0, 0);
 }
 
@@ -227,11 +230,20 @@ img {
     }
 }
 
+// Global Popup definition
+.popup {
+    mat-dialog-container {
+        background-color: #242528;
+        overflow        : hidden;
+        overflow-y      : auto;
+    }
+}
+
 // Global buttons definitios
 .buttons {
     line-height     : 1rem;
     height          : 2rem;
-    background-color: rgba(229, 238, 255, .2);
+    background-color: var(--bg-grey-2);
     text-align      : left;
     min-width       : 8rem;
 
