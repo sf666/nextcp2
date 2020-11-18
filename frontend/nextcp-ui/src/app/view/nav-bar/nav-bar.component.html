@@ -10,7 +10,8 @@
 
     <div class="nav-search-container">
         <mat-icon class="mr-1 search-icon" svgIcon="card-search-outline"></mat-icon>
-        <input class="nav-search" [(ngModel)]="quickSearchString" matInput placeholder="search" #searchInput (keyup)="keyUp($event)" (focus)="focus()">
+        <input class="nav-search" [(ngModel)]="quickSearchString" matInput placeholder="search" #searchInput
+            (keyup)="keyUp($event)" (focus)="focus()">
         <mat-icon class="mr-1 search-icon" svgIcon="close" (click)="clearSearch()"></mat-icon>
     </div>
 </div>

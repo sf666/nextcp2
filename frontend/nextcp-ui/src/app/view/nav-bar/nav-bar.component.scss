@@ -24,8 +24,13 @@
     padding-left: 1.5rem;
 }
 
+.btnContainer {
+    max-height: 1.0rem;
+}
+
 .headButton {
-    color: var(--glas-white);
+    color           : var(--glas-white);
+    background-color: rgba(229, 238, 255, .2);
 }
 
 .headLeftContainer {

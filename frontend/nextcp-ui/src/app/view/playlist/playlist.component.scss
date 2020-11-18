@@ -10,9 +10,54 @@ $img-border-width : 0px;
 }
 
 img {
-    width : $imgWidthHeight;
-    height: $imgWidthHeight;
+    height: calc(var(--footer-heihgt) - 2px);
+    width : calc(var(--footer-heihgt) - 2px);
 }
+
+.baseFontsize {
+    font-size  : 1rem;
+    font-weight: 300;
+}
+
+.currentTime {
+    @extend .baseFontsize;
+    color                : rgba(229, 238, 255, .3);
+    font-feature-settings: "tnum";
+}
+
+.finishedTime {
+    @extend .baseFontsize;
+    color                : var(--glas-white);
+    font-feature-settings: "tnum";
+}
+
+
+.albumAndTitle {
+    margin-left: 1.5rem;
+    align-self : center;
+}
+
+.middle-spacer {
+    flex: 1 1 auto;
+}
+
+.search-row {
+    padding-bottom: 16px;
+}
+
+.searchImgHeight {
+    max-width : 4rem;
+    max-height: 4rem;
+    width     : 4rem;
+    height    : 4rem;
+}
+
+.rightButtons {
+    align-self   : center;
+    color        : var(--glas-white);
+    padding-right: 16px;
+}
+
 
 // square image (this is useful if input image is a rectangle)
 .cropImg {
@@ -30,15 +75,14 @@ img {
 }
 
 .title {
-    font-size : 1.4rem;
-    color     : $amber-pantone-5;
-    margin-top: 0.3rem;
+    @extend .baseFontsize;
+    font-size: 1.2rem;
+    color    : var(--snow-white-3);
 
     &.active {
-        color: $pantone-333-C;
+        color: rgb(0, 255, 255);
     }
 }
-
 
 .foot {
     margin-bottom: 0.7rem;

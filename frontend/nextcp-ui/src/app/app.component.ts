@@ -17,7 +17,7 @@ export class AppComponent {
 
   showFiller = false;
 
-  private debouceResize = _.debounce(this.resiseVh, 500);
+  private throttleResize = _.throttle(this.resiseVh, 100);
 
   constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
     // Globally register SVG mat-icon 
@@ -31,7 +31,7 @@ export class AppComponent {
   // Mobile Devices URL bar / view height fix.
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.debouceResize();
+    this.throttleResize();
   }
 
   private resiseVh() {
