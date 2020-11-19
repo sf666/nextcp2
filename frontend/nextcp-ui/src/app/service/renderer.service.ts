@@ -38,7 +38,9 @@ export class RendererService {
         if (data.currentTrack?.albumArtUrl) {
           this.backgroundImageService.setFooterBackgroundImage(data.currentTrack?.albumArtUrl);
         }
-        this.trackTime.durationDisp = data.duration;
+        if (data.duration) {
+          this.trackTime.durationDisp = data.duration;
+        }
       };
     });
 

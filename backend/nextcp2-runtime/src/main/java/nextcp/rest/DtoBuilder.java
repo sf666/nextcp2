@@ -182,7 +182,7 @@ public class DtoBuilder
         // apply some defaults
         if (dto.albumartUri == null)
         {
-            dto.albumartUri = ASSET_FOLDER + "/directory-icon.png";
+            dto.albumartUri = ASSET_FOLDER + "/images/directory-icon.png";
         }
         return dto;
     }
@@ -239,7 +239,7 @@ public class DtoBuilder
 
         if (StringUtils.isBlank(itemDto.albumArtUrl))
         {
-            itemDto.albumArtUrl = ASSET_FOLDER + "/music-icon.png";
+            itemDto.albumArtUrl = ASSET_FOLDER + "/images/music-icon.png";
         }
 
         for (Res res : item.getResources())

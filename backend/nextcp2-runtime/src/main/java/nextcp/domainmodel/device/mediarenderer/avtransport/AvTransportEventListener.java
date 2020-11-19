@@ -3,8 +3,6 @@ package nextcp.domainmodel.device.mediarenderer.avtransport;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.xml.stream.XMLEventReader;
@@ -19,13 +17,8 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.StAXEventBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationEventPublisher;
 
 import nextcp.domainmodel.device.mediarenderer.MediaRendererDevice;
-import nextcp.domainmodel.device.mediarenderer.avtransport.event.AvTransportCurrentTrackUriChangeEvent;
-import nextcp.domainmodel.device.mediarenderer.avtransport.event.AvTransportStateChangedEvent;
-import nextcp.domainmodel.device.mediarenderer.avtransport.event.AvTransportTransportStateChangeEvent;
-import nextcp.dto.TrackInfoDto;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport.AVTransportServiceEventListenerImpl;
 
 /**

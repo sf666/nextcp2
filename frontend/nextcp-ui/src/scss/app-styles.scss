@@ -9,8 +9,10 @@
     --primary-color: rgb(0, 255, 255);
     --grey-5       : rgb(76 78 84);
 
-    --bg-grey-2: rgba(229, 238, 255, .2);
-    --bg-grey-6: rgba(0, 0, 0, .4);
+    --bg-grey-2: rgba(229, 238, 255, .8);
+    --bg-grey-4: rgba(229, 238, 255, .6);
+    --bg-grey-6: rgba(229, 238, 255, .4);
+    --bg-grey-8: rgba(229, 238, 255, .2);
 
     --footer-heihgt: 5rem;
     --sidebar-width: 250px;
@@ -187,7 +189,7 @@ input {
     background-repeat: calc(var(--vh, 1vh) * 100);
     background-size  : cover;
     background-color : rgba(0, 0, 0, 0.5);
-    background-image : url(/assets/folder-bg.png);
+    background-image : url(/images/folder-bg.png);
 
     position: relative;
     margin  : 0.3rem;
@@ -214,7 +216,7 @@ input {
     font-size       : 1.1rem;
     font-weight     : 300;
     background-color: rgba(0, 0, 0, 0.5);
-    background-image: url(/assets/folder-bg.png);
+    background-image: url(/assets/images/folder-bg.png);
 }
 
 img {
@@ -243,7 +245,7 @@ img {
 .buttons {
     line-height     : 1rem;
     height          : 2rem;
-    background-color: var(--bg-grey-2);
+    background-color: var(--bg-grey-8);
     text-align      : left;
     min-width       : 8rem;
 

@@ -16,7 +16,7 @@ export class PlaylistComponent implements OnInit {
   constructor(
     public deviceService: DeviceService,
     private sseService: SseService,
-    backgroundImageService: BackgroundImageService,
+    private backgroundImageService: BackgroundImageService,
     scrollViewService: ScrollViewService,
     public playlistService: PlaylistService) {
 
@@ -29,6 +29,7 @@ export class PlaylistComponent implements OnInit {
 
   ngOnInit(): void {
     this.playlistService.updatePlaylistItems();
+    this.backgroundImageService.setBackgroundImageMainScreen("/assets/images/playlist_bg.png");
   }
 
   getActiveClass(item: MusicItemDto) {

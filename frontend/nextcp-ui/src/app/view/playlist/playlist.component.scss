@@ -21,7 +21,7 @@ img {
 
 .currentTime {
     @extend .baseFontsize;
-    color                : rgba(229, 238, 255, .3);
+    color                : var(--bg-grey-6);
     font-feature-settings: "tnum";
 }
 
