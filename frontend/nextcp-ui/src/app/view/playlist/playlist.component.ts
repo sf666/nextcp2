@@ -1,3 +1,4 @@
+import { BackgroundImageService } from './../../util/background-image.service';
 import { ScrollViewService } from './../../util/scroll-view.service';
 import { SseService } from './../../service/sse/sse.service';
 import { DeviceService } from './../../service/device.service';
@@ -15,8 +16,10 @@ export class PlaylistComponent implements OnInit {
   constructor(
     public deviceService: DeviceService,
     private sseService: SseService,
+    backgroundImageService: BackgroundImageService,
     scrollViewService: ScrollViewService,
     public playlistService: PlaylistService) {
+
     sseService.mediaRendererPlaylistStateChanged$.subscribe(data => {
       if (deviceService.isMediaRendererSelected(data.udn)) {
         scrollViewService.scrollIntoViewID("PL-" + data.Id);
