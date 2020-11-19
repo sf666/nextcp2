@@ -5,7 +5,9 @@
 		<groupId>de.sf666</groupId>
         <artifactId>nextcp2-DeviceDriver</artifactId>
         <version>2.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
+    
     <artifactId>nextcp2-ma9000</artifactId>
     <name>ma 9000 device driver</name>
 
