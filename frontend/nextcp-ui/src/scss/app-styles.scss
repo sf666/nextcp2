@@ -233,7 +233,7 @@ img {
 // Global Popup definition
 .popup {
     mat-dialog-container {
-        background-color: #242528;
+        background-color: rgb(#242528, 0.95);
         overflow        : hidden;
         overflow-y      : auto;
     }
@@ -246,6 +246,18 @@ img {
     background-color: var(--bg-grey-2);
     text-align      : left;
     min-width       : 8rem;
+
+    &:first-child {
+        margin-left: 0;
+    }
+}
+
+.my-buttons {
+    height     : 2.1rem;
+    color      : var(--glas-white-3);
+    margin-top : 8px !important;
+    margin-left: 8px !important;
+    min-width  : 200px;
 
     &:first-child {
         margin-left: 0;

@@ -27,7 +27,7 @@ export class MinimTagComponent implements OnInit {
   ngOnInit(): void {
     const matDialogConfig: MatDialogConfig = new MatDialogConfig();
     const rect = this.triggerElementRef.nativeElement.getBoundingClientRect();
-    matDialogConfig.position = { left: `${rect.left}px`, top: `${rect.bottom - 50}px` };
+    matDialogConfig.position = { left: `${rect.left}px`, top: `${rect.bottom+4}px` };
     matDialogConfig.width = '300px';
     matDialogConfig.height = '400px';
     
