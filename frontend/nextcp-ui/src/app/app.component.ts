@@ -31,12 +31,13 @@ export class AppComponent {
   // Mobile Devices URL bar / view height fix.
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.throttleResize();
+    // this.throttleResize();
+    this.resiseVh();
   }
 
   private resiseVh() {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
-}
+  }
 
 }
