@@ -1,3 +1,4 @@
+import { DtoGeneratorService } from './../util/dto-generator.service';
 import { BackgroundImageService } from './../util/background-image.service';
 import { HttpService } from './http.service';
 import { DeviceService } from './device.service';
@@ -24,11 +25,12 @@ export class RendererService {
   constructor(
     sseService: SseService,
     private deviceService: DeviceService,
+    private dtoGeneratorService: DtoGeneratorService,
     private backgroundImageService: BackgroundImageService,
     private httpService: HttpService) {
 
-    this.trackInfo = this.emptyTrackInfo();
-    this.trackTime = this.emptyTrackTime();
+    this.trackInfo = this.dtoGeneratorService.emptyTrackInfo();
+    this.trackTime = this.dtoGeneratorService.emptyTrackTime();
 
     sseService.mediaRendererDeviceDriverStateChanged$.subscribe(data => this.updateRenderDeviceDriverState(data));
 
@@ -112,71 +114,5 @@ export class RendererService {
       volume: vol
     };
     this.httpService.post(this.baseUri, uri, request, "volume control");
-  }
-
-  //
-  // Empty Datastructures
-  // ================================================================================================================
-
-  emptyTrackTime(): TrackTimeDto {
-    return {
-      duration: 0,
-      streaming: false,
-      durationDisp: '00:00',
-      mediaRendererUdn: '',
-      percent: 0,
-      seconds: 0,
-      secondsDisp: '00:00',
-      trackCount: 0
-    }
-  }
-
-  emptyTrackInfo(): TrackInfoDto {
-    return {
-      mediaRendererUdn: '',
-      codecName: '',
-      detailsCount: 0,
-      metadata: '',
-      metatext: '',
-      metatextCount: 0,
-      trackCount: 0,
-      uri: '',
-      duration: '',
-      currentTrack: this.emptyMusicItem(),
-    }
-  }
-
-  emptyMusicItem(): MusicItemDto {
-    return {
-      album: '',
-      albumArtUrl: '',
-      artistName: '',
-      audioFormat: this.emptyAudioFormat(),
-      creator: '',
-      currentTrackMetadata: '',
-      date: '',
-      mediaServerUDN: '',
-      numberOfThisDisc: '',
-      objectClass: '',
-      objectID: '',
-      originalTrackNumber: '',
-      parentId: '',
-      rating: 0,
-      refId: '',
-      streamingURL: '',
-      title: '',
-    }
-  }
-
-  emptyAudioFormat(): AudioFormat {
-    return {
-      bitrate: 0,
-      bitsPerSample: 0,
-      filetype: '',
-      nrAudioChannels: 2,
-      sampleFrequency: 0,
-      durationDisp: '',
-      durationInSeconds: 0
-    }
   }
 }

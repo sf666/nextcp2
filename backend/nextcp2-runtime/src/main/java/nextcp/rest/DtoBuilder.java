@@ -14,6 +14,7 @@ import org.fourthline.cling.support.contentdirectory.DIDLParser;
 import org.fourthline.cling.support.model.DIDLContent;
 import org.fourthline.cling.support.model.DIDLObject;
 import org.fourthline.cling.support.model.DIDLObject.Property;
+import org.fourthline.cling.support.model.DescMeta;
 import org.fourthline.cling.support.model.Res;
 import org.fourthline.cling.support.model.container.MusicAlbum;
 import org.fourthline.cling.support.model.item.AudioItem;
@@ -22,6 +23,7 @@ import org.fourthline.cling.support.model.item.MusicTrack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Node;
 
 import nextcp.domainmodel.device.BaseDevice;
 import nextcp.domainmodel.device.mediarenderer.MediaRendererDevice;
@@ -31,6 +33,7 @@ import nextcp.dto.AudioFormat;
 import nextcp.dto.ContainerDto;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.MediaServerDto;
+import nextcp.dto.MusicBrainzId;
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.UpnpAvTransportState;
 
@@ -195,6 +198,7 @@ public class DtoBuilder
     public MusicItemDto buildItemDto(Item item, String mediaServerUdn)
     {
         MusicItemDto itemDto = new MusicItemDto();
+        itemDto.musicBrainzId = new MusicBrainzId();
         itemDto.title = item.getTitle();
         itemDto.parentId = item.getParentID();
         itemDto.objectClass = item.getClazz().getValue();
@@ -202,6 +206,7 @@ public class DtoBuilder
         itemDto.refId = item.getRefID();
         itemDto.mediaServerUDN = mediaServerUdn;
 
+        itemDto.musicBrainzId = extractMediaPlayerMusicBrainzMetadata(item);
         if (item instanceof AudioItem)
         {
             addAudioItem((AudioItem) item, itemDto);
@@ -213,6 +218,45 @@ public class DtoBuilder
         }
 
         return itemDto;
+    }
+
+    private MusicBrainzId extractMediaPlayerMusicBrainzMetadata(Item item)
+    {
+        MusicBrainzId mb = new MusicBrainzId();
+        Optional<DescMeta> mpdDesc = item.getDescMetadata().stream().filter(n -> n.getType().equalsIgnoreCase("mpd-tags")).findFirst();
+        if (mpdDesc.isPresent())
+        {
+            Node metaChildNodes = ((Node) mpdDesc.get().getMetadata()).getFirstChild();
+            for (int i = 0; i < metaChildNodes.getChildNodes().getLength(); i++)
+            {
+                Node n = metaChildNodes.getChildNodes().item(i);
+                switch (n.getNodeName().toLowerCase())
+                {
+                    case "musicbrainzidalbumid":
+                        mb.AlbumId = n.getTextContent();
+                        break;
+                    case "musicbrainzidartistid":
+                        mb.ArtistId = n.getTextContent();
+                        break;
+                    case "musicbrainzidalbumartistid":
+                        mb.AlbumArtistId = n.getTextContent();
+                        break;
+                    case "musicbrainzidreleasetrackid":
+                        mb.ReleaseTrackId = n.getTextContent();
+                        break;
+                    case "musicbrainzidworkid":
+                        mb.WorkId = n.getTextContent();
+                        break;
+                    case "musicbrainzidtrackid":
+                        mb.TrackId = n.getTextContent();
+                        break;
+                    default:
+                        log.warn("unknown attribute : " + n.getNodeName());
+                        break;
+                }
+            }
+        }
+        return mb;
     }
 
     private void addAudioItem(AudioItem item, MusicItemDto itemDto)

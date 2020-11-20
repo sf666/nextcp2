@@ -25,12 +25,13 @@ public class MusicItemDto
     public AudioFormat audioFormat;
     public String albumArtUrl;
     public Integer rating;
+    public MusicBrainzId musicBrainzId;
 
     public MusicItemDto()
     {
     }
 
-    public MusicItemDto(String mediaServerUDN, String streamingURL, String objectID, String objectClass, String parentId, String refId, String currentTrackMetadata, String creator, String title, String artistName, String numberOfThisDisc, String originalTrackNumber, String album, String date, AudioFormat audioFormat, String albumArtUrl, Integer rating)
+    public MusicItemDto(String mediaServerUDN, String streamingURL, String objectID, String objectClass, String parentId, String refId, String currentTrackMetadata, String creator, String title, String artistName, String numberOfThisDisc, String originalTrackNumber, String album, String date, AudioFormat audioFormat, String albumArtUrl, Integer rating, MusicBrainzId musicBrainzId)
     {
         this.mediaServerUDN = mediaServerUDN;
         this.streamingURL = streamingURL;
@@ -49,6 +50,7 @@ public class MusicItemDto
         this.audioFormat = audioFormat;
         this.albumArtUrl = albumArtUrl;
         this.rating = rating;
+        this.musicBrainzId = musicBrainzId;
     }
     
     @Override
@@ -73,6 +75,7 @@ public class MusicItemDto
         sb.append("audioFormat=").append(this.audioFormat).append(", ");
         sb.append("albumArtUrl=").append(this.albumArtUrl).append(", ");
         sb.append("rating=").append(this.rating).append(", ");
+        sb.append("musicBrainzId=").append(this.musicBrainzId).append(", ");
         sb.append("]");
         return sb.toString();
     }

@@ -169,6 +169,16 @@ MusicItemDto:
    audioFormat: AudioFormat
    albumArtUrl: String
    rating: Integer
+   musicBrainzId: MusicBrainzId
+   
+MusicBrainzId:
+   AlbumId: String
+   ArtistId: String
+   ReleaseTrackId: String
+   AlbumArtistId: String
+   WorkId: String
+   TrackId: String
+
    
 RendererPlaylist:
    udn: String

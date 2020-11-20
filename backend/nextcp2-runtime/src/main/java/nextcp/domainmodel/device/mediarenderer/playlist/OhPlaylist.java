@@ -17,6 +17,7 @@ import org.w3c.dom.Node;
 import nextcp.domainmodel.device.mediarenderer.OpenHomeUtils;
 import nextcp.domainmodel.device.services.IPlaylistService;
 import nextcp.dto.ContainerItemDto;
+import nextcp.dto.MusicBrainzId;
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.PlaylistState;
 import nextcp.rest.DtoBuilder;
@@ -252,6 +253,7 @@ public class OhPlaylist implements IPlaylistService
     public MusicItemDto extractMusicItem(Node node)
     {
         MusicItemDto dto = new MusicItemDto();
+        dto.musicBrainzId = new MusicBrainzId();
         dto.objectID = extractValue("Id", node);
         dto.streamingURL = extractValue("Uri", node);
         dto.streamingURL = extractValue("Uri", node);

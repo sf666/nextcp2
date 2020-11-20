@@ -118,9 +118,8 @@ mat-slider {
 }
 
 img {
-    height          : calc(var(--footer-heihgt) - 2px);
-    width           : calc(var(--footer-heihgt) - 2px);
-    //    align-self: center;
+    height: calc(var(--footer-heihgt) - 2px);
+    width : calc(var(--footer-heihgt) - 2px);
 }
 
 .standbyOn {
@@ -144,8 +143,9 @@ img {
 
 .title {
     @extend .baseFontsize;
-    font-size: 1.2rem;
-    color    : var(--snow-white-3);
+    font-size    : 1.2rem;
+    color        : var(--snow-white-3);
+    margin-bottom: 4px;
 }
 
 .minWidth {
@@ -169,6 +169,7 @@ img {
     padding-bottom: 3px;
     padding-left  : 12px;
     padding-right : 12px;
+    padding-bottom: 4px;
 }
 
 .lower-row {
@@ -178,5 +179,6 @@ img {
 }
 
 .volume-bar {
-    border-top: 1px solid var(--glas-white);
+    border-top : 1px solid var(--glas-white);
+    line-height: 1.6rem;
 }
