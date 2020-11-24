@@ -19,12 +19,13 @@ public class Config
     public List<RadioStation> radioStation;
     public List<RendererDeviceConfiguration> rendererDevices;
     public RatingSupport ratingSupport;
+    public MusicbrainzSupport musicbrainzSupport;
 
     public Config()
     {
     }
 
-    public Config(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, List<RendererDeviceConfiguration> rendererDevices, RatingSupport ratingSupport)
+    public Config(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, List<RendererDeviceConfiguration> rendererDevices, RatingSupport ratingSupport, MusicbrainzSupport musicbrainzSupport)
     {
         this.generateUpnpCode = generateUpnpCode;
         this.generateUpnpCodePath = generateUpnpCodePath;
@@ -37,6 +38,7 @@ public class Config
         this.radioStation = radioStation;
         this.rendererDevices = rendererDevices;
         this.ratingSupport = ratingSupport;
+        this.musicbrainzSupport = musicbrainzSupport;
     }
     
     @Override
@@ -55,6 +57,7 @@ public class Config
         sb.append("radioStation=").append(this.radioStation).append(", ");
         sb.append("rendererDevices=").append(this.rendererDevices).append(", ");
         sb.append("ratingSupport=").append(this.ratingSupport).append(", ");
+        sb.append("musicbrainzSupport=").append(this.musicbrainzSupport).append(", ");
         sb.append("]");
         return sb.toString();
     }

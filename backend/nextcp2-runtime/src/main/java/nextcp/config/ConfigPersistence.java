@@ -20,8 +20,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import nextcp.dto.Config;
+import nextcp.dto.MusicbrainzSupport;
 import nextcp.dto.RatingSupport;
 import nextcp.dto.RendererDeviceConfiguration;
+import nextcp.musicbrainz.MusicBrainzConfig;
 import nextcp.rating.RatingConfig;
 import nextcp.util.FileOpsNio;
 
@@ -61,10 +63,18 @@ public class ConfigPersistence
     }
 
     @Bean
+    public MusicBrainzConfig musicBraintConfig()
+    {
+        MusicBrainzConfig mb = new MusicBrainzConfig();
+        mb.username = config.musicbrainzSupport.username;
+        mb.password = config.musicbrainzSupport.password;
+        return mb;
+    }
+
+    @Bean
     public RatingConfig ratingConfigProducer()
     {
         RatingConfig rc = new RatingConfig();
-
         rc.databaseFilename = config.ratingSupport.databaseFilename;
         rc.musicDirectory = config.ratingSupport.musicRootPath;
         rc.supportedFileTypes = config.ratingSupport.supportedFileTypes;
@@ -230,6 +240,7 @@ public class ConfigPersistence
         c.ratingSupport.databaseFilename = FilenameUtils.concat(systemConfig.getString("user.dir"), "rating_db");
         c.ratingSupport.musicRootPath = "";
         c.ratingSupport.supportedFileTypes = "flac";
+        c.musicbrainzSupport = new MusicbrainzSupport("", "");
         return c;
     }
 

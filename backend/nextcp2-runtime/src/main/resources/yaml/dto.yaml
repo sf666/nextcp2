@@ -22,6 +22,11 @@ Config:
    radioStation: List<RadioStation>
    rendererDevices: List<RendererDeviceConfiguration>
    ratingSupport: RatingSupport
+   musicbrainzSupport: MusicbrainzSupport
+
+MusicbrainzSupport:
+    username: String
+    password: String    
    
 RatingSupport:
    musicRootPath: String

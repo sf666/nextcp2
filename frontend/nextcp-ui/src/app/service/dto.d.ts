@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2020-11-20 14:39:55.
+// Generated using typescript-generator version 2.0.400 on 2020-11-23 14:57:33.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -28,6 +28,7 @@ export interface Config {
     radioStation: RadioStation[];
     rendererDevices: RendererDeviceConfiguration[];
     ratingSupport: RatingSupport;
+    musicbrainzSupport: MusicbrainzSupport;
 }
 
 export interface ContainerDto {
@@ -137,6 +138,12 @@ export interface MusicItemDto {
     albumArtUrl: string;
     rating: number;
     musicBrainzId: MusicBrainzId;
+}
+
+export interface MusicbrainzSupport {
+    host: string;
+    username: string;
+    password: string;
 }
 
 export interface PlayOpenHomeRadioDto {

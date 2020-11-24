@@ -76,6 +76,7 @@ git clone https://github.com/sf666/lemma.git
 git clone https://github.com/sf666/seamless.git
 git clone https://github.com/sf666/cling.git
 git clone https://bitbucket.org/ijabz/jaudiotagger.git
+git clone https://github.com/sf666/musicbrainz.git
 ```
 
 ## build instructions

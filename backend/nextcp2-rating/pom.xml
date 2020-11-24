@@ -13,10 +13,18 @@
 
 
 	<dependencies>
+
+		<!-- Spring REST Services & Annotations -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>	
+		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 		</dependency>
+
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -37,12 +45,5 @@
 			<groupId>net.jthink</groupId>
 			<artifactId>jaudiotagger</artifactId>
 		</dependency>
-
-		<!-- Spring REST Services -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-		</dependency>
-
 	</dependencies>
 </project>
