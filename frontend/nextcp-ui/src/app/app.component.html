@@ -1,9 +1,10 @@
+<router-outlet></router-outlet>
+
 <div class="app-root">
+  
   <div *ngIf="showBlur()" class="bg-img" id="main-screen">
   </div>
   
-  <div class="bg-img-footer" id="footer-background">
-  </div>
   
   
   <nav-bar></nav-bar>
@@ -13,7 +14,9 @@
   <div id="mainContent" class="mainContent">
     <router-outlet></router-outlet>
   </div>
-  
-  
+
   <renderer-footer></renderer-footer>  
+  <div class="bg-img-footer" id="footer-background">
+  </div>
+
 </div>

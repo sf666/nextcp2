@@ -51,6 +51,7 @@ import { SearchResultItemMultiComponent } from './view/search/search-result-item
 import { SearchResultItemSingleComponent } from './view/search/search-result-item-single/search-result-item-single.component';
 import { InputOutputSourceComponent } from './view/input-output-source/input-output-source.component';
 import { DomChangedDirective } from './directive/watch-dom-tree.directive';
+import { StarRatingComponent } from './view/star-rating/star-rating.component';
 
 
 @NgModule({
@@ -80,6 +81,7 @@ import { DomChangedDirective } from './directive/watch-dom-tree.directive';
       InputOutputSourceComponent,
       DomChangedDirective,
       MinimTagComponent,
+      StarRatingComponent,
 
    ],
    imports: [

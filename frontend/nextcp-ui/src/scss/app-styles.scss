@@ -254,6 +254,10 @@ img {
     }
 }
 
+button:focus {
+    outline: none;    
+}
+
 .my-buttons {
     height     : 2.1rem;
     color      : var(--glas-white-3);

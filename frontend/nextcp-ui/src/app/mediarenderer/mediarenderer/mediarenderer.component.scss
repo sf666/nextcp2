@@ -1,0 +1,30 @@
+img {
+//    object-fit: cover;
+    width     : 500px;
+    //height    : 500px;
+}
+
+
+.baseFontsize {
+    font-size  : 1.2rem;
+    font-weight: 300;
+}
+
+.regularText {
+    @extend .baseFontsize;
+    color                : rgba(229, 238, 255, .3);
+    font-feature-settings: "tnum";
+}
+
+.highlightText {
+    @extend .baseFontsize;
+    color                : var(--glas-white);
+    font-feature-settings: "tnum";
+}
+
+.title {
+    @extend .baseFontsize;
+    font-size    : 1.4rem;
+    color        : var(--snow-white-3);
+    margin-bottom: 4px;
+}

@@ -1,3 +1,6 @@
+import { MusicItemDto } from './../../service/dto.d';
+import { BackgroundImageService } from './../../util/background-image.service';
+import { SseService } from './../../service/sse/sse.service';
 import { MatSliderChange } from '@angular/material/slider';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
@@ -15,64 +18,41 @@ export class MediarendererComponent {
   private _mediaRendererUdn: string;
 
   constructor(
-    public deviceService: DeviceService, 
+    sseService: SseService,
+    private deviceService: DeviceService,
+    private backgroundImageService: BackgroundImageService,
     public rendererService: RendererService) {
-      deviceService.mediaRendererChanged$.subscribe(data => this._mediaRendererUdn = data.udn);
-      deviceService.mediaServerChanged$.subscribe(data => this._mediaServerUdn = data.udn);
+
   }
 
-  hasDeviceDriver(): boolean {
-    return (this.rendererService.deviceDriverState?.rendererUDN?.length > 0);
-  }
-
-  public getStandbyClass() {
-    if (this.rendererService.deviceDriverState.standby) {
-      return "standbyOn";
+  public getCurrentSongTitle(): string {
+    if (this.rendererService.trackInfoAvailable) {
+      return this.rendererService.trackInfo?.currentTrack?.title;
     }
     else {
-      return "standbyOff";
+      return "no track info available";
     }
   }
 
-  powerClicked() {
-    this.rendererService.powerPressed();
+  public getCurrentTrack(): MusicItemDto {
+    if (this.rendererService.trackInfoAvailable) {
+      return this.rendererService.trackInfo?.currentTrack;
+    }
   }
 
-  volChanged(event: MatSliderChange) {
-    this.rendererService.setVolume(event.value);
+  streaming() {
+    let streaming: boolean;
+    streaming = this.rendererService?.trackTime?.streaming;
+    return streaming;
   }
 
-  /**
-   * Getter mediaServerUdn
-   * @return {string}
-   */
-  public get mediaServerUdn(): string {
-    return this._mediaServerUdn;
-  }
-
-  /**
-   * Getter mediaRendererUdn
-   * @return {string}
-   */
-  public get mediaRendererUdn(): string {
-    return this._mediaRendererUdn;
-  }
-
-  /**
-   * Setter mediaServerUdn
-   * @param {string} value
-   */
-  public set mediaServerUdn(value: string) {
-    this._mediaServerUdn = value;
-    this.deviceService.setMediaServerByUdn(value);
-  }
-
-  /**
-   * Setter mediaRendererUdn
-   * @param {string} value
-   */
-  public set mediaRendererUdn(value: string) {
-    this._mediaRendererUdn = value;
-    this.deviceService.setMediaRendererByUdn(value);
+  public getImgSrc(): string {
+    if (this.rendererService.trackInfo?.currentTrack?.albumArtUrl) {
+      this.backgroundImageService.setBackgroundImageMainScreen(this.rendererService.trackInfo?.currentTrack?.albumArtUrl);
+      return this.rendererService.trackInfo?.currentTrack?.albumArtUrl;
+    }
+    else {
+      return "";
+    }
   }
 }

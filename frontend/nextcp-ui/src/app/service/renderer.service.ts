@@ -86,6 +86,10 @@ export class RendererService {
     }
   }
 
+  public get trackInfoAvailable(): boolean {
+    return this.trackInfo?.currentTrack?.title?.length > 0;
+  }
+
   //
   // Renderer actions
   // ================================================================================================================

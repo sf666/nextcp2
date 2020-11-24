@@ -70,12 +70,9 @@ export class FooterComponent {
       return "";
     }
   }
-
-  public get trackInfoAvailable(): boolean {
-    return this.rendererService.trackInfo?.currentTrack?.title?.length > 0;
-  }
+  
   public getCurrentSongTitle(): string {
-    if (this.trackInfoAvailable) {
+    if (this.rendererService.trackInfoAvailable) {
       return this.rendererService.trackInfo?.currentTrack?.title;
     }
     else {
