@@ -13,20 +13,20 @@ import org.springframework.test.context.ContextConfiguration;
 @Configuration
 @ContextConfiguration(classes = SpringTestConfiguration.class)
 @ComponentScan(
-{ "nextcp"})
+{ "nextcp" })
 public class TestMusicBrainz
 {
     @Autowired
     private MusicBrainzService musicBrainzService = null;
-    
+
     @Test
     public void testDbScripts() throws Exception
     {
-        
-        
+
         // Test Track ID : 8ee8158a-060c-4225-9258-b6d2206549ca
         String trackId = "8ee8158a-060c-4225-9258-b6d2206549ca";
         musicBrainzService.setRating(trackId, 5);
         assertEquals(5, musicBrainzService.getRating(trackId));
     }
+    
 }

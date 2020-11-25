@@ -28,7 +28,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.coles</groupId>
+			<groupId>de.sf666</groupId>
 			<artifactId>musicbrainz</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>

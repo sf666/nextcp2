@@ -13,7 +13,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +28,7 @@ import nextcp.musicbrainz.MusicBrainzConfig;
 import nextcp.rating.RatingConfig;
 import nextcp.util.FileOpsNio;
 
-@Controller
+@Service
 public class ConfigPersistence
 {
     private static final Logger log = LoggerFactory.getLogger(ConfigPersistence.class.getName());
