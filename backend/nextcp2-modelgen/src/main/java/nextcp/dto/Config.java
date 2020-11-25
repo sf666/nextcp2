@@ -18,14 +18,15 @@ public class Config
     public List<UiClientConfig> clientConfig;
     public List<RadioStation> radioStation;
     public List<RendererDeviceConfiguration> rendererDevices;
-    public RatingSupport ratingSupport;
+    public LocalIndexSupport localIndexerSupport;
     public MusicbrainzSupport musicbrainzSupport;
+    public RatingStrategy ratingStrategy;
 
     public Config()
     {
     }
 
-    public Config(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, List<RendererDeviceConfiguration> rendererDevices, RatingSupport ratingSupport, MusicbrainzSupport musicbrainzSupport)
+    public Config(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, List<RendererDeviceConfiguration> rendererDevices, LocalIndexSupport localIndexerSupport, MusicbrainzSupport musicbrainzSupport, RatingStrategy ratingStrategy)
     {
         this.generateUpnpCode = generateUpnpCode;
         this.generateUpnpCodePath = generateUpnpCodePath;
@@ -37,8 +38,9 @@ public class Config
         this.clientConfig = clientConfig;
         this.radioStation = radioStation;
         this.rendererDevices = rendererDevices;
-        this.ratingSupport = ratingSupport;
+        this.localIndexerSupport = localIndexerSupport;
         this.musicbrainzSupport = musicbrainzSupport;
+        this.ratingStrategy = ratingStrategy;
     }
     
     @Override
@@ -56,8 +58,9 @@ public class Config
         sb.append("clientConfig=").append(this.clientConfig).append(", ");
         sb.append("radioStation=").append(this.radioStation).append(", ");
         sb.append("rendererDevices=").append(this.rendererDevices).append(", ");
-        sb.append("ratingSupport=").append(this.ratingSupport).append(", ");
+        sb.append("localIndexerSupport=").append(this.localIndexerSupport).append(", ");
         sb.append("musicbrainzSupport=").append(this.musicbrainzSupport).append(", ");
+        sb.append("ratingStrategy=").append(this.ratingStrategy).append(", ");
         sb.append("]");
         return sb.toString();
     }

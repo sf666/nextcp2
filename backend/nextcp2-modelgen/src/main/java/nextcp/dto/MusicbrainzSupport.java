@@ -8,6 +8,7 @@ import java.util.List;
 public class MusicbrainzSupport
 {
 
+    public Boolean isActive;
     public String username;
     public String password;
 
@@ -15,8 +16,9 @@ public class MusicbrainzSupport
     {
     }
 
-    public MusicbrainzSupport(String username, String password)
+    public MusicbrainzSupport(Boolean isActive, String username, String password)
     {
+        this.isActive = isActive;
         this.username = username;
         this.password = password;
     }
@@ -26,6 +28,7 @@ public class MusicbrainzSupport
     {
         StringBuilder sb = new StringBuilder();
         sb.append("MusicbrainzSupport [");
+        sb.append("isActive=").append(this.isActive).append(", ");
         sb.append("username=").append(this.username).append(", ");
         sb.append("password=").append(this.password).append(", ");
         sb.append("]");

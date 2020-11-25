@@ -43,7 +43,7 @@ public class TestDb
     private RepositoryAdminService repositoryAdminService = null;
 
     @Autowired
-    private RatingService ratingService = null;
+    private LocalRatingService ratingService = null;
 
     @Test
     public void testDbScripts() throws IOException

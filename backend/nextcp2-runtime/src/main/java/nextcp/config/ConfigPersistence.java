@@ -20,8 +20,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import nextcp.dto.Config;
+import nextcp.dto.LocalIndexSupport;
 import nextcp.dto.MusicbrainzSupport;
-import nextcp.dto.RatingSupport;
+import nextcp.dto.RatingStrategy;
 import nextcp.dto.RendererDeviceConfiguration;
 import nextcp.musicbrainz.MusicBrainzConfig;
 import nextcp.rating.RatingConfig;
@@ -60,6 +61,7 @@ public class ConfigPersistence
     {
         findConfig();
         readConfig();
+        writeConfig();
     }
 
     @Bean
@@ -75,9 +77,10 @@ public class ConfigPersistence
     public RatingConfig ratingConfigProducer()
     {
         RatingConfig rc = new RatingConfig();
-        rc.databaseFilename = config.ratingSupport.databaseFilename;
-        rc.musicDirectory = config.ratingSupport.musicRootPath;
-        rc.supportedFileTypes = config.ratingSupport.supportedFileTypes;
+        rc.isActive = config.localIndexerSupport.isActive;
+        rc.databaseFilename = config.localIndexerSupport.databaseFilename;
+        rc.musicDirectory = config.localIndexerSupport.musicRootPath;
+        rc.supportedFileTypes = config.localIndexerSupport.supportedFileTypes;
         return rc;
     }
 
@@ -195,9 +198,17 @@ public class ConfigPersistence
         {
             config.rendererDevices = new ArrayList<>();
         }
-        if (config.ratingSupport == null)
+        if (config.localIndexerSupport == null)
         {
-            config.ratingSupport = new RatingSupport();
+            config.localIndexerSupport = new LocalIndexSupport();
+        }
+        if (config.musicbrainzSupport == null)
+        {
+            config.musicbrainzSupport = new MusicbrainzSupport(false, "", "");
+        }
+        if (config.ratingStrategy == null)
+        {
+            config.ratingStrategy = new RatingStrategy(true, true, true, "NONE");
         }
     }
 
@@ -236,11 +247,13 @@ public class ConfigPersistence
         createDefaultLog(c.log4jConfigFile);
         c.loggingDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
         c.rendererDevices = new ArrayList<RendererDeviceConfiguration>();
-        c.ratingSupport = new RatingSupport();
-        c.ratingSupport.databaseFilename = FilenameUtils.concat(systemConfig.getString("user.dir"), "rating_db");
-        c.ratingSupport.musicRootPath = "";
-        c.ratingSupport.supportedFileTypes = "flac";
-        c.musicbrainzSupport = new MusicbrainzSupport("", "");
+        c.localIndexerSupport = new LocalIndexSupport();
+        c.localIndexerSupport.isActive = true;
+        c.localIndexerSupport.databaseFilename = FilenameUtils.concat(systemConfig.getString("user.dir"), "rating_db");
+        c.localIndexerSupport.musicRootPath = "";
+        c.localIndexerSupport.supportedFileTypes = "flac,mp3";
+        c.musicbrainzSupport = new MusicbrainzSupport(false, "", "");
+        c.ratingStrategy = new RatingStrategy(true, true, true, "FILE");
         return c;
     }
 

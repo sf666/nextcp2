@@ -5,19 +5,21 @@ import java.util.List;
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
  */
-public class RatingSupport
+public class LocalIndexSupport
 {
 
+    public Boolean isActive;
     public String musicRootPath;
     public String databaseFilename;
     public String supportedFileTypes;
 
-    public RatingSupport()
+    public LocalIndexSupport()
     {
     }
 
-    public RatingSupport(String musicRootPath, String databaseFilename, String supportedFileTypes)
+    public LocalIndexSupport(Boolean isActive, String musicRootPath, String databaseFilename, String supportedFileTypes)
     {
+        this.isActive = isActive;
         this.musicRootPath = musicRootPath;
         this.databaseFilename = databaseFilename;
         this.supportedFileTypes = supportedFileTypes;
@@ -27,7 +29,8 @@ public class RatingSupport
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("RatingSupport [");
+        sb.append("LocalIndexSupport [");
+        sb.append("isActive=").append(this.isActive).append(", ");
         sb.append("musicRootPath=").append(this.musicRootPath).append(", ");
         sb.append("databaseFilename=").append(this.databaseFilename).append(", ");
         sb.append("supportedFileTypes=").append(this.supportedFileTypes).append(", ");

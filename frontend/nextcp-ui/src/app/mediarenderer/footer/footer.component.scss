@@ -162,14 +162,20 @@ img {
 }
 
 .renderer-label {
-    text-align    : center;
-    font-size     : 0.8rem;
-    font-weight   : 300;
-    color         : var(--glas-white-3);
-    padding-bottom: 3px;
-    padding-left  : 12px;
-    padding-right : 12px;
-    padding-bottom: 4px;
+    align-self : center;
+    text-align : center;
+    font-size  : 1rem;
+    font-weight: 400;
+    color      : var(--glas-white-3);
+    align-self : flex-start;
+    color    : var(--primary-color-reduced);
+}
+
+.renderer-icon {
+    font-size: 1.2rem;
+    width    : 2rem;
+    height   : 1.3rem;
+    color    : var(--primary-color-reduced);
 }
 
 .lower-row {
@@ -179,6 +185,5 @@ img {
 }
 
 .volume-bar {
-    border-top : 1px solid var(--glas-white);
     line-height: 1.6rem;
 }

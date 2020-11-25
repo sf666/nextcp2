@@ -43,7 +43,7 @@
 		<module>nextcp2-modelgen</module>
 		<module>nextcp2-device-driver</module>
 		<module>nextcp2-assembly</module>
-		<module>nextcp2-rating</module>
+		<module>nextcp2-indexer</module>
 	</modules>
 
 	<build>
@@ -126,7 +126,7 @@
 			<!-- local modules -->
 			<dependency>
 				<groupId>de.sf666</groupId>
-				<artifactId>nextcp2-rating</artifactId>
+				<artifactId>nextcp2-indexer</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 

@@ -80,6 +80,10 @@ export class FooterComponent {
     }
   }
 
+  openAvailableMediaRendererDialog(event: any) {
+    
+  }
+
   //
   // Footer right : device audio and power control
   //

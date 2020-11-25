@@ -9,8 +9,8 @@
         <relativePath>../pom.xml</relativePath>		
 	</parent>
 
-	<artifactId>nextcp2-rating</artifactId>
-
+	<artifactId>nextcp2-indexer</artifactId>
+	<description>nextCP/2 local file indexer module</description>
 
 	<dependencies>
 

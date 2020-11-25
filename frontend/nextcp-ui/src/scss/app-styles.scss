@@ -2,12 +2,13 @@
 @import "app-variables";
 
 :root {
-    --snow-white   : rgb(255, 255, 250);
-    --glas-white   : rgba(255, 255, 255, 0.5);
-    --glas-white-3 : rgba(255, 255, 255, 0.7);
-    --glas-white-8 : rgba(255, 255, 255, 0.2);
-    --primary-color: rgb(0, 255, 255);
-    --grey-5       : rgb(76 78 84);
+    --snow-white           : rgb(255, 255, 250);
+    --glas-white           : rgba(255, 255, 255, 0.5);
+    --glas-white-3         : rgba(255, 255, 255, 0.7);
+    --glas-white-8         : rgba(255, 255, 255, 0.2);
+    --primary-color        : rgb(0, 255, 255);
+    --primary-color-reduced: rgba(0, 255, 255, 0.5);
+    --grey-5               : rgb(76 78 84);
 
     --bg-grey-2: rgba(229, 238, 255, .8);
     --bg-grey-4: rgba(229, 238, 255, .6);
@@ -255,7 +256,7 @@ img {
 }
 
 button:focus {
-    outline: none;    
+    outline: none;
 }
 
 .my-buttons {

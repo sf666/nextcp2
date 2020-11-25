@@ -16,7 +16,7 @@ import org.jaudiotagger.tag.TagException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import nextcp.rating.domain.SongRating;
 import nextcp.rating.repository.RepositoryAdminService;
@@ -25,10 +25,10 @@ import nextcp.rating.repository.SongPersistenceService;
 /**
  * Main Rating-Service class for interaction.
  */
-@Component
-public class RatingService
+@Service
+public class LocalRatingService
 {
-    private static final Logger log = LoggerFactory.getLogger(RatingService.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(LocalRatingService.class.getName());
 
     @Autowired
     private SongPersistenceService songPersistenceService = null;

@@ -1,7 +1,4 @@
-#
-# device driver DTO
-#
-
+# DeviceDriverCapability
 DeviceDriverCapability:
     deviceType: String
     deviceDescription: String
@@ -21,14 +18,23 @@ Config:
    clientConfig: List<UiClientConfig>
    radioStation: List<RadioStation>
    rendererDevices: List<RendererDeviceConfiguration>
-   ratingSupport: RatingSupport
+   localIndexerSupport: LocalIndexSupport
    musicbrainzSupport: MusicbrainzSupport
+   ratingStrategy: RatingStrategy
+   
+RatingStrategy:
+   updateMusicBrainzRating : Boolean
+   updateLocalFileRating: Boolean
+   syncRatings: Boolean
+   collisionStrategy: String
 
 MusicbrainzSupport:
+    isActive: Boolean
     username: String
-    password: String    
+    password: String
    
-RatingSupport:
+LocalIndexSupport:
+   isActive: Boolean
    musicRootPath: String
    databaseFilename: String
    supportedFileTypes: String
