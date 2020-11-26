@@ -1,3 +1,4 @@
+import { GenericResultService } from './../../service/generic-result.service';
 import { DeviceService } from './../../service/device.service';
 import { SseService } from './../../service/sse/sse.service';
 import { RendererService } from './../../service/renderer.service';
@@ -15,10 +16,11 @@ export class StarRatingComponent implements OnInit {
   @Input() currentSong: MusicItemDto;
 
 
-  private lastUpdateId : number;
+  private lastUpdateId: number;
   starsAvail: number[];
 
   constructor(
+    private genericResultService: GenericResultService,
     private ratingServiceService: RatingServiceService,
     private deviceService: DeviceService,
     private sseService: SseService) {
@@ -29,8 +31,16 @@ export class StarRatingComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  isVisible() : boolean {
+    return this.currentSong?.musicBrainzId?.TrackId?.length > 0;
+  }
+
   starSelected(num: number) {
-    this.ratingServiceService.setStarRatingByMusicBrainzID(this.currentSong.musicBrainzId.TrackId, num);
+    if (this.currentSong.musicBrainzId.TrackId) {
+      this.ratingServiceService.setStarRatingByMusicBrainzID(this.currentSong.musicBrainzId.TrackId, num);
+    } else {
+      this.genericResultService.displayErrorMessage("current track has no identifier.", "add star rating");
+    }
   }
 
   getClass(num: number) {

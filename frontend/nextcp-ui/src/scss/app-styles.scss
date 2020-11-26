@@ -2,13 +2,21 @@
 @import "app-variables";
 
 :root {
-    --snow-white           : rgb(255, 255, 250);
-    --glas-white           : rgba(255, 255, 255, 0.5);
-    --glas-white-3         : rgba(255, 255, 255, 0.7);
-    --glas-white-8         : rgba(255, 255, 255, 0.2);
-    --primary-color        : rgb(0, 255, 255);
-    --primary-color-reduced: rgba(0, 255, 255, 0.5);
-    --grey-5               : rgb(76 78 84);
+    --snow-white             : rgb(255, 255, 250);
+    --glas-white             : rgba(255, 255, 255, 0.5);
+    --glas-white-3           : rgba(255, 255, 255, 0.7);
+    --glas-white-8           : rgba(255, 255, 255, 0.2);
+    --primary-color          : rgb(0, 255, 255);
+    --primary-color-reduced  : rgba(0, 255, 255, 0.5);
+    --primary-color-reduced-2: rgba(0, 255, 255, 0.2);
+
+    --color-orange-reduced-3: rgba(255, 184, 28, 0.7);
+    --color-orange-reduced-5: rgba(255, 184, 28, 0.5);
+    --color-orange-reduced-7: rgba(255, 184, 28, 0.3);
+
+    --color-transparent: rgba(0, 0, 0, 0);
+
+    --grey-5: rgb(76 78 84);
 
     --bg-grey-2: rgba(229, 238, 255, .8);
     --bg-grey-4: rgba(229, 238, 255, .6);
@@ -33,6 +41,10 @@
 
 // overwrite material design ... 
 
+.trans-color {
+    color: var(--color-transparent);
+}
+
 .no-wrap {
     white-space  : nowrap;
     overflow     : hidden;
@@ -46,7 +58,9 @@
     min-height: 0;
 }
 
-
+.middle-spacer {
+    flex: 1 1 auto;
+}
 
 // Section 
 .section {
@@ -76,6 +90,16 @@
         margin-bottom: 0.8rem;
 
         border-bottom: 1px solid $border-primary;
+    }
+
+    &.subhead {
+        font-size: 1.1rem;
+
+        padding-top   : 0.8rem;
+        padding-bottom: 0.2rem;
+        padding-left  : $paddingLeftColumn + 1rem;
+
+        margin-bottom: 0.8rem;
     }
 
     &.label {

@@ -68,6 +68,14 @@ public class RatingService
         return numUpdated;
     }
 
+    
+    public int syncRatingsFromAudioFile()
+    {
+        int num = userRatingPersistenceService.syncRating();
+        this.publisher.publishEvent(new ToastrMessage("", "info", "Import from audiofile", num + " entries were imported"));
+        return num;
+    }
+    
     private void updateMusicBrainzBackend(String musicBrainzID, Integer rating)
     {
         try

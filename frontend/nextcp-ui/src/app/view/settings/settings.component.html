@@ -55,7 +55,7 @@
 
 <div>
     <div class="d-flex flex-row flex-wrap ml-4">
-        <div *ngFor="let rendererConfig of configService.getRendererDevicesConfig()">
+        <div class="cardContainer" *ngFor="let rendererConfig of configService.getRendererDevicesConfig()">
             <mat-card class="card-width mr-4 mb-3">
                 <mat-card-header>
                     <mat-card-title>{{rendererConfig.mediaRenderer.friendlyName}}</mat-card-title>
@@ -92,14 +92,22 @@
                             </mat-form-field>
                         </div>
                     </div>
+                    <div class="middle-spacer">&nbsp;</div>
+                    <div class="d-flex">
+                        <button mat-flat-button class="ml-2" color="primary" (click)="saveRendererConfig(rendererConfig)">Save</button>
+                        <button mat-flat-button class="ml-2" color="warn" (click)="deleteRendererConfig(rendererConfig)">Delete</button>    
+                    </div>
                 </mat-card-content>
-                <mat-card-actions>
-                    <button mat-flat-button class="ml-2" color="primary" (click)="saveRendererConfig(rendererConfig)">Save</button>
-                    <button mat-flat-button class="ml-2" color="warn" (click)="deleteRendererConfig(rendererConfig)">Delete</button>
-                </mat-card-actions>
             </mat-card>
         </div>
     </div>
     <!-- -->
     <div class="section head">Adminisration</div>
+    <div class="section subhead">Rating Support</div>
+    <div class="d-flex section subhead">
+        <button mat-flat-button class="ml-2 settings" (click)="ratingServiceService.syncRatingFromAudioFile()">import rating from audio file</button>
+        <!-- 
+            <button mat-flat-button class="ml-2 settings" (click)="importRatingFromMusicBrainz()">import rating from musicbrainz.org</button>
+        -->
+    </div>
 </div>

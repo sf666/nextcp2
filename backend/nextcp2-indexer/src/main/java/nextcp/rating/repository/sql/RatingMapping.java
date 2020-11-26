@@ -56,4 +56,10 @@ public interface RatingMapping
 
     @Select("SELECT RATING FROM USER_RATING where MUSICBRAINZID = '${musicBrainzID}'")
     Integer selectUserRatingByMusicBrainzId(String musicBrainzID);
+    
+    //
+    // Copy file ratings to user rating
+    //
+    @Update("MERGE INTO USER_RATING(MUSICBRAINZID, RATING) KEY (MUSICBRAINZID) SELECT MUSICBRAINZID, RATING FROM Song_Rating")
+    void syncUserRatingByMusicBrainzId();
 }

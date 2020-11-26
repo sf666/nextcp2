@@ -1,3 +1,4 @@
+import { RatingServiceService } from './../../service/rating-service.service';
 import { UiClientConfig, MediaServerDto, RendererDeviceConfiguration } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
 import { Component } from '@angular/core';
@@ -9,7 +10,9 @@ import { Component } from '@angular/core';
 })
 export class SettingsComponent {
 
-  constructor(public configService: ConfigurationService) { }
+  constructor(
+    public ratingServiceService: RatingServiceService,
+    public configService: ConfigurationService) { }
 
   mediaRendererChanged(event) {
     this.configService.clientConfig.defaultMediaRenderer = event;
@@ -38,4 +41,5 @@ export class SettingsComponent {
   restart() {
     this.configService.restart();
   }
+
 }

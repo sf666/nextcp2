@@ -1,6 +1,7 @@
 <div class="d-flex">
-    <div class="ml-4 mt-4">
+    <div class="ml-4 mt-4 d-flex flex-column">
         <img *ngIf="rendererService.trackInfoAvailable" src="{{getImgSrc()}}">
+        <star-rating [currentSong]="getCurrentTrack()"></star-rating>
     </div>
     <div class="d-flex flex-column ml-5 mt-5">
         <div class="d-flex flex-column minWidth">
@@ -19,32 +20,32 @@
                 </div>
             </div>
         </div>
-        <star-rating [currentSong]="getCurrentTrack()"></star-rating>
 
-        <div class="mt-6">&nbsp;</div>
-        <div class="d-flex">
-            <div>Album Artist ID</div>
-            <div>{{rendererService.trackInfo?.currentTrack?.musicBrainzId.AlbumArtistId}}</div>
-        </div>
-        <div class="d-flex">
-            <div>Album ID</div>
-            <div>{{rendererService.trackInfo?.currentTrack?.musicBrainzId.AlbumId}}</div>
-        </div>
-        <div class="d-flex">
-            <div>Artist ID</div>
-            <div>{{rendererService.trackInfo?.currentTrack?.musicBrainzId.ArtistId}}</div>
-        </div>
-        <div class="d-flex">
-            <div>Release Track ID</div>
-            <div>{{rendererService.trackInfo?.currentTrack?.musicBrainzId.ReleaseTrackId}}</div>
-        </div>
-        <div class="d-flex">
-            <div>Track ID</div>
-            <div>{{rendererService.trackInfo?.currentTrack?.musicBrainzId.TrackId}}</div>
-        </div>
-        <div class="d-flex">
-            <div>Work ID</div>
-            <div>{{rendererService.trackInfo?.currentTrack?.musicBrainzId.WorkId}}</div>
+        <div class="mt-6 trans-color">&nbsp;
+            <div class="d-flex">
+                <div>Album Artist ID</div>
+                <div>{{rendererService.trackInfo?.currentTrack?.musicBrainzId.AlbumArtistId}}</div>
+            </div>
+            <div class="d-flex">
+                <div>Album ID</div>
+                <div>{{rendererService.trackInfo?.currentTrack?.musicBrainzId.AlbumId}}</div>
+            </div>
+            <div class="d-flex">
+                <div>Artist ID</div>
+                <div>{{rendererService.trackInfo?.currentTrack?.musicBrainzId.ArtistId}}</div>
+            </div>
+            <div class="d-flex">
+                <div>Release Track ID</div>
+                <div>{{rendererService.trackInfo?.currentTrack?.musicBrainzId.ReleaseTrackId}}</div>
+            </div>
+            <div class="d-flex">
+                <div>Track ID</div>
+                <div>{{rendererService.trackInfo?.currentTrack?.musicBrainzId.TrackId}}</div>
+            </div>
+            <div class="d-flex">
+                <div>Work ID</div>
+                <div>{{rendererService.trackInfo?.currentTrack?.musicBrainzId.WorkId}}</div>
+            </div>    
         </div>
     </div>
 </div>

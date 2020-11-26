@@ -1,4 +1,4 @@
-<div class="d-flex">
+<div class="d-flex justify-content-center mt-3" *ngIf="isVisible()">
     <button mat-icon-button aria-label="" class="{{getClass(num)}}" *ngFor="let num of starsAvail" (click)="starSelected(num)">
         <mat-icon>star</mat-icon>
     </button>

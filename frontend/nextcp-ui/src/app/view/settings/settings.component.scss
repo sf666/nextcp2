@@ -9,3 +9,11 @@ input {
     max-width: 250px;
 }
 
+.cardContainer {
+    display: flex;
+    align-items: stretch;    
+}
+
+.settings {
+    background-color: var(--color-orange-reduced-3);
+}

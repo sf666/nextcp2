@@ -73,6 +73,14 @@ public class UserRatingPersistenceService
             return num;
         }
     }
+    
+    public int syncRating()
+    {
+        try (SqlSession session = sessionManager.getSessionFactory().openSession(true))
+        {
+            return session.update("nextcp.rating.repository.sql.RatingMapping.syncUserRatingByMusicBrainzId",null);
+        }
+    }
 
     private boolean allIdsEmpty(UserRating userRating)
     {

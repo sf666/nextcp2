@@ -24,4 +24,10 @@ export class RatingServiceService {
 
     return this.httpService.post<number>(this.baseUri, uri, musicBrainzID);
   }  
+
+  public syncRatingFromAudioFile() {
+    const uri = "/syncRatingFromAudioFile";
+
+    return this.httpService.get(this.baseUri, uri);
+  }  
 }

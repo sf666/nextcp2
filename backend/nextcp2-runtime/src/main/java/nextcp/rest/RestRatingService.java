@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,8 +19,7 @@ import nextcp.domainmodel.rating.RatingService;
 public class RestRatingService
 {
     private static final Logger log = LoggerFactory.getLogger(RestRatingService.class.getName());
-    
-    
+
     @Autowired
     private RatingService serviceDelegate = null;
 
@@ -42,4 +42,11 @@ public class RestRatingService
     {
         serviceDelegate.setRatingInStarsByMusicBrainzId(musicBrainzID, rating);
     }
+
+    @GetMapping("/syncRatingFromAudioFile")
+    public void syncRatingFromAudioFile()
+    {
+        serviceDelegate.syncRatingsFromAudioFile();
+    }
+
 }
