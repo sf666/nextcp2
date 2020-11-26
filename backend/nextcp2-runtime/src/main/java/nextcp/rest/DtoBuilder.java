@@ -22,6 +22,7 @@ import org.fourthline.cling.support.model.item.Item;
 import org.fourthline.cling.support.model.item.MusicTrack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Node;
 
@@ -29,6 +30,7 @@ import nextcp.domainmodel.device.BaseDevice;
 import nextcp.domainmodel.device.mediarenderer.MediaRendererDevice;
 import nextcp.domainmodel.device.mediarenderer.avtransport.AvTransportState;
 import nextcp.domainmodel.device.mediaserver.MediaServerDevice;
+import nextcp.domainmodel.rating.RatingService;
 import nextcp.dto.AudioFormat;
 import nextcp.dto.ContainerDto;
 import nextcp.dto.MediaRendererDto;
@@ -45,6 +47,9 @@ public class DtoBuilder
     public static final String ASSET_FOLDER = "assets";
 
     private SimpleDateFormat dispParse = new SimpleDateFormat("HH:mm:ss.SSS Z");
+
+    @Autowired
+    private RatingService ratingService = null;
 
     /**
      * Generates XML MEtadata
@@ -121,6 +126,7 @@ public class DtoBuilder
             }
             DIDLContent didlMeta = generateDidlContent(xml);
             MusicItemDto itemDto = buildItemDto(didlMeta.getItems().get(0), "");
+            updateRating(itemDto);
             return itemDto;
         }
         catch (Exception e)
@@ -129,6 +135,21 @@ public class DtoBuilder
         }
 
         return null;
+    }
+
+    private void updateRating(MusicItemDto itemDto)
+    {
+        try
+        {
+            if (!org.apache.commons.lang.StringUtils.isBlank(itemDto.musicBrainzId.TrackId))
+            {
+                itemDto.rating = ratingService.getRatingInStarsByMusicBrainzId(itemDto.musicBrainzId.TrackId);
+            }
+        }
+        catch (Exception e)
+        {
+            log.warn("cannot update rating ... ");
+        }
     }
 
     public MediaRendererDto buildMediaRendererDevice(MediaRendererDevice device)
@@ -216,7 +237,7 @@ public class DtoBuilder
         {
             addMusicTrack((MusicTrack) item, itemDto);
         }
-
+        updateRating(itemDto);
         return itemDto;
     }
 
@@ -346,17 +367,17 @@ public class DtoBuilder
             af.nrAudioChannels = res.getNrAudioChannels();
             af.sampleFrequency = res.getSampleFrequency();
             af.durationDisp = res.getDuration();
-            if (!StringUtils.isBlank(af.durationDisp))
+            try
             {
-                String s = normalizeDuration(res.getDuration());
-                try
+                if (!StringUtils.isBlank(af.durationDisp))
                 {
+                    String s = normalizeDuration(res.getDuration());
                     af.durationInSeconds = dispParse.parse(s).getTime() / 1000;
                 }
-                catch (ParseException e)
-                {
-                    log.warn("cannot parse duration : " + s);
-                }
+            }
+            catch (Exception e)
+            {
+                log.warn("cannot parse duration : " + e.getMessage());
             }
         }
         return af;
@@ -364,6 +385,11 @@ public class DtoBuilder
 
     private String normalizeDuration(String duration)
     {
+        if (StringUtils.isBlank(duration))
+        {
+            return "";
+        }
+        
         StringBuilder sb = new StringBuilder();
         if (StringUtils.countMatches(duration, ":") == 1)
         {

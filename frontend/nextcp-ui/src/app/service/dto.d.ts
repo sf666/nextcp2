@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2020-11-23 14:57:33.
+// Generated using typescript-generator version 2.0.400 on 2020-11-26 08:11:48.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -27,8 +27,9 @@ export interface Config {
     clientConfig: UiClientConfig[];
     radioStation: RadioStation[];
     rendererDevices: RendererDeviceConfiguration[];
-    ratingSupport: RatingSupport;
+    localIndexerSupport: LocalIndexSupport;
     musicbrainzSupport: MusicbrainzSupport;
+    ratingStrategy: RatingStrategy;
 }
 
 export interface ContainerDto {
@@ -90,6 +91,13 @@ export interface InputSourceDto {
     Visible: boolean;
 }
 
+export interface LocalIndexSupport {
+    isActive: boolean;
+    musicRootPath: string;
+    databaseFilename: string;
+    supportedFileTypes: string;
+}
+
 export interface MediaRendererDto {
     udn: string;
     friendlyName: string;
@@ -141,7 +149,7 @@ export interface MusicItemDto {
 }
 
 export interface MusicbrainzSupport {
-    host: string;
+    isActive: boolean;
     username: string;
     password: string;
 }
@@ -192,15 +200,6 @@ export interface QuickSearchResultDto {
     playlistItems: ContainerDto[];
 }
 
-export interface RadioState {
-    ChannelsMax: number;
-    Id: number;
-    Metadata: string;
-    ProtocolInfo: string;
-    TransportState: string;
-    Uri: string;
-}
-
 export interface RadioStation {
     id: number;
     stationName: string;
@@ -208,10 +207,11 @@ export interface RadioStation {
     artworkUrl: string;
 }
 
-export interface RatingSupport {
-    musicRootPath: string;
-    databaseFilename: string;
-    supportedFileTypes: string;
+export interface RatingStrategy {
+    updateMusicBrainzRating: boolean;
+    updateLocalFileRating: boolean;
+    syncRatings: boolean;
+    collisionStrategy: string;
 }
 
 export interface RendererDeviceConfiguration {
@@ -227,6 +227,13 @@ export interface RendererDeviceConfiguration {
 export interface RendererPlaylist {
     udn: string;
     musicItemDto: MusicItemDto[];
+}
+
+export interface ToastrMessage {
+    clientID: string;
+    type: string;
+    header: string;
+    body: string;
 }
 
 export interface TrackInfoDto {

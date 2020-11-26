@@ -46,9 +46,11 @@ public class SongPersistenceService
 
     public int updateSong(SongRating song)
     {
-        try (SqlSession session = sessionManager.getSessionFactory().openSession())
+        try (SqlSession session = sessionManager.getSessionFactory().openSession(true))
         {
-            return session.update("nextcp.rating.repository.sql.RatingMapping.updateRating", song);
+            int num = session.update("nextcp.rating.repository.sql.RatingMapping.updateRating", song);
+            session.commit(true);
+            return num;
         }
     }
 }

@@ -62,6 +62,7 @@ public class SessionManager
             log.warn("missong database filename.");
             return null;
         }
+        log.info("using database path : " + config.databaseFilename == null ? "UNSET" : config.databaseFilename);
         String dbUrl = String.format("jdbc:h2:%s", config.databaseFilename);
         PooledDataSource dataSource = new PooledDataSource("org.h2.Driver", dbUrl, "sa", "");
         return dataSource;

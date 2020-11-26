@@ -60,11 +60,6 @@ export class ContentDirectoryService {
     this.quickSearchPanelVisible = false;
   }
 
-  public browseChildren(objectID: string, sortCriteria: string, mediaServerUdn: string): void {
-    this.updateBrowsePath(objectID);
-    this.browseChildrenByRequest(this.createBrowseRequest(objectID, sortCriteria, mediaServerUdn));
-  }
-
   public browseChildrenByContiner(containerDto: ContainerDto): void {
     this.updateBrowsePath(containerDto.id);
     this.browseChildrenByRequest(this.createBrowseRequest(containerDto.id, "", containerDto.mediaServerUDN));

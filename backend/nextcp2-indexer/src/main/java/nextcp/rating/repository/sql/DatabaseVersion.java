@@ -1,6 +1,7 @@
 package nextcp.rating.repository.sql;
 
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 public interface DatabaseVersion
 {
@@ -9,6 +10,9 @@ public interface DatabaseVersion
 
     @Select("SELECT config_value FROM DATABASE_CONFIG where config_entry = 'SCHEMA_VERSION'")
     Integer selectSchemaVersion();
+
+    @Update("UPDATE DATABASE_CONFIG SET config_value = ${num} where config_entry = 'SCHEMA_VERSION'")
+    Integer updateSchemaVersion(Integer num);
 
     /**
      * Read any config value

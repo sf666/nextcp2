@@ -74,8 +74,7 @@ export class NavBarComponent {
   }
 
   gotoParent() {
-    this.contentDirectoryService.browseChildren(this.contentDirectoryService.currentContainerList.currentContainer.parentID, "",
-      this.contentDirectoryService.currentContainerList.currentContainer.mediaServerUDN);
+    this.contentDirectoryService.browseChildrenByContiner(this.contentDirectoryService.currentContainerList.currentContainer);
   }
 
   //

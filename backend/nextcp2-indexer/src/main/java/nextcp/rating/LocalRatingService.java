@@ -86,7 +86,14 @@ public class LocalRatingService
         }
 
         SongRating song = songPersistenceService.getSongByMusicBrainzId(musicBrainzTitleId);
-        persistSongRatingInDbAndMusicFile(ratingInStars, song);
+        if (song == null)
+        {
+            throw new RuntimeException("song not available in local rating DB.");
+        }
+        else
+        {
+            persistSongRatingInDbAndMusicFile(ratingInStars, song);
+        }
     }
 
     /**

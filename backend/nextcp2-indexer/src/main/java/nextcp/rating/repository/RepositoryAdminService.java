@@ -32,6 +32,9 @@ import nextcp.rating.RatingConfig;
 import nextcp.rating.RatingException;
 import nextcp.rating.domain.SongRating;
 
+/**
+ * Update TARGET_DB_SCHEMA to latest update sql file
+ */
 @Service
 public class RepositoryAdminService
 {
@@ -41,7 +44,7 @@ public class RepositoryAdminService
 
     private PathMatcher matcher = null;
 
-    private final int TARGET_DB_SCHEMA = 1;
+    private final int TARGET_DB_SCHEMA = 2;
     private final int MAX_COMMIT = 200;
 
     @Autowired

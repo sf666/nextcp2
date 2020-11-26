@@ -22,7 +22,7 @@ export class AlbumComponent {
   }
 
   public browseTo(containerDto: ContainerDto) {
-    this.contentDirectoryService.browseChildren(containerDto.id, containerDto.parentID, containerDto.mediaServerUDN);
+    this.contentDirectoryService.browseChildrenByContiner(containerDto);
   }
 
   playAlbum(container) {

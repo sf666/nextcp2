@@ -1,3 +1,4 @@
+import { SseService } from './sse/sse.service';
 import { delay } from './../global';
 import { GenericResult } from './generic-result.service.d';
 import { ToastrService } from 'ngx-toastr';
@@ -11,7 +12,25 @@ export class GenericResultService {
   private lastError: Array<string> = new Array();;
   private debounceDelayMs: number = 1000;
 
-  constructor(private toastr: ToastrService) { }
+  constructor(
+    private toastr: ToastrService,
+    private sseService: SseService,
+  ) {
+    sseService.toasterMessageReceived$.subscribe(message => {
+      if (message.type.toLowerCase() === "info") {
+        this.toastr.info(message.body, message.header);
+      }
+      else if (message.type.toLowerCase() === "error") {
+        this.toastr.error(message.body, message.header);
+      }
+      else if (message.type.toLowerCase() === "success") {
+        this.toastr.success(message.body, message.header);
+      } else {
+        // if no type is given, default to info
+        this.toastr.info(message.body, message.header);
+      }
+    });
+  }
 
   public displayToastr(result: GenericResult) {
     if (typeof result !== 'undefined') {
@@ -30,7 +49,7 @@ export class GenericResultService {
   }
 
   public displayGenericMessage(header: string, body: string) {
-      this.displaySuccessMessage(header, body);
+    this.displaySuccessMessage(header, body);
   }
 
   public displayHttpError(err, toastrMessage) {

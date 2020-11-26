@@ -62,7 +62,7 @@ export class ContainerComponent implements AfterViewChecked {
     completeTime = 0;
     if (this.contentDirectoryService.currentContainerList?.musicItemDto) {
       this.contentDirectoryService.currentContainerList.musicItemDto.forEach(
-        el => completeTime = completeTime + el.audioFormat.durationInSeconds
+        el => completeTime = completeTime + (el.audioFormat?.durationInSeconds ? el.audioFormat.durationInSeconds : 0)
       );
     }
     if (completeTime) {
