@@ -15,12 +15,6 @@
 	<packaging>jar</packaging>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.aesy.musicbrainz</groupId>
-			<artifactId>musicbrainz-api</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
-
 		<!-- Rating Service modul -->
 		<dependency>
 			<groupId>de.sf666</groupId>
