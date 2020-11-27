@@ -14,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import nextcp.domainmodel.device.DeviceRegistry;
-import nextcp.domainmodel.device.mediarenderer.MediaRendererDevice;
-import nextcp.domainmodel.device.mediaserver.MediaServerDevice;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.GenericBooleanRequest;
 import nextcp.dto.GenericNumberRequest;
@@ -24,6 +21,9 @@ import nextcp.dto.MusicItemDto;
 import nextcp.dto.PlayRequestDto;
 import nextcp.dto.PlaylistAddContainerRequest;
 import nextcp.dto.PlaylistState;
+import nextcp.upnp.device.DeviceRegistry;
+import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
+import nextcp.upnp.device.mediaserver.MediaServerDevice;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist.actions.InsertInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.BrowseInput;
 
@@ -40,6 +40,7 @@ public class RestPlaylistService extends BaseRestService
     @PostMapping("/getState")
     public PlaylistState getState(@RequestBody String rendererUdn)
     {
+        log.debug("/getState called");
         MediaRendererDevice device = getMediaRendererByUdn(rendererUdn);
         checkDevice(device);
         return device.getPlaylistServiceBridge().getState();

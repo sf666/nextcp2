@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
-import nextcp.domainmodel.device.mediarenderer.MediaRendererListChanged;
-import nextcp.domainmodel.device.mediaserver.MediaServerListChanged;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.MediaServerDto;
 import nextcp.rest.DtoBuilder;
+import nextcp.upnp.device.mediarenderer.MediaRendererListChanged;
+import nextcp.upnp.device.mediaserver.MediaServerListChanged;
 
 @Controller
 public class DeviceRegistrySseEvents

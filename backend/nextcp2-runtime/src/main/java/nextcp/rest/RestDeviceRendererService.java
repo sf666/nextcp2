@@ -17,15 +17,15 @@ import org.springframework.web.server.ResponseStatusException;
 
 import nextcp.devicedriver.DeviceCapabilityDto;
 import nextcp.devicedriver.DeviceDriverDiscoveryService;
-import nextcp.domainmodel.device.DeviceRegistry;
-import nextcp.domainmodel.device.mediarenderer.MediaRendererDevice;
-import nextcp.domainmodel.device.mediarenderer.product.OpenHomeProductDevice;
 import nextcp.dto.DeviceDriverState;
 import nextcp.dto.InputSourceDto;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.MediaRendererSetVolume;
 import nextcp.dto.MediaRendererSwitchPower;
 import nextcp.dto.TrackInfoDto;
+import nextcp.upnp.device.DeviceRegistry;
+import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
+import nextcp.upnp.device.mediarenderer.product.OpenHomeProductDevice;
 
 /**
  * This class bridges rendering device information.

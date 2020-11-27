@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import nextcp.domainmodel.device.DeviceRegistry;
-import nextcp.domainmodel.device.mediaserver.MediaServerDevice;
 import nextcp.dto.BrowseRequestDto;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.QuickSearchRequestDto;
 import nextcp.dto.QuickSearchResultDto;
+import nextcp.upnp.device.DeviceRegistry;
+import nextcp.upnp.device.mediaserver.MediaServerDevice;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.BrowseInput;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)

@@ -1,7 +1,6 @@
 package nextcp.rest;
 
 import java.net.MalformedURLException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,11 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Node;
 
-import nextcp.domainmodel.device.BaseDevice;
-import nextcp.domainmodel.device.mediarenderer.MediaRendererDevice;
-import nextcp.domainmodel.device.mediarenderer.avtransport.AvTransportState;
-import nextcp.domainmodel.device.mediaserver.MediaServerDevice;
-import nextcp.domainmodel.rating.RatingService;
 import nextcp.dto.AudioFormat;
 import nextcp.dto.ContainerDto;
 import nextcp.dto.MediaRendererDto;
@@ -38,6 +32,11 @@ import nextcp.dto.MediaServerDto;
 import nextcp.dto.MusicBrainzId;
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.UpnpAvTransportState;
+import nextcp.service.RatingService;
+import nextcp.upnp.device.BaseDevice;
+import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
+import nextcp.upnp.device.mediarenderer.avtransport.AvTransportState;
+import nextcp.upnp.device.mediaserver.MediaServerDevice;
 
 @Service
 public class DtoBuilder

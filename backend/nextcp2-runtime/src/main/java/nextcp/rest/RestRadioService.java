@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import nextcp.domainmodel.device.mediarenderer.MediaRendererDevice;
 import nextcp.dto.Config;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.PlayOpenHomeRadioDto;
 import nextcp.dto.RadioStation;
+import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController

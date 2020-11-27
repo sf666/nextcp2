@@ -9,10 +9,10 @@ import org.fourthline.cling.support.model.item.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nextcp.domainmodel.device.mediaserver.MediaServerDevice;
 import nextcp.dto.ContainerDto;
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.QuickSearchResultDto;
+import nextcp.upnp.device.mediaserver.MediaServerDevice;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.ContentDirectoryService;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.SearchInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.SearchOutput;

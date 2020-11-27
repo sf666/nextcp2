@@ -10,12 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import nextcp.domainmodel.device.DeviceRegistry;
 import nextcp.dto.Config;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.RendererDeviceConfiguration;
 import nextcp.dto.UiClientConfig;
 import nextcp.eventBridge.SsePublisher;
+import nextcp.upnp.device.DeviceRegistry;
 
 @Controller
 public class ConfigService

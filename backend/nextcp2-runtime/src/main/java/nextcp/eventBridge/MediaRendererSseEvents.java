@@ -4,15 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
-import nextcp.domainmodel.device.mediarenderer.avtransport.event.AvTransportStateChangedEvent;
-import nextcp.domainmodel.device.mediarenderer.avtransport.event.AvTransportTransportStateChangeEvent;
-import nextcp.domainmodel.device.mediarenderer.playlist.PlaylistChangedEvent;
 import nextcp.dto.DeviceDriverState;
 import nextcp.dto.PlaylistState;
 import nextcp.dto.TrackInfoDto;
 import nextcp.dto.TrackTimeDto;
 import nextcp.dto.UpnpAvTransportState;
 import nextcp.rest.DtoBuilder;
+import nextcp.upnp.device.mediarenderer.avtransport.event.AvTransportStateChangedEvent;
+import nextcp.upnp.device.mediarenderer.avtransport.event.AvTransportTransportStateChangeEvent;
+import nextcp.upnp.device.mediarenderer.playlist.PlaylistChangedEvent;
 
 @Controller
 public class MediaRendererSseEvents

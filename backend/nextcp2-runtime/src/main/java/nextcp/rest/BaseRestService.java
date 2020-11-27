@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
-import nextcp.domainmodel.device.DeviceRegistry;
-import nextcp.domainmodel.device.mediarenderer.MediaRendererDevice;
+import nextcp.upnp.device.DeviceRegistry;
+import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 
 @Component
 public class BaseRestService

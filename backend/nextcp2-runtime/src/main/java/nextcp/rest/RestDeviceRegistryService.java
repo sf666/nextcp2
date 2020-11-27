@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import nextcp.domainmodel.device.DeviceRegistry;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.MediaServerDto;
+import nextcp.upnp.device.DeviceRegistry;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController

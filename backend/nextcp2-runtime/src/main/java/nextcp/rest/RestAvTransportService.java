@@ -16,11 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import nextcp.domainmodel.device.mediarenderer.MediaRendererDevice;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.PlayRadioDto;
 import nextcp.dto.PlayRequestDto;
-import nextcp.dto.UpnpAvTransportState;
+import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 
 /**
  * Here are AvTransportServices encapsulted, inclusing service events.
