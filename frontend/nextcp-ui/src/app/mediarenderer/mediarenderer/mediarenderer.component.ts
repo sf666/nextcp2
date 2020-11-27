@@ -1,10 +1,11 @@
+import { LayoutService } from './../../service/layout.service';
 import { MusicItemDto } from './../../service/dto.d';
 import { BackgroundImageService } from './../../util/background-image.service';
 import { SseService } from './../../service/sse/sse.service';
 import { MatSliderChange } from '@angular/material/slider';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-mediarenderer',
@@ -12,7 +13,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./mediarenderer.component.scss']
 })
 
-export class MediarendererComponent {
+export class MediarendererComponent implements OnInit {
 
   private _mediaServerUdn: string;
   private _mediaRendererUdn: string;
@@ -20,9 +21,13 @@ export class MediarendererComponent {
   constructor(
     sseService: SseService,
     private deviceService: DeviceService,
+    private layoutService: LayoutService,
     private backgroundImageService: BackgroundImageService,
     public rendererService: RendererService) {
 
+  }
+  ngOnInit(): void {
+    this.layoutService.setFramedView();
   }
 
   public getCurrentSongTitle(): string {

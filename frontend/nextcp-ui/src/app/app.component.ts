@@ -1,3 +1,4 @@
+import { LayoutService } from './service/layout.service';
 import { Component, HostListener } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -10,7 +11,7 @@ import { debounce } from 'lodash';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'nextcp-ui';
+  title = 'nextCP/2';
 
   opened: boolean;
   events: string[] = [];
@@ -19,7 +20,7 @@ export class AppComponent {
 
   private throttleResize = _.throttle(this.resiseVh, 100);
 
-  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
+  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer, public layoutService: LayoutService) {
     // Globally register SVG mat-icon 
     iconRegistry.addSvgIconSet(sanitizer.bypassSecurityTrustResourceUrl('assets/icon-set.svg'));
   }

@@ -7,16 +7,16 @@
   
   
   
-  <nav-bar></nav-bar>
+  <nav-bar *ngIf="layoutService.headerVisible"></nav-bar>
   
-  <app-sidebar></app-sidebar>
+  <app-sidebar *ngIf="layoutService.sidebarVisible"></app-sidebar>
   
   <div id="mainContent" class="mainContent">
     <router-outlet></router-outlet>
   </div>
 
-  <renderer-footer></renderer-footer>  
-  <div class="bg-img-footer" id="footer-background">
+  <renderer-footer *ngIf="layoutService.footerVisible"></renderer-footer>  
+  <div class="bg-img-footer" id="footer-background" *ngIf="layoutService.footerVisible">
   </div>
 
 </div>
