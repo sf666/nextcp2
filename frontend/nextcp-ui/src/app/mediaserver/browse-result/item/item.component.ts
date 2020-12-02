@@ -46,6 +46,10 @@ export class ItemComponent {
   }
 
   getDuration(item: MusicItemDto): string {
-    return this.timeDisplayService.convertLongToDateString(item.audioFormat.durationInSeconds);
+    if (item.audioFormat?.durationInSeconds) {
+      return this.timeDisplayService.convertLongToDateString(item.audioFormat.durationInSeconds);
+    } else {
+      return "";
+    }
   }
 }

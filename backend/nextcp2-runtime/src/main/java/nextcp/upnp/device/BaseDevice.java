@@ -4,8 +4,9 @@ import org.apache.commons.lang.StringUtils;
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.model.meta.RemoteDevice;
 import org.fourthline.cling.model.types.UDN;
-import org.fourthline.cling.support.contentdirectory.DIDLParser;
 import org.fourthline.cling.support.model.DIDLContent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -14,6 +15,8 @@ import nextcp.util.DidlContent;
 
 public class BaseDevice
 {
+    private static final Logger log = LoggerFactory.getLogger(BaseDevice.class.getName());
+    
     private RemoteDevice device;
     private DidlContent didlContent = new DidlContent();
 
@@ -85,6 +88,7 @@ public class BaseDevice
 
     protected DIDLContent generateDidlContent(String didlContentXml) throws Exception
     {
+        log.debug(didlContentXml);
         return didlContent.generateDidlContent(didlContentXml);
     }
 
