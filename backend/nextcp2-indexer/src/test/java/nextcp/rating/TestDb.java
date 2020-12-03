@@ -15,6 +15,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 
+import nextcp.db.DatabaseConfig;
+import nextcp.db.SessionManager;
+import nextcp.rating.repository.LocalRatingService;
 import nextcp.rating.repository.RepositoryAdminService;
 
 @SpringBootTest
@@ -43,6 +46,9 @@ public class TestDb
     private RepositoryAdminService repositoryAdminService = null;
 
     @Autowired
+    private SessionManager sessionManager = null;
+
+    @Autowired
     private LocalRatingService ratingService = null;
 
     @Test
@@ -53,7 +59,7 @@ public class TestDb
             try
             {
                 // current schema is number "1".
-                assertEquals(1, repositoryAdminService.getCurrentSchemaVersion());
+                assertEquals(1, sessionManager.getCurrentSchemaVersion());
 
                 // check
                 String acoustid = "fd92e5d0-9edf-4c8d-8c21-3c8dace568a6";
@@ -64,7 +70,7 @@ public class TestDb
 
                 assertEquals(2, ratingService.getRatingInStarsByAcoustID(acoustid));
                 assertEquals(1, ratingService.getRatingInStarsByMusicBrainzID(brainzId));
-                
+
             }
             finally
             {
@@ -78,13 +84,21 @@ public class TestDb
     }
 
     @Bean
+    public DatabaseConfig getDbConfig()
+    {
+
+        log.info("DB File is : " + dbFile.getAbsolutePath());
+
+        return new DatabaseConfig(dbFile.getAbsolutePath());
+    }
+
+    @Bean
     public RatingConfig getConfig()
     {
 
         log.info("DB File is : " + dbFile.getAbsolutePath());
 
         RatingConfig rc = new RatingConfig();
-        rc.databaseFilename = dbFile.getAbsolutePath();
         rc.musicDirectory = "/music/";
         rc.supportedFileTypes = "flac, mp3, ogg, ape";
         return rc;

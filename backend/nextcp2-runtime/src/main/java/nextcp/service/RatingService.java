@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import nextcp.dto.Config;
 import nextcp.dto.ToastrMessage;
 import nextcp.musicbrainz.MusicBrainzService;
-import nextcp.rating.LocalRatingService;
 import nextcp.rating.domain.UserRating;
+import nextcp.rating.repository.LocalRatingService;
 import nextcp.rating.repository.UserRatingPersistenceService;
 
 /**

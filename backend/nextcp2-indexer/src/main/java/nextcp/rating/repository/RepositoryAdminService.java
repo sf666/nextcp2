@@ -29,7 +29,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import nextcp.rating.RatingConfig;
-import nextcp.rating.RatingException;
 import nextcp.rating.domain.SongRating;
 
 /**
@@ -44,16 +43,14 @@ public class RepositoryAdminService
 
     private PathMatcher matcher = null;
 
-    private final int TARGET_DB_SCHEMA = 2;
     private final int MAX_COMMIT = 200;
 
+    private IndexerSessionFactory sessionFactory = null;
+    
     @Autowired
-    private SessionManager sessionManager = null;
-
-    @Autowired
-    public RepositoryAdminService(RatingConfig config, SessionManager sessionManager)
+    public RepositoryAdminService(RatingConfig config, IndexerSessionFactory sessionFactory)
     {
-        this.sessionManager = sessionManager;
+        this.sessionFactory = sessionFactory;
         this.config = config;
 
         if (StringUtils.isBlank(config.supportedFileTypes))
@@ -64,10 +61,8 @@ public class RepositoryAdminService
         {
             matcher = FileSystems.getDefault().getPathMatcher(String.format("glob:**/*.{%s}", config.supportedFileTypes.replaceAll("\\s", "")));
         }
-
-        updateDatabaseToCurrentSchema();
     }
-
+    
     @EventListener
     public void onApplicationEvent(ContextRefreshedEvent event)
     {
@@ -92,7 +87,7 @@ public class RepositoryAdminService
             return;
         }
 
-        if (sessionManager.getSessionFactory() == null)
+        if (sessionFactory == null)
         {
             log.debug("session factory is null. Rating support is disabled.");
             return;
@@ -113,7 +108,7 @@ public class RepositoryAdminService
         runScript(sqlScriptPath);
 
         AtomicInteger inserts = new AtomicInteger(0);
-        try (SqlSession session = sessionManager.getSessionFactory().openSession(false))
+        try (SqlSession session = sessionFactory.openSession(false))
         {
             long start = System.currentTimeMillis();
             Files.walk(rootDir).filter(matcher::matches).forEach(p -> updateDatabase(p, session, inserts));
@@ -160,32 +155,11 @@ public class RepositoryAdminService
         }
     }
 
-    /**
-     * Easy schema update concept ... just increment sql-script number ... On heavy concurrent work, this will not suit. Use something like firefly instead
-     */
-    public void updateDatabaseToCurrentSchema()
-    {
-        try
-        {
-            int currentVersion = getCurrentSchemaVersion();
-            while (currentVersion < TARGET_DB_SCHEMA)
-            {
-                currentVersion++;
-                String sqlScriptPath = String.format("/sql/%d.sql", currentVersion);
-                runScript(sqlScriptPath);
-            }
-        }
-        catch (Exception e)
-        {
-            log.warn("cannot update database.", e);
-        }
-    }
-
     private void runScript(String sqlScriptPath)
     {
         try (InputStreamReader isr = new InputStreamReader(RepositoryAdminService.class.getResourceAsStream(sqlScriptPath)))
         {
-            ScriptRunner scriptRunner = new ScriptRunner(sessionManager.getSessionFactory().openSession().getConnection());
+            ScriptRunner scriptRunner = new ScriptRunner(sessionFactory.openSession().getConnection());
             scriptRunner.runScript(isr);
 
         }
@@ -193,41 +167,6 @@ public class RepositoryAdminService
         {
             log.error("sql script error", e);
         }
-    }
-
-    /**
-     * 
-     * @return
-     */
-    public int getCurrentSchemaVersion()
-    {
-        if (sessionManager.getSessionFactory() == null)
-        {
-            log.debug("database session canot be opend ... ");
-            throw new RatingException(RatingException.DATABASE_ACCESS_ERROR, "SessionFactory is null. Database cannot be accessed.");
-        }
-
-        try (SqlSession session = sessionManager.getSessionFactory().openSession())
-        {
-            Integer count = session.selectOne("nextcp.rating.repository.sql.DatabaseVersion.findRating", "DATABASE_CONFIG");
-            if (count == 0)
-            {
-                return 0;
-            }
-            return session.selectOne("nextcp.rating.repository.sql.DatabaseVersion.selectSchemaVersion");
-        }
-        catch (Exception e)
-        {
-            rebuildDbFromScratch();
-            // remove this exception, after above method is implemented
-            log.error("DB error", e);
-            throw new RuntimeException("Database is corrupt.");
-        }
-    }
-
-    private void rebuildDbFromScratch()
-    {
-        // drop all known tables and start the update-process
     }
 
 }

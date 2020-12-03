@@ -10,12 +10,17 @@ import nextcp.rating.domain.UserRating;
 @Service
 public class UserRatingPersistenceService
 {
-    @Autowired
-    private SessionManager sessionManager = null;
+    private IndexerSessionFactory sessionFactory = null;
 
+    @Autowired
+    public UserRatingPersistenceService(IndexerSessionFactory sessionFactory)
+    {
+        this.sessionFactory = sessionFactory;
+    }
+    
     public Integer getRatingByAcoustID(String acoustID)
     {
-        try (SqlSession session = sessionManager.getSessionFactory().openSession())
+        try (SqlSession session = sessionFactory.openSession())
         {
             return session.selectOne("nextcp.rating.repository.sql.RatingMapping.selectUserRatingByAcoustId", acoustID);
         }
@@ -23,7 +28,7 @@ public class UserRatingPersistenceService
 
     public Integer getRatingByMusicBrainzID(String musicBrainzID)
     {
-        try (SqlSession session = sessionManager.getSessionFactory().openSession())
+        try (SqlSession session = sessionFactory.openSession())
         {
             return session.selectOne("nextcp.rating.repository.sql.RatingMapping.selectUserRatingByMusicBrainzId", musicBrainzID);
         }
@@ -46,7 +51,7 @@ public class UserRatingPersistenceService
             throw new RuntimeException("AcoustID und MuicBrainzID are both empty. Cannot update user rating.");
         }
 
-        try (SqlSession session = sessionManager.getSessionFactory().openSession(true))
+        try (SqlSession session = sessionFactory.openSession(true))
         {
             return session.insert("nextcp.rating.repository.sql.RatingMapping.insertUserRating", userRating);
         }
@@ -59,7 +64,7 @@ public class UserRatingPersistenceService
             throw new RuntimeException("AcoustID und MuicBrainzID are both empty. Cannot update user rating.");
         }
 
-        try (SqlSession session = sessionManager.getSessionFactory().openSession(true))
+        try (SqlSession session = sessionFactory.openSession(true))
         {
             int num = 0;
             if (StringUtils.isAllBlank(userRating.musicBrainzId))
@@ -76,7 +81,7 @@ public class UserRatingPersistenceService
     
     public int syncRating()
     {
-        try (SqlSession session = sessionManager.getSessionFactory().openSession(true))
+        try (SqlSession session = sessionFactory.openSession(true))
         {
             return session.update("nextcp.rating.repository.sql.RatingMapping.syncUserRatingByMusicBrainzId",null);
         }

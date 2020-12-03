@@ -1,4 +1,4 @@
-package nextcp.rating;
+package nextcp.rating.repository;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,9 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import nextcp.rating.RatingException;
 import nextcp.rating.domain.SongRating;
-import nextcp.rating.repository.RepositoryAdminService;
-import nextcp.rating.repository.SongPersistenceService;
 
 /**
  * Main Rating-Service class for interaction.

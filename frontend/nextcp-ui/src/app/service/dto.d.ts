@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2020-11-26 08:11:48.
+// Generated using typescript-generator version 2.0.400 on 2020-12-03 11:17:55.
 
 export interface AudioFormat {
     nrAudioChannels: number;

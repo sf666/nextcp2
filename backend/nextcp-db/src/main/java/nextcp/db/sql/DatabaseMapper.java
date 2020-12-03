@@ -1,12 +1,15 @@
-package nextcp.rating.repository.sql;
+package nextcp.db.sql;
 
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-public interface DatabaseVersion
+/**
+ * This interface describes some basic DB support for SQL schema updates and key/value stores. 
+ */
+public interface DatabaseMapper
 {
     @Select("SELECT count(*) FROM INFORMATION_SCHEMA.TABLES where TABLE_NAME = '${tableName}'")
-    Integer findRating(String tableName);
+    Integer findTableName(String tableName);
 
     @Select("SELECT config_value FROM DATABASE_CONFIG where config_entry = 'SCHEMA_VERSION'")
     Integer selectSchemaVersion();

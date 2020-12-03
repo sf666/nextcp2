@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
+import nextcp.db.DatabaseConfig;
 import nextcp.dto.Config;
 import nextcp.dto.LocalIndexSupport;
 import nextcp.dto.MusicbrainzSupport;
@@ -74,11 +75,16 @@ public class ConfigPersistence
     }
 
     @Bean
+    public DatabaseConfig dbConfigProducer()
+    {
+        return new DatabaseConfig(config.localIndexerSupport.databaseFilename);
+    }
+
+    @Bean
     public RatingConfig ratingConfigProducer()
     {
         RatingConfig rc = new RatingConfig();
         rc.isActive = config.localIndexerSupport.isActive;
-        rc.databaseFilename = config.localIndexerSupport.databaseFilename;
         rc.musicDirectory = config.localIndexerSupport.musicRootPath;
         rc.supportedFileTypes = config.localIndexerSupport.supportedFileTypes;
         return rc;

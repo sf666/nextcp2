@@ -9,12 +9,17 @@ import nextcp.rating.domain.SongRating;
 @Service
 public class SongPersistenceService
 {
+    private IndexerSessionFactory sessionFactory = null;
+
     @Autowired
-    private SessionManager sessionManager = null;
+    public SongPersistenceService(IndexerSessionFactory sessionFactory)
+    {
+        this.sessionFactory = sessionFactory;
+    }
 
     public SongRating getSongByAcoustId(String acoustId)
     {
-        try (SqlSession session = sessionManager.getSessionFactory().openSession())
+        try (SqlSession session = sessionFactory.openSession())
         {
             return session.selectOne("nextcp.rating.repository.sql.RatingMapping.selectAcoustIDSong", acoustId);
         }
@@ -22,7 +27,7 @@ public class SongPersistenceService
 
     public SongRating getSongByMusicBrainzId(String musicBrainzId)
     {
-        try (SqlSession session = sessionManager.getSessionFactory().openSession())
+        try (SqlSession session = sessionFactory.openSession())
         {
             return session.selectOne("nextcp.rating.repository.sql.RatingMapping.selectMusicBrainzIDSong", musicBrainzId);
         }
@@ -30,7 +35,7 @@ public class SongPersistenceService
 
     public Integer getRatingByAcoustID(String acoustID)
     {
-        try (SqlSession session = sessionManager.getSessionFactory().openSession())
+        try (SqlSession session = sessionFactory.openSession())
         {
             return session.selectOne("nextcp.rating.repository.sql.RatingMapping.selectRatingByAcoustId", acoustID);
         }
@@ -38,7 +43,7 @@ public class SongPersistenceService
 
     public Integer getRatingByMusicBrainzID(String musicBrainzID)
     {
-        try (SqlSession session = sessionManager.getSessionFactory().openSession())
+        try (SqlSession session = sessionFactory.openSession())
         {
             return session.selectOne("nextcp.rating.repository.sql.RatingMapping.selectRatingByMusicBrainzId", musicBrainzID);
         }
@@ -46,7 +51,7 @@ public class SongPersistenceService
 
     public int updateSong(SongRating song)
     {
-        try (SqlSession session = sessionManager.getSessionFactory().openSession(true))
+        try (SqlSession session = sessionFactory.openSession(true))
         {
             int num = session.update("nextcp.rating.repository.sql.RatingMapping.updateRating", song);
             session.commit(true);
