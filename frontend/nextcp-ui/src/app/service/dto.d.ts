@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2020-12-03 11:17:55.
+// Generated using typescript-generator version 2.0.400 on 2020-12-03 14:18:38.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -26,7 +26,6 @@ export interface Config {
     loggingDateTimeFormat: string;
     clientConfig: UiClientConfig[];
     radioStation: RadioStation[];
-    rendererDevices: RendererDeviceConfiguration[];
     localIndexerSupport: LocalIndexSupport;
     musicbrainzSupport: MusicbrainzSupport;
     ratingStrategy: RatingStrategy;
@@ -212,6 +211,10 @@ export interface RatingStrategy {
     updateLocalFileRating: boolean;
     syncRatings: boolean;
     collisionStrategy: string;
+}
+
+export interface RendererConfigDto {
+    rendererDevices: RendererDeviceConfiguration[];
 }
 
 export interface RendererDeviceConfiguration {

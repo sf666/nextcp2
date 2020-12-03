@@ -1,6 +1,7 @@
 package nextcp.dto;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -17,7 +18,6 @@ public class Config
     public String loggingDateTimeFormat;
     public List<UiClientConfig> clientConfig;
     public List<RadioStation> radioStation;
-    public List<RendererDeviceConfiguration> rendererDevices;
     public LocalIndexSupport localIndexerSupport;
     public MusicbrainzSupport musicbrainzSupport;
     public RatingStrategy ratingStrategy;
@@ -26,7 +26,7 @@ public class Config
     {
     }
 
-    public Config(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, List<RendererDeviceConfiguration> rendererDevices, LocalIndexSupport localIndexerSupport, MusicbrainzSupport musicbrainzSupport, RatingStrategy ratingStrategy)
+    public Config(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, LocalIndexSupport localIndexerSupport, MusicbrainzSupport musicbrainzSupport, RatingStrategy ratingStrategy)
     {
         this.generateUpnpCode = generateUpnpCode;
         this.generateUpnpCodePath = generateUpnpCodePath;
@@ -37,7 +37,6 @@ public class Config
         this.loggingDateTimeFormat = loggingDateTimeFormat;
         this.clientConfig = clientConfig;
         this.radioStation = radioStation;
-        this.rendererDevices = rendererDevices;
         this.localIndexerSupport = localIndexerSupport;
         this.musicbrainzSupport = musicbrainzSupport;
         this.ratingStrategy = ratingStrategy;
@@ -57,7 +56,6 @@ public class Config
         sb.append("loggingDateTimeFormat=").append(this.loggingDateTimeFormat).append(", ");
         sb.append("clientConfig=").append(this.clientConfig).append(", ");
         sb.append("radioStation=").append(this.radioStation).append(", ");
-        sb.append("rendererDevices=").append(this.rendererDevices).append(", ");
         sb.append("localIndexerSupport=").append(this.localIndexerSupport).append(", ");
         sb.append("musicbrainzSupport=").append(this.musicbrainzSupport).append(", ");
         sb.append("ratingStrategy=").append(this.ratingStrategy).append(", ");

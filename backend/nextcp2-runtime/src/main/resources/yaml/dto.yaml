@@ -17,10 +17,12 @@ Config:
    loggingDateTimeFormat: String
    clientConfig: List<UiClientConfig>
    radioStation: List<RadioStation>
-   rendererDevices: List<RendererDeviceConfiguration>
    localIndexerSupport: LocalIndexSupport
    musicbrainzSupport: MusicbrainzSupport
    ratingStrategy: RatingStrategy
+
+RendererConfigDto:
+   rendererDevices: CopyOnWriteArrayList<RendererDeviceConfiguration>
    
 RatingStrategy:
    updateMusicBrainzRating : Boolean

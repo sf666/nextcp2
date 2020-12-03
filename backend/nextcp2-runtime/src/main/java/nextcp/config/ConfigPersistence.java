@@ -24,7 +24,6 @@ import nextcp.dto.Config;
 import nextcp.dto.LocalIndexSupport;
 import nextcp.dto.MusicbrainzSupport;
 import nextcp.dto.RatingStrategy;
-import nextcp.dto.RendererDeviceConfiguration;
 import nextcp.musicbrainz.MusicBrainzConfig;
 import nextcp.rating.RatingConfig;
 import nextcp.util.FileOpsNio;
@@ -46,16 +45,6 @@ public class ConfigPersistence
     private ObjectMapper om = new ObjectMapper();
 
     private String log4jConfigFile = "";
-
-    public String getLog4jConfigFile()
-    {
-        return log4jConfigFile;
-    }
-
-    public void setLog4jConfigFile(String log4jConfigFile)
-    {
-        this.log4jConfigFile = log4jConfigFile;
-    }
 
     @PostConstruct
     public void init()
@@ -200,10 +189,6 @@ public class ConfigPersistence
         {
             config.generateUpnpCode = false;
         }
-        if (config.rendererDevices == null)
-        {
-            config.rendererDevices = new ArrayList<>();
-        }
         if (config.localIndexerSupport == null)
         {
             config.localIndexerSupport = new LocalIndexSupport();
@@ -252,7 +237,6 @@ public class ConfigPersistence
         c.loggingDateTimeFormat = "HH:mm:ss";
         createDefaultLog(c.log4jConfigFile);
         c.loggingDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
-        c.rendererDevices = new ArrayList<RendererDeviceConfiguration>();
         c.localIndexerSupport = new LocalIndexSupport();
         c.localIndexerSupport.isActive = true;
         c.localIndexerSupport.databaseFilename = FilenameUtils.concat(systemConfig.getString("user.dir"), "rating_db");
@@ -307,6 +291,16 @@ public class ConfigPersistence
         }
     }
 
+    public String getLog4jConfigFile()
+    {
+        return log4jConfigFile;
+    }
+
+    public void setLog4jConfigFile(String log4jConfigFile)
+    {
+        this.log4jConfigFile = log4jConfigFile;
+    }
+
     public static void main(String[] args)
     {
         ConfigPersistence cr = new ConfigPersistence();
@@ -317,4 +311,5 @@ public class ConfigPersistence
         cr.writeConfig();
 
     }
+
 }

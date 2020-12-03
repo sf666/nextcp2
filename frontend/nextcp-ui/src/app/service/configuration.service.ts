@@ -1,7 +1,7 @@
 import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { SseService } from './sse/sse.service';
-import { UiClientConfig, Config, MediaServerDto, MediaRendererDto, DeviceDriverState, RendererDeviceConfiguration, DeviceDriverCapability } from './dto.d';
+import { UiClientConfig, RendererConfigDto, Config, MediaServerDto, MediaRendererDto, DeviceDriverState, RendererDeviceConfiguration, DeviceDriverCapability } from './dto.d';
 import { GenericResultService } from './generic-result.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -15,6 +15,7 @@ import { isAssigned } from '../global';
 export class ConfigurationService {
 
   clientConfigChanged$: Subject<UiClientConfig> = new Subject();
+  rendererConfigChanged$: Subject<RendererDeviceConfiguration[]> = new Subject();
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -23,6 +24,9 @@ export class ConfigurationService {
   };
 
   public deviceDriverList: DeviceDriverCapability[];
+
+  // renderer configurations
+  rendererConfig: RendererConfigDto;
 
   // configuration for this client
   clientConfig: UiClientConfig = {
@@ -48,7 +52,9 @@ export class ConfigurationService {
     this.clientConfig.uuid = this.getStoredClientId();
     this.getClientConfigFromServer();
     this.getDeviceDriverFromServer();
+    this.getMediaRendererConfig();
     sseService.configChanged$.subscribe(data => this.applyConfig(data));
+    sseService.rendererConfigChanged$.subscribe(data => this.applyRendererConfig(data));
   }
 
   public restart() {
@@ -75,9 +81,10 @@ export class ConfigurationService {
     this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaRendererConfig, "Delete mediarenderer config", "success").subscribe();
   }
 
-  public saveAllMediaRendererConfig(mediaRendererConfig: RendererDeviceConfiguration[]) {
-    const uri = '/saveAllMediaRendererConfig';
-    this.httpService.post(this.baseUri, uri, mediaRendererConfig).subscribe();
+  public getMediaRendererConfig() {
+    const uri = '/getMediaRendererConfig';
+    this.httpService.get<RendererConfigDto>(this.baseUri, uri).subscribe(data => 
+      this.rendererConfig = data);
   }
 
   private getClientConfigFromServer() {
@@ -89,12 +96,17 @@ export class ConfigurationService {
     });
   }
 
-  private applyConfig(data: Config) {
-    this.serverConfig = data;
+  private applyRendererConfig(data: RendererConfigDto) {
+    this.rendererConfig = data;
 
-    this.serverConfig.rendererDevices = this.serverConfig?.rendererDevices.sort((n1, n2) => {
+    this.rendererConfig.rendererDevices = this.rendererConfig?.rendererDevices.sort((n1, n2) => {
       return n1.displayString.localeCompare(n2.displayString);
     });
+
+  }
+
+  private applyConfig(data: Config) {
+    this.serverConfig = data;
 
     if (isAssigned(this.getClientConfig(this.clientConfig.uuid))) {
       this.clientConfig = this.getClientConfig(this.clientConfig.uuid);
@@ -114,11 +126,11 @@ export class ConfigurationService {
   }
 
   public getRendererDevicesConfig(): RendererDeviceConfiguration[] {
-    return this.serverConfig?.rendererDevices;
+    return this.rendererConfig?.rendererDevices;
   }
 
   public isRenderDeviceActive(deviceUdn: string): boolean {
-    var configEntry = this.serverConfig?.rendererDevices.filter(conf => conf.mediaRenderer.udn == deviceUdn);
+    var configEntry = this.rendererConfig.rendererDevices.filter(conf => conf.mediaRenderer.udn == deviceUdn);
     if (!configEntry || configEntry.length == 0) {
       return false;
     }

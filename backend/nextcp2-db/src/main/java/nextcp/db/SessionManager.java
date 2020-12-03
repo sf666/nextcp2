@@ -72,6 +72,21 @@ public class SessionManager
         updateDatabaseToCurrentSchema();
     }
 
+    /**
+     * This method returns the SqlSessionFactory used by this Session-Manager
+     * 
+     * @return
+     */
+    public SqlSessionFactory getSessionFactory()
+    {
+        return sqlSessionFactory;
+    }
+
+    /**
+     * This method returns a new SqlSessionFactory configured with supplied Mapping classes
+     * 
+     * @return
+     */
     public SqlSessionFactory getSessionFactory(List<Class<?>> mapperList)
     {
         if (environment == null)
@@ -87,7 +102,6 @@ public class SessionManager
         return sqlSessionFactory;
     }
 
-    
     /**
      * Easy schema update concept ... just increment sql-script number ... On heavy concurrent work, this will not suit. Use something like firefly instead
      */
@@ -149,7 +163,7 @@ public class SessionManager
 
     private void rebuildDbFromScratch()
     {
-        // Not implemented yet ... 
+        // Not implemented yet ...
     }
 
     private DataSource getDataSource()

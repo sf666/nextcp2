@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import nextcp.config.ConfigService;
+import nextcp.config.RendererConfig;
 import nextcp.domainmodel.device.services.IInfoService;
 import nextcp.domainmodel.device.services.IPlaylistService;
 import nextcp.domainmodel.device.services.IProductService;
@@ -54,7 +54,7 @@ public class MediaRendererDevice extends BaseDevice
     private MediaRendererFactories factories = null;
 
     @Autowired
-    private ConfigService configService = null;
+    private RendererConfig rendererConfigService = null;
 
     private IDeviceDriver deviceDriver = null;
 
@@ -247,7 +247,7 @@ public class MediaRendererDevice extends BaseDevice
 
     private IDeviceDriver createDeviceDriver()
     {
-        RendererDeviceConfiguration rendererConfig = configService.getMediaRendererConfig(getUDN().getIdentifierString());
+        RendererDeviceConfiguration rendererConfig = rendererConfigService.getMediaRendererConfig(getUDN().getIdentifierString());
         if (rendererConfig != null && !StringUtils.isBlank(rendererConfig.deviceDriverType))
         {
             DeviceDriver deviceDriver = factories.createDeviceDriver(getUdnAsString(), rendererConfig.deviceDriverType, rendererConfig.connectionString);

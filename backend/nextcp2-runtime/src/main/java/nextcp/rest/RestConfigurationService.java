@@ -9,18 +9,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import nextcp.config.ConfigService;
+import nextcp.config.RendererConfig;
 import nextcp.devicedriver.DeviceCapabilityDto;
 import nextcp.devicedriver.DeviceDriverDiscoveryService;
 import nextcp.dto.Config;
 import nextcp.dto.DeviceDriverCapability;
+import nextcp.dto.RendererConfigDto;
 import nextcp.dto.RendererDeviceConfiguration;
 import nextcp.dto.UiClientConfig;
 import nextcp.util.IApplicationRestartable;
@@ -43,8 +47,11 @@ public class RestConfigurationService
     private ConfigService configService = null;
 
     @Autowired
+    private RendererConfig rendererConfigService = null;
+
+    @Autowired
     private DeviceDriverDiscoveryService deviceDriverDiscoveryService = null;
-    
+
     @Autowired
     private ApplicationContext context;
 
@@ -82,16 +89,17 @@ public class RestConfigurationService
         }
     }
 
-    @PostMapping("/saveAllMediaRendererConfig")
-    public void saveAllRendererConfig(@RequestBody List<RendererDeviceConfiguration> rendererDevices)
+    @GetMapping("/getMediaRendererConfig")
+    public RendererConfigDto getRendererConfig()
     {
         try
         {
-            configService.updateRendererDevices(rendererDevices);
+            return rendererConfigService.getConfig();
         }
         catch (Exception e)
         {
-            log.error("saveAllMediaRendererConfig", e);
+            log.error("getMediaRendererConfig", e);
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "reading media renderer config failed : " + e.getMessage());
         }
     }
 
@@ -100,11 +108,12 @@ public class RestConfigurationService
     {
         try
         {
-            configService.updateRendererDevice(rendererDevice);
+            rendererConfigService.updateRendererDevice(rendererDevice);
         }
         catch (Exception e)
         {
             log.error("saveMediaRendererConfig", e);
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "saving media renderer config failed : " + e.getMessage());
         }
     }
 
@@ -113,7 +122,7 @@ public class RestConfigurationService
     {
         try
         {
-            configService.deleteRendererDevice(rendererDevice);
+            rendererConfigService.deleteRendererDevice(rendererDevice);
         }
         catch (Exception e)
         {
