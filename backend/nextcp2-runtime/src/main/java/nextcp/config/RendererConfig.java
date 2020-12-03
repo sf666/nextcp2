@@ -69,7 +69,9 @@ public class RendererConfig
 
     private RendererConfigDto readConfig()
     {
-        String value = dbService.selectConfigValue(CONFIG_KEY_RENDERER_DEVICES);
+
+        String value = "";
+        value = dbService.selectConfigValue(CONFIG_KEY_RENDERER_DEVICES);
         RendererConfigDto renderer = readConfig(value);
         return renderer;
     }

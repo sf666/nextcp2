@@ -39,9 +39,17 @@ public class BasicDbService
      */
     public String selectConfigValue(String key)
     {
-        try (SqlSession session = factory.openSession())
+        try
         {
-            return session.selectOne("nextcp.db.sql.DatabaseMapper.selectConfigValue", key);
+            try (SqlSession session = factory.openSession())
+            {
+                return session.selectOne("nextcp.db.sql.DatabaseMapper.selectConfigValue", key);
+            }
+        }
+        catch (Exception e)
+        {
+            // No value ...
+            return null;
         }
     }
 
