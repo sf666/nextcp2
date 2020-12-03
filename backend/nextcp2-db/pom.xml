@@ -9,8 +9,8 @@
 		<relativePath>../pom.xml</relativePath>		
 	</parent>
 	
-	<artifactId>nextcp-db</artifactId>
-	<name>nextcp-db</name>
+	<artifactId>nextcp2-db</artifactId>
+	<name>nextcp2-db</name>
 	<description>database persistence service</description>
 
 	<dependencies>

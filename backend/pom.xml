@@ -44,7 +44,7 @@
 		<module>nextcp2-device-driver</module>
 		<module>nextcp2-assembly</module>
 		<module>nextcp2-indexer</module>
-		<module>nextcp-db</module>
+		<module>nextcp2-db</module>
 	</modules>
 
 	<build>
@@ -124,6 +124,24 @@
 	<dependencyManagement>
 		<dependencies>
 
+			<dependency>
+				<groupId>de.sf666</groupId>
+				<artifactId>nextcp2-runtime</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>de.sf666</groupId>
+				<artifactId>nextcp2-db</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>de.sf666</groupId>
+				<artifactId>nextcp2-modelgen</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
 			<!-- Database and OR mapper -->
 			<dependency>
 				<groupId>com.h2database</groupId>
@@ -137,18 +155,6 @@
 				<version>3.5.6</version>
 			</dependency>
 
-			<dependency>
-				<groupId>de.sf666</groupId>
-				<artifactId>nextcp2-runtime</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-
-			<dependency>
-				<groupId>de.sf666</groupId>
-				<artifactId>nextcp2-modelgen</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
 
 			<!-- XML parser -->
 			<dependency>
