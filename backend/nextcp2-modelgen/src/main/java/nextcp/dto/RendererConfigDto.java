@@ -1,7 +1,6 @@
 package nextcp.dto;
 
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -9,13 +8,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class RendererConfigDto
 {
 
-    public CopyOnWriteArrayList<RendererDeviceConfiguration> rendererDevices;
+    public List<RendererDeviceConfiguration> rendererDevices;
 
     public RendererConfigDto()
     {
     }
 
-    public RendererConfigDto(CopyOnWriteArrayList<RendererDeviceConfiguration> rendererDevices)
+    public RendererConfigDto(List<RendererDeviceConfiguration> rendererDevices)
     {
         this.rendererDevices = rendererDevices;
     }

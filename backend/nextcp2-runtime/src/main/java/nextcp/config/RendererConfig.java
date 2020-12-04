@@ -1,6 +1,7 @@
 package nextcp.config;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
@@ -45,6 +47,7 @@ public class RendererConfig
     {
         this.dbService = dbService;
         this.ssePublisher = ssePublisher;
+        om.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
         config = readConfig();
     }
 
@@ -69,11 +72,24 @@ public class RendererConfig
 
     private RendererConfigDto readConfig()
     {
+        try
+        {
+            String value = "";
+            value = dbService.selectJsonStoreValue(CONFIG_KEY_RENDERER_DEVICES);
+            RendererConfigDto renderer = readConfig(value);
+            return renderer;
+        }
+        catch (Exception e)
+        {
+            return generateDefaultConfig();
+        }
+    }
 
-        String value = "";
-        value = dbService.selectJsonStoreValue(CONFIG_KEY_RENDERER_DEVICES);
-        RendererConfigDto renderer = readConfig(value);
-        return renderer;
+    private RendererConfigDto generateDefaultConfig()
+    {
+        RendererConfigDto c = new RendererConfigDto();
+        c.rendererDevices = new ArrayList<RendererDeviceConfiguration>();
+        return c;
     }
 
     private RendererConfigDto readConfig(String json)
@@ -92,9 +108,9 @@ public class RendererConfig
         }
         catch (IOException e)
         {
-            log.error("could not write config", e);
+            log.error("could not read config", e);
         }
-        return null;
+        return generateDefaultConfig();
     }
 
     public boolean isMediaRendererActive(String udn)
@@ -163,6 +179,11 @@ public class RendererConfig
 
     public RendererDeviceConfiguration getMediaRendererConfig(String udn)
     {
+        if (config == null || config.rendererDevices == null)
+        {
+            return null;
+        }
+
         Optional<RendererDeviceConfiguration> configEntry = config.rendererDevices.stream().filter(d -> d.mediaRenderer.udn.contentEquals(udn)).findFirst();
         if (configEntry.isPresent())
         {

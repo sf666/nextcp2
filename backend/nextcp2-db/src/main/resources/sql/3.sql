@@ -1,4 +1,4 @@
-CREATE TABLE JSON_STORE(lookupKey VARCHAR(64) PRIMARY KEY, lookupValue JSON);
+CREATE TABLE JSON_STORE(lookupKey VARCHAR(64) PRIMARY KEY, lookupValue CLOB);
 
 -- Cleanup task
 delete from DATABASE_CONFIG where config_value = 'RENDERER_DEVICES';

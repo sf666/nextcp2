@@ -46,7 +46,7 @@ public interface DatabaseMapper
      * @param configEntry
      * @return
      */
-    @Select("SELECT lookupValue FROM JSON_STORE where config_entry = '${key}'")
+    @Select("SELECT lookupValue FROM JSON_STORE where lookupKey = '${key}'")
     String selectJsonValue(String key);
 
     /**

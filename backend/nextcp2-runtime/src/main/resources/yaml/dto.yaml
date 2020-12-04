@@ -22,7 +22,7 @@ Config:
    ratingStrategy: RatingStrategy
 
 RendererConfigDto:
-   rendererDevices: CopyOnWriteArrayList<RendererDeviceConfiguration>
+   rendererDevices: List<RendererDeviceConfiguration>
    
 RatingStrategy:
    updateMusicBrainzRating : Boolean

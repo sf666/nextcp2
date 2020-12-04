@@ -60,7 +60,7 @@ public class BasicDbService
      * 
      * @return 0 = not found, 1 = found
      */
-    public String updateConfigValue(KeyValuePair keyValue)
+    public Integer updateConfigValue(KeyValuePair keyValue)
     {
         try (SqlSession session = factory.openSession())
         {
@@ -98,7 +98,7 @@ public class BasicDbService
      * 
      * @return 0 = not found, 1 = found
      */
-    public String updateJsonStoreValue(KeyValuePair keyValue)
+    public Integer updateJsonStoreValue(KeyValuePair keyValue)
     {
         try (SqlSession session = factory.openSession())
         {
