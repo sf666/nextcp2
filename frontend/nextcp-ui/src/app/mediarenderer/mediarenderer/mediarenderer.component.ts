@@ -1,3 +1,4 @@
+import { DefautPlaylistsComponent } from './../../mediaserver/popup/defaut-playlists/defaut-playlists.component';
 import { PlaylistComponent } from './../../view/playlist/playlist.component';
 import { MatDialog } from '@angular/material/dialog';
 import { LayoutService } from './../../service/layout.service';
@@ -68,10 +69,10 @@ export class MediarendererComponent implements OnInit {
     return this.rendererService.trackInfo?.currentTrack?.musicBrainzId?.TrackId.length > 0;
   }
 
-  openAddPlaylistDialog(event: any) {
+  openAddPlaylistDialog(event: any, mbid: string) {
     const target = new ElementRef(event.currentTarget);
-    const dialogRef = this.dialog.open(PlaylistComponent, {
-      data: { trigger: target },
+    const dialogRef = this.dialog.open(DefautPlaylistsComponent, {
+      data: { trigger: target, id :  mbid},
       panelClass: 'popup'
     });
     dialogRef.afterClosed().subscribe(_res => {

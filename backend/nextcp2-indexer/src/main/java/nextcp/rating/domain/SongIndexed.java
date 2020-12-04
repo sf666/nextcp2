@@ -35,7 +35,7 @@ import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
  * </pre>
  * 
  */
-public class SongRating
+public class SongIndexed
 {
     private String filePath;
     private String acoustID;

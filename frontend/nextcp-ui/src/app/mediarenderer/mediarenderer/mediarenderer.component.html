@@ -21,10 +21,10 @@
             </div>
         </div>
 
-        <div class="d-flex">
-            <button *ngIf="canBeAddedToPlaylist" mat-flat-button class="my-buttons"
-                (click)="openAddPlaylistDialog($event)">
-                <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="tag"></mat-icon>Tags
+        <div class="d-flex buttons-container">
+            <button *ngIf="canBeAddedToPlaylist" mat-flat-button class="mr-buttons"
+                (click)="openAddPlaylistDialog($event, getCurrentTrack().musicBrainzId.TrackId)">
+                <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="playlist-plus"></mat-icon>Playlists
             </button>
         </div>
 

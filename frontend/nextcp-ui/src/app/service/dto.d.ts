@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2020-12-03 14:18:38.
+// Generated using typescript-generator version 2.0.400 on 2020-12-04 14:21:06.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -29,6 +29,7 @@ export interface Config {
     localIndexerSupport: LocalIndexSupport;
     musicbrainzSupport: MusicbrainzSupport;
     ratingStrategy: RatingStrategy;
+    playlistPath: string;
 }
 
 export interface ContainerDto {
@@ -66,6 +67,11 @@ export interface DeviceDriverState {
     rendererUDN: string;
     volume: number;
     standby: boolean;
+}
+
+export interface FileSystemPlaylistAdd {
+    playlistName: string;
+    musicBrainzId: string;
 }
 
 export interface GenericBooleanRequest {

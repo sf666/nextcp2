@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import nextcp.rating.domain.SongRating;
+import nextcp.rating.domain.SongIndexed;
 
 /**
  * 
@@ -13,16 +13,16 @@ public interface RatingMapping
 {
 
     @Select("SELECT * FROM blog WHERE id = #{id}")
-    SongRating findRating(int id);
+    SongIndexed findRating(int id);
 
     @Insert("INSERT into Song_Rating_TMP(FILEPATH, ACOUSTID, MUSICBRAINZID, RATING) VALUES(#{filePath}, #{acoustID}, #{musicBrainzID}, #{rating})")
-    void insertSong(SongRating song);
+    void insertSong(SongIndexed song);
 
     @Select("SELECT * FROM Song_Rating WHERE ACOUSTID = '${acoustID}'")
-    SongRating selectAcoustIDSong(String acoustID);
+    SongIndexed selectAcoustIDSong(String acoustID);
 
     @Select("SELECT * FROM Song_Rating WHERE MUSICBRAINZID = '${musicBrainzID}'")
-    SongRating selectMusicBrainzIDSong(String musicBrainzID);
+    SongIndexed selectMusicBrainzIDSong(String musicBrainzID);
 
     /**
      * Update Statements are prepared statements. Therefore no need to embrace #{filePath} with " ' "
@@ -30,7 +30,7 @@ public interface RatingMapping
      * @param song
      */
     @Update("UPDATE Song_Rating SET RATING = #{rating} WHERE FILEPATH = #{filePath}")
-    void updateRating(SongRating song);
+    void updateRating(SongIndexed song);
 
     @Select("SELECT RATING FROM Song_Rating where ACOUSTID = '${acoustID}'")
     Integer selectRatingByAcoustId(String acoustID);

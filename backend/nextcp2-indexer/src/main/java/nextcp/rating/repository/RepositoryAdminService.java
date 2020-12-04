@@ -28,18 +28,18 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import nextcp.rating.RatingConfig;
-import nextcp.rating.domain.SongRating;
+import nextcp.indexer.IndexerConfig;
+import nextcp.rating.domain.SongIndexed;
 
 /**
- * Update TARGET_DB_SCHEMA to latest update sql file
+ * 
  */
 @Service
 public class RepositoryAdminService
 {
     private static final Logger log = LoggerFactory.getLogger(RepositoryAdminService.class.getName());
 
-    private RatingConfig config = null;
+    private IndexerConfig config = null;
 
     private PathMatcher matcher = null;
 
@@ -48,7 +48,7 @@ public class RepositoryAdminService
     private IndexerSessionFactory sessionFactory = null;
     
     @Autowired
-    public RepositoryAdminService(RatingConfig config, IndexerSessionFactory sessionFactory)
+    public RepositoryAdminService(IndexerConfig config, IndexerSessionFactory sessionFactory)
     {
         this.sessionFactory = sessionFactory;
         this.config = config;
@@ -129,7 +129,7 @@ public class RepositoryAdminService
 
     private void updateDatabase(Path p, SqlSession session, AtomicInteger inserts)
     {
-        SongRating song = new SongRating();
+        SongIndexed song = new SongIndexed();
         song.setFilePath(p.toString());
         AudioFile audioFile;
         try

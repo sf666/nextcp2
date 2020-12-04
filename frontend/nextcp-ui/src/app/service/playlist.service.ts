@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs';
 import { SseService } from './sse/sse.service';
 import { GenericResultService } from './generic-result.service';
-import { GenericBooleanRequest, GenericNumberRequest, MusicItemDto, PlayRequestDto, PlaylistState, ContainerDto, PlaylistAddContainerRequest } from './dto.d';
+import { GenericBooleanRequest, GenericNumberRequest, MusicItemDto, PlayRequestDto, PlaylistState, ContainerDto, PlaylistAddContainerRequest, FileSystemPlaylistAdd } from './dto.d';
 import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
 import { Injectable, OnInit } from '@angular/core';
@@ -23,6 +23,10 @@ export class PlaylistService implements OnInit {
     TransportState: 'unknown'
   }
 
+  // Default Playlists located on the file system
+  fsPlaylists: string[] = [];
+
+
   // Playlist items of selected media renderer device
   public playlistItems: MusicItemDto[] = [];
 
@@ -43,9 +47,18 @@ export class PlaylistService implements OnInit {
     });
 
     sseService.mediaRendererPlaylistStateChanged$.subscribe(data => {
-      if (deviceService.isMediaRendererSelected(data.udn)) { 
-        this.playlistState = data 
+      if (deviceService.isMediaRendererSelected(data.udn)) {
+        this.playlistState = data
       }
+    });
+
+    // 
+    // read available default Playlists
+    // ================================================================================
+    const uri = '/getDefaultPlaylists';
+
+    this.httpService.get<string[]>(this.baseUri, uri).subscribe(data => {
+      this.fsPlaylists = data;
     });
   }
 
@@ -208,4 +221,15 @@ export class PlaylistService implements OnInit {
     const uri = '/previous';
     this.httpService.post(this.baseUri, uri, this.getSelectedMediaRendererUdn()).subscribe();
   }
+
+  //
+  // Filesystem Playlist actions
+  // ========================================================================
+
+  public addToFilesystemPlaylist(musicBrainzId : string, playlistName: string): void {
+    const uri = '/addToFilesystemPlaylist';
+    let req : FileSystemPlaylistAdd = {musicBrainzId: musicBrainzId, playlistName: playlistName};
+    this.httpService.post(this.baseUri, uri, req).subscribe();
+  }
+
 }

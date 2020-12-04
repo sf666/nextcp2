@@ -25,8 +25,8 @@ import nextcp.dto.Config;
 import nextcp.dto.LocalIndexSupport;
 import nextcp.dto.MusicbrainzSupport;
 import nextcp.dto.RatingStrategy;
+import nextcp.indexer.IndexerConfig;
 import nextcp.musicbrainz.MusicBrainzConfig;
-import nextcp.rating.RatingConfig;
 import nextcp.util.FileOpsNio;
 
 @Service
@@ -78,12 +78,13 @@ public class ConfigPersistence
     }
 
     @Bean
-    public RatingConfig ratingConfigProducer()
+    public IndexerConfig indexerConfigProducer()
     {
-        RatingConfig rc = new RatingConfig();
+        IndexerConfig rc = new IndexerConfig();
         rc.isActive = config.localIndexerSupport.isActive;
         rc.musicDirectory = config.localIndexerSupport.musicRootPath;
         rc.supportedFileTypes = config.localIndexerSupport.supportedFileTypes;
+        rc.playlistDirectory = config.playlistPath;
         return rc;
     }
 

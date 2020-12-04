@@ -1,4 +1,4 @@
-package nextcp.rating.repository;
+package nextcp.indexer.service;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,8 +18,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import nextcp.rating.RatingException;
-import nextcp.rating.domain.SongRating;
+import nextcp.indexer.IndexerException;
+import nextcp.rating.domain.SongIndexed;
+import nextcp.rating.repository.RepositoryAdminService;
+import nextcp.rating.repository.SongPersistenceService;
 
 /**
  * Main Rating-Service class for interaction.
@@ -56,35 +58,35 @@ public class LocalRatingService
      * @param acoustId
      * @param ratingInStars
      */
-    public void setAcousticRatingInStars(String acoustId, int ratingInStars) throws RatingException
+    public void setAcousticRatingInStars(String acoustId, int ratingInStars) throws IndexerException
     {
         if (ratingInStars < 0 || ratingInStars > 5)
         {
-            throw new RatingException(RatingException.ILLEGAL_RATING_VALUE, "Rating value must be between 0 and 5 (including).");
+            throw new IndexerException(IndexerException.ILLEGAL_RATING_VALUE, "Rating value must be between 0 and 5 (including).");
         }
 
         if (StringUtils.isBlank(acoustId))
         {
-            throw new RatingException(RatingException.EMPTY_ACOUSTIC_ID, "AcousticID must not be empty or blanc.");
+            throw new IndexerException(IndexerException.EMPTY_ACOUSTIC_ID, "AcousticID must not be empty or blanc.");
         }
 
-        SongRating song = songPersistenceService.getSongByAcoustId(acoustId);
+        SongIndexed song = songPersistenceService.getSongByAcoustId(acoustId);
         persistSongRatingInDbAndMusicFile(ratingInStars, song);
     }
 
-    public void setMusicBrainzRatingInStars(String musicBrainzTitleId, int ratingInStars) throws RatingException
+    public void setMusicBrainzRatingInStars(String musicBrainzTitleId, int ratingInStars) throws IndexerException
     {
         if (ratingInStars < 0 || ratingInStars > 5)
         {
-            throw new RatingException(RatingException.ILLEGAL_RATING_VALUE, "Rating value must be between 0 and 5 (including).");
+            throw new IndexerException(IndexerException.ILLEGAL_RATING_VALUE, "Rating value must be between 0 and 5 (including).");
         }
 
         if (StringUtils.isBlank(musicBrainzTitleId))
         {
-            throw new RatingException(RatingException.EMPTY_ACOUSTIC_ID, "MusicBrainz-Title-ID must not be empty or blanc.");
+            throw new IndexerException(IndexerException.EMPTY_ACOUSTIC_ID, "MusicBrainz-Title-ID must not be empty or blanc.");
         }
 
-        SongRating song = songPersistenceService.getSongByMusicBrainzId(musicBrainzTitleId);
+        SongIndexed song = songPersistenceService.getSongByMusicBrainzId(musicBrainzTitleId);
         if (song == null)
         {
             throw new RuntimeException("song not available in local rating DB.");
@@ -101,7 +103,7 @@ public class LocalRatingService
      * @param ratingInStars
      * @param song
      */
-    private void persistSongRatingInDbAndMusicFile(int ratingInStars, SongRating song)
+    private void persistSongRatingInDbAndMusicFile(int ratingInStars, SongIndexed song)
     {
         AudioFile audioFile;
         try

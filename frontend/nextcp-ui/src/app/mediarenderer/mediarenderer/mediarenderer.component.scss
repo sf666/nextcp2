@@ -1,6 +1,6 @@
 img {
-//    object-fit: cover;
-    width     : 500px;
+    //    object-fit: cover;
+    width       : 500px;
     //height    : 500px;
 }
 
@@ -24,8 +24,25 @@ img {
 
 .title {
     @extend .baseFontsize;
-    word-wrap: break-word;
+    word-wrap    : break-word;
     font-size    : 2rem;
     color        : var(--snow-white-3);
     margin-bottom: 20px;
+}
+
+.buttons-container {
+    margin-top: 40px;
+}
+
+.mr-buttons {
+    background-color: rgba(229, 238, 255, .1);
+    color           : rgba(229, 238, 255, .7);
+    text-align      : left;
+    min-width       : 8rem;
+    margin-right    : 16px;
+    margin-top      : 16px;
+
+    &:first-child {
+        margin-left: 0;
+    }
 }

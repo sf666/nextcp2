@@ -1,13 +1,16 @@
 package nextcp.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.fourthline.cling.model.types.UDN;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,12 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import nextcp.dto.ContainerItemDto;
+import nextcp.dto.FileSystemPlaylistAdd;
 import nextcp.dto.GenericBooleanRequest;
 import nextcp.dto.GenericNumberRequest;
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.PlayRequestDto;
 import nextcp.dto.PlaylistAddContainerRequest;
 import nextcp.dto.PlaylistState;
+import nextcp.dto.ToastrMessage;
+import nextcp.indexer.IndexerException;
+import nextcp.indexer.service.FilesystemPlaylistService;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
@@ -36,6 +43,49 @@ public class RestPlaylistService extends BaseRestService
 
     @Autowired
     private DeviceRegistry deviceRegistry = null;
+
+    @Autowired
+    private FilesystemPlaylistService filesystemPlaylistService = null;
+
+    @Autowired
+    private ApplicationEventPublisher publisher = null;
+
+    //
+    // Filesystem playlist service
+    // =======================================================================
+    @GetMapping("/getDefaultPlaylists")
+    public List<String> getDefaultPlaylists()
+    {
+        try
+        {
+            return filesystemPlaylistService.getAvailablePlaylistNames();
+        }
+        catch (Exception e)
+        {
+            log.warn("defaultPlaylist", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "Filesystem Playlist", e.getMessage()));
+            return new ArrayList<String>();
+        }
+    }
+
+    @PostMapping("/addToFilesystemPlaylist")
+    public void addToFilesystemPlaylist(@RequestBody FileSystemPlaylistAdd addRequest)
+    {
+        try
+        {
+            filesystemPlaylistService.addSongToPlaylist(addRequest.musicBrainzId, addRequest.playlistName);
+            publisher.publishEvent(new ToastrMessage(null, "success", "Playlist", "song successfully added to playlist."));
+        }
+        catch (IndexerException e)
+        {
+            log.warn("add to fs playlist", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "Playlist", e.description));
+        }
+    }
+
+    //
+    // UPnP playlist service
+    // =======================================================================
 
     @PostMapping("/getState")
     public PlaylistState getState(@RequestBody String rendererUdn)
@@ -120,7 +170,7 @@ public class RestPlaylistService extends BaseRestService
         {
             MediaRendererDevice rendererDevice = getMediaRendererByUdn(req.mediaRendererUdn);
             checkDevice(rendererDevice);
-            if (req.shuffle != null) 
+            if (req.shuffle != null)
             {
                 rendererDevice.getPlaylistServiceBridge().deleteAll();
                 rendererDevice.getPlaylistServiceBridge().setShuffle(req.shuffle);

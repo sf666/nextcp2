@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PlaylistComponent } from './playlist.component';
+import { DefautPlaylistsComponent } from './defaut-playlists.component';
 
-describe('PlaylistComponent', () => {
-  let component: PlaylistComponent;
-  let fixture: ComponentFixture<PlaylistComponent>;
+describe('DefautPlaylistsComponent', () => {
+  let component: DefautPlaylistsComponent;
+  let fixture: ComponentFixture<DefautPlaylistsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PlaylistComponent ]
+      declarations: [ DefautPlaylistsComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PlaylistComponent);
+    fixture = TestBed.createComponent(DefautPlaylistsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

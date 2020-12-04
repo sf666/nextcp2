@@ -231,6 +231,10 @@ InputSourceDto:
  # Client Request classes
  #
 
+FileSystemPlaylistAdd:
+   playlistName : String
+   musicBrainzId : String
+
 GenericNumberRequest:
    deviceUDN: String
    value : Long

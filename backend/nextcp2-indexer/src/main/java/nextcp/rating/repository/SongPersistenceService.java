@@ -4,7 +4,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import nextcp.rating.domain.SongRating;
+import nextcp.rating.domain.SongIndexed;
 
 @Service
 public class SongPersistenceService
@@ -17,7 +17,7 @@ public class SongPersistenceService
         this.sessionFactory = sessionFactory;
     }
 
-    public SongRating getSongByAcoustId(String acoustId)
+    public SongIndexed getSongByAcoustId(String acoustId)
     {
         try (SqlSession session = sessionFactory.openSession())
         {
@@ -25,7 +25,7 @@ public class SongPersistenceService
         }
     }
 
-    public SongRating getSongByMusicBrainzId(String musicBrainzId)
+    public SongIndexed getSongByMusicBrainzId(String musicBrainzId)
     {
         try (SqlSession session = sessionFactory.openSession())
         {
@@ -49,7 +49,7 @@ public class SongPersistenceService
         }
     }
 
-    public int updateSong(SongRating song)
+    public int updateSong(SongIndexed song)
     {
         try (SqlSession session = sessionFactory.openSession(true))
         {

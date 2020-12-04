@@ -17,7 +17,8 @@ import org.springframework.test.context.ContextConfiguration;
 
 import nextcp.db.DatabaseConfig;
 import nextcp.db.SessionManager;
-import nextcp.rating.repository.LocalRatingService;
+import nextcp.indexer.IndexerConfig;
+import nextcp.indexer.service.LocalRatingService;
 import nextcp.rating.repository.RepositoryAdminService;
 
 @SpringBootTest
@@ -93,12 +94,12 @@ public class TestDb
     }
 
     @Bean
-    public RatingConfig getConfig()
+    public IndexerConfig getConfig()
     {
 
         log.info("DB File is : " + dbFile.getAbsolutePath());
 
-        RatingConfig rc = new RatingConfig();
+        IndexerConfig rc = new IndexerConfig();
         rc.musicDirectory = "/music/";
         rc.supportedFileTypes = "flac, mp3, ogg, ape";
         return rc;
