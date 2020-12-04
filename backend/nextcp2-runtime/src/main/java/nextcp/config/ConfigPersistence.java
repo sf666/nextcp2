@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
@@ -39,7 +40,7 @@ public class ConfigPersistence
 
     private Configuration systemConfig = new SystemConfiguration();
 
-    private static final String DEFAULT_CONFIG_FILENAME = "nextcp2Config.json";
+    private static final String DEFAULT_CONFIG_FILENAME = "nextcp2config.json";
     private static final String DEFAULT_UNIX_CONFIG_PATH = "/etc/nextcp2";
 
     private ObjectMapper om = new ObjectMapper();
@@ -49,9 +50,16 @@ public class ConfigPersistence
     @PostConstruct
     public void init()
     {
-        findConfig();
-        readConfig();
-        writeConfig();
+        try
+        {
+            findConfig();
+            readConfig();
+            writeConfig();
+        }
+        catch (Exception e)
+        {
+            log.warn("Error while reading config file.", e);
+        }
     }
 
     @Bean
@@ -151,23 +159,12 @@ public class ConfigPersistence
         return systemConfig.getString("configFile");
     }
 
-    public void readConfig()
+    public void readConfig() throws JsonParseException, JsonMappingException, IOException
     {
         if (configurationFilename != null)
         {
-            try
-            {
-                config = om.readValue(new File(configurationFilename), Config.class);
-                applyDefaults();
-            }
-            catch (JsonParseException e)
-            {
-                log.error("error in config file. File could not be parsed.", e);
-            }
-            catch (IOException e)
-            {
-                log.error("could not write config", e);
-            }
+            config = om.readValue(new File(configurationFilename), Config.class);
+            applyDefaults();
         }
         else
         {

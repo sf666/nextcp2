@@ -21,12 +21,13 @@ public class Config
     public LocalIndexSupport localIndexerSupport;
     public MusicbrainzSupport musicbrainzSupport;
     public RatingStrategy ratingStrategy;
+    public String playlistPath;
 
     public Config()
     {
     }
 
-    public Config(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, LocalIndexSupport localIndexerSupport, MusicbrainzSupport musicbrainzSupport, RatingStrategy ratingStrategy)
+    public Config(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, LocalIndexSupport localIndexerSupport, MusicbrainzSupport musicbrainzSupport, RatingStrategy ratingStrategy, String playlistPath)
     {
         this.generateUpnpCode = generateUpnpCode;
         this.generateUpnpCodePath = generateUpnpCodePath;
@@ -40,6 +41,7 @@ public class Config
         this.localIndexerSupport = localIndexerSupport;
         this.musicbrainzSupport = musicbrainzSupport;
         this.ratingStrategy = ratingStrategy;
+        this.playlistPath = playlistPath;
     }
     
     @Override
@@ -59,6 +61,7 @@ public class Config
         sb.append("localIndexerSupport=").append(this.localIndexerSupport).append(", ");
         sb.append("musicbrainzSupport=").append(this.musicbrainzSupport).append(", ");
         sb.append("ratingStrategy=").append(this.ratingStrategy).append(", ");
+        sb.append("playlistPath=").append(this.playlistPath).append(", ");
         sb.append("]");
         return sb.toString();
     }

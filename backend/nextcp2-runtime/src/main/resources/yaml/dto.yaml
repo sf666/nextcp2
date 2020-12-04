@@ -20,6 +20,7 @@ Config:
    localIndexerSupport: LocalIndexSupport
    musicbrainzSupport: MusicbrainzSupport
    ratingStrategy: RatingStrategy
+   playlistPath: String
 
 RendererConfigDto:
    rendererDevices: List<RendererDeviceConfiguration>
