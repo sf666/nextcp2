@@ -37,7 +37,27 @@ public interface DatabaseMapper
      *            config value
      * @return 0 = unsuccess, 1 = success
      */
-    @Update("MERGE INTO DATABASE_CONFIG KEY (config_entry) VALUES (#{key}, #{value});")
+    @Update("MERGE INTO DATABASE_CONFIG KEY (config_entry) VALUES (#{key}, #{value})")
     Integer updateConfigValue(KeyValuePair keyValue);
 
+    /**
+     * Read any config value
+     * 
+     * @param configEntry
+     * @return
+     */
+    @Select("SELECT lookupValue FROM JSON_STORE where config_entry = '${key}'")
+    String selectJsonValue(String key);
+
+    /**
+     * Insert or update any config value
+     * 
+     * @param key
+     *            config key
+     * @param value
+     *            config value
+     * @return 0 = unsuccess, 1 = success
+     */
+    @Update("MERGE INTO JSON_STORE KEY (lookupKey) VALUES (#{key}, #{value})")
+    Integer updateJsonValue(KeyValuePair keyValue);
 }

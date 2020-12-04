@@ -54,7 +54,7 @@ public class RendererConfig
         {
             ObjectWriter writer = om.writer();
             String value = writer.withDefaultPrettyPrinter().writeValueAsString(config);
-            dbService.updateConfigValue(new KeyValuePair(CONFIG_KEY_RENDERER_DEVICES, value));
+            dbService.updateJsonStoreValue(new KeyValuePair(CONFIG_KEY_RENDERER_DEVICES, value));
         }
         catch (JsonProcessingException e)
         {
@@ -71,7 +71,7 @@ public class RendererConfig
     {
 
         String value = "";
-        value = dbService.selectConfigValue(CONFIG_KEY_RENDERER_DEVICES);
+        value = dbService.selectJsonStoreValue(CONFIG_KEY_RENDERER_DEVICES);
         RendererConfigDto renderer = readConfig(value);
         return renderer;
     }

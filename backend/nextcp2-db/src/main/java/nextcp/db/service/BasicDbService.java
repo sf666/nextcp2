@@ -67,4 +67,42 @@ public class BasicDbService
             return session.selectOne("nextcp.db.sql.DatabaseMapper.updateConfigValue", keyValue);
         }
     }
+
+    /**
+     * 
+     * @param key
+     *            lookup key
+     * 
+     * @return 0 = not found, 1 = found
+     */
+    public String selectJsonStoreValue(String key)
+    {
+        try
+        {
+            try (SqlSession session = factory.openSession())
+            {
+                return session.selectOne("nextcp.db.sql.DatabaseMapper.selectJsonValue", key);
+            }
+        }
+        catch (Exception e)
+        {
+            // No value ...
+            return null;
+        }
+    }
+
+    /**
+     * 
+     * @param key
+     *            lookup key
+     * 
+     * @return 0 = not found, 1 = found
+     */
+    public String updateJsonStoreValue(KeyValuePair keyValue)
+    {
+        try (SqlSession session = factory.openSession())
+        {
+            return session.selectOne("nextcp.db.sql.DatabaseMapper.updateJsonValue", keyValue);
+        }
+    }
 }
