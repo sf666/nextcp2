@@ -48,6 +48,11 @@ public class RestDeviceRendererService
     {
         log.info(String.format("Setting standby state on device %s to : %s", newState.rendererUDN, newState.standby.toString()));
         MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(newState.rendererUDN));
+        
+        if (newState.standby)
+        {
+            device.getPlaylistServiceBridge().pause();
+        }
         device.getDeviceDriver().setStandby(newState.standby);
     }
 
