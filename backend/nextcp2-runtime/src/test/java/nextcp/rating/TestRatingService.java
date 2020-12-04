@@ -28,19 +28,24 @@ public class TestRatingService
     @Test
     public void testRating()
     {
+        String trackId = "8ee8158a-060c-4225-9258-b6d2206549ca";
+
+        int numUp = ratingService.setRatingInStarsByMusicBrainzId(trackId, 3);
+        assertTrue(numUp == 1);
+
+        int rating = ratingService.getRatingInStarsByMusicBrainzId(trackId);
+        assertTrue(rating == 3);
+    }
+
+    static
+    {
         try
         {
             System.setProperty("configFile", File.createTempFile("test", "testRating").getAbsolutePath());
-            String trackId = "8ee8158a-060c-4225-9258-b6d2206549ca";
-
-            int numUp = ratingService.setRatingInStarsByMusicBrainzId(trackId, 3);
-            assertTrue(numUp == 1);
-
-            int rating = ratingService.getRatingInStarsByMusicBrainzId(trackId);
-            assertTrue(rating == 3);
         }
         catch (IOException e)
         {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

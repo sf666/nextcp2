@@ -163,7 +163,15 @@ public class ConfigPersistence
     {
         if (configurationFilename != null)
         {
-            config = om.readValue(new File(configurationFilename), Config.class);
+            try
+            {
+                config = om.readValue(new File(configurationFilename), Config.class);
+            }
+            catch (Exception e)
+            {
+                log.warn("supplied config file is broken. Generating default config ...");
+                config = getDefaultConfig();
+            }
             applyDefaults();
         }
         else
