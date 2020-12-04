@@ -16,7 +16,7 @@ import nextcp.service.RatingService;
 @Configuration
 @ContextConfiguration(classes = SpringTestConfiguration.class)
 @ComponentScan(
-{ "nextcp" })
+{ "nextcp.rating" })
 public class TestRatingService
 {
     @Autowired
