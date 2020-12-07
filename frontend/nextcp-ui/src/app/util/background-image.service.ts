@@ -8,11 +8,15 @@ export class BackgroundImageService {
   constructor() { }
 
   public setBackgroundImageMainScreen(url: string) : void {
-    document.getElementById('main-screen').style.backgroundImage = 'url("' + url + '")';
+    if (Modernizr.backdropfilter && document.getElementById('main-screen')) {
+      document.getElementById('main-screen').style.backgroundImage = 'url("' + url + '")';
+    }
   }
 
   public setFooterBackgroundImage(url: string) : void {
-    document.getElementById('footer-background').style.backgroundImage = 'url("' + url + '")';
+    if (Modernizr.backdropfilter && document.getElementById('footer-background')) {
+      document.getElementById('footer-background').style.backgroundImage = 'url("' + url + '")';
+    }
   }  
 }
 

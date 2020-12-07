@@ -16,7 +16,7 @@
   </div>
 
   <renderer-footer *ngIf="layoutService.footerVisible"></renderer-footer>  
-  <div class="bg-img-footer" id="footer-background" *ngIf="layoutService.footerVisible">
+  <div class="bg-img-footer" id="footer-background" *ngIf="layoutService.footerVisible && showBlur()">
   </div>
 
 </div>
