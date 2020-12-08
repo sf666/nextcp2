@@ -226,7 +226,7 @@ public class DtoBuilder
         itemDto.refId = item.getRefID();
         itemDto.mediaServerUDN = mediaServerUdn;
 
-        itemDto.musicBrainzId = extractMediaPlayerMusicBrainzMetadata(item);
+        extractDescMetadata(itemDto, item);
         if (item instanceof AudioItem)
         {
             addAudioItem((AudioItem) item, itemDto);
@@ -240,7 +240,13 @@ public class DtoBuilder
         return itemDto;
     }
 
-    private MusicBrainzId extractMediaPlayerMusicBrainzMetadata(Item item)
+    // itemDto.musicBrainzId
+    private void extractDescMetadata(MusicItemDto itemDto, Item item)
+    {
+        itemDto.musicBrainzId = extractMusicBrainzId(item);
+    }
+
+    private MusicBrainzId extractMusicBrainzId(Item item)
     {
         MusicBrainzId mb = new MusicBrainzId();
         Optional<DescMeta> mpdDesc = item.getDescMetadata().stream().filter(n -> n.getType().equalsIgnoreCase("mpd-tags")).findFirst();
@@ -271,7 +277,25 @@ public class DtoBuilder
                         mb.TrackId = n.getTextContent();
                         break;
                     default:
-                        log.warn("unknown attribute : " + n.getNodeName());
+                        log.warn("unknown mpd-tags attribute : " + n.getNodeName());
+                        break;
+                }
+            }
+        }
+        mpdDesc = item.getDescMetadata().stream().filter(n -> n.getType().equalsIgnoreCase("ums-tags")).findFirst();
+        if (mpdDesc.isPresent())
+        {
+            Node metaChildNodes = ((Node) mpdDesc.get().getMetadata()).getFirstChild();
+            for (int i = 0; i < metaChildNodes.getChildNodes().getLength(); i++)
+            {
+                Node n = metaChildNodes.getChildNodes().item(i);
+                switch (n.getNodeName().toLowerCase())
+                {
+                    case "musicbrainztrackid":
+                        mb.TrackId = n.getTextContent();
+                        break;
+                    default:
+                        log.warn("unknown ums-tags attribute : " + n.getNodeName());
                         break;
                 }
             }
@@ -388,7 +412,7 @@ public class DtoBuilder
         {
             return "";
         }
-        
+
         StringBuilder sb = new StringBuilder();
         if (StringUtils.countMatches(duration, ":") == 1)
         {

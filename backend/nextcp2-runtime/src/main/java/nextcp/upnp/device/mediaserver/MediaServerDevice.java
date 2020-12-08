@@ -92,6 +92,10 @@ public class MediaServerDevice extends BaseDevice
             if (out != null && out.NumberReturned != null)
             {
                 log.info("Response Objects: " + out.NumberReturned);
+                if (log.isDebugEnabled())
+                {
+                    log.debug("DIDL Object : " + out.Result);
+                }
             }
 
             DIDLContent didl = generateDidlContent(out.Result);
