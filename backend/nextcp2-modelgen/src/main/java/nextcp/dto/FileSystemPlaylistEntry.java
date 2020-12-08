@@ -6,17 +6,17 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
  */
-public class FileSystemPlaylistAdd
+public class FileSystemPlaylistEntry
 {
 
     public String playlistName;
     public String musicBrainzId;
 
-    public FileSystemPlaylistAdd()
+    public FileSystemPlaylistEntry()
     {
     }
 
-    public FileSystemPlaylistAdd(String playlistName, String musicBrainzId)
+    public FileSystemPlaylistEntry(String playlistName, String musicBrainzId)
     {
         this.playlistName = playlistName;
         this.musicBrainzId = musicBrainzId;
@@ -26,7 +26,7 @@ public class FileSystemPlaylistAdd
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("FileSystemPlaylistAdd [");
+        sb.append("FileSystemPlaylistEntry [");
         sb.append("playlistName=").append(this.playlistName).append(", ");
         sb.append("musicBrainzId=").append(this.musicBrainzId).append(", ");
         sb.append("]");

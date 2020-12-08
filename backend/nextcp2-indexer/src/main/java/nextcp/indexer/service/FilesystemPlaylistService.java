@@ -81,12 +81,7 @@ public class FilesystemPlaylistService
     public List<String> addSongToPlaylist(String musicBrainzId, String playlistName)
     {
         Path playlistPath = getPlaylistPathFromName(playlistName);
-        SongIndexed songIndex = songPersistenceService.getSongByMusicBrainzId(musicBrainzId);
-
-        if (playlistPath == null || songIndex == null)
-        {
-            throw new IndexerException(IndexerException.PLAYLIST_PARAM_NOT_INITIALIZED, "cannnot add song to playlist. Playlist or song unavailable ... ");
-        }
+        SongIndexed songIndex = getIndexedSong(musicBrainzId, playlistPath);
 
         String entry = calculateRelativeSongPath(Paths.get(songIndex.getFilePath()), playlistPath);
         List<String> playlistEntries = readCurrentPlaylist(playlistPath);
@@ -102,14 +97,27 @@ public class FilesystemPlaylistService
         return playlistEntries;
     }
 
-    public List<String> removeSongFromPlaylist(String relativeSongPath, String playlistName)
+    private SongIndexed getIndexedSong(String musicBrainzId, Path playlistPath)
+    {
+        SongIndexed songIndex = songPersistenceService.getSongByMusicBrainzId(musicBrainzId);
+
+        if (playlistPath == null || songIndex == null)
+        {
+            throw new IndexerException(IndexerException.PLAYLIST_PARAM_NOT_INITIALIZED, "cannnot add song to playlist. Playlist or song unavailable ... ");
+        }
+        return songIndex;
+    }
+
+    public List<String> removeSongFromPlaylist(String musicBrainzId, String playlistName)
     {
         Path playlistPath = getPlaylistPathFromName(playlistName);
+        SongIndexed songIndex = getIndexedSong(musicBrainzId, playlistPath);
+        String entry = calculateRelativeSongPath(Paths.get(songIndex.getFilePath()), playlistPath);
 
         List<String> playlistEntries = readCurrentPlaylist(playlistPath);
-        if (!playlistEntries.remove(relativeSongPath))
+        if (!playlistEntries.remove(entry))
         {
-            log.warn("Song not in playlist : " + relativeSongPath != null ? relativeSongPath : "NULL");
+            log.warn("Song is not in playlist : " + entry != null ? entry : "NULL");
             throw new IndexerException(IndexerException.PLAYLIST_FILE_NOT_IN_PLAYLIST, "Cannot remove song. Song is not in playlist : ");
         }
         else

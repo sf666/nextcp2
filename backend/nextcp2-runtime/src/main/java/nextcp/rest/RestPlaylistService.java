@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import nextcp.dto.ContainerItemDto;
-import nextcp.dto.FileSystemPlaylistAdd;
+import nextcp.dto.FileSystemPlaylistEntry;
 import nextcp.dto.GenericBooleanRequest;
 import nextcp.dto.GenericNumberRequest;
 import nextcp.dto.MusicItemDto;
@@ -69,12 +69,27 @@ public class RestPlaylistService extends BaseRestService
     }
 
     @PostMapping("/addToFilesystemPlaylist")
-    public void addToFilesystemPlaylist(@RequestBody FileSystemPlaylistAdd addRequest)
+    public void addToFilesystemPlaylist(@RequestBody FileSystemPlaylistEntry addRequest)
     {
         try
         {
             filesystemPlaylistService.addSongToPlaylist(addRequest.musicBrainzId, addRequest.playlistName);
             publisher.publishEvent(new ToastrMessage(null, "success", "Playlist", "song successfully added to playlist."));
+        }
+        catch (IndexerException e)
+        {
+            log.warn("add to fs playlist", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "Playlist", e.description));
+        }
+    }
+
+    @PostMapping("/removeFromFilesystemPlaylist")
+    public void removeFromFilesystemPlaylist(@RequestBody FileSystemPlaylistEntry addRequest)
+    {
+        try
+        {
+            filesystemPlaylistService.removeSongFromPlaylist(addRequest.musicBrainzId, addRequest.playlistName);
+            publisher.publishEvent(new ToastrMessage(null, "success", "Playlist", "song successfully removed from playlist."));
         }
         catch (IndexerException e)
         {

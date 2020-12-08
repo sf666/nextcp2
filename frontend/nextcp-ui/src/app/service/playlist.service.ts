@@ -104,7 +104,7 @@ export class PlaylistService implements OnInit {
   }
 
   //
-  // openhome playlist actions
+  // renderer playlist actions
   // ===========================================================================
 
   public seekId(id: number) {

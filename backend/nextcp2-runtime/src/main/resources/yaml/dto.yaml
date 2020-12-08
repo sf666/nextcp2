@@ -231,7 +231,7 @@ InputSourceDto:
  # Client Request classes
  #
 
-FileSystemPlaylistAdd:
+FileSystemPlaylistEntry:
    playlistName : String
    musicBrainzId : String
 

@@ -31,7 +31,7 @@
                     </mat-icon>
                     add tracks
                 </button>
-                
+
                 <!-- minim server support -->
                 <button *ngIf="minimTagsList?.length > 0" mat-flat-button class="my-buttons"
                     (click)="openMinimTagDialog($event)">
@@ -58,19 +58,10 @@
     </div>
 </ng-template>
 
-<div *ngIf="containerList?.length > 0">
-    <div class="section head">Folder</div>
-    <div class="cardLayout">
-        <div class="my-Card" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)"
-            *ngFor="let container of containerList">
-            <img src="{{container.albumartUri}}" class="card-img-top" alt="{{container.title}}">
-            <div class="my-card-body">
-                <div class="my-card-title">{{container.title}}</div>
-            </div>
-        </div>
-    </div>
-</div>
-
+<!--
+ Playlist Elements
+ =========================================== 
+-->
 <div *ngIf="playlistList?.length > 0">
     <div class="section head">Playlists</div>
 
@@ -94,6 +85,19 @@
                         svgIcon="playlist-plus" aria-label="add to playlist">
                     </mat-icon>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="containerList?.length > 0">
+    <div class="section head">Folder</div>
+    <div class="cardLayout">
+        <div class="my-Card" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)"
+            *ngFor="let container of containerList">
+            <img src="{{container.albumartUri}}" class="card-img-top" alt="{{container.title}}">
+            <div class="my-card-body">
+                <div class="my-card-title">{{container.title}}</div>
             </div>
         </div>
     </div>
