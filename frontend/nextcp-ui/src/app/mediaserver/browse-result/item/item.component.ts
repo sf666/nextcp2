@@ -25,6 +25,13 @@ export class ItemComponent {
     return "top-div";
   }
 
+  getMusicTracks(): MusicItemDto[] {
+    if (this.contentDirectoryService.currentContainerList.musicItemDto?.length) {
+      return this.contentDirectoryService.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0);
+    }
+    return [];
+  }
+
   playAllTracks(): void {
     this.playlistService.addContainerToPlaylistAndPlay(this.contentDirectoryService.currentContainerList.currentContainer, false);
   }
