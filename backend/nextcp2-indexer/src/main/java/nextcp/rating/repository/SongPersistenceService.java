@@ -1,5 +1,7 @@
 package nextcp.rating.repository;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,11 +27,11 @@ public class SongPersistenceService
         }
     }
 
-    public SongIndexed getSongByMusicBrainzId(String musicBrainzId)
+    public List<SongIndexed> getSongByMusicBrainzId(String musicBrainzId)
     {
         try (SqlSession session = sessionFactory.openSession())
         {
-            return session.selectOne("nextcp.rating.repository.sql.RatingMapping.selectMusicBrainzIDSong", musicBrainzId);
+            return session.selectList("nextcp.rating.repository.sql.RatingMapping.selectMusicBrainzIDSong", musicBrainzId);
         }
     }
 

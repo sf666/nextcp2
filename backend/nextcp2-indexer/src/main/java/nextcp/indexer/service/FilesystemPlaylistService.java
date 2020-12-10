@@ -13,7 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import nextcp.indexer.IndexerConfig;
@@ -47,7 +46,7 @@ public class FilesystemPlaylistService
             Path dir = Paths.get(config.playlistDirectory);
             if (dir.toFile().isDirectory())
             {
-                Files.newDirectoryStream(dir , path -> isValidPlaylist(path.toString())).forEach(p -> addPlaylist(p));
+                Files.newDirectoryStream(dir, path -> isValidPlaylist(path.toString())).forEach(p -> addPlaylist(p));
             }
             else
             {
@@ -69,7 +68,7 @@ public class FilesystemPlaylistService
     {
         availablePlaylists.add(p);
         String name = p.getName(p.getNameCount() - 1).toString();
-        name = name.substring(0,name.indexOf('.'));
+        name = name.substring(0, name.indexOf('.'));
         playlistsNames.add(name);
     }
 
@@ -81,7 +80,7 @@ public class FilesystemPlaylistService
     public List<String> addSongToPlaylist(String musicBrainzId, String playlistName)
     {
         Path playlistPath = getPlaylistPathFromName(playlistName);
-        SongIndexed songIndex = getIndexedSong(musicBrainzId, playlistPath);
+        SongIndexed songIndex = getBestSong(getIndexedSong(musicBrainzId, playlistPath));
 
         String entry = calculateRelativeSongPath(Paths.get(songIndex.getFilePath()), playlistPath);
         List<String> playlistEntries = readCurrentPlaylist(playlistPath);
@@ -97,33 +96,62 @@ public class FilesystemPlaylistService
         return playlistEntries;
     }
 
-    private SongIndexed getIndexedSong(String musicBrainzId, Path playlistPath)
+    private SongIndexed getBestSong(List<SongIndexed> songs)
     {
-        SongIndexed songIndex = songPersistenceService.getSongByMusicBrainzId(musicBrainzId);
+        if (songs.size() == 1)
+        {
+            return null;
+        }
+        if (songs.size() == 1)
+        {
+            return songs.get(0);
+        }
+        // TODO analyse filetype and bitrate ...  
+        return songs.get(0);
+    }
 
-        if (playlistPath == null || songIndex == null)
+    /**
+     * 
+     * @param musicBrainzId
+     * @param playlistPath
+     * @return
+     */
+    private List<SongIndexed> getIndexedSong(String musicBrainzId, Path playlistPath)
+    {
+        List<SongIndexed> songIndexList = songPersistenceService.getSongByMusicBrainzId(musicBrainzId);
+
+        if (playlistPath == null || songIndexList == null || songIndexList.isEmpty())
         {
             throw new IndexerException(IndexerException.PLAYLIST_PARAM_NOT_INITIALIZED, "cannnot add song to playlist. Playlist or song unavailable ... ");
         }
-        return songIndex;
+        return songIndexList;
     }
 
     public List<String> removeSongFromPlaylist(String musicBrainzId, String playlistName)
     {
+        int numRemoved = 0;
         Path playlistPath = getPlaylistPathFromName(playlistName);
-        SongIndexed songIndex = getIndexedSong(musicBrainzId, playlistPath);
-        String entry = calculateRelativeSongPath(Paths.get(songIndex.getFilePath()), playlistPath);
-
+        List<SongIndexed> songIndexList = getIndexedSong(musicBrainzId, playlistPath);
         List<String> playlistEntries = readCurrentPlaylist(playlistPath);
-        if (!playlistEntries.remove(entry))
+
+        for (SongIndexed songIndex : songIndexList)
         {
-            log.warn("Song is not in playlist : " + entry != null ? entry : "NULL");
+            String entry = calculateRelativeSongPath(Paths.get(songIndex.getFilePath()), playlistPath);
+            if (!playlistEntries.remove(entry))
+            {
+                numRemoved++;
+                log.debug("Song is not in playlist : " + entry != null ? entry : "NULL");
+            }
+        }
+        if (numRemoved == 0)
+        {
             throw new IndexerException(IndexerException.PLAYLIST_FILE_NOT_IN_PLAYLIST, "Cannot remove song. Song is not in playlist : ");
         }
         else
         {
             writePlaylistToDisk(playlistEntries, playlistPath);
         }
+
         return playlistEntries;
     }
 

@@ -2,6 +2,7 @@ package nextcp.indexer.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jaudiotagger.audio.AudioFile;
@@ -86,12 +87,8 @@ public class LocalRatingService
             throw new IndexerException(IndexerException.EMPTY_ACOUSTIC_ID, "MusicBrainz-Title-ID must not be empty or blanc.");
         }
 
-        SongIndexed song = songPersistenceService.getSongByMusicBrainzId(musicBrainzTitleId);
-        if (song == null)
-        {
-            throw new RuntimeException("song not available in local rating DB.");
-        }
-        else
+        List<SongIndexed> songs = songPersistenceService.getSongByMusicBrainzId(musicBrainzTitleId);
+        for (SongIndexed song : songs)
         {
             persistSongRatingInDbAndMusicFile(ratingInStars, song);
         }
