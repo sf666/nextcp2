@@ -1,7 +1,9 @@
 <div class="d-flex">
     <div class="ml-4 mt-4 d-flex flex-column">
-        <img *ngIf="rendererService.trackInfoAvailable" src="{{getImgSrc()}}">
-        <star-rating [currentSong]="getCurrentTrack()"></star-rating>
+        <div class="mb-3">
+            <img *ngIf="rendererService.trackInfoAvailable" src="{{getImgSrc()}}">
+        </div>
+        <star-rating [size]="getStarSize()" [currentSong]="getCurrentTrack()"></star-rating>
     </div>
     <div class="d-flex flex-column ml-5 mt-5">
         <div class="d-flex flex-column minWidth">

@@ -4,20 +4,24 @@ import { SseService } from './../../service/sse/sse.service';
 import { RendererService } from './../../service/renderer.service';
 import { RatingServiceService } from './../../service/rating-service.service';
 import { MusicItemDto } from './../../service/dto.d';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'star-rating',
+  encapsulation: ViewEncapsulation.None,
   templateUrl: './star-rating.component.html',
   styleUrls: ['./star-rating.component.scss']
 })
+
 export class StarRatingComponent implements OnInit {
 
   @Input() currentSong: MusicItemDto;
-
+  @Input() size: string = "sm";
 
   private lastUpdateId: number;
   starsAvail: number[];
+
+
 
   constructor(
     private genericResultService: GenericResultService,
@@ -31,15 +35,28 @@ export class StarRatingComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  isVisible() : boolean {
+  isVisible(): boolean {
     return this.currentSong?.musicBrainzId?.TrackId?.length > 0;
   }
 
   starSelected(num: number) {
+    this.currentSong.rating = num;
     if (this.currentSong.musicBrainzId.TrackId) {
       this.ratingServiceService.setStarRatingByMusicBrainzID(this.currentSong.musicBrainzId.TrackId, num);
     } else {
       this.genericResultService.displayErrorMessage("current track has no identifier.", "add star rating");
+    }
+  }
+
+  getBtnSizeClass() {
+    if (this.size === 'sm') {
+      return "mat-icon-button-sm";
+    }
+  }
+
+  getIconSizeClass() {
+    if (this.size === 'sm') {
+      return "mat-icon-sm";
     }
   }
 
@@ -51,5 +68,4 @@ export class StarRatingComponent implements OnInit {
     }
     return "inactive";
   }
-
 }

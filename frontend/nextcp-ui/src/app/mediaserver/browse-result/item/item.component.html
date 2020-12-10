@@ -6,6 +6,7 @@
                     <div class="col small-col">#</div>
                     <div class="col">Title</div>
                     <div class="col">Artist</div>
+                    <div class="col mid-col">Rating</div>
                     <div class="col text-right mid-col">LG</div>
                     <div class="col mid-col"></div>
                 </div>
@@ -15,6 +16,7 @@
                     <div class="col col-greyed small-col">{{item.originalTrackNumber}}</div>
                     <div class="col ">{{item.title}}</div>
                     <div class="col ">{{item.artistName}}</div>
+                    <star-rating [currentSong]="item"></star-rating>
                     <div class="col text-right mid-col">{{getDuration(item)}}</div>
                     <div class="col col-greyed mid-col">...</div>
                 </div>

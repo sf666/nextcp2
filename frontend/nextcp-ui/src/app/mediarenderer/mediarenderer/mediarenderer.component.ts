@@ -65,6 +65,10 @@ export class MediarendererComponent implements OnInit {
     }
   }
 
+  getStarSize() {
+    return "lg";
+  }
+  
   public get canBeAddedToPlaylist(): boolean{
     return this.rendererService.trackInfo?.currentTrack?.musicBrainzId?.TrackId?.length > 0;
   }
