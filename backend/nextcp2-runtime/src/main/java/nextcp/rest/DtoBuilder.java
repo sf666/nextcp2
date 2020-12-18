@@ -294,6 +294,9 @@ public class DtoBuilder
                     case "musicbrainztrackid":
                         mb.TrackId = n.getTextContent();
                         break;
+                    case "musicbrainzreleaseid":
+                        mb.ReleaseTrackId = n.getTextContent();
+                        break;
                     default:
                         log.warn("unknown ums-tags attribute : " + n.getNodeName());
                         break;

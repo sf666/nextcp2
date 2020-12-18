@@ -1,3 +1,4 @@
+import { SongOptionsServiceService } from './../../popup/song-options/song-options-service.service';
 import { TimeDisplayService } from './../../../util/time-display.service';
 import { ScrollViewService } from './../../../util/scroll-view.service';
 import { MusicItemDto } from './../../../service/dto.d';
@@ -16,6 +17,7 @@ export class ItemComponent {
   constructor(
     public contentDirectoryService: ContentDirectoryService,
     private scrollViewService: ScrollViewService,
+    private songOptionsServiceService: SongOptionsServiceService,
     public avtransportService: AvtransportService,
     private timeDisplayService: TimeDisplayService,
     public playlistService: PlaylistService) { }
@@ -58,5 +60,9 @@ export class ItemComponent {
     } else {
       return "";
     }
+  }
+
+  showSongPopup(event : any , item: MusicItemDto) {
+    this.songOptionsServiceService.openOptionsDialog(event,item);
   }
 }

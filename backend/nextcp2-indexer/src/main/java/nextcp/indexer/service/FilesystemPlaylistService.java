@@ -22,222 +22,183 @@ import nextcp.rating.repository.IndexerSessionFactory;
 import nextcp.rating.repository.SongPersistenceService;
 
 @Service
-public class FilesystemPlaylistService
-{
-    private static final Logger log = LoggerFactory.getLogger(FilesystemPlaylistService.class.getName());
+public class FilesystemPlaylistService {
 
-    private List<Path> availablePlaylists = new ArrayList<>();
-    private List<String> playlistsNames = new ArrayList<>();
+	private static final Logger log = LoggerFactory.getLogger(FilesystemPlaylistService.class.getName());
 
-    @Autowired
-    private SongPersistenceService songPersistenceService = null;
+	private List<Path> availablePlaylists = new ArrayList<>();
+	private List<String> playlistsNames = new ArrayList<>();
 
-    @Autowired
-    public FilesystemPlaylistService(IndexerConfig config, IndexerSessionFactory sessionFactory)
-    {
-        if (StringUtils.isAllBlank(config.playlistDirectory))
-        {
-            log.info("'playlistPath' not configured. Filesystem playlist support is unavailable.");
-            return;
-        }
+	@Autowired
+	private SongPersistenceService songPersistenceService = null;
 
-        try
-        {
-            Path dir = Paths.get(config.playlistDirectory);
-            if (dir.toFile().isDirectory())
-            {
-                Files.newDirectoryStream(dir, path -> isValidPlaylist(path.toString())).forEach(p -> addPlaylist(p));
-            }
-            else
-            {
-                throw new IndexerException(IndexerException.PLAYLIST_DIRECTORY_NOT_EXISTS, "configured directory is not existent or not a directory.");
-            }
-        }
-        catch (Exception e)
-        {
-            log.warn("Error while scanning Playlist files from disc location : " + config.playlistDirectory != null ? config.playlistDirectory : "NULL", e);
-        }
-    }
+	@Autowired
+	public FilesystemPlaylistService(IndexerConfig config, IndexerSessionFactory sessionFactory) {
+		if (StringUtils.isAllBlank(config.playlistDirectory)) {
+			log.info("'playlistPath' not configured. Filesystem playlist support is unavailable.");
+			return;
+		}
 
-    public List<String> getAvailablePlaylistNames()
-    {
-        return playlistsNames;
-    }
+		try {
+			Path dir = Paths.get(config.playlistDirectory);
+			if (dir.toFile().isDirectory()) {
+				Files.newDirectoryStream(dir, path -> isValidPlaylist(path.toString())).forEach(p -> addPlaylist(p));
+			} else {
+				throw new IndexerException(IndexerException.PLAYLIST_DIRECTORY_NOT_EXISTS,
+					"configured directory is not existent or not a directory.");
+			}
+		} catch (Exception e) {
+			log.warn(
+				"Error while scanning Playlist files from disc location : " + config.playlistDirectory != null ? config.playlistDirectory
+					: "NULL",
+				e);
+		}
+	}
 
-    private void addPlaylist(Path p)
-    {
-        availablePlaylists.add(p);
-        String name = p.getName(p.getNameCount() - 1).toString();
-        name = name.substring(0, name.indexOf('.'));
-        playlistsNames.add(name);
-    }
+	public List<String> getAvailablePlaylistNames() {
+		return playlistsNames;
+	}
 
-    private Path getPlaylistPathFromName(String playlistName)
-    {
-        return availablePlaylists.get(playlistsNames.indexOf(playlistName));
-    }
+	private void addPlaylist(Path p) {
+		availablePlaylists.add(p);
+		String name = p.getName(p.getNameCount() - 1).toString();
+		name = name.substring(0, name.indexOf('.'));
+		playlistsNames.add(name);
+	}
 
-    public List<String> addSongToPlaylist(String musicBrainzId, String playlistName)
-    {
-        Path playlistPath = getPlaylistPathFromName(playlistName);
-        SongIndexed songIndex = getBestSong(getIndexedSong(musicBrainzId, playlistPath));
+	private Path getPlaylistPathFromName(String playlistName) {
+		return availablePlaylists.get(playlistsNames.indexOf(playlistName));
+	}
 
-        String entry = calculateRelativeSongPath(Paths.get(songIndex.getFilePath()), playlistPath);
-        List<String> playlistEntries = readCurrentPlaylist(playlistPath);
-        if (playlistEntries.contains(entry))
-        {
-            throw new IndexerException(IndexerException.PLAYLIST_FILE_EXISTS, "Song already exists in playlist");
-        }
-        else
-        {
-            playlistEntries.add(entry);
-            writePlaylistToDisk(playlistEntries, playlistPath);
-        }
-        return playlistEntries;
-    }
+	public List<String> addSongToPlaylist(String musicBrainzId, String playlistName) {
+		Path playlistPath = getPlaylistPathFromName(playlistName);
+		SongIndexed songIndex = getBestSong(getIndexedSong(musicBrainzId, playlistPath));
 
-    private SongIndexed getBestSong(List<SongIndexed> songs)
-    {
-        if (songs.size() == 1)
-        {
-            return null;
-        }
-        if (songs.size() == 1)
-        {
-            return songs.get(0);
-        }
-        // TODO analyse filetype and bitrate ...  
-        return songs.get(0);
-    }
+		if (songIndex == null) {
+			throw new IndexerException(IndexerException.SONG_NOT_FOUND, "song was not found for MBID : " + musicBrainzId);
+		}
+		if (playlistName == null) {
+			throw new IndexerException(IndexerException.PLAYLIST_NOT_FOUND, "playlist was not found. name : " + playlistName);
+		}
 
-    /**
-     * 
-     * @param musicBrainzId
-     * @param playlistPath
-     * @return
-     */
-    private List<SongIndexed> getIndexedSong(String musicBrainzId, Path playlistPath)
-    {
-        List<SongIndexed> songIndexList = songPersistenceService.getSongByMusicBrainzId(musicBrainzId);
+		String entry = calculateRelativeSongPath(Paths.get(songIndex.getFilePath()), playlistPath);
+		List<String> playlistEntries = readCurrentPlaylist(playlistPath);
+		if (playlistEntries.contains(entry)) {
+			throw new IndexerException(IndexerException.PLAYLIST_FILE_EXISTS, "Song already exists in playlist");
+		} else {
+			playlistEntries.add(entry);
+			writePlaylistToDisk(playlistEntries, playlistPath);
+		}
+		return playlistEntries;
+	}
 
-        if (playlistPath == null || songIndexList == null || songIndexList.isEmpty())
-        {
-            throw new IndexerException(IndexerException.PLAYLIST_PARAM_NOT_INITIALIZED, "cannnot add song to playlist. Playlist or song unavailable ... ");
-        }
-        return songIndexList;
-    }
+	private SongIndexed getBestSong(List<SongIndexed> songs) {
+		if (songs.size() == 0) {
+			return null;
+		}
+		if (songs.size() == 1) {
+			return songs.get(0);
+		}
+		// TODO analyse filetype and bitrate ...
+		return songs.get(0);
+	}
 
-    public List<String> removeSongFromPlaylist(String musicBrainzId, String playlistName)
-    {
-        int numRemoved = 0;
-        Path playlistPath = getPlaylistPathFromName(playlistName);
-        List<SongIndexed> songIndexList = getIndexedSong(musicBrainzId, playlistPath);
-        List<String> playlistEntries = readCurrentPlaylist(playlistPath);
+	/**
+	 * 
+	 * @param musicBrainzId
+	 * @param playlistPath
+	 * @return
+	 */
+	private List<SongIndexed> getIndexedSong(String musicBrainzId, Path playlistPath) {
+		List<SongIndexed> songIndexList = songPersistenceService.getSongByMusicBrainzId(musicBrainzId);
+		return songIndexList;
+	}
 
-        for (SongIndexed songIndex : songIndexList)
-        {
-            String entry = calculateRelativeSongPath(Paths.get(songIndex.getFilePath()), playlistPath);
-            if (!playlistEntries.remove(entry))
-            {
-                numRemoved++;
-                log.debug("Song is not in playlist : " + entry != null ? entry : "NULL");
-            }
-        }
-        if (numRemoved == 0)
-        {
-            throw new IndexerException(IndexerException.PLAYLIST_FILE_NOT_IN_PLAYLIST, "Cannot remove song. Song is not in playlist : ");
-        }
-        else
-        {
-            writePlaylistToDisk(playlistEntries, playlistPath);
-        }
+	public List<String> removeSongFromPlaylist(String musicBrainzId, String playlistName) {
+		int numRemoved = 0;
+		Path playlistPath = getPlaylistPathFromName(playlistName);
+		List<SongIndexed> songIndexList = getIndexedSong(musicBrainzId, playlistPath);
+		List<String> playlistEntries = readCurrentPlaylist(playlistPath);
 
-        return playlistEntries;
-    }
+		for (SongIndexed songIndex : songIndexList) {
+			String entry = calculateRelativeSongPath(Paths.get(songIndex.getFilePath()), playlistPath);
+			if (!playlistEntries.remove(entry)) {
+				numRemoved++;
+				log.debug("Song is not in playlist : " + entry != null ? entry : "NULL");
+			}
+		}
+		if (numRemoved == 0) {
+			throw new IndexerException(IndexerException.PLAYLIST_FILE_NOT_IN_PLAYLIST, "Cannot remove song. Song is not in playlist : ");
+		} else {
+			writePlaylistToDisk(playlistEntries, playlistPath);
+		}
 
-    private List<String> readCurrentPlaylist(Path playlistFile)
-    {
-        if (!Files.exists(playlistFile))
-        {
-            throw new IndexerException(IndexerException.PLAYLIST_NOT_EXISTS, "Playlist does not exists: " + playlistFile.toString());
-        }
+		return playlistEntries;
+	}
 
-        List<String> lines = new ArrayList<String>();
-        try
-        {
-            lines = Files.readAllLines(playlistFile, StandardCharsets.UTF_8);
-        }
-        catch (IOException e)
-        {
-            log.error("readCurrentPlaylist", e);
-        }
-        return lines;
-    }
+	private List<String> readCurrentPlaylist(Path playlistFile) {
+		if (!Files.exists(playlistFile)) {
+			throw new IndexerException(IndexerException.PLAYLIST_NOT_EXISTS, "Playlist does not exists: " + playlistFile.toString());
+		}
 
-    /**
-     * 
-     * @param event
-     * @param absolutePlaylistFile
-     * @return
-     */
-    private String calculateRelativeSongPath(Path absoluteSongPath, Path absolutePlaylistFile)
-    {
-        StringBuilder sb = new StringBuilder();
+		List<String> lines = new ArrayList<String>();
+		try {
+			lines = Files.readAllLines(playlistFile, StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			log.error("readCurrentPlaylist", e);
+		}
+		return lines;
+	}
 
-        if (absoluteSongPath.toString().startsWith(absolutePlaylistFile.getParent().toString()))
-        {
-            String relativePath = absoluteSongPath.toString().substring(absolutePlaylistFile.getParent().toString().length());
-            sb.append(".");
-            if (!relativePath.startsWith(File.separator))
-            {
-                sb.append(File.separator);
-            }
-            sb.append(relativePath);
-        }
-        else
-        {
-            Path commonRoot = absolutePlaylistFile.getParent();
-            do
-            {
-                sb.append("..");
-                sb.append(File.separator);
-                commonRoot = commonRoot.getParent();
-            }
-            while (!absoluteSongPath.toString().startsWith(commonRoot.toString()));
+	/**
+	 * 
+	 * @param event
+	 * @param absolutePlaylistFile
+	 * @return
+	 */
+	private String calculateRelativeSongPath(Path absoluteSongPath, Path absolutePlaylistFile) {
+		StringBuilder sb = new StringBuilder();
 
-            String relativePath = absoluteSongPath.toString().substring(commonRoot.toString().length() + 1);
-            sb.append(relativePath);
-            return sb.toString();
-        }
-        return sb.toString();
-    }
+		if (absoluteSongPath.toString().startsWith(absolutePlaylistFile.getParent().toString())) {
+			String relativePath = absoluteSongPath.toString().substring(absolutePlaylistFile.getParent().toString().length());
+			sb.append(".");
+			if (!relativePath.startsWith(File.separator)) {
+				sb.append(File.separator);
+			}
+			sb.append(relativePath);
+		} else {
+			Path commonRoot = absolutePlaylistFile.getParent();
+			do {
+				sb.append("..");
+				sb.append(File.separator);
+				commonRoot = commonRoot.getParent();
+			} while (!absoluteSongPath.toString().startsWith(commonRoot.toString()));
 
-    private void writePlaylistToDisk(List<String> lines, Path playlistFile)
-    {
-        try
-        {
-            Files.write(playlistFile, lines);
-        }
-        catch (IOException e)
-        {
-            log.warn("cannot write internal media renderer playlist file.", e);
-        }
-    }
+			String relativePath = absoluteSongPath.toString().substring(commonRoot.toString().length() + 1);
+			sb.append(relativePath);
+			return sb.toString();
+		}
+		return sb.toString();
+	}
 
-    public boolean isValidPlaylist(String filename)
-    {
-        if (filename.endsWith(".m3u"))
-        {
-            return true;
-        }
-        if (filename.endsWith(".m3u8"))
-        {
-            return true;
-        }
-        if (filename.endsWith(".pls"))
-        {
-            return true;
-        }
-        return false;
-    }
+	private void writePlaylistToDisk(List<String> lines, Path playlistFile) {
+		try {
+			Files.write(playlistFile, lines);
+		} catch (IOException e) {
+			log.warn("cannot write internal media renderer playlist file.", e);
+		}
+	}
+
+	public boolean isValidPlaylist(String filename) {
+		if (filename.endsWith(".m3u")) {
+			return true;
+		}
+		if (filename.endsWith(".m3u8")) {
+			return true;
+		}
+		if (filename.endsWith(".pls")) {
+			return true;
+		}
+		return false;
+	}
 }

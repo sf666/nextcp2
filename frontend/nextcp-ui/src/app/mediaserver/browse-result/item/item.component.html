@@ -8,17 +8,22 @@
                     <div class="col">Artist</div>
                     <div class="col mid-col">Rating</div>
                     <div class="col text-right mid-col">LG</div>
-                    <div class="col mid-col"></div>
+                    <div class="col small-col"></div>
                 </div>
             </div>
             <div class="item-tbody">
-                <div id="{{item.objectID}}" class="row" (click)="play(item)" *ngFor="let item of contentDirectoryService.currentContainerList.musicItemDto">
-                    <div class="col col-greyed small-col">{{item.originalTrackNumber}}</div>
-                    <div class="col">{{item.title}}</div>
-                    <div class="col">{{item.artistName}}</div>                    
+                <div id="{{item.objectID}}" class="row" *ngFor="let item of contentDirectoryService.currentContainerList.musicItemDto">
+                    <div (click)="play(item)" class="col col-greyed small-col">{{item.originalTrackNumber}}</div>
+                    <div (click)="play(item)" class="col">{{item.title}}</div>
+                    <div (click)="play(item)" class="col">{{item.artistName}}</div>                    
                     <div class="col mid-col"><star-rating [currentSong]="item"></star-rating></div>
                     <div class="col text-right mid-col">{{getDuration(item)}}</div>
-                    <div class="col col-greyed mid-col">...</div>
+                    <div class="col col-greyed small-col">    
+                        <button mat-icon-button aria-label="" class="" (click)="showSongPopup($event, item)">
+                            &#x22EE;    
+                        </button>
+                        
+                    </div>
                 </div>
             </div>
         </div>
