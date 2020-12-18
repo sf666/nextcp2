@@ -1,0 +1,34 @@
+.cardLayout {
+    display    : flex;
+    margin-left: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.5);
+
+    &.cover-card {
+        display       : flex;
+        flex-direction: column;
+        margin-right  : 1.5rem;
+        margin-bottom : 4rem;
+    }
+
+    &.card-body {
+        display         : flex;
+        flex-direction  : column;
+        background-color: black;
+        padding         : 0;
+        margin          : 0;
+        max-width       : $imgCardWidth;
+        min-width       : $imgCardWidth;
+    }
+}
+
+.card-title {
+    display      : flex;
+    flex         : 1;
+
+    padding-left    : 0.5rem;
+    padding-top     : 1rem;
+    font-size       : 0.9rem;
+    font-weight     : 500;
+    background-color: rgba(0, 0, 0, 0.5);
+    background-image: var(--main-background-color);
+}

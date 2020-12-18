@@ -95,6 +95,20 @@
 <div *ngIf="containerList?.length > 0">
     <div class="section head">Folder</div>
     <div class="cardLayout">
+        <div class="cardLayout cover-card" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)"
+            *ngFor="let container of containerList">
+            <img class="" src="{{container.albumartUri}}" class="" alt="{{container.title}}">
+            <div class="d-flex cardLayout card-body">
+                <div class="card-title">{{container.title}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--
+<div *ngIf="containerList?.length > 0">
+    <div class="section head">Folder</div>
+    <div class="cardLayout">
         <div class="my-Card" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)"
             *ngFor="let container of containerList">
             <img src="{{container.albumartUri}}" class="card-img-top" alt="{{container.title}}">
@@ -104,3 +118,4 @@
         </div>
     </div>
 </div>
+-->
