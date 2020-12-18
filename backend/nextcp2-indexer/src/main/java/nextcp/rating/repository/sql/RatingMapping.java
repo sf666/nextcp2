@@ -24,6 +24,9 @@ public interface RatingMapping
     @Select("SELECT * FROM Song_Rating WHERE MUSICBRAINZID = '${musicBrainzID}'")
     SongIndexed selectMusicBrainzIDSong(String musicBrainzID);
 
+    @Select("SELECT musicbrainzid FROM Song_Rating WHERE filepath = '${path}'")
+    String selectMusicBrainzIDFromPath(String path);
+
     /**
      * Update Statements are prepared statements. Therefore no need to embrace #{filePath} with " ' "
      * 

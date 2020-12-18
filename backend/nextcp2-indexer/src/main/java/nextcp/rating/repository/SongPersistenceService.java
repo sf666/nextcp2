@@ -60,4 +60,13 @@ public class SongPersistenceService
             return num;
         }
     }
+
+    public String selectMusicBrainzIDFromPath(String path)
+    {
+        try (SqlSession session = sessionFactory.openSession(true))
+        {
+            String id = session.selectOne("nextcp.rating.repository.sql.RatingMapping.selectMusicBrainzIDFromPath", path);
+            return id;
+        }        
+    }
 }
