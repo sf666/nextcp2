@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,7 +97,7 @@ public class FilesystemPlaylistService
 
         String entry = calculateRelativeSongPath(Paths.get(songIndex.getFilePath()), playlistPath);
         List<String> playlistEntries = readCurrentPlaylist(playlistPath);
-        if (isSongAlreadyInPlaylist(entry, playlistEntries))
+        if (isSongAlreadyInPlaylist(songIndex.getFilePath(), entry, playlistEntries, playlistPath))
         {
             throw new IndexerException(IndexerException.PLAYLIST_FILE_EXISTS, "Song already exists in playlist");
         }
@@ -115,7 +116,7 @@ public class FilesystemPlaylistService
      * @param playlistEntries
      * @return
      */
-    private boolean isSongAlreadyInPlaylist(String entry, List<String> playlistEntries)
+    private boolean isSongAlreadyInPlaylist(String absolutePath, String entry, List<String> playlistEntries, Path playlistPath)
     {
         if (playlistEntries.contains(entry))
         {
@@ -123,10 +124,16 @@ public class FilesystemPlaylistService
         }
         Set<String> mbIdSet = new HashSet<String>();
 
-        String entryId = songPersistenceService.selectMusicBrainzIDFromPath(entry);
+        String entryId = songPersistenceService.selectMusicBrainzIDFromPath(absolutePath);
+        if (entryId == null)
+        {
+            throw new IndexerException(IndexerException.PLAYLIST_NOT_EXISTS, "songs MusicBrainzID dissapeared : " + absolutePath);
+        }
+        String base = FilenameUtils.getFullPath(playlistPath.toFile().getAbsolutePath());
         for (String aPath : playlistEntries)
         {
-            mbIdSet.add(songPersistenceService.selectMusicBrainzIDFromPath(aPath));
+            String absoluteFile = FilenameUtils.concat(base, aPath);
+            mbIdSet.add(songPersistenceService.selectMusicBrainzIDFromPath(absoluteFile));
         }
         if (mbIdSet.contains(entryId))
         {
