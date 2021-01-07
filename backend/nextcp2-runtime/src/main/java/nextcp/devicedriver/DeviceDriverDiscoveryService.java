@@ -55,18 +55,25 @@ public class DeviceDriverDiscoveryService
                 }
             });
 
-            URL[] urls = new URL[flist.length];
-
-            for (int i = 0; i < flist.length; i++)
-                urls[i] = flist[i].toURI().toURL();
-
-            URLClassLoader ucl = new URLClassLoader(urls, this.getClass().getClassLoader());
-
-            ServiceLoader<IDeviceDriverFactory> loader = ServiceLoader.load(IDeviceDriverFactory.class, ucl);
-            for (IDeviceDriverFactory factory : loader)
+            if (flist != null)
             {
-                availableDeviceDriver.put(factory.getDriverCapabilities().getDeviceType(), factory);
-                log.info(String.format("Found Driver for device of type : %s ", factory.getDriverCapabilities().getDeviceType()));
+                URL[] urls = new URL[flist.length];
+
+                for (int i = 0; i < flist.length; i++)
+                    urls[i] = flist[i].toURI().toURL();
+
+                URLClassLoader ucl = new URLClassLoader(urls, this.getClass().getClassLoader());
+
+                ServiceLoader<IDeviceDriverFactory> loader = ServiceLoader.load(IDeviceDriverFactory.class, ucl);
+                for (IDeviceDriverFactory factory : loader)
+                {
+                    availableDeviceDriver.put(factory.getDriverCapabilities().getDeviceType(), factory);
+                    log.info(String.format("Found Driver for device of type : %s ", factory.getDriverCapabilities().getDeviceType()));
+                }
+            }
+            else
+            {
+                log.debug("no device driver available.");
             }
         }
         catch (Exception e)

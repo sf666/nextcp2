@@ -133,7 +133,7 @@ public class MediaServerDevice extends BaseDevice
 
     private String getParentName(ContainerDto current)
     {
-        if (current.id.equals("0"))
+        if (current == null || current.id.equals("0"))
         {
             return "";
         }
@@ -154,7 +154,7 @@ public class MediaServerDevice extends BaseDevice
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.warn("cannot get parent name", e);
             throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage());
         }
     }
