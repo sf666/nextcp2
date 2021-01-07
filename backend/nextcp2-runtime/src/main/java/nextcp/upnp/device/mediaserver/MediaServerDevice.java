@@ -133,7 +133,7 @@ public class MediaServerDevice extends BaseDevice
 
     private String getParentName(ContainerDto current)
     {
-        if (current == null || current.id.equals("0"))
+        if (current == null || current.id == null || current.id.equals("0"))
         {
             return "";
         }

@@ -31,12 +31,12 @@
 
     <ng-template #mixedTitles>
         <div class="cardLayout mixedTitles">
-            <div id="{{item.objectID}}" class="my-Card" *ngFor="let item of contentDirectoryService.currentContainerList.musicItemDto">
-                <img src="{{item.albumArtUrl}}" class="card-img-top" alt="{{item.title}}">
-                <div class="my-card-body">
-                    <div class="my-card-title">{{item.title}}</div>
+            <div id="{{item.objectID}}" class="cardLayout cover-card" *ngFor="let item of contentDirectoryService.currentContainerList.musicItemDto">
+                <img src="{{item.albumArtUrl}}" class="cardLayout image-container" alt="{{item.title}}">
+                <div class="d-flex cardLayout card-body">
+                    <div class="card-title">{{item.title}}</div>
                 </div>
-                <div class="play-overlay d-flex justify-content-center align-items-center">
+                <div class="cardLayout play-overlay d-flex justify-content-center align-items-center">
                     <mat-icon (click)="avtransportService.playResource(item)" class="play-overlay-button" svgIcon="play"
                         aria-label="play">
                     </mat-icon>

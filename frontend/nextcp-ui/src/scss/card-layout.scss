@@ -1,34 +1,70 @@
+@import "app-variables";
+
 .cardLayout {
-    display    : flex;
-    margin-left: 0.5rem;
-    background-color: rgba(0, 0, 0, 0.5);
+    display  : flex;
+    flex-wrap: wrap;
 
     &.cover-card {
         display       : flex;
+        margin-left   : 0.5rem;
+        position      : relative;
         flex-direction: column;
         margin-right  : 1.5rem;
         margin-bottom : 4rem;
+        max-width     : $imgCardWidth;
+        min-width     : $imgCardWidth;
+        max-width     : $imgCardWidth;
+        min-width     : $imgCardWidth;
     }
 
     &.card-body {
-        display         : flex;
-        flex-direction  : column;
-        background-color: black;
-        padding         : 0;
-        margin          : 0;
+        display       : flex;
+        flex-direction: column;
+        margin        : 0;
+        padding-top   : 16px;
+        padding-left  : 8px;
+        max-width     : $imgCardWidth;
+        min-width     : $imgCardWidth;
+    }
+
+    &.image-container {
+        position  : relative;
+        max-width : $imgCardWidth;
+        min-width : $imgCardWidth;
+        max-height: $imgCardWidth;
+        min-height: $imgCardWidth;
+    }
+
+    &.play-overlay {
+        position        : absolute;
+        top             : 0;
+        bottom          : 0;
+        left            : 0;
+        right           : 0;
+        height          : 100%;
+        width           : 100%;
+        opacity         : 0;
+        background-color: rgba($color: $pantone-Neutral-Black-C, $alpha: 0.95);
+        text-align      : center;
+        transition      : .3s ease;
+        opacity         : 0;
         max-width       : $imgCardWidth;
         min-width       : $imgCardWidth;
+        max-height      : $imgCardWidth;
+        min-height      : $imgCardWidth;
+
+        &:hover {
+            opacity: 0.7;
+        }
     }
 }
 
 .card-title {
-    display      : flex;
-    flex         : 1;
+    display: flex;
+    flex   : 1;
 
-    padding-left    : 0.5rem;
-    padding-top     : 1rem;
-    font-size       : 0.9rem;
-    font-weight     : 500;
-    background-color: rgba(0, 0, 0, 0.5);
-    background-image: var(--main-background-color);
+    color         : rgb(152, 152, 166);
+    font-size     : 0.9rem;
+    font-weight   : 500;
+    letter-spacing: 0.08rem;
 }

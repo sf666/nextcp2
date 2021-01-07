@@ -2,7 +2,7 @@
 <div class="outer-container">
     <div class="d-flex">
         <div>
-            <img src="{{currentContainer.albumartUri}}" class="img-top" alt="select media server ...">
+            <img class="cardLayout image-container" src="{{currentContainer.albumartUri}}" class="img-top" alt="select media server ...">
         </div>
         <div *ngIf="isLeaf(); else containerTitle" class="d-flex flex-column pl-4">
             <div class="d-flex flex-column">
@@ -40,7 +40,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 <ng-template #containerTitle>
@@ -58,33 +57,37 @@
     </div>
 </ng-template>
 
+
+<div class="section head"></div>
+
 <!--
  Playlist Elements
  =========================================== 
 -->
 <div *ngIf="playlistList?.length > 0">
-    <div class="section head">Playlists</div>
-
     <div class="cardLayout">
-        <div id="{{container.id}}" tabindex="-1" class="my-Card" *ngFor="let container of playlistList">
-            <img src="{{container.albumartUri}}" alt="{{container.title}}">
-            <div class="my-card-body">
-                <div class="my-card-title">{{container.title}}</div>
+        <div id="{{container.id}}" tabindex="-1" class="cardLayout cover-card" *ngFor="let container of playlistList">
+            <div class="cardLayout image-container">
+                <img class="cardLayout image-container" src="{{container.albumartUri}}" alt="{{container.title}}">
+                <div class="cardLayout play-overlay d-flex flex-column justify-content-center align-items-center">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <mat-icon (click)="browseTo(container)" class="play-overlay-button"
+                            svgIcon="folder-move-outline" aria-label="step into folder">
+                        </mat-icon>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <mat-icon (click)="playPlaylist(container)" class="play-overlay-button" svgIcon="play"
+                            aria-label="app to playlist and play">
+                        </mat-icon>
+                        <mat-icon (click)="playlistService.addContainerToPlaylist(container)"
+                            class="play-overlay-button" svgIcon="playlist-plus" aria-label="add to playlist">
+                        </mat-icon>
+                    </div>
+                </div>
             </div>
-            <div class="play-overlay d-flex flex-column justify-content-center align-items-center">
-                <div class="d-flex justify-content-center align-items-center">
-                    <mat-icon (click)="browseTo(container)" class="play-overlay-button" svgIcon="folder-move-outline"
-                        aria-label="step into folder">
-                    </mat-icon>
-                </div>
-                <div class="d-flex justify-content-center align-items-center">
-                    <mat-icon (click)="playPlaylist(container)" class="play-overlay-button" svgIcon="play"
-                        aria-label="app to playlist and play">
-                    </mat-icon>
-                    <mat-icon (click)="playlistService.addContainerToPlaylist(container)" class="play-overlay-button"
-                        svgIcon="playlist-plus" aria-label="add to playlist">
-                    </mat-icon>
-                </div>
+            <div class="d-flex cardLayout card-body">
+                <div class="playlistText">PLAYLIST</div>
+                <div class="card-title">{{container.title}}</div>
             </div>
         </div>
     </div>
@@ -93,29 +96,13 @@
 <!-- container elements -->
 
 <div *ngIf="containerList?.length > 0">
-    <div class="section head">Folder</div>
     <div class="cardLayout">
         <div class="cardLayout cover-card" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)"
             *ngFor="let container of containerList">
-            <img class="" src="{{container.albumartUri}}" class="" alt="{{container.title}}">
+            <img class="cardLayout image-container" src="{{container.albumartUri}}" class="" alt="{{container.title}}">
             <div class="d-flex cardLayout card-body">
                 <div class="card-title">{{container.title}}</div>
             </div>
         </div>
     </div>
 </div>
-
-<!--
-<div *ngIf="containerList?.length > 0">
-    <div class="section head">Folder</div>
-    <div class="cardLayout">
-        <div class="my-Card" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)"
-            *ngFor="let container of containerList">
-            <img src="{{container.albumartUri}}" class="card-img-top" alt="{{container.title}}">
-            <div class="my-card-body">
-                <div class="my-card-title">{{container.title}}</div>
-            </div>
-        </div>
-    </div>
-</div>
--->

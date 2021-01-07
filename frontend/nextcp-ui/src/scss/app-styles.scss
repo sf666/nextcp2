@@ -184,13 +184,6 @@ input {
     }
 }
 
-// using direct flex wrap class instead of bootstrap class
-.cardLayout {
-    display         : flex;
-    flex-flow       : row wrap;
-    background-color: rgba(0, 0, 0, 0);
-}
-
 //
 // Extending / patching external libraries 
 // =========================================================================================================================
@@ -244,17 +237,8 @@ input {
     background-image: url(/assets/images/folder-bg.png);
 }
 
-img {
-    &.card-img-top {
-        object-fit: cover;
-        width     : $imgCardWidth;
-        height    : $imgCardWidth;
-        transition: all 300ms;
-
-        &:hover {
-            transform: scale(1.06);
-        }
-    }
+.image-folder {
+    background-color: #3c3832;
 }
 
 // Global Popup definition

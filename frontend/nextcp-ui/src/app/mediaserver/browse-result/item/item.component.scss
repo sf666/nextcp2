@@ -1,5 +1,6 @@
 @import "pantone";
 @import 'appTable';
+@import "card-layout";
 
 // "play-button" overlay symbol
 .play-overlay-button {
@@ -23,6 +24,10 @@
     text-align      : center;
     transition      : .3s ease;
     opacity         : 0;
+    max-width: $imgCardWidth;
+    min-width: $imgCardWidth;
+    max-height: $imgCardWidth;
+    min-height: $imgCardWidth;
 
     &:hover {
         opacity: 0.7;
