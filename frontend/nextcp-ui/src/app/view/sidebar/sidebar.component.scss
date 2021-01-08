@@ -49,4 +49,15 @@ a {
 
 .mat-button {
     font-weight: 300;
+    height     : 50px;
+    line-height: 45px;
+
+    &:hover {
+        background-color: var(--grey-5);
+        color           : var(--snow-white);
+    }
+}
+
+.mat-button-wrapper {
+    line-height: 40px;
 }

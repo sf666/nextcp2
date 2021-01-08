@@ -58,7 +58,7 @@ export class PlaylistService implements OnInit {
     const uri = '/getDefaultPlaylists';
 
     this.httpService.get<string[]>(this.baseUri, uri).subscribe(data => {
-      this.fsPlaylists = data;
+      this.fsPlaylists = data.sort();
     });
   }
 
