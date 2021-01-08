@@ -258,6 +258,14 @@ input {
         overflow-y      : auto;
         padding         : 0px;
         max-width       : 400px;
+        border-radius   : 4px;
+    }
+}
+
+.popup-rounded {
+    @extend .popup;
+    mat-dialog-container {
+        border-radius   : 16px;
     }
 }
 

@@ -1,12 +1,11 @@
 <!-- Default playlists -->
 
-<div *ngIf="true">
+<div class="panel" *ngIf="true">
     <div class="dialogTitle">Playlists</div>
-    <div class="d-flex flex-wrap mt-4">
-        <div *ngFor="let playlist of playlistService.fsPlaylists">
-            <button mat-flat-button class="my-buttons" (click)="addToPlaylist(playlist)">
-                <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="playlist-plus"></mat-icon> {{playlist}}
-            </button>
+    <div class="dialogItems d-flex flex-column flex-wrap mt-4">
+        <div *ngFor="let playlist of playlistService.fsPlaylists" class="playlist-item"
+            (click)="addToPlaylist(playlist)">
+            {{playlist}}
         </div>
     </div>
 </div>

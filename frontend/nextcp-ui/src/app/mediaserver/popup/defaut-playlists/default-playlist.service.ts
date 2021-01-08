@@ -14,7 +14,7 @@ export class DefaultPlaylistService {
     const target = new ElementRef(event.currentTarget);
     const dialogRef = this.dialog.open(DefautPlaylistsComponent, {
       data: { trigger: target, id :  mbid},
-      panelClass: 'popup'
+      panelClass: 'popup-rounded'
     });
     dialogRef.afterClosed().subscribe(_res => {
       console.log(_res);
