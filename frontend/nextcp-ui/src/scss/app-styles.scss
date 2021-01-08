@@ -5,6 +5,7 @@
     --snow-white             : rgb(255, 255, 250);
     --glas-white             : rgba(255, 255, 255, 0.5);
     --glas-white-3           : rgba(255, 255, 255, 0.7);
+    --glas-white-4           : rgba(255, 255, 255, 0.6);
     --glas-white-8           : rgba(255, 255, 255, 0.2);
     --primary-color          : rgb(0, 255, 255);
     --primary-color-reduced  : rgba(0, 255, 255, 0.5);
@@ -265,7 +266,7 @@ input {
 .popup-rounded {
     @extend .popup;
     mat-dialog-container {
-        border-radius   : 16px;
+        border-radius   : 8px;
     }
 }
 

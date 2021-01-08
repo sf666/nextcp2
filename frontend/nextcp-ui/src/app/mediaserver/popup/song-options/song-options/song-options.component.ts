@@ -1,3 +1,4 @@
+import { MusicItemDto } from './../../../../service/dto.d';
 import { MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, ElementRef, OnInit } from '@angular/core';
 import { DefaultPlaylistService } from '../../defaut-playlists/default-playlist.service';
@@ -34,11 +35,15 @@ export class SongOptionsComponent implements OnInit {
     const matDialogConfig: MatDialogConfig = new MatDialogConfig();
     const rect = this.triggerElementRef.nativeElement.getBoundingClientRect();
     matDialogConfig.position = { left: `${rect.left - 200}px`, top: `${rect.bottom - 20}px` };
-    matDialogConfig.width = '220px';
+    matDialogConfig.width = '250px';
     matDialogConfig.height = '200px';
 
     this._matDialogRef.updateSize(matDialogConfig.width, matDialogConfig.height);
     this._matDialogRef.updatePosition(matDialogConfig.position);
     this._matDialogRef.addPanelClass('popup');
+  }
+
+  get selectedMusicItem(): MusicItemDto {
+    return this.data.item;
   }
 }

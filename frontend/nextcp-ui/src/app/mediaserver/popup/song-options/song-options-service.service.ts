@@ -15,7 +15,7 @@ export class SongOptionsServiceService {
     const target = new ElementRef(event.currentTarget);
     const dialogRef = this.dialog.open(SongOptionsComponent, {
       data: { trigger: target, item :  item, event: event},
-      panelClass: 'popup'
+      panelClass: 'popup-rounded'
     });
     dialogRef.afterClosed().subscribe(_res => {
       console.log(_res);
