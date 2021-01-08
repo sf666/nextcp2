@@ -9,7 +9,7 @@ $col-4    : $amber-pantone-6;
 $col-grey : $col-4;
 
 a {
-    margin-top: 1rem;
+    margin-top : 1rem;
     line-height: 1.5rem;
 }
 
@@ -30,11 +30,11 @@ a {
 }
 
 .sidebar {
-    position        : fixed;
-    top             : 0;
-    left            : 0;
-    width           : var(--sidebar-width);
-    height          : calc(var(--vh, 1vh) * 100 - var(--footer-heihgt));
+    position: fixed;
+    top     : 0;
+    left    : 0;
+    width   : var(--sidebar-width);
+    height  : calc(var(--vh, 1vh) * 100 - var(--footer-heihgt));
 
     display         : flex;
     flex-direction  : column;
@@ -42,5 +42,11 @@ a {
     background      : #242428;
     transition      : 50ms ease-in;
     overflow-y      : auto;
+    letter-spacing  : 0.05rem;
+    font-weight     : 300;
     //z-index       : 20;
+}
+
+.mat-button {
+    font-weight: 300;
 }

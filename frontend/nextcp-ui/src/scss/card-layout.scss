@@ -3,6 +3,7 @@
 .cardLayout {
     display  : flex;
     flex-wrap: wrap;
+    width    : 100%;
 
     &.cover-card {
         display       : flex;

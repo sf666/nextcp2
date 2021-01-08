@@ -241,6 +241,15 @@ input {
     background-color: #3c3832;
 }
 
+.highlightFolderText {
+    font-size     : 0.7rem;
+    font-weight   : 500;
+    color         : var(--primary-color);
+    letter-spacing: 0.1rem;
+    padding-bottom: 8px;
+}
+
+
 // Global Popup definition
 .popup {
     mat-dialog-container {

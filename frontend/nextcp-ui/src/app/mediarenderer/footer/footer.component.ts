@@ -26,11 +26,11 @@ export class FooterComponent {
   }
 
   public getCurrentMediaRendererName() {
-    if (this.currentMediaRendererName) {
+    if (this.currentMediaRendererName?.length > 0) {
       return this.currentMediaRendererName;
     }
     else {
-      "select media renderer";
+      return "select media renderer";
     }
   }
 

@@ -3,14 +3,14 @@
 }
 
 .mainContent {
-    position  : fixed;
-    top       : var(--nav-height);
-    left      : var(--sidebar-width);
-    height    : 90vh;
-    height    : calc(var(--vh, 1vh) * 100 - var(--nav-height) - var(--footer-heihgt));
-    width     : calc(100% - var(--sidebar-width));
-    overflow-y: scroll;
-
+    position      : fixed;
+    top           : var(--nav-height);
+    left          : var(--sidebar-width);
+    height        : 90vh;
+    height        : calc(var(--vh, 1vh) * 100 - var(--nav-height) - var(--footer-heihgt));
+    width         : calc(100% - var(--sidebar-width));
+    overflow-y    : scroll;
+    letter-spacing: 0.07rem;
 }
 
 .app-root {
@@ -39,8 +39,8 @@
     background-size  : cover;
     background-color : rgb(0, 0, 0);
 
-    width     : calc(100% - var(--sidebar-width));
-    height    : calc(var(--vh, 1vh) * 100 - var(--nav-height) - var(--footer-heihgt));
+    width : calc(100% - var(--sidebar-width));
+    height: calc(var(--vh, 1vh) * 100 - var(--nav-height) - var(--footer-heihgt));
 }
 
 .bg-img-footer::before {
