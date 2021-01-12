@@ -1,5 +1,6 @@
 <div class="d-flex flex-column">
-    <div class="d-flex">
+    <!-- (mouseleave)="close()" -->
+    <div class="d-flex" (mouseenter)="closeAllDialogs()">
         <div class="top-image">
             <img src="{{selectedMusicItem.albumArtUrl}}">
         </div>
@@ -10,11 +11,19 @@
         </div>
     </div>
 
-    <div class="divider">&nbsp;</div>
+    <div class="divider mt-2 mb-1">&nbsp;</div>
 
     <div class="dialogItems d-flex flex-column flex-wrap">
-        <div class="playlist-item" (click)="openAddToPlaylistDialog()"> <!-- (mouseenter)="openAddToPlaylistDialog()" -->
-            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="playlist-plus"></mat-icon> add to playlist
+        <div class="d-flex justify-content-between playlist-item">
+            <div class="d-flex justify-content-between" style="align-self: center;" (click)="openAddToPlaylistDialog()"
+                (mouseenter)="openAddToPlaylistDialog()">
+                Add to playlist
+            </div>
+            <mat-icon class="chevron-right" style="align-self: center;" svgIcon="chevron-right"></mat-icon>
+        </div>
+        <div class="divider mb-1 mt-1">&nbsp;</div>
+        <div class="playlist-item" (mouseenter)="closeAllDialogs()" (click)="actionPlayNext()">
+            Play next
         </div>
     </div>
 

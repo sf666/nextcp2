@@ -8,6 +8,7 @@ import org.fourthline.cling.support.model.item.MusicTrack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.PlayRadioDto;
 import nextcp.dto.PlayRequestDto;
+import nextcp.dto.ToastrMessage;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 
 /**
@@ -34,8 +36,32 @@ public class RestAvTransportService extends BaseRestService
     @Autowired
     private DtoBuilder dtoBuilder = null;
 
+    @Autowired
+    private ApplicationEventPublisher publisher = null;
+
     @PostMapping("/playResource")
     public void playResource(@RequestBody PlayRequestDto playRequest)
+    {
+        MediaRendererDevice device = checkPlayInput(playRequest);
+        device.getAvTransportServiceBridge().play(playRequest.streamUrl, playRequest.streamMetadata);
+    }
+
+    @PostMapping("/playResourceNext")
+    public void playResourceNext(@RequestBody PlayRequestDto playRequest)
+    {
+        try
+        {
+            MediaRendererDevice device = checkPlayInput(playRequest);
+            device.getAvTransportServiceBridge().playNext(playRequest.streamUrl, playRequest.streamMetadata);
+            publisher.publishEvent(new ToastrMessage(null, "success", "play", "song will be played next."));
+        }
+        catch (Exception e)
+        {
+            publisher.publishEvent(new ToastrMessage(null, "error", "play next", e.getMessage()));
+        }
+    }
+
+    private MediaRendererDevice checkPlayInput(PlayRequestDto playRequest)
     {
         if (playRequest.mediaRendererDto == null)
         {
@@ -50,10 +76,9 @@ public class RestAvTransportService extends BaseRestService
         }
         if (device.getAvTransportServiceBridge() == null)
         {
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED,
-                    "playing failed. No AvTransport service available. UDN : " + playRequest.mediaRendererDto.udn);
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "playing failed. No AvTransport service available. UDN : " + playRequest.mediaRendererDto.udn);
         }
-        device.getAvTransportServiceBridge().play(playRequest.streamUrl, playRequest.streamMetadata);
+        return device;
     }
 
     @PostMapping("/pause")
@@ -106,7 +131,7 @@ public class RestAvTransportService extends BaseRestService
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Tranport state cannot be retrieved: Select an available media renderer.");
         }
         device.getAvTransportEventPublisher().publishAllAvEvents();
-//        return dtoBuilder.buildAvTransportStateDto(device.getAvTransportEventListener().getCurrentAvTransportState(), device);
+        // return dtoBuilder.buildAvTransportStateDto(device.getAvTransportEventListener().getCurrentAvTransportState(), device);
     }
 
 }

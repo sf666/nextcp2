@@ -2,6 +2,7 @@ import { MusicItemDto } from './../../../../service/dto.d';
 import { MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, ElementRef, OnInit } from '@angular/core';
 import { DefaultPlaylistService } from '../../defaut-playlists/default-playlist.service';
+import { AvtransportService } from 'src/app/service/avtransport.service';
 
 @Component({
   selector: 'app-song-options',
@@ -13,8 +14,10 @@ export class SongOptionsComponent implements OnInit {
   private data;
   private readonly _matDialogRef: MatDialogRef<SongOptionsComponent>;
   private readonly triggerElementRef: ElementRef;
+  private playlistDialogOpen: boolean;
 
   constructor(
+    private avtransportService: AvtransportService,
     private defaultPlaylistService: DefaultPlaylistService,
     _matDialogRef: MatDialogRef<SongOptionsComponent>,
     @Inject(MAT_DIALOG_DATA) data: { trigger: ElementRef, id: string },
@@ -22,13 +25,40 @@ export class SongOptionsComponent implements OnInit {
     this.data = data;
     this._matDialogRef = _matDialogRef;
     this.triggerElementRef = data.trigger;
+    this.playlistDialogOpen = false;
+
+    _matDialogRef.afterClosed().subscribe(_res => {
+      this.closeAllDialogs();
+    });     
   }
 
   openAddToPlaylistDialog() {
     if (this.data?.item?.musicBrainzId?.TrackId) {
-      this.defaultPlaylistService.openAddPlaylistDialog(this.data.event, this.data.item.musicBrainzId.TrackId);
-      this._matDialogRef.close();
+      if (!this.playlistDialogOpen) {
+        let dialogRef =  this.defaultPlaylistService.openAddPlaylistDialogWithParent(this.data.event, this.data.item.musicBrainzId.TrackId, this);
+        dialogRef.afterClosed().subscribe(_res => {
+          this.playlistDialogOpen = false;
+        });        
+        this.playlistDialogOpen = true;
+      }
     }
+  }
+
+  close() {
+    this.closeAllDialogs();
+    this._matDialogRef.close();
+  }
+
+  closeAllDialogs() {
+    this.defaultPlaylistService.close();
+  }
+
+  allDialogsClosed(): boolean {
+    return !this.playlistDialogOpen;
+  }
+
+  actionPlayNext() {
+    this.avtransportService.playResourceNext(this.selectedMusicItem);
   }
 
   ngOnInit(): void {

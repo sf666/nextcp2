@@ -45,6 +45,12 @@ public class Upnp_AVTransportBridge implements IInfoService, IUpnpAvTransport
     }
 
     @Override
+    public void playNext(String uri, String metaData)
+    {
+        setNextUrl(uri, metaData);
+    }
+
+    @Override
     public void setUrl(String currentUri, String metadata)
     {
         SetAVTransportURIInput uri = new SetAVTransportURIInput();

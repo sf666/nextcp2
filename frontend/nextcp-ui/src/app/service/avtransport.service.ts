@@ -77,7 +77,15 @@ export class AvtransportService {
 
   public playResource(musicItemDto: MusicItemDto) {
     const uri = '/playResource';
+    this._playResource(uri, musicItemDto);
+  }
 
+  public playResourceNext(musicItemDto: MusicItemDto) {
+    const uri = '/playResourceNext';
+    this._playResource(uri, musicItemDto);
+  }
+
+  private _playResource(uri: string, musicItemDto: MusicItemDto) {
     if (this.selectedMediaRenderer?.udn?.length > 0) {
       const playReq: PlayRequestDto = {
         mediaRendererDto: this.selectedMediaRenderer,
@@ -87,7 +95,7 @@ export class AvtransportService {
 
       this.httpService.post(this.baseUri, uri, playReq).subscribe();
     } else {
-      this.toastr.error("select media renderer before playing songs","media renderer");
+      this.toastr.error("select media renderer before playing songs", "media renderer");
     }
   }
 

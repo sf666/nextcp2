@@ -19,5 +19,7 @@ public interface IUpnpAvTransport
     void setNextUrl(String streamingURL, String trackMetadata);
 
     void next();
+
+    void playNext(String streamUrl, String streamMetadata);
     
 }
