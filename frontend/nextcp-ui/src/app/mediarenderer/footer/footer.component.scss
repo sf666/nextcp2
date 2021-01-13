@@ -15,7 +15,7 @@ $col-grey: $col-4;
     position        : fixed;
     left            : 0;
     bottom          : 0;
-    height          : var(--footer-heihgt);
+    height          : var(--footer-height);
     width           : 100%;
     background-color: rgba(0, 0, 0, 0.7);
     text-align      : left;
@@ -119,8 +119,8 @@ mat-slider {
 }
 
 img {
-    height: calc(var(--footer-heihgt) - 2px);
-    width : calc(var(--footer-heihgt) - 2px);
+    height: calc(var(--footer-height) - 2px);
+    width : calc(var(--footer-height) - 2px);
 }
 
 .standbyOn {

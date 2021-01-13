@@ -33,7 +33,7 @@ a {
     top     : 0;
     left    : 0;
     width   : var(--sidebar-width);
-    height  : calc(var(--vh, 1vh) * 100 - var(--footer-heihgt));
+    height  : calc(var(--vh, 1vh) * 100 - var(--footer-height));
 
     display         : flex;
     flex-direction  : column;

@@ -7,7 +7,7 @@
     top           : var(--nav-height);
     left          : var(--sidebar-width);
     height        : 90vh;
-    height        : calc(var(--vh, 1vh) * 100 - var(--nav-height) - var(--footer-heihgt));
+    height        : calc(var(--vh, 1vh) * 100 - var(--nav-height) - var(--footer-height));
     width         : calc(100% - var(--sidebar-width));
     overflow-y    : scroll;
     letter-spacing: 0.07rem;
@@ -40,7 +40,7 @@
     background-color : rgb(0, 0, 0);
 
     width : calc(100% - var(--sidebar-width));
-    height: calc(var(--vh, 1vh) * 100 - var(--nav-height) - var(--footer-heihgt));
+    height: calc(var(--vh, 1vh) * 100 - var(--nav-height) - var(--footer-height));
 }
 
 .bg-img-footer::before {
@@ -60,8 +60,8 @@
     display   : block;
     position  : fixed;
     bottom    : 0px;
-    max-height: var(--footer-heihgt);
-    height    : var(--footer-heihgt);
+    max-height: var(--footer-height);
+    height    : var(--footer-height);
     width     : 100%;
 
     background-repeat  : calc(var(--vh, 1vh) * 100);
