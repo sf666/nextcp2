@@ -6,32 +6,43 @@
 .play-overlay-button {
     color    : white;
     opacity  : 1;
-    font-size: 3rem;
-    width    : 3rem;
-    height   : 3rem;
+    font-size: 2.5rem;
+    width    : 2.5rem;
+    height   : 2.5rem;
+}
+
+.scaleBigger {
+    transition: all 0.2s ease-in-out;
+}
+
+.scaleBigger:hover {
+    transform: scale(1.15, 1.15);
+}
+
+.overlay-button {
+    // transform: scale(0.6);
 }
 
 .play-overlay {
-    position        : absolute;
-    top             : 0;
-    bottom          : 0;
-    left            : 0;
-    right           : 0;
-    height          : 100%;
-    width           : 100%;
+    position: absolute;
+    top     : 0;
+    bottom  : 0;
+    left    : 0;
+    right   : 0;
+    height  : 100%;
+    width   : 100%;
+
     opacity         : 0;
+    color           : var(--snow-white);
     background-color: rgba($color: $pantone-Neutral-Black-C, $alpha: 0.95);
-    text-align      : center;
-    transition      : .3s ease;
-    opacity         : 0;
-    max-width: $imgCardWidth;
-    min-width: $imgCardWidth;
+
+    text-align: center;
+    transition: .3s ease;
+
+    max-width : $imgCardWidth;
+    min-width : $imgCardWidth;
     max-height: $imgCardWidth;
     min-height: $imgCardWidth;
-
-    &:hover {
-        opacity: 0.7;
-    }
 }
 
 .mixedTitles {
@@ -43,6 +54,6 @@
 }
 
 .mat-icon-button-sm {
-    width: 14px;
+    width : 14px;
     height: 14px;
 }
