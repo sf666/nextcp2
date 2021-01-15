@@ -13,8 +13,20 @@ export class DownloadService {
 
   constructor(private httpService: HttpService) { }
 
-  downloadFileByMBID(song: MusicItemDto) {
-    let uri = "/DownloadService/downloadFileByMBID/" + song.musicBrainzId.TrackId;
-    window.open(uri);
+  downloadFileByMBID(song: MusicItemDto, callback?) {
+
+    var a = document.createElement('a');
+    a.download = "file";
+    a.href = "/DownloadService/downloadFileByMBID/" + song.musicBrainzId.TrackId;
+    a.target = "_blank";
+    a.style.display = 'none';
+    
+    a.onclick = function () {
+      if (callback) {
+        callback.close();
+      }
+    };
+
+    a.click();
   }
 }

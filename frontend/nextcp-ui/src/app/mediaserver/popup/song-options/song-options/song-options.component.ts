@@ -59,16 +59,7 @@ export class SongOptionsComponent implements OnInit {
   }
 
   download() {
-    this.downloadService.downloadFileByMBID(this.data.item);
-    this.closeAllDialogs();
-    close();
-  }
-
-
-  saveResponse(res: Response) {
-    let fn = this.data.item.title + "." + this.data.item.audioFormat.filetype;
-    console.log("start downloading of from : " + this.data.item.streamingURL);
-    const fileStream = sr.createWriteStream(fn);
+    this.downloadService.downloadFileByMBID(this.data.item, this);
   }
 
   openAddToPlaylistDialog() {
