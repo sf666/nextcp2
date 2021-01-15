@@ -17,5 +17,4 @@ export class DownloadService {
     let uri = "/DownloadService/downloadFileByMBID/" + song.musicBrainzId.TrackId;
     window.open(uri);
   }
-
 }
