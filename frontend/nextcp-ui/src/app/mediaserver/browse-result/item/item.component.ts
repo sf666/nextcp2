@@ -5,7 +5,7 @@ import { MusicItemDto } from './../../../service/dto.d';
 import { PlaylistService } from './../../../service/playlist.service';
 import { AvtransportService } from './../../../service/avtransport.service';
 import { ContentDirectoryService } from './../../../service/content-directory.service';
-import { Component, AfterViewChecked, AfterViewInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'browseResultItem',
@@ -45,10 +45,10 @@ export class ItemComponent {
   allTracksSameAlbum(): boolean {
     if (this.contentDirectoryService.currentContainerList?.musicItemDto?.length > 0) {
       let firstTrackAlbum = this.contentDirectoryService.currentContainerList.musicItemDto[0].album;
-      return this.contentDirectoryService.currentContainerList.musicItemDto.filter(item => item.album !== firstTrackAlbum).length == 0;
+      return this.getMusicTracks().filter(item => item.album !== firstTrackAlbum).length == 0;
     }
     return true;
-  }
+  }  
 
   play(musicItemDto: MusicItemDto) {
     this.avtransportService.playResource(musicItemDto);
