@@ -27,7 +27,7 @@ import nextcp.dto.PlaylistAddContainerRequest;
 import nextcp.dto.PlaylistState;
 import nextcp.dto.ToastrMessage;
 import nextcp.indexer.IndexerException;
-import nextcp.indexer.service.FilesystemPlaylistService;
+import nextcp.indexer.service.FilesystemIndexerService;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
@@ -45,7 +45,7 @@ public class RestPlaylistService extends BaseRestService
     private DeviceRegistry deviceRegistry = null;
 
     @Autowired
-    private FilesystemPlaylistService filesystemPlaylistService = null;
+    private FilesystemIndexerService filesystemPlaylistService = null;
 
     @Autowired
     private ApplicationEventPublisher publisher = null;

@@ -10,6 +10,7 @@ public class IndexerException extends RuntimeException {
 	public static final int GENERIC_ERROR = 0;
 	public static final int ILLEGAL_RATING_VALUE = 1000;
 	public static final int EMPTY_ACOUSTIC_ID = 1001;
+    public static final int INVALID_UUID = 1002;
 
 	public static final int DATABASE_ACCESS_ERROR = 2000;
 

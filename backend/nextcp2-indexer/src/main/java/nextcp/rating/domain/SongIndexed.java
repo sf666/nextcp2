@@ -1,5 +1,6 @@
 package nextcp.rating.domain;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
@@ -41,6 +42,11 @@ public class SongIndexed
     private String acoustID;
     private String musicBrainzID;
     private int rating;
+
+    public String getFilename()
+    {
+        return FilenameUtils.getName(filePath);
+    }
 
     public String getFilePath()
     {

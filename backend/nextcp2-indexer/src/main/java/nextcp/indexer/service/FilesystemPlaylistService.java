@@ -25,19 +25,20 @@ import nextcp.rating.repository.IndexerSessionFactory;
 import nextcp.rating.repository.SongPersistenceService;
 
 @Service
-public class FilesystemPlaylistService
+public class FilesystemIndexerService
 {
 
-    private static final Logger log = LoggerFactory.getLogger(FilesystemPlaylistService.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(FilesystemIndexerService.class.getName());
 
     private List<Path> availablePlaylists = new ArrayList<>();
     private List<String> playlistsNames = new ArrayList<>();
+    private final int UUID_CHAR_LEN = 36;
 
     @Autowired
     private SongPersistenceService songPersistenceService = null;
 
     @Autowired
-    public FilesystemPlaylistService(IndexerConfig config, IndexerSessionFactory sessionFactory)
+    public FilesystemIndexerService(IndexerConfig config, IndexerSessionFactory sessionFactory)
     {
         if (StringUtils.isAllBlank(config.playlistDirectory))
         {
@@ -84,7 +85,7 @@ public class FilesystemPlaylistService
     public List<String> addSongToPlaylist(String musicBrainzId, String playlistName)
     {
         Path playlistPath = getPlaylistPathFromName(playlistName);
-        SongIndexed songIndex = getBestSong(getIndexedSong(musicBrainzId, playlistPath));
+        SongIndexed songIndex = getBestSongFromSongList(getIndexedSongFromMBID(musicBrainzId));
 
         if (songIndex == null)
         {
@@ -143,7 +144,12 @@ public class FilesystemPlaylistService
         return false;
     }
 
-    private SongIndexed getBestSong(List<SongIndexed> songs)
+    public SongIndexed getBestSong(String musicBrainzId)
+    {
+        return getBestSongFromSongList(getIndexedSongFromMBID(musicBrainzId));
+    }
+
+    private SongIndexed getBestSongFromSongList(List<SongIndexed> songs)
     {
         if (songs.size() == 0)
         {
@@ -157,14 +163,22 @@ public class FilesystemPlaylistService
         return songs.get(0);
     }
 
+    public void checkValidUUID(String musicBrainzID)
+    {
+        if ("00000000-0000-0000-0000-000000000000".equals(musicBrainzID) || musicBrainzID == null || musicBrainzID.length() != UUID_CHAR_LEN)
+        {
+            throw new IndexerException(IndexerException.INVALID_UUID, String.format("Invalid UUID : %s", musicBrainzID));
+        }
+    }
+
     /**
      * 
      * @param musicBrainzId
-     * @param playlistPath
      * @return
      */
-    private List<SongIndexed> getIndexedSong(String musicBrainzId, Path playlistPath)
+    private List<SongIndexed> getIndexedSongFromMBID(String musicBrainzId)
     {
+        checkValidUUID(musicBrainzId);
         List<SongIndexed> songIndexList = songPersistenceService.getSongByMusicBrainzId(musicBrainzId);
         return songIndexList;
     }
@@ -173,7 +187,7 @@ public class FilesystemPlaylistService
     {
         int numRemoved = 0;
         Path playlistPath = getPlaylistPathFromName(playlistName);
-        List<SongIndexed> songIndexList = getIndexedSong(musicBrainzId, playlistPath);
+        List<SongIndexed> songIndexList = getIndexedSongFromMBID(musicBrainzId);
         List<String> playlistEntries = readCurrentPlaylist(playlistPath);
 
         for (SongIndexed songIndex : songIndexList)
