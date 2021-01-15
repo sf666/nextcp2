@@ -1,5 +1,5 @@
 .footer-block {
-    height: var(--footerHeight);
+    // height: var(--footerHeight);
 }
 
 .mainContent {
@@ -11,10 +11,13 @@
     width         : calc(100% - var(--sidebar-width));
     overflow-y    : scroll;
     letter-spacing: 0.07rem;
+    flex          : 1;
+
 }
 
 .app-root {
     background-color: rgba(0, 0, 0, 1);
+    display: flex;
 }
 
 .bg-img::before {

@@ -37,7 +37,7 @@ export class AppComponent {
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     // this.throttleResize();
-    this.resiseVh();
+    // this.resiseVh();
   }
 
   private resiseVh() {

@@ -9,13 +9,13 @@
   
   <nav-bar *ngIf="layoutService.headerVisible"></nav-bar>
   
-  <app-sidebar *ngIf="layoutService.sidebarVisible"></app-sidebar>
   
   <div id="mainContent" class="mainContent">
+    <app-sidebar *ngIf="layoutService.sidebarVisible"></app-sidebar>
     <router-outlet></router-outlet>
   </div>
 
-  <renderer-footer *ngIf="layoutService.footerVisible"></renderer-footer>  
+  <renderer-footer *ngIf="layoutService.footerVisible"></renderer-footer>    
   <div class="bg-img-footer" id="footer-background" *ngIf="layoutService.footerVisible && showBlur()">
   </div>
 
