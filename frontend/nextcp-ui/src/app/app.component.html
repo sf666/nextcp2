@@ -10,8 +10,8 @@
   <nav-bar *ngIf="layoutService.headerVisible"></nav-bar>
   
   
+  <app-sidebar *ngIf="layoutService.sidebarVisible"></app-sidebar>
   <div id="mainContent" class="mainContent">
-    <app-sidebar *ngIf="layoutService.sidebarVisible"></app-sidebar>
     <router-outlet></router-outlet>
   </div>
 
