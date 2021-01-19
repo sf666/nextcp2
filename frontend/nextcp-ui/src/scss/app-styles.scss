@@ -27,9 +27,11 @@
     --footer-height: 5rem;
     --sidebar-width: 250px;
     --nav-height   : 75px;
+}
 
-    // ViewHeight fix
-    --vh: 1vh; // Fallback units    
+// Disable focus frame
+*:focus {
+    outline: none;
 }
 
 //
@@ -265,8 +267,9 @@ input {
 
 .popup-rounded {
     @extend .popup;
+
     mat-dialog-container {
-        border-radius   : 8px;
+        border-radius: 8px;
     }
 }
 
