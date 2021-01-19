@@ -78,7 +78,6 @@ export class SongOptionsComponent implements OnInit {
   }
 
   deleteFromPlaylist() {
-    // this.contentDirectoryService.currentContainerList.currentContainer
     if (this.data?.item?.musicBrainzId?.TrackId) {
       this.playlistService.removeFromFilesystemPlaylistByMBID(this.data.item.musicBrainzId.TrackId, this.contentDirectoryService.currentContainerList.currentContainer.title);
     }

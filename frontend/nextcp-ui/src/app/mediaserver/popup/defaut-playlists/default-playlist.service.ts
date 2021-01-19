@@ -16,7 +16,13 @@ export class DefaultPlaylistService {
      }
 
   public openAddPlaylistDialogWithParent(event: any, mbid: string, parent: SongOptionsComponent) : MatDialogRef<any,any> {
-    const target = new ElementRef(event.target);
+    let target : ElementRef;
+
+    if (event.target ) {
+      target = new ElementRef(event.target);
+    } else if (event.nativeElement ) {
+      target = new ElementRef(event.nativeElement);
+    }
     this.dialogRef = this.dialog.open(DefautPlaylistsComponent, {
       hasBackdrop: false,
       data: { trigger: target, id :  mbid, parentPanel: parent},
