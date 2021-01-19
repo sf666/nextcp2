@@ -16,8 +16,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import nextcp.dto.ToastrMessage;
 import nextcp.indexer.IndexerConfig;
 import nextcp.indexer.IndexerException;
 import nextcp.rating.domain.SongIndexed;
@@ -34,6 +36,9 @@ public class FilesystemIndexerService
     private List<String> playlistsNames = new ArrayList<>();
     private final int UUID_CHAR_LEN = 36;
 
+    @Autowired
+    private ApplicationEventPublisher publisher = null;
+    
     @Autowired
     private SongPersistenceService songPersistenceService = null;
 
@@ -74,12 +79,17 @@ public class FilesystemIndexerService
         availablePlaylists.add(p);
         String name = p.getName(p.getNameCount() - 1).toString();
         name = name.substring(0, name.indexOf('.'));
-        playlistsNames.add(name);
+        playlistsNames.add(name.toLowerCase());
     }
 
     private Path getPlaylistPathFromName(String playlistName)
     {
-        return availablePlaylists.get(playlistsNames.indexOf(playlistName));
+        String baseName = FilenameUtils.getBaseName(playlistName);
+        if (playlistsNames.indexOf(baseName.toLowerCase()) > -1)
+        {
+            return availablePlaylists.get(playlistsNames.indexOf(baseName.toLowerCase()));
+        }
+        throw new IndexerException(IndexerException.PLAYLIST_NOT_FOUND, "Playlist not managed : " + playlistName);
     }
 
     public List<String> addSongToPlaylist(String musicBrainzId, String playlistName)
@@ -193,9 +203,12 @@ public class FilesystemIndexerService
         for (SongIndexed songIndex : songIndexList)
         {
             String entry = calculateRelativeSongPath(Paths.get(songIndex.getFilePath()), playlistPath);
-            if (!playlistEntries.remove(entry))
+            if (playlistEntries.remove(entry))
             {
                 numRemoved++;
+            }
+            else
+            {
                 log.debug("Song is not in playlist : " + entry != null ? entry : "NULL");
             }
         }

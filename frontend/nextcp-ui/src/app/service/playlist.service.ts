@@ -226,10 +226,15 @@ export class PlaylistService implements OnInit {
   // Filesystem Playlist actions
   // ========================================================================
 
-  public addToFilesystemPlaylist(musicBrainzId : string, playlistName: string): void {
-    const uri = '/addToFilesystemPlaylist';
+  public addToFilesystemPlaylistByMBID(musicBrainzId : string, playlistName: string): void {
+    const uri = '/addToFilesystemPlaylistByMBID';
     let req : FileSystemPlaylistAdd = {musicBrainzId: musicBrainzId, playlistName: playlistName};
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }
 
+  public removeFromFilesystemPlaylistByMBID(musicBrainzId : string, playlistName: string): void {
+    const uri = '/removeFromFilesystemPlaylistByMBID';
+    let req : FileSystemPlaylistAdd = {musicBrainzId: musicBrainzId, playlistName: playlistName};
+    this.httpService.post(this.baseUri, uri, req).subscribe();
+  }
 }

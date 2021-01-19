@@ -1,7 +1,9 @@
+import { PlaylistService } from './../../../../service/playlist.service';
+import { ContentDirectoryService } from './../../../../service/content-directory.service';
 import { HttpClient } from '@angular/common/http';
 import * as sr from 'streamsaver';
 import { DownloadService } from './../../../../util/download.service';
-import { MusicItemDto } from './../../../../service/dto.d';
+import { MusicItemDto, MusicBrainzId, TrackInfoDto } from './../../../../service/dto.d';
 import { MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, ElementRef, OnInit } from '@angular/core';
 import { DefaultPlaylistService } from '../../defaut-playlists/default-playlist.service';
@@ -22,7 +24,8 @@ export class SongOptionsComponent implements OnInit {
 
   constructor(
     private elRef: ElementRef,
-    private httpClient: HttpClient,
+    private playlistService: PlaylistService,
+    private contentDirectoryService: ContentDirectoryService,
     private downloadService: DownloadService,
     private avtransportService: AvtransportService,
     private defaultPlaylistService: DefaultPlaylistService,
@@ -74,6 +77,13 @@ export class SongOptionsComponent implements OnInit {
     }
   }
 
+  deleteFromPlaylist() {
+    // this.contentDirectoryService.currentContainerList.currentContainer
+    if (this.data?.item?.musicBrainzId?.TrackId) {
+      this.playlistService.removeFromFilesystemPlaylistByMBID(this.data.item.musicBrainzId.TrackId, this.contentDirectoryService.currentContainerList.currentContainer.title);
+    }
+    close();
+  }
   close() {
     this.closeAllDialogs();
     this._matDialogRef.close();
@@ -93,5 +103,9 @@ export class SongOptionsComponent implements OnInit {
 
   get selectedMusicItem(): MusicItemDto {
     return this.data.item;
+  }
+
+  get isParentPlaylist() : boolean {
+    return this.contentDirectoryService.currentContainerList.currentContainer.objectClass === "object.container.playlistContainer";
   }
 }

@@ -28,6 +28,9 @@
         <div class="playlist-item" (mouseover)="closeAllDialogs()" (click)="download()">
             Download
         </div>
+        <div *ngIf="isParentPlaylist" class="playlist-item" (mouseover)="closeAllDialogs()" (click)="deleteFromPlaylist()">
+            Delete from playlist
+        </div>
     </div>
 
     <div class="spaces">&nbsp;</div>

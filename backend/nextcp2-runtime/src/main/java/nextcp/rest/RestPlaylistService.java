@@ -68,13 +68,14 @@ public class RestPlaylistService extends BaseRestService
         }
     }
 
-    @PostMapping("/addToFilesystemPlaylist")
-    public void addToFilesystemPlaylist(@RequestBody FileSystemPlaylistEntry addRequest)
+    @PostMapping("/addToFilesystemPlaylistByMBID")
+    public void addToFilesystemPlaylistByMBID(@RequestBody FileSystemPlaylistEntry addRequest)
     {
         try
         {
             filesystemPlaylistService.addSongToPlaylist(addRequest.musicBrainzId, addRequest.playlistName);
-            publisher.publishEvent(new ToastrMessage(null, "success", "Playlist", "song successfully added to playlist."));
+            publisher.publishEvent(new ToastrMessage(null, "success", "Playlist",
+                    "song successfully added to playlist. The selected playlist has to be reindex from the media server for changes to be visible!"));
         }
         catch (IndexerException e)
         {
@@ -83,13 +84,14 @@ public class RestPlaylistService extends BaseRestService
         }
     }
 
-    @PostMapping("/removeFromFilesystemPlaylist")
-    public void removeFromFilesystemPlaylist(@RequestBody FileSystemPlaylistEntry addRequest)
+    @PostMapping("/removeFromFilesystemPlaylistByMBID")
+    public void removeFromFilesystemPlaylistByMBID(@RequestBody FileSystemPlaylistEntry addRequest)
     {
         try
         {
             filesystemPlaylistService.removeSongFromPlaylist(addRequest.musicBrainzId, addRequest.playlistName);
-            publisher.publishEvent(new ToastrMessage(null, "success", "Playlist", "song successfully removed from playlist."));
+            publisher.publishEvent(new ToastrMessage(null, "success", "Playlist",
+                    "Song successfully removed from playlist. This playlist has to be reindex from the media server for changes to be visible!"));
         }
         catch (IndexerException e)
         {

@@ -40,7 +40,7 @@ export class DefautPlaylistsComponent implements OnInit {
   }
 
   addToPlaylist(playlistName: string) {
-    this.playlistService.addToFilesystemPlaylist(this.data.id, playlistName);
+    this.playlistService.addToFilesystemPlaylistByMBID(this.data.id, playlistName);
     this._matDialogRef.close();
     this.data.parentPanel.close();
   }

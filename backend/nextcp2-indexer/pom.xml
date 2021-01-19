@@ -19,6 +19,13 @@
 			<artifactId>nextcp2-db</artifactId>
 		</dependency>
 
+		<!-- generated models -->
+		<dependency>
+			<groupId>de.sf666</groupId>
+			<artifactId>nextcp2-modelgen</artifactId>
+		</dependency>
+
+
 		<!-- Spring REST Services & Annotations -->
 		<dependency>
 			<groupId>org.springframework</groupId>
