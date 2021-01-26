@@ -45,8 +45,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { SearchComponent } from './view/search/search.component';
-import { MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { SearchResultItemMultiComponent } from './view/search/search-result-item-multi/search-result-item-multi.component';
 import { SearchResultItemSingleComponent } from './view/search/search-result-item-single/search-result-item-single.component';
 import { InputOutputSourceComponent } from './view/input-output-source/input-output-source.component';
@@ -76,7 +75,6 @@ import { SongOptionsComponent } from './mediaserver/popup/song-options/song-opti
       RadioComponent,
       PlaylistComponent,
       SidebarComponent,
-      SearchComponent,
       ModalSearchResultComponent,
       SearchResultItemMultiComponent,
       SearchResultItemSingleComponent,

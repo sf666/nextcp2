@@ -1,7 +1,7 @@
 import { AvtransportService } from './../../../service/avtransport.service';
 import { Router } from '@angular/router';
 import { ContentDirectoryService } from './../../../service/content-directory.service';
-import { ContainerDto, MusicItemDto } from './../../../service/dto.d';
+import { ContainerDto, ContainerItemDto, MusicItemDto } from './../../../service/dto.d';
 import { SearchItemService } from './../../../service/search/search-item.service';
 import { Component, OnInit } from '@angular/core';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
@@ -41,7 +41,35 @@ export class SearchResultItemMultiComponent {
     }
   }
 
-  showSongPopup(event : any , item: MusicItemDto) {
-    this.songOptionsServiceService.openOptionsDialog(event,item);
-  }  
+  showSongPopup(event: any, item: MusicItemDto) {
+    this.songOptionsServiceService.openOptionsDialog(event, item);
+  }
+
+  get hasSongItems(): boolean {
+    return this.searchItemService.musicItemList?.musicItems?.length > 0;
+  }
+
+  get hasAlbumItems(): boolean {
+    return this.searchItemService.musicItemList?.albumItems?.length > 0;
+  }
+
+  get albumItems(): ContainerDto[] {
+    return this.searchItemService.musicItemList.albumItems;
+  }
+
+  get hasPlaylistItems(): boolean {
+    return this.searchItemService.musicItemList?.playlistItems?.length > 0;
+  }
+
+  get playlistItems(): ContainerDto[] {
+    return this.searchItemService.musicItemList.playlistItems;
+  }
+
+  get hasArtistItems(): boolean {
+    return this.searchItemService.musicItemList?.artistItems?.length > 0;
+  }
+
+  get artistItems(): ContainerDto[] {
+    return this.searchItemService.musicItemList.artistItems;
+  }
 }

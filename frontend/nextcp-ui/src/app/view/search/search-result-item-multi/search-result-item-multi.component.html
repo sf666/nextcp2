@@ -1,7 +1,7 @@
 <!-- Songs -->
-<div *ngIf="searchItemService?.musicItemList?.musicItems?.length > 0" class="d-flex flex-column outer-container">
-    <div class="search-title ml-3">Songs</div>
-    <div class="item-table">
+<div class="d-flex flex-column outer-container">
+    <div *ngIf="hasSongItems" class="search-title ml-3">Songs</div>
+    <div *ngIf="hasSongItems" class="item-table">
         <div class="item-thead">
             <div class="row col-greyed">
                 <div class="col small-col">#</div>
@@ -13,7 +13,8 @@
             </div>
         </div>
         <div class="item-tbody">
-            <div id="{{item.objectID}}" class="row" *ngFor="let item of searchItemService.musicItemList.musicItems; index as idx">
+            <div id="{{item.objectID}}" class="row"
+                *ngFor="let item of searchItemService.musicItemList.musicItems; index as idx">
                 <div class="col col-greyed small-col">{{idx+1}}</div>
                 <div (click)="play(item)" class="col">{{item.title}}</div>
                 <div (click)="play(item)" class="col">{{item.artistName}}</div>
@@ -31,83 +32,46 @@
     </div>
 
     <!-- Album -->
-    <div *ngIf="searchItemService?.musicItemList?.albumItems?.length > 0" class="d-flex flex-column outer-container">
+    <div *ngIf="hasAlbumItems" class="d-flex flex-column outer-container">
         <div class="search-title ml-3">Album</div>
-        <div class="d-flex">
-            <div class="item-table">
-                <div class="item-thead">
-                    <div class="row col-greyed">
-                        <div class="col small-col">#</div>
-                        <div class="col">Title</div>
-                        <div class="col">Artist</div>
-                        <div class="col"></div>
-                    </div>
-                </div>
-                <div class="item-tbody">
-                    <div class="row" (click)="browseToContainer(item)"
-                        *ngFor="let item of searchItemService.musicItemList.albumItems; index as idx">
-                        <div class="col col-greyed small-col">{{idx+1}}</div>
-                        <div class="col ">{{item.title}}</div>
-                        <div class="col ">{{item.artist}}</div>
-                        <div class="col col-greyed ">...</div>
-                    </div>
+        <div class="cardLayout">
+            <div class="cardLayout cover-card" id="{{container.id}}" tabindex="-1"
+                (click)="browseToContainer(container)" *ngFor="let container of albumItems">
+                <img class="cardLayout image-container" src="{{container.albumartUri}}" class=""
+                    alt="{{container.title}}">
+                <div class="d-flex cardLayout card-body">
+                    <div class="card-title">{{container.title}}</div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Playlist -->
-    <div *ngIf="searchItemService?.musicItemList?.playlistItems?.length > 0" class="d-flex flex-column outer-container">
+    <div *ngIf="hasPlaylistItems" class="d-flex flex-column outer-container">
         <div class="search-title ml-3">Playlists</div>
-        <div class="d-flex">
-            <div class="item-table">
-                <div class="item-thead">
-                    <div class="row col-greyed">
-                        <div class="col small-col">#</div>
-                        <div class="col">Title</div>
-                        <div class="col">Artist</div>
-                        <div class="col w-10">Duration</div>
-                        <div class="col"></div>
-                    </div>
-                </div>
-                <div class="item-tbody">
-                    <div class="row" (click)="browseToContainer(item)"
-                        *ngFor="let item of searchItemService.musicItemList.playlistItems; index as idx">
-                        <div class="col col-greyed small-col">{{idx+1}}</div>
-                        <div class="col ">{{item.title}}</div>
-                        <div class="col ">{{item.artist}}</div>
-                        <div class="col ">N/A</div>
-                        <div class="col col-greyed ">...</div>
-                    </div>
+        <div class="cardLayout">
+            <div class="cardLayout cover-card" id="{{container.id}}" tabindex="-1"
+                (click)="browseToContainer(container)" *ngFor="let container of playlistItems">
+                <img class="cardLayout image-container" src="{{container.albumartUri}}" class=""
+                    alt="{{container.title}}">
+                <div class="d-flex cardLayout card-body">
+                    <div class="card-title">{{container.title}}</div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Artist -->
-    <div *ngIf="searchItemService?.musicItemList?.artistItems?.length > 0" class="d-flex flex-column outer-container">
-        <div class="search-title ml-3">Artists</div>
-        <div class="d-flex">
-            <div class="item-table">
-                <div class="item-thead">
-                    <div class="row col-greyed">
-                        <div class="col small-col">#</div>
-                        <div class="col">Title</div>
-                        <div class="col">Artist</div>
-                        <div class="col w-10">Duration</div>
-                        <div class="col"></div>
-                    </div>
-                </div>
-                <div class="item-tbody">
-                    <div class="row" (click)="browseToContainer(item)"
-                        *ngFor="let item of searchItemService.musicItemList.artistItems; index as idx">
-                        <div class="col col-greyed small-col">{{idx+1}}</div>
-                        <div class="col ">{{item.title}}</div>
-                        <div class="col ">{{item.artist}}</div>
-                        <div class="col ">N/A</div>
-                        <div class="col col-greyed ">...</div>
-                    </div>
-                </div>
+<!-- Artist -->
+<div *ngIf="hasArtistItems" class="d-flex flex-column outer-container">
+    <div class="search-title ml-3">Artists</div>
+    <div class="cardLayout">
+        <div class="cardLayout cover-card" id="{{container.id}}" tabindex="-1" (click)="browseToContainer(container)"
+            *ngFor="let container of artistItems">
+            <img class="cardLayout image-container" src="{{container.albumartUri}}" class="" alt="{{container.title}}">
+            <div class="d-flex cardLayout card-body">
+                <div class="card-title">{{container.title}}</div>
             </div>
         </div>
     </div>
+</div>

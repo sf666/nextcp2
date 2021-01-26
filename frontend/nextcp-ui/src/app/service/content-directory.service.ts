@@ -22,7 +22,7 @@ export class ContentDirectoryService {
   public quickSearchQueryString: string;
   public quickSearchPanelVisible: boolean;
 
-  currentContainerListChanged$ : Subject<ContainerItemDto> = new Subject();
+  currentContainerListChanged$: Subject<ContainerItemDto> = new Subject();
 
   constructor(
     private httpService: HttpService,
@@ -109,7 +109,9 @@ export class ContentDirectoryService {
   public quickSearchByDto(quickSearchDto: QuickSearchRequestDto): void {
 
     const uri = '/quickSearch';
-    this.httpService.post<QuickSearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => this.quickSearchResultList = data);
+    this.httpService.post<QuickSearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => { 
+      this.quickSearchResultList = data;
+    });
   }
 
   public searchAllItems(quickSearchDto: QuickSearchRequestDto): void {

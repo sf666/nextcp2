@@ -100,11 +100,10 @@ public class SearchSupport
         searchInput.RequestedCount = requestCount;
         searchInput.SortCriteria = "";
 
-        SearchOutput out = contentDirectoryService.search(searchInput);
-
         DIDLContent didl;
         try
         {
+            SearchOutput out = contentDirectoryService.search(searchInput);
             didl = didlContent.generateDidlContent(out.Result);
             addItemObjects(container.musicItems, didl);
         }
@@ -184,20 +183,3 @@ public class SearchSupport
     }
 }
 
-/**
- * if (!StringUtils.isBlank(searchRequest.date_from) && SearchCaps.contains("dc:date")) { sb.append(String.format(" and dc:date >= \"%s\"", searchRequest.date_from)); } if
- * (!StringUtils.isBlank(searchRequest.date_to) && SearchCaps.contains("dc:date")) { sb.append(String.format(" and dc:date <= \"%s\"", searchRequest.date_to)); } if
- * (!StringUtils.isBlank(searchRequest.creator) && SearchCaps.contains("dc:creator")) { sb.append(String.format(" and dc:creator contains \"%s\"", searchRequest.title)); } if
- * (!StringUtils.isBlank(searchRequest.artist) && SearchCaps.contains("upnp:artist")) { sb.append(String.format(" and upnp:artist contains \"%s\"", searchRequest.artist)); } if
- * (!StringUtils.isBlank(searchRequest.album) && SearchCaps.contains("upnp:album")) { sb.append(String.format(" or ( upnp:class = \"object.container.album.musicAlbum\" and
- * upnp:album contains \"%s\" )", searchRequest.album)); } if (!StringUtils.isBlank(searchRequest.genre) && SearchCaps.contains("upnp:genre")) { sb.append(String.format(" and
- * upnp:genre contains \"%s\"", searchRequest.genre)); }
- * 
- * sb.append(" )");
- * 
- * BrowseResponse response = search(searchRequest.containerID, sb.toString(), "*", 0, 0, "");
- * 
- * if (response != null) { log.info("Search finished with " + response.getTotalMatches() + " entries."); for (DIDLObject item : response.getResult()) { if
- * (item.getObjectClass().contains(DIDLConstants.UPNP_CLASS_MUSIC_TRACK)) { resultList.add(new FileContainerDto((DIDLMusicTrack) item, getDeviceUdn(), 0, true)); } } } else {
- * log.info("Search finished with no result."); }
- */
