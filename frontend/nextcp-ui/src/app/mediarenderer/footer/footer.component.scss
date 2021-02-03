@@ -119,9 +119,10 @@ mat-slider {
 }
 
 img {
-    height: calc(var(--footer-height) - 2px);
-    width : calc(var(--footer-height) - 2px);
-    border-radius: 4px;    
+    height       : calc(var(--footer-height) - 2px);
+    width        : calc(var(--footer-height) - 2px);
+    border-radius: 8px;
+    padding      : 4px;
 }
 
 .standbyOn {
