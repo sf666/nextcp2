@@ -20,8 +20,7 @@ If no config file is given or found, a config-file will be generated next to the
 
 ## system requirements
 
-- JDK 8 (for dependent libraries)
-- JDK 11
+- minimum JDK 8
 - maven 3.6
 - npm 6.14
 - GIT client
@@ -33,7 +32,7 @@ If no config file is given or found, a config-file will be generated next to the
 ## Install maven dependencies
 
 ```diff
-! ATTENTION: Lemma needs JDK 8 to build!
+! ATTENTION: Lemma needs JDK 8 to build. JDK 9 and higher will not work!
 ```
 
 Before calling the `./build_dependencies.sh` script or installing build dependencies manually, switch to JDK 8.
@@ -54,12 +53,11 @@ sdk use java <identifier>
 
 ### automated dependencies installation
 
-Install dependent libraries by calling the script 
+Install dependent libraries by calling the script
 
 ```bash
 ./build_dependencies.sh
 ```
-
 
 ### manual installation
 
@@ -70,7 +68,7 @@ mvn install
 ```
 
 Repositories to clone:
- 
+
 ```bash
 git clone https://github.com/sf666/lemma.git
 git clone https://github.com/sf666/seamless.git
@@ -81,7 +79,7 @@ git clone https://github.com/sf666/musicbrainz.git
 
 ## build instructions
 
-Before calling the `./build.sh` script or doing manual build steps, switch to JDK 11.
+Before calling the `./build.sh` script or doing manual build steps, switch to JDK 8 or higher.
 
 Switching between Java versions can be done with SDKMAN : https://sdkman.io/install
 
@@ -91,7 +89,7 @@ list available JDK installations with
 sdk list java
 ```
 
-select one Java 11 or higher Java version by typing
+select one Java 8 or higher Java version by typing
 
 ```bash
 sdk use java <identifier>
@@ -165,7 +163,7 @@ or if build manually, replace `nextcp2.jar` with the your current version of the
 java -Xms256m -Xmx256m -jar [-DconfigFile=path_to_config_file] nextcp2-assembly-spring-boot-2.0.0-SNAPSHOT.jar
 ```
 
-By default the application will start on the current interface on port `8085`. 
+By default the application will start on the current interface on port `8085`.
 
 Open your browser and connect to the application:
 
@@ -173,7 +171,7 @@ Open your browser and connect to the application:
 http://localhost:8085
 ```
 
-If nextcp runs on a remote maschine, replace `localhost` by the IP address of your remote maschine.
+If nextcp runs on a remote mashine, replace `localhost` by the IP address of your remote maschine.
 
 
 ## config file
@@ -209,7 +207,7 @@ Launch your favorite chromium browser from the Visual Studio Code debug perspect
 
 ## code generation
 
-Code generation classes are located in the package `codegen` within the maven module `nextcp2-runtime`.
+Generatied classes are located in the package `codegen` within the maven module `nextcp2-runtime`.
 
 ### DTO
 
@@ -246,5 +244,4 @@ Typescript DTO's will be generated in the file `nextcp-ui/src/app/service/dto.d.
 
 ### UPnP services
 
-If activated in the configuration file, java code (service classes, input and output classes, event consumer) will be generated for all discovered UPnP services.
-The generated code uses [cling](https://github.com/4thline/cling) as UPnP stack.
+If activated in the configuration file, java code (service classes, input and output classes, event consumer) will be generated for all discovered UPnP services. The generated code uses [cling](https://github.com/4thline/cling) as UPnP stack.
