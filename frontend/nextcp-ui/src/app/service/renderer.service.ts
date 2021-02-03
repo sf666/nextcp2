@@ -119,4 +119,65 @@ export class RendererService {
     };
     this.httpService.post(this.baseUri, uri, request, "volume control");
   }
+
+  //
+  // Renderer : information about the current played song
+  // ================================================================================================================
+
+  streaming() {
+    let streaming: boolean;
+    streaming = this.trackTime?.streaming;
+    return streaming;
+  }
+
+  getFinishTime(): string {
+    if (this.trackTime?.durationDisp) {
+      return this.trackTime.durationDisp;
+    } else {
+      return "00:00";
+    }
+  }
+
+  public getImgSrc(): string {
+    if (this.trackInfo?.currentTrack?.albumArtUrl) {
+      return this.trackInfo?.currentTrack?.albumArtUrl;
+    }
+    else {
+      return "";
+    }
+  }
+
+  public getBitrate(): number {
+    if (this.trackInfo?.currentTrack?.audioFormat?.bitrate) {
+      return this.trackInfo?.currentTrack?.audioFormat?.bitrate / 125
+    } else {
+      return 0;
+    }
+  }
+
+  public getBitsPerSample(): number {
+    if (this.trackInfo?.currentTrack?.audioFormat?.bitsPerSample) {
+      return this.trackInfo?.currentTrack?.audioFormat?.bitsPerSample
+    } else {
+      return 0;
+    }
+  }
+
+  public getSampleFreq(): number {
+    if (this.trackInfo?.currentTrack?.audioFormat?.sampleFrequency) {
+      return this.trackInfo?.currentTrack?.audioFormat?.sampleFrequency / 1000
+    } else {
+      return 0;
+    }
+  }
+
+  public getCurrentSongTitle(): string {
+    if (this.trackInfoAvailable) {
+      return this.trackInfo?.currentTrack?.title;
+    }
+    else {
+      return "no track info available";
+    }
+  }
+
 }

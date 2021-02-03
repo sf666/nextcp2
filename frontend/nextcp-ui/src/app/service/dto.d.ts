@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2020-12-04 15:13:30.
+// Generated using typescript-generator version 2.0.400 on 2021-02-03 07:03:09.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -69,7 +69,7 @@ export interface DeviceDriverState {
     standby: boolean;
 }
 
-export interface FileSystemPlaylistAdd {
+export interface FileSystemPlaylistEntry {
     playlistName: string;
     musicBrainzId: string;
 }

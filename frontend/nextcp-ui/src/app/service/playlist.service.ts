@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs';
 import { SseService } from './sse/sse.service';
 import { GenericResultService } from './generic-result.service';
-import { GenericBooleanRequest, GenericNumberRequest, MusicItemDto, PlayRequestDto, PlaylistState, ContainerDto, PlaylistAddContainerRequest, FileSystemPlaylistAdd } from './dto.d';
+import { GenericBooleanRequest, GenericNumberRequest, MusicItemDto, PlayRequestDto, PlaylistState, ContainerDto, PlaylistAddContainerRequest, FileSystemPlaylistEntry } from './dto.d';
 import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
 import { Injectable, OnInit } from '@angular/core';
@@ -228,13 +228,13 @@ export class PlaylistService implements OnInit {
 
   public addToFilesystemPlaylistByMBID(musicBrainzId : string, playlistName: string): void {
     const uri = '/addToFilesystemPlaylistByMBID';
-    let req : FileSystemPlaylistAdd = {musicBrainzId: musicBrainzId, playlistName: playlistName};
+    let req : FileSystemPlaylistEntry = {musicBrainzId: musicBrainzId, playlistName: playlistName};
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }
 
   public removeFromFilesystemPlaylistByMBID(musicBrainzId : string, playlistName: string): void {
     const uri = '/removeFromFilesystemPlaylistByMBID';
-    let req : FileSystemPlaylistAdd = {musicBrainzId: musicBrainzId, playlistName: playlistName};
+    let req : FileSystemPlaylistEntry = {musicBrainzId: musicBrainzId, playlistName: playlistName};
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }
 }

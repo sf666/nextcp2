@@ -18,12 +18,14 @@ export class MediarendererComponent implements OnInit {
   private _mediaServerUdn: string;
   private _mediaRendererUdn: string;
 
+  public showDetail : boolean;
+
   constructor(
     private defaultPlaylistService: DefaultPlaylistService,
     private layoutService: LayoutService,
     private backgroundImageService: BackgroundImageService,
     public rendererService: RendererService) {
-
+      this.showDetail = false;
   }
   ngOnInit(): void {
     this.layoutService.setFramedView();
@@ -70,5 +72,9 @@ export class MediarendererComponent implements OnInit {
 
   openAddPlaylistDialog(event: any, mbid: string) {
     this.defaultPlaylistService.openAddPlaylistDialog(event, mbid);
+  }
+
+  detailsClicked() : void {
+    this.showDetail = !this.showDetail;
   }
 }

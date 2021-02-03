@@ -12,3 +12,4 @@ backend/nextcp2-modelgen/bin
 backend/nextcp2-rating/bin
 backend/nextcp2-runtime/bin
 backend/nextcp2-indexer/bin
+rating_db.mv.db

@@ -12,6 +12,7 @@ $img-border-width : 0px;
 img {
     height: calc(var(--footer-height) - 2px);
     width : calc(var(--footer-height) - 2px);
+    border-radius: 4px;    
 }
 
 .baseFontsize {

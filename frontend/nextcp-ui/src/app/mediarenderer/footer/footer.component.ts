@@ -38,50 +38,12 @@ export class FooterComponent {
     return this.avtransportService.upnpAvTransportState;
   }
 
-  public getBitrate(): number {
-    if (this.rendererService?.trackInfo?.currentTrack?.audioFormat?.bitrate) {
-      return this.rendererService?.trackInfo?.currentTrack?.audioFormat?.bitrate / 125
-    } else {
-      return 0;
-    }
-  }
-
-  public getBitsPerSample(): number {
-    if (this.rendererService?.trackInfo?.currentTrack?.audioFormat?.bitsPerSample) {
-      return this.rendererService?.trackInfo?.currentTrack?.audioFormat?.bitsPerSample
-    } else {
-      return 0;
-    }
-  }
-
-  public getSampleFreq(): number {
-    if (this.rendererService?.trackInfo?.currentTrack?.audioFormat?.sampleFrequency) {
-      return this.rendererService?.trackInfo?.currentTrack?.audioFormat?.sampleFrequency / 1000
-    } else {
-      return 0;
-    }
-  }
-
   public getImgSrc(): string {
-    if (this.rendererService.trackInfo?.currentTrack?.albumArtUrl) {
-      return this.rendererService.trackInfo?.currentTrack?.albumArtUrl;
-    }
-    else {
-      return "";
-    }
+    return this.rendererService.getImgSrc();
   }
   
   public getCurrentSongTitle(): string {
-    if (this.rendererService.trackInfoAvailable) {
-      return this.rendererService.trackInfo?.currentTrack?.title;
-    }
-    else {
-      return "no track info available";
-    }
-  }
-
-  openAvailableMediaRendererDialog(event: any) {
-    
+    return this.rendererService.getCurrentSongTitle();
   }
 
   //
@@ -114,18 +76,13 @@ export class FooterComponent {
   // =========================================================================================================
 
   streaming() {
-    let streaming: boolean;
-    streaming = this.rendererService?.trackTime?.streaming;
-    return streaming;
+    return this.rendererService.streaming();
   }
 
   getFinishTime(): string {
-    if (this.rendererService.trackTime?.durationDisp) {
-      return this.rendererService.trackTime.durationDisp;
-    } else {
-      return "00:00";
-    }
+    return this.rendererService.getFinishTime();
   }
+  
   //
   // styling of elements depending on state information
   // =========================================================================================================

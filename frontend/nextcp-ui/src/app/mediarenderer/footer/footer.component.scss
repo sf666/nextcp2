@@ -121,6 +121,7 @@ mat-slider {
 img {
     height: calc(var(--footer-height) - 2px);
     width : calc(var(--footer-height) - 2px);
+    border-radius: 4px;    
 }
 
 .standbyOn {
