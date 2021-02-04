@@ -10,8 +10,9 @@ import org.fourthline.cling.model.types.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nextcp.upnp.GenActionException;
 import nextcp.upnp.ActionCallback;
+import nextcp.upnp.GenActionException;
+import nextcp.upnp.NextcpClientInfo;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -23,7 +24,7 @@ public class IsValidated extends ActionCallback
 
     public IsValidated(Service service, IsValidatedInput input, ControlPoint cp)
     {
-        super(new ActionInvocation(service.getAction("IsValidated")), cp);
+        super(new ActionInvocation(service.getAction("IsValidated"), new NextcpClientInfo()), cp);
 
         getActionInvocation().setInput("DeviceID", input.DeviceID);
     }

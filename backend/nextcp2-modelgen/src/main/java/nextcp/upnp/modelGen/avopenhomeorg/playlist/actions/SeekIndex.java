@@ -10,8 +10,9 @@ import org.fourthline.cling.model.types.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nextcp.upnp.GenActionException;
 import nextcp.upnp.ActionCallback;
+import nextcp.upnp.GenActionException;
+import nextcp.upnp.NextcpClientInfo;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -23,7 +24,7 @@ public class SeekIndex extends ActionCallback
 
     public SeekIndex(Service service, SeekIndexInput input, ControlPoint cp)
     {
-        super(new ActionInvocation(service.getAction("SeekIndex")), cp);
+        super(new ActionInvocation(service.getAction("SeekIndex"), new NextcpClientInfo()), cp);
 
         getActionInvocation().setInput("Value", new UnsignedIntegerFourBytes(input.Value));
     }

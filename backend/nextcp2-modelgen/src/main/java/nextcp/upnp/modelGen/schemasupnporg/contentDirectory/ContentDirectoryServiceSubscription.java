@@ -106,14 +106,20 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
+                    case "TransferIDs":
+                        transferIDsChange((String) stateVar.getValue());
+                        break;
                     case "SystemUpdateID":
                         systemUpdateIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "SortCapabilities":
+                        sortCapabilitiesChange((String) stateVar.getValue());
                         break;
                     case "ContainerUpdateIDs":
                         containerUpdateIDsChange((String) stateVar.getValue());
                         break;
-                    case "TransferIDs":
-                        transferIDsChange((String) stateVar.getValue());
+                    case "SearchCapabilities":
+                        searchCapabilitiesChange((String) stateVar.getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -135,11 +141,27 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
         }        
     }
 
+    private void transferIDsChange(String value)
+    {
+        for (IContentDirectoryServiceEventListener listener : eventListener)
+        {
+            listener.transferIDsChange(value);
+        }
+    }    
+
     private void systemUpdateIDChange(Long value)
     {
         for (IContentDirectoryServiceEventListener listener : eventListener)
         {
             listener.systemUpdateIDChange(value);
+        }
+    }    
+
+    private void sortCapabilitiesChange(String value)
+    {
+        for (IContentDirectoryServiceEventListener listener : eventListener)
+        {
+            listener.sortCapabilitiesChange(value);
         }
     }    
 
@@ -151,11 +173,11 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void transferIDsChange(String value)
+    private void searchCapabilitiesChange(String value)
     {
         for (IContentDirectoryServiceEventListener listener : eventListener)
         {
-            listener.transferIDsChange(value);
+            listener.searchCapabilitiesChange(value);
         }
     }    
 }

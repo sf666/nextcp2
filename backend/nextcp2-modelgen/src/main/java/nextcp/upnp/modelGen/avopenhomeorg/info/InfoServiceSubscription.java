@@ -21,14 +21,14 @@ import nextcp.upnp.ISubscriptionEventListener;
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
- * Generated UPnP subscription service class.
+ * Generated UPnP subscription service class.  
  */
 public class InfoServiceSubscription extends RemoteGENASubscription
 {
     private static final Logger log = LoggerFactory.getLogger(InfoServiceSubscription.class.getName());
 
     private List<IInfoServiceEventListener> eventListener = new CopyOnWriteArrayList<>();
-
+        
     protected InfoServiceSubscription(RemoteService service, int requestedDurationSeconds)
     {
         super(service, requestedDurationSeconds);
@@ -38,12 +38,12 @@ public class InfoServiceSubscription extends RemoteGENASubscription
     {
         eventListener.add(listener);
     }
-
+    
     public boolean removeSubscriptionEventListener(IInfoServiceEventListener listener)
     {
         return eventListener.remove(listener);
     }
-
+    
     @Override
     public void invalidMessage(UnsupportedDataException ex)
     {
@@ -150,16 +150,16 @@ public class InfoServiceSubscription extends RemoteGENASubscription
             {
                 log.error("illegal cast. Please checke code generator.", e);
             }
-
+                            
             for (ISubscriptionEventListener listener : eventListener)
             {
                 listener.eventReceived(key, stateVar);
             }
-        }
-        for (ISubscriptionEventListener listener : eventListener)
-        {
-            listener.eventProcessed();
-        }
+            for (ISubscriptionEventListener listener : eventListener)
+            {
+                listener.eventProcessed();
+            }
+        }        
     }
 
     private void detailsCountChange(Long value)
@@ -168,7 +168,7 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         {
             listener.detailsCountChange(value);
         }
-    }
+    }    
 
     private void metatextCountChange(Long value)
     {
@@ -176,7 +176,7 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         {
             listener.metatextCountChange(value);
         }
-    }
+    }    
 
     private void sampleRateChange(Long value)
     {
@@ -184,7 +184,7 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         {
             listener.sampleRateChange(value);
         }
-    }
+    }    
 
     private void metadataChange(String value)
     {
@@ -192,7 +192,7 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         {
             listener.metadataChange(value);
         }
-    }
+    }    
 
     private void durationChange(Long value)
     {
@@ -200,7 +200,7 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         {
             listener.durationChange(value);
         }
-    }
+    }    
 
     private void trackCountChange(Long value)
     {
@@ -208,7 +208,7 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         {
             listener.trackCountChange(value);
         }
-    }
+    }    
 
     private void bitRateChange(Long value)
     {
@@ -216,7 +216,7 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         {
             listener.bitRateChange(value);
         }
-    }
+    }    
 
     private void uriChange(String value)
     {
@@ -224,7 +224,7 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         {
             listener.uriChange(value);
         }
-    }
+    }    
 
     private void bitDepthChange(Long value)
     {
@@ -232,7 +232,7 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         {
             listener.bitDepthChange(value);
         }
-    }
+    }    
 
     private void losslessChange(Boolean value)
     {
@@ -240,7 +240,7 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         {
             listener.losslessChange(value);
         }
-    }
+    }    
 
     private void codecNameChange(String value)
     {
@@ -248,7 +248,7 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         {
             listener.codecNameChange(value);
         }
-    }
+    }    
 
     private void metatextChange(String value)
     {
@@ -256,5 +256,5 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         {
             listener.metatextChange(value);
         }
-    }
+    }    
 }

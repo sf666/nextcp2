@@ -10,8 +10,9 @@ import org.fourthline.cling.model.types.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nextcp.upnp.GenActionException;
 import nextcp.upnp.ActionCallback;
+import nextcp.upnp.GenActionException;
+import nextcp.upnp.NextcpClientInfo;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,7 +28,7 @@ public class ${className} extends ActionCallback
     public ${className}(Service service, ControlPoint cp)
 </#if>
     {
-        super(new ActionInvocation(service.getAction("${className}")), cp);
+        super(new ActionInvocation(service.getAction("${className}"), new NextcpClientInfo()), cp);
 
 <#list varInList as var>
   <#if var.upnpDataType == "(StringDatatype)">

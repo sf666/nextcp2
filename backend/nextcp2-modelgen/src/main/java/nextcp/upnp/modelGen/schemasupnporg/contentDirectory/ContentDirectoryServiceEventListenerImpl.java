@@ -106,12 +106,30 @@ public class ContentDirectoryServiceEventListenerImpl implements IContentDirecto
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
+    public void transferIDsChange(String value)
+    {
+        stateVariable.TransferIDs = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "TransferIDs", value));
+        }
+    }
+    
     public void systemUpdateIDChange(Long value)
     {
         stateVariable.SystemUpdateID = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "SystemUpdateID", value));
+        }
+    }
+    
+    public void sortCapabilitiesChange(String value)
+    {
+        stateVariable.SortCapabilities = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "SortCapabilities", value));
         }
     }
     
@@ -124,12 +142,12 @@ public class ContentDirectoryServiceEventListenerImpl implements IContentDirecto
         }
     }
     
-    public void transferIDsChange(String value)
+    public void searchCapabilitiesChange(String value)
     {
-        stateVariable.TransferIDs = value;
+        stateVariable.SearchCapabilities = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "TransferIDs", value));
+            log.debug(String.format("StateVariable : %s: %s", "SearchCapabilities", value));
         }
     }
     

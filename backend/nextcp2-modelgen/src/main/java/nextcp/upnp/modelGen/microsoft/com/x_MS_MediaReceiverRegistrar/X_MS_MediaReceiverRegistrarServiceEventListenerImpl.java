@@ -9,6 +9,12 @@ import org.fourthline.cling.model.state.StateVariableValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ *
+ * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
+ *
+ * Generated UPnP EventListener Implementation.  
+ */
 public class X_MS_MediaReceiverRegistrarServiceEventListenerImpl implements IX_MS_MediaReceiverRegistrarServiceEventListener 
 {
     private static Logger log = LoggerFactory.getLogger(X_MS_MediaReceiverRegistrarService.class.getName());
@@ -100,15 +106,6 @@ public class X_MS_MediaReceiverRegistrarServiceEventListenerImpl implements IX_M
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void validationRevokedUpdateIDChange(Long value)
-    {
-        stateVariable.ValidationRevokedUpdateID = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "ValidationRevokedUpdateID", value));
-        }
-    }
-    
     public void validationSucceededUpdateIDChange(Long value)
     {
         stateVariable.ValidationSucceededUpdateID = value;
@@ -118,12 +115,12 @@ public class X_MS_MediaReceiverRegistrarServiceEventListenerImpl implements IX_M
         }
     }
     
-    public void authorizationDeniedUpdateIDChange(Long value)
+    public void validationRevokedUpdateIDChange(Long value)
     {
-        stateVariable.AuthorizationDeniedUpdateID = value;
+        stateVariable.ValidationRevokedUpdateID = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "AuthorizationDeniedUpdateID", value));
+            log.debug(String.format("StateVariable : %s: %s", "ValidationRevokedUpdateID", value));
         }
     }
     
@@ -133,6 +130,15 @@ public class X_MS_MediaReceiverRegistrarServiceEventListenerImpl implements IX_M
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "AuthorizationGrantedUpdateID", value));
+        }
+    }
+    
+    public void authorizationDeniedUpdateIDChange(Long value)
+    {
+        stateVariable.AuthorizationDeniedUpdateID = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "AuthorizationDeniedUpdateID", value));
         }
     }
     

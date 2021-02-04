@@ -10,8 +10,9 @@ import org.fourthline.cling.model.types.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nextcp.upnp.GenActionException;
 import nextcp.upnp.ActionCallback;
+import nextcp.upnp.GenActionException;
+import nextcp.upnp.NextcpClientInfo;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -23,7 +24,7 @@ public class SetRepeat extends ActionCallback
 
     public SetRepeat(Service service, SetRepeatInput input, ControlPoint cp)
     {
-        super(new ActionInvocation(service.getAction("SetRepeat")), cp);
+        super(new ActionInvocation(service.getAction("SetRepeat"), new NextcpClientInfo()), cp);
 
         getActionInvocation().setInput("Value", input.Value);
     }

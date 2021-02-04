@@ -10,8 +10,9 @@ import org.fourthline.cling.model.types.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nextcp.upnp.GenActionException;
 import nextcp.upnp.ActionCallback;
+import nextcp.upnp.GenActionException;
+import nextcp.upnp.NextcpClientInfo;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -23,7 +24,7 @@ public class GetVerticalKeystone extends ActionCallback
 
     public GetVerticalKeystone(Service service, GetVerticalKeystoneInput input, ControlPoint cp)
     {
-        super(new ActionInvocation(service.getAction("GetVerticalKeystone")), cp);
+        super(new ActionInvocation(service.getAction("GetVerticalKeystone"), new NextcpClientInfo()), cp);
 
         getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
     }
