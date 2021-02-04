@@ -81,25 +81,13 @@ git clone https://github.com/sf666/musicbrainz.git
 
 Before calling the `./build.sh` script or doing manual build steps, switch to JDK 8 or higher.
 
-Switching between Java versions can be done with SDKMAN : https://sdkman.io/install
-
-list available JDK installations with
-
-```bash
-sdk list java
-```
-
-select one Java 8 or higher Java version by typing
-
-```bash
-sdk use java <identifier>
-```
-
 ### automated build
 
-call `build.sh`
+- call `build.sh`
 
 Build artifacts are located in the `build` directory.
+
+- call `build_jdk8.sh` for a JDK 8 runtime compatible release.
 
 ### manual building
 
@@ -188,6 +176,13 @@ If no config file is found, a config file will be generated at this location : '
 See the Wiki [config file page](https://github.com/sf666/nextcp2/wiki/config-file) for documentation.
 
 # developer notice
+
+## Choosing JDK 8 release
+
+There is a JDK 8 build profile that can be used by calling
+```
+    mvn clean package -P jdk8
+```
 
 ## debugging
 

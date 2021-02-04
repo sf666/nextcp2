@@ -25,10 +25,8 @@
 
 	<properties>
 		<maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
-
-		<java.version>8</java.version>
-		<maven.compiler.source>8</maven.compiler.source>
-		<maven.compiler.target>8</maven.compiler.target>
+		<java.version>11</java.version>
+		<maven.compiler.release>11</maven.compiler.release>
 
 		<log4j2.version>2.11.2</log4j2.version>
 		<slf4j.version>1.7.21</slf4j.version>
@@ -49,6 +47,13 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<release>${maven.compiler.release}</release>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -199,7 +204,6 @@
 			</dependency>
 
 			<!-- Utils -->
-
 			<dependency>
 				<groupId>commons-configuration</groupId>
 				<artifactId>commons-configuration</artifactId>
@@ -227,5 +231,14 @@
 		</dependencies>
 	</dependencyManagement>
 
-
+	<profiles>
+		<!-- JDK 8 profile -->
+		<profile>
+			<id>jdk8</id>
+			<properties>
+				<java.version>8</java.version>
+				<maven.compiler.release>8</maven.compiler.release>
+			</properties>
+		</profile>
+	</profiles>
 </project>
