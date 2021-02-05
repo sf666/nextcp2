@@ -53,6 +53,7 @@ import { DomChangedDirective } from './directive/watch-dom-tree.directive';
 import { StarRatingComponent } from './view/star-rating/star-rating.component';
 import { DefautPlaylistsComponent } from './mediaserver/popup/defaut-playlists/defaut-playlists.component';
 import { SongOptionsComponent } from './mediaserver/popup/song-options/song-options/song-options.component';
+import { QualityBadgeComponent } from './util/comp/quality-badge/quality-badge.component';
 
 
 @NgModule({
@@ -84,6 +85,7 @@ import { SongOptionsComponent } from './mediaserver/popup/song-options/song-opti
       StarRatingComponent,
       DefautPlaylistsComponent,
       SongOptionsComponent,
+      QualityBadgeComponent,
 
    ],
    imports: [

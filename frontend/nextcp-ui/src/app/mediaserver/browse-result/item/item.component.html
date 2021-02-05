@@ -12,15 +12,11 @@
                 </div>
             </div>
             <div class="item-tbody">
-                <div id="{{item.objectID}}" class="row"
-                    *ngFor="let item of getMusicTracks()">
+                <div id="{{item.objectID}}" class="row" *ngFor="let item of getMusicTracks()">
                     <div (click)="play(item)" class="col col-greyed small-col">{{item.originalTrackNumber}}</div>
                     <div (click)="play(item)" class="col d-flex">
                         <div>{{item.title}}</div>
-                        <div *ngIf="trackQualityService.isHifi(item)"> <span class="app-badge">
-                                <span class="app-badge-text">{{trackQualityService.getHifiString(item)}}</span>
-                            </span>
-                        </div>
+                        <quality-badge [item]="item"></quality-badge>
                     </div>
                     <div (click)="play(item)" class="col">{{item.artistName}}</div>
                     <div class="col mid-col">
@@ -44,7 +40,10 @@
                 *ngFor="let item of contentDirectoryService.currentContainerList.musicItemDto">
                 <img src="{{item.albumArtUrl}}" class="cardLayout image-container" alt="{{item.title}}">
                 <div class="d-flex cardLayout card-body">
-                    <div class="card-title">{{item.title}}</div>
+                    <div class="d-flex">
+                        <div class="card-title">{{item.title}}</div>
+                        <quality-badge [item]="item"></quality-badge>
+                    </div>
                 </div>
                 <div class="cardLayout play-overlay d-flex flex-column justify-content-end">
                     <div class="d-flex justify-content-around align-items-center pb-4">
