@@ -16,4 +16,11 @@ export class QualityBadgeComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  get isHifi(): boolean {
+    return this.trackQualityService.isHifi(this.item);
+  }
+
+  get hifiString(): string {
+    return this.trackQualityService.getHifiString(this.item);
+  }
 }

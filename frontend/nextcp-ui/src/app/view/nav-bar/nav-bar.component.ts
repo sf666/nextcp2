@@ -39,8 +39,7 @@ export class NavBarComponent {
   // UI state management for navbar 
 
   get musicLibraryVisible(): boolean {
-    //  console.log("current path : " + this.currentPath);
-    return this.currentPath === '/music-library' || this.currentPath === '/'; // router default view
+    return this.currentPath === '/music-library' || this.currentPath === '/';
   }
   get playlistVisible(): boolean {
     return this.currentPath === '/playlist';
@@ -64,6 +63,10 @@ export class NavBarComponent {
     return this.currentPath === '/input-output';
   }
 
+  get searchResultVisible(): boolean {
+    return this.searchResultSingleVisible || this.searchResultMultiVisible;
+  }
+
   // music-library
   public get currentContainer(): ContainerDto {
     return this.contentDirectoryService.currentContainerList.currentContainer;
@@ -76,6 +79,10 @@ export class NavBarComponent {
   gotoParent() {
     this.contentDirectoryService.browseChildren(this.contentDirectoryService.currentContainerList.currentContainer.parentID, "",
       this.contentDirectoryService.currentContainerList.currentContainer.mediaServerUDN);
+  }
+  searchBackPressed() {
+//    this.contentDirectoryService.browseToRoot("", this.contentDirectoryService.currentContainerList.currentContainer.mediaServerUDN);
+    this.router.navigateByUrl('music-library');    
   }
 
   //

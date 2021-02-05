@@ -32,6 +32,12 @@ export class CdsBrowsePathService {
     return this.visitedPathFromRoot.peek();
   }
 
+  public clearPath() : void {
+    while (!this.visitedPathFromRoot.isEmpty) {
+      this.visitedPathFromRoot.pop();
+    }
+  }
+
   get scrollToID(): string {
     return this.scrollId;
   }

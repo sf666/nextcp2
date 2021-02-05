@@ -2,7 +2,10 @@
     <div class="d-flex">
         <img src="{{searchItemService.musicItem?.albumArtUrl}}" class="cropImg align-self-center" alt="">
         <div class="d-flex flex-column ml-4">
-            <div class="title">{{searchItemService.musicItem?.title}}</div>
+            <div class="d-flex">
+                <div class="title">{{searchItemService.musicItem?.title}}</div>
+                <quality-badge [item]="searchItemService.musicItem"></quality-badge>
+            </div>
             <div class="regular">by <span class="highlight">{{searchItemService.musicItem?.artistName}}</span></div>
             <div class="regular">from the album <span class="highlight">{{searchItemService.musicItem?.album}}</span>
             </div>
@@ -11,7 +14,7 @@
                     <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="play"></mat-icon>
                     play
                 </button>
-                <button mat-flat-button class="buttons" (click)="addToPlaylist()">
+                <button mat-flat-button class="buttons ml-2" (click)="addToPlaylist()">
                     <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="playlist-plus"></mat-icon>
                     add playlist
                 </button>

@@ -35,23 +35,26 @@
 </ng-template>
 
 <ng-template #radio>
-    <div *ngIf="radioVisible; else searchSingle">
+    <div *ngIf="radioVisible; else search">
         <div class="headFont">Radio</div>
     </div>
 </ng-template>
 
-<ng-template #searchSingle>
-    <div *ngIf="searchResultSingleVisible; else settings">&nbsp;</div>
-</ng-template>
-
-<ng-template #settings>
-    <div *ngIf="settingsVisible; else searchMulti">
-        <div class="headFont">Settings</div>
+<ng-template #search>
+    <div *ngIf="searchResultVisible; else settings">
+        <div class="headLeftContainer minWidth">
+            <button mat-mini-fab (click)="searchBackPressed()">
+                <mat-icon class="left-button" style="vertical-align: top;" svgIcon="arrow-left"></mat-icon>
+            </button>
+            <div class="headFont no-wrap">search result</div>
+        </div>
     </div>
 </ng-template>
 
-<ng-template #searchMulti>
-    <div *ngIf="searchResultMultiVisible; else inputOutput">&nbsp;</div>
+<ng-template #settings>
+    <div *ngIf="settingsVisible; else inputOutput">
+        <div class="headFont">Settings</div>
+    </div>
 </ng-template>
 
 <ng-template #inputOutput>

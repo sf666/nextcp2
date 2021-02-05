@@ -66,13 +66,19 @@ export class ContentDirectoryService {
     this.browseChildrenByRequest(this.createBrowseRequest(objectID, sortCriteria, mediaServerUdn));
   }
 
+  public browseToRoot(sortCriteria: string, mediaServerUdn: string): void {
+    this.cdsBrowsePathService.clearPath();
+    this.updateBrowsePath("0");
+    this.browseChildrenByRequest(this.createBrowseRequest("0", sortCriteria, mediaServerUdn));
+  }
+
   public browseChildrenByContiner(containerDto: ContainerDto): void {
     this.updateBrowsePath(containerDto.id);
     this.browseChildrenByRequest(this.createBrowseRequest(containerDto.id, "", containerDto.mediaServerUDN));
   }
 
   private updateBrowsePath(id: string) {
-    if (this.cdsBrowsePathService.peekCurrentPathID().length < id.length) {
+    if (this.cdsBrowsePathService.peekCurrentPathID()?.length < id.length) {
       this.cdsBrowsePathService.stepIn(id);
     } else {
       this.cdsBrowsePathService.stepOut();
