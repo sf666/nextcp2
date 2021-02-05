@@ -106,8 +106,29 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
+                    case "X_Subtitle":
+                        x_SubtitleChange((String) stateVar.getValue());
+                        break;
+                    case "Volume":
+                        volumeChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "X_Current3DFormatter":
+                        x_Current3DFormatterChange((String) stateVar.getValue());
+                        break;
                     case "LastChange":
                         lastChangeChange((String) stateVar.getValue());
+                        break;
+                    case "X_Possible3DFormatter":
+                        x_Possible3DFormatterChange((String) stateVar.getValue());
+                        break;
+                    case "PresetNameList":
+                        presetNameListChange((String) stateVar.getValue());
+                        break;
+                    case "Mute":
+                        muteChange((Boolean) stateVar.getValue());
+                        break;
+                    case "VolumeDB":
+                        volumeDBChange((Integer) stateVar.getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -129,11 +150,67 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
         }        
     }
 
+    private void x_SubtitleChange(String value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.x_SubtitleChange(value);
+        }
+    }    
+
+    private void volumeChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.volumeChange(value);
+        }
+    }    
+
+    private void x_Current3DFormatterChange(String value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.x_Current3DFormatterChange(value);
+        }
+    }    
+
     private void lastChangeChange(String value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
             listener.lastChangeChange(value);
+        }
+    }    
+
+    private void x_Possible3DFormatterChange(String value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.x_Possible3DFormatterChange(value);
+        }
+    }    
+
+    private void presetNameListChange(String value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.presetNameListChange(value);
+        }
+    }    
+
+    private void muteChange(Boolean value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.muteChange(value);
+        }
+    }    
+
+    private void volumeDBChange(Integer value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.volumeDBChange(value);
         }
     }    
 }

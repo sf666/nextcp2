@@ -28,7 +28,7 @@ public class SetVolume extends ActionCallback
 
         getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
         getActionInvocation().setInput("Channel", input.Channel);
-        getActionInvocation().setInput("DesiredVolume", new UnsignedIntegerFourBytes(input.DesiredVolume));
+        throw new RuntimeException("(UnsignedIntegerTwoBytesDatatype)");
     }
 
     public void executeAction()

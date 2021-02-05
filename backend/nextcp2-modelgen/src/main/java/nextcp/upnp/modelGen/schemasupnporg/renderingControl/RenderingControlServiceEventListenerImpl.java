@@ -106,12 +106,75 @@ public class RenderingControlServiceEventListenerImpl implements IRenderingContr
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
+    public void x_SubtitleChange(String value)
+    {
+        stateVariable.X_Subtitle = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "X_Subtitle", value));
+        }
+    }
+    
+    public void volumeChange(Long value)
+    {
+        stateVariable.Volume = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Volume", value));
+        }
+    }
+    
+    public void x_Current3DFormatterChange(String value)
+    {
+        stateVariable.X_Current3DFormatter = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "X_Current3DFormatter", value));
+        }
+    }
+    
     public void lastChangeChange(String value)
     {
         stateVariable.LastChange = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "LastChange", value));
+        }
+    }
+    
+    public void x_Possible3DFormatterChange(String value)
+    {
+        stateVariable.X_Possible3DFormatter = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "X_Possible3DFormatter", value));
+        }
+    }
+    
+    public void presetNameListChange(String value)
+    {
+        stateVariable.PresetNameList = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "PresetNameList", value));
+        }
+    }
+    
+    public void muteChange(Boolean value)
+    {
+        stateVariable.Mute = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Mute", value));
+        }
+    }
+    
+    public void volumeDBChange(Integer value)
+    {
+        stateVariable.VolumeDB = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "VolumeDB", value));
         }
     }
     
