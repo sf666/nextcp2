@@ -147,6 +147,29 @@ export class RendererService {
     }
   }
 
+  public isHifi() : boolean {
+    let bps = this.getBitsPerSample();
+    let sFreq = this.getSampleFreq();
+    if (bps >= 16 && sFreq>= 44100) { // CD Quality
+      return true;
+    }
+    return false;
+  }
+
+  public getHifiString() : string {
+    let bps = this.getBitsPerSample();
+    let sFreq = this.getSampleFreq();
+    if (!this.isHifi) {
+      return "low";
+    } else if (bps == 16 && sFreq == 44100) {
+      return "CD"
+    } else if (bps > 16 && sFreq == 44100) {
+      return "HIFI"
+    } else if (bps >= 24 && sFreq > 44100) {
+      return "Hi-Res"
+    }
+  }
+
   public getBitrate(): number {
     if (this.trackInfo?.currentTrack?.audioFormat?.bitrate) {
       return this.trackInfo?.currentTrack?.audioFormat?.bitrate / 125

@@ -1,3 +1,4 @@
+import { TrackQualityService } from './../../../util/track-quality.service';
 import { SongOptionsServiceService } from './../../popup/song-options/song-options-service.service';
 import { TimeDisplayService } from './../../../util/time-display.service';
 import { ScrollViewService } from './../../../util/scroll-view.service';
@@ -20,6 +21,7 @@ export class ItemComponent {
     private songOptionsServiceService: SongOptionsServiceService,
     public avtransportService: AvtransportService,
     private timeDisplayService: TimeDisplayService,
+    public trackQualityService: TrackQualityService,
     public playlistService: PlaylistService) { }
 
 

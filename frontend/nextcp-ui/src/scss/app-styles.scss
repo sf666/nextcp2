@@ -324,3 +324,29 @@ button:focus {
     @extend .plainTextBase;
     color: var(--snow-white);
 }
+
+.app-badge {
+    flex-shrink: 0;
+    margin-left: 10px;
+
+    display          : flex;
+    -webkit-box-pack : center;
+    justify-content  : center;
+    -webkit-box-align: center;
+    align-items      : center;
+    box-sizing       : border-box;
+    border-radius    : 4px;
+    padding          : 4px 6px 2px 6px;
+    width            : fit-content;
+    border           : 1px solid rgba(153, 114, 75, 0.6);
+}
+
+.app-badge-text {
+    margin        : 0px;
+    font-size     : 8px;
+    font-weight   : 700;
+    letter-spacing: 0.08em;
+    line-height   : 12px;
+    text-transform: uppercase;
+    color         : rgb(255, 190, 125);
+}

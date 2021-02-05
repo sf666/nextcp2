@@ -13,9 +13,15 @@
             </div>
             <div class="item-tbody">
                 <div id="{{item.objectID}}" class="row"
-                    *ngFor="let item of contentDirectoryService.currentContainerList.musicItemDto">
+                    *ngFor="let item of getMusicTracks()">
                     <div (click)="play(item)" class="col col-greyed small-col">{{item.originalTrackNumber}}</div>
-                    <div (click)="play(item)" class="col">{{item.title}}</div>
+                    <div (click)="play(item)" class="col d-flex">
+                        <div>{{item.title}}</div>
+                        <div *ngIf="trackQualityService.isHifi(item)"> <span class="app-badge">
+                                <span class="app-badge-text">{{trackQualityService.getHifiString(item)}}</span>
+                            </span>
+                        </div>
+                    </div>
                     <div (click)="play(item)" class="col">{{item.artistName}}</div>
                     <div class="col mid-col">
                         <star-rating [currentSong]="item"></star-rating>
