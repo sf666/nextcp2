@@ -1,48 +1,34 @@
 package nextcp.upnp.modelGen.schemasupnporg.renderingControl;
 
 import org.fourthline.cling.UpnpService;
-
 import org.fourthline.cling.model.meta.RemoteDevice;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.types.ServiceType;
 import org.fourthline.cling.protocol.ProtocolCreationException;
 import org.fourthline.cling.protocol.sync.SendingSubscribe;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nextcp.upnp.ISubscriptionEventListener;
-
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.X_SetSubtitle;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.X_SetSubtitleInput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.SetVolumeDB;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.SetVolumeDBInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetMute;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetMuteInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetMuteOutput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolume;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolumeDB;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolumeDBInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolumeDBOutput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolumeInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolumeOutput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.ListPresets;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.ListPresetsInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.ListPresetsOutput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.SelectPreset;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.SelectPresetInput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetMute;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetMuteOutput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetMuteInput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolume;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolumeOutput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolumeInput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.SetVolume;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.SetVolumeInput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.X_Set3DFormatter;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.X_Set3DFormatterInput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.X_Get3DFormatter;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.X_Get3DFormatterOutput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.X_Get3DFormatterInput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.ListPresets;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.ListPresetsOutput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.ListPresetsInput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.SetMute;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.SetMuteInput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.X_GetSubtitle;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.X_GetSubtitleOutput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.X_GetSubtitleInput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolumeDB;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolumeDBOutput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolumeDBInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.SetVolume;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.SetVolumeDB;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.SetVolumeDBInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.SetVolumeInput;
 
 
 /**
@@ -96,13 +82,6 @@ public class RenderingControlService
         return renderingControlService;
     }    
 
-
-    public void x_SetSubtitle(X_SetSubtitleInput inp)
-    {
-        X_SetSubtitle x_SetSubtitle = new X_SetSubtitle(renderingControlService, inp, upnpService.getControlPoint());
-        x_SetSubtitle.executeAction();
-    }
-
     public void setVolumeDB(SetVolumeDBInput inp)
     {
         SetVolumeDB setVolumeDB = new SetVolumeDB(renderingControlService, inp, upnpService.getControlPoint());
@@ -135,19 +114,6 @@ public class RenderingControlService
         setVolume.executeAction();
     }
 
-    public void x_Set3DFormatter(X_Set3DFormatterInput inp)
-    {
-        X_Set3DFormatter x_Set3DFormatter = new X_Set3DFormatter(renderingControlService, inp, upnpService.getControlPoint());
-        x_Set3DFormatter.executeAction();
-    }
-
-    public X_Get3DFormatterOutput x_Get3DFormatter(X_Get3DFormatterInput inp)
-    {
-        X_Get3DFormatter x_Get3DFormatter = new X_Get3DFormatter(renderingControlService, inp, upnpService.getControlPoint());
-        X_Get3DFormatterOutput res = x_Get3DFormatter.executeAction();
-        return res;        
-    }
-
     public ListPresetsOutput listPresets(ListPresetsInput inp)
     {
         ListPresets listPresets = new ListPresets(renderingControlService, inp, upnpService.getControlPoint());
@@ -161,12 +127,6 @@ public class RenderingControlService
         setMute.executeAction();
     }
 
-    public X_GetSubtitleOutput x_GetSubtitle(X_GetSubtitleInput inp)
-    {
-        X_GetSubtitle x_GetSubtitle = new X_GetSubtitle(renderingControlService, inp, upnpService.getControlPoint());
-        X_GetSubtitleOutput res = x_GetSubtitle.executeAction();
-        return res;        
-    }
 
     public GetVolumeDBOutput getVolumeDB(GetVolumeDBInput inp)
     {
