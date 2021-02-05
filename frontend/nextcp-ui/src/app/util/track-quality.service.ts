@@ -26,7 +26,7 @@ export class TrackQualityService {
       return "CD"
     } else if (bps > 16 && sFreq == 44100) {
       return "HIFI"
-    } else if (bps >= 24 && sFreq > 44100) {
+    } else if (bps >= 16 && sFreq > 44100) {
       return "Hi-Res"
     }
   }
