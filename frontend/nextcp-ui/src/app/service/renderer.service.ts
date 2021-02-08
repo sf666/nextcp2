@@ -41,7 +41,7 @@ export class RendererService {
           this.backgroundImageService.setFooterBackgroundImage(data.currentTrack?.albumArtUrl);
         }
         if (data.duration) {
-          this.trackTime.durationDisp = data.duration;
+//          this.trackTime.durationDisp = data.duration;
         }
       };
     });
