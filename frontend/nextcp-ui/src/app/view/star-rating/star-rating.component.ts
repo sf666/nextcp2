@@ -36,7 +36,10 @@ export class StarRatingComponent implements OnInit {
   }
 
   isVisible(): boolean {
-    return this.currentSong?.musicBrainzId?.TrackId?.length > 0;
+    if (this.currentSong.musicBrainzId?.TrackId?.length > 0) {
+      return "00000000-0000-0000-0000-000000000000" !== this.currentSong.musicBrainzId.TrackId;
+    }
+    return false;    
   }
 
   starSelected(num: number) {
