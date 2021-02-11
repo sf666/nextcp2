@@ -1,5 +1,7 @@
 package nextcp.service;
 
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -68,14 +70,33 @@ public class RatingService
         return numUpdated;
     }
 
-    
     public int syncRatingsFromAudioFile()
     {
         int num = userRatingPersistenceService.syncRating();
         this.publisher.publishEvent(new ToastrMessage("", "info", "Import from audiofile", num + " entries were imported"));
         return num;
     }
-    
+
+    public void syncRatingsFromMusicBrainz(boolean storeInSong)
+    {
+        HashMap<String, Integer> ratings = musicBrainzService.getAllUserRatings();
+        int num = 0;
+        for (String uuid : ratings.keySet())
+        {
+            UserRating ur = new UserRating(uuid, null, ratings.get(uuid));
+            int numUpdated = userRatingPersistenceService.insertOrUpdateUserRating(ur);
+            if (numUpdated > 0)
+            {
+                num++;
+            }
+            if (storeInSong)
+            {
+                updateLocalFileBackend(uuid, ratings.get(uuid));
+            }
+        }
+        this.publisher.publishEvent(new ToastrMessage("", "info", "Import from musicbrainz.org", num + " entries were imported"));
+    }
+
     private void updateMusicBrainzBackend(String musicBrainzID, Integer rating)
     {
         try

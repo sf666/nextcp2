@@ -27,7 +27,16 @@ export class RatingServiceService {
 
   public syncRatingFromAudioFile() {
     const uri = "/syncRatingFromAudioFile";
+    return this.httpService.get(this.baseUri, uri);
+  }  
 
+  public syncRatingFromMusicBrainz() {
+    const uri = "/syncRatingsFromMusicBrainz";
+    return this.httpService.get(this.baseUri, uri);
+  }  
+
+  public syncRatingsFromMusicBrainzToFiles() {
+    const uri = "/syncRatingsFromMusicBrainzToFiles";
     return this.httpService.get(this.baseUri, uri);
   }  
 }

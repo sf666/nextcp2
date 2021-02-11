@@ -48,5 +48,16 @@ public class RestRatingService
     {
         serviceDelegate.syncRatingsFromAudioFile();
     }
+    
+    @GetMapping("/syncRatingsFromMusicBrainz")
+    public void syncRatingsFromMusicBrainz()
+    {
+        serviceDelegate.syncRatingsFromMusicBrainz(false);
+    }
 
+    @GetMapping("/syncRatingsFromMusicBrainzToFiles")
+    public void syncRatingsFromMusicBrainzToFiles()
+    {
+        serviceDelegate.syncRatingsFromMusicBrainz(true);
+    }
 }

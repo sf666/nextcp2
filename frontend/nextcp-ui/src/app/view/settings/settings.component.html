@@ -105,9 +105,8 @@
     <div class="section head">Adminisration</div>
     <div class="section subhead">Rating Support</div>
     <div class="d-flex section subhead">
-        <button mat-flat-button class="ml-2 settings" (click)="ratingServiceService.syncRatingFromAudioFile()">import rating from audio file</button>
-        <!-- 
-            <button mat-flat-button class="ml-2 settings" (click)="importRatingFromMusicBrainz()">import rating from musicbrainz.org</button>
-        -->
+        <button mat-flat-button class="ml-2 settings" (click)="ratingServiceService.syncRatingFromAudioFile()">import star rating from audio file</button>
+        <button mat-flat-button class="ml-2 settings" (click)="ratingServiceService.syncRatingFromMusicBrainz()">import star rating from musicbrainz.org</button>
+        <button mat-flat-button class="ml-2 settings" (click)="ratingServiceService.syncRatingsFromMusicBrainzToFiles()">import star rating from musicbrainz.org and store in audio file</button>
     </div>
 </div>
