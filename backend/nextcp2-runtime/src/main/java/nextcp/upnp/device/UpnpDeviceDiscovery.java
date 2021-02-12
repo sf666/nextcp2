@@ -32,7 +32,7 @@ public class UpnpDeviceDiscovery implements RegistryListener
 
     @Autowired
     private DeviceRegistry deviceRegistry = null;
-    
+
     @Autowired
     private DeviceFactory deviceFactory = null;
 
@@ -55,9 +55,13 @@ public class UpnpDeviceDiscovery implements RegistryListener
     public void remoteDeviceAdded(Registry registry, RemoteDevice device)
     {
         log.info(String.format("remoteDeviceAdded of type '%s'. Device [%s] ", device.getType(), device.toString()));
-        if (device.getType().getType().equals(MEDIA_SERVER_TYPE) && device.getType().getNamespace().equalsIgnoreCase("schemas-upnp-org"))
+        if (device.getType().getType().equals(MEDIA_SERVER_TYPE) && device.getDetails().getManufacturerDetails().getManufacturer().equalsIgnoreCase("ums"))
         {
-            deviceRegistry.addMediaServerDevice(device);
+            deviceRegistry.addMediaServerDevice(device, MediaServerType.UMS);
+        }
+        else if (device.getType().getType().equals(MEDIA_SERVER_TYPE) && device.getType().getNamespace().equalsIgnoreCase("schemas-upnp-org"))
+        {
+            deviceRegistry.addMediaServerDevice(device, MediaServerType.DEFAULT);
         }
         else if (device.getType().getType().equals(MEDIA_RENDERE_TYPE) && device.getType().getNamespace().equalsIgnoreCase("schemas-upnp-org"))
         {
@@ -102,7 +106,7 @@ public class UpnpDeviceDiscovery implements RegistryListener
         }
         else if (device.getType().getType().equals(JMINIM_MONITOR_TYPE) && device.getType().getNamespace().equalsIgnoreCase("jminim-org"))
         {
-            // TODO
+            deviceRegistry.removeMediaServerExtDevice(device);
         }
     }
 

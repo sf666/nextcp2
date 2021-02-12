@@ -1,5 +1,6 @@
 package nextcp.upnp.device.mediaserver;
 
+import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -258,6 +259,16 @@ public class MediaServerDevice extends BaseDevice
             MusicItemDto itemDto = getDtoBuilder().buildItemDto(item, getUDN().getIdentifierString());
             result.add(itemDto);
         }
+    }
+
+    public void rescan()
+    {
+        log.warn("rescan not implemented for this device : " + getFriendlyName()); 
+    }
+    
+    public void rescanFile(File f)
+    {
+        log.warn("scan file not implemented for this device : " + getFriendlyName()); 
     }
 
 }

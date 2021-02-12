@@ -76,9 +76,9 @@ public class DeviceRegistry
     //
     // Media Server
     //
-    public void addMediaServerDevice(RemoteDevice remoteDevice)
+    public void addMediaServerDevice(RemoteDevice remoteDevice, MediaServerType default1)
     {
-        MediaServerDevice device = deviceFactory.mediaServerDeviceFactory(remoteDevice);
+        MediaServerDevice device = deviceFactory.mediaServerDeviceFactory(remoteDevice, default1);
         mediaServerList.put(remoteDevice.getIdentity().getUdn(), device);
         eventPublisher.publishEvent(new MediaServerListChanged(getAvailableMediaServer()));
     }

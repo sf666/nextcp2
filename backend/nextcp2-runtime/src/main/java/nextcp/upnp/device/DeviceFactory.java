@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Scope;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediaserver.JMinimDevice;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
+import nextcp.upnp.device.mediaserver.UmsServerDevice;
 
 @Configuration
 public class DeviceFactory
@@ -22,9 +23,17 @@ public class DeviceFactory
 
     @Bean
     @Scope(value = "prototype")
-    public MediaServerDevice mediaServerDeviceFactory(RemoteDevice name)
+    public MediaServerDevice mediaServerDeviceFactory(RemoteDevice name, MediaServerType serverType)
     {
-        return new MediaServerDevice(name);
+        switch (serverType)
+        {
+            case UMS:
+                return new UmsServerDevice(name);
+            case DEFAULT:
+                return new MediaServerDevice(name);
+            default:
+                throw new RuntimeException("Unknown server type.");
+        }
     }
 
     @Bean

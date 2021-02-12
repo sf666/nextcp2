@@ -27,18 +27,43 @@ public class RestContentDirectoryService
     @Autowired
     private DeviceRegistry deviceRegistry = null;
 
-    @PostMapping("/browseChildren")
-    public ContainerItemDto browse(@RequestBody BrowseRequestDto browseRequest)
+    @PostMapping("/rescanContent")
+    public void rescanContent(@RequestBody String mediaServerUDN)
+    {
+        if (StringUtils.isBlank(mediaServerUDN))
+        {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "media server ID shall not be empty");
+        }
+        MediaServerDevice device = deviceRegistry.getMediaServerByUDN(new UDN(mediaServerUDN));
+        if (device == null)
+        {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "unknown media server : " + mediaServerUDN);
+        }
+        device.rescan();
+    }
+
+    private void checkDeviceAvailability(BrowseRequestDto browseRequest, MediaServerDevice device)
+    {
+        if (device == null)
+        {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "unknown media server : " + browseRequest.mediaServerUDN);
+        }
+    }
+
+    private void checkUdn(BrowseRequestDto browseRequest)
     {
         if (StringUtils.isBlank(browseRequest.mediaServerUDN))
         {
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "media server ID shall not be empty");
         }
+    }
+
+    @PostMapping("/browseChildren")
+    public ContainerItemDto browse(@RequestBody BrowseRequestDto browseRequest)
+    {
+        checkUdn(browseRequest);
         MediaServerDevice device = deviceRegistry.getMediaServerByUDN(new UDN(browseRequest.mediaServerUDN));
-        if (device == null)
-        {
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "unknown media server : " + browseRequest.mediaServerUDN);
-        }
+        checkDeviceAvailability(browseRequest, device);
         BrowseInput inp = new BrowseInput();
         inp.ObjectID = browseRequest.objectID;
         inp.SortCriteria = browseRequest.sortCriteria;
