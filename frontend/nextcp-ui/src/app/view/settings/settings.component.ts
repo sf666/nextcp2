@@ -1,3 +1,5 @@
+import { DeviceService } from './../../service/device.service';
+import { ContentDirectoryService } from './../../service/content-directory.service';
 import { RatingServiceService } from './../../service/rating-service.service';
 import { UiClientConfig, MediaServerDto, RendererDeviceConfiguration } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
@@ -12,6 +14,8 @@ export class SettingsComponent {
 
   constructor(
     public ratingServiceService: RatingServiceService,
+    public contentDirectoryService: ContentDirectoryService,
+    public deviceService : DeviceService,
     public configService: ConfigurationService) { }
 
   mediaRendererChanged(event) {
@@ -42,4 +46,7 @@ export class SettingsComponent {
     this.configService.restart();
   }
 
+  rescan() {
+    this.contentDirectoryService.rescanContent(this.deviceService.selectedMediaServerDevice.udn);
+  }
 }

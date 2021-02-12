@@ -101,7 +101,6 @@ export class ContentDirectoryService {
       objectID: objectID,
       sortCriteria: sortCriteria
     }
-
     return br;
   }
 
@@ -118,6 +117,11 @@ export class ContentDirectoryService {
     this.httpService.post<QuickSearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => { 
       this.quickSearchResultList = data;
     });
+  }
+  
+  public rescanContent(mediaServerUdn: string): void {
+    const uri = '/rescanContent';
+    this.httpService.post(this.baseUri, uri, mediaServerUdn).subscribe();
   }
 
   public searchAllItems(quickSearchDto: QuickSearchRequestDto): void {
