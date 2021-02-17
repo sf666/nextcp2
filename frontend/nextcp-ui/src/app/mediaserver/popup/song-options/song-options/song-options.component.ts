@@ -1,3 +1,4 @@
+import { UuidService } from './../../../../util/uuid.service';
 import { PlaylistService } from './../../../../service/playlist.service';
 import { ContentDirectoryService } from './../../../../service/content-directory.service';
 import { HttpClient } from '@angular/common/http';
@@ -29,6 +30,7 @@ export class SongOptionsComponent implements OnInit {
     private downloadService: DownloadService,
     private avtransportService: AvtransportService,
     private defaultPlaylistService: DefaultPlaylistService,
+    private uuidService: UuidService,
     _matDialogRef: MatDialogRef<SongOptionsComponent>,
     @Inject(MAT_DIALOG_DATA) data: { trigger: ElementRef, id: string },
   ) {
@@ -57,7 +59,7 @@ export class SongOptionsComponent implements OnInit {
 
   public hasValidMusicBrainzId(): boolean {
     if (this.data?.item?.musicBrainzId?.TrackId?.length > 0) {
-      return "00000000-0000-0000-0000-000000000000" !== this.data.item.musicBrainzId.TrackId;
+      return this.uuidService.isValidUuid(this.data.item.musicBrainzId.TrackId);
     }
     return false;
   }

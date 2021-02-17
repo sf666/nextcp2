@@ -1,3 +1,4 @@
+import { UuidService } from './../../util/uuid.service';
 import { GenericResultService } from './../../service/generic-result.service';
 import { DeviceService } from './../../service/device.service';
 import { SseService } from './../../service/sse/sse.service';
@@ -26,6 +27,7 @@ export class StarRatingComponent implements OnInit {
   constructor(
     private genericResultService: GenericResultService,
     private ratingServiceService: RatingServiceService,
+    private uuidService: UuidService,
     private deviceService: DeviceService,
     private sseService: SseService) {
 
@@ -37,7 +39,7 @@ export class StarRatingComponent implements OnInit {
 
   isVisible(): boolean {
     if (this.currentSong.musicBrainzId?.TrackId?.length > 0) {
-      return "00000000-0000-0000-0000-000000000000" !== this.currentSong.musicBrainzId.TrackId;
+      return this.uuidService.isValidUuid(this.currentSong.musicBrainzId?.TrackId);
     }
     return false;    
   }

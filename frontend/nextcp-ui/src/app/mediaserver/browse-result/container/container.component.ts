@@ -107,9 +107,11 @@ export class ContainerComponent implements AfterViewChecked {
     this.playlistService.addContainerToPlaylistAndPlay(container, false);
   }
 
-  isLeaf(): boolean {
-    let isLeaf = this.containerListWithoutMinimServerTags().length < 1;
-    return isLeaf;
+  hasSongs(): boolean {
+    if (this.contentDirectoryService.currentContainerList?.musicItemDto?.length > 0) {
+      return true;
+    }
+    return false;
   }
 
   openMinimTagDialog(event: any) {
