@@ -2,7 +2,8 @@
 <div class="outer-container">
     <div class="d-flex">
         <div>
-            <img class="cardLayout image-container" src="{{currentContainer.albumartUri}}" class="img-top" alt="select media server ...">
+            <img class="cardLayout image-container" src="{{currentContainer.albumartUri}}" class="img-top"
+                alt="select media server ...">
         </div>
         <div *ngIf="hasSongs(); else containerTitle" class="d-flex flex-column pl-4">
             <div class="d-flex flex-column">
@@ -16,6 +17,10 @@
                         class="highlight">{{totalPlaytime}}</span></div>
             </div>
             <div class="d-flex mt-4">
+                <button mat-flat-button class="my-buttons" (click)="playPlaylist(currentContainer)">
+                    <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="{{switchViewIcon}}"></mat-icon>
+                    switch view
+                </button>
                 <button mat-flat-button class="my-buttons" (click)="playPlaylist(currentContainer)">
                     <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="play"></mat-icon>
                     play

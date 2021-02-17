@@ -114,6 +114,10 @@ export class ContainerComponent implements AfterViewChecked {
     return false;
   }
 
+  get switchViewIcon() : string {
+    return "format-list-text"; // view-list
+  }
+
   openMinimTagDialog(event: any) {
     const target = new ElementRef(event.currentTarget);
     const dialogRef = this.dialog.open(MinimTagComponent, {
