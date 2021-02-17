@@ -341,7 +341,7 @@ public class DtoBuilder
                 itemDto.audioFormat = format;
             }
             String url = res.getValue();
-            if (!StringUtils.isBlank(url) && res.getProtocolInfo().getContentFormat().startsWith("audio"))
+            if (!StringUtils.isBlank(url) && isAudioResource(res))
             {
                 itemDto.streamingURL = url;
             }
@@ -350,7 +350,31 @@ public class DtoBuilder
 
     private String readStreamingUrl(AudioItem item)
     {
-        return item.getResources().stream().filter(res -> res.getProtocolInfo().getContentFormat().startsWith("audio")).findFirst().get().getValue();
+        Optional<Res> resUrl = item.getResources().stream().filter(res -> isAudioResource(res)).findFirst();
+        if (!resUrl.isEmpty())
+        {
+            return resUrl.get().getValue();
+        }
+        else 
+        {
+            log.warn(String.format("Empty URL : %s : %s",item.getId(), item.getLongDescription()));
+            return "";
+        }            
+    }
+
+    private boolean isAudioResource(Res res)
+    {
+        if (res.getProtocolInfo().getContentFormat().startsWith("audio"))
+        {
+            return true;
+        }
+        if (res.getProtocolInfo().getContentFormat().startsWith("MIMETYPE_AUTO"))
+        {
+            // UMS unknown renderer 
+            return true;
+        }
+        
+        return false;
     }
 
     public void addMusicTrack(MusicTrack item, MusicItemDto itemDto)
