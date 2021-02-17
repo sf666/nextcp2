@@ -1,4 +1,4 @@
-import { ContainerDto, QuickSearchResultDto, ContainerItemDto, QuickSearchRequestDto, MusicItemDto, AudioFormat, MusicBrainzId, TrackTimeDto, TrackInfoDto } from './../service/dto.d';
+import { ContainerDto, SearchResultDto, ContainerItemDto, SearchRequestDto, MusicItemDto, AudioFormat, MusicBrainzId, TrackTimeDto, TrackInfoDto } from './../service/dto.d';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -29,7 +29,7 @@ export class DtoGeneratorService {
     };
   }
 
-  public generateEmptyQuickSearchResultDto(): QuickSearchResultDto {
+  public generateEmptySearchResultDto(): SearchResultDto {
     return {
       albumItems: [],
       artistItems: [],
@@ -49,9 +49,10 @@ export class DtoGeneratorService {
     }
   }
 
-  public generateQuickSearchDto(_searchRequest: string, _mediaServerUDN: string, _sortCriteria): QuickSearchRequestDto {
+  public generateQuickSearchDto(_searchRequest: string, _mediaServerUDN: string, _sortCriteria, start? : number, count? : number): SearchRequestDto {
     return {
-      requestCount: 4,
+      startElement: start ? start : 0,
+      requestCount: count ? count : 4,
       mediaServerUDN: _mediaServerUDN,
       searchRequest: _searchRequest,
       sortCriteria: _sortCriteria

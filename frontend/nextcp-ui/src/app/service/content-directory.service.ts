@@ -5,7 +5,7 @@ import { DtoGeneratorService } from './../util/dto-generator.service';
 import { SearchItemService } from './search/search-item.service';
 import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
-import { ContainerItemDto, BrowseRequestDto, MediaServerDto, ContainerDto, QuickSearchRequestDto, QuickSearchResultDto } from './dto.d';
+import { ContainerItemDto, BrowseRequestDto, MediaServerDto, ContainerDto, SearchRequestDto, SearchResultDto } from './dto.d';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -18,7 +18,7 @@ export class ContentDirectoryService {
   public currentContainerList: ContainerItemDto;
 
   // QuickSearch Support
-  public quickSearchResultList: QuickSearchResultDto;
+  public quickSearchResultList: SearchResultDto;
   public quickSearchQueryString: string;
   public quickSearchPanelVisible: boolean;
 
@@ -35,7 +35,7 @@ export class ContentDirectoryService {
 
     // Initialize empty result object
     this.currentContainerList = this.dtoGeneratorService.generateEmptyContainerItemDto();
-    this.quickSearchResultList = this.dtoGeneratorService.generateEmptyQuickSearchResultDto();
+    this.quickSearchResultList = this.dtoGeneratorService.generateEmptySearchResultDto();
     this.quickSearchPanelVisible = false;
 
     deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));
@@ -56,7 +56,7 @@ export class ContentDirectoryService {
   }
 
   public clearSearch() {
-    this.quickSearchResultList = this.dtoGeneratorService.generateEmptyQuickSearchResultDto();
+    this.quickSearchResultList = this.dtoGeneratorService.generateEmptySearchResultDto();
     this.quickSearchPanelVisible = false;
   }
 
@@ -101,6 +101,7 @@ export class ContentDirectoryService {
       objectID: objectID,
       sortCriteria: sortCriteria
     }
+
     return br;
   }
 
@@ -111,10 +112,10 @@ export class ContentDirectoryService {
     this.quickSearchByDto(this.dtoGeneratorService.generateQuickSearchDto(searchQuery, mediaServerUdn, sortCriteria));
   }
 
-  public quickSearchByDto(quickSearchDto: QuickSearchRequestDto): void {
+  public quickSearchByDto(quickSearchDto: SearchRequestDto): void {
 
     const uri = '/quickSearch';
-    this.httpService.post<QuickSearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => { 
+    this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => { 
       this.quickSearchResultList = data;
     });
   }
@@ -124,36 +125,36 @@ export class ContentDirectoryService {
     this.httpService.post(this.baseUri, uri, mediaServerUdn).subscribe();
   }
 
-  public searchAllItems(quickSearchDto: QuickSearchRequestDto): void {
+  public searchAllItems(quickSearchDto: SearchRequestDto): void {
     const uri = '/searchAllItems';
-    this.httpService.post<QuickSearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
+    this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
       this.searchItemService.musicItemList = data;
       this.clearSearch();
       this.router.navigateByUrl('searchResultContainer');
     });
   }
 
-  public searchAllPlaylist(quickSearchDto: QuickSearchRequestDto): void {
+  public searchAllPlaylist(quickSearchDto: SearchRequestDto): void {
     const uri = '/searchAllPlaylist';
-    this.httpService.post<QuickSearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
+    this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
       this.searchItemService.musicItemList = data;
       this.clearSearch();
       this.router.navigateByUrl('searchResultContainer');
     });
   }
 
-  public searchAllAlbum(quickSearchDto: QuickSearchRequestDto): void {
+  public searchAllAlbum(quickSearchDto: SearchRequestDto): void {
     const uri = '/searchAllAlbum';
-    this.httpService.post<QuickSearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
+    this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
       this.searchItemService.musicItemList = data;
       this.clearSearch();
       this.router.navigateByUrl('searchResultContainer');
     });
   }
 
-  public searchAllArtists(quickSearchDto: QuickSearchRequestDto): void {
+  public searchAllArtists(quickSearchDto: SearchRequestDto): void {
     const uri = '/searchAllArtists';
-    this.httpService.post<QuickSearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
+    this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
       this.searchItemService.musicItemList = data;
       this.clearSearch();
       this.router.navigateByUrl('searchResultContainer');

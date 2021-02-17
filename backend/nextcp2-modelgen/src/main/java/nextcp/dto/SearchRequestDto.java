@@ -6,20 +6,22 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
  */
-public class QuickSearchRequestDto
+public class SearchRequestDto
 {
 
+    public Long startElement;
     public Long requestCount;
     public String mediaServerUDN;
     public String searchRequest;
     public String sortCriteria;
 
-    public QuickSearchRequestDto()
+    public SearchRequestDto()
     {
     }
 
-    public QuickSearchRequestDto(Long requestCount, String mediaServerUDN, String searchRequest, String sortCriteria)
+    public SearchRequestDto(Long startElement, Long requestCount, String mediaServerUDN, String searchRequest, String sortCriteria)
     {
+        this.startElement = startElement;
         this.requestCount = requestCount;
         this.mediaServerUDN = mediaServerUDN;
         this.searchRequest = searchRequest;
@@ -30,7 +32,8 @@ public class QuickSearchRequestDto
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("QuickSearchRequestDto [");
+        sb.append("SearchRequestDto [");
+        sb.append("startElement=").append(this.startElement).append(", ");
         sb.append("requestCount=").append(this.requestCount).append(", ");
         sb.append("mediaServerUDN=").append(this.mediaServerUDN).append(", ");
         sb.append("searchRequest=").append(this.searchRequest).append(", ");

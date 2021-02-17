@@ -64,26 +64,26 @@ export class ModalSearchResultComponent {
   showAllItem() {
     this.contentDirectoryService.searchAllItems(
       this.dtoGeneratorService.generateQuickSearchDto(
-        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, ""));
+        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", 0 , 100));
     this.contentDirectoryService.hideQuickSearchPanel();
   }
 
   showAllAlbum() {
     this.contentDirectoryService.searchAllAlbum(
       this.dtoGeneratorService.generateQuickSearchDto(
-        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, ""));
+        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", 0 , 100));
     this.contentDirectoryService.hideQuickSearchPanel();
   }
   showAllItemArtist() {
     this.contentDirectoryService.searchAllArtists(
       this.dtoGeneratorService.generateQuickSearchDto(
-        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, ""));
+        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", 0 , 100));
     this.contentDirectoryService.hideQuickSearchPanel();
   }
   showAllPlaylist() {
     this.contentDirectoryService.searchAllPlaylist(
       this.dtoGeneratorService.generateQuickSearchDto(
-        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, ""));
+        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", 0 , 100));
     this.contentDirectoryService.hideQuickSearchPanel();
   }
 }

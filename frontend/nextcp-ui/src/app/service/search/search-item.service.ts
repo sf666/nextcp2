@@ -1,4 +1,4 @@
-import { MusicItemDto, QuickSearchResultDto } from './../dto.d';
+import { MusicItemDto, SearchResultDto } from './../dto.d';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -9,7 +9,7 @@ export class SearchItemService {
   _searchQuery: string;
 
   private _musicItem: MusicItemDto;
-  private _musicItemList: QuickSearchResultDto;
+  private _musicItemList: SearchResultDto;
 
   constructor() { }
 
@@ -17,7 +17,7 @@ export class SearchItemService {
     return this._musicItem;
   }
 
-  get musicItemList(): QuickSearchResultDto {
+  get musicItemList(): SearchResultDto {
     return this._musicItemList;
   }
 
@@ -26,7 +26,7 @@ export class SearchItemService {
     this._musicItem = mi;
   }
 
-  set musicItemList(mil : QuickSearchResultDto) {
+  set musicItemList(mil : SearchResultDto) {
     this.clear();
     this._musicItemList = mil;
   }

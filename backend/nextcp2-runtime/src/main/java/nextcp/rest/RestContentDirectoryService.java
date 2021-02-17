@@ -13,8 +13,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import nextcp.dto.BrowseRequestDto;
 import nextcp.dto.ContainerItemDto;
-import nextcp.dto.QuickSearchRequestDto;
-import nextcp.dto.QuickSearchResultDto;
+import nextcp.dto.SearchRequestDto;
+import nextcp.dto.SearchResultDto;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.BrowseInput;
@@ -71,7 +71,7 @@ public class RestContentDirectoryService
     }
 
     @PostMapping("/quickSearch")
-    public QuickSearchResultDto quickSearch(@RequestBody QuickSearchRequestDto searchRequest)
+    public SearchResultDto quickSearch(@RequestBody SearchRequestDto searchRequest)
     {
         if (StringUtils.isBlank(searchRequest.mediaServerUDN))
         {
@@ -87,7 +87,7 @@ public class RestContentDirectoryService
     }
 
     @PostMapping("/searchAllItems")
-    public QuickSearchResultDto searchAllItems(@RequestBody QuickSearchRequestDto searchRequest)
+    public SearchResultDto searchAllItems(@RequestBody SearchRequestDto searchRequest)
     {
         if (StringUtils.isBlank(searchRequest.mediaServerUDN))
         {
@@ -98,11 +98,11 @@ public class RestContentDirectoryService
         {
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "unknown media server : " + searchRequest.mediaServerUDN);
         }
-        return device.searchAllItems(searchRequest.searchRequest, adjustRequestCount(searchRequest.requestCount));
+        return device.searchAllItems(searchRequest.searchRequest, searchRequest.requestCount);
     }
 
     @PostMapping("/searchAllPlaylist")
-    public QuickSearchResultDto searchAllPlaylist(@RequestBody QuickSearchRequestDto searchRequest)
+    public SearchResultDto searchAllPlaylist(@RequestBody SearchRequestDto searchRequest)
     {
         if (StringUtils.isBlank(searchRequest.mediaServerUDN))
         {
@@ -117,7 +117,7 @@ public class RestContentDirectoryService
     }
 
     @PostMapping("/searchAllAlbum")
-    public QuickSearchResultDto searchAllAlbum(@RequestBody QuickSearchRequestDto searchRequest)
+    public SearchResultDto searchAllAlbum(@RequestBody SearchRequestDto searchRequest)
     {
         if (StringUtils.isBlank(searchRequest.mediaServerUDN))
         {
@@ -132,7 +132,7 @@ public class RestContentDirectoryService
     }
 
     @PostMapping("/searchAllArtists")
-    public QuickSearchResultDto searchAllArtists(@RequestBody QuickSearchRequestDto searchRequest)
+    public SearchResultDto searchAllArtists(@RequestBody SearchRequestDto searchRequest)
     {
         if (StringUtils.isBlank(searchRequest.mediaServerUDN))
         {

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.dto.ContainerDto;
 import nextcp.dto.MusicItemDto;
-import nextcp.dto.QuickSearchResultDto;
+import nextcp.dto.SearchResultDto;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.ContentDirectoryService;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.SearchInput;
@@ -35,9 +35,9 @@ public class SearchSupport
         this.mediaServerDevice = mediaServerDevice;
     }
 
-    public QuickSearchResultDto quickSearch(String quickSearch, long requestCount)
+    public SearchResultDto quickSearch(String quickSearch, long requestCount)
     {
-        QuickSearchResultDto container = initEmptySearchResultContainer();
+        SearchResultDto container = initEmptySearchResultContainer();
 
         searchAndAddMusicItems(quickSearch, container, requestCount);
         searchAndAddArtistContainer(quickSearch, container, requestCount);
@@ -47,17 +47,17 @@ public class SearchSupport
 
     }
 
-    private void searchAndAddPlaylistContainer(String quickSearch, QuickSearchResultDto container, long requestCount)
+    private void searchAndAddPlaylistContainer(String quickSearch, SearchResultDto container, long requestCount)
     {
         searchAndAddArtistContainer(quickSearch, container.playlistItems, "object.container.playlistContainer", requestCount);
     }
 
-    private void searchAndAddAlbumContainer(String quickSearch, QuickSearchResultDto container, long requestCount)
+    private void searchAndAddAlbumContainer(String quickSearch, SearchResultDto container, long requestCount)
     {
         searchAndAddArtistContainer(quickSearch, container.albumItems, "object.container.album", requestCount);
     }
 
-    private void searchAndAddArtistContainer(String quickSearch, QuickSearchResultDto container, long requestCount)
+    private void searchAndAddArtistContainer(String quickSearch, SearchResultDto container, long requestCount)
     {
         searchAndAddArtistContainer(quickSearch, container.artistItems, "object.container.person", requestCount);
     }
@@ -86,7 +86,7 @@ public class SearchSupport
         }
     }
 
-    private void searchAndAddMusicItems(String quickSearch, QuickSearchResultDto container, Long requestCount)
+    private void searchAndAddMusicItems(String quickSearch, SearchResultDto container, Long requestCount)
     {
         StringBuilder sb = new StringBuilder();
         sb.append("( upnp:class = \"object.item.audioItem.musicTrack\""); // upnp:class derivedfrom “object.container.person”
@@ -113,9 +113,9 @@ public class SearchSupport
         }
     }
 
-    private QuickSearchResultDto initEmptySearchResultContainer()
+    private SearchResultDto initEmptySearchResultContainer()
     {
-        QuickSearchResultDto dto = new QuickSearchResultDto();
+        SearchResultDto dto = new SearchResultDto();
         dto.albumItems = new ArrayList<ContainerDto>();
         dto.artistItems = new ArrayList<ContainerDto>();
         dto.musicItems = new ArrayList<>();
@@ -146,36 +146,36 @@ public class SearchSupport
     // search all from one type
     //
 
-    public QuickSearchResultDto searchAllItems(String quickSearch, long requestCount)
+    public SearchResultDto searchAllItems(String quickSearch, long requestCount)
     {
-        QuickSearchResultDto container = initEmptySearchResultContainer();
+        SearchResultDto container = initEmptySearchResultContainer();
 
         searchAndAddMusicItems(quickSearch, container, requestCount);
 
         return container;
     }
 
-    public QuickSearchResultDto searchAllArtists(String quickSearch, long requestCount)
+    public SearchResultDto searchAllArtists(String quickSearch, long requestCount)
     {
-        QuickSearchResultDto container = initEmptySearchResultContainer();
+        SearchResultDto container = initEmptySearchResultContainer();
 
         searchAndAddArtistContainer(quickSearch, container, requestCount);
 
         return container;
     }
 
-    public QuickSearchResultDto searchAllAlbum(String quickSearch, long requestCount)
+    public SearchResultDto searchAllAlbum(String quickSearch, long requestCount)
     {
-        QuickSearchResultDto container = initEmptySearchResultContainer();
+        SearchResultDto container = initEmptySearchResultContainer();
 
         searchAndAddAlbumContainer(quickSearch, container, requestCount);
 
         return container;
     }
 
-    public QuickSearchResultDto searchAllPlaylist(String quickSearch, long requestCount)
+    public SearchResultDto searchAllPlaylist(String quickSearch, long requestCount)
     {
-        QuickSearchResultDto container = initEmptySearchResultContainer();
+        SearchResultDto container = initEmptySearchResultContainer();
 
         searchAndAddPlaylistContainer(quickSearch, container, requestCount);
 

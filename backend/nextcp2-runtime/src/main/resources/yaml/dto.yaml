@@ -257,13 +257,14 @@ BrowseRequestDto:
    objectID: String
    sortCriteria: String
 
-QuickSearchRequestDto:
+SearchRequestDto:
+   startElement : Long
    requestCount : Long
    mediaServerUDN: String
    searchRequest: String
    sortCriteria: String
 
-QuickSearchResultDto:
+SearchResultDto:
     musicItems: List<MusicItemDto>
     albumItems: List<ContainerDto>
     artistItems: List<ContainerDto>

@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2021-02-03 07:03:09.
+// Generated using typescript-generator version 2.0.400 on 2021-02-17 09:53:17.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -191,20 +191,6 @@ export interface PlaylistState {
     Id: number;
 }
 
-export interface QuickSearchRequestDto {
-    requestCount: number;
-    mediaServerUDN: string;
-    searchRequest: string;
-    sortCriteria: string;
-}
-
-export interface QuickSearchResultDto {
-    musicItems: MusicItemDto[];
-    albumItems: ContainerDto[];
-    artistItems: ContainerDto[];
-    playlistItems: ContainerDto[];
-}
-
 export interface RadioStation {
     id: number;
     stationName: string;
@@ -236,6 +222,21 @@ export interface RendererDeviceConfiguration {
 export interface RendererPlaylist {
     udn: string;
     musicItemDto: MusicItemDto[];
+}
+
+export interface SearchRequestDto {
+    startElement: number;
+    requestCount: number;
+    mediaServerUDN: string;
+    searchRequest: string;
+    sortCriteria: string;
+}
+
+export interface SearchResultDto {
+    musicItems: MusicItemDto[];
+    albumItems: ContainerDto[];
+    artistItems: ContainerDto[];
+    playlistItems: ContainerDto[];
 }
 
 export interface ToastrMessage {

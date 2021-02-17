@@ -21,7 +21,7 @@ import nextcp.dto.ContainerDto;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MediaServerDto;
 import nextcp.dto.MusicItemDto;
-import nextcp.dto.QuickSearchResultDto;
+import nextcp.dto.SearchResultDto;
 import nextcp.upnp.device.BaseDevice;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.ContentDirectoryService;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.BrowseInput;
@@ -56,27 +56,27 @@ public class MediaServerDevice extends BaseDevice
         return contentDirectoryService;
     }
 
-    public QuickSearchResultDto quickSearch(String quickSearch, long requestCount)
+    public SearchResultDto quickSearch(String quickSearch, long requestCount)
     {
         return searchSupportDelegate.quickSearch(quickSearch, requestCount);
     }
 
-    public QuickSearchResultDto searchAllItems(String quickSearch, long requestCount)
+    public SearchResultDto searchAllItems(String quickSearch, long requestCount)
     {
         return searchSupportDelegate.searchAllItems(quickSearch, requestCount);
     }
 
-    public QuickSearchResultDto searchAllArtists(String quickSearch, long requestCount)
+    public SearchResultDto searchAllArtists(String quickSearch, long requestCount)
     {
         return searchSupportDelegate.searchAllArtists(quickSearch, requestCount);
     }
 
-    public QuickSearchResultDto searchAllAlbum(String quickSearch, long requestCount)
+    public SearchResultDto searchAllAlbum(String quickSearch, long requestCount)
     {
         return searchSupportDelegate.searchAllAlbum(quickSearch, requestCount);
     }
 
-    public QuickSearchResultDto searchAllPlaylist(String quickSearch, long requestCount)
+    public SearchResultDto searchAllPlaylist(String quickSearch, long requestCount)
     {
         return searchSupportDelegate.searchAllPlaylist(quickSearch, requestCount);
     }
