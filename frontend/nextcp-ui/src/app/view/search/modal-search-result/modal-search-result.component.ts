@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
+/* eslint-disable no-restricted-syntax */
 import { ContentDirectoryService } from './../../../service/content-directory.service';
 import { ContainerDto, MusicItemDto } from './../../../service/dto.d';
 import { SearchItemService } from './../../../service/search/search-item.service';
@@ -26,32 +28,32 @@ export class ModalSearchResultComponent {
   // single item selected
   //
 
-  musicItemSelected(musicItem: MusicItemDto) {
+  musicItemSelected(musicItem: MusicItemDto): void {
     console.debug("search item selected : " + musicItem);
     this.searchItemService.musicItem = musicItem;
     this.contentDirectoryService.clearSearch();
-    this.router.navigateByUrl('searchResultSingleItem');
+    void this.router.navigateByUrl('searchResultSingleItem');
   }
 
-  albumItemSelected(albumItem: ContainerDto) {
+  albumItemSelected(albumItem: ContainerDto): void {
     console.debug("album selected : " + albumItem);
     this.contentDirectoryService.clearSearch();
     this.contentDirectoryService.browseChildrenByContiner(albumItem);
-    this.router.navigateByUrl('music-library');
+    void this.router.navigateByUrl('music-library');
   }
 
-  playlistItemSelected(playlistItem: ContainerDto) {
+  playlistItemSelected(playlistItem: ContainerDto): void {
     console.debug("album selected : " + playlistItem);
     this.contentDirectoryService.clearSearch();
     this.contentDirectoryService.browseChildrenByContiner(playlistItem);
-    this.router.navigateByUrl('music-library');
+    void this.router.navigateByUrl('music-library');
   }
 
-  artistItemSelected(artistItem: ContainerDto) {
+  artistItemSelected(artistItem: ContainerDto): void {
     console.debug("album selected : " + artistItem);
     this.contentDirectoryService.clearSearch();
     this.contentDirectoryService.browseChildrenByContiner(artistItem);
-    this.router.navigateByUrl('music-library');
+    void this.router.navigateByUrl('music-library');
   }
 
   //
@@ -61,29 +63,29 @@ export class ModalSearchResultComponent {
 
   // TODO: Should include a "please wait ..." dialog for long 'showAll...' queries ?
 
-  showAllItem() {
+  showAllItem(): void {
     this.contentDirectoryService.searchAllItems(
       this.dtoGeneratorService.generateQuickSearchDto(
-        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", 0 , 100));
+        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", 0, 100));
     this.contentDirectoryService.hideQuickSearchPanel();
   }
 
-  showAllAlbum() {
+  showAllAlbum(): void {
     this.contentDirectoryService.searchAllAlbum(
       this.dtoGeneratorService.generateQuickSearchDto(
-        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", 0 , 100));
+        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", 0, 100));
     this.contentDirectoryService.hideQuickSearchPanel();
   }
-  showAllItemArtist() {
+  showAllItemArtist(): void {
     this.contentDirectoryService.searchAllArtists(
       this.dtoGeneratorService.generateQuickSearchDto(
-        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", 0 , 100));
+        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", 0, 100));
     this.contentDirectoryService.hideQuickSearchPanel();
   }
-  showAllPlaylist() {
+  showAllPlaylist(): void {
     this.contentDirectoryService.searchAllPlaylist(
       this.dtoGeneratorService.generateQuickSearchDto(
-        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", 0 , 100));
+        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", 0, 100));
     this.contentDirectoryService.hideQuickSearchPanel();
   }
 }
