@@ -2,10 +2,10 @@ import { UuidService } from './../../util/uuid.service';
 import { GenericResultService } from './../../service/generic-result.service';
 import { DeviceService } from './../../service/device.service';
 import { SseService } from './../../service/sse/sse.service';
-import { RendererService } from './../../service/renderer.service';
 import { RatingServiceService } from './../../service/rating-service.service';
 import { MusicItemDto } from './../../service/dto.d';
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon'
 
 @Component({
   selector: 'star-rating',
@@ -14,10 +14,10 @@ import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
   styleUrls: ['./star-rating.component.scss']
 })
 
-export class StarRatingComponent implements OnInit {
+export class StarRatingComponent {
 
   @Input() currentSong: MusicItemDto;
-  @Input() size: string = "sm";
+  @Input() size = "sm";
 
   private lastUpdateId: number;
   starsAvail: number[];
@@ -32,9 +32,6 @@ export class StarRatingComponent implements OnInit {
     private sseService: SseService) {
 
     this.starsAvail = Array(5).fill(1).map((x, i) => i + 1);
-  }
-
-  ngOnInit(): void {
   }
 
   isVisible(): boolean {

@@ -17,7 +17,6 @@ import { ServerDropdownComponent } from './mediaserver/dropdown/dropdown.compone
 import { MediarendererComponent } from './mediarenderer/mediarenderer/mediarenderer.component';
 import { BrowseResultComponent } from './mediaserver/browse-result/browse-result.component';
 import { ContainerComponent } from './mediaserver/browse-result/container/container.component';
-import { ItemComponent } from './mediaserver/browse-result/item/item.component';
 import { AlbumComponent } from './mediaserver/browse-result/album/album.component';
 import { DeviceViewComponent } from './view/device-view/device-view.component';
 import { NavBarComponent } from './view/nav-bar/nav-bar.component';
@@ -66,7 +65,6 @@ import { QualityBadgeComponent } from './util/comp/quality-badge/quality-badge.c
       MediarendererComponent,
       BrowseResultComponent,
       ContainerComponent,
-      ItemComponent,
       AlbumComponent,
       DeviceViewComponent,
       NavBarComponent,
