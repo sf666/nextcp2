@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
 import { DeviceService } from 'src/app/service/device.service';
 
 @Component({
-  selector: 'mediaServer-browse-result',
+  selector: 'media-server-browse-result',
   templateUrl: './browse-result.component.html',
   styleUrls: ['./browse-result.component.scss']
 })
@@ -21,7 +21,7 @@ export class BrowseResultComponent {
     return this.deviceService.selectedMediaServerDevice.udn.length > 0;
   }
 
-  domChange(event: any) {
+  domChange(_event: Event) : void {
     if (this.cdsBrowsePathService.scrollToID.length > 0) {
       this.scrollViewService.scrollIntoViewID(this.cdsBrowsePathService.scrollToID);
     }

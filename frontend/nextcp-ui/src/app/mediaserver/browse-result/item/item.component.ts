@@ -9,7 +9,7 @@ import { ContentDirectoryService } from './../../../service/content-directory.se
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'browseResultItem',
+  selector: 'browse-result-item',
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.scss']
 })
