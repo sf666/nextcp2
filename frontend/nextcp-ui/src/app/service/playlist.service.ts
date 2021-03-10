@@ -156,7 +156,7 @@ export class PlaylistService implements OnInit {
     this.httpService.postWithSuccessMessage(this.baseUri, uri, playlistAddContainerRequest, 'Playlist', 'Songs successfully added.', "Error adding songs to playlist.").subscribe();
   }
 
-  public addContainerToPlaylistAndPlay(containerDto: ContainerDto, _shuffle: boolean) {
+  public addContainerToPlaylistAndPlay(containerDto: ContainerDto, _shuffle: boolean): void {
     const uri = '/insertAndPlayContainer';
     const playlistAddContainerRequest: PlaylistAddContainerRequest = {
       containerDto: containerDto,
@@ -226,15 +226,15 @@ export class PlaylistService implements OnInit {
   // Filesystem Playlist actions
   // ========================================================================
 
-  public addToFilesystemPlaylistByMBID(musicBrainzId : string, playlistName: string): void {
+  public addToFilesystemPlaylistByMBID(musicBrainzId: string, playlistName: string): void {
     const uri = '/addToFilesystemPlaylistByMBID';
-    let req : FileSystemPlaylistEntry = {musicBrainzId: musicBrainzId, playlistName: playlistName};
+    let req: FileSystemPlaylistEntry = { musicBrainzId: musicBrainzId, playlistName: playlistName };
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }
 
-  public removeFromFilesystemPlaylistByMBID(musicBrainzId : string, playlistName: string): void {
+  public removeFromFilesystemPlaylistByMBID(musicBrainzId: string, playlistName: string): void {
     const uri = '/removeFromFilesystemPlaylistByMBID';
-    let req : FileSystemPlaylistEntry = {musicBrainzId: musicBrainzId, playlistName: playlistName};
+    let req: FileSystemPlaylistEntry = { musicBrainzId: musicBrainzId, playlistName: playlistName };
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }
 }

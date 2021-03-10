@@ -13,7 +13,7 @@ import { ContentDirectoryService } from './../../service/content-directory.servi
 import { MinimTagComponent } from './../popup/minim-tag/minim-tag.component';
 import { BackgroundImageService } from './../../util/background-image.service';
 import { ContainerItemDto } from './../../service/dto.d';
-import { AfterViewChecked, AfterViewInit, ElementRef } from '@angular/core';
+import { AfterViewChecked, ElementRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -87,7 +87,7 @@ export class BrowseResultComponent implements AfterViewChecked {
     return "";
   }
 
-  public get hasChilds() {
+  public get hasChilds(): boolean {
     return this.containerList?.length > 0 || this.playlistList?.length > 0 || this.itemsCount > 0;
   }
 
@@ -111,15 +111,15 @@ export class BrowseResultComponent implements AfterViewChecked {
     return this.contentDirectoryService.currentContainerList;
   }
 
-  public browseTo(containerDto: ContainerDto) {
+  public browseTo(containerDto: ContainerDto): void {
     this.contentDirectoryService.browseChildrenByContiner(containerDto);
   }
 
-  shufflePlaylist(container) {
+  shufflePlaylist(container: ContainerDto): void {
     this.playlistService.addContainerToPlaylistAndPlay(container, true);
   }
 
-  playPlaylist(container) {
+  playPlaylist(container: ContainerDto): void {
     this.playlistService.addContainerToPlaylistAndPlay(container, false);
   }
 
@@ -130,11 +130,11 @@ export class BrowseResultComponent implements AfterViewChecked {
     return false;
   }
 
-  get switchViewIcon() : string {
+  get switchViewIcon(): string {
     return "format-list-text"; // view-list
   }
 
-  openMinimTagDialog(event: any) {
+  openMinimTagDialog(event: Event): void {
     const target = new ElementRef(event.currentTarget);
     const dialogRef = this.dialog.open(MinimTagComponent, {
       data: { trigger: target },
@@ -143,12 +143,12 @@ export class BrowseResultComponent implements AfterViewChecked {
     dialogRef.afterClosed().subscribe(_res => {
       console.log(_res);
     });
-  }  
+  }
 
   //
   // Album 
   //
-  playAlbum(container) {
+  playAlbum(container: ContainerDto): void {
     this.playlistService.addContainerToPlaylistAndPlay(container, false);
   }
 
@@ -204,7 +204,7 @@ export class BrowseResultComponent implements AfterViewChecked {
     }
   }
 
-  showSongPopup(event: any, item: MusicItemDto): void {
+  showSongPopup(event: Event, item: MusicItemDto): void {
     this.songOptionsServiceService.openOptionsDialog(event, item);
   }
 }
