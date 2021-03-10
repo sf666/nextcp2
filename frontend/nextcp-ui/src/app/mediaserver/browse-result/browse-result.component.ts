@@ -5,7 +5,7 @@ import { DeviceService } from 'src/app/service/device.service';
 import { TrackQualityService } from './../../util/track-quality.service';
 import { SongOptionsServiceService } from './../popup/song-options/song-options-service.service';
 import { TimeDisplayService } from './../../util/time-display.service';
-import { MusicItemDto } from './../../service/dto.d';
+import { MusicItemDto, ContainerDto } from './../../service/dto.d';
 import { PlaylistService } from './../../service/playlist.service';
 import { AvtransportService } from './../../service/avtransport.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
@@ -27,6 +27,21 @@ export class BrowseResultComponent {
     private timeDisplayService: TimeDisplayService,
     public trackQualityService: TrackQualityService,
     public playlistService: PlaylistService) { }
+
+  // Album 
+  public get albumList(): ContainerDto[] {
+    return this.contentDirectoryService.currentContainerList.albumDto;
+  }
+
+  public browseTo(containerDto: ContainerDto) {
+    this.contentDirectoryService.browseChildrenByContiner(containerDto);
+  }
+
+  playAlbum(container) {
+    this.playlistService.addContainerToPlaylistAndPlay(container, false);
+  }
+
+  // Album end
 
   isRendererSelected(): boolean {
     return this.deviceService.selectedMediaServerDevice.udn.length > 0;
