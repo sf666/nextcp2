@@ -16,7 +16,6 @@ import { ToastrModule } from 'ngx-toastr';
 import { ServerDropdownComponent } from './mediaserver/dropdown/dropdown.component';
 import { MediarendererComponent } from './mediarenderer/mediarenderer/mediarenderer.component';
 import { BrowseResultComponent } from './mediaserver/browse-result/browse-result.component';
-import { ContainerComponent } from './mediaserver/browse-result/container/container.component';
 import { DeviceViewComponent } from './view/device-view/device-view.component';
 import { NavBarComponent } from './view/nav-bar/nav-bar.component';
 import { MusicLibraryComponent } from './view/music-library/music-library.component';
@@ -63,7 +62,6 @@ import { QualityBadgeComponent } from './util/comp/quality-badge/quality-badge.c
       ServerDropdownComponent,
       MediarendererComponent,
       BrowseResultComponent,
-      ContainerComponent,
       DeviceViewComponent,
       NavBarComponent,
       MusicLibraryComponent,
