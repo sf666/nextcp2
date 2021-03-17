@@ -21,6 +21,7 @@ import nextcp.dto.ContainerDto;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MediaServerDto;
 import nextcp.dto.MusicItemDto;
+import nextcp.dto.SearchRequestDto;
 import nextcp.dto.SearchResultDto;
 import nextcp.upnp.device.BaseDevice;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.ContentDirectoryService;
@@ -56,31 +57,31 @@ public class MediaServerDevice extends BaseDevice
         return contentDirectoryService;
     }
 
-    public SearchResultDto quickSearch(String quickSearch, long requestCount)
+    public SearchResultDto quickSearch(SearchRequestDto searchRequest)
     {
-        return searchSupportDelegate.quickSearch(quickSearch, requestCount);
+        return searchSupportDelegate.quickSearch(searchRequest);
     }
 
-    public SearchResultDto searchAllItems(String quickSearch, long requestCount)
+    public SearchResultDto searchAllItems(SearchRequestDto searchRequest)
     {
-        return searchSupportDelegate.searchAllItems(quickSearch, requestCount);
+        return searchSupportDelegate.searchAllItems(searchRequest);
     }
 
-    public SearchResultDto searchAllArtists(String quickSearch, long requestCount)
+    public SearchResultDto searchAllArtists(SearchRequestDto searchRequest)
     {
-        return searchSupportDelegate.searchAllArtists(quickSearch, requestCount);
+        return searchSupportDelegate.searchAllArtists(searchRequest);
     }
 
-    public SearchResultDto searchAllAlbum(String quickSearch, long requestCount)
+    public SearchResultDto searchAllAlbum(SearchRequestDto searchRequest)
     {
-        return searchSupportDelegate.searchAllAlbum(quickSearch, requestCount);
+        return searchSupportDelegate.searchAllAlbum(searchRequest);
     }
 
-    public SearchResultDto searchAllPlaylist(String quickSearch, long requestCount)
+    public SearchResultDto searchAllPlaylist(SearchRequestDto searchReques)
     {
-        return searchSupportDelegate.searchAllPlaylist(quickSearch, requestCount);
+        return searchSupportDelegate.searchAllPlaylist(searchReques);
     }
-
+    
     public ContainerItemDto browseChildren(BrowseInput inp)
     {
         ContainerDto curContainer = getCurrentMeta(inp);

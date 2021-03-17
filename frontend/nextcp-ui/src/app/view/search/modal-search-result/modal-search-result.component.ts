@@ -63,29 +63,33 @@ export class ModalSearchResultComponent {
 
   // TODO: Should include a "please wait ..." dialog for long 'showAll...' queries ?
 
+  get currentContainerID(): string {
+    return this.contentDirectoryService.currentContainerList.currentContainer.id;
+  }
+
   showAllItem(): void {
     this.contentDirectoryService.searchAllItems(
       this.dtoGeneratorService.generateQuickSearchDto(
-        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", 0, 100));
+        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", this.currentContainerID, 0, 100));
     this.contentDirectoryService.hideQuickSearchPanel();
   }
 
   showAllAlbum(): void {
     this.contentDirectoryService.searchAllAlbum(
       this.dtoGeneratorService.generateQuickSearchDto(
-        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", 0, 100));
+        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", this.currentContainerID, 0, 100));
     this.contentDirectoryService.hideQuickSearchPanel();
   }
   showAllItemArtist(): void {
     this.contentDirectoryService.searchAllArtists(
       this.dtoGeneratorService.generateQuickSearchDto(
-        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", 0, 100));
+        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", this.currentContainerID, 0, 100));
     this.contentDirectoryService.hideQuickSearchPanel();
   }
   showAllPlaylist(): void {
     this.contentDirectoryService.searchAllPlaylist(
       this.dtoGeneratorService.generateQuickSearchDto(
-        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", 0, 100));
+        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", this.currentContainerID, 0, 100));
     this.contentDirectoryService.hideQuickSearchPanel();
   }
 }

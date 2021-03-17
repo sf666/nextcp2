@@ -20,7 +20,7 @@ export class NavBarComponent {
 
   private currentPath: string;
   private currentSearchText: string;
-  private throttledSearch = _.throttle(this.doSearch, 500);
+  private throttledSearch;
 
   constructor(
     public contentDirectoryService: ContentDirectoryService,
@@ -33,8 +33,14 @@ export class NavBarComponent {
       if (event instanceof NavigationStart) {
         this.currentPath = event.url;
       }
+      this.throttledSearch = _.throttle(this.searchBound, 500)
     });
   }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  public searchBound = () => {
+    return this.doSearch();
+  };
 
   // UI state management for navbar 
 
@@ -76,20 +82,20 @@ export class NavBarComponent {
     return this.contentDirectoryService.currentContainerList.parentFolderTitle;
   }
 
-  gotoParent() {
+  gotoParent(): void {
     this.contentDirectoryService.browseChildren(this.contentDirectoryService.currentContainerList.currentContainer.parentID, "",
       this.contentDirectoryService.currentContainerList.currentContainer.mediaServerUDN);
   }
-  searchBackPressed() {
-//    this.contentDirectoryService.browseToRoot("", this.contentDirectoryService.currentContainerList.currentContainer.mediaServerUDN);
-    this.router.navigateByUrl('music-library');    
+  searchBackPressed(): void {
+    //    this.contentDirectoryService.browseToRoot("", this.contentDirectoryService.currentContainerList.currentContainer.mediaServerUDN);
+    void this.router.navigateByUrl('music-library');
   }
 
   //
   // Search
   // =========================================================================
 
-  get quickSearchString() {
+  get quickSearchString(): string {
     return this.contentDirectoryService.quickSearchQueryString;
   }
 
@@ -101,27 +107,28 @@ export class NavBarComponent {
       if (value && value.length > 2) {
         this.contentDirectoryService.quickSearchPanelVisible = true;
         this.currentSearchText = value;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         this.throttledSearch();
       }
     }
   }
 
-  keyUp(event: any) {
+  keyUp(event: KeyboardEvent): void {
     if (event.key === 'Escape') {
       this.contentDirectoryService.clearSearch();
       this.quickSearchString = '';
     }
   }
 
-  focus() {
-    this.quickSearchString = this.quickSearchString;
+  focus(): void {
+    // this.quickSearchString = this.quickSearchString;
   }
 
   private doSearch(): void {
     this.contentDirectoryService.quickSearch(this.currentSearchText, "", this.deviceService.selectedMediaServerDevice.udn);
   }
 
-  clearSearch() {
+  clearSearch(): void {
     this.quickSearchString = "";
   }
 

@@ -9,6 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class SearchRequestDto
 {
 
+    public String parentObjectID;
     public Long startElement;
     public Long requestCount;
     public String mediaServerUDN;
@@ -19,8 +20,9 @@ public class SearchRequestDto
     {
     }
 
-    public SearchRequestDto(Long startElement, Long requestCount, String mediaServerUDN, String searchRequest, String sortCriteria)
+    public SearchRequestDto(String parentObjectID, Long startElement, Long requestCount, String mediaServerUDN, String searchRequest, String sortCriteria)
     {
+        this.parentObjectID = parentObjectID;
         this.startElement = startElement;
         this.requestCount = requestCount;
         this.mediaServerUDN = mediaServerUDN;
@@ -33,6 +35,7 @@ public class SearchRequestDto
     {
         StringBuilder sb = new StringBuilder();
         sb.append("SearchRequestDto [");
+        sb.append("parentObjectID=").append(this.parentObjectID).append(", ");
         sb.append("startElement=").append(this.startElement).append(", ");
         sb.append("requestCount=").append(this.requestCount).append(", ");
         sb.append("mediaServerUDN=").append(this.mediaServerUDN).append(", ");

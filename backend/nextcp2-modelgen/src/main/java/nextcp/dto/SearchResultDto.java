@@ -9,6 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class SearchResultDto
 {
 
+    public String parentID;
     public List<MusicItemDto> musicItems;
     public List<ContainerDto> albumItems;
     public List<ContainerDto> artistItems;
@@ -18,8 +19,9 @@ public class SearchResultDto
     {
     }
 
-    public SearchResultDto(List<MusicItemDto> musicItems, List<ContainerDto> albumItems, List<ContainerDto> artistItems, List<ContainerDto> playlistItems)
+    public SearchResultDto(String parentID, List<MusicItemDto> musicItems, List<ContainerDto> albumItems, List<ContainerDto> artistItems, List<ContainerDto> playlistItems)
     {
+        this.parentID = parentID;
         this.musicItems = musicItems;
         this.albumItems = albumItems;
         this.artistItems = artistItems;
@@ -31,6 +33,7 @@ public class SearchResultDto
     {
         StringBuilder sb = new StringBuilder();
         sb.append("SearchResultDto [");
+        sb.append("parentID=").append(this.parentID).append(", ");
         sb.append("musicItems=").append(this.musicItems).append(", ");
         sb.append("albumItems=").append(this.albumItems).append(", ");
         sb.append("artistItems=").append(this.artistItems).append(", ");

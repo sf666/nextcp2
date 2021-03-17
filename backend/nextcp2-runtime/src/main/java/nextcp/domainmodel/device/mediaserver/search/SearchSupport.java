@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.dto.ContainerDto;
 import nextcp.dto.MusicItemDto;
+import nextcp.dto.SearchRequestDto;
 import nextcp.dto.SearchResultDto;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.ContentDirectoryService;
@@ -35,18 +36,35 @@ public class SearchSupport
         this.mediaServerDevice = mediaServerDevice;
     }
 
-    public SearchResultDto quickSearch(String quickSearch, long requestCount)
+    public SearchResultDto quickSearch(SearchRequestDto searchRequest)
     {
+        String quickSearch = searchRequest.searchRequest;
+        long requestCount = adjustRequestCount(searchRequest.requestCount);
+        
         SearchResultDto container = initEmptySearchResultContainer();
 
         searchAndAddMusicItems(quickSearch, container, requestCount);
         searchAndAddArtistContainer(quickSearch, container, requestCount);
         searchAndAddAlbumContainer(quickSearch, container, requestCount);
         searchAndAddPlaylistContainer(quickSearch, container, requestCount);
+        
         return container;
+    }
+
+    private long adjustRequestCount(Long givenRequestCount)
+    {
+        if (givenRequestCount == null)
+        {
+            return 3;
+        }
+
+        givenRequestCount = Math.min(10, givenRequestCount);
+        givenRequestCount = Math.max(2, givenRequestCount);
+        return givenRequestCount;
 
     }
 
+    
     private void searchAndAddPlaylistContainer(String quickSearch, SearchResultDto container, long requestCount)
     {
         searchAndAddArtistContainer(quickSearch, container.playlistItems, "object.container.playlistContainer", requestCount);
@@ -146,38 +164,38 @@ public class SearchSupport
     // search all from one type
     //
 
-    public SearchResultDto searchAllItems(String quickSearch, long requestCount)
+    public SearchResultDto searchAllItems(SearchRequestDto searchRequest)
     {
         SearchResultDto container = initEmptySearchResultContainer();
 
-        searchAndAddMusicItems(quickSearch, container, requestCount);
+        searchAndAddMusicItems(searchRequest.searchRequest, container, adjustRequestCount(searchRequest.requestCount));
 
         return container;
     }
 
-    public SearchResultDto searchAllArtists(String quickSearch, long requestCount)
+    public SearchResultDto searchAllArtists(SearchRequestDto searchRequest)
     {
         SearchResultDto container = initEmptySearchResultContainer();
 
-        searchAndAddArtistContainer(quickSearch, container, requestCount);
+        searchAndAddArtistContainer(searchRequest.searchRequest, container, adjustRequestCount(searchRequest.requestCount));
 
         return container;
     }
 
-    public SearchResultDto searchAllAlbum(String quickSearch, long requestCount)
+    public SearchResultDto searchAllAlbum(SearchRequestDto searchRequest)
     {
         SearchResultDto container = initEmptySearchResultContainer();
 
-        searchAndAddAlbumContainer(quickSearch, container, requestCount);
+        searchAndAddAlbumContainer(searchRequest.searchRequest, container, adjustRequestCount(searchRequest.requestCount));
 
         return container;
     }
 
-    public SearchResultDto searchAllPlaylist(String quickSearch, long requestCount)
+    public SearchResultDto searchAllPlaylist(SearchRequestDto searchRequest)
     {
         SearchResultDto container = initEmptySearchResultContainer();
 
-        searchAndAddPlaylistContainer(quickSearch, container, requestCount);
+        searchAndAddPlaylistContainer(searchRequest.searchRequest, container, adjustRequestCount(searchRequest.requestCount));
 
         return container;
     }

@@ -258,6 +258,7 @@ BrowseRequestDto:
    sortCriteria: String
 
 SearchRequestDto:
+   parentObjectID : String  
    startElement : Long
    requestCount : Long
    mediaServerUDN: String
@@ -265,10 +266,11 @@ SearchRequestDto:
    sortCriteria: String
 
 SearchResultDto:
-    musicItems: List<MusicItemDto>
-    albumItems: List<ContainerDto>
-    artistItems: List<ContainerDto>
-    playlistItems: List<ContainerDto>
+   parentID: String
+   musicItems: List<MusicItemDto>
+   albumItems: List<ContainerDto>
+   artistItems: List<ContainerDto>
+   playlistItems: List<ContainerDto>
    
    
 PlayRequestDto:

@@ -9,8 +9,6 @@ import { Injectable } from '@angular/core';
  */
 export class DtoGeneratorService {
 
-  constructor() { }
-
   public generateEmptyContainerDto(): ContainerDto {
     return {
       albumartUri: '',
@@ -31,6 +29,7 @@ export class DtoGeneratorService {
 
   public generateEmptySearchResultDto(): SearchResultDto {
     return {
+      parentID: '0',
       albumItems: [],
       artistItems: [],
       musicItems: [],
@@ -49,13 +48,14 @@ export class DtoGeneratorService {
     }
   }
 
-  public generateQuickSearchDto(_searchRequest: string, _mediaServerUDN: string, _sortCriteria, start? : number, count? : number): SearchRequestDto {
+  public generateQuickSearchDto(_searchRequest: string, _mediaServerUDN: string, _sortCriteria: string, parentObjectID: string, start?: number, count?: number): SearchRequestDto {
     return {
       startElement: start ? start : 0,
       requestCount: count ? count : 4,
       mediaServerUDN: _mediaServerUDN,
       searchRequest: _searchRequest,
-      sortCriteria: _sortCriteria
+      sortCriteria: _sortCriteria,
+      parentObjectID: parentObjectID
     }
   }
 

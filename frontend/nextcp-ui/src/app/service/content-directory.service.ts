@@ -46,16 +46,16 @@ export class ContentDirectoryService {
     this.browseChildrenByRequest(this.createBrowseRequest("0", "", data.udn));
   }
 
-  public showQuickSearchPanel() {
+  public showQuickSearchPanel(): void {
     this.quickSearchPanelVisible = true;
   }
 
 
-  public hideQuickSearchPanel() {
+  public hideQuickSearchPanel(): void {
     this.quickSearchPanelVisible = false;
   }
 
-  public clearSearch() {
+  public clearSearch(): void {
     this.quickSearchResultList = this.dtoGeneratorService.generateEmptySearchResultDto();
     this.quickSearchPanelVisible = false;
   }
@@ -96,7 +96,7 @@ export class ContentDirectoryService {
   }
 
   private createBrowseRequest(objectID: string, sortCriteria: string, mediaServerUdn: string): BrowseRequestDto {
-    let br: BrowseRequestDto = {
+    const br: BrowseRequestDto = {
       mediaServerUDN: mediaServerUdn,
       objectID: objectID,
       sortCriteria: sortCriteria
@@ -104,22 +104,24 @@ export class ContentDirectoryService {
 
     return br;
   }
-
+  get currentContainerID(): string {
+    return this.currentContainerList.currentContainer.id;
+  }
   //
   // Search Section
   //
   public quickSearch(searchQuery: string, sortCriteria: string, mediaServerUdn: string): void {
-    this.quickSearchByDto(this.dtoGeneratorService.generateQuickSearchDto(searchQuery, mediaServerUdn, sortCriteria));
+    this.quickSearchByDto(this.dtoGeneratorService.generateQuickSearchDto(searchQuery, mediaServerUdn, sortCriteria, this.currentContainerID));
   }
 
   public quickSearchByDto(quickSearchDto: SearchRequestDto): void {
 
     const uri = '/quickSearch';
-    this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => { 
+    this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
       this.quickSearchResultList = data;
     });
   }
-  
+
   public rescanContent(mediaServerUdn: string): void {
     const uri = '/rescanContent';
     this.httpService.post(this.baseUri, uri, mediaServerUdn).subscribe();
@@ -130,7 +132,7 @@ export class ContentDirectoryService {
     this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
       this.searchItemService.musicItemList = data;
       this.clearSearch();
-      this.router.navigateByUrl('searchResultContainer');
+      void this.router.navigateByUrl('searchResultContainer');
     });
   }
 
@@ -139,7 +141,7 @@ export class ContentDirectoryService {
     this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
       this.searchItemService.musicItemList = data;
       this.clearSearch();
-      this.router.navigateByUrl('searchResultContainer');
+      void this.router.navigateByUrl('searchResultContainer');
     });
   }
 
@@ -148,7 +150,7 @@ export class ContentDirectoryService {
     this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
       this.searchItemService.musicItemList = data;
       this.clearSearch();
-      this.router.navigateByUrl('searchResultContainer');
+      void this.router.navigateByUrl('searchResultContainer');
     });
   }
 
@@ -157,7 +159,7 @@ export class ContentDirectoryService {
     this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
       this.searchItemService.musicItemList = data;
       this.clearSearch();
-      this.router.navigateByUrl('searchResultContainer');
+      void this.router.navigateByUrl('searchResultContainer');
     });
   }
 

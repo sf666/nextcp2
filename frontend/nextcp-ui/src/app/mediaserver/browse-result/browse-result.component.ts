@@ -60,8 +60,8 @@ export class BrowseResultComponent implements AfterViewChecked {
   }
 
   public get itemsCount(): number {
-    if (this.contentDirectoryService.currentContainerList?.musicItemDto?.length) {
-      return this.contentDirectoryService.currentContainerList.musicItemDto.length;
+    if (this.getMusicTracks().length) {
+      return this.getMusicTracks().length;
     } else {
       return 0;
     }

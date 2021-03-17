@@ -83,7 +83,7 @@ public class RestContentDirectoryService
         {
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "unknown media server : " + searchRequest.mediaServerUDN);
         }
-        return device.quickSearch(searchRequest.searchRequest, adjustRequestCount(searchRequest.requestCount));
+        return device.quickSearch(searchRequest);
     }
 
     @PostMapping("/searchAllItems")
@@ -98,7 +98,7 @@ public class RestContentDirectoryService
         {
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "unknown media server : " + searchRequest.mediaServerUDN);
         }
-        return device.searchAllItems(searchRequest.searchRequest, searchRequest.requestCount);
+        return device.searchAllItems(searchRequest);
     }
 
     @PostMapping("/searchAllPlaylist")
@@ -113,7 +113,7 @@ public class RestContentDirectoryService
         {
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "unknown media server : " + searchRequest.mediaServerUDN);
         }
-        return device.searchAllPlaylist(searchRequest.searchRequest, adjustRequestCount(searchRequest.requestCount));
+        return device.searchAllPlaylist(searchRequest);
     }
 
     @PostMapping("/searchAllAlbum")
@@ -128,7 +128,7 @@ public class RestContentDirectoryService
         {
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "unknown media server : " + searchRequest.mediaServerUDN);
         }
-        return device.searchAllAlbum(searchRequest.searchRequest, adjustRequestCount(searchRequest.requestCount));
+        return device.searchAllAlbum(searchRequest);
     }
 
     @PostMapping("/searchAllArtists")
@@ -143,19 +143,6 @@ public class RestContentDirectoryService
         {
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "unknown media server : " + searchRequest.mediaServerUDN);
         }
-        return device.searchAllArtists(searchRequest.searchRequest, adjustRequestCount(searchRequest.requestCount));
-    }
-
-    private long adjustRequestCount(Long givenRequestCount)
-    {
-        if (givenRequestCount == null)
-        {
-            return 3;
-        }
-
-        givenRequestCount = Math.min(10, givenRequestCount);
-        givenRequestCount = Math.max(2, givenRequestCount);
-        return givenRequestCount;
-
+        return device.searchAllArtists(searchRequest);
     }
 }

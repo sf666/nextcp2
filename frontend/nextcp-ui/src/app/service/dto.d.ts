@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2021-02-17 09:53:17.
+// Generated using typescript-generator version 2.0.400 on 2021-03-17 15:37:36.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -225,6 +225,7 @@ export interface RendererPlaylist {
 }
 
 export interface SearchRequestDto {
+    parentObjectID: string;
     startElement: number;
     requestCount: number;
     mediaServerUDN: string;
@@ -233,6 +234,7 @@ export interface SearchRequestDto {
 }
 
 export interface SearchResultDto {
+    parentID: string;
     musicItems: MusicItemDto[];
     albumItems: ContainerDto[];
     artistItems: ContainerDto[];
