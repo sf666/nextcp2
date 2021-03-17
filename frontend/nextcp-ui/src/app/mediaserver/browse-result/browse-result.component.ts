@@ -23,6 +23,8 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class BrowseResultComponent implements AfterViewChecked {
 
+  private listView : boolean;
+
   constructor(
     private backgroundImageService: BackgroundImageService,
     private dialog: MatDialog,
@@ -34,7 +36,9 @@ export class BrowseResultComponent implements AfterViewChecked {
     public avtransportService: AvtransportService,
     private timeDisplayService: TimeDisplayService,
     public trackQualityService: TrackQualityService,
-    public playlistService: PlaylistService) { }
+    public playlistService: PlaylistService) { 
+      this.listView = this.allTracksSameAlbum();
+    }
 
   // 
   // Container
@@ -182,6 +186,14 @@ export class BrowseResultComponent implements AfterViewChecked {
 
   addAllTracks(): void {
     this.playlistService.addContainerToPlaylist(this.contentDirectoryService.currentContainerList.currentContainer);
+  }
+
+  isListView(): boolean {
+    return this.listView;
+  }
+
+  toggleListView() : void {
+    this.listView = !this.listView;    
   }
 
   allTracksSameAlbum(): boolean {

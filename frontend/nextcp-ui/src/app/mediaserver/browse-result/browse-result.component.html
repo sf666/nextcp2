@@ -2,6 +2,7 @@
 <!--                                                                -->
 <!-- Template : Browse Result General Container                     -->
 <!-- ############################################################## -->
+
 <!-- Top browsing element: Displays image and informations about current container -->
 <div class="outer-container">
     <div class="d-flex">
@@ -21,7 +22,7 @@
                         class="highlight">{{totalPlaytime}}</span></div>
             </div>
             <div class="d-flex mt-4">
-                <button mat-flat-button class="my-buttons" (click)="playPlaylist(currentContainer)">
+                <button mat-flat-button class="my-buttons" (click)="toggleListView()">
                     <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="{{switchViewIcon}}"></mat-icon>
                     switch view
                 </button>
@@ -156,7 +157,7 @@
 <!-- Template : Browse Result Items                                 -->
 <!-- ############################################################## -->
 <div id="{{topDivId}}" tabindex="-1" *ngIf="getMusicTracks().length > 0">
-    <div *ngIf="allTracksSameAlbum(); else mixedTitles">
+    <div *ngIf="isListView(); else mixedTitles">
         <div class="item-table">
             <div class="item-thead">
                 <div class="row col-greyed">
@@ -193,12 +194,11 @@
     <ng-template #mixedTitles>
         <div class="cardLayout mixedTitles">
             <div id="{{item.objectID}}" class="cardLayout cover-card"
-                *ngFor="let item of contentDirectoryService.currentContainerList.musicItemDto">
+                *ngFor="let item of getMusicTracks()">
                 <img src="{{item.albumArtUrl}}" class="cardLayout image-container" alt="{{item.title}}">
                 <div class="d-flex cardLayout card-body">
                     <div class="d-flex">
-                        <div class="card-title">{{item.title}}</div>
-                        <quality-badge [item]="item"></quality-badge>
+                        <div class="card-title">{{item.title}}</div>                        
                     </div>
                 </div>
                 <div class="cardLayout play-overlay d-flex flex-column justify-content-end">
