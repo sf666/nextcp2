@@ -29,6 +29,7 @@ export class ModalSearchResultComponent {
   //
 
   musicItemSelected(musicItem: MusicItemDto): void {
+    this.contentDirectoryService.popCurrentPathAsParent();
     console.debug("search item selected : " + musicItem);
     this.searchItemService.musicItem = musicItem;
     this.contentDirectoryService.clearSearch();
@@ -36,6 +37,7 @@ export class ModalSearchResultComponent {
   }
 
   albumItemSelected(albumItem: ContainerDto): void {
+    this.contentDirectoryService.popCurrentPathAsParent();
     console.debug("album selected : " + albumItem);
     this.contentDirectoryService.clearSearch();
     this.contentDirectoryService.browseChildrenByContiner(albumItem);
@@ -43,6 +45,7 @@ export class ModalSearchResultComponent {
   }
 
   playlistItemSelected(playlistItem: ContainerDto): void {
+    this.contentDirectoryService.popCurrentPathAsParent();
     console.debug("album selected : " + playlistItem);
     this.contentDirectoryService.clearSearch();
     this.contentDirectoryService.browseChildrenByContiner(playlistItem);
@@ -50,6 +53,7 @@ export class ModalSearchResultComponent {
   }
 
   artistItemSelected(artistItem: ContainerDto): void {
+    this.contentDirectoryService.popCurrentPathAsParent();
     console.debug("album selected : " + artistItem);
     this.contentDirectoryService.clearSearch();
     this.contentDirectoryService.browseChildrenByContiner(artistItem);
@@ -68,6 +72,7 @@ export class ModalSearchResultComponent {
   }
 
   showAllItem(): void {
+    this.contentDirectoryService.popCurrentPathAsParent();
     this.contentDirectoryService.searchAllItems(
       this.dtoGeneratorService.generateQuickSearchDto(
         this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", this.currentContainerID, 0, 100));
@@ -75,21 +80,26 @@ export class ModalSearchResultComponent {
   }
 
   showAllAlbum(): void {
+    this.contentDirectoryService.popCurrentPathAsParent();
     this.contentDirectoryService.searchAllAlbum(
       this.dtoGeneratorService.generateQuickSearchDto(
         this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", this.currentContainerID, 0, 100));
     this.contentDirectoryService.hideQuickSearchPanel();
   }
+
   showAllItemArtist(): void {
+    this.contentDirectoryService.popCurrentPathAsParent();
     this.contentDirectoryService.searchAllArtists(
       this.dtoGeneratorService.generateQuickSearchDto(
         this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", this.currentContainerID, 0, 100));
     this.contentDirectoryService.hideQuickSearchPanel();
   }
+
   showAllPlaylist(): void {
+    this.contentDirectoryService.popCurrentPathAsParent();
     this.contentDirectoryService.searchAllPlaylist(
       this.dtoGeneratorService.generateQuickSearchDto(
         this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", this.currentContainerID, 0, 100));
     this.contentDirectoryService.hideQuickSearchPanel();
-  }
+  }  
 }

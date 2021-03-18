@@ -16,6 +16,7 @@ export class ContentDirectoryService {
 
   baseUri = '/ContentDirectoryService';
   public currentContainerList: ContainerItemDto;
+  private customParentID : string;
 
   // QuickSearch Support
   public quickSearchResultList: SearchResultDto;
@@ -45,7 +46,7 @@ export class ContentDirectoryService {
     // Update to root folder of media server
     this.browseChildrenByRequest(this.createBrowseRequest("0", "", data.udn));
   }
-
+  
   public showQuickSearchPanel(): void {
     this.quickSearchPanelVisible = true;
   }
@@ -60,6 +61,29 @@ export class ContentDirectoryService {
     this.quickSearchPanelVisible = false;
   }
 
+  public gotoParent(): void {
+    this.browseChildren(this.getParentTarget(), "", this.deviceService.selectedMediaServerDevice.udn);
+  }
+
+  public popCurrentPathAsParent(): void {
+    this.setIndividualParentID(this.currentContainerList.currentContainer.id);
+  }
+
+  private getParentTarget(): string {
+    let targetUDN: string;
+
+    if (this.customParentID) {
+      targetUDN = this.customParentID;
+      this.customParentID = null;
+    } else {
+      targetUDN = this.currentContainerList.currentContainer.parentID;
+    }
+    return targetUDN;
+  }
+
+  public setIndividualParentID(parentID : string): void {
+    this.customParentID = parentID;
+  }
 
   public browseChildren(objectID: string, sortCriteria: string, mediaServerUdn: string): void {
     this.updateBrowsePath(objectID);

@@ -83,8 +83,7 @@ export class NavBarComponent {
   }
 
   gotoParent(): void {
-    this.contentDirectoryService.browseChildren(this.contentDirectoryService.currentContainerList.currentContainer.parentID, "",
-      this.contentDirectoryService.currentContainerList.currentContainer.mediaServerUDN);
+    this.contentDirectoryService.gotoParent();
   }
   searchBackPressed(): void {
     //    this.contentDirectoryService.browseToRoot("", this.contentDirectoryService.currentContainerList.currentContainer.mediaServerUDN);

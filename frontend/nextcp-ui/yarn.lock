@@ -3742,6 +3742,11 @@ d@1, d@^1.0.1:
     es5-ext "^0.10.50"
     type "^1.0.1"
 
+daemon@>=0.3.0:
+  version "1.1.0"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/daemon/-/daemon-1.1.0.tgz#6c5102c81db0be856fc9008fc2c935b398864ae8"
+  integrity sha1-bFECyB2wvoVvyQCPwsk1s5iGSug=
+
 damerau-levenshtein@^1.0.4:
   version "1.0.6"
   resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/damerau-levenshtein/-/damerau-levenshtein-1.0.6.tgz#143c1641cb3d85c60c32329e26899adea8701791"
@@ -8473,6 +8478,13 @@ serve-static@1.14.1:
     escape-html "~1.0.3"
     parseurl "~1.3.3"
     send "0.17.1"
+
+service@0.1.4:
+  version "0.1.4"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/service/-/service-0.1.4.tgz#d0ab9ffbc2b9d5875af8b01dec36339784525b44"
+  integrity sha1-0Kuf+8K51Yda+LAd7DYzl4RSW0Q=
+  dependencies:
+    daemon ">=0.3.0"
 
 set-blocking@^2.0.0, set-blocking@~2.0.0:
   version "2.0.0"
