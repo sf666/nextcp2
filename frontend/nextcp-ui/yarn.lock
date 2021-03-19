@@ -2,20 +2,20 @@
 # yarn lockfile v1
 
 
+"@angular-devkit/architect@0.1100.1":
+  version "0.1100.1"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/architect/-/architect-0.1100.1.tgz#0451fd261a1afc69af2e41f80f4002b93035f548"
+  integrity sha512-DIAvTRRY+k7T2xHf4RVV06P16D0V7wSf1MSpGSDWVpfWcA3HNOSGfsk1F+COMlbFehXuKztwieXarv5rXbBCng==
+  dependencies:
+    "@angular-devkit/core" "11.0.1"
+    rxjs "6.6.3"
+
 "@angular-devkit/architect@0.1102.0":
   version "0.1102.0"
   resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/architect/-/architect-0.1102.0.tgz#0d4bee477d59318e8f3511fa6936bdcfa303df55"
   integrity sha512-d9Da6SiTiDb5N1avxWLcPHSyWCq3G62TlROXxr32WkcQRko8wtgW5VOzgSkdmY2p6UTSME89naUojfzgu2Wh6g==
   dependencies:
     "@angular-devkit/core" "11.2.0"
-    rxjs "6.6.3"
-
-"@angular-devkit/architect@^0.1102.3":
-  version "0.1102.3"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/architect/-/architect-0.1102.3.tgz#c5e022dc85682a2d19a94613f451add2538fd6d6"
-  integrity sha512-+skN/lDvWPxiQl0d2maVtfqgr/aRIx4cZdlTTp20FQ14J8BK9xFHuexnhQ17jdVYCIrgWoPDz2d9ZRw7e6pXvA==
-  dependencies:
-    "@angular-devkit/core" "11.2.3"
     rxjs "6.6.3"
 
 "@angular-devkit/build-angular@^0.1102.0":
@@ -116,6 +116,17 @@
     "@angular-devkit/core" "11.2.0"
     rxjs "6.6.3"
 
+"@angular-devkit/core@11.0.1":
+  version "11.0.1"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/core/-/core-11.0.1.tgz#7125b07ac7d66a8fdaaf612a3b757817d23b8107"
+  integrity sha512-ui3g7w/0SpU9oq8uwN9upR8Y1eOXZ+P2p3NyDydBrR7ZEfEkRLS1mhozN/ib8farrwK5N3kIIJxMb5t3187Hng==
+  dependencies:
+    ajv "6.12.6"
+    fast-json-stable-stringify "2.1.0"
+    magic-string "0.25.7"
+    rxjs "6.6.3"
+    source-map "0.7.3"
+
 "@angular-devkit/core@11.2.0":
   version "11.2.0"
   resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/core/-/core-11.2.0.tgz#a9198a391723e865fc6b369752c176cd5ed1d452"
@@ -155,11 +166,6 @@
     "@angular-devkit/core" "11.2.3"
     ora "5.3.0"
     rxjs "6.6.3"
-
-"@angular-eslint/builder@^1.2.0":
-  version "1.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-eslint/builder/-/builder-1.2.0.tgz#485f07be5fbce8e87b53324e2e532b46461c7fef"
-  integrity sha512-bYIut4edOq/RWyYsi3Z5NW/wEHSGLpjXfQ38zbdRlsX93+N8nAu1hf5ishbnpkEobEyerktoRVmRI8UXPsijjg==
 
 "@angular-eslint/eslint-plugin-template@1.2.0":
   version "1.2.0"
