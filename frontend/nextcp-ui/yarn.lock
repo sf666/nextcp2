@@ -2,31 +2,23 @@
 # yarn lockfile v1
 
 
-"@angular-devkit/architect@0.1100.1":
-  version "0.1100.1"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/architect/-/architect-0.1100.1.tgz#0451fd261a1afc69af2e41f80f4002b93035f548"
-  integrity sha512-DIAvTRRY+k7T2xHf4RVV06P16D0V7wSf1MSpGSDWVpfWcA3HNOSGfsk1F+COMlbFehXuKztwieXarv5rXbBCng==
+"@angular-devkit/architect@0.1102.5":
+  version "0.1102.5"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/architect/-/architect-0.1102.5.tgz#431df157af0c6477e5951f64ff12f3d5d5f075ee"
+  integrity sha512-lVc6NmEAZZPzvc18GzMFLoxqKKvPlNOg4vEtFsFldZmrydLJJGFi4KAs2WaJd8qVR1XuY4el841cjDQAJSq6sQ==
   dependencies:
-    "@angular-devkit/core" "11.0.1"
+    "@angular-devkit/core" "11.2.5"
     rxjs "6.6.3"
 
-"@angular-devkit/architect@0.1102.0":
-  version "0.1102.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/architect/-/architect-0.1102.0.tgz#0d4bee477d59318e8f3511fa6936bdcfa303df55"
-  integrity sha512-d9Da6SiTiDb5N1avxWLcPHSyWCq3G62TlROXxr32WkcQRko8wtgW5VOzgSkdmY2p6UTSME89naUojfzgu2Wh6g==
+"@angular-devkit/build-angular@^0.1102.5":
+  version "0.1102.5"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/build-angular/-/build-angular-0.1102.5.tgz#7db51dfc33a8683458fa714d434f8c09fdc1f648"
+  integrity sha512-iAq/KbRq6kuA17rQZ67/0zQHEzpC9RzvtMZQ3wiiFsOmW5AIV5scjP7e6dn+F6vXZA44X4gCH5AUUkOLXyEtfg==
   dependencies:
-    "@angular-devkit/core" "11.2.0"
-    rxjs "6.6.3"
-
-"@angular-devkit/build-angular@^0.1102.0":
-  version "0.1102.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/build-angular/-/build-angular-0.1102.0.tgz"
-  integrity sha512-9Yl6qBOR1o0ThyLhrWJ6Rhr3qLRe+RP3sbfUt4QA+8wsIXN7WakEXJALlq7TDeG66OaWyyjbtC2q3EPdNeBC/g==
-  dependencies:
-    "@angular-devkit/architect" "0.1102.0"
-    "@angular-devkit/build-optimizer" "0.1102.0"
-    "@angular-devkit/build-webpack" "0.1102.0"
-    "@angular-devkit/core" "11.2.0"
+    "@angular-devkit/architect" "0.1102.5"
+    "@angular-devkit/build-optimizer" "0.1102.5"
+    "@angular-devkit/build-webpack" "0.1102.5"
+    "@angular-devkit/core" "11.2.5"
     "@babel/core" "7.12.10"
     "@babel/generator" "7.12.11"
     "@babel/plugin-transform-async-to-generator" "7.12.1"
@@ -34,8 +26,9 @@
     "@babel/preset-env" "7.12.11"
     "@babel/runtime" "7.12.5"
     "@babel/template" "7.12.7"
+    "@discoveryjs/json-ext" "0.5.2"
     "@jsdevtools/coverage-istanbul-loader" "3.0.5"
-    "@ngtools/webpack" "11.2.0"
+    "@ngtools/webpack" "11.2.5"
     ansi-colors "4.1.1"
     autoprefixer "10.2.4"
     babel-loader "8.2.2"
@@ -45,7 +38,7 @@
     circular-dependency-plugin "5.2.2"
     copy-webpack-plugin "6.3.2"
     core-js "3.8.3"
-    critters "0.0.6"
+    critters "0.0.7"
     css-loader "5.0.1"
     cssnano "4.1.10"
     file-loader "6.2.0"
@@ -96,30 +89,30 @@
     webpack-subresource-integrity "1.5.2"
     worker-plugin "5.0.0"
 
-"@angular-devkit/build-optimizer@0.1102.0":
-  version "0.1102.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/build-optimizer/-/build-optimizer-0.1102.0.tgz"
-  integrity sha512-0Xb7xR0iUrbo/BnKJPTsy5IuodfFUWbvXUu9qeKc+oHzwxObX4Y32X0yyRpIJc5UK7Ce43HkopRQ/tHdoJp2fQ==
+"@angular-devkit/build-optimizer@0.1102.5":
+  version "0.1102.5"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/build-optimizer/-/build-optimizer-0.1102.5.tgz#5c17d82a8c4f03ec0a14110838c2c3da6cb24dfd"
+  integrity sha512-ujTwrevgMRNyWir4IdnJEdDRkVSLqugRpL6cU9OeqGn6Bu+zEzZQokLkMZvbw00eEKlf5Siej4hEeF1Hnx+LUA==
   dependencies:
     loader-utils "2.0.0"
     source-map "0.7.3"
     tslib "2.1.0"
-    typescript "4.1.3"
+    typescript "4.1.5"
     webpack-sources "2.2.0"
 
-"@angular-devkit/build-webpack@0.1102.0":
-  version "0.1102.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/build-webpack/-/build-webpack-0.1102.0.tgz"
-  integrity sha512-bfd6WlxcbWJ01HNNcFt4sBBaY+Bz2J/zFA6BSORvC5LpqawYCYeUbDJTY9Wb7gtp+aPEiNHI0HeUvoNkubsYfg==
+"@angular-devkit/build-webpack@0.1102.5":
+  version "0.1102.5"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/build-webpack/-/build-webpack-0.1102.5.tgz#e111acf7c0cbed761ae382089052a5c2dee71d96"
+  integrity sha512-VMsi+mFwgPUQi7eEc2oKcf7X0xD0R1xfoguLS/+HGy3sfh+b7oJy3BU4+TRzDPBtGj6vWvENK2rwHFN3cBWvxA==
   dependencies:
-    "@angular-devkit/architect" "0.1102.0"
-    "@angular-devkit/core" "11.2.0"
+    "@angular-devkit/architect" "0.1102.5"
+    "@angular-devkit/core" "11.2.5"
     rxjs "6.6.3"
 
-"@angular-devkit/core@11.0.1":
-  version "11.0.1"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/core/-/core-11.0.1.tgz#7125b07ac7d66a8fdaaf612a3b757817d23b8107"
-  integrity sha512-ui3g7w/0SpU9oq8uwN9upR8Y1eOXZ+P2p3NyDydBrR7ZEfEkRLS1mhozN/ib8farrwK5N3kIIJxMb5t3187Hng==
+"@angular-devkit/core@11.2.5":
+  version "11.2.5"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/core/-/core-11.2.5.tgz#f9ba8288a6cc388808ee639c383dada50d64d06a"
+  integrity sha512-DRFvEHRKoC+hTwcOAJqLe6UQa+bpXc/1IGCMHWEbuply0KIFIGQOlmaYwFZKixz3HdFZlmoCMcAVkAXvyaWVsQ==
   dependencies:
     ajv "6.12.6"
     fast-json-stable-stringify "2.1.0"
@@ -127,105 +120,74 @@
     rxjs "6.6.3"
     source-map "0.7.3"
 
-"@angular-devkit/core@11.2.0":
-  version "11.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/core/-/core-11.2.0.tgz#a9198a391723e865fc6b369752c176cd5ed1d452"
-  integrity sha512-qqYEH8m/bwpngoLDMFuth8ykvoHxQ3aHHnAWfRXz9NXydwSfathG0VSYCctB126sK39JKIn+xq16CQAExxNu+Q==
+"@angular-devkit/schematics@11.2.5", "@angular-devkit/schematics@^11.2.5":
+  version "11.2.5"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/schematics/-/schematics-11.2.5.tgz#ddcb966f3f1dc910e55f03067036f1f6a01b8222"
+  integrity sha512-7RoWgpMvhljPhW9CMz1EtqkwNnGpnsPyy0N29ClHPUq+o8wLR0hvbLBDz1fKSF7j1AwRccaQSNTj8KWsjzQJLQ==
   dependencies:
-    ajv "6.12.6"
-    fast-json-stable-stringify "2.1.0"
-    magic-string "0.25.7"
-    rxjs "6.6.3"
-    source-map "0.7.3"
-
-"@angular-devkit/core@11.2.3":
-  version "11.2.3"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/core/-/core-11.2.3.tgz#322fb08f4e2683a37bd08edecb04ddafa42865d9"
-  integrity sha512-2JEGXzFqjTqVls2uIZEE0sk4VY9a/alxBAq8BFYIVbvzKsL9gAY71Ztf21zrhQrZop9qeuLJtOAbp00QyYUaQA==
-  dependencies:
-    ajv "6.12.6"
-    fast-json-stable-stringify "2.1.0"
-    magic-string "0.25.7"
-    rxjs "6.6.3"
-    source-map "0.7.3"
-
-"@angular-devkit/schematics@11.2.0":
-  version "11.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/schematics/-/schematics-11.2.0.tgz"
-  integrity sha512-sMDacACJbA4pykiqgJf/RdW0damcf4mDqErGgEqs/bGG+SBUb8+wgt4cQnUwwVX5V2nMdvv7f0A84rgR6I3G2w==
-  dependencies:
-    "@angular-devkit/core" "11.2.0"
+    "@angular-devkit/core" "11.2.5"
     ora "5.3.0"
     rxjs "6.6.3"
 
-"@angular-devkit/schematics@^11.2.3":
-  version "11.2.3"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-devkit/schematics/-/schematics-11.2.3.tgz#4f156ff2f723ad5b24a709bf97fe676c9753a544"
-  integrity sha512-x/IKgZDn6z/MzQ28WF2GTP2N+n78iySQhLu6n6bpmdrFp9noi9QASzN+mAFiqSNO8XpO9oyIB5y2ERl8KBrU1g==
+"@angular-eslint/eslint-plugin-template@2.0.2", "@angular-eslint/eslint-plugin-template@^2.0.0":
+  version "2.0.2"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-eslint/eslint-plugin-template/-/eslint-plugin-template-2.0.2.tgz#1d874e08c70f31c77218d8ff92b8ba55ccf0b5b6"
+  integrity sha512-STk9bTVSJwX8ctHFNx7G+HanbMfpeX5B3hmaUQ7qloM+JPihk+b7BmXT8BjOnXOT+yN8r3NHF9agekyAiYGRkg==
   dependencies:
-    "@angular-devkit/core" "11.2.3"
-    ora "5.3.0"
-    rxjs "6.6.3"
-
-"@angular-eslint/eslint-plugin-template@1.2.0":
-  version "1.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-eslint/eslint-plugin-template/-/eslint-plugin-template-1.2.0.tgz"
-  integrity sha512-Oi/y+N/FETuyhbVuFxbkCqSfLo61CAvIPwnQQCfDku/IsCSTI1SjW+B2xO9thDI5po7t5V+3n26uMLQsWNZmlw==
-  dependencies:
-    "@typescript-eslint/experimental-utils" "4.3.0"
+    "@typescript-eslint/experimental-utils" "4.16.1"
     aria-query "^4.2.2"
     axobject-query "^2.2.0"
 
-"@angular-eslint/eslint-plugin@1.2.0":
-  version "1.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-eslint/eslint-plugin/-/eslint-plugin-1.2.0.tgz"
-  integrity sha512-HxSDdAS2/lbwYBJmRVRKlx5wjiKdeBPl7JJlciwhrP7QR01a66AWun+fW1ZpMnnqivkF+D5sISsoedRLthRcwA==
+"@angular-eslint/eslint-plugin@2.0.2", "@angular-eslint/eslint-plugin@^2.0.0":
+  version "2.0.2"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-eslint/eslint-plugin/-/eslint-plugin-2.0.2.tgz#58be0c864cb84c7ee024f2be6af04e90ba14c97f"
+  integrity sha512-/hJNXUjPEXwsmXeWneAW7X3Jg+JwsMavQ8eQ4UevcaKx4Ozthh09n6oyegqc82Y48Adcce7KyalGCKmWY19piA==
   dependencies:
-    "@typescript-eslint/experimental-utils" "4.3.0"
+    "@typescript-eslint/experimental-utils" "4.16.1"
 
-"@angular-eslint/schematics@^1.2.0":
-  version "1.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-eslint/schematics/-/schematics-1.2.0.tgz#d91034c9bbaff2f694a484648fca46d7cb61b616"
-  integrity sha512-F0Mb6XyLWGmmtov5kv/BHvt22Uo/FuD4y2WhO7NUA9rZRJd+anmyHCkC9HXmNKUuLQIUKjJ4DJgsmD0Kh0Hr2g==
+"@angular-eslint/schematics@^2.0.2":
+  version "2.0.2"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-eslint/schematics/-/schematics-2.0.2.tgz#4bf9f4f8c47bebe91a4784b6c83111df9f3346c0"
+  integrity sha512-nYXkkbY/vhwD5jHzd4GpGGpsKh4Llz/iOy62jcNNojfKFX2s0E9AQDGb80vBHZoRBfGiAbM6wve/YiwMHsrWfw==
   dependencies:
-    "@angular-eslint/eslint-plugin" "1.2.0"
-    "@angular-eslint/eslint-plugin-template" "1.2.0"
+    "@angular-eslint/eslint-plugin" "2.0.2"
+    "@angular-eslint/eslint-plugin-template" "2.0.2"
     strip-json-comments "3.1.1"
-    tslint-to-eslint-config "2.0.1"
+    tslint-to-eslint-config "2.2.0"
 
-"@angular-eslint/template-parser@1.2.0":
-  version "1.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-eslint/template-parser/-/template-parser-1.2.0.tgz"
-  integrity sha512-EfNJh0nFGJInHa2ccVw8Eb9ujWoUAwaQMCi9GppzYrqhSPc0YZqdQg4eIW2AlZs1giHD2Ko/V1rphzw+9gisCw==
+"@angular-eslint/template-parser@^2.0.0":
+  version "2.0.2"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular-eslint/template-parser/-/template-parser-2.0.2.tgz#ca1abafdbfd7a59679ff2b5e0ca1dc00aa617b81"
+  integrity sha512-oMXNAokWWnJF/Jp4fJwm5F/tv+9sShc5yio5cELHFCsn8l1wetTmHMe9xqbwS7aFosJ7BnGj6aSq3WpckWzXTg==
   dependencies:
     eslint-scope "^5.1.0"
 
-"@angular/animations@^11.2.3":
-  version "11.2.4"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/animations/-/animations-11.2.4.tgz#3372b45e70d128cf0fe260d452bf95da69126222"
-  integrity sha512-t04jQwoqpaBT3tJIAnPKZ2p43Hy0Vhq7FoyZZQB0TZZyPzxgl8DenBPMsNZxfaV9QM5i2gFE0eqkCy7YfXvvPA==
+"@angular/animations@^11.2.6":
+  version "11.2.6"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/animations/-/animations-11.2.6.tgz#36935bc0fe33f1486ed889f8b5e12915858ccf5a"
+  integrity sha512-fci034QakkoIrFeY/uOmDvf6AupZ7ziU1FlBMs/wn4HOqwsPCofpawvFQnfj5nez1+KM5JOJ1VHmZKJupkWfgw==
   dependencies:
     tslib "^2.0.0"
 
-"@angular/cdk@^11.2.3":
-  version "11.2.3"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/cdk/-/cdk-11.2.3.tgz#e4e0cba88a0db469bfd6e52d1c964461358215da"
-  integrity sha512-QehBMt36nNfXZ8nBGJLLUQlexzQv6rohQmEYXULHarAC3Ily8DnB9wDGJ4emlKyGz1MIVYR0tZP39RmQp0hH+g==
+"@angular/cdk@^11.2.5":
+  version "11.2.5"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/cdk/-/cdk-11.2.5.tgz#e0cce8b28ca635b6151b834c6e1c4bc0a8dd7c04"
+  integrity sha512-ugalSDLME5E9JlxcRR8RGlOYlaV6rIzxOVQrGRBzY2tdhMT4Ng+BFtCkq1K88AU1sTLHq54xg9Xkfn7b5W2kiA==
   dependencies:
     tslib "^2.0.0"
   optionalDependencies:
     parse5 "^5.0.0"
 
-"@angular/cli@~11.2.0":
-  version "11.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/cli/-/cli-11.2.0.tgz"
-  integrity sha512-waIR5Nqc2wcYXZh/Mgm+4Iyvu0nzKAhvmKiJjcJ+f2UuPRMLdNAInTvhdpfgKaNdmiArxNa6UntRIu+EavGc9Q==
+"@angular/cli@~11.2.5":
+  version "11.2.5"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/cli/-/cli-11.2.5.tgz#3cf3e6432db41cebb364da2dcf3d44588535a34a"
+  integrity sha512-GIwK8l6wtg/++8aDYW++LSf7v1uqDtB6so2rPjNlOm7oYk5iqM73KaorQb/1A52oxWE3IRSJLNQaSyUlWvHvSA==
   dependencies:
-    "@angular-devkit/architect" "0.1102.0"
-    "@angular-devkit/core" "11.2.0"
-    "@angular-devkit/schematics" "11.2.0"
-    "@schematics/angular" "11.2.0"
-    "@schematics/update" "0.1102.0"
+    "@angular-devkit/architect" "0.1102.5"
+    "@angular-devkit/core" "11.2.5"
+    "@angular-devkit/schematics" "11.2.5"
+    "@schematics/angular" "11.2.5"
+    "@schematics/update" "0.1102.5"
     "@yarnpkg/lockfile" "1.1.0"
     ansi-colors "4.1.1"
     debug "4.3.1"
@@ -244,17 +206,17 @@
     universal-analytics "0.4.23"
     uuid "8.3.2"
 
-"@angular/common@~11.2.0":
-  version "11.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/common/-/common-11.2.0.tgz"
-  integrity sha512-wsWI5F6Y2DNxne2D5uk8e9U/vn95UYZLMNBW+QXI9U/I9kDSXoa8yEvNcn1x0XfNXBMst5pi4iSF5M8mIck1eg==
+"@angular/common@~11.2.6":
+  version "11.2.6"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/common/-/common-11.2.6.tgz#9985b9f1b3d82588f85bb74b1967749b0134d017"
+  integrity sha512-q1yR6bktd5p987gLEKiFY4CrHcmBxks9R6GcdgzGneQsucDtGESzEKdcJ0uaMXE+9teS+fQy5GvXel6DlA/J+w==
   dependencies:
     tslib "^2.0.0"
 
-"@angular/compiler-cli@~11.2.0":
-  version "11.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/compiler-cli/-/compiler-cli-11.2.0.tgz"
-  integrity sha512-FJ8OHWBQftmncDGV43ASFeCu3cW1W2P5fvub9fiBFEeTIkB/HXrMOMCQg/1XSdfA5kwFzj2NedMp573X9kq6ng==
+"@angular/compiler-cli@~11.2.6":
+  version "11.2.6"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/compiler-cli/-/compiler-cli-11.2.6.tgz#456844d71079df3ca3f025aaa9d9df9ed5a79006"
+  integrity sha512-1OC8UkySaLzaw3aSrm8A6SA88CxQAdA4ffaOhBLE/Ee6CxpneVxn3ORlnccqnS8zWyEpschbootPJV56U3Azeg==
   dependencies:
     "@babel/core" "^7.8.6"
     "@babel/types" "^7.8.6"
@@ -277,10 +239,10 @@
   resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/compiler/-/compiler-9.0.0.tgz#87e0bef4c369b6cadae07e3a4295778fc93799d5"
   integrity sha512-ctjwuntPfZZT2mNj2NDIVu51t9cvbhl/16epc5xEwyzyDt76pX9UgwvY+MbXrf/C/FWwdtmNtfP698BKI+9leQ==
 
-"@angular/compiler@~11.2.0":
-  version "11.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/compiler/-/compiler-11.2.0.tgz"
-  integrity sha512-EW6LM/kUYhQkuFqGt03c/eRKZAYr0LLEdMOn//j1uIh+wSq9KLffBGpky6b63xdfWxsXi8OucXUOydTQBckNEQ==
+"@angular/compiler@~11.2.6":
+  version "11.2.6"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/compiler/-/compiler-11.2.6.tgz#8b69cd2f2c3bb0fbc6f95ded1ccbe20e6858daed"
+  integrity sha512-3ijsCxnCLU1V1hy4UMf9qtMz5LR+wCdVFDqktEQccN9YEkN0cNtOc8Nu9EV9/mc2tqd1Q4xSBpb2o2mvpy7AhQ==
   dependencies:
     tslib "^2.0.0"
 
@@ -289,59 +251,59 @@
   resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/core/-/core-9.0.0.tgz#227dc53e1ac81824f998c6e76000b7efc522641e"
   integrity sha512-6Pxgsrf0qF9iFFqmIcWmjJGkkCaCm6V5QNnxMy2KloO3SDq6QuMVRbN9RtC8Urmo25LP+eZ6ZgYqFYpdD8Hd9w==
 
-"@angular/core@~11.2.0":
-  version "11.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/core/-/core-11.2.0.tgz"
-  integrity sha512-jnbnJTW2GwfkRoXG8J4zs5FMcahMZwo6jrZGe9FiXjCYG9cLEuOXy4h99Z1s/o0vc/VXyWgym7SmeEgv+urf8g==
+"@angular/core@~11.2.6":
+  version "11.2.6"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/core/-/core-11.2.6.tgz#c38ee7834519d3c94e51be62156784a984cd93d2"
+  integrity sha512-lS5JOQ/Y9gbk5WiMnCp5Zyz2pRIoZ+IWLOXHU5rkQeXy0zE3eMJhw0FfpEK+X5CeSNl2EPVSPLT0MtDtbNPodg==
   dependencies:
     tslib "^2.0.0"
 
-"@angular/forms@~11.2.0":
-  version "11.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/forms/-/forms-11.2.0.tgz"
-  integrity sha512-FgIG9ou27FbmyFv0n6pF95cQEz412/+iyY9OSlDnezD/7yU4fwk4NNPgP6Z/b1k7ClLYxP/YKC00WVhi1i8HdA==
+"@angular/forms@~11.2.6":
+  version "11.2.6"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/forms/-/forms-11.2.6.tgz#d82a1c655754d48ec861b9b3af370e6ee1e841cb"
+  integrity sha512-0xxayXCNc8lPQhDj5q/hAcG55cmDXPSBn2cxX4V+uDSGwKU1+h2CQID6gJdBJBh5wOaeMe6h8dK2s1pRgok66A==
   dependencies:
     tslib "^2.0.0"
 
-"@angular/language-service@~11.2.0":
-  version "11.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/language-service/-/language-service-11.2.0.tgz"
-  integrity sha512-0n7yrBiwpN6qUEDBoMHxEzxRN+w4tIe+42Ra68UQ5leBx5mSA6P6Ipi+nPwy8RXjqNEHgR0D//30Zp18O8UhCA==
+"@angular/language-service@~11.2.6":
+  version "11.2.6"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/language-service/-/language-service-11.2.6.tgz#920d29bcaff80bff6450c9eea5064e1fe1abc307"
+  integrity sha512-jzIutEzUbfBZxLWftpi5oXusL3rwbe2P/6HnNd8NUeBos9+G859R7hCsstAQ61XPn41a2/Fbl+YOwYhdjoBQrw==
 
-"@angular/localize@~11.2.0":
-  version "11.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/localize/-/localize-11.2.0.tgz"
-  integrity sha512-TtrD7FSEEkrpvmF9JF/nMaxvIsmhLWLn68MwhTXL9H8NuRvBFc9CB/WI0s9Rp5o5JKOQCX1h6vrKMxrrvv0g+w==
+"@angular/localize@~11.2.6":
+  version "11.2.6"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/localize/-/localize-11.2.6.tgz#465f2541c5bcdc396725504becaec3b96c718ec8"
+  integrity sha512-8K+SdqKqIaRlNRegDBy//VAtf2rlwoZAmqoFfiM5ujuB4SFt32NAduxDUlFGWdZD5V3iPorFBrceq04bt695AA==
   dependencies:
     "@babel/core" "7.8.3"
     glob "7.1.2"
     yargs "^16.1.1"
 
-"@angular/material@^11.2.3":
-  version "11.2.3"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/material/-/material-11.2.3.tgz#d38a63ea49f2c16c35752b8daab03addb59d98f1"
-  integrity sha512-esIDzEmShc+fhkbgLn4kYcmc855NShR2YuqyPHs7fxRXOlKkK9c2PHKjhk+Vd8Hf7gtilJwuCB4kReKMl0psWQ==
+"@angular/material@^11.2.5":
+  version "11.2.5"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/material/-/material-11.2.5.tgz#33145101816cd88a74c8f14073a218cb4d4f5bba"
+  integrity sha512-zdzAexDl0WQ2NhRXpa6CKzIvenozLcLl0kmAJBSoUYclES9B+t86tPdWW5CKl4zJOHDM2ZnxhzkYGEffS9Qvug==
   dependencies:
     tslib "^2.0.0"
 
-"@angular/platform-browser-dynamic@~11.2.0":
-  version "11.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/platform-browser-dynamic/-/platform-browser-dynamic-11.2.0.tgz"
-  integrity sha512-bBCtgtL87mvDT0K3HNBS19UC0BzIJUTGnYKJS9IugyfTEqlldB4juMmh/3FPjk30kxxJ8IB/ydaN2uVhBAxPVQ==
+"@angular/platform-browser-dynamic@~11.2.6":
+  version "11.2.6"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/platform-browser-dynamic/-/platform-browser-dynamic-11.2.6.tgz#26acbe4de315019ebe1e925ee826eda20c95d881"
+  integrity sha512-B56b8yPW3vAmPe4VONiBYEMZ6B1i5CUkJvit8qWWK3y7t5XrYOihIiGC0UqEDaw/uAg72GXjixspcxZWan5e9w==
   dependencies:
     tslib "^2.0.0"
 
-"@angular/platform-browser@~11.2.0":
-  version "11.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/platform-browser/-/platform-browser-11.2.0.tgz"
-  integrity sha512-xd3O4svQ95BN/KpzQUFkSWfvwiCURuLJhLlDkxzLA58ElA0qodHOjQmQz/1vRFh/nXQQoWg8z9ixbmcRGzWTow==
+"@angular/platform-browser@~11.2.6":
+  version "11.2.6"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/platform-browser/-/platform-browser-11.2.6.tgz#d2af4323275f501e279ee2aa821ac5599c11feae"
+  integrity sha512-xnYpfoqWyQOUngfbHefsZMyelCSAaxpopu/WYP0gpbYh9qJiVhsN9s6zRMqOIPueq9lmvlEuGBMgaJjeD6Ei7Q==
   dependencies:
     tslib "^2.0.0"
 
-"@angular/router@~11.2.0":
-  version "11.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/router/-/router-11.2.0.tgz"
-  integrity sha512-Gw08D6W4SGEIgm5zKdGs1yCW7FnwYjF8cycWczrpU8fmZh+WLbIjPAy/blI/nByCDU9BGyZ7cWGOiQJHEnzWmg==
+"@angular/router@~11.2.6":
+  version "11.2.6"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@angular/router/-/router-11.2.6.tgz#5845ef37e85400aeeaf0ffe670802a58569638cc"
+  integrity sha512-n/3Sp36slXzRXUcUO9nVs3CkgFxa6U9A8GENeyxq9XQtcE912jOP4dzjDi3hlaNKbX9ijOyEh505KpqmiSYATg==
   dependencies:
     tslib "^2.0.0"
 
@@ -1669,6 +1631,11 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
+"@discoveryjs/json-ext@0.5.2":
+  version "0.5.2"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@discoveryjs/json-ext/-/json-ext-0.5.2.tgz#8f03a22a04de437254e8ce8cc84ba39689288752"
+  integrity sha512-HyYEUDeIj5rRQU2Hk5HTB2uHsbRQpF70nvMhVzi+VJR0X+xNEhjPui4/kBf3VeH/wqD28PT4sVOm8qqLjBrSZg==
+
 "@eslint/eslintrc@^0.4.0":
   version "0.4.0"
   resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@eslint/eslintrc/-/eslintrc-0.4.0.tgz"
@@ -1752,12 +1719,12 @@
   dependencies:
     tslib "^2.0.0"
 
-"@ngtools/webpack@11.2.0":
-  version "11.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@ngtools/webpack/-/webpack-11.2.0.tgz"
-  integrity sha512-2KYaA/fIw863jydXDolWp4kUNLODVIKs2834vW+oztocnYFe/z4dTz6rArKFUCixMCu12ieXrjAetzGA564bsg==
+"@ngtools/webpack@11.2.5":
+  version "11.2.5"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@ngtools/webpack/-/webpack-11.2.5.tgz#3e2265145d19fcdda9ec2894ccded83658b1fa66"
+  integrity sha512-7fhg8hvqTiTS5ESiEN4xR2qRnOVX0rhVSckMXbAFvNYTwQOuS865RiBrYCJ4CsKhGJ9P7XS5i2EIwA3/aLSivg==
   dependencies:
-    "@angular-devkit/core" "11.2.0"
+    "@angular-devkit/core" "11.2.5"
     enhanced-resolve "5.7.0"
     webpack-sources "2.2.0"
 
@@ -1842,22 +1809,22 @@
     puka "^1.0.1"
     read-package-json-fast "^2.0.1"
 
-"@schematics/angular@11.2.0":
-  version "11.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@schematics/angular/-/angular-11.2.0.tgz"
-  integrity sha512-PtbyZ7TEEEae9Y5siSZYigWyk8iOSjZ10ThA7tRxm8gdcLjGimyyKr5TyjufIAvrXIYnBXNLgPkZG6s5CQIEyw==
+"@schematics/angular@11.2.5":
+  version "11.2.5"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@schematics/angular/-/angular-11.2.5.tgz#c984687c95be32d3fa6016faa8b5a61715a830f5"
+  integrity sha512-pjaK0gZyqhzgAVxMKElG6cDpAvNZ3adVCTA8dhEixpH+JaQdoczl59hMn7rH75yQW0PApe+8g7HMwVK6bLRmxQ==
   dependencies:
-    "@angular-devkit/core" "11.2.0"
-    "@angular-devkit/schematics" "11.2.0"
+    "@angular-devkit/core" "11.2.5"
+    "@angular-devkit/schematics" "11.2.5"
     jsonc-parser "3.0.0"
 
-"@schematics/update@0.1102.0":
-  version "0.1102.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@schematics/update/-/update-0.1102.0.tgz"
-  integrity sha512-2hFt/2iPe6LqQvzYj4HvQ8us0e0lBU75rSK2yY6VfiZWR/qo7yk99YKI7JWFTLvLsNbhNnSG/9opXJHqqUoc3g==
+"@schematics/update@0.1102.5":
+  version "0.1102.5"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@schematics/update/-/update-0.1102.5.tgz#538493f0a7d06d794d521cca4f2ff588f05cc733"
+  integrity sha512-iz9pM8mabieqQnPZjrqP5jfRFvPm81/uIg46kY3KjtDtSBi4GAF2dnFyX1dC2mG1rq+e+8zeQLvOvhdLifYlEA==
   dependencies:
-    "@angular-devkit/core" "11.2.0"
-    "@angular-devkit/schematics" "11.2.0"
+    "@angular-devkit/core" "11.2.5"
+    "@angular-devkit/schematics" "11.2.5"
     "@yarnpkg/lockfile" "1.1.0"
     ini "2.0.0"
     npm-package-arg "^8.0.0"
@@ -1990,74 +1957,74 @@
     "@types/source-list-map" "*"
     source-map "^0.6.1"
 
-"@typescript-eslint/eslint-plugin@4.3.0":
-  version "4.3.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@typescript-eslint/eslint-plugin/-/eslint-plugin-4.3.0.tgz"
-  integrity sha512-RqEcaHuEKnn3oPFislZ6TNzsBLqpZjN93G69SS+laav/I8w/iGMuMq97P0D2/2/kW4SCebHggqhbcCfbDaaX+g==
+"@typescript-eslint/eslint-plugin@4.16.1":
+  version "4.16.1"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@typescript-eslint/eslint-plugin/-/eslint-plugin-4.16.1.tgz#2caf6a79dd19c3853b8d39769a27fccb24e4e651"
+  integrity sha512-SK777klBdlkUZpZLC1mPvyOWk9yAFCWmug13eAjVQ4/Q1LATE/NbcQL1xDHkptQkZOLnPmLUA1Y54m8dqYwnoQ==
   dependencies:
-    "@typescript-eslint/experimental-utils" "4.3.0"
-    "@typescript-eslint/scope-manager" "4.3.0"
+    "@typescript-eslint/experimental-utils" "4.16.1"
+    "@typescript-eslint/scope-manager" "4.16.1"
     debug "^4.1.1"
     functional-red-black-tree "^1.0.1"
+    lodash "^4.17.15"
     regexpp "^3.0.0"
     semver "^7.3.2"
     tsutils "^3.17.1"
 
-"@typescript-eslint/experimental-utils@4.3.0":
-  version "4.3.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@typescript-eslint/experimental-utils/-/experimental-utils-4.3.0.tgz"
-  integrity sha512-cmmIK8shn3mxmhpKfzMMywqiEheyfXLV/+yPDnOTvQX/ztngx7Lg/OD26J8gTZfkLKUmaEBxO2jYP3keV7h2OQ==
+"@typescript-eslint/experimental-utils@4.16.1":
+  version "4.16.1"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@typescript-eslint/experimental-utils/-/experimental-utils-4.16.1.tgz#da7a396dc7d0e01922acf102b76efff17320b328"
+  integrity sha512-0Hm3LSlMYFK17jO4iY3un1Ve9x1zLNn4EM50Lia+0EV99NdbK+cn0er7HC7IvBA23mBg3P+8dUkMXy4leL33UQ==
   dependencies:
     "@types/json-schema" "^7.0.3"
-    "@typescript-eslint/scope-manager" "4.3.0"
-    "@typescript-eslint/types" "4.3.0"
-    "@typescript-eslint/typescript-estree" "4.3.0"
+    "@typescript-eslint/scope-manager" "4.16.1"
+    "@typescript-eslint/types" "4.16.1"
+    "@typescript-eslint/typescript-estree" "4.16.1"
     eslint-scope "^5.0.0"
     eslint-utils "^2.0.0"
 
-"@typescript-eslint/parser@4.3.0":
-  version "4.3.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@typescript-eslint/parser/-/parser-4.3.0.tgz"
-  integrity sha512-JyfRnd72qRuUwItDZ00JNowsSlpQGeKfl9jxwO0FHK1qQ7FbYdoy5S7P+5wh1ISkT2QyAvr2pc9dAemDxzt75g==
+"@typescript-eslint/parser@4.16.1":
+  version "4.16.1"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@typescript-eslint/parser/-/parser-4.16.1.tgz#3bbd3234dd3c5b882b2bcd9899bc30e1e1586d2a"
+  integrity sha512-/c0LEZcDL5y8RyI1zLcmZMvJrsR6SM1uetskFkoh3dvqDKVXPsXI+wFB/CbVw7WkEyyTKobC1mUNp/5y6gRvXg==
   dependencies:
-    "@typescript-eslint/scope-manager" "4.3.0"
-    "@typescript-eslint/types" "4.3.0"
-    "@typescript-eslint/typescript-estree" "4.3.0"
+    "@typescript-eslint/scope-manager" "4.16.1"
+    "@typescript-eslint/types" "4.16.1"
+    "@typescript-eslint/typescript-estree" "4.16.1"
     debug "^4.1.1"
 
-"@typescript-eslint/scope-manager@4.3.0":
-  version "4.3.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@typescript-eslint/scope-manager/-/scope-manager-4.3.0.tgz"
-  integrity sha512-cTeyP5SCNE8QBRfc+Lgh4Xpzje46kNUhXYfc3pQWmJif92sjrFuHT9hH4rtOkDTo/si9Klw53yIr+djqGZS1ig==
+"@typescript-eslint/scope-manager@4.16.1":
+  version "4.16.1"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@typescript-eslint/scope-manager/-/scope-manager-4.16.1.tgz#244e2006bc60cfe46987e9987f4ff49c9e3f00d5"
+  integrity sha512-6IlZv9JaurqV0jkEg923cV49aAn8V6+1H1DRfhRcvZUrptQ+UtSKHb5kwTayzOYTJJ/RsYZdcvhOEKiBLyc0Cw==
   dependencies:
-    "@typescript-eslint/types" "4.3.0"
-    "@typescript-eslint/visitor-keys" "4.3.0"
+    "@typescript-eslint/types" "4.16.1"
+    "@typescript-eslint/visitor-keys" "4.16.1"
 
-"@typescript-eslint/types@4.3.0":
-  version "4.3.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@typescript-eslint/types/-/types-4.3.0.tgz"
-  integrity sha512-Cx9TpRvlRjOppGsU6Y6KcJnUDOelja2NNCX6AZwtVHRzaJkdytJWMuYiqi8mS35MRNA3cJSwDzXePfmhU6TANw==
+"@typescript-eslint/types@4.16.1":
+  version "4.16.1"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@typescript-eslint/types/-/types-4.16.1.tgz#5ba2d3e38b1a67420d2487519e193163054d9c15"
+  integrity sha512-nnKqBwMgRlhzmJQF8tnFDZWfunXmJyuXj55xc8Kbfup4PbkzdoDXZvzN8//EiKR27J6vUSU8j4t37yUuYPiLqA==
 
-"@typescript-eslint/typescript-estree@4.3.0":
-  version "4.3.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@typescript-eslint/typescript-estree/-/typescript-estree-4.3.0.tgz"
-  integrity sha512-ZAI7xjkl+oFdLV/COEz2tAbQbR3XfgqHEGy0rlUXzfGQic6EBCR4s2+WS3cmTPG69aaZckEucBoTxW9PhzHxxw==
+"@typescript-eslint/typescript-estree@4.16.1":
+  version "4.16.1"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@typescript-eslint/typescript-estree/-/typescript-estree-4.16.1.tgz#c2fc46b05a48fbf8bbe8b66a63f0a9ba04b356f1"
+  integrity sha512-m8I/DKHa8YbeHt31T+UGd/l8Kwr0XCTCZL3H4HMvvLCT7HU9V7yYdinTOv1gf/zfqNeDcCgaFH2BMsS8x6NvJg==
   dependencies:
-    "@typescript-eslint/types" "4.3.0"
-    "@typescript-eslint/visitor-keys" "4.3.0"
+    "@typescript-eslint/types" "4.16.1"
+    "@typescript-eslint/visitor-keys" "4.16.1"
     debug "^4.1.1"
     globby "^11.0.1"
     is-glob "^4.0.1"
-    lodash "^4.17.15"
     semver "^7.3.2"
     tsutils "^3.17.1"
 
-"@typescript-eslint/visitor-keys@4.3.0":
-  version "4.3.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@typescript-eslint/visitor-keys/-/visitor-keys-4.3.0.tgz"
-  integrity sha512-xZxkuR7XLM6RhvLkgv9yYlTcBHnTULzfnw4i6+z2TGBLy9yljAypQaZl9c3zFvy7PNI7fYWyvKYtohyF8au3cw==
+"@typescript-eslint/visitor-keys@4.16.1":
+  version "4.16.1"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/@typescript-eslint/visitor-keys/-/visitor-keys-4.16.1.tgz#d7571fb580749fae621520deeb134370bbfc7293"
+  integrity sha512-s/aIP1XcMkEqCNcPQtl60ogUYjSM8FU2mq1O7y5cFf3Xcob1z1iXWNB6cC43Op+NGRTFgGolri6s8z/efA9i1w==
   dependencies:
-    "@typescript-eslint/types" "4.3.0"
+    "@typescript-eslint/types" "4.16.1"
     eslint-visitor-keys "^2.0.0"
 
 "@webassemblyjs/ast@1.9.0":
@@ -3292,10 +3259,10 @@ combined-stream@^1.0.6, combined-stream@~1.0.6:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@6.2.0:
-  version "6.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/commander/-/commander-6.2.0.tgz#b990bfb8ac030aedc6d11bc04d1488ffef56db75"
-  integrity sha512-zP4jEKbe8SHzKJYQmq8Y9gYjtO/POJLgIdKgV7B9qNmABVFVc+ctqSX6iXh4mCpJfRBOabiZ2YKPg8ciDw6C+Q==
+commander@7.1.0:
+  version "7.1.0"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/commander/-/commander-7.1.0.tgz#f2eaecf131f10e36e07d894698226e36ae0eb5ff"
+  integrity sha512-pRxBna3MJe6HKnBGsDyMv8ETbptw3axEdYHoqNh7gu5oDcew8fs0xnivZGm06Ogk8zGAJ9VX+OPEr2GXEQK4dg==
 
 commander@^2.11.0, commander@^2.12.1, commander@^2.20.0:
   version "2.20.3"
@@ -3509,10 +3476,10 @@ cosmiconfig@^7.0.0:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
-critters@0.0.6:
-  version "0.0.6"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/critters/-/critters-0.0.6.tgz"
-  integrity sha512-NUB3Om7tkf+XWi9+2kJ2A3l4/tHORDI1UT+nHxUqay2B/tJvMpiXcklDDLBH3fPn9Pe23uu0we/08Ukjy4cLCQ==
+critters@0.0.7:
+  version "0.0.7"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/critters/-/critters-0.0.7.tgz#548b470360f4f3c51e622de3b7aa733c8f0b17bf"
+  integrity sha512-qUF2SaAWFYjNPdCcPpu68p2DnHiosia84yx5mPTlUMQjkjChR+n6sO1/I7yn2U2qNDgSPTd2SoaTIDQcUL+EwQ==
   dependencies:
     chalk "^4.1.0"
     css "^3.0.0"
@@ -3540,10 +3507,10 @@ cross-spawn@^7.0.2:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
-cson-parser@4.0.7:
-  version "4.0.7"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/cson-parser/-/cson-parser-4.0.7.tgz#41cfbcb16f6481d7dbd8e80784db1d87a2bbd04d"
-  integrity sha512-BSnAl0gllETWjU9/lb8MmeqhsGaRINPwhoPiBjI/TJBRvKf/24I9EVqnwvmk6R3Gt66cMRSGVktl6QicxIb72g==
+cson-parser@4.0.8:
+  version "4.0.8"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/cson-parser/-/cson-parser-4.0.8.tgz#373f3bde1be018267fccbc575d82120c2a7a645e"
+  integrity sha512-Hdv3N2E5JU4vAp88cxcs/Y+0L0y0HJnpoc067E//qbXNF4/cG713rFLryD0QvKZYK6w3QBA67t7UOfo2ymh8Sg==
   dependencies:
     coffeescript "1.12.7"
 
@@ -4294,12 +4261,10 @@ escape-string-regexp@^1.0.2, escape-string-regexp@^1.0.5:
   resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz"
   integrity sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=
 
-eslint-config-prettier@6.15.0:
-  version "6.15.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/eslint-config-prettier/-/eslint-config-prettier-6.15.0.tgz#7f93f6cb7d45a92f1537a70ecc06366e1ac6fed9"
-  integrity sha512-a1+kOYLR8wMGustcgAjdydMsQ2A/2ipRPwRKUmfYaSxc9ZPcrku080Ctl6zrZzZNs/U82MjSv+qKREkoq3bJaw==
-  dependencies:
-    get-stdin "^6.0.0"
+eslint-config-prettier@8.1.0:
+  version "8.1.0"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/eslint-config-prettier/-/eslint-config-prettier-8.1.0.tgz#4ef1eaf97afe5176e6a75ddfb57c335121abc5a6"
+  integrity sha512-oKMhGv3ihGbCIimCAjqkdzx2Q+jthoqnXSP+d86M9tptwugycmTFdVR4IpLgq2c4SHifbwO90z2fQ8/Aio73yw==
 
 eslint-import-resolver-node@^0.3.4:
   version "0.3.4"
@@ -4902,11 +4867,6 @@ get-intrinsic@^1.0.2, get-intrinsic@^1.1.1:
     function-bind "^1.1.1"
     has "^1.0.3"
     has-symbols "^1.0.1"
-
-get-stdin@^6.0.0:
-  version "6.0.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/get-stdin/-/get-stdin-6.0.0.tgz#9e09bf712b360ab9225e812048f71fde9c89657b"
-  integrity sha512-jp4tHawyV7+fkkSKyvjuLZswblUtz+SQKzSWnBbii16BuZksJlU1wuBYXY75r+duh/llF1ur6oNwi+2ZzjKZ7g==
 
 get-stream@^4.0.0:
   version "4.1.0"
@@ -5964,10 +5924,10 @@ json3@^3.3.3:
   resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/json3/-/json3-3.3.3.tgz#7fc10e375fc5ae42c4705a5cc0aa6f62be305b81"
   integrity sha512-c7/8mbUsKigAbLkD5B010BK4D9LZm7A1pNItkEwiUZRpIN66exu/e7YQWysGun+TRKaJp8MhemM+VkfWv42aCA==
 
-json5@2.1.3:
-  version "2.1.3"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/json5/-/json5-2.1.3.tgz#c9b0f7fa9233bfe5807fe66fcf3a5617ed597d43"
-  integrity sha512-KXPvOm8K9IJKFM0bmdn8QXh7udDh1g/giieX0NLCaMnb4hEiVFqnop2ImTXCc5e0/oHz3LTqmHGtExn5hfMkOA==
+json5@2.2.0, json5@^2.1.0, json5@^2.1.2:
+  version "2.2.0"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/json5/-/json5-2.2.0.tgz#2dfefe720c6ba525d9ebd909950f0515316c89a3"
+  integrity sha512-f+8cldu7X/y7RAJurMEJmdoKXGB/X550w2Nr3tTbezL6RwEE/iMcm+tZnXeoZtKuOq6ft8+CqzEkrIgx1fPoQA==
   dependencies:
     minimist "^1.2.5"
 
@@ -5977,13 +5937,6 @@ json5@^1.0.1:
   integrity sha512-aKS4WQjPenRxiQsC93MNfjx+nbF4PAdYzmd/1JIj8HYzqfbu86beTuNgXDzPknWk0n0uARlyewZo4s++ES36Ow==
   dependencies:
     minimist "^1.2.0"
-
-json5@^2.1.0, json5@^2.1.2:
-  version "2.2.0"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/json5/-/json5-2.2.0.tgz"
-  integrity sha512-f+8cldu7X/y7RAJurMEJmdoKXGB/X550w2Nr3tTbezL6RwEE/iMcm+tZnXeoZtKuOq6ft8+CqzEkrIgx1fPoQA==
-  dependencies:
-    minimist "^1.2.5"
 
 jsonc-parser@3.0.0:
   version "3.0.0"
@@ -6263,7 +6216,12 @@ lodash.uniq@^4.5.0:
   resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/lodash.uniq/-/lodash.uniq-4.5.0.tgz"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-lodash@4.17.20, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20:
+lodash@4.17.21:
+  version "4.17.21"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+
+lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20:
   version "4.17.20"
   resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/lodash/-/lodash-4.17.20.tgz"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
@@ -8285,14 +8243,14 @@ run-parallel@^1.1.9:
   dependencies:
     queue-microtask "^1.2.2"
 
-rxjs@6.6.3, rxjs@^6.6.0, rxjs@~6.6.3:
+rxjs@6.6.3, rxjs@^6.6.0:
   version "6.6.3"
   resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/rxjs/-/rxjs-6.6.3.tgz#8ca84635c4daa900c0d3967a6ee7ac60271ee552"
   integrity sha512-trsQc+xYYXZ3urjOiJOuCOa5N3jAZ3eiSpQB5hIT8zGlL2QfnHLJ2r7GMkBGuIausdJN1OneaI6gQlsqNHHmZQ==
   dependencies:
     tslib "^1.9.0"
 
-rxjs@^6.5.3:
+rxjs@^6.5.3, rxjs@~6.6.6:
   version "6.6.6"
   resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/rxjs/-/rxjs-6.6.6.tgz#14d8417aa5a07c5e633995b525e1e3c0dec03b70"
   integrity sha512-/oTwee4N4iWzAMAL9xdGKjkEHmIwupR3oXbQjCKywF1BeFohswF3vZdogbmEF6pZkOsXTzWkrZszrWpQTByYVg==
@@ -9327,21 +9285,21 @@ tslib@^2.0.0:
   resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/tslib/-/tslib-2.0.1.tgz"
   integrity sha512-SgIkNheinmEBgx1IUNirK0TUD4X9yjjBRTqqjggWCU3pUEqIk3/Uwl3yRixYKT6WjQuGiwDv4NomL3wqRCj+CQ==
 
-tslint-to-eslint-config@2.0.1:
-  version "2.0.1"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/tslint-to-eslint-config/-/tslint-to-eslint-config-2.0.1.tgz#c814513ed47cce47ebf89588806b7c607d06b59e"
-  integrity sha512-RURU/zcBQpW9jKS7H2J6of4+64npTb0nrH7ND8tNhagMwryVjVnUDcucsl8DQuD7tO9RgjFO9bmJfDhyP0yV1w==
+tslint-to-eslint-config@2.2.0:
+  version "2.2.0"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/tslint-to-eslint-config/-/tslint-to-eslint-config-2.2.0.tgz#711a1596b765175139193a3878a8a12ebdf91318"
+  integrity sha512-ta+V1G8y431CPXuJHbzlYYxuAyvKZM8llLZnFN7jy0C98dMsz0jIQCZW7dH5I6wt10gTyMOw7h5W+JEeQumbfQ==
   dependencies:
     chalk "4.1.0"
-    commander "6.2.0"
-    cson-parser "4.0.7"
-    eslint-config-prettier "6.15.0"
+    commander "7.1.0"
+    cson-parser "4.0.8"
+    eslint-config-prettier "8.1.0"
     glob "7.1.6"
-    json5 "2.1.3"
-    lodash "4.17.20"
+    json5 "2.2.0"
+    lodash "4.17.21"
     minimatch "3.0.4"
     tslint "6.1.3"
-    typescript "4.1.2"
+    typescript "4.2.2"
 
 tslint@6.1.3, tslint@~6.1.3:
   version "6.1.3"
@@ -9423,15 +9381,15 @@ type@^2.0.0:
   resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/type/-/type-2.1.0.tgz"
   integrity sha512-G9absDWvhAWCV2gmF1zKud3OyC61nZDwWvBL2DApaVFogI07CprggiQAOOjvp2NRjYWFzPyu7vwtDrQFq8jeSA==
 
-typescript@4.1.2:
-  version "4.1.2"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/typescript/-/typescript-4.1.2.tgz#6369ef22516fe5e10304aae5a5c4862db55380e9"
-  integrity sha512-thGloWsGH3SOxv1SoY7QojKi0tc+8FnOmiarEGMbd/lar7QOEd3hvlx3Fp5y6FlDUGl9L+pd4n2e+oToGMmhRQ==
+typescript@4.1.5:
+  version "4.1.5"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/typescript/-/typescript-4.1.5.tgz#123a3b214aaff3be32926f0d8f1f6e704eb89a72"
+  integrity sha512-6OSu9PTIzmn9TCDiovULTnET6BgXtDYL4Gg4szY+cGsc3JP1dQL8qvE8kShTRx1NIw4Q9IBHlwODjkjWEtMUyA==
 
-typescript@4.1.3:
-  version "4.1.3"
-  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/typescript/-/typescript-4.1.3.tgz"
-  integrity sha512-B3ZIOf1IKeH2ixgHhj6la6xdwR9QrLC5d1VKeCSY4tvkqhF2eqd9O7txNlS0PO3GrBAFIdr3L1ndNwteUbZLYg==
+typescript@4.2.2:
+  version "4.2.2"
+  resolved "https://reposrv02nexus3.entwicklung.god.de/nexus/repository/npm-all/typescript/-/typescript-4.2.2.tgz#1450f020618f872db0ea17317d16d8da8ddb8c4c"
+  integrity sha512-tbb+NVrLfnsJy3M59lsDgrzWIflR4d4TIUjz+heUnHZwdF7YsrMTKoRERiIvI2lvBG95dfpLxB21WZhys1bgaQ==
 
 typescript@~4.0.2:
   version "4.0.2"
