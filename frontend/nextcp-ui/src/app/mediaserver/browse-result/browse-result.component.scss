@@ -190,3 +190,16 @@ img {
     margin-top: 60px;
     margin-left: 90px;
 }
+
+.minWidth {
+    min-width : 0;
+    min-height: 0;
+}
+
+.no-wrap {
+    white-space  : nowrap;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+    min-height   : 0;
+    min-width    : 0;
+}

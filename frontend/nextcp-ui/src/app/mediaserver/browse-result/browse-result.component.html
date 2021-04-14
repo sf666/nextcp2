@@ -172,8 +172,8 @@
             <div class="item-tbody">
                 <div id="{{item.objectID}}" class="row" *ngFor="let item of getMusicTracks()">
                     <div (click)="play(item)" class="col col-greyed small-col">{{item.originalTrackNumber}}</div>
-                    <div (click)="play(item)" class="col d-flex">
-                        <div>{{item.title}}</div>
+                    <div (click)="play(item)" class="col d-flex minWidth">
+                        <div class="no-wrap">{{item.title}}</div>
                         <quality-badge [item]="item"></quality-badge>
                     </div>
                     <div (click)="play(item)" class="col">{{item.artistName}}</div>
