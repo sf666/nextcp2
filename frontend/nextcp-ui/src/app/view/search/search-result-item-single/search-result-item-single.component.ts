@@ -16,11 +16,11 @@ export class SearchResultItemSingleComponent {
     private avtransportService: AvtransportService) {
   }
 
-  play() {
+  play() : void {
     this.avtransportService.playResource(this.searchItemService.musicItem);
   }
 
-  addToPlaylist() {
+  addToPlaylist() : void {
     this.playlistService.addToPlaylist(this.searchItemService.musicItem);
   }
 }

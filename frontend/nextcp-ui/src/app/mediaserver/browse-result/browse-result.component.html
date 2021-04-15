@@ -75,7 +75,7 @@
  =========================================== 
 -->
 <div *ngIf="playlistList?.length > 0">
-    <div class="cardLayout">
+    <div id="head_browse_result_playlist_items_ID" class="cardLayout">
         <div id="{{container.id}}" tabindex="-1" class="cardLayout cover-card" *ngFor="let container of playlistList">
             <div class="cardLayout image-container">
                 <img class="cardLayout image-container" src="{{container.albumartUri}}" alt="{{container.title}}">
@@ -106,7 +106,7 @@
 <!-- container elements -->
 
 <div *ngIf="containerList?.length > 0">
-    <div class="cardLayout">
+    <div id="head_browse_result_playlist_container_ID" class="cardLayout">
         <div class="cardLayout cover-card" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)"
             *ngFor="let container of containerList">
             <img class="cardLayout image-container" src="{{container.albumartUri}}" class="" alt="{{container.title}}">
@@ -126,7 +126,7 @@
 <div *ngIf="albumList?.length > 0">
     <div class="section head">Album</div>
 
-    <div class="cardLayout">
+    <div id="head_browse_result_album_ID" class="cardLayout">
         <div id="{{container.id}}" tabindex="-1" class="my-Card" *ngFor="let container of albumList">
             <img src="{{container.albumartUri}}" class="card-img-top" alt="{{container.title}}">
             <div class="my-card-body">
@@ -159,7 +159,7 @@
 <div id="{{topDivId}}" tabindex="-1" *ngIf="getMusicTracks().length > 0">
     <div *ngIf="isListView(); else mixedTitles">
         <div class="item-table">
-            <div class="item-thead">
+            <div id="head_browse_result_items_list_view_ID" class="item-thead">
                 <div class="row col-greyed">
                     <div class="col small-col">#</div>
                     <div class="col">Title</div>
@@ -192,7 +192,7 @@
     </div>
 
     <ng-template #mixedTitles>
-        <div class="cardLayout mixedTitles">
+        <div id="head_browse_result_items_mixed_titles_ID" class="cardLayout mixedTitles">
             <div id="{{item.objectID}}" class="cardLayout cover-card"
                 *ngFor="let item of getMusicTracks()">
                 <img src="{{item.albumArtUrl}}" class="cardLayout image-container" alt="{{item.title}}">
