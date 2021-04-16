@@ -103,6 +103,12 @@
     </div>
     <!-- -->
     <div class="section head">Adminisration</div>
+    <div class="section subhead">System imformation</div>
+    <div class="d-flex section">
+        <div class="section item-2-label">Build number </div>
+        <div class="section item-2-disp">{{buildNumber}}</div>
+    </div>
+    
     <div class="section subhead">Rating Support</div>
     <div class="d-flex section subhead">
         <button mat-flat-button class="ml-2 settings" (click)="ratingServiceService.syncRatingFromAudioFile()">import star rating from audio file</button>

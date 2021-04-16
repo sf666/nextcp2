@@ -29,7 +29,7 @@ export class HttpService {
    * @param path 
    */
   public get<T>(base: string, path: string, errorHeader?: string): Subject<T> {
-    let ret = new Subject<T>();
+    const ret = new Subject<T>();
     this.http.get<T>(base + path).subscribe(data => {
       return ret.next(data);
     }, err => {

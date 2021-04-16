@@ -47,7 +47,7 @@ export class DeviceService {
     return udn === this._selectedMediaRendererDevice.udn;
   }
 
-  public isAnyMediaRendererSelected() : boolean {
+  public isAnyMediaRendererSelected(): boolean {
     return this._selectedMediaRendererDevice.udn.length > 0;
   }
 
@@ -87,9 +87,8 @@ export class DeviceService {
   }
 
   public getEnabledMediaRendererList(): MediaRendererDto[] {
-    return this.mediaRenderList.filter(renderer => { 
-      var enabled : boolean;
-      enabled = this.configService.isRenderDeviceActive(renderer.udn) 
+    return this.mediaRenderList.filter(renderer => {
+      const enabled = this.configService.isRenderDeviceActive(renderer.udn);
       return enabled;
     });
   }
@@ -116,15 +115,15 @@ export class DeviceService {
     this.mediaRendererChanged$.next(device);
   }
 
-  public setMediaRendererByUdn(udn: string) {
-    let renderer = this.mediaRenderList.filter(e => e.udn === udn);
+  public setMediaRendererByUdn(udn: string): void {
+    const renderer = this.mediaRenderList.filter(e => e.udn === udn);
     if (renderer.length > 0) {
       this.selectedMediaRendererDevice = renderer[0];
     }
   }
 
-  public setMediaServerByUdn(udn: string) {
-    let serverDevice = this.mediaServerList.filter(e => e.udn === udn);
+  public setMediaServerByUdn(udn: string): void {
+    const serverDevice = this.mediaServerList.filter(e => e.udn === udn);
     if (serverDevice.length > 0) {
       this.selectedMediaServerDevice = serverDevice[0];
     }

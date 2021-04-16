@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2021-03-17 15:37:36.
+// Generated using typescript-generator version 2.0.400 on 2021-04-16 14:22:58.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -239,6 +239,10 @@ export interface SearchResultDto {
     albumItems: ContainerDto[];
     artistItems: ContainerDto[];
     playlistItems: ContainerDto[];
+}
+
+export interface SystemInformationDto {
+    buildNumber: string;
 }
 
 export interface ToastrMessage {

@@ -299,3 +299,6 @@ ToastrMessage:
    type: String
    header: String
    body: String
+   
+SystemInformationDto:
+   buildNumber: String

@@ -192,10 +192,12 @@ For debugging within an IDE start the backend first. The main Spring-Boot startu
 backend/nextcp2-assembly/src/main/java/nextcp/NextcpApplicationStartup
 ```
 
-To start the front-end in Visual Studio Code switch to TERMINAL change into the directory `nextcp2/frontend/nextcp-ui` and start the front-end by typing
+For having a frontend build, `yarn` has to be installed in the build environment.
+
+To start the front-end in Visual Studio Code switch to TERMINAL, change into the directory `nextcp2/frontend/nextcp-ui` and start the front-end by typing
 
 ```
-npm start
+yarn start
 ```
 
 Launch your favorite chromium browser from the Visual Studio Code debug perspective.

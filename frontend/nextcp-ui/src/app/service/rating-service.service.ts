@@ -12,31 +12,31 @@ export class RatingServiceService {
 
   constructor(private httpService: HttpService) { }
 
-/*
-  public getStarRatingByMusicBrainzID(musicBrainzID: string): Subject<number> {
-    const uri = "/getStarRatingByMusicBrainzID";
+  /*
+    public getStarRatingByMusicBrainzID(musicBrainzID: string): Subject<number> {
+      const uri = "/getStarRatingByMusicBrainzID";
+  
+      return this.httpService.post<number>(this.baseUri, uri, musicBrainzID);
+    }
+  */
+  public setStarRatingByMusicBrainzID(musicBrainzID: string, stars: number): Subject<number> {
+    const uri = `/setStarRatingByMusicBrainzID/${stars}`;
 
     return this.httpService.post<number>(this.baseUri, uri, musicBrainzID);
   }
-*/
-  public setStarRatingByMusicBrainzID(musicBrainzID: string, stars : number): Subject<number> {
-    const uri = "/setStarRatingByMusicBrainzID/" + stars;
 
-    return this.httpService.post<number>(this.baseUri, uri, musicBrainzID);
-  }  
-
-  public syncRatingFromAudioFile() {
+  public syncRatingFromAudioFile(): Subject<string> {
     const uri = "/syncRatingFromAudioFile";
     return this.httpService.get(this.baseUri, uri);
-  }  
+  }
 
-  public syncRatingFromMusicBrainz() {
+  public syncRatingFromMusicBrainz(): Subject<string> {
     const uri = "/syncRatingsFromMusicBrainz";
     return this.httpService.get(this.baseUri, uri);
-  }  
+  }
 
-  public syncRatingsFromMusicBrainzToFiles() {
+  public syncRatingsFromMusicBrainzToFiles(): Subject<string> {
     const uri = "/syncRatingsFromMusicBrainzToFiles";
     return this.httpService.get(this.baseUri, uri);
-  }  
+  }
 }

@@ -35,7 +35,6 @@
 		<h2database.version>1.4.200</h2database.version>
 	</properties>
 
-
 	<modules>
 		<module>nextcp2-runtime</module>
 		<module>nextcp2-modelgen</module>
@@ -46,6 +45,15 @@
 	</modules>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>*.txt</include>
+				</includes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

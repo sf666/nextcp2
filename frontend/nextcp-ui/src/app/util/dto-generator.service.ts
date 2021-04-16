@@ -1,4 +1,4 @@
-import { ContainerDto, SearchResultDto, ContainerItemDto, SearchRequestDto, MusicItemDto, AudioFormat, MusicBrainzId, TrackTimeDto, TrackInfoDto } from './../service/dto.d';
+import { ContainerDto, SearchResultDto, ContainerItemDto, SearchRequestDto, MusicItemDto, AudioFormat, MusicBrainzId, TrackTimeDto, TrackInfoDto, SystemInformationDto } from './../service/dto.d';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -25,6 +25,12 @@ export class DtoGeneratorService {
       searchable: false,
       title: ''
     };
+  }
+
+  public generateSystemInformationDto(): SystemInformationDto {
+    return {
+      buildNumber: 'unknown'
+    }
   }
 
   public generateEmptySearchResultDto(): SearchResultDto {
