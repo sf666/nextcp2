@@ -13,3 +13,12 @@ backend/nextcp2-rating/bin
 backend/nextcp2-runtime/bin
 backend/nextcp2-indexer/bin
 rating_db.mv.db
+backend/.git-versioned-pom.xml
+backend/nextcp2-assembly/.git-versioned-pom.xml
+backend/nextcp2-assembly/mbservice.log
+backend/nextcp2-db/.git-versioned-pom.xml
+backend/nextcp2-device-driver/.git-versioned-pom.xml
+backend/nextcp2-device-driver/nextcp2-ma9000/.git-versioned-pom.xml
+backend/nextcp2-indexer/.git-versioned-pom.xml
+backend/nextcp2-modelgen/.git-versioned-pom.xml
+backend/nextcp2-runtime/.git-versioned-pom.xml
