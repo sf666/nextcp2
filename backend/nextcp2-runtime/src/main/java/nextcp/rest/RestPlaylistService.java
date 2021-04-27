@@ -39,6 +39,7 @@ import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.BrowseInput;
 @RequestMapping("/PlaylistService")
 public class RestPlaylistService extends BaseRestService
 {
+
     private static final Logger log = LoggerFactory.getLogger(RestPlaylistService.class.getName());
 
     @Autowired
@@ -132,21 +133,42 @@ public class RestPlaylistService extends BaseRestService
     @PostMapping("/seekId")
     public void seekId(@RequestBody GenericNumberRequest req)
     {
-        MediaRendererDevice device = getMediaRendererByUdn(req.deviceUDN);
-        checkDevice(device);
-        device.getPlaylistServiceBridge().seekId(req.value);
+        if (req.value == null)
+        {
+            publisher.publishEvent(new ToastrMessage(null, "error", "seekId", "shall not be null"));
+            return;
+        }
+        try
+        {
+            MediaRendererDevice device = getMediaRendererByUdn(req.deviceUDN);
+            checkDevice(device);
+            device.getPlaylistServiceBridge().seekId(req.value);
+        }
+        catch (Exception e)
+        {
+            log.warn("seekId", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "seekId #" + req.value, e.getMessage()));
+        }
     }
 
     @PostMapping("/insert")
     public void insert(@RequestBody PlayRequestDto req)
     {
-        MediaRendererDevice device = getMediaRendererByUdn(req.mediaRendererDto.udn);
-        checkDevice(device);
-        InsertInput inp = new InsertInput();
-        inp.AfterId = 0L;
-        inp.Metadata = req.streamMetadata;
-        inp.Uri = req.streamUrl;
-        device.getPlaylistServiceBridge().insert(inp);
+        try
+        {
+            MediaRendererDevice device = getMediaRendererByUdn(req.mediaRendererDto.udn);
+            checkDevice(device);
+            InsertInput inp = new InsertInput();
+            inp.AfterId = 0L;
+            inp.Metadata = req.streamMetadata;
+            inp.Uri = req.streamUrl;
+            device.getPlaylistServiceBridge().insert(inp);
+        }
+        catch (Exception e)
+        {
+            log.warn("seekId", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "insert ", req.streamUrl + "failed. Message" + e.getMessage()));
+        }
     }
 
     @PostMapping("/insertContainer")
@@ -204,17 +226,33 @@ public class RestPlaylistService extends BaseRestService
     @PostMapping("/pause")
     public void pause(@RequestBody String rendererUdn)
     {
-        MediaRendererDevice device = getMediaRendererByUdn(rendererUdn);
-        checkDevice(device);
-        device.getPlaylistServiceBridge().pause();
+        try
+        {
+            MediaRendererDevice device = getMediaRendererByUdn(rendererUdn);
+            checkDevice(device);
+            device.getPlaylistServiceBridge().pause();
+        }
+        catch (Exception e)
+        {
+            log.warn("pause", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "pause ", "failed. Message : " + e.getMessage()));
+        }
     }
 
     @PostMapping("/deleteAll")
     public void deleteAll(@RequestBody String rendererUdn)
     {
-        MediaRendererDevice device = getMediaRendererByUdn(rendererUdn);
-        checkDevice(device);
-        device.getPlaylistServiceBridge().deleteAll();
+        try
+        {
+            MediaRendererDevice device = getMediaRendererByUdn(rendererUdn);
+            checkDevice(device);
+            device.getPlaylistServiceBridge().deleteAll();
+        }
+        catch (Exception e)
+        {
+            log.warn("deleteAll", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "deleteAll ", "Failed. Message : " + e.getMessage()));
+        }
     }
 
     private void checkDevice(MediaRendererDevice device)
@@ -228,40 +266,80 @@ public class RestPlaylistService extends BaseRestService
     @PostMapping("/setRepeat")
     public void repeat(@RequestBody GenericBooleanRequest req)
     {
-        MediaRendererDevice device = getMediaRendererByUdn(req.deviceUDN);
-        checkDevice(device);
-        device.getPlaylistServiceBridge().setRepeat(req.value);
+        try
+        {
+            MediaRendererDevice device = getMediaRendererByUdn(req.deviceUDN);
+            checkDevice(device);
+            device.getPlaylistServiceBridge().setRepeat(req.value);
+        }
+        catch (Exception e)
+        {
+            log.warn("setRepeat", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "setRepeat", "Failed. Message : " + e.getMessage()));
+        }
     }
 
     @PostMapping("/delete")
     public void deleteId(@RequestBody GenericNumberRequest req)
     {
-        MediaRendererDevice device = getMediaRendererByUdn(req.deviceUDN);
-        checkDevice(device);
-        device.getPlaylistServiceBridge().deleteId(req.value);
+        try
+        {
+            MediaRendererDevice device = getMediaRendererByUdn(req.deviceUDN);
+            checkDevice(device);
+            device.getPlaylistServiceBridge().deleteId(req.value);
+        }
+        catch (Exception e)
+        {
+            log.warn("delete", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "delete ", "Failed. Message : " + e.getMessage()));
+        }
     }
 
     @PostMapping("/play")
     public void play(@RequestBody String rendererUdn)
     {
-        MediaRendererDevice device = getMediaRendererByUdn(rendererUdn);
-        checkDevice(device);
-        device.getPlaylistServiceBridge().play();
+        try
+        {
+            MediaRendererDevice device = getMediaRendererByUdn(rendererUdn);
+            checkDevice(device);
+            device.getPlaylistServiceBridge().play();
+        }
+        catch (Exception e)
+        {
+            log.warn("/play", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "/play ", "Failed. Message : " + e.getMessage()));
+        }
     }
 
     @PostMapping("/next")
     public void next(@RequestBody String rendererUdn)
     {
-        MediaRendererDevice device = getMediaRendererByUdn(rendererUdn);
-        checkDevice(device);
-        device.getPlaylistServiceBridge().next();
+        try
+        {
+            MediaRendererDevice device = getMediaRendererByUdn(rendererUdn);
+            checkDevice(device);
+            device.getPlaylistServiceBridge().next();
+        }
+        catch (Exception e)
+        {
+            log.warn("next", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "next ", "Failed. Message : " + e.getMessage()));
+        }
     }
 
     @PostMapping("/previous")
     public void previous(@RequestBody String rendererUdn)
     {
-        MediaRendererDevice device = getMediaRendererByUdn(rendererUdn);
-        checkDevice(device);
-        device.getPlaylistServiceBridge().previous();
+        try
+        {
+            MediaRendererDevice device = getMediaRendererByUdn(rendererUdn);
+            checkDevice(device);
+            device.getPlaylistServiceBridge().previous();
+        }
+        catch (Exception e)
+        {
+            log.warn("previous", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "previous ", "Failed. Message : " + e.getMessage()));
+        }
     }
 }
