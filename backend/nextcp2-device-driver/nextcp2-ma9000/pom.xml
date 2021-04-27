@@ -10,5 +10,8 @@
     
     <artifactId>nextcp2-ma9000</artifactId>
     <name>ma 9000 device driver</name>
-
+	
+	<build>
+	 	<finalName>device_driver_ma9000</finalName>	
+	</build>
 </project>
