@@ -5,7 +5,7 @@ import { DtoGeneratorService } from './../util/dto-generator.service';
 import { SearchItemService } from './search/search-item.service';
 import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
-import { ContainerItemDto, BrowseRequestDto, MediaServerDto, ContainerDto, SearchRequestDto, SearchResultDto } from './dto.d';
+import { ContainerItemDto, BrowseRequestDto, MediaServerDto, ContainerDto, SearchRequestDto, SearchResultDto, MusicItemDto } from './dto.d';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -16,7 +16,7 @@ export class ContentDirectoryService {
 
   baseUri = '/ContentDirectoryService';
   public currentContainerList: ContainerItemDto;
-  private customParentID : string;
+  private customParentID: string;
 
   // QuickSearch Support
   public quickSearchResultList: SearchResultDto;
@@ -42,11 +42,57 @@ export class ContentDirectoryService {
     deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));
   }
 
+  //
+  // Container and item lists of current media folder
+  // --------------------------------------------------------------------------------------------
+  //
+
+  // general container excluding special container
+  public containerList(filter?: string): ContainerDto[] {
+    return this.currentContainerList.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer" && this.doFilterText(item.title, filter));
+  }
+
+  // special container: playlists
+  public playlistList(filter?: string): ContainerDto[] {
+    return this.currentContainerList.containerDto.filter(item => item.objectClass === "object.container.playlistContainer" && this.doFilterText(item.title, filter));
+  }
+
+  // container with album tags
+  public albumList(filter?: string): ContainerDto[] {
+    return this.currentContainerList.albumDto.filter(item => this.doFilterText(item.title, filter));
+  }
+
+  private doFilterText(title: string, filter?: string) {
+    if (!filter) {
+      return true;
+    }
+    return title.toLowerCase().includes(filter.toLowerCase());
+  }
+
+  public getMusicTracks(filter?: string): MusicItemDto[] {
+    if (this.currentContainerList.musicItemDto?.length) {
+      return this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0 && this.doFilterText(item.title, filter));
+    }
+    return [];
+  }
+
+  public containerListWithoutMinimServerTags(filter?: string): ContainerDto[] {
+    return this.currentContainerList.containerDto.filter(item => !item.title.startsWith(">> ") && this.doFilterText(item.title, filter));
+  }
+
+  public minimTagsList(): ContainerDto[] {
+    return this.currentContainerList.minimServerSupportTags;
+  }
+
+  //
+  // --------------------------------------------------------------------------------------------
+  //
+
   mediaServerChanged(data: MediaServerDto): void {
     // Update to root folder of media server
     this.browseChildrenByRequest(this.createBrowseRequest("0", "", data.udn));
   }
-  
+
   public showQuickSearchPanel(): void {
     this.quickSearchPanelVisible = true;
   }
@@ -81,7 +127,7 @@ export class ContentDirectoryService {
     return targetUDN;
   }
 
-  public setIndividualParentID(parentID : string): void {
+  public setIndividualParentID(parentID: string): void {
     this.customParentID = parentID;
   }
 

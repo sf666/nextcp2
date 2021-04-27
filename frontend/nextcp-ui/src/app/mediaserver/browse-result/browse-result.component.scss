@@ -203,3 +203,38 @@ img {
     min-height   : 0;
     min-width    : 0;
 }
+
+
+.search-container {
+    display           : flex;
+    box-sizing        : border-box;
+    -webkit-app-region: no-drag;
+    -moz-app-region   : no-drag;
+
+    width    : 100%;
+    max-width: 388px;
+
+    align-self      : center;
+    align-items     : center;
+    padding         : 0 7px;
+    background-color: var(--bg-grey-8);
+    border-radius   : 8px;
+    cursor          : text;
+    transition      : background-color .2s ease-out;
+}
+
+input {
+    &.search {
+        box-sizing : border-box;
+        appearance : textfield;
+        font-size  : 16px !important;
+        font-weight: 300;
+        flex-grow  : 1;
+        height     : 36px;
+        margin     : 0 8px;
+        padding    : 0;
+        color      : #fff;
+        background : transparent;
+        border     : 0;
+    }
+}

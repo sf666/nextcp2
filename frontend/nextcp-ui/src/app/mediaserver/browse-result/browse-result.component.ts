@@ -23,7 +23,9 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class BrowseResultComponent implements AfterViewChecked {
 
-  private listView : boolean;
+  private listView: boolean;
+
+  quickSearchString: string;
 
   constructor(
     private backgroundImageService: BackgroundImageService,
@@ -36,9 +38,9 @@ export class BrowseResultComponent implements AfterViewChecked {
     public avtransportService: AvtransportService,
     private timeDisplayService: TimeDisplayService,
     public trackQualityService: TrackQualityService,
-    public playlistService: PlaylistService) { 
-      this.listView = this.allTracksSameAlbum();
-    }
+    public playlistService: PlaylistService) {
+    this.listView = this.allTracksSameAlbum();
+  }
 
   // 
   // Container
@@ -47,24 +49,79 @@ export class BrowseResultComponent implements AfterViewChecked {
     this.backgroundImageService.setBackgroundImageMainScreen(this.currentContainer.albumartUri);
   }
 
-  public get containerList(): ContainerDto[] {
-    return this.contentDirectoryService.currentContainerList.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer");
+  // 
+  // media items lists
+  //
+  get containerList(): ContainerDto[] {
+    return this.contentDirectoryService.containerList(this.quickSearchString);
   }
 
-  public get playlistList(): ContainerDto[] {
-    return this.contentDirectoryService.currentContainerList.containerDto.filter(item => item.objectClass === "object.container.playlistContainer");
+  get playlistList(): ContainerDto[] {
+    return this.contentDirectoryService.playlistList(this.quickSearchString);
   }
 
-  public get minimTagsList(): ContainerDto[] {
+  get albumList(): ContainerDto[] {
+    return this.contentDirectoryService.albumList(this.quickSearchString);
+  }
+
+  containerListWithoutMinimServerTags(): ContainerDto[] {
+    return this.contentDirectoryService.containerListWithoutMinimServerTags(this.quickSearchString);
+  }
+
+  get minimTagsList(): ContainerDto[] {
     return this.contentDirectoryService.currentContainerList.minimServerSupportTags;
   }
 
+  get musicTracks(): MusicItemDto[] {
+    return this.contentDirectoryService.getMusicTracks(this.quickSearchString);
+  }
+
+  //
+  // filter methods
+  // 
+  public filterSpecialObjectClass(item: ContainerDto, objCls: string): boolean {
+    let result = item.objectClass.lastIndexOf(objCls, 0) === 0;
+    if (this.filterContent()) {
+      result = result && item.title.toLowerCase().includes(this.quickSearchString);
+    }
+    return result;
+  }
+
+  public filterGeneralContainerClass(item: ContainerDto): boolean {
+    if (this.filterContent()) {
+      return item.title.toLowerCase().includes(this.quickSearchString);
+    }
+    return true;
+  }
+
+  public filterMusicItems(item: MusicItemDto, objCls: string): boolean {
+    let result = item.objectClass.lastIndexOf(objCls, 0) === 0;
+    if (this.filterContent()) {
+      result = result && item.title.toLowerCase().includes(this.quickSearchString);
+    }
+    return result;
+  }
+
   public get itemsCount(): number {
-    if (this.getMusicTracks().length) {
-      return this.getMusicTracks().length;
+    if (this.musicTracks.length) {
+      return this.musicTracks.length;
     } else {
       return 0;
     }
+  }
+
+  private filterContent(): boolean {
+    return this.quickSearchString.length > 0;
+  }
+
+  keyUp(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      this.clearSearch();
+    }
+  }
+
+  clearSearch(): void {
+    this.quickSearchString = '';
   }
 
   get containerType(): string {
@@ -95,13 +152,6 @@ export class BrowseResultComponent implements AfterViewChecked {
     return this.containerList?.length > 0 || this.playlistList?.length > 0 || this.itemsCount > 0;
   }
 
-  public get albumList(): ContainerDto[] {
-    return this.contentDirectoryService.currentContainerList.albumDto;
-  }
-
-  public containerListWithoutMinimServerTags(): ContainerDto[] {
-    return this.contentDirectoryService.currentContainerList.containerDto.filter(item => !item.title.startsWith(">> "));
-  }
 
   public get currentContainerLabel(): string {
     return this.contentDirectoryService.currentContainerList.currentContainer.title;
@@ -173,13 +223,6 @@ export class BrowseResultComponent implements AfterViewChecked {
     return "top-div";
   }
 
-  getMusicTracks(): MusicItemDto[] {
-    if (this.contentDirectoryService.currentContainerList.musicItemDto?.length) {
-      return this.contentDirectoryService.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0);
-    }
-    return [];
-  }
-
   playAllTracks(): void {
     this.playlistService.addContainerToPlaylistAndPlay(this.contentDirectoryService.currentContainerList.currentContainer, false);
   }
@@ -192,14 +235,14 @@ export class BrowseResultComponent implements AfterViewChecked {
     return this.listView;
   }
 
-  toggleListView() : void {
-    this.listView = !this.listView;    
+  toggleListView(): void {
+    this.listView = !this.listView;
   }
 
   allTracksSameAlbum(): boolean {
-    if (this.contentDirectoryService.currentContainerList?.musicItemDto?.length > 0) {
-      const firstTrackAlbum = this.contentDirectoryService.currentContainerList.musicItemDto[0].album;
-      return this.getMusicTracks().filter(item => item.album !== firstTrackAlbum).length == 0;
+    if (this.musicTracks.length > 0) {
+      const firstTrackAlbum = this.musicTracks[0].album;
+      return this.musicTracks.filter(item => item.album !== firstTrackAlbum).length == 0;
     }
     return true;
   }
