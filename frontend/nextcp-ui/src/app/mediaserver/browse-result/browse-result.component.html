@@ -49,6 +49,19 @@
                 </button>
             </div>
         </div>
+
+        <div class="middle-spacer">
+            &nbsp;
+        </div>
+        <!-- current content search box -->
+        <div class="d-flex flex-row-reverse mr-3 align-self-end">
+            <div class="search-container">
+                <mat-icon class="mr-1 search-icon" svgIcon="card-search-outline"></mat-icon>
+                <input class="search" [(ngModel)]="quickSearchString" matInput placeholder="search content" #searchInput
+                    (keyup)="keyUp($event)">
+                <mat-icon class="mr-1 search-icon" svgIcon="close" (click)="clearSearch()"></mat-icon>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -68,15 +81,8 @@
 </ng-template>
 
 
+<!-- Head end -->
 <div class="section head"></div>
-<div class="d-flex flex-row-reverse mr-3">
-    <div class="search-container">
-        <mat-icon class="mr-1 search-icon" svgIcon="card-search-outline"></mat-icon>
-        <input class="search" [(ngModel)]="quickSearchString" matInput placeholder="search content" #searchInput
-            (keyup)="keyUp($event)">
-        <mat-icon class="mr-1 search-icon" svgIcon="close" (click)="clearSearch()"></mat-icon>
-    </div>    
-</div>
 
 <!--
  Playlist Elements
