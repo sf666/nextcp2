@@ -6,8 +6,6 @@ import { Injectable } from '@angular/core';
 
 export class ScrollViewService {
 
-  constructor() { }
-
   /**
    *  
    * @param elementID ATTENTION: elementID needs to have tabindex set: <div id="elementID" tabindex="-1">
@@ -16,7 +14,7 @@ export class ScrollViewService {
     //return;
 
     // buttons don't work any more ...
-    let targetElement = document.getElementById(elementID); // querySelector('#someElementId');
+    const targetElement = document.getElementById(elementID); // querySelector('#someElementId');
 
     if (targetElement) {
       targetElement.focus();

@@ -18,14 +18,14 @@ export class AppComponent {
 
   showFiller = false;
 
-  private throttleResize = _.throttle(this.resiseVh, 100);
+//  private throttleResize = _.throttle(this.resiseVh, 100);
 
   constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer, public layoutService: LayoutService) {
     // Globally register SVG mat-icon 
     iconRegistry.addSvgIconSet(sanitizer.bypassSecurityTrustResourceUrl('assets/icon-set.svg'));
   }
 
-  public showBlur() {
+  public showBlur(): boolean {
     if (Modernizr.backdropfilter) {
       return true;
     } else {
