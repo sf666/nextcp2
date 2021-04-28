@@ -166,6 +166,7 @@ export class BrowseResultComponent implements AfterViewChecked {
   }
 
   public browseTo(containerDto: ContainerDto): void {
+    this.quickSearchString = '';
     this.contentDirectoryService.browseChildrenByContiner(containerDto);
   }
 
