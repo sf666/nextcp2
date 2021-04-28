@@ -137,8 +137,8 @@ export class BrowseResultComponent implements AfterViewChecked {
   get totalPlaytime(): string {
     let completeTime: number;
     completeTime = 0;
-    if (this.contentDirectoryService.currentContainerList?.musicItemDto) {
-      this.contentDirectoryService.currentContainerList.musicItemDto.forEach(
+    if (this.musicTracks.length > 0) {
+      this.musicTracks.forEach(
         el => completeTime = completeTime + (el.audioFormat?.durationInSeconds ? el.audioFormat.durationInSeconds : 0)
       );
     }
