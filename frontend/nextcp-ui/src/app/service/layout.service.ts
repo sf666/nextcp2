@@ -32,8 +32,11 @@ export class LayoutService {
       /Windows Phone/i
     ];
 
-    return toMatch.some((toMatchItem) => {
-      return toMatchItem.exec(navigator.userAgent);
+    const mat = toMatch.some((toMatchItem) => {
+      const m =  navigator.userAgent.match(toMatchItem);
+      return m;
     });
+
+    return mat;
   }  
 }
