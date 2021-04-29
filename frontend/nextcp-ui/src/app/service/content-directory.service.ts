@@ -142,9 +142,9 @@ export class ContentDirectoryService {
     this.browseChildrenByRequest(this.createBrowseRequest("0", sortCriteria, mediaServerUdn));
   }
 
-  public browseChildrenByContiner(containerDto: ContainerDto): void {
+  public browseChildrenByContiner(containerDto: ContainerDto): Subject<ContainerItemDto> {
     this.updateBrowsePath(containerDto.id);
-    this.browseChildrenByRequest(this.createBrowseRequest(containerDto.id, "", containerDto.mediaServerUDN));
+    return this.browseChildrenByRequest(this.createBrowseRequest(containerDto.id, "", containerDto.mediaServerUDN));
   }
 
   private updateBrowsePath(id: string) {
@@ -155,9 +155,11 @@ export class ContentDirectoryService {
     }
   }
 
-  private browseChildrenByRequest(browseRequestDto: BrowseRequestDto): void {
+  private browseChildrenByRequest(browseRequestDto: BrowseRequestDto): Subject<ContainerItemDto> {
     const uri = '/browseChildren';
-    this.httpService.post<ContainerItemDto>(this.baseUri, uri, browseRequestDto).subscribe(data => this.updateContainer(data));
+    const sub = this.httpService.post<ContainerItemDto>(this.baseUri, uri, browseRequestDto)
+    sub.subscribe(data => this.updateContainer(data));
+    return sub;
   }
 
   updateContainer(data: ContainerItemDto): void {
