@@ -55,7 +55,7 @@
                         &nbsp;
                     </div>
                     <!-- current content search box -->
-                    <div class="d-flex flex-row-reverse mr-3 mt-1 align-self-end">
+                    <div class="d-flex flex-row-reverse mr-3 mt-2 align-self-end">
                         <div class="search-container">
                             <mat-icon class="mr-1 search-icon" svgIcon="card-search-outline"></mat-icon>
                             <input class="search" [(ngModel)]="quickSearchString" matInput placeholder="search content"
@@ -179,7 +179,8 @@
             <div class="item-table">
                 <div id="head_browse_result_items_list_view_ID" class="item-thead">
                     <div class="row col-greyed">
-                        <div class="col small-col">#</div>
+                        <div *ngIf="!allTracksSameAlbum()" class="col small-col-img mr-2"></div>
+                        <div *ngIf="allTracksSameAlbum()" class="col small-col">#</div>
                         <div class="col">Title</div>
                         <div class="col">Artist</div>
                         <div *ngIf="!allTracksSameAlbum()" class="col">Album</div>
@@ -190,7 +191,10 @@
                 </div>
                 <div class="item-tbody">
                     <div id="{{item.objectID}}" class="row minWidth" *ngFor="let item of musicTracks">
-                        <div (click)="play(item)" class="col col-greyed small-col">{{item.originalTrackNumber}}</div>
+                        <div *ngIf="!allTracksSameAlbum()" class="small-col-img mr-2">
+                            <img class="img-small" src="{{item.albumArtUrl}}">
+                        </div>
+                        <div *ngIf="allTracksSameAlbum()" (click)="play(item)" class="col col-greyed small-col">{{item.originalTrackNumber}}</div>
                         <div (click)="play(item)" class="col d-flex minWidth">
                             <div class="no-wrap">{{item.title}}</div>
                             <quality-badge [item]="item"></quality-badge>
