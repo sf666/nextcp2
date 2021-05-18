@@ -15,7 +15,7 @@ import { Component } from '@angular/core';
 })
 
 export class NavBarComponent {
-  private doSearchFunc : ReturnType<(...args)>;
+  private doSearchFunc : any;
 
   showBackButton = false;
 
