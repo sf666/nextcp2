@@ -29,13 +29,21 @@ public class SearchSupport
     private ContentDirectoryService contentDirectoryService = null;
     private DidlContent didlContent = new DidlContent();
     private MediaServerDevice mediaServerDevice = null;
+    private String searchCaps = "";
 
     public SearchSupport(ContentDirectoryService contentDirectoryService, MediaServerDevice mediaServerDevice)
     {
         this.contentDirectoryService = contentDirectoryService;
         this.mediaServerDevice = mediaServerDevice;
+        
+        searchCaps = contentDirectoryService.getSearchCapabilities().SearchCaps;
     }
 
+    public String getSearchCaps()
+    {
+        return searchCaps;
+    }
+    
     public SearchResultDto quickSearch(SearchRequestDto searchRequest)
     {
         String quickSearch = searchRequest.searchRequest;

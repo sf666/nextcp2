@@ -32,7 +32,7 @@ export class GenericResultService {
     });
   }
 
-  public displayToastr(result: GenericResult) {
+  public displayToastr(result: GenericResult) : void {
     if (typeof result !== 'undefined') {
       if (result.success) {
         this.toastr.info(result.message, result.headerMessage);
@@ -48,11 +48,11 @@ export class GenericResultService {
     }
   }
 
-  public displayGenericMessage(header: string, body: string) {
+  public displayGenericMessage(header: string, body: string) : void {
     this.displaySuccessMessage(header, body);
   }
 
-  public displayHttpError(err, toastrMessage) {
+  public displayHttpError(err, toastrMessage) : void {
     if (err.status == 504) {
       this.displayErrorMessage("Server unavailable. Please check if your computer is connected to your LAN and nextcp/2 server process is online.", "gateway error");
     }
@@ -71,19 +71,19 @@ export class GenericResultService {
    * @param message Shows error messages. Debouncing message text.
    * @param head 
    */
-  public displayErrorMessage(message: string, head: string) {
+  public displayErrorMessage(message: string, head: string) : void {
     if (!this.lastError.includes(message)) {
       this.toastr.error(message, head);
       this.lastError.push(message);
-      delay(this.debounceDelayMs).then(() => this.lastError.filter(item => item !== message));
+      void delay(this.debounceDelayMs).then(() => this.lastError.filter(item => item !== message));
     }
   }
 
-  public displaySuccessMessage(head: string, message: string) {
+  public displaySuccessMessage(head: string, message: string) : void {
     if (!this.lastError.includes(message)) {
       this.toastr.info(message, head);
       this.lastError.push(message);
-      delay(this.debounceDelayMs).then(() => this.lastError.filter(item => item !== message));
+      void delay(this.debounceDelayMs).then(() => this.lastError.filter(item => item !== message));
     }
   }
 }

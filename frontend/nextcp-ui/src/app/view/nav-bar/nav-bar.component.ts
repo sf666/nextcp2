@@ -1,3 +1,4 @@
+import { debounce } from 'src/app/global';
 import { CdsBrowsePathService } from './../../util/cds-browse-path.service';
 import { ContainerDto } from './../../service/dto.d';
 import { PlaylistService } from './../../service/playlist.service';
@@ -5,7 +6,6 @@ import { Router, NavigationStart, Event as NavigationEvent } from '@angular/rout
 import { DeviceService } from './../../service/device.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { Component } from '@angular/core';
-import * as _ from "lodash";
 
 
 @Component({
@@ -15,12 +15,14 @@ import * as _ from "lodash";
 })
 
 export class NavBarComponent {
+  private doSearchFunc : ReturnType<(...args)>;
 
   showBackButton = false;
 
   private currentPath: string;
   private currentSearchText: string;
-  private throttledSearch;
+
+  private doSearchThrotteled = (): void => this.contentDirectoryService.quickSearch(this.currentSearchText, "", this.deviceService.selectedMediaServerDevice.udn);
 
   constructor(
     public contentDirectoryService: ContentDirectoryService,
@@ -33,14 +35,9 @@ export class NavBarComponent {
       if (event instanceof NavigationStart) {
         this.currentPath = event.url;
       }
-      this.throttledSearch = _.throttle(this.searchBound, 500)
     });
+    this.doSearchFunc = debounce(1000,this.doSearchThrotteled);    
   }
-
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  public searchBound = () => {
-    return this.doSearch();
-  };
 
   // UI state management for navbar 
 
@@ -106,8 +103,7 @@ export class NavBarComponent {
       if (value && value.length > 2) {
         this.contentDirectoryService.quickSearchPanelVisible = true;
         this.currentSearchText = value;
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        this.throttledSearch();
+        this.doSearch();
       }
     }
   }
@@ -124,7 +120,8 @@ export class NavBarComponent {
   }
 
   private doSearch(): void {
-    this.contentDirectoryService.quickSearch(this.currentSearchText, "", this.deviceService.selectedMediaServerDevice.udn);
+    this.doSearchFunc();
+//    this.contentDirectoryService.quickSearch(this.currentSearchText, "", this.deviceService.selectedMediaServerDevice.udn);
   }
 
   clearSearch(): void {
