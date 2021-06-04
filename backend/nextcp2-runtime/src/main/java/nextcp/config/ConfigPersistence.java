@@ -185,27 +185,44 @@ public class ConfigPersistence
     {
         if (config.clientConfig == null)
         {
+            log.info("adding new configuration value 'clientConfig'. List is empty.");
             config.clientConfig = new ArrayList<>();
         }
+        
         if (config.radioStation == null)
         {
+            log.info("adding new configuration value 'radioStation'. List is empty.");
             config.radioStation = new ArrayList<>();
         }
+        
         if (config.generateUpnpCode == null)
         {
+            log.info("adding new configuration value 'generateUpnpCode' as disabled.");
             config.generateUpnpCode = false;
         }
+        
         if (config.localIndexerSupport == null)
         {
+            log.info("adding new configuration value 'localIndexerSupport' as disabled. To activate this feature, provide music path, database path and file types.");
             config.localIndexerSupport = new LocalIndexSupport();
         }
+        
         if (config.musicbrainzSupport == null)
         {
+            log.info("adding new configuration value 'musicbrainzSupport' as disabled. To activate this feature, provide username and password.");
             config.musicbrainzSupport = new MusicbrainzSupport(false, "", "");
         }
+        
         if (config.ratingStrategy == null)
         {
+            log.info("adding new configuration value 'ratingStrategy' with enabled MusicBrainz rating, local file rating and musicBrainz to local file rating synchronization.");
             config.ratingStrategy = new RatingStrategy(true, true, true, "NONE");
+        }
+        
+        if (config.globalSearchDelay == null)
+        {
+            log.info("adding new configuration value 'globalSearchDelay = 500'");
+            config.globalSearchDelay = Long.valueOf(500);
         }
     }
 

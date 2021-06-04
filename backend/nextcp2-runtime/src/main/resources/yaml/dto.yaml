@@ -21,6 +21,7 @@ Config:
    musicbrainzSupport: MusicbrainzSupport
    ratingStrategy: RatingStrategy
    playlistPath: String
+   globalSearchDelay: Long
 
 RendererConfigDto:
    rendererDevices: List<RendererDeviceConfiguration>

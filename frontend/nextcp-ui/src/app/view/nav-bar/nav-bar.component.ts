@@ -1,3 +1,4 @@
+import { ConfigurationService } from './../../service/configuration.service';
 import { debounce } from 'src/app/global';
 import { CdsBrowsePathService } from './../../util/cds-browse-path.service';
 import { ContainerDto } from './../../service/dto.d';
@@ -15,7 +16,8 @@ import { Component } from '@angular/core';
 })
 
 export class NavBarComponent {
-  private doSearchFunc : any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private doSearchFunc: any;
 
   showBackButton = false;
 
@@ -29,6 +31,7 @@ export class NavBarComponent {
     private router: Router,
     private cdsBrowsePathService: CdsBrowsePathService,
     public playlistService: PlaylistService,
+    private configurationService: ConfigurationService,
     private deviceService: DeviceService) {
 
     this.router.events.subscribe((event: NavigationEvent) => {
@@ -36,10 +39,10 @@ export class NavBarComponent {
         this.currentPath = event.url;
       }
     });
-    this.doSearchFunc = debounce(1000,this.doSearchThrotteled);    
+    this.doSearchFunc = debounce(this.getSearchDelay(), this.doSearchThrotteled);
   }
 
-  // UI state management for navbar 
+  // UI state management for navbar   
 
   get musicLibraryVisible(): boolean {
     return this.currentPath === '/music-library' || this.currentPath === '/';
@@ -120,8 +123,8 @@ export class NavBarComponent {
   }
 
   private doSearch(): void {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     this.doSearchFunc();
-//    this.contentDirectoryService.quickSearch(this.currentSearchText, "", this.deviceService.selectedMediaServerDevice.udn);
   }
 
   clearSearch(): void {
@@ -131,5 +134,10 @@ export class NavBarComponent {
   isDisabled(): boolean {
     return this.contentDirectoryService.currentContainerList.currentContainer.id === '0' ||
       this.contentDirectoryService.currentContainerList.currentContainer.id === '';
+  }
+
+  getSearchDelay(): number {
+    const delay = this.configurationService.serverConfig?.globalSearchDelay != null ? this.configurationService.serverConfig.globalSearchDelay : 600;
+    return Math.max(300, delay);
   }
 }

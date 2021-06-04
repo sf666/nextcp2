@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2021-04-16 14:22:58.
+// Generated using typescript-generator version 2.0.400 on 2021-06-04 08:05:46.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -30,6 +30,7 @@ export interface Config {
     musicbrainzSupport: MusicbrainzSupport;
     ratingStrategy: RatingStrategy;
     playlistPath: string;
+    globalSearchDelay: number;
 }
 
 export interface ContainerDto {
