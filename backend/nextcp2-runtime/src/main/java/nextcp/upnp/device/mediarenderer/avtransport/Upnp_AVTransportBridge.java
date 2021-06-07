@@ -4,25 +4,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.domainmodel.device.services.IInfoService;
+import nextcp.domainmodel.device.services.ITimeService;
 import nextcp.domainmodel.device.services.IUpnpAvTransport;
 import nextcp.dto.TrackInfoDto;
+import nextcp.dto.TrackTimeDto;
+import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
+import nextcp.upnp.modelGen.avopenhomeorg.time.TimeServiceStateVariable;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport.AVTransportService;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetPositionInfoInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetPositionInfoOutput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.NextInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.PauseInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.PlayInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.SetAVTransportURIInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.SetNextAVTransportURIInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.StopInput;
+import nextcp.util.DisplayUtils;
 
-public class Upnp_AVTransportBridge implements IInfoService, IUpnpAvTransport
+public class Upnp_AVTransportBridge implements IInfoService, IUpnpAvTransport, ITimeService
 {
     private static final Logger log = LoggerFactory.getLogger(Upnp_AVTransportBridge.class.getName());
 
     private AVTransportService avTransportService = null;
+    private MediaRendererDevice device = null;
 
-    public Upnp_AVTransportBridge(AVTransportService upnp_avTransportService)
+    public Upnp_AVTransportBridge(AVTransportService upnp_avTransportService, MediaRendererDevice device)
     {
         this.avTransportService = upnp_avTransportService;
+        this.device = device;
     }
 
     /**
@@ -99,35 +108,97 @@ public class Upnp_AVTransportBridge implements IInfoService, IUpnpAvTransport
         avTransportService.next(inp);
     }
 
+    public TrackTimeDto generateTractTimeDto()
+    {
+        TrackTimeDto dto = new TrackTimeDto();
+        dto.mediaRendererUdn = device.getUDN().getIdentifierString();
+
+        GetPositionInfoInput inp = new GetPositionInfoInput();
+        inp.InstanceID = 0L;
+        GetPositionInfoOutput out = avTransportService.getPositionInfo(inp);
+
+        dto.duration = getAsSeconds(out.TrackDuration);
+        dto.seconds = getAsSeconds(out.RelTime);
+        dto.trackCount = out.Track;
+
+        dto.durationDisp = DisplayUtils.convertToDigitString(dto.duration);
+        if ("00:00".equals(dto.durationDisp))
+        {
+            dto.streaming = true;
+            if (dto.seconds != null && dto.seconds > 0)
+            {
+                dto.durationDisp = "streaming";
+            }
+        }
+        else
+        {
+            dto.streaming = false;
+        }
+        dto.secondsDisp = DisplayUtils.convertToDigitString(dto.seconds);
+        dto.percent = calcPercent(dto.seconds, dto.duration);
+        return dto;
+    }
+
+    private Long getAsSeconds(String trackDuration)
+    {
+        int idx = 0;
+        long asSeconds = 0;
+        String[] values = trackDuration.split(":");
+        if (values.length == 3)
+        {
+            asSeconds = Integer.valueOf(values[0]) * 60 * 60;
+            idx++;
+        }
+        asSeconds = asSeconds + Integer.valueOf(values[idx]) * 60;
+        idx++;
+        asSeconds = asSeconds + Integer.valueOf(values[idx]);
+        return asSeconds;
+    }
+
+    private int calcPercent(Long seconds, Long duration)
+    {
+        if (seconds == null || duration == null)
+        {
+            return 0;
+        }
+
+        if (duration == 0)
+        {
+            return 0;
+        }
+
+        return (int) ((seconds * 100) / duration);
+    }
+
     @Override
     public TrackInfoDto getTrackinfo()
     {
         log.warn("NOT IMPLEMENTED YET ...");
-        
+
         TrackInfoDto dto = new TrackInfoDto();
 
         // TODO: Implement
-//        
-//        DetailsOutput details = details();
-//        dto.lossless = details.Lossless;
-//        dto.bitDepth = details.BitDepth;
-//        dto.bitRate = details.BitRate;
-//        dto.sampleRate = details.SampleRate;
-//        dto.codecName = details.CodecName;
-//        dto.duration = details.Duration;
-//        dto.durationDisp = DisplayUtils.convertToDigitString(details.Duration);
-//
-//        CountersOutput counter = counters();
-//        dto.detailsCount = counter.DetailsCount;
-//        dto.metatextCount = counter.MetatextCount;
-//        dto.trackCount = counter.TrackCount;
-//
-//        MetatextOutput meta = metatext();
-//        dto.metatext = meta.Value;
-//
-//        TrackOutput track = track();
-//        dto.metadata = track.Metadata;
-//        dto.uri = track.Uri;
+        //
+        // DetailsOutput details = details();
+        // dto.lossless = details.Lossless;
+        // dto.bitDepth = details.BitDepth;
+        // dto.bitRate = details.BitRate;
+        // dto.sampleRate = details.SampleRate;
+        // dto.codecName = details.CodecName;
+        // dto.duration = details.Duration;
+        // dto.durationDisp = DisplayUtils.convertToDigitString(details.Duration);
+        //
+        // CountersOutput counter = counters();
+        // dto.detailsCount = counter.DetailsCount;
+        // dto.metatextCount = counter.MetatextCount;
+        // dto.trackCount = counter.TrackCount;
+        //
+        // MetatextOutput meta = metatext();
+        // dto.metatext = meta.Value;
+        //
+        // TrackOutput track = track();
+        // dto.metadata = track.Metadata;
+        // dto.uri = track.Uri;
 
         return dto;
     }

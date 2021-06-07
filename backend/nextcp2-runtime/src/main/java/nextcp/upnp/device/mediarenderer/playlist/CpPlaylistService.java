@@ -189,7 +189,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
                 {
                     log.debug("media renderer device is playing current song : " + value);
                 }
-                else if (nextSongUrl.contentEquals(value))
+                else if (nextSongUrl != null && nextSongUrl.contentEquals(value))
                 {
                     log.debug("media renderer device proceeded to next song in queue : " + value);
                     moveToNextTrack();

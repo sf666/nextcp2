@@ -1,5 +1,7 @@
 package nextcp.upnp.device.mediarenderer;
 
+import java.util.HashSet;
+
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang.StringUtils;
@@ -7,6 +9,7 @@ import org.fourthline.cling.model.meta.RemoteDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 
 import nextcp.config.RendererConfig;
 import nextcp.domainmodel.device.services.IInfoService;
@@ -17,9 +20,13 @@ import nextcp.domainmodel.device.services.IUpnpAvTransport;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.RendererDeviceConfiguration;
 import nextcp.dto.TrackInfoDto;
+import nextcp.dto.TrackTimeDto;
+import nextcp.service.ISchedulerService;
+import nextcp.service.SchedulerService;
 import nextcp.upnp.device.BaseDevice;
 import nextcp.upnp.device.mediarenderer.avtransport.AvTransportEventListener;
 import nextcp.upnp.device.mediarenderer.avtransport.AvTransportEventPublisher;
+import nextcp.upnp.device.mediarenderer.avtransport.AvTransportState;
 import nextcp.upnp.device.mediarenderer.avtransport.Upnp_AVTransportBridge;
 import nextcp.upnp.device.mediarenderer.ohinfo.OhInfoServiceEventListener;
 import nextcp.upnp.device.mediarenderer.ohinfo.Oh_InfoServiceImpl;
@@ -46,7 +53,7 @@ import nextcp.util.BackendException;
 /**
  * This class represents s device and it's capabilities.
  */
-public class MediaRendererDevice extends BaseDevice
+public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 {
     private static final Logger log = LoggerFactory.getLogger(MediaRendererDevice.class.getName());
 
@@ -55,6 +62,12 @@ public class MediaRendererDevice extends BaseDevice
 
     @Autowired
     private RendererConfig rendererConfigService = null;
+
+    @Autowired
+    private SchedulerService schedulerService = null;
+    
+    @Autowired
+    private ApplicationEventPublisher eventPublisher = null;
 
     private IDeviceDriver deviceDriver = null;
 
@@ -94,6 +107,7 @@ public class MediaRendererDevice extends BaseDevice
     public MediaRendererDevice(RemoteDevice device)
     {
         super(device);
+        
     }
 
     @PostConstruct
@@ -104,7 +118,7 @@ public class MediaRendererDevice extends BaseDevice
 
         if (hasUpnpAvTransport())
         {
-            avTransportBridge = new Upnp_AVTransportBridge(upnp_avTransportService);
+            avTransportBridge = new Upnp_AVTransportBridge(upnp_avTransportService, this);
             avTransportEventListener = new AvTransportEventListener(this);
             avTransportEventPublisher = new AvTransportEventPublisher(this);
             avTransportEventListener.addEventListener(avTransportEventPublisher);
@@ -125,6 +139,7 @@ public class MediaRendererDevice extends BaseDevice
         {
             // Extract Info's from AVTransport ...
             this.infoService = avTransportBridge;
+            schedulerService.addNotifier(this);
         }
 
         if (hasOhVolumeService())
@@ -339,5 +354,24 @@ public class MediaRendererDevice extends BaseDevice
         TrackInfoDto ti = infoService.getTrackinfo();
         ti.mediaRendererUdn = getUDN().getIdentifierString();
         return ti;
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public void tick(long counter)
+    {
+        if (!hasOhInfoService() && avTransportIsPlaying())
+        {
+            TrackTimeDto dto = avTransportBridge.generateTractTimeDto();
+            eventPublisher.publishEvent(dto);
+        }
+    }
+
+    private boolean avTransportIsPlaying()
+    {
+        AvTransportState state = avTransportEventPublisher.getCurrentAvTransportState(); 
+        return state.TransportState.equals("PLAYING");
     }
 }
