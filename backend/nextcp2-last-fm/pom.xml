@@ -2,6 +2,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>de.sf666</groupId>
 		<artifactId>nextcp2-root</artifactId>
@@ -9,22 +10,9 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>nextcp2-indexer</artifactId>
-	<description>nextCP/2 local file indexer module</description>
+	<artifactId>nextcp2-last-fm</artifactId>
 
 	<dependencies>
-
-		<dependency>
-			<groupId>de.sf666</groupId>
-			<artifactId>nextcp2-db</artifactId>
-		</dependency>
-
-		<!-- generated models -->
-		<dependency>
-			<groupId>de.sf666</groupId>
-			<artifactId>nextcp2-modelgen</artifactId>
-		</dependency>
-
 
 		<!-- Spring REST Services & Annotations -->
 		<dependency>
@@ -36,28 +24,35 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 		</dependency>
-
-		<!-- OR Mapper -->
 		<dependency>
-			<groupId>org.mybatis</groupId>
-			<artifactId>mybatis</artifactId>
+			<groupId>javax.annotation</groupId>
+			<artifactId>javax.annotation-api</artifactId>
+		</dependency>
+		
+		<!-- HTTP client -->
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp-urlconnection</artifactId>
 		</dependency>
 
+		<!-- JSON parser -->
 		<dependency>
-			<groupId>net.jthink</groupId>
-			<artifactId>jaudiotagger</artifactId>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-jaxb-annotations</artifactId>
 		</dependency>
-
 		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
+			<groupId>com.fasterxml.jackson.jaxrs</groupId>
+			<artifactId>jackson-jaxrs-json-provider</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
 		</dependency>
 
 	</dependencies>
 </project>
-
