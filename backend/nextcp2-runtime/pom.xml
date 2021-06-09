@@ -23,6 +23,11 @@
 
 		<dependency>
 			<groupId>de.sf666</groupId>
+			<artifactId>nextcp2-last-fm</artifactId>
+		</dependency>	
+
+		<dependency>
+			<groupId>de.sf666</groupId>
 			<artifactId>nextcp2-db</artifactId>
 		</dependency>
 

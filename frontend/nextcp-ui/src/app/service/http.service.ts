@@ -46,7 +46,7 @@ export class HttpService {
    * @param payload 
    */
   public post<T>(base: string, path: string, payload: any, errorHeader?: string): Subject<T> {
-    let ret = new Subject<T>();
+    const ret = new Subject<T>();
     this.http.post<T>(base + path, payload).subscribe(data => {
       return ret.next(data);
     }, err => {
@@ -57,7 +57,7 @@ export class HttpService {
   }
 
   public postWithSuccessMessage<T>(base: string, path: string, payload: any, successHeader: string, successBody: string, errorHeader?: string): Subject<T> {
-    let ret = new Subject<T>();
+    const ret = new Subject<T>();
     this.http.post<T>(base + path, payload).subscribe(data => {
       this.genericResultService.displaySuccessMessage(successHeader, successBody);
       return ret.next(data);

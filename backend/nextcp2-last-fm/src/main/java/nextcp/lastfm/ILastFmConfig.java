@@ -1,4 +1,4 @@
-package nextcp2.lastfm;
+package nextcp.lastfm;
 
 public interface ILastFmConfig
 {

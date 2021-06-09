@@ -1,11 +1,11 @@
-package nextcp2;
+package nextcp;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ComponentScan(
-{ "nextcp2" })
+{ "nextcp" })
 public class SpringLastFMTestConfiguration
 {
     public SpringLastFMTestConfiguration()

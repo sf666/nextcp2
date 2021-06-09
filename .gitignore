@@ -23,3 +23,5 @@ backend/nextcp2-indexer/.git-versioned-pom.xml
 backend/nextcp2-modelgen/.git-versioned-pom.xml
 backend/nextcp2-runtime/.git-versioned-pom.xml
 rating_db.trace.db
+.git-versioned-pom.xml
+nextcp2.log

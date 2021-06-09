@@ -1,4 +1,4 @@
-package nextcp2.lastfm.auth;
+package nextcp.lastfm.auth;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -10,9 +10,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 
-import nextcp2.SpringLastFMTestConfiguration;
-import nextcp2.lastfm.ILastFmConfig;
-import nextcp2.lastfm.LastFmConfig;
+import nextcp.SpringLastFMTestConfiguration;
+import nextcp.lastfm.ILastFmConfig;
+import nextcp.lastfm.LastFmConfig;
+import nextcp.lastfm.auth.LastFmAuthenticator;
 
 @SpringBootTest
 @Configuration
@@ -26,7 +27,7 @@ public class TestAuth
     private ILastFmConfig config = null;
 
     @Autowired
-    private Authenticator authenticator = null;
+    private LastFmAuthenticator authenticator = null;
 
     public TestAuth()
     {

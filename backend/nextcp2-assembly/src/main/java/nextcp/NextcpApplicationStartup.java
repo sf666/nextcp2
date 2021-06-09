@@ -24,9 +24,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import nextcp.dto.Config;
 import nextcp.util.IApplicationRestartable;
 
-@ComponentScan(
-{ "nextcp, codegen" })
-@SpringBootApplication(scanBasePackages = "nextcp, devicedriver")
+@SpringBootApplication(scanBasePackages = "nextcp, devicedriver, codegen")
 @EnableScheduling
 public class NextcpApplicationStartup implements IApplicationRestartable
 {

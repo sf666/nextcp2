@@ -34,6 +34,10 @@ export class SettingsComponent {
     return bn;
   }
 
+  activateLastFM() : void {
+    this.systemService.registerNextcp2AtLastFM();
+  }
+
   save(): void {
     this.configService.saveClientConfig();
   }
