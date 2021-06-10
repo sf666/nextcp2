@@ -28,7 +28,7 @@
 			<groupId>javax.annotation</groupId>
 			<artifactId>javax.annotation-api</artifactId>
 		</dependency>
-		
+
 		<!-- HTTP client -->
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
@@ -52,6 +52,12 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
+		</dependency>
+
+		<!-- Some other stuff -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
 		</dependency>
 
 	</dependencies>

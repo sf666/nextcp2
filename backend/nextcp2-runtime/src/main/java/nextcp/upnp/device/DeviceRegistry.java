@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
-import nextcp.config.ConfigService;
 import nextcp.config.RendererConfig;
+import nextcp.service.ConfigService;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediarenderer.MediaRendererListChanged;
 import nextcp.upnp.device.mediaserver.IMediaServerExtendedSupport;

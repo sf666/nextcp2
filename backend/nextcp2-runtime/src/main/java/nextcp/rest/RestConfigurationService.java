@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import nextcp.config.ConfigService;
 import nextcp.config.RendererConfig;
 import nextcp.devicedriver.DeviceCapabilityDto;
 import nextcp.devicedriver.DeviceDriverDiscoveryService;
@@ -27,6 +26,7 @@ import nextcp.dto.DeviceDriverCapability;
 import nextcp.dto.RendererConfigDto;
 import nextcp.dto.RendererDeviceConfiguration;
 import nextcp.dto.UiClientConfig;
+import nextcp.service.ConfigService;
 import nextcp.util.IApplicationRestartable;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)

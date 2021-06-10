@@ -38,6 +38,10 @@ export class SettingsComponent {
     this.systemService.registerNextcp2AtLastFM();
   }
 
+  generateSession() : void {
+    this.systemService.getLastFmSession();
+  }
+
   save(): void {
     this.configService.saveClientConfig();
   }

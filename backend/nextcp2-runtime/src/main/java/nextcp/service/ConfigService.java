@@ -1,10 +1,11 @@
-package nextcp.config;
+package nextcp.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import nextcp.config.ConfigPersistence;
 import nextcp.dto.Config;
 import nextcp.dto.UiClientConfig;
 import nextcp.eventBridge.SsePublisher;
@@ -46,7 +47,7 @@ public class ConfigService
         writeAndSendConfig();
     }
 
-    private void writeAndSendConfig()
+    public void writeAndSendConfig()
     {
         persistence.writeConfig();
         ssePublisher.sendObjectAsJson(CLIENT_CONFIG_QUEUENAME, config);

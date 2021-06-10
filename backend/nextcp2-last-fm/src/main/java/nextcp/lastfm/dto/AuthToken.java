@@ -1,4 +1,4 @@
-package nextcp.lastfm.auth;
+package nextcp.lastfm.dto;
 
 import java.util.HashMap;
 import java.util.Map;

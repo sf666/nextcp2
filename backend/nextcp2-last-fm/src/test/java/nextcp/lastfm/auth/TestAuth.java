@@ -36,7 +36,7 @@ public class TestAuth
     @Test
     public void doAuthentication()
     {
-        assertTrue(authenticator.getAuthToken().getToken().length() > 0);
+        assertTrue(authenticator.getUserGrantingAuthToken().getToken().length() > 0);
     }
 
     @Bean

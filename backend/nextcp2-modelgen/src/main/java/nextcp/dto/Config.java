@@ -23,12 +23,13 @@ public class Config
     public RatingStrategy ratingStrategy;
     public String playlistPath;
     public Long globalSearchDelay;
+    public String lastFmSessionKey;
 
     public Config()
     {
     }
 
-    public Config(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, LocalIndexSupport localIndexerSupport, MusicbrainzSupport musicbrainzSupport, RatingStrategy ratingStrategy, String playlistPath, Long globalSearchDelay)
+    public Config(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, LocalIndexSupport localIndexerSupport, MusicbrainzSupport musicbrainzSupport, RatingStrategy ratingStrategy, String playlistPath, Long globalSearchDelay, String lastFmSessionKey)
     {
         this.generateUpnpCode = generateUpnpCode;
         this.generateUpnpCodePath = generateUpnpCodePath;
@@ -44,6 +45,7 @@ public class Config
         this.ratingStrategy = ratingStrategy;
         this.playlistPath = playlistPath;
         this.globalSearchDelay = globalSearchDelay;
+        this.lastFmSessionKey = lastFmSessionKey;
     }
     
     @Override
@@ -65,6 +67,7 @@ public class Config
         sb.append("ratingStrategy=").append(this.ratingStrategy).append(", ");
         sb.append("playlistPath=").append(this.playlistPath).append(", ");
         sb.append("globalSearchDelay=").append(this.globalSearchDelay).append(", ");
+        sb.append("lastFmSessionKey=").append(this.lastFmSessionKey).append(", ");
         sb.append("]");
         return sb.toString();
     }

@@ -1,7 +1,5 @@
 package nextcp.lastfm;
 
-import nextcp.lastfm.ILastFmConfig;
-
 /**
  * LastFM configuration
  */

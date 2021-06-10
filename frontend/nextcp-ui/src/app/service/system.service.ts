@@ -28,8 +28,14 @@ export class SystemService {
     const options = {
       responseType: 'text',
     };
-    this.http.get("/SystemService/getLastFmAppRegistration", {responseType: 'text'}).subscribe(url => this.openLastFMUrl(url));
-      
+    this.http.get("/SystemService/getLastFmAppRegistration", {responseType: 'text'}).subscribe(url => this.openLastFMUrl(url));   
+  }
+
+  public getLastFmSession(): void {
+    const options = {
+      responseType: 'text',
+    };
+    this.httpService.get(this.baseUri, "/createLastFmSession").subscribe();
   }
 
   private openLastFMUrl(url: string) {
