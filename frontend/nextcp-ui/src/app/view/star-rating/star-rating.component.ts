@@ -35,13 +35,13 @@ export class StarRatingComponent {
   }
 
   isVisible(): boolean {
-    if (this.currentSong.musicBrainzId?.TrackId?.length > 0) {
+    if (this.currentSong?.musicBrainzId?.TrackId?.length > 0) {
       return this.uuidService.isValidUuid(this.currentSong.musicBrainzId?.TrackId);
     }
-    return false;    
+    return false;
   }
 
-  starSelected(num: number) {
+  starSelected(num: number): void {
     this.currentSong.rating = num;
     if (this.currentSong.musicBrainzId.TrackId) {
       this.ratingServiceService.setStarRatingByMusicBrainzID(this.currentSong.musicBrainzId.TrackId, num);
@@ -50,19 +50,19 @@ export class StarRatingComponent {
     }
   }
 
-  getBtnSizeClass() {
+  getBtnSizeClass(): string  {
     if (this.size === 'sm') {
       return "mat-icon-button-sm";
     }
   }
 
-  getIconSizeClass() {
+  getIconSizeClass(): string  {
     if (this.size === 'sm') {
       return "mat-icon-sm";
     }
   }
 
-  getClass(num: number) {
+  getClass(num: number): string  {
     if (this.currentSong) {
       if (this.currentSong.rating && this.currentSong.rating >= num) {
         return "active";

@@ -1,4 +1,4 @@
-package nextcp.lastfm.auth;
+package nextcp.lastfm.request;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

@@ -13,7 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import nextcp.SpringLastFMTestConfiguration;
 import nextcp.lastfm.ILastFmConfig;
 import nextcp.lastfm.LastFmConfig;
-import nextcp.lastfm.auth.LastFmAuthenticator;
+import nextcp.lastfm.service.LastFmAuthService;
 
 @SpringBootTest
 @Configuration
@@ -27,7 +27,7 @@ public class TestAuth
     private ILastFmConfig config = null;
 
     @Autowired
-    private LastFmAuthenticator authenticator = null;
+    private LastFmAuthService authenticator = null;
 
     public TestAuth()
     {

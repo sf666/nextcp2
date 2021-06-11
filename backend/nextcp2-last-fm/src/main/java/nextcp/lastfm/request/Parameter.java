@@ -1,4 +1,4 @@
-package nextcp.lastfm.auth;
+package nextcp.lastfm.request;
 
 public class Parameter implements Comparable<Parameter>
 {
