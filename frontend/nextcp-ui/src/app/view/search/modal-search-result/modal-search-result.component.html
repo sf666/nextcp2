@@ -63,9 +63,7 @@
         <div class="search-row" *ngIf="contentDirectoryService.quickSearchResultList?.artistItems?.length > 0; else noContentBlock">
             <div *ngFor="let item of contentDirectoryService.quickSearchResultList?.artistItems"
                 class="search-row d-flex" (click)="artistItemSelected(item)">
-                <div class="cropImg searchImgHeight">
-                    <mat-icon svgIcon="account-music-outline" inline="true" aria-hidden="false" aria-label=""></mat-icon>
-                </div>
+                <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
                 <div class="ml-3 d-flex flex-column justify-content-between min-width">
                     <div class="title">{{item.title}}</div>
                     <div class="artist">Artist</div>

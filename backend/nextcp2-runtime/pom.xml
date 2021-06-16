@@ -15,6 +15,12 @@
 	<packaging>jar</packaging>
 
 	<dependencies>
+		<!--  cover and album lookup  -->
+		<dependency>
+			<groupId>se.michaelthelin.spotify</groupId>
+			<artifactId>spotify-web-api-java</artifactId>
+		</dependency>
+
 		<!-- Rating Service modul -->
 		<dependency>
 			<groupId>de.sf666</groupId>
@@ -23,8 +29,8 @@
 
 		<dependency>
 			<groupId>de.sf666</groupId>
-			<artifactId>nextcp2-last-fm</artifactId>
-		</dependency>	
+			<artifactId>nextcp2-external-information-provider</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>de.sf666</groupId>

@@ -23,6 +23,7 @@ Config:
    playlistPath: String
    globalSearchDelay: Long
    lastFmSessionKey: String
+   spotifyRefreshToken: String
 
 RendererConfigDto:
    rendererDevices: List<RendererDeviceConfiguration>

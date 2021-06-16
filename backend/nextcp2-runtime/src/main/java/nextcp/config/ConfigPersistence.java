@@ -28,6 +28,7 @@ import nextcp.dto.RatingStrategy;
 import nextcp.indexer.IndexerConfig;
 import nextcp.lastfm.ILastFmConfig;
 import nextcp.musicbrainz.MusicBrainzConfig;
+import nextcp.spotify.ISpotifyConfig;
 import nextcp.util.FileOpsNio;
 
 @Service
@@ -70,6 +71,26 @@ public class ConfigPersistence
         mb.username = config.musicbrainzSupport.username;
         mb.password = config.musicbrainzSupport.password;
         return mb;
+    }
+
+    @Bean
+    public ISpotifyConfig spotifyProducer()
+    {
+        return new ISpotifyConfig()
+        {
+            
+            @Override
+            public String getSpotifyRefreshToken()
+            {
+                return config.spotifyRefreshToken;
+            }
+            
+            @Override
+            public String getClientId()
+            {
+                return "07c3ea9a85b045b09f0dea60b83fb949";
+            }
+        };
     }
 
     @Bean

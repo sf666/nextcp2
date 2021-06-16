@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import nextcp.dto.Config;
 import nextcp.dto.ToastrMessage;
-import nextcp.lastfm.dto.AuthSessionStatus;
+import nextcp.lastfm.dto.auth.AuthSessionStatus;
 import nextcp.lastfm.service.LastFmAuthService;
 
 @Service

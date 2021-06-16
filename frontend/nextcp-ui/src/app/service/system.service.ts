@@ -28,7 +28,14 @@ export class SystemService {
     const options = {
       responseType: 'text',
     };
-    this.http.get("/SystemService/getLastFmAppRegistration", {responseType: 'text'}).subscribe(url => this.openLastFMUrl(url));   
+    this.http.get("/SystemService/getLastFmAppRegistration", {responseType: 'text'}).subscribe(url => this.openUrl(url));   
+  }
+
+  public registerNextcp2AtSpotify(): void {
+    const options = {
+      responseType: 'text',
+    };
+    this.http.get("/SystemService/getSpotifyAppRegistration", {responseType: 'text'}).subscribe(url => this.openUrl(url));   
   }
 
   public getLastFmSession(): void {
@@ -38,8 +45,8 @@ export class SystemService {
     this.httpService.get(this.baseUri, "/createLastFmSession").subscribe();
   }
 
-  private openLastFMUrl(url: string) {
-    console.log("opening LastFM registration link : " + url);
+  private openUrl(url: string) {
+    console.log("opening registration link : " + url);
     window.open(url, "_blank"); // , "_blank");
   }
 

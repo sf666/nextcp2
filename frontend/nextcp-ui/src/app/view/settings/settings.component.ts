@@ -38,6 +38,10 @@ export class SettingsComponent {
     this.systemService.registerNextcp2AtLastFM();
   }
 
+  activateSpotify() : void {
+    this.systemService.registerNextcp2AtSpotify();
+  }
+
   generateSession() : void {
     this.systemService.getLastFmSession();
   }

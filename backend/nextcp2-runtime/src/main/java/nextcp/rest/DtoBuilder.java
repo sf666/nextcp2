@@ -1,5 +1,6 @@
 package nextcp.rest;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.Optional;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.hc.core5.http.ParseException;
 import org.fourthline.cling.support.contentdirectory.DIDLParser;
 import org.fourthline.cling.support.model.DIDLContent;
 import org.fourthline.cling.support.model.DIDLObject;
@@ -16,6 +18,7 @@ import org.fourthline.cling.support.model.DIDLObject.Property;
 import org.fourthline.cling.support.model.DescMeta;
 import org.fourthline.cling.support.model.Res;
 import org.fourthline.cling.support.model.container.MusicAlbum;
+import org.fourthline.cling.support.model.container.MusicArtist;
 import org.fourthline.cling.support.model.item.AudioItem;
 import org.fourthline.cling.support.model.item.Item;
 import org.fourthline.cling.support.model.item.MusicTrack;
@@ -25,6 +28,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Node;
 
+import com.wrapper.spotify.exceptions.SpotifyWebApiException;
+import com.wrapper.spotify.model_objects.specification.Artist;
+import com.wrapper.spotify.model_objects.specification.Paging;
+
 import nextcp.dto.AudioFormat;
 import nextcp.dto.ContainerDto;
 import nextcp.dto.MediaRendererDto;
@@ -32,7 +39,10 @@ import nextcp.dto.MediaServerDto;
 import nextcp.dto.MusicBrainzId;
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.UpnpAvTransportState;
+import nextcp.lastfm.dto.artist.info.ArtistInfoResponse;
+import nextcp.lastfm.service.LastFmArtistService.ImageSize;
 import nextcp.service.RatingService;
+import nextcp.spotify.SpotifyService;
 import nextcp.upnp.device.BaseDevice;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediarenderer.avtransport.AvTransportState;
@@ -46,6 +56,9 @@ public class DtoBuilder
     public static final String ASSET_FOLDER = "assets";
 
     private SimpleDateFormat dispParse = new SimpleDateFormat("HH:mm:ss.SSS Z");
+
+    @Autowired
+    private SpotifyService spotifyService = null;
 
     @Autowired
     private RatingService ratingService = null;
@@ -202,12 +215,43 @@ public class DtoBuilder
             addMusicAlbum((MusicAlbum) container, dto);
         }
 
+        // Read artists image from Spotify
+        if (container instanceof MusicArtist)
+        {
+            addSpotifyArtistImage(container, dto);
+        }
+
         // apply some defaults
         if (dto.albumartUri == null)
         {
             dto.albumartUri = ASSET_FOLDER + "/images/directory-icon.png";
         }
         return dto;
+    }
+
+    private void addSpotifyArtistImage(DIDLObject container, ContainerDto dto)
+    {
+        Paging<Artist> artists;
+        try
+        {
+            artists = spotifyService.getSpotifyApi().searchArtists(container.getTitle()).build().execute();
+            if (artists.getTotal() > 0)
+            {
+                if (artists.getTotal() > 1)
+                {
+                    log.debug("artist search deliverd more than 1 hits. Taking first one ... ");                
+                }
+                dto.albumartUri = artists.getItems()[0].getImages()[0].getUrl();
+            }
+            else if (artists.getTotal() == 0)
+            {
+                log.debug("artist search deliverd 0 hits");
+            }
+        }
+        catch (ParseException | SpotifyWebApiException | IOException e)
+        {
+            log.warn("Error accessing spotify search api.", e);
+        }
     }
 
     public Optional<Property> extractProperty(String name, List<Property> list)
@@ -355,11 +399,11 @@ public class DtoBuilder
         {
             return resUrl.get().getValue();
         }
-        else 
+        else
         {
-            log.warn(String.format("Empty URL : %s : %s",item.getId(), item.getLongDescription()));
+            log.warn(String.format("Empty URL : %s : %s", item.getId(), item.getLongDescription()));
             return "";
-        }            
+        }
     }
 
     private boolean isAudioResource(Res res)
@@ -370,10 +414,10 @@ public class DtoBuilder
         }
         if (res.getProtocolInfo().getContentFormat().startsWith("MIMETYPE_AUTO"))
         {
-            // UMS unknown renderer 
+            // UMS unknown renderer
             return true;
         }
-        
+
         return false;
     }
 
