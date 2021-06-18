@@ -66,10 +66,9 @@ public class RestSystemService
     }
 
     @GetMapping("/spotifyCallback")
-    public String spotifyCallback(@RequestParam String code)
+    public void spotifyCallback(@RequestParam String code)
     {
         spotifyService.registerAccessToken(code);
         log.info("Spotify account connected with code : " + code);
-        return "<html><head><title>Close</title></head><body onload=\"window.close();\"></body></html>";
     }
 }
