@@ -68,6 +68,7 @@ export class SettingsComponent {
 
   sendSpotifyCode(): void {
     this.systemService.setSpotifyCode(this.code);
+    this.code = "";
   }
 
   registerAppAtSpotify() : void {

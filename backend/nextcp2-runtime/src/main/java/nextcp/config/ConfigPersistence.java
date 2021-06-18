@@ -90,6 +90,13 @@ public class ConfigPersistence
             {
                 return "07c3ea9a85b045b09f0dea60b83fb949";
             }
+
+            @Override
+            public void setSpotifyRefreshToken(String currentToken)
+            {
+                config.spotifyRefreshToken = currentToken;
+                writeConfig();
+            }
         };
     }
 

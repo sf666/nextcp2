@@ -21,6 +21,7 @@ import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
+import com.wrapper.spotify.requests.authorization.authorization_code.pkce.AuthorizationCodePKCERefreshRequest;
 import com.wrapper.spotify.requests.authorization.authorization_code.pkce.AuthorizationCodePKCERequest;
 
 @Service
@@ -44,7 +45,7 @@ public class SpotifyService
     {
         codeVerifier = RandomStringUtils.random(128, true, true);
         byte[] sha256codeVerifier = DigestUtils.sha256(codeVerifier);
-        codeChallange = Base64.getUrlEncoder().withoutPadding().encodeToString(sha256codeVerifier); 
+        codeChallange = Base64.getUrlEncoder().withoutPadding().encodeToString(sha256codeVerifier);
     }
 
     @PostConstruct
@@ -59,29 +60,12 @@ public class SpotifyService
             try
             {
                 SpotifyApi.Builder builder = new SpotifyApi.Builder();
-                builder.setClientId(config.getClientId()).setRedirectUri(new URI("http://localhost:65525"));
+                spotifyApi = builder.setClientId(config.getClientId()).setRedirectUri(new URI("http://localhost:65525")).build();
+
                 if (!StringUtils.isAllBlank(config.getSpotifyRefreshToken()))
                 {
-                    builder.setRefreshToken(config.getSpotifyRefreshToken());
+                    renewToken();
                 }
-                spotifyApi = builder.build();
-
-                AuthorizationCodeCredentials authorizationCodeCredentials;
-                try
-                {
-                    if (!StringUtils.isAllBlank(config.getSpotifyRefreshToken()))
-                    {
-                        authorizationCodeCredentials = spotifyApi.authorizationCodeRefresh().build().execute();
-                        spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
-                        log.info("spotify access token aquired.");
-                    }
-                }
-                catch (ParseException | SpotifyWebApiException | IOException e)
-                {
-                    authorizationNeeded = true;
-                    log.warn("could not connect to spotify api. Please re-authorize app.", e);
-                }
-
             }
             catch (URISyntaxException e)
             {
@@ -107,7 +91,31 @@ public class SpotifyService
         return "";
     }
 
-    public void setAuthCode(String authorizationCode)
+    public void renewToken()
+    {
+        spotifyApi.setRefreshToken(config.getSpotifyRefreshToken());
+        AuthorizationCodePKCERefreshRequest authorizationCodePKCERefreshRequest = spotifyApi.authorizationCodePKCERefresh().build();
+        AuthorizationCodeCredentials authorizationCodeCredentials;
+        try
+        {
+            authorizationCodeCredentials = authorizationCodePKCERefreshRequest.execute();
+            spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
+            spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+            config.setSpotifyRefreshToken(authorizationCodeCredentials.getRefreshToken());
+            authorizationNeeded = false;
+        }
+        catch (ParseException | SpotifyWebApiException | IOException e)
+        {
+            log.warn("error renewing spotify access token.", e);
+        }
+    }
+
+    /**
+     * 
+     * @param authorizationCode
+     * @return AccessToken
+     */
+    public String setAuthCode(String authorizationCode)
     {
         AuthorizationCodePKCERequest authorizationCodeRequest = spotifyApi.authorizationCodePKCE(authorizationCode, codeVerifier).build();
         AuthorizationCodeCredentials authorizationCodeCredentials;
@@ -116,10 +124,12 @@ public class SpotifyService
             authorizationCodeCredentials = authorizationCodeRequest.execute();
             spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
             spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+            return authorizationCodeCredentials.getRefreshToken();
         }
         catch (ParseException | SpotifyWebApiException | IOException e)
         {
             log.warn("cannot connect to spotify api.", e);
+            return "";
         }
     }
 

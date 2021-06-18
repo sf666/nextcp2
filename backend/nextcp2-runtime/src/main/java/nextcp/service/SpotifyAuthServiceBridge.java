@@ -32,12 +32,10 @@ public class SpotifyAuthServiceBridge
     {
         return spotifyService.getSpotifyRegistrationUrl();
     }
-    
-    public void registerAccessToken(String token)
-    {
-        spotifyService.setAuthCode(token);
 
-        config.spotifyRefreshToken = token;
+    public void registerSpotifyCode(String token)
+    {
+        config.spotifyRefreshToken = spotifyService.setAuthCode(token);
         confService.writeAndSendConfig();
         this.publisher.publishEvent(new ToastrMessage("", "info", "Spotify", "user account successfully connected to Spotify"));
     }

@@ -21,8 +21,12 @@ public class SpotifyConfig implements ISpotifyConfig
     @Override
     public String getSpotifyRefreshToken()
     {
-        // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void setSpotifyRefreshToken(String currentToken)
+    {
     }
 
 }
