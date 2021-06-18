@@ -239,9 +239,16 @@ public class DtoBuilder
             {
                 if (artists.getTotal() > 1)
                 {
-                    log.debug("artist search deliverd more than 1 hits. Taking first one ... ");                
+                    log.debug("artist search deliverd more than 1 hits. Taking first one ... ");
                 }
-                dto.albumartUri = artists.getItems()[0].getImages()[0].getUrl();
+                if (artists.getItems()[0].getImages().length > 0)
+                {
+                    dto.albumartUri = artists.getItems()[0].getImages()[0].getUrl();
+                }
+                else
+                {
+                    log.debug("no artist image available for artist : " + artists.getItems()[0].getName());
+                }
             }
             else if (artists.getTotal() == 0)
             {
