@@ -28,14 +28,21 @@ export class SystemService {
     const options = {
       responseType: 'text',
     };
-    this.http.get("/SystemService/getLastFmAppRegistration", {responseType: 'text'}).subscribe(url => this.openUrl(url));   
+    this.http.get("/SystemService/getLastFmAppRegistration", { responseType: 'text' }).subscribe(url => this.openUrl(url));
   }
 
   public registerNextcp2AtSpotify(): void {
     const options = {
       responseType: 'text',
     };
-    this.http.get("/SystemService/getSpotifyAppRegistration", {responseType: 'text'}).subscribe(url => this.openUrl(url));   
+    this.http.get("/SystemService/getSpotifyAppRegistration", { responseType: 'text' }).subscribe(url => window.open(url, "_blanc"));
+  }
+
+  public setSpotifyCode(code: string): void {
+    const options = {
+      responseType: 'text',
+    };
+    this.httpService.get(this.baseUri, "/spotifyCallback?code=" + code).subscribe();
   }
 
   public getLastFmSession(): void {
@@ -47,7 +54,8 @@ export class SystemService {
 
   private openUrl(url: string) {
     console.log("opening registration link : " + url);
-    window.open(url, "_blank"); // , "_blank");
+    const frame = document.getElementById("spotifyIframe");
+    frame.setAttribute("src", url);
   }
 
   public get buildVersion(): string {

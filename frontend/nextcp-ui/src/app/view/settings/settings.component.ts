@@ -4,8 +4,7 @@ import { ContentDirectoryService } from './../../service/content-directory.servi
 import { RatingServiceService } from './../../service/rating-service.service';
 import { UiClientConfig, MediaServerDto, RendererDeviceConfiguration, MediaRendererDto } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
-import { Component } from '@angular/core';
-import { bindNodeCallback } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'settings',
@@ -14,12 +13,37 @@ import { bindNodeCallback } from 'rxjs';
 })
 export class SettingsComponent {
 
+  code: string;
+
   constructor(
     public ratingServiceService: RatingServiceService,
     public contentDirectoryService: ContentDirectoryService,
     public deviceService: DeviceService,
     public systemService: SystemService,
-    public configService: ConfigurationService) { }
+    public configService: ConfigurationService) {
+  }
+  /*
+
+  ngOnInit(): void {
+  
+  const protocol = "web+nextcp";
+
+  const btn = document.getElementById('spotifyLoginBtn');
+  this.systemService.registerNextcp2AtSpotify(btn);
+
+  const url = location.href;
+  const arr = url.split('/');
+  const result = arr[0] + '//' + arr[2]
+  const target = result + '/spotifyCallback?code=%s';
+
+  console.log("target url: " + target);
+  
+  navigator.registerProtocolHandler(protocol,
+    target,
+    "Callback");
+  
+}
+  */
 
   mediaRendererChanged(event: MediaRendererDto): void {
     this.configService.clientConfig.defaultMediaRenderer = event;
@@ -29,21 +53,25 @@ export class SettingsComponent {
     this.configService.clientConfig.defaultMediaServer = event;
   }
 
-  get buildNumber() : string {
+  get buildNumber(): string {
     const bn = this.systemService.buildVersion;
     return bn;
   }
 
-  activateLastFM() : void {
+  activateLastFM(): void {
     this.systemService.registerNextcp2AtLastFM();
   }
 
-  activateSpotify() : void {
-    this.systemService.registerNextcp2AtSpotify();
+  generateSession(): void {
+    this.systemService.getLastFmSession();
   }
 
-  generateSession() : void {
-    this.systemService.getLastFmSession();
+  sendSpotifyCode(): void {
+    this.systemService.setSpotifyCode(this.code);
+  }
+
+  registerAppAtSpotify() : void {
+    this.systemService.registerNextcp2AtSpotify();
   }
 
   save(): void {

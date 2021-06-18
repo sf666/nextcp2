@@ -59,7 +59,7 @@ public class SpotifyService
             try
             {
                 SpotifyApi.Builder builder = new SpotifyApi.Builder();
-                builder.setClientId(config.getClientId()).setRedirectUri(new URI("http://localhost:8085/SystemService/spotifyCallback"));
+                builder.setClientId(config.getClientId()).setRedirectUri(new URI("http://localhost:65525"));
                 if (!StringUtils.isAllBlank(config.getSpotifyRefreshToken()))
                 {
                     builder.setRefreshToken(config.getSpotifyRefreshToken());
