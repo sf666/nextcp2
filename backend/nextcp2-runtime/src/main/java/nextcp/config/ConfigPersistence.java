@@ -88,7 +88,7 @@ public class ConfigPersistence
             @Override
             public String getClientId()
             {
-                return "07c3ea9a85b045b09f0dea60b83fb949";
+                return config.spotifyClientId;
             }
 
             @Override
@@ -232,6 +232,10 @@ public class ConfigPersistence
 
     private void applyDefaults()
     {
+        if (config.spotifyClientId == null)
+        {
+            config.spotifyClientId = "07c3ea9a85b045b09f0dea60b83fb949";
+        }
         if (config.clientConfig == null)
         {
             log.info("adding new configuration value 'clientConfig'. List is empty.");
