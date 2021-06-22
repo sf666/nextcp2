@@ -41,7 +41,7 @@ public class SessionManager
     private Environment environment = null;
 
     // Schema update constants
-    private final int TARGET_DB_SCHEMA = 3;
+    private final int TARGET_DB_SCHEMA = 4;
 
     @Autowired
     public SessionManager(DatabaseConfig config)

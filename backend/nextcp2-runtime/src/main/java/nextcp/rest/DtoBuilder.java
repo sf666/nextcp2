@@ -39,9 +39,8 @@ import nextcp.dto.MediaServerDto;
 import nextcp.dto.MusicBrainzId;
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.UpnpAvTransportState;
-import nextcp.lastfm.dto.artist.info.ArtistInfoResponse;
-import nextcp.lastfm.service.LastFmArtistService.ImageSize;
 import nextcp.service.RatingService;
+import nextcp.spotify.SpotifyArtistService;
 import nextcp.spotify.SpotifyService;
 import nextcp.upnp.device.BaseDevice;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
@@ -58,7 +57,7 @@ public class DtoBuilder
     private SimpleDateFormat dispParse = new SimpleDateFormat("HH:mm:ss.SSS Z");
 
     @Autowired
-    private SpotifyService spotifyService = null;
+    private SpotifyArtistService spotifyArtistService = null;
 
     @Autowired
     private RatingService ratingService = null;
@@ -218,7 +217,11 @@ public class DtoBuilder
         // Read artists image from Spotify
         if (container instanceof MusicArtist)
         {
-            addSpotifyArtistImage(container, dto);
+            String url = spotifyArtistService.getArtistImageUrlByName(container.getTitle());
+            if (!StringUtils.isBlank(url))
+            {
+                dto.albumartUri = url;
+            }
         }
 
         // apply some defaults
@@ -227,38 +230,6 @@ public class DtoBuilder
             dto.albumartUri = ASSET_FOLDER + "/images/directory-icon.png";
         }
         return dto;
-    }
-
-    private void addSpotifyArtistImage(DIDLObject container, ContainerDto dto)
-    {
-        Paging<Artist> artists;
-        try
-        {
-            artists = spotifyService.getSpotifyApi().searchArtists(container.getTitle()).build().execute();
-            if (artists.getTotal() > 0)
-            {
-                if (artists.getTotal() > 1)
-                {
-                    log.debug("artist search deliverd more than 1 hits. Taking first one ... ");
-                }
-                if (artists.getItems()[0].getImages().length > 0)
-                {
-                    dto.albumartUri = artists.getItems()[0].getImages()[0].getUrl();
-                }
-                else
-                {
-                    log.debug("no artist image available for artist : " + artists.getItems()[0].getName());
-                }
-            }
-            else if (artists.getTotal() == 0)
-            {
-                log.debug("artist search deliverd 0 hits");
-            }
-        }
-        catch (ParseException | SpotifyWebApiException | IOException e)
-        {
-            log.warn("Error accessing spotify search api.", e);
-        }
     }
 
     public Optional<Property> extractProperty(String name, List<Property> list)

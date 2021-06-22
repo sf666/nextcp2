@@ -45,7 +45,7 @@ public interface RatingMapping
     // User Ratings
     // ===================================================
 
-    @Insert("insert into USER_RATING(MUSICBRAINZID,ACOUSTID, RATING) values (#{musicBrainzId}, #{acoustId}, #{rating})")
+    @Insert("insert into USER_RATING(MUSICBRAINZID,RATING) values (${musicBrainzId}, ${stars})")
     int insertUserRating(String musicBrainzId, Integer stars);
 
     @Update("UPDATE USER_RATING SET RATING = #{rating} WHERE MUSICBRAINZID = #{musicBrainzId}")
