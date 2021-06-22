@@ -1,3 +1,4 @@
+import { PopupService } from './../../../../util/popup.service';
 import { UuidService } from './../../../../util/uuid.service';
 import { PlaylistService } from './../../../../service/playlist.service';
 import { ContentDirectoryService } from './../../../../service/content-directory.service';
@@ -31,6 +32,7 @@ export class SongOptionsComponent implements OnInit {
     private avtransportService: AvtransportService,
     private defaultPlaylistService: DefaultPlaylistService,
     private uuidService: UuidService,
+    private popupService: PopupService,
     _matDialogRef: MatDialogRef<SongOptionsComponent>,
     @Inject(MAT_DIALOG_DATA) data: { trigger: ElementRef, id: string },
   ) {
@@ -45,15 +47,7 @@ export class SongOptionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const matDialogConfig: MatDialogConfig = new MatDialogConfig();
-    const rect = this.triggerElementRef.nativeElement.getBoundingClientRect();
-    matDialogConfig.position = { left: `${rect.left - 200}px`, top: `${rect.bottom - 20}px` };
-    matDialogConfig.width = '250px';
-    matDialogConfig.height = '300px';
-
-    this._matDialogRef.updateSize(matDialogConfig.width, matDialogConfig.height);
-    this._matDialogRef.updatePosition(matDialogConfig.position);
-    this._matDialogRef.addPanelClass('popup');
+    this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 250, 300);
   }
 
 
@@ -107,7 +101,7 @@ export class SongOptionsComponent implements OnInit {
     return this.data.item;
   }
 
-  get isParentPlaylist() : boolean {
+  get isParentPlaylist(): boolean {
     return this.contentDirectoryService.currentContainerList.currentContainer.objectClass === "object.container.playlistContainer";
   }
 }

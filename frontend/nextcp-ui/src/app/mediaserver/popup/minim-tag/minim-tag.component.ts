@@ -1,3 +1,4 @@
+import { PopupService } from './../../../util/popup.service';
 import { MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ContentDirectoryService } from './../../../service/content-directory.service';
 import { ContainerDto } from './../../../service/dto.d';
@@ -18,6 +19,7 @@ export class MinimTagComponent implements OnInit {
 
   constructor(
     private contentDirectoryService: ContentDirectoryService,
+    private popupService: PopupService,
     _matDialogRef: MatDialogRef<MinimTagComponent>,
     @Inject(MAT_DIALOG_DATA) data: { trigger: ElementRef }) {
     this._matDialogRef = _matDialogRef;
@@ -25,15 +27,7 @@ export class MinimTagComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const matDialogConfig: MatDialogConfig = new MatDialogConfig();
-    const rect = this.triggerElementRef.nativeElement.getBoundingClientRect();
-    matDialogConfig.position = { left: `${rect.left}px`, top: `${rect.bottom+4}px` };
-    matDialogConfig.width = '300px';
-    matDialogConfig.height = '400px';
-    
-    this._matDialogRef.updateSize(matDialogConfig.width, matDialogConfig.height);
-    this._matDialogRef.updatePosition(matDialogConfig.position);
-    this._matDialogRef.addPanelClass('popup');
+    this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 300, 400);
   }
 
   cancel(): void {

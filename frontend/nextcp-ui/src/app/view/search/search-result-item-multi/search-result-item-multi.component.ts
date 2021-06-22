@@ -24,12 +24,12 @@ export class SearchResultItemMultiComponent {
 
   }
 
-  browseToContainer(container: ContainerDto) {
+  browseToContainer(container: ContainerDto): void {
     this.contentDirectoryService.browseChildrenByContiner(container);
-    this.router.navigateByUrl('music-library');
+    void this.router.navigateByUrl('music-library');
   }
 
-  play(musicItemDto: MusicItemDto) {
+  play(musicItemDto: MusicItemDto): void {
     this.avtransportService.playResource(musicItemDto);
   }
 
@@ -41,7 +41,7 @@ export class SearchResultItemMultiComponent {
     }
   }
 
-  showSongPopup(event: any, item: MusicItemDto) {
+  showSongPopup(event: any, item: MusicItemDto) : void{
     this.songOptionsServiceService.openOptionsDialog(event, item);
   }
 
