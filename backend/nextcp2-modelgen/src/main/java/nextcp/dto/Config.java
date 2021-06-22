@@ -1,7 +1,6 @@
 package nextcp.dto;
 
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -24,14 +23,13 @@ public class Config
     public String playlistPath;
     public Long globalSearchDelay;
     public String lastFmSessionKey;
-    public String spotifyClientId;
-    public String spotifyRefreshToken;
+    public SpotifyConfigDto spotifyConfig;
 
     public Config()
     {
     }
 
-    public Config(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, LocalIndexSupport localIndexerSupport, MusicbrainzSupport musicbrainzSupport, RatingStrategy ratingStrategy, String playlistPath, Long globalSearchDelay, String lastFmSessionKey, String spotifyClientId, String spotifyRefreshToken)
+    public Config(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, LocalIndexSupport localIndexerSupport, MusicbrainzSupport musicbrainzSupport, RatingStrategy ratingStrategy, String playlistPath, Long globalSearchDelay, String lastFmSessionKey, SpotifyConfigDto spotifyConfig)
     {
         this.generateUpnpCode = generateUpnpCode;
         this.generateUpnpCodePath = generateUpnpCodePath;
@@ -48,8 +46,7 @@ public class Config
         this.playlistPath = playlistPath;
         this.globalSearchDelay = globalSearchDelay;
         this.lastFmSessionKey = lastFmSessionKey;
-        this.spotifyClientId = spotifyClientId;
-        this.spotifyRefreshToken = spotifyRefreshToken;
+        this.spotifyConfig = spotifyConfig;
     }
     
     @Override
@@ -72,8 +69,7 @@ public class Config
         sb.append("playlistPath=").append(this.playlistPath).append(", ");
         sb.append("globalSearchDelay=").append(this.globalSearchDelay).append(", ");
         sb.append("lastFmSessionKey=").append(this.lastFmSessionKey).append(", ");
-        sb.append("spotifyClientId=").append(this.spotifyClientId).append(", ");
-        sb.append("spotifyRefreshToken=").append(this.spotifyRefreshToken).append(", ");
+        sb.append("spotifyConfig=").append(this.spotifyConfig).append(", ");
         sb.append("]");
         return sb.toString();
     }

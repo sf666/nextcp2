@@ -1,4 +1,4 @@
-// Generated using typescript-generator version 2.0.400 on 2021-06-04 08:05:46.
+// Generated using typescript-generator version 2.0.400 on 2021-06-22 13:32:32.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -31,6 +31,8 @@ export interface Config {
     ratingStrategy: RatingStrategy;
     playlistPath: string;
     globalSearchDelay: number;
+    lastFmSessionKey: string;
+    spotifyConfig: SpotifyConfigDto;
 }
 
 export interface ContainerDto {
@@ -240,6 +242,12 @@ export interface SearchResultDto {
     albumItems: ContainerDto[];
     artistItems: ContainerDto[];
     playlistItems: ContainerDto[];
+}
+
+export interface SpotifyConfigDto {
+    accountConnected: boolean;
+    clientId: string;
+    refreshToken: string;
 }
 
 export interface SystemInformationDto {

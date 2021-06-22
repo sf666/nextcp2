@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.SystemConfiguration;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +26,7 @@ import nextcp.dto.Config;
 import nextcp.dto.LocalIndexSupport;
 import nextcp.dto.MusicbrainzSupport;
 import nextcp.dto.RatingStrategy;
+import nextcp.dto.SpotifyConfigDto;
 import nextcp.indexer.IndexerConfig;
 import nextcp.lastfm.ILastFmConfig;
 import nextcp.musicbrainz.MusicBrainzConfig;
@@ -71,33 +73,6 @@ public class ConfigPersistence
         mb.username = config.musicbrainzSupport.username;
         mb.password = config.musicbrainzSupport.password;
         return mb;
-    }
-
-    @Bean
-    public ISpotifyConfig spotifyProducer()
-    {
-        return new ISpotifyConfig()
-        {
-            
-            @Override
-            public String getSpotifyRefreshToken()
-            {
-                return config.spotifyRefreshToken;
-            }
-            
-            @Override
-            public String getClientId()
-            {
-                return config.spotifyClientId;
-            }
-
-            @Override
-            public void setSpotifyRefreshToken(String currentToken)
-            {
-                config.spotifyRefreshToken = currentToken;
-                writeConfig();
-            }
-        };
     }
 
     @Bean
@@ -232,9 +207,14 @@ public class ConfigPersistence
 
     private void applyDefaults()
     {
-        if (config.spotifyClientId == null)
+        if (config.spotifyConfig == null)
         {
-            config.spotifyClientId = "07c3ea9a85b045b09f0dea60b83fb949";
+            config.spotifyConfig = new SpotifyConfigDto();
+            config.spotifyConfig.clientId = "07c3ea9a85b045b09f0dea60b83fb949";
+        }
+        else if (StringUtils.isBlank(config.spotifyConfig.clientId))
+        {
+            config.spotifyConfig.clientId = "07c3ea9a85b045b09f0dea60b83fb949";
         }
         if (config.clientConfig == null)
         {
@@ -320,6 +300,7 @@ public class ConfigPersistence
         c.localIndexerSupport.supportedFileTypes = "flac,mp3";
         c.musicbrainzSupport = new MusicbrainzSupport(false, "", "");
         c.ratingStrategy = new RatingStrategy(true, true, true, "FILE");
+        c.spotifyConfig = new SpotifyConfigDto();
         return c;
     }
 

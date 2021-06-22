@@ -57,7 +57,7 @@ export class ConfigurationService {
     sseService.rendererConfigChanged$.subscribe(data => this.applyRendererConfig(data));
   }
 
-  public restart() {
+  public restart(): void {
     const uri = '/restart';
 
     this.httpService.get(this.baseUri, uri).subscribe();
@@ -71,19 +71,19 @@ export class ConfigurationService {
     });
   }
 
-  public saveMediaRendererConfig(mediaRendererConfig: RendererDeviceConfiguration) {
+  public saveMediaRendererConfig(mediaRendererConfig: RendererDeviceConfiguration): void {
     const uri = '/saveMediaRendererConfig';
     this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaRendererConfig, "Save mediarenderer config", "success").subscribe();
   }
 
-  public deleteMediaRendererConfig(mediaRendererConfig: RendererDeviceConfiguration) {
+  public deleteMediaRendererConfig(mediaRendererConfig: RendererDeviceConfiguration): void {
     const uri = '/deleteMediaRendererConfig';
     this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaRendererConfig, "Delete mediarenderer config", "success").subscribe();
   }
 
-  public getMediaRendererConfig() {
+  public getMediaRendererConfig(): void {
     const uri = '/getMediaRendererConfig';
-    this.httpService.get<RendererConfigDto>(this.baseUri, uri).subscribe(data => 
+    this.httpService.get<RendererConfigDto>(this.baseUri, uri).subscribe(data =>
       this.rendererConfig = data);
   }
 
@@ -115,7 +115,7 @@ export class ConfigurationService {
   }
 
   // Use this function to aquire a vlient global userID
-  public getStoredClientId() {
+  public getStoredClientId(): string {
     let cid: string = localStorage.getItem("clientID");
     if (cid) {
       return cid;
@@ -130,14 +130,14 @@ export class ConfigurationService {
   }
 
   public isRenderDeviceActive(deviceUdn: string): boolean {
-    var configEntry = this.rendererConfig.rendererDevices.filter(conf => conf.mediaRenderer.udn == deviceUdn);
+    const configEntry = this.rendererConfig.rendererDevices.filter(conf => conf.mediaRenderer.udn == deviceUdn);
     if (!configEntry || configEntry.length == 0) {
       return false;
     }
     return configEntry[0].active;
   }
 
-  public selectClientConfig(uuid) {
+  public selectClientConfig(uuid): void {
     this.clientConfig = this.getClientConfig(uuid);
     localStorage.setItem("clientID", uuid);
     this.clientConfigChanged$.next(this.clientConfig);
@@ -150,7 +150,7 @@ export class ConfigurationService {
     return this.serverConfig.clientConfig.find(conf => conf.uuid === uuid);
   }
 
-  public saveClientConfig() {
+  public saveClientConfig(): void {
     const uri = '/saveClientProfile';
     this.http.post(this.baseUri + uri, this.clientConfig).subscribe(data => {
       this.genericResultService.displayGenericMessage("configuration", "client configuration saved.");
@@ -164,4 +164,9 @@ export class ConfigurationService {
     const element: UiClientConfig = this.getClientConfig(uuid);
     return isAssigned(element);
   }
+
+  public spotifyAccountConnected() : boolean {
+    return this.serverConfig?.spotifyConfig?.accountConnected ? true : false;
+  }
+
 }

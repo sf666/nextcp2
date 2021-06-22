@@ -28,7 +28,7 @@ import com.wrapper.spotify.requests.authorization.authorization_code.pkce.Author
 public class SpotifyService
 {
     private static final Logger log = LoggerFactory.getLogger(SpotifyService.class.getName());
-
+    
     @Autowired
     private ISpotifyConfig config = null;
 
@@ -36,7 +36,7 @@ public class SpotifyService
 
     // private boolean refreshTokenNeeded = false;
 
-    private boolean authorizationNeeded = true;
+    private boolean userAuthorizationNeeded = true;
 
     private String codeVerifier = "";
     private String codeChallange = "";
@@ -102,10 +102,12 @@ public class SpotifyService
             spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
             spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
             config.setSpotifyRefreshToken(authorizationCodeCredentials.getRefreshToken());
-            authorizationNeeded = false;
+            userAuthorizationNeeded = false;
         }
         catch (ParseException | SpotifyWebApiException | IOException e)
         {
+            userAuthorizationNeeded = true;
+            spotifyApi.setRefreshToken("");
             log.warn("error renewing spotify access token.", e);
         }
     }
@@ -140,6 +142,6 @@ public class SpotifyService
 
     public boolean isAuthorizationNeeded()
     {
-        return authorizationNeeded;
+        return userAuthorizationNeeded;
     }
 }

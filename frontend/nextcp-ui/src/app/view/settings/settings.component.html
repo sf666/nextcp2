@@ -143,7 +143,10 @@
     </div>
 
     <div class="section subhead subsect">Spotify</div>
-    <div class="d-flex section flex-column subhead">
+    <div class="para" *ngIf="configService.spotifyAccountConnected">
+        Your Spotify account is connected.
+    </div>
+    <div class="d-flex section flex-column subhead" *ngIf="!configService.spotifyAccountConnected">
         <div class="para">
             1. Click this button. A new window will open. Login and approve access to nextCP/2 :
             <button id="spotifyLoginBtn" mat-flat-button class="ml-2 settings" (click)="registerAppAtSpotify()">nextCP/2

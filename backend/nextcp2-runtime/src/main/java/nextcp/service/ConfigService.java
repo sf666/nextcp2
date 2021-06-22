@@ -3,12 +3,14 @@ package nextcp.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 
 import nextcp.config.ConfigPersistence;
 import nextcp.dto.Config;
 import nextcp.dto.UiClientConfig;
 import nextcp.eventBridge.SsePublisher;
+import nextcp.spotify.ISpotifyConfig;
 import nextcp.upnp.device.DeviceRegistry;
 
 @Controller
@@ -51,5 +53,38 @@ public class ConfigService
     {
         persistence.writeConfig();
         ssePublisher.sendObjectAsJson(CLIENT_CONFIG_QUEUENAME, config);
+    }
+
+    @Bean
+    public ISpotifyConfig spotifyConfigProducer()
+    {
+        return new ISpotifyConfig()
+        {
+            @Override
+            public String getSpotifyRefreshToken()
+            {
+                return config.spotifyConfig.refreshToken;
+            }
+
+            @Override
+            public String getClientId()
+            {
+                return config.spotifyConfig.clientId;
+            }
+
+            @Override
+            public void setSpotifyRefreshToken(String currentToken)
+            {
+                config.spotifyConfig.refreshToken = currentToken;
+                writeAndSendConfig();
+            }
+
+            @Override
+            public void setUserAuthorizationNeeded(boolean authNeeded)
+            {
+                config.spotifyConfig.accountConnected = !authNeeded;
+                writeAndSendConfig();
+            }
+        };
     }
 }
