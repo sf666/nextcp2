@@ -15,6 +15,7 @@ import org.apache.hc.core5.http.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.wrapper.spotify.SpotifyApi;
@@ -38,9 +39,13 @@ public class SpotifyService
 
     private boolean userAuthorizationNeeded = true;
 
+    private long renewTokenTimeout = 0;
+
     private String codeVerifier = "";
     private String codeChallange = "";
 
+    private static final long twoMinutesMilli = 2 * 60 * 1000;
+    
     public SpotifyService()
     {
         codeVerifier = RandomStringUtils.random(128, true, true);
@@ -91,14 +96,25 @@ public class SpotifyService
         return "";
     }
 
+    @Scheduled(fixedRate = 60000)
+    public void checkToken()
+    {
+        if (System.currentTimeMillis() > renewTokenTimeout)
+        {
+            renewToken();
+        }
+    }
+    
     public void renewToken()
     {
+        log.info("renew Spotify token ...");
         spotifyApi.setRefreshToken(config.getSpotifyRefreshToken());
         AuthorizationCodePKCERefreshRequest authorizationCodePKCERefreshRequest = spotifyApi.authorizationCodePKCERefresh().build();
         AuthorizationCodeCredentials authorizationCodeCredentials;
         try
         {
             authorizationCodeCredentials = authorizationCodePKCERefreshRequest.execute();
+            renewTokenTimeout = System.currentTimeMillis() + authorizationCodeCredentials.getExpiresIn() * 1000 - twoMinutesMilli;
             spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
             spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
             config.setSpotifyRefreshToken(authorizationCodeCredentials.getRefreshToken());
