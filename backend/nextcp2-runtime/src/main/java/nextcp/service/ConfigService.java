@@ -87,7 +87,7 @@ public class ConfigService
             }
 
             @Override
-            public boolean userIsAuthorized(boolean authNeeded)
+            public boolean userIsAuthorized()
             {
                 return config.spotifyConfig.accountConnected;
             }
