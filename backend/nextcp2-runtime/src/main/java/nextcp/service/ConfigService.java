@@ -85,6 +85,12 @@ public class ConfigService
                 config.spotifyConfig.accountConnected = !authNeeded;
                 writeAndSendConfig();
             }
+
+            @Override
+            public boolean userIsAuthorized(boolean authNeeded)
+            {
+                return config.spotifyConfig.accountConnected;
+            }
         };
     }
 }

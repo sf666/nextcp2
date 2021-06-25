@@ -14,4 +14,6 @@ public interface ISpotifyConfig
      *            true if user authorization is needed
      */
     public void setUserAuthorizationNeeded(boolean authNeeded);
+    
+    public boolean userIsAuthorized();
 }

@@ -29,15 +29,11 @@ import com.wrapper.spotify.requests.authorization.authorization_code.pkce.Author
 public class SpotifyService
 {
     private static final Logger log = LoggerFactory.getLogger(SpotifyService.class.getName());
-    
+
     @Autowired
     private ISpotifyConfig config = null;
 
     private SpotifyApi spotifyApi = null;
-
-    // private boolean refreshTokenNeeded = false;
-
-    private boolean userAuthorizationNeeded = true;
 
     private long renewTokenTimeout = 0;
 
@@ -45,7 +41,7 @@ public class SpotifyService
     private String codeChallange = "";
 
     private static final long twoMinutesMilli = 2 * 60 * 1000;
-    
+
     public SpotifyService()
     {
         codeVerifier = RandomStringUtils.random(128, true, true);
@@ -104,7 +100,7 @@ public class SpotifyService
             renewToken();
         }
     }
-    
+
     public void renewToken()
     {
         log.info("renew Spotify token ...");
@@ -118,12 +114,16 @@ public class SpotifyService
             spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
             spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
             config.setSpotifyRefreshToken(authorizationCodeCredentials.getRefreshToken());
-            userAuthorizationNeeded = false;
         }
-        catch (ParseException | SpotifyWebApiException | IOException e)
+        catch (ParseException | IOException e)
         {
-            userAuthorizationNeeded = true;
+            log.warn("error renewing spotify access token.", e);
+        }
+        catch (SpotifyWebApiException e)
+        {
+            renewTokenTimeout = Long.MAX_VALUE;
             spotifyApi.setRefreshToken("");
+            config.setUserAuthorizationNeeded(true);
             log.warn("error renewing spotify access token.", e);
         }
     }
@@ -142,11 +142,18 @@ public class SpotifyService
             authorizationCodeCredentials = authorizationCodeRequest.execute();
             spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
             spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+            config.setUserAuthorizationNeeded(false);
             return authorizationCodeCredentials.getRefreshToken();
         }
-        catch (ParseException | SpotifyWebApiException | IOException e)
+        catch (ParseException | IOException e)
         {
             log.warn("cannot connect to spotify api.", e);
+            return "";
+        }
+        catch (SpotifyWebApiException e)
+        {
+            log.warn("cannot connect to spotify api.", e);
+            config.setUserAuthorizationNeeded(true);
             return "";
         }
     }
@@ -154,10 +161,5 @@ public class SpotifyService
     public SpotifyApi getSpotifyApi()
     {
         return spotifyApi;
-    }
-
-    public boolean isAuthorizationNeeded()
-    {
-        return userAuthorizationNeeded;
     }
 }
