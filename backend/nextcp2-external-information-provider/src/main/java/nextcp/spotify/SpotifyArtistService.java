@@ -27,7 +27,6 @@ public class SpotifyArtistService
 
     public SpotifyArtistService()
     {
-        // TODO Auto-generated constructor stub
     }
 
     public Artist getArtistByName(String name)
@@ -56,7 +55,7 @@ public class SpotifyArtistService
         }
         return null;
     }
-    
+
     public Artist getArtistByNameFromSpotify(String name)
     {
         Paging<Artist> artists;
@@ -83,9 +82,13 @@ public class SpotifyArtistService
                 log.debug("artist search deliverd 0 hits");
             }
         }
-        catch (ParseException | SpotifyWebApiException | IOException e)
+        catch (ParseException | IOException e)
         {
             log.warn("Error accessing spotify search api.", e);
+        }
+        catch (SpotifyWebApiException e)
+        {
+            spotifyService.renewToken();
         }
         return null;
     }
