@@ -40,7 +40,7 @@ public class OhInfoServiceEventListener extends InfoServiceEventListenerImpl
         dto.trackCount = state.TrackCount;
         dto.uri = state.Uri;
         dto.duration = DisplayUtils.convertToDigitString(state.Duration);
-        dto.currentTrack = device.getDtoBuilder().extractXmlAsMusicItem(state.Metatext);
+        dto.currentTrack = device.getDtoBuilder().extractXmlAsMusicItem(state.Metadata);
         return dto;
     }
 
