@@ -27,7 +27,7 @@ public class SetColorTemperature extends ActionCallback
         super(new ActionInvocation(service.getAction("SetColorTemperature"), new NextcpClientInfo()), cp);
 
         getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("DesiredColorTemperature", new UnsignedIntegerFourBytes(input.DesiredColorTemperature));
+        throw new RuntimeException("(UnsignedIntegerTwoBytesDatatype)");
     }
 
     public void executeAction()

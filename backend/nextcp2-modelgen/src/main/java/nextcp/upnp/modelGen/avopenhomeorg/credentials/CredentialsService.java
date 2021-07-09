@@ -19,21 +19,21 @@ import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.Set;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.SetInput;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.GetPublicKey;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.GetPublicKeyOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.GetSequenceNumber;
-import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.GetSequenceNumberOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.Get;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.GetOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.GetInput;
+import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.GetSequenceNumber;
+import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.GetSequenceNumberOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.Login;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.LoginOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.LoginInput;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.ReLogin;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.ReLoginOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.ReLoginInput;
-import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.GetIds;
-import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.GetIdsOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.Clear;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.ClearInput;
+import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.GetIds;
+import nextcp.upnp.modelGen.avopenhomeorg.credentials.actions.GetIdsOutput;
 
 
 /**
@@ -107,17 +107,17 @@ public class CredentialsService
         return res;        
     }
 
-    public GetSequenceNumberOutput getSequenceNumber()
-    {
-        GetSequenceNumber getSequenceNumber = new GetSequenceNumber(credentialsService,  upnpService.getControlPoint());
-        GetSequenceNumberOutput res = getSequenceNumber.executeAction();
-        return res;        
-    }
-
     public GetOutput get(GetInput inp)
     {
         Get get = new Get(credentialsService, inp, upnpService.getControlPoint());
         GetOutput res = get.executeAction();
+        return res;        
+    }
+
+    public GetSequenceNumberOutput getSequenceNumber()
+    {
+        GetSequenceNumber getSequenceNumber = new GetSequenceNumber(credentialsService,  upnpService.getControlPoint());
+        GetSequenceNumberOutput res = getSequenceNumber.executeAction();
         return res;        
     }
 
@@ -135,16 +135,16 @@ public class CredentialsService
         return res;        
     }
 
+    public void clear(ClearInput inp)
+    {
+        Clear clear = new Clear(credentialsService, inp, upnpService.getControlPoint());
+        clear.executeAction();
+    }
+
     public GetIdsOutput getIds()
     {
         GetIds getIds = new GetIds(credentialsService,  upnpService.getControlPoint());
         GetIdsOutput res = getIds.executeAction();
         return res;        
-    }
-
-    public void clear(ClearInput inp)
-    {
-        Clear clear = new Clear(credentialsService, inp, upnpService.getControlPoint());
-        clear.executeAction();
     }
 }

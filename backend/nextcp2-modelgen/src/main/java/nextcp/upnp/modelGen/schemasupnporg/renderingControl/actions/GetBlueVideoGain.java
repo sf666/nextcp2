@@ -35,7 +35,7 @@ public class GetBlueVideoGain extends ActionCallback
 
         GetBlueVideoGainOutput result = new GetBlueVideoGainOutput();
 
-        result.CurrentBlueVideoGain = ((UnsignedIntegerFourBytes) invocation.getOutput("CurrentBlueVideoGain").getValue()).getValue();
+        result.CurrentBlueVideoGain = ((UnsignedIntegerTwoBytes) invocation.getOutput("CurrentBlueVideoGain").getValue()).getValue();
 
         return result;
     }

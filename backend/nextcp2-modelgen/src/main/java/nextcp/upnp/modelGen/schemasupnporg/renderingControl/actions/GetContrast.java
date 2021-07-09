@@ -35,7 +35,7 @@ public class GetContrast extends ActionCallback
 
         GetContrastOutput result = new GetContrastOutput();
 
-        result.CurrentContrast = ((UnsignedIntegerFourBytes) invocation.getOutput("CurrentContrast").getValue()).getValue();
+        result.CurrentContrast = ((UnsignedIntegerTwoBytes) invocation.getOutput("CurrentContrast").getValue()).getValue();
 
         return result;
     }

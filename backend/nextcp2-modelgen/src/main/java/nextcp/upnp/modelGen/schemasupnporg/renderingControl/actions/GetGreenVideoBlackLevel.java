@@ -35,7 +35,7 @@ public class GetGreenVideoBlackLevel extends ActionCallback
 
         GetGreenVideoBlackLevelOutput result = new GetGreenVideoBlackLevelOutput();
 
-        result.CurrentGreenVideoBlackLevel = ((UnsignedIntegerFourBytes) invocation.getOutput("CurrentGreenVideoBlackLevel").getValue()).getValue();
+        result.CurrentGreenVideoBlackLevel = ((UnsignedIntegerTwoBytes) invocation.getOutput("CurrentGreenVideoBlackLevel").getValue()).getValue();
 
         return result;
     }

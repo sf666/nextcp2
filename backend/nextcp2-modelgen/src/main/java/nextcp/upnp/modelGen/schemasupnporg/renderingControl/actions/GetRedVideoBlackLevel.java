@@ -35,7 +35,7 @@ public class GetRedVideoBlackLevel extends ActionCallback
 
         GetRedVideoBlackLevelOutput result = new GetRedVideoBlackLevelOutput();
 
-        result.CurrentRedVideoBlackLevel = ((UnsignedIntegerFourBytes) invocation.getOutput("CurrentRedVideoBlackLevel").getValue()).getValue();
+        result.CurrentRedVideoBlackLevel = ((UnsignedIntegerTwoBytes) invocation.getOutput("CurrentRedVideoBlackLevel").getValue()).getValue();
 
         return result;
     }

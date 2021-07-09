@@ -112,11 +112,23 @@ public class ProductServiceSubscription extends RemoteGENASubscription
                     case "ModelImageUri":
                         modelImageUriChange((String) stateVar.getValue());
                         break;
+                    case "ProductInfo":
+                        productInfoChange((String) stateVar.getValue());
+                        break;
                     case "ModelInfo":
                         modelInfoChange((String) stateVar.getValue());
                         break;
+                    case "ManufacturerName":
+                        manufacturerNameChange((String) stateVar.getValue());
+                        break;
                     case "ManufacturerInfo":
                         manufacturerInfoChange((String) stateVar.getValue());
+                        break;
+                    case "ModelName":
+                        modelNameChange((String) stateVar.getValue());
+                        break;
+                    case "SourceVisible":
+                        sourceVisibleChange((Boolean) stateVar.getValue());
                         break;
                     case "ProductName":
                         productNameChange((String) stateVar.getValue());
@@ -124,26 +136,17 @@ public class ProductServiceSubscription extends RemoteGENASubscription
                     case "SourceCount":
                         sourceCountChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
+                    case "SourceType":
+                        sourceTypeChange((String) stateVar.getValue());
+                        break;
                     case "Attributes":
                         attributesChange((String) stateVar.getValue());
                         break;
+                    case "SourceName":
+                        sourceNameChange((String) stateVar.getValue());
+                        break;
                     case "ProductRoom":
                         productRoomChange((String) stateVar.getValue());
-                        break;
-                    case "ModelUrl":
-                        modelUrlChange((String) stateVar.getValue());
-                        break;
-                    case "ProductImageUri":
-                        productImageUriChange((String) stateVar.getValue());
-                        break;
-                    case "ProductInfo":
-                        productInfoChange((String) stateVar.getValue());
-                        break;
-                    case "ManufacturerName":
-                        manufacturerNameChange((String) stateVar.getValue());
-                        break;
-                    case "ModelName":
-                        modelNameChange((String) stateVar.getValue());
                         break;
                     case "SourceXml":
                         sourceXmlChange((String) stateVar.getValue());
@@ -157,8 +160,17 @@ public class ProductServiceSubscription extends RemoteGENASubscription
                     case "ProductUrl":
                         productUrlChange((String) stateVar.getValue());
                         break;
+                    case "ModelUrl":
+                        modelUrlChange((String) stateVar.getValue());
+                        break;
                     case "SourceIndex":
                         sourceIndexChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "ProductImageUri":
+                        productImageUriChange((String) stateVar.getValue());
+                        break;
+                    case "SourceXmlChangeCount":
+                        sourceXmlChangeCountChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -196,6 +208,14 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void productInfoChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.productInfoChange(value);
+        }
+    }    
+
     private void modelInfoChange(String value)
     {
         for (IProductServiceEventListener listener : eventListener)
@@ -204,11 +224,35 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void manufacturerNameChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.manufacturerNameChange(value);
+        }
+    }    
+
     private void manufacturerInfoChange(String value)
     {
         for (IProductServiceEventListener listener : eventListener)
         {
             listener.manufacturerInfoChange(value);
+        }
+    }    
+
+    private void modelNameChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.modelNameChange(value);
+        }
+    }    
+
+    private void sourceVisibleChange(Boolean value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.sourceVisibleChange(value);
         }
     }    
 
@@ -228,6 +272,14 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void sourceTypeChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.sourceTypeChange(value);
+        }
+    }    
+
     private void attributesChange(String value)
     {
         for (IProductServiceEventListener listener : eventListener)
@@ -236,51 +288,19 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void sourceNameChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.sourceNameChange(value);
+        }
+    }    
+
     private void productRoomChange(String value)
     {
         for (IProductServiceEventListener listener : eventListener)
         {
             listener.productRoomChange(value);
-        }
-    }    
-
-    private void modelUrlChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.modelUrlChange(value);
-        }
-    }    
-
-    private void productImageUriChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.productImageUriChange(value);
-        }
-    }    
-
-    private void productInfoChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.productInfoChange(value);
-        }
-    }    
-
-    private void manufacturerNameChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.manufacturerNameChange(value);
-        }
-    }    
-
-    private void modelNameChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.modelNameChange(value);
         }
     }    
 
@@ -316,11 +336,35 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void modelUrlChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.modelUrlChange(value);
+        }
+    }    
+
     private void sourceIndexChange(Long value)
     {
         for (IProductServiceEventListener listener : eventListener)
         {
             listener.sourceIndexChange(value);
+        }
+    }    
+
+    private void productImageUriChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.productImageUriChange(value);
+        }
+    }    
+
+    private void sourceXmlChangeCountChange(Long value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.sourceXmlChangeCountChange(value);
         }
     }    
 }

@@ -35,7 +35,7 @@ public class GetBlueVideoBlackLevel extends ActionCallback
 
         GetBlueVideoBlackLevelOutput result = new GetBlueVideoBlackLevelOutput();
 
-        result.CurrentBlueVideoBlackLevel = ((UnsignedIntegerFourBytes) invocation.getOutput("CurrentBlueVideoBlackLevel").getValue()).getValue();
+        result.CurrentBlueVideoBlackLevel = ((UnsignedIntegerTwoBytes) invocation.getOutput("CurrentBlueVideoBlackLevel").getValue()).getValue();
 
         return result;
     }

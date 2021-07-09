@@ -1,48 +1,58 @@
 package nextcp.upnp.modelGen.schemasupnporg.aVTransport;
 
 import org.fourthline.cling.UpnpService;
+
 import org.fourthline.cling.model.meta.RemoteDevice;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.types.ServiceType;
 import org.fourthline.cling.protocol.ProtocolCreationException;
 import org.fourthline.cling.protocol.sync.SendingSubscribe;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetCurrentTransportActions;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetCurrentTransportActionsInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetCurrentTransportActionsOutput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetDeviceCapabilities;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetDeviceCapabilitiesInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetDeviceCapabilitiesOutput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetMediaInfo;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetMediaInfoInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetMediaInfoOutput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetPositionInfo;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetPositionInfoInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetPositionInfoOutput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetTransportInfo;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetTransportInfoInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetTransportInfoOutput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetTransportSettings;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetTransportSettingsInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetTransportSettingsOutput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.Next;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.NextInput;
+import nextcp.upnp.ISubscriptionEventListener;
+
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.Pause;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.PauseInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.Play;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.PlayInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.Previous;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.PreviousInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.Seek;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.SeekInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.SetAVTransportURI;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.SetAVTransportURIInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.SetNextAVTransportURI;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.SetNextAVTransportURIInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.Stop;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.StopInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetPositionInfo;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetPositionInfoOutput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetPositionInfoInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetDRMState;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetDRMStateOutput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetDRMStateInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.SetNextAVTransportURI;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.SetNextAVTransportURIInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.Play;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.PlayInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetDeviceCapabilities;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetDeviceCapabilitiesOutput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetDeviceCapabilitiesInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetMediaInfo;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetMediaInfoOutput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetMediaInfoInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.Next;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.NextInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetTransportInfo;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetTransportInfoOutput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetTransportInfoInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.Previous;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.PreviousInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.SetAVTransportURI;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.SetAVTransportURIInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetTransportSettings;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetTransportSettingsOutput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetTransportSettingsInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetMediaInfo_Ext;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetMediaInfo_ExtOutput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetMediaInfo_ExtInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.Seek;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.SeekInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetCurrentTransportActions;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetCurrentTransportActionsOutput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetCurrentTransportActionsInput;
 
 
 /**
@@ -116,6 +126,13 @@ public class AVTransportService
         return res;        
     }
 
+    public GetDRMStateOutput getDRMState(GetDRMStateInput inp)
+    {
+        GetDRMState getDRMState = new GetDRMState(aVTransportService, inp, upnpService.getControlPoint());
+        GetDRMStateOutput res = getDRMState.executeAction();
+        return res;        
+    }
+
     public void setNextAVTransportURI(SetNextAVTransportURIInput inp)
     {
         SetNextAVTransportURI setNextAVTransportURI = new SetNextAVTransportURI(aVTransportService, inp, upnpService.getControlPoint());
@@ -171,6 +188,13 @@ public class AVTransportService
     {
         GetTransportSettings getTransportSettings = new GetTransportSettings(aVTransportService, inp, upnpService.getControlPoint());
         GetTransportSettingsOutput res = getTransportSettings.executeAction();
+        return res;        
+    }
+
+    public GetMediaInfo_ExtOutput getMediaInfo_Ext(GetMediaInfo_ExtInput inp)
+    {
+        GetMediaInfo_Ext getMediaInfo_Ext = new GetMediaInfo_Ext(aVTransportService, inp, upnpService.getControlPoint());
+        GetMediaInfo_ExtOutput res = getMediaInfo_Ext.executeAction();
         return res;        
     }
 

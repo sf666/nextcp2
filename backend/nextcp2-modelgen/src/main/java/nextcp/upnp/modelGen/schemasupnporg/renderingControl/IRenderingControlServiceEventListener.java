@@ -10,17 +10,37 @@ import nextcp.upnp.ISubscriptionEventListener;
  */
 public interface IRenderingControlServiceEventListener extends ISubscriptionEventListener 
 {
-    public void x_SubtitleChange(String value);
+    public void loudnessChange(Boolean value);
+    
+    public void brightnessChange(Long value);
+    
+    public void greenVideoBlackLevelChange(Long value);
+    
+    public void blueVideoBlackLevelChange(Long value);
+    
+    public void presetNameListChange(String value);
+    
+    public void contrastChange(Long value);
+    
+    public void sharpnessChange(Long value);
+    
+    public void greenVideoGainChange(Long value);
+    
+    public void colorTemperatureChange(Long value);
+    
+    public void horizontalKeystoneChange(Integer value);
     
     public void volumeChange(Long value);
     
-    public void x_Current3DFormatterChange(String value);
-    
     public void lastChangeChange(String value);
     
-    public void x_Possible3DFormatterChange(String value);
+    public void blueVideoGainChange(Long value);
     
-    public void presetNameListChange(String value);
+    public void redVideoGainChange(Long value);
+    
+    public void verticalKeystoneChange(Integer value);
+    
+    public void redVideoBlackLevelChange(Long value);
     
     public void muteChange(Boolean value);
     

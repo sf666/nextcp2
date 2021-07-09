@@ -35,7 +35,7 @@ public class GetRedVideoGain extends ActionCallback
 
         GetRedVideoGainOutput result = new GetRedVideoGainOutput();
 
-        result.CurrentRedVideoGain = ((UnsignedIntegerFourBytes) invocation.getOutput("CurrentRedVideoGain").getValue()).getValue();
+        result.CurrentRedVideoGain = ((UnsignedIntegerTwoBytes) invocation.getOutput("CurrentRedVideoGain").getValue()).getValue();
 
         return result;
     }

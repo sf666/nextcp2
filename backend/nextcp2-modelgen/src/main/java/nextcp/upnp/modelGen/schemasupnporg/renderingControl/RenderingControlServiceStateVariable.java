@@ -6,12 +6,22 @@ package nextcp.upnp.modelGen.schemasupnporg.renderingControl;
 public class RenderingControlServiceStateVariable
 {
 
-    public String X_Subtitle = null;
-    public Long Volume = null;
-    public String X_Current3DFormatter = null;
-    public String LastChange = null;
-    public String X_Possible3DFormatter = null;
+    public Boolean Loudness = null;
+    public Long Brightness = null;
+    public Long GreenVideoBlackLevel = null;
+    public Long BlueVideoBlackLevel = null;
     public String PresetNameList = null;
+    public Long Contrast = null;
+    public Long Sharpness = null;
+    public Long GreenVideoGain = null;
+    public Long ColorTemperature = null;
+    public Integer HorizontalKeystone = null;
+    public Long Volume = null;
+    public String LastChange = null;
+    public Long BlueVideoGain = null;
+    public Long RedVideoGain = null;
+    public Integer VerticalKeystone = null;
+    public Long RedVideoBlackLevel = null;
     public Boolean Mute = null;
     public Integer VolumeDB = null;
 

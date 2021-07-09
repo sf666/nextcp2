@@ -10,6 +10,8 @@ import nextcp.upnp.ISubscriptionEventListener;
  */
 public interface IAVTransportServiceEventListener extends ISubscriptionEventListener 
 {
+    public void currentMediaCategoryChange(String value);
+    
     public void absoluteTimePositionChange(String value);
     
     public void currentTrackURIChange(String value);
@@ -18,17 +20,17 @@ public interface IAVTransportServiceEventListener extends ISubscriptionEventList
     
     public void relativeCounterPositionChange(Integer value);
     
-    public void transportStatusChange(String value);
-    
     public void aVTransportURIMetaDataChange(String value);
+    
+    public void transportStatusChange(String value);
     
     public void transportStateChange(String value);
     
     public void currentTrackChange(Long value);
     
-    public void playbackStorageMediumChange(String value);
-    
     public void possibleRecordQualityModesChange(String value);
+    
+    public void playbackStorageMediumChange(String value);
     
     public void nextAVTransportURIMetaDataChange(String value);
     
@@ -48,9 +50,11 @@ public interface IAVTransportServiceEventListener extends ISubscriptionEventList
     
     public void relativeTimePositionChange(String value);
     
-    public void currentPlayModeChange(String value);
+    public void dRMStateChange(String value);
     
     public void currentTrackDurationChange(String value);
+    
+    public void currentPlayModeChange(String value);
     
     public void possiblePlaybackStorageMediaChange(String value);
     

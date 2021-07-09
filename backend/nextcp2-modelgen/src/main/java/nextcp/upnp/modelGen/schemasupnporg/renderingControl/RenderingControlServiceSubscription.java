@@ -106,23 +106,53 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "X_Subtitle":
-                        x_SubtitleChange((String) stateVar.getValue());
+                    case "Loudness":
+                        loudnessChange((Boolean) stateVar.getValue());
+                        break;
+                    case "Brightness":
+                        brightnessChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "GreenVideoBlackLevel":
+                        greenVideoBlackLevelChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "BlueVideoBlackLevel":
+                        blueVideoBlackLevelChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "PresetNameList":
+                        presetNameListChange((String) stateVar.getValue());
+                        break;
+                    case "Contrast":
+                        contrastChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "Sharpness":
+                        sharpnessChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "GreenVideoGain":
+                        greenVideoGainChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "ColorTemperature":
+                        colorTemperatureChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "HorizontalKeystone":
+                        horizontalKeystoneChange((Integer) stateVar.getValue());
                         break;
                     case "Volume":
                         volumeChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
-                    case "X_Current3DFormatter":
-                        x_Current3DFormatterChange((String) stateVar.getValue());
-                        break;
                     case "LastChange":
                         lastChangeChange((String) stateVar.getValue());
                         break;
-                    case "X_Possible3DFormatter":
-                        x_Possible3DFormatterChange((String) stateVar.getValue());
+                    case "BlueVideoGain":
+                        blueVideoGainChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
-                    case "PresetNameList":
-                        presetNameListChange((String) stateVar.getValue());
+                    case "RedVideoGain":
+                        redVideoGainChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "VerticalKeystone":
+                        verticalKeystoneChange((Integer) stateVar.getValue());
+                        break;
+                    case "RedVideoBlackLevel":
+                        redVideoBlackLevelChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "Mute":
                         muteChange((Boolean) stateVar.getValue());
@@ -150,11 +180,83 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
         }        
     }
 
-    private void x_SubtitleChange(String value)
+    private void loudnessChange(Boolean value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
-            listener.x_SubtitleChange(value);
+            listener.loudnessChange(value);
+        }
+    }    
+
+    private void brightnessChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.brightnessChange(value);
+        }
+    }    
+
+    private void greenVideoBlackLevelChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.greenVideoBlackLevelChange(value);
+        }
+    }    
+
+    private void blueVideoBlackLevelChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.blueVideoBlackLevelChange(value);
+        }
+    }    
+
+    private void presetNameListChange(String value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.presetNameListChange(value);
+        }
+    }    
+
+    private void contrastChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.contrastChange(value);
+        }
+    }    
+
+    private void sharpnessChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.sharpnessChange(value);
+        }
+    }    
+
+    private void greenVideoGainChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.greenVideoGainChange(value);
+        }
+    }    
+
+    private void colorTemperatureChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.colorTemperatureChange(value);
+        }
+    }    
+
+    private void horizontalKeystoneChange(Integer value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.horizontalKeystoneChange(value);
         }
     }    
 
@@ -166,14 +268,6 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void x_Current3DFormatterChange(String value)
-    {
-        for (IRenderingControlServiceEventListener listener : eventListener)
-        {
-            listener.x_Current3DFormatterChange(value);
-        }
-    }    
-
     private void lastChangeChange(String value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
@@ -182,19 +276,35 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void x_Possible3DFormatterChange(String value)
+    private void blueVideoGainChange(Long value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
-            listener.x_Possible3DFormatterChange(value);
+            listener.blueVideoGainChange(value);
         }
     }    
 
-    private void presetNameListChange(String value)
+    private void redVideoGainChange(Long value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
-            listener.presetNameListChange(value);
+            listener.redVideoGainChange(value);
+        }
+    }    
+
+    private void verticalKeystoneChange(Integer value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.verticalKeystoneChange(value);
+        }
+    }    
+
+    private void redVideoBlackLevelChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.redVideoBlackLevelChange(value);
         }
     }    
 

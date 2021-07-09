@@ -30,6 +30,8 @@ import nextcp.upnp.modelGen.avopenhomeorg.product.actions.StandbyOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.Source;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SourceOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SourceInput;
+import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetProductRoom;
+import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetProductRoomInput;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetStandby;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetStandbyInput;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SourceIndex;
@@ -38,8 +40,6 @@ import nextcp.upnp.modelGen.avopenhomeorg.product.actions.Manufacturer;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.ManufacturerOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.Model;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.ModelOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetSourceBySystemName;
-import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetSourceBySystemNameInput;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SourceXmlChangeCount;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SourceXmlChangeCountOutput;
 
@@ -150,6 +150,12 @@ public class ProductService
         return res;        
     }
 
+    public void setProductRoom(SetProductRoomInput inp)
+    {
+        SetProductRoom setProductRoom = new SetProductRoom(productService, inp, upnpService.getControlPoint());
+        setProductRoom.executeAction();
+    }
+
     public void setStandby(SetStandbyInput inp)
     {
         SetStandby setStandby = new SetStandby(productService, inp, upnpService.getControlPoint());
@@ -175,12 +181,6 @@ public class ProductService
         Model model = new Model(productService,  upnpService.getControlPoint());
         ModelOutput res = model.executeAction();
         return res;        
-    }
-
-    public void setSourceBySystemName(SetSourceBySystemNameInput inp)
-    {
-        SetSourceBySystemName setSourceBySystemName = new SetSourceBySystemName(productService, inp, upnpService.getControlPoint());
-        setSourceBySystemName.executeAction();
     }
 
     public SourceXmlChangeCountOutput sourceXmlChangeCount()

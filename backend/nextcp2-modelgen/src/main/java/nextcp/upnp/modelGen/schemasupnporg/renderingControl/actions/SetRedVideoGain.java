@@ -27,7 +27,7 @@ public class SetRedVideoGain extends ActionCallback
         super(new ActionInvocation(service.getAction("SetRedVideoGain"), new NextcpClientInfo()), cp);
 
         getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("DesiredRedVideoGain", new UnsignedIntegerFourBytes(input.DesiredRedVideoGain));
+        throw new RuntimeException("(UnsignedIntegerTwoBytesDatatype)");
     }
 
     public void executeAction()
