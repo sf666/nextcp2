@@ -18,17 +18,17 @@ import org.slf4j.LoggerFactory;
 public class dialServiceEventListenerImpl implements IdialServiceEventListener 
 {
     private static Logger log = LoggerFactory.getLogger(dialService.class.getName());
-    private dialServiceStateVariable stateVariable = new dialServiceStateVariable();
+//    private dialServiceStateVariable stateVariable = new dialServiceStateVariable();
 
     /**
      * Access to state variable
      * 
      * @return state variable
      */
-    public dialServiceStateVariable getStateVariable()
-    {
-        return stateVariable;
-    }
+//    public dialServiceStateVariable getStateVariable()
+//    {
+//        return stateVariable;
+//    }
 
     //
     // Generic event callbacks
