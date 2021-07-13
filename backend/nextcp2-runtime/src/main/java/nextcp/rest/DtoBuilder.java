@@ -249,6 +249,10 @@ public class DtoBuilder
         itemDto.mediaServerUDN = mediaServerUdn;
 
         extractDescMetadata(itemDto, item);
+
+        extractKnownProperties(itemDto, item);
+        extractAudioFormat(item, itemDto);
+
         if (item instanceof AudioItem)
         {
             addAudioItem((AudioItem) item, itemDto);
@@ -260,6 +264,32 @@ public class DtoBuilder
         }
         updateRating(itemDto);
         return itemDto;
+    }
+
+    private void extractKnownProperties(MusicItemDto itemDto, Item item)
+    {
+        itemDto.streamingURL = readStreamingUrl(item);
+
+        for (Property<?> property : item.getProperties())
+        {
+            switch (property.getDescriptorName())
+            {
+                case "artist":
+                    itemDto.artistName = property.getValue().toString();
+                    break;
+                case "album":
+                    itemDto.album = property.getValue().toString();
+                    break;
+                case "albumArtURI":
+                    itemDto.albumArtUrl = property.getValue().toString();
+                    break;
+                case "originalTrackNumber":
+                    itemDto.originalTrackNumber = property.getValue().toString();
+                    break;
+                default:
+                    log.debug("unprocessed property : " + property.getDescriptorName() + " : " + property.getValue());
+            }
+        }
     }
 
     // itemDto.musicBrainzId
@@ -335,29 +365,17 @@ public class DtoBuilder
         itemDto.streamingURL = readStreamingUrl(item);
         // URI[] rel = item.getRelations();
 
-        for (Property<?> property : item.getProperties())
-        {
-            switch (property.getDescriptorName())
-            {
-                case "albumArtURI":
-                    itemDto.albumArtUrl = property.getValue().toString();
-                    break;
-                case "originalTrackNumber":
-                    itemDto.originalTrackNumber = property.getValue().toString();
-                    break;
-                default:
-                    log.debug("unprocessed property : " + property.getDescriptorName() + " : " + property.getValue());
-            }
-        }
-
         if (StringUtils.isBlank(itemDto.albumArtUrl))
         {
             itemDto.albumArtUrl = ASSET_FOLDER + "/images/music-icon.png";
         }
+    }
 
+    private void extractAudioFormat(Item item, MusicItemDto itemDto)
+    {
         for (Res res : item.getResources())
         {
-            AudioFormat format = extractAudioFormat(res);
+            AudioFormat format = extractAudioFormatFromResourceField(res);
             if (format != null)
             {
                 itemDto.audioFormat = format;
@@ -370,7 +388,7 @@ public class DtoBuilder
         }
     }
 
-    private String readStreamingUrl(AudioItem item)
+    private String readStreamingUrl(Item item)
     {
         Optional<Res> resUrl = item.getResources().stream().filter(res -> isAudioResource(res)).findFirst();
         if (!resUrl.isEmpty())
@@ -379,7 +397,7 @@ public class DtoBuilder
         }
         else
         {
-            log.warn(String.format("Empty URL : %s : %s", item.getId(), item.getLongDescription()));
+            log.warn(String.format("Empty URL for ID : %s ", item.getId()));
             return "";
         }
     }
@@ -428,7 +446,7 @@ public class DtoBuilder
         }
     }
 
-    AudioFormat extractAudioFormat(Res res)
+    AudioFormat extractAudioFormatFromResourceField(Res res)
     {
         AudioFormat af = null;
         if (res.getBitrate() != null)
