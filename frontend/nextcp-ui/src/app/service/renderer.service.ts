@@ -36,6 +36,7 @@ export class RendererService {
 
     sseService.mediaRendererTrackInfoChanged$.subscribe(data => {
       if (deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
+        // console.log("updating trackInfo : " + data.currentTrack?.artistName);
         this.trackInfo = data;
         if (data.currentTrack?.albumArtUrl) {
           this.backgroundImageService.setFooterBackgroundImage(data.currentTrack?.albumArtUrl);
@@ -43,7 +44,7 @@ export class RendererService {
         if (data.duration) {
 //          this.trackTime.durationDisp = data.duration;
         }
-      };
+      }
     });
 
     sseService.mediaRendererPositionChanged$.subscribe(data => {

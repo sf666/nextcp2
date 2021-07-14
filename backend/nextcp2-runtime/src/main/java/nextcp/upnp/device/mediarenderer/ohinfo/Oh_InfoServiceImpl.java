@@ -60,7 +60,7 @@ public class Oh_InfoServiceImpl implements IInfoService
         TrackOutput track = track();
         dto.metadata = track.Metadata;
         dto.uri = track.Uri;
-        dto.currentTrack = device.getDtoBuilder().extractXmlAsMusicItem(dto.metatext);
+        dto.currentTrack = device.getDtoBuilder().extractXmlAsMusicItem(dto.metadata);
 
         return dto;
     }

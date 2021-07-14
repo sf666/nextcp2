@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import nextcp.dto.Config;
 
 /**
- * Global SSE Emiiter class ...
+ * Global SSE Emitter class ...
  */
 @Controller
 public class SsePublisher

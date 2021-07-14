@@ -362,9 +362,6 @@ public class DtoBuilder
     {
         itemDto.creator = item.getCreator();
         itemDto.currentTrackMetadata = generateMetadataFromItem(item);
-        itemDto.streamingURL = readStreamingUrl(item);
-        // URI[] rel = item.getRelations();
-
         if (StringUtils.isBlank(itemDto.albumArtUrl))
         {
             itemDto.albumArtUrl = ASSET_FOLDER + "/images/music-icon.png";
@@ -388,7 +385,7 @@ public class DtoBuilder
         }
     }
 
-    private String readStreamingUrl(Item item)
+    public String readStreamingUrl(Item item)
     {
         Optional<Res> resUrl = item.getResources().stream().filter(res -> isAudioResource(res)).findFirst();
         if (!resUrl.isEmpty())
