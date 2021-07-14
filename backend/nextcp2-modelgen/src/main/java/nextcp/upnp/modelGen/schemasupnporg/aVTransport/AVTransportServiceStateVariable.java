@@ -6,17 +6,16 @@ package nextcp.upnp.modelGen.schemasupnporg.aVTransport;
 public class AVTransportServiceStateVariable
 {
 
-    public String CurrentMediaCategory = null;
     public String AbsoluteTimePosition = null;
     public String CurrentTrackURI = null;
     public String CurrentTrackMetaData = null;
     public Integer RelativeCounterPosition = null;
-    public String AVTransportURIMetaData = null;
     public String TransportStatus = null;
+    public String AVTransportURIMetaData = null;
     public String TransportState = null;
     public Long CurrentTrack = null;
-    public String PossibleRecordQualityModes = null;
     public String PlaybackStorageMedium = null;
+    public String PossibleRecordQualityModes = null;
     public String NextAVTransportURIMetaData = null;
     public Long NumberOfTracks = null;
     public String CurrentMediaDuration = null;
@@ -26,9 +25,8 @@ public class AVTransportServiceStateVariable
     public String TransportPlaySpeed = null;
     public Integer AbsoluteCounterPosition = null;
     public String RelativeTimePosition = null;
-    public String DRMState = null;
-    public String CurrentTrackDuration = null;
     public String CurrentPlayMode = null;
+    public String CurrentTrackDuration = null;
     public String PossiblePlaybackStorageMedia = null;
     public String CurrentRecordQualityMode = null;
     public String RecordMediumWriteStatus = null;

@@ -106,11 +106,11 @@ public class PlaylistServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "Relative":
-                        relativeChange((Integer) stateVar.getValue());
-                        break;
                     case "IdArrayChanged":
                         idArrayChangedChange((Boolean) stateVar.getValue());
+                        break;
+                    case "Relative":
+                        relativeChange((Integer) stateVar.getValue());
                         break;
                     case "TracksMax":
                         tracksMaxChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
@@ -124,11 +124,11 @@ public class PlaylistServiceSubscription extends RemoteGENASubscription
                     case "Metadata":
                         metadataChange((String) stateVar.getValue());
                         break;
-                    case "Repeat":
-                        repeatChange((Boolean) stateVar.getValue());
-                        break;
                     case "Index":
                         indexChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "Repeat":
+                        repeatChange((Boolean) stateVar.getValue());
                         break;
                     case "IdArray":
                         idArrayChange((byte[]) stateVar.getValue());
@@ -174,19 +174,19 @@ public class PlaylistServiceSubscription extends RemoteGENASubscription
         }        
     }
 
-    private void relativeChange(Integer value)
-    {
-        for (IPlaylistServiceEventListener listener : eventListener)
-        {
-            listener.relativeChange(value);
-        }
-    }    
-
     private void idArrayChangedChange(Boolean value)
     {
         for (IPlaylistServiceEventListener listener : eventListener)
         {
             listener.idArrayChangedChange(value);
+        }
+    }    
+
+    private void relativeChange(Integer value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.relativeChange(value);
         }
     }    
 
@@ -222,19 +222,19 @@ public class PlaylistServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void repeatChange(Boolean value)
-    {
-        for (IPlaylistServiceEventListener listener : eventListener)
-        {
-            listener.repeatChange(value);
-        }
-    }    
-
     private void indexChange(Long value)
     {
         for (IPlaylistServiceEventListener listener : eventListener)
         {
             listener.indexChange(value);
+        }
+    }    
+
+    private void repeatChange(Boolean value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.repeatChange(value);
         }
     }    
 

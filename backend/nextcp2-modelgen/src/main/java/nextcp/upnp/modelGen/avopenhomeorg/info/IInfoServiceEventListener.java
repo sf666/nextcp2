@@ -26,11 +26,11 @@ public interface IInfoServiceEventListener extends ISubscriptionEventListener
     
     public void uriChange(String value);
     
-    public void bitDepthChange(Long value);
+    public void codecNameChange(String value);
     
     public void losslessChange(Boolean value);
     
-    public void codecNameChange(String value);
+    public void bitDepthChange(Long value);
     
     public void metatextChange(String value);
     

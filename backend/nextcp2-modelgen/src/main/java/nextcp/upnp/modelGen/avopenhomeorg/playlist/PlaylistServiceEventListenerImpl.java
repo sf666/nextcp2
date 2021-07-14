@@ -106,21 +106,21 @@ public class PlaylistServiceEventListenerImpl implements IPlaylistServiceEventLi
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void relativeChange(Integer value)
-    {
-        stateVariable.Relative = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Relative", value));
-        }
-    }
-    
     public void idArrayChangedChange(Boolean value)
     {
         stateVariable.IdArrayChanged = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "IdArrayChanged", value));
+        }
+    }
+    
+    public void relativeChange(Integer value)
+    {
+        stateVariable.Relative = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Relative", value));
         }
     }
     
@@ -160,21 +160,21 @@ public class PlaylistServiceEventListenerImpl implements IPlaylistServiceEventLi
         }
     }
     
-    public void repeatChange(Boolean value)
-    {
-        stateVariable.Repeat = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Repeat", value));
-        }
-    }
-    
     public void indexChange(Long value)
     {
         stateVariable.Index = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "Index", value));
+        }
+    }
+    
+    public void repeatChange(Boolean value)
+    {
+        stateVariable.Repeat = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Repeat", value));
         }
     }
     
