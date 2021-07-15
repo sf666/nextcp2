@@ -178,12 +178,12 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
-    public void codecNameChange(String value)
+    public void bitDepthChange(Long value)
     {
-        stateVariable.CodecName = value;
+        stateVariable.BitDepth = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "CodecName", value));
+            log.debug(String.format("StateVariable : %s: %s", "BitDepth", value));
         }
     }
     
@@ -196,12 +196,12 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
-    public void bitDepthChange(Long value)
+    public void codecNameChange(String value)
     {
-        stateVariable.BitDepth = value;
+        stateVariable.CodecName = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "BitDepth", value));
+            log.debug(String.format("StateVariable : %s: %s", "CodecName", value));
         }
     }
     

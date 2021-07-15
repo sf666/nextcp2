@@ -128,11 +128,11 @@ public class CredentialsServiceSubscription extends RemoteGENASubscription
             {
                 listener.eventReceived(key, stateVar);
             }
-            for (ISubscriptionEventListener listener : eventListener)
-            {
-                listener.eventProcessed();
-            }
         }        
+        for (ISubscriptionEventListener listener : eventListener)
+        {
+            listener.eventProcessed();
+        }
     }
 
     private void publicKeyChange(String value)

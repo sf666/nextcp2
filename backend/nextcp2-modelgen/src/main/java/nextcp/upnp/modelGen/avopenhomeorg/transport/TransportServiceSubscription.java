@@ -152,11 +152,11 @@ public class TransportServiceSubscription extends RemoteGENASubscription
             {
                 listener.eventReceived(key, stateVar);
             }
-            for (ISubscriptionEventListener listener : eventListener)
-            {
-                listener.eventProcessed();
-            }
         }        
+        for (ISubscriptionEventListener listener : eventListener)
+        {
+            listener.eventProcessed();
+        }
     }
 
     private void modesChange(String value)

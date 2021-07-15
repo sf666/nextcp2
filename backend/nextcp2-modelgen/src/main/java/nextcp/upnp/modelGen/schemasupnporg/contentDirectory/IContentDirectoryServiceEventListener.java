@@ -16,8 +16,14 @@ public interface IContentDirectoryServiceEventListener extends ISubscriptionEven
     
     public void sortCapabilitiesChange(String value);
     
+    public void x_FeatureListChange(String value);
+    
+    public void sortExtensionCapabilitiesChange(String value);
+    
     public void containerUpdateIDsChange(String value);
     
     public void searchCapabilitiesChange(String value);
+    
+    public void featureListChange(String value);
     
 }

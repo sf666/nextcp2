@@ -10,9 +10,9 @@ import nextcp.upnp.ISubscriptionEventListener;
  */
 public interface IPlaylistServiceEventListener extends ISubscriptionEventListener 
 {
-    public void idArrayChangedChange(Boolean value);
-    
     public void relativeChange(Integer value);
+    
+    public void idArrayChangedChange(Boolean value);
     
     public void tracksMaxChange(Long value);
     
@@ -22,9 +22,9 @@ public interface IPlaylistServiceEventListener extends ISubscriptionEventListene
     
     public void metadataChange(String value);
     
-    public void indexChange(Long value);
-    
     public void repeatChange(Boolean value);
+    
+    public void indexChange(Long value);
     
     public void idArrayChange(byte[] value);
     

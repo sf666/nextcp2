@@ -130,14 +130,14 @@ public class InfoServiceSubscription extends RemoteGENASubscription
                     case "Uri":
                         uriChange((String) stateVar.getValue());
                         break;
-                    case "CodecName":
-                        codecNameChange((String) stateVar.getValue());
+                    case "BitDepth":
+                        bitDepthChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "Lossless":
                         losslessChange((Boolean) stateVar.getValue());
                         break;
-                    case "BitDepth":
-                        bitDepthChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                    case "CodecName":
+                        codecNameChange((String) stateVar.getValue());
                         break;
                     case "Metatext":
                         metatextChange((String) stateVar.getValue());
@@ -155,11 +155,11 @@ public class InfoServiceSubscription extends RemoteGENASubscription
             {
                 listener.eventReceived(key, stateVar);
             }
-            for (ISubscriptionEventListener listener : eventListener)
-            {
-                listener.eventProcessed();
-            }
         }        
+        for (ISubscriptionEventListener listener : eventListener)
+        {
+            listener.eventProcessed();
+        }
     }
 
     private void detailsCountChange(Long value)
@@ -226,11 +226,11 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void codecNameChange(String value)
+    private void bitDepthChange(Long value)
     {
         for (IInfoServiceEventListener listener : eventListener)
         {
-            listener.codecNameChange(value);
+            listener.bitDepthChange(value);
         }
     }    
 
@@ -242,11 +242,11 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void bitDepthChange(Long value)
+    private void codecNameChange(String value)
     {
         for (IInfoServiceEventListener listener : eventListener)
         {
-            listener.bitDepthChange(value);
+            listener.codecNameChange(value);
         }
     }    
 

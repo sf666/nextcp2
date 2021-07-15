@@ -158,11 +158,11 @@ public class RadioServiceSubscription extends RemoteGENASubscription
             {
                 listener.eventReceived(key, stateVar);
             }
-            for (ISubscriptionEventListener listener : eventListener)
-            {
-                listener.eventProcessed();
-            }
         }        
+        for (ISubscriptionEventListener listener : eventListener)
+        {
+            listener.eventProcessed();
+        }
     }
 
     private void relativeChange(Integer value)

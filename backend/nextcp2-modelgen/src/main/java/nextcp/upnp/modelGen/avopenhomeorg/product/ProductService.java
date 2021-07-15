@@ -30,6 +30,8 @@ import nextcp.upnp.modelGen.avopenhomeorg.product.actions.StandbyOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.Source;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SourceOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SourceInput;
+import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetProductRoom;
+import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetProductRoomInput;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetStandby;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetStandbyInput;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SourceIndex;
@@ -146,6 +148,12 @@ public class ProductService
         Source source = new Source(productService, inp, upnpService.getControlPoint());
         SourceOutput res = source.executeAction();
         return res;        
+    }
+
+    public void setProductRoom(SetProductRoomInput inp)
+    {
+        SetProductRoom setProductRoom = new SetProductRoom(productService, inp, upnpService.getControlPoint());
+        setProductRoom.executeAction();
     }
 
     public void setStandby(SetStandbyInput inp)

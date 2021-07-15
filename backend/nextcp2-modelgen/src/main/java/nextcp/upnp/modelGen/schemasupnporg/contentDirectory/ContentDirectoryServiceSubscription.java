@@ -115,11 +115,20 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
                     case "SortCapabilities":
                         sortCapabilitiesChange((String) stateVar.getValue());
                         break;
+                    case "X_FeatureList":
+                        x_FeatureListChange((String) stateVar.getValue());
+                        break;
+                    case "SortExtensionCapabilities":
+                        sortExtensionCapabilitiesChange((String) stateVar.getValue());
+                        break;
                     case "ContainerUpdateIDs":
                         containerUpdateIDsChange((String) stateVar.getValue());
                         break;
                     case "SearchCapabilities":
                         searchCapabilitiesChange((String) stateVar.getValue());
+                        break;
+                    case "FeatureList":
+                        featureListChange((String) stateVar.getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -134,11 +143,11 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
             {
                 listener.eventReceived(key, stateVar);
             }
-            for (ISubscriptionEventListener listener : eventListener)
-            {
-                listener.eventProcessed();
-            }
         }        
+        for (ISubscriptionEventListener listener : eventListener)
+        {
+            listener.eventProcessed();
+        }
     }
 
     private void transferIDsChange(String value)
@@ -165,6 +174,22 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void x_FeatureListChange(String value)
+    {
+        for (IContentDirectoryServiceEventListener listener : eventListener)
+        {
+            listener.x_FeatureListChange(value);
+        }
+    }    
+
+    private void sortExtensionCapabilitiesChange(String value)
+    {
+        for (IContentDirectoryServiceEventListener listener : eventListener)
+        {
+            listener.sortExtensionCapabilitiesChange(value);
+        }
+    }    
+
     private void containerUpdateIDsChange(String value)
     {
         for (IContentDirectoryServiceEventListener listener : eventListener)
@@ -178,6 +203,14 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
         for (IContentDirectoryServiceEventListener listener : eventListener)
         {
             listener.searchCapabilitiesChange(value);
+        }
+    }    
+
+    private void featureListChange(String value)
+    {
+        for (IContentDirectoryServiceEventListener listener : eventListener)
+        {
+            listener.featureListChange(value);
         }
     }    
 }

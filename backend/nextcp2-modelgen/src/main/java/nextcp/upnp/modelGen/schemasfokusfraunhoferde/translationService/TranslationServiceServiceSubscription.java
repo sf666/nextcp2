@@ -125,11 +125,11 @@ public class TranslationServiceServiceSubscription extends RemoteGENASubscriptio
             {
                 listener.eventReceived(key, stateVar);
             }
-            for (ISubscriptionEventListener listener : eventListener)
-            {
-                listener.eventProcessed();
-            }
         }        
+        for (ISubscriptionEventListener listener : eventListener)
+        {
+            listener.eventProcessed();
+        }
     }
 
     private void languageIDListChange(String value)
