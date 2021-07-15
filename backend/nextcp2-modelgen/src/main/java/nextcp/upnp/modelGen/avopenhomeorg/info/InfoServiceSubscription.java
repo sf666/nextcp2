@@ -97,11 +97,12 @@ public class InfoServiceSubscription extends RemoteGENASubscription
     @Override
     public void eventReceived()
     {
-        log.debug("eventReceived");
+        log.debug("eventReceived : ");
         Map<String, StateVariableValue<RemoteService>> values = getCurrentValues();
         for (StateVariableValue<RemoteService> stateVar : values.values())
         {
             String key = stateVar.getStateVariable().getName();
+            log.warn(String.format("Key : >%s< : >%s<", key, stateVar));
             try
             {
                 switch (key)

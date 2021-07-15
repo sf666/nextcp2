@@ -33,7 +33,11 @@ public class AvTransportEventPublisher extends BaseAvTransportChangeEventImpl
     public void publishAllAvEvents()
     {
         publishGlobalAvTransportState(currentAvTransportState);
-        getEventPublisher().publishEvent(getAsTrackInfo(currentAvTransportState));
+         
+        if (!device.hasOhInfoService())
+        {
+            getEventPublisher().publishEvent(getAsTrackInfo(currentAvTransportState));
+        }
     }
 
     private void publishGlobalAvTransportState(AvTransportState currentAvTransportState)
