@@ -102,7 +102,7 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         for (StateVariableValue<RemoteService> stateVar : values.values())
         {
             String key = stateVar.getStateVariable().getName();
-            log.warn(String.format("Key : >%s< : >%s<", key, stateVar));
+            log.debug(String.format("Key : >%s< : >%s<", key, stateVar));
             try
             {
                 switch (key)
