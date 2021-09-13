@@ -1,0 +1,9 @@
+<div class="panel" *ngIf="true" (mouseleave)="close()">
+    <div class="dialogTitle">Renderer</div>
+    <div class="dialogItems d-flex flex-column flex-wrap mt-4">
+        <div *ngFor="let device of deviceService.getEnabledMediaRendererList()" class="element-item"
+            (click)="selectRenderer(device.udn)">
+            {{device.friendlyName}}
+        </div>
+    </div>
+</div>

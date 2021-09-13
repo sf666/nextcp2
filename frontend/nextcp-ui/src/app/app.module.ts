@@ -51,6 +51,7 @@ import { StarRatingComponent } from './view/star-rating/star-rating.component';
 import { DefautPlaylistsComponent } from './mediaserver/popup/defaut-playlists/defaut-playlists.component';
 import { SongOptionsComponent } from './mediaserver/popup/song-options/song-options/song-options.component';
 import { QualityBadgeComponent } from './util/comp/quality-badge/quality-badge.component';
+import { AvailableRendererComponent } from './popup/available-renderer/available-renderer.component';
 
 
 @NgModule({
@@ -80,6 +81,7 @@ import { QualityBadgeComponent } from './util/comp/quality-badge/quality-badge.c
       DefautPlaylistsComponent,
       SongOptionsComponent,
       QualityBadgeComponent,
+      AvailableRendererComponent,
 
    ],
    imports: [

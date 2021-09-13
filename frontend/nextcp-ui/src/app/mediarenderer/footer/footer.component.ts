@@ -1,10 +1,12 @@
+import { MatDialog } from '@angular/material/dialog';
+import { AvailableRendererComponent } from './../../popup/available-renderer/available-renderer.component';
 import { MatSliderChange } from '@angular/material/slider';
 import { PlaylistService } from './../../service/playlist.service';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
 import { UpnpAvTransportState } from './../../service/dto.d';
 import { AvtransportService } from './../../service/avtransport.service';
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'renderer-footer',
@@ -18,6 +20,7 @@ export class FooterComponent {
   currentMediaRendererName: string;
 
   constructor(
+    private dialog: MatDialog,
     public avtransportService: AvtransportService,
     public deviceService: DeviceService,
     public playlistService: PlaylistService,
@@ -25,13 +28,15 @@ export class FooterComponent {
     deviceService.mediaRendererChanged$.subscribe(data => this.currentMediaRendererName = data.friendlyName);
   }
 
-  public getCurrentMediaRendererName() {
-    if (this.currentMediaRendererName?.length > 0) {
-      return this.currentMediaRendererName;
-    }
-    else {
-      return "select media renderer";
-    }
+  public rendererClicked(event: Event): void {
+    const target = new ElementRef(event.currentTarget);
+    const dialogRef = this.dialog.open(AvailableRendererComponent, {
+      data: { trigger: target },
+      panelClass: 'popup'
+    });
+    dialogRef.afterClosed().subscribe(_res => {
+      console.log(_res);
+    });
   }
 
   public get avTransportState(): UpnpAvTransportState {
@@ -41,7 +46,7 @@ export class FooterComponent {
   public getImgSrc(): string {
     return this.rendererService.getImgSrc();
   }
-  
+
   public getCurrentSongTitle(): string {
     return this.rendererService.getCurrentSongTitle();
   }
@@ -82,7 +87,7 @@ export class FooterComponent {
   getFinishTime(): string {
     return this.rendererService.getFinishTime();
   }
-  
+
   //
   // styling of elements depending on state information
   // =========================================================================================================
