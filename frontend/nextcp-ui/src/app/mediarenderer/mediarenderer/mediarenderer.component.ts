@@ -2,9 +2,7 @@ import { DefaultPlaylistService } from './../../mediaserver/popup/defaut-playlis
 import { LayoutService } from './../../service/layout.service';
 import { MusicItemDto } from './../../service/dto.d';
 import { BackgroundImageService } from './../../util/background-image.service';
-import { SseService } from './../../service/sse/sse.service';
 import { RendererService } from './../../service/renderer.service';
-import { DeviceService } from './../../service/device.service';
 import { Component, OnInit, ElementRef } from '@angular/core';
 
 @Component({
@@ -18,14 +16,14 @@ export class MediarendererComponent implements OnInit {
   private _mediaServerUdn: string;
   private _mediaRendererUdn: string;
 
-  public showDetail : boolean;
+  public showDetail: boolean;
 
   constructor(
     private defaultPlaylistService: DefaultPlaylistService,
     private layoutService: LayoutService,
     private backgroundImageService: BackgroundImageService,
     public rendererService: RendererService) {
-      this.showDetail = false;
+    this.showDetail = false;
   }
   ngOnInit(): void {
     this.layoutService.setFramedView();
@@ -46,9 +44,8 @@ export class MediarendererComponent implements OnInit {
     }
   }
 
-  streaming() {
-    let streaming: boolean;
-    streaming = this.rendererService?.trackTime?.streaming;
+  streaming() : boolean{
+    const streaming = this.rendererService?.trackTime?.streaming;
     return streaming;
   }
 
@@ -62,19 +59,19 @@ export class MediarendererComponent implements OnInit {
     }
   }
 
-  getStarSize() {
+  getStarSize(): string {
     return "lg";
   }
 
-  public get canBeAddedToPlaylist(): boolean{
+  public get canBeAddedToPlaylist(): boolean {
     return this.rendererService.trackInfo?.currentTrack?.musicBrainzId?.TrackId?.length > 0;
   }
 
-  openAddPlaylistDialog(event: any, mbid: string) {
+  openAddPlaylistDialog(event: any, mbid: string): void {
     this.defaultPlaylistService.openAddPlaylistDialog(event, mbid);
   }
 
-  detailsClicked() : void {
+  detailsClicked(): void {
     this.showDetail = !this.showDetail;
   }
 }
