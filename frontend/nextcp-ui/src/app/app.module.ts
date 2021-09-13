@@ -52,6 +52,7 @@ import { DefautPlaylistsComponent } from './mediaserver/popup/defaut-playlists/d
 import { SongOptionsComponent } from './mediaserver/popup/song-options/song-options/song-options.component';
 import { QualityBadgeComponent } from './util/comp/quality-badge/quality-badge.component';
 import { AvailableRendererComponent } from './popup/available-renderer/available-renderer.component';
+import { VolumeControlComponent } from './popup/volume-control/volume-control.component';
 
 
 @NgModule({
@@ -82,6 +83,7 @@ import { AvailableRendererComponent } from './popup/available-renderer/available
       SongOptionsComponent,
       QualityBadgeComponent,
       AvailableRendererComponent,
+      VolumeControlComponent,
 
    ],
    imports: [

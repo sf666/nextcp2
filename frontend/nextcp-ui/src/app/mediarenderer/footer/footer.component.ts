@@ -1,3 +1,4 @@
+import { VolumeControlComponent } from './../../popup/volume-control/volume-control.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AvailableRendererComponent } from './../../popup/available-renderer/available-renderer.component';
 import { MatSliderChange } from '@angular/material/slider';
@@ -39,6 +40,18 @@ export class FooterComponent {
     });
   }
 
+  public volumeClicked(event: Event): void {
+    const target = new ElementRef(event.currentTarget);
+    const dialogRef = this.dialog.open(VolumeControlComponent, {
+      data: { trigger: target },
+      panelClass: 'popup'
+    });
+    dialogRef.afterClosed().subscribe(_res => {
+      console.log(_res);
+    });
+  }
+  
+
   public get avTransportState(): UpnpAvTransportState {
     return this.avtransportService.upnpAvTransportState;
   }
@@ -59,15 +72,11 @@ export class FooterComponent {
     return this.rendererService.deviceDriverState?.hasDeviceDriver;
   }
 
-  powerClicked() {
+  powerClicked(): void {
     this.rendererService.powerPressed();
   }
 
-  volChanged(event: MatSliderChange) {
-    this.rendererService.setVolume(event.value);
-  }
-
-  public getStandbyClass() {
+  public getStandbyClass(): string {
     if (this.rendererService.deviceDriverState.standby) {
       return "standbyOn";
     }
@@ -80,7 +89,7 @@ export class FooterComponent {
   // for demontration purpose : locally provided actions intended to be used by the template
   // =========================================================================================================
 
-  streaming() {
+  streaming(): boolean {
     return this.rendererService.streaming();
   }
 

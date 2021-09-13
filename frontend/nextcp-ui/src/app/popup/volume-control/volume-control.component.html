@@ -1,0 +1,9 @@
+<div class="d-flex flex-column justify-content-between align-self-center">
+    <mat-icon class="icon-main align-self-center" svgIcon="volume-high" aria-hidden="false"
+        aria-label="high volume icon">
+    </mat-icon>
+    <mat-slider vertical class="align-self-center sidebar-slider" [value]="rendererService.deviceDriverState.volume"
+        (change)="volChanged($event)" min="0" max="90" step="1" value="0"></mat-slider>
+    <mat-icon class="icon-main align-self-center" svgIcon="volume-low" aria-hidden="false" aria-label="low volume icon">
+    </mat-icon>
+</div>

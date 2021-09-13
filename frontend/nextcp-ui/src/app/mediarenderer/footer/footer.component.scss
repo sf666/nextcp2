@@ -75,7 +75,7 @@ mat-slider {
 }
 
 .right-footer {
-    //    flex-basis : 25em; // auto
+    flex-basis : 15rem; // 15em / auto
     flex-grow : 1;
     align-self: center;
 }
@@ -178,11 +178,12 @@ img {
 }
 
 .renderer-icon {
-    font-size : 1.2rem;
-    width     : 2rem;
-    height    : 1.3rem;
-    color     : var(--primary-color-reduced);
-    align-self: center;
+    font-size     : 1.2rem;
+    width         : 2rem;
+    height        : 1.3rem;
+    color         : var(--primary-color-reduced);
+    align-self    : center;
+    vertical-align: middle;
 }
 
 .lower-row {
