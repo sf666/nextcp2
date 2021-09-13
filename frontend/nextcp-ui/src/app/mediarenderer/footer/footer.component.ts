@@ -1,3 +1,4 @@
+import { AvailableServerComponent } from './../../popup/available-server/available-server.component';
 import { VolumeControlComponent } from './../../popup/volume-control/volume-control.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AvailableRendererComponent } from './../../popup/available-renderer/available-renderer.component';
@@ -32,6 +33,17 @@ export class FooterComponent {
   public rendererClicked(event: Event): void {
     const target = new ElementRef(event.currentTarget);
     const dialogRef = this.dialog.open(AvailableRendererComponent, {
+      data: { trigger: target },
+      panelClass: 'popup'
+    });
+    dialogRef.afterClosed().subscribe(_res => {
+      console.log(_res);
+    });
+  }
+
+  public serverClicked(event: Event): void {
+    const target = new ElementRef(event.currentTarget);
+    const dialogRef = this.dialog.open(AvailableServerComponent, {
       data: { trigger: target },
       panelClass: 'popup'
     });

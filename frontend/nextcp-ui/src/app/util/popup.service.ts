@@ -32,7 +32,7 @@ export class PopupService {
     if (window.innerHeight - rect.bottom - popupHeight - 20 > 0) {
       topPos = rect.bottom - 20;
     } else {
-      topPos = window.innerHeight - popupHeight - 2;  // MatDialogConfig width
+      topPos = window.innerHeight - popupHeight - 2;  // MatDialogConfig height
     }
 
     _matDialogRef.updateSize(`${popupWidth}px`, `${popupHeight}px`);

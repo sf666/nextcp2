@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InputOutputSourceComponent } from './input-output-source.component';
+import { AvailableServerComponent } from './available-server.component';
 
-describe('InputOutputSourceComponent', () => {
-  let component: InputOutputSourceComponent;
-  let fixture: ComponentFixture<InputOutputSourceComponent>;
+describe('AvailableServerComponent', () => {
+  let component: AvailableServerComponent;
+  let fixture: ComponentFixture<AvailableServerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InputOutputSourceComponent ]
+      declarations: [ AvailableServerComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InputOutputSourceComponent);
+    fixture = TestBed.createComponent(AvailableServerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

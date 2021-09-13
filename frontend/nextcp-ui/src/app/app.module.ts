@@ -45,7 +45,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SearchResultItemMultiComponent } from './view/search/search-result-item-multi/search-result-item-multi.component';
 import { SearchResultItemSingleComponent } from './view/search/search-result-item-single/search-result-item-single.component';
-import { InputOutputSourceComponent } from './view/input-output-source/input-output-source.component';
 import { DomChangedDirective } from './directive/watch-dom-tree.directive';
 import { StarRatingComponent } from './view/star-rating/star-rating.component';
 import { DefautPlaylistsComponent } from './mediaserver/popup/defaut-playlists/defaut-playlists.component';
@@ -53,6 +52,7 @@ import { SongOptionsComponent } from './mediaserver/popup/song-options/song-opti
 import { QualityBadgeComponent } from './util/comp/quality-badge/quality-badge.component';
 import { AvailableRendererComponent } from './popup/available-renderer/available-renderer.component';
 import { VolumeControlComponent } from './popup/volume-control/volume-control.component';
+import { AvailableServerComponent } from './popup/available-server/available-server.component';
 
 
 @NgModule({
@@ -75,7 +75,6 @@ import { VolumeControlComponent } from './popup/volume-control/volume-control.co
       ModalSearchResultComponent,
       SearchResultItemMultiComponent,
       SearchResultItemSingleComponent,
-      InputOutputSourceComponent,
       DomChangedDirective,
       MinimTagComponent,
       StarRatingComponent,
@@ -84,6 +83,7 @@ import { VolumeControlComponent } from './popup/volume-control/volume-control.co
       QualityBadgeComponent,
       AvailableRendererComponent,
       VolumeControlComponent,
+      AvailableServerComponent,
 
    ],
    imports: [
