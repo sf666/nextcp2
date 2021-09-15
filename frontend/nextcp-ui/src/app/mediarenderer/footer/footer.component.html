@@ -73,11 +73,11 @@
         <div class="m-2 pl-2 right-footer mr-4 lower-row justify-content-between">
             <mat-icon class="icon-main align-self-center" (click)="serverClicked($event)" svgIcon="server-network"></mat-icon>
             <mat-icon class="icon-main align-self-center" style="margin-top: 4px;" (click)="rendererClicked($event)" svgIcon="cast-audio"></mat-icon>
-            <mat-icon class="{{getStandbyClass()}} align-self-center" svgIcon="power-standby" aria-hidden="false"
-                aria-label="POWER icon" (click)="powerClicked()" *ngIf="hasDeviceDriver()">
-            </mat-icon>
             <mat-icon class="icon-main align-self-center" svgIcon="volume-high" aria-hidden="false"
                 aria-label="high volume icon" (click)="volumeClicked($event)" *ngIf="hasDeviceDriver()">
+            </mat-icon>
+            <mat-icon class="{{getStandbyClass()}} align-self-center" svgIcon="power-standby" aria-hidden="false"
+                aria-label="POWER icon" (click)="powerClicked()" *ngIf="hasDeviceDriver()">
             </mat-icon>
         </div>
     </div>
