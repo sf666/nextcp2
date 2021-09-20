@@ -218,4 +218,10 @@ public class SongIndexed
             rating = 5;
         }
     }
+
+	@Override
+	public String toString() {
+		return "SongIndexed [filePath=" + filePath + ", acoustID=" + acoustID + ", musicBrainzID=" + musicBrainzID + ", rating=" + rating +
+			"]";
+	}
 }

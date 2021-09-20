@@ -43,7 +43,7 @@ export class PlaylistService implements OnInit {
     sseService.mediaRendererPlaylistItemsChanged$.subscribe(data => {
       if (deviceService.isMediaRendererSelected(data.udn)) {
         this.playlistItems = data.musicItemDto;
-      };
+      }
     });
 
     sseService.mediaRendererPlaylistStateChanged$.subscribe(data => {
@@ -63,7 +63,6 @@ export class PlaylistService implements OnInit {
   }
 
   ngOnInit(): void {
-
     //
     // init state variables (playlist items & playlist state)
     // ================================================================================
@@ -77,7 +76,7 @@ export class PlaylistService implements OnInit {
     })
   }
 
-  public updatePlaylistItems() {
+  public updatePlaylistItems(): void {
     if (this.deviceService.selectedMediaRendererDevice.udn !== '') {
       this.getPlaylistItems(this.deviceService.selectedMediaRendererDevice.udn);
       this.getPlaylistState(this.deviceService.selectedMediaRendererDevice.udn);
@@ -88,11 +87,11 @@ export class PlaylistService implements OnInit {
   // Ui action endpoints
   // ===========================================================================
 
-  public toggleShuffle() {
+  public toggleShuffle(): void {
     this.setShuffle(!this.playlistState.Shuffle);
   }
 
-  public toggleRepeat() {
+  public toggleRepeat(): void {
     this.setRepeat(!this.playlistState.Repeat);
   }
 
@@ -107,7 +106,7 @@ export class PlaylistService implements OnInit {
   // renderer playlist actions
   // ===========================================================================
 
-  public seekId(id: number) {
+  public seekId(id: number): void {
     if (this.getSelectedMediaRendererUdn() !== '') {
       const uri = '/seekId';
       const genericNumberRequest: GenericNumberRequest = { deviceUDN: this.getSelectedMediaRendererUdn(), value: id };
@@ -115,26 +114,26 @@ export class PlaylistService implements OnInit {
     }
   }
 
-  public getPlaylistItems(udn: string) {
+  public getPlaylistItems(udn: string): void {
     const uri = '/getPlaylistItems';
     if (udn !== '') {
       this.httpService.post<MusicItemDto[]>(this.baseUri, uri, udn).subscribe(data => this.playlistItems = data);
     }
   }
 
-  public getPlaylistState(udn: string) {
+  public getPlaylistState(udn: string): void {
     const uri = '/getState';
     if (udn !== '') {
       this.httpService.post<PlaylistState>(this.baseUri, uri, udn).subscribe(data => this.playlistState = data);
     }
   }
 
-  public readList() {
+  public readList(): void {
     const uri = '/readList';
     this.httpService.post(this.baseUri, uri, this.getSelectedMediaRendererUdn()).subscribe();
   }
 
-  public addToPlaylist(musicItemDto: MusicItemDto) {
+  public addToPlaylist(musicItemDto: MusicItemDto): void {
     const uri = '/insert';
     const playRequestDto: PlayRequestDto = {
       mediaRendererDto: this.deviceService.selectedMediaRendererDevice,
@@ -145,7 +144,7 @@ export class PlaylistService implements OnInit {
     this.httpService.post(this.baseUri, uri, playRequestDto).subscribe();
   }
 
-  public addContainerToPlaylist(containerDto: ContainerDto) {
+  public addContainerToPlaylist(containerDto: ContainerDto): void {
     const uri = '/insertContainer';
     const playlistAddContainerRequest: PlaylistAddContainerRequest = {
       containerDto: containerDto,
@@ -169,7 +168,7 @@ export class PlaylistService implements OnInit {
 
   public setShuffle(shuffle: boolean): void {
     const uri = '/setShuffle';
-    var req: GenericBooleanRequest = {
+    const req: GenericBooleanRequest = {
       deviceUDN: this.getSelectedMediaRendererUdn(),
       value: shuffle
     };
@@ -189,7 +188,7 @@ export class PlaylistService implements OnInit {
 
   public setRepeat(repeat: boolean): void {
     const uri = '/setRepeat';
-    var req: GenericBooleanRequest = {
+    const req: GenericBooleanRequest = {
       deviceUDN: this.getSelectedMediaRendererUdn(),
       value: repeat
     };
@@ -199,7 +198,7 @@ export class PlaylistService implements OnInit {
 
   public delete(id: number): void {
     const uri = '/delete';
-    var req: GenericNumberRequest = {
+    const req: GenericNumberRequest = {
       deviceUDN: this.getSelectedMediaRendererUdn(),
       value: id
     };
@@ -228,13 +227,13 @@ export class PlaylistService implements OnInit {
 
   public addToFilesystemPlaylistByMBID(musicBrainzId: string, playlistName: string): void {
     const uri = '/addToFilesystemPlaylistByMBID';
-    let req: FileSystemPlaylistEntry = { musicBrainzId: musicBrainzId, playlistName: playlistName };
+    const req: FileSystemPlaylistEntry = { musicBrainzId: musicBrainzId, playlistName: playlistName };
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }
 
   public removeFromFilesystemPlaylistByMBID(musicBrainzId: string, playlistName: string): void {
     const uri = '/removeFromFilesystemPlaylistByMBID';
-    let req: FileSystemPlaylistEntry = { musicBrainzId: musicBrainzId, playlistName: playlistName };
+    const req: FileSystemPlaylistEntry = { musicBrainzId: musicBrainzId, playlistName: playlistName };
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }
 }

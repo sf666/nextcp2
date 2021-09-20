@@ -679,7 +679,6 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
     @Override
     public void insertContainer(ContainerItemDto items)
     {
-        reset();
         addAllSongToPlaylist(items.musicItemDto);
     }
 
