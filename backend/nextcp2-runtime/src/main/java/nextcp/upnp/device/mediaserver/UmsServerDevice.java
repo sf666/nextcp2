@@ -50,7 +50,7 @@ public class UmsServerDevice extends MediaServerDevice
     @Override
     public void rescanFile(File f)
     {
-        RequestBody body = RequestBody.create(config.localIndexerSupport.musicRootPath, MediaType.parse("application/text"));
+        RequestBody body = RequestBody.create(f.getAbsolutePath(), MediaType.parse("application/text"));
         String requestUrl = String.format("%sapi/rescanFileOrFolder", getDevice().getDetails().getBaseURL());
         Request request = new Request.Builder().url(requestUrl).addHeader("api-key","123456789012").post(body).build();
         Call call = okClient.newCall(request);
@@ -60,7 +60,7 @@ public class UmsServerDevice extends MediaServerDevice
         }
         catch (IOException e)
         {
-            log.warn("rescan file or folder failed", e);
+//            log.warn("rescan file or folder failed", e);
         }
     }
 
