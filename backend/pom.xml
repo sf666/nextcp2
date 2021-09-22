@@ -33,6 +33,8 @@
 		<cling.version>2.1.2</cling.version>
 		<freemarker.version>2.3.30</freemarker.version>
 		<h2database.version>1.4.200</h2database.version>
+		<jackson.version>2.12.4</jackson.version>
+		
 	</properties>
 
 	<modules>
@@ -196,23 +198,23 @@
 			<dependency>
 				<groupId>com.fasterxml.jackson.module</groupId>
 				<artifactId>jackson-module-jaxb-annotations</artifactId>
-				<version>2.10.2</version>
+				<version>${jackson.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.jaxrs</groupId>
 				<artifactId>jackson-jaxrs-json-provider</artifactId>
-				<version>2.10.2.1</version>
+				<version>${jackson.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-core</artifactId>
-				<version>2.10.2</version>
+				<version>${jackson.version}</version>
 			</dependency>
 			<!-- XML parser -->
 			<dependency>
 				<groupId>com.fasterxml.jackson.dataformat</groupId>
 				<artifactId>jackson-dataformat-xml</artifactId>
-				<version>2.11.0</version>
+				<version>${jackson.version}</version>
 			</dependency>
 
 			<!-- Utils -->
