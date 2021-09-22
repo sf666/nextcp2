@@ -43,7 +43,7 @@ public class UmsServerDevice extends MediaServerDevice
         }
         catch (IOException e)
         {
-            log.warn("unable to retrieve rating data from musicbrainz.org", e);
+            log.warn("rescan failed", e);
         }
     }
     
@@ -60,7 +60,7 @@ public class UmsServerDevice extends MediaServerDevice
         }
         catch (IOException e)
         {
-            log.warn("unable to retrieve rating data from musicbrainz.org", e);
+            log.warn("rescan file or folder failed", e);
         }
     }
 

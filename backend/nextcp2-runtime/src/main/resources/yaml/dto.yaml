@@ -310,3 +310,8 @@ ToastrMessage:
    
 SystemInformationDto:
    buildNumber: String
+   
+
+FileChangedEventDto:
+   type: String
+   path: String  
