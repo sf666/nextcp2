@@ -134,7 +134,7 @@ public class RepositoryAdminService {
 				inserts.set(0);
 			}
 		} catch (Exception e) {
-			log.debug("update song failed.", e);
+			log.error("update song failed.", e);
 			publisher.publishEvent(new ToastrMessage(null, "error", "Updating song failed", song.toString()));
 
 		}
