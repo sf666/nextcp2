@@ -21,7 +21,7 @@ public class DeviceMultiplexer {
     {
     	for (MediaServerDevice serverDevice : deviveRegistry.getAvailableMediaServer()) {
     		File f = new File(event.path);
-			serverDevice.rescanFile(f.getParentFile());
+			serverDevice.rescanFile(f);
 		}
     }
 }

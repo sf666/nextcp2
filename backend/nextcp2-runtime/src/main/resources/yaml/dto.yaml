@@ -40,7 +40,6 @@ RatingStrategy:
    collisionStrategy: String
 
 MusicbrainzSupport:
-    isActive: Boolean
     username: String
     password: String
    

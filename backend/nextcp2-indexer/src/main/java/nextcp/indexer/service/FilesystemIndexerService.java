@@ -91,15 +91,18 @@ public class FilesystemIndexerService {
 		SongIndexed songIndex = getBestSongFromSongList(getIndexedSongFromMBID(musicBrainzId));
 
 		if (songIndex == null) {
+			log.error("song not found " + musicBrainzId);
 			throw new IndexerException(IndexerException.SONG_NOT_FOUND, "song was not found for MBID : " + musicBrainzId);
 		}
 		if (playlistName == null) {
+			log.error("playlist not found " + playlistName);
 			throw new IndexerException(IndexerException.PLAYLIST_NOT_FOUND, "playlist was not found. name : " + playlistName);
 		}
 
 		String entry = calculateRelativeSongPath(Paths.get(songIndex.getFilePath()), playlistPath);
 		List<String> playlistEntries = readCurrentPlaylist(playlistPath);
 		if (isSongAlreadyInPlaylist(songIndex.getFilePath(), entry, playlistEntries, playlistPath)) {
+			log.debug("song already in playlist " + entry);
 			throw new IndexerException(IndexerException.PLAYLIST_FILE_EXISTS, "Song already exists in playlist");
 		} else {
 			playlistEntries.add(entry);
