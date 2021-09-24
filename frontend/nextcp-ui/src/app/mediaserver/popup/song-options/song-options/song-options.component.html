@@ -15,8 +15,8 @@
 
     <div class="dialogItems d-flex flex-column flex-wrap">
         <div class="d-flex justify-content-between playlist-item" *ngIf="hasValidMusicBrainzId()">
-            <div class="d-flex justify-content-between" style="align-self: center;" (click)="openAddToPlaylistDialog()"
-                (mouseenter)="openAddToPlaylistDialog()">
+            <div class="d-flex justify-content-between" style="align-self: center;" (click)="openAddToPlaylistDialog($event)"
+                (mouseenter)="openAddToPlaylistDialog($event)">
                 Add to playlist
             </div>
             <mat-icon class="chevron-right" style="align-self: center;" svgIcon="chevron-right"></mat-icon>

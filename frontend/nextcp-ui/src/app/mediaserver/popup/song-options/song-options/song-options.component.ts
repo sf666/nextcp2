@@ -19,7 +19,7 @@ import { tap } from 'lodash';
 })
 export class SongOptionsComponent implements OnInit {
 
-  private data;
+  private data : MusicItemDto;
   private readonly _matDialogRef: MatDialogRef<SongOptionsComponent>;
   private readonly triggerElementRef: ElementRef;
   private playlistDialogOpen: boolean;
@@ -58,14 +58,14 @@ export class SongOptionsComponent implements OnInit {
     return false;
   }
 
-  download() {
+  download(): void {
     this.downloadService.downloadFileByMBID(this.data.item, this);
   }
 
-  openAddToPlaylistDialog() {
+  openAddToPlaylistDialog(event: Event): void {
     if (this.data?.item?.musicBrainzId?.TrackId) {
       if (!this.playlistDialogOpen) {
-        let dialogRef = this.defaultPlaylistService.openAddPlaylistDialogWithParent(this.elRef, this.data.item.musicBrainzId.TrackId, this);
+        const dialogRef = this.defaultPlaylistService.openAddPlaylistDialogWithParent(event, this.data.item.musicBrainzId.TrackId, this);
         dialogRef.afterClosed().subscribe(_res => {
           this.playlistDialogOpen = false;
         });
@@ -74,13 +74,14 @@ export class SongOptionsComponent implements OnInit {
     }
   }
 
-  deleteFromPlaylist() {
+  deleteFromPlaylist(): void {
     if (this.data?.item?.musicBrainzId?.TrackId) {
       this.playlistService.removeFromFilesystemPlaylistByMBID(this.data.item.musicBrainzId.TrackId, this.contentDirectoryService.currentContainerList.currentContainer.title);
     }
     close();
   }
-  close() {
+
+  close(): void {
     this.closeAllDialogs();
     this._matDialogRef.close();
   }

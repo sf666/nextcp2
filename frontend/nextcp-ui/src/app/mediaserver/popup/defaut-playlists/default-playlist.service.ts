@@ -36,7 +36,7 @@ export class DefaultPlaylistService {
     return this.openAddPlaylistDialogWithParent(event, mbid, null);
   }
 
-  public close() {
+  public close(): void {
     if (this.dialogRef) {
       this.dialogRef.close();
     }

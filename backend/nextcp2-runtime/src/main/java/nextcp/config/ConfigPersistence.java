@@ -243,7 +243,7 @@ public class ConfigPersistence
         if (config.musicbrainzSupport == null)
         {
             log.info("adding new configuration value 'musicbrainzSupport' as disabled. To activate this feature, provide username and password.");
-            config.musicbrainzSupport = new MusicbrainzSupport(false, "", "");
+            config.musicbrainzSupport = new MusicbrainzSupport("", "");
         }
 
         if (config.ratingStrategy == null)
