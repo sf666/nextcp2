@@ -298,7 +298,7 @@ public class ConfigPersistence
         c.localIndexerSupport.databaseFilename = FilenameUtils.concat(systemConfig.getString("user.dir"), "rating_db");
         c.localIndexerSupport.musicRootPath = "";
         c.localIndexerSupport.supportedFileTypes = "flac,mp3";
-        c.musicbrainzSupport = new MusicbrainzSupport(false, "", "");
+        c.musicbrainzSupport = new MusicbrainzSupport("", "");
         c.ratingStrategy = new RatingStrategy(true, true, true, "FILE");
         c.spotifyConfig = new SpotifyConfigDto();
         return c;
