@@ -19,7 +19,7 @@ import { tap } from 'lodash';
 })
 export class SongOptionsComponent implements OnInit {
 
-  private data : MusicItemDto;
+  private item : MusicItemDto;
   private readonly _matDialogRef: MatDialogRef<SongOptionsComponent>;
   private readonly triggerElementRef: ElementRef;
   private playlistDialogOpen: boolean;
@@ -34,9 +34,9 @@ export class SongOptionsComponent implements OnInit {
     private uuidService: UuidService,
     private popupService: PopupService,
     _matDialogRef: MatDialogRef<SongOptionsComponent>,
-    @Inject(MAT_DIALOG_DATA) data: { trigger: ElementRef, id: string },
+    @Inject(MAT_DIALOG_DATA) data: { trigger: ElementRef, item :  MusicItemDto, event: PointerEvent},
   ) {
-    this.data = data;
+    this.item = data.item;
     this._matDialogRef = _matDialogRef;
     this.triggerElementRef = data.trigger;
     this.playlistDialogOpen = false;
@@ -52,20 +52,20 @@ export class SongOptionsComponent implements OnInit {
 
 
   public hasValidMusicBrainzId(): boolean {
-    if (this.data?.item?.musicBrainzId?.TrackId?.length > 0) {
-      return this.uuidService.isValidUuid(this.data.item.musicBrainzId.TrackId);
+    if (this.item?.musicBrainzId?.TrackId?.length > 0) {
+      return this.uuidService.isValidUuid(this.item.musicBrainzId.TrackId);
     }
     return false;
   }
 
   download(): void {
-    this.downloadService.downloadFileByMBID(this.data.item, this);
+    this.downloadService.downloadFileByMBID(this.item, this);
   }
 
   openAddToPlaylistDialog(event: Event): void {
-    if (this.data?.item?.musicBrainzId?.TrackId) {
+    if (this.item?.musicBrainzId?.TrackId) {
       if (!this.playlistDialogOpen) {
-        const dialogRef = this.defaultPlaylistService.openAddPlaylistDialogWithParent(event, this.data.item.musicBrainzId.TrackId, this);
+        const dialogRef = this.defaultPlaylistService.openAddPlaylistDialogWithParent(event, this.item.musicBrainzId.TrackId, this);
         dialogRef.afterClosed().subscribe(_res => {
           this.playlistDialogOpen = false;
         });
@@ -75,8 +75,8 @@ export class SongOptionsComponent implements OnInit {
   }
 
   deleteFromPlaylist(): void {
-    if (this.data?.item?.musicBrainzId?.TrackId) {
-      this.playlistService.removeFromFilesystemPlaylistByMBID(this.data.item.musicBrainzId.TrackId, this.contentDirectoryService.currentContainerList.currentContainer.title);
+    if (this.item?.musicBrainzId?.TrackId) {
+      this.playlistService.removeFromFilesystemPlaylistByMBID(this.item.musicBrainzId.TrackId, this.contentDirectoryService.currentContainerList.currentContainer.title);
     }
     close();
   }
@@ -86,7 +86,7 @@ export class SongOptionsComponent implements OnInit {
     this._matDialogRef.close();
   }
 
-  closeAllDialogs() {
+  closeAllDialogs(): void {
     this.defaultPlaylistService.close();
   }
 
@@ -94,12 +94,12 @@ export class SongOptionsComponent implements OnInit {
     return !this.playlistDialogOpen;
   }
 
-  actionPlayNext() {
+  actionPlayNext() : void {
     this.avtransportService.playResourceNext(this.selectedMusicItem);
   }
 
   get selectedMusicItem(): MusicItemDto {
-    return this.data.item;
+    return this.item;
   }
 
   get isParentPlaylist(): boolean {

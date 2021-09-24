@@ -259,7 +259,7 @@ export class BrowseResultComponent implements AfterViewChecked {
     }
   }
 
-  showSongPopup(event: Event, item: MusicItemDto): void {
+  showSongPopup(event: PointerEvent, item: MusicItemDto): void {
     this.songOptionsServiceService.openOptionsDialog(event, item);
   }
 }

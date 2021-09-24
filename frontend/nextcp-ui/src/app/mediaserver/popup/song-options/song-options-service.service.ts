@@ -11,7 +11,7 @@ export class SongOptionsServiceService {
   constructor(
     private dialog: MatDialog) { }
 
-  public openOptionsDialog(event: any, item: MusicItemDto) {
+  public openOptionsDialog(event: PointerEvent, item: MusicItemDto): void {
     const target = new ElementRef(event.currentTarget);
     const dialogRef = this.dialog.open(SongOptionsComponent, {
       hasBackdrop: true,
