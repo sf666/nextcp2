@@ -141,18 +141,31 @@ public class Upnp_AVTransportBridge implements IInfoService, IUpnpAvTransport, I
 
     private Long getAsSeconds(String trackDuration)
     {
-        int idx = 0;
-        long asSeconds = 0;
-        String[] values = trackDuration.split(":");
-        if (values.length == 3)
+        if ("NOT_IMPLEMENTED".equalsIgnoreCase(trackDuration))
         {
-            asSeconds = Integer.valueOf(values[0]) * 60 * 60;
-            idx++;
+            return 0L;
         }
-        asSeconds = asSeconds + Integer.valueOf(values[idx]) * 60;
-        idx++;
-        asSeconds = asSeconds + Integer.valueOf(values[idx]);
-        return asSeconds;
+        
+        try
+        {
+            int idx = 0;
+            long asSeconds = 0;
+            String[] values = trackDuration.split(":");
+            if (values.length == 3)
+            {
+                asSeconds = Integer.valueOf(values[0]) * 60 * 60;
+                idx++;
+            }
+            asSeconds = asSeconds + Integer.valueOf(values[idx]) * 60;
+            idx++;
+            asSeconds = asSeconds + Integer.valueOf(values[idx]);
+            return asSeconds;
+        }
+        catch (Exception e)
+        {
+            log.warn("error reading duration time", e);
+            return 0;
+        }
     }
 
     private int calcPercent(Long seconds, Long duration)
