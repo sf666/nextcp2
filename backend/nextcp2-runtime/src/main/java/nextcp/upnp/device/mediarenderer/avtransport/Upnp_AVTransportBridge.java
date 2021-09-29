@@ -9,7 +9,6 @@ import nextcp.domainmodel.device.services.IUpnpAvTransport;
 import nextcp.dto.TrackInfoDto;
 import nextcp.dto.TrackTimeDto;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
-import nextcp.upnp.modelGen.avopenhomeorg.time.TimeServiceStateVariable;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport.AVTransportService;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetPositionInfoInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetPositionInfoOutput;
@@ -164,7 +163,7 @@ public class Upnp_AVTransportBridge implements IInfoService, IUpnpAvTransport, I
         catch (Exception e)
         {
             log.warn("error reading duration time", e);
-            return 0;
+            return 0L;
         }
     }
 
