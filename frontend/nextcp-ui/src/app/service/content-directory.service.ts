@@ -33,7 +33,7 @@ export class ContentDirectoryService {
 
     private router: Router,
     private deviceService: DeviceService) {
-
+    
     // Initialize empty result object
     this.currentContainerList = this.dtoGeneratorService.generateEmptyContainerItemDto();
     this.quickSearchResultList = this.dtoGeneratorService.generateEmptySearchResultDto();
@@ -90,7 +90,14 @@ export class ContentDirectoryService {
 
   mediaServerChanged(data: MediaServerDto): void {
     // Update to root folder of media server
-    this.browseChildrenByRequest(this.createBrowseRequest("0", "", data.udn));
+    let oid : string;
+    if (localStorage.getItem('lastMediaServerDevice') === data.udn) {
+      oid = localStorage.getItem('lastMediaServerPath');
+    } else {
+      oid = '0';
+    }
+    this.browseChildrenByRequest(this.createBrowseRequest(oid, "", data.udn));
+    localStorage.setItem('lastMediaServerDevice', data.udn);
   }
 
   public showQuickSearchPanel(): void {
@@ -159,6 +166,7 @@ export class ContentDirectoryService {
     const uri = '/browseChildren';
     const sub = this.httpService.post<ContainerItemDto>(this.baseUri, uri, browseRequestDto)
     sub.subscribe(data => this.updateContainer(data));
+    localStorage.setItem('lastMediaServerPath', browseRequestDto.objectID); 
     return sub;
   }
 

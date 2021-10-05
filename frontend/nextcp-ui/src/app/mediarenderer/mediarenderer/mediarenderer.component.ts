@@ -1,3 +1,5 @@
+import { ContentDirectoryService } from './../../service/content-directory.service';
+import { DeviceService } from './../../service/device.service';
 import { DefaultPlaylistService } from './../../mediaserver/popup/defaut-playlists/default-playlist.service';
 import { LayoutService } from './../../service/layout.service';
 import { MusicItemDto } from './../../service/dto.d';
@@ -13,9 +15,6 @@ import { Component, OnInit, ElementRef } from '@angular/core';
 
 export class MediarendererComponent implements OnInit {
 
-  private _mediaServerUdn: string;
-  private _mediaRendererUdn: string;
-
   public showDetail: boolean;
 
   constructor(
@@ -25,6 +24,7 @@ export class MediarendererComponent implements OnInit {
     public rendererService: RendererService) {
     this.showDetail = false;
   }
+
   ngOnInit(): void {
     this.layoutService.setFramedView();
   }
@@ -44,7 +44,7 @@ export class MediarendererComponent implements OnInit {
     }
   }
 
-  streaming() : boolean{
+  streaming(): boolean {
     const streaming = this.rendererService?.trackTime?.streaming;
     return streaming;
   }

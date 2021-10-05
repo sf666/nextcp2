@@ -24,6 +24,8 @@ export class DeviceService {
 
   mediaRendererChanged$: Subject<MediaRendererDto> = new Subject();
   mediaServerChanged$: Subject<MediaServerDto> = new Subject();
+  mediaRendererInitiated$: Subject<MediaRendererDto[]> = new Subject();
+  mediaServerInitiated$: Subject<MediaServerDto[]> = new Subject();
 
   constructor(
     // class services
@@ -49,6 +51,13 @@ export class DeviceService {
 
   public isMediaServerSelected(udn: string): boolean {
     return udn === this._selectedMediaServerDevice.udn;
+  }
+
+  public isMediaServerAvailable(udn: string): boolean {
+    if (this.mediaServerList.some(e => e.udn === udn)) {
+      return true;
+    }
+    return false;
   }
 
   public isAnyMediaRendererSelected(): boolean {
@@ -134,7 +143,7 @@ export class DeviceService {
   }
 
   //
-  // API calls
+  // renderer and server initialization
   //
 
   private getAllMediaServer() {
@@ -143,6 +152,7 @@ export class DeviceService {
     this.httpService.get<MediaServerDto[]>(this.baseUri, uri).subscribe(data => {
       this.mediaServerList = data;
       this.applyDefaultServer();
+      this.mediaServerInitiated$.next(data);
     });
   }
 
@@ -152,6 +162,7 @@ export class DeviceService {
     this.httpService.get<MediaRendererDto[]>(this.baseUri, uri).subscribe(data => {
       this.mediaRenderList = data;
       this.applyDefaultRenderer();
+      this.mediaRendererInitiated$.next(data);
     });
   }
 }

@@ -1,11 +1,11 @@
 import { ScrollViewService } from './../../util/scroll-view.service';
 import { CdsBrowsePathService } from './../../util/cds-browse-path.service';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DeviceService } from 'src/app/service/device.service';
 import { TrackQualityService } from './../../util/track-quality.service';
 import { SongOptionsServiceService } from './../popup/song-options/song-options-service.service';
 import { TimeDisplayService } from './../../util/time-display.service';
-import { MusicItemDto, ContainerDto } from './../../service/dto.d';
+import { MusicItemDto, ContainerDto, MediaServerDto } from './../../service/dto.d';
 import { PlaylistService } from './../../service/playlist.service';
 import { AvtransportService } from './../../service/avtransport.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
@@ -165,8 +165,8 @@ export class BrowseResultComponent implements AfterViewChecked {
     return this.contentDirectoryService.currentContainerList;
   }
 
-  public browseTo(containerDto: ContainerDto): void {    
-    this.contentDirectoryService.browseChildrenByContiner(containerDto).subscribe( () => this.quickSearchString = '');
+  public browseTo(containerDto: ContainerDto): void {
+    this.contentDirectoryService.browseChildrenByContiner(containerDto).subscribe(() => this.quickSearchString = '');
   }
 
   shufflePlaylist(container: ContainerDto): void {
