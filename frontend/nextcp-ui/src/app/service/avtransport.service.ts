@@ -47,7 +47,7 @@ export class AvtransportService {
     this.getInitialAvTransportState();
   }
 
-  public getInitialAvTransportState() {
+  public getInitialAvTransportState(): void {
     const uri = '/MediaRendererAvTransportState';
     this.httpService.post<UpnpAvTransportState>(this.baseUri, uri, this.selectedMediaRenderer).subscribe();
   }
@@ -57,7 +57,7 @@ export class AvtransportService {
   // ================================================================================
 
   public isPlaying(): boolean {
-    let playing: boolean = this.upnpAvTransportState?.TransportState === 'PLAYING';
+    const playing: boolean = this.upnpAvTransportState?.TransportState === 'PLAYING';
     return playing;
   }
 
@@ -75,12 +75,12 @@ export class AvtransportService {
     this.httpService.post(this.baseUri, uri, this.selectedMediaRenderer.udn).subscribe();
   }
 
-  public playResource(musicItemDto: MusicItemDto) {
+  public playResource(musicItemDto: MusicItemDto): void {
     const uri = '/playResource';
     this._playResource(uri, musicItemDto);
   }
 
-  public playResourceNext(musicItemDto: MusicItemDto) {
+  public playResourceNext(musicItemDto: MusicItemDto): void {
     const uri = '/playResourceNext';
     this._playResource(uri, musicItemDto);
   }
@@ -99,7 +99,7 @@ export class AvtransportService {
     }
   }
 
-  playRadio(radio: RadioStation) {
+  playRadio(radio: RadioStation): void {
     const uri = '/playOnlineResource';
     const playReq: PlayRadioDto = {
       mediaRendererDto: this.selectedMediaRenderer,

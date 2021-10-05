@@ -27,7 +27,7 @@ export class RadioService {
     }
   }
 
-  playOpenHomeStation(station: MusicItemDto) {
+  playOpenHomeStation(station: MusicItemDto): void {
     const req: PlayOpenHomeRadioDto = {
       mediaRendererDto: this.deviceService.selectedMediaRendererDevice,
       radioStation: station

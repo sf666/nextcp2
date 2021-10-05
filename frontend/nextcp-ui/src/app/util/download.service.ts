@@ -13,9 +13,9 @@ export class DownloadService {
 
   constructor(private httpService: HttpService) { }
 
-  downloadFileByMBID(song: MusicItemDto, callback?) {
+  downloadFileByMBID(song: MusicItemDto, callback?): void {
 
-    var a = document.createElement('a');
+    const a = document.createElement('a');
     a.download = "file";
     a.href = "/DownloadService/downloadFileByMBID/" + song.musicBrainzId.TrackId;
     a.target = "_blank";

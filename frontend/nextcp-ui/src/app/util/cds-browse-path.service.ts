@@ -20,7 +20,7 @@ export class CdsBrowsePathService {
     this.scrollId = '';
   }
 
-  public stepOut() {
+  public stepOut(): void {
     this.scrollId = this.visitedPathFromRoot.pop();
   }
 
