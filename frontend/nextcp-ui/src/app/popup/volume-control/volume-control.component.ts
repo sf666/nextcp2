@@ -13,6 +13,8 @@ export class VolumeControlComponent implements OnInit {
 
   private readonly _matDialogRef: MatDialogRef<VolumeControlComponent>;
   private readonly triggerElementRef: ElementRef;
+  private closeOnMs: number;
+  private myTimer : NodeJS.Timeout;
 
   constructor(
     _matDialogRef: MatDialogRef<VolumeControlComponent>,
@@ -31,5 +33,18 @@ export class VolumeControlComponent implements OnInit {
 
   volChanged(event: MatSliderChange): void {
     this.rendererService.setVolume(event.value);
+    this.closeOnMs = Date.now() + 3000;
+    if (this.myTimer) {
+      clearTimeout(this.myTimer);
+    }
+    this.myTimer = setTimeout(() => {
+      this.closeWindow();
+    }, 4000);
+  }
+
+  closeWindow() : void {
+    if (Date.now() > this.closeOnMs) {
+      this._matDialogRef.close();
+    }
   }
 }
