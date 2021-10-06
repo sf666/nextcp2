@@ -129,7 +129,7 @@ export class ConfigurationService {
     return this.rendererConfig?.rendererDevices;
   }
 
-  public isRenderDeviceActive(deviceUdn: string): boolean {
+  public isRenderDeviceUdnActive(deviceUdn: string): boolean {
     const configEntry = this.rendererConfig.rendererDevices.filter(conf => conf.mediaRenderer.udn == deviceUdn);
     if (!configEntry || configEntry.length == 0) {
       return false;
@@ -137,7 +137,7 @@ export class ConfigurationService {
     return configEntry[0].active;
   }
 
-  public selectClientConfig(uuid): void {
+  public selectClientConfig(uuid: string): void {
     this.clientConfig = this.getClientConfig(uuid);
     localStorage.setItem("clientID", uuid);
     this.clientConfigChanged$.next(this.clientConfig);

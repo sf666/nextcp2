@@ -59,6 +59,7 @@
             <mat-card class="card-width mr-4 mb-3">
                 <mat-card-header>
                     <mat-card-title>{{rendererConfig.mediaRenderer.friendlyName}}</mat-card-title>
+                    <mat-card-subtitle *ngIf="isRendererConfigActive(rendererConfig)">ONLINE</mat-card-subtitle>                    
                     <mat-card-subtitle>{{rendererConfig.displayString}} [{{rendererConfig.ip}}]</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>

@@ -45,6 +45,10 @@ export class SettingsComponent {
 }
   */
 
+  isRendererConfigActive(deviceConfig: RendererDeviceConfiguration): boolean {
+    return this.deviceService.isRenderOnline(deviceConfig.mediaRenderer);
+  }
+
   mediaRendererChanged(event: MediaRendererDto): void {
     this.configService.clientConfig.defaultMediaRenderer = event;
   }

@@ -2,7 +2,7 @@ import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { ConfigurationService } from './configuration.service';
 import { SseService } from './sse/sse.service';
-import { MediaServerDto, MediaRendererDto, UiClientConfig } from './dto.d';
+import { MediaServerDto, MediaRendererDto, UiClientConfig, RendererDeviceConfiguration } from './dto.d';
 import { Injectable } from '@angular/core';
 import { enableDebugTools } from '@angular/platform-browser';
 
@@ -43,6 +43,13 @@ export class DeviceService {
     configService.clientConfigChanged$.subscribe(data => this.clientConfigChanged(data));
     sse.mediaRendererListChanged$.subscribe(data => this.mediarendererListChanged(data));
     sse.mediaServerListChanged$.subscribe(data => this.mediaserverListChanged(data));
+  }
+
+  public isRenderOnline(device: MediaRendererDto): boolean {
+    if (this.mediaRenderList.some(renderer => renderer.udn == device.udn)) {
+      return true;
+    }
+    return false;
   }
 
   public isMediaRendererSelected(udn: string): boolean {
@@ -101,7 +108,7 @@ export class DeviceService {
 
   public getEnabledMediaRendererList(): MediaRendererDto[] {
     return this.mediaRenderList.filter(renderer => {
-      const enabled = this.configService.isRenderDeviceActive(renderer.udn);
+      const enabled = this.configService.isRenderDeviceUdnActive(renderer.udn);
       return enabled;
     });
   }
