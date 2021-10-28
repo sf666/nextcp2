@@ -64,7 +64,7 @@ RendererDeviceConfiguration:
    hasOpenHomeDeviceDriver: Boolean
    deviceDriverType: String   
    connectionString: String
-
+   powerOnVolPercent: Integer
 
 #
 # StateVariables

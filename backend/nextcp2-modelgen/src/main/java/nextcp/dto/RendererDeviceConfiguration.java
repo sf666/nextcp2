@@ -16,12 +16,13 @@ public class RendererDeviceConfiguration
     public Boolean hasOpenHomeDeviceDriver;
     public String deviceDriverType;
     public String connectionString;
+    public Integer powerOnVolPercent;
 
     public RendererDeviceConfiguration()
     {
     }
 
-    public RendererDeviceConfiguration(MediaRendererDto mediaRenderer, String ip, String displayString, Boolean active, Boolean hasOpenHomeDeviceDriver, String deviceDriverType, String connectionString)
+    public RendererDeviceConfiguration(MediaRendererDto mediaRenderer, String ip, String displayString, Boolean active, Boolean hasOpenHomeDeviceDriver, String deviceDriverType, String connectionString, Integer powerOnVolPercent)
     {
         this.mediaRenderer = mediaRenderer;
         this.ip = ip;
@@ -30,6 +31,7 @@ public class RendererDeviceConfiguration
         this.hasOpenHomeDeviceDriver = hasOpenHomeDeviceDriver;
         this.deviceDriverType = deviceDriverType;
         this.connectionString = connectionString;
+        this.powerOnVolPercent = powerOnVolPercent;
     }
     
     @Override
@@ -44,6 +46,7 @@ public class RendererDeviceConfiguration
         sb.append("hasOpenHomeDeviceDriver=").append(this.hasOpenHomeDeviceDriver).append(", ");
         sb.append("deviceDriverType=").append(this.deviceDriverType).append(", ");
         sb.append("connectionString=").append(this.connectionString).append(", ");
+        sb.append("powerOnVolPercent=").append(this.powerOnVolPercent).append(", ");
         sb.append("]");
         return sb.toString();
     }

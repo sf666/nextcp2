@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2021-09-22 13:29:14.
+// Generated using typescript-generator version 2.32.889 on 2021-10-28 14:10:18.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -164,7 +164,6 @@ export interface MusicItemDto {
 }
 
 export interface MusicbrainzSupport {
-    isActive: boolean;
     username: string;
     password: string;
 }
@@ -227,6 +226,7 @@ export interface RendererDeviceConfiguration {
     hasOpenHomeDeviceDriver: boolean;
     deviceDriverType: string;
     connectionString: string;
+    powerOnVolPercent: number;
 }
 
 export interface RendererPlaylist {
