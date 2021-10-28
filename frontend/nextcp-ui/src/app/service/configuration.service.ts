@@ -114,7 +114,7 @@ export class ConfigurationService {
     }
   }
 
-  // Use this function to aquire a vlient global userID
+  // Use this function to acquire a client global userID
   public getStoredClientId(): string {
     let cid: string = localStorage.getItem("clientID");
     if (cid) {

@@ -42,6 +42,9 @@ export class FooterComponent {
   }
 
   public serverClicked(event: Event): void {
+    // delete last stored path if server is selected manually
+    localStorage.setItem('lastMediaServerDevice', '');
+
     const target = new ElementRef(event.currentTarget);
     const dialogRef = this.dialog.open(AvailableServerComponent, {
       data: { trigger: target },

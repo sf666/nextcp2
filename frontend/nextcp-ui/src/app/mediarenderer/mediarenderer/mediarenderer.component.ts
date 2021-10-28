@@ -1,11 +1,9 @@
-import { ContentDirectoryService } from './../../service/content-directory.service';
-import { DeviceService } from './../../service/device.service';
 import { DefaultPlaylistService } from './../../mediaserver/popup/defaut-playlists/default-playlist.service';
 import { LayoutService } from './../../service/layout.service';
 import { MusicItemDto } from './../../service/dto.d';
 import { BackgroundImageService } from './../../util/background-image.service';
 import { RendererService } from './../../service/renderer.service';
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-mediarenderer',
