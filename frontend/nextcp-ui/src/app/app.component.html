@@ -13,7 +13,10 @@
   <app-sidebar *ngIf="layoutService.sidebarVisible"></app-sidebar>
   <div id="mainContent" class="mainContent">
     <router-outlet></router-outlet>
+    <div class="footer-block">&nbsp;</div>
+    <!--
     <div *ngIf="layoutService.isMobileDevice()" class="footer-block">&nbsp;</div>
+    -->
   </div>
 
   <renderer-footer *ngIf="layoutService.footerVisible"></renderer-footer>    
