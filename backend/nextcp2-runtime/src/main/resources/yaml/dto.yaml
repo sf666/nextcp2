@@ -108,6 +108,7 @@ UpnpAvTransportState:
    CurrentTransportActions: String
    PossibleRecordStorageMedia: String
     
+    
 #
 # Transfer classes for some ui views
 #
@@ -310,7 +311,18 @@ ToastrMessage:
 SystemInformationDto:
    buildNumber: String
    
-
+# Event classes
 FileChangedEventDto:
    type: String
    path: String  
+
+DeviceVolumeChanged:
+   udn : String
+   vol : Integer
+   
+DevicePowerChanged:
+   udn : String
+   isPowerOn : Boolean
+
+   
+   

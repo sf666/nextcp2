@@ -11,6 +11,8 @@ import nextcp.devicedriver.DeviceDriverDiscoveryService;
 import nextcp.devicedriver.IDeviceDriverCallback;
 import nextcp.devicedriver.IDeviceDriverService;
 import nextcp.dto.DeviceDriverState;
+import nextcp.dto.DevicePowerChanged;
+import nextcp.dto.DeviceVolumeChanged;
 
 /**
  * Mediarenderer support for functionalities not offered by the device UPnP protocol stack.
@@ -64,13 +66,16 @@ public class DeviceDriver implements IDeviceDriverCallback, IDeviceDriver
     @Override
     public void volumeChanged(int vol)
     {
+        DeviceVolumeChanged event = new DeviceVolumeChanged(rendererUdn, vol);
+        eventPublisher.publishEvent(event);
         eventPublisher.publishEvent(getDeviceDriverState());
     }
 
     @Override
     public void standbyChanged(boolean standbyState)
     {
-        eventPublisher.publishEvent(getDeviceDriverState());
+        DevicePowerChanged event = new DevicePowerChanged(rendererUdn, !standbyState);
+        eventPublisher.publishEvent(event);
     }
 
     @Override

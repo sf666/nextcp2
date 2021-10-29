@@ -88,7 +88,7 @@
                     <div>
                         <mat-form-field appearance="fill">
                             <mat-label>power on defaut volume</mat-label>
-                            <input matInput type="number" [(ngModel)]="rendererConfig.powerOnVolPercent"
+                            <input matInput type="number" min="0" max="100" [(ngModel)]="rendererConfig.powerOnVolPercent"
                                 placeholder="undefined">
                         </mat-form-field>
                     </div>

@@ -65,7 +65,10 @@ public class ContentDirectoryService
         {
             log.error("Event subscription", ex);
         }
-
+        catch(Exception e)
+        {
+            log.error("Generic exception", e);
+        }
         log.info(String.format("initialized service 'ContentDirectory' for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
     }
     
