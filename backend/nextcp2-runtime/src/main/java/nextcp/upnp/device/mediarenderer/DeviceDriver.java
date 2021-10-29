@@ -76,6 +76,7 @@ public class DeviceDriver implements IDeviceDriverCallback, IDeviceDriver
     {
         DevicePowerChanged event = new DevicePowerChanged(rendererUdn, !standbyState);
         eventPublisher.publishEvent(event);
+        eventPublisher.publishEvent(getDeviceDriverState());
     }
 
     @Override
