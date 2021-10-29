@@ -108,7 +108,7 @@ public class RepositoryAdminService {
 			}
 			log.info(String.format("finished directory scanning in %d seconds.", (System.currentTimeMillis() - start) / 1000));
 		} catch (Exception e) {
-			log.error("rescanDirectory", e);
+			log.warn("rescanDirectory", e);
 		}
 
 		sqlScriptPath = String.format("/sql/%s.sql", "renameTmpTable");
@@ -134,9 +134,8 @@ public class RepositoryAdminService {
 				inserts.set(0);
 			}
 		} catch (Exception e) {
-			log.error("update song failed.", e);
+			log.warn("update song failed.", e);
 			publisher.publishEvent(new ToastrMessage(null, "error", "Updating song failed", song.toString()));
-
 		}
 	}
 
