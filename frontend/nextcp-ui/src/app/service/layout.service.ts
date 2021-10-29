@@ -21,22 +21,8 @@ export class LayoutService {
     this.headerVisible = false;
   }
 
-  public isMobileDevice(): boolean {
-    const toMatch = [
-      /Android/i,
-      /webOS/i,
-      /iPhone/i,
-      /iPad/i,
-      /iPod/i,
-      /BlackBerry/i,
-      /Windows Phone/i
-    ];
-
-    const mat = toMatch.some((toMatchItem) => {
-      const m =  navigator.userAgent.match(toMatchItem);
-      return m;
-    });
-
-    return mat;
+  public isMobileDevice(): boolean { 
+    const isTouchDevice = window.screenX === 0 && ('ontouchstart' in window || 'onmsgesturechange' in window);
+    return isTouchDevice;
   }  
 }
