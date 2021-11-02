@@ -2,7 +2,7 @@
     <div class="app-label">nextCP/2</div>
     <a mat-button routerLinkActive="active" style="text-align:left"
         [routerLink]="'/music-library'">
-        <mat-icon class="icn" style="vertical-align: top;" svgIcon="music-box-multiple-outline"></mat-icon>Music Library
+        <mat-icon class="icn" style="vertical-align: top;" svgIcon="music-box-multiple-outline" (click)="musicLibraryClicked()"></mat-icon>Music Library
     </a>
     <a mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/playlist'">
         <mat-icon class="icn" style="vertical-align: top;" svgIcon="playlist-music-outline"></mat-icon>Queue

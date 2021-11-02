@@ -18,7 +18,11 @@ export class SidebarComponent  {
     deviceService.mediaServerChanged$.subscribe(data => this._mediaServerUdn = data.udn);
   }
 
- 
+  public musicLibraryClicked() : void{
+      // delete last stored path if server is selected manually
+      localStorage.setItem('lastMediaServerDevice', '');
+  }
+  
     /**
      * Getter mediaServerUdn
      * @return {string}
