@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { MatSliderChange } from '@angular/material/slider';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
@@ -13,7 +14,10 @@ export class SidebarComponent  {
   private _mediaServerUdn : string;
   private _mediaRendererUdn : string;
 
-  constructor(public deviceService: DeviceService, public rendererService: RendererService) { 
+  constructor(
+    public deviceService: DeviceService,
+    private router: Router,
+    public rendererService: RendererService) {
     deviceService.mediaRendererChanged$.subscribe(data => this._mediaRendererUdn = data.udn);
     deviceService.mediaServerChanged$.subscribe(data => this._mediaServerUdn = data.udn);
   }
@@ -21,6 +25,7 @@ export class SidebarComponent  {
   public musicLibraryClicked() : void{
       // delete last stored path if server is selected manually
       localStorage.setItem('lastMediaServerDevice', '');
+      //void this.router.navigate([ '/music-library' ]);
   }
   
     /**
