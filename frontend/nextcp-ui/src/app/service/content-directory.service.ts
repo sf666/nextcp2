@@ -17,6 +17,7 @@ export class ContentDirectoryService {
   baseUri = '/ContentDirectoryService';
   public currentContainerList: ContainerItemDto;
   private customParentID: string;
+  private currentMediaServerDto : MediaServerDto;
 
   // QuickSearch Support
   public quickSearchResultList: SearchResultDto;
@@ -96,6 +97,7 @@ export class ContentDirectoryService {
     } else {
       oid = '0';
     }
+    this.currentMediaServerDto = data;
     this.browseChildrenByRequest(this.createBrowseRequest(oid, "", data.udn));
     localStorage.setItem('lastMediaServerDevice', data.udn);
   }
@@ -143,10 +145,10 @@ export class ContentDirectoryService {
     this.browseChildrenByRequest(this.createBrowseRequest(objectID, sortCriteria, mediaServerUdn));
   }
 
-  public browseToRoot(sortCriteria: string, mediaServerUdn: string): void {
+  public browseToRoot(sortCriteria: string): void {
     this.cdsBrowsePathService.clearPath();
     this.updateBrowsePath("0");
-    this.browseChildrenByRequest(this.createBrowseRequest("0", sortCriteria, mediaServerUdn));
+    this.browseChildrenByRequest(this.createBrowseRequest("0", sortCriteria, this.currentMediaServerDto.udn));
   }
 
   public browseChildrenByContiner(containerDto: ContainerDto): Subject<ContainerItemDto> {
