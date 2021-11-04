@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2021-10-28 14:10:18.
+// Generated using typescript-generator version 2.32.889 on 2021-11-04 08:20:39.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -72,6 +72,16 @@ export interface DeviceDriverState {
     rendererUDN: string;
     volume: number;
     standby: boolean;
+}
+
+export interface DevicePowerChanged {
+    udn: string;
+    isPowerOn: boolean;
+}
+
+export interface DeviceVolumeChanged {
+    udn: string;
+    vol: number;
 }
 
 export interface FileChangedEventDto {

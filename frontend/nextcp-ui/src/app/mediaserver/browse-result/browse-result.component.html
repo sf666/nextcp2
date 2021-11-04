@@ -192,27 +192,39 @@
                         <div class="col small-col"></div>
                     </div>
                 </div>
-                <div class="item-tbody">
-                    <div id="{{item.objectID}}" class="row minWidth" *ngFor="let item of musicTracks">
-                        <div *ngIf="!allTracksSameAlbum()" class="small-col-img mr-2">
-                            <img class="img-small" src="{{item.albumArtUrl}}">
-                        </div>
-                        <div *ngIf="allTracksSameAlbum()" (click)="play(item)" class="col col-greyed small-col">
-                            {{item.originalTrackNumber}}</div>
-                        <div (click)="play(item)" class="col d-flex minWidth">
-                            <div class="no-wrap">{{item.title}}</div>
-                            <quality-badge [item]="item"></quality-badge>
-                        </div>
-                        <div (click)="play(item)" class="col no-wrap">{{item.artistName}}</div>
-                        <div *ngIf="!allTracksSameAlbum()" class="col">{{item.album}}</div>
-                        <div class="col mid-col">
-                            <star-rating [currentSong]="item"></star-rating>
-                        </div>
-                        <div class="col text-right mid-col">{{getDuration(item)}}</div>
-                        <div class="col col-greyed small-col">
-                            <button mat-icon-button aria-label="" class="" (click)="showSongPopup($event, item)">
-                                &#x22EE;
-                            </button>
+
+                <!--
+                <div class="item-tbody" *ngIf="!allTracksSameDisc()">
+                    {{getDiscLabel(item)}}
+                </div>
+                -->
+
+                <div id="{{item.objectID}}" class="" *ngFor="let item of musicTracks">
+                    <div class="item-tbody" *ngIf="!allTracksSameDisc()">
+                        {{getDiscLabel(item)}}
+                    </div>
+                    <div class="item-tbody">
+                        <div class="row minWidth">
+                            <div *ngIf="!allTracksSameAlbum()" class="small-col-img mr-2">
+                                <img class="img-small" src="{{item.albumArtUrl}}">
+                            </div>
+                            <div *ngIf="allTracksSameAlbum()" (click)="play(item)" class="col col-greyed small-col">
+                                {{item.originalTrackNumber}}</div>
+                            <div (click)="play(item)" class="col d-flex minWidth">
+                                <div class="no-wrap">{{item.title}}</div>
+                                <quality-badge [item]="item"></quality-badge>
+                            </div>
+                            <div (click)="play(item)" class="col no-wrap">{{item.artistName}}</div>
+                            <div *ngIf="!allTracksSameAlbum()" class="col">{{item.album}}</div>
+                            <div class="col mid-col">
+                                <star-rating [currentSong]="item"></star-rating>
+                            </div>
+                            <div class="col text-right mid-col">{{getDuration(item)}}</div>
+                            <div class="col col-greyed small-col">
+                                <button mat-icon-button aria-label="" class="" (click)="showSongPopup($event, item)">
+                                    &#x22EE;
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

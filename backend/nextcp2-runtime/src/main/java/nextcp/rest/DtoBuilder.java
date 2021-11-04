@@ -1,6 +1,5 @@
 package nextcp.rest;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,7 +9,6 @@ import java.util.Optional;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.hc.core5.http.ParseException;
 import org.fourthline.cling.support.contentdirectory.DIDLParser;
 import org.fourthline.cling.support.model.DIDLContent;
 import org.fourthline.cling.support.model.DIDLObject;
@@ -28,10 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Node;
 
-import com.wrapper.spotify.exceptions.SpotifyWebApiException;
-import com.wrapper.spotify.model_objects.specification.Artist;
-import com.wrapper.spotify.model_objects.specification.Paging;
-
 import nextcp.dto.AudioFormat;
 import nextcp.dto.ContainerDto;
 import nextcp.dto.MediaRendererDto;
@@ -41,7 +35,6 @@ import nextcp.dto.MusicItemDto;
 import nextcp.dto.UpnpAvTransportState;
 import nextcp.service.RatingService;
 import nextcp.spotify.SpotifyArtistService;
-import nextcp.spotify.SpotifyService;
 import nextcp.upnp.device.BaseDevice;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediarenderer.avtransport.AvTransportState;
@@ -295,11 +288,14 @@ public class DtoBuilder
     // itemDto.musicBrainzId
     private void extractDescMetadata(MusicItemDto itemDto, Item item)
     {
-        itemDto.musicBrainzId = extractMusicBrainzId(item);
+        extractMusicBrainzId(itemDto, item);
     }
 
-    private MusicBrainzId extractMusicBrainzId(Item item)
+    private void extractMusicBrainzId(MusicItemDto itemDto, Item item)
     {
+        //
+        // Support for Mediaplayer Tags (https://petemanchester.github.io/MediaPlayer/) 
+        // 
         MusicBrainzId mb = new MusicBrainzId();
         Optional<DescMeta> mpdDesc = item.getDescMetadata().stream().filter(n -> n.getType().equalsIgnoreCase("mpd-tags")).findFirst();
         if (mpdDesc.isPresent())
@@ -334,6 +330,10 @@ public class DtoBuilder
                 }
             }
         }
+        
+        //
+        // Support for UniversalMediaServer Tags (https://www.universalmediaserver.com/)
+        // 
         mpdDesc = item.getDescMetadata().stream().filter(n -> n.getType().equalsIgnoreCase("ums-tags")).findFirst();
         if (mpdDesc.isPresent())
         {
@@ -349,13 +349,16 @@ public class DtoBuilder
                     case "musicbrainzreleaseid":
                         mb.ReleaseTrackId = n.getTextContent();
                         break;
+                    case "numberofthisdisc":
+                        itemDto.numberOfThisDisc = n.getTextContent();
+                        break;
                     default:
                         log.warn("unknown ums-tags attribute : " + n.getNodeName());
                         break;
                 }
             }
         }
-        return mb;
+        itemDto.musicBrainzId = mb;
     }
 
     private void addAudioItem(AudioItem item, MusicItemDto itemDto)

@@ -24,6 +24,7 @@ import { MatDialog } from '@angular/material/dialog';
 export class BrowseResultComponent implements AfterViewChecked {
 
   private listView: boolean;
+  private lastDiscLabel = '';
 
   quickSearchString: string;
 
@@ -199,6 +200,14 @@ export class BrowseResultComponent implements AfterViewChecked {
     });
   }
 
+  getDiscLabel(item : MusicItemDto) : string{
+    if (item.numberOfThisDisc !== this.lastDiscLabel) {
+      this.lastDiscLabel = item.numberOfThisDisc;
+      return `Disk ${item.numberOfThisDisc}`;
+    }
+    return '';
+  }
+
   //
   // Album 
   //
@@ -243,6 +252,14 @@ export class BrowseResultComponent implements AfterViewChecked {
     if (this.musicTracks.length > 0) {
       const firstTrackAlbum = this.musicTracks[0].album;
       return this.musicTracks.filter(item => item.album !== firstTrackAlbum).length == 0;
+    }
+    return true;
+  }
+
+  allTracksSameDisc(): boolean {
+    if (this.musicTracks.length > 0) {
+      const firstTrackDisc = this.musicTracks[0].numberOfThisDisc;
+      return this.musicTracks.filter(item => item.numberOfThisDisc !== firstTrackDisc).length == 0;
     }
     return true;
   }
