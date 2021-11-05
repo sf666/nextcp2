@@ -24,7 +24,9 @@ export class SidebarComponent  {
   }
 
   public musicLibraryClicked() : void{
-      // this.contentDirectoryService.browseToRoot('');
+    if (!this.contentDirectoryService.currentContainerList.currentContainer) {
+      this.contentDirectoryService.browseToRoot('');
+    }
   }
   
     /**
