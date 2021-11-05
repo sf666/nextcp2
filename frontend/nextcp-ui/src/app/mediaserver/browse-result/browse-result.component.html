@@ -193,14 +193,8 @@
                     </div>
                 </div>
 
-                <!--
-                <div class="item-tbody" *ngIf="!allTracksSameDisc()">
-                    {{getDiscLabel(item)}}
-                </div>
-                -->
-
                 <div id="{{item.objectID}}" class="" *ngFor="let item of musicTracks">
-                    <div class="item-tbody" *ngIf="!allTracksSameDisc()">
+                    <div class="item-tbody" *ngIf="allTracksSameAlbum() && !allTracksSameDisc()">
                         {{getDiscLabel(item)}}
                     </div>
                     <div class="item-tbody">
