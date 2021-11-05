@@ -257,12 +257,11 @@ export class BrowseResultComponent implements AfterViewChecked {
   }
 
   allTracksSameDisc(): boolean {
-      if (this.musicTracks.length > 0) {
-        const firstTrackDisc = this.musicTracks[0].numberOfThisDisc;
-        return this.musicTracks.filter(item => item.numberOfThisDisc !== firstTrackDisc).length == 0;
-      }
-      return true;
+    if (this.musicTracks.length > 0) {
+      const firstTrackDisc = this.musicTracks[0].numberOfThisDisc;
+      return this.musicTracks.filter(item => item.numberOfThisDisc !== firstTrackDisc).length == 0;
     }
+    return true;
   }
 
   play(musicItemDto: MusicItemDto): void {
