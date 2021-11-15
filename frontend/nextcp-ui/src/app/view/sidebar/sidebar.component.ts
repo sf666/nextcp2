@@ -1,6 +1,4 @@
 import { ContentDirectoryService } from './../../service/content-directory.service';
-import { Router } from '@angular/router';
-import { MatSliderChange } from '@angular/material/slider';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
 import { Component } from '@angular/core';

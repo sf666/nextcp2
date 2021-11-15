@@ -12,12 +12,12 @@ export class CdsBrowsePathService {
 
   constructor() {
     this.visitedPathFromRoot = new Stack();
-    this.scrollId = '';
+    this.scrollId = 'ID_SCROLL_TO_ELEMENT_STEP_IN';
   }
 
   public stepIn(path: string): void {
     this.visitedPathFromRoot.push(path);
-    this.scrollId = '';
+    this.scrollId = 'ID_SCROLL_TO_ELEMENT_STEP_IN';
   }
 
   public stepOut(): void {
