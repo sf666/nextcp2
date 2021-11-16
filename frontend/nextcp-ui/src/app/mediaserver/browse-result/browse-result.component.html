@@ -10,7 +10,7 @@
                 <img class="cardLayout image-container" src="{{currentContainer.albumartUri}}" class="img-top"
                     alt="select media server ...">
             </div>
-            <div class="d-flex flex-column justify-content-between w-100" id="ID_SCROLL_TO_ELEMENT_STEP_IN">
+            <div class="d-flex flex-column justify-content-between w-100" id="ID_SCROLL_TO_ELEMENT_STEP_IN" tabindex="-1">
                 <div *ngIf="hasSongs(); else containerTitle" class="d-flex flex-column pl-4">
                     <div class="d-flex flex-column">
                         <div class="title">{{currentContainer.title}}</div>
@@ -93,7 +93,7 @@
         =========================================== 
     -->
     <div *ngIf="playlistList?.length > 0">
-        <div id="head_browse_result_playlist_items_ID" class="cardLayout">
+        <div id="head_browse_result_playlist_items_ID" tabindex="-1" class="cardLayout">
             <div id="{{container.id}}" tabindex="-1" class="cardLayout cover-card"
                 *ngFor="let container of playlistList">
                 <div class="cardLayout image-container">
