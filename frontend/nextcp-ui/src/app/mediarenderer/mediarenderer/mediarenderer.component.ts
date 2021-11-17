@@ -27,6 +27,15 @@ export class MediarendererComponent implements OnInit {
     this.layoutService.setFramedView();
   }
 
+  public hasCurrentSongTitle(): boolean {
+    if (this.rendererService.trackInfoAvailable) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   public getCurrentSongTitle(): string {
     if (this.rendererService.trackInfoAvailable) {
       return this.rendererService.trackInfo?.currentTrack?.title;

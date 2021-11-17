@@ -1,4 +1,4 @@
-<div *ngIf="configurationService.serverConfig?.radioStation.length > 0" class="cardLayout">
+<div *ngIf="configurationService.serverConfig?.radioStation.length > 0; else noRadio" class="cardLayout">
     <div class="cardLayout cover-card" *ngFor="let item of configurationService.serverConfig.radioStation">
         <img src="{{item.artworkUrl}}" class="cardLayout image-container" alt="{{item.stationName}}">
         <div class="d-flex cardLayout card-body">
@@ -10,19 +10,22 @@
         </div>
     </div>
 </div>
+<ng-template #noRadio><div class="regularText infotext">There are no configured radio stations available.</div></ng-template>
 
-<div class="section head">Player Radio Stations</div>
+<div *ngIf="radioService.radioItems?.length > 0">
+    <div class="section head">Radio stations by selected player</div>
 
-<div *ngIf="radioService.radioItems?.length > 0" class="cardLayout">
-    <div class="cardLayout cover-card" *ngFor="let item of radioService.radioItems">
-        <img src="{{item.albumArtUrl}}" class="cardLayout image-container" alt="{{item.title}}">
-        <div class="d-flex cardLayout card-body">
-            <div class="highlightFolderText">RADIO</div>
-            <div class="card-title">{{item.title}}</div>
+    <div class="cardLayout">
+        <div class="cardLayout cover-card" *ngFor="let item of radioService.radioItems">
+            <img src="{{item.albumArtUrl}}" class="cardLayout image-container" alt="{{item.title}}">
+            <div class="d-flex cardLayout card-body">
+                <div class="highlightFolderText">RADIO</div>
+                <div class="card-title">{{item.title}}</div>
+            </div>
+            <div class="cardLayout play-overlay d-flex justify-content-center align-items-center">
+                <mat-icon (click)="playOh(item)" class="play-overlay-button" svgIcon="play" aria-label="play">
+                </mat-icon>
+            </div>
         </div>
-        <div class="cardLayout play-overlay d-flex justify-content-center align-items-center">
-            <mat-icon (click)="playOh(item)" class="play-overlay-button" svgIcon="play" aria-label="play">
-            </mat-icon>
-        </div>
-    </div>
+    </div>    
 </div>
