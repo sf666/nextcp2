@@ -47,8 +47,8 @@ export class CdsBrowsePathService {
    */
    public scrollIntoViewID(elementID: string): void {
     const targetElement = document.getElementById(elementID); // querySelector('#someElementId');
-    this.scrollId = '';
     if (targetElement) {
+      this.scrollId = '';
       targetElement.focus();
     }
   }  

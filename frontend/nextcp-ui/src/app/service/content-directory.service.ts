@@ -17,7 +17,7 @@ export class ContentDirectoryService {
   baseUri = '/ContentDirectoryService';
   public currentContainerList: ContainerItemDto;
   private customParentID: string;
-  private currentMediaServerDto : MediaServerDto;
+  private currentMediaServerDto: MediaServerDto;
 
   // QuickSearch Support
   public quickSearchResultList: SearchResultDto;
@@ -34,7 +34,7 @@ export class ContentDirectoryService {
 
     private router: Router,
     private deviceService: DeviceService) {
-    
+
     // Initialize empty result object
     this.currentContainerList = this.dtoGeneratorService.generateEmptyContainerItemDto();
     this.quickSearchResultList = this.dtoGeneratorService.generateEmptySearchResultDto();
@@ -91,7 +91,7 @@ export class ContentDirectoryService {
 
   mediaServerChanged(data: MediaServerDto): void {
     // Update to root folder of media server
-    let oid : string;
+    let oid: string;
     if (localStorage.getItem('lastMediaServerDevice') === data.udn) {
       oid = localStorage.getItem('lastMediaServerPath');
     } else {
@@ -117,7 +117,7 @@ export class ContentDirectoryService {
   }
 
   public gotoParent(): void {
-    this.browseChildren(this.getParentTarget(), "", this.deviceService.selectedMediaServerDevice.udn);
+    this.browseChildren(this.getParentTarget(), "", this.deviceService.selectedMediaServerDevice.udn, true);
   }
 
   public popCurrentPathAsParent(): void {
@@ -140,8 +140,14 @@ export class ContentDirectoryService {
     this.customParentID = parentID;
   }
 
-  public browseChildren(objectID: string, sortCriteria: string, mediaServerUdn: string): void {
-    this.updateBrowsePath(objectID);
+  /**
+   * 
+   * @param objectID 
+   * @param sortCriteria 
+   * @param mediaServerUdn 
+   */
+  public browseChildren(objectID: string, sortCriteria: string, mediaServerUdn: string, isStepOut?: boolean): void {
+    this.updateBrowsePath(objectID, isStepOut);
     this.browseChildrenByRequest(this.createBrowseRequest(objectID, sortCriteria, mediaServerUdn));
   }
 
@@ -156,11 +162,11 @@ export class ContentDirectoryService {
     return this.browseChildrenByRequest(this.createBrowseRequest(containerDto.id, "", containerDto.mediaServerUDN));
   }
 
-  private updateBrowsePath(id: string) {
-    if (this.cdsBrowsePathService.peekCurrentPathID()?.length < id.length) {
-      this.cdsBrowsePathService.stepIn(id);
-    } else {
+  private updateBrowsePath(id: string, isStepOut?: boolean) {
+    if (isStepOut) {
       this.cdsBrowsePathService.stepOut();
+    } else {
+      this.cdsBrowsePathService.stepIn(id);
     }
   }
 
@@ -168,7 +174,7 @@ export class ContentDirectoryService {
     const uri = '/browseChildren';
     const sub = this.httpService.post<ContainerItemDto>(this.baseUri, uri, browseRequestDto)
     sub.subscribe(data => this.updateContainer(data));
-    localStorage.setItem('lastMediaServerPath', browseRequestDto.objectID); 
+    localStorage.setItem('lastMediaServerPath', browseRequestDto.objectID);
     return sub;
   }
 
