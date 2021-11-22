@@ -1,4 +1,3 @@
-import { ScrollViewService } from './../../util/scroll-view.service';
 import { CdsBrowsePathService } from './../../util/cds-browse-path.service';
 import { Component, OnInit } from '@angular/core';
 import { DeviceService } from 'src/app/service/device.service';
@@ -34,7 +33,6 @@ export class BrowseResultComponent implements AfterViewChecked {
     private deviceService: DeviceService,
     private cdsBrowsePathService: CdsBrowsePathService,
     public contentDirectoryService: ContentDirectoryService,
-    private scrollViewService: ScrollViewService,
     private songOptionsServiceService: SongOptionsServiceService,
     public avtransportService: AvtransportService,
     private timeDisplayService: TimeDisplayService,
@@ -223,10 +221,9 @@ export class BrowseResultComponent implements AfterViewChecked {
 
   domChange(_event: Event): void {
     if (this.cdsBrowsePathService.scrollToID.length > 0) {
-      this.scrollViewService.scrollIntoViewID(this.cdsBrowsePathService.scrollToID);
+      this.cdsBrowsePathService.scrollIntoViewID(this.cdsBrowsePathService.scrollToID);
     }
   }
-
 
   get topDivId(): string {
     return "top-div";

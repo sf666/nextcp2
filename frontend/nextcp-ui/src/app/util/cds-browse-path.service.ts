@@ -41,4 +41,15 @@ export class CdsBrowsePathService {
   get scrollToID(): string {
     return this.scrollId;
   }
+
+  /**
+   * @param elementID ATTENTION: elementID needs to have tabindex set to '-1': <div id="elementID" tabindex="-1">
+   */
+   public scrollIntoViewID(elementID: string): void {
+    const targetElement = document.getElementById(elementID); // querySelector('#someElementId');
+    this.scrollId = '';
+    if (targetElement) {
+      targetElement.focus();
+    }
+  }  
 }

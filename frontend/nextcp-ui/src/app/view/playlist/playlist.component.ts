@@ -1,5 +1,5 @@
+import { CdsBrowsePathService } from './../../util/cds-browse-path.service';
 import { BackgroundImageService } from './../../util/background-image.service';
-import { ScrollViewService } from './../../util/scroll-view.service';
 import { SseService } from './../../service/sse/sse.service';
 import { DeviceService } from './../../service/device.service';
 import { MusicItemDto } from './../../service/dto.d';
@@ -17,12 +17,12 @@ export class PlaylistComponent implements OnInit {
     public deviceService: DeviceService,
     private sseService: SseService,
     private backgroundImageService: BackgroundImageService,
-    scrollViewService: ScrollViewService,
+    scrollViewService: CdsBrowsePathService,
     public playlistService: PlaylistService) {
 
     sseService.mediaRendererPlaylistStateChanged$.subscribe(data => {
       if (deviceService.isMediaRendererSelected(data.udn)) {
-        scrollViewService.scrollIntoViewID("PL-" + data.Id);
+        scrollViewService.scrollIntoViewID(`PL-${data.Id}`);
       }
     });
   }
@@ -32,7 +32,7 @@ export class PlaylistComponent implements OnInit {
     this.backgroundImageService.setBackgroundImageMainScreen("/assets/images/playlist_bg.png");
   }
 
-  getActiveClass(item: MusicItemDto) {
+  getActiveClass(item: MusicItemDto) : string{
     const id: number = +item.objectID;
     if (id === this.playlistService.playlistState.Id) {
       return "active";
