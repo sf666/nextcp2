@@ -171,6 +171,10 @@ public class FilesystemIndexerService {
 	private List<SongIndexed> getIndexedSongFromMBID(String musicBrainzId) {
 		checkValidUUID(musicBrainzId);
 		List<SongIndexed> songIndexList = songPersistenceService.getSongByMusicBrainzId(musicBrainzId);
+		if (songIndexList.size() == 0)
+		{
+	        log.info("musicBrainzID not found in internal table : " + musicBrainzId);
+		}
 		return songIndexList;
 	}
 
