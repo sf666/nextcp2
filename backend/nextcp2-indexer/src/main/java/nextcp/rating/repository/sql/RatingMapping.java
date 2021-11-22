@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import nextcp.rating.domain.SongIndexed;
+import nextcp.rating.domain.UserRating;
 
 /**
  * 
@@ -45,14 +46,14 @@ public interface RatingMapping
     // User Ratings
     // ===================================================
 
-    @Insert("insert into USER_RATING(MUSICBRAINZID,RATING) values (${musicBrainzId}, ${stars})")
-    int insertUserRating(String musicBrainzId, Integer stars);
+    @Insert("insert into USER_RATING(MUSICBRAINZID,RATING) values (#{musicBrainzId}, #{rating})")
+    int insertUserRating(UserRating userRating);
 
     @Update("UPDATE USER_RATING SET RATING = #{rating} WHERE MUSICBRAINZID = #{musicBrainzId}")
-    void updateUserRatingByMusicBrainzId(String musicBrainzId, Integer stars);
+    void updateUserRatingByMusicBrainzId(UserRating userRating);
 
     @Update("UPDATE USER_RATING SET RATING = #{rating} WHERE ACOUSTID = #{acoustId}")
-    void updateUserRatingByMusicAcoustId(String acoustId, Integer stars);
+    void updateUserRatingByMusicAcoustId(UserRating userRating);
 
     @Select("SELECT RATING FROM USER_RATING where ACOUSTID = '${acoustID}'")
     Integer selectUserRatingByAcoustId(String acoustID);

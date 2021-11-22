@@ -20,6 +20,4 @@ public class UserRating
         this.acoustId = acoustId;
         this.rating = rating;
     }
-    
-    
 }
