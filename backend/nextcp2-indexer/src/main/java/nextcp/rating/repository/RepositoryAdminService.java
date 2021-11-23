@@ -144,6 +144,10 @@ public class RepositoryAdminService
             Tag tag = audioFile.getTag();
             song.setAcoustID(readTagField(tag, FieldKey.ACOUSTID_ID));
             song.setMusicBrainzID(readTagField(tag, FieldKey.MUSICBRAINZ_TRACK_ID));
+            if (log.isDebugEnabled())
+            {
+                log.debug(String.format("[%s] AcoustID[%s] musicBrainzID[%s]", song.getFilePath(), song.getAcoustID(), song.getMusicBrainzID()));
+            }
             song.setRatingFromTag(tag);
 
             session.insert("nextcp.rating.repository.sql.RatingMapping.insertSong", song);
@@ -163,7 +167,7 @@ public class RepositoryAdminService
 
     public String readTagField(Tag tag, FieldKey key)
     {
-        String s = tag.getFirst(FieldKey.ACOUSTID_ID);
+        String s = tag.getFirst(key);
         if (StringUtils.isAllBlank(s))
         {
             return null;

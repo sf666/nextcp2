@@ -122,12 +122,12 @@ public class OpenHomeUtils
                     try
                     {
                         Element eElement = (Element) nNode;
-                        String meta = eElement.getElementsByTagName("Metadata").item(0).getTextContent();
+                        String meta = extractElementTextByTag(eElement, "Metadata");
                         MusicItemDto dto = dtoBuilder.extractXmlAsMusicItem(meta);
                         if (dto != null)
                         {
-                            dto.objectID = eElement.getElementsByTagName("Id").item(0).getTextContent();
-                            dto.streamingURL = eElement.getElementsByTagName("Uri").item(0).getTextContent();
+                            dto.objectID = extractElementTextByTag(eElement, "Id");
+                            dto.streamingURL = extractElementTextByTag(eElement, "Uri");
                             result.add(dto);
                         }
                     }
@@ -144,6 +144,18 @@ public class OpenHomeUtils
         }
 
         return result;
+    }
+
+    private String extractElementTextByTag(Element eElement, String tag)
+    {
+        try
+        {
+            return eElement.getElementsByTagName(tag).item(0).getTextContent();
+        }
+        catch (Exception e)
+        {
+            return "";
+        }
     }
 
     public LinkedList<InputSourceDto> convertToInputSourceList(String xml)
