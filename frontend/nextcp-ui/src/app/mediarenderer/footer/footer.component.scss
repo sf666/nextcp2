@@ -39,7 +39,7 @@ mat-slider {
 
 .icon-button {
     margin-left: 1rem;
-    color      : var(--glas-white);
+    color      : var(--glas-white-5);
     width      : 2rem;
     height     : 2rem;
 
@@ -53,7 +53,7 @@ mat-slider {
 }
 
 .icon-main {
-    color: var(--glas-white);
+    color: var(--glas-white-5);
 }
 
 .progress-bar {
@@ -117,7 +117,7 @@ mat-slider {
 
 .finishedTime {
     @extend .baseFontsize;
-    color                : var(--glas-white);
+    color                : var(--glas-white-5);
     font-feature-settings: "tnum";
 }
 

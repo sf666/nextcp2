@@ -28,7 +28,7 @@ img {
 
 .finishedTime {
     @extend .baseFontsize;
-    color                : var(--glas-white);
+    color                : var(--glas-white-5);
     font-feature-settings: "tnum";
 }
 
@@ -51,7 +51,7 @@ img {
 
 .rightButtons {
     align-self   : center;
-    color        : var(--glas-white);
+    color        : var(--glas-white-5);
     padding-right: 16px;
 }
 

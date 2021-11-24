@@ -5,8 +5,8 @@
     min-width     : 250px;
     padding-left  : 20px;
     padding-top   : 16px;
-    padding-bottom   : 12px;
-    color         : var(--glas-white-4);
+    padding-bottom: 12px;
+    color         : var(--snow-white);
 }
 
 .element-item {
@@ -23,10 +23,10 @@
 
     &:hover {
         background-color: var(--grey-5);
-        color           : var(--snow-white);
+        color           : var(--glas-white-3);
     }
 }
 
 .selected {
-    color      : var(--primary-color);
+    color: var(--primary-color);
 }

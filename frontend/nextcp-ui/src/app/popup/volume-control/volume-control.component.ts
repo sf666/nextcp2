@@ -28,7 +28,7 @@ export class VolumeControlComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 50, 450);
+    this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 50, 500);
   }
 
   volChanged(event: MatSliderChange): void {
