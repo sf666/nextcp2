@@ -39,4 +39,9 @@ export class RatingServiceService {
     const uri = "/syncRatingsFromMusicBrainzToFiles";
     return this.httpService.get(this.baseUri, uri);
   }
+
+  public indexerRescanMusicDirectory(): Subject<string> {
+    const uri = "/indexerRescanMusicDirectory";
+    return this.httpService.get(this.baseUri, uri);
+  }
 }

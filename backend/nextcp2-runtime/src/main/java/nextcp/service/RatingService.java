@@ -128,4 +128,9 @@ public class RatingService
             this.publisher.publishEvent(new ToastrMessage("", "error", "Local DB Rating", "couldn't save : " + e.getMessage()));
         }
     }
+    
+    public void indexMusicDirectory()
+    {
+        localRatingService.rescanMusicDirectory();
+    }
 }
