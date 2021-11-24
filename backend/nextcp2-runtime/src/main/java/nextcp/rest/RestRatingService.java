@@ -61,7 +61,7 @@ public class RestRatingService
         serviceDelegate.syncRatingsFromMusicBrainz(true);
     }
     
-    @GetMapping("/rescanDatabase")
+    @GetMapping("/indexerRescanMusicDirectory")
     public void rescanDatabase()
     {
         serviceDelegate.indexMusicDirectory();
