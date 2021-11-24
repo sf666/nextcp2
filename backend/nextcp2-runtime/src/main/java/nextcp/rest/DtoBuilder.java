@@ -397,7 +397,7 @@ public class DtoBuilder
         }
         else
         {
-            log.warn(String.format("Empty URL for ID : %s ", item.getId()));
+            log.debug(String.format("Empty URL for ID : %s ", item.getId()));
             return "";
         }
     }
