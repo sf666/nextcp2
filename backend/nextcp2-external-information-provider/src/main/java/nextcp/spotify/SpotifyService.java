@@ -117,14 +117,14 @@ public class SpotifyService
         }
         catch (ParseException | IOException e)
         {
-            log.warn("error renewing spotify access token.", e);
+            log.warn("Parse or IO exception. Error renewing spotify access token. " + e.getMessage());
         }
         catch (SpotifyWebApiException e)
         {
             renewTokenTimeout = Long.MAX_VALUE;
             spotifyApi.setRefreshToken("");
             config.setUserAuthorizationNeeded(true);
-            log.warn("error renewing spotify access token.", e);
+            log.warn("Spotify Web Api exception. Error renewing spotify access token. " + e.getMessage());
         }
     }
 
