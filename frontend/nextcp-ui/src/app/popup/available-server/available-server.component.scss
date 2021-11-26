@@ -10,20 +10,19 @@
 }
 
 .element-item {
-    color         : var(--glas-white-2);
+    color         : var(--glas-white-3);
     padding-top   : 8px !important;
     padding-left  : 40px !important;
     padding-right : 8px !important;
     height        : 40px;
     width         : 100%;
-    color         : var(--snow-white);
     font-weight   : 500;
     font-size     : 0.9rem;
     letter-spacing: 0.05rem;
 
     &:hover {
         background-color: var(--grey-5);
-        color           : var(--snow-white-3);
+        color           : var(--snow-white);
     }
 }
 

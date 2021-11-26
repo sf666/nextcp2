@@ -34,13 +34,17 @@ public class Ma9000Factory implements IDeviceDriverFactory
             {
                 throw new BackendException(BackendException.DEVICE_DRIVER_CONNECTION_STRING_EMPTY, "connection string shall not be null or empty.");
             }
+            if (connectionString == null || !connectionString.contains(":"))
+            {
+                throw new RuntimeException(String.format("invalid connection string : %s", connectionString));
+            }
             String[] part = connectionString.split(":");
             checkParts(part);
             return new Ma9000Binding(new InetSocketAddress(part[0], Integer.parseInt(part[1])), callback, rendererUdn);
         }
         catch (Exception e)
         {
-            log.error("failed aquiring driver.", e);
+            log.error(String.format("failed aquiring driver for connectin string >%s<", connectionString), e);
             return null;
         }
     }

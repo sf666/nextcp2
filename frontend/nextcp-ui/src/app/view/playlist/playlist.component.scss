@@ -74,7 +74,7 @@ img {
 .title {
     @extend .baseFontsize;
     font-size: 1.2rem;
-    color    : var(--snow-white-3);
+    color    : var(--glas-white-3);
 
     &.active {
         color: rgb(0, 255, 255);
