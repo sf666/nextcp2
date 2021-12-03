@@ -24,7 +24,8 @@ export class AvailableRendererComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const popupHeight = this.deviceService.getMediaRendererList.length * 30 + 120;
+    const rendererCount = this.deviceService.getMediaRendererList().length;
+    const popupHeight = rendererCount * 30 + 120;
     this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 250, popupHeight);
   }
 
