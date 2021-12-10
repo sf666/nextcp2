@@ -1,3 +1,4 @@
+import { PersistenceService } from './../../service/persistence/persistence.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { PopupService } from './../../util/popup.service';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
@@ -18,6 +19,7 @@ export class AvailableServerComponent implements OnInit {
     _matDialogRef: MatDialogRef<AvailableServerComponent>,
     @Inject(MAT_DIALOG_DATA) data: { trigger: ElementRef, id: string },
     private popupService: PopupService,
+    private persistenceService: PersistenceService,
     public deviceService: DeviceService
   ) {
     this.triggerElementRef = data.trigger;
@@ -34,6 +36,8 @@ export class AvailableServerComponent implements OnInit {
   }
 
   selectServer(udn: string): void {
+    // delete last stored path if server is selected manually
+    this.persistenceService.clearLastMediaServerDevice();    
     this.deviceService.setMediaServerByUdn(udn);
   }
 

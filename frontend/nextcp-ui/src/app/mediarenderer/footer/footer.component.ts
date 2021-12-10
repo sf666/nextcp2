@@ -1,3 +1,4 @@
+import { PersistenceService } from './../../service/persistence/persistence.service';
 import { AvailableServerComponent } from './../../popup/available-server/available-server.component';
 import { VolumeControlComponent } from './../../popup/volume-control/volume-control.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -25,7 +26,7 @@ export class FooterComponent {
     private dialog: MatDialog,
     public avtransportService: AvtransportService,
     public deviceService: DeviceService,
-    public playlistService: PlaylistService,
+    public playlistService: PlaylistService,    
     public rendererService: RendererService) {
     deviceService.mediaRendererChanged$.subscribe(data => this.currentMediaRendererName = data.friendlyName);
   }
@@ -42,9 +43,6 @@ export class FooterComponent {
   }
 
   public serverClicked(event: Event): void {
-    // delete last stored path if server is selected manually
-    localStorage.setItem('lastMediaServerDevice', '');
-
     const target = new ElementRef(event.currentTarget);
     const dialogRef = this.dialog.open(AvailableServerComponent, {
       data: { trigger: target },

@@ -85,6 +85,7 @@ export class NavBarComponent {
   gotoParent(): void {
     this.contentDirectoryService.gotoParent();
   }
+  
   searchBackPressed(): void {
     //    this.contentDirectoryService.browseToRoot("", this.contentDirectoryService.currentContainerList.currentContainer.mediaServerUDN);
     void this.router.navigateByUrl('music-library');

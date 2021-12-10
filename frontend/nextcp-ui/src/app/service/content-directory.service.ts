@@ -1,3 +1,4 @@
+import { PersistenceService } from './persistence/persistence.service';
 import { Subject } from 'rxjs';
 import { CdsBrowsePathService } from './../util/cds-browse-path.service';
 import { Router } from '@angular/router';
@@ -7,6 +8,7 @@ import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
 import { ContainerItemDto, BrowseRequestDto, MediaServerDto, ContainerDto, SearchRequestDto, SearchResultDto, MusicItemDto } from './dto.d';
 import { Injectable } from '@angular/core';
+import { Console } from 'console';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +30,7 @@ export class ContentDirectoryService {
 
   constructor(
     private httpService: HttpService,
+    private persistenceService: PersistenceService,
     private searchItemService: SearchItemService,
     private dtoGeneratorService: DtoGeneratorService,
     private cdsBrowsePathService: CdsBrowsePathService,
@@ -92,20 +95,21 @@ export class ContentDirectoryService {
   mediaServerChanged(data: MediaServerDto): void {
     // Update to root folder of media server
     let oid: string;
-    if (localStorage.getItem('lastMediaServerDevice') === data.udn) {
-      oid = localStorage.getItem('lastMediaServerPath');
+    if (this.persistenceService.isCurrentMediaServer(data.udn)) {
+      oid = this.persistenceService.getLastMediaServerPath();
+      this.cdsBrowsePathService.restorePathToRoot();
     } else {
-      oid = '0';
+      oid = '0';      
+      this.cdsBrowsePathService.clearPath();
+      this.persistenceService.setNewMediaServerDevice(data.udn);
     }
     this.currentMediaServerDto = data;
     this.browseChildrenByRequest(this.createBrowseRequest(oid, "", data.udn));
-    localStorage.setItem('lastMediaServerDevice', data.udn);
   }
 
   public showQuickSearchPanel(): void {
     this.quickSearchPanelVisible = true;
   }
-
 
   public hideQuickSearchPanel(): void {
     this.quickSearchPanelVisible = false;
@@ -131,6 +135,7 @@ export class ContentDirectoryService {
       targetUDN = this.customParentID;
       this.customParentID = null;
     } else {
+      console.log("Parent ID : " + this.currentContainerList.currentContainer.parentID);
       targetUDN = this.currentContainerList.currentContainer.parentID;
     }
     return targetUDN;
@@ -174,7 +179,8 @@ export class ContentDirectoryService {
     const uri = '/browseChildren';
     const sub = this.httpService.post<ContainerItemDto>(this.baseUri, uri, browseRequestDto)
     sub.subscribe(data => this.updateContainer(data));
-    localStorage.setItem('lastMediaServerPath', browseRequestDto.objectID);
+    this.persistenceService.setCurrentObjectID(browseRequestDto.objectID);
+    this.cdsBrowsePathService.persistPathToRoot();
     return sub;
   }
 
