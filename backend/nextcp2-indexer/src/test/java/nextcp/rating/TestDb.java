@@ -44,9 +44,6 @@ public class TestDb
     }
 
     @Autowired
-    private RepositoryAdminService repositoryAdminService = null;
-
-    @Autowired
     private SessionManager sessionManager = null;
 
     @Autowired
