@@ -8,7 +8,7 @@ import Stack from 'ts-data.stack';
 export class CdsBrowsePathService {
 
   private visitedPathFromRoot: Stack<string>;
-  private visitedPathFromRootAsString : string;
+  private visitedPathFromRootAsString: string;
   private scrollId: string;
 
   constructor() {
@@ -32,19 +32,21 @@ export class CdsBrowsePathService {
   }
 
   public stepOut(): void {
-    this.scrollId = this.visitedPathFromRoot.pop();
-    this.visitedPathFromRootAsString = this.visitedPathFromRootAsString.substring(0, this.visitedPathFromRootAsString.lastIndexOf(','));
+    if (this.visitedPathFromRoot.peek()) {
+      this.scrollId = this.visitedPathFromRoot.pop();
+      this.visitedPathFromRootAsString = this.visitedPathFromRootAsString.substring(0, this.visitedPathFromRootAsString.lastIndexOf(','));
+    }
   }
 
   public peekCurrentPathID(): string {
     if (this.visitedPathFromRoot.isEmpty()) {
       return '';
     }
-    
+
     return this.visitedPathFromRoot.peek();
   }
 
-  public clearPath() : void {
+  public clearPath(): void {
     while (!this.visitedPathFromRoot.isEmpty) {
       this.visitedPathFromRoot.pop();
     }
@@ -56,31 +58,31 @@ export class CdsBrowsePathService {
     return this.scrollId;
   }
 
-  public persistPathToRoot() : void {
+  public persistPathToRoot(): void {
     localStorage.setItem('visitedPath', this.visitedPathFromRootAsString);
   }
 
-  public restorePathToRoot() : void {
+  public restorePathToRoot(): void {
     const pathStack = localStorage.getItem('visitedPath');
     this.clearPath();
     if (pathStack) {
       pathStack.split(',').forEach(p => {
         this.visitedPathFromRoot.push(p);
         this.addPathToString(p);
-      });      
+      });
     }
     this.persistPathToRoot();
     console.log('path restored');
   }
-  
+
   /**
    * @param elementID ATTENTION: elementID needs to have tabindex set to '-1': <div id="elementID" tabindex="-1">
    */
-   public scrollIntoViewID(elementID: string): void {
+  public scrollIntoViewID(elementID: string): void {
     const targetElement = document.getElementById(elementID); // querySelector('#someElementId');
     if (targetElement) {
       this.scrollId = '';
       targetElement.focus();
     }
-  }  
+  }
 }
