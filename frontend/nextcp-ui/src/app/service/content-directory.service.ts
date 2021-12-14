@@ -8,7 +8,6 @@ import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
 import { ContainerItemDto, BrowseRequestDto, MediaServerDto, ContainerDto, SearchRequestDto, SearchResultDto, MusicItemDto } from './dto.d';
 import { Injectable } from '@angular/core';
-import { Console } from 'console';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +19,8 @@ export class ContentDirectoryService {
   public currentContainerList: ContainerItemDto;
   private customParentID: string;
   private currentMediaServerDto: MediaServerDto;
+
+  private lastOidIsResoredFromCache: boolean;
 
   // QuickSearch Support
   public quickSearchResultList: SearchResultDto;
@@ -98,7 +99,9 @@ export class ContentDirectoryService {
     if (this.persistenceService.isCurrentMediaServer(data.udn)) {
       oid = this.persistenceService.getLastMediaServerPath();
       this.cdsBrowsePathService.restorePathToRoot();
+      this.lastOidIsResoredFromCache = true;
     } else {
+      this.lastOidIsResoredFromCache = false;
       oid = '0';      
       this.cdsBrowsePathService.clearPath();
       this.persistenceService.setNewMediaServerDevice(data.udn);
@@ -187,6 +190,10 @@ export class ContentDirectoryService {
   updateContainer(data: ContainerItemDto): void {
     this.currentContainerList = data;
     this.currentContainerListChanged$.next(data);
+    if (this.lastOidIsResoredFromCache && !(data.containerDto.length > 0 || data.musicItemDto.length > 0)) {
+      this.browseToRoot('');
+      this.lastOidIsResoredFromCache = false;
+    }
   }
 
   private createBrowseRequest(objectID: string, sortCriteria: string, mediaServerUdn: string): BrowseRequestDto {
