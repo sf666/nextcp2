@@ -35,19 +35,27 @@ a {
     width   : var(--sidebar-width);
     height  : calc(var(--vh, 1vh) * 100 - var(--footer-height));
 
+    padding-left : 16px;
+    padding-right: 16px;
+    padding-top  : 8px;
+
     display         : flex;
     flex-direction  : column;
     flex-shrink     : 0;
-    background      : #242428;
+    background      : #242528;
     transition      : 50ms ease-in;
     overflow-y      : auto;
     letter-spacing  : 0.05rem;
-    font-weight     : 300;
+    font-weight     : 500;
     //z-index       : 20;
 }
 
 .mat-button {
-    font-weight: 300;
+    font-weight: 500;
+    font-size  : 0.8rem;
+    color      : white;
+    letter-spacing: 0.06rem;
+
     height     : 50px;
     line-height: 45px;
 

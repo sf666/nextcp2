@@ -11,6 +11,7 @@
 @import 'custom_variables';
 @import '~@angular/material/theming';
 @import "../assets/fonts/quicksand.scss";
+@import "../assets/fonts/nationale.scss";
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -54,7 +55,7 @@ $my-app-theme: mat-dark-theme($my-app-primary, $my-app-accent, $my-app-warn);
 
 // Define a custom typography config that overrides the font-family: Quicksand, sans-serif
 
-$custom-typography: mat-typography-config($font-family : 'Lato, Quicksand, sans-serif');
+$custom-typography: mat-typography-config($font-family : 'nationale, Lato, Quicksand, sans-serif');
 
 // Override typography for all Angular Material, including mat-base-typography and all components.
 @include angular-material-typography($custom-typography);
