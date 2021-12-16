@@ -1,16 +1,16 @@
 <div class="sidebar">
     <div class="app-label">nextCP/2</div>
-    <a mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/music-library'" (click)="musicLibraryClicked()">
-        <mat-icon class="icn" style="vertical-align: top;" svgIcon="music-box-multiple-outline"></mat-icon>Music Library
+    <a #btn1 mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/music-library'" (click)="musicLibraryClicked()">
+        <mat-icon class="icn" style="vertical-align: top;" svgIcon="music-box-multiple-outline"></mat-icon><span class="{{getTextClass(btn1)}}">Music Library</span>
     </a>
-    <a mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/playlist'">
-        <mat-icon class="icn" style="vertical-align: top;" svgIcon="playlist-music-outline"></mat-icon>Queue
+    <a #btn2 mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/playlist'">
+        <mat-icon class="icn" style="vertical-align: top;" svgIcon="playlist-music-outline"></mat-icon><span class="{{getTextClass(btn2)}}">Queue</span>
     </a>
-    <a mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/player'">
-        <mat-icon class="icn" style="vertical-align: top;" svgIcon="surround-sound"></mat-icon>Now listening
+    <a #btn3 mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/player'">
+        <mat-icon class="icn" style="vertical-align: top;" svgIcon="surround-sound"></mat-icon><span class="{{getTextClass(btn3)}}">Now listening</span>
     </a>
-    <a mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/radio'">
-        <mat-icon class="icn" style="vertical-align: top;" svgIcon="radio"></mat-icon>Radio
+    <a #btn4 mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/radio'">
+        <mat-icon class="icn" style="vertical-align: top;" svgIcon="radio"></mat-icon><span class="{{getTextClass(btn4)}}">Radio</span>
     </a>
 
     <!--
@@ -20,8 +20,8 @@
         <mat-icon class="icn" style="vertical-align: top;" svgIcon="card-search-outline"></mat-icon>Search
     </a>
     -->    
-    <a mat-button routerLinkActive="active" style="text-align:left; vertical-align: top;" [routerLink]="'/settings'">
-        <mat-icon class="icn" style="vertical-align: top;" svgIcon="cog-outline"></mat-icon>App settings
+    <a #btn5 mat-button routerLinkActive="active" style="text-align:left; vertical-align: top;" [routerLink]="'/settings'">
+        <mat-icon class="icn" style="vertical-align: top;" svgIcon="cog-outline"></mat-icon><span class="{{getTextClass(btn5)}}">App settings</span>
     </a>
 
 </div>

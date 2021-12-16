@@ -10,6 +10,7 @@ $col-grey : $col-4;
 
 a {
     line-height: 1.5rem;
+    color      : rgba(229, 238, 255, 0.6);
 }
 
 .icn {
@@ -35,27 +36,23 @@ a {
     width   : var(--sidebar-width);
     height  : calc(var(--vh, 1vh) * 100 - var(--footer-height));
 
-    padding-left : 16px;
-    padding-right: 16px;
-    padding-top  : 8px;
-
     display         : flex;
     flex-direction  : column;
     flex-shrink     : 0;
-    background      : #242528;
+    background      : #242428;
     transition      : 50ms ease-in;
     overflow-y      : auto;
-    letter-spacing  : 0.05rem;
-    font-weight     : 500;
+    letter-spacing  : 0.04rem;
+    font-weight     : 300;
     //z-index       : 20;
 }
 
-.mat-button {
-    font-weight: 500;
-    font-size  : 0.8rem;
-    color      : white;
-    letter-spacing: 0.06rem;
+.button-text {
+    color: rgb(255, 255, 255);
+}
 
+.mat-button {
+    font-weight: 400;
     height     : 50px;
     line-height: 45px;
 

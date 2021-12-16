@@ -2,6 +2,7 @@ import { ContentDirectoryService } from './../../service/content-directory.servi
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
 import { Component } from '@angular/core';
+import { MatAnchor } from '@angular/material/button';
 
 @Component({
   selector: 'app-sidebar',
@@ -27,26 +28,33 @@ export class SidebarComponent  {
     }
   }
   
-    /**
-     * Getter mediaServerUdn
-     * @return {string}
-     */
+  public getTextClass(el : MatAnchor) : string {
+    if (el._elementRef.nativeElement.classList.contains("active")) {
+      return "";
+    }
+    return "button-text";
+  }
+
+  /**
+   * Getter mediaServerUdn
+   * @return {string}
+   */
 	public get mediaServerUdn(): string {
 		return this._mediaServerUdn;
 	}
 
-    /**
-     * Getter mediaRendererUdn
-     * @return {string}
-     */
+  /**
+   * Getter mediaRendererUdn
+   * @return {string}
+   */
 	public get mediaRendererUdn(): string {
 		return this._mediaRendererUdn;
 	}
 
-    /**
-     * Setter mediaServerUdn
-     * @param {string} value
-     */
+  /**
+   * Setter mediaServerUdn
+   * @param {string} value
+   */
 	public set mediaServerUdn(value: string) {
     this._mediaServerUdn = value;
     this.deviceService.setMediaServerByUdn(value);
