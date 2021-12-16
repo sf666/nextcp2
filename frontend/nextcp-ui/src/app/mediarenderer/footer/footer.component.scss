@@ -75,7 +75,7 @@ mat-slider {
 }
 
 .right-footer {
-    flex-basis : 15rem; // 15em / auto
+    flex-basis: 15rem; // 15em / auto
     flex-grow : 1;
     align-self: center;
 }
@@ -141,16 +141,42 @@ img {
 }
 
 .albumAndTitle {
-    margin-left  : 1.5rem;
-    margin-top   : 0.2rem;
-    margin-bottom: 0.2rem;
-    align-self   : center;
+    margin-left    : 1.5rem;
+    margin-top     : 0.2rem;
+    margin-bottom  : 0.2rem;
+    align-self     : center;
+    justify-content: space-between;
 }
 
 .title {
     @extend .baseFontsize;
-    font-size    : 1.2rem;
-    color        : var(--glas-white-3);
+    font-size    : 0.95rem;
+    font-weight  : 500;
+    color        : rgb(252, 252, 252);
+    margin-bottom: 4px;
+}
+
+.artist {
+    @extend .baseFontsize;
+    font-size    : 0.85rem;
+    font-weight  : 400;
+    color        : rgba(252, 252, 252, 0.65);
+    margin-bottom: 16px;
+}
+
+.album {
+    @extend .baseFontsize;
+    font-size    : 0.85rem;
+    font-weight  : 400;
+    color        : rgba(252, 252, 252, 0.65);
+    margin-bottom: 4px;
+}
+
+.albumLabel {
+    @extend .baseFontsize;
+    font-size    : 0.85rem;
+    font-weight  : 400;
+    color        : rgba(128, 128, 128, 0.65);
     margin-bottom: 4px;
 }
 
