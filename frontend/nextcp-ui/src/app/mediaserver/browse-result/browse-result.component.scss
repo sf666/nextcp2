@@ -27,6 +27,10 @@
     color: rgba(255, 255, 255, 0.2);
 }
 
+.liked {
+    color: rgb(0, 255, 255);
+}
+
 img {
     object-fit   : cover;
     width        : $imgCardWidth;

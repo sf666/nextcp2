@@ -1,4 +1,3 @@
-import { Subject } from 'rxjs';
 import { SseService } from './sse/sse.service';
 import { GenericResultService } from './generic-result.service';
 import { GenericBooleanRequest, GenericNumberRequest, MusicItemDto, PlayRequestDto, PlaylistState, ContainerDto, PlaylistAddContainerRequest, FileSystemPlaylistEntry } from './dto.d';

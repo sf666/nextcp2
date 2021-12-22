@@ -1,3 +1,4 @@
+import { MyMusicService } from './../../service/my-music.service';
 import { CdsBrowsePathService } from './../../util/cds-browse-path.service';
 import { Component, OnInit } from '@angular/core';
 import { DeviceService } from 'src/app/service/device.service';
@@ -24,6 +25,7 @@ export class BrowseResultComponent implements AfterViewChecked {
 
   private listView: boolean;
   private lastDiscLabel = '';
+  private isAlbumLiked: false;
 
   quickSearchString: string;
 
@@ -37,8 +39,9 @@ export class BrowseResultComponent implements AfterViewChecked {
     public avtransportService: AvtransportService,
     private timeDisplayService: TimeDisplayService,
     public trackQualityService: TrackQualityService,
+    public myMusicService: MyMusicService,
     public playlistService: PlaylistService) {
-    this.listView = this.allTracksSameAlbum();
+    this.listView = this.contentDirectoryService.allTracksSameAlbum();
   }
 
   // 
@@ -198,7 +201,7 @@ export class BrowseResultComponent implements AfterViewChecked {
     });
   }
 
-  getDiscLabel(item : MusicItemDto) : string{
+  getDiscLabel(item: MusicItemDto): string {
     if (item.numberOfThisDisc !== this.lastDiscLabel) {
       this.lastDiscLabel = item.numberOfThisDisc;
       return `Disk ${item.numberOfThisDisc}`;
@@ -245,22 +248,6 @@ export class BrowseResultComponent implements AfterViewChecked {
     this.listView = !this.listView;
   }
 
-  allTracksSameAlbum(): boolean {
-    if (this.musicTracks.length > 0) {
-      const firstTrackAlbum = this.musicTracks[0].album;
-      return this.musicTracks.filter(item => item.album !== firstTrackAlbum).length == 0;
-    }
-    return true;
-  }
-
-  allTracksSameDisc(): boolean {
-    if (this.musicTracks.length > 0) {
-      const firstTrackDisc = this.musicTracks[0].numberOfThisDisc;
-      return this.musicTracks.filter(item => item.numberOfThisDisc !== firstTrackDisc).length == 0;
-    }
-    return true;
-  }
-
   play(musicItemDto: MusicItemDto): void {
     this.avtransportService.playResource(musicItemDto);
   }
@@ -272,8 +259,30 @@ export class BrowseResultComponent implements AfterViewChecked {
       return "";
     }
   }
-
   showSongPopup(event: PointerEvent, item: MusicItemDto): void {
     this.songOptionsServiceService.openOptionsDialog(event, item);
+  }
+
+  isLiked(): boolean {
+    return this.myMusicService.currentAlbumLiked;
+  }
+
+  likePossible(): boolean {
+    if (!this.contentDirectoryService.allTracksSameMusicBrainzReleaseId()) {
+      return false;
+    }
+    if (this.myMusicService.currentAlbumLiked) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  dislikeAlbum(): void {
+    this.myMusicService.deleteAlbumLike(this.myMusicService.currentAlbumReleaseID);
+  }
+
+  likeAlbum(): void {
+    this.myMusicService.likeAlbum(this.myMusicService.currentAlbumReleaseID);
   }
 }

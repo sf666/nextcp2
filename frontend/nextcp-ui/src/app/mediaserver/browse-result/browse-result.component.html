@@ -14,7 +14,10 @@
                 tabindex="-1">
                 <div *ngIf="hasSongs(); else containerTitle" class="d-flex flex-column pl-4">
                     <div class="d-flex flex-column">
-                        <div class="title">{{currentContainer.title}}</div>
+                        <div class="title">{{currentContainer.title}}
+                            <mat-icon *ngIf="isLiked()" (click)="dislikeAlbum()" class="mr-1 liked" svgIcon="heart"></mat-icon>
+                            <mat-icon *ngIf="likePossible()" (click)="likeAlbum()" class="mr-1 unliked" svgIcon="heart-outline"></mat-icon>
+                        </div>
                         <div *ngIf="currentContainer.artist" class="regular">by <span
                                 class="highlight">{{currentContainer.artist}}</span>
                         </div>
@@ -184,11 +187,11 @@
                 <div class="item-table">
                     <div id="head_browse_result_items_list_view_ID" class="item-thead">
                         <div class="row col-greyed">
-                            <div *ngIf="!allTracksSameAlbum()" class="col small-col-img mr-2"></div>
-                            <div *ngIf="allTracksSameAlbum()" class="col small-col">#</div>
+                            <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col small-col-img mr-2"></div>
+                            <div *ngIf="contentDirectoryService.allTracksSameAlbum()" class="col small-col">#</div>
                             <div class="col">Title</div>
                             <div class="col">Artist</div>
-                            <div *ngIf="!allTracksSameAlbum()" class="col">Album</div>
+                            <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col">Album</div>
                             <div class="col mid-col">Rating</div>
                             <div class="col text-right mid-col">LG</div>
                             <div class="col small-col"></div>
@@ -196,22 +199,22 @@
                     </div>
 
                     <div id="{{item.objectID}}" class="" *ngFor="let item of musicTracks">
-                        <div class="item-tbody" *ngIf="allTracksSameAlbum() && !allTracksSameDisc()">
+                        <div class="item-tbody" *ngIf="contentDirectoryService.allTracksSameAlbum() && !contentDirectoryService.allTracksSameDisc()">
                             {{getDiscLabel(item)}}
                         </div>
                         <div class="item-tbody">
                             <div class="row minWidth">
-                                <div *ngIf="!allTracksSameAlbum()" class="small-col-img mr-2">
+                                <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="small-col-img mr-2">
                                     <img class="img-small" src="{{item.albumArtUrl}}">
                                 </div>
-                                <div *ngIf="allTracksSameAlbum()" (click)="play(item)" class="col col-greyed small-col">
+                                <div *ngIf="contentDirectoryService.allTracksSameAlbum()" (click)="play(item)" class="col col-greyed small-col">
                                     {{item.originalTrackNumber}}</div>
                                 <div (click)="play(item)" class="col d-flex minWidth">
                                     <div class="no-wrap">{{item.title}}</div>
                                     <quality-badge [item]="item"></quality-badge>
                                 </div>
                                 <div (click)="play(item)" class="col no-wrap">{{item.artistName}}</div>
-                                <div *ngIf="!allTracksSameAlbum()" class="col">{{item.album}}</div>
+                                <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col">{{item.album}}</div>
                                 <div class="col mid-col">
                                     <star-rating [currentSong]="item"></star-rating>
                                 </div>

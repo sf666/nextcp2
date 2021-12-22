@@ -102,7 +102,7 @@ export class ContentDirectoryService {
       this.lastOidIsResoredFromCache = true;
     } else {
       this.lastOidIsResoredFromCache = false;
-      oid = '0';      
+      oid = '0';
       this.cdsBrowsePathService.clearPath();
       this.persistenceService.setNewMediaServerDevice(data.udn);
     }
@@ -196,6 +196,29 @@ export class ContentDirectoryService {
     }
   }
 
+  public allTracksSameAlbum(): boolean {
+    if (this.getMusicTracks().length > 0) {
+      const firstTrackAlbum = this.getMusicTracks()[0].album;
+      return this.getMusicTracks().filter(item => item.album !== firstTrackAlbum).length == 0;
+    }
+    return true;
+  }
+
+  public allTracksSameMusicBrainzReleaseId(): boolean {
+    if (this.getMusicTracks().length > 0) {
+      const firstTrackReleaseID = this.getMusicTracks()[0].musicBrainzId.ReleaseTrackId;
+      return this.getMusicTracks().filter(item => item.musicBrainzId.ReleaseTrackId !== firstTrackReleaseID).length == 0;
+    }
+    return true;
+  }
+
+  public allTracksSameDisc(): boolean {
+    if (this.getMusicTracks().length > 0) {
+      const firstTrackDisc = this.getMusicTracks()[0].numberOfThisDisc;
+      return this.getMusicTracks().filter(item => item.numberOfThisDisc !== firstTrackDisc).length == 0;
+    }
+    return true;
+  }
   private createBrowseRequest(objectID: string, sortCriteria: string, mediaServerUdn: string): BrowseRequestDto {
     const br: BrowseRequestDto = {
       mediaServerUDN: mediaServerUdn,
