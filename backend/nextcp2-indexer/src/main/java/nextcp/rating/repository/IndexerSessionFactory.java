@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import nextcp.db.SessionManager;
+import nextcp.mymusic.MyMusicMapping;
 import nextcp.rating.repository.sql.RatingMapping;
 
 @Service
@@ -21,6 +22,7 @@ public class IndexerSessionFactory
     {
         List<Class<?>> mapper = new ArrayList<Class<?>>();
         mapper.add(RatingMapping.class);
+        mapper.add(MyMusicMapping.class);
         sessionFactory = sessionManager.getSessionFactory(mapper);
     }
 

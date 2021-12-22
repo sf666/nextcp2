@@ -1,6 +1,6 @@
 How to use:
 
-After adding additional scripts, update the `nextcp.db.SessionManager.TARGET_DB_SCHEMA` attribute to reflect which scripts to run ... 
+After adding additional scripts, update the `nextcp.db.c.TARGET_DB_SCHEMA` attribute to reflect which scripts to run ... 
 
 The session manager will detect the current schema version and will update until the `nextcp.db.SessionManager.TARGET_DB_SCHEMA` scriptnumber is executed.
 
