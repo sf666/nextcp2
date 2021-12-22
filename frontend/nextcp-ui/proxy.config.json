@@ -35,6 +35,10 @@
     "target": "http://localhost:8085",
     "secure": false
   },
+  "/MyMusicService/*": {
+    "target": "http://localhost:8085",
+    "secure": false
+  },  
   "/SystemService/*": {
     "target": "http://localhost:8085",
     "secure": false
