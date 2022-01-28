@@ -3,6 +3,12 @@
     <a #btn1 mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/music-library'" (click)="musicLibraryClicked()">
         <mat-icon class="icn" style="vertical-align: top;" svgIcon="music-box-multiple-outline"></mat-icon><span class="{{getTextClass(btn1)}}">Music Library</span>
     </a>
+    <a #btn5 mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/myAlbums'">
+        <mat-icon class="icn" style="vertical-align: top;" svgIcon="music-circle-outline"></mat-icon><span class="{{getTextClass(btn5)}}">Albums</span>
+    </a>
+    <a #btn6 mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/myTracks'">
+        <mat-icon class="icn" style="vertical-align: top;" svgIcon="music"></mat-icon><span class="{{getTextClass(btn6)}}">Tracks</span>
+    </a>
     <a #btn2 mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/playlist'">
         <mat-icon class="icn" style="vertical-align: top;" svgIcon="playlist-music-outline"></mat-icon><span class="{{getTextClass(btn2)}}">Queue</span>
     </a>

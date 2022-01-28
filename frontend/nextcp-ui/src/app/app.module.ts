@@ -53,6 +53,8 @@ import { QualityBadgeComponent } from './util/comp/quality-badge/quality-badge.c
 import { AvailableRendererComponent } from './popup/available-renderer/available-renderer.component';
 import { VolumeControlComponent } from './popup/volume-control/volume-control.component';
 import { AvailableServerComponent } from './popup/available-server/available-server.component';
+import { MyAlbumComponent } from './view/my-album/my-album.component';
+import { MySongsComponent } from './view/my-songs/my-songs.component';
 
 
 @NgModule({
@@ -84,6 +86,8 @@ import { AvailableServerComponent } from './popup/available-server/available-ser
       AvailableRendererComponent,
       VolumeControlComponent,
       AvailableServerComponent,
+      MyAlbumComponent,
+      MySongsComponent,
 
    ],
    imports: [
