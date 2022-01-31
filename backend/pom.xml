@@ -36,6 +36,14 @@
 		</repository>
 	</repositories>
 
+	<distributionManagement>
+		<repository>
+			<id>repsy</id>
+			<name>public maven distribution repository</name>
+			<url>https://repo.repsy.io/mvn/sf666/nextcp2</url>
+		</repository>
+	</distributionManagement>
+
 	<properties>
 		<maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
 		<java.version>11</java.version>
