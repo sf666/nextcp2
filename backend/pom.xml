@@ -101,6 +101,15 @@
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<tagNameFormat>@{project.version}</tagNameFormat>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<executions>
 					<execution>
@@ -254,17 +263,6 @@
 				<artifactId>cling-support</artifactId>
 				<version>${cling.version}</version>
 			</dependency>
-			<!-- Jackson -->
-			<!-- <dependency> <groupId>com.fasterxml.jackson.module</groupId> <artifactId>jackson-module-jaxb-annotations</artifactId> 
-				<version>${jackson.version}</version> </dependency> <dependency> <groupId>com.fasterxml.jackson.jaxrs</groupId> 
-				<artifactId>jackson-jaxrs-json-provider</artifactId> <version>${jackson.version}</version> 
-				</dependency> <dependency> <groupId>com.fasterxml.jackson.core</groupId> 
-				<artifactId>jackson-core</artifactId> <version>${jackson.version}</version> 
-				</dependency> -->
-			<!-- XML parser -->
-			<!-- <dependency> <groupId>com.fasterxml.jackson.dataformat</groupId> 
-				<artifactId>jackson-dataformat-xml</artifactId> <version>${jackson.version}</version> 
-				</dependency> -->
 
 			<!-- Utils -->
 			<dependency>
