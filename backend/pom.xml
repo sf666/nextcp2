@@ -201,12 +201,6 @@
 				<artifactId>nextcp2-indexer</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			
-			<dependency>
-				<groupId>de.sf666</groupId>
-				<artifactId>nextcp2-db</artifactId>
-				<version>${project.version}</version>
-			</dependency>
 
 			<dependency>
 				<groupId>de.sf666</groupId>
