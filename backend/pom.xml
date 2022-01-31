@@ -29,6 +29,11 @@
 			<name>public repo hosted at Repsy</name>
 			<url>https://repo.repsy.io/mvn/sf666/musicbrainz</url>
 		</repository>
+		<repository>
+			<id>repsy-4l</id>
+			<name>public repo hosted at Repsy</name>
+			<url>https://repo.repsy.io/mvn/sf666/4l</url>
+		</repository>
 	</repositories>
 
 	<properties>
