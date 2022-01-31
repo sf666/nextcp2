@@ -94,7 +94,10 @@
 				<groupId>com.github.danielflower.mavenplugins</groupId>
 				<artifactId>multi-module-maven-release-plugin</artifactId>
 				<version>3.5.8</version>
-			</plugin>			
+				<configuration>
+					<serverId>github_sf</serverId>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
