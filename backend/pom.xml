@@ -85,6 +85,16 @@
 			</resource>
 		</resources>
 
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>com.github.danielflower.mavenplugins</groupId>
+					<artifactId>multi-module-maven-release-plugin</artifactId>
+					<version>3.5.8</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -93,7 +103,6 @@
 			<plugin>
 				<groupId>com.github.danielflower.mavenplugins</groupId>
 				<artifactId>multi-module-maven-release-plugin</artifactId>
-				<version>3.5.8</version>
 				<configuration>
 					<serverId>github_sf</serverId>
 				</configuration>
