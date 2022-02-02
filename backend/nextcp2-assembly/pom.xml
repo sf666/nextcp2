@@ -10,7 +10,7 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>nextcp2-assembly-spring-boot</artifactId>
+	<artifactId>nextcp2</artifactId>
 	<name>spring boot assembly project</name>
 
 
@@ -21,8 +21,17 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+    			<!-- do not deploy -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>false</skip>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
+
 
 	<dependencies>
 

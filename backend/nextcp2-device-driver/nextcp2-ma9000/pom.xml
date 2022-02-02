@@ -11,8 +11,19 @@
     
     <artifactId>nextcp2-ma9000</artifactId>
     <name>ma 9000 device driver</name>
-	
-	<build>
+
+    <build>
 	 	<finalName>device_driver_ma9000</finalName>	
-	</build>
+    	<plugins>
+    			<!-- do not deploy -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>false</skip>
+				</configuration>
+			</plugin>
+    	</plugins>
+    </build>
+    
 </project>
