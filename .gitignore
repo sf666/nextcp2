@@ -27,3 +27,4 @@ rating_db.trace.db
 nextcp2.log
 *.versionsBackup
 yarn.lock
+package-lock.json
