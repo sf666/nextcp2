@@ -31,7 +31,7 @@
     "@babel/core": "^7.13.10",
     "@babel/preset-env": "^7.13.10",
     "@material/linear-progress": "^7.0.0",
-    "@ng-bootstrap/ng-bootstrap": "^11.0.2",
+    "@ng-bootstrap/ng-bootstrap": "^11.0.0",
     "@types/streamsaver": "^2.0.0",
     "body-scroll-lock": "^3.1.5",
     "bootstrap": "^4.6.0",
