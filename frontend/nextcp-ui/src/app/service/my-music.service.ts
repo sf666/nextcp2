@@ -23,7 +23,7 @@ export class MyMusicService {
 
   private updateContainerStatus(): void {
     if (this.contentDirectoryService.allTracksSameMusicBrainzReleaseId()) {
-      if (this.contentDirectoryService.getMusicTracks()[0].musicBrainzId.ReleaseTrackId) {
+      if (this.contentDirectoryService.getMusicTracks()[0]?.musicBrainzId?.ReleaseTrackId) {
         this.currentAlbumReleaseID = this.contentDirectoryService.getMusicTracks()[0].musicBrainzId.ReleaseTrackId;
         this.isAlbumLiked(this.currentAlbumReleaseID).subscribe(
           res => this.currentAlbumLiked = res
