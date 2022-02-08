@@ -271,11 +271,12 @@ export class BrowseResultComponent implements AfterViewChecked {
     if (!this.contentDirectoryService.allTracksSameMusicBrainzReleaseId()) {
       return false;
     }
-    if (this.myMusicService.currentAlbumLiked) {
-      return false;
-    } else {
-      return true;
+    if (this.myMusicService?.currentAlbumReleaseID) {
+      if (!this.myMusicService.currentAlbumLiked) {
+        return true;
+      }
     }
+    return false;
   }
 
   dislikeAlbum(): void {

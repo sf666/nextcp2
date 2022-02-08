@@ -31,7 +31,7 @@ export class MyMusicService {
       }
     } else {
       this.currentAlbumLiked = false;
-      this.currentAlbumReleaseID = "";
+      this.currentAlbumReleaseID = undefined;
     }
   }
 
