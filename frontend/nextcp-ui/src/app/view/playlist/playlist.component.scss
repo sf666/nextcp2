@@ -59,8 +59,8 @@ img {
 // square image (this is useful if input image is a rectangle)
 .cropImg {
     object-fit: cover;
-    width     : calc('$imgWidthHeight  - 2*$img-border-width');
-    height    : calc('$imgWidthHeight  - 2*$img-border-width');
+    width     : calc(#{$imgWidthHeight}  - 2*#{$img-border-width});
+    height    : calc(#{$imgWidthHeight}  - 2*#{$img-border-width});
 }
 
 .playlistItem {
