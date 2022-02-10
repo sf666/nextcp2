@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 
 import nextcp.rating.repository.IndexerSessionFactory;
 
-@Service
+// out of order now ...  @Service
+
 public class MyMusicRepository
 {
     private static final Logger log = LoggerFactory.getLogger(MyMusicRepository.class.getName());

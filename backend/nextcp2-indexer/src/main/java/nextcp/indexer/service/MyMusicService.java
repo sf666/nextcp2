@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import nextcp.mymusic.MyMusicRepository;
 
-@Service
+// Off @Service
 public class MyMusicService
 {
     

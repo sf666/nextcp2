@@ -36,21 +36,21 @@ export class MyMusicService {
   }
 
   public likeAlbum(mbReleaseID: string): void {
-    const uri = '/likeAlbum';
+    const uri = '/likeAlbum/' + this.contentDirectoryService.getCurrentMediaServerDto().udn;
     if (mbReleaseID !== '') {
       this.httpService.post(this.baseUri, uri, mbReleaseID).subscribe(d => this.updateContainerStatus());
     }
   }
 
   public deleteAlbumLike(mbReleaseID: string): void {
-    const uri = '/deleteAlbumLike';
+    const uri = '/deleteAlbumLike/' + this.contentDirectoryService.getCurrentMediaServerDto().udn;
     if (mbReleaseID !== '') {
       this.httpService.post(this.baseUri, uri, mbReleaseID).subscribe(d => this.updateContainerStatus());
     }
   }
 
   public isAlbumLiked(mbReleaseID: string): Subject<boolean> {
-    const uri = '/isAlbumLiked';
+    const uri = '/isAlbumLiked/' + this.contentDirectoryService.getCurrentMediaServerDto().udn;
     if (mbReleaseID !== '') {
       return this.httpService.post<boolean>(this.baseUri, uri, mbReleaseID);
     }

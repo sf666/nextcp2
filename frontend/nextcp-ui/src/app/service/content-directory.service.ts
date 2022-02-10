@@ -47,6 +47,10 @@ export class ContentDirectoryService {
     deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));
   }
 
+  public getCurrentMediaServerDto() : MediaServerDto {
+    return this.currentMediaServerDto;
+  }
+
   //
   // Container and item lists of current media folder
   // --------------------------------------------------------------------------------------------
