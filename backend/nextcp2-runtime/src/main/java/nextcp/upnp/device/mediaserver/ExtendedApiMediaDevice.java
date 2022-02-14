@@ -5,13 +5,15 @@ package nextcp.upnp.device.mediaserver;
  */
 public interface ExtendedApiMediaDevice
 {
-    public boolean isAlbumLiked(String uuid);
+    public boolean isAlbumLiked(String musicBrainzReleaseId);
 
-    public void likeAlbum(String uuid);
+    public void likeAlbum(String musicBrainzReleaseId);
 
-    public void dislikeAlbum(String uuid);
+    public void dislikeAlbum(String musicBrainzReleaseId);
 
-    public void likeSong(String uuid);
+    public void likeSong(String musicBrainzTrackId);
 
-    public void dislikeSong(String uuid);
+    public void dislikeSong(String musicBrainzTrackId);
+    
+    public boolean isSongLiked(String musicBrainzTrackId);
 }

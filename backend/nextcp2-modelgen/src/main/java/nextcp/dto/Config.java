@@ -25,12 +25,13 @@ public class Config
     public Long globalSearchDelay;
     public String lastFmSessionKey;
     public SpotifyConfigDto spotifyConfig;
+    public List<UmsServerApiKey> umsApiKeys;
 
     public Config()
     {
     }
 
-    public Config(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, LocalIndexSupport localIndexerSupport, MusicbrainzSupport musicbrainzSupport, RatingStrategy ratingStrategy, String playlistPath, Long globalSearchDelay, String lastFmSessionKey, SpotifyConfigDto spotifyConfig)
+    public Config(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, LocalIndexSupport localIndexerSupport, MusicbrainzSupport musicbrainzSupport, RatingStrategy ratingStrategy, String playlistPath, Long globalSearchDelay, String lastFmSessionKey, SpotifyConfigDto spotifyConfig, List<UmsServerApiKey> umsApiKeys)
     {
         this.generateUpnpCode = generateUpnpCode;
         this.generateUpnpCodePath = generateUpnpCodePath;
@@ -48,6 +49,7 @@ public class Config
         this.globalSearchDelay = globalSearchDelay;
         this.lastFmSessionKey = lastFmSessionKey;
         this.spotifyConfig = spotifyConfig;
+        this.umsApiKeys = umsApiKeys;
     }
     
     @Override
@@ -71,6 +73,7 @@ public class Config
         sb.append("globalSearchDelay=").append(this.globalSearchDelay).append(", ");
         sb.append("lastFmSessionKey=").append(this.lastFmSessionKey).append(", ");
         sb.append("spotifyConfig=").append(this.spotifyConfig).append(", ");
+        sb.append("umsApiKeys=").append(this.umsApiKeys).append(", ");
         sb.append("]");
         return sb.toString();
     }

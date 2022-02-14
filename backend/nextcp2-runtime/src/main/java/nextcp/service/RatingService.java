@@ -14,7 +14,9 @@ import nextcp.rating.domain.UserRating;
 import nextcp.rating.repository.UserRatingPersistenceService;
 
 /**
- * Logic for rating backends.
+ * Rating logic. This service tries to keep song rating information local to this control point.
+ * 
+ * Song ratings (writing) will be promoted to backend. If a device is able to supply a song rating, this information will be used, otherweise cached rating will be used.
  */
 @Service
 public class RatingService
@@ -26,7 +28,7 @@ public class RatingService
     private ApplicationEventPublisher publisher = null;
 
     //
-    // Central user ratig service
+    // Central user rating service
     //
     @Autowired
     private UserRatingPersistenceService userRatingPersistenceService = null;
@@ -128,7 +130,7 @@ public class RatingService
             this.publisher.publishEvent(new ToastrMessage("", "error", "Local DB Rating", "couldn't save : " + e.getMessage()));
         }
     }
-    
+
     public void indexMusicDirectory()
     {
         localRatingService.rescanMusicDirectory();

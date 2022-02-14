@@ -27,6 +27,7 @@ import nextcp.dto.LocalIndexSupport;
 import nextcp.dto.MusicbrainzSupport;
 import nextcp.dto.RatingStrategy;
 import nextcp.dto.SpotifyConfigDto;
+import nextcp.dto.UmsServerApiKey;
 import nextcp.indexer.IndexerConfig;
 import nextcp.lastfm.ILastFmConfig;
 import nextcp.musicbrainz.MusicBrainzConfig;
@@ -282,6 +283,7 @@ public class ConfigPersistence
     private Config getDefaultConfig()
     {
         Config c = new Config();
+        c.umsApiKeys = new ArrayList<>();
         c.generateUpnpCode = false;
         c.generateUpnpCodePath = System.getProperty("java.io.tmpdir");
         c.embeddedServerPort = 8085;
@@ -362,9 +364,8 @@ public class ConfigPersistence
     {
         ConfigPersistence cr = new ConfigPersistence();
         cr.configurationFilename = "/tmp/cfg.json";
-
         cr.config = cr.getDefaultConfig();
-
+        cr.config.umsApiKeys.add(new UmsServerApiKey("uuid", "key"));
         cr.writeConfig();
 
     }

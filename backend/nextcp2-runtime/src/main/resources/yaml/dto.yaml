@@ -24,6 +24,11 @@ Config:
    globalSearchDelay: Long
    lastFmSessionKey: String
    spotifyConfig: SpotifyConfigDto
+   umsApiKeys: List<UmsServerApiKey>
+   
+UmsServerApiKey:
+   serverUuid: String
+   serverApiKey: String
 
 SpotifyConfigDto:
    accountConnected: boolean
