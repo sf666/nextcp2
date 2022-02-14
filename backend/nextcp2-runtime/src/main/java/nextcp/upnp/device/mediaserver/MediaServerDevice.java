@@ -49,7 +49,14 @@ public class MediaServerDevice extends BaseDevice
     private void init()
     {
         this.contentDirectoryService = new ContentDirectoryService(getUpnpService(), getDevice());
-        searchSupportDelegate = new SearchSupport(contentDirectoryService, this);
+        try
+        {
+            searchSupportDelegate = new SearchSupport(contentDirectoryService, this);
+        }
+        catch (Exception e)
+        {
+            log.info("search support ...", e);
+        }
     }
 
     public ContentDirectoryService getContentDirectoryService()
