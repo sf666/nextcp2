@@ -11,12 +11,12 @@ import nextcp.dto.ToastrMessage;
 import nextcp.indexer.service.LocalRatingService;
 import nextcp.musicbrainz.MusicBrainzService;
 import nextcp.rating.domain.UserRating;
-import nextcp.rating.repository.UserRatingPersistenceService;
+import nextcp.rating.repository.SongPersistenceService;
 
 /**
  * Rating logic. This service tries to keep song rating information local to this control point.
  * 
- * Song ratings (writing) will be promoted to backend. If a device is able to supply a song rating, this information will be used, otherweise cached rating will be used.
+ * Song ratings (writing) will be promoted to backends. If a device is able to supply a song rating, this information will be used, cached rating will be used.
  */
 @Service
 public class RatingService
@@ -28,13 +28,15 @@ public class RatingService
     private ApplicationEventPublisher publisher = null;
 
     //
-    // Central user rating service
+    // database persistence layer
     //
     @Autowired
-    private UserRatingPersistenceService userRatingPersistenceService = null;
+    private SongPersistenceService userRatingPersistenceService = null;
 
     //
     // Available rating backends
+    // 1. musicBrainz
+    // 2. 
     // ====================================================================
     @Autowired
     private MusicBrainzService musicBrainzService = null;

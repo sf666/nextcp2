@@ -162,6 +162,40 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         }
     }
 
+    private String getApiKey()
+    {
+        String key = ums_keys.get(getUdnAsString());
+        return key != null ? key : "";
+    }
+
+    @Override
+    public void rateSong(String musicBrainzTrackId, int stars)
+    {
+        try
+        {
+            String strResponse = executeCall(String.format("%s/%s", musicBrainzTrackId, stars ), "api/rating/setrating");
+        }
+        catch (Exception e)
+        {
+            log.debug("rateSong failed ...", e);
+        }
+    }
+
+    @Override
+    public int getSongRating(String musicBrainzTrackId)
+    {
+        try
+        {
+            String strResponse = executeCall(musicBrainzTrackId, "api/rating/getrating");
+            return Integer.valueOf(strResponse);
+        }
+        catch (Exception e)
+        {
+            log.debug("getSongRating failed ...", e);
+            return 0;
+        }
+    }
+
     private String executeCall(String bodyString, String uri) throws IOException
     {
         RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/text"));
@@ -170,11 +204,5 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         Call call = okClient.newCall(request);
         Response response = call.execute();
         return response.body().string();
-    }
-
-    private String getApiKey()
-    {
-        String key = ums_keys.get(getUdnAsString());
-        return key != null ? key : "";
     }
 }

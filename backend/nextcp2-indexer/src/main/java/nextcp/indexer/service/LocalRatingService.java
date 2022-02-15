@@ -25,7 +25,7 @@ import nextcp.rating.repository.RepositoryAdminService;
 import nextcp.rating.repository.SongPersistenceService;
 
 /**
- * Main Rating-Service class for interaction.
+ * This rating service stores star rating in the file and in a local cache ...
  */
 @Service
 public class LocalRatingService

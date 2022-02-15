@@ -20,7 +20,6 @@ import nextcp.db.DatabaseConfig;
 import nextcp.db.SessionManager;
 import nextcp.indexer.IndexerConfig;
 import nextcp.indexer.service.LocalRatingService;
-import nextcp.rating.repository.RepositoryAdminService;
 
 @SpringBootTest
 @Configuration
