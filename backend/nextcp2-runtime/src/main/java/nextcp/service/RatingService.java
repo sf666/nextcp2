@@ -53,7 +53,7 @@ public class RatingService
         }
         catch (Exception e)
         {
-            this.publisher.publishEvent(new ToastrMessage("", "error", "read rating", "couldn't read "));
+            this.publisher.publishEvent(new ToastrMessage("", "error", "read rating", "couldn't read : " + e.getMessage()));
             return null;
         }
     }
@@ -65,9 +65,11 @@ public class RatingService
             rating = 0;
         }
 
+        // store user rating in local cache
         UserRating ur = new UserRating(musicBrainzID, null, rating);
         int numUpdated = userRatingPersistenceService.insertOrUpdateUserRating(ur);
-
+        
+        // Update local file
         updateLocalFileBackend(musicBrainzID, rating);
         updateMusicBrainzBackend(musicBrainzID, rating);
 
@@ -123,7 +125,7 @@ public class RatingService
         {
             if (config.ratingStrategy.updateLocalFileRating)
             {
-                localRatingService.setMusicBrainzRatingInStars(musicBrainzID, rating);
+                localRatingService.persistMusicBrainzRatingInStarsLocalFile(musicBrainzID, rating);
                 this.publisher.publishEvent(new ToastrMessage("", "sucess", "local file", "Rating successfully applied to local file."));
             }
         }

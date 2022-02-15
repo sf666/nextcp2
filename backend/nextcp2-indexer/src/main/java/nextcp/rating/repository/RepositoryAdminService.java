@@ -52,6 +52,7 @@ public class RepositoryAdminService
     @Autowired
     public RepositoryAdminService(IndexerConfig config, IndexerSessionFactory sessionFactory)
     {
+//        org.apache.ibatis.logging.LogFactory.useLog4J2Logging();
         this.sessionFactory = sessionFactory;
         this.config = config;
 

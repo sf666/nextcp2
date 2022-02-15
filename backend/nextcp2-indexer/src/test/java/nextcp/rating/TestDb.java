@@ -66,7 +66,7 @@ public class TestDb
                 String brainzId = "b9517b13-015d-4f45-8bed-2c7b207c701d";
 
                 ratingService.setAcousticRatingInStars(acoustid, 2);
-                ratingService.setMusicBrainzRatingInStars(brainzId, 1);
+                ratingService.persistMusicBrainzRatingInStarsLocalFile(brainzId, 1);
 
                 assertEquals(2, ratingService.getRatingInStarsByAcoustID(acoustid));
                 assertEquals(1, ratingService.getRatingInStarsByMusicBrainzID(brainzId));

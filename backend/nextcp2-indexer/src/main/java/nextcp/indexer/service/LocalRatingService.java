@@ -72,10 +72,10 @@ public class LocalRatingService
         }
 
         SongIndexed song = songPersistenceService.getSongByAcoustId(acoustId);
-        persistSongRatingInDbAndMusicFile(ratingInStars, song);
+        persistSongRatingInMusicFile(ratingInStars, song);
     }
 
-    public void setMusicBrainzRatingInStars(String musicBrainzTitleId, int ratingInStars) throws IndexerException
+    public void persistMusicBrainzRatingInStarsLocalFile(String musicBrainzTitleId, int ratingInStars) throws IndexerException
     {
         if (ratingInStars < 0 || ratingInStars > 5)
         {
@@ -90,7 +90,7 @@ public class LocalRatingService
         List<SongIndexed> songs = songPersistenceService.getSongByMusicBrainzId(musicBrainzTitleId);
         for (SongIndexed song : songs)
         {
-            persistSongRatingInDbAndMusicFile(ratingInStars, song);
+            persistSongRatingInMusicFile(ratingInStars, song);
         }
     }
 
@@ -100,7 +100,7 @@ public class LocalRatingService
      * @param ratingInStars
      * @param song
      */
-    private void persistSongRatingInDbAndMusicFile(int ratingInStars, SongIndexed song)
+    private void persistSongRatingInMusicFile(int ratingInStars, SongIndexed song)
     {
         AudioFile audioFile;
         try
@@ -115,7 +115,6 @@ public class LocalRatingService
         {
             log.warn("Error writing Tag info.", e);
         }
-        songPersistenceService.updateSong(song);
     }
 
 }

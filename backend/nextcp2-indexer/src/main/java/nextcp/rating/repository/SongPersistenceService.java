@@ -40,19 +40,39 @@ public class SongPersistenceService
         }
     }
 
+    /**
+     * Reads user rating from local CP database (USER_RATING table)
+     * 
+     * @param acoustID
+     * @return
+     */
     public Integer getRatingByAcoustID(String acoustID)
     {
         try (SqlSession session = sessionFactory.openSession())
         {
-            return session.selectOne("nextcp.rating.repository.sql.RatingMapping.selectRatingByAcoustId", acoustID);
+            return session.selectOne("nextcp.rating.repository.sql.RatingMapping.selectUserRatingByAcoustId", acoustID);
         }
     }
 
+    /**
+     * Reads user rating from local CP database (USER_RATING table)
+     * 
+     * @param musicBrainzID
+     * @return
+     */
     public Integer getRatingByMusicBrainzID(String musicBrainzID)
     {
         try (SqlSession session = sessionFactory.openSession())
         {
-            return session.selectOne("nextcp.rating.repository.sql.RatingMapping.selectRatingByMusicBrainzId", musicBrainzID);
+            List<Integer> ratings = session.selectList("nextcp.rating.repository.sql.RatingMapping.selectUserRatingByMusicBrainzId", musicBrainzID);
+            if (ratings.isEmpty())
+            {
+                return 0;
+            }
+            else
+            {
+                return ratings.get(0);
+            }
         }
     }
 
@@ -70,12 +90,18 @@ public class SongPersistenceService
     {
         try (SqlSession session = sessionFactory.openSession(true))
         {
-            path = path.replaceAll("'","''");
+            path = path.replaceAll("'", "''");
             String id = session.selectOne("nextcp.rating.repository.sql.RatingMapping.selectMusicBrainzIDFromPath", path);
             return id;
-        }        
+        }
     }
-    
+
+    /**
+     * adds star rating to USER_RATING table
+     * 
+     * @param userRating
+     * @return
+     */
     public int insertOrUpdateUserRating(UserRating userRating)
     {
         int up = updateUserRating(userRating);
@@ -95,7 +121,9 @@ public class SongPersistenceService
 
         try (SqlSession session = sessionFactory.openSession(true))
         {
-            return session.insert("nextcp.rating.repository.sql.RatingMapping.insertUserRating", userRating);
+            int num = session.insert("nextcp.rating.repository.sql.RatingMapping.insertUserRating", userRating);
+            session.commit(true);
+            return num;
         }
     }
 
@@ -117,15 +145,18 @@ public class SongPersistenceService
             {
                 num = session.update("nextcp.rating.repository.sql.RatingMapping.updateUserRatingByMusicBrainzId", userRating);
             }
+            session.commit(true);
             return num;
         }
     }
-    
+
     public int syncRating()
     {
         try (SqlSession session = sessionFactory.openSession(true))
         {
-            return session.update("nextcp.rating.repository.sql.RatingMapping.syncUserRatingByMusicBrainzId",null);
+            int num = session.update("nextcp.rating.repository.sql.RatingMapping.syncUserRatingByMusicBrainzId", null);
+            session.commit();
+            return num;
         }
     }
 
@@ -136,5 +167,5 @@ public class SongPersistenceService
             return true;
         }
         return false;
-    }    
+    }
 }

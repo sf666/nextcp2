@@ -64,6 +64,6 @@ public interface RatingMapping
     //
     // Copy file ratings to user rating
     //
-    @Update("MERGE INTO USER_RATING(MUSICBRAINZID, RATING) KEY (MUSICBRAINZID) SELECT MUSICBRAINZID, RATING FROM Song_Rating")
+    @Update("MERGE INTO USER_RATING(MUSICBRAINZID, RATING) KEY (MUSICBRAINZID) SELECT MUSICBRAINZID, RATING FROM Song_Rating where MUSICBRAINZID is not null")
     void syncUserRatingByMusicBrainzId();
 }
