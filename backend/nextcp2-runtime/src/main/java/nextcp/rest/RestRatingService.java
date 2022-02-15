@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import nextcp.service.RatingService;
+import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/RatingService")
-public class RestRatingService
+public class RestRatingService extends BaseRestService
 {
     private static final Logger log = LoggerFactory.getLogger(RestRatingService.class.getName());
 
@@ -37,10 +38,11 @@ public class RestRatingService
         }
     }
 
-    @PostMapping("/setStarRatingByMusicBrainzID/{rating}")
-    public void setRatingInStarsByMusicBrainzId(@PathVariable("rating") Integer rating, @RequestBody String musicBrainzID)
+    @PostMapping("/setStarRatingByMusicBrainzID/{rating}/{mediaServerDevice}")
+    public void setRatingInStarsByMusicBrainzId(@PathVariable("rating") Integer rating, @PathVariable("mediaServerDevice") String udn, @RequestBody String musicBrainzID)
     {
-        serviceDelegate.setRatingInStarsByMusicBrainzId(musicBrainzID, rating);
+        ExtendedApiMediaDevice device = getExtendedMediaServerByUdn(udn);
+        serviceDelegate.setRatingInStarsByMusicBrainzId(musicBrainzID, rating, device);
     }
 
     @GetMapping("/syncRatingFromAudioFile")
@@ -48,7 +50,7 @@ public class RestRatingService
     {
         serviceDelegate.syncRatingsFromAudioFile();
     }
-    
+
     @GetMapping("/syncRatingsFromMusicBrainz")
     public void syncRatingsFromMusicBrainz()
     {
@@ -60,11 +62,11 @@ public class RestRatingService
     {
         serviceDelegate.syncRatingsFromMusicBrainz(true);
     }
-    
+
     @GetMapping("/indexerRescanMusicDirectory")
     public void rescanDatabase()
     {
         serviceDelegate.indexMusicDirectory();
     }
-    
+
 }

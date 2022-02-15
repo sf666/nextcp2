@@ -12,6 +12,7 @@ import nextcp.indexer.service.LocalRatingService;
 import nextcp.musicbrainz.MusicBrainzService;
 import nextcp.rating.domain.UserRating;
 import nextcp.rating.repository.SongPersistenceService;
+import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
 
 /**
  * Rating logic. This service tries to keep song rating information local to this control point.
@@ -58,7 +59,7 @@ public class RatingService
         }
     }
 
-    public int setRatingInStarsByMusicBrainzId(String musicBrainzID, Integer rating)
+    public int setRatingInStarsByMusicBrainzId(String musicBrainzID, Integer rating, ExtendedApiMediaDevice device)
     {
         if (rating == null)
         {
@@ -73,6 +74,11 @@ public class RatingService
         updateLocalFileBackend(musicBrainzID, rating);
         updateMusicBrainzBackend(musicBrainzID, rating);
 
+        // inform backend
+        if (device != null)
+        {
+            device.rateSong(musicBrainzID, rating);
+        }
         return numUpdated;
     }
 
@@ -127,13 +133,13 @@ public class RatingService
             {
                 localRatingService.persistMusicBrainzRatingInStarsLocalFile(musicBrainzID, rating);
                 this.publisher.publishEvent(new ToastrMessage("", "sucess", "local file", "Rating successfully applied to local file."));
+                ratingPersistenceService.updateStarRatingInSong(musicBrainzID, rating);
             }
         }
         catch (Exception e)
         {
             this.publisher.publishEvent(new ToastrMessage("", "error", "Local DB Rating", "couldn't save : " + e.getMessage()));
         }
-        ratingPersistenceService.updateStarRatingInSong(musicBrainzID, rating);
     }
 
     public void indexMusicDirectory()

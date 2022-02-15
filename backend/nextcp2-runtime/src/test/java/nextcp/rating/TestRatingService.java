@@ -30,7 +30,7 @@ public class TestRatingService
     {
         String trackId = "8ee8158a-060c-4225-9258-b6d2206549ca";
 
-        int numUp = ratingService.setRatingInStarsByMusicBrainzId(trackId, 3);
+        int numUp = ratingService.setRatingInStarsByMusicBrainzId(trackId, 3, null);
         assertTrue(numUp == 1);
 
         int rating = ratingService.getRatingInStarsByMusicBrainzId(trackId);

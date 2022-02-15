@@ -1,3 +1,4 @@
+import { ContentDirectoryService } from './content-directory.service';
 import { Subject } from 'rxjs';
 import { MusicBrainzId } from './dto.d';
 import { HttpService } from './http.service';
@@ -10,7 +11,9 @@ export class RatingServiceService {
 
   private baseUri = '/RatingService';
 
-  constructor(private httpService: HttpService) { }
+  constructor(
+    private httpService: HttpService,
+    private contentDirectoryService: ContentDirectoryService) { }
 
   /*
     public getStarRatingByMusicBrainzID(musicBrainzID: string): Subject<number> {
@@ -20,8 +23,7 @@ export class RatingServiceService {
     }
   */
   public setStarRatingByMusicBrainzID(musicBrainzID: string, stars: number): Subject<number> {
-    const uri = `/setStarRatingByMusicBrainzID/${stars}`;
-
+    const uri = `/setStarRatingByMusicBrainzID/${stars}/${this.contentDirectoryService.getCurrentMediaServerDto().udn}`;    
     return this.httpService.post<number>(this.baseUri, uri, musicBrainzID);
   }
 

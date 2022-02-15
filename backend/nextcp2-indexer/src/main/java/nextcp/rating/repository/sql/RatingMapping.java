@@ -28,14 +28,12 @@ public interface RatingMapping
     @Select("SELECT musicbrainzid FROM Song_Rating WHERE filepath = '${path}'")
     String selectMusicBrainzIDFromPath(String path);
 
-    /**
-     * Update Statements are prepared statements. Therefore no need to embrace #{filePath} with " ' "
-     * 
-     * @param song
-     */
     @Update("UPDATE Song_Rating SET RATING = ${rating} WHERE MUSICBRAINZID = '${musicBrainzID}'")
     int updateRatingByMusicBrainzID(String musicBrainzID, int rating);
 
+    /**
+     * Update Statements are prepared statements. Therefore no need to embrace #{filePath} with " ' "
+     */
     @Update("UPDATE Song_Rating SET RATING = #{rating} WHERE FILEPATH = #{filePath}")
     void updateRating(SongIndexed song);
 
