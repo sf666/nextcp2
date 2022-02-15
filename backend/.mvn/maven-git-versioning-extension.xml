@@ -1,15 +1,19 @@
 <configuration xmlns="https://github.com/qoomon/maven-git-versioning-extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:schemaLocation="https://github.com/qoomon/maven-git-versioning-extension https://qoomon.github.io/maven-git-versioning-extension/configuration-6.4.0.xsd">
-    <branch>
-        <pattern>master</pattern>
-        <versionFormat>${version}-${commit.timestamp.datetime}</versionFormat>
-    </branch>
-    <branch>
-         <pattern>feature/(.+)</pattern>
-         <versionFormat>${1}-SNAPSHOT</versionFormat>
-     </branch>
-    <tag>
-        <pattern>v([0-9].*)</pattern>
-        <versionFormat>${1}</versionFormat>
-    </tag>
+<refs>
+        <ref type="branch">
+            <pattern>.+</pattern>
+            <version>${ref}-${commit.timestamp.datetime}</version>
+        </ref>
+
+        <ref type="tag">
+            <pattern>v([0-9].*)</pattern>
+            <version>${ref.version}</version>
+        </ref>
+</refs>
+    <!-- optional fallback configuration in case of no matching ref configuration-->
+    <rev>
+        <version>${commit}</version>
+    </rev>
+
 </configuration>

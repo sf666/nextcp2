@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.test.context.ContextConfiguration;
 
-import nextcp.indexer.service.MyMusicServiceRepository;
+import nextcp.indexer.service.MyMusicAlbumService;
 
 @SpringBootTest
 @Configuration
@@ -28,7 +28,7 @@ public class TestMyMusic
 
     @Autowired
     @Lazy
-    private MyMusicServiceRepository myMusicService = null;
+    private MyMusicAlbumService myMusicService = null;
     
     @Test
     public void lifecycleTestMyAlbum()

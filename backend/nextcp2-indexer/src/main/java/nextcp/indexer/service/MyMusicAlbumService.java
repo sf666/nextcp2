@@ -3,14 +3,14 @@ package nextcp.indexer.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import nextcp.mymusic.MyMusicRepository;
+import nextcp.mymusic.MyMusicAlbumRepository;
 
 @Service
-public class MyMusicServiceRepository
+public class MyMusicAlbumService
 {
     
     @Autowired
-    private MyMusicRepository myMusicRepository = null;
+    private MyMusicAlbumRepository myMusicRepository = null;
 
     public void likeAlbum(String uuid)
     {

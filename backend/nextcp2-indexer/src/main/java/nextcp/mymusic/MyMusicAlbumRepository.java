@@ -5,18 +5,20 @@ import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import nextcp.rating.repository.IndexerSessionFactory;
 
-// out of order now ...  @Service
 
-public class MyMusicRepository
+
+@Service
+public class MyMusicAlbumRepository
 {
-    private static final Logger log = LoggerFactory.getLogger(MyMusicRepository.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(MyMusicAlbumRepository.class.getName());
     private IndexerSessionFactory sessionFactory = null;
 
     @Autowired
-    public MyMusicRepository(IndexerSessionFactory sessionFactory)
+    public MyMusicAlbumRepository(IndexerSessionFactory sessionFactory)
     {
         this.sessionFactory = sessionFactory;
     }
