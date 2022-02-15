@@ -33,6 +33,9 @@ public interface RatingMapping
      * 
      * @param song
      */
+    @Update("UPDATE Song_Rating SET RATING = ${rating} WHERE MUSICBRAINZID = '${musicBrainzID}'")
+    int updateRatingByMusicBrainzID(String musicBrainzID, int rating);
+
     @Update("UPDATE Song_Rating SET RATING = #{rating} WHERE FILEPATH = #{filePath}")
     void updateRating(SongIndexed song);
 

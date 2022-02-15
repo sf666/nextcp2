@@ -31,7 +31,7 @@ public class RatingService
     // database persistence layer
     //
     @Autowired
-    private SongPersistenceService userRatingPersistenceService = null;
+    private SongPersistenceService ratingPersistenceService = null;
 
     //
     // Available rating backends
@@ -48,7 +48,7 @@ public class RatingService
     {
         try
         {
-            Integer rating = userRatingPersistenceService.getRatingByMusicBrainzID(musicBrainzID);
+            Integer rating = ratingPersistenceService.getRatingByMusicBrainzID(musicBrainzID);
             return rating;
         }
         catch (Exception e)
@@ -67,7 +67,7 @@ public class RatingService
 
         // store user rating in local cache
         UserRating ur = new UserRating(musicBrainzID, null, rating);
-        int numUpdated = userRatingPersistenceService.insertOrUpdateUserRating(ur);
+        int numUpdated = ratingPersistenceService.insertOrUpdateUserRating(ur);
         
         // Update local file
         updateLocalFileBackend(musicBrainzID, rating);
@@ -78,7 +78,7 @@ public class RatingService
 
     public int syncRatingsFromAudioFile()
     {
-        int num = userRatingPersistenceService.syncRating();
+        int num = ratingPersistenceService.syncRating();
         this.publisher.publishEvent(new ToastrMessage("", "info", "Import from audiofile", num + " entries were imported"));
         return num;
     }
@@ -90,7 +90,7 @@ public class RatingService
         for (String uuid : ratings.keySet())
         {
             UserRating ur = new UserRating(uuid, null, ratings.get(uuid));
-            int numUpdated = userRatingPersistenceService.insertOrUpdateUserRating(ur);
+            int numUpdated = ratingPersistenceService.insertOrUpdateUserRating(ur);
             if (numUpdated > 0)
             {
                 num++;
@@ -133,6 +133,7 @@ public class RatingService
         {
             this.publisher.publishEvent(new ToastrMessage("", "error", "Local DB Rating", "couldn't save : " + e.getMessage()));
         }
+        ratingPersistenceService.updateStarRatingInSong(musicBrainzID, rating);
     }
 
     public void indexMusicDirectory()

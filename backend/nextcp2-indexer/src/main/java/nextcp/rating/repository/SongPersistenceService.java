@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import nextcp.rating.domain.SongIndexed;
 import nextcp.rating.domain.UserRating;
+import nextcp.rating.repository.sql.RatingMapping;
 
 /**
  * Database layer for reading and updating song objects
@@ -122,6 +123,29 @@ public class SongPersistenceService
         try (SqlSession session = sessionFactory.openSession(true))
         {
             int num = session.insert("nextcp.rating.repository.sql.RatingMapping.insertUserRating", userRating);
+            session.commit(true);
+            return num;
+        }
+    }
+
+    /**
+     * Updates rating information of local song cache. This is done, if the rating in the file itself changes.
+     * @param musicBrainzID
+     * @param rating
+     * @return
+     */
+    public int updateStarRatingInSong(String musicBrainzID, Integer rating)
+    {
+        if (StringUtils.isAllBlank(musicBrainzID) || rating == null)
+        {
+            throw new RuntimeException("MuicBrainzID and rating must be set.");
+        }
+
+        try (SqlSession session = sessionFactory.openSession(true))
+        {
+            int num = 0;
+            RatingMapping ratingMapper = session.getMapper(RatingMapping.class);
+            num = ratingMapper.updateRatingByMusicBrainzID(musicBrainzID, rating);
             session.commit(true);
             return num;
         }
