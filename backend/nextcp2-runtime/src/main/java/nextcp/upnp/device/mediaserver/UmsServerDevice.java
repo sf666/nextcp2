@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import nextcp.config.ConfigPersistence;
 import nextcp.dto.Config;
 import nextcp.dto.UmsServerApiKey;
 import okhttp3.Call;
@@ -28,6 +29,9 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     @Autowired
     private Config config = null;
 
+    @Autowired
+    private ConfigPersistence cp = null;
+
     private static HashMap<String, String> ums_keys = new HashMap<String, String>();
 
     public UmsServerDevice(RemoteDevice device)
@@ -40,10 +44,18 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     {
         synchronized (ums_keys)
         {
-            ums_keys.clear();
-            for (UmsServerApiKey ums : config.umsApiKeys)
+            if (ums_keys.isEmpty())
             {
-                ums_keys.put(ums.serverUuid, ums.serverApiKey);
+                for (UmsServerApiKey ums : config.umsApiKeys)
+                {
+                    ums_keys.put(ums.serverUuid, ums.serverApiKey);
+                }
+            }
+            if (!ums_keys.containsKey(getUdnAsString()))
+            {
+                ums_keys.put(getUdnAsString(), "secret");
+                config.umsApiKeys.add(new UmsServerApiKey(getUdnAsString(), "secret"));
+                cp.writeConfig();
             }
         }
     }
