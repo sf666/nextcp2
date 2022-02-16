@@ -34,6 +34,9 @@ import nextcp.musicbrainz.MusicBrainzConfig;
 import nextcp.spotify.ISpotifyConfig;
 import nextcp.util.FileOpsNio;
 
+/**
+ * After adding new configuration parameter, do not forget to "applyDefaults()".
+ */
 @Service
 public class ConfigPersistence
 {
@@ -257,6 +260,11 @@ public class ConfigPersistence
         {
             log.info("adding new configuration value 'globalSearchDelay = 500'");
             config.globalSearchDelay = Long.valueOf(500);
+        }
+        
+        if (config.umsApiKeys == null)
+        {
+            config.umsApiKeys = new ArrayList<>();
         }
     }
 
