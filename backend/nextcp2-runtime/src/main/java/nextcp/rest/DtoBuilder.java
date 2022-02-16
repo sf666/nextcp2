@@ -352,6 +352,12 @@ public class DtoBuilder
                     case "numberofthisdisc":
                         itemDto.numberOfThisDisc = n.getTextContent();
                         break;
+                    case "rating":
+                        try
+                        {
+                            itemDto.rating = Integer.parseInt(n.getTextContent());
+                        }
+                        catch (Exception e) {}
                     default:
                         log.warn("unknown ums-tags attribute : " + n.getNodeName());
                         break;
