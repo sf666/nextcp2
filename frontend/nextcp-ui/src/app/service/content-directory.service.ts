@@ -207,7 +207,7 @@ export class ContentDirectoryService {
     if ((numMbid > 0) && (numtrack == numMbid)) {
       const firstTrackMbid = this.getMusicTracks()[0].musicBrainzId?.ReleaseTrackId;
       const numSameMbid = this.getMusicTracks().filter(item => item.musicBrainzId?.ReleaseTrackId === firstTrackMbid).length;
-      console.log("numSameMbid " + numSameMbid + " : numMbid + " + numMbid);
+//       console.log("numSameMbid " + numSameMbid + " : numMbid + " + numMbid);
       return numSameMbid == numMbid;
     } else {
       if (this.getMusicTracks().length > 0) {
