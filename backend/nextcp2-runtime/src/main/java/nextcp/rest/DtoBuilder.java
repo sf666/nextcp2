@@ -143,16 +143,20 @@ public class DtoBuilder
 
     private void updateRating(MusicItemDto itemDto)
     {
-        try
+        // try to update rating, if not set by media server
+        if (itemDto.rating == null)
         {
-            if (!org.apache.commons.lang.StringUtils.isBlank(itemDto.musicBrainzId.TrackId))
+            try
             {
-                itemDto.rating = ratingService.getRatingInStarsByMusicBrainzId(itemDto.musicBrainzId.TrackId);
+                if (!org.apache.commons.lang.StringUtils.isBlank(itemDto.musicBrainzId.TrackId))
+                {
+                    itemDto.rating = ratingService.getRatingInStarsByMusicBrainzId(itemDto.musicBrainzId.TrackId);
+                }
             }
-        }
-        catch (Exception e)
-        {
-            log.warn("cannot update rating ... ");
+            catch (Exception e)
+            {
+                log.warn("cannot update rating ... ");
+            }
         }
     }
 
