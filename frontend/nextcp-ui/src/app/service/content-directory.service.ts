@@ -47,7 +47,7 @@ export class ContentDirectoryService {
     deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));
   }
 
-  public getCurrentMediaServerDto() : MediaServerDto {
+  public getCurrentMediaServerDto(): MediaServerDto {
     return this.currentMediaServerDto;
   }
 
@@ -201,11 +201,21 @@ export class ContentDirectoryService {
   }
 
   public allTracksSameAlbum(): boolean {
-    if (this.getMusicTracks().length > 0) {
-      const firstTrackAlbum = this.getMusicTracks()[0].album;
-      return this.getMusicTracks().filter(item => item.album !== firstTrackAlbum).length == 0;
+    const numtrack = this.getMusicTracks().length;
+    const numMbid = this.getMusicTracks().filter(item => item.musicBrainzId?.ReleaseTrackId?.length > 0).length;
+    
+    if ((numMbid > 0) && (numtrack == numMbid)) {
+      const firstTrackMbid = this.getMusicTracks()[0].musicBrainzId?.ReleaseTrackId;
+      const numSameMbid = this.getMusicTracks().filter(item => item.musicBrainzId?.ReleaseTrackId === firstTrackMbid).length;
+      console.log("numSameMbid " + numSameMbid + " : numMbid + " + numMbid);
+      return numSameMbid == numMbid;
+    } else {
+      if (this.getMusicTracks().length > 0) {
+        const firstTrackAlbum = this.getMusicTracks()[0].album;
+        return this.getMusicTracks().filter(item => item.album !== firstTrackAlbum).length == 0;
+      }
+      return true;
     }
-    return true;
   }
 
   public allTracksSameMusicBrainzReleaseId(): boolean {
