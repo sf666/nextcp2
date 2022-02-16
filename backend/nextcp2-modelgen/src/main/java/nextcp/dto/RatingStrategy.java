@@ -11,6 +11,7 @@ public class RatingStrategy
 
     public Boolean updateMusicBrainzRating;
     public Boolean updateLocalFileRating;
+    public Boolean updateUmsServerRating;
     public Boolean syncRatings;
     public String collisionStrategy;
 
@@ -18,10 +19,11 @@ public class RatingStrategy
     {
     }
 
-    public RatingStrategy(Boolean updateMusicBrainzRating, Boolean updateLocalFileRating, Boolean syncRatings, String collisionStrategy)
+    public RatingStrategy(Boolean updateMusicBrainzRating, Boolean updateLocalFileRating, Boolean updateUmsServerRating, Boolean syncRatings, String collisionStrategy)
     {
         this.updateMusicBrainzRating = updateMusicBrainzRating;
         this.updateLocalFileRating = updateLocalFileRating;
+        this.updateUmsServerRating = updateUmsServerRating;
         this.syncRatings = syncRatings;
         this.collisionStrategy = collisionStrategy;
     }
@@ -33,6 +35,7 @@ public class RatingStrategy
         sb.append("RatingStrategy [");
         sb.append("updateMusicBrainzRating=").append(this.updateMusicBrainzRating).append(", ");
         sb.append("updateLocalFileRating=").append(this.updateLocalFileRating).append(", ");
+        sb.append("updateUmsServerRating=").append(this.updateUmsServerRating).append(", ");
         sb.append("syncRatings=").append(this.syncRatings).append(", ");
         sb.append("collisionStrategy=").append(this.collisionStrategy).append(", ");
         sb.append("]");

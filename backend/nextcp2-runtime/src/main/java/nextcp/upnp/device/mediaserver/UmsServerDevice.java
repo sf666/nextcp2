@@ -10,9 +10,11 @@ import org.fourthline.cling.model.meta.RemoteDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 
 import nextcp.config.ConfigPersistence;
 import nextcp.dto.Config;
+import nextcp.dto.ToastrMessage;
 import nextcp.dto.UmsServerApiKey;
 import okhttp3.Call;
 import okhttp3.MediaType;
@@ -31,6 +33,9 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
     @Autowired
     private ConfigPersistence cp = null;
+
+    @Autowired
+    private ApplicationEventPublisher publisher = null;
 
     private static HashMap<String, String> ums_keys = new HashMap<String, String>();
 
@@ -71,7 +76,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         catch (Exception e)
         {
             log.debug("likealbum failed ...", e);
-        }          
+        }
     }
 
     @Override
@@ -85,7 +90,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         catch (Exception e)
         {
             log.debug("likealbum failed ...", e);
-        }          
+        }
     }
 
     @Override
@@ -100,7 +105,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         {
             log.debug("isalbumliked failed ...", e);
             return false;
-        }        
+        }
     }
 
     @Override
@@ -114,7 +119,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         catch (Exception e)
         {
             log.debug("likealbum failed ...", e);
-        }          
+        }
     }
 
     @Override
@@ -128,7 +133,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         catch (Exception e)
         {
             log.debug("dislikealbum failed ...", e);
-        }        
+        }
     }
 
     @Override
@@ -142,7 +147,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         catch (Exception e)
         {
             log.debug("likesong failed ...", e);
-        }        
+        }
     }
 
     @Override
@@ -156,7 +161,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         catch (Exception e)
         {
             log.debug("dislikesong failed ...", e);
-        }        
+        }
     }
 
     @Override
@@ -183,13 +188,42 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     @Override
     public void rateSong(String musicBrainzTrackId, int stars)
     {
-        try
+        if (config.ratingStrategy.updateUmsServerRating)
         {
-            String strResponse = executeCall(String.format("%s/%s", musicBrainzTrackId, stars ), "api/rating/setrating");
+            try
+            {
+                Response response = executeCallWithResponse(String.format("%s/%s", musicBrainzTrackId, stars), "api/rating/setrating");
+                String body = response.body().string();
+                int code = response.code();
+                switch (code)
+                {
+                    case 200:
+                        publisher.publishEvent(new ToastrMessage(null, "info", "UMS server device " + getFriendlyName(), body));
+                    case 401:
+                        publisher.publishEvent(new ToastrMessage(null, "error", "nextcp/2 configuration error",
+                                "Wrong API key configured for device " + getFriendlyName()+". Set correct secret for server : " + getUdnAsString()));
+                        break;
+                    case 404:
+                        publisher.publishEvent(new ToastrMessage(null, "warn", "UMS server device " + getFriendlyName(), "Object not found. " + body));
+                        break;
+                    case 503:
+                        publisher.publishEvent(new ToastrMessage(null, "error", "UMS server device " + getFriendlyName(),
+                                "UMS server API is not enabled. Set an api_key entry in UMD.conf file."));
+                        break;
+
+                    default:
+                        publisher.publishEvent(new ToastrMessage(null, "warn", "UMS server device '" + getFriendlyName() + "'", body));
+                }
+            }
+            catch (Exception e)
+            {
+                log.debug("rateSong failed ...", e);
+                publisher.publishEvent(new ToastrMessage(null, "error", "UMS server device" + getFriendlyName(), "File rating failed : " + e.getMessage()));
+            }
         }
-        catch (Exception e)
+        else
         {
-            log.debug("rateSong failed ...", e);
+            log.debug("UMS API is disabled");
         }
     }
 
@@ -216,5 +250,15 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         Call call = okClient.newCall(request);
         Response response = call.execute();
         return response.body().string();
+    }
+
+    private Response executeCallWithResponse(String bodyString, String uri) throws IOException
+    {
+        RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/text"));
+        String requestUrl = String.format("%s%s", getDevice().getDetails().getBaseURL(), uri);
+        Request request = new Request.Builder().url(requestUrl).addHeader("api-key", getApiKey()).post(body).build();
+        Call call = okClient.newCall(request);
+        Response response = call.execute();
+        return response;
     }
 }

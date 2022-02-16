@@ -41,6 +41,7 @@ RendererConfigDto:
 RatingStrategy:
    updateMusicBrainzRating : Boolean
    updateLocalFileRating: Boolean
+   updateUmsServerRating: Boolean
    syncRatings: Boolean
    collisionStrategy: String
 

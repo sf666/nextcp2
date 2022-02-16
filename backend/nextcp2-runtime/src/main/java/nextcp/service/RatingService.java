@@ -74,7 +74,6 @@ public class RatingService
         updateLocalFileBackend(musicBrainzID, rating);
         updateMusicBrainzBackend(musicBrainzID, rating);
 
-        // inform backend
         if (device != null)
         {
             device.rateSong(musicBrainzID, rating);
