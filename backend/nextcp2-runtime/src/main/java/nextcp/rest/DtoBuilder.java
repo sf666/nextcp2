@@ -294,8 +294,8 @@ public class DtoBuilder
     private void extractMusicBrainzId(MusicItemDto itemDto, Item item)
     {
         //
-        // Support for Mediaplayer Tags (https://petemanchester.github.io/MediaPlayer/) 
-        // 
+        // Support for Mediaplayer Tags (https://petemanchester.github.io/MediaPlayer/)
+        //
         MusicBrainzId mb = new MusicBrainzId();
         Optional<DescMeta> mpdDesc = item.getDescMetadata().stream().filter(n -> n.getType().equalsIgnoreCase("mpd-tags")).findFirst();
         if (mpdDesc.isPresent())
@@ -330,10 +330,10 @@ public class DtoBuilder
                 }
             }
         }
-        
+
         //
         // Support for UniversalMediaServer Tags (https://www.universalmediaserver.com/)
-        // 
+        //
         mpdDesc = item.getDescMetadata().stream().filter(n -> n.getType().equalsIgnoreCase("ums-tags")).findFirst();
         if (mpdDesc.isPresent())
         {
@@ -355,9 +355,13 @@ public class DtoBuilder
                     case "rating":
                         try
                         {
-                            itemDto.rating = Integer.parseInt(n.getTextContent());
+                            String strRating = n.getTextContent();
+                            itemDto.rating = Integer.parseInt(strRating);
                         }
-                        catch (Exception e) {}
+                        catch (Exception e)
+                        {
+                            log.debug("parsing rating information failed", e);
+                        }
                     default:
                         log.warn("unknown ums-tags attribute : " + n.getNodeName());
                         break;
