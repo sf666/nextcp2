@@ -93,7 +93,7 @@
         <!--
         Playlist Elements
         =========================================== 
-    -->
+        -->
         <div *ngIf="playlistList?.length > 0">
             <div id="head_browse_result_playlist_items_ID" tabindex="-1" class="cardLayout">
                 <div id="{{container.id}}" tabindex="-1" class="cardLayout cover-card"
@@ -190,10 +190,10 @@
                             <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col small-col-img mr-2"></div>
                             <div *ngIf="contentDirectoryService.allTracksSameAlbum()" class="col small-col">#</div>
                             <div class="col">Title</div>
-                            <div class="col d-none d-sm-block">Artist</div>
-                            <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col">Album</div>
+                            <div class="col d-none d-md-block">Artist</div>
+                            <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col d-none d-lg-block">Album</div>
                             <div *ngIf="contentDirectoryService.oneTrackWithMusicBrainzId()" class="col mid-col">Rating</div>
-                            <div class="col text-right mid-col d-none d-md-block">LG</div>
+                            <div class="col text-right mid-col d-none d-lg-block">LG</div>
                             <div class="col small-col"></div>
                         </div>
                     </div>
@@ -204,7 +204,7 @@
                         </div>
                         <div class="item-tbody">
                             <div class="row minWidth">
-                                <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="small-col-img mr-2">
+                                <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class=" mr-2">
                                     <img class="img-small" src="{{item.albumArtUrl}}">
                                 </div>
                                 <div *ngIf="contentDirectoryService.allTracksSameAlbum()" (click)="play(item)" class="col col-greyed small-col">
@@ -213,12 +213,12 @@
                                     <div class="no-wrap">{{item.title}}</div>
                                     <quality-badge [item]="item"></quality-badge>
                                 </div>
-                                <div (click)="play(item)" class="col no-wrap d-none d-sm-block">{{item.artistName}}</div>
-                                <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col">{{item.album}}</div>
+                                <div (click)="play(item)" class="col no-wrap d-none d-md-block">{{item.artistName}}</div>
+                                <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col d-none d-lg-block">{{item.album}}</div>
                                 <div *ngIf="contentDirectoryService.oneTrackWithMusicBrainzId()" class="col mid-col">
                                     <star-rating [currentSong]="item"></star-rating>
                                 </div>
-                                <div class="col text-right mid-col d-none d-md-block">{{getDuration(item)}}</div>
+                                <div class="col text-right mid-col d-none d-lg-block">{{getDuration(item)}}</div>
                                 <div class="col col-greyed small-col">
                                     <button mat-icon-button aria-label="" class=""
                                         (click)="showSongPopup($event, item)">
