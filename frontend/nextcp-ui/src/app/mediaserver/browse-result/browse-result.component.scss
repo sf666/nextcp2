@@ -11,8 +11,8 @@
     object-fit       : cover;
     background-color : rgba(0, 0, 0, 0.5);
 
-    width : 12rem;
-    height: 12rem;
+    width : 15rem;
+    height: 15rem;
 }
 
 .img-small {
@@ -226,8 +226,8 @@ img {
     -webkit-app-region: no-drag;
     -moz-app-region   : no-drag;
 
-    width    : 100%;
-    max-width: 388px;
+    width          : 100%;
+    //    max-width: 388px;
 
     align-self      : center;
     align-items     : center;

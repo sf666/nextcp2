@@ -3,7 +3,7 @@
 
 :root {
     --snow-white             : rgb(255, 255, 250);
-    --glas-white-5             : rgba(255, 255, 255, 0.5);
+    --glas-white-5           : rgba(255, 255, 255, 0.5);
     --glas-white-3           : rgba(255, 255, 255, 0.7);
     --glas-white-4           : rgba(255, 255, 255, 0.6);
     --glas-white-8           : rgba(255, 255, 255, 0.2);
@@ -218,17 +218,17 @@ input {
 }
 
 .my-card-body {
-    position              : absolute;
-    bottom                : 0;
-    background-color      : rgba($color: $pantone-Neutral-Black-C, $alpha: 0.90);
+    position        : absolute;
+    bottom          : 0;
+    background-color: rgba($color: $pantone-Neutral-Black-C, $alpha: 0.90);
     /* Black see-through */
-    color                 : #f1f1f1;
-    width                 : 100%;
-    transition            : .5s ease;
-    font-size             : 20px;
-    font-weight           : 300;
-    text-align            : center;
-    opacity               : 0.8;
+    color           : #f1f1f1;
+    width           : 100%;
+    transition      : .5s ease;
+    font-size       : 20px;
+    font-weight     : 300;
+    text-align      : center;
+    opacity         : 0.8;
 }
 
 .my-card-title {
@@ -289,18 +289,6 @@ button:focus {
     outline: none;
 }
 
-.my-buttons {
-    //     height     : 2.5rem;
-    color      : var(--glas-white-3);
-    margin-top : 8px !important;
-    margin-left: 8px !important;
-    min-width  : 200px;
-
-    &:first-child {
-        margin-left: 0;
-    }
-}
-
 .mat-icon {
     vertical-align: top;
 }
@@ -315,7 +303,7 @@ button:focus {
 }
 
 .infotext {
-    margin-top: 60px;
+    margin-top : 60px;
     margin-left: 90px;
 }
 

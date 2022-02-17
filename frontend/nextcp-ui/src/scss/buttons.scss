@@ -1,10 +1,11 @@
 // Global buttons definitios
 .my-buttons {
+    color           : var(--glas-white-3);
     background-color: rgba(229, 238, 255, .1);
-    color           : rgba(229, 238, 255, .7);
+//    color           : rgba(229, 238, 255, .7);
     text-align      : left;
     min-width       : 8rem;
-    margin-right    : 16px;
+//    margin-right    : 16px;
     margin-top      : 16px;
 
     &:first-child {

@@ -8,7 +8,7 @@
         <div class="d-flex">
             <div>
                 <img class="cardLayout image-container" src="{{currentContainer.albumartUri}}" class="img-top"
-                    alt="select media server ...">
+                    alt="select_media_server">
             </div>
             <div class="d-flex flex-column justify-content-between w-100" id="ID_SCROLL_TO_ELEMENT_STEP_IN"
                 tabindex="-1">
@@ -26,7 +26,7 @@
                         <div *ngIf="totalPlaytime.length > 0" class="pt-1 regular">Total play time <span
                                 class="highlight">{{totalPlaytime}}</span></div>
                     </div>
-                    <div class="d-flex mt-4">
+                    <div class="d-flex justify-content-between mt-4 mr-4">
                         <button mat-flat-button class="my-buttons" (click)="toggleListView()">
                             <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="{{switchViewIcon}}"></mat-icon>
                             switch view
@@ -53,21 +53,21 @@
                             <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="tag"></mat-icon>Tags
                         </button>
                     </div>
+                    <!-- current content search box -->
+                    <div class="d-flex mt-4 mr-4">
+                        <div class="search-container">
+                            <mat-icon class="mr-1 search-icon" svgIcon="card-search-outline"></mat-icon>
+                            <input class="search" [(ngModel)]="quickSearchString" matInput placeholder="search content" #searchInput
+                                (keyup)="keyUp($event)">
+                            <mat-icon class="mr-1 search-icon" svgIcon="close" (click)="clearSearch()"></mat-icon>
+                        </div>
+                    </div>
                 </div>
                 <div class="d-flex">
                     <div class="middle-spacer">
                         &nbsp;
                     </div>
                 </div>
-            </div>
-        </div>
-        <!-- current content search box -->
-        <div class="d-flex mt-4">
-            <div class="search-container">
-                <mat-icon class="mr-1 search-icon" svgIcon="card-search-outline"></mat-icon>
-                <input class="search" [(ngModel)]="quickSearchString" matInput placeholder="search content" #searchInput
-                    (keyup)="keyUp($event)">
-                <mat-icon class="mr-1 search-icon" svgIcon="close" (click)="clearSearch()"></mat-icon>
             </div>
         </div>
     </div>
