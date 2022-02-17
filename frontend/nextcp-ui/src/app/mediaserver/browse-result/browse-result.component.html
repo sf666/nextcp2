@@ -5,14 +5,14 @@
 
     <!-- Top browsing element: Displays image and informations about current container -->
     <div class="outer-container">
-        <div class="d-flex">
-            <div>
+        <div class="header-container">
+            <div class="top-img-container">
                 <img class="cardLayout image-container" src="{{currentContainer.albumartUri}}" class="img-top"
                     alt="select_media_server">
             </div>
-            <div class="d-flex flex-column justify-content-between w-100" id="ID_SCROLL_TO_ELEMENT_STEP_IN"
+            <div class="d-flex flex-column justify-content-between w-100 pl-4" id="ID_SCROLL_TO_ELEMENT_STEP_IN"
                 tabindex="-1">
-                <div *ngIf="hasSongs(); else containerTitle" class="d-flex flex-column pl-4">
+                <div *ngIf="hasSongs(); else containerTitle" class="right-button">
                     <div class="d-flex flex-column">
                         <div class="title">{{currentContainer.title}}
                             <mat-icon *ngIf="isLiked()" (click)="dislikeAlbum()" class="mr-1 liked" svgIcon="heart"></mat-icon>
@@ -26,7 +26,7 @@
                         <div *ngIf="totalPlaytime.length > 0" class="pt-1 regular">Total play time <span
                                 class="highlight">{{totalPlaytime}}</span></div>
                     </div>
-                    <div class="d-flex justify-content-between mt-4 mr-4">
+                    <div class="button-row">
                         <button mat-flat-button class="my-buttons" (click)="toggleListView()">
                             <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="{{switchViewIcon}}"></mat-icon>
                             switch view
@@ -54,7 +54,7 @@
                         </button>
                     </div>
                     <!-- current content search box -->
-                    <div class="d-flex mt-4 mr-4">
+                    <div class="d-flex mt-4">
                         <div class="search-container">
                             <mat-icon class="mr-1 search-icon" svgIcon="card-search-outline"></mat-icon>
                             <input class="search" [(ngModel)]="quickSearchString" matInput placeholder="search content" #searchInput
@@ -190,10 +190,10 @@
                             <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col small-col-img mr-2"></div>
                             <div *ngIf="contentDirectoryService.allTracksSameAlbum()" class="col small-col">#</div>
                             <div class="col">Title</div>
-                            <div class="col">Artist</div>
+                            <div class="col d-none d-sm-block">Artist</div>
                             <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col">Album</div>
-                            <div class="col mid-col">Rating</div>
-                            <div class="col text-right mid-col">LG</div>
+                            <div *ngIf="contentDirectoryService.oneTrackWithMusicBrainzId()" class="col mid-col">Rating</div>
+                            <div class="col text-right mid-col d-none d-md-block">LG</div>
                             <div class="col small-col"></div>
                         </div>
                     </div>
@@ -213,12 +213,12 @@
                                     <div class="no-wrap">{{item.title}}</div>
                                     <quality-badge [item]="item"></quality-badge>
                                 </div>
-                                <div (click)="play(item)" class="col no-wrap">{{item.artistName}}</div>
+                                <div (click)="play(item)" class="col no-wrap d-none d-sm-block">{{item.artistName}}</div>
                                 <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col">{{item.album}}</div>
-                                <div class="col mid-col">
+                                <div *ngIf="contentDirectoryService.oneTrackWithMusicBrainzId()" class="col mid-col">
                                     <star-rating [currentSong]="item"></star-rating>
                                 </div>
-                                <div class="col text-right mid-col">{{getDuration(item)}}</div>
+                                <div class="col text-right mid-col d-none d-md-block">{{getDuration(item)}}</div>
                                 <div class="col col-greyed small-col">
                                     <button mat-icon-button aria-label="" class=""
                                         (click)="showSongPopup($event, item)">

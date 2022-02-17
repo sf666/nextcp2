@@ -23,6 +23,7 @@ import nextcp.dto.MediaServerDto;
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.SearchRequestDto;
 import nextcp.dto.SearchResultDto;
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.device.BaseDevice;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.ContentDirectoryService;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.BrowseInput;
@@ -186,6 +187,11 @@ public class MediaServerDevice extends BaseDevice
             }
             result.mediaServerUDN = getUDN().getIdentifierString();
             return result;
+        }
+        catch (GenActionException e)
+        {
+            e.printStackTrace();
+            throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.description);
         }
         catch (Exception e)
         {

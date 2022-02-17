@@ -218,6 +218,10 @@ export class ContentDirectoryService {
     }
   }
 
+  public oneTrackWithMusicBrainzId(): boolean {
+    return this.getMusicTracks().filter(item => ((item.musicBrainzId.TrackId != undefined) || (item.musicBrainzId.TrackId !== ""))).length == 0;
+  }
+
   public allTracksSameMusicBrainzReleaseId(): boolean {
     if (this.getMusicTracks().length > 0) {
       const firstTrackReleaseID = this.getMusicTracks()[0].musicBrainzId.ReleaseTrackId;

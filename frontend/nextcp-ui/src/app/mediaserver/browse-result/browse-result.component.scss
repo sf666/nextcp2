@@ -4,6 +4,45 @@
 @import "buttons";
 @import "app-variables";
 
+// area right to the image
+.right-button {
+    display        : flex;
+    flex-direction : column;
+    justify-content: center;
+    max-width      : 750px;
+}
+
+.button-row {
+    display        : flex;
+    justify-content: space-between;
+    margin-top     : 1rem;
+}
+
+.header-container {
+    display     : flex;
+    margin-right: 32px;
+}
+
+@media only screen and (max-width: 900px) {
+    .header-container {
+        display       : flex;
+        flex-direction: column;
+        margin-right  : 8px;
+    }
+
+    .top-img-container {
+        align-self: center;
+    }
+}
+
+@media only screen and (max-width: 1100px) {
+    .button-row {
+        display        : flex;
+        justify-content: space-between;
+        margin-top     : 1rem;
+        flex-wrap      : wrap;
+    }
+}
 
 // Container
 .img-top {
@@ -101,6 +140,13 @@ img {
     margin-top : 30px;
 }
 
+@media only screen and (max-width: 900px) {
+    .outer-container {
+        position   : relative;
+        margin-left: 8px;
+        margin-top : 8px;
+    }
+}
 
 .plainText {
     font-size  : 1rem;
