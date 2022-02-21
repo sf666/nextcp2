@@ -1,11 +1,11 @@
 import { MyMusicService } from './../../service/my-music.service';
 import { CdsBrowsePathService } from './../../util/cds-browse-path.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { DeviceService } from 'src/app/service/device.service';
 import { TrackQualityService } from './../../util/track-quality.service';
 import { SongOptionsServiceService } from './../popup/song-options/song-options-service.service';
 import { TimeDisplayService } from './../../util/time-display.service';
-import { MusicItemDto, ContainerDto, MediaServerDto } from './../../service/dto.d';
+import { MusicItemDto, ContainerDto } from './../../service/dto.d';
 import { PlaylistService } from './../../service/playlist.service';
 import { AvtransportService } from './../../service/avtransport.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
@@ -25,7 +25,6 @@ export class BrowseResultComponent implements AfterViewChecked {
 
   private listView: boolean;
   private lastDiscLabel = '';
-  private isAlbumLiked: false;
 
   quickSearchString: string;
 
@@ -41,9 +40,9 @@ export class BrowseResultComponent implements AfterViewChecked {
     public trackQualityService: TrackQualityService,
     public myMusicService: MyMusicService,
     public playlistService: PlaylistService) {
-    this.listView = this.contentDirectoryService.allTracksSameAlbum();
-  }
-
+      contentDirectoryService.browseFinished$.subscribe(data => this.listView = this.contentDirectoryService.allTracksSameAlbum());
+    }
+    
   // 
   // Container
   //

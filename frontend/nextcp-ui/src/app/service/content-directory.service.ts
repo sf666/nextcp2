@@ -29,9 +29,13 @@ export class ContentDirectoryService {
 
   // some calculated constants
   private allTracksSameAlbum_ : boolean;
+  private oneTrackWithMusicBrainzId_ : boolean;
+  private allTracksSameMusicBrainzReleaseId_ : boolean;
+  private allTracksSameDisc_ : boolean;
 
   currentContainerListChanged$: Subject<ContainerItemDto> = new Subject();
-
+  browseFinished$: Subject<any> = new Subject();
+  
   constructor(
     private httpService: HttpService,
     private persistenceService: PersistenceService,
@@ -206,7 +210,11 @@ export class ContentDirectoryService {
       this.lastOidIsResoredFromCache = false;
     } else {
       this.checkAllTracksSameAlbum();
+      this.checkOneTrackWithMusicBrainzId();
+      this.checkAllTracksSameMusicBrainzReleaseId();
+      this.checkAllTracksSameDisc();
     }
+    this.browseFinished$.next("update");
   }
 
   public allTracksSameAlbum(): boolean {
@@ -232,25 +240,40 @@ export class ContentDirectoryService {
   }
 
   public oneTrackWithMusicBrainzId(): boolean {
+    return this.oneTrackWithMusicBrainzId_;
+  }
+
+  private checkOneTrackWithMusicBrainzId(): void {
     const mbTrackExists = this.getMusicTracks().filter(item => (item.musicBrainzId?.TrackId.length > 0)).length > 0;
     console.log("oneTrackWithMusicBrainzId : " + mbTrackExists);
-    return mbTrackExists;
+    this.oneTrackWithMusicBrainzId_ = mbTrackExists;
+    console.log("checkOneTrackWithMusicBrainzId : " + this.oneTrackWithMusicBrainzId_ );
   }
 
   public allTracksSameMusicBrainzReleaseId(): boolean {
+    return this.allTracksSameMusicBrainzReleaseId_;
+  }
+
+  private checkAllTracksSameMusicBrainzReleaseId(): void {
     if (this.getMusicTracks().length > 0) {
       const firstTrackReleaseID = this.getMusicTracks()[0].musicBrainzId.ReleaseTrackId;
-      return this.getMusicTracks().filter(item => item.musicBrainzId.ReleaseTrackId !== firstTrackReleaseID).length == 0;
+      this.allTracksSameMusicBrainzReleaseId_ = this.getMusicTracks().filter(item => item.musicBrainzId.ReleaseTrackId !== firstTrackReleaseID).length == 0;
     }
-    return true;
+    this.allTracksSameMusicBrainzReleaseId_ = true;
+    console.log("allTracksSameMusicBrainzReleaseId_ : " + this.allTracksSameMusicBrainzReleaseId_ );
   }
 
   public allTracksSameDisc(): boolean {
+    return this.allTracksSameDisc_;
+  }
+
+  private checkAllTracksSameDisc(): void {
     if (this.getMusicTracks().length > 0) {
       const firstTrackDisc = this.getMusicTracks()[0].numberOfThisDisc;
-      return this.getMusicTracks().filter(item => item.numberOfThisDisc !== firstTrackDisc).length == 0;
+      this.allTracksSameDisc_ = this.getMusicTracks().filter(item => item.numberOfThisDisc !== firstTrackDisc).length == 0;
     }
-    return true;
+    this.allTracksSameDisc_ = true;
+    console.log("allTracksSameDisc_ : " + this.allTracksSameDisc_ );
   }
   private createBrowseRequest(objectID: string, sortCriteria: string, mediaServerUdn: string): BrowseRequestDto {
     const br: BrowseRequestDto = {
