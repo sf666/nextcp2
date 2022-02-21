@@ -27,6 +27,9 @@ export class ContentDirectoryService {
   public quickSearchQueryString: string;
   public quickSearchPanelVisible: boolean;
 
+  // some calculated constants
+  private allTracksSameAlbum_ : boolean;
+
   currentContainerListChanged$: Subject<ContainerItemDto> = new Subject();
 
   constructor(
@@ -191,31 +194,41 @@ export class ContentDirectoryService {
     return sub;
   }
 
+  /**
+   * 
+   * @param data Gets called after a browse request returns ...
+   */
   updateContainer(data: ContainerItemDto): void {
     this.currentContainerList = data;
     this.currentContainerListChanged$.next(data);
     if (this.lastOidIsResoredFromCache && !(data.containerDto.length > 0 || data.musicItemDto.length > 0)) {
       this.browseToRoot('');
       this.lastOidIsResoredFromCache = false;
+    } else {
+      this.checkAllTracksSameAlbum();
     }
   }
 
   public allTracksSameAlbum(): boolean {
+    return this.allTracksSameAlbum_;
+  }
+  
+  private checkAllTracksSameAlbum(): void {
     const numtrack = this.getMusicTracks().length;
     const numMbid = this.getMusicTracks().filter(item => item.musicBrainzId?.ReleaseTrackId?.length > 0).length;
     
     if ((numMbid > 0) && (numtrack == numMbid)) {
       const firstTrackMbid = this.getMusicTracks()[0].musicBrainzId?.ReleaseTrackId;
       const numSameMbid = this.getMusicTracks().filter(item => item.musicBrainzId?.ReleaseTrackId === firstTrackMbid).length;
-//       console.log("numSameMbid " + numSameMbid + " : numMbid + " + numMbid);
-      return numSameMbid == numMbid;
+      this.allTracksSameAlbum_ = numSameMbid == numMbid;
     } else {
       if (this.getMusicTracks().length > 0) {
         const firstTrackAlbum = this.getMusicTracks()[0].album;
-        return this.getMusicTracks().filter(item => item.album !== firstTrackAlbum).length == 0;
+        this.allTracksSameAlbum_ = this.getMusicTracks().filter(item => item.album !== firstTrackAlbum).length == 0;
       }
-      return true;
+      this.allTracksSameAlbum_ = true;
     }
+    console.log("checkAllTracksSameAlbum : " + this.allTracksSameAlbum_ );
   }
 
   public oneTrackWithMusicBrainzId(): boolean {
