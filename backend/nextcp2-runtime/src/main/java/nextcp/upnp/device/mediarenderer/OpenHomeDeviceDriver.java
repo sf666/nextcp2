@@ -1,5 +1,7 @@
 package nextcp.upnp.device.mediarenderer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 
 import nextcp.devicedriver.IDeviceDriverCallback;
@@ -15,6 +17,8 @@ import nextcp.upnp.modelGen.avopenhomeorg.volume.actions.SetVolumeInput;
  */
 public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implements IDeviceDriver, IDeviceDriverCallback
 {
+    private static final Logger log = LoggerFactory.getLogger(OpenHomeDeviceDriver.class.getName());
+
     private int volume;
     private boolean standby;
     private MediaRendererDevice device = null;
@@ -29,9 +33,25 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
         this.eventPublisher = eventPublisher;
         this.productService = productService;
         this.volumeService = volumeService;
-        
-        volume = Math.toIntExact(volumeService.volume().Value);
-        standby = productService.getStandby();
+
+        try
+        {
+            volume = Math.toIntExact(volumeService.volume().Value);
+        }
+        catch (Exception e)
+        {
+            log.debug("volume service error ", e);
+            volume = 0;
+        }
+        try
+        {
+            standby = productService.getStandby();
+        }
+        catch (Exception e)
+        {
+            log.debug("standby service error ", e);
+            standby = true;
+        }
     }
 
     //

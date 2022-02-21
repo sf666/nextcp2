@@ -345,7 +345,8 @@ public class DtoBuilder
             for (int i = 0; i < metaChildNodes.getChildNodes().getLength(); i++)
             {
                 Node n = metaChildNodes.getChildNodes().item(i);
-                switch (n.getNodeName().toLowerCase())
+                String nodeName = n.getNodeName().toLowerCase(); 
+                switch (nodeName)
                 {
                     case "musicbrainztrackid":
                         mb.TrackId = n.getTextContent();
@@ -366,6 +367,7 @@ public class DtoBuilder
                         {
                             log.debug("parsing rating information failed", e);
                         }
+                        break;
                     default:
                         log.warn("unknown ums-tags attribute : " + n.getNodeName());
                         break;

@@ -219,7 +219,9 @@ export class ContentDirectoryService {
   }
 
   public oneTrackWithMusicBrainzId(): boolean {
-    return this.getMusicTracks().filter(item => ((item.musicBrainzId.TrackId != undefined) || (item.musicBrainzId.TrackId !== ""))).length == 0;
+    const mbTrackExists = this.getMusicTracks().filter(item => (item.musicBrainzId?.TrackId.length > 0)).length > 0;
+    console.log("oneTrackWithMusicBrainzId : " + mbTrackExists);
+    return mbTrackExists;
   }
 
   public allTracksSameMusicBrainzReleaseId(): boolean {
