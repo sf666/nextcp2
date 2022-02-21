@@ -162,6 +162,7 @@ ContainerDto:
    artist: String
    rating: Integer
    creator: String
+   media_date: String
 
 AudioFormat:
    nrAudioChannels: Long 

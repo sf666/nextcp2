@@ -181,6 +181,10 @@ public class DtoBuilder
             {
                 dto.artist = container.getFirstArtist().getName();
             }
+            if (container.getDate() != null)
+            {
+                dto.media_date = container.getDate();
+            }
             // TODO extracting more info's necessary ... Role, etc. ?
         }
         catch (MalformedURLException e)

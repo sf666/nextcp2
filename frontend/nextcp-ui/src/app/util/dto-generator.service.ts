@@ -23,7 +23,8 @@ export class DtoGeneratorService {
       rating: 0,
       searchClass: '',
       searchable: false,
-      title: ''
+      title: '',
+      media_date:''
     };
   }
 

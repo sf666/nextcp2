@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2022-02-02 07:57:16.
+// Generated using typescript-generator version 2.32.889 on 2022-02-21 16:23:42.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -35,6 +35,7 @@ export interface Config {
     globalSearchDelay: number;
     lastFmSessionKey: string;
     spotifyConfig: SpotifyConfigDto;
+    umsApiKeys: UmsServerApiKey[];
 }
 
 export interface ContainerDto {
@@ -51,6 +52,7 @@ export interface ContainerDto {
     artist: string;
     rating: number;
     creator: string;
+    media_date: string;
 }
 
 export interface ContainerItemDto {
@@ -220,6 +222,7 @@ export interface RadioStation {
 export interface RatingStrategy {
     updateMusicBrainzRating: boolean;
     updateLocalFileRating: boolean;
+    updateUmsServerRating: boolean;
     syncRatings: boolean;
     collisionStrategy: string;
 }
@@ -307,6 +310,11 @@ export interface UiClientConfig {
     clientName: string;
     defaultMediaServer: MediaServerDto;
     defaultMediaRenderer: MediaRendererDto;
+}
+
+export interface UmsServerApiKey {
+    serverUuid: string;
+    serverApiKey: string;
 }
 
 export interface UpnpAvTransportState {
