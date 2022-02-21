@@ -25,7 +25,6 @@ public class GetSearchCapabilities extends ActionCallback
     public GetSearchCapabilities(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetSearchCapabilities"), new NextcpClientInfo()), cp);
-
     }
 
     public GetSearchCapabilitiesOutput executeAction()

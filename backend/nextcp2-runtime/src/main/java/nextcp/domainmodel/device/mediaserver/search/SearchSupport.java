@@ -36,7 +36,13 @@ public class SearchSupport
         this.contentDirectoryService = contentDirectoryService;
         this.mediaServerDevice = mediaServerDevice;
         
-        searchCaps = contentDirectoryService.getSearchCapabilities().SearchCaps;
+        try {
+            searchCaps = contentDirectoryService.getSearchCapabilities().SearchCaps;
+        }
+        catch (Exception e)
+        {
+            log.info("no search capability available ... ", e);
+        }
     }
 
     public String getSearchCaps()

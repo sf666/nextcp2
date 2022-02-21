@@ -12,53 +12,59 @@
             </div>
             <div class="d-flex flex-column justify-content-between w-100 pl-4" id="ID_SCROLL_TO_ELEMENT_STEP_IN"
                 tabindex="-1">
-                <div *ngIf="hasSongs(); else containerTitle" class="right-button">
-                    <div class="d-flex flex-column">
-                        <div class="title">{{currentContainer.title}}
-                            <mat-icon *ngIf="isLiked()" (click)="dislikeAlbum()" class="mr-1 liked" svgIcon="heart"></mat-icon>
-                            <mat-icon *ngIf="likePossible()" (click)="likeAlbum()" class="mr-1 unliked" svgIcon="heart-outline"></mat-icon>
+                <div class="right-button">
+                    <div *ngIf="hasSongs(); else containerTitle">
+                        <div class="d-flex flex-column">
+                            <div class="title">{{currentContainer.title}}
+                                <mat-icon *ngIf="isLiked()" (click)="dislikeAlbum()" class="mr-1 liked" svgIcon="heart">
+                                </mat-icon>
+                                <mat-icon *ngIf="likePossible()" (click)="likeAlbum()" class="mr-1 unliked"
+                                    svgIcon="heart-outline"></mat-icon>
+                            </div>
+                            <div *ngIf="currentContainer.artist" class="regular">by <span
+                                    class="highlight">{{currentContainer.artist}}</span>
+                            </div>
+                            <div *ngIf="itemsCount > 0" class="pt-3 regular">{{containerType}} contains <span
+                                    class="highlight">{{itemsCount}}</span> audio title</div>
+                            <div *ngIf="totalPlaytime.length > 0" class="pt-1 regular">Total play time <span
+                                    class="highlight">{{totalPlaytime}}</span></div>
                         </div>
-                        <div *ngIf="currentContainer.artist" class="regular">by <span
-                                class="highlight">{{currentContainer.artist}}</span>
+                        <div class="button-row">
+                            <button mat-flat-button class="my-buttons" (click)="toggleListView()">
+                                <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="{{switchViewIcon}}">
+                                </mat-icon>
+                                switch view
+                            </button>
+                            <button mat-flat-button class="my-buttons" (click)="playPlaylist(currentContainer)">
+                                <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="play"></mat-icon>
+                                play
+                            </button>
+                            <button mat-flat-button class="my-buttons" (click)="shufflePlaylist(currentContainer)">
+                                <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="shuffle-variant">
+                                </mat-icon>
+                                shuffle
+                            </button>
+                            <button mat-flat-button class="my-buttons"
+                                (click)="playlistService.addContainerToPlaylist(currentContainer)">
+                                <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="playlist-plus"
+                                    aria-label="add to playlist">
+                                </mat-icon>
+                                add tracks
+                            </button>
                         </div>
-                        <div *ngIf="itemsCount > 0" class="pt-3 regular">{{containerType}} contains <span
-                                class="highlight">{{itemsCount}}</span> audio title</div>
-                        <div *ngIf="totalPlaytime.length > 0" class="pt-1 regular">Total play time <span
-                                class="highlight">{{totalPlaytime}}</span></div>
-                    </div>
-                    <div class="button-row">
-                        <button mat-flat-button class="my-buttons" (click)="toggleListView()">
-                            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="{{switchViewIcon}}"></mat-icon>
-                            switch view
-                        </button>
-                        <button mat-flat-button class="my-buttons" (click)="playPlaylist(currentContainer)">
-                            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="play"></mat-icon>
-                            play
-                        </button>
-                        <button mat-flat-button class="my-buttons" (click)="shufflePlaylist(currentContainer)">
-                            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="shuffle-variant"></mat-icon>
-                            shuffle
-                        </button>
-                        <button mat-flat-button class="my-buttons"
-                            (click)="playlistService.addContainerToPlaylist(currentContainer)">
-                            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="playlist-plus"
-                                aria-label="add to playlist">
-                            </mat-icon>
-                            add tracks
-                        </button>
 
-                        <!-- minim server support -->
-                        <button *ngIf="minimTagsList?.length > 0" mat-flat-button class="my-buttons"
-                            (click)="openMinimTagDialog($event)">
-                            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="tag"></mat-icon>Tags
-                        </button>
                     </div>
+                    <!-- minim server support -->
+                    <button *ngIf="minimTagsList?.length > 0" mat-flat-button class="my-buttons"
+                        (click)="openMinimTagDialog($event)">
+                        <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="tag"></mat-icon>Tags
+                    </button>
                     <!-- current content search box -->
                     <div class="d-flex mt-4">
                         <div class="search-container">
                             <mat-icon class="mr-1 search-icon" svgIcon="card-search-outline"></mat-icon>
-                            <input class="search" [(ngModel)]="quickSearchString" matInput placeholder="search content" #searchInput
-                                (keyup)="keyUp($event)">
+                            <input class="search" [(ngModel)]="quickSearchString" matInput placeholder="search content"
+                                #searchInput (keyup)="keyUp($event)">
                             <mat-icon class="mr-1 search-icon" svgIcon="close" (click)="clearSearch()"></mat-icon>
                         </div>
                     </div>
@@ -74,7 +80,7 @@
 
 
     <ng-template #containerTitle>
-        <div class="d-flex flex-column infobox align-self-start">
+        <div id="template_containerTitle" class="d-flex flex-column infobox align-self-start">
             <div class="title">{{currentContainer.title}}</div>
             <div *ngIf="albumList?.length > 0" class="regular"><span class="highlight pr-2">{{albumList?.length}}</span>
                 Playlist<span *ngIf="albumList?.length > 1">s</span></div>
@@ -187,19 +193,23 @@
                 <div class="item-table">
                     <div id="head_browse_result_items_list_view_ID" class="item-thead">
                         <div class="row col-greyed">
-                            <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col small-col-img mr-2"></div>
+                            <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col small-col-img mr-2">
+                            </div>
                             <div *ngIf="contentDirectoryService.allTracksSameAlbum()" class="col small-col">#</div>
                             <div class="col">Title</div>
                             <div class="col d-none d-md-block">Artist</div>
-                            <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col d-none d-lg-block">Album</div>
-                            <div *ngIf="contentDirectoryService.oneTrackWithMusicBrainzId()" class="col mid-col">Rating</div>
+                            <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col d-none d-lg-block">
+                                Album</div>
+                            <div *ngIf="contentDirectoryService.oneTrackWithMusicBrainzId()" class="col mid-col">Rating
+                            </div>
                             <div class="col text-right mid-col d-none d-lg-block">LG</div>
                             <div class="col small-col"></div>
                         </div>
                     </div>
 
                     <div id="{{item.objectID}}" class="" *ngFor="let item of musicTracks">
-                        <div class="item-tbody" *ngIf="contentDirectoryService.allTracksSameAlbum() && !contentDirectoryService.allTracksSameDisc()">
+                        <div class="item-tbody"
+                            *ngIf="contentDirectoryService.allTracksSameAlbum() && !contentDirectoryService.allTracksSameDisc()">
                             {{getDiscLabel(item)}}
                         </div>
                         <div class="item-tbody">
@@ -207,14 +217,17 @@
                                 <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class=" mr-2">
                                     <img class="img-small" src="{{item.albumArtUrl}}">
                                 </div>
-                                <div *ngIf="contentDirectoryService.allTracksSameAlbum()" (click)="play(item)" class="col col-greyed small-col">
+                                <div *ngIf="contentDirectoryService.allTracksSameAlbum()" (click)="play(item)"
+                                    class="col col-greyed small-col">
                                     {{item.originalTrackNumber}}</div>
                                 <div (click)="play(item)" class="col d-flex minWidth">
                                     <div class="no-wrap">{{item.title}}</div>
                                     <quality-badge [item]="item"></quality-badge>
                                 </div>
-                                <div (click)="play(item)" class="col no-wrap d-none d-md-block">{{item.artistName}}</div>
-                                <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col d-none d-lg-block">{{item.album}}</div>
+                                <div (click)="play(item)" class="col no-wrap d-none d-md-block">{{item.artistName}}
+                                </div>
+                                <div *ngIf="!contentDirectoryService.allTracksSameAlbum()"
+                                    class="col d-none d-lg-block">{{item.album}}</div>
                                 <div *ngIf="contentDirectoryService.oneTrackWithMusicBrainzId()" class="col mid-col">
                                     <star-rating [currentSong]="item"></star-rating>
                                 </div>
