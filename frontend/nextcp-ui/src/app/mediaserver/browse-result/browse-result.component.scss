@@ -44,6 +44,23 @@
     }
 }
 
+.albumTitle {
+    color        : var(--snow-white);
+    margin-bottom: 0.5rem;
+}
+
+.albumSubheader {
+    color         : grey;
+    letter-spacing: 0.1rem;
+    margin-bottom : 0.4rem;
+}
+
+.albumYear {
+    color         : grey;
+    font-size     : 0.6rem;
+    letter-spacing: 0.15rem;
+}
+
 // Container
 .img-top {
     background-repeat: calc(var(--vh, 1vh) * 100);
@@ -120,7 +137,7 @@ img {
 .infobox {
     padding-left  : 2rem;
     padding-top   : 1rem;
-    padding-bottom: 2   rem;
+    padding-bottom: 2 rem;
     align-self    : center;
 }
 
