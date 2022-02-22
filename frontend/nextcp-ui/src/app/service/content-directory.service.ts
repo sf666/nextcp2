@@ -244,7 +244,7 @@ export class ContentDirectoryService {
   }
 
   private checkOneTrackWithMusicBrainzId(): void {
-    const mbTrackExists = this.getMusicTracks().filter(item => (item.musicBrainzId?.TrackId.length > 0)).length > 0;
+    const mbTrackExists = this.getMusicTracks().filter(item => (item.musicBrainzId?.TrackId?.length > 0))?.length > 0;
     console.log("oneTrackWithMusicBrainzId : " + mbTrackExists);
     this.oneTrackWithMusicBrainzId_ = mbTrackExists;
     console.log("checkOneTrackWithMusicBrainzId : " + this.oneTrackWithMusicBrainzId_ );
