@@ -138,13 +138,15 @@
         <!-- General container section      -->
         <!--                                -->
         <div *ngIf="containerList?.length > 0">
-            <div id="head_browse_result_playlist_container_ID" class="cardLayout">
-                <div class="cardLayout cover-card" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)"
+            <div id="head_browse_result_playlist_container_ID" class="albumLayout">
+                <div class="albumTile" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)"
                     *ngFor="let container of containerList">
-                    <img class="cardLayout image-container" src="{{container.albumartUri}}" class=""
+                    <div class="albumImageContainer">
+                        <img class="cardLayout image-container" src="{{container.albumartUri}}" class=""
                         alt="{{container.title}}">
-                    <div class="d-flex cardLayout card-body">
-                        <div class="card-title">{{container.title}}</div>
+                    </div>
+                    <div class="d-flex flex-column albumDesc">
+                        <div class="albumTitle">{{container.title}}</div>
                     </div>
                 </div>
             </div>
@@ -155,11 +157,11 @@
         <!-- Template : Browse Result Album                                 -->
         <!-- ############################################################## -->
         <div *ngIf="albumList?.length > 0">
-            <div id="head_browse_result_album_ID" class="cardLayout">
-                <div id="{{container.id}}" tabindex="-1" class="cardLayout cover-card" *ngFor="let container of albumList">
-                    <div class="albumContainer">
-                        <img src="{{container.albumartUri}}" class="cardLayout image-container" alt="{{container.title}}">
-                        <div class="cardLayout play-overlay-album d-flex flex-column justify-content-center align-items-center">
+            <div id="head_browse_result_album_ID" class="albumLayout">
+                <div id="{{container.id}}" tabindex="-1" class="albumTile" *ngFor="let container of albumList">
+                    <div class="albumImageContainer">
+                        <img src="{{container.albumartUri}}" alt="{{container.title}}">
+                        <div class="play-overlay-album d-flex flex-column justify-content-center align-items-center">
                             <div class="d-flex justify-content-center align-items-center">
                                 <mat-icon (click)="browseTo(container)" class="play-overlay-button-album"
                                     svgIcon="folder-move-outline" aria-label="step into folder">
@@ -175,10 +177,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex flex-column cardLayout card-body minWidth">
-                        <div class="card-title albumTitle no-wrap">{{container.title}}</div>
-                        <div class="card-title albumSubheader no-wrap">{{container.artist}}</div>
-                        <div class="card-title albumYear no-wrap">{{container.media_date}}</div>
+                    <div class="d-flex flex-column minWidth albumDesc">
+                        <div class="albumTitle no-wrap">{{container.title}}</div>
+                        <div class="albumSubheader no-wrap">{{container.artist}}</div>
+                        <div class="albumYear no-wrap">{{container.media_date}}</div>
                     </div>
                 </div>
             </div>

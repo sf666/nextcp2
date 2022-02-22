@@ -1,5 +1,68 @@
 @import "app-variables";
 
+// ALBUM formatting section
+// ============================================
+
+.albumImageContainer {
+    display    : flex;
+    position   : relative;
+    margin-left: 1rem;
+
+    flex-basis: 12rem;
+    min-width : 8rem;
+    max-width : 15rem;
+    flex-grow : 1;
+
+    margin: auto;
+}
+
+.albumImageContainer img {
+    width : 100%;
+    height: auto;
+}
+
+.albumLayout {
+    display  : flex;
+    flex-wrap: wrap;
+    flex-grow: 1;
+}
+
+.albumTile {
+    flex-basis: 12rem;
+    min-width : 8rem;
+    max-width : 15rem;
+    flex-grow : 1;
+    padding   : 1rem;
+
+    font-size     : 0.9rem;
+    font-weight   : 500;
+    letter-spacing: 0.08rem;
+}
+
+.albumDesc {
+    margin-left: 1rem;
+    margin-top : 1rem;
+}
+
+.albumTitle {
+    color        : var(--snow-white);
+    margin-bottom: 0.5rem;
+}
+
+.albumSubheader {
+    color         : grey;
+    letter-spacing: 0.1rem;
+    margin-bottom : 0.4rem;
+}
+
+.albumYear {
+    color         : grey;
+    font-size     : 0.7rem;
+    letter-spacing: 0.15rem;
+}
+
+
+// old card layout
 .cardLayout {
     display  : flex;
     flex-wrap: wrap;
@@ -12,10 +75,7 @@
         flex-direction: column;
         margin-right  : 1.5rem;
         margin-bottom : 4rem;
-        max-width     : $imgCardWidth;
-        min-width     : $imgCardWidth;
-        max-width     : $imgCardWidth;
-        min-width     : $imgCardWidth;
+        flex-basis    : $imgCardWidth;
     }
 
     &.card-body {
@@ -24,16 +84,11 @@
         margin        : 0;
         padding-top   : 16px;
         padding-left  : 8px;
-        max-width     : $imgCardWidth;
-        min-width     : $imgCardWidth;
+        flex-basis    : $imgCardWidth;
     }
 
     &.image-container {
-        position  : relative;
-        max-width : $imgCardWidth;
-        min-width : $imgCardWidth;
-        max-height: $imgCardWidth;
-        min-height: $imgCardWidth;
+        position: relative;
     }
 
     &.play-overlay {
@@ -49,10 +104,7 @@
         text-align      : center;
         transition      : .3s ease;
         opacity         : 0;
-        max-width       : $imgCardWidth;
-        min-width       : $imgCardWidth;
-        max-height      : $imgCardWidth;
-        min-height      : $imgCardWidth;
+        flex-basis      : $imgCardWidth;
 
         &:hover {
             opacity: 0.7;
