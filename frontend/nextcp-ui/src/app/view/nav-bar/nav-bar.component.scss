@@ -3,11 +3,10 @@
 @import "app-variables";
 
 
-.navbar {
+.navbar-base {
     position: fixed;
     top     : 0px;
     right   : 0px;
-    width   : calc(100% - var(--sidebar-width));
     height  : var(--nav-height);
     z-index : 3;
 
@@ -16,6 +15,18 @@
     flex-wrap       : nowrap;
     font-weight     : 300;
     background-color: black;
+}
+
+.navbar {
+    @extend .navbar-base;
+    width: calc(100% - var(--sidebar-width));
+}
+
+@media only screen and (max-width: 900px) {
+    .navbar {
+        @extend .navbar-base;
+        width: calc(100% - var(--sidebar-width-min));
+    }
 }
 
 .headFont {

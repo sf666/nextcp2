@@ -2,21 +2,33 @@
     height: var(--footer-height);
 }
 
-.mainContent {
+.mainContent-base {
     position      : fixed;
     top           : var(--nav-height);
-    left          : var(--sidebar-width);
     height        : 90vh;
     height        : calc(var(--vh, 1vh) * 100 - var(--nav-height) - var(--footer-height));
-    width         : calc(100% - var(--sidebar-width));
     overflow-y    : scroll;
     letter-spacing: 0.07rem;
     flex          : 1;
 }
 
+.mainContent {
+    @extend .mainContent-base;
+    width: calc(100% - var(--sidebar-width));
+    left : var(--sidebar-width);
+}
+
+@media only screen and (max-width: 900px) {
+    .mainContent {
+        @extend .mainContent-base;
+        left : var(--sidebar-width-min);
+        width: calc(100% - var(--sidebar-width-min));
+    }
+}
+
 .app-root {
     background-color: rgba(0, 0, 0, 1);
-    display: flex;
+    display         : flex;
 }
 
 .bg-img::before {
@@ -30,9 +42,8 @@
     pointer-events         : none;
 }
 
-.bg-img {
+.bg-img-base {
     display : block;
-    left    : var(--sidebar-width);
     top     : var(--nav-height);
     right   : 0px;
     position: fixed;
@@ -41,8 +52,21 @@
     background-size  : cover;
     background-color : rgb(0, 0, 0);
 
-    width : calc(100% - var(--sidebar-width));
     height: calc(var(--vh, 1vh) * 100 - var(--nav-height) - var(--footer-height));
+}
+
+.bg-img {
+    @extend .bg-img-base;
+    width: calc(100% - var(--sidebar-width));
+    left    : var(--sidebar-width);
+}
+
+@media only screen and (max-width: 900px) {
+    .bg-img {
+        @extend .bg-img-base;
+        width: calc(100% - var(--sidebar-width-min));
+        left    : var(--sidebar-width-min);
+    }
 }
 
 .bg-img-footer::before {

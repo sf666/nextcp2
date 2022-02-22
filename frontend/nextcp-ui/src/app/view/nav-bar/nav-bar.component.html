@@ -1,5 +1,5 @@
+<div>TEST</div>
 <div id="navbar" class="navbar">
-
     <!-- First div section in the routing cascade. Follow the else parts ...-->
     <div class="headLeftContainer minWidth" *ngIf="musicLibraryVisible; else playlist">
         <button mat-mini-fab [disabled]="isDisabled()" (click)="gotoParent()">

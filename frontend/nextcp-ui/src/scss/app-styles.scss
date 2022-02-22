@@ -2,12 +2,29 @@
 @import "app-variables";
 
 
-@media (min-width:320px)  { /* smartphones, iPhone, portrait 480x320 phones */ }
-@media (min-width:481px)  { /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */ }
-@media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */ }
-@media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */ }
-@media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */ }
-@media (min-width:1281px) { /* hi-res laptops and desktops */ }
+@media (min-width:320px) {
+    /* smartphones, iPhone, portrait 480x320 phones */
+}
+
+@media (min-width:481px) {
+    /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
+}
+
+@media (min-width:641px) {
+    /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+}
+
+@media (min-width:961px) {
+    /* tablet, landscape iPad, lo-res laptops ands desktops */
+}
+
+@media (min-width:1025px) {
+    /* big landscape tablets, laptops, and desktops */
+}
+
+@media (min-width:1281px) {
+    /* hi-res laptops and desktops */
+}
 
 :root {
     --snow-white             : rgb(255, 255, 250);
@@ -34,9 +51,10 @@
     --bg-grey-6: rgba(229, 238, 255, .4);
     --bg-grey-8: rgba(229, 238, 255, .2);
 
-    --footer-height: 5rem;
-    --sidebar-width: 250px;
-    --nav-height   : 75px;
+    --footer-height    : 5rem;
+    --sidebar-width    : 250px;
+    --sidebar-width-min: 55px;
+    --nav-height       : 75px;
 }
 
 // Disable focus frame
