@@ -40,9 +40,13 @@ export class BrowseResultComponent implements AfterViewChecked {
     public trackQualityService: TrackQualityService,
     public myMusicService: MyMusicService,
     public playlistService: PlaylistService) {
-      contentDirectoryService.browseFinished$.subscribe(data => this.listView = this.contentDirectoryService.allTracksSameAlbum());
+      contentDirectoryService.browseFinished$.subscribe(data => this.browseFinished(data));
     }
-    
+
+  private browseFinished(data) {
+    this.listView = !this.contentDirectoryService.allTracksSameAlbum();
+    console.log("listView : " + this.listView);
+  }
   // 
   // Container
   //

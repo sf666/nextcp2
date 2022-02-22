@@ -14,7 +14,7 @@
                 tabindex="-1">
                 <div class="right-button">
                     <div *ngIf="hasSongs(); else containerTitle">
-                        <div class="d-flex flex-column">
+                        <div class="d-flex flex-column mt-2">
                             <div class="title">{{currentContainer.title}}
                                 <mat-icon *ngIf="isLiked()" (click)="dislikeAlbum()" class="mr-1 liked" svgIcon="heart">
                                 </mat-icon>
@@ -100,33 +100,32 @@
         =========================================== 
         -->
         <div *ngIf="playlistList?.length > 0">
-            <div id="head_browse_result_playlist_items_ID" tabindex="-1" class="cardLayout">
-                <div id="{{container.id}}" tabindex="-1" class="cardLayout cover-card"
-                    *ngFor="let container of playlistList">
+            <div id="head_browse_result_playlist_items_ID" tabindex="-1" class="albumLayout">
+                <div id="{{container.id}}" tabindex="-1" class="albumTile" *ngFor="let container of playlistList">
                     <div class="cardLayout image-container">
-                        <img class="cardLayout image-container" src="{{container.albumartUri}}"
-                            alt="{{container.title}}">
-                        <div
-                            class="cardLayout play-overlay d-flex flex-column justify-content-center align-items-center">
-                            <div class="d-flex justify-content-center align-items-center">
-                                <mat-icon (click)="browseTo(container)" class="play-overlay-button"
-                                    svgIcon="folder-move-outline" aria-label="step into folder">
-                                </mat-icon>
-                                <mat-icon (click)="playlistService.addContainerToPlaylist(container)"
-                                    class="play-overlay-button" svgIcon="playlist-plus" aria-label="add to playlist">
-                                </mat-icon>
-                            </div>
-                            <div class="d-flex justify-content-center align-items-center">
-                                <mat-icon (click)="playPlaylist(container)" class="play-overlay-button" svgIcon="play"
-                                    aria-label="app to playlist and play">
-                                </mat-icon>
-                                <mat-icon (click)="shufflePlaylist(container)" class="play-overlay-button"
-                                    svgIcon="shuffle-variant" aria-label="app to playlist and shuffle play">
-                                </mat-icon>
+                        <div class="albumImageContainer">
+                            <img src="{{container.albumartUri}}" alt="{{container.title}}">
+                            <div class="play-overlay d-flex flex-column justify-content-center align-items-center">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <mat-icon (click)="browseTo(container)" class="play-overlay-button"
+                                        svgIcon="folder-move-outline" aria-label="step into folder">
+                                    </mat-icon>
+                                    <mat-icon (click)="playlistService.addContainerToPlaylist(container)"
+                                        class="play-overlay-button" svgIcon="playlist-plus" aria-label="add to playlist">
+                                    </mat-icon>
+                                </div>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <mat-icon (click)="playPlaylist(container)" class="play-overlay-button" svgIcon="play"
+                                        aria-label="app to playlist and play">
+                                    </mat-icon>
+                                    <mat-icon (click)="shufflePlaylist(container)" class="play-overlay-button"
+                                        svgIcon="shuffle-variant" aria-label="app to playlist and shuffle play">
+                                    </mat-icon>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex cardLayout card-body">
+                    <div class="d-flex flex-column albumDesc" flex-column>
                         <div class="playlistText">PLAYLIST</div>
                         <div class="card-title">{{container.title}}</div>
                     </div>
