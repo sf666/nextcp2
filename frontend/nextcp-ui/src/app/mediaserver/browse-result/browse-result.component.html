@@ -192,8 +192,8 @@
         <!-- ############################################################## -->
         <div id="{{topDivId}}" tabindex="-1" *ngIf="musicTracks.length > 0">
             <div *ngIf="isListView(); else mixedTitles">
-                <div class="item-table">
-                    <div id="head_browse_result_items_list_view_ID" class="item-thead">
+                <div id="head_browse_result_items_list_view_ID" class="item-table">
+                    <div class="item-thead">
                         <div class="row col-greyed">
                             <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col small-col-img mr-2">
                             </div>

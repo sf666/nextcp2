@@ -8,6 +8,7 @@ import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
 import { ContainerItemDto, BrowseRequestDto, MediaServerDto, ContainerDto, SearchRequestDto, SearchResultDto, MusicItemDto } from './dto.d';
 import { Injectable } from '@angular/core';
+import { debug } from 'console';
 
 @Injectable({
   providedIn: 'root'
@@ -234,7 +235,6 @@ export class ContentDirectoryService {
         const firstTrackAlbum = this.getMusicTracks()[0].album;
         this.allTracksSameAlbum_ = this.getMusicTracks().filter(item => item.album !== firstTrackAlbum).length == 0;
       }
-      this.allTracksSameAlbum_ = true;
     }
     console.log("checkAllTracksSameAlbum : " + this.allTracksSameAlbum_ );
   }
