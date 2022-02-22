@@ -111,7 +111,7 @@
               "browserTarget": "nextcp-ui:build:production"
             },
             "dev": {
-              "browserTarget": "nextcp-ui:build:production"
+              "browserTarget": "nextcp-ui:build:dev"
             }
           }
         },
