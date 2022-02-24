@@ -23,7 +23,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class BrowseResultComponent implements AfterViewChecked {
 
-  private listView: boolean;
+  private listView = true;
   private lastDiscLabel = '';
 
   quickSearchString: string;
@@ -44,8 +44,8 @@ export class BrowseResultComponent implements AfterViewChecked {
     }
 
   private browseFinished(data) {
-    this.listView = !this.contentDirectoryService.allTracksSameAlbum();
-    console.log("listView : " + this.listView);
+//    this.listView = this.contentDirectoryService.allTracksSameAlbum();
+//    console.log("listView : " + this.listView);
   }
   // 
   // Container
@@ -249,6 +249,7 @@ export class BrowseResultComponent implements AfterViewChecked {
 
   toggleListView(): void {
     this.listView = !this.listView;
+    console.log("list view is now : " + this.listView);
   }
 
   play(musicItemDto: MusicItemDto): void {

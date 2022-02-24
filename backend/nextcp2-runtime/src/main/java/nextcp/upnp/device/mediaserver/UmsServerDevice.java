@@ -199,6 +199,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
                 {
                     case 200:
                         publisher.publishEvent(new ToastrMessage(null, "info", "UMS server device " + getFriendlyName(), body));
+                        break;
                     case 401:
                         publisher.publishEvent(new ToastrMessage(null, "error", "nextcp/2 configuration error",
                                 "Wrong API key configured for device " + getFriendlyName()+". Set correct secret for server : " + getUdnAsString()));
@@ -210,7 +211,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
                         publisher.publishEvent(new ToastrMessage(null, "error", "UMS server device " + getFriendlyName(),
                                 "UMS server API is not enabled. Set an api_key entry in UMD.conf file."));
                         break;
-
                     default:
                         publisher.publishEvent(new ToastrMessage(null, "warn", "UMS server device '" + getFriendlyName() + "'", body));
                 }
