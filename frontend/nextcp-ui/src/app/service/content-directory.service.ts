@@ -270,9 +270,8 @@ export class ContentDirectoryService {
   private checkAllTracksSameDisc(): void {
     if (this.getMusicTracks().length > 0) {
       const firstTrackDisc = this.getMusicTracks()[0].numberOfThisDisc;
-      this.allTracksSameDisc_ = this.getMusicTracks().filter(item => item.numberOfThisDisc !== firstTrackDisc).length == 0;
+      this.allTracksSameDisc_ = !this.getMusicTracks().find(item => item.numberOfThisDisc !== firstTrackDisc);
     }
-    this.allTracksSameDisc_ = true;
     console.log("allTracksSameDisc_ : " + this.allTracksSameDisc_ );
   }
   private createBrowseRequest(objectID: string, sortCriteria: string, mediaServerUdn: string): BrowseRequestDto {
