@@ -23,11 +23,15 @@
 
     <!--
         Maybe not necessary any more because of quick search "show all" functionality 
-
     <a mat-button routerLinkActive="active" style="text-align:left; vertical-align: top;" [routerLink]="'/search'">
         <mat-icon class="icn" style="vertical-align: top;" svgIcon="card-search-outline"></mat-icon>Search
     </a>
-    -->    
+    -->
+    
+    <a #btn6 mat-button routerLinkActive="active" style="text-align:left; vertical-align: top;" (click)="myAlbum()">
+        <mat-icon class="icn" style="vertical-align: top;" svgIcon="heart-box-outline"></mat-icon><span class="{{getTextClass(btn6)}}">My Albums</span>
+    </a>
+
     <a #btn5 mat-button routerLinkActive="active" style="text-align:left; vertical-align: top;" [routerLink]="'/settings'">
         <mat-icon class="icn" style="vertical-align: top;" svgIcon="cog-outline"></mat-icon><span class="{{getTextClass(btn5)}}">App settings</span>
     </a>

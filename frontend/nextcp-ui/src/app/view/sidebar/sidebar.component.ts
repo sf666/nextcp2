@@ -69,4 +69,7 @@ export class SidebarComponent  {
     this.deviceService.setMediaRendererByUdn(value);
 	}
 
+  public myAlbum() : void {
+    this.contentDirectoryService.browseChildren("$DBID$MYMUSIC$","");
+  }
 }

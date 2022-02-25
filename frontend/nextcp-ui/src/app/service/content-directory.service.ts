@@ -169,7 +169,10 @@ export class ContentDirectoryService {
    * @param sortCriteria 
    * @param mediaServerUdn 
    */
-  public browseChildren(objectID: string, sortCriteria: string, mediaServerUdn: string, isStepOut?: boolean): void {
+  public browseChildren(objectID: string, sortCriteria: string, mediaServerUdn?: string, isStepOut?: boolean): void {
+    if(!mediaServerUdn) {
+      mediaServerUdn = this.currentMediaServerDto.udn;
+    }
     this.updateBrowsePath(objectID, isStepOut);
     this.browseChildrenByRequest(this.createBrowseRequest(objectID, sortCriteria, mediaServerUdn));
   }
