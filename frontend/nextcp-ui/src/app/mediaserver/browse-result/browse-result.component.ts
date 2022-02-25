@@ -44,18 +44,15 @@ export class BrowseResultComponent implements AfterViewChecked {
     }
 
   private browseFinished(data) {
-//    this.listView = this.contentDirectoryService.allTracksSameAlbum();
-//    console.log("listView : " + this.listView);
+
   }
-  // 
-  // Container
-  //
+
   ngAfterViewChecked(): void {
     this.backgroundImageService.setBackgroundImageMainScreen(this.currentContainer.albumartUri);
   }
 
   // 
-  // media items lists
+  // media container & items lists
   //
   get containerList(): ContainerDto[] {
     return this.contentDirectoryService.containerList(this.quickSearchString);
@@ -69,10 +66,6 @@ export class BrowseResultComponent implements AfterViewChecked {
     return this.contentDirectoryService.albumList(this.quickSearchString);
   }
 
-  containerListWithoutMinimServerTags(): ContainerDto[] {
-    return this.contentDirectoryService.containerListWithoutMinimServerTags(this.quickSearchString);
-  }
-
   get minimTagsList(): ContainerDto[] {
     return this.contentDirectoryService.currentContainerList.minimServerSupportTags;
   }
@@ -81,31 +74,13 @@ export class BrowseResultComponent implements AfterViewChecked {
     return this.contentDirectoryService.getMusicTracks(this.quickSearchString);
   }
 
+  get items(): MusicItemDto[] {
+    return this.contentDirectoryService.getItems(this.quickSearchString);
+  }
+
   //
   // filter methods
   // 
-  public filterSpecialObjectClass(item: ContainerDto, objCls: string): boolean {
-    let result = item.objectClass.lastIndexOf(objCls, 0) === 0;
-    if (this.filterContent()) {
-      result = result && item.title.toLowerCase().includes(this.quickSearchString);
-    }
-    return result;
-  }
-
-  public filterGeneralContainerClass(item: ContainerDto): boolean {
-    if (this.filterContent()) {
-      return item.title.toLowerCase().includes(this.quickSearchString);
-    }
-    return true;
-  }
-
-  public filterMusicItems(item: MusicItemDto, objCls: string): boolean {
-    let result = item.objectClass.lastIndexOf(objCls, 0) === 0;
-    if (this.filterContent()) {
-      result = result && item.title.toLowerCase().includes(this.quickSearchString);
-    }
-    return result;
-  }
 
   public get itemsCount(): number {
     if (this.musicTracks.length) {
@@ -113,10 +88,6 @@ export class BrowseResultComponent implements AfterViewChecked {
     } else {
       return 0;
     }
-  }
-
-  private filterContent(): boolean {
-    return this.quickSearchString.length > 0;
   }
 
   keyUp(event: KeyboardEvent): void {
@@ -183,7 +154,7 @@ export class BrowseResultComponent implements AfterViewChecked {
   }
 
   hasSongs(): boolean {
-    if (this.contentDirectoryService.currentContainerList?.musicItemDto?.length > 0) {
+    if (this.contentDirectoryService.getMusicTracks().length > 0) {
       return true;
     }
     return false;
@@ -212,14 +183,9 @@ export class BrowseResultComponent implements AfterViewChecked {
     return '';
   }
 
-  //
-  // Album 
-  //
   playAlbum(container: ContainerDto): void {
     this.playlistService.addContainerToPlaylistAndPlay(container, false);
   }
-
-  // Album end
 
   isRendererSelected(): boolean {
     return this.deviceService.selectedMediaServerDevice.udn.length > 0;
@@ -263,10 +229,15 @@ export class BrowseResultComponent implements AfterViewChecked {
       return "";
     }
   }
+
   showSongPopup(event: PointerEvent, item: MusicItemDto): void {
     this.songOptionsServiceService.openOptionsDialog(event, item);
   }
 
+  //
+  // Like section
+  // ==============================================================================
+  //
   isLiked(): boolean {
     return this.myMusicService.currentAlbumLiked;
   }

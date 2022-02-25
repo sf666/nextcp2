@@ -8,7 +8,6 @@ import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
 import { ContainerItemDto, BrowseRequestDto, MediaServerDto, ContainerDto, SearchRequestDto, SearchResultDto, MusicItemDto } from './dto.d';
 import { Injectable } from '@angular/core';
-import { debug } from 'console';
 
 @Injectable({
   providedIn: 'root'
@@ -29,14 +28,22 @@ export class ContentDirectoryService {
   public quickSearchPanelVisible: boolean;
 
   // some calculated constants
-  private allTracksSameAlbum_ : boolean;
-  private oneTrackWithMusicBrainzId_ : boolean;
-  private allTracksSameMusicBrainzReleaseId_ : boolean;
-  private allTracksSameDisc_ : boolean;
+  private allTracksSameAlbum_: boolean;
+  private oneTrackWithMusicBrainzId_: boolean;
+  private allTracksSameMusicBrainzReleaseId_: boolean;
+  private allTracksSameDisc_: boolean;
+
+  // result container split by types
+  public containerList_: ContainerDto[] = [];  // not playlist container
+  public playlistList_: ContainerDto[] = [];   // playlist container
+
+  // item treatment
+  public musicTracks_: MusicItemDto[] = [];
+  public otherItems_: MusicItemDto[] = [];
 
   currentContainerListChanged$: Subject<ContainerItemDto> = new Subject();
   browseFinished$: Subject<any> = new Subject();
-  
+
   constructor(
     private httpService: HttpService,
     private persistenceService: PersistenceService,
@@ -46,7 +53,6 @@ export class ContentDirectoryService {
 
     private router: Router,
     private deviceService: DeviceService) {
-
     // Initialize empty result object
     this.currentContainerList = this.dtoGeneratorService.generateEmptyContainerItemDto();
     this.quickSearchResultList = this.dtoGeneratorService.generateEmptySearchResultDto();
@@ -64,14 +70,14 @@ export class ContentDirectoryService {
   // --------------------------------------------------------------------------------------------
   //
 
-  // general container excluding special container
+  // container without playlists
   public containerList(filter?: string): ContainerDto[] {
-    return this.currentContainerList.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer" && this.doFilterText(item.title, filter));
+    return this.containerList_.filter(item => this.doFilterText(item.title, filter));
   }
 
-  // special container: playlists
+  // playlist container
   public playlistList(filter?: string): ContainerDto[] {
-    return this.currentContainerList.containerDto.filter(item => item.objectClass === "object.container.playlistContainer" && this.doFilterText(item.title, filter));
+    return this.playlistList_.filter(item => this.doFilterText(item.title, filter));
   }
 
   // container with album tags
@@ -87,14 +93,11 @@ export class ContentDirectoryService {
   }
 
   public getMusicTracks(filter?: string): MusicItemDto[] {
-    if (this.currentContainerList.musicItemDto?.length) {
-      return this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0 && this.doFilterText(item.title, filter));
-    }
-    return [];
+    return this.musicTracks_.filter(item => this.doFilterText(item.title, filter));
   }
 
-  public containerListWithoutMinimServerTags(filter?: string): ContainerDto[] {
-    return this.currentContainerList.containerDto.filter(item => !item.title.startsWith(">> ") && this.doFilterText(item.title, filter));
+  public getItems(filter?: string): MusicItemDto[] {
+    return this.otherItems_.filter(item => this.doFilterText(item.title, filter));
   }
 
   public minimTagsList(): ContainerDto[] {
@@ -214,6 +217,11 @@ export class ContentDirectoryService {
       this.checkOneTrackWithMusicBrainzId();
       this.checkAllTracksSameMusicBrainzReleaseId();
       this.checkAllTracksSameDisc();
+
+      this.containerList_ = this.currentContainerList.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer");
+      this.playlistList_ = this.currentContainerList.containerDto.filter(item => item.objectClass === "object.container.playlistContainer");
+      this.musicTracks_ = this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0);
+      this.otherItems_ = this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0);
     }
     this.browseFinished$.next("update");
   }
@@ -221,11 +229,11 @@ export class ContentDirectoryService {
   public allTracksSameAlbum(): boolean {
     return this.allTracksSameAlbum_;
   }
-  
+
   private checkAllTracksSameAlbum(): void {
     const numtrack = this.getMusicTracks().length;
     const numMbid = this.getMusicTracks().filter(item => item.musicBrainzId?.ReleaseTrackId?.length > 0).length;
-    
+
     if ((numMbid > 0) && (numtrack == numMbid)) {
       const firstTrackMbid = this.getMusicTracks()[0].musicBrainzId?.ReleaseTrackId;
       const numSameMbid = this.getMusicTracks().filter(item => item.musicBrainzId?.ReleaseTrackId === firstTrackMbid).length;
@@ -236,7 +244,7 @@ export class ContentDirectoryService {
         this.allTracksSameAlbum_ = this.getMusicTracks().filter(item => item.album !== firstTrackAlbum).length == 0;
       }
     }
-    console.log("checkAllTracksSameAlbum : " + this.allTracksSameAlbum_ );
+    console.log("checkAllTracksSameAlbum : " + this.allTracksSameAlbum_);
   }
 
   public oneTrackWithMusicBrainzId(): boolean {
@@ -247,7 +255,7 @@ export class ContentDirectoryService {
     const mbTrackExists = this.getMusicTracks().filter(item => (item.musicBrainzId?.TrackId?.length > 0))?.length > 0;
     console.log("oneTrackWithMusicBrainzId : " + mbTrackExists);
     this.oneTrackWithMusicBrainzId_ = mbTrackExists;
-    console.log("checkOneTrackWithMusicBrainzId : " + this.oneTrackWithMusicBrainzId_ );
+    console.log("checkOneTrackWithMusicBrainzId : " + this.oneTrackWithMusicBrainzId_);
   }
 
   public allTracksSameMusicBrainzReleaseId(): boolean {
@@ -260,7 +268,7 @@ export class ContentDirectoryService {
       this.allTracksSameMusicBrainzReleaseId_ = this.getMusicTracks().filter(item => item.musicBrainzId.ReleaseTrackId !== firstTrackReleaseID).length == 0;
     }
     this.allTracksSameMusicBrainzReleaseId_ = true;
-    console.log("allTracksSameMusicBrainzReleaseId_ : " + this.allTracksSameMusicBrainzReleaseId_ );
+    console.log("allTracksSameMusicBrainzReleaseId_ : " + this.allTracksSameMusicBrainzReleaseId_);
   }
 
   public allTracksSameDisc(): boolean {
@@ -272,22 +280,24 @@ export class ContentDirectoryService {
       const firstTrackDisc = this.getMusicTracks()[0].numberOfThisDisc;
       this.allTracksSameDisc_ = !this.getMusicTracks().find(item => item.numberOfThisDisc !== firstTrackDisc);
     }
-    console.log("allTracksSameDisc_ : " + this.allTracksSameDisc_ );
+    console.log("allTracksSameDisc_ : " + this.allTracksSameDisc_);
   }
+
   private createBrowseRequest(objectID: string, sortCriteria: string, mediaServerUdn: string): BrowseRequestDto {
     const br: BrowseRequestDto = {
       mediaServerUDN: mediaServerUdn,
       objectID: objectID,
       sortCriteria: sortCriteria
     }
-
     return br;
   }
+
   get currentContainerID(): string {
     return this.currentContainerList.currentContainer.id;
   }
   //
   // Search Section
+  // =====================================================================================
   //
   public quickSearch(searchQuery: string, sortCriteria: string, mediaServerUdn: string): void {
     this.quickSearchByDto(this.dtoGeneratorService.generateQuickSearchDto(searchQuery, mediaServerUdn, sortCriteria, this.currentContainerID));

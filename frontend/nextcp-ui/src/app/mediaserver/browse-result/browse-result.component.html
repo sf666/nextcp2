@@ -94,11 +94,16 @@
         </div>
     </ng-template>
 
+    <!--
+        Main Content
+        ==========================================
+    -->
     <div class="outer-container">
-        <!--
-        Playlist Elements
-        =========================================== 
-        -->
+    
+    <!--
+        playlist elements on first position
+        =================================================================
+    -->
         <div *ngIf="playlistList?.length > 0">
             <div id="head_browse_result_playlist_items_ID" tabindex="-1" class="albumLayout">
                 <div id="{{container.id}}" tabindex="-1" class="albumTile" *ngFor="let container of playlistList">
@@ -132,25 +137,6 @@
                 </div>
             </div>
         </div>
-
-        <!--                                -->
-        <!-- General container section      -->
-        <!--                                -->
-        <div *ngIf="containerList?.length > 0">
-            <div id="head_browse_result_playlist_container_ID" class="albumLayout">
-                <div class="albumTile" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)"
-                    *ngFor="let container of containerList">
-                    <div class="albumImageContainer">
-                        <img class="cardLayout image-container" src="{{container.albumartUri}}" class=""
-                        alt="{{container.title}}">
-                    </div>
-                    <div class="d-flex flex-column albumDesc">
-                        <div class="albumTitle">{{container.title}}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
 
         <!--                                                                -->
         <!-- Template : Browse Result Album                                 -->
@@ -276,6 +262,40 @@
                     </div>
                 </div>
             </ng-template>
+        </div>
+
+        <!--                                -->
+        <!-- General container section      -->
+        <!--                                -->
+        <div *ngIf="containerList?.length > 0">
+            <div id="head_browse_result_playlist_container_ID" class="albumLayout">
+                <div class="albumTile" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)"
+                    *ngFor="let container of containerList">
+                    <div class="albumImageContainer">
+                        <img class="cardLayout image-container" src="{{container.albumartUri}}" alt="{{container.title}}">
+                    </div>
+                    <div class="d-flex flex-column albumDesc">
+                        <div class="albumTitle">{{container.title}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--                                -->
+        <!-- Other items                    -->
+        <!--                                -->
+        <div *ngIf="items?.length > 0">
+            <div id="head_browse_other_items_ID" class="albumLayout">
+                <div class="albumTile" id="{{item.id}}" tabindex="-1" (click)="avtransportService.playResource(item)"
+                    *ngFor="let item of items">
+                    <div class="albumImageContainer">
+                        <img class="cardLayout image-container" src="{{item.albumArtUrl}}" alt="{{item.title}}">
+                    </div>
+                    <div class="d-flex flex-column albumDesc">
+                        <div class="albumTitle">{{item.title}}</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
