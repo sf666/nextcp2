@@ -163,6 +163,7 @@ ContainerDto:
    rating: Integer
    creator: String
    media_date: String
+   genre: String
 
 AudioFormat:
    nrAudioChannels: Long 

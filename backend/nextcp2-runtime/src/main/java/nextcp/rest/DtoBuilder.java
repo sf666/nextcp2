@@ -185,6 +185,10 @@ public class DtoBuilder
             {
                 dto.media_date = container.getDate();
             }
+            if (container.getGenres().length > 0)
+            {
+                dto.genre = container.getFirstGenre();
+            }
             // TODO extracting more info's necessary ... Role, etc. ?
         }
         catch (MalformedURLException e)

@@ -23,12 +23,13 @@ public class ContainerDto
     public Integer rating;
     public String creator;
     public String media_date;
+    public String genre;
 
     public ContainerDto()
     {
     }
 
-    public ContainerDto(String id, String parentID, String title, String objectClass, Integer childCount, String createClass, String searchClass, Boolean searchable, String mediaServerUDN, String albumartUri, String artist, Integer rating, String creator, String media_date)
+    public ContainerDto(String id, String parentID, String title, String objectClass, Integer childCount, String createClass, String searchClass, Boolean searchable, String mediaServerUDN, String albumartUri, String artist, Integer rating, String creator, String media_date, String genre)
     {
         this.id = id;
         this.parentID = parentID;
@@ -44,6 +45,7 @@ public class ContainerDto
         this.rating = rating;
         this.creator = creator;
         this.media_date = media_date;
+        this.genre = genre;
     }
     
     @Override
@@ -65,6 +67,7 @@ public class ContainerDto
         sb.append("rating=").append(this.rating).append(", ");
         sb.append("creator=").append(this.creator).append(", ");
         sb.append("media_date=").append(this.media_date).append(", ");
+        sb.append("genre=").append(this.genre).append(", ");
         sb.append("]");
         return sb.toString();
     }
