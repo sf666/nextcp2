@@ -45,7 +45,7 @@ export class NavBarComponent {
   // UI state management for navbar   
 
   get musicLibraryVisible(): boolean {
-    return this.currentPath === '/music-library' || this.currentPath === '/';
+    return this.currentPath === '/music-library' || this.currentPath === '/' || this.currentPath === '/myAlbums';
   }
   get playlistVisible(): boolean {
     return this.currentPath === '/playlist';

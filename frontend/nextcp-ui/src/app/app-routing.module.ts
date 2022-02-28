@@ -1,5 +1,4 @@
 import { MySongsComponent } from './view/my-songs/my-songs.component';
-import { MyAlbumComponent } from './view/my-album/my-album.component';
 import { SearchResultItemMultiComponent } from './view/search/search-result-item-multi/search-result-item-multi.component';
 import { SearchResultItemSingleComponent } from './view/search/search-result-item-single/search-result-item-single.component';
 import { PlaylistComponent } from './view/playlist/playlist.component';
@@ -15,7 +14,7 @@ const routes: Routes = [
   { path: 'music-library', component: MusicLibraryComponent },
   { path: 'player', component: MediarendererComponent },
   { path: 'settings', component: SettingsComponent },
-  { path: 'myAlbums', component: MyAlbumComponent },
+  { path: 'myAlbums', component: MusicLibraryComponent },
   { path: 'myTracks', component: MySongsComponent },
   { path: 'radio', component: RadioComponent },
   { path: 'playlist', component: PlaylistComponent },  

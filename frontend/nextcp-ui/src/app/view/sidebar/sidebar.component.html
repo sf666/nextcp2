@@ -27,8 +27,8 @@
         <mat-icon class="icn" style="vertical-align: top;" svgIcon="card-search-outline"></mat-icon>Search
     </a>
     -->
-    
-    <a #btn6 mat-button routerLinkActive="active" style="text-align:left; vertical-align: top;" (click)="myAlbum()">
+
+    <a #btn6 mat-button routerLinkActive="active" style="text-align:left; vertical-align: top;" [routerLink]="'/myAlbums'" (click)="myAlbum()">
         <mat-icon class="icn" style="vertical-align: top;" svgIcon="heart-box-outline"></mat-icon><span class="{{getTextClass(btn6)}}">My Albums</span>
     </a>
 
