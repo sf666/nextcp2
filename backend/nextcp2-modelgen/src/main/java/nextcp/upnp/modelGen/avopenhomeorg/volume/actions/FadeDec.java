@@ -21,6 +21,7 @@ public class FadeDec extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(FadeDec.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public FadeDec(Service service, ControlPoint cp)
     {

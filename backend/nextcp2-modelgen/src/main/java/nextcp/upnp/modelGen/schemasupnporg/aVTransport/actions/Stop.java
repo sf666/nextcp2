@@ -21,6 +21,7 @@ public class Stop extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(Stop.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public Stop(Service service, StopInput input, ControlPoint cp)
     {

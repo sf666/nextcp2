@@ -1,4 +1,4 @@
-package nextcp.upnp.modelGen.dialmultiscreenorg.dial;
+package nextcp.upnp.modelGen.avopenhomeorg.oAuth;
 
 import java.util.Map;
 import java.util.List;
@@ -23,23 +23,23 @@ import nextcp.upnp.ISubscriptionEventListener;
  *
  * Generated UPnP subscription service class.  
  */
-public class dialServiceSubscription extends RemoteGENASubscription
+public class OAuthServiceSubscription extends RemoteGENASubscription
 {
-    private static final Logger log = LoggerFactory.getLogger(dialServiceSubscription.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(OAuthServiceSubscription.class.getName());
 
-    private List<IdialServiceEventListener> eventListener = new CopyOnWriteArrayList<>();
+    private List<IOAuthServiceEventListener> eventListener = new CopyOnWriteArrayList<>();
         
-    protected dialServiceSubscription(RemoteService service, int requestedDurationSeconds)
+    protected OAuthServiceSubscription(RemoteService service, int requestedDurationSeconds)
     {
         super(service, requestedDurationSeconds);
     }
 
-    public void addSubscriptionEventListener(IdialServiceEventListener listener)
+    public void addSubscriptionEventListener(IOAuthServiceEventListener listener)
     {
         eventListener.add(listener);
     }
     
-    public boolean removeSubscriptionEventListener(IdialServiceEventListener listener)
+    public boolean removeSubscriptionEventListener(IOAuthServiceEventListener listener)
     {
         return eventListener.remove(listener);
     }
@@ -106,6 +106,15 @@ public class dialServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
+                    case "PublicKey":
+                        publicKeyChange((String) stateVar.getValue());
+                        break;
+                    case "SupportedServices":
+                        supportedServicesChange((String) stateVar.getValue());
+                        break;
+                    case "UpdateId":
+                        updateIdChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
                     default:
                         log.warn("unknown state variable : " + key);
                 }
@@ -119,10 +128,34 @@ public class dialServiceSubscription extends RemoteGENASubscription
             {
                 listener.eventReceived(key, stateVar);
             }
-            for (ISubscriptionEventListener listener : eventListener)
-            {
-                listener.eventProcessed();
-            }
         }        
+        for (ISubscriptionEventListener listener : eventListener)
+        {
+            listener.eventProcessed();
+        }
     }
+
+    private void publicKeyChange(String value)
+    {
+        for (IOAuthServiceEventListener listener : eventListener)
+        {
+            listener.publicKeyChange(value);
+        }
+    }    
+
+    private void supportedServicesChange(String value)
+    {
+        for (IOAuthServiceEventListener listener : eventListener)
+        {
+            listener.supportedServicesChange(value);
+        }
+    }    
+
+    private void updateIdChange(Long value)
+    {
+        for (IOAuthServiceEventListener listener : eventListener)
+        {
+            listener.updateIdChange(value);
+        }
+    }    
 }

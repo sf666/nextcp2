@@ -21,6 +21,7 @@ public class SourceXmlChangeCount extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SourceXmlChangeCount.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SourceXmlChangeCount(Service service, ControlPoint cp)
     {

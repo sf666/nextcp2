@@ -21,6 +21,7 @@ public class X_GetFeatureList extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(X_GetFeatureList.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public X_GetFeatureList(Service service, ControlPoint cp)
     {

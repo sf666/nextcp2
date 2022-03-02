@@ -21,6 +21,7 @@ public class SkipPrevious extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SkipPrevious.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SkipPrevious(Service service, ControlPoint cp)
     {

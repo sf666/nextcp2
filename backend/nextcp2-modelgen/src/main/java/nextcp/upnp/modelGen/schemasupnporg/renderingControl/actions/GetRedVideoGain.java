@@ -21,6 +21,7 @@ public class GetRedVideoGain extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetRedVideoGain.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetRedVideoGain(Service service, GetRedVideoGainInput input, ControlPoint cp)
     {

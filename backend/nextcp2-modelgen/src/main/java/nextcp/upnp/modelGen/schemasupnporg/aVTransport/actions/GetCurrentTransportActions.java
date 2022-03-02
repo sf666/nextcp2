@@ -21,6 +21,7 @@ public class GetCurrentTransportActions extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetCurrentTransportActions.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetCurrentTransportActions(Service service, GetCurrentTransportActionsInput input, ControlPoint cp)
     {

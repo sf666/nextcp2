@@ -21,6 +21,7 @@ public class SeekIndex extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SeekIndex.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SeekIndex(Service service, SeekIndexInput input, ControlPoint cp)
     {

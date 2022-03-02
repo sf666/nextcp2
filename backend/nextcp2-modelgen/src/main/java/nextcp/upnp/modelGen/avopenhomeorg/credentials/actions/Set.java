@@ -21,6 +21,7 @@ public class Set extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(Set.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public Set(Service service, SetInput input, ControlPoint cp)
     {
@@ -28,7 +29,7 @@ public class Set extends ActionCallback
 
         getActionInvocation().setInput("Id", input.Id);
         getActionInvocation().setInput("UserName", input.UserName);
-        throw new RuntimeException("(Base64Datatype)");
+        getActionInvocation().setInput("Password", b64.getString(input.Password));
     }
 
     public void executeAction()

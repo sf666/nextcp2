@@ -21,6 +21,7 @@ public class SetInvertPhase extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetInvertPhase.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetInvertPhase(Service service, SetInvertPhaseInput input, ControlPoint cp)
     {

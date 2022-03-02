@@ -66,18 +66,25 @@ public class TransportService
     {
         this.upnpService = upnpService;
         transportService = device.findService(new ServiceType("av-openhome-org", "Transport"));
-        subscription = new TransportServiceSubscription(transportService, 600);
-        try
+        if (transportService != null)
         {
-            SendingSubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingSubscribe(subscription);
-            protocol.run();
-        }
-        catch (ProtocolCreationException ex)
-        {
-            log.error("Event subscription", ex);
-        }
-
-        log.info(String.format("initialized service 'Transport' for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	        subscription = new TransportServiceSubscription(transportService, 600);
+	        try
+	        {
+	            SendingSubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingSubscribe(subscription);
+	            protocol.run();
+	        }
+	        catch (ProtocolCreationException ex)
+	        {
+	            log.error("Event subscription", ex);
+	        }
+	
+	        log.info(String.format("initialized service 'Transport' for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	    }
+	    else
+	    {
+	        log.warn(String.format("initialized service 'Transport' failed for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	    }
     }
     
     public void addSubscriptionEventListener(ITransportServiceEventListener listener)

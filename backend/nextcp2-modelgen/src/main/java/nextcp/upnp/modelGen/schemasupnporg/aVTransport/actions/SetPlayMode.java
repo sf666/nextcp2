@@ -21,6 +21,7 @@ public class SetPlayMode extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetPlayMode.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetPlayMode(Service service, SetPlayModeInput input, ControlPoint cp)
     {

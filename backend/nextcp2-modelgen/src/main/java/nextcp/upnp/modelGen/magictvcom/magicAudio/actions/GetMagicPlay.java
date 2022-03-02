@@ -21,6 +21,7 @@ public class GetMagicPlay extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetMagicPlay.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetMagicPlay(Service service, ControlPoint cp)
     {

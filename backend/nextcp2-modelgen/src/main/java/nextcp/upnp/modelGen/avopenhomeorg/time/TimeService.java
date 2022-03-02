@@ -39,18 +39,25 @@ public class TimeService
     {
         this.upnpService = upnpService;
         timeService = device.findService(new ServiceType("av-openhome-org", "Time"));
-        subscription = new TimeServiceSubscription(timeService, 600);
-        try
+        if (timeService != null)
         {
-            SendingSubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingSubscribe(subscription);
-            protocol.run();
-        }
-        catch (ProtocolCreationException ex)
-        {
-            log.error("Event subscription", ex);
-        }
-
-        log.info(String.format("initialized service 'Time' for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	        subscription = new TimeServiceSubscription(timeService, 600);
+	        try
+	        {
+	            SendingSubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingSubscribe(subscription);
+	            protocol.run();
+	        }
+	        catch (ProtocolCreationException ex)
+	        {
+	            log.error("Event subscription", ex);
+	        }
+	
+	        log.info(String.format("initialized service 'Time' for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	    }
+	    else
+	    {
+	        log.warn(String.format("initialized service 'Time' failed for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	    }
     }
     
     public void addSubscriptionEventListener(ITimeServiceEventListener listener)

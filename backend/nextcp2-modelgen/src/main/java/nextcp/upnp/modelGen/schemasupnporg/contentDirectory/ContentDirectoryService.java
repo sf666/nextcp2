@@ -20,17 +20,11 @@ import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.GetSearchCap
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.GetSearchCapabilitiesOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.GetSortCapabilities;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.GetSortCapabilitiesOutput;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.X_GetFeatureList;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.X_GetFeatureListOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.Search;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.SearchOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.SearchInput;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.GetSortExtensionCapabilities;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.GetSortExtensionCapabilitiesOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.GetSystemUpdateID;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.GetSystemUpdateIDOutput;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.GetFeatureList;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.GetFeatureListOutput;
 
 
 /**
@@ -55,21 +49,25 @@ public class ContentDirectoryService
     {
         this.upnpService = upnpService;
         contentDirectoryService = device.findService(new ServiceType("schemas-upnp-org", "ContentDirectory"));
-        subscription = new ContentDirectoryServiceSubscription(contentDirectoryService, 600);
-        try
+        if (contentDirectoryService != null)
         {
-            SendingSubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingSubscribe(subscription);
-            protocol.run();
-        }
-        catch (ProtocolCreationException ex)
-        {
-            log.error("Event subscription", ex);
-        }
-        catch(Exception e)
-        {
-            log.error("Generic exception", e);
-        }
-        log.info(String.format("initialized service 'ContentDirectory' for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	        subscription = new ContentDirectoryServiceSubscription(contentDirectoryService, 600);
+	        try
+	        {
+	            SendingSubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingSubscribe(subscription);
+	            protocol.run();
+	        }
+	        catch (ProtocolCreationException ex)
+	        {
+	            log.error("Event subscription", ex);
+	        }
+	
+	        log.info(String.format("initialized service 'ContentDirectory' for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	    }
+	    else
+	    {
+	        log.warn(String.format("initialized service 'ContentDirectory' failed for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	    }
     }
     
     public void addSubscriptionEventListener(IContentDirectoryServiceEventListener listener)
@@ -109,13 +107,6 @@ public class ContentDirectoryService
         return res;        
     }
 
-    public X_GetFeatureListOutput x_GetFeatureList()
-    {
-        X_GetFeatureList x_GetFeatureList = new X_GetFeatureList(contentDirectoryService,  upnpService.getControlPoint());
-        X_GetFeatureListOutput res = x_GetFeatureList.executeAction();
-        return res;        
-    }
-
     public SearchOutput search(SearchInput inp)
     {
         Search search = new Search(contentDirectoryService, inp, upnpService.getControlPoint());
@@ -123,24 +114,10 @@ public class ContentDirectoryService
         return res;        
     }
 
-    public GetSortExtensionCapabilitiesOutput getSortExtensionCapabilities()
-    {
-        GetSortExtensionCapabilities getSortExtensionCapabilities = new GetSortExtensionCapabilities(contentDirectoryService,  upnpService.getControlPoint());
-        GetSortExtensionCapabilitiesOutput res = getSortExtensionCapabilities.executeAction();
-        return res;        
-    }
-
     public GetSystemUpdateIDOutput getSystemUpdateID()
     {
         GetSystemUpdateID getSystemUpdateID = new GetSystemUpdateID(contentDirectoryService,  upnpService.getControlPoint());
         GetSystemUpdateIDOutput res = getSystemUpdateID.executeAction();
-        return res;        
-    }
-
-    public GetFeatureListOutput getFeatureList()
-    {
-        GetFeatureList getFeatureList = new GetFeatureList(contentDirectoryService,  upnpService.getControlPoint());
-        GetFeatureListOutput res = getFeatureList.executeAction();
         return res;        
     }
 }

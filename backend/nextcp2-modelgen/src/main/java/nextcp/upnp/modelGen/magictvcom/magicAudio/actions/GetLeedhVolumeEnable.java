@@ -21,6 +21,7 @@ public class GetLeedhVolumeEnable extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetLeedhVolumeEnable.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetLeedhVolumeEnable(Service service, ControlPoint cp)
     {

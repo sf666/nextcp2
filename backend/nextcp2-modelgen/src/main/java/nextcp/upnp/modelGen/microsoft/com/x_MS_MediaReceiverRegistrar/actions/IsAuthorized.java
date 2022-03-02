@@ -21,6 +21,7 @@ public class IsAuthorized extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(IsAuthorized.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public IsAuthorized(Service service, IsAuthorizedInput input, ControlPoint cp)
     {

@@ -21,6 +21,7 @@ public class SetUltraSonicFilterDSD extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetUltraSonicFilterDSD.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetUltraSonicFilterDSD(Service service, SetUltraSonicFilterDSDInput input, ControlPoint cp)
     {

@@ -21,6 +21,7 @@ public class SetSender extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetSender.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetSender(Service service, SetSenderInput input, ControlPoint cp)
     {

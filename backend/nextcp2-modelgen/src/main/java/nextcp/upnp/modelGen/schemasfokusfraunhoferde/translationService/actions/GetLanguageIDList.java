@@ -21,6 +21,7 @@ public class GetLanguageIDList extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetLanguageIDList.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetLanguageIDList(Service service, ControlPoint cp)
     {

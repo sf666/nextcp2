@@ -21,6 +21,7 @@ public class GetQobuzQuality extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetQobuzQuality.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetQobuzQuality(Service service, ControlPoint cp)
     {

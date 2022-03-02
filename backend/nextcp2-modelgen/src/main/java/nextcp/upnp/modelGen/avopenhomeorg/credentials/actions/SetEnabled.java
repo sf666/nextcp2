@@ -21,6 +21,7 @@ public class SetEnabled extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetEnabled.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetEnabled(Service service, SetEnabledInput input, ControlPoint cp)
     {

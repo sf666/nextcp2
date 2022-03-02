@@ -21,6 +21,7 @@ public class SetMute extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetMute.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetMute(Service service, SetMuteInput input, ControlPoint cp)
     {

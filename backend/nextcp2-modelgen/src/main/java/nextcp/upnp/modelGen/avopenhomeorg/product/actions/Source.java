@@ -21,6 +21,7 @@ public class Source extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(Source.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public Source(Service service, SourceInput input, ControlPoint cp)
     {

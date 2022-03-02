@@ -46,18 +46,25 @@ public class X_MS_MediaReceiverRegistrarService
     {
         this.upnpService = upnpService;
         x_MS_MediaReceiverRegistrarService = device.findService(new ServiceType("microsoft.com", "X_MS_MediaReceiverRegistrar"));
-        subscription = new X_MS_MediaReceiverRegistrarServiceSubscription(x_MS_MediaReceiverRegistrarService, 600);
-        try
+        if (x_MS_MediaReceiverRegistrarService != null)
         {
-            SendingSubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingSubscribe(subscription);
-            protocol.run();
-        }
-        catch (ProtocolCreationException ex)
-        {
-            log.error("Event subscription", ex);
-        }
-
-        log.info(String.format("initialized service 'X_MS_MediaReceiverRegistrar' for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	        subscription = new X_MS_MediaReceiverRegistrarServiceSubscription(x_MS_MediaReceiverRegistrarService, 600);
+	        try
+	        {
+	            SendingSubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingSubscribe(subscription);
+	            protocol.run();
+	        }
+	        catch (ProtocolCreationException ex)
+	        {
+	            log.error("Event subscription", ex);
+	        }
+	
+	        log.info(String.format("initialized service 'X_MS_MediaReceiverRegistrar' for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	    }
+	    else
+	    {
+	        log.warn(String.format("initialized service 'X_MS_MediaReceiverRegistrar' failed for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	    }
     }
     
     public void addSubscriptionEventListener(IX_MS_MediaReceiverRegistrarServiceEventListener listener)

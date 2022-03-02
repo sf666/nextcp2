@@ -21,6 +21,7 @@ public class GetTidalQuality extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetTidalQuality.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetTidalQuality(Service service, ControlPoint cp)
     {

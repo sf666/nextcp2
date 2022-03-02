@@ -21,6 +21,7 @@ public class StreamInfo extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(StreamInfo.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public StreamInfo(Service service, ControlPoint cp)
     {

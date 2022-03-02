@@ -58,18 +58,25 @@ public class RenderingControlService
     {
         this.upnpService = upnpService;
         renderingControlService = device.findService(new ServiceType("schemas-upnp-org", "RenderingControl"));
-        subscription = new RenderingControlServiceSubscription(renderingControlService, 600);
-        try
+        if (renderingControlService != null)
         {
-            SendingSubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingSubscribe(subscription);
-            protocol.run();
-        }
-        catch (ProtocolCreationException ex)
-        {
-            log.error("Event subscription", ex);
-        }
-
-        log.info(String.format("initialized service 'RenderingControl' for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	        subscription = new RenderingControlServiceSubscription(renderingControlService, 600);
+	        try
+	        {
+	            SendingSubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingSubscribe(subscription);
+	            protocol.run();
+	        }
+	        catch (ProtocolCreationException ex)
+	        {
+	            log.error("Event subscription", ex);
+	        }
+	
+	        log.info(String.format("initialized service 'RenderingControl' for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	    }
+	    else
+	    {
+	        log.warn(String.format("initialized service 'RenderingControl' failed for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	    }
     }
     
     public void addSubscriptionEventListener(IRenderingControlServiceEventListener listener)

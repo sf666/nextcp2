@@ -21,6 +21,7 @@ public class GetScreensaver extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetScreensaver.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetScreensaver(Service service, ControlPoint cp)
     {

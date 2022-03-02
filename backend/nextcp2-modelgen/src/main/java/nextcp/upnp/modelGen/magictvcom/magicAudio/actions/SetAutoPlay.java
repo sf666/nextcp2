@@ -21,6 +21,7 @@ public class SetAutoPlay extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetAutoPlay.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetAutoPlay(Service service, SetAutoPlayInput input, ControlPoint cp)
     {

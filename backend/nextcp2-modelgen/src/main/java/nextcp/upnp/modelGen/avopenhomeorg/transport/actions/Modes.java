@@ -21,6 +21,7 @@ public class Modes extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(Modes.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public Modes(Service service, ControlPoint cp)
     {

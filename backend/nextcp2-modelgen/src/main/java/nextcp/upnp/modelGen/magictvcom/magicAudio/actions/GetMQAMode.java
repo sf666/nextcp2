@@ -21,6 +21,7 @@ public class GetMQAMode extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetMQAMode.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetMQAMode(Service service, ControlPoint cp)
     {

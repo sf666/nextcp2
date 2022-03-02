@@ -21,6 +21,7 @@ public class Search extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(Search.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public Search(Service service, SearchInput input, ControlPoint cp)
     {

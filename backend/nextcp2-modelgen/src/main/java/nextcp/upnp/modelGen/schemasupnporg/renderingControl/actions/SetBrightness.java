@@ -21,6 +21,7 @@ public class SetBrightness extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetBrightness.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetBrightness(Service service, SetBrightnessInput input, ControlPoint cp)
     {

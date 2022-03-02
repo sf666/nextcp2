@@ -21,6 +21,7 @@ public class SetStandby extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetStandby.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetStandby(Service service, SetStandbyInput input, ControlPoint cp)
     {

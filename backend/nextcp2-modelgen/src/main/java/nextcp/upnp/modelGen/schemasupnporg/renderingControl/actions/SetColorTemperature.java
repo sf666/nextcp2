@@ -21,6 +21,7 @@ public class SetColorTemperature extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetColorTemperature.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetColorTemperature(Service service, SetColorTemperatureInput input, ControlPoint cp)
     {

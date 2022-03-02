@@ -21,6 +21,7 @@ public class SetVolume extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetVolume.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetVolume(Service service, SetVolumeInput input, ControlPoint cp)
     {

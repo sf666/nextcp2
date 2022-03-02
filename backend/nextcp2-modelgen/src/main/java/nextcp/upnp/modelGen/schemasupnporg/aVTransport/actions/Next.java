@@ -21,6 +21,7 @@ public class Next extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(Next.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public Next(Service service, NextInput input, ControlPoint cp)
     {

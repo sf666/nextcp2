@@ -21,6 +21,7 @@ public class Play extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(Play.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public Play(Service service, PlayInput input, ControlPoint cp)
     {

@@ -21,6 +21,7 @@ public class SetContrast extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetContrast.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetContrast(Service service, SetContrastInput input, ControlPoint cp)
     {

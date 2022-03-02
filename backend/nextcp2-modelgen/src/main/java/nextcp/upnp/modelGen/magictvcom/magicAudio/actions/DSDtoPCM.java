@@ -21,6 +21,7 @@ public class DSDtoPCM extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(DSDtoPCM.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public DSDtoPCM(Service service, ControlPoint cp)
     {

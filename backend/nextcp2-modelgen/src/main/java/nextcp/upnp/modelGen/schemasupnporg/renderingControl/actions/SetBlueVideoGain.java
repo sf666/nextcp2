@@ -21,6 +21,7 @@ public class SetBlueVideoGain extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetBlueVideoGain.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetBlueVideoGain(Service service, SetBlueVideoGainInput input, ControlPoint cp)
     {

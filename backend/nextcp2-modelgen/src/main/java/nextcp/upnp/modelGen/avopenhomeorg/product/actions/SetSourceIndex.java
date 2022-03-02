@@ -21,6 +21,7 @@ public class SetSourceIndex extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetSourceIndex.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetSourceIndex(Service service, SetSourceIndexInput input, ControlPoint cp)
     {

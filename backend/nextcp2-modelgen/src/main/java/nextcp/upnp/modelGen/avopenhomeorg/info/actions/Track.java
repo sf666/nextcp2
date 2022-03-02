@@ -21,6 +21,7 @@ public class Track extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(Track.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public Track(Service service, ControlPoint cp)
     {

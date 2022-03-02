@@ -21,6 +21,7 @@ public class SetMQAMode extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetMQAMode.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetMQAMode(Service service, SetMQAModeInput input, ControlPoint cp)
     {

@@ -21,6 +21,7 @@ public class GetVolumeControl extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetVolumeControl.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetVolumeControl(Service service, ControlPoint cp)
     {

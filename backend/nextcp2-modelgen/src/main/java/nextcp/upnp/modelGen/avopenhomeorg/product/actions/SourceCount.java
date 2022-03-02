@@ -21,6 +21,7 @@ public class SourceCount extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SourceCount.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SourceCount(Service service, ControlPoint cp)
     {

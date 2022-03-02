@@ -21,6 +21,7 @@ public class SourceXml extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SourceXml.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SourceXml(Service service, ControlPoint cp)
     {

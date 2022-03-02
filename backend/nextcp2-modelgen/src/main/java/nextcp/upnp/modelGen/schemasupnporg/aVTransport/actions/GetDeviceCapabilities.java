@@ -21,6 +21,7 @@ public class GetDeviceCapabilities extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetDeviceCapabilities.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetDeviceCapabilities(Service service, GetDeviceCapabilitiesInput input, ControlPoint cp)
     {

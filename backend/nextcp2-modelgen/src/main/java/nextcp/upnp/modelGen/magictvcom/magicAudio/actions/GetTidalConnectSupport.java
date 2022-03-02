@@ -21,6 +21,7 @@ public class GetTidalConnectSupport extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetTidalConnectSupport.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetTidalConnectSupport(Service service, ControlPoint cp)
     {

@@ -21,6 +21,7 @@ public class DeleteAll extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(DeleteAll.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public DeleteAll(Service service, ControlPoint cp)
     {

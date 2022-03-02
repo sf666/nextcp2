@@ -21,6 +21,7 @@ public class SetRAATEnable extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetRAATEnable.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetRAATEnable(Service service, SetRAATEnableInput input, ControlPoint cp)
     {

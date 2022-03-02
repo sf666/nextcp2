@@ -21,6 +21,7 @@ public class GetVolumeDBRange extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetVolumeDBRange.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetVolumeDBRange(Service service, GetVolumeDBRangeInput input, ControlPoint cp)
     {

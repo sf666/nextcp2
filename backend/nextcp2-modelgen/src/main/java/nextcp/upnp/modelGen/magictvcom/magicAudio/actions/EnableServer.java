@@ -21,6 +21,7 @@ public class EnableServer extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(EnableServer.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public EnableServer(Service service, EnableServerInput input, ControlPoint cp)
     {

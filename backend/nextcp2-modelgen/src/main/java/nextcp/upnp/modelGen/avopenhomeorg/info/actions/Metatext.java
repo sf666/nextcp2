@@ -21,6 +21,7 @@ public class Metatext extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(Metatext.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public Metatext(Service service, ControlPoint cp)
     {

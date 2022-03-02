@@ -1,4 +1,4 @@
-package nextcp.upnp.modelGen.dialmultiscreenorg.dial;
+package nextcp.upnp.modelGen.avopenhomeorg.oAuth;
 
 import org.fourthline.cling.model.UnsupportedDataException;
 import org.fourthline.cling.model.gena.CancelReason;
@@ -15,20 +15,20 @@ import org.slf4j.LoggerFactory;
  *
  * Generated UPnP EventListener Implementation.  
  */
-public class dialServiceEventListenerImpl implements IdialServiceEventListener 
+public class OAuthServiceEventListenerImpl implements IOAuthServiceEventListener 
 {
-    private static Logger log = LoggerFactory.getLogger(dialService.class.getName());
-//    private dialServiceStateVariable stateVariable = new dialServiceStateVariable();
+    private static Logger log = LoggerFactory.getLogger(OAuthService.class.getName());
+    private OAuthServiceStateVariable stateVariable = new OAuthServiceStateVariable();
 
     /**
      * Access to state variable
      * 
      * @return state variable
      */
-//    public dialServiceStateVariable getStateVariable()
-//    {
-//        return stateVariable;
-//    }
+    public OAuthServiceStateVariable getStateVariable()
+    {
+        return stateVariable;
+    }
 
     //
     // Generic event callbacks
@@ -106,4 +106,31 @@ public class dialServiceEventListenerImpl implements IdialServiceEventListener
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
+    public void publicKeyChange(String value)
+    {
+        stateVariable.PublicKey = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "PublicKey", value));
+        }
+    }
+    
+    public void supportedServicesChange(String value)
+    {
+        stateVariable.SupportedServices = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "SupportedServices", value));
+        }
+    }
+    
+    public void updateIdChange(Long value)
+    {
+        stateVariable.UpdateId = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "UpdateId", value));
+        }
+    }
+    
 }

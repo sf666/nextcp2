@@ -21,6 +21,7 @@ public class GetMagicAudioVer extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetMagicAudioVer.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetMagicAudioVer(Service service, ControlPoint cp)
     {

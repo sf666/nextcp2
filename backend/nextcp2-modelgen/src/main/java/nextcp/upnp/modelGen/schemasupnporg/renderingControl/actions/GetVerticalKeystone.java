@@ -21,6 +21,7 @@ public class GetVerticalKeystone extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetVerticalKeystone.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetVerticalKeystone(Service service, GetVerticalKeystoneInput input, ControlPoint cp)
     {

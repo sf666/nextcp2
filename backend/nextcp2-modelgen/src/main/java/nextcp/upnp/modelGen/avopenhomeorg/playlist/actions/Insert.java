@@ -21,6 +21,7 @@ public class Insert extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(Insert.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public Insert(Service service, InsertInput input, ControlPoint cp)
     {

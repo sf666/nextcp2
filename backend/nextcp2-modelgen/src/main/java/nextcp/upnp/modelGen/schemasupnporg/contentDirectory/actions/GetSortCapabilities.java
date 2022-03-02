@@ -21,6 +21,7 @@ public class GetSortCapabilities extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetSortCapabilities.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetSortCapabilities(Service service, ControlPoint cp)
     {

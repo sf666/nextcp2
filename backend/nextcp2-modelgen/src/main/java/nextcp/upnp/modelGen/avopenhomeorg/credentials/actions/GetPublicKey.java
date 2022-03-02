@@ -21,6 +21,7 @@ public class GetPublicKey extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetPublicKey.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetPublicKey(Service service, ControlPoint cp)
     {

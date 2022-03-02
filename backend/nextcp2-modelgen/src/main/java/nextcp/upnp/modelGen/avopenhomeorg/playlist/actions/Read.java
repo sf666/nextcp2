@@ -21,6 +21,7 @@ public class Read extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(Read.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public Read(Service service, ReadInput input, ControlPoint cp)
     {

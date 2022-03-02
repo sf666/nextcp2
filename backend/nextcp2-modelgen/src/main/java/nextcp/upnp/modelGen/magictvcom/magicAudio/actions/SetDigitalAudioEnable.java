@@ -21,6 +21,7 @@ public class SetDigitalAudioEnable extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetDigitalAudioEnable.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetDigitalAudioEnable(Service service, SetDigitalAudioEnableInput input, ControlPoint cp)
     {

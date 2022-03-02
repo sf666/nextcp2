@@ -21,6 +21,7 @@ public class SelectPreset extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SelectPreset.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SelectPreset(Service service, SelectPresetInput input, ControlPoint cp)
     {

@@ -21,6 +21,7 @@ public class SetRepeat extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetRepeat.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetRepeat(Service service, SetRepeatInput input, ControlPoint cp)
     {

@@ -21,6 +21,7 @@ public class SetShuffle extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetShuffle.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetShuffle(Service service, SetShuffleInput input, ControlPoint cp)
     {

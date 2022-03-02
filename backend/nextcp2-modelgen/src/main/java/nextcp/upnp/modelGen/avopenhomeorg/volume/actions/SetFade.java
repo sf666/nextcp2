@@ -21,6 +21,7 @@ public class SetFade extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetFade.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetFade(Service service, SetFadeInput input, ControlPoint cp)
     {

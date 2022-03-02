@@ -21,6 +21,7 @@ public class Model extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(Model.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public Model(Service service, ControlPoint cp)
     {

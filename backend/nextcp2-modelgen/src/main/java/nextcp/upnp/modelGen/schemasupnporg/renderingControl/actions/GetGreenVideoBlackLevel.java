@@ -21,6 +21,7 @@ public class GetGreenVideoBlackLevel extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetGreenVideoBlackLevel.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetGreenVideoBlackLevel(Service service, GetGreenVideoBlackLevelInput input, ControlPoint cp)
     {

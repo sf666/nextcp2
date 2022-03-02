@@ -21,6 +21,7 @@ public class ConnectionComplete extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(ConnectionComplete.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public ConnectionComplete(Service service, ConnectionCompleteInput input, ControlPoint cp)
     {

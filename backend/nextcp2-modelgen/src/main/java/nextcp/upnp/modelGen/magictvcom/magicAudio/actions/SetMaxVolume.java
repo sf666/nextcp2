@@ -21,6 +21,7 @@ public class SetMaxVolume extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetMaxVolume.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetMaxVolume(Service service, SetMaxVolumeInput input, ControlPoint cp)
     {

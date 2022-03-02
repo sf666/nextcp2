@@ -21,6 +21,7 @@ public class GetNetworkLED extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetNetworkLED.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetNetworkLED(Service service, ControlPoint cp)
     {

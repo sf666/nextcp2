@@ -21,6 +21,7 @@ public class BalanceDec extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(BalanceDec.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public BalanceDec(Service service, ControlPoint cp)
     {

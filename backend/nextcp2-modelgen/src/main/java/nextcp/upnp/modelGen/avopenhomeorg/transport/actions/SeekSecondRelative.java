@@ -21,6 +21,7 @@ public class SeekSecondRelative extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SeekSecondRelative.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SeekSecondRelative(Service service, SeekSecondRelativeInput input, ControlPoint cp)
     {

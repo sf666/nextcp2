@@ -21,6 +21,7 @@ public class ChannelsMax extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(ChannelsMax.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public ChannelsMax(Service service, ControlPoint cp)
     {

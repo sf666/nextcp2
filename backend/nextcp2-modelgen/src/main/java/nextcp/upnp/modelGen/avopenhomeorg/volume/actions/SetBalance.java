@@ -21,6 +21,7 @@ public class SetBalance extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetBalance.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetBalance(Service service, SetBalanceInput input, ControlPoint cp)
     {

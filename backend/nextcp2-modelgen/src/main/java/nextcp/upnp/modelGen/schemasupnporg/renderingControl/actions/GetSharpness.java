@@ -21,6 +21,7 @@ public class GetSharpness extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetSharpness.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetSharpness(Service service, GetSharpnessInput input, ControlPoint cp)
     {

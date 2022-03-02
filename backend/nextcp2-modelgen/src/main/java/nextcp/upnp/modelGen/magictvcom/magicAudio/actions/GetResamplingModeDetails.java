@@ -21,6 +21,7 @@ public class GetResamplingModeDetails extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetResamplingModeDetails.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetResamplingModeDetails(Service service, GetResamplingModeDetailsInput input, ControlPoint cp)
     {

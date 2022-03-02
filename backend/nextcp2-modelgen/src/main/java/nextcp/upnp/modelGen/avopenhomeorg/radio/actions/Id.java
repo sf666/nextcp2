@@ -21,6 +21,7 @@ public class Id extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(Id.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public Id(Service service, ControlPoint cp)
     {

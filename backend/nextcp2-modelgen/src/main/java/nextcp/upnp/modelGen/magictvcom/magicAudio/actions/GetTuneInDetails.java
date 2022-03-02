@@ -21,6 +21,7 @@ public class GetTuneInDetails extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetTuneInDetails.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetTuneInDetails(Service service, ControlPoint cp)
     {

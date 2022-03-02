@@ -21,6 +21,7 @@ public class GetOutputEnable extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetOutputEnable.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetOutputEnable(Service service, GetOutputEnableInput input, ControlPoint cp)
     {

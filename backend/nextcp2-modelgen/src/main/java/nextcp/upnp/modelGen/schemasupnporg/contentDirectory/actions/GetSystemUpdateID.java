@@ -21,6 +21,7 @@ public class GetSystemUpdateID extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetSystemUpdateID.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetSystemUpdateID(Service service, ControlPoint cp)
     {

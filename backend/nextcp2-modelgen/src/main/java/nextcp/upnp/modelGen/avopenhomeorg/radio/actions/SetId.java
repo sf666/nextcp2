@@ -21,6 +21,7 @@ public class SetId extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetId.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetId(Service service, SetIdInput input, ControlPoint cp)
     {

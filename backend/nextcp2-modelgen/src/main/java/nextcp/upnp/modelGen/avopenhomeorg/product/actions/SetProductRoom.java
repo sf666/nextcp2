@@ -21,6 +21,7 @@ public class SetProductRoom extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetProductRoom.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetProductRoom(Service service, SetProductRoomInput input, ControlPoint cp)
     {

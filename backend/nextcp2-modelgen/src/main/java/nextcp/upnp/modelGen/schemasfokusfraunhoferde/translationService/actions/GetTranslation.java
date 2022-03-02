@@ -21,6 +21,7 @@ public class GetTranslation extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetTranslation.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetTranslation(Service service, GetTranslationInput input, ControlPoint cp)
     {

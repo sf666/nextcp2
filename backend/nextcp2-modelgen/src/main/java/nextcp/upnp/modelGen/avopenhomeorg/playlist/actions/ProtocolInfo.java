@@ -21,6 +21,7 @@ public class ProtocolInfo extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(ProtocolInfo.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public ProtocolInfo(Service service, ControlPoint cp)
     {

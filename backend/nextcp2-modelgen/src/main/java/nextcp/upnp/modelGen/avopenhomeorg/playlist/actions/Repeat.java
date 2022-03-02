@@ -21,6 +21,7 @@ public class Repeat extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(Repeat.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public Repeat(Service service, ControlPoint cp)
     {

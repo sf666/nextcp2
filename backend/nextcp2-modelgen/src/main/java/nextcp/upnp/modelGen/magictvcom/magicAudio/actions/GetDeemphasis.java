@@ -21,6 +21,7 @@ public class GetDeemphasis extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetDeemphasis.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetDeemphasis(Service service, ControlPoint cp)
     {

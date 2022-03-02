@@ -21,6 +21,7 @@ public class GetDetailsEx extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetDetailsEx.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetDetailsEx(Service service, ControlPoint cp)
     {

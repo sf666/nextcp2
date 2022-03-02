@@ -21,6 +21,7 @@ public class GetRAATVer extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetRAATVer.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetRAATVer(Service service, ControlPoint cp)
     {

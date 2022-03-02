@@ -133,24 +133,6 @@ public class ContentDirectoryServiceEventListenerImpl implements IContentDirecto
         }
     }
     
-    public void x_FeatureListChange(String value)
-    {
-        stateVariable.X_FeatureList = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "X_FeatureList", value));
-        }
-    }
-    
-    public void sortExtensionCapabilitiesChange(String value)
-    {
-        stateVariable.SortExtensionCapabilities = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "SortExtensionCapabilities", value));
-        }
-    }
-    
     public void containerUpdateIDsChange(String value)
     {
         stateVariable.ContainerUpdateIDs = value;
@@ -166,15 +148,6 @@ public class ContentDirectoryServiceEventListenerImpl implements IContentDirecto
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "SearchCapabilities", value));
-        }
-    }
-    
-    public void featureListChange(String value)
-    {
-        stateVariable.FeatureList = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "FeatureList", value));
         }
     }
     

@@ -21,6 +21,7 @@ public class GetMediaInfo_Ext extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetMediaInfo_Ext.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetMediaInfo_Ext(Service service, GetMediaInfo_ExtInput input, ControlPoint cp)
     {

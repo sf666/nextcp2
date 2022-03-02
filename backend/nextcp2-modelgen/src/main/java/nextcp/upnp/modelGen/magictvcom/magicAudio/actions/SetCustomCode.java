@@ -21,6 +21,7 @@ public class SetCustomCode extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetCustomCode.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetCustomCode(Service service, SetCustomCodeInput input, ControlPoint cp)
     {

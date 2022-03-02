@@ -21,6 +21,7 @@ public class Previous extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(Previous.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public Previous(Service service, PreviousInput input, ControlPoint cp)
     {

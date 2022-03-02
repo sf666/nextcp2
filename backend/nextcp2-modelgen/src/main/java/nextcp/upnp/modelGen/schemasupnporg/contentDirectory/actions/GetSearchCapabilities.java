@@ -21,10 +21,12 @@ public class GetSearchCapabilities extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetSearchCapabilities.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetSearchCapabilities(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetSearchCapabilities"), new NextcpClientInfo()), cp);
+
     }
 
     public GetSearchCapabilitiesOutput executeAction()

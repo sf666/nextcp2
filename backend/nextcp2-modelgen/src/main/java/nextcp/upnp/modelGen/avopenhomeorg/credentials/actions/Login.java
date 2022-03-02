@@ -21,6 +21,7 @@ public class Login extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(Login.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public Login(Service service, LoginInput input, ControlPoint cp)
     {

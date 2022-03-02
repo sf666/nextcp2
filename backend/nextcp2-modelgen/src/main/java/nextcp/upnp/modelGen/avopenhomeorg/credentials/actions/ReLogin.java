@@ -21,6 +21,7 @@ public class ReLogin extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(ReLogin.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public ReLogin(Service service, ReLoginInput input, ControlPoint cp)
     {

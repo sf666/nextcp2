@@ -15,6 +15,11 @@ import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.GetCurrentConnectionIDs;
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.GetCurrentConnectionIDsOutput;
+import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.ConnectionComplete;
+import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.ConnectionCompleteInput;
+import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.PrepareForConnection;
+import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.PrepareForConnectionOutput;
+import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.PrepareForConnectionInput;
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.GetProtocolInfo;
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.GetProtocolInfoOutput;
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.GetCurrentConnectionInfo;
@@ -44,18 +49,25 @@ public class ConnectionManagerService
     {
         this.upnpService = upnpService;
         connectionManagerService = device.findService(new ServiceType("schemas-upnp-org", "ConnectionManager"));
-        subscription = new ConnectionManagerServiceSubscription(connectionManagerService, 600);
-        try
+        if (connectionManagerService != null)
         {
-            SendingSubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingSubscribe(subscription);
-            protocol.run();
-        }
-        catch (ProtocolCreationException ex)
-        {
-            log.error("Event subscription", ex);
-        }
-
-        log.info(String.format("initialized service 'ConnectionManager' for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	        subscription = new ConnectionManagerServiceSubscription(connectionManagerService, 600);
+	        try
+	        {
+	            SendingSubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingSubscribe(subscription);
+	            protocol.run();
+	        }
+	        catch (ProtocolCreationException ex)
+	        {
+	            log.error("Event subscription", ex);
+	        }
+	
+	        log.info(String.format("initialized service 'ConnectionManager' for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	    }
+	    else
+	    {
+	        log.warn(String.format("initialized service 'ConnectionManager' failed for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	    }
     }
     
     public void addSubscriptionEventListener(IConnectionManagerServiceEventListener listener)
@@ -78,6 +90,19 @@ public class ConnectionManagerService
     {
         GetCurrentConnectionIDs getCurrentConnectionIDs = new GetCurrentConnectionIDs(connectionManagerService,  upnpService.getControlPoint());
         GetCurrentConnectionIDsOutput res = getCurrentConnectionIDs.executeAction();
+        return res;        
+    }
+
+    public void connectionComplete(ConnectionCompleteInput inp)
+    {
+        ConnectionComplete connectionComplete = new ConnectionComplete(connectionManagerService, inp, upnpService.getControlPoint());
+        connectionComplete.executeAction();
+    }
+
+    public PrepareForConnectionOutput prepareForConnection(PrepareForConnectionInput inp)
+    {
+        PrepareForConnection prepareForConnection = new PrepareForConnection(connectionManagerService, inp, upnpService.getControlPoint());
+        PrepareForConnectionOutput res = prepareForConnection.executeAction();
         return res;        
     }
 

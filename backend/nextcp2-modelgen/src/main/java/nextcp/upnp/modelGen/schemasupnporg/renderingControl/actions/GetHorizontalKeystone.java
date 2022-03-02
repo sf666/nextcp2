@@ -21,6 +21,7 @@ public class GetHorizontalKeystone extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetHorizontalKeystone.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetHorizontalKeystone(Service service, GetHorizontalKeystoneInput input, ControlPoint cp)
     {

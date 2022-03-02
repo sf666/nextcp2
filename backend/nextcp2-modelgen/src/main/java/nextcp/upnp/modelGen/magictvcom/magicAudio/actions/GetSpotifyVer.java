@@ -21,6 +21,7 @@ public class GetSpotifyVer extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetSpotifyVer.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetSpotifyVer(Service service, ControlPoint cp)
     {

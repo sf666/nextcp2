@@ -21,12 +21,13 @@ public class RegisterDevice extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(RegisterDevice.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public RegisterDevice(Service service, RegisterDeviceInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("RegisterDevice"), new NextcpClientInfo()), cp);
 
-        throw new RuntimeException("(Base64Datatype)");
+        getActionInvocation().setInput("RegistrationReqMsg", b64.getString(input.RegistrationReqMsg));
     }
 
     public RegisterDeviceOutput executeAction()

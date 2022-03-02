@@ -21,6 +21,7 @@ public class Shuffle extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(Shuffle.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public Shuffle(Service service, ControlPoint cp)
     {

@@ -21,6 +21,7 @@ public class SetPlaybackClockSource extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetPlaybackClockSource.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetPlaybackClockSource(Service service, SetPlaybackClockSourceInput input, ControlPoint cp)
     {

@@ -21,6 +21,7 @@ public class GetLoudness extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetLoudness.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetLoudness(Service service, GetLoudnessInput input, ControlPoint cp)
     {

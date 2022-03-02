@@ -21,6 +21,7 @@ public class SetTidalConnectEnable extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetTidalConnectEnable.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetTidalConnectEnable(Service service, SetTidalConnectEnableInput input, ControlPoint cp)
     {

@@ -21,6 +21,7 @@ public class VolumeInc extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(VolumeInc.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public VolumeInc(Service service, ControlPoint cp)
     {

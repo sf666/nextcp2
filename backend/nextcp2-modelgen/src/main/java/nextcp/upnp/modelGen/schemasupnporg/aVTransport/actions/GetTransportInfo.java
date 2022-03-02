@@ -21,6 +21,7 @@ public class GetTransportInfo extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetTransportInfo.class.getName());
     private ActionInvocation<?> invocation;
+  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetTransportInfo(Service service, GetTransportInfoInput input, ControlPoint cp)
     {
