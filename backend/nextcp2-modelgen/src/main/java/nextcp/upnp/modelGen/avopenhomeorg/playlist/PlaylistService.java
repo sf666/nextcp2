@@ -65,6 +65,8 @@ import nextcp.upnp.modelGen.avopenhomeorg.playlist.actions.IdOutput;
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
+ * Template: service.ftl
+ * 
  * Generated UPnP Service class for calling Actions synchroniously.  
  */
 public class PlaylistService

@@ -16,6 +16,9 @@ import nextcp.upnp.NextcpClientInfo;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
+ *
+ * Template: action.ftl
+ *  
  */
 public class SetOauth extends ActionCallback
 {

@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
+ * Template: serviceEventImpl.ftl
+ *  
  * Generated UPnP EventListener Implementation.  
  */
 public class AVTransportServiceEventListenerImpl implements IAVTransportServiceEventListener 
@@ -106,6 +108,15 @@ public class AVTransportServiceEventListenerImpl implements IAVTransportServiceE
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
+    public void currentMediaCategoryChange(String value)
+    {
+        stateVariable.CurrentMediaCategory = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "CurrentMediaCategory", value));
+        }
+    }
+    
     public void absoluteTimePositionChange(String value)
     {
         stateVariable.AbsoluteTimePosition = value;
@@ -187,21 +198,21 @@ public class AVTransportServiceEventListenerImpl implements IAVTransportServiceE
         }
     }
     
-    public void nextAVTransportURIMetaDataChange(String value)
-    {
-        stateVariable.NextAVTransportURIMetaData = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "NextAVTransportURIMetaData", value));
-        }
-    }
-    
     public void playbackStorageMediumChange(String value)
     {
         stateVariable.PlaybackStorageMedium = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "PlaybackStorageMedium", value));
+        }
+    }
+    
+    public void nextAVTransportURIMetaDataChange(String value)
+    {
+        stateVariable.NextAVTransportURIMetaData = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "NextAVTransportURIMetaData", value));
         }
     }
     
@@ -277,12 +288,12 @@ public class AVTransportServiceEventListenerImpl implements IAVTransportServiceE
         }
     }
     
-    public void currentPlayModeChange(String value)
+    public void dRMStateChange(String value)
     {
-        stateVariable.CurrentPlayMode = value;
+        stateVariable.DRMState = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "CurrentPlayMode", value));
+            log.debug(String.format("StateVariable : %s: %s", "DRMState", value));
         }
     }
     
@@ -292,6 +303,15 @@ public class AVTransportServiceEventListenerImpl implements IAVTransportServiceE
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "CurrentTrackDuration", value));
+        }
+    }
+    
+    public void currentPlayModeChange(String value)
+    {
+        stateVariable.CurrentPlayMode = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "CurrentPlayMode", value));
         }
     }
     

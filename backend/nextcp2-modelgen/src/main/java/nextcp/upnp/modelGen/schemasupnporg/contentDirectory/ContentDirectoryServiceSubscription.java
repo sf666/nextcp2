@@ -21,6 +21,8 @@ import nextcp.upnp.ISubscriptionEventListener;
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
+ * Template: serviceSubscription.ftl
+ *  
  * Generated UPnP subscription service class.  
  */
 public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
@@ -106,9 +108,6 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "TransferIDs":
-                        transferIDsChange((String) stateVar.getValue());
-                        break;
                     case "SystemUpdateID":
                         systemUpdateIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
@@ -120,6 +119,9 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
                         break;
                     case "SearchCapabilities":
                         searchCapabilitiesChange((String) stateVar.getValue());
+                        break;
+                    case "X_RemoteSharingEnabled":
+                        x_RemoteSharingEnabledChange((Boolean) stateVar.getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -140,14 +142,6 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
             listener.eventProcessed();
         }
     }
-
-    private void transferIDsChange(String value)
-    {
-        for (IContentDirectoryServiceEventListener listener : eventListener)
-        {
-            listener.transferIDsChange(value);
-        }
-    }    
 
     private void systemUpdateIDChange(Long value)
     {
@@ -178,6 +172,14 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
         for (IContentDirectoryServiceEventListener listener : eventListener)
         {
             listener.searchCapabilitiesChange(value);
+        }
+    }    
+
+    private void x_RemoteSharingEnabledChange(Boolean value)
+    {
+        for (IContentDirectoryServiceEventListener listener : eventListener)
+        {
+            listener.x_RemoteSharingEnabledChange(value);
         }
     }    
 }

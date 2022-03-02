@@ -16,12 +16,14 @@ import nextcp.upnp.NextcpClientInfo;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
+ *
+ * Template: action.ftl
+ *  
  */
 public class ClearLonglivedLivedToken extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(ClearLonglivedLivedToken.class.getName());
     private ActionInvocation<?> invocation;
-  	private Base64Datatype b64 = new Base64Datatype();
 
     public ClearLonglivedLivedToken(Service service, ClearLonglivedLivedTokenInput input, ControlPoint cp)
     {

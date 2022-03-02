@@ -23,6 +23,8 @@ import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.GetSortCapab
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.Search;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.SearchOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.SearchInput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.X_GetRemoteSharingStatus;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.X_GetRemoteSharingStatusOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.GetSystemUpdateID;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.GetSystemUpdateIDOutput;
 
@@ -31,6 +33,8 @@ import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.GetSystemUpd
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
+ * Template: service.ftl
+ * 
  * Generated UPnP Service class for calling Actions synchroniously.  
  */
 public class ContentDirectoryService
@@ -111,6 +115,13 @@ public class ContentDirectoryService
     {
         Search search = new Search(contentDirectoryService, inp, upnpService.getControlPoint());
         SearchOutput res = search.executeAction();
+        return res;        
+    }
+
+    public X_GetRemoteSharingStatusOutput x_GetRemoteSharingStatus()
+    {
+        X_GetRemoteSharingStatus x_GetRemoteSharingStatus = new X_GetRemoteSharingStatus(contentDirectoryService,  upnpService.getControlPoint());
+        X_GetRemoteSharingStatusOutput res = x_GetRemoteSharingStatus.executeAction();
         return res;        
     }
 

@@ -16,12 +16,14 @@ import nextcp.upnp.NextcpClientInfo;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
+ *
+ * Template: action.ftl
+ *  
  */
 public class GetDRMState extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetDRMState.class.getName());
     private ActionInvocation<?> invocation;
-  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetDRMState(Service service, GetDRMStateInput input, ControlPoint cp)
     {

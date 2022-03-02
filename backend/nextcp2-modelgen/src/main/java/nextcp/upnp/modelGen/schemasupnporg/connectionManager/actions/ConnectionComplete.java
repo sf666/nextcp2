@@ -16,12 +16,14 @@ import nextcp.upnp.NextcpClientInfo;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
+ *
+ * Template: action.ftl
+ *  
  */
 public class ConnectionComplete extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(ConnectionComplete.class.getName());
     private ActionInvocation<?> invocation;
-  	private Base64Datatype b64 = new Base64Datatype();
 
     public ConnectionComplete(Service service, ConnectionCompleteInput input, ControlPoint cp)
     {

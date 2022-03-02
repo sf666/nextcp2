@@ -2,6 +2,9 @@ package ${packageName};
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
+ *
+ * Template: actionParam.ftl
+ *  
  */
 public class ${className}
 {

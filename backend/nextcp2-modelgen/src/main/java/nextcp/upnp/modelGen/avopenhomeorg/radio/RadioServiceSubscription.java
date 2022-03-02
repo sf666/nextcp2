@@ -21,6 +21,8 @@ import nextcp.upnp.ISubscriptionEventListener;
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
+ * Template: serviceSubscription.ftl
+ *  
  * Generated UPnP subscription service class.  
  */
 public class RadioServiceSubscription extends RemoteGENASubscription

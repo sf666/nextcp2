@@ -16,12 +16,14 @@ import nextcp.upnp.NextcpClientInfo;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
+ *
+ * Template: action.ftl
+ *  
  */
 public class SetQobuzQuality extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(SetQobuzQuality.class.getName());
     private ActionInvocation<?> invocation;
-  	private Base64Datatype b64 = new Base64Datatype();
 
     public SetQobuzQuality(Service service, SetQobuzQualityInput input, ControlPoint cp)
     {

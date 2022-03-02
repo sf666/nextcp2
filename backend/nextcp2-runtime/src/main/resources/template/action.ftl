@@ -16,12 +16,17 @@ import nextcp.upnp.NextcpClientInfo;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
+ *
+ * Template: action.ftl
+ *  
  */
 public class ${className} extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(${className}.class.getName());
     private ActionInvocation<?> invocation;
+<#if varInList?filter(x -> x.upnpDataType == "(Base64Datatype)")?size != 0>
   	private Base64Datatype b64 = new Base64Datatype();
+</#if>
 
 <#if varInList?has_content>
     public ${className}(Service service, ${className}Input input, ControlPoint cp)

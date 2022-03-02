@@ -21,6 +21,8 @@ import nextcp.upnp.ISubscriptionEventListener;
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
+ * Template: serviceSubscription.ftl
+ *  
  * Generated UPnP subscription service class.  
  */
 public class RenderingControlServiceSubscription extends RemoteGENASubscription
@@ -106,26 +108,59 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "MinVolumeDB":
-                        minVolumeDBChange((Integer) stateVar.getValue());
+                    case "Loudness":
+                        loudnessChange((Boolean) stateVar.getValue());
                         break;
-                    case "Volume":
-                        volumeChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                    case "Brightness":
+                        brightnessChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
-                    case "MaxVolumeDB":
-                        maxVolumeDBChange((Integer) stateVar.getValue());
+                    case "GreenVideoBlackLevel":
+                        greenVideoBlackLevelChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
-                    case "LastChange":
-                        lastChangeChange((String) stateVar.getValue());
+                    case "ColorTemperature":
+                        colorTemperatureChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
-                    case "PresetNameList":
-                        presetNameListChange((String) stateVar.getValue());
+                    case "HorizontalKeystone":
+                        horizontalKeystoneChange((Integer) stateVar.getValue());
+                        break;
+                    case "BlueVideoGain":
+                        blueVideoGainChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "RedVideoGain":
+                        redVideoGainChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "VerticalKeystone":
+                        verticalKeystoneChange((Integer) stateVar.getValue());
+                        break;
+                    case "RedVideoBlackLevel":
+                        redVideoBlackLevelChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "Mute":
                         muteChange((Boolean) stateVar.getValue());
                         break;
                     case "VolumeDB":
                         volumeDBChange((Integer) stateVar.getValue());
+                        break;
+                    case "BlueVideoBlackLevel":
+                        blueVideoBlackLevelChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "PresetNameList":
+                        presetNameListChange((String) stateVar.getValue());
+                        break;
+                    case "Contrast":
+                        contrastChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "GreenVideoGain":
+                        greenVideoGainChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "Sharpness":
+                        sharpnessChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "Volume":
+                        volumeChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "LastChange":
+                        lastChangeChange((String) stateVar.getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -147,43 +182,75 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
         }
     }
 
-    private void minVolumeDBChange(Integer value)
+    private void loudnessChange(Boolean value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
-            listener.minVolumeDBChange(value);
+            listener.loudnessChange(value);
         }
     }    
 
-    private void volumeChange(Long value)
+    private void brightnessChange(Long value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
-            listener.volumeChange(value);
+            listener.brightnessChange(value);
         }
     }    
 
-    private void maxVolumeDBChange(Integer value)
+    private void greenVideoBlackLevelChange(Long value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
-            listener.maxVolumeDBChange(value);
+            listener.greenVideoBlackLevelChange(value);
         }
     }    
 
-    private void lastChangeChange(String value)
+    private void colorTemperatureChange(Long value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
-            listener.lastChangeChange(value);
+            listener.colorTemperatureChange(value);
         }
     }    
 
-    private void presetNameListChange(String value)
+    private void horizontalKeystoneChange(Integer value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
-            listener.presetNameListChange(value);
+            listener.horizontalKeystoneChange(value);
+        }
+    }    
+
+    private void blueVideoGainChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.blueVideoGainChange(value);
+        }
+    }    
+
+    private void redVideoGainChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.redVideoGainChange(value);
+        }
+    }    
+
+    private void verticalKeystoneChange(Integer value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.verticalKeystoneChange(value);
+        }
+    }    
+
+    private void redVideoBlackLevelChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.redVideoBlackLevelChange(value);
         }
     }    
 
@@ -200,6 +267,62 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
             listener.volumeDBChange(value);
+        }
+    }    
+
+    private void blueVideoBlackLevelChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.blueVideoBlackLevelChange(value);
+        }
+    }    
+
+    private void presetNameListChange(String value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.presetNameListChange(value);
+        }
+    }    
+
+    private void contrastChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.contrastChange(value);
+        }
+    }    
+
+    private void greenVideoGainChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.greenVideoGainChange(value);
+        }
+    }    
+
+    private void sharpnessChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.sharpnessChange(value);
+        }
+    }    
+
+    private void volumeChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.volumeChange(value);
+        }
+    }    
+
+    private void lastChangeChange(String value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.lastChangeChange(value);
         }
     }    
 }

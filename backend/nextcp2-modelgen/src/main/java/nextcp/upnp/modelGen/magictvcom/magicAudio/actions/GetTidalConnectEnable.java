@@ -16,12 +16,14 @@ import nextcp.upnp.NextcpClientInfo;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
+ *
+ * Template: action.ftl
+ *  
  */
 public class GetTidalConnectEnable extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(GetTidalConnectEnable.class.getName());
     private ActionInvocation<?> invocation;
-  	private Base64Datatype b64 = new Base64Datatype();
 
     public GetTidalConnectEnable(Service service, ControlPoint cp)
     {

@@ -15,11 +15,6 @@ import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.GetCurrentConnectionIDs;
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.GetCurrentConnectionIDsOutput;
-import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.ConnectionComplete;
-import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.ConnectionCompleteInput;
-import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.PrepareForConnection;
-import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.PrepareForConnectionOutput;
-import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.PrepareForConnectionInput;
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.GetProtocolInfo;
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.GetProtocolInfoOutput;
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.GetCurrentConnectionInfo;
@@ -31,6 +26,8 @@ import nextcp.upnp.modelGen.schemasupnporg.connectionManager.actions.GetCurrentC
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
+ * Template: service.ftl
+ * 
  * Generated UPnP Service class for calling Actions synchroniously.  
  */
 public class ConnectionManagerService
@@ -90,19 +87,6 @@ public class ConnectionManagerService
     {
         GetCurrentConnectionIDs getCurrentConnectionIDs = new GetCurrentConnectionIDs(connectionManagerService,  upnpService.getControlPoint());
         GetCurrentConnectionIDsOutput res = getCurrentConnectionIDs.executeAction();
-        return res;        
-    }
-
-    public void connectionComplete(ConnectionCompleteInput inp)
-    {
-        ConnectionComplete connectionComplete = new ConnectionComplete(connectionManagerService, inp, upnpService.getControlPoint());
-        connectionComplete.executeAction();
-    }
-
-    public PrepareForConnectionOutput prepareForConnection(PrepareForConnectionInput inp)
-    {
-        PrepareForConnection prepareForConnection = new PrepareForConnection(connectionManagerService, inp, upnpService.getControlPoint());
-        PrepareForConnectionOutput res = prepareForConnection.executeAction();
         return res;        
     }
 

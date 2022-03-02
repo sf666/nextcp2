@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
+ * Template: serviceEventImpl.ftl
+ *  
  * Generated UPnP EventListener Implementation.  
  */
 public class TimeServiceEventListenerImpl implements ITimeServiceEventListener 

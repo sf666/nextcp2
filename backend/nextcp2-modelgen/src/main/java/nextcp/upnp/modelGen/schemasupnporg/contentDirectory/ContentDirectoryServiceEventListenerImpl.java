@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
+ * Template: serviceEventImpl.ftl
+ *  
  * Generated UPnP EventListener Implementation.  
  */
 public class ContentDirectoryServiceEventListenerImpl implements IContentDirectoryServiceEventListener 
@@ -106,15 +108,6 @@ public class ContentDirectoryServiceEventListenerImpl implements IContentDirecto
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void transferIDsChange(String value)
-    {
-        stateVariable.TransferIDs = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "TransferIDs", value));
-        }
-    }
-    
     public void systemUpdateIDChange(Long value)
     {
         stateVariable.SystemUpdateID = value;
@@ -148,6 +141,15 @@ public class ContentDirectoryServiceEventListenerImpl implements IContentDirecto
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "SearchCapabilities", value));
+        }
+    }
+    
+    public void x_RemoteSharingEnabledChange(Boolean value)
+    {
+        stateVariable.X_RemoteSharingEnabled = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "X_RemoteSharingEnabled", value));
         }
     }
     

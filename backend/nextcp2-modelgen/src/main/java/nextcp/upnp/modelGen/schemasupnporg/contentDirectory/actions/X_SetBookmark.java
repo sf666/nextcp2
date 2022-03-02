@@ -16,12 +16,14 @@ import nextcp.upnp.NextcpClientInfo;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
+ *
+ * Template: action.ftl
+ *  
  */
 public class X_SetBookmark extends ActionCallback
 {
     private static Logger log = LoggerFactory.getLogger(X_SetBookmark.class.getName());
     private ActionInvocation<?> invocation;
-  	private Base64Datatype b64 = new Base64Datatype();
 
     public X_SetBookmark(Service service, X_SetBookmarkInput input, ControlPoint cp)
     {
