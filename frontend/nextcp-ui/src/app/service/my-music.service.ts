@@ -18,7 +18,7 @@ export class MyMusicService {
   constructor(
     private httpService: HttpService,
     private contentDirectoryService: ContentDirectoryService) {
-    contentDirectoryService.currentContainerListChanged$.subscribe(data => this.updateContainerStatus())
+    contentDirectoryService.browseFinished$.subscribe(data => this.updateContainerStatus())
   }
 
   private updateContainerStatus(): void {
