@@ -41,8 +41,8 @@ export class ContentDirectoryService {
   public musicTracks_: MusicItemDto[] = [];
   public otherItems_: MusicItemDto[] = [];
 
-  currentContainerListChanged$: Subject<ContainerItemDto> = new Subject();
-  browseFinished$: Subject<any> = new Subject();
+  // notfiy other about content change
+  browseFinished$: Subject<ContainerItemDto> = new Subject();
 
   constructor(
     private httpService: HttpService,
@@ -211,7 +211,6 @@ export class ContentDirectoryService {
    */
   updateContainer(data: ContainerItemDto): void {
     this.currentContainerList = data;
-    this.currentContainerListChanged$.next(data);
     if (this.lastOidIsResoredFromCache && !(data.containerDto.length > 0 || data.musicItemDto.length > 0)) {
       this.browseToRoot('');
       this.lastOidIsResoredFromCache = false;
@@ -226,7 +225,7 @@ export class ContentDirectoryService {
       this.musicTracks_ = this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0);
       this.otherItems_ = this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0);
     }
-    this.browseFinished$.next("update");
+    this.browseFinished$.next(data);
   }
 
   public allTracksSameAlbum(): boolean {

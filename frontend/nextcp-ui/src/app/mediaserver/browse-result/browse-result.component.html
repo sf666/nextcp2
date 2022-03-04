@@ -275,6 +275,7 @@
                         <img class="cardLayout image-container" src="{{container.albumartUri}}" alt="{{container.title}}">
                     </div>
                     <div class="d-flex flex-column albumDesc">
+                        <div class="playlistText">{{getOtherContainerHeadline(container)}}</div>
                         <div class="albumTitle">{{container.title}}</div>
                     </div>
                 </div>
@@ -292,6 +293,7 @@
                         <img class="cardLayout image-container" src="{{item.albumArtUrl}}" alt="{{item.title}}">
                     </div>
                     <div class="d-flex flex-column albumDesc">
+                        <div class="playlistText">{{getOtherItemHeadline(item)}}</div>
                         <div class="albumTitle">{{item.title}}</div>
                     </div>
                 </div>

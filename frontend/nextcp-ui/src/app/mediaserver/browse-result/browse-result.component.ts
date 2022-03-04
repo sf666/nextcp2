@@ -234,6 +234,46 @@ export class BrowseResultComponent implements AfterViewChecked {
     this.songOptionsServiceService.openOptionsDialog(event, item);
   }
 
+  getOtherContainerHeadline(item: ContainerDto): string {
+    if (item.objectClass.startsWith("object.container.person")) {
+      return "ARTIST";
+    } else if (item.objectClass?.startsWith("object.container.playlistContainer")) {
+      return "PLAYLIST";
+    } else if (item.objectClass?.startsWith("object.container.album")) {
+      return "ALBUM";
+    } else if (item.objectClass?.startsWith("object.container.genre")) {
+      return "GENRE";
+    } else if (item.objectClass?.startsWith("object.container.channelGroup")) {
+      return "CHANNELS";
+    } else if (item.objectClass?.startsWith("object.container.epgContainer")) {
+      return "EPG";
+    } else if (item.objectClass?.startsWith("object.container.storageSystem")) {
+      return "DEVICE";
+    } else if (item.objectClass?.startsWith("object.container.storageVolume")) {
+      return "DISC";
+    } else if (item.objectClass?.startsWith("object.container.storageFolder")) {
+      return "";
+    } else if (item.objectClass?.startsWith("object.container.bookmarkFolder")) {
+      return "BOOKMARKS";
+    }
+    return "";
+  }
+
+  getOtherItemHeadline(item: MusicItemDto): string {
+    if (item.objectClass?.startsWith("object.item.imageItem")) {
+      return "IMAGE";
+    } else if (item.objectClass?.startsWith("object.item.videoItem")) {
+      return "VIDEO";
+    } else if (item.objectClass?.startsWith("object.item.playlistItem")) {
+      return "PLAYLIST";
+    } else if (item.objectClass?.startsWith("object.item.textItem")) {
+      return "TEXT";
+    } else if (item.objectClass?.startsWith("object.item.bookmarkItem")) {
+      return "BOOKMARK";
+    }
+    return "";
+  }
+
   //
   // Like section
   // ==============================================================================
