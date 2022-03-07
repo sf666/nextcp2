@@ -370,18 +370,18 @@ public class DtoBuilder
                         break;
                     case "date":
                         itemDto.date = n.getTextContent();
-                        log.debug("numberofthidatesdisc : " + itemDto.date);
+                        log.debug("date : " + itemDto.date);
                         break;
                     case "genre":
                         itemDto.genre = n.getTextContent();
-                        log.debug("numberofthidatesdisc : " + itemDto.genre);
+                        log.debug("genre : " + itemDto.genre);
                         break;
                     case "rating":
                         try
                         {
                             String strRating = n.getTextContent();
                             itemDto.rating = Integer.parseInt(strRating);
-                            log.debug("raing : " + strRating);
+                            log.debug("rating : " + strRating);
                         }
                         catch (Exception e)
                         {
