@@ -5,6 +5,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
+ *
+ * Template: javadataclass.ftl
+ *   
  */
 public class GenericBooleanRequest
 {

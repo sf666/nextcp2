@@ -368,6 +368,14 @@ public class DtoBuilder
                         itemDto.numberOfThisDisc = n.getTextContent();
                         log.debug("numberofthisdisc : " + itemDto.numberOfThisDisc);
                         break;
+                    case "date":
+                        itemDto.date = n.getTextContent();
+                        log.debug("numberofthidatesdisc : " + itemDto.date);
+                        break;
+                    case "genre":
+                        itemDto.genre = n.getTextContent();
+                        log.debug("numberofthidatesdisc : " + itemDto.genre);
+                        break;
                     case "rating":
                         try
                         {

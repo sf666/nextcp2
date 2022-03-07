@@ -198,6 +198,7 @@ MusicItemDto:
    date: String
    audioFormat: AudioFormat
    albumArtUrl: String
+   genre: String
    rating: Integer
    musicBrainzId: MusicBrainzId
    

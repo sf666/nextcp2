@@ -5,6 +5,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
+ *
+ * Template: javadataclass.ftl
+ *   
  */
 public class MusicItemDto
 {
@@ -25,6 +28,7 @@ public class MusicItemDto
     public String date;
     public AudioFormat audioFormat;
     public String albumArtUrl;
+    public String genre;
     public Integer rating;
     public MusicBrainzId musicBrainzId;
 
@@ -32,7 +36,7 @@ public class MusicItemDto
     {
     }
 
-    public MusicItemDto(String mediaServerUDN, String streamingURL, String objectID, String objectClass, String parentId, String refId, String currentTrackMetadata, String creator, String title, String artistName, String numberOfThisDisc, String originalTrackNumber, String album, String date, AudioFormat audioFormat, String albumArtUrl, Integer rating, MusicBrainzId musicBrainzId)
+    public MusicItemDto(String mediaServerUDN, String streamingURL, String objectID, String objectClass, String parentId, String refId, String currentTrackMetadata, String creator, String title, String artistName, String numberOfThisDisc, String originalTrackNumber, String album, String date, AudioFormat audioFormat, String albumArtUrl, String genre, Integer rating, MusicBrainzId musicBrainzId)
     {
         this.mediaServerUDN = mediaServerUDN;
         this.streamingURL = streamingURL;
@@ -50,6 +54,7 @@ public class MusicItemDto
         this.date = date;
         this.audioFormat = audioFormat;
         this.albumArtUrl = albumArtUrl;
+        this.genre = genre;
         this.rating = rating;
         this.musicBrainzId = musicBrainzId;
     }
@@ -75,6 +80,7 @@ public class MusicItemDto
         sb.append("date=").append(this.date).append(", ");
         sb.append("audioFormat=").append(this.audioFormat).append(", ");
         sb.append("albumArtUrl=").append(this.albumArtUrl).append(", ");
+        sb.append("genre=").append(this.genre).append(", ");
         sb.append("rating=").append(this.rating).append(", ");
         sb.append("musicBrainzId=").append(this.musicBrainzId).append(", ");
         sb.append("]");
