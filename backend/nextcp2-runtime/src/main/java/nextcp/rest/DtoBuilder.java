@@ -358,15 +358,15 @@ public class DtoBuilder
                 {
                     case "musicbrainztrackid":
                         mb.TrackId = n.getTextContent();
-                        log.debug("musicbrainztrackid : " + strRating);
+                        log.debug("musicbrainztrackid : " + mb.TrackId);
                         break;
                     case "musicbrainzreleaseid":
                         mb.ReleaseTrackId = n.getTextContent();
-                        log.debug("musicbrainzreleaseid : " + strRating);
+                        log.debug("musicbrainzreleaseid : " + mb.ReleaseTrackId);
                         break;
                     case "numberofthisdisc":
                         itemDto.numberOfThisDisc = n.getTextContent();
-                        log.debug("numberofthisdisc : " + strRating);
+                        log.debug("numberofthisdisc : " + itemDto.numberOfThisDisc);
                         break;
                     case "rating":
                         try
