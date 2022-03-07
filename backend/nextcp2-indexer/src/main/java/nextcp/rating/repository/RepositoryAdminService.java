@@ -98,7 +98,7 @@ public class RepositoryAdminService
         Path rootDir = Paths.get(config.musicDirectory);
         if (!rootDir.toFile().exists())
         {
-            log.warn("Music root directory not supplied. Rating support is disabled.");
+            log.info("Music root directory not supplied. Local rating support is disabled.");
             return;
         }
         if (!rootDir.toFile().isDirectory())

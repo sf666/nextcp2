@@ -184,7 +184,7 @@ public class ConfigPersistence
     {
         if (systemConfig.getString("configFile") == null)
         {
-            log.info("system-property 'configFile' not found. Can be provided on the command line '-D configFile=/PATH_TO_CONFIG_FILE' ");
+            log.info("system-property 'configFile' not provided (use '-D configFile=/PATH_TO_CONFIG_FILE')");
         }
         return systemConfig.getString("configFile");
     }
