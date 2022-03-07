@@ -215,15 +215,15 @@ export class ContentDirectoryService {
       this.browseToRoot('');
       this.lastOidIsResoredFromCache = false;
     } else {
-      this.checkAllTracksSameAlbum();
-      this.checkOneTrackWithMusicBrainzId();
-      this.checkAllTracksSameMusicBrainzReleaseId();
-      this.checkAllTracksSameDisc();
-
       this.containerList_ = this.currentContainerList.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer");
       this.playlistList_ = this.currentContainerList.containerDto.filter(item => item.objectClass === "object.container.playlistContainer");
       this.musicTracks_ = this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0);
       this.otherItems_ = this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0);
+
+      this.checkAllTracksSameAlbum();
+      this.checkOneTrackWithMusicBrainzId();
+      this.checkAllTracksSameMusicBrainzReleaseId();
+      this.checkAllTracksSameDisc();
     }
     this.browseFinished$.next(data);
   }

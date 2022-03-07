@@ -208,8 +208,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
                         publisher.publishEvent(new ToastrMessage(null, "warn", "UMS server device " + getFriendlyName(), "Object not found. " + body));
                         break;
                     case 503:
-                        publisher.publishEvent(new ToastrMessage(null, "error", "UMS server device " + getFriendlyName(),
-                                "UMS server API is not enabled. Set an api_key entry in UMD.conf file."));
+                        publisher.publishEvent(new ToastrMessage(null, "error", "UMS server device " + getFriendlyName(), body));
                         break;
                     default:
                         publisher.publishEvent(new ToastrMessage(null, "warn", "UMS server device '" + getFriendlyName() + "'", body));
