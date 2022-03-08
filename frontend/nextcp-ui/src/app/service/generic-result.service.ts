@@ -1,6 +1,6 @@
+import { GenericResult, GenericNumberRequest } from './dto.d';
 import { SseService } from './sse/sse.service';
 import { delay } from './../global';
-import { GenericResult } from './generic-result.service.d';
 import { ToastrService } from 'ngx-toastr';
 import { Injectable } from '@angular/core';
 
@@ -32,7 +32,7 @@ export class GenericResultService {
     });
   }
 
-  public displayToastr(result: GenericResult) : void {
+  public displayToastr(result: GenericResult): void {
     if (typeof result !== 'undefined') {
       if (result.success) {
         this.toastr.info(result.message, result.headerMessage);
@@ -48,11 +48,19 @@ export class GenericResultService {
     }
   }
 
-  public displayGenericMessage(header: string, body: string) : void {
+  public displayGenericResult(gr: GenericResult): void {
+    if (gr.success) {
+      this.displaySuccessMessage(gr.headerMessage, gr.message);
+    } else {
+      this.displayErrorMessage(gr.message, gr.headerMessage);
+    }
+  }
+
+  public displayGenericMessage(header: string, body: string): void {
     this.displaySuccessMessage(header, body);
   }
 
-  public displayHttpError(err, toastrMessage) : void {
+  public displayHttpError(err, toastrMessage): void {
     if (err.status == 504) {
       this.displayErrorMessage("Server unavailable. Please check if your computer is connected to your LAN and nextcp/2 server process is online.", "gateway error");
     }
@@ -71,7 +79,7 @@ export class GenericResultService {
    * @param message Shows error messages. Debouncing message text.
    * @param head 
    */
-  public displayErrorMessage(message: string, head: string) : void {
+  public displayErrorMessage(message: string, head: string): void {
     if (!this.lastError.includes(message)) {
       this.toastr.error(message, head);
       this.lastError.push(message);
@@ -79,11 +87,9 @@ export class GenericResultService {
     }
   }
 
-  public displaySuccessMessage(head: string, message: string) : void {
-    if (!this.lastError.includes(message)) {
-      this.toastr.info(message, head);
-      this.lastError.push(message);
-      void delay(this.debounceDelayMs).then(() => this.lastError.filter(item => item !== message));
-    }
+  public displaySuccessMessage(head: string, message: string): void {
+    this.toastr.info(message, head);
+    this.lastError.push(message);
+    void delay(this.debounceDelayMs).then(() => this.lastError.filter(item => item !== message));
   }
 }

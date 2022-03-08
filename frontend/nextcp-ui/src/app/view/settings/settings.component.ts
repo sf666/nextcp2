@@ -1,3 +1,4 @@
+import { MyMusicService } from './../../service/my-music.service';
 import { SystemService } from './../../service/system.service';
 import { DeviceService } from './../../service/device.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
@@ -20,6 +21,7 @@ export class SettingsComponent {
     public contentDirectoryService: ContentDirectoryService,
     public deviceService: DeviceService,
     public systemService: SystemService,
+    public myMusicService: MyMusicService,
     public configService: ConfigurationService) {
   }
   /*

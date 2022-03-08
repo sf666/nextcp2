@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2022-02-21 16:23:42.
+// Generated using typescript-generator version 2.32.889 on 2022-03-08 12:35:13.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -53,6 +53,7 @@ export interface ContainerDto {
     rating: number;
     creator: string;
     media_date: string;
+    genre: string;
 }
 
 export interface ContainerItemDto {
@@ -104,6 +105,12 @@ export interface GenericBooleanRequest {
 export interface GenericNumberRequest {
     deviceUDN: string;
     value: number;
+}
+
+export interface GenericResult {
+    success: boolean;
+    message: string;
+    headerMessage: string;
 }
 
 export interface GenericStringRequest {
@@ -171,6 +178,7 @@ export interface MusicItemDto {
     date: string;
     audioFormat: AudioFormat;
     albumArtUrl: string;
+    genre: string;
     rating: number;
     musicBrainzId: MusicBrainzId;
 }

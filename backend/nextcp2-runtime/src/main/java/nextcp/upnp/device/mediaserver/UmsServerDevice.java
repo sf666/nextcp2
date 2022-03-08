@@ -202,7 +202,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
                         break;
                     case 401:
                         publisher.publishEvent(new ToastrMessage(null, "error", "nextcp/2 configuration error",
-                                "Wrong API key configured for device " + getFriendlyName()+". Set correct secret for server : " + getUdnAsString()));
+                                "Wrong API key configured for device " + getFriendlyName() + ". Set correct secret for server : " + getUdnAsString()));
                         break;
                     case 404:
                         publisher.publishEvent(new ToastrMessage(null, "warn", "UMS server device " + getFriendlyName(), "Object not found. " + body));
@@ -259,5 +259,41 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         Call call = okClient.newCall(request);
         Response response = call.execute();
         return response;
+    }
+
+    @Override
+    public void backupMyMusic()
+    {
+        try
+        {
+            Response res = executeCallWithResponse("", "api/like/backupLikedAlbums");
+            if (res.code() != 200) {
+                log.warn("API error");
+                throw new RuntimeException(res.body().string());
+            }
+        }
+        catch (Exception e)
+        {
+            log.debug("backupLikedAlbums failed ...", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void restoreMyMusic()
+    {
+        try
+        {
+            Response res = executeCallWithResponse("", "api/like/restoreLikedAlbums");
+            if (res.code() != 200) {
+                log.warn("API error");
+                throw new RuntimeException(res.body().string());
+            }
+        }
+        catch (Exception e)
+        {
+            log.debug("restoreLikedAlbums failed ...", e);
+            throw new RuntimeException(e);
+        }
     }
 }

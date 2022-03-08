@@ -20,4 +20,8 @@ public interface ExtendedApiMediaDevice
     public void rateSong(String musicBrainzTrackId, int stars);
 
     public int getSongRating(String musicBrainzTrackId);
+
+    public void backupMyMusic();
+
+    public void restoreMyMusic();
 }

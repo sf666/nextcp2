@@ -1,7 +1,12 @@
+GenericResult:
+   success: Boolean
+   message: String
+   headerMessage: String
+   
 # DeviceDriverCapability
 DeviceDriverCapability:
-    deviceType: String
-    deviceDescription: String
+   deviceType: String
+   deviceDescription: String
 
 #
 # config

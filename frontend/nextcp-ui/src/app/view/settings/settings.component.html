@@ -125,10 +125,11 @@
             <button mat-flat-button class="ml-2 settings"
             (click)="ratingServiceService.indexerRescanMusicDirectory()">index local music directory</button>            
     </div>
-    <div class="section subhead subsect">Media Server</div>
+    <div class="section subhead subsect">actions for current selected media server</div>
     <div class="d-flex section subhead">
-        <button mat-flat-button class="ml-2 settings" (click)="rescan()">Rescan media library for selected media
-            server</button>
+        <button mat-flat-button class="ml-2 settings" (click)="rescan()">Rescan media library</button>
+        <button mat-flat-button class="ml-2 settings" (click)="myMusicService.backupLikedAlbums()">backup liked albums</button>
+        <button mat-flat-button class="ml-2 settings" (click)="myMusicService.restoreLikedAlbums()">restore liked albums</button>
     </div>
 
     <div class="section subhead subsect">Last FM</div>

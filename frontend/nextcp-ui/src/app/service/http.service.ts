@@ -1,3 +1,4 @@
+import { GenericResult } from './dto.d';
 import { GenericResultService } from './generic-result.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -37,6 +38,18 @@ export class HttpService {
       console.log(err);
     });
     return ret;
+  }
+
+  public getWithGenericResult(base: string, path: string, errorHeader?: string): void {
+    this.get<GenericResult>(base, path, errorHeader).subscribe(data => {
+      this.genericResultService.displayGenericResult(data);
+    });
+  }
+
+  public postWithGenericResult(base: string, path: string, payload: any, errorHeader?: string): void {
+    this.post<GenericResult>(base, path, payload).subscribe(data => {
+      this.genericResultService.displayGenericResult(data);
+    });
   }
 
   /**

@@ -24,6 +24,7 @@ export class DtoGeneratorService {
       searchClass: '',
       searchable: false,
       title: '',
+      genre: '',
       media_date:''
     };
   }
@@ -85,6 +86,7 @@ export class DtoGeneratorService {
       refId: '',
       streamingURL: '',
       title: '',
+      genre:'', 
       musicBrainzId: this.emptyMusicBrainzId()
     }
   }
