@@ -72,17 +72,29 @@ export class ContentDirectoryService {
 
   // container without playlists
   public containerList(filter?: string): ContainerDto[] {
-    return this.containerList_.filter(item => this.doFilterText(item.title, filter));
+    if (filter) {
+      return this.containerList_.filter(item => this.doFilterText(item.title, filter));
+    } else {
+      return this.containerList_;
+    }
   }
 
   // playlist container
   public playlistList(filter?: string): ContainerDto[] {
-    return this.playlistList_.filter(item => this.doFilterText(item.title, filter));
+    if (filter) {
+      return this.playlistList_.filter(item => this.doFilterText(item.title, filter));
+    } else {
+      return this.playlistList_;
+    }
   }
 
   // container with album tags
   public albumList(filter?: string): ContainerDto[] {
-    return this.currentContainerList.albumDto.filter(item => this.doFilterText(item.title, filter));
+    if (filter) {
+      return this.currentContainerList.albumDto.filter(item => this.doFilterText(item.title, filter));
+    } else {
+      return this.currentContainerList.albumDto;
+    }
   }
 
   private doFilterText(title: string, filter?: string) {
@@ -93,11 +105,19 @@ export class ContentDirectoryService {
   }
 
   public getMusicTracks(filter?: string): MusicItemDto[] {
-    return this.musicTracks_.filter(item => this.doFilterText(item.title, filter));
+    if (filter) {
+      return this.musicTracks_.filter(item => this.doFilterText(item.title, filter));
+    } else {
+      return this.musicTracks_;
+    }
   }
 
   public getItems(filter?: string): MusicItemDto[] {
-    return this.otherItems_.filter(item => this.doFilterText(item.title, filter));
+    if (filter) {
+      return this.otherItems_.filter(item => this.doFilterText(item.title, filter));
+    } else {
+      return this.otherItems_;
+    }
   }
 
   public minimTagsList(): ContainerDto[] {
