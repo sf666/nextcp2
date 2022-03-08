@@ -253,17 +253,24 @@ export class ContentDirectoryService {
   }
 
   private checkAllTracksSameAlbum(): void {
+    console.log("checkAllTracksSameAlbum ..." + this.allTracksSameAlbum_);
     const numtrack = this.getMusicTracks().length;
     const numMbid = this.getMusicTracks().filter(item => item.musicBrainzId?.ReleaseTrackId?.length > 0).length;
+
+    console.log("number of tracs : " + numtrack);
+    console.log("number of tracs with mbid: " + numMbid);
 
     if ((numMbid > 0) && (numtrack == numMbid)) {
       const firstTrackMbid = this.getMusicTracks()[0].musicBrainzId?.ReleaseTrackId;
       const numSameMbid = this.getMusicTracks().filter(item => item.musicBrainzId?.ReleaseTrackId === firstTrackMbid).length;
       this.allTracksSameAlbum_ = numSameMbid == numMbid;
+      console.log("number of tracs with same mbid like first track : " + numSameMbid);
     } else {
       if (this.getMusicTracks().length > 0) {
         const firstTrackAlbum = this.getMusicTracks()[0].album;
-        this.allTracksSameAlbum_ = this.getMusicTracks().filter(item => item.album !== firstTrackAlbum).length == 0;
+        const albumsWithOtherNames = this.getMusicTracks().filter(item => item.album !== firstTrackAlbum).length;
+        this.allTracksSameAlbum_ = albumsWithOtherNames == 0;
+        console.log("number of tracs with other album title : " + albumsWithOtherNames);
       }
     }
     console.log("checkAllTracksSameAlbum : " + this.allTracksSameAlbum_);
