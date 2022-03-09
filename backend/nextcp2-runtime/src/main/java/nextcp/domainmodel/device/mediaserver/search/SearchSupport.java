@@ -35,8 +35,9 @@ public class SearchSupport
     {
         this.contentDirectoryService = contentDirectoryService;
         this.mediaServerDevice = mediaServerDevice;
-        
-        try {
+
+        try
+        {
             searchCaps = contentDirectoryService.getSearchCapabilities().SearchCaps;
         }
         catch (Exception e)
@@ -49,19 +50,25 @@ public class SearchSupport
     {
         return searchCaps;
     }
-    
+
+    /**
+     * Quick Search delivers first elements of Songs, Albums, Artists and Playlists. Sorting is optimized to deliver liked or better rated music
+     * 
+     * @param searchRequest
+     * @return
+     */
     public SearchResultDto quickSearch(SearchRequestDto searchRequest)
     {
         String quickSearch = searchRequest.searchRequest;
         long requestCount = adjustRequestCount(searchRequest.requestCount);
-        
+
         SearchResultDto container = initEmptySearchResultContainer();
 
-        searchAndAddMusicItems(quickSearch, searchRequest.sortCriteria, container, requestCount);
+        searchAndAddMusicItems(quickSearch, "-upnp:rating, +dc:title", container, requestCount);
         searchAndAddArtistContainer(quickSearch, searchRequest.sortCriteria, container, requestCount);
-        searchAndAddAlbumContainer(quickSearch, searchRequest.sortCriteria, container, requestCount);
+        searchAndAddAlbumContainer(quickSearch, "-ums:liked, +dc:title", container, requestCount);
         searchAndAddPlaylistContainer(quickSearch, searchRequest.sortCriteria, container, requestCount);
-        
+
         return container;
     }
 
@@ -78,7 +85,6 @@ public class SearchSupport
 
     }
 
-    
     private void searchAndAddPlaylistContainer(String quickSearch, String sortCriteria, SearchResultDto container, long requestCount)
     {
         searchAndAddArtistContainer(quickSearch, sortCriteria, container.playlistItems, "object.container.playlistContainer", requestCount);
@@ -118,7 +124,7 @@ public class SearchSupport
         }
     }
 
-    private void searchAndAddMusicItems(String quickSearch,String sortCriteria, SearchResultDto container, Long requestCount)
+    private void searchAndAddMusicItems(String quickSearch, String sortCriteria, SearchResultDto container, Long requestCount)
     {
         StringBuilder sb = new StringBuilder();
         sb.append("( upnp:class = \"object.item.audioItem.musicTrack\""); // upnp:class derivedfrom “object.container.person”
@@ -214,4 +220,3 @@ public class SearchSupport
         return container;
     }
 }
-
