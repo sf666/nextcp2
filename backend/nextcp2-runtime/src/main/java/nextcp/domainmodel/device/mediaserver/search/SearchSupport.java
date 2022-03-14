@@ -66,7 +66,7 @@ public class SearchSupport
 
         searchAndAddMusicItems(quickSearch, "-upnp:rating, +dc:title", container, requestCount);
         searchAndAddArtistContainer(quickSearch, searchRequest.sortCriteria, container, requestCount);
-        searchAndAddAlbumContainer(quickSearch, "-ums:liked, +dc:title", container, requestCount);
+        searchAndAddAlbumContainer(quickSearch, "-ums:likedAlbum, +dc:title", container, requestCount);
         searchAndAddPlaylistContainer(quickSearch, searchRequest.sortCriteria, container, requestCount);
 
         return container;
