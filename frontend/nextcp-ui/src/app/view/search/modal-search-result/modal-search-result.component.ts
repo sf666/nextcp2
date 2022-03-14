@@ -75,7 +75,7 @@ export class ModalSearchResultComponent {
     this.contentDirectoryService.popCurrentPathAsParent();
     this.contentDirectoryService.searchAllItems(
       this.dtoGeneratorService.generateQuickSearchDto(
-        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", this.currentContainerID, 0, 100));
+        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "-upnp:rating, +dc:title", this.currentContainerID, 0, 100));
     this.contentDirectoryService.hideQuickSearchPanel();
   }
 
@@ -83,7 +83,7 @@ export class ModalSearchResultComponent {
     this.contentDirectoryService.popCurrentPathAsParent();
     this.contentDirectoryService.searchAllAlbum(
       this.dtoGeneratorService.generateQuickSearchDto(
-        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", this.currentContainerID, 0, 100));
+        this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "-ums:likedAlbum, +dc:title", this.currentContainerID, 0, 100));
     this.contentDirectoryService.hideQuickSearchPanel();
   }
 
