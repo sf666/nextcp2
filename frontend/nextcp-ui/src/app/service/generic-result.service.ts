@@ -1,7 +1,7 @@
+import { ToastService } from './toast/toast.service';
 import { GenericResult, GenericNumberRequest } from './dto.d';
 import { SseService } from './sse/sse.service';
 import { delay } from './../global';
-import { ToastrService } from 'ngx-toastr';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class GenericResultService {
   private debounceDelayMs: number = 1000;
 
   constructor(
-    private toastr: ToastrService,
+    private toastr: ToastService,
     private sseService: SseService,
   ) {
     sseService.toasterMessageReceived$.subscribe(message => {
@@ -38,9 +38,7 @@ export class GenericResultService {
         this.toastr.info(result.message, result.headerMessage);
       }
       else {
-        this.toastr.error(result.message, result.headerMessage, {
-          disableTimeOut: false,
-        });
+        this.toastr.error(result.message, result.headerMessage);
       }
     }
     else {

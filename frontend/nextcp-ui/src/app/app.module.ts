@@ -6,13 +6,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { CommonModule } from '@angular/common';
-import { ToastrModule } from 'ngx-toastr';
+import { NgbModule, NgbToast } from '@ng-bootstrap/ng-bootstrap';
 import { ServerDropdownComponent } from './mediaserver/dropdown/dropdown.component';
 import { MediarendererComponent } from './mediarenderer/mediarenderer/mediarenderer.component';
 import { BrowseResultComponent } from './mediaserver/browse-result/browse-result.component';
@@ -55,6 +52,7 @@ import { VolumeControlComponent } from './popup/volume-control/volume-control.co
 import { AvailableServerComponent } from './popup/available-server/available-server.component';
 import { MyAlbumComponent } from './view/my-album/my-album.component';
 import { MySongsComponent } from './view/my-songs/my-songs.component';
+import { ToastContainerComponent } from './service/toast/toast-container/toast-container.component';
 
 
 @NgModule({
@@ -88,14 +86,9 @@ import { MySongsComponent } from './view/my-songs/my-songs.component';
       AvailableServerComponent,
       MyAlbumComponent,
       MySongsComponent,
-
+      ToastContainerComponent,
    ],
    imports: [
-      // Toastr
-      CommonModule,
-      BrowserAnimationsModule,
-      ToastrModule.forRoot(),
-
       // Material Design
       MatSliderModule,
       MatIconModule,

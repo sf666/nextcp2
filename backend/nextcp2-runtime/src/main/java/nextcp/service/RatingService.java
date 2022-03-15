@@ -84,7 +84,7 @@ public class RatingService
     public int syncRatingsFromAudioFile()
     {
         int num = ratingPersistenceService.syncRating();
-        this.publisher.publishEvent(new ToastrMessage("", "info", "Import from audiofile", num + " entries were imported"));
+        this.publisher.publishEvent(new ToastrMessage("", "info", "audiofile disc import", num + " entries were imported"));
         return num;
     }
 
@@ -105,7 +105,7 @@ public class RatingService
                 updateLocalFileBackend(uuid, ratings.get(uuid));
             }
         }
-        this.publisher.publishEvent(new ToastrMessage("", "info", "Import from musicbrainz.org", num + " entries were imported"));
+        this.publisher.publishEvent(new ToastrMessage("", "info", "musicbrainz.org import", num + " entries were imported"));
     }
 
     private void updateMusicBrainzBackend(String musicBrainzID, Integer rating)
@@ -115,12 +115,12 @@ public class RatingService
             if (config.ratingStrategy.updateMusicBrainzRating)
             {
                 musicBrainzService.setRating(musicBrainzID, rating);
-                this.publisher.publishEvent(new ToastrMessage("", "sucess", "MusicBrainz", "Rating successfully send to musicbrainz.org"));
+                this.publisher.publishEvent(new ToastrMessage("", "sucess", "MusicBrainz Rating", "successfully send to musicbrainz.org"));
             }
         }
         catch (Exception e)
         {
-            this.publisher.publishEvent(new ToastrMessage("", "error", "Set MusicBrainz Rating", "couldn't save : " + e.getMessage()));
+            this.publisher.publishEvent(new ToastrMessage("", "error", "MusicBrainz Rating", "couldn't save : " + e.getMessage()));
         }
     }
 
@@ -131,13 +131,14 @@ public class RatingService
             if (config.ratingStrategy.updateLocalFileRating)
             {
                 localRatingService.persistMusicBrainzRatingInStarsLocalFile(musicBrainzID, rating);
-                this.publisher.publishEvent(new ToastrMessage("", "sucess", "local file", "Rating successfully applied to local file."));
+                this.publisher.publishEvent(new ToastrMessage("", "sucess", "Rating", "rating successfully applied to file on disc."));
+                // inform local file database cache of new rating value  
                 ratingPersistenceService.updateStarRatingInSong(musicBrainzID, rating);
             }
         }
         catch (Exception e)
         {
-            this.publisher.publishEvent(new ToastrMessage("", "error", "Local DB Rating", "couldn't save : " + e.getMessage()));
+            this.publisher.publishEvent(new ToastrMessage("", "error", "Local database", "rating couldn't be saved : " + e.getMessage()));
         }
     }
 

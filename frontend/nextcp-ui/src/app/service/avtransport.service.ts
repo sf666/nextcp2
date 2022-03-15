@@ -1,4 +1,4 @@
-import { ToastrService } from 'ngx-toastr';
+import { ToastService } from './toast/toast.service';
 import { HttpService } from './http.service';
 import { SseService } from './sse/sse.service';
 import { MusicItemDto, PlayRequestDto, MediaRendererDto, UpnpAvTransportState, RadioStation, PlayRadioDto } from './dto.d';
@@ -18,7 +18,7 @@ export class AvtransportService {
   constructor(
     private sse: SseService,
     private httpService: HttpService,
-    private toastr: ToastrService,
+    private toastr: ToastService,
     private deviceService: DeviceService) {
 
     // Register for application event (user selected new media player within the UI)

@@ -9,28 +9,8 @@
 
 @import 'pantone';
 
-// Customisation 1: First import overridden variables from theme superhero ... 
-@import 'custom_variables';
-@import 'superhero_variables';
-
-// Original Bootstrap : Required bootstrap modules
-
-@import "node_modules/bootstrap/scss/_functions.scss";
-@import "node_modules/bootstrap/scss/_variables.scss";
-@import "node_modules/bootstrap/scss/mixins";
-
-// Customisation 2: Import custom theme 
-@import 'superhero';
-@import 'custom_theme';
-
-// Original Bootstrap : Load 
-@import "../node_modules/bootstrap/scss/bootstrap";
-
 // cool table look and feel
 // @import 'appTable';
-
-// Toastr style
-@import '~ngx-toastr/toastr-bs4-alert';
 
 @import 'app-variables';
 @import 'app-styles';
@@ -50,3 +30,6 @@ body {
     /* mobile viewport bug fix */
     min-height: -webkit-fill-available;
 }
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
