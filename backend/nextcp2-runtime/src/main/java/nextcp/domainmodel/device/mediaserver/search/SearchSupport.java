@@ -79,7 +79,7 @@ public class SearchSupport
             return 3;
         }
 
-        givenRequestCount = Math.min(10, givenRequestCount);
+        givenRequestCount = Math.min(999, givenRequestCount);
         givenRequestCount = Math.max(2, givenRequestCount);
         return givenRequestCount;
 
