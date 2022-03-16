@@ -7,7 +7,7 @@
     <div *ngIf="showTopHeader" class="outer-container">
         <div class="header-container">
             <div class="top-img-container">
-                <img class="cardLayout image-container" src="{{currentContainer.albumartUri}}" class="img-top"
+                <img class="image-container" src="{{currentContainer.albumartUri}}" class="img-top"
                     alt="select_media_server">
             </div>
             <div class="d-flex flex-column justify-content-between w-100 ps-4" id="ID_SCROLL_TO_ELEMENT_STEP_IN"
@@ -107,7 +107,7 @@
         <div *ngIf="playlistList?.length > 0">
             <div id="head_browse_result_playlist_items_ID" tabindex="-1" class="albumLayout">
                 <div id="{{container.id}}" tabindex="-1" class="albumTile" *ngFor="let container of playlistList">
-                    <div class="cardLayout image-container">
+                    <div class="image-container">
                         <div class="albumImageContainer">
                             <img src="{{container.albumartUri}}" alt="{{container.title}}">
                             <div class="play-overlay d-flex flex-column justify-content-center align-items-center">
@@ -175,7 +175,7 @@
         <!--                                                                -->
         <!-- Template : Browse Result Items                                 -->
         <!-- ############################################################## -->
-        <div id="{{topDivId}}" tabindex="-1" *ngIf="musicTracks.length > 0">
+        <div id="{{topDivId}}" tabindex="-1" *ngIf="musicTracks.length > 0" class="itemDetails">
             <div *ngIf="isListView(); else mixedTitles">
                 <div id="head_browse_result_items_list_view_ID" class="item-table">
                     <div class="item-thead">
@@ -232,15 +232,15 @@
             </div>
 
             <ng-template #mixedTitles>
-                <div id="head_browse_result_items_mixed_titles_ID" class="cardLayout mixedTitles">
-                    <div id="{{item.objectID}}" class="cardLayout cover-card" *ngFor="let item of musicTracks">
-                        <img src="{{item.albumArtUrl}}" class="cardLayout image-container" alt="{{item.title}}">
-                        <div class="d-flex cardLayout card-body">
+                <div id="head_browse_result_items_mixed_titles_ID" class="mixedTitles">
+                    <div id="{{item.objectID}}" class="cover-card" *ngFor="let item of musicTracks">
+                        <img src="{{item.albumArtUrl}}" class="image-container" alt="{{item.title}}">
+                        <div class="d-flex card-body">
                             <div class="d-flex">
                                 <div class="card-title">{{item.title}}</div>
                             </div>
                         </div>
-                        <div class="cardLayout play-overlay d-flex flex-column justify-content-end">
+                        <div class="play-overlay d-flex flex-column justify-content-end">
                             <div class="d-flex justify-content-around align-items-center pb-4">
                                 <div class="scaleBigger">
                                     <mat-icon (click)="avtransportService.playResource(item)"
@@ -272,7 +272,7 @@
                 <div class="albumTile" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)"
                     *ngFor="let container of containerList">
                     <div class="albumImageContainer">
-                        <img class="cardLayout image-container" src="{{container.albumartUri}}" alt="{{container.title}}">
+                        <img class="image-container" src="{{container.albumartUri}}" alt="{{container.title}}">
                     </div>
                     <div class="d-flex flex-column albumDesc">
                         <div class="playlistText">{{getOtherContainerHeadline(container)}}</div>
@@ -290,7 +290,7 @@
                 <div class="albumTile" id="{{item.id}}" tabindex="-1" (click)="avtransportService.playResource(item)"
                     *ngFor="let item of items">
                     <div class="albumImageContainer">
-                        <img class="cardLayout image-container" src="{{item.albumArtUrl}}" alt="{{item.title}}">
+                        <img class="image-container" src="{{item.albumArtUrl}}" alt="{{item.title}}">
                     </div>
                     <div class="d-flex flex-column albumDesc">
                         <div class="playlistText">{{getOtherItemHeadline(item)}}</div>
