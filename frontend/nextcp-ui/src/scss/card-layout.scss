@@ -2,15 +2,18 @@
 
 // ALBUM formatting section
 // ============================================
+$grid-flex-basis     : 12rem;
+$grid-flex-min-width : 10rem;
+$grid-flex-max-width : 17rem;
 
 .albumImageContainer {
     display    : flex;
     position   : relative;
     margin-left: 1rem;
 
-    flex-basis: 12rem;
-    min-width : 8rem;
-    max-width : 15rem;
+    flex-basis: $grid-flex-basis;
+    min-width : $grid-flex-min-width;
+    max-width : $grid-flex-max-width;
     flex-grow : 1;
 
     margin: auto;
@@ -28,10 +31,11 @@
 }
 
 .albumTile {
-    flex-basis: 12rem;
-    min-width : 8rem;
-    max-width : 15rem;
+    flex-basis: $grid-flex-basis;
+    min-width : $grid-flex-min-width;
+    max-width : $grid-flex-max-width;
     flex-grow : 1;
+
     padding   : 1rem;
 
     font-size     : 0.9rem;
