@@ -1,5 +1,4 @@
 import { GenericResultService } from './generic-result.service';
-import { ContainerItemDto } from './dto.d';
 import { ContentDirectoryService } from './content-directory.service';
 import { Subject } from 'rxjs';
 import { HttpService } from './http.service';

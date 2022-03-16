@@ -1,9 +1,9 @@
+import { ToastService } from './toast/toast.service';
 import { PersistenceService } from './persistence/persistence.service';
 import { Subject } from 'rxjs';
 import { CdsBrowsePathService } from './../util/cds-browse-path.service';
 import { Router } from '@angular/router';
 import { DtoGeneratorService } from './../util/dto-generator.service';
-import { SearchItemService } from './search/search-item.service';
 import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
 import { ContainerItemDto, BrowseRequestDto, MediaServerDto, ContainerDto, SearchRequestDto, SearchResultDto, MusicItemDto } from './dto.d';
@@ -49,11 +49,9 @@ export class ContentDirectoryService {
   constructor(
     private httpService: HttpService,
     private persistenceService: PersistenceService,
-    private searchItemService: SearchItemService,
     private dtoGeneratorService: DtoGeneratorService,
     private cdsBrowsePathService: CdsBrowsePathService,
-
-    private router: Router,
+    private toastService: ToastService,
     private deviceService: DeviceService) {
     // Initialize empty result object
     this.currentContainerList = this.dtoGeneratorService.generateEmptyContainerItemDto();
@@ -200,7 +198,11 @@ export class ContentDirectoryService {
    */
   public browseChildren(objectID: string, sortCriteria: string, mediaServerUdn?: string, isStepOut?: boolean): void {
     if (!mediaServerUdn) {
-      mediaServerUdn = this.currentMediaServerDto.udn;
+      if (!this.currentMediaServerDto?.udn) {
+        this.toastService.error("select media server", "MediaLibrary");
+      } else {
+        mediaServerUdn = this.currentMediaServerDto.udn;
+      }
     }
     this.updateBrowsePath(objectID, isStepOut);
     this.browseChildrenByRequest(this.createBrowseRequest(objectID, sortCriteria, mediaServerUdn));

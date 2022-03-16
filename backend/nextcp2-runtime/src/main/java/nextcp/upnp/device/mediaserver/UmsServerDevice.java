@@ -195,24 +195,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
                 Response response = executeCallWithResponse(String.format("%s/%s", musicBrainzTrackId, stars), "api/rating/setrating");
                 String body = response.body().string();
                 int code = response.code();
-                switch (code)
-                {
-                    case 200:
-                        publisher.publishEvent(new ToastrMessage(null, "info", "UMS server device " + getFriendlyName(), body));
-                        break;
-                    case 401:
-                        publisher.publishEvent(new ToastrMessage(null, "error", "nextcp/2 configuration error",
-                                "Wrong API key configured for device " + getFriendlyName() + ". Set correct secret for server : " + getUdnAsString()));
-                        break;
-                    case 404:
-                        publisher.publishEvent(new ToastrMessage(null, "warn", "UMS server device " + getFriendlyName(), "Object not found. " + body));
-                        break;
-                    case 503:
-                        publisher.publishEvent(new ToastrMessage(null, "error", "UMS server device " + getFriendlyName(), body));
-                        break;
-                    default:
-                        publisher.publishEvent(new ToastrMessage(null, "warn", "UMS server device '" + getFriendlyName() + "'", body));
-                }
+                toastDeviceResponse(body, code, true);
             }
             catch (Exception e)
             {
@@ -223,6 +206,31 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         else
         {
             log.debug("UMS API is disabled");
+        }
+    }
+
+    private void toastDeviceResponse(String body, int code, boolean successToast)
+    {
+        switch (code)
+        {
+            case 200:
+                if (successToast)
+                {
+                    publisher.publishEvent(new ToastrMessage(null, "info", "UMS server device " + getFriendlyName(), body));
+                }
+                break;
+            case 401:
+                publisher.publishEvent(new ToastrMessage(null, "error", "nextcp/2 configuration error",
+                        "Wrong API key configured for device " + getFriendlyName() + ". Set correct secret for server : " + getUdnAsString()));
+                break;
+            case 404:
+                publisher.publishEvent(new ToastrMessage(null, "warn", "UMS server device " + getFriendlyName(), "Object not found. " + body));
+                break;
+            case 503:
+                publisher.publishEvent(new ToastrMessage(null, "error", "UMS server device " + getFriendlyName(), body));
+                break;
+            default:
+                publisher.publishEvent(new ToastrMessage(null, "warn", "UMS server device '" + getFriendlyName() + "'", body));
         }
     }
 
@@ -241,6 +249,14 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         }
     }
 
+    /**
+     * Execute a UMS call. Will send Toast error message to client in case of an error.
+     * 
+     * @param bodyString
+     * @param uri
+     * @return
+     * @throws IOException
+     */
     private String executeCall(String bodyString, String uri) throws IOException
     {
         RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/text"));
@@ -248,7 +264,9 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         Request request = new Request.Builder().url(requestUrl).addHeader("api-key", getApiKey()).post(body).build();
         Call call = okClient.newCall(request);
         Response response = call.execute();
-        return response.body().string();
+        String respString = response.body().string();
+        toastDeviceResponse(respString, response.code(), false);
+        return bodyString;
     }
 
     private Response executeCallWithResponse(String bodyString, String uri) throws IOException
@@ -267,7 +285,8 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         try
         {
             Response res = executeCallWithResponse("", "api/like/backupLikedAlbums");
-            if (res.code() != 200) {
+            if (res.code() != 200)
+            {
                 log.warn("API error");
                 throw new RuntimeException(res.body().string());
             }
@@ -285,7 +304,8 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         try
         {
             Response res = executeCallWithResponse("", "api/like/restoreLikedAlbums");
-            if (res.code() != 200) {
+            if (res.code() != 200)
+            {
                 log.warn("API error");
                 throw new RuntimeException(res.body().string());
             }
