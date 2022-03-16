@@ -1,11 +1,12 @@
 @import 'material-design-theme';
 
 /* You can add global styles to this file, and also import other style files */
-/* We add global bootstrap theme */
 
-// Bootstrap & Optional Bootstrap-Theme
-// file 'bootstrap.min.css was replaced by a theme from https://bootswatch.com/
-// Generated from https://bootstrap.build/app and changed "font-weight" to 300
+/*
+    BOOTSTRAP 5
+    We add global bootstrap theme and overwrite with own style.
+*/
+@import "bootstrap-styles";
 
 @import 'pantone';
 
@@ -31,5 +32,3 @@ body {
     min-height: -webkit-fill-available;
 }
 
-/* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap';

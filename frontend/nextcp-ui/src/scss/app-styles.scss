@@ -55,7 +55,14 @@
     --sidebar-width    : 250px;
     --sidebar-width-min: 55px;
     --nav-height       : 75px;
+
 }
+
+// Variables ===================================================================
+
+$web-font-path: "https://fonts.googleapis.com/css?family=Lato:100,300,700" !default;
+@import url($web-font-path);
+
 
 // Disable focus frame
 *:focus {
@@ -65,10 +72,6 @@
 //
 // application classes for individual components
 // ===================================================================================
-
-// Some classes from bootstrap are overwritten.
-//
-// Attention: Import this file before importing : "../node_modules/bootstrap/scss/bootstrap"
 
 // overwrite material design ... 
 
@@ -237,46 +240,6 @@ input {
     width: 600px;
 }
 
-
-//
-// Bootstrap card extension
-// 
-
-// some formatting
-.my-Card {
-    @extend .card;
-
-    background-repeat: calc(var(--vh, 1vh) * 100);
-    background-size  : cover;
-    background-color : rgba(0, 0, 0, 0.5);
-    background-image : url(/images/folder-bg.png);
-
-    position: relative;
-    margin  : 0.3rem;
-    width   : $cardWidth;
-}
-
-.my-card-body {
-    position        : absolute;
-    bottom          : 0;
-    background-color: rgba($color: $pantone-Neutral-Black-C, $alpha: 0.90);
-    /* Black see-through */
-    color           : #f1f1f1;
-    width           : 100%;
-    transition      : .5s ease;
-    font-size       : 20px;
-    font-weight     : 300;
-    text-align      : center;
-    opacity         : 0.8;
-}
-
-.my-card-title {
-    padding         : 2px;
-    font-size       : 1.1rem;
-    font-weight     : 300;
-    background-color: rgba(0, 0, 0, 0.5);
-    background-image: url(/assets/images/folder-bg.png);
-}
 
 .image-folder {
     background-color: #3c3832;
