@@ -19,6 +19,7 @@ export class ContentDirectoryService {
   public currentContainerList: ContainerItemDto;
   private customParentID: string;
   private currentMediaServerDto: MediaServerDto;
+  public orderAlbumsByGenre = false;
 
   private lastOidIsResoredFromCache: boolean;
 
@@ -182,6 +183,13 @@ export class ContentDirectoryService {
 
   public setIndividualParentID(parentID: string): void {
     this.customParentID = parentID;
+  }
+
+  /**
+   * Browses to special MyMusic Folder. TODO: URL should be retrieved from media server (i.e. UMS)
+   */
+  public browseToMyMusic() {
+    this.browseChildren("$DBID$MYMUSIC$","");
   }
 
   /**

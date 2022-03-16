@@ -70,6 +70,6 @@ export class SidebarComponent  {
 	}
 
   public myAlbum() : void {
-    this.contentDirectoryService.browseChildren("$DBID$MYMUSIC$","");
+    this.contentDirectoryService.browseToMyMusic();
   }
 }
