@@ -120,6 +120,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
     @Override
     public void transportStateChange(String value)
     {
+        log.debug("transportStateChange to : " + value);
         if ("PAUSED_PLAYBACK".equalsIgnoreCase(value))
         {
             proceedToNextSongToPlayNoNextUriSupport();
@@ -130,7 +131,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
         }
         else if ("PLAYING".equalsIgnoreCase(value))
         {
-            log.debug("processed : " + value);
+            log.debug("transportStateChange to PLAYING. Do nothing ...: ");
         }
         else
         {
@@ -146,6 +147,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 
     private void proceedToNextSongToPlayNoNextUriSupport()
     {
+        log.debug("proceedToNextSongToPlayNoNextUriSupport ...");
         // if device has no nextUrl support, it goes into PAUSED state
         if (!hasNextUriSupport())
         {
@@ -154,32 +156,38 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
                 MusicItemDto nextSong = moveToNextTrack();
                 if (nextSong != null)
                 {
+                    log.info(String.format("proceedToNextSongToPlayNoNextUriSupport : set URL to %s", nextSong.streamingURL));
                     getDevice().getAvTransportServiceBridge().setUrl(nextSong.streamingURL, nextSong.currentTrackMetadata);
                     getDevice().getAvTransportServiceBridge().play();
                 }
                 else
                 {
+                    log.info("proceedToNextSongToPlayNoNextUriSupport : stopping ...");
                     stop();
                 }
             }
+        } else 
+        {
+            log.debug("device has nextUriSupport. Do nothing ... ");
         }
     }
 
     @Override
     public void currentTrackURIChange(String value)
     {
+        log.debug("currentTrackURIChange to : " + value);
         super.currentTrackURIChange(value);
-
         proceedToNextSongNextUriSupport(value);
     }
 
     private void proceedToNextSongNextUriSupport(String value)
     {
+        log.debug("proceedToNextSongNextUriSupport ...");
         if (hasNextUriSupport())
         {
             if (StringUtils.isEmpty(value))
             {
-                log.debug("device has no current track uri set.");
+                log.debug("device has no 'current track' uri set.");
                 return;
             }
 
@@ -200,6 +208,10 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
                     log.info("media renderer device is controlled by another device. pause playing queue until playback stops ... current uri : " + value);
                 }
             }
+        }
+        else
+        {
+            log.debug("device has no nextUriSupport. Do nothing ...");            
         }
     }
 
@@ -314,6 +326,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
     {
         if (!playlistItems.contains(song))
         {
+            log.debug("adding song to playlist : " + song != null ? song.toString() : "NULL");            
             playlistItems.addLast(song);
             playbackItems = getFillStrategy().addElement(playbackItems, position);
             updateSongUrls();
@@ -327,6 +340,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 
     public int addAllSongToPlaylist(List<MusicItemDto> songsToAdd)
     {
+        log.debug("addAllSongToPlaylist ...");            
         // remove double entries ...
         songsToAdd.removeAll(playlistItems);
 
@@ -337,8 +351,13 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
             int firstElementPosition = playlistItems.indexOf(songsToAdd.get(0));
             int lastElementPosition = playlistItems.indexOf(songsToAdd.get(songsToAdd.size() - 1));
             playbackItems = getFillStrategy().addAllElement(playbackItems, firstElementPosition, lastElementPosition);
+            log.info(String.format("added %d songs", songsToAdd.size()));
             getEventPublisher().publishEvent(createPlaylistEventObject());
             return songsToAdd.size();
+        }
+        else
+        {
+            log.info("addAllSongToPlaylist: all songs already in playlist.");
         }
         return 0;
     }
