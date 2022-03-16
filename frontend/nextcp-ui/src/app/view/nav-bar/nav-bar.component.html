@@ -8,10 +8,10 @@
     </div>
 
     <div class="nav-search-container">
-        <mat-icon class="mr-1 search-icon" svgIcon="card-search-outline"></mat-icon>
+        <mat-icon class="me-1 search-icon" svgIcon="card-search-outline"></mat-icon>
         <input class="nav-search" [(ngModel)]="quickSearchString" matInput placeholder="global search" #searchInput
             (keyup)="keyUp($event)" (focus)="focus()">
-        <mat-icon class="mr-1 search-icon" svgIcon="close" (click)="clearSearch()"></mat-icon>
+        <mat-icon class="me-1 search-icon" svgIcon="close" (click)="clearSearch()"></mat-icon>
     </div>
 </div>
 
@@ -20,8 +20,8 @@
 <ng-template #playlist>
     <div class="headLeftContainer" *ngIf="playlistVisible; else player">
         <div class="headFont">Playlist Tracks</div>
-        <button mat-flat-button class="ml-4 headButton" (click)="playlistService.deleteAll()">
-            <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="close"></mat-icon>
+        <button mat-flat-button class="ms-4 headButton" (click)="playlistService.deleteAll()">
+            <mat-icon class="me-1" style="vertical-align: top;" svgIcon="close"></mat-icon>
             clear tracks
         </button>
     </div>

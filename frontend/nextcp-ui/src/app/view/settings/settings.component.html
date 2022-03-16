@@ -13,7 +13,7 @@
 
             <!-- Dropdown for available configs-->
             <div class="d-inline-block" ngbDropdown #serverDrop>
-                <button class="btn btn-outline-primary mr-2" id="dropdownManual" ngbDropdownToggle></button>
+                <button class="btn btn-outline-primary me-2" id="dropdownManual" ngbDropdownToggle></button>
                 <div ngbDropdownMenu aria-labelledby="dropdownManual">
                     <button ngbDropdownItem *ngFor="let clientConfig of configService?.serverConfig?.clientConfig"
                         (click)="selectConfig(clientConfig)">{{clientConfig.clientName}}
@@ -54,9 +54,9 @@
 <div class="section head">Media Renderer configuration</div>
 
 <div>
-    <div class="d-flex flex-row flex-wrap ml-4">
+    <div class="d-flex flex-row flex-wrap ms-4">
         <div class="cardContainer" *ngFor="let rendererConfig of configService.getRendererDevicesConfig()">
-            <mat-card class="card-width mr-4 mb-3">
+            <mat-card class="card-width me-4 mb-3">
                 <mat-card-header>
                     <mat-card-title>{{rendererConfig.mediaRenderer.friendlyName}}</mat-card-title>
                     <mat-card-subtitle *ngIf="isRendererConfigActive(rendererConfig)">ONLINE</mat-card-subtitle>
@@ -94,9 +94,9 @@
                     </div>
                     <div class="middle-spacer">&nbsp;</div>
                     <div class="d-flex">
-                        <button mat-flat-button class="ml-2" color="primary"
+                        <button mat-flat-button class="ms-2" color="primary"
                             (click)="saveRendererConfig(rendererConfig)">Save</button>
-                        <button mat-flat-button class="ml-2" color="warn"
+                        <button mat-flat-button class="ms-2" color="warn"
                             (click)="deleteRendererConfig(rendererConfig)">Delete</button>
                     </div>
                 </mat-card-content>
@@ -113,34 +113,34 @@
 
     <div class="section subhead subsect">Rating Support</div>
     <div class="d-flex section subhead">
-        <button mat-flat-button class="ml-2 settings" (click)="ratingServiceService.syncRatingFromAudioFile()">import
+        <button mat-flat-button class="ms-2 settings" (click)="ratingServiceService.syncRatingFromAudioFile()">import
             star rating from audio file</button>
     </div>
     <div class="d-flex section subhead">
-        <button mat-flat-button class="ml-2 settings" (click)="ratingServiceService.syncRatingFromMusicBrainz()">import
+        <button mat-flat-button class="ms-2 settings" (click)="ratingServiceService.syncRatingFromMusicBrainz()">import
             star rating from musicbrainz.org</button>
-        <button mat-flat-button class="ml-2 settings"
+        <button mat-flat-button class="ms-2 settings"
             (click)="ratingServiceService.syncRatingsFromMusicBrainzToFiles()">import star rating from musicbrainz.org
             and store in audio file</button>
-            <button mat-flat-button class="ml-2 settings"
+            <button mat-flat-button class="ms-2 settings"
             (click)="ratingServiceService.indexerRescanMusicDirectory()">index local music directory</button>            
     </div>
     <div class="section subhead subsect">actions for current selected media server</div>
     <div class="d-flex section subhead">
-        <button mat-flat-button class="ml-2 settings" (click)="rescan()">Rescan media library</button>
-        <button mat-flat-button class="ml-2 settings" (click)="myMusicService.backupLikedAlbums()">backup liked albums</button>
-        <button mat-flat-button class="ml-2 settings" (click)="myMusicService.restoreLikedAlbums()">restore liked albums</button>
+        <button mat-flat-button class="ms-2 settings" (click)="rescan()">Rescan media library</button>
+        <button mat-flat-button class="ms-2 settings" (click)="myMusicService.backupLikedAlbums()">backup liked albums</button>
+        <button mat-flat-button class="ms-2 settings" (click)="myMusicService.restoreLikedAlbums()">restore liked albums</button>
     </div>
 
     <div class="section subhead subsect">Last FM</div>
     <div class="d-flex section flex-column subhead">
         <div class="para">
             1. Click this button. A new window will open. Login and approve access to nextCP/2 :
-            <button mat-flat-button class="ml-2 settings" (click)="activateLastFM()">nextCP/2 LastFM access</button>
+            <button mat-flat-button class="ms-2 settings" (click)="activateLastFM()">nextCP/2 LastFM access</button>
         </div>
         <div class="para">
             2. After step 1 is done, click this button to connect nextCP/2 to LastFM :
-            <button mat-flat-button class="ml-2 settings" (click)="generateSession()">generate LastFM session</button>
+            <button mat-flat-button class="ms-2 settings" (click)="generateSession()">generate LastFM session</button>
         </div>
     </div>
 
@@ -151,13 +151,13 @@
     <div class="d-flex section flex-column subhead" *ngIf="!configService.spotifyAccountConnected()">
         <div class="para">
             1. Click this button. A new window will open. Login and approve access to nextCP/2 :
-            <button id="spotifyLoginBtn" mat-flat-button class="ml-2 settings" (click)="registerAppAtSpotify()">nextCP/2
+            <button id="spotifyLoginBtn" mat-flat-button class="ms-2 settings" (click)="registerAppAtSpotify()">nextCP/2
                 Spotify access</button>
         </div>
         <div class="para">
             2. After granting access you wil be redirected to a localhost URL (error page). Copy spotify access code
             from your browsers URL bar into the input field below and
-            <button id="spotifyLoginBtn" mat-flat-button class="ml-2 settings" (click)="sendSpotifyCode()">send
+            <button id="spotifyLoginBtn" mat-flat-button class="ms-2 settings" (click)="sendSpotifyCode()">send
                 it</button>
             <div>
                 <input class="section input" [(ngModel)]="code">

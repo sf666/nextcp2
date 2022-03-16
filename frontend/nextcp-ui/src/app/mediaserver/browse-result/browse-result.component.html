@@ -16,9 +16,9 @@
                     <div *ngIf="hasSongs(); else containerTitle">
                         <div class="d-flex flex-column mt-2">
                             <div class="title">{{currentContainer.title}}
-                                <mat-icon *ngIf="isLiked()" (click)="dislikeAlbum()" class="mr-1 liked" svgIcon="heart">
+                                <mat-icon *ngIf="isLiked()" (click)="dislikeAlbum()" class="me-1 liked" svgIcon="heart">
                                 </mat-icon>
-                                <mat-icon *ngIf="likePossible()" (click)="likeAlbum()" class="mr-1 unliked"
+                                <mat-icon *ngIf="likePossible()" (click)="likeAlbum()" class="me-1 unliked"
                                     svgIcon="heart-outline"></mat-icon>
                             </div>
                             <div *ngIf="currentContainer.artist" class="regular">by <span
@@ -31,22 +31,22 @@
                         </div>
                         <div class="button-row">
                             <button mat-flat-button class="my-buttons" (click)="toggleListView()">
-                                <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="{{switchViewIcon}}">
+                                <mat-icon class="me-1" style="vertical-align: top;" svgIcon="{{switchViewIcon}}">
                                 </mat-icon>
                                 switch view
                             </button>
                             <button mat-flat-button class="my-buttons" (click)="playPlaylist(currentContainer)">
-                                <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="play"></mat-icon>
+                                <mat-icon class="me-1" style="vertical-align: top;" svgIcon="play"></mat-icon>
                                 play
                             </button>
                             <button mat-flat-button class="my-buttons" (click)="shufflePlaylist(currentContainer)">
-                                <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="shuffle-variant">
+                                <mat-icon class="me-1" style="vertical-align: top;" svgIcon="shuffle-variant">
                                 </mat-icon>
                                 shuffle
                             </button>
                             <button mat-flat-button class="my-buttons"
                                 (click)="playlistService.addContainerToPlaylist(currentContainer)">
-                                <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="playlist-plus"
+                                <mat-icon class="me-1" style="vertical-align: top;" svgIcon="playlist-plus"
                                     aria-label="add to playlist">
                                 </mat-icon>
                                 add tracks
@@ -57,15 +57,15 @@
                     <!-- minim server support -->
                     <button *ngIf="minimTagsList?.length > 0" mat-flat-button class="my-buttons"
                         (click)="openMinimTagDialog($event)">
-                        <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="tag"></mat-icon>Tags
+                        <mat-icon class="me-1" style="vertical-align: top;" svgIcon="tag"></mat-icon>Tags
                     </button>
                     <!-- current content search box -->
                     <div class="d-flex mt-4">
                         <div class="search-container">
-                            <mat-icon class="mr-1 search-icon" svgIcon="card-search-outline"></mat-icon>
+                            <mat-icon class="me-1 search-icon" svgIcon="card-search-outline"></mat-icon>
                             <input class="search" [(ngModel)]="quickSearchString" matInput placeholder="search content"
                                 #searchInput (keyup)="keyUp($event)">
-                            <mat-icon class="mr-1 search-icon" svgIcon="close" (click)="clearSearch()"></mat-icon>
+                            <mat-icon class="me-1 search-icon" svgIcon="close" (click)="clearSearch()"></mat-icon>
                         </div>
                     </div>
                 </div>
@@ -180,7 +180,7 @@
                 <div id="head_browse_result_items_list_view_ID" class="item-table">
                     <div class="item-thead">
                         <div class="row col-greyed">
-                            <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col small-col-img mr-2">
+                            <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col small-col-img me-2">
                             </div>
                             <div *ngIf="contentDirectoryService.allTracksSameAlbum()" class="col small-col">#</div>
                             <div class="col">Title</div>
@@ -201,7 +201,7 @@
                         </div>
                         <div class="item-tbody">
                             <div class="row minWidth">
-                                <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class=" mr-2">
+                                <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class=" me-2">
                                     <img class="img-small" src="{{item.albumArtUrl}}">
                                 </div>
                                 <div *ngIf="contentDirectoryService.allTracksSameAlbum()" (click)="play(item)"

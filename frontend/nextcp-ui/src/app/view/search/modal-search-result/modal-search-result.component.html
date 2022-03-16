@@ -11,7 +11,7 @@
                 class="search-row d-flex" (click)="musicItemSelected(item)">
                 <img src="{{item.albumArtUrl}}" class="cropImg searchImgHeight align-self-center" alt="">
 
-                <div class="ml-3 d-flex flex-column justify-content-between min-width">
+                <div class="ms-3 d-flex flex-column justify-content-between min-width">
                     <div class="d-flex">
                         <div class="title">{{item.title}}</div>
                         <quality-badge [item]="item"></quality-badge>
@@ -31,7 +31,7 @@
             <div *ngFor="let item of contentDirectoryService.quickSearchResultList?.albumItems"
                 class="search-row d-flex" (click)="albumItemSelected(item)">
                 <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
-                <div class="ml-3 d-flex flex-column justify-content-between min-width">
+                <div class="ms-3 d-flex flex-column justify-content-between min-width">
                     <div class="title">{{item.title}}</div>
                     <div class="artist">from {{item.artist}}</div>
                 </div>
@@ -48,7 +48,7 @@
             <div *ngFor="let item of contentDirectoryService.quickSearchResultList?.playlistItems"
                 class="search-row d-flex" (click)="playlistItemSelected(item)">
                 <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
-                <div class="ml-3 d-flex flex-column justify-content-between min-width">
+                <div class="ms-3 d-flex flex-column justify-content-between min-width">
                     <div class="title">{{item.title}}</div>
                 </div>
             </div>
@@ -64,7 +64,7 @@
             <div *ngFor="let item of contentDirectoryService.quickSearchResultList?.artistItems"
                 class="search-row d-flex" (click)="artistItemSelected(item)">
                 <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
-                <div class="ml-3 d-flex flex-column justify-content-between min-width">
+                <div class="ms-3 d-flex flex-column justify-content-between min-width">
                     <div class="title">{{item.title}}</div>
                     <div class="artist">Artist</div>
                 </div>

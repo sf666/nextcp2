@@ -1,12 +1,12 @@
 <div class="d-flex">
-    <div class="ml-4 mt-4 d-flex flex-column">
+    <div class="ms-4 mt-4 d-flex flex-column">
         <div class="mb-3">
             <img *ngIf="rendererService.trackInfoAvailable" src="{{getImgSrc()}}">
         </div>
         <star-rating [size]="getStarSize()" [currentSong]="getCurrentTrack()"></star-rating>
     </div>
     <div *ngIf="hasCurrentSongTitle(); else noTitle">
-        <div class="d-flex flex-column ml-5 mt-5">
+        <div class="d-flex flex-column ms-5 mt-5">
             <div class="d-flex flex-column minWidth">
                 <div class="title">{{getCurrentSongTitle()}}</div>
                 <div class="d-flex flex-column no-wrap">
@@ -26,11 +26,11 @@
     
             <div class="d-flex buttons-container">
                 <button class="mr-buttons" mat-flat-button aria-label="Show info" (click)="detailsClicked()">
-                    <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="information-outline"></mat-icon>Details
+                    <mat-icon class="me-1" style="vertical-align: top;" svgIcon="information-outline"></mat-icon>Details
                 </button>
                 <button *ngIf="canBeAddedToPlaylist" mat-flat-button class="mr-buttons"
                     (click)="openAddPlaylistDialog($event, getCurrentTrack().musicBrainzId.TrackId)">
-                    <mat-icon class="mr-1" style="vertical-align: top;" svgIcon="playlist-plus"></mat-icon>Playlists
+                    <mat-icon class="me-1" style="vertical-align: top;" svgIcon="playlist-plus"></mat-icon>Playlists
                 </button>
             </div>
     
