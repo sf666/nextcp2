@@ -291,6 +291,10 @@ public class DtoBuilder
                 case "originalTrackNumber":
                     itemDto.originalTrackNumber = property.getValue().toString();
                     break;
+                case "genre":
+                    itemDto.genre = property.getValue().toString();
+                case "date":
+                    itemDto.date = property.getValue().toString();
                 default:
                     log.debug("unprocessed property : " + property.getDescriptorName() + " : " + property.getValue());
             }
