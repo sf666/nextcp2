@@ -382,6 +382,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
         {
             if (state.Repeat)
             {
+                log.info("repeat playback ...");
                 if (playbackItems.size() > 0)
                 {
                     peekSongIdx = 0;
@@ -439,7 +440,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
         {
             log.info(String.format("moving to next track : %s", playlistItems.get(currentSongIdx)));
         }
-
+        
         return playlistItems.get(currentSongIdx);
     }
 

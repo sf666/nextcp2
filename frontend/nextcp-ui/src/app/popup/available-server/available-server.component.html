@@ -1,7 +1,7 @@
 <div class="panel" *ngIf="true" (mouseleave)="close()">
     <div class="dialogTitle">Media Server</div>
-    <div class="dialogItems d-flex flex-column flex-wrap mt-4">
-        <div *ngFor="let device of deviceService.getMediaServerList()" class="element-item {{getSelectedClass(device.udn)}}"
+    <div class="dialogItems d-flex flex-column flex-wrap mt-4 minWidth">
+        <div *ngFor="let device of deviceService.getMediaServerList()" class="no-wrap element-item {{getSelectedClass(device.udn)}}"
             (click)="selectServer(device.udn)">
             {{device.friendlyName}}
         </div>
