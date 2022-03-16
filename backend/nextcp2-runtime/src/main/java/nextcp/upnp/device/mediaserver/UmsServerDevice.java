@@ -266,7 +266,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         Response response = call.execute();
         String respString = response.body().string();
         toastDeviceResponse(respString, response.code(), false);
-        return bodyString;
+        return respString;
     }
 
     private Response executeCallWithResponse(String bodyString, String uri) throws IOException
