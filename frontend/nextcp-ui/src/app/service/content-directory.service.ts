@@ -43,6 +43,7 @@ export class ContentDirectoryService {
 
   // notfiy other about content change
   browseFinished$: Subject<ContainerItemDto> = new Subject();
+  searchFinished$: Subject<ContainerItemDto> = new Subject();
 
   constructor(
     private httpService: HttpService,
@@ -229,7 +230,7 @@ export class ContentDirectoryService {
    * 
    * @param data Gets called after a browse request returns ...
    */
-  updateContainer(data: ContainerItemDto): void {
+  public updateContainer(data: ContainerItemDto): void {
     this.currentContainerList = data;
     if (this.lastOidIsResoredFromCache && !(data.containerDto.length > 0 || data.musicItemDto.length > 0)) {
       this.browseToRoot('');
@@ -347,38 +348,53 @@ export class ContentDirectoryService {
   public searchAllItems(quickSearchDto: SearchRequestDto): void {
     const uri = '/searchAllItems';
     this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
-      this.searchItemService.musicItemList = data;
-      this.clearSearch();
-      void this.router.navigateByUrl('searchResultContainer');
+      this.updateSearchResultItemAndNavigate(data.musicItems);
     });
   }
 
   public searchAllPlaylist(quickSearchDto: SearchRequestDto): void {
     const uri = '/searchAllPlaylist';
     this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
-      this.searchItemService.musicItemList = data;
-      this.clearSearch();
-      void this.router.navigateByUrl('searchResultContainer');
+      this.updateSearchResultAndNavigate(data.playlistItems);
     });
   }
 
   public searchAllAlbum(quickSearchDto: SearchRequestDto): void {
     const uri = '/searchAllAlbum';
     this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
-      this.searchItemService.musicItemList = data;
-      this.clearSearch();
-      void this.router.navigateByUrl('searchResultContainer');
+      this.updateSearchResultAndNavigate(data.albumItems);
     });
   }
 
   public searchAllArtists(quickSearchDto: SearchRequestDto): void {
     const uri = '/searchAllArtists';
     this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
-      this.searchItemService.musicItemList = data;
-      this.clearSearch();
-      void this.router.navigateByUrl('searchResultContainer');
+      this.updateSearchResultAndNavigate(data.artistItems);
     });
   }
 
+  private updateSearchResultAndNavigate(searchResultContainer : ContainerDto[]) {
+    let ci = this.dtoGeneratorService.generateEmptyContainerItemDto();
+    ci.containerDto = searchResultContainer;
+    ci.currentContainer = this.currentContainerList.currentContainer;
+    ci.currentContainer.parentID = this.cdsBrowsePathService.peekCurrentPathID();
+    this.clearSearch();
+    this.updateContainer(ci);
+    this.searchFinished$.next(ci);
+  }
+
+  private updateSearchResultItemAndNavigate(searchResultItems : MusicItemDto[]) {
+    let ci = this.dtoGeneratorService.generateEmptyContainerItemDto();
+    ci.musicItemDto = searchResultItems;
+    ci.currentContainer = this.currentContainerList.currentContainer;
+    ci.currentContainer.albumartUri = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+    ci.currentContainer.childCount = searchResultItems.length;
+    ci.currentContainer.artist = '';
+    ci.currentContainer.title = '';
+    ci.currentContainer.parentID = this.cdsBrowsePathService.peekCurrentPathID();
+    this.clearSearch();
+    this.updateContainer(ci);
+    this.searchFinished$.next(ci);
+  }
 }
 

@@ -26,6 +26,8 @@ export class BrowseResultComponent implements AfterViewChecked {
   private listView = true;
   private lastDiscLabel = '';
 
+  showTopHeader = true;
+
   quickSearchString: string;
 
   constructor(
@@ -41,10 +43,15 @@ export class BrowseResultComponent implements AfterViewChecked {
     public myMusicService: MyMusicService,
     public playlistService: PlaylistService) {
       contentDirectoryService.browseFinished$.subscribe(data => this.browseFinished(data));
+      contentDirectoryService.searchFinished$.subscribe(data => this.searchFinished(data));
     }
 
   private browseFinished(data) {
+    this.showTopHeader = true;
+  }
 
+  private searchFinished(data) {
+    this.showTopHeader = false;
   }
 
   ngAfterViewChecked(): void {

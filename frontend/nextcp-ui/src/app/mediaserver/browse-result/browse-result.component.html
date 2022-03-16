@@ -4,7 +4,7 @@
     <!-- ############################################################## -->
 
     <!-- Top browsing element: Displays image and informations about current container -->
-    <div class="outer-container">
+    <div *ngIf="showTopHeader" class="outer-container">
         <div class="header-container">
             <div class="top-img-container">
                 <img class="cardLayout image-container" src="{{currentContainer.albumartUri}}" class="img-top"
