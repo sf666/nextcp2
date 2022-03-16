@@ -24,7 +24,7 @@ import { ModalSearchResultComponent } from './view/search/modal-search-result/mo
 
 
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Material Design
 import { MatSliderModule } from '@angular/material/slider';
 import { MatIconModule } from '@angular/material/icon';
@@ -107,6 +107,7 @@ import { ToastContainerComponent } from './service/toast/toast-container/toast-c
 
       // Other
       BrowserModule,
+      BrowserAnimationsModule,
       AppRoutingModule,
       FormsModule,
       HttpClientModule,
