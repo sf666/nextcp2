@@ -201,7 +201,7 @@
                         </div>
                         <div class="item-tbody">
                             <div class="row minWidth">
-                                <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class=" me-2">
+                                <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col small-col-img me-2">
                                     <img class="img-small" src="{{item.albumArtUrl}}">
                                 </div>
                                 <div *ngIf="contentDirectoryService.allTracksSameAlbum()" (click)="play(item)"

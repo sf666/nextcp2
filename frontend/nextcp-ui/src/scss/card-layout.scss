@@ -36,7 +36,7 @@ $grid-flex-max-width : 17rem;
     max-width : $grid-flex-max-width;
     flex-grow : 1;
 
-    padding   : 1rem;
+    padding: 1rem;
 
     font-size     : 0.9rem;
     font-weight   : 500;
@@ -50,6 +50,7 @@ $grid-flex-max-width : 17rem;
 
 .albumTitle {
     color        : var(--snow-white);
+    font-weight  : 400;
     margin-bottom: 0.5rem;
 }
 

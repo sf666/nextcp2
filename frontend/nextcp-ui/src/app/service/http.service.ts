@@ -60,23 +60,29 @@ export class HttpService {
    */
   public post<T>(base: string, path: string, payload: any, errorHeader?: string): Subject<T> {
     const ret = new Subject<T>();
-    this.http.post<T>(base + path, payload).subscribe(data => {
-      return ret.next(data);
-    }, err => {
-      this.genericResultService.displayHttpError(err, errorHeader == null ? "communication error" : errorHeader);
-      console.log(err);
+    this.http.post<T>(base + path, payload).subscribe({
+      next: (data) => {
+        return ret.next(data);
+      },
+      error: (err) => {
+        this.genericResultService.displayHttpError(err, errorHeader == null ? "communication error" : errorHeader);
+        console.log(err);
+      }
     });
     return ret;
   }
 
   public postWithSuccessMessage<T>(base: string, path: string, payload: any, successHeader: string, successBody: string, errorHeader?: string): Subject<T> {
     const ret = new Subject<T>();
-    this.http.post<T>(base + path, payload).subscribe(data => {
-      this.genericResultService.displaySuccessMessage(successHeader, successBody);
-      return ret.next(data);
-    }, err => {
-      this.genericResultService.displayHttpError(err, errorHeader == null ? "communication error" : errorHeader);
-      console.log(err);
+    this.http.post<T>(base + path, payload).subscribe({ 
+      next: (data) => {
+        this.genericResultService.displaySuccessMessage(successHeader, successBody);
+        return ret.next(data);
+      },
+      error: (err) => {
+        this.genericResultService.displayHttpError(err, errorHeader == null ? "communication error" : errorHeader);
+        console.log(err);
+      }
     });
     return ret;
   }
