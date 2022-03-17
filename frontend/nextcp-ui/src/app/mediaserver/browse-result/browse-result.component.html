@@ -214,7 +214,7 @@
                                 <div (click)="play(item)" class="col no-wrap d-none d-md-block">{{item.artistName}}
                                 </div>
                                 <div *ngIf="!contentDirectoryService.allTracksSameAlbum()"
-                                    class="col d-none d-lg-block">{{item.album}}</div>
+                                    class="col no-wrap d-none d-lg-block">{{item.album}}</div>
                                 <div *ngIf="contentDirectoryService.oneTrackWithMusicBrainzId()" class="col mid-col">
                                     <star-rating [currentSong]="item"></star-rating>
                                 </div>
