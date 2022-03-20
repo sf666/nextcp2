@@ -219,7 +219,7 @@ public class RestPlaylistService extends BaseRestService
         }
         catch (Exception e)
         {
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Adding folder & play" + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Adding folder & play : " + e.getMessage());
         }
     }
 
