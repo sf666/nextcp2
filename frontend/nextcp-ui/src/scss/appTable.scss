@@ -18,7 +18,8 @@
     }
 
     .small-col {
-        max-width : 60px;
+        max-width : 4rem;
+        min-width : 1rem;
         text-align: right;
     }
 
@@ -73,7 +74,7 @@
         text-transform: initial;
         margin-left   : 0.1rem;
         margin-top    : 0.5rem;
-    
+
         .row {
             margin     : 5px 0;
             padding    : 0 8px;
@@ -87,7 +88,8 @@
         }
 
         .small-col {
-            max-width : 30px;
+            max-width : 2rem;
+            min-width : 1rem;
             text-align: right;
         }
 
