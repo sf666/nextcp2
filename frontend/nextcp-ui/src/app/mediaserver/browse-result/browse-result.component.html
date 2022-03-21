@@ -201,7 +201,7 @@
                         </div>
                         <div class="item-tbody">
                             <div class="row minWidth">
-                                <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col small-col-img me-2">
+                                <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" class="col small-col-img me-2" (click)="play(item)">
                                     <img class="img-small" src="{{item.albumArtUrl}}">
                                 </div>
                                 <div *ngIf="contentDirectoryService.allTracksSameAlbum()" (click)="play(item)"
@@ -213,7 +213,7 @@
                                 </div>
                                 <div (click)="play(item)" class="col no-wrap d-none d-md-block">{{item.artistName}}
                                 </div>
-                                <div *ngIf="!contentDirectoryService.allTracksSameAlbum()"
+                                <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" (click)="play(item)"
                                     class="col no-wrap d-none d-lg-block">{{item.album}}</div>
                                 <div *ngIf="contentDirectoryService.oneTrackWithMusicBrainzId()" class="col d-none d-sm-block mid-col">
                                     <star-rating [currentSong]="item"></star-rating>

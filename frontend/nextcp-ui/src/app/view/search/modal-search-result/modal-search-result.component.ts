@@ -1,3 +1,4 @@
+import { AvtransportService } from './../../../service/avtransport.service';
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable no-restricted-syntax */
 import { ContentDirectoryService } from './../../../service/content-directory.service';
@@ -21,6 +22,7 @@ export class ModalSearchResultComponent {
     private searchItemService: SearchItemService,
     private dtoGeneratorService: DtoGeneratorService,
     private deviceService: DeviceService,
+    private avtransportService: AvtransportService,
     private router: Router) {
   }
 
@@ -33,7 +35,7 @@ export class ModalSearchResultComponent {
     console.debug("search item selected : " + musicItem);
     this.searchItemService.musicItem = musicItem;
     this.contentDirectoryService.clearSearch();
-    void this.router.navigateByUrl('searchResultSingleItem');
+    this.avtransportService.playResource(musicItem);
   }
 
   albumItemSelected(albumItem: ContainerDto): void {
