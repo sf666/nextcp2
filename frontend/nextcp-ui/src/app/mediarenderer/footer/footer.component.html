@@ -26,7 +26,6 @@
                     </div>
                 </div>
             </div>
-            <div class="middle-spacer">&nbsp;</div>
             <div class="d-flex footer-badge">
                 <quality-badge [item]="rendererService.trackInfo?.currentTrack"></quality-badge>
             </div>
@@ -40,11 +39,11 @@
 
         <!-- Middle footer section -->
         <div class="m-2 middle-footer flex-column align-items-center">
-            <div class="lower-row">
+            <div class="middle-div">
                 <div class="ms-4 me-2 d-flex align-self-center">
-                    <mat-icon class="icon-button secondary {{shuffleClass}}" svgIcon="shuffle"
+                    <mat-icon class="icon-button d-none d-sm-block secondary {{shuffleClass}}" svgIcon="shuffle"
                         (click)="playlistService.toggleShuffle()" aria-label="shuffle"></mat-icon>
-                    <mat-icon class="icon-button secondary" svgIcon="skip-backward" (click)="playlistService.previous()"
+                    <mat-icon class="icon-button d-none d-sm-block secondary" svgIcon="skip-backward" (click)="playlistService.previous()"
                         aria-label="skip-backward"></mat-icon>
                     <mat-icon *ngIf="!avtransportService.isPlaying()" (click)="playlistService.play()"
                         class="icon-button main" svgIcon="play" aria-label="play"></mat-icon>
@@ -52,10 +51,10 @@
                         class="icon-button main" svgIcon="pause" aria-label="play"></mat-icon>
                     <mat-icon class="icon-button secondary" svgIcon="skip-forward" (click)="playlistService.next()"
                         aria-label="skip-forward"></mat-icon>
-                    <mat-icon class="icon-button secondary {{repeatClass}}" svgIcon="repeat"
+                    <mat-icon class="icon-button d-none d-sm-block secondary {{repeatClass}}" svgIcon="repeat"
                         (click)="playlistService.toggleRepeat()" aria-label="repeat"></mat-icon>
                 </div>
-                <div class="timeDispContainer">
+                <div class="timeDispContainer d-none d-lg-flex">
                     <div class="currentTime">{{rendererService.trackTime.secondsDisp}}</div>
                     <div class="ms-2 currentTime">/</div>
                     <div class="ms-2 finishedTime" *ngIf="!streaming(); else streamDisplayString">{{getFinishTime()}}
@@ -69,7 +68,7 @@
         </ng-template>
 
         <!-- right footer section -->
-        <div class="m-2 ps-2 right-footer me-4 lower-row justify-content-between">
+        <div class="m-2 ps-2 right-footer me-4 justify-content-between d-none d-md-flex">
             <mat-icon class="icon-main align-self-center" (click)="serverClicked($event)" svgIcon="server-network"></mat-icon>
             <mat-icon class="icon-main align-self-center" style="margin-top: 4px;" (click)="rendererClicked($event)" svgIcon="cast-audio"></mat-icon>
             <mat-icon class="icon-main align-self-center" svgIcon="volume-high" aria-hidden="false"
