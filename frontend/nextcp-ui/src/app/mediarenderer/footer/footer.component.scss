@@ -27,13 +27,13 @@ mat-slider {
 }
 
 .timeDispContainer {
+    flex           : 1 2 auto;
     display        : flex;
     flex-direction : row;
     justify-content: flex-end;
     align-self     : center; // vertical center
     width          : 150px;
     min-width      : 150px;
-    margin-left    : 1.5rem;
 }
 
 .icon-button {
@@ -66,8 +66,14 @@ mat-slider {
     min-width : 200px;
 }
 
+.qualityBadge {
+    margin-right: 0.5rem;
+    margin-left : 0.5rem;
+    align-self  : center;
+}
+
 .middle-footer {
-    flex      : 3 3 20rem;
+    flex: 3 3 20rem;
 }
 
 .right-footer {
@@ -93,10 +99,6 @@ mat-slider {
     align-self     : flex-end;
     text-align     : end;
     text-align-last: end;
-}
-
-.footer-badge {
-    align-self: center;
 }
 
 .baseFontsize {
