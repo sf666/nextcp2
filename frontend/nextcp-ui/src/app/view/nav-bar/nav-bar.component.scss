@@ -87,12 +87,14 @@ input {
     -webkit-app-region: no-drag;
     -moz-app-region   : no-drag;
 
-    width    : 100%;
-    max-width: 388px;
+    width      : 100%;
+    max-width  : 388px;
+    min-width  : 200px;
+    margin-left: 1rem;
+    padding    : 0 7px;
 
     align-self      : center;
     align-items     : center;
-    padding         : 0 7px;
     background-color: var(--bg-grey-8);
     border-radius   : 8px;
     cursor          : text;

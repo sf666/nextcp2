@@ -48,11 +48,13 @@
     }
 
     .item-tbody {
+        flex          : 1 1 auto;
         font-size     : 0.9rem;
         font-weight   : 300;
         text-align    : left;
         align-self    : stretch;
         text-transform: initial;
+        min-width     : 100px;
 
         .row {
             padding-top   : 7px;
@@ -111,6 +113,7 @@
         .item-thead {
             font-size     : 0.9rem;
             font-weight   : 500;
+            min-width     : 0px;
             margin        : 15px 0;
             text-align    : left;
             align-self    : stretch;
@@ -125,6 +128,7 @@
             text-transform: initial;
 
             .row {
+                flex          : 1 1 auto;
                 padding-top   : 7px;
                 padding-bottom: 7px;
 

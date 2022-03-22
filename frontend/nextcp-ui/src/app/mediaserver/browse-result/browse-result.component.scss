@@ -19,15 +19,17 @@
 }
 
 .header-container {
-    display     : flex;
-    margin-right: 32px;
+    display      : flex;
+    padding-right: 32px;
+    flex         : 1 1 auto;
 }
 
 @media only screen and (max-width: 900px) {
     .header-container {
+        flex          : 1 1 auto;
         display       : flex;
         flex-direction: column;
-        margin-right  : 8px;
+        padding-right : 8px;
     }
 
     .top-img-container {
@@ -108,10 +110,10 @@ img {
 }
 
 .outer-container {
-    display     : flex;
-    flex        : 1 5 auto;
-    position    : relative;
-    margin-top  : 2rem;
+    display   : flex;
+    flex      : 1 5 auto;
+    position  : relative;
+    margin-top: 2rem;
 }
 
 .browseContentArea {
