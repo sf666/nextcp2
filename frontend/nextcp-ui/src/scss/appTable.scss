@@ -5,39 +5,6 @@
     align-self    : stretch;
     text-transform: initial;
 
-    .row {
-        margin     : 5px 0;
-        padding    : 0 20px;
-        align-items: center;
-    }
-
-    .col {
-        padding      : 0 10px;
-        overflow     : hidden;
-        text-overflow: ellipsis;
-    }
-
-    .small-col {
-        max-width : 4rem;
-        min-width : 1rem;
-        text-align: right;
-    }
-
-    .small-col-img {
-        max-width : 4rem;
-        text-align: right;
-    }
-
-    .mid-col {
-        max-width : 100px;
-        text-align: right;
-    }
-
-    .medium-col {
-        max-width : 130px;
-        text-align: right;
-    }
-
     .item-thead {
         font-size     : 0.9rem;
         font-weight   : 500;
@@ -55,87 +22,11 @@
         align-self    : stretch;
         text-transform: initial;
         min-width     : 100px;
-
-        .row {
-            padding-top   : 7px;
-            padding-bottom: 7px;
-
-            &:hover {
-                background: rgba(88, 109, 148, 0.2);
-            }
-        }
     }
 }
 
-@media only screen and (max-width: 1100px) {
-    .item-table {
-        font-size     : 1rem;
-        font-weight   : 300;
-        text-align    : left;
-        align-self    : stretch;
-        text-transform: initial;
-        margin-left   : 0.1rem;
-        margin-top    : 0.5rem;
-
-        .row {
-            margin     : 5px 0;
-            padding    : 0 8px;
-            align-items: center;
-        }
-
-        .col {
-            padding      : 0 10px;
-            overflow     : hidden;
-            text-overflow: ellipsis;
-        }
-
-        .small-col {
-            max-width : 2rem;
-            min-width : 1rem;
-            text-align: right;
-        }
-
-        .small-col-img {
-            max-width : 4rem;
-            text-align: right;
-        }
-
-        .mid-col {
-            max-width : 100px;
-            text-align: right;
-        }
-
-        .medium-col {
-            max-width : 130px;
-            text-align: right;
-        }
-
-        .item-thead {
-            font-size     : 0.9rem;
-            font-weight   : 500;
-            min-width     : 0px;
-            margin        : 15px 0;
-            text-align    : left;
-            align-self    : stretch;
-            text-transform: initial;
-        }
-
-        .item-tbody {
-            font-size     : 0.9rem;
-            font-weight   : 300;
-            text-align    : left;
-            align-self    : stretch;
-            text-transform: initial;
-
-            .row {
-                flex          : 1 1 auto;
-                padding-top   : 7px;
-                padding-bottom: 7px;
-
-                &:hover {
-                    background: rgba(88, 109, 148, 0.2);
-                }
-            }
-        }
-    }
+/*         &:hover {
+    background: rgba(88, 109, 148, 0.2);
 }
+}
+*/

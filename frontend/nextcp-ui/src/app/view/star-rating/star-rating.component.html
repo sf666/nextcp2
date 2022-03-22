@@ -1,5 +1,5 @@
-<div class="d-flex justify-content-center icon-sm" *ngIf="isVisible()">
-    <button mat-icon-button aria-label="" class="{{getClass(num)}} {{getBtnSizeClass()}}" *ngFor="let num of starsAvail" (click)="starSelected(num)">
+<div class="d-flex justify-content-end icon-sm minWidth" *ngIf="isVisible()">
+    <div class="{{getClass(num)}} {{getBtnSizeClass()}}" *ngFor="let num of starsAvail" (click)="starSelected(num)">
         <mat-icon class="{{getIconSizeClass()}}">star</mat-icon>
-    </button>
+    </div>
 </div>

@@ -190,6 +190,13 @@ export class BrowseResultComponent implements AfterViewChecked {
     return '';
   }
 
+  newDiscLabel(item: MusicItemDto): boolean {
+    if (item.numberOfThisDisc !== this.lastDiscLabel) {
+      return true;
+    }
+    return false;
+  }
+
   playAlbum(container: ContainerDto): void {
     this.playlistService.addContainerToPlaylistAndPlay(container, false);
   }

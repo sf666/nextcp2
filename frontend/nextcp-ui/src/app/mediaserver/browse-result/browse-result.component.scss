@@ -46,6 +46,10 @@
     }
 }
 
+.myRow {
+    align-content: center;
+}
+
 // Container
 .img-top {
     background-repeat: calc(var(--vh, 1vh) * 100);
@@ -60,8 +64,10 @@
     object-fit      : cover;
     background-color: rgba(0, 0, 0, 0.5);
 
-    width : 4rem;
-    height: 4rem;
+    width        : 4rem;
+    height       : 4rem;
+    margin-bottom: 0.5rem;
+    margin-top   : 0.5rem;
 }
 
 .search-icon {
@@ -273,3 +279,27 @@ input {
 .itemDetails {
     margin-bottom: 10rem;
 }
+
+.text-right {
+    text-align: end;
+}
+
+.disc-label {
+    margin-top   : 1rem;
+    font-weight  : 500;
+    margin-bottom: 1.5rem;
+}
+
+.row-alignment {
+    align-items: center;
+}
+
+.clearfix{
+    &:nth-of-type(n){
+      display: none;
+    }
+  
+    &:nth-of-type(4n){
+      display: block;
+    }
+  }
