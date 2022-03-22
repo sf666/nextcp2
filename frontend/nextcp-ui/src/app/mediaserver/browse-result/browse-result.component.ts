@@ -315,4 +315,15 @@ export class BrowseResultComponent implements AfterViewChecked {
   likeAlbum(): void {
     this.myMusicService.likeAlbum(this.myMusicService.currentAlbumReleaseID);
   }
+
+  // CSS responsive grid layout counting in respect to first image visible or not
+
+  getTitleResponsiveClass(): string {
+    if (!this.contentDirectoryService.allTracksSameAlbum()) {
+      return "col-8 col-sm-7 col-md-5 col-lg-4";
+    } else {
+      return "col-10 col-sm-8 col-md-6 col-lg-6";
+    }
+  }
+
 }
