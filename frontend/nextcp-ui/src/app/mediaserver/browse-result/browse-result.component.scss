@@ -108,18 +108,14 @@ img {
 }
 
 .outer-container {
+    display     : flex;
+    flex        : 1 5 auto;
     position    : relative;
-    margin-left : 3rem;
-    margin-right: 1rem;
     margin-top  : 2rem;
 }
 
-@media only screen and (max-width: 900px) {
-    .outer-container {
-        position   : relative;
-        margin-left: 8px;
-        margin-top : 8px;
-    }
+.browseContentArea {
+    flex: 5 1 auto;
 }
 
 .plainText {
@@ -273,5 +269,5 @@ input {
 }
 
 .itemDetails {
-    margin-bottom: 10rem;      
-}  
+    margin-bottom: 10rem;
+}

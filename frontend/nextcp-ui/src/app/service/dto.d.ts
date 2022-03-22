@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2022-03-08 12:35:13.
+// Generated using typescript-generator version 2.32.889 on 2022-03-21 16:54:03.
 
 export interface AudioFormat {
     nrAudioChannels: number;
