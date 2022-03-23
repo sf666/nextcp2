@@ -77,8 +77,9 @@ mat-slider {
 }
 
 .right-footer {
-    flex      : 1 1 8rem;
-    align-self: center;
+    flex           : 1 1 8rem;
+    align-self     : center;
+    justify-content: space-evenly;
 }
 
 .audioInfoLabel {
