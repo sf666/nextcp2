@@ -25,9 +25,10 @@ $grid-flex-max-width : 19rem;
 }
 
 .albumLayout {
+    flex     : 1 1 0;
     display  : flex;
     flex-wrap: wrap;
-    flex-grow: 5 1 auto;
+    min-width: 0px;
 }
 
 .albumTile {

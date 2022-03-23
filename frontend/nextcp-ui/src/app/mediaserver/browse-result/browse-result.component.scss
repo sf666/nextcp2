@@ -123,8 +123,15 @@ img {
 }
 
 .browseContentArea {
-    flex: 30 1 auto;
+    flex: 30 1 0;
 }
+
+@media only screen and (max-width: 34rem) {
+    .browseContentArea {
+        flex: 2 1 0;
+    }
+}
+
 
 .plainText {
     font-size  : 1rem;
