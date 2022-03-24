@@ -396,7 +396,7 @@ public class DtoBuilder
                             log.debug("parsing rating information failed", e);
                         }
                         break;
-                    case "fileid":
+                    case "audiotrackid":
                     	try
                     	{
                             String strFileId = n.getTextContent();
