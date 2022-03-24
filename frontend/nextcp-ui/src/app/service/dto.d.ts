@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2022-03-21 16:54:03.
+// Generated using typescript-generator version 2.32.889 on 2022-03-24 11:19:15.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -181,6 +181,7 @@ export interface MusicItemDto {
     genre: string;
     rating: number;
     musicBrainzId: MusicBrainzId;
+    fileId: number;
 }
 
 export interface MusicbrainzSupport {

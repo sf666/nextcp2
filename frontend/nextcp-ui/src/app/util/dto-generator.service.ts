@@ -87,7 +87,8 @@ export class DtoGeneratorService {
       streamingURL: '',
       title: '',
       genre:'', 
-      musicBrainzId: this.emptyMusicBrainzId()
+      musicBrainzId: this.emptyMusicBrainzId(),
+      fileId: -1
     }
   }
 

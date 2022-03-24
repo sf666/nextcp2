@@ -5,7 +5,6 @@ import { SseService } from './../../service/sse/sse.service';
 import { RatingServiceService } from './../../service/rating-service.service';
 import { MusicItemDto } from './../../service/dto.d';
 import { Component, Input, ViewEncapsulation } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon'
 
 @Component({
   selector: 'star-rating',

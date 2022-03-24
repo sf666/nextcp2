@@ -206,6 +206,7 @@ MusicItemDto:
    genre: String
    rating: Integer
    musicBrainzId: MusicBrainzId
+   fileId: Long
    
 MusicBrainzId:
    AlbumId: String

@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.fourthline.cling.support.contentdirectory.DIDLParser;
 import org.fourthline.cling.support.model.DIDLContent;
 import org.fourthline.cling.support.model.DIDLObject;
@@ -313,10 +314,10 @@ public class DtoBuilder
         // Support for Mediaplayer Tags (https://petemanchester.github.io/MediaPlayer/)
         //
         MusicBrainzId mb = new MusicBrainzId();
-        Optional<DescMeta> mpdDesc = item.getDescMetadata().stream().filter(n -> n.getType().equalsIgnoreCase("mpd-tags")).findFirst();
-        if (mpdDesc.isPresent())
+        Optional<DescMeta> descMetadata = item.getDescMetadata().stream().filter(n -> n.getType().equalsIgnoreCase("mpd-tags")).findFirst();
+        if (descMetadata.isPresent())
         {
-            Node metaChildNodes = ((Node) mpdDesc.get().getMetadata()).getFirstChild();
+            Node metaChildNodes = ((Node) descMetadata.get().getMetadata()).getFirstChild();
             for (int i = 0; i < metaChildNodes.getChildNodes().getLength(); i++)
             {
                 Node n = metaChildNodes.getChildNodes().item(i);
@@ -350,10 +351,10 @@ public class DtoBuilder
         //
         // Support for UniversalMediaServer Tags (https://www.universalmediaserver.com/)
         //
-        mpdDesc = item.getDescMetadata().stream().filter(n -> n.getType().equalsIgnoreCase("ums-tags")).findFirst();
-        if (mpdDesc.isPresent())
+        descMetadata = item.getDescMetadata().stream().filter(n -> n.getType().equalsIgnoreCase("ums-tags")).findFirst();
+        if (descMetadata.isPresent())
         {
-            Node metaChildNodes = ((Node) mpdDesc.get().getMetadata()).getFirstChild();
+            Node metaChildNodes = ((Node) descMetadata.get().getMetadata()).getFirstChild();
             for (int i = 0; i < metaChildNodes.getChildNodes().getLength(); i++)
             {
                 Node n = metaChildNodes.getChildNodes().item(i);
@@ -384,13 +385,30 @@ public class DtoBuilder
                         try
                         {
                             String strRating = n.getTextContent();
-                            itemDto.rating = Integer.parseInt(strRating);
-                            log.debug("rating : " + strRating);
+                            if (NumberUtils.isParsable(strRating))
+                            {
+                                itemDto.rating = Integer.parseInt(strRating);
+                                log.debug("rating : " + strRating);
+                            }
                         }
                         catch (Exception e)
                         {
                             log.debug("parsing rating information failed", e);
                         }
+                        break;
+                    case "fileid":
+                    	try
+                    	{
+                            String strFileId = n.getTextContent();
+                            if (NumberUtils.isParsable(strFileId)) {
+                                itemDto.fileId = Long.parseLong(strFileId);
+                                log.debug("fileid : " + strFileId);
+                            }
+                    	}
+                    	catch (Exception e )
+                    	{
+                            log.debug("parsing fileid failed", e);
+                    	}
                         break;
                     default:
                         log.warn("unknown ums-tags attribute : " + n.getNodeName());
