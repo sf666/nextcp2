@@ -56,6 +56,7 @@ export class SongOptionsComponent implements OnInit {
 
   download(): void {
     this.downloadService.downloadFileByMBID(this.item, this);
+    this.closeThisPopup();
   }
 
   openAddToPlaylistDialog(event: Event): void {

@@ -78,7 +78,6 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("adding song to server playlist", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "Server playlist", e.getMessage()));
         }
     }
 
@@ -92,7 +91,6 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("removing song from server playlist", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "Server playlist", e.getMessage()));
         }
     }
 
