@@ -3,6 +3,7 @@ package nextcp.upnp.device.mediaserver;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -11,6 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import nextcp.config.ConfigPersistence;
 import nextcp.dto.Config;
@@ -27,6 +33,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 {
     private static final Logger log = LoggerFactory.getLogger(UmsServerDevice.class.getName());
     private OkHttpClient okClient = new OkHttpClient.Builder().build();
+    private ObjectMapper om = new ObjectMapper();
 
     @Autowired
     private Config config = null;
@@ -279,41 +286,67 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         return response;
     }
 
-    @Override
-    public void backupMyMusic()
+    private String doGenericCall(String body, String api, boolean showOkMessage)
     {
         try
         {
-            Response res = executeCallWithResponse("", "api/like/backupLikedAlbums");
+            Response res = executeCallWithResponse(body, api);
+            String respBody = res.body().string();
             if (res.code() != 200)
             {
-                log.warn("API error");
-                throw new RuntimeException(res.body().string());
+                log.warn("API error : " + respBody);
+                toastDeviceResponse(respBody, res.code(), false);
+                throw new RuntimeException(respBody);
             }
+            if (showOkMessage)
+            {
+                toastDeviceResponse(respBody, res.code(), true);
+            }
+            return respBody;
         }
         catch (Exception e)
         {
-            log.debug("backupLikedAlbums failed ...", e);
+            log.error("API call failed ...", e);
             throw new RuntimeException(e);
         }
     }
 
     @Override
+    public void backupMyMusic()
+    {
+        doGenericCall("", "api/like/backupLikedAlbums", true);
+    }
+
+    @Override
     public void restoreMyMusic()
     {
-        try
+        doGenericCall("", "api/like/restoreLikedAlbums", true);
+    }
+
+    @Override
+    public void createPlaylist(String playlistName)
+    {
+        doGenericCall(playlistName, "api/playlist/createplaylist", true);
+    }
+
+    @Override
+    public void addSongToPlaylist(Integer audiotracId, String playlistName)
+    {
+        doGenericCall(String.format("%d/%s", audiotracId, playlistName), "api/playlist/addsongtoplaylist", true);
+    }
+
+    @Override
+    public void removeSongFromPlaylist(Integer audiotraclId, String playlistName)
+    {
+        doGenericCall(String.format("%d/%s", audiotraclId, playlistName), "api/playlist/removesongfromplaylist", true);
+    }
+
+    @Override
+    public List<String> getAllPlaylists() throws JsonMappingException, JsonProcessingException
+    {
+        String playlists = doGenericCall("", "api/playlist/getallplaylists", false);
+        return om.readValue(playlists, new TypeReference<List<String>>()
         {
-            Response res = executeCallWithResponse("", "api/like/restoreLikedAlbums");
-            if (res.code() != 200)
-            {
-                log.warn("API error");
-                throw new RuntimeException(res.body().string());
-            }
-        }
-        catch (Exception e)
-        {
-            log.debug("restoreLikedAlbums failed ...", e);
-            throw new RuntimeException(e);
-        }
+        });
     }
 }

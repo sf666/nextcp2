@@ -236,6 +236,10 @@ export class ContentDirectoryService {
     return sub;
   }
 
+  public refreshCurrentContainer() : void {
+    this.browseChildrenByRequest(this.createBrowseRequest(this.currentContainerID, "", this.currentMediaServerDto.udn));
+  }
+
   /**
    * 
    * @param data Gets called after a browse request returns ...

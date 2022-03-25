@@ -1,6 +1,6 @@
 import { SseService } from './sse/sse.service';
 import { GenericResultService } from './generic-result.service';
-import { GenericBooleanRequest, GenericNumberRequest, MusicItemDto, PlayRequestDto, PlaylistState, ContainerDto, PlaylistAddContainerRequest, FileSystemPlaylistEntry } from './dto.d';
+import { GenericBooleanRequest, GenericNumberRequest, MusicItemDto, PlayRequestDto, PlaylistState, ContainerDto, PlaylistAddContainerRequest, ServerPlaylistEntry, MediaServerDto } from './dto.d';
 import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
 import { Injectable, OnInit } from '@angular/core';
@@ -22,9 +22,9 @@ export class PlaylistService implements OnInit {
     TransportState: 'unknown'
   }
 
-  // Default Playlists located on the file system
-  fsPlaylists: string[] = [];
-
+  // Default server based playlists
+  serverPlaylists: string[] = [];
+  selectedMediaServer : MediaServerDto;
 
   // Playlist items of selected media renderer device
   public playlistItems: MusicItemDto[] = [];
@@ -51,14 +51,7 @@ export class PlaylistService implements OnInit {
       }
     });
 
-    // 
-    // read available default Playlists
-    // ================================================================================
-    const uri = '/getDefaultPlaylists';
-
-    this.httpService.get<string[]>(this.baseUri, uri).subscribe(data => {
-      this.fsPlaylists = data.sort();
-    });
+    deviceService.mediaServerChanged$.subscribe(server => this.updateServerBasedPlaylists(server))
   }
 
   ngOnInit(): void {
@@ -82,6 +75,13 @@ export class PlaylistService implements OnInit {
     }
   }
 
+  private updateServerBasedPlaylists(server: MediaServerDto) {
+    const uri = '/getDefaultPlaylists';
+    this.selectedMediaServer = server;
+    this.httpService.post<string[]>(this.baseUri, uri, server.udn).subscribe(data => {
+      this.serverPlaylists = data.sort();
+    });
+  }
   //
   // Ui action endpoints
   // ===========================================================================
@@ -224,15 +224,15 @@ export class PlaylistService implements OnInit {
   // Filesystem Playlist actions
   // ========================================================================
 
-  public addToFilesystemPlaylistByMBID(musicBrainzId: string, playlistName: string): void {
-    const uri = '/addToFilesystemPlaylistByMBID';
-    const req: FileSystemPlaylistEntry = { musicBrainzId: musicBrainzId, playlistName: playlistName };
+  public addSongToServerPlaylist(songId: number, playlistName: string): void {
+    const uri = '/addToServerPlaylist';
+    const req: ServerPlaylistEntry = { serverUdn: this.selectedMediaServer.udn, songid: songId, playlistName: playlistName };
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }
 
-  public removeFromFilesystemPlaylistByMBID(musicBrainzId: string, playlistName: string): void {
-    const uri = '/removeFromFilesystemPlaylistByMBID';
-    const req: FileSystemPlaylistEntry = { musicBrainzId: musicBrainzId, playlistName: playlistName };
+  public removeSongFromServerPlaylist(songId: number, playlistName: string): void {
+    const uri = '/removeFromServerPlaylist';
+    const req: ServerPlaylistEntry = { serverUdn: this.selectedMediaServer.udn, songid: songId, playlistName: playlistName };
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }
 }

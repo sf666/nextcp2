@@ -70,7 +70,7 @@ public class BaseRestService
         {
             return ((ExtendedApiMediaDevice) device);
         }
-        return null;
+        throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "extended features not availbale : " + udn);
     }
 
     protected DeviceRegistry getDeviceRegistry()

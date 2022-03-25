@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2022-03-24 11:19:15.
+// Generated using typescript-generator version 2.32.889 on 2022-03-25 09:50:59.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -90,11 +90,6 @@ export interface DeviceVolumeChanged {
 export interface FileChangedEventDto {
     type: string;
     path: string;
-}
-
-export interface FileSystemPlaylistEntry {
-    playlistName: string;
-    musicBrainzId: string;
 }
 
 export interface GenericBooleanRequest {
@@ -271,6 +266,12 @@ export interface SearchResultDto {
     albumItems: ContainerDto[];
     artistItems: ContainerDto[];
     playlistItems: ContainerDto[];
+}
+
+export interface ServerPlaylistEntry {
+    serverUdn: string;
+    playlistName: string;
+    songid: number;
 }
 
 export interface SpotifyConfigDto {

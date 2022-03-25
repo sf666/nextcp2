@@ -18,16 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import nextcp.dto.ContainerItemDto;
-import nextcp.dto.FileSystemPlaylistEntry;
 import nextcp.dto.GenericBooleanRequest;
 import nextcp.dto.GenericNumberRequest;
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.PlayRequestDto;
 import nextcp.dto.PlaylistAddContainerRequest;
 import nextcp.dto.PlaylistState;
+import nextcp.dto.ServerPlaylistEntry;
 import nextcp.dto.ToastrMessage;
-import nextcp.indexer.IndexerException;
-import nextcp.indexer.service.FilesystemIndexerService;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
@@ -45,59 +43,56 @@ public class RestPlaylistService extends BaseRestService
     @Autowired
     private DeviceRegistry deviceRegistry = null;
 
-    @Autowired
-    private FilesystemIndexerService filesystemPlaylistService = null;
+    // @Autowired
+    // private FilesystemIndexerService filesystemPlaylistService = null;
 
     @Autowired
     private ApplicationEventPublisher publisher = null;
 
     //
-    // Filesystem playlist service
+    // Media Server based playlists
     // =======================================================================
-    @GetMapping("/getDefaultPlaylists")
-    public List<String> getDefaultPlaylists()
+
+    @PostMapping("/getDefaultPlaylists")
+    public List<String> getDefaultPlaylists(@RequestBody String serverUdn)
     {
         try
         {
-            return filesystemPlaylistService.getAvailablePlaylistNames();
+            return getExtendedMediaServerByUdn(serverUdn).getAllPlaylists();
         }
         catch (Exception e)
         {
-            log.warn("defaultPlaylist", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "Filesystem Playlist", e.getMessage()));
+            log.warn("getDefaultPlaylists", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "Server playlist", e.getMessage()));
             return new ArrayList<String>();
         }
     }
 
-    @PostMapping("/addToFilesystemPlaylistByMBID")
-    public void addToFilesystemPlaylistByMBID(@RequestBody FileSystemPlaylistEntry addRequest)
+    @PostMapping("/addToServerPlaylist")
+    public void addToServerPlaylist(@RequestBody ServerPlaylistEntry addRequest)
     {
         try
         {
-            filesystemPlaylistService.addSongToPlaylist(addRequest.musicBrainzId, addRequest.playlistName);
-            publisher.publishEvent(new ToastrMessage(null, "success", "Playlist",
-                    "song successfully added to playlist. The selected playlist has to be reindex from the media server for changes to be visible!"));
+            getExtendedMediaServerByUdn(addRequest.serverUdn).addSongToPlaylist(addRequest.songid, addRequest.playlistName);
         }
-        catch (IndexerException e)
+        catch (Exception e)
         {
-            log.warn("add to fs playlist", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "Playlist", e.description));
+            log.warn("adding song to server playlist", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "Server playlist", e.getMessage()));
         }
     }
 
-    @PostMapping("/removeFromFilesystemPlaylistByMBID")
-    public void removeFromFilesystemPlaylistByMBID(@RequestBody FileSystemPlaylistEntry addRequest)
+    @PostMapping("/removeFromServerPlaylist")
+    public void removeFromServerPlaylist(@RequestBody ServerPlaylistEntry addRequest)
     {
         try
         {
-            filesystemPlaylistService.removeSongFromPlaylist(addRequest.musicBrainzId, addRequest.playlistName);
-            publisher.publishEvent(new ToastrMessage(null, "success", "Playlist",
-                    "Song successfully removed from playlist. This playlist has to be reindex from the media server for changes to be visible!"));
+            getExtendedMediaServerByUdn(addRequest.serverUdn).removeSongFromPlaylist(addRequest.songid, addRequest.playlistName);
         }
-        catch (IndexerException e)
+        catch (Exception e)
         {
-            log.warn("add to fs playlist", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "Playlist", e.description));
+            log.warn("removing song from server playlist", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "Server playlist", e.getMessage()));
         }
     }
 

@@ -254,9 +254,10 @@ InputSourceDto:
  # Client Request classes
  #
 
-FileSystemPlaylistEntry:
+ServerPlaylistEntry:
+   serverUdn : String
    playlistName : String
-   musicBrainzId : String
+   songid : Integer
 
 GenericNumberRequest:
    deviceUDN: String

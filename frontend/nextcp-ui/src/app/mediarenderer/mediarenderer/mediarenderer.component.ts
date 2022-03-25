@@ -74,8 +74,8 @@ export class MediarendererComponent implements OnInit {
     return this.rendererService.trackInfo?.currentTrack?.musicBrainzId?.TrackId?.length > 0;
   }
 
-  openAddPlaylistDialog(event: any, mbid: string): void {
-    this.defaultPlaylistService.openAddPlaylistDialog(event, mbid);
+  openAddPlaylistDialog(event: any, fileId: number): void {
+    this.defaultPlaylistService.openAddPlaylistDialog(event, fileId);
   }
 
   detailsClicked(): void {

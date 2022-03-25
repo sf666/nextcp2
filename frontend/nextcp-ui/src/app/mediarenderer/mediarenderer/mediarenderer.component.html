@@ -29,7 +29,7 @@
                     <mat-icon class="me-1" style="vertical-align: top;" svgIcon="information-outline"></mat-icon>Details
                 </button>
                 <button *ngIf="canBeAddedToPlaylist" mat-flat-button class="mr-buttons"
-                    (click)="openAddPlaylistDialog($event, getCurrentTrack().musicBrainzId.TrackId)">
+                    (click)="openAddPlaylistDialog($event, getCurrentTrack().fileId)">
                     <mat-icon class="me-1" style="vertical-align: top;" svgIcon="playlist-plus"></mat-icon>Playlists
                 </button>
             </div>

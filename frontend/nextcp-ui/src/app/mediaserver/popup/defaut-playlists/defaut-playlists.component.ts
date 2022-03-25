@@ -26,7 +26,7 @@ export class DefautPlaylistsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const popupHeight = this.playlistService.fsPlaylists.length * 20 + 120;
+    const popupHeight = this.playlistService.serverPlaylists.length * 20 + 120;
     this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 250, popupHeight);
   }
 
@@ -35,7 +35,7 @@ export class DefautPlaylistsComponent implements OnInit {
   }
 
   addToPlaylist(playlistName: string) {
-    this.playlistService.addToFilesystemPlaylistByMBID(this.data.id, playlistName);
+    this.playlistService.addSongToServerPlaylist(this.data.id, playlistName);
     this._matDialogRef.close();
     this.data.parentPanel.close();
   }

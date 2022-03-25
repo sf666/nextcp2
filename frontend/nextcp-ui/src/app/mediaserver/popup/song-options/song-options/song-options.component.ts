@@ -2,15 +2,12 @@ import { PopupService } from './../../../../util/popup.service';
 import { UuidService } from './../../../../util/uuid.service';
 import { PlaylistService } from './../../../../service/playlist.service';
 import { ContentDirectoryService } from './../../../../service/content-directory.service';
-import { HttpClient } from '@angular/common/http';
-import * as sr from 'streamsaver';
 import { DownloadService } from './../../../../util/download.service';
-import { MusicItemDto, MusicBrainzId, TrackInfoDto } from './../../../../service/dto.d';
-import { MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MusicItemDto} from './../../../../service/dto.d';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, ElementRef, OnInit } from '@angular/core';
 import { DefaultPlaylistService } from '../../defaut-playlists/default-playlist.service';
 import { AvtransportService } from 'src/app/service/avtransport.service';
-import { tap } from 'lodash';
 
 @Component({
   selector: 'app-song-options',
@@ -25,7 +22,6 @@ export class SongOptionsComponent implements OnInit {
   private playlistDialogOpen: boolean;
 
   constructor(
-    private elRef: ElementRef,
     private playlistService: PlaylistService,
     private contentDirectoryService: ContentDirectoryService,
     private downloadService: DownloadService,
@@ -65,7 +61,7 @@ export class SongOptionsComponent implements OnInit {
   openAddToPlaylistDialog(event: Event): void {
     if (this.item?.musicBrainzId?.TrackId) {
       if (!this.playlistDialogOpen) {
-        const dialogRef = this.defaultPlaylistService.openAddPlaylistDialogWithParent(event, this.item.musicBrainzId.TrackId, this);
+        const dialogRef = this.defaultPlaylistService.openAddPlaylistDialogWithParent(event, this.item.fileId, this);
         dialogRef.afterClosed().subscribe(_res => {
           this.playlistDialogOpen = false;
         });
@@ -76,12 +72,13 @@ export class SongOptionsComponent implements OnInit {
 
   deleteFromPlaylist(): void {
     if (this.item?.musicBrainzId?.TrackId) {
-      this.playlistService.removeFromFilesystemPlaylistByMBID(this.item.musicBrainzId.TrackId, this.contentDirectoryService.currentContainerList.currentContainer.title);
+      this.playlistService.removeSongFromServerPlaylist(this.item.fileId, this.contentDirectoryService.currentContainerList.currentContainer.title);
     }
-    close();
+    this.contentDirectoryService.refreshCurrentContainer();
+    this.closeThisPopup();
   }
 
-  close(): void {
+  closeThisPopup(): void {
     this.closeAllDialogs();
     this._matDialogRef.close();
   }
