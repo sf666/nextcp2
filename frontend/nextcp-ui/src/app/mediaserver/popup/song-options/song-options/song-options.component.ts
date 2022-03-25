@@ -75,8 +75,8 @@ export class SongOptionsComponent implements OnInit {
     if (this.item?.musicBrainzId?.TrackId) {
       this.playlistService.removeSongFromServerPlaylist(this.item.fileId, this.contentDirectoryService.currentContainerList.currentContainer.title);
     }
-    this.contentDirectoryService.refreshCurrentContainer();
     this.closeThisPopup();
+    setTimeout( () => { this.contentDirectoryService.refreshCurrentContainer()}, 200);
   }
 
   closeThisPopup(): void {
