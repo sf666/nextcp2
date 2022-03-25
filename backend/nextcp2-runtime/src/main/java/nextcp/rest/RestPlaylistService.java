@@ -63,7 +63,6 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("getDefaultPlaylists", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "Server playlist", e.getMessage()));
             return new ArrayList<String>();
         }
     }
