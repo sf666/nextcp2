@@ -48,8 +48,8 @@ export class SongOptionsComponent implements OnInit {
 
 
   public hasValidMusicBrainzId(): boolean {
-    if (this.item?.musicBrainzId?.TrackId?.length > 0) {
-      return this.uuidService.isValidUuid(this.item.musicBrainzId.TrackId);
+    if (this.item?.fileId > 0) {
+      return true;
     }
     return false;
   }
@@ -93,6 +93,7 @@ export class SongOptionsComponent implements OnInit {
 
   actionPlayNext() : void {
     this.avtransportService.playResourceNext(this.selectedMusicItem);
+    this.closeThisPopup();
   }
 
   get selectedMusicItem(): MusicItemDto {
