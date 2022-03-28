@@ -220,3 +220,11 @@ img {
 .volume-bar {
     line-height: 1.6rem;
 }
+
+.songPopup {
+    flex           : 1 1 0;
+    align-self     : center;
+    justify-content: center;
+    margin-left    : 0.5rem;
+    margin-right   : 0.5rem;
+}
