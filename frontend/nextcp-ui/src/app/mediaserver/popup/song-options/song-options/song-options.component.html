@@ -14,9 +14,9 @@
     <div class="divider mt-2 mb-1">&nbsp;</div>
 
     <div class="dialogItems d-flex flex-column flex-wrap">
-        <div class="d-flex justify-content-between playlist-item" *ngIf="hasValidMusicBrainzId()">
-            <div class="d-flex justify-content-between" style="align-self: center;" (click)="openAddToPlaylistDialog($event)"
-                (mouseenter)="openAddToPlaylistDialog($event)">
+        <div class="d-flex justify-content-between playlist-item" *ngIf="hasValidMusicBrainzId()"
+            (click)="openAddToPlaylistDialog($event)" (mouseenter)="openAddToPlaylistDialog($event)">
+            <div class="d-flex justify-content-between" style="align-self: center;">
                 Add to playlist
             </div>
             <mat-icon class="chevron-right" style="align-self: center;" svgIcon="chevron-right"></mat-icon>
@@ -28,7 +28,8 @@
         <div class="playlist-item" (mouseover)="closeAllDialogs()" (click)="download()">
             Download
         </div>
-        <div *ngIf="isParentPlaylist" class="playlist-item" (mouseover)="closeAllDialogs()" (click)="deleteFromPlaylist()">
+        <div *ngIf="isParentPlaylist" class="playlist-item" (mouseover)="closeAllDialogs()"
+            (click)="deleteFromPlaylist()">
             Delete from playlist
         </div>
     </div>
