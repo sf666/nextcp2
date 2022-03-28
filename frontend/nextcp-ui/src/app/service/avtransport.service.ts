@@ -12,7 +12,7 @@ export class AvtransportService {
 
   upnpAvTransportState: UpnpAvTransportState;
   selectedMediaRenderer: MediaRendererDto;
-
+  public lastPlayedMusicItem : MusicItemDto;
   baseUri = '/AvTransportService';
 
   constructor(

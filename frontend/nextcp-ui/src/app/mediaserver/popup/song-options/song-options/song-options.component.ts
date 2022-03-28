@@ -27,7 +27,6 @@ export class SongOptionsComponent implements OnInit {
     private downloadService: DownloadService,
     private avtransportService: AvtransportService,
     private defaultPlaylistService: DefaultPlaylistService,
-    private uuidService: UuidService,
     private popupService: PopupService,
     _matDialogRef: MatDialogRef<SongOptionsComponent>,
     @Inject(MAT_DIALOG_DATA) data: { trigger: ElementRef, item :  MusicItemDto, event: PointerEvent},

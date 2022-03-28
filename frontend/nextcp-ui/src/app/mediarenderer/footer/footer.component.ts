@@ -1,9 +1,8 @@
-import { PersistenceService } from './../../service/persistence/persistence.service';
+import { SongOptionsServiceService } from './../../mediaserver/popup/song-options/song-options-service.service';
 import { AvailableServerComponent } from './../../popup/available-server/available-server.component';
 import { VolumeControlComponent } from './../../popup/volume-control/volume-control.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AvailableRendererComponent } from './../../popup/available-renderer/available-renderer.component';
-import { MatSliderChange } from '@angular/material/slider';
 import { PlaylistService } from './../../service/playlist.service';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
@@ -18,15 +17,14 @@ import { Component, ElementRef } from '@angular/core';
 })
 export class FooterComponent {
 
-  private baseURI = 'DeviceRendererService';
-
   currentMediaRendererName: string;
 
   constructor(
     private dialog: MatDialog,
     public avtransportService: AvtransportService,
     public deviceService: DeviceService,
-    public playlistService: PlaylistService,    
+    public playlistService: PlaylistService,
+    public songOptionsServiceService: SongOptionsServiceService,
     public rendererService: RendererService) {
     deviceService.mediaRendererChanged$.subscribe(data => this.currentMediaRendererName = data.friendlyName);
   }
@@ -126,5 +124,9 @@ export class FooterComponent {
       return "active"
     }
     return "";
+  }
+
+  showSongPopup(event: PointerEvent): void {
+    //this.songOptionsServiceService.openOptionsDialog(event, item);
   }
 }

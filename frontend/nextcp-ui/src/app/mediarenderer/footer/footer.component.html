@@ -32,6 +32,11 @@
         <div class="d-none d-sm-flex qualityBadge">
             <quality-badge [item]="rendererService.trackInfo?.currentTrack"></quality-badge>
         </div>
+        
+        <!-- song options -->
+        <div class="col-1 col-greyed" (click)="showSongPopup($event)">
+            &#x22EE;
+        </div>
 
         <ng-template #stream>
             <div>

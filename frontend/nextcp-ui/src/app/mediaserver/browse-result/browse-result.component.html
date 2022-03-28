@@ -184,13 +184,13 @@
                                 <div *ngIf="!contentDirectoryService.allTracksSameAlbum()"
                                     class="col-3 col-sm-2 col-md-2 col-lg-1">&nbsp;</div>
                                 <div *ngIf="contentDirectoryService.allTracksSameAlbum()" class="col-1">#</div>
-                                <div class="{{getTitleResponsiveClass()}}">Title</div>
-                                <div class="col-2 d-none d-md-block">Artist</div>
+                                <div class="{{getTitleResponsiveClass()}}">TITLE</div>
+                                <div class="col-2 d-none d-md-block">ARTIST</div>
                                 <div *ngIf="!contentDirectoryService.allTracksSameAlbum()"
                                     class="col-2 d-none d-lg-block">
                                     Album</div>
                                 <div *ngIf="contentDirectoryService.oneTrackWithMusicBrainzId()"
-                                    class="col-1 col-sm-2 col-lg-1 d-none text-right d-sm-block ">Rating
+                                    class="col-1 col-sm-2 col-lg-1 d-none text-right d-sm-block">Rating
                                 </div>
                                 <div class="col-1 text-right mid-col d-none d-lg-block">LG</div>
                                 <div class="col-1">&nbsp;</div>
@@ -218,7 +218,9 @@
                                     <div (click)="play(item)"
                                         class="{{getTitleResponsiveClass()}} no-wrap d-flex justify-content-between">
                                         <div class="">{{item.title}}</div>
-                                        <quality-badge [item]="item"></quality-badge>
+                                        <div class="d-none d-md-block">
+                                            <quality-badge [item]="item"></quality-badge>
+                                        </div>
                                     </div>
                                     <div (click)="play(item)" class="col-2 no-wrap d-none d-md-block">
                                         {{item.artistName}}
