@@ -322,7 +322,7 @@ export class BrowseResultComponent implements AfterViewChecked {
     if (!this.contentDirectoryService.allTracksSameAlbum()) {
       return "col-8 col-sm-7 col-md-5 col-lg-4";
     } else {
-      return "col-10 col-sm-8 col-md-6 col-lg-6";
+      return "col-11 col-sm-9 col-md-7 col-lg-7";
     }
   }
 
