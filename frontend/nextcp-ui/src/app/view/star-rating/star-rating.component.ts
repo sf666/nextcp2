@@ -43,7 +43,7 @@ export class StarRatingComponent {
   starSelected(num: number): void {
     this.currentSong.rating = num;
     if (this.currentSong?.songId?.umsAudiotrackId != null) {
-      this.ratingServiceService.setStarRating(this.currentSong.songId.umsAudiotrackId, num);
+      this.ratingServiceService.setStarRating(this.currentSong.songId, num);
     } else {
       this.genericResultService.displayErrorMessage("current track has no identifier.", "add star rating");
     }
