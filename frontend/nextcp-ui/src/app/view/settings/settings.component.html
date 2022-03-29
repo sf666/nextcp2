@@ -15,10 +15,8 @@
 
         <mat-form-field appearance="fill" class="smaller">
             <mat-label>rename profile to</mat-label>
-            <input matInput type="text" [(ngModel)]="newProfileName">
-            <button matSuffix mat-icon-button aria-label="Rename profile" (click)="renameProfile()">
-                <mat-icon>rename-box</mat-icon>
-            </button>
+            <input matInput class="align-self-center" type="text" [(ngModel)]="newProfileName">
+            <mat-icon matSuffix class="icn" svgIcon="rename-box" (click)="renameProfile()"></mat-icon>
         </mat-form-field>
     </div>
 
