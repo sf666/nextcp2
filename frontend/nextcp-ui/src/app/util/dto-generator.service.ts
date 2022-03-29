@@ -1,4 +1,4 @@
-import { ContainerDto, SearchResultDto, ContainerItemDto, SearchRequestDto, MusicItemDto, AudioFormat, MusicBrainzId, TrackTimeDto, TrackInfoDto, SystemInformationDto } from './../service/dto.d';
+import { ContainerDto, SearchResultDto, ContainerItemDto, SearchRequestDto, MusicItemDto, AudioFormat, MusicBrainzId, TrackTimeDto, TrackInfoDto, SystemInformationDto, MusicItemIdDto } from './../service/dto.d';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -25,7 +25,7 @@ export class DtoGeneratorService {
       searchable: false,
       title: '',
       genre: '',
-      media_date:''
+      media_date: ''
     };
   }
 
@@ -86,9 +86,17 @@ export class DtoGeneratorService {
       refId: '',
       streamingURL: '',
       title: '',
-      genre:'', 
+      genre: '',
       musicBrainzId: this.emptyMusicBrainzId(),
-      fileId: -1
+      songId: this.emptySongId()
+    }
+  }
+
+  emptySongId(): MusicItemIdDto {
+    return {
+      umsAudiotrackId: -1,
+      acoustID: '',
+      musicBrainzIdTrackId: ''
     }
   }
 
@@ -138,7 +146,6 @@ export class DtoGeneratorService {
       AlbumId: '',
       ArtistId: '',
       ReleaseTrackId: '',
-      TrackId: '',
       WorkId: ''
     }
   }

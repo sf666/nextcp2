@@ -24,9 +24,13 @@ public interface ExtendedApiMediaDevice
     
     public boolean isSongLiked(String musicBrainzTrackId);
     
-    public void rateSong(String musicBrainzTrackId, int stars);
+    public void rateSong(Integer audiotrackId, int stars);
 
-    public int getSongRating(String musicBrainzTrackId);
+    public void rateSongByMusicBrainzID(String musicbrainzId, int stars);
+
+    public int getSongRating(Integer audiotrackId);
+
+    public int getSongRatingByMusicBrainzID(String musicBrainzTrackId);
 
     // Backup Services
     

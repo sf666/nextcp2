@@ -3,7 +3,7 @@ import { UuidService } from './../../../../util/uuid.service';
 import { PlaylistService } from './../../../../service/playlist.service';
 import { ContentDirectoryService } from './../../../../service/content-directory.service';
 import { DownloadService } from './../../../../util/download.service';
-import { MusicItemDto} from './../../../../service/dto.d';
+import { MusicItemDto } from './../../../../service/dto.d';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, ElementRef, OnInit } from '@angular/core';
 import { DefaultPlaylistService } from '../../defaut-playlists/default-playlist.service';
@@ -16,7 +16,7 @@ import { AvtransportService } from 'src/app/service/avtransport.service';
 })
 export class SongOptionsComponent implements OnInit {
 
-  private item : MusicItemDto;
+  private item: MusicItemDto;
   private readonly _matDialogRef: MatDialogRef<SongOptionsComponent>;
   private readonly triggerElementRef: ElementRef;
   private playlistDialogOpen: boolean;
@@ -29,7 +29,7 @@ export class SongOptionsComponent implements OnInit {
     private defaultPlaylistService: DefaultPlaylistService,
     private popupService: PopupService,
     _matDialogRef: MatDialogRef<SongOptionsComponent>,
-    @Inject(MAT_DIALOG_DATA) data: { trigger: ElementRef, item :  MusicItemDto, event: PointerEvent},
+    @Inject(MAT_DIALOG_DATA) data: { trigger: ElementRef, item: MusicItemDto, event: PointerEvent },
   ) {
     this.item = data.item;
     this._matDialogRef = _matDialogRef;
@@ -46,8 +46,8 @@ export class SongOptionsComponent implements OnInit {
   }
 
 
-  public hasValidMusicBrainzId(): boolean {
-    if (this.item?.fileId > 0) {
+  public hasValidSongId(): boolean {
+    if (this.item?.songId.umsAudiotrackId > 0) {
       return true;
     }
     return false;
@@ -59,9 +59,9 @@ export class SongOptionsComponent implements OnInit {
   }
 
   openAddToPlaylistDialog(event: Event): void {
-    if (this.item?.musicBrainzId?.TrackId) {
+    if (this.item?.songId.umsAudiotrackId != null) {
       if (!this.playlistDialogOpen) {
-        const dialogRef = this.defaultPlaylistService.openAddPlaylistDialogWithParent(event, this.item.fileId, this);
+        const dialogRef = this.defaultPlaylistService.openAddPlaylistDialogWithParent(event, this.item.songId.umsAudiotrackId, this);
         dialogRef.afterClosed().subscribe(_res => {
           this.playlistDialogOpen = false;
         });
@@ -71,11 +71,11 @@ export class SongOptionsComponent implements OnInit {
   }
 
   deleteFromPlaylist(): void {
-    if (this.item?.musicBrainzId?.TrackId) {
-      this.playlistService.removeSongFromServerPlaylist(this.item.fileId, this.contentDirectoryService.currentContainerList.currentContainer.title);
+    if (this.item?.songId.umsAudiotrackId != null) {
+      this.playlistService.removeSongFromServerPlaylist(this.item.songId.umsAudiotrackId, this.contentDirectoryService.currentContainerList.currentContainer.title);
     }
     this.closeThisPopup();
-    setTimeout( () => { this.contentDirectoryService.refreshCurrentContainer()}, 200);
+    setTimeout(() => { this.contentDirectoryService.refreshCurrentContainer() }, 200);
   }
 
   closeThisPopup(): void {
@@ -91,7 +91,7 @@ export class SongOptionsComponent implements OnInit {
     return !this.playlistDialogOpen;
   }
 
-  actionPlayNext() : void {
+  actionPlayNext(): void {
     this.avtransportService.playResourceNext(this.selectedMusicItem);
     this.closeThisPopup();
   }

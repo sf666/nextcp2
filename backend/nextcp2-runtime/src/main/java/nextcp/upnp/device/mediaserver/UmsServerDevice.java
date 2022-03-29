@@ -193,13 +193,37 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     }
 
     @Override
-    public void rateSong(String musicBrainzTrackId, int stars)
+    public void rateSong(Integer audiotrackId, int stars)
     {
         if (config.ratingStrategy.updateUmsServerRating)
         {
             try
             {
-                Response response = executeCallWithResponse(String.format("%s/%s", musicBrainzTrackId, stars), "api/rating/setrating");
+                Response response = executeCallWithResponse(String.format("%s/%s", audiotrackId, stars), "api/rating/setratingbyaudiotrackid");
+                String body = response.body().string();
+                int code = response.code();
+                toastDeviceResponse(body, code, true);
+            }
+            catch (Exception e)
+            {
+                log.debug("rateSong failed ...", e);
+                publisher.publishEvent(new ToastrMessage(null, "error", "UMS server device" + getFriendlyName(), "File rating failed : " + e.getMessage()));
+            }
+        }
+        else
+        {
+            log.debug("UMS API is disabled");
+        }
+    }
+
+    @Override
+    public void rateSongByMusicBrainzID(String musicbrainzId, int stars)
+    {
+        if (config.ratingStrategy.updateUmsServerRating)
+        {
+            try
+            {
+                Response response = executeCallWithResponse(String.format("%s/%s", musicbrainzId, stars), "api/rating/setrating");
                 String body = response.body().string();
                 int code = response.code();
                 toastDeviceResponse(body, code, true);
@@ -242,7 +266,22 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     }
 
     @Override
-    public int getSongRating(String musicBrainzTrackId)
+    public int getSongRating(Integer audiotrackId)
+    {
+        try
+        {
+            String strResponse = executeCall(Integer.toString(audiotrackId), "api/rating/getratingbyaudiotrackid");
+            return Integer.valueOf(strResponse);
+        }
+        catch (Exception e)
+        {
+            log.debug("getSongRating by audiotrackid failed ...", e);
+            return 0;
+        }
+    }
+
+    @Override
+    public int getSongRatingByMusicBrainzID(String musicBrainzTrackId)
     {
         try
         {

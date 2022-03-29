@@ -33,6 +33,7 @@ import nextcp.dto.MediaRendererDto;
 import nextcp.dto.MediaServerDto;
 import nextcp.dto.MusicBrainzId;
 import nextcp.dto.MusicItemDto;
+import nextcp.dto.MusicItemIdDto;
 import nextcp.dto.UpnpAvTransportState;
 import nextcp.service.RatingService;
 import nextcp.spotify.SpotifyArtistService;
@@ -131,7 +132,6 @@ public class DtoBuilder
             }
             DIDLContent didlMeta = generateDidlContent(xml);
             MusicItemDto itemDto = buildItemDto(didlMeta.getItems().get(0), "");
-            updateRating(itemDto);
             return itemDto;
         }
         catch (Exception e)
@@ -142,24 +142,6 @@ public class DtoBuilder
         return null;
     }
 
-    private void updateRating(MusicItemDto itemDto)
-    {
-        // try to update rating, if not set by media server
-        if (itemDto.rating == null)
-        {
-            try
-            {
-                if (!org.apache.commons.lang.StringUtils.isBlank(itemDto.musicBrainzId.TrackId))
-                {
-                    itemDto.rating = ratingService.getRatingInStarsByMusicBrainzId(itemDto.musicBrainzId.TrackId);
-                }
-            }
-            catch (Exception e)
-            {
-                log.warn("cannot update rating ... ");
-            }
-        }
-    }
 
     public MediaRendererDto buildMediaRendererDevice(MediaRendererDevice device)
     {
@@ -268,7 +250,6 @@ public class DtoBuilder
         {
             addMusicTrack((MusicTrack) item, itemDto);
         }
-        updateRating(itemDto);
         return itemDto;
     }
 
@@ -314,6 +295,10 @@ public class DtoBuilder
         // Support for Mediaplayer Tags (https://petemanchester.github.io/MediaPlayer/)
         //
         MusicBrainzId mb = new MusicBrainzId();
+        MusicItemIdDto ids = new MusicItemIdDto();
+        itemDto.songId = ids;
+        itemDto.musicBrainzId = mb;
+        
         Optional<DescMeta> descMetadata = item.getDescMetadata().stream().filter(n -> n.getType().equalsIgnoreCase("mpd-tags")).findFirst();
         if (descMetadata.isPresent())
         {
@@ -339,7 +324,7 @@ public class DtoBuilder
                         mb.WorkId = n.getTextContent();
                         break;
                     case "musicbrainzidtrackid":
-                        mb.TrackId = n.getTextContent();
+                        ids.musicBrainzIdTrackId = n.getTextContent();
                         break;
                     default:
                         log.warn("unknown mpd-tags attribute : " + n.getNodeName());
@@ -362,8 +347,8 @@ public class DtoBuilder
                 switch (nodeName)
                 {
                     case "musicbrainztrackid":
-                        mb.TrackId = n.getTextContent();
-                        log.debug("musicbrainztrackid : " + mb.TrackId);
+                        ids.musicBrainzIdTrackId = n.getTextContent();
+                        log.debug("musicbrainztrackid : " + ids.musicBrainzIdTrackId);
                         break;
                     case "musicbrainzreleaseid":
                         mb.ReleaseTrackId = n.getTextContent();
@@ -401,8 +386,8 @@ public class DtoBuilder
                     	{
                             String strFileId = n.getTextContent();
                             if (NumberUtils.isParsable(strFileId)) {
-                                itemDto.fileId = Long.parseLong(strFileId);
-                                log.debug("fileid : " + strFileId);
+                                ids.umsAudiotrackId = Integer.parseInt(strFileId);
+                                log.debug("audiotrackId : " + strFileId);
                             }
                     	}
                     	catch (Exception e )
@@ -416,7 +401,6 @@ public class DtoBuilder
                 }
             }
         }
-        itemDto.musicBrainzId = mb;
     }
 
     private void addAudioItem(AudioItem item, MusicItemDto itemDto)

@@ -15,35 +15,13 @@ export class RatingServiceService {
     private httpService: HttpService,
     private contentDirectoryService: ContentDirectoryService) { }
 
-  /*
-    public getStarRatingByMusicBrainzID(musicBrainzID: string): Subject<number> {
-      const uri = "/getStarRatingByMusicBrainzID";
-  
-      return this.httpService.post<number>(this.baseUri, uri, musicBrainzID);
-    }
-  */
-  public setStarRatingByMusicBrainzID(musicBrainzID: string, stars: number): Subject<number> {
-    const uri = `/setStarRatingByMusicBrainzID/${stars}/${this.contentDirectoryService.getCurrentMediaServerDto().udn}`;    
+  public setStarRating(musicBrainzID: number, stars: number): Subject<number> {
+    const uri = `/setStarRating/${stars}/${this.contentDirectoryService.getCurrentMediaServerDto().udn}`;    
     return this.httpService.post<number>(this.baseUri, uri, musicBrainzID);
   }
 
-  public syncRatingFromAudioFile(): Subject<string> {
-    const uri = "/syncRatingFromAudioFile";
-    return this.httpService.get(this.baseUri, uri);
-  }
-
-  public syncRatingFromMusicBrainz(): Subject<string> {
-    const uri = "/syncRatingsFromMusicBrainz";
-    return this.httpService.get(this.baseUri, uri);
-  }
-
-  public syncRatingsFromMusicBrainzToFiles(): Subject<string> {
-    const uri = "/syncRatingsFromMusicBrainzToFiles";
-    return this.httpService.get(this.baseUri, uri);
-  }
-
-  public indexerRescanMusicDirectory(): Subject<string> {
-    const uri = "/indexerRescanMusicDirectory";
+  public syncRatingsFromMusicBrainzToBackend(): Subject<string> {
+    const uri = "/syncRatingsFromMusicBrainzToBackend";
     return this.httpService.get(this.baseUri, uri);
   }
 }

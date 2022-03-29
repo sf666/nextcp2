@@ -71,7 +71,7 @@ export class MediarendererComponent implements OnInit {
   }
 
   public get canBeAddedToPlaylist(): boolean {
-    return this.rendererService.trackInfo?.currentTrack?.musicBrainzId?.TrackId?.length > 0;
+    return this.rendererService.trackInfo?.currentTrack?.songId?.umsAudiotrackId != null;
   }
 
   openAddPlaylistDialog(event: any, fileId: number): void {

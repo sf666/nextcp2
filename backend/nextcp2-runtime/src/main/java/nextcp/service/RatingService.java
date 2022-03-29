@@ -7,11 +7,10 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import nextcp.dto.Config;
+import nextcp.dto.MusicItemIdDto;
 import nextcp.dto.ToastrMessage;
 import nextcp.indexer.service.LocalRatingService;
 import nextcp.musicbrainz.MusicBrainzService;
-import nextcp.rating.domain.UserRating;
-import nextcp.rating.repository.SongPersistenceService;
 import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
 
 /**
@@ -29,12 +28,6 @@ public class RatingService
     private ApplicationEventPublisher publisher = null;
 
     //
-    // database persistence layer
-    //
-    @Autowired
-    private SongPersistenceService ratingPersistenceService = null;
-
-    //
     // Available rating backends
     // 1. musicBrainz
     // 2. 
@@ -42,68 +35,38 @@ public class RatingService
     @Autowired
     private MusicBrainzService musicBrainzService = null;
 
-    @Autowired
-    private LocalRatingService localRatingService = null;
-
-    public Integer getRatingInStarsByMusicBrainzId(String musicBrainzID)
-    {
-        try
-        {
-            Integer rating = ratingPersistenceService.getRatingByMusicBrainzID(musicBrainzID);
-            return rating;
-        }
-        catch (Exception e)
-        {
-            this.publisher.publishEvent(new ToastrMessage("", "error", "read rating", "couldn't read : " + e.getMessage()));
-            return null;
-        }
-    }
-
-    public int setRatingInStarsByMusicBrainzId(String musicBrainzID, Integer rating, ExtendedApiMediaDevice device)
+    public void setRatingInStars(MusicItemIdDto ids, Integer rating, ExtendedApiMediaDevice device)
     {
         if (rating == null)
         {
             rating = 0;
         }
-
-        // store user rating in local cache
-        UserRating ur = new UserRating(musicBrainzID, null, rating);
-        int numUpdated = ratingPersistenceService.insertOrUpdateUserRating(ur);
         
-        // Update local file
-        updateLocalFileBackend(musicBrainzID, rating);
-        updateMusicBrainzBackend(musicBrainzID, rating);
-
+        // Send rating to device
         if (device != null)
         {
-            device.rateSong(musicBrainzID, rating);
+            device.rateSong(ids.umsAudiotrackId, rating);
         }
-        return numUpdated;
+        
+        // send rating to musicBrainz
+        updateMusicBrainzBackend(ids.musicBrainzIdTrackId, rating);
     }
 
-    public int syncRatingsFromAudioFile()
-    {
-        int num = ratingPersistenceService.syncRating();
-        this.publisher.publishEvent(new ToastrMessage("", "info", "audiofile disc import", num + " entries were imported"));
-        return num;
-    }
 
-    public void syncRatingsFromMusicBrainz(boolean storeInSong)
+    public void syncRatingsFromMusicBrainz(ExtendedApiMediaDevice device)
     {
+        if (device == null)
+        {
+            this.publisher.publishEvent(new ToastrMessage("", "error", "musicbrainz.org import","select media server first"));
+            return;
+        }
+        
         HashMap<String, Integer> ratings = musicBrainzService.getAllUserRatings();
         int num = 0;
         for (String uuid : ratings.keySet())
         {
-            UserRating ur = new UserRating(uuid, null, ratings.get(uuid));
-            int numUpdated = ratingPersistenceService.insertOrUpdateUserRating(ur);
-            if (numUpdated > 0)
-            {
-                num++;
-            }
-            if (storeInSong)
-            {
-                updateLocalFileBackend(uuid, ratings.get(uuid));
-            }
+            device.rateSongByMusicBrainzID(uuid, ratings.get(uuid));
+            num++;
         }
         this.publisher.publishEvent(new ToastrMessage("", "info", "musicbrainz.org import", num + " entries were imported"));
     }
@@ -124,26 +87,4 @@ public class RatingService
         }
     }
 
-    private void updateLocalFileBackend(String musicBrainzID, Integer rating)
-    {
-        try
-        {
-            if (config.ratingStrategy.updateLocalFileRating)
-            {
-                localRatingService.persistMusicBrainzRatingInStarsLocalFile(musicBrainzID, rating);
-                this.publisher.publishEvent(new ToastrMessage("", "sucess", "Rating", "rating successfully applied to file on disc."));
-                // inform local file database cache of new rating value  
-                ratingPersistenceService.updateStarRatingInSong(musicBrainzID, rating);
-            }
-        }
-        catch (Exception e)
-        {
-            this.publisher.publishEvent(new ToastrMessage("", "error", "Local database", "rating couldn't be saved : " + e.getMessage()));
-        }
-    }
-
-    public void indexMusicDirectory()
-    {
-        localRatingService.rescanMusicDirectory();
-    }
 }

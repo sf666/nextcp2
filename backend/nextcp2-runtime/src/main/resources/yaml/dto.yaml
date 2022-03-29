@@ -30,18 +30,22 @@ Config:
    lastFmSessionKey: String
    spotifyConfig: SpotifyConfigDto
    umsApiKeys: List<UmsServerApiKey>
+
    
 UmsServerApiKey:
    serverUuid: String
    serverApiKey: String
+
 
 SpotifyConfigDto:
    accountConnected: boolean
    clientId: String
    refreshToken: String
 
+
 RendererConfigDto:
    rendererDevices: List<RendererDeviceConfiguration>
+
    
 RatingStrategy:
    updateMusicBrainzRating : Boolean
@@ -50,9 +54,11 @@ RatingStrategy:
    syncRatings: Boolean
    collisionStrategy: String
 
+
 MusicbrainzSupport:
     username: String
     password: String
+
    
 LocalIndexSupport:
    isActive: Boolean
@@ -179,12 +185,20 @@ AudioFormat:
    durationDisp: String
    durationInSeconds: Long 
 
+
 RadioStation:
    id: Long
    stationName: String
    resourceUrl: String
    artworkUrl: String
    
+   
+MusicItemIdDto:
+   acoustID: String
+   musicBrainzIdTrackId: String
+   umsAudiotrackId: Integer
+
+
 MusicItemDto:
    mediaServerUDN: String
    streamingURL: String
@@ -192,6 +206,7 @@ MusicItemDto:
    objectClass: String
    parentId: String
    refId: String
+   songId: MusicItemIdDto
    
    currentTrackMetadata: String
    creator: String
@@ -206,7 +221,7 @@ MusicItemDto:
    genre: String
    rating: Integer
    musicBrainzId: MusicBrainzId
-   fileId: Long
+
    
 MusicBrainzId:
    AlbumId: String
@@ -214,7 +229,6 @@ MusicBrainzId:
    ReleaseTrackId: String
    AlbumArtistId: String
    WorkId: String
-   TrackId: String
 
    
 RendererPlaylist:

@@ -113,17 +113,9 @@
 
     <div class="section subhead subsect">Rating Support</div>
     <div class="d-flex section subhead">
-        <button mat-flat-button class="ms-2 settings" (click)="ratingServiceService.syncRatingFromAudioFile()">import
-            star rating from audio file</button>
-    </div>
-    <div class="d-flex section subhead">
-        <button mat-flat-button class="ms-2 settings" (click)="ratingServiceService.syncRatingFromMusicBrainz()">import
-            star rating from musicbrainz.org</button>
         <button mat-flat-button class="ms-2 settings"
-            (click)="ratingServiceService.syncRatingsFromMusicBrainzToFiles()">import star rating from musicbrainz.org
-            and store in audio file</button>
-            <button mat-flat-button class="ms-2 settings"
-            (click)="ratingServiceService.indexerRescanMusicDirectory()">index local music directory</button>            
+            (click)="ratingServiceService.syncRatingsFromMusicBrainzToBackend()">import star rating from musicbrainz.org
+            and store in server backend</button>
     </div>
     <div class="section subhead subsect">currently selected media server actions</div>
     <div class="d-flex section subhead">

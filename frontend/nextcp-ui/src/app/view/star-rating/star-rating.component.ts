@@ -34,16 +34,16 @@ export class StarRatingComponent {
   }
 
   isVisible(): boolean {
-    if (this.currentSong?.musicBrainzId?.TrackId?.length > 0) {
-      return this.uuidService.isValidUuid(this.currentSong.musicBrainzId?.TrackId);
+    if (this.currentSong?.songId?.umsAudiotrackId != null) {
+      return true;
     }
     return false;
   }
 
   starSelected(num: number): void {
     this.currentSong.rating = num;
-    if (this.currentSong.musicBrainzId.TrackId) {
-      this.ratingServiceService.setStarRatingByMusicBrainzID(this.currentSong.musicBrainzId.TrackId, num);
+    if (this.currentSong?.songId?.umsAudiotrackId != null) {
+      this.ratingServiceService.setStarRating(this.currentSong.songId.umsAudiotrackId, num);
     } else {
       this.genericResultService.displayErrorMessage("current track has no identifier.", "add star rating");
     }

@@ -296,9 +296,13 @@ export class ContentDirectoryService {
   }
 
   private checkOneTrackWithMusicBrainzId(): void {
-    const mbTrackExists = this.musicTracks_.filter(item => (item.musicBrainzId?.TrackId?.length > 0))?.length > 0;
+    const mbTrackExists = this.musicTracks_.filter(item => (this.hasSongId(item)))?.length > 0;
     this.oneTrackWithMusicBrainzId_ = mbTrackExists;
     console.log("checkOneTrackWithMusicBrainzId : " + this.oneTrackWithMusicBrainzId_);
+  }
+
+  private hasSongId(item: MusicItemDto): boolean {
+    return (item.songId?.musicBrainzIdTrackId?.length > 0) || (item.songId?.umsAudiotrackId != null);
   }
 
   public allTracksSameMusicBrainzReleaseId(): boolean {

@@ -18,6 +18,7 @@ public class MusicItemDto
     public String objectClass;
     public String parentId;
     public String refId;
+    public MusicItemIdDto songId;
     public String currentTrackMetadata;
     public String creator;
     public String title;
@@ -31,13 +32,12 @@ public class MusicItemDto
     public String genre;
     public Integer rating;
     public MusicBrainzId musicBrainzId;
-    public Long fileId;
 
     public MusicItemDto()
     {
     }
 
-    public MusicItemDto(String mediaServerUDN, String streamingURL, String objectID, String objectClass, String parentId, String refId, String currentTrackMetadata, String creator, String title, String artistName, String numberOfThisDisc, String originalTrackNumber, String album, String date, AudioFormat audioFormat, String albumArtUrl, String genre, Integer rating, MusicBrainzId musicBrainzId, Long fileId)
+    public MusicItemDto(String mediaServerUDN, String streamingURL, String objectID, String objectClass, String parentId, String refId, MusicItemIdDto songId, String currentTrackMetadata, String creator, String title, String artistName, String numberOfThisDisc, String originalTrackNumber, String album, String date, AudioFormat audioFormat, String albumArtUrl, String genre, Integer rating, MusicBrainzId musicBrainzId)
     {
         this.mediaServerUDN = mediaServerUDN;
         this.streamingURL = streamingURL;
@@ -45,6 +45,7 @@ public class MusicItemDto
         this.objectClass = objectClass;
         this.parentId = parentId;
         this.refId = refId;
+        this.songId = songId;
         this.currentTrackMetadata = currentTrackMetadata;
         this.creator = creator;
         this.title = title;
@@ -58,7 +59,6 @@ public class MusicItemDto
         this.genre = genre;
         this.rating = rating;
         this.musicBrainzId = musicBrainzId;
-        this.fileId = fileId;
     }
     
     @Override
@@ -72,6 +72,7 @@ public class MusicItemDto
         sb.append("objectClass=").append(this.objectClass).append(", ");
         sb.append("parentId=").append(this.parentId).append(", ");
         sb.append("refId=").append(this.refId).append(", ");
+        sb.append("songId=").append(this.songId).append(", ");
         sb.append("currentTrackMetadata=").append(this.currentTrackMetadata).append(", ");
         sb.append("creator=").append(this.creator).append(", ");
         sb.append("title=").append(this.title).append(", ");
@@ -85,7 +86,6 @@ public class MusicItemDto
         sb.append("genre=").append(this.genre).append(", ");
         sb.append("rating=").append(this.rating).append(", ");
         sb.append("musicBrainzId=").append(this.musicBrainzId).append(", ");
-        sb.append("fileId=").append(this.fileId).append(", ");
         sb.append("]");
         return sb.toString();
     }

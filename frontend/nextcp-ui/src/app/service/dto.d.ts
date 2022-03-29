@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2022-03-25 09:50:59.
+// Generated using typescript-generator version 2.32.889 on 2022-03-28 15:49:05.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -153,7 +153,6 @@ export interface MusicBrainzId {
     ReleaseTrackId: string;
     AlbumArtistId: string;
     WorkId: string;
-    TrackId: string;
 }
 
 export interface MusicItemDto {
@@ -163,6 +162,7 @@ export interface MusicItemDto {
     objectClass: string;
     parentId: string;
     refId: string;
+    songId: MusicItemIdDto;
     currentTrackMetadata: string;
     creator: string;
     title: string;
@@ -176,7 +176,12 @@ export interface MusicItemDto {
     genre: string;
     rating: number;
     musicBrainzId: MusicBrainzId;
-    fileId: number;
+}
+
+export interface MusicItemIdDto {
+    acoustID: string;
+    musicBrainzIdTrackId: string;
+    umsAudiotrackId: number;
 }
 
 export interface MusicbrainzSupport {

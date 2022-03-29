@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import nextcp.dto.MusicItemIdDto;
 import nextcp.service.RatingService;
 import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
 
@@ -24,49 +25,17 @@ public class RestRatingService extends BaseRestService
     @Autowired
     private RatingService serviceDelegate = null;
 
-    @PostMapping("/getStarRatingByMusicBrainzID")
-    public Integer getRatingInStarsByMusicBrainzId(@RequestBody String musicBrainzID)
-    {
-        try
-        {
-            return serviceDelegate.getRatingInStarsByMusicBrainzId(musicBrainzID);
-        }
-        catch (Exception e)
-        {
-            log.warn("", e);
-            return null;
-        }
-    }
 
-    @PostMapping("/setStarRatingByMusicBrainzID/{rating}/{mediaServerDevice}")
-    public void setRatingInStarsByMusicBrainzId(@PathVariable("rating") Integer rating, @PathVariable("mediaServerDevice") String udn, @RequestBody String musicBrainzID)
+    @PostMapping("/setStarRating/{rating}/{mediaServerDevice}")
+    public void setRatingInStarsByMusicBrainzId(@PathVariable("rating") Integer rating, @PathVariable("mediaServerDevice") String udn, @RequestBody MusicItemIdDto ids)
     {
         ExtendedApiMediaDevice device = getExtendedMediaServerByUdn(udn);
-        serviceDelegate.setRatingInStarsByMusicBrainzId(musicBrainzID, rating, device);
+        serviceDelegate.setRatingInStars(ids, rating, device);
     }
 
-    @GetMapping("/syncRatingFromAudioFile")
-    public void syncRatingFromAudioFile()
+    @PostMapping("/syncRatingsFromMusicBrainzToBackend")
+    public void syncRatingsFromMusicBrainzToFiles(@RequestBody String serverUdn)
     {
-        serviceDelegate.syncRatingsFromAudioFile();
+        serviceDelegate.syncRatingsFromMusicBrainz(getExtendedMediaServerByUdn(serverUdn));
     }
-
-    @GetMapping("/syncRatingsFromMusicBrainz")
-    public void syncRatingsFromMusicBrainz()
-    {
-        serviceDelegate.syncRatingsFromMusicBrainz(false);
-    }
-
-    @GetMapping("/syncRatingsFromMusicBrainzToFiles")
-    public void syncRatingsFromMusicBrainzToFiles()
-    {
-        serviceDelegate.syncRatingsFromMusicBrainz(true);
-    }
-
-    @GetMapping("/indexerRescanMusicDirectory")
-    public void rescanDatabase()
-    {
-        serviceDelegate.indexMusicDirectory();
-    }
-
 }
