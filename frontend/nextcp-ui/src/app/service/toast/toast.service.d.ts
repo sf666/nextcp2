@@ -1,7 +1,7 @@
 export interface ToastMessage {
     classname: string;
     autohide: string;
-    delay: string;
+    delay: number;
     header: string;
-    textOrTpl: string;
+    textToDisplay: string;
 }

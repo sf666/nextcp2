@@ -139,7 +139,7 @@ DeviceDriverState:
 MediaServerDto:
    udn: String
    friendlyName: String
-
+   extendedApi: Boolean
 
 MediaRendererDto:
    udn: String

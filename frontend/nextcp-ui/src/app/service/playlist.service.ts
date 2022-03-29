@@ -105,10 +105,10 @@ export class PlaylistService implements OnInit {
   // renderer playlist actions
   // ===========================================================================
 
-  public seekId(id: number): void {
+  public seekId(id: string): void {
     if (this.getSelectedMediaRendererUdn() !== '') {
       const uri = '/seekId';
-      const genericNumberRequest: GenericNumberRequest = { deviceUDN: this.getSelectedMediaRendererUdn(), value: id };
+      const genericNumberRequest: GenericNumberRequest = { deviceUDN: this.getSelectedMediaRendererUdn(), value: parseInt(id) };
       this.httpService.post(this.baseUri, uri, genericNumberRequest).subscribe();
     }
   }
@@ -195,11 +195,11 @@ export class PlaylistService implements OnInit {
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }
 
-  public delete(id: number): void {
+  public delete(id: string): void {
     const uri = '/delete';
     const req: GenericNumberRequest = {
       deviceUDN: this.getSelectedMediaRendererUdn(),
-      value: id
+      value: parseInt(id)
     };
 
     this.httpService.post(this.baseUri, uri, req).subscribe();

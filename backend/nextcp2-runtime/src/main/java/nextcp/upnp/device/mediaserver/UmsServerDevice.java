@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import nextcp.config.ConfigPersistence;
 import nextcp.dto.Config;
+import nextcp.dto.MediaServerDto;
 import nextcp.dto.ToastrMessage;
 import nextcp.dto.UmsServerApiKey;
 import okhttp3.Call;
@@ -388,4 +389,10 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         {
         });
     }
+
+    public MediaServerDto getAsDto()
+    {
+        return new MediaServerDto(getUDN().getIdentifierString(), getFriendlyName(), true);
+    }
+    
 }

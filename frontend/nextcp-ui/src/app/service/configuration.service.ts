@@ -1,11 +1,10 @@
 import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { SseService } from './sse/sse.service';
-import { UiClientConfig, RendererConfigDto, Config, MediaServerDto, MediaRendererDto, DeviceDriverState, RendererDeviceConfiguration, DeviceDriverCapability } from './dto.d';
+import { UiClientConfig, RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability } from './dto.d';
 import { GenericResultService } from './generic-result.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { v4 as uuid } from 'uuid';
 import { isAssigned } from '../global';
 
 @Injectable({
@@ -16,6 +15,8 @@ export class ConfigurationService {
 
   clientConfigChanged$: Subject<UiClientConfig> = new Subject();
   rendererConfigChanged$: Subject<RendererDeviceConfiguration[]> = new Subject();
+
+  private clientUUID = this.getStoredClientId();
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -29,7 +30,7 @@ export class ConfigurationService {
   rendererConfig: RendererConfigDto;
 
   // configuration for this client
-  clientConfig: UiClientConfig = {
+  public clientConfig: UiClientConfig = {
     clientName: "",
     uuid: "",
     defaultMediaRenderer: {
@@ -38,7 +39,8 @@ export class ConfigurationService {
     },
     defaultMediaServer: {
       friendlyName: "",
-      udn: ""
+      udn: "",
+      extendedApi: false
     }
   };
 
@@ -49,12 +51,15 @@ export class ConfigurationService {
 
 
   constructor(private http: HttpClient, private genericResultService: GenericResultService, sseService: SseService, private httpService: HttpService) {
-    this.clientConfig.uuid = this.getStoredClientId();
     this.getClientConfigFromServer();
     this.getDeviceDriverFromServer();
     this.getMediaRendererConfig();
     sseService.configChanged$.subscribe(data => this.applyConfig(data));
     sseService.rendererConfigChanged$.subscribe(data => this.applyRendererConfig(data));
+  }
+
+  public createNewUiClientConfig(newuuid: string): UiClientConfig {
+    return { clientName: 'NewProfile', uuid: newuuid, defaultMediaRenderer: { friendlyName: '', udn: '' }, defaultMediaServer: { friendlyName: '', udn: '', extendedApi: false } };
   }
 
   public restart(): void {
@@ -108,8 +113,8 @@ export class ConfigurationService {
   private applyConfig(data: Config) {
     this.serverConfig = data;
 
-    if (isAssigned(this.getClientConfig(this.clientConfig.uuid))) {
-      this.clientConfig = this.getClientConfig(this.clientConfig.uuid);
+    if (isAssigned(this.getClientConfig(this.clientUUID))) {
+      this.clientConfig = this.getClientConfig(this.clientUUID);
       this.clientConfigChanged$.next(this.clientConfig);
     }
   }
@@ -120,9 +125,7 @@ export class ConfigurationService {
     if (cid) {
       return cid;
     }
-    cid = uuid();
-    localStorage.setItem("clientID", cid);
-    return cid;
+    return;
   }
 
   public getRendererDevicesConfig(): RendererDeviceConfiguration[] {
@@ -150,6 +153,16 @@ export class ConfigurationService {
     return this.serverConfig.clientConfig.find(conf => conf.uuid === uuid);
   }
 
+  public getActiveClientConfig(): UiClientConfig {
+    return this.clientConfig;
+  }
+
+  public addNewClientConfig(): void {
+    const newProfile = this.createNewUiClientConfig(this.getStoredClientId());
+    this.serverConfig.clientConfig.push(newProfile);
+    this.clientConfig = newProfile;
+  }
+
   public saveClientConfig(): void {
     const uri = '/saveClientProfile';
     this.http.post(this.baseUri + uri, this.clientConfig).subscribe(data => {
@@ -165,7 +178,7 @@ export class ConfigurationService {
     return isAssigned(element);
   }
 
-  public spotifyAccountConnected() : boolean {
+  public spotifyAccountConnected(): boolean {
     return this.serverConfig?.spotifyConfig?.accountConnected ? true : false;
   }
 

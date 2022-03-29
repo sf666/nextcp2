@@ -263,7 +263,7 @@ public class MediaServerDevice extends BaseDevice
 
     public MediaServerDto getAsDto()
     {
-        return new MediaServerDto(getUDN().getIdentifierString(), getFriendlyName());
+        return new MediaServerDto(getUDN().getIdentifierString(), getFriendlyName(), false);
     }
 
     private void addItemObjects(List<MusicItemDto> result, DIDLContent didl)

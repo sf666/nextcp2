@@ -2,6 +2,7 @@ input {
     &.section {
         width    : 100%;
         font-size: 1rem;
+        margin   : 1rem;
     }
 }
 
@@ -10,8 +11,8 @@ input {
 }
 
 .cardContainer {
-    display: flex;
-    align-items: stretch;    
+    display    : flex;
+    align-items: stretch;
 }
 
 .settings {
@@ -19,10 +20,23 @@ input {
 }
 
 .para {
-    font-size: 1rem;
+    font-size : 1rem;
     margin-top: 1rem;
 }
 
 .subsect {
     font-weight: 500;
+}
+
+.bigger {
+    flex: 3 3 0;
+}
+
+.smaller {
+    flex: 1 1 0;
+}
+
+.maxButton {
+    max-width: 15rem;
+    margin   : 1rem;
 }

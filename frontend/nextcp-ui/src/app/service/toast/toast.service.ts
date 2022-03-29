@@ -32,9 +32,9 @@ export class ToastService {
     return {
       classname: classname,
       autohide: 'true',
-      delay: '5000',
+      delay: 5000,
       header: header,
-      textOrTpl: message
+      textToDisplay: message
     }
   }
 }

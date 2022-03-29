@@ -4,7 +4,6 @@ import { ConfigurationService } from './configuration.service';
 import { SseService } from './sse/sse.service';
 import { MediaServerDto, MediaRendererDto, UiClientConfig, RendererDeviceConfiguration } from './dto.d';
 import { Injectable } from '@angular/core';
-import { enableDebugTools } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +18,7 @@ export class DeviceService {
   private defaultMediaRendererAlreadySelected = false;
   private defaultMediaServerAlreadySelected = false;
 
-  private _selectedMediaServerDevice: MediaServerDto = { udn: '', friendlyName: 'please select Media-Server' };
+  private _selectedMediaServerDevice: MediaServerDto = { udn: '', friendlyName: 'please select Media-Server', extendedApi: false };
   private _selectedMediaRendererDevice: MediaRendererDto = { udn: '', friendlyName: 'please select Media-Renderer' };
 
   mediaRendererChanged$: Subject<MediaRendererDto> = new Subject();
@@ -88,7 +87,7 @@ export class DeviceService {
 
   private applyDefaultServer() {
     if (!this.defaultMediaServerAlreadySelected && this.mediaServerList.some(e => e.udn === this.configService.clientConfig.defaultMediaServer.udn)) {
-      console.log("selecting default media server ... ");
+      console.log("selecting default media server to " + this.configService.clientConfig.defaultMediaServer.friendlyName);
       this.defaultMediaServerAlreadySelected = true;
       this.selectedMediaServerDevice = this.configService.clientConfig.defaultMediaServer;
     }
@@ -96,7 +95,7 @@ export class DeviceService {
 
   private applyDefaultRenderer() {
     if (!this.defaultMediaRendererAlreadySelected && this.mediaRenderList.some(e => e.udn === this.configService.clientConfig.defaultMediaRenderer.udn)) {
-      console.log("selecting default media renderer ... ");
+      console.log("selecting default media renderer to " + this.configService.clientConfig.defaultMediaRenderer.friendlyName);
       this.defaultMediaRendererAlreadySelected = true;
       this.selectedMediaRendererDevice = this.configService.clientConfig.defaultMediaRenderer;
     }

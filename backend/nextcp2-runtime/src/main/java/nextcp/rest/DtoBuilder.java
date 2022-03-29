@@ -54,28 +54,10 @@ public class DtoBuilder
     @Autowired
     private SpotifyArtistService spotifyArtistService = null;
 
-    @Autowired
-    private RatingService ratingService = null;
-
     /**
      * Generates XML MEtadata
      */
     private DIDLParser didlParser = new DIDLParser();
-
-    /**
-     * Builds DTOs
-     * 
-     * @param device
-     * 
-     * @return DTO
-     */
-    public MediaServerDto buildMediaServerDevice(BaseDevice device)
-    {
-        MediaServerDto dto = new MediaServerDto();
-        dto.friendlyName = device.getFriendlyName();
-        dto.udn = device.getUDN().getIdentifierString();
-        return dto;
-    }
 
     public UpnpAvTransportState buildAvTransportStateDto(AvTransportState stateVariable, MediaRendererDevice rendererDevice)
     {
@@ -564,7 +546,7 @@ public class DtoBuilder
         List<MediaServerDto> mediaServer = new ArrayList<>();
         for (MediaServerDevice device : mediaServerDevices)
         {
-            mediaServer.add(buildMediaServerDevice(device));
+            mediaServer.add(device.getAsDto());
         }
         return mediaServer;
     }

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2022-03-28 15:49:05.
+// Generated using typescript-generator version 2.32.889 on 2022-03-29 13:29:16.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -145,6 +145,7 @@ export interface MediaRendererSwitchPower {
 export interface MediaServerDto {
     udn: string;
     friendlyName: string;
+    extendedApi: boolean;
 }
 
 export interface MusicBrainzId {

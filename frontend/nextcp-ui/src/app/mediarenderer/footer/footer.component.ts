@@ -126,7 +126,7 @@ export class FooterComponent {
     return "";
   }
 
-  showSongPopup(event: PointerEvent): void {
+  showSongPopup(event: MouseEvent): void {
     if (this.rendererService.trackInfo?.currentTrack?.streamingURL) {
       this.songOptionsServiceService.openOptionsDialog(event, this.rendererService.trackInfo.currentTrack);
     }
