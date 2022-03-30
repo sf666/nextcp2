@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import nextcp.dto.Config;
 import nextcp.dto.MusicItemIdDto;
 import nextcp.dto.ToastrMessage;
-import nextcp.indexer.service.LocalRatingService;
 import nextcp.musicbrainz.MusicBrainzService;
 import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
 

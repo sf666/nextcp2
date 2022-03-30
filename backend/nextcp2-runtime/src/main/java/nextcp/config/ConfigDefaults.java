@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.dto.Config;
-import nextcp.dto.LocalIndexSupport;
 import nextcp.dto.MusicbrainzSupport;
 import nextcp.dto.RatingStrategy;
 import nextcp.dto.SpotifyConfigDto;
@@ -43,12 +42,6 @@ public class ConfigDefaults
         {
             log.info("adding new configuration value 'generateUpnpCode' as disabled.");
             config.generateUpnpCode = false;
-        }
-
-        if (config.localIndexerSupport == null)
-        {
-            log.info("adding new configuration value 'localIndexerSupport' as disabled. To activate this feature, provide music path, database path and file types.");
-            config.localIndexerSupport = new LocalIndexSupport();
         }
 
         if (config.musicbrainzSupport == null)

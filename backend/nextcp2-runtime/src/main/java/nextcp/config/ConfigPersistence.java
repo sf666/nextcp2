@@ -10,7 +10,6 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.SystemConfiguration;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -21,14 +20,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
-import nextcp.db.DatabaseConfig;
 import nextcp.dto.Config;
-import nextcp.dto.LocalIndexSupport;
 import nextcp.dto.MusicbrainzSupport;
 import nextcp.dto.RatingStrategy;
 import nextcp.dto.SpotifyConfigDto;
 import nextcp.dto.UmsServerApiKey;
-import nextcp.indexer.IndexerConfig;
 import nextcp.lastfm.ILastFmConfig;
 import nextcp.musicbrainz.MusicBrainzConfig;
 import nextcp.util.FileOpsNio;
@@ -98,23 +94,6 @@ public class ConfigPersistence
                 return "a9292ddac1cef440892f454e95c78300";
             }
         };
-    }
-
-    @Bean
-    public DatabaseConfig dbConfigProducer()
-    {
-        return new DatabaseConfig(config.localIndexerSupport.databaseFilename);
-    }
-
-    @Bean
-    public IndexerConfig indexerConfigProducer()
-    {
-        IndexerConfig rc = new IndexerConfig();
-        rc.isActive = config.localIndexerSupport.isActive;
-        rc.musicDirectory = config.localIndexerSupport.musicRootPath;
-        rc.supportedFileTypes = config.localIndexerSupport.supportedFileTypes;
-        rc.playlistDirectory = config.playlistPath;
-        return rc;
     }
 
     @Bean
@@ -246,11 +225,6 @@ public class ConfigPersistence
         c.loggingDateTimeFormat = "HH:mm:ss";
         createDefaultLog(c.log4jConfigFile);
         c.loggingDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
-        c.localIndexerSupport = new LocalIndexSupport();
-        c.localIndexerSupport.isActive = true;
-        c.localIndexerSupport.databaseFilename = FilenameUtils.concat(systemConfig.getString("user.dir"), "rating_db");
-        c.localIndexerSupport.musicRootPath = "";
-        c.localIndexerSupport.supportedFileTypes = "flac,mp3";
         c.musicbrainzSupport = new MusicbrainzSupport("", "");
         c.ratingStrategy = new RatingStrategy(true, true, true, true, "FILE");
         c.spotifyConfig = new SpotifyConfigDto();

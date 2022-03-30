@@ -22,7 +22,6 @@ Config:
    loggingDateTimeFormat: String
    clientConfig: List<UiClientConfig>
    radioStation: List<RadioStation>
-   localIndexerSupport: LocalIndexSupport
    musicbrainzSupport: MusicbrainzSupport
    ratingStrategy: RatingStrategy
    playlistPath: String

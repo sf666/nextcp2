@@ -21,12 +21,6 @@
 			<artifactId>spotify-web-api-java</artifactId>
 		</dependency>
 
-		<!-- Rating Service modul -->
-		<dependency>
-			<groupId>de.sf666</groupId>
-			<artifactId>nextcp2-indexer</artifactId>
-		</dependency>
-
 		<dependency>
 			<groupId>de.sf666</groupId>
 			<artifactId>nextcp2-external-information-provider</artifactId>
