@@ -16,6 +16,7 @@ public class RendererDeviceConfiguration
     public String ip;
     public String displayString;
     public Boolean active;
+    public Boolean setCoveredUpnpDeviceToMaxVolume;
     public Boolean hasOpenHomeDeviceDriver;
     public String deviceDriverType;
     public String connectionString;
@@ -25,12 +26,13 @@ public class RendererDeviceConfiguration
     {
     }
 
-    public RendererDeviceConfiguration(MediaRendererDto mediaRenderer, String ip, String displayString, Boolean active, Boolean hasOpenHomeDeviceDriver, String deviceDriverType, String connectionString, Integer powerOnVolPercent)
+    public RendererDeviceConfiguration(MediaRendererDto mediaRenderer, String ip, String displayString, Boolean active, Boolean setCoveredUpnpDeviceToMaxVolume, Boolean hasOpenHomeDeviceDriver, String deviceDriverType, String connectionString, Integer powerOnVolPercent)
     {
         this.mediaRenderer = mediaRenderer;
         this.ip = ip;
         this.displayString = displayString;
         this.active = active;
+        this.setCoveredUpnpDeviceToMaxVolume = setCoveredUpnpDeviceToMaxVolume;
         this.hasOpenHomeDeviceDriver = hasOpenHomeDeviceDriver;
         this.deviceDriverType = deviceDriverType;
         this.connectionString = connectionString;
@@ -46,6 +48,7 @@ public class RendererDeviceConfiguration
         sb.append("ip=").append(this.ip).append(", ");
         sb.append("displayString=").append(this.displayString).append(", ");
         sb.append("active=").append(this.active).append(", ");
+        sb.append("setCoveredUpnpDeviceToMaxVolume=").append(this.setCoveredUpnpDeviceToMaxVolume).append(", ");
         sb.append("hasOpenHomeDeviceDriver=").append(this.hasOpenHomeDeviceDriver).append(", ");
         sb.append("deviceDriverType=").append(this.deviceDriverType).append(", ");
         sb.append("connectionString=").append(this.connectionString).append(", ");

@@ -25,15 +25,20 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
     private ApplicationEventPublisher eventPublisher = null;
     private IProductService productService = null;
     private VolumeService volumeService = null;
+    private IDeviceDriver physicalDeviceDriver = null;
+    private boolean setCoveredUpnpDeviceToMaxVolume = false;
 
-    public OpenHomeDeviceDriver(MediaRendererDevice device, ApplicationEventPublisher eventPublisher, IProductService productService, VolumeService volumeService)
+    public OpenHomeDeviceDriver(MediaRendererDevice device, ApplicationEventPublisher eventPublisher, IProductService productService, VolumeService volumeService,
+            IDeviceDriver physicalDeviceDriver, Boolean setCoveredUpnpDeviceToMaxVolume)
     {
         super();
         this.device = device;
         this.eventPublisher = eventPublisher;
         this.productService = productService;
         this.volumeService = volumeService;
-
+        this.physicalDeviceDriver = physicalDeviceDriver;
+        this.setCoveredUpnpDeviceToMaxVolume = setCoveredUpnpDeviceToMaxVolume != null ? setCoveredUpnpDeviceToMaxVolume : false;
+        
         try
         {
             volume = Math.toIntExact(volumeService.volume().Value);
@@ -61,6 +66,23 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
     @Override
     public void setVolume(int vol)
     {
+        if (physicalDeviceDriver == null)
+        {
+            setVolOh(vol);
+        }
+        else
+        {
+            physicalDeviceDriver.setVolume(vol);
+            if (setCoveredUpnpDeviceToMaxVolume)
+            {
+                setVolOh(100);
+            }
+        }
+    }
+
+    private void setVolOh(int vol)
+    {
+//        volume = vol;
         SetVolumeInput inp = new SetVolumeInput();
         inp.Value = (long) vol;
         volumeService.setVolume(inp);
@@ -69,7 +91,15 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
     @Override
     public void setStandby(boolean standbyState)
     {
-        productService.setStandby(standbyState);
+//        standby = standbyState;
+        if (physicalDeviceDriver == null)
+        {
+            productService.setStandby(standbyState);
+        }
+        else
+        {
+            physicalDeviceDriver.setStandby(standbyState);
+        }
     }
 
     //
@@ -79,7 +109,14 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
     @Override
     public DeviceDriverState getDeviceDriverState()
     {
-        return new DeviceDriverState(true, device.getUdnAsString(), volume, standby);
+        if (physicalDeviceDriver == null)
+        {
+            return new DeviceDriverState(true, device.getUdnAsString(), volume, standby);
+        }
+        else
+        {
+            return physicalDeviceDriver.getDeviceDriverState();
+        }
     }
 
     @Override
@@ -94,6 +131,19 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
     {
         this.standby = standbyState;
         eventPublisher.publishEvent(getDeviceDriverState());
+    }
+
+    @Override
+    public boolean isMonitoringExternalAV()
+    {
+        if (physicalDeviceDriver == null)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
 }

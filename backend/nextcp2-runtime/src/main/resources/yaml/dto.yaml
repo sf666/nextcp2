@@ -61,6 +61,7 @@ RendererDeviceConfiguration:
    ip: String
    displayString: String
    active: Boolean
+   setCoveredUpnpDeviceToMaxVolume: Boolean
    hasOpenHomeDeviceDriver: Boolean
    deviceDriverType: String   
    connectionString: String

@@ -101,4 +101,10 @@ public class DeviceDriver implements IDeviceDriverCallback, IDeviceDriver
         physicalDeviceDriver.setStandby(standbyState);
     }
 
+    @Override
+    public boolean isMonitoringExternalAV()
+    {
+        return true;
+    }
+
 }

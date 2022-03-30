@@ -53,7 +53,7 @@ public class RestDeviceRendererService
         {
             device.getPlaylistServiceBridge().pause();
         }
-        device.getDeviceDriver().setStandby(newState.standby);
+        device.setStandby(newState.standby);
     }
 
     public Set<DeviceCapabilityDto> getAvailableDeviceDriverTypes(@RequestBody MediaRendererDto dto)
@@ -73,7 +73,7 @@ public class RestDeviceRendererService
     {
         log.info(String.format("Setting volume on device %s to : %d", newVol.rendererUDN, newVol.volume));
         MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(newVol.rendererUDN));
-        device.getDeviceDriver().setVolume(newVol.volume);
+        device.setVolume(newVol.volume);
     }
 
     @PostMapping("/getDeviceState")
@@ -83,8 +83,8 @@ public class RestDeviceRendererService
         checkDevice(device, "get device state");
         if (device.hasDeviceDriver())
         {
-            log.info(String.format("Getting device state for device %s : %s", dto.friendlyName, device.getDeviceDriver().getDeviceDriverState()));
-            DeviceDriverState dd = device.getDeviceDriver().getDeviceDriverState();
+            log.info(String.format("Getting device state for device %s : %s", dto.friendlyName, device.getDeviceDriverState()));
+            DeviceDriverState dd = device.getDeviceDriverState();
             dd.hasDeviceDriver = true;
             return dd;
         }

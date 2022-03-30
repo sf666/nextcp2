@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2022-03-30 09:18:58.
+// Generated using typescript-generator version 2.32.889 on 2022-03-30 14:27:18.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -229,6 +229,7 @@ export interface RendererDeviceConfiguration {
     ip: string;
     displayString: string;
     active: boolean;
+    setCoveredUpnpDeviceToMaxVolume: boolean;
     hasOpenHomeDeviceDriver: boolean;
     deviceDriverType: string;
     connectionString: string;

@@ -43,7 +43,7 @@ public class DeviceDriverCallbackEvents
                 if (config.powerOnVolPercent != null)
                 {
                     log.info(String.format("setting default volume for device %s to %d ", event.udn, config.powerOnVolPercent));
-                    device.getDeviceDriver().setVolume(config.powerOnVolPercent);
+                    device.setVolume(config.powerOnVolPercent);
                 }
             }
         }

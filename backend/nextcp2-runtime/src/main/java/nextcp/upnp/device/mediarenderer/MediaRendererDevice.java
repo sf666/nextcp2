@@ -1,7 +1,5 @@
 package nextcp.upnp.device.mediarenderer;
 
-import java.util.HashSet;
-
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang.StringUtils;
@@ -17,8 +15,10 @@ import nextcp.domainmodel.device.services.IPlaylistService;
 import nextcp.domainmodel.device.services.IProductService;
 import nextcp.domainmodel.device.services.IRadioService;
 import nextcp.domainmodel.device.services.IUpnpAvTransport;
+import nextcp.dto.DeviceDriverState;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.RendererDeviceConfiguration;
+import nextcp.dto.ToastrMessage;
 import nextcp.dto.TrackInfoDto;
 import nextcp.dto.TrackTimeDto;
 import nextcp.service.ISchedulerService;
@@ -37,6 +37,7 @@ import nextcp.upnp.device.mediarenderer.playlist.OhPlaylist;
 import nextcp.upnp.device.mediarenderer.playlist.OhPlaylistServiceEventListener;
 import nextcp.upnp.device.mediarenderer.product.OhProductServiceBridge;
 import nextcp.upnp.device.mediarenderer.product.OhProductServiceEventListener;
+import nextcp.upnp.device.mediarenderer.renderingControl.RenderingControlEventListener;
 import nextcp.upnp.device.mediarenderer.volume.OhVolumeServiceEventListener;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials.CredentialsService;
 import nextcp.upnp.modelGen.avopenhomeorg.info.InfoService;
@@ -62,10 +63,11 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
     @Autowired
     private RendererConfig rendererConfigService = null;
+    private RendererDeviceConfiguration rendererConfig = null;
 
     @Autowired
     private SchedulerService schedulerService = null;
-    
+
     @Autowired
     private ApplicationEventPublisher eventPublisher = null;
 
@@ -77,6 +79,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     // Event Listener for services. Service state variable is held here.
     private AvTransportEventListener avTransportEventListener = null;
     private AvTransportEventPublisher avTransportEventPublisher = null;
+    private RenderingControlEventListener renderingControlEventListener = null;
     private OhInfoServiceEventListener ohInfoServiceEventListener = null;
     private OhTimeServiceEventListener ohTimeServiceEventListener = null;
     private OhProductServiceEventListener ohProductServiceEventListener = null;
@@ -86,6 +89,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     AVTransportService upnp_avTransportService = null;
     RenderingControlService upnp_renderingControlService = null;
     ConnectionManagerService upnp_connectionManagerService = null;
+    UpnpDeviceDriver upnpDeviceDriver = null;
 
     // openhome services
     InfoService oh_infoService = null;
@@ -107,12 +111,13 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     public MediaRendererDevice(RemoteDevice device)
     {
         super(device);
-        
+
     }
 
     @PostConstruct
     private void init()
     {
+        rendererConfig = rendererConfigService.getMediaRendererConfig(getUDN().getIdentifierString());
         // ATTENTION: Initialize services first
         serviceInitializer.initializeServices(getUpnpService(), getDevice(), this);
 
@@ -146,6 +151,12 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         {
             ohVolumeServiceEventListener = new OhVolumeServiceEventListener();
             oh_volumeService.addSubscriptionEventListener(ohVolumeServiceEventListener);
+        }
+
+        if (hasUpnpRenderingControlService())
+        {
+            renderingControlEventListener = new RenderingControlEventListener();
+            upnp_renderingControlService.addSubscriptionEventListener(renderingControlEventListener);
         }
 
         if (hasOhTimeService())
@@ -198,7 +209,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
      * 
      * @return
      */
-    private IDeviceDriver getOhDeviceDriver()
+    private IDeviceDriver getOhDeviceDriver(IDeviceDriver physicalDeviceDriver)
     {
         if (productService == null)
         {
@@ -213,7 +224,9 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
         if (ohDeviceDriver == null)
         {
-            ohDeviceDriver = new OpenHomeDeviceDriver(this, getEventPublisher(), productService, oh_volumeService);
+            ohDeviceDriver = new OpenHomeDeviceDriver(this, getEventPublisher(), productService, oh_volumeService, physicalDeviceDriver,
+                    rendererConfig.setCoveredUpnpDeviceToMaxVolume);
+            log.info("Using OpenHome Implementation for volume and power control for device " + getFriendlyName());
             if (ohProductServiceEventListener != null)
             {
                 ohProductServiceEventListener.addStandbyCallback(ohDeviceDriver);
@@ -229,6 +242,31 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             else
             {
                 log.warn("no ohVolumeServiceEventListener available. No volume updates will be available.");
+            }
+        }
+        return ohDeviceDriver;
+    }
+
+    private IDeviceDriver getUpnpDeviceDriver(IDeviceDriver physicalDeviceDriver)
+    {
+        if (upnp_renderingControlService == null)
+        {
+            log.warn("Rendering Control Service is not initialized ... UPnP device driver is not being created.");
+            return null;
+        }
+
+        if (upnpDeviceDriver == null)
+        {
+            upnpDeviceDriver = new UpnpDeviceDriver(this, getEventPublisher(), upnp_renderingControlService, physicalDeviceDriver, rendererConfig.setCoveredUpnpDeviceToMaxVolume);
+            log.info("Using UPnP Implementation for volume control for device " + getFriendlyName());
+
+            if (renderingControlEventListener != null)
+            {
+                renderingControlEventListener.addDeviceDriverCallback(upnpDeviceDriver);
+            }
+            else
+            {
+                log.warn("no renderingControlEventListener available. No volume updates will be available.");
             }
         }
         return ohDeviceDriver;
@@ -255,36 +293,32 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         return oh_infoService != null;
     }
 
-    public IDeviceDriver getDeviceDriver()
+    protected IDeviceDriver getDeviceDriver()
     {
         return deviceDriver;
     }
 
     private IDeviceDriver createDeviceDriver()
     {
-        RendererDeviceConfiguration rendererConfig = rendererConfigService.getMediaRendererConfig(getUDN().getIdentifierString());
+        IDeviceDriver dd = null;
+        IDeviceDriver physicalDriver = null;
+
         if (rendererConfig != null && !StringUtils.isBlank(rendererConfig.deviceDriverType))
         {
-            DeviceDriver deviceDriver = factories.createDeviceDriver(getUdnAsString(), rendererConfig.deviceDriverType, rendererConfig.connectionString);
-            deviceDriver = factories.createDeviceDriver(getUDN().getIdentifierString(), rendererConfig.deviceDriverType, rendererConfig.connectionString);
-            log.info(String.format("Device Driver created of type %s for device  %s. Connection string : %s", rendererConfig.deviceDriverType, getFriendlyName(),
+            physicalDriver = factories.createDeviceDriver(getUdnAsString(), rendererConfig.deviceDriverType, rendererConfig.connectionString);
+            log.info(String.format("External AV Device Driver created of type '%s' for device '%s'. Connection string : %s", rendererConfig.deviceDriverType, getFriendlyName(),
                     rendererConfig.connectionString));
-            return deviceDriver;
         }
-        else
+        dd = getOhDeviceDriver(physicalDriver);
+        if (dd == null)
         {
-            IDeviceDriver dd = getOhDeviceDriver();
-            if (dd != null)
-            {
-                log.info("Using OpenHome Implementation for volume and power control for device " + getFriendlyName());
-                return dd;
-            }
-            else
-            {
-                log.info("No device driver configured for device : " + getFriendlyName());
-            }
+            dd = getUpnpDeviceDriver(physicalDriver);
         }
-        return deviceDriver;
+        if (dd == null)
+        {
+            log.info("Attention: No device driver configured for device : " + getFriendlyName());
+        }
+        return dd;
     }
 
     public AvTransportEventPublisher getAvTransportEventPublisher()
@@ -313,6 +347,11 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     public boolean hasUpnpAvTransport()
     {
         return upnp_avTransportService != null;
+    }
+
+    public boolean hasUpnpRenderingControlService()
+    {
+        return upnp_renderingControlService != null;
     }
 
     public boolean hasProductService()
@@ -371,7 +410,29 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
     private boolean avTransportIsPlaying()
     {
-        AvTransportState state = avTransportEventPublisher.getCurrentAvTransportState(); 
+        AvTransportState state = avTransportEventPublisher.getCurrentAvTransportState();
         return state.TransportState.equals("PLAYING");
+    }
+
+    // Device operations
+
+    public void setVolume(int vol)
+    {
+        if (getDeviceDriver() == null)
+        {
+            eventPublisher.publishEvent(new ToastrMessage(null, "error", "Volume", "no device driver available"));
+            return;
+        }
+        getDeviceDriver().setVolume(vol);
+    }
+
+    public DeviceDriverState getDeviceDriverState()
+    {
+        return getDeviceDriver().getDeviceDriverState();
+    }
+
+    public void setStandby(boolean standbyState)
+    {
+        getDeviceDriver().setStandby(standbyState);
     }
 }

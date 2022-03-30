@@ -136,11 +136,7 @@ public class RendererConfig
         if (configEntry.isPresent())
         {
             log.debug(remoteDevice.getDetails().getFriendlyName() + " is already known.");
-            if (!remoteDevice.getIdentity().getDescriptorURL().getHost().contentEquals(configEntry.get().ip))
-            {
-                configEntry.get().ip = remoteDevice.getIdentity().getDescriptorURL().getHost();
-                writeConfig();
-            }
+            updateDefaults(remoteDevice, configEntry.get());
         }
         else
         {
@@ -152,9 +148,27 @@ public class RendererConfig
             c.displayString = remoteDevice.getDisplayString();
             c.hasOpenHomeDeviceDriver = remoteDevice.findService(new ServiceType("av-openhome-org", "Product")) != null;
             c.mediaRenderer = new MediaRendererDto(remoteDevice.getIdentity().getUdn().getIdentifierString(), remoteDevice.getDetails().getFriendlyName());
+            c.setCoveredUpnpDeviceToMaxVolume = false;
             config.rendererDevices.add(c);
             writeAndSendConfig();
             log.info(remoteDevice.getDetails().getFriendlyName() + " added RendererDevice config : " + c);
+        }
+    }
+
+    private void updateDefaults(RemoteDevice remoteDevice, RendererDeviceConfiguration configEntry)
+    {
+        if (!remoteDevice.getIdentity().getDescriptorURL().getHost().contentEquals(configEntry.ip))
+        {
+            configEntry.ip = remoteDevice.getIdentity().getDescriptorURL().getHost();
+            writeConfig();
+        }
+        if (configEntry.setCoveredUpnpDeviceToMaxVolume == null)
+        {
+            configEntry.setCoveredUpnpDeviceToMaxVolume = false;
+        }
+        if (configEntry.active == null)
+        {
+            configEntry.active = false;
         }
     }
 
