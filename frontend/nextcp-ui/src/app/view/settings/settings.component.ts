@@ -87,10 +87,10 @@ export class SettingsComponent {
   }
 
   extendedApiNotAvailable(): boolean {
-    if (this.deviceService?.selectedMediaServerDevice.friendlyName != 'please select Media-Server') {
+    if (this.deviceService?.selectedMediaServerDevice.udn) {
       return !this.deviceService?.selectedMediaServerDevice?.extendedApi;
     }
-    return false;
+    return true;
   }
   // Client Profile configuration
 
