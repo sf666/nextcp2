@@ -32,14 +32,6 @@ export class SettingsComponent {
     return this.deviceService.isRenderOnline(deviceConfig.mediaRenderer);
   }
 
-  mediaRendererChanged(event: MediaRendererDto): void {
-    this.configService.clientConfig.defaultMediaRenderer = event;
-  }
-
-  mediaServerChanged(event: MediaServerDto): void {
-    this.configService.clientConfig.defaultMediaServer = event;
-  }
-
   get buildNumber(): string {
     const bn = this.systemService.buildVersion;
     return bn;

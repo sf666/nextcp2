@@ -44,7 +44,7 @@ export class ConfigurationService {
     }
   };
 
-  // global serverside configuration file
+  // global serverside configuration file (server state)
   serverConfig: Config;
 
   baseUri = '/ConfigurationService';
@@ -54,8 +54,8 @@ export class ConfigurationService {
     this.getClientConfigFromServer();
     this.getDeviceDriverFromServer();
     this.getMediaRendererConfig();
-    sseService.configChanged$.subscribe(data => this.applyConfig(data));
-    sseService.rendererConfigChanged$.subscribe(data => this.applyRendererConfig(data));
+    sseService.configChanged$.subscribe(serverConfig => this.applyServerConfigurationFile(serverConfig));
+    sseService.rendererConfigChanged$.subscribe(data => this.applyRendererServerRendererList(data));
   }
 
   public createNewUiClientConfig(newuuid: string): UiClientConfig {
@@ -95,26 +95,29 @@ export class ConfigurationService {
   private getClientConfigFromServer() {
     const uri = '/configuration';
     this.http.get<Config>(this.baseUri + uri).subscribe(data => {
-      this.applyConfig(data);
+      this.applyServerConfigurationFile(data);
     }, err => {
       this.genericResultService.displayHttpError(err, "cannot read configuration");
     });
   }
 
-  private applyRendererConfig(data: RendererConfigDto) {
+  private applyRendererServerRendererList(data: RendererConfigDto) {
     this.rendererConfig = data;
 
     this.rendererConfig.rendererDevices = this.rendererConfig?.rendererDevices.sort((n1, n2) => {
       return n1.displayString.localeCompare(n2.displayString);
     });
-
+    this.updateUiClientConfig();
   }
 
-  private applyConfig(data: Config) {
-    this.serverConfig = data;
+  private applyServerConfigurationFile(serverConfig: Config) {
+    this.serverConfig = serverConfig;
+    this.updateUiClientConfig();
+  }
 
-    if (isAssigned(this.getClientConfig(this.clientUUID))) {
-      this.clientConfig = this.getClientConfig(this.clientUUID);
+  private updateUiClientConfig() {
+    if (isAssigned(this.getClientConfigFromServerFile(this.clientUUID))) {
+      this.clientConfig = this.getClientConfigFromServerFile(this.clientUUID);
       this.clientConfigChanged$.next(this.clientConfig);
     }
   }
@@ -141,7 +144,7 @@ export class ConfigurationService {
   }
 
   public selectClientConfig(uuid: string): void {
-    this.clientConfig = this.getClientConfig(uuid);
+    this.clientConfig = this.getClientConfigFromServerFile(uuid);
     localStorage.setItem("clientID", uuid);
     this.clientConfigChanged$.next(this.clientConfig);
   }
@@ -149,7 +152,7 @@ export class ConfigurationService {
   /**
    * @param uuid find config entry with supplies uuid.
    */
-  public getClientConfig(uuid: string): UiClientConfig {
+  public getClientConfigFromServerFile(uuid: string): UiClientConfig {
     return this.serverConfig.clientConfig.find(conf => conf.uuid === uuid);
   }
 
@@ -174,7 +177,7 @@ export class ConfigurationService {
   }
 
   public existClientConfig(uuid: string): boolean {
-    const element: UiClientConfig = this.getClientConfig(uuid);
+    const element: UiClientConfig = this.getClientConfigFromServerFile(uuid);
     return isAssigned(element);
   }
 
