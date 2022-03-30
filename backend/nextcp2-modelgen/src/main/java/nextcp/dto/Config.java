@@ -21,7 +21,6 @@ public class Config
     public String loggingDateTimeFormat;
     public List<UiClientConfig> clientConfig;
     public List<RadioStation> radioStation;
-    public LocalIndexSupport localIndexerSupport;
     public MusicbrainzSupport musicbrainzSupport;
     public RatingStrategy ratingStrategy;
     public String playlistPath;
@@ -29,12 +28,13 @@ public class Config
     public String lastFmSessionKey;
     public SpotifyConfigDto spotifyConfig;
     public List<UmsServerApiKey> umsApiKeys;
+    public String databaseFilename;
 
     public Config()
     {
     }
 
-    public Config(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, LocalIndexSupport localIndexerSupport, MusicbrainzSupport musicbrainzSupport, RatingStrategy ratingStrategy, String playlistPath, Long globalSearchDelay, String lastFmSessionKey, SpotifyConfigDto spotifyConfig, List<UmsServerApiKey> umsApiKeys)
+    public Config(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, MusicbrainzSupport musicbrainzSupport, RatingStrategy ratingStrategy, String playlistPath, Long globalSearchDelay, String lastFmSessionKey, SpotifyConfigDto spotifyConfig, List<UmsServerApiKey> umsApiKeys, String databaseFilename)
     {
         this.generateUpnpCode = generateUpnpCode;
         this.generateUpnpCodePath = generateUpnpCodePath;
@@ -45,7 +45,6 @@ public class Config
         this.loggingDateTimeFormat = loggingDateTimeFormat;
         this.clientConfig = clientConfig;
         this.radioStation = radioStation;
-        this.localIndexerSupport = localIndexerSupport;
         this.musicbrainzSupport = musicbrainzSupport;
         this.ratingStrategy = ratingStrategy;
         this.playlistPath = playlistPath;
@@ -53,6 +52,7 @@ public class Config
         this.lastFmSessionKey = lastFmSessionKey;
         this.spotifyConfig = spotifyConfig;
         this.umsApiKeys = umsApiKeys;
+        this.databaseFilename = databaseFilename;
     }
     
     @Override
@@ -69,7 +69,6 @@ public class Config
         sb.append("loggingDateTimeFormat=").append(this.loggingDateTimeFormat).append(", ");
         sb.append("clientConfig=").append(this.clientConfig).append(", ");
         sb.append("radioStation=").append(this.radioStation).append(", ");
-        sb.append("localIndexerSupport=").append(this.localIndexerSupport).append(", ");
         sb.append("musicbrainzSupport=").append(this.musicbrainzSupport).append(", ");
         sb.append("ratingStrategy=").append(this.ratingStrategy).append(", ");
         sb.append("playlistPath=").append(this.playlistPath).append(", ");
@@ -77,6 +76,7 @@ public class Config
         sb.append("lastFmSessionKey=").append(this.lastFmSessionKey).append(", ");
         sb.append("spotifyConfig=").append(this.spotifyConfig).append(", ");
         sb.append("umsApiKeys=").append(this.umsApiKeys).append(", ");
+        sb.append("databaseFilename=").append(this.databaseFilename).append(", ");
         sb.append("]");
         return sb.toString();
     }

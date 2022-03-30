@@ -29,7 +29,7 @@ Config:
    lastFmSessionKey: String
    spotifyConfig: SpotifyConfigDto
    umsApiKeys: List<UmsServerApiKey>
-
+   databaseFilename: String
    
 UmsServerApiKey:
    serverUuid: String

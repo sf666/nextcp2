@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
+import nextcp.db.DatabaseConfig;
 import nextcp.dto.Config;
 import nextcp.dto.MusicbrainzSupport;
 import nextcp.dto.RatingStrategy;
@@ -66,6 +67,12 @@ public class ConfigPersistence
             log.warn("Error while reading config file.", e);
         }
     }
+    
+    @Bean
+    public DatabaseConfig dbConfigProducer()
+    {
+        return new DatabaseConfig(config.databaseFilename);
+    }    
 
     @Bean
     public MusicBrainzConfig musicBraintConfig()
