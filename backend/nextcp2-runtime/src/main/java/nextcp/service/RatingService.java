@@ -2,6 +2,9 @@ package nextcp.service;
 
 import java.util.HashMap;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,8 @@ import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
 @Service
 public class RatingService
 {
+    private static final Logger log = LoggerFactory.getLogger(RatingService.class.getName());
+    
     @Autowired
     private Config config = null;
 
@@ -74,10 +79,12 @@ public class RatingService
     {
         try
         {
-            if (config.ratingStrategy.updateMusicBrainzRating)
+            if (!StringUtils.isAllBlank(config.musicbrainzSupport.username))
             {
                 musicBrainzService.setRating(musicBrainzID, rating);
                 this.publisher.publishEvent(new ToastrMessage("", "sucess", "MusicBrainz Rating", "successfully send to musicbrainz.org"));
+            } else {
+                log.trace("musicbrainz.org username not set in config. musicbrainz.orgupdate is disabled.");
             }
         }
         catch (Exception e)

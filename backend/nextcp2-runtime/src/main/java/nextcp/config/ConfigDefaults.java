@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.dto.Config;
 import nextcp.dto.MusicbrainzSupport;
-import nextcp.dto.RatingStrategy;
 import nextcp.dto.SpotifyConfigDto;
 
 public class ConfigDefaults
@@ -50,12 +49,6 @@ public class ConfigDefaults
             config.musicbrainzSupport = new MusicbrainzSupport("", "");
         }
 
-        if (config.ratingStrategy == null)
-        {
-            log.info("adding new configuration value 'ratingStrategy' with enabled MusicBrainz rating, local file rating and musicBrainz to local file rating synchronization.");
-            config.ratingStrategy = new RatingStrategy(true, true, true, true, "NONE");
-        }
-
         if (config.globalSearchDelay == null)
         {
             log.info("adding new configuration value 'globalSearchDelay = 500'");
@@ -66,12 +59,6 @@ public class ConfigDefaults
         {
             log.info("adding new configuration value 'umsApiKeys = []'");
             config.umsApiKeys = new ArrayList<>();
-        }
-
-        if (config.ratingStrategy.updateUmsServerRating == null)
-        {
-            log.info("adding new configuration value 'updateUmsServerRating = true'");
-            config.ratingStrategy.updateUmsServerRating = true;
         }
     }
 

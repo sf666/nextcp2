@@ -40,8 +40,8 @@ public class SessionManager
 
     private Environment environment = null;
 
-    // Schema update constants. Update this value to the latest SQL script!
-    private final int TARGET_DB_SCHEMA = 5;
+    // Schema update constants. Update this value to the latest SQL script number in /resources/sql directory
+    private final int TARGET_DB_SCHEMA = 1;
 
     @Autowired
     public SessionManager(DatabaseConfig config)

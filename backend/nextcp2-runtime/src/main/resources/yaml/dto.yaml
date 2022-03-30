@@ -23,8 +23,6 @@ Config:
    clientConfig: List<UiClientConfig>
    radioStation: List<RadioStation>
    musicbrainzSupport: MusicbrainzSupport
-   ratingStrategy: RatingStrategy
-   playlistPath: String
    globalSearchDelay: Long
    lastFmSessionKey: String
    spotifyConfig: SpotifyConfigDto
@@ -45,25 +43,11 @@ SpotifyConfigDto:
 RendererConfigDto:
    rendererDevices: List<RendererDeviceConfiguration>
 
-   
-RatingStrategy:
-   updateMusicBrainzRating : Boolean
-   updateLocalFileRating: Boolean
-   updateUmsServerRating: Boolean
-   syncRatings: Boolean
-   collisionStrategy: String
-
 
 MusicbrainzSupport:
     username: String
     password: String
 
-   
-LocalIndexSupport:
-   isActive: Boolean
-   musicRootPath: String
-   databaseFilename: String
-   supportedFileTypes: String
    
 UiClientConfig:
    uuid: String

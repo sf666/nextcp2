@@ -11,6 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class MediaServerDto
 {
+
     public String udn;
     public String friendlyName;
     public Boolean extendedApi;

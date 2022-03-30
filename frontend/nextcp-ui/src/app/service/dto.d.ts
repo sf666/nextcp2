@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2022-03-30 08:52:19.
+// Generated using typescript-generator version 2.32.889 on 2022-03-30 09:18:58.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -29,8 +29,6 @@ export interface Config {
     clientConfig: UiClientConfig[];
     radioStation: RadioStation[];
     musicbrainzSupport: MusicbrainzSupport;
-    ratingStrategy: RatingStrategy;
-    playlistPath: string;
     globalSearchDelay: number;
     lastFmSessionKey: string;
     spotifyConfig: SpotifyConfigDto;
@@ -220,14 +218,6 @@ export interface RadioStation {
     stationName: string;
     resourceUrl: string;
     artworkUrl: string;
-}
-
-export interface RatingStrategy {
-    updateMusicBrainzRating: boolean;
-    updateLocalFileRating: boolean;
-    updateUmsServerRating: boolean;
-    syncRatings: boolean;
-    collisionStrategy: string;
 }
 
 export interface RendererConfigDto {

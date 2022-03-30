@@ -196,48 +196,34 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     @Override
     public void rateSong(Integer audiotrackId, int stars)
     {
-        if (config.ratingStrategy.updateUmsServerRating)
+        try
         {
-            try
-            {
-                Response response = executeCallWithResponse(String.format("%s/%s", audiotrackId, stars), "api/rating/setratingbyaudiotrackid");
-                String body = response.body().string();
-                int code = response.code();
-                toastDeviceResponse(body, code, true);
-            }
-            catch (Exception e)
-            {
-                log.debug("rateSong failed ...", e);
-                publisher.publishEvent(new ToastrMessage(null, "error", "UMS server device" + getFriendlyName(), "File rating failed : " + e.getMessage()));
-            }
+            Response response = executeCallWithResponse(String.format("%s/%s", audiotrackId, stars), "api/rating/setratingbyaudiotrackid");
+            String body = response.body().string();
+            int code = response.code();
+            toastDeviceResponse(body, code, true);
         }
-        else
+        catch (Exception e)
         {
-            log.debug("UMS API is disabled");
+            log.debug("rateSong failed ...", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "UMS server device" + getFriendlyName(), "File rating failed : " + e.getMessage()));
         }
     }
 
     @Override
     public void rateSongByMusicBrainzID(String musicbrainzId, int stars)
     {
-        if (config.ratingStrategy.updateUmsServerRating)
+        try
         {
-            try
-            {
-                Response response = executeCallWithResponse(String.format("%s/%s", musicbrainzId, stars), "api/rating/setrating");
-                String body = response.body().string();
-                int code = response.code();
-                toastDeviceResponse(body, code, true);
-            }
-            catch (Exception e)
-            {
-                log.debug("rateSong failed ...", e);
-                publisher.publishEvent(new ToastrMessage(null, "error", "UMS server device" + getFriendlyName(), "File rating failed : " + e.getMessage()));
-            }
+            Response response = executeCallWithResponse(String.format("%s/%s", musicbrainzId, stars), "api/rating/setrating");
+            String body = response.body().string();
+            int code = response.code();
+            toastDeviceResponse(body, code, true);
         }
-        else
+        catch (Exception e)
         {
-            log.debug("UMS API is disabled");
+            log.debug("rateSong failed ...", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "UMS server device" + getFriendlyName(), "File rating failed : " + e.getMessage()));
         }
     }
 
@@ -394,5 +380,5 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     {
         return new MediaServerDto(getUDN().getIdentifierString(), getFriendlyName(), true);
     }
-    
+
 }

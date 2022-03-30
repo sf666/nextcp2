@@ -1,12 +1,17 @@
 -- Tables  
-CREATE TABLE SONG_RATING(FILEPATH VARCHAR(4096) PRIMARY KEY, ACOUSTID UUID, MUSICBRAINZID UUID , RATING INT);
+-- ========================================
 
+
+-- config entries 
 CREATE TABLE DATABASE_CONFIG(config_entry VARCHAR(64) PRIMARY KEY, config_value VARCHAR(2048));
 
--- Index  
+-- Key Value table store
+CREATE TABLE JSON_STORE(lookupKey VARCHAR(64) PRIMARY KEY, lookupValue CLOB);
 
-create INDEX idx_acoustic on SONG_RATING(ACOUSTID);
-create INDEX idx_musicbrainz on SONG_RATING(MUSICBRAINZID);
+-- Spotify
+CREATE TABLE SPOTIFY_ARTIST(uri VARCHAR(64) PRIMARY KEY, artistName VARCHAR(64), artistJsonObj CLOB);
+CREATE UNIQUE INDEX IDX_SPOTIFY_ARTIST ON SPOTIFY_ARTIST(artistName);
+
 
 -- Update schema version to 1
 

@@ -23,7 +23,6 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import nextcp.db.DatabaseConfig;
 import nextcp.dto.Config;
 import nextcp.dto.MusicbrainzSupport;
-import nextcp.dto.RatingStrategy;
 import nextcp.dto.SpotifyConfigDto;
 import nextcp.dto.UmsServerApiKey;
 import nextcp.lastfm.ILastFmConfig;
@@ -233,7 +232,6 @@ public class ConfigPersistence
         createDefaultLog(c.log4jConfigFile);
         c.loggingDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
         c.musicbrainzSupport = new MusicbrainzSupport("", "");
-        c.ratingStrategy = new RatingStrategy(true, true, true, true, "FILE");
         c.spotifyConfig = new SpotifyConfigDto();
         return c;
     }

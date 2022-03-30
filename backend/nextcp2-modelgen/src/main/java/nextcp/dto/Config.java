@@ -22,8 +22,6 @@ public class Config
     public List<UiClientConfig> clientConfig;
     public List<RadioStation> radioStation;
     public MusicbrainzSupport musicbrainzSupport;
-    public RatingStrategy ratingStrategy;
-    public String playlistPath;
     public Long globalSearchDelay;
     public String lastFmSessionKey;
     public SpotifyConfigDto spotifyConfig;
@@ -34,7 +32,7 @@ public class Config
     {
     }
 
-    public Config(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, MusicbrainzSupport musicbrainzSupport, RatingStrategy ratingStrategy, String playlistPath, Long globalSearchDelay, String lastFmSessionKey, SpotifyConfigDto spotifyConfig, List<UmsServerApiKey> umsApiKeys, String databaseFilename)
+    public Config(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, MusicbrainzSupport musicbrainzSupport, Long globalSearchDelay, String lastFmSessionKey, SpotifyConfigDto spotifyConfig, List<UmsServerApiKey> umsApiKeys, String databaseFilename)
     {
         this.generateUpnpCode = generateUpnpCode;
         this.generateUpnpCodePath = generateUpnpCodePath;
@@ -46,8 +44,6 @@ public class Config
         this.clientConfig = clientConfig;
         this.radioStation = radioStation;
         this.musicbrainzSupport = musicbrainzSupport;
-        this.ratingStrategy = ratingStrategy;
-        this.playlistPath = playlistPath;
         this.globalSearchDelay = globalSearchDelay;
         this.lastFmSessionKey = lastFmSessionKey;
         this.spotifyConfig = spotifyConfig;
@@ -70,8 +66,6 @@ public class Config
         sb.append("clientConfig=").append(this.clientConfig).append(", ");
         sb.append("radioStation=").append(this.radioStation).append(", ");
         sb.append("musicbrainzSupport=").append(this.musicbrainzSupport).append(", ");
-        sb.append("ratingStrategy=").append(this.ratingStrategy).append(", ");
-        sb.append("playlistPath=").append(this.playlistPath).append(", ");
         sb.append("globalSearchDelay=").append(this.globalSearchDelay).append(", ");
         sb.append("lastFmSessionKey=").append(this.lastFmSessionKey).append(", ");
         sb.append("spotifyConfig=").append(this.spotifyConfig).append(", ");
