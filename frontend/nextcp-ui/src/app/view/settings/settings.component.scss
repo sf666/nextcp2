@@ -8,6 +8,7 @@ input {
 
 .card-width {
     max-width: 250px;
+    font-weight: 500;
 }
 
 .cardContainer {
@@ -43,4 +44,8 @@ input {
 
 .mat-form-field-infix {
     align-self: center;
+}
+
+#icnId > svg {
+    vertical-align: middle;
 }

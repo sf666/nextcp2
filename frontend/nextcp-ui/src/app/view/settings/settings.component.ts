@@ -5,12 +5,13 @@ import { ContentDirectoryService } from './../../service/content-directory.servi
 import { RatingServiceService } from './../../service/rating-service.service';
 import { UiClientConfig, MediaServerDto, RendererDeviceConfiguration, MediaRendererDto } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'settings',
   templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss']
+  styleUrls: ['./settings.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class SettingsComponent {
 
