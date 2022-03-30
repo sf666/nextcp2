@@ -1,3 +1,4 @@
+import { CustomHttpInterceptor } from './service/http-interceptor';
 import { MinimTagComponent } from './mediaserver/popup/minim-tag/minim-tag.component';
 import { SidebarComponent } from './view/sidebar/sidebar.component';
 import { RendererDropdownComponent } from './mediarenderer/dropdown/dropdown.component';
@@ -5,7 +6,7 @@ import { MediaServerComponent } from './mediaserver/mediaServer/mediaServer.comp
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -54,7 +55,7 @@ import { AvailableServerComponent } from './popup/available-server/available-ser
 import { MyAlbumComponent } from './view/my-album/my-album.component';
 import { MySongsComponent } from './view/my-songs/my-songs.component';
 import { ToastContainerComponent } from './service/toast/toast-container/toast-container.component';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 
 @NgModule({
    declarations: [
@@ -105,6 +106,7 @@ import { ToastContainerComponent } from './service/toast/toast-container/toast-c
       MatListModule,
       MatSidenavModule,
       MatDialogModule,
+      MatProgressSpinnerModule,
 
       // Other
       BrowserModule,
@@ -117,7 +119,12 @@ import { ToastContainerComponent } from './service/toast/toast-container/toast-c
    schemas: [
       CUSTOM_ELEMENTS_SCHEMA
    ],
-   providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
+   providers: [{ 
+      provide: LocationStrategy, useClass: HashLocationStrategy 
+   }, {
+      provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true
+   }],
+
    bootstrap: [
       AppComponent
    ]

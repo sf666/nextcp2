@@ -4,9 +4,13 @@
   
   <div *ngIf="showBlur()" class="bg-img" id="main-screen">
   </div>
-  
-  
-  
+
+  <div class="spinner-overlay" *ngIf="spinnerService.visibility | async">
+    <div class="spinner">
+      <mat-spinner [diameter]="50" mode="indeterminate"></mat-spinner>
+    </div>
+  </div>
+    
   <nav-bar *ngIf="layoutService.headerVisible"></nav-bar>
   
   

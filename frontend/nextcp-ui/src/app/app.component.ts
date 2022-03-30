@@ -1,3 +1,4 @@
+import { SpinnerService } from './service/spinner.service';
 import { LayoutService } from './service/layout.service';
 import { Component, HostListener } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
@@ -20,7 +21,7 @@ export class AppComponent {
 
 //  private throttleResize = _.throttle(this.resiseVh, 100);
 
-  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer, public layoutService: LayoutService) {
+  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer, public layoutService: LayoutService, public spinnerService: SpinnerService) {
     // Globally register SVG mat-icon 
     iconRegistry.addSvgIconSet(sanitizer.bypassSecurityTrustResourceUrl('assets/icon-set.svg'));
   }

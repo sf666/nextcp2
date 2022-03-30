@@ -58,14 +58,14 @@
 .bg-img {
     @extend .bg-img-base;
     width: calc(100% - var(--sidebar-width));
-    left    : var(--sidebar-width);
+    left : var(--sidebar-width);
 }
 
 @media only screen and (max-width: 900px) {
     .bg-img {
         @extend .bg-img-base;
         width: calc(100% - var(--sidebar-width-min));
-        left    : var(--sidebar-width-min);
+        left : var(--sidebar-width-min);
     }
 }
 
@@ -98,3 +98,22 @@
     background-repeat: calc(var(--vh, 1vh) * 100);
     z-index          : 3;
 }
+
+.spinner {
+    position         : absolute;
+    top              : 50%;
+    left             : 50%;
+    -moz-transform   : translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform        : translateX(-50%) translateY(-50%);
+}
+
+.spinner-overlay{
+    height:100vh;
+    width:100%;
+    background-color:rgba(0, 0, 0, 0.286);
+    z-index:    10;
+    top:        0; 
+    left:       0; 
+    position:   fixed;
+  }
