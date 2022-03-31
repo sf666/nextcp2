@@ -19,12 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import nextcp.config.RendererConfig;
+import nextcp.config.ServerConfig;
 import nextcp.devicedriver.DeviceCapabilityDto;
 import nextcp.devicedriver.DeviceDriverDiscoveryService;
 import nextcp.dto.Config;
 import nextcp.dto.DeviceDriverCapability;
+import nextcp.dto.NextcpFileConfigDto;
 import nextcp.dto.RendererConfigDto;
 import nextcp.dto.RendererDeviceConfiguration;
+import nextcp.dto.ServerConfigDto;
+import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.UiClientConfig;
 import nextcp.service.ConfigService;
 import nextcp.util.IApplicationRestartable;
@@ -48,6 +52,9 @@ public class RestConfigurationService
 
     @Autowired
     private RendererConfig rendererConfigService = null;
+
+    @Autowired
+    private ServerConfig serverConfigService = null;
 
     @Autowired
     private DeviceDriverDiscoveryService deviceDriverDiscoveryService = null;
@@ -90,7 +97,7 @@ public class RestConfigurationService
     }
 
     @GetMapping("/getMediaRendererConfig")
-    public RendererConfigDto getRendererConfig()
+    public RendererConfigDto getMediaRendererConfig()
     {
         try
         {
@@ -100,6 +107,34 @@ public class RestConfigurationService
         {
             log.error("getMediaRendererConfig", e);
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "reading media renderer config failed : " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/getMediaServerConfig")
+    public ServerConfigDto getMediaServerConfig()
+    {
+        try
+        {
+            return serverConfigService.getServerConfig();
+        }
+        catch (Exception e)
+        {
+            log.error("getMediaRendererConfig", e);
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "reading media renderer config failed : " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/saveFileServerConfig")
+    public void saveFileServerConfig(@RequestBody NextcpFileConfigDto rendererDevice)
+    {
+        try
+        {
+            serverConfigService.updateFileServerConfig(rendererDevice);
+        }
+        catch (Exception e)
+        {
+            log.error("saveFileServerConfig", e);
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "saving file server config failed : " + e.getMessage());
         }
     }
 
@@ -117,6 +152,20 @@ public class RestConfigurationService
         }
     }
 
+    @PostMapping("/saveMediaServerConfig")
+    public void saveMediaServerConfig(@RequestBody ServerDeviceConfiguration serverDevice)
+    {
+        try
+        {
+            serverConfigService.updateServerDevice(serverDevice);
+        }
+        catch (Exception e)
+        {
+            log.error("saveMediaServerConfig", e);
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "saving media server config failed : " + e.getMessage());
+        }
+    }
+
     @PostMapping("/deleteMediaRendererConfig")
     public void deleteRendererConfig(@RequestBody RendererDeviceConfiguration rendererDevice)
     {
@@ -127,6 +176,19 @@ public class RestConfigurationService
         catch (Exception e)
         {
             log.error("deleteMediaRendererConfig", e);
+        }
+    }
+
+    @PostMapping("/deleteMediaServerConfig")
+    public void deleteMediaServerConfig(@RequestBody ServerDeviceConfiguration serverDevice)
+    {
+        try
+        {
+            serverConfigService.deleteServerDevice(serverDevice);
+        }
+        catch (Exception e)
+        {
+            log.error("deleteMediaServerConfig", e);
         }
     }
 

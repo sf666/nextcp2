@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2022-03-30 14:27:18.
+// Generated using typescript-generator version 2.32.889 on 2022-03-31 13:54:38.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -32,7 +32,6 @@ export interface Config {
     globalSearchDelay: number;
     lastFmSessionKey: string;
     spotifyConfig: SpotifyConfigDto;
-    umsApiKeys: UmsServerApiKey[];
     databaseFilename: string;
 }
 
@@ -181,6 +180,12 @@ export interface MusicbrainzSupport {
     password: string;
 }
 
+export interface NextcpFileConfigDto {
+    libraryPath: string;
+    embeddedServerPort: number;
+    databaseFilename: string;
+}
+
 export interface PlayOpenHomeRadioDto {
     mediaRendererDto: MediaRendererDto;
     radioStation: MusicItemDto;
@@ -256,6 +261,19 @@ export interface SearchResultDto {
     albumItems: ContainerDto[];
     artistItems: ContainerDto[];
     playlistItems: ContainerDto[];
+}
+
+export interface ServerConfigDto {
+    nextcpFileConfigDto: NextcpFileConfigDto;
+    serverDevices: ServerDeviceConfiguration[];
+}
+
+export interface ServerDeviceConfiguration {
+    ip: string;
+    displayString: string;
+    enabled: boolean;
+    mediaServer: MediaServerDto;
+    apiKey: string;
 }
 
 export interface ServerPlaylistEntry {

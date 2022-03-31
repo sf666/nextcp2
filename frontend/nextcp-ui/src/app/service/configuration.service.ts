@@ -1,7 +1,7 @@
 import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { SseService } from './sse/sse.service';
-import { UiClientConfig, RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability } from './dto.d';
+import { UiClientConfig, RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, MediaServerDto } from './dto.d';
 import { GenericResultService } from './generic-result.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -13,8 +13,18 @@ import { isAssigned } from '../global';
 
 export class ConfigurationService {
 
+  // Observer
+  // ===============================================================================
   clientConfigChanged$: Subject<UiClientConfig> = new Subject();
   rendererConfigChanged$: Subject<RendererDeviceConfiguration[]> = new Subject();
+
+  // Configs
+  // ===============================================================================
+
+  serverConfig: Config;                     // global serverside configuration file (server state) (read only)
+  rendererConfig: RendererConfigDto;        // renderer configurations
+  serverConfigDto: ServerConfigDto;         // server side object, can be used to update server config
+
 
   private clientUUID = this.getStoredClientId();
 
@@ -25,9 +35,6 @@ export class ConfigurationService {
   };
 
   public deviceDriverList: DeviceDriverCapability[];
-
-  // renderer configurations
-  rendererConfig: RendererConfigDto;
 
   // configuration for this client
   public clientConfig: UiClientConfig = {
@@ -44,9 +51,6 @@ export class ConfigurationService {
     }
   };
 
-  // global serverside configuration file (server state)
-  serverConfig: Config;
-
   baseUri = '/ConfigurationService';
 
 
@@ -54,8 +58,10 @@ export class ConfigurationService {
     this.getClientConfigFromServer();
     this.getDeviceDriverFromServer();
     this.getMediaRendererConfig();
+    this.getMediaServerConfig();
     sseService.configChanged$.subscribe(serverConfig => this.applyServerConfigurationFile(serverConfig));
     sseService.rendererConfigChanged$.subscribe(data => this.applyRendererServerRendererList(data));
+    sseService.serverDevicesConfigChanged$.subscribe(data => this.serverConfigDto = data);
   }
 
   public createNewUiClientConfig(newuuid: string): UiClientConfig {
@@ -76,6 +82,10 @@ export class ConfigurationService {
     });
   }
 
+  public getServerConfig() {
+    return this.serverConfigDto;
+  }
+
   public saveMediaRendererConfig(mediaRendererConfig: RendererDeviceConfiguration): void {
     const uri = '/saveMediaRendererConfig';
     this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaRendererConfig, "Save mediarenderer config", "success").subscribe();
@@ -86,10 +96,26 @@ export class ConfigurationService {
     this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaRendererConfig, "Delete mediarenderer config", "success").subscribe();
   }
 
+  public saveMediaServerConfig(mediaServerConfig: ServerDeviceConfiguration): void {
+    const uri = '/saveMediaServerConfig';
+    this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaServerConfig, "Save mediaserver config", "success").subscribe();
+  }
+
+  public deleteMediaServerConfig(mediaServerConfig: ServerDeviceConfiguration): void {
+    const uri = '/deleteMediaServerConfig';
+    this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaServerConfig, "Delete mediaserver config", "success").subscribe();
+  }
+
   public getMediaRendererConfig(): void {
     const uri = '/getMediaRendererConfig';
     this.httpService.get<RendererConfigDto>(this.baseUri, uri).subscribe(data =>
       this.rendererConfig = data);
+  }
+
+  public getMediaServerConfig(): void {
+    const uri = '/getMediaServerConfig';
+    this.httpService.get<ServerConfigDto>(this.baseUri, uri).subscribe(data =>
+      this.serverConfigDto = data);
   }
 
   private getClientConfigFromServer() {

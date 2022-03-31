@@ -3,7 +3,7 @@ import { SystemService } from './../../service/system.service';
 import { DeviceService } from './../../service/device.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { RatingServiceService } from './../../service/rating-service.service';
-import { UiClientConfig, MediaServerDto, RendererDeviceConfiguration, MediaRendererDto } from './../../service/dto.d';
+import { UiClientConfig, MediaServerDto, RendererDeviceConfiguration, MediaRendererDto, ServerDeviceConfiguration } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
 import { Component, ViewEncapsulation } from '@angular/core';
 
@@ -31,6 +31,10 @@ export class SettingsComponent {
 
   isRendererConfigActive(deviceConfig: RendererDeviceConfiguration): boolean {
     return this.deviceService.isRenderOnline(deviceConfig.mediaRenderer);
+  }
+
+  isServerConfigActive(deviceConfig: ServerDeviceConfiguration): boolean {
+    return this.deviceService.isServerOnline(deviceConfig.mediaServer);
   }
 
   get buildNumber(): string {
@@ -69,6 +73,14 @@ export class SettingsComponent {
 
   deleteRendererConfig(rendererConfig: RendererDeviceConfiguration): void {
     this.configService.deleteMediaRendererConfig(rendererConfig);
+  }
+
+  saveServerConfig(rendererConfig: ServerDeviceConfiguration): void {
+    this.configService.saveMediaServerConfig(rendererConfig);
+  }
+
+  deleteServerConfig(rendererConfig: ServerDeviceConfiguration): void {
+    this.configService.deleteMediaServerConfig(rendererConfig);
   }
 
   restart(): void {

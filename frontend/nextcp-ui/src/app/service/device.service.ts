@@ -51,6 +51,14 @@ export class DeviceService {
     return false;
   }
 
+  public isServerOnline(device: MediaServerDto): boolean {
+    if (this.mediaServerList.some(server => server.udn == device.udn)) {
+      return true;
+    }
+    return false;
+  }
+
+
   public isMediaRendererSelected(udn: string): boolean {
     return udn === this._selectedMediaRendererDevice.udn;
   }

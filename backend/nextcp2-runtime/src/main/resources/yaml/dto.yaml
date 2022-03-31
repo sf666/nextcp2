@@ -26,9 +26,8 @@ Config:
    globalSearchDelay: Long
    lastFmSessionKey: String
    spotifyConfig: SpotifyConfigDto
-   umsApiKeys: List<UmsServerApiKey>
    databaseFilename: String
-   
+
 UmsServerApiKey:
    serverUuid: String
    serverApiKey: String
@@ -43,6 +42,24 @@ SpotifyConfigDto:
 RendererConfigDto:
    rendererDevices: List<RendererDeviceConfiguration>
 
+
+# Client/Server DTO exchange of file based configuration entries 
+NextcpFileConfigDto:
+   libraryPath: String
+   embeddedServerPort: Integer
+   databaseFilename: String
+
+
+ServerConfigDto:
+   nextcpFileConfigDto: NextcpFileConfigDto
+   serverDevices: List<ServerDeviceConfiguration>
+
+ServerDeviceConfiguration:
+   ip: String
+   displayString: String
+   enabled: Boolean
+   mediaServer: MediaServerDto
+   apiKey: String
 
 MusicbrainzSupport:
     username: String

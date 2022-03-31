@@ -11,14 +11,13 @@ import nextcp.dto.Config;
 import nextcp.dto.UiClientConfig;
 import nextcp.eventBridge.SsePublisher;
 import nextcp.spotify.ISpotifyConfig;
-import nextcp.upnp.device.DeviceRegistry;
 
 @Controller
 public class ConfigService
 {
     private static final Logger log = LoggerFactory.getLogger(ConfigService.class.getName());
 
-    public static String CLIENT_CONFIG_QUEUENAME = "CONFIG_CHANGED";
+    public static String CONFIG_QUEUENAME = "CONFIG_CHANGED";
 
     @Autowired
     private Config config = null;
@@ -28,9 +27,6 @@ public class ConfigService
 
     @Autowired
     private SsePublisher ssePublisher = null;
-
-    @Autowired
-    private DeviceRegistry deviceRegistry = null;
 
     public void addClientProfile(UiClientConfig clientConfig)
     {
@@ -52,7 +48,7 @@ public class ConfigService
     public void writeAndSendConfig()
     {
         persistence.writeConfig();
-        ssePublisher.sendObjectAsJson(CLIENT_CONFIG_QUEUENAME, config);
+        ssePublisher.sendObjectAsJson(CONFIG_QUEUENAME, config);
     }
 
     @Bean

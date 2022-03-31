@@ -2,7 +2,6 @@ package nextcp.upnp.device.mediaserver;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -19,10 +18,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import nextcp.config.ConfigPersistence;
-import nextcp.dto.Config;
+import nextcp.config.ServerConfig;
 import nextcp.dto.MediaServerDto;
+import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.ToastrMessage;
-import nextcp.dto.UmsServerApiKey;
 import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -37,15 +36,13 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     private ObjectMapper om = new ObjectMapper();
 
     @Autowired
-    private Config config = null;
+    private ServerConfig config = null;
 
     @Autowired
     private ConfigPersistence cp = null;
 
     @Autowired
     private ApplicationEventPublisher publisher = null;
-
-    private static HashMap<String, String> ums_keys = new HashMap<String, String>();
 
     public UmsServerDevice(RemoteDevice device)
     {
@@ -55,22 +52,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     @PostConstruct
     private void init()
     {
-        synchronized (ums_keys)
-        {
-            if (ums_keys.isEmpty())
-            {
-                for (UmsServerApiKey ums : config.umsApiKeys)
-                {
-                    ums_keys.put(ums.serverUuid, ums.serverApiKey);
-                }
-            }
-            if (!ums_keys.containsKey(getUdnAsString()))
-            {
-                ums_keys.put(getUdnAsString(), "secret");
-                config.umsApiKeys.add(new UmsServerApiKey(getUdnAsString(), "secret"));
-                cp.writeConfig();
-            }
-        }
     }
 
     @Override
@@ -189,8 +170,17 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
     private String getApiKey()
     {
-        String key = ums_keys.get(getUdnAsString());
-        return key != null ? key : "";
+        ServerDeviceConfiguration deviceConfig = config.getMediaServerConfig(getUdnAsString());
+        if (deviceConfig == null)
+        {
+            log.warn("no configuration for server device " + getFriendlyName());
+        }
+        else
+        {
+            String key = config.getMediaServerConfig(getUdnAsString()).apiKey;
+            return key != null ? key : "";
+        }
+        return "";
     }
 
     @Override

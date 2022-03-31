@@ -37,9 +37,7 @@ public class RendererConfig
     public static final String RENDERE_CONFIG_QUEUENAME = "RENDERER_CONFIG_CHANGED";
 
     private RendererConfigDto config = new RendererConfigDto();
-
     private SsePublisher ssePublisher = null;
-
     private BasicDbService dbService = null;
 
     @Autowired
@@ -160,7 +158,6 @@ public class RendererConfig
         if (!remoteDevice.getIdentity().getDescriptorURL().getHost().contentEquals(configEntry.ip))
         {
             configEntry.ip = remoteDevice.getIdentity().getDescriptorURL().getHost();
-            writeConfig();
         }
         if (configEntry.setCoveredUpnpDeviceToMaxVolume == null)
         {
@@ -170,6 +167,7 @@ public class RendererConfig
         {
             configEntry.active = false;
         }
+        writeAndSendConfig();
     }
 
     public void updateRendererDevice(RendererDeviceConfiguration rendererDevice)

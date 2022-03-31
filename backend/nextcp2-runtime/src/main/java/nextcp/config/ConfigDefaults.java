@@ -54,12 +54,6 @@ public class ConfigDefaults
             log.info("adding new configuration value 'globalSearchDelay = 500'");
             config.globalSearchDelay = Long.valueOf(500);
         }
-
-        if (config.umsApiKeys == null)
-        {
-            log.info("adding new configuration value 'umsApiKeys = []'");
-            config.umsApiKeys = new ArrayList<>();
-        }
     }
 
 }

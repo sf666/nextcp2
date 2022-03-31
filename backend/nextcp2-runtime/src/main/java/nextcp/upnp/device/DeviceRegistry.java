@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import nextcp.config.RendererConfig;
-import nextcp.service.ConfigService;
+import nextcp.config.ServerConfig;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediarenderer.MediaRendererListChanged;
 import nextcp.upnp.device.mediaserver.IMediaServerExtendedSupport;
@@ -30,7 +30,10 @@ public class DeviceRegistry
     public DeviceFactory deviceFactory = null;
 
     @Autowired
-    private RendererConfig configService = null;
+    private RendererConfig rendererConfigService = null;
+
+    @Autowired
+    private ServerConfig serverConfigService = null;
 
     @Autowired
     private ApplicationEventPublisher eventPublisher = null;
@@ -50,9 +53,9 @@ public class DeviceRegistry
     //
     public void addMediaRendererDevice(RemoteDevice remoteDevice)
     {
+        rendererConfigService.addMediaRendererDeviceConfig(remoteDevice);
         MediaRendererDevice device = deviceFactory.mediaRendererDeviceFactory(remoteDevice);
         mediaRendererList.put(remoteDevice.getIdentity().getUdn(), device);
-        configService.addMediaRendererDeviceConfig(remoteDevice);
         eventPublisher.publishEvent(new MediaRendererListChanged(getAvailableMediaRenderer()));
     }
 
@@ -65,7 +68,7 @@ public class DeviceRegistry
     public Collection<MediaRendererDevice> getActiveMediaRenderer()
     {
         return Collections
-                .unmodifiableCollection(mediaRendererList.values().stream().filter(r -> configService.isMediaRendererActive(r.getUdnAsString())).collect(Collectors.toList()));
+                .unmodifiableCollection(mediaRendererList.values().stream().filter(r -> rendererConfigService.isMediaRendererActive(r.getUdnAsString())).collect(Collectors.toList()));
     }
 
     public Collection<MediaRendererDevice> getAvailableMediaRenderer()
@@ -76,9 +79,10 @@ public class DeviceRegistry
     //
     // Media Server
     //
-    public void addMediaServerDevice(RemoteDevice remoteDevice, MediaServerType default1)
+    public void addMediaServerDevice(RemoteDevice remoteDevice, MediaServerType serverType)
     {
-        MediaServerDevice device = deviceFactory.mediaServerDeviceFactory(remoteDevice, default1);
+        MediaServerDevice device = deviceFactory.mediaServerDeviceFactory(remoteDevice, serverType);
+        serverConfigService.addMediaServerDeviceConfig(remoteDevice, device);
         mediaServerList.put(remoteDevice.getIdentity().getUdn(), device);
         eventPublisher.publishEvent(new MediaServerListChanged(getAvailableMediaServer()));
     }

@@ -50,7 +50,7 @@ public class SessionManager
 
         if (StringUtils.isBlank(config.databaseFilename))
         {
-            log.warn("Rating support disabled: Configuration 'databaseFilename' must be provided.");
+            throw new RuntimeException("Configuration 'databaseFilename' must be provided.");
         }
         else
         {
