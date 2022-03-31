@@ -304,27 +304,29 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
     private String doGenericCall(String body, String api, boolean showOkMessage)
     {
+        String respBody = "";
+        Response res = null;
         try
         {
-            Response res = executeCallWithResponse(body, api);
-            String respBody = res.body().string();
-            if (res.code() != 200)
-            {
-                log.warn("API error : " + respBody);
-                toastDeviceResponse(respBody, res.code(), false);
-                throw new RuntimeException(respBody);
-            }
-            if (showOkMessage)
-            {
-                toastDeviceResponse(respBody, res.code(), true);
-            }
-            return respBody;
+            res = executeCallWithResponse(body, api);
+            respBody = res.body().string();
         }
-        catch (Exception e)
+        catch (IOException e)
         {
-            log.error("API call failed ...", e);
-            throw new RuntimeException(e);
+            throw new RuntimeException("Execution failed.", e);
         }
+
+        if (res.code() != 200)
+        {
+            log.warn("API error : " + respBody);
+            toastDeviceResponse(respBody, res.code(), false);
+            throw new RuntimeException(respBody);
+        }
+        if (showOkMessage)
+        {
+            toastDeviceResponse(respBody, res.code(), true);
+        }
+        return respBody;
     }
 
     @Override
