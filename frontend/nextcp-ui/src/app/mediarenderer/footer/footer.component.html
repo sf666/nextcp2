@@ -82,7 +82,7 @@
             <mat-icon class="icon-main align-self-center" (click)="serverClicked($event)" svgIcon="server-network"></mat-icon>
             <mat-icon class="icon-main align-self-center" style="margin-top: 4px;" (click)="rendererClicked($event)" svgIcon="cast-audio"></mat-icon>
             <mat-icon class="icon-main align-self-center" svgIcon="volume-high" aria-hidden="false"
-                aria-label="high volume icon" (click)="volumeClicked($event)" *ngIf="hasDeviceDriver()">
+                aria-label="high volume icon" (click)="volumeClicked($event)">
             </mat-icon>
             <mat-icon class="{{getStandbyClass()}} align-self-center" svgIcon="power-standby" aria-hidden="false"
                 aria-label="POWER icon" (click)="powerClicked()" *ngIf="hasDeviceDriver()">

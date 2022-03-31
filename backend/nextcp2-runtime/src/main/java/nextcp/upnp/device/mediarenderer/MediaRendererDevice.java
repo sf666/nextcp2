@@ -226,7 +226,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         {
             ohDeviceDriver = new OpenHomeDeviceDriver(this, getEventPublisher(), productService, oh_volumeService, physicalDeviceDriver,
                     rendererConfig.setCoveredUpnpDeviceToMaxVolume);
-            log.info("Using OpenHome Implementation for volume and power control for device " + getFriendlyName());
+            log.info("Added OpenHome Implementation for volume and power control to device " + getFriendlyName());
             if (ohProductServiceEventListener != null)
             {
                 ohProductServiceEventListener.addStandbyCallback(ohDeviceDriver);
