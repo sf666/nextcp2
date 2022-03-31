@@ -72,7 +72,6 @@
 		<module>nextcp2-modelgen</module>
 		<module>nextcp2-device-driver</module>
 		<module>nextcp2-assembly</module>
-		<module>nextcp2-indexer</module>
 		<module>nextcp2-db</module>
 		<module>nextcp2-external-information-provider</module>
 	</modules>
