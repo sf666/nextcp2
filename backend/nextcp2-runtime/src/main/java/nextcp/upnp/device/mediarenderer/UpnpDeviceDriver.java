@@ -31,7 +31,6 @@ public class UpnpDeviceDriver extends RenderingControlServiceEventListenerImpl i
         this.eventPublisher = eventPublisher;
         this.volumeService = volumeService;
         this.physicalDeviceDriver = physicalDeviceDriver;
-        this.setMaxVol = setMaxVol;
         this.setMaxVol = setMaxVol != null ? setMaxVol : false;
 
         volume = 0;
