@@ -38,7 +38,7 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
         this.volumeService = volumeService;
         this.physicalDeviceDriver = physicalDeviceDriver;
         this.setCoveredUpnpDeviceToMaxVolume = setCoveredUpnpDeviceToMaxVolume != null ? setCoveredUpnpDeviceToMaxVolume : false;
-        
+
         try
         {
             volume = Math.toIntExact(volumeService.volume().Value);
@@ -82,7 +82,7 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
 
     private void setVolOh(int vol)
     {
-//        volume = vol;
+        // volume = vol;
         SetVolumeInput inp = new SetVolumeInput();
         inp.Value = (long) vol;
         volumeService.setVolume(inp);
@@ -91,7 +91,7 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
     @Override
     public void setStandby(boolean standbyState)
     {
-//        standby = standbyState;
+        // standby = standbyState;
         if (physicalDeviceDriver == null)
         {
             productService.setStandby(standbyState);
@@ -122,8 +122,11 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
     @Override
     public void volumeChanged(int vol)
     {
-        this.volume = vol;
-        eventPublisher.publishEvent(getDeviceDriverState());
+        if (physicalDeviceDriver == null)
+        {
+            // just publish devicedriver state to client 
+            eventPublisher.publishEvent(getDeviceDriverState());
+        }
     }
 
     @Override

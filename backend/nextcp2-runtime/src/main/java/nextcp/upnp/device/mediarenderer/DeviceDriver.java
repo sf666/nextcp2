@@ -69,6 +69,7 @@ public class DeviceDriver implements IDeviceDriverCallback, IDeviceDriver
         DeviceVolumeChanged event = new DeviceVolumeChanged(rendererUdn, vol);
         eventPublisher.publishEvent(event);
         eventPublisher.publishEvent(getDeviceDriverState());
+        log.info(String.format("%s -> new vol -> %d", driverName, vol));
     }
 
     @Override
@@ -77,6 +78,7 @@ public class DeviceDriver implements IDeviceDriverCallback, IDeviceDriver
         DevicePowerChanged event = new DevicePowerChanged(rendererUdn, !standbyState);
         eventPublisher.publishEvent(event);
         eventPublisher.publishEvent(getDeviceDriverState());
+        log.info(String.format("%s -> new standby -> %s", driverName, Boolean.toString(standbyState)));
     }
 
     @Override
