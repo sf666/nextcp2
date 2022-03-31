@@ -213,12 +213,12 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     {
         if (productService == null)
         {
-            log.warn("Product service is not initialized ... OH device driver is not being created.");
+            log.warn("Product service is not initialized ... OH device driver is not being created for device " + getFriendlyName());
             return null;
         }
         if (oh_volumeService == null)
         {
-            log.warn("Volume service is not initialized ... OH device driver is not being created.");
+            log.warn("Volume service is not initialized ... OH device driver is not being created." + getFriendlyName());
             return null;
         }
 
@@ -233,7 +233,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             }
             else
             {
-                log.warn("no ohProductServiceEventListener available. No standby updates will be available.");
+                log.warn("no ohProductServiceEventListener available. No standby updates will be available for device " + getFriendlyName());
             }
             if (ohVolumeServiceEventListener != null)
             {
