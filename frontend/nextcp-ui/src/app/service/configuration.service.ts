@@ -61,7 +61,7 @@ export class ConfigurationService {
     this.getMediaServerConfig();
     sseService.configChanged$.subscribe(serverConfig => this.applyServerConfigurationFile(serverConfig));
     sseService.rendererConfigChanged$.subscribe(data => this.applyRendererServerRendererList(data));
-    sseService.serverDevicesConfigChanged$.subscribe(data => this.serverConfigDto = data);
+    sseService.serverDevicesConfigChanged$.subscribe(data => this.applyMediaServerList(data));
   }
 
   public createNewUiClientConfig(newuuid: string): UiClientConfig {
@@ -124,6 +124,14 @@ export class ConfigurationService {
       this.applyServerConfigurationFile(data);
     }, err => {
       this.genericResultService.displayHttpError(err, "cannot read configuration");
+    });
+  }
+
+  private applyMediaServerList(data: ServerConfigDto) {
+    this.serverConfigDto = data;
+
+    this.serverConfigDto.serverDevices = this.serverConfigDto?.serverDevices.sort((n1, n2) => {
+      return n1.displayString.localeCompare(n2.displayString);
     });
   }
 
