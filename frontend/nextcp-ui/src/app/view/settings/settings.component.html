@@ -55,35 +55,38 @@
                     <mat-card-subtitle class="no-wrap">{{rendererConfig.displayString}}</mat-card-subtitle>
                     <mat-card-subtitle>IP: {{rendererConfig.ip}}</mat-card-subtitle>
                 <mat-card-content>
-                    <div>
+                    <section>
                         <mat-slide-toggle class="mb-2" [(ngModel)]="rendererConfig.active">
                             Enable
                         </mat-slide-toggle>
-                    </div>
-                    <div>
+                    </section>
+                    <section>
                         <mat-form-field appearance="fill">
                             <mat-label>device driver type</mat-label>
                             <mat-select [(ngModel)]="rendererConfig.deviceDriverType">
-                                <mat-option>None</mat-option>
+                                <mat-option value="">None</mat-option>
                                 <mat-option [value]="dd.deviceType" *ngFor="let dd of configService.deviceDriverList">
                                     {{dd.deviceType}}</mat-option>
                             </mat-select>
                         </mat-form-field>
-                    </div>
-                    <div>
+                    </section>
+                    <section>
                         <mat-form-field appearance="fill">
                             <mat-label>device driver connection</mat-label>
                             <input matInput type="text" [(ngModel)]="rendererConfig.connectionString"
                                 placeholder="ip:port">
                         </mat-form-field>
-                    </div>
-                    <div>
+                    </section>
+                    <section>
                         <mat-form-field appearance="fill">
                             <mat-label>power on defaut volume</mat-label>
                             <input matInput type="number" min="0" max="100"
                                 [(ngModel)]="rendererConfig.powerOnVolPercent" placeholder="undefined">
                         </mat-form-field>
-                    </div>
+                        <mat-slide-toggle class="mb-2" [(ngModel)]="rendererConfig.setCoveredUpnpDeviceToMaxVolume" [disabled]="!rendererConfig.deviceDriverType">
+                            UPnP max volume
+                        </mat-slide-toggle>
+                    </section>
                     <div class="middle-spacer">&nbsp;</div>
                     <div class="d-flex">
                         <button mat-flat-button class="ms-2" color="primary"

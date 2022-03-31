@@ -15,15 +15,18 @@ import nextcp.dto.DevicePowerChanged;
 import nextcp.dto.DeviceVolumeChanged;
 
 /**
- * Mediarenderer support for functionalities not offered by the device UPnP protocol stack.
+ * This class is responsible for controlling external AV devices directly by it's proprietary device protocol.
+ * 
+ * Use case: Having a OH/UPnP network streamer connected to a receiver or amplifier with volume control. Volume control should be
+ * controled by the hardware device, not the network streamer. 
  *
  * <pre>
- * Current features are:
+ * Current direct device control features are:
  * 
  * - power control 
  * - volume control
  * 
- * The reference implementaion located in module nextcp2-ma9000 shows how to communicate to a McIntosh Amplifier.
+ * A reference implementation located in module nextcp2-ma9000 shows how to communicate to a McIntosh Amplifier.
  * A TCP/IP to RS-232 converter (bridge) is attached to the amplifiers RS-232 control port. 
  * 
  * State changes of the device update the corresponding internal control point states.
