@@ -47,9 +47,10 @@
 <div class="section head">server configuration</div>
 <div class="d-flex flex-row flex-wrap ms-4">
     <div class="cardContainer" *ngFor="let serverConfig of configService.getServerConfig().serverDevices">
-        <mat-card class="card-width me-4 mb-3">
-            <mat-card-title class="no-wrap">{{serverConfig.mediaServer.friendlyName}}</mat-card-title>
-            <mat-card-subtitle *ngIf="isServerConfigActive(serverConfig)">ONLINE</mat-card-subtitle>
+        <mat-card class="card-width me-4">
+            <mat-card-title class="no-wrap mb-3">{{serverConfig.mediaServer.friendlyName}}</mat-card-title>
+            <mat-card-subtitle class="online" *ngIf="isServerConfigActive(serverConfig)">ONLINE</mat-card-subtitle>
+            <mat-card-subtitle class="offline" *ngIf="!isServerConfigActive(serverConfig)">OFFLINE</mat-card-subtitle>
             <mat-card-subtitle>IP: {{serverConfig.ip}}</mat-card-subtitle>
             <mat-card-content>
                 <section>
@@ -79,9 +80,10 @@
 <div>
     <div class="d-flex flex-row flex-wrap ms-4">
         <div class="cardContainer" *ngFor="let rendererConfig of configService.getRendererDevicesConfig()">
-            <mat-card class="card-width me-4 mb-3">
-                <mat-card-title class="no-wrap">{{rendererConfig.mediaRenderer.friendlyName}}</mat-card-title>
-                <mat-card-subtitle *ngIf="isRendererConfigActive(rendererConfig)">ONLINE</mat-card-subtitle>
+            <mat-card class="card-width me-4">
+                <mat-card-title class="no-wrap mb-3">{{rendererConfig.mediaRenderer.friendlyName}}</mat-card-title>
+                <mat-card-subtitle class="online" *ngIf="isRendererConfigActive(rendererConfig)">ONLINE</mat-card-subtitle>
+                <mat-card-subtitle class="offline" *ngIf="!isRendererConfigActive(rendererConfig)">OFFLINE</mat-card-subtitle>
                 <mat-card-subtitle class="no-wrap">{{rendererConfig.displayString}}</mat-card-subtitle>
                 <mat-card-subtitle>IP: {{rendererConfig.ip}}</mat-card-subtitle>
                 <mat-card-content>
