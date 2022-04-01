@@ -48,6 +48,7 @@ export class ContentDirectoryService {
 
   constructor(
     private httpService: HttpService,
+    private router: Router,
     private persistenceService: PersistenceService,
     private dtoGeneratorService: DtoGeneratorService,
     private cdsBrowsePathService: CdsBrowsePathService,
@@ -187,7 +188,7 @@ export class ContentDirectoryService {
    * Browses to special MyMusic Folder. TODO: URL should be retrieved from media server (i.e. UMS)
    */
   public browseToMyMusic() {
-    this.browseChildren("$DBID$MYMUSIC$","");
+    this.browseChildren("$DBID$MYMUSIC$", "");
   }
 
   /**
@@ -233,10 +234,13 @@ export class ContentDirectoryService {
     sub.subscribe(data => this.updateContainer(data));
     this.persistenceService.setCurrentObjectID(browseRequestDto.objectID);
     this.cdsBrowsePathService.persistPathToRoot();
+    if (browseRequestDto.objectID == '0') {
+      this.router.navigateByUrl('music-library');
+    }
     return sub;
   }
 
-  public refreshCurrentContainer() : void {
+  public refreshCurrentContainer(): void {
     this.browseChildrenByRequest(this.createBrowseRequest(this.currentContainerID, "", this.currentMediaServerDto.udn));
   }
 
@@ -391,7 +395,7 @@ export class ContentDirectoryService {
     });
   }
 
-  private updateSearchResultAndNavigate(searchResultContainer : ContainerDto[]) {
+  private updateSearchResultAndNavigate(searchResultContainer: ContainerDto[]) {
     let ci = this.dtoGeneratorService.generateEmptyContainerItemDto();
     ci.containerDto = searchResultContainer;
     ci.currentContainer = this.currentContainerList.currentContainer;
@@ -401,7 +405,7 @@ export class ContentDirectoryService {
     this.searchFinished$.next(ci);
   }
 
-  private updateSearchResultItemAndNavigate(searchResultItems : MusicItemDto[]) {
+  private updateSearchResultItemAndNavigate(searchResultItems: MusicItemDto[]) {
     let ci = this.dtoGeneratorService.generateEmptyContainerItemDto();
     ci.musicItemDto = searchResultItems;
     ci.currentContainer = this.currentContainerList.currentContainer;
