@@ -303,8 +303,7 @@
             <!--                                -->
             <div *ngIf="items?.length > 0">
                 <div id="head_browse_other_items_ID" class="albumLayout">
-                    <div class="albumTile" id="{{item.objectID}}" tabindex="-1"
-                        (click)="avtransportService.playResource(item)" *ngFor="let item of items">
+                    <div class="albumTile" id="{{item.objectID}}" tabindex="-1" (click)="avtransportService.playResource(item)" *ngFor="let item of items">
                         <div class="albumImageContainer">
                             <img class="image-container" src="{{item.albumArtUrl}}" alt="{{item.title}}">
                         </div>
