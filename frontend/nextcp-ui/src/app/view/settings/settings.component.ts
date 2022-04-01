@@ -59,8 +59,8 @@ export class SettingsComponent {
     this.systemService.registerNextcp2AtSpotify();
   }
 
-  save(): void {
-    this.configService.saveClientConfig();
+  saveClientConfig(): void {
+    this.configService.saveClientProfile();
   }
 
   selectConfig(config: UiClientConfig): void {

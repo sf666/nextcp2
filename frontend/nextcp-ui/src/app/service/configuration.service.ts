@@ -1,3 +1,4 @@
+import { UuidService } from './../util/uuid.service';
 import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { SseService } from './sse/sse.service';
@@ -54,7 +55,7 @@ export class ConfigurationService {
   baseUri = '/ConfigurationService';
 
 
-  constructor(private http: HttpClient, private genericResultService: GenericResultService, sseService: SseService, private httpService: HttpService) {
+  constructor(private http: HttpClient, private genericResultService: GenericResultService, sseService: SseService, private httpService: HttpService, private uuidService: UuidService) {
     this.getClientConfigFromServer();
     this.getDeviceDriverFromServer();
     this.getMediaRendererConfig();
@@ -64,8 +65,8 @@ export class ConfigurationService {
     sseService.serverDevicesConfigChanged$.subscribe(data => this.applyMediaServerList(data));
   }
 
-  public createNewUiClientConfig(newuuid: string): UiClientConfig {
-    return { clientName: 'NewProfile', uuid: newuuid, defaultMediaRenderer: { friendlyName: '', udn: '' }, defaultMediaServer: { friendlyName: '', udn: '', extendedApi: false } };
+  public createNewUiClientConfig(newUUID: string): UiClientConfig {
+    return { clientName: 'NewProfile', uuid: newUUID, defaultMediaRenderer: { friendlyName: '', udn: '' }, defaultMediaServer: { friendlyName: '', udn: '', extendedApi: false } };
   }
 
   public restart(): void {
@@ -160,9 +161,13 @@ export class ConfigurationService {
   public getStoredClientId(): string {
     let cid: string = localStorage.getItem("clientID");
     if (cid) {
+      console.log("looked up from local storage an UUID of : " + cid);
+      return cid;
+    } else {
+      cid = this.uuidService.getUnique5();
+      console.log("created new client UUID of : " + cid);
       return cid;
     }
-    return;
   }
 
   public getRendererDevicesConfig(): RendererDeviceConfiguration[] {
@@ -180,6 +185,8 @@ export class ConfigurationService {
   public selectClientConfig(uuid: string): void {
     this.clientConfig = this.getClientConfigFromServerFile(uuid);
     localStorage.setItem("clientID", uuid);
+    this.clientUUID = uuid;
+    console.log("selecting client config : " + this.clientConfig.clientName + " with uuid of : " + this.clientConfig.uuid + " in local storage.");
     this.clientConfigChanged$.next(this.clientConfig);
   }
 
@@ -195,12 +202,13 @@ export class ConfigurationService {
   }
 
   public addNewClientConfig(): void {
-    const newProfile = this.createNewUiClientConfig(this.getStoredClientId());
+    const newUUID = this.uuidService.getUnique5();
+    const newProfile = this.createNewUiClientConfig(newUUID);
     this.serverConfig.clientConfig.push(newProfile);
-    this.clientConfig = newProfile;
+    this.selectClientConfig(newUUID);
   }
 
-  public saveClientConfig(): void {
+  public saveClientProfile(): void {
     const uri = '/saveClientProfile';
     this.http.post(this.baseUri + uri, this.clientConfig).subscribe(data => {
       this.genericResultService.displayGenericMessage("configuration", "client configuration saved.");

@@ -40,13 +40,13 @@
     </mat-form-field>
 
     <div class="d-flex section ms-4">
-        <button mat-flat-button color="primary" (click)="save()">save</button>
+        <button mat-flat-button color="primary" (click)="saveClientConfig()">save</button>
     </div>
 </div>
 
 <div class="section head">server configuration</div>
 <div class="d-flex flex-row flex-wrap ms-4">
-    <div class="cardContainer" *ngFor="let serverConfig of configService.getServerConfig().serverDevices">
+    <div class="cardContainer" *ngFor="let serverConfig of configService?.getServerConfig()?.serverDevices">
         <mat-card class="card-width me-4 mb-3">
             <mat-card-title class="no-wrap mb-3">{{serverConfig.mediaServer.friendlyName}}</mat-card-title>
             <mat-card-subtitle class="online" *ngIf="isServerConfigActive(serverConfig)">ONLINE</mat-card-subtitle>
@@ -58,7 +58,7 @@
                         Enable
                     </mat-slide-toggle>
                 </section>
-                <section>
+                <section *ngIf="serverConfig.mediaServer.extendedApi">
                     <mat-form-field appearance="fill">
                         <mat-label>API key</mat-label>
                         <input matInput type="text" [(ngModel)]="serverConfig.apiKey"
