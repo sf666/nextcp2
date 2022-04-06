@@ -22,7 +22,7 @@ import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.BrowseInput;
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/ContentDirectoryService")
-public class RestContentDirectoryService
+public class RestContentDirectoryService extends BaseRestService
 {
     @Autowired
     private DeviceRegistry deviceRegistry = null;
@@ -40,22 +40,6 @@ public class RestContentDirectoryService
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "unknown media server : " + mediaServerUDN);
         }
         device.rescan();
-    }
-
-    private void checkDeviceAvailability(BrowseRequestDto browseRequest, MediaServerDevice device)
-    {
-        if (device == null)
-        {
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "unknown media server : " + browseRequest.mediaServerUDN);
-        }
-    }
-
-    private void checkUdn(BrowseRequestDto browseRequest)
-    {
-        if (StringUtils.isBlank(browseRequest.mediaServerUDN))
-        {
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "media server ID shall not be empty");
-        }
     }
 
     @PostMapping("/browseChildren")

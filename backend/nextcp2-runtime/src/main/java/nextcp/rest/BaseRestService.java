@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
+import nextcp.dto.BrowseRequestDto;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
@@ -21,6 +22,22 @@ public class BaseRestService
     public BaseRestService()
     {
         super();
+    }
+
+    protected void checkDeviceAvailability(BrowseRequestDto browseRequest, MediaServerDevice device)
+    {
+        if (device == null)
+        {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "unknown media server : " + browseRequest.mediaServerUDN);
+        }
+    }
+
+    protected void checkUdn(BrowseRequestDto browseRequest)
+    {
+        if (StringUtils.isBlank(browseRequest.mediaServerUDN))
+        {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "media server ID shall not be empty");
+        }
     }
 
     protected MediaRendererDevice getMediaRendererByUdn(String udn)
@@ -65,7 +82,7 @@ public class BaseRestService
         {
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Media-Server not found : " + udn);
         }
-        
+
         if (device instanceof ExtendedApiMediaDevice)
         {
             return ((ExtendedApiMediaDevice) device);
