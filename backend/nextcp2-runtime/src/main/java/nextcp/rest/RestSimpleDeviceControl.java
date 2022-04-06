@@ -34,22 +34,22 @@ public class RestSimpleDeviceControl extends BaseRestService
      * @param newState
      *            ON / OFF
      */
-    @GetMapping("/standby/{mediaServerDevice}/{state}")
-    public String standby(@PathVariable("mediaServerDevice") String udn, @PathVariable("state") String newState)
+    @GetMapping("/standby/{mediaRendererDevice}/{state}")
+    public String standby(@PathVariable("mediaRendererDevice") String udn, @PathVariable("state") String newState)
     {
         boolean standby = false;
         if ("on".equals(newState.toLowerCase()))
         {
             standby = false;
         }
-        else if ("on".equals(newState.toLowerCase()))
+        else if ("off".equals(newState.toLowerCase()))
         {
-            standby = false;
+            standby = true;
         }
         else
         {
             log.warn("Illegal request state : " + newState);
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Illegal request state : " + newState);
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Illegal request state. Should be ON or OFF. Received : " + newState);
         }
 
         log.info(String.format("Setting standby state on device %s to : %s", udn, Boolean.toString(standby)));
