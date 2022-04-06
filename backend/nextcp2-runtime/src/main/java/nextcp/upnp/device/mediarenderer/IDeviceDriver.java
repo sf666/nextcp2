@@ -11,5 +11,11 @@ public interface IDeviceDriver
 
     void setStandby(boolean standbyState);
 
+    int getVolume();
+
+    boolean getStandby();
+
     boolean isMonitoringExternalAV();
+    
+    
 }

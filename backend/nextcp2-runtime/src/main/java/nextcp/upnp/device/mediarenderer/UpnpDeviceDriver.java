@@ -51,7 +51,7 @@ public class UpnpDeviceDriver extends RenderingControlServiceEventListenerImpl i
         this.volume = vol;
         if (physicalDeviceDriver == null)
         {
-            // just publish devicedriver state to client 
+            // just publish devicedriver state to client
             eventPublisher.publishEvent(getDeviceDriverState());
         }
     }
@@ -123,6 +123,18 @@ public class UpnpDeviceDriver extends RenderingControlServiceEventListenerImpl i
         {
             return true;
         }
+    }
+
+    @Override
+    public int getVolume()
+    {
+        return physicalDeviceDriver.getVolume();
+    }
+
+    @Override
+    public boolean getStandby()
+    {
+        return physicalDeviceDriver.getStandby();
     }
 
 }

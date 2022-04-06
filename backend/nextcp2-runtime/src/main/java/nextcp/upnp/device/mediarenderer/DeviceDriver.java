@@ -112,4 +112,16 @@ public class DeviceDriver implements IDeviceDriverCallback, IDeviceDriver
         return true;
     }
 
+    @Override
+    public int getVolume()
+    {
+        return physicalDeviceDriver.getVolume();
+    }
+
+    @Override
+    public boolean getStandby()
+    {
+        return physicalDeviceDriver.getStandby();
+    }
+
 }

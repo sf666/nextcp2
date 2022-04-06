@@ -124,7 +124,7 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
     {
         if (physicalDeviceDriver == null)
         {
-            // just publish devicedriver state to client 
+            // just publish devicedriver state to client
             eventPublisher.publishEvent(getDeviceDriverState());
         }
     }
@@ -147,6 +147,18 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
         {
             return true;
         }
+    }
+
+    @Override
+    public int getVolume()
+    {
+        return physicalDeviceDriver.getVolume();
+    }
+
+    @Override
+    public boolean getStandby()
+    {
+        return physicalDeviceDriver.getStandby();
     }
 
 }

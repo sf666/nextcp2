@@ -435,4 +435,9 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     {
         getDeviceDriver().setStandby(standbyState);
     }
+    
+    public void getStandby()
+    {
+        getDeviceDriver().getStandby();
+    }
 }

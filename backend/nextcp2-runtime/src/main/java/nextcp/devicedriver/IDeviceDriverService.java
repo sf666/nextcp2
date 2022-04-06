@@ -25,5 +25,15 @@ public interface IDeviceDriverService
      */
     public void setStandby(boolean standbyState);
 
+    public int getVolume();
+
+    /**
+     * Set standby state
+     * 
+     * @param standbyState
+     *            true = device should go into standby. false = device should power on.
+     */
+    public boolean getStandby();
+
     public DeviceDriverState getCurrentState();
 }
