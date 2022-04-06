@@ -112,4 +112,10 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
     {
         return state;
     }
+
+    @Override
+    public boolean getStandby()
+    {
+        return state.standby;
+    }
 }

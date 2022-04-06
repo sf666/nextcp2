@@ -61,11 +61,10 @@ public class RestSimpleDeviceControl extends BaseRestService
      *            ON / OFF
      */
     @GetMapping("/standby/{mediaRendererDevice}")
-    public String standby(@PathVariable("mediaRendererDevice") String udn)
+    public Boolean standby(@PathVariable("mediaRendererDevice") String udn)
     {
         MediaRendererDevice device = getMediaRendererByUdn(udn);
-        // return device.getStandby(standby);
-        return "OK";
+        return device.getStandby();
     }
 
 }
