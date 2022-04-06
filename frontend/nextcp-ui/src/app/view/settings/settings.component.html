@@ -48,7 +48,7 @@
 <div class="d-flex flex-row flex-wrap ms-4">
     <div class="cardContainer" *ngFor="let serverConfig of configService?.getServerConfig()?.serverDevices">
         <mat-card class="card-width me-4 mb-3">
-            <mat-card-title class="no-wrap mb-3">{{serverConfig.mediaServer.friendlyName}}</mat-card-title>
+            <mat-card-subtitle class="no-wrap myCardTitle mb-3">{{serverConfig.mediaServer.friendlyName}}</mat-card-subtitle>
             <mat-card-subtitle class="online" *ngIf="isServerConfigActive(serverConfig)">ONLINE</mat-card-subtitle>
             <mat-card-subtitle class="offline" *ngIf="!isServerConfigActive(serverConfig)">OFFLINE</mat-card-subtitle>
             <mat-card-subtitle>IP: {{serverConfig.ip}}</mat-card-subtitle>

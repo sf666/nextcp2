@@ -16,6 +16,11 @@ input {
     align-items: stretch;
 }
 
+.myCardTitle {
+    font-size: larger;
+    color: var(--snow-white);
+}
+
 .settings {
     background-color: var(--color-orange-reduced-3);
 }

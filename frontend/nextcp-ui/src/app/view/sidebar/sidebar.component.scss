@@ -55,13 +55,14 @@ a {
 
 .sidebar {
     @extend.sidebar-base;
-    width   : var(--sidebar-width);
+    width: var(--sidebar-width);
 }
 
 @media only screen and (max-width: 900px) {
     .sidebar {
         @extend.sidebar-base;
-        width   : var(--sidebar-width-min);
+        width: var(--sidebar-width-min);
+        max-width: var(--sidebar-width-min);
     }
 }
 
@@ -73,6 +74,9 @@ a {
     font-weight: 400;
     height     : 50px;
     line-height: 45px;
+
+    background      : #242428;
+    color           : rgba(229, 238, 255, 0.6);
 
     &:hover {
         background-color: var(--grey-5);

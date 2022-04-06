@@ -1,13 +1,13 @@
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { MatAnchor } from '@angular/material/button';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent  {
 
