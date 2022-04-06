@@ -1,7 +1,7 @@
 <div class="d-flex flex-column section">
     <div class="section head">Client profiles</div>
 
-    <div class="d-flex">
+    <div class="d-flex flex-wrap">
         <mat-form-field appearance="fill" class="bigger">
             <mat-label>Available server side profiles</mat-label>
             <mat-select [(ngModel)]="configService.clientConfig" [compareWith]="compareProfile">

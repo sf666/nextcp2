@@ -35,7 +35,7 @@ public class RestSimpleDeviceControl extends BaseRestService
      *            ON / OFF
      */
     @GetMapping("/standby/{mediaServerDevice}/{state}")
-    public void standby(@PathVariable("mediaServerDevice") String udn, @PathVariable("state") String newState)
+    public String standby(@PathVariable("mediaServerDevice") String udn, @PathVariable("state") String newState)
     {
         boolean standby = false;
         if ("on".equals(newState.toLowerCase()))
@@ -60,6 +60,7 @@ public class RestSimpleDeviceControl extends BaseRestService
             device.getPlaylistServiceBridge().pause();
         }
         device.setStandby(standby);
+        return "OK";
     }
 
 }
