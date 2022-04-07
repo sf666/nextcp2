@@ -10,4 +10,8 @@ public interface IRadioService
     List<MusicItemDto> getRadioStations();
 
     void play(MusicItemDto radioStation);
+
+    void pause();
+    
+    void stop();
 }

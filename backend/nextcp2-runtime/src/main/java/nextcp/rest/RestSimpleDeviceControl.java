@@ -65,4 +65,11 @@ public class RestSimpleDeviceControl extends BaseRestService
         }
     }
 
+    @GetMapping("/pauseRadio/{mediaRendererDevice}")
+    public void pauseRadio(@PathVariable("mediaRendererDevice") String udn)
+    {
+        MediaRendererDevice device = getMediaRendererByUdn(udn);
+        device.getRadioServiceBridge().pause();
+    }
+
 }
