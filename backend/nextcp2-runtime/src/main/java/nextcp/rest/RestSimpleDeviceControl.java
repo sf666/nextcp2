@@ -64,16 +64,19 @@ public class RestSimpleDeviceControl extends BaseRestService
         Optional<MusicItemDto> radio = device.getRadioServiceBridge().getRadioStations().stream().filter(mi -> mi.title.toLowerCase().startsWith(station)).findFirst();
         if (radio.isPresent())
         {
-            log.info("plauing radio ... " + station);
+            log.info("playing radio ... " + station);
             device.getRadioServiceBridge().play(radio.get());
         }
-        log.warn("radio station not found : " + station);
+        else
+        {
+            log.warn("radio station not found : " + station);
+        }
     }
 
     @GetMapping("/pauseRadio/{mediaRendererDevice}")
     public void pauseRadio(@PathVariable("mediaRendererDevice") String udn)
     {
-        log.info("pause radio");
+        log.info("pause radio ...");
         MediaRendererDevice device = getMediaRendererByUdn(udn);
         device.getRadioServiceBridge().pause();
     }
