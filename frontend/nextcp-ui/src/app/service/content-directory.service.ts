@@ -317,8 +317,9 @@ export class ContentDirectoryService {
     if (this.getMusicTracks().length > 0) {
       const firstTrackReleaseID = this.getMusicTracks()[0].musicBrainzId.ReleaseTrackId;
       this.allTracksSameMusicBrainzReleaseId_ = this.getMusicTracks().filter(item => item.musicBrainzId.ReleaseTrackId !== firstTrackReleaseID).length == 0;
+    } else {
+      this.allTracksSameMusicBrainzReleaseId_ = false;
     }
-    this.allTracksSameMusicBrainzReleaseId_ = true;
     console.log("allTracksSameMusicBrainzReleaseId_ : " + this.allTracksSameMusicBrainzReleaseId_);
   }
 

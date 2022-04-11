@@ -87,7 +87,8 @@
                 <mat-card-subtitle class="offline" *ngIf="!isRendererConfigActive(rendererConfig)">OFFLINE</mat-card-subtitle>
                 <mat-card-subtitle class="no-wrap">{{rendererConfig.displayString}}</mat-card-subtitle>
                 <mat-card-subtitle>IP: {{rendererConfig.ip}}</mat-card-subtitle>
-                <mat-card-subtitle>UDN: {{rendererConfig.mediaRenderer.udn}}</mat-card-subtitle>
+                <mat-card-subtitle>UDN: {{rendererConfig.mediaRenderer
+                    .udn}}</mat-card-subtitle>
                 <mat-card-content>
                     <section>
                         <mat-slide-toggle class="mb-2" [(ngModel)]="rendererConfig.active">
