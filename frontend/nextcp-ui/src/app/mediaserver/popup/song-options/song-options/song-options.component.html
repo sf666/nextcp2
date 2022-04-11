@@ -25,18 +25,19 @@
             </div>
             <mat-icon class="chevron-right" style="align-self: center;" svgIcon="chevron-right"></mat-icon>
         </div>
+        <div *ngIf="isParentPlaylist" class="playlist-item" (mouseover)="closeAllDialogs()"
+            (click)="deleteFromPlaylist()">
+            Delete from playlist
+        </div>
+        
         <div *ngIf="hasValidSongId()" class="divider mb-1 mt-1">&nbsp;</div>
+        
         <div class="playlist-item" (mouseenter)="closeAllDialogs()" (click)="actionPlayNext()">
             Play next
         </div>
         <div class="playlist-item" (mouseover)="closeAllDialogs()" (click)="download()">
             Download
         </div>
-        <div *ngIf="isParentPlaylist" class="playlist-item" (mouseover)="closeAllDialogs()"
-            (click)="deleteFromPlaylist()">
-            Delete from playlist
-        </div>
     </div>
-
     <div class="spaces">&nbsp;</div>
 </div>
