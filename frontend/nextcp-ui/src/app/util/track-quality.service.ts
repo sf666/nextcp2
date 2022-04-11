@@ -11,7 +11,15 @@ export class TrackQualityService {
   public isHifi(song: MusicItemDto) : boolean {
     let bps = this.getBitsPerSample(song);
     let sFreq = this.getSampleFreq(song);
-    if (bps >= 16 && sFreq>= 44100) { // CD Quality
+    let bitrate = this.getBitrate(song);
+
+    // probably compressed MP3
+    if (bitrate <= 320000) {
+      return false;
+    }
+    
+    // minimum CD Quality
+    if (bps >= 16 && sFreq>= 44100) { 
       return true;
     }
     return false;
@@ -33,7 +41,7 @@ export class TrackQualityService {
 
   public getBitrate(song: MusicItemDto): number {
     if (song?.audioFormat?.bitrate) {
-      return song?.audioFormat?.bitrate / 125
+      return song?.audioFormat?.bitrate;
     } else {
       return 0;
     }
