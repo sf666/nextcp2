@@ -49,3 +49,8 @@ img {
         color           : var(--snow-white);
     }
 }
+
+.starRating {
+    display: flex;
+    align-self: center;
+}

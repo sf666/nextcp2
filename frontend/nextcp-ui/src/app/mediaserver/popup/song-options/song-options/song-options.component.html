@@ -12,6 +12,10 @@
     </div>
 
     <div class="divider mt-2 mb-1">&nbsp;</div>
+    <div class="starRating">
+        <star-rating [currentSong]="selectedMusicItem"></star-rating>
+    </div>
+    <div class="divider mt-2 mb-1">&nbsp;</div>
 
     <div class="dialogItems d-flex flex-column flex-wrap">
         <div class="d-flex justify-content-between playlist-item" *ngIf="hasValidSongId()"
