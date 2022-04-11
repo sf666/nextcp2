@@ -269,7 +269,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
                 log.warn("no renderingControlEventListener available. No volume updates will be available.");
             }
         }
-        return ohDeviceDriver;
+        return upnpDeviceDriver;
     }
 
     public boolean hasRadioService()
