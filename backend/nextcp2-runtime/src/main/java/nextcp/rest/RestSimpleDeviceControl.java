@@ -1,5 +1,7 @@
 package nextcp.rest;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -55,8 +57,9 @@ public class RestSimpleDeviceControl extends BaseRestService
     }
 
     @GetMapping("/playDefaultRadio/{mediaRendererDevice}/{station}")
-    public void playDefaultRadio(@PathVariable("mediaRendererDevice") String udn, @PathVariable("station") String station)
+    public void playDefaultRadio(@PathVariable("mediaRendererDevice") String udn, @PathVariable("station") String encodedStation) throws UnsupportedEncodingException
     {
+        String station = URLDecoder.decode(encodedStation, "UTF-8");
         MediaRendererDevice device = getMediaRendererByUdn(udn);
         Optional<MusicItemDto> radio = device.getRadioServiceBridge().getRadioStations().stream().filter(mi -> mi.title.toLowerCase().startsWith(station)).findFirst();
         if (radio.isPresent())
