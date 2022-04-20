@@ -75,6 +75,7 @@ public class RestPlaylistService extends BaseRestService
         }
         catch (Exception e)
         {
+            publisher.publishEvent(new ToastrMessage(null, "error", "edit playlist", "Adding song failed. Message : " + e.getMessage()));
             log.warn("adding song to server playlist", e);
         }
     }
@@ -89,6 +90,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("removing song from server playlist", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "edit playlist", "Removing song failed. Message : " + e.getMessage()));
         }
     }
 
@@ -173,7 +175,8 @@ public class RestPlaylistService extends BaseRestService
         }
         catch (Exception e)
         {
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Adding Folder : " + e.getMessage());
+            log.warn("insertContainer", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "adding songs ", "Adding folder to current renderer playlist failed. Message : " + e.getMessage()));
         }
     }
 
@@ -210,7 +213,8 @@ public class RestPlaylistService extends BaseRestService
         }
         catch (Exception e)
         {
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Adding folder & play : " + e.getMessage());
+            log.warn("insertAndPlayContainer", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "adding songs ", "Cannot play folder. Message : " + e.getMessage()));
         }
     }
 
