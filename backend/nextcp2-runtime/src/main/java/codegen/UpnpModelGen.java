@@ -297,7 +297,7 @@ public class UpnpModelGen implements RegistryListener
 
     private String getStateVariableClassname(Service service)
     {
-        String className = service.getServiceType().getType() + "ServiceStateVariable";
+        String className = String.format("%sService%d%s", service.getServiceType().getType(), service.getServiceType().getVersion(), "StateVariable");
         return className;
     }
 
