@@ -130,12 +130,12 @@ public class UpnpModelGen implements RegistryListener
             importClasses.add(getPackage(action) + "." + action.getName());
             if (action.getOutputArguments().length > 0)
             {
-                outputClasses.add(action.getName() + "Output");
+                outputClasses.add(action.getName() + "Output" + service.getServiceType().getVersion());
                 importClasses.add(getPackage(action) + "." + action.getName() + "Output" + service.getServiceType().getVersion());
             }
             if (action.getInputArguments().length > 0)
             {
-                inputClasses.add(action.getName() + "Input");
+                inputClasses.add(action.getName() + "Input" + service.getServiceType().getVersion());
                 importClasses.add(getPackage(action) + "." + action.getName() + "Input" + service.getServiceType().getVersion());
             }
         }
@@ -202,7 +202,7 @@ public class UpnpModelGen implements RegistryListener
             varInList.add(new Variable(argument));
         }
 
-        writeCode(root, getFilename(action, ""), "action.ftl");
+        writeCode(root, getFilename(action, "" + action.getService().getServiceType().getVersion()), "action.ftl");
     }
 
     protected String getPackage(Action<?> action)
