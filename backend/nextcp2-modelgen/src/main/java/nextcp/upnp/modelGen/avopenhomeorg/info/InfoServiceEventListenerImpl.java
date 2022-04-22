@@ -171,30 +171,12 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
-    public void uriChange(String value)
-    {
-        stateVariable.Uri = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Uri", value));
-        }
-    }
-    
     public void bitDepthChange(Long value)
     {
         stateVariable.BitDepth = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "BitDepth", value));
-        }
-    }
-    
-    public void losslessChange(Boolean value)
-    {
-        stateVariable.Lossless = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Lossless", value));
         }
     }
     
@@ -207,12 +189,30 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
+    public void losslessChange(Boolean value)
+    {
+        stateVariable.Lossless = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Lossless", value));
+        }
+    }
+    
     public void metatextChange(String value)
     {
         stateVariable.Metatext = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "Metatext", value));
+        }
+    }
+    
+    public void uriChange(String value)
+    {
+        stateVariable.Uri = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Uri", value));
         }
     }
     

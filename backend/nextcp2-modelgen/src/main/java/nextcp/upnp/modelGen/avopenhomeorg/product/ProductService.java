@@ -21,25 +21,23 @@ import nextcp.upnp.modelGen.avopenhomeorg.product.actions.Product;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.ProductOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SourceXml;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SourceXmlOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetSourceIndex;
-import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetSourceIndexInput;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetSourceIndexByName;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetSourceIndexByNameInput;
+import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetSourceIndex;
+import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetSourceIndexInput;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.Standby;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.StandbyOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.Source;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SourceOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SourceInput;
-import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetProductRoom;
-import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetProductRoomInput;
-import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetStandby;
-import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetStandbyInput;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SourceIndex;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SourceIndexOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.product.actions.Manufacturer;
-import nextcp.upnp.modelGen.avopenhomeorg.product.actions.ManufacturerOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetStandby;
+import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetStandbyInput;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.Model;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.ModelOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.product.actions.Manufacturer;
+import nextcp.upnp.modelGen.avopenhomeorg.product.actions.ManufacturerOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SourceXmlChangeCount;
 import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SourceXmlChangeCountOutput;
 
@@ -133,16 +131,16 @@ public class ProductService
         return res;        
     }
 
-    public void setSourceIndex(SetSourceIndexInput inp)
-    {
-        SetSourceIndex setSourceIndex = new SetSourceIndex(productService, inp, upnpService.getControlPoint());
-        setSourceIndex.executeAction();
-    }
-
     public void setSourceIndexByName(SetSourceIndexByNameInput inp)
     {
         SetSourceIndexByName setSourceIndexByName = new SetSourceIndexByName(productService, inp, upnpService.getControlPoint());
         setSourceIndexByName.executeAction();
+    }
+
+    public void setSourceIndex(SetSourceIndexInput inp)
+    {
+        SetSourceIndex setSourceIndex = new SetSourceIndex(productService, inp, upnpService.getControlPoint());
+        setSourceIndex.executeAction();
     }
 
     public StandbyOutput standby()
@@ -159,10 +157,11 @@ public class ProductService
         return res;        
     }
 
-    public void setProductRoom(SetProductRoomInput inp)
+    public SourceIndexOutput sourceIndex()
     {
-        SetProductRoom setProductRoom = new SetProductRoom(productService, inp, upnpService.getControlPoint());
-        setProductRoom.executeAction();
+        SourceIndex sourceIndex = new SourceIndex(productService,  upnpService.getControlPoint());
+        SourceIndexOutput res = sourceIndex.executeAction();
+        return res;        
     }
 
     public void setStandby(SetStandbyInput inp)
@@ -171,10 +170,10 @@ public class ProductService
         setStandby.executeAction();
     }
 
-    public SourceIndexOutput sourceIndex()
+    public ModelOutput model()
     {
-        SourceIndex sourceIndex = new SourceIndex(productService,  upnpService.getControlPoint());
-        SourceIndexOutput res = sourceIndex.executeAction();
+        Model model = new Model(productService,  upnpService.getControlPoint());
+        ModelOutput res = model.executeAction();
         return res;        
     }
 
@@ -182,13 +181,6 @@ public class ProductService
     {
         Manufacturer manufacturer = new Manufacturer(productService,  upnpService.getControlPoint());
         ManufacturerOutput res = manufacturer.executeAction();
-        return res;        
-    }
-
-    public ModelOutput model()
-    {
-        Model model = new Model(productService,  upnpService.getControlPoint());
-        ModelOutput res = model.executeAction();
         return res;        
     }
 

@@ -16,22 +16,22 @@ import nextcp.upnp.ISubscriptionEventListener;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.GetJobUpdateId;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.GetJobUpdateIdOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.GetJobUpdateIdInput;
-import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.ClearLonglivedLivedToken;
-import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.ClearLonglivedLivedTokenInput;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.GetUpdateId;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.GetUpdateIdOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.GetServiceStatus;
-import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.GetServiceStatusOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.ClearLonglivedLivedToken;
+import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.ClearLonglivedLivedTokenInput;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.ClearAllTokens;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.ClearAllTokensInput;
+import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.GetServiceStatus;
+import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.GetServiceStatusOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.ClearToken;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.ClearTokenInput;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.SetToken;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.SetTokenInput;
-import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.ClearShortLivedToken;
-import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.ClearShortLivedTokenInput;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.ClearLonglivedLivedTokens;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.ClearLonglivedLivedTokensInput;
+import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.ClearShortLivedToken;
+import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.ClearShortLivedTokenInput;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.BeginLimitedInputFlow;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.BeginLimitedInputFlowOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth.actions.BeginLimitedInputFlowInput;
@@ -113,12 +113,6 @@ public class OAuthService
         return res;        
     }
 
-    public void clearLonglivedLivedToken(ClearLonglivedLivedTokenInput inp)
-    {
-        ClearLonglivedLivedToken clearLonglivedLivedToken = new ClearLonglivedLivedToken(oAuthService, inp, upnpService.getControlPoint());
-        clearLonglivedLivedToken.executeAction();
-    }
-
     public GetUpdateIdOutput getUpdateId()
     {
         GetUpdateId getUpdateId = new GetUpdateId(oAuthService,  upnpService.getControlPoint());
@@ -126,17 +120,23 @@ public class OAuthService
         return res;        
     }
 
-    public GetServiceStatusOutput getServiceStatus()
+    public void clearLonglivedLivedToken(ClearLonglivedLivedTokenInput inp)
     {
-        GetServiceStatus getServiceStatus = new GetServiceStatus(oAuthService,  upnpService.getControlPoint());
-        GetServiceStatusOutput res = getServiceStatus.executeAction();
-        return res;        
+        ClearLonglivedLivedToken clearLonglivedLivedToken = new ClearLonglivedLivedToken(oAuthService, inp, upnpService.getControlPoint());
+        clearLonglivedLivedToken.executeAction();
     }
 
     public void clearAllTokens(ClearAllTokensInput inp)
     {
         ClearAllTokens clearAllTokens = new ClearAllTokens(oAuthService, inp, upnpService.getControlPoint());
         clearAllTokens.executeAction();
+    }
+
+    public GetServiceStatusOutput getServiceStatus()
+    {
+        GetServiceStatus getServiceStatus = new GetServiceStatus(oAuthService,  upnpService.getControlPoint());
+        GetServiceStatusOutput res = getServiceStatus.executeAction();
+        return res;        
     }
 
     public void clearToken(ClearTokenInput inp)
@@ -151,16 +151,16 @@ public class OAuthService
         setToken.executeAction();
     }
 
-    public void clearShortLivedToken(ClearShortLivedTokenInput inp)
-    {
-        ClearShortLivedToken clearShortLivedToken = new ClearShortLivedToken(oAuthService, inp, upnpService.getControlPoint());
-        clearShortLivedToken.executeAction();
-    }
-
     public void clearLonglivedLivedTokens(ClearLonglivedLivedTokensInput inp)
     {
         ClearLonglivedLivedTokens clearLonglivedLivedTokens = new ClearLonglivedLivedTokens(oAuthService, inp, upnpService.getControlPoint());
         clearLonglivedLivedTokens.executeAction();
+    }
+
+    public void clearShortLivedToken(ClearShortLivedTokenInput inp)
+    {
+        ClearShortLivedToken clearShortLivedToken = new ClearShortLivedToken(oAuthService, inp, upnpService.getControlPoint());
+        clearShortLivedToken.executeAction();
     }
 
     public BeginLimitedInputFlowOutput beginLimitedInputFlow(BeginLimitedInputFlowInput inp)
