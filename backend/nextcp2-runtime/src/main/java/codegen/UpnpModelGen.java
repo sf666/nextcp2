@@ -107,7 +107,7 @@ public class UpnpModelGen implements RegistryListener
 
     private void genServiceClass(RemoteService service)
     {
-        String className = service.getServiceType().getType() + "Service";
+        String className = service.getServiceType().getType() + "Service" + service.getServiceType().getVersion();
         Map<String, Object> root = new HashMap<>();
         root.put("className", className);
         root.put("upnpSchema", service.getServiceType().getNamespace());

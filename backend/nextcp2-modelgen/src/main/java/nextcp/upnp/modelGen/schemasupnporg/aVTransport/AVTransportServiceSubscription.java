@@ -108,9 +108,6 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "CurrentMediaCategory":
-                        currentMediaCategoryChange((String) stateVar.getValue());
-                        break;
                     case "AbsoluteTimePosition":
                         absoluteTimePositionChange((String) stateVar.getValue());
                         break;
@@ -138,11 +135,11 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
                     case "PossibleRecordQualityModes":
                         possibleRecordQualityModesChange((String) stateVar.getValue());
                         break;
-                    case "PlaybackStorageMedium":
-                        playbackStorageMediumChange((String) stateVar.getValue());
-                        break;
                     case "NextAVTransportURIMetaData":
                         nextAVTransportURIMetaDataChange((String) stateVar.getValue());
+                        break;
+                    case "PlaybackStorageMedium":
+                        playbackStorageMediumChange((String) stateVar.getValue());
                         break;
                     case "NumberOfTracks":
                         numberOfTracksChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
@@ -168,14 +165,11 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
                     case "RelativeTimePosition":
                         relativeTimePositionChange((String) stateVar.getValue());
                         break;
-                    case "DRMState":
-                        dRMStateChange((String) stateVar.getValue());
+                    case "CurrentPlayMode":
+                        currentPlayModeChange((String) stateVar.getValue());
                         break;
                     case "CurrentTrackDuration":
                         currentTrackDurationChange((String) stateVar.getValue());
-                        break;
-                    case "CurrentPlayMode":
-                        currentPlayModeChange((String) stateVar.getValue());
                         break;
                     case "PossiblePlaybackStorageMedia":
                         possiblePlaybackStorageMediaChange((String) stateVar.getValue());
@@ -214,14 +208,6 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
             listener.eventProcessed();
         }
     }
-
-    private void currentMediaCategoryChange(String value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.currentMediaCategoryChange(value);
-        }
-    }    
 
     private void absoluteTimePositionChange(String value)
     {
@@ -295,19 +281,19 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void playbackStorageMediumChange(String value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.playbackStorageMediumChange(value);
-        }
-    }    
-
     private void nextAVTransportURIMetaDataChange(String value)
     {
         for (IAVTransportServiceEventListener listener : eventListener)
         {
             listener.nextAVTransportURIMetaDataChange(value);
+        }
+    }    
+
+    private void playbackStorageMediumChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.playbackStorageMediumChange(value);
         }
     }    
 
@@ -375,11 +361,11 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void dRMStateChange(String value)
+    private void currentPlayModeChange(String value)
     {
         for (IAVTransportServiceEventListener listener : eventListener)
         {
-            listener.dRMStateChange(value);
+            listener.currentPlayModeChange(value);
         }
     }    
 
@@ -388,14 +374,6 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
         for (IAVTransportServiceEventListener listener : eventListener)
         {
             listener.currentTrackDurationChange(value);
-        }
-    }    
-
-    private void currentPlayModeChange(String value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.currentPlayModeChange(value);
         }
     }    
 

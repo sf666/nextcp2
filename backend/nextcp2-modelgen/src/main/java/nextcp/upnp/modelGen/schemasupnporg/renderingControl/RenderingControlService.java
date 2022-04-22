@@ -13,6 +13,15 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
 
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolumeDBRange;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolumeDBRangeOutput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolumeDBRangeInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetMute;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetMuteOutput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetMuteInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolume;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolumeOutput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolumeInput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.SelectPreset;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.SelectPresetInput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.SetVolume;
@@ -22,6 +31,9 @@ import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.ListPresetsO
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.ListPresetsInput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.SetMute;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.SetMuteInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolumeDB;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolumeDBOutput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.GetVolumeDBInput;
 
 
 /**
@@ -85,6 +97,27 @@ public class RenderingControlService
     }    
 
 
+    public GetVolumeDBRangeOutput getVolumeDBRange(GetVolumeDBRangeInput inp)
+    {
+        GetVolumeDBRange getVolumeDBRange = new GetVolumeDBRange(renderingControlService, inp, upnpService.getControlPoint());
+        GetVolumeDBRangeOutput res = getVolumeDBRange.executeAction();
+        return res;        
+    }
+
+    public GetMuteOutput getMute(GetMuteInput inp)
+    {
+        GetMute getMute = new GetMute(renderingControlService, inp, upnpService.getControlPoint());
+        GetMuteOutput res = getMute.executeAction();
+        return res;        
+    }
+
+    public GetVolumeOutput getVolume(GetVolumeInput inp)
+    {
+        GetVolume getVolume = new GetVolume(renderingControlService, inp, upnpService.getControlPoint());
+        GetVolumeOutput res = getVolume.executeAction();
+        return res;        
+    }
+
     public void selectPreset(SelectPresetInput inp)
     {
         SelectPreset selectPreset = new SelectPreset(renderingControlService, inp, upnpService.getControlPoint());
@@ -108,5 +141,12 @@ public class RenderingControlService
     {
         SetMute setMute = new SetMute(renderingControlService, inp, upnpService.getControlPoint());
         setMute.executeAction();
+    }
+
+    public GetVolumeDBOutput getVolumeDB(GetVolumeDBInput inp)
+    {
+        GetVolumeDB getVolumeDB = new GetVolumeDB(renderingControlService, inp, upnpService.getControlPoint());
+        GetVolumeDBOutput res = getVolumeDB.executeAction();
+        return res;        
     }
 }
