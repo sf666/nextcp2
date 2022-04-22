@@ -131,12 +131,12 @@ public class UpnpModelGen implements RegistryListener
             if (action.getOutputArguments().length > 0)
             {
                 outputClasses.add(action.getName() + "Output");
-                importClasses.add(getPackage(action) + "." + action.getName() + "Output");
+                importClasses.add(getPackage(action) + "." + action.getName() + "Output" + service.getServiceType().getVersion());
             }
             if (action.getInputArguments().length > 0)
             {
                 inputClasses.add(action.getName() + "Input");
-                importClasses.add(getPackage(action) + "." + action.getName() + "Input");
+                importClasses.add(getPackage(action) + "." + action.getName() + "Input" + service.getServiceType().getVersion());
             }
         }
 
@@ -184,11 +184,11 @@ public class UpnpModelGen implements RegistryListener
 
     private void genActionClass(Action<?> action)
     {
-        String className = action.getName();
+        String actionClassName = action.getName() + action.getService().getServiceType().getVersion();
         Map<String, Object> root = new HashMap<>();
         List<Variable> varOutList = new LinkedList<>();
         List<Variable> varInList = new LinkedList<>();
-        root.put("className", className);
+        root.put("className", actionClassName);
         root.put("varOutList", varOutList);
         root.put("varInList", varInList);
         root.put("packageName", getPackage(action));
