@@ -265,14 +265,14 @@ public class UpnpModelGen implements RegistryListener
         String postfix = null;
         if (isInput)
         {
-            postfix = "Input";
+            postfix = "Input" + action.getService().getServiceType().getVersion();
             args = action.getInputArguments();
             log.info("        INPUT");
         }
         else
         {
             args = action.getOutputArguments();
-            postfix = "Output";
+            postfix = "Output" + action.getService().getServiceType().getVersion();
             log.info("        OUTPUT");
         }
 
