@@ -130,13 +130,13 @@ public class UpnpModelGen implements RegistryListener
             importClasses.add(getPackage(action) + "." + action.getName());
             if (action.getOutputArguments().length > 0)
             {
-                outputClasses.add(action.getName() + "Output" + service.getServiceType().getVersion());
-                importClasses.add(getPackage(action) + "." + action.getName() + "Output" + service.getServiceType().getVersion());
+                outputClasses.add(action.getName() + "Output");
+                importClasses.add(getPackage(action) + "." + action.getName() + "Output");
             }
             if (action.getInputArguments().length > 0)
             {
-                inputClasses.add(action.getName() + "Input" + service.getServiceType().getVersion());
-                importClasses.add(getPackage(action) + "." + action.getName() + "Input" + service.getServiceType().getVersion());
+                inputClasses.add(action.getName() + "Input");
+                importClasses.add(getPackage(action) + "." + action.getName() + "Input");
             }
         }
 
@@ -168,7 +168,7 @@ public class UpnpModelGen implements RegistryListener
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.basePackage).append(".").append(getNamespace(service)).append(".");
-        sb.append(toLowerFirstCap(getServiceType(service)));
+        sb.append(toLowerFirstCap(getServiceType(service))).append(service.getServiceType().getVersion());
         return sb.toString();
     }
 
@@ -184,11 +184,11 @@ public class UpnpModelGen implements RegistryListener
 
     private void genActionClass(Action<?> action)
     {
-        String actionClassName = action.getName() + action.getService().getServiceType().getVersion();
+        String className = action.getName();
         Map<String, Object> root = new HashMap<>();
         List<Variable> varOutList = new LinkedList<>();
         List<Variable> varInList = new LinkedList<>();
-        root.put("className", actionClassName);
+        root.put("className", className);
         root.put("varOutList", varOutList);
         root.put("varInList", varInList);
         root.put("packageName", getPackage(action));
@@ -202,7 +202,7 @@ public class UpnpModelGen implements RegistryListener
             varInList.add(new Variable(argument));
         }
 
-        writeCode(root, getFilename(action, "" + action.getService().getServiceType().getVersion()), "action.ftl");
+        writeCode(root, getFilename(action, ""), "action.ftl");
     }
 
     protected String getPackage(Action<?> action)
@@ -265,14 +265,14 @@ public class UpnpModelGen implements RegistryListener
         String postfix = null;
         if (isInput)
         {
-            postfix = "Input" + action.getService().getServiceType().getVersion();
+            postfix = "Input";
             args = action.getInputArguments();
             log.info("        INPUT");
         }
         else
         {
             args = action.getOutputArguments();
-            postfix = "Output" + action.getService().getServiceType().getVersion();
+            postfix = "Output";
             log.info("        OUTPUT");
         }
 
@@ -297,7 +297,7 @@ public class UpnpModelGen implements RegistryListener
 
     private String getStateVariableClassname(Service service)
     {
-        String className = String.format("%sService%d%s", service.getServiceType().getType(), service.getServiceType().getVersion(), "StateVariable");
+        String className = service.getServiceType().getType() + "ServiceStateVariable";
         return className;
     }
 
