@@ -209,7 +209,7 @@ public class UpnpModelGen implements RegistryListener
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.basePackage).append(".").append(getNamespace(action)).append(".");
-        sb.append(toLowerFirstCap(action.getService().getServiceType().getType())).append(".actions");
+        sb.append(toLowerFirstCap(action.getService().getServiceType().getType())).append(action.getService().getServiceType().getVersion()).append(".actions");
         return sb.toString();
     }
 
