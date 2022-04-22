@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>de.sf666</groupId>
@@ -59,7 +57,7 @@
 		<java.version>11</java.version>
 		<maven.compiler.release>11</maven.compiler.release>
 
-		<log4j2.version>2.17.0</log4j2.version>
+		<log4j2.version>2.17.2</log4j2.version>
 		<slf4j.version>1.7.21</slf4j.version>
 		<cling.version>2.1.2</cling.version>
 		<freemarker.version>2.3.30</freemarker.version>
@@ -120,8 +118,7 @@
 						<goals>
 							<goal>sources</goal>
 						</goals>
-						<configuration>
-						</configuration>
+						<configuration></configuration>
 					</execution>
 				</executions>
 			</plugin>
