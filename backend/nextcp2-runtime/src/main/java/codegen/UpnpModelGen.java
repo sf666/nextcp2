@@ -67,7 +67,6 @@ public class UpnpModelGen implements RegistryListener
     @EventListener
     public void onApplicationStartedEvent(ContextRefreshedEvent event)
     {
-
         log.info("code generation for upnp services is " + (config.generateUpnpCode ? "enabled" : "disabled"));
     }
 
@@ -86,6 +85,7 @@ public class UpnpModelGen implements RegistryListener
 
     private void dumpDeviceServices(RemoteDevice device)
     {
+        log.info("Device named : " + device.getDisplayString());
         log.info("  available services :");
         for (RemoteService service : device.getServices())
         {
