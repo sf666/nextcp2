@@ -53,8 +53,8 @@ public class DeviceRegistry
     //
     public void addMediaRendererDevice(RemoteDevice remoteDevice)
     {
-        rendererConfigService.addMediaRendererDeviceConfig(remoteDevice);
         MediaRendererDevice device = deviceFactory.mediaRendererDeviceFactory(remoteDevice);
+        rendererConfigService.addMediaRendererDeviceConfig(device);
         mediaRendererList.put(remoteDevice.getIdentity().getUdn(), device);
         eventPublisher.publishEvent(new MediaRendererListChanged(getAvailableMediaRenderer()));
     }

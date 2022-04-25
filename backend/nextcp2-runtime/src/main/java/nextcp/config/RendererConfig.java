@@ -21,10 +21,10 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 
 import nextcp.db.service.BasicDbService;
 import nextcp.db.service.KeyValuePair;
-import nextcp.dto.MediaRendererDto;
 import nextcp.dto.RendererConfigDto;
 import nextcp.dto.RendererDeviceConfiguration;
 import nextcp.eventBridge.SsePublisher;
+import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 
 @Service
 public class RendererConfig
@@ -127,8 +127,9 @@ public class RendererConfig
         return true;
     }
 
-    public void addMediaRendererDeviceConfig(RemoteDevice remoteDevice)
+    public void addMediaRendererDeviceConfig(MediaRendererDevice device)
     {
+        RemoteDevice remoteDevice = device.getDevice();
         Optional<RendererDeviceConfiguration> configEntry = config.rendererDevices.stream()
                 .filter(d -> d.mediaRenderer.udn.contentEquals(remoteDevice.getIdentity().getUdn().getIdentifierString())).findFirst();
         if (configEntry.isPresent())
@@ -145,7 +146,7 @@ public class RendererConfig
             c.deviceDriverType = "";
             c.displayString = remoteDevice.getDisplayString();
             c.hasOpenHomeDeviceDriver = remoteDevice.findService(new ServiceType("av-openhome-org", "Product")) != null;
-            c.mediaRenderer = new MediaRendererDto(remoteDevice.getIdentity().getUdn().getIdentifierString(), remoteDevice.getDetails().getFriendlyName());
+            c.mediaRenderer = device.getAsDto();
             c.setCoveredUpnpDeviceToMaxVolume = false;
             config.rendererDevices.add(c);
             writeAndSendConfig();
