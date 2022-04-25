@@ -43,10 +43,14 @@ public class ServiceInitializer
 
     void initializeServices(UpnpService upnpService, RemoteDevice device, MediaRendererDevice renderer, List<MediaRendererServicesDto> services)
     {
+        log.debug("Services for device : " + renderer.getFriendlyName());
         for (RemoteService service : device.getServices())
         {
-            services.add(
-                    new MediaRendererServicesDto(service.getServiceType().getNamespace(), service.getServiceType().toFriendlyString(), "" + service.getServiceType().getVersion()));
+            MediaRendererServicesDto serviceDto = new MediaRendererServicesDto(service.getServiceType().getNamespace(), service.getServiceType().toFriendlyString(),
+                    "" + service.getServiceType().getVersion());
+            log.debug(serviceDto.toString());
+            services.add(serviceDto);
+
             if (device.hasEmbeddedDevices())
             {
                 log.warn("Device has embedded devices.");
