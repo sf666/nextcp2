@@ -40,7 +40,7 @@ public class X_MS_MediaReceiverRegistrarService
 
     private UpnpService upnpService = null;
 
-    private X_MS_MediaReceiverRegistrarServiceStateVariable x_MS_MediaReceiverRegistrarService1StateVariable = new X_MS_MediaReceiverRegistrarServiceStateVariable();
+    private X_MS_MediaReceiverRegistrarService1StateVariable x_MS_MediaReceiverRegistrarService1StateVariable = new X_MS_MediaReceiverRegistrarService1StateVariable();
     
     private X_MS_MediaReceiverRegistrarServiceSubscription subscription = null;
     

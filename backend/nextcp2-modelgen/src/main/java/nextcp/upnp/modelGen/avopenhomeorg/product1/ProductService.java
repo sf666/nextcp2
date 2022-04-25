@@ -30,10 +30,12 @@ import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.StandbyOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Source;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceInput;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceIndex;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceIndexOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetProductRoom;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetProductRoomInput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetStandby;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetStandbyInput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceIndex;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceIndexOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Manufacturer;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.ManufacturerOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Model;
@@ -157,17 +159,23 @@ public class ProductService
         return res;        
     }
 
-    public SourceIndexOutput sourceIndex()
+    public void setProductRoom(SetProductRoomInput inp)
     {
-        SourceIndex sourceIndex = new SourceIndex(productService,  upnpService.getControlPoint());
-        SourceIndexOutput res = sourceIndex.executeAction();
-        return res;        
+        SetProductRoom setProductRoom = new SetProductRoom(productService, inp, upnpService.getControlPoint());
+        setProductRoom.executeAction();
     }
 
     public void setStandby(SetStandbyInput inp)
     {
         SetStandby setStandby = new SetStandby(productService, inp, upnpService.getControlPoint());
         setStandby.executeAction();
+    }
+
+    public SourceIndexOutput sourceIndex()
+    {
+        SourceIndex sourceIndex = new SourceIndex(productService,  upnpService.getControlPoint());
+        SourceIndexOutput res = sourceIndex.executeAction();
+        return res;        
     }
 
     public ManufacturerOutput manufacturer()

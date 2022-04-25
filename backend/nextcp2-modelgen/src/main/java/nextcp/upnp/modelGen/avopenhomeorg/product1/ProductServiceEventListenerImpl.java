@@ -252,21 +252,21 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
         }
     }
     
-    public void productUrlChange(String value)
-    {
-        stateVariable.ProductUrl = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "ProductUrl", value));
-        }
-    }
-    
     public void manufacturerImageUriChange(String value)
     {
         stateVariable.ManufacturerImageUri = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "ManufacturerImageUri", value));
+        }
+    }
+    
+    public void productUrlChange(String value)
+    {
+        stateVariable.ProductUrl = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "ProductUrl", value));
         }
     }
     

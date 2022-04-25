@@ -153,15 +153,6 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
-    public void bitRateChange(Long value)
-    {
-        stateVariable.BitRate = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "BitRate", value));
-        }
-    }
-    
     public void trackCountChange(Long value)
     {
         stateVariable.TrackCount = value;
@@ -171,12 +162,30 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
-    public void metatextChange(String value)
+    public void bitRateChange(Long value)
     {
-        stateVariable.Metatext = value;
+        stateVariable.BitRate = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "Metatext", value));
+            log.debug(String.format("StateVariable : %s: %s", "BitRate", value));
+        }
+    }
+    
+    public void uriChange(String value)
+    {
+        stateVariable.Uri = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Uri", value));
+        }
+    }
+    
+    public void bitDepthChange(Long value)
+    {
+        stateVariable.BitDepth = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "BitDepth", value));
         }
     }
     
@@ -198,21 +207,12 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
-    public void bitDepthChange(Long value)
+    public void metatextChange(String value)
     {
-        stateVariable.BitDepth = value;
+        stateVariable.Metatext = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "BitDepth", value));
-        }
-    }
-    
-    public void uriChange(String value)
-    {
-        stateVariable.Uri = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Uri", value));
+            log.debug(String.format("StateVariable : %s: %s", "Metatext", value));
         }
     }
     

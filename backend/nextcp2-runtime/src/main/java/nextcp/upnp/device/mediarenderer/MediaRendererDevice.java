@@ -43,7 +43,7 @@ import nextcp.upnp.modelGen.avopenhomeorg.credentials1.CredentialsService;
 import nextcp.upnp.modelGen.avopenhomeorg.info1.InfoService;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.PlaylistService;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.ProductService;
-import nextcp.upnp.modelGen.avopenhomeorg.radio.RadioService;
+import nextcp.upnp.modelGen.avopenhomeorg.radio1.RadioService;
 import nextcp.upnp.modelGen.avopenhomeorg.time1.TimeService;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.VolumeService;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.AVTransportService;

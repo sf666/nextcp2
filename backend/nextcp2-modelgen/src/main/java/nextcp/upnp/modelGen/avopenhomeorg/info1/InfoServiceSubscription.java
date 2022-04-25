@@ -123,14 +123,17 @@ public class InfoServiceSubscription extends RemoteGENASubscription
                     case "Duration":
                         durationChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
-                    case "BitRate":
-                        bitRateChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
                     case "TrackCount":
                         trackCountChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
-                    case "Metatext":
-                        metatextChange((String) stateVar.getValue());
+                    case "BitRate":
+                        bitRateChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "Uri":
+                        uriChange((String) stateVar.getValue());
+                        break;
+                    case "BitDepth":
+                        bitDepthChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "Lossless":
                         losslessChange((Boolean) stateVar.getValue());
@@ -138,11 +141,8 @@ public class InfoServiceSubscription extends RemoteGENASubscription
                     case "CodecName":
                         codecNameChange((String) stateVar.getValue());
                         break;
-                    case "BitDepth":
-                        bitDepthChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "Uri":
-                        uriChange((String) stateVar.getValue());
+                    case "Metatext":
+                        metatextChange((String) stateVar.getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -204,14 +204,6 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void bitRateChange(Long value)
-    {
-        for (IInfoServiceEventListener listener : eventListener)
-        {
-            listener.bitRateChange(value);
-        }
-    }    
-
     private void trackCountChange(Long value)
     {
         for (IInfoServiceEventListener listener : eventListener)
@@ -220,11 +212,27 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void metatextChange(String value)
+    private void bitRateChange(Long value)
     {
         for (IInfoServiceEventListener listener : eventListener)
         {
-            listener.metatextChange(value);
+            listener.bitRateChange(value);
+        }
+    }    
+
+    private void uriChange(String value)
+    {
+        for (IInfoServiceEventListener listener : eventListener)
+        {
+            listener.uriChange(value);
+        }
+    }    
+
+    private void bitDepthChange(Long value)
+    {
+        for (IInfoServiceEventListener listener : eventListener)
+        {
+            listener.bitDepthChange(value);
         }
     }    
 
@@ -244,19 +252,11 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void bitDepthChange(Long value)
+    private void metatextChange(String value)
     {
         for (IInfoServiceEventListener listener : eventListener)
         {
-            listener.bitDepthChange(value);
-        }
-    }    
-
-    private void uriChange(String value)
-    {
-        for (IInfoServiceEventListener listener : eventListener)
-        {
-            listener.uriChange(value);
+            listener.metatextChange(value);
         }
     }    
 }

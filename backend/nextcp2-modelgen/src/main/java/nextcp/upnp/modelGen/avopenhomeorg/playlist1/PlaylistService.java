@@ -36,13 +36,13 @@ import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.InsertOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.InsertInput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekSecondAbsolute;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekSecondAbsoluteInput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekIndex;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekIndexInput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.Read;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ReadOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ReadInput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.DeleteId;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.DeleteIdInput;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekIndex;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekIndexInput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.Play;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekId;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekIdInput;
@@ -52,11 +52,11 @@ import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ReadListInput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.Next;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SetRepeat;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SetRepeatInput;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ProtocolInfo;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ProtocolInfoOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.Previous;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekSecondRelative;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekSecondRelativeInput;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.Previous;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ProtocolInfo;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ProtocolInfoOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.Id;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.IdOutput;
 
@@ -201,6 +201,12 @@ public class PlaylistService
         seekSecondAbsolute.executeAction();
     }
 
+    public void seekIndex(SeekIndexInput inp)
+    {
+        SeekIndex seekIndex = new SeekIndex(playlistService, inp, upnpService.getControlPoint());
+        seekIndex.executeAction();
+    }
+
     public ReadOutput read(ReadInput inp)
     {
         Read read = new Read(playlistService, inp, upnpService.getControlPoint());
@@ -212,12 +218,6 @@ public class PlaylistService
     {
         DeleteId deleteId = new DeleteId(playlistService, inp, upnpService.getControlPoint());
         deleteId.executeAction();
-    }
-
-    public void seekIndex(SeekIndexInput inp)
-    {
-        SeekIndex seekIndex = new SeekIndex(playlistService, inp, upnpService.getControlPoint());
-        seekIndex.executeAction();
     }
 
     public void play()
@@ -251,11 +251,10 @@ public class PlaylistService
         setRepeat.executeAction();
     }
 
-    public ProtocolInfoOutput protocolInfo()
+    public void previous()
     {
-        ProtocolInfo protocolInfo = new ProtocolInfo(playlistService,  upnpService.getControlPoint());
-        ProtocolInfoOutput res = protocolInfo.executeAction();
-        return res;        
+        Previous previous = new Previous(playlistService,  upnpService.getControlPoint());
+        previous.executeAction();
     }
 
     public void seekSecondRelative(SeekSecondRelativeInput inp)
@@ -264,10 +263,11 @@ public class PlaylistService
         seekSecondRelative.executeAction();
     }
 
-    public void previous()
+    public ProtocolInfoOutput protocolInfo()
     {
-        Previous previous = new Previous(playlistService,  upnpService.getControlPoint());
-        previous.executeAction();
+        ProtocolInfo protocolInfo = new ProtocolInfo(playlistService,  upnpService.getControlPoint());
+        ProtocolInfoOutput res = protocolInfo.executeAction();
+        return res;        
     }
 
     public IdOutput id()

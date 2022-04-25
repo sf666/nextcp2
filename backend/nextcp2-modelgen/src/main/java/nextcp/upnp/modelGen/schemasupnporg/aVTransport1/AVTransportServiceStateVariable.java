@@ -13,13 +13,13 @@ public class AVTransportServiceStateVariable
     public String CurrentTrackURI = null;
     public String CurrentTrackMetaData = null;
     public Integer RelativeCounterPosition = null;
-    public String TransportStatus = null;
     public String AVTransportURIMetaData = null;
+    public String TransportStatus = null;
     public String TransportState = null;
     public Long CurrentTrack = null;
-    public String PlaybackStorageMedium = null;
     public String PossibleRecordQualityModes = null;
     public String NextAVTransportURIMetaData = null;
+    public String PlaybackStorageMedium = null;
     public Long NumberOfTracks = null;
     public String CurrentMediaDuration = null;
     public String NextAVTransportURI = null;

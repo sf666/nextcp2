@@ -171,24 +171,6 @@ public class VolumeServiceEventListenerImpl implements IVolumeServiceEventListen
         }
     }
     
-    public void balanceChange(Integer value)
-    {
-        stateVariable.Balance = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Balance", value));
-        }
-    }
-    
-    public void volumeUnityChange(Long value)
-    {
-        stateVariable.VolumeUnity = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "VolumeUnity", value));
-        }
-    }
-    
     public void muteChange(Boolean value)
     {
         stateVariable.Mute = value;
@@ -198,12 +180,30 @@ public class VolumeServiceEventListenerImpl implements IVolumeServiceEventListen
         }
     }
     
+    public void balanceChange(Integer value)
+    {
+        stateVariable.Balance = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Balance", value));
+        }
+    }
+    
     public void fadeChange(Integer value)
     {
         stateVariable.Fade = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "Fade", value));
+        }
+    }
+    
+    public void volumeUnityChange(Long value)
+    {
+        stateVariable.VolumeUnity = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "VolumeUnity", value));
         }
     }
     

@@ -156,11 +156,11 @@ public class ProductServiceSubscription extends RemoteGENASubscription
                     case "Standby":
                         standbyChange((Boolean) stateVar.getValue());
                         break;
-                    case "ProductUrl":
-                        productUrlChange((String) stateVar.getValue());
-                        break;
                     case "ManufacturerImageUri":
                         manufacturerImageUriChange((String) stateVar.getValue());
+                        break;
+                    case "ProductUrl":
+                        productUrlChange((String) stateVar.getValue());
                         break;
                     case "ModelUrl":
                         modelUrlChange((String) stateVar.getValue());
@@ -322,19 +322,19 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void productUrlChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.productUrlChange(value);
-        }
-    }    
-
     private void manufacturerImageUriChange(String value)
     {
         for (IProductServiceEventListener listener : eventListener)
         {
             listener.manufacturerImageUriChange(value);
+        }
+    }    
+
+    private void productUrlChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.productUrlChange(value);
         }
     }    
 

@@ -44,9 +44,9 @@ public interface IProductServiceEventListener extends ISubscriptionEventListener
     
     public void standbyChange(Boolean value);
     
-    public void productUrlChange(String value);
-    
     public void manufacturerImageUriChange(String value);
+    
+    public void productUrlChange(String value);
     
     public void modelUrlChange(String value);
     

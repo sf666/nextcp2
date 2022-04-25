@@ -144,21 +144,21 @@ public class AVTransportServiceEventListenerImpl implements IAVTransportServiceE
         }
     }
     
-    public void transportStatusChange(String value)
-    {
-        stateVariable.TransportStatus = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "TransportStatus", value));
-        }
-    }
-    
     public void aVTransportURIMetaDataChange(String value)
     {
         stateVariable.AVTransportURIMetaData = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "AVTransportURIMetaData", value));
+        }
+    }
+    
+    public void transportStatusChange(String value)
+    {
+        stateVariable.TransportStatus = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "TransportStatus", value));
         }
     }
     
@@ -180,15 +180,6 @@ public class AVTransportServiceEventListenerImpl implements IAVTransportServiceE
         }
     }
     
-    public void playbackStorageMediumChange(String value)
-    {
-        stateVariable.PlaybackStorageMedium = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "PlaybackStorageMedium", value));
-        }
-    }
-    
     public void possibleRecordQualityModesChange(String value)
     {
         stateVariable.PossibleRecordQualityModes = value;
@@ -204,6 +195,15 @@ public class AVTransportServiceEventListenerImpl implements IAVTransportServiceE
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "NextAVTransportURIMetaData", value));
+        }
+    }
+    
+    public void playbackStorageMediumChange(String value)
+    {
+        stateVariable.PlaybackStorageMedium = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "PlaybackStorageMedium", value));
         }
     }
     

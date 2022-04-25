@@ -9,15 +9,15 @@ import nextcp.domainmodel.device.services.IRadioService;
 import nextcp.dto.MusicItemDto;
 import nextcp.rest.DtoBuilder;
 import nextcp.upnp.device.mediarenderer.OpenHomeUtils;
-import nextcp.upnp.modelGen.avopenhomeorg.radio.RadioService;
-import nextcp.upnp.modelGen.avopenhomeorg.radio.actions.ChannelOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.radio.actions.IdOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.radio.actions.ReadInput;
-import nextcp.upnp.modelGen.avopenhomeorg.radio.actions.ReadListInput;
-import nextcp.upnp.modelGen.avopenhomeorg.radio.actions.ReadListOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.radio.actions.ReadOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.radio.actions.SetChannelInput;
-import nextcp.upnp.modelGen.avopenhomeorg.radio.actions.SetIdInput;
+import nextcp.upnp.modelGen.avopenhomeorg.radio1.RadioService;
+import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.ChannelOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.IdOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.ReadInput;
+import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.ReadListInput;
+import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.ReadListOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.ReadOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.SetChannelInput;
+import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.SetIdInput;
 
 public class OhRadioBridge implements IRadioService
 {

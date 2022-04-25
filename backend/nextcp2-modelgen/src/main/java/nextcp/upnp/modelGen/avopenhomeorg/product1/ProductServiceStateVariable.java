@@ -25,8 +25,8 @@ public class ProductServiceStateVariable
     public String ProductRoom = null;
     public String SourceXml = null;
     public Boolean Standby = null;
-    public String ProductUrl = null;
     public String ManufacturerImageUri = null;
+    public String ProductUrl = null;
     public String ModelUrl = null;
     public Long SourceIndex = null;
     public String ProductImageUri = null;
