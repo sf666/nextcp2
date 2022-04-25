@@ -48,7 +48,7 @@ public class ServiceInitializer
         {
             MediaRendererServicesDto serviceDto = new MediaRendererServicesDto(service.getServiceType().getNamespace(), service.getServiceType().toFriendlyString(),
                     "" + service.getServiceType().getVersion());
-            log.debug(serviceDto.toString());
+            log.info(serviceDto.toString());
             services.add(serviceDto);
 
             if (device.hasEmbeddedDevices())
