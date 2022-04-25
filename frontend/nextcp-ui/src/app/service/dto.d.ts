@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2022-03-31 13:54:38.
+// Generated using typescript-generator version 2.32.889 on 2022-04-25 14:31:52.
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -120,6 +120,13 @@ export interface InputSourceDto {
 export interface MediaRendererDto {
     udn: string;
     friendlyName: string;
+    services: MediaRendererServicesDto[];
+}
+
+export interface MediaRendererServicesDto {
+    namespace: string;
+    serviceName: string;
+    version: string;
 }
 
 export interface MediaRendererSetVolume {

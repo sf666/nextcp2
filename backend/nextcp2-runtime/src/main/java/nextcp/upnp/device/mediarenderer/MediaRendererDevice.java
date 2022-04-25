@@ -1,5 +1,8 @@
 package nextcp.upnp.device.mediarenderer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang.StringUtils;
@@ -17,6 +20,7 @@ import nextcp.domainmodel.device.services.IRadioService;
 import nextcp.domainmodel.device.services.IUpnpAvTransport;
 import nextcp.dto.DeviceDriverState;
 import nextcp.dto.MediaRendererDto;
+import nextcp.dto.MediaRendererServicesDto;
 import nextcp.dto.RendererDeviceConfiguration;
 import nextcp.dto.ToastrMessage;
 import nextcp.dto.TrackInfoDto;
@@ -73,6 +77,8 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
     private IDeviceDriver deviceDriver = null;
 
+    private List<MediaRendererServicesDto> services = new ArrayList<>();
+
     // private IDeviceDriverService
     private ServiceInitializer serviceInitializer = new ServiceInitializer();
 
@@ -119,8 +125,8 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     {
         rendererConfig = rendererConfigService.getMediaRendererConfig(getUDN().getIdentifierString());
         // ATTENTION: Initialize services first
-        serviceInitializer.initializeServices(getUpnpService(), getDevice(), this);
-
+        serviceInitializer.initializeServices(getUpnpService(), getDevice(), this, services);
+        
         if (hasUpnpAvTransport())
         {
             avTransportBridge = new Upnp_AVTransportBridge(upnp_avTransportService, this);
@@ -197,6 +203,11 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
         // must be called after OH Services!
         deviceDriver = createDeviceDriver();
+    }
+    
+    public List<MediaRendererServicesDto> getServices()
+    {
+        return services;
     }
 
     private boolean hasOhVolumeService()
@@ -439,5 +450,5 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     public boolean getStandby()
     {
         return getDeviceDriver().getStandby();
-    }
+    }    
 }

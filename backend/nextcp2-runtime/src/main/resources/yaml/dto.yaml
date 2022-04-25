@@ -80,7 +80,7 @@ RendererDeviceConfiguration:
    active: Boolean
    setCoveredUpnpDeviceToMaxVolume: Boolean
    hasOpenHomeDeviceDriver: Boolean
-   deviceDriverType: String   
+   deviceDriverType: String
    connectionString: String
    powerOnVolPercent: Integer
 
@@ -145,7 +145,13 @@ MediaServerDto:
 MediaRendererDto:
    udn: String
    friendlyName: String
+   services: List<MediaRendererServicesDto>
 
+
+MediaRendererServicesDto:
+   namespace: String
+   serviceName: String
+   version: String
 
 ContainerItemDto:
    parentFolderTitle: String

@@ -1,11 +1,14 @@
 package nextcp.upnp.device.mediarenderer;
 
+import java.util.List;
+
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.model.meta.RemoteDevice;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.dto.MediaRendererServicesDto;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials1.CredentialsService;
 import nextcp.upnp.modelGen.avopenhomeorg.info1.InfoService;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.PlaylistService;
@@ -38,10 +41,12 @@ public class ServiceInitializer
     static final String OH_Radio = "Radio";
     static final String OH_Product = "Product";
 
-    void initializeServices(UpnpService upnpService, RemoteDevice device, MediaRendererDevice renderer)
+    void initializeServices(UpnpService upnpService, RemoteDevice device, MediaRendererDevice renderer, List<MediaRendererServicesDto> services)
     {
         for (RemoteService service : device.getServices())
         {
+            services.add(
+                    new MediaRendererServicesDto(service.getServiceType().getNamespace(), service.getServiceType().toFriendlyString(), "" + service.getServiceType().getVersion()));
             if (device.hasEmbeddedDevices())
             {
                 log.warn("Device has embedded devices.");
@@ -100,7 +105,7 @@ public class ServiceInitializer
                 {
                     log.warn("Device has unknown openhome services : " + service.getServiceType().getType());
                 }
-                
+
             }
             else
             {

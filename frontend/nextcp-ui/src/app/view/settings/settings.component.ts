@@ -17,7 +17,8 @@ export class SettingsComponent {
 
   code: string;
 
-  none_device: MediaServerDto = { 'udn': '', 'friendlyName': '', extendedApi: false };
+  none_serverdevice: MediaServerDto = { 'udn': '', 'friendlyName': '', extendedApi: false };
+  none_renderdevice: MediaRendererDto = { 'udn': '', 'friendlyName': '', services: [] };
   newProfileName: string;
 
   constructor(
@@ -115,11 +116,11 @@ export class SettingsComponent {
   }
 
   noServerSelected(): void {
-    this.configService.clientConfig.defaultMediaServer = this.none_device;
+    this.configService.clientConfig.defaultMediaServer = this.none_serverdevice;
   }
 
   noRendererSelected(): void {
-    this.configService.clientConfig.defaultMediaRenderer = this.none_device;
+    this.configService.clientConfig.defaultMediaRenderer = this.none_renderdevice;
   }
 
 

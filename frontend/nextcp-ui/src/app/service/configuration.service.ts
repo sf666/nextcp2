@@ -43,7 +43,8 @@ export class ConfigurationService {
     uuid: "",
     defaultMediaRenderer: {
       friendlyName: "",
-      udn: ""
+      udn: "",
+      services: []
     },
     defaultMediaServer: {
       friendlyName: "",
@@ -66,7 +67,7 @@ export class ConfigurationService {
   }
 
   public createNewUiClientConfig(newUUID: string): UiClientConfig {
-    return { clientName: 'NewProfile', uuid: newUUID, defaultMediaRenderer: { friendlyName: '', udn: '' }, defaultMediaServer: { friendlyName: '', udn: '', extendedApi: false } };
+    return { clientName: 'NewProfile', uuid: newUUID, defaultMediaRenderer: { friendlyName: '', udn: '', services: [] }, defaultMediaServer: { friendlyName: '', udn: '', extendedApi: false } };
   }
 
   public restart(): void {
@@ -109,8 +110,7 @@ export class ConfigurationService {
 
   public getMediaRendererConfig(): void {
     const uri = '/getMediaRendererConfig';
-    this.httpService.get<RendererConfigDto>(this.baseUri, uri).subscribe(data =>
-      this.rendererConfig = data);
+    this.httpService.get<RendererConfigDto>(this.baseUri, uri).subscribe(data => this.rendererConfig = data);
   }
 
   public getMediaServerConfig(): void {

@@ -19,7 +19,7 @@ export class DeviceService {
   private defaultMediaServerAlreadySelected = false;
 
   private _selectedMediaServerDevice: MediaServerDto = { udn: '', friendlyName: 'please select Media-Server', extendedApi: false };
-  private _selectedMediaRendererDevice: MediaRendererDto = { udn: '', friendlyName: 'please select Media-Renderer' };
+  private _selectedMediaRendererDevice: MediaRendererDto = { udn: '', friendlyName: 'please select Media-Renderer', services: [] };
 
   mediaRendererChanged$: Subject<MediaRendererDto> = new Subject();
   mediaServerChanged$: Subject<MediaServerDto> = new Subject();
@@ -86,6 +86,8 @@ export class DeviceService {
   private mediarendererListChanged(data: MediaRendererDto[]): void {
     this.mediaRenderList = data;
     this.applyDefaultRenderer();
+    console.log("renderer list updated.");
+    this.logMediaRendererServices(data);
   }
 
   private clientConfigChanged(data: UiClientConfig): void {
@@ -177,6 +179,15 @@ export class DeviceService {
       this.mediaRenderList = data;
       this.applyDefaultRenderer();
       this.mediaRendererInitiated$.next(data);
+
+      this.logMediaRendererServices(data);
+    });
+  }
+
+  private logMediaRendererServices(rendererList: MediaRendererDto[]): void {
+    rendererList.forEach(renderer => {
+      console.log("availbale services for device : " + renderer.friendlyName);
+      renderer.services.forEach(service => console.log(service))
     });
   }
 }
