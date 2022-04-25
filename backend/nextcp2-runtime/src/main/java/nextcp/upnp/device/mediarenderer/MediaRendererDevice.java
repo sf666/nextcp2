@@ -372,7 +372,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
     public MediaRendererDto getAsDto()
     {
-        return new MediaRendererDto(getUDN().getIdentifierString(), getFriendlyName());
+        return new MediaRendererDto(getUDN().getIdentifierString(), getFriendlyName(), services);
     }
 
     //
