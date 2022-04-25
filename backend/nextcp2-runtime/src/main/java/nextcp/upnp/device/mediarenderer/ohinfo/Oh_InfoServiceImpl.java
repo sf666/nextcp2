@@ -3,12 +3,11 @@ package nextcp.upnp.device.mediarenderer.ohinfo;
 import nextcp.domainmodel.device.services.IInfoService;
 import nextcp.dto.TrackInfoDto;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
-import nextcp.upnp.modelGen.avopenhomeorg.info.InfoService;
-import nextcp.upnp.modelGen.avopenhomeorg.info.actions.CountersOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.info.actions.DetailsOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.info.actions.MetatextOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.info.actions.TrackOutput;
-import nextcp.util.DisplayUtils;
+import nextcp.upnp.modelGen.avopenhomeorg.info1.InfoService;
+import nextcp.upnp.modelGen.avopenhomeorg.info1.actions.CountersOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.info1.actions.DetailsOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.info1.actions.MetatextOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.info1.actions.TrackOutput;
 
 public class Oh_InfoServiceImpl implements IInfoService
 {

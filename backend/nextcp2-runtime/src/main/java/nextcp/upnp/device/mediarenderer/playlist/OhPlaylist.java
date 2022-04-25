@@ -21,19 +21,19 @@ import nextcp.dto.MusicItemDto;
 import nextcp.dto.PlaylistState;
 import nextcp.rest.DtoBuilder;
 import nextcp.upnp.device.mediarenderer.OpenHomeUtils;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist.PlaylistService;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist.actions.DeleteIdInput;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist.actions.InsertInput;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist.actions.ReadInput;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist.actions.ReadListInput;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist.actions.ReadListOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist.actions.ReadOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist.actions.SeekIdInput;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist.actions.SeekIndexInput;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist.actions.SeekSecondAbsoluteInput;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist.actions.SeekSecondRelativeInput;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist.actions.SetRepeatInput;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist.actions.SetShuffleInput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.PlaylistService;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.DeleteIdInput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.InsertInput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ReadInput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ReadListInput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ReadListOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ReadOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekIdInput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekIndexInput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekSecondAbsoluteInput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekSecondRelativeInput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SetRepeatInput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SetShuffleInput;
 
 /**
  * Devices with Open Home playlist support

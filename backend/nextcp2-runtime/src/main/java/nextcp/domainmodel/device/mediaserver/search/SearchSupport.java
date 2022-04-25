@@ -14,9 +14,9 @@ import nextcp.dto.MusicItemDto;
 import nextcp.dto.SearchRequestDto;
 import nextcp.dto.SearchResultDto;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.ContentDirectoryService;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.SearchInput;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.SearchOutput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.ContentDirectoryService;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.SearchInput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.SearchOutput;
 import nextcp.util.DidlContent;
 
 /**

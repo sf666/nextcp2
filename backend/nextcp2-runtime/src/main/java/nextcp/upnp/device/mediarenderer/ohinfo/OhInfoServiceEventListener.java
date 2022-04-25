@@ -1,11 +1,9 @@
 package nextcp.upnp.device.mediarenderer.ohinfo;
 
 import nextcp.dto.TrackInfoDto;
-import nextcp.dto.TrackTimeDto;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
-import nextcp.upnp.modelGen.avopenhomeorg.info.InfoServiceEventListenerImpl;
-import nextcp.upnp.modelGen.avopenhomeorg.info.InfoServiceStateVariable;
-import nextcp.upnp.modelGen.avopenhomeorg.time.TimeServiceStateVariable;
+import nextcp.upnp.modelGen.avopenhomeorg.info1.InfoServiceEventListenerImpl;
+import nextcp.upnp.modelGen.avopenhomeorg.info1.InfoServiceStateVariable;
 import nextcp.util.DisplayUtils;
 
 public class OhInfoServiceEventListener extends InfoServiceEventListenerImpl

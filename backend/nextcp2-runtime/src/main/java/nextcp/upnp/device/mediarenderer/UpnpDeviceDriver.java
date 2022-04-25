@@ -7,9 +7,9 @@ import org.springframework.context.ApplicationEventPublisher;
 import nextcp.devicedriver.IDeviceDriverCallback;
 import nextcp.domainmodel.device.services.IProductService;
 import nextcp.dto.DeviceDriverState;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.RenderingControlService;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.RenderingControlServiceEventListenerImpl;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.actions.SetVolumeInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.RenderingControlService;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.RenderingControlServiceEventListenerImpl;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.SetVolumeInput;
 
 public class UpnpDeviceDriver extends RenderingControlServiceEventListenerImpl implements IDeviceDriver, IDeviceDriverCallback
 {

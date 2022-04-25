@@ -25,9 +25,9 @@ import nextcp.dto.SearchRequestDto;
 import nextcp.dto.SearchResultDto;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.device.BaseDevice;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.ContentDirectoryService;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.BrowseInput;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.BrowseOutput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.ContentDirectoryService;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseInput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseOutput;
 import nextcp.util.BackendException;
 
 /**
@@ -89,7 +89,7 @@ public class MediaServerDevice extends BaseDevice
     {
         return searchSupportDelegate.searchAllPlaylist(searchReques);
     }
-    
+
     public ContainerItemDto browseChildren(BrowseInput inp)
     {
         ContainerDto curContainer = getCurrentMeta(inp);
@@ -235,7 +235,7 @@ public class MediaServerDevice extends BaseDevice
             else if (didlObject.getTitle().startsWith("#--"))
             {
                 // Maybe the renderer in misconfigred in UMS.
-                // ignore Transcode folder. 
+                // ignore Transcode folder.
                 log.debug("Ignore #--Transcode--# folder ... maybe UMS renderer is misconfigured");
             }
             else
@@ -277,12 +277,12 @@ public class MediaServerDevice extends BaseDevice
 
     public void rescan()
     {
-        log.warn("rescan not implemented for this device : " + getFriendlyName()); 
+        log.warn("rescan not implemented for this device : " + getFriendlyName());
     }
-    
+
     public void rescanFile(File f)
     {
-        log.warn("scan file not implemented for this device : " + getFriendlyName()); 
+        log.warn("scan file not implemented for this device : " + getFriendlyName());
     }
 
 }

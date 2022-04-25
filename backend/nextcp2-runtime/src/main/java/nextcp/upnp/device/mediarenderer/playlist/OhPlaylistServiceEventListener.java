@@ -10,8 +10,8 @@ import nextcp.dto.MusicItemDto;
 import nextcp.dto.PlaylistState;
 import nextcp.dto.RendererPlaylist;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist.PlaylistServiceEventListenerImpl;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist.PlaylistServiceStateVariable;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.PlaylistServiceEventListenerImpl;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.PlaylistServiceStateVariable;
 
 public class OhPlaylistServiceEventListener extends PlaylistServiceEventListenerImpl
 {

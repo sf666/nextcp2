@@ -5,19 +5,19 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.devicedriver.IDeviceDriverCallback;
 import nextcp.upnp.device.mediarenderer.UpnpDeviceDriver;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.RenderingControlServiceEventListenerImpl;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.RenderingControlServiceEventListenerImpl;
 
 public class RenderingControlEventListener extends RenderingControlServiceEventListenerImpl
 {
     private static final Logger log = LoggerFactory.getLogger(RenderingControlEventListener.class.getName());
 
     private IDeviceDriverCallback callback = null;
-    
+
     public void addDeviceDriverCallback(IDeviceDriverCallback callback)
     {
         this.callback = callback;
     }
-    
+
     @Override
     public void volumeChange(Long value)
     {

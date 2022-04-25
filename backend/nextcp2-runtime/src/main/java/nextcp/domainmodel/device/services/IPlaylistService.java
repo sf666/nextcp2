@@ -5,7 +5,7 @@ import java.util.List;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.PlaylistState;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist.actions.InsertInput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.InsertInput;
 
 public interface IPlaylistService
 {
@@ -49,5 +49,5 @@ public interface IPlaylistService
     void insertContainer(ContainerItemDto items);
 
     void insertAndPlayContainer(ContainerItemDto items);
-    
+
 }

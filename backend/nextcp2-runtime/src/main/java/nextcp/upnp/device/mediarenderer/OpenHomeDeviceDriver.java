@@ -7,9 +7,9 @@ import org.springframework.context.ApplicationEventPublisher;
 import nextcp.devicedriver.IDeviceDriverCallback;
 import nextcp.domainmodel.device.services.IProductService;
 import nextcp.dto.DeviceDriverState;
-import nextcp.upnp.modelGen.avopenhomeorg.product.ProductServiceEventListenerImpl;
-import nextcp.upnp.modelGen.avopenhomeorg.volume.VolumeService;
-import nextcp.upnp.modelGen.avopenhomeorg.volume.actions.SetVolumeInput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.ProductServiceEventListenerImpl;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.VolumeService;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetVolumeInput;
 
 /**
  * 

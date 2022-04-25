@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.AVTransportServiceEventListenerImpl;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.AVTransportServiceEventListenerImpl;
 
 /**
  * Do not overwrite this class.

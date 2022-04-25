@@ -4,8 +4,8 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import nextcp.dto.TrackTimeDto;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
-import nextcp.upnp.modelGen.avopenhomeorg.time.TimeServiceEventListenerImpl;
-import nextcp.upnp.modelGen.avopenhomeorg.time.TimeServiceStateVariable;
+import nextcp.upnp.modelGen.avopenhomeorg.time1.TimeServiceEventListenerImpl;
+import nextcp.upnp.modelGen.avopenhomeorg.time1.TimeServiceStateVariable;
 import nextcp.util.DisplayUtils;
 
 public class OhTimeServiceEventListener extends TimeServiceEventListenerImpl

@@ -28,8 +28,8 @@ import nextcp.dto.ToastrMessage;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist.actions.InsertInput;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.BrowseInput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.InsertInput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseInput;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController

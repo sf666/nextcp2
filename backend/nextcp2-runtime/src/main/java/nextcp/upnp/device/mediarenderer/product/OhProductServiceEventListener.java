@@ -7,8 +7,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import nextcp.devicedriver.IDeviceDriverCallback;
 import nextcp.dto.InputSourceDto;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
-import nextcp.upnp.modelGen.avopenhomeorg.product.ProductServiceEventListenerImpl;
-import nextcp.upnp.modelGen.avopenhomeorg.product.ProductServiceStateVariable;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.ProductServiceEventListenerImpl;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.ProductServiceStateVariable;
 
 public class OhProductServiceEventListener extends ProductServiceEventListenerImpl
 {

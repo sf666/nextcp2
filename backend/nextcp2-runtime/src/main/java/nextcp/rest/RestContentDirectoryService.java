@@ -17,7 +17,7 @@ import nextcp.dto.SearchRequestDto;
 import nextcp.dto.SearchResultDto;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory.actions.BrowseInput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseInput;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController

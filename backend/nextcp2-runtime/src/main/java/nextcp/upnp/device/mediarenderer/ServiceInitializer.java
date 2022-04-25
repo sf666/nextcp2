@@ -6,16 +6,16 @@ import org.fourthline.cling.model.meta.RemoteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nextcp.upnp.modelGen.avopenhomeorg.credentials.CredentialsService;
-import nextcp.upnp.modelGen.avopenhomeorg.info.InfoService;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist.PlaylistService;
-import nextcp.upnp.modelGen.avopenhomeorg.product.ProductService;
+import nextcp.upnp.modelGen.avopenhomeorg.credentials1.CredentialsService;
+import nextcp.upnp.modelGen.avopenhomeorg.info1.InfoService;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.PlaylistService;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.ProductService;
 import nextcp.upnp.modelGen.avopenhomeorg.radio.RadioService;
-import nextcp.upnp.modelGen.avopenhomeorg.time.TimeService;
-import nextcp.upnp.modelGen.avopenhomeorg.volume.VolumeService;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.AVTransportService;
-import nextcp.upnp.modelGen.schemasupnporg.connectionManager.ConnectionManagerService;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl.RenderingControlService;
+import nextcp.upnp.modelGen.avopenhomeorg.time1.TimeService;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.VolumeService;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.AVTransportService;
+import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.ConnectionManagerService;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.RenderingControlService;
 
 /**
  * Initialized media renderer services.

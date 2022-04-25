@@ -9,15 +9,15 @@ import nextcp.domainmodel.device.services.IUpnpAvTransport;
 import nextcp.dto.TrackInfoDto;
 import nextcp.dto.TrackTimeDto;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.AVTransportService;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetPositionInfoInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.GetPositionInfoOutput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.NextInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.PauseInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.PlayInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.SetAVTransportURIInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.SetNextAVTransportURIInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport.actions.StopInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.AVTransportService;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetPositionInfoInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetPositionInfoOutput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.NextInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.PauseInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.PlayInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.SetAVTransportURIInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.SetNextAVTransportURIInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.StopInput;
 import nextcp.util.DisplayUtils;
 
 public class Upnp_AVTransportBridge implements IInfoService, IUpnpAvTransport, ITimeService
@@ -144,7 +144,7 @@ public class Upnp_AVTransportBridge implements IInfoService, IUpnpAvTransport, I
         {
             return 0L;
         }
-        
+
         try
         {
             int idx = 0;

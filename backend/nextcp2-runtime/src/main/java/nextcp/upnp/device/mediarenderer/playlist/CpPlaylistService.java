@@ -21,7 +21,7 @@ import nextcp.upnp.device.mediarenderer.avtransport.BaseAvTransportChangeEventIm
 import nextcp.upnp.device.mediarenderer.playlist.playStrategy.IPlaylistFillStrategy;
 import nextcp.upnp.device.mediarenderer.playlist.playStrategy.RandomPlaybackStrategy;
 import nextcp.upnp.device.mediarenderer.playlist.playStrategy.SequencialPlaybackStrategy;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist.actions.InsertInput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.InsertInput;
 import nextcp.util.BackendException;
 
 /**

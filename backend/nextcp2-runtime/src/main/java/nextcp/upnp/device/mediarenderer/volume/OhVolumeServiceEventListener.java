@@ -1,7 +1,7 @@
 package nextcp.upnp.device.mediarenderer.volume;
 
 import nextcp.devicedriver.IDeviceDriverCallback;
-import nextcp.upnp.modelGen.avopenhomeorg.volume.VolumeServiceEventListenerImpl;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.VolumeServiceEventListenerImpl;
 
 public class OhVolumeServiceEventListener extends VolumeServiceEventListenerImpl
 {

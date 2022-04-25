@@ -6,8 +6,8 @@ import nextcp.domainmodel.device.services.IProductService;
 import nextcp.dto.InputSourceDto;
 import nextcp.rest.DtoBuilder;
 import nextcp.upnp.device.mediarenderer.OpenHomeUtils;
-import nextcp.upnp.modelGen.avopenhomeorg.product.ProductService;
-import nextcp.upnp.modelGen.avopenhomeorg.product.actions.SetStandbyInput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.ProductService;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetStandbyInput;
 
 /**
  * Actions
