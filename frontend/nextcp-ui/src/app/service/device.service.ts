@@ -185,9 +185,13 @@ export class DeviceService {
   }
 
   private logMediaRendererServices(rendererList: MediaRendererDto[]): void {
-    rendererList.forEach(renderer => {
-      console.log("availbale services for device : " + renderer.friendlyName);
-      renderer.services.forEach(service => console.log(service))
-    });
+    if (rendererList) {
+      rendererList.forEach(renderer => {
+        if (renderer?.services) {
+          console.log("availbale services for device : " + renderer.friendlyName);
+          renderer.services?.forEach(service => console.log(service))
+        }
+      });
+    }
   }
 }
