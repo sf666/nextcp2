@@ -142,6 +142,7 @@ export class DeviceService {
   public set selectedMediaRendererDevice(device: MediaRendererDto) {
     this._selectedMediaRendererDevice = device;
     this.mediaRendererChanged$.next(device);
+    this.logMediaRendererDeviceServices(device);
   }
 
   public setMediaRendererByUdn(udn: string): void {
@@ -184,13 +185,17 @@ export class DeviceService {
     });
   }
 
+  private logMediaRendererDeviceServices(renderer: MediaRendererDto): void {
+    if (renderer) {
+      console.log("available services for device : " + renderer.friendlyName);
+      renderer.services?.forEach(service => console.log(service.namespace + " " + service.serviceName + " " + service.version))
+    }
+  }
+
   private logMediaRendererServices(rendererList: MediaRendererDto[]): void {
     if (rendererList) {
       rendererList.forEach(renderer => {
-        if (renderer?.services) {
-          console.log("availbale services for device : " + renderer.friendlyName);
-          renderer.services?.forEach(service => console.log(service))
-        }
+        this.logMediaRendererDeviceServices(renderer);
       });
     }
   }
