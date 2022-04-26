@@ -97,6 +97,7 @@ public class UpnpDeviceDriver extends RenderingControlServiceEventListenerImpl i
         SetVolumeInput inp = new SetVolumeInput();
         inp.InstanceID = 0L;
         inp.DesiredVolume = Long.valueOf(vol);
+        inp.Channel = "Master";
         volumeService.setVolume(inp);
     }
 
