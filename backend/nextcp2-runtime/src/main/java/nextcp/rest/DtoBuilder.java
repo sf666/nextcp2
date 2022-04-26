@@ -35,9 +35,7 @@ import nextcp.dto.MusicBrainzId;
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.MusicItemIdDto;
 import nextcp.dto.UpnpAvTransportState;
-import nextcp.service.RatingService;
 import nextcp.spotify.SpotifyArtistService;
-import nextcp.upnp.device.BaseDevice;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediarenderer.avtransport.AvTransportState;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
@@ -63,7 +61,7 @@ public class DtoBuilder
     {
         UpnpAvTransportState stateDto = new UpnpAvTransportState();
 
-        stateDto.mediaRenderer = buildMediaRendererDevice(rendererDevice);
+        stateDto.mediaRenderer = rendererDevice.getAsDto();
         stateDto.AbsoluteTimePosition = stateVariable.AbsoluteTimePosition;
         stateDto.CurrentTrackURI = stateVariable.CurrentTrackURI;
         stateDto.RelativeCounterPosition = stateVariable.RelativeCounterPosition;
@@ -122,15 +120,6 @@ public class DtoBuilder
         }
 
         return null;
-    }
-
-
-    public MediaRendererDto buildMediaRendererDevice(MediaRendererDevice device)
-    {
-        MediaRendererDto dto = new MediaRendererDto();
-        dto.friendlyName = device.getFriendlyName();
-        dto.udn = device.getUDN().getIdentifierString();
-        return dto;
     }
 
     private ContainerDto addMusicAlbum(MusicAlbum container, ContainerDto dto)
@@ -280,7 +269,7 @@ public class DtoBuilder
         MusicItemIdDto ids = new MusicItemIdDto();
         itemDto.songId = ids;
         itemDto.musicBrainzId = mb;
-        
+
         Optional<DescMeta> descMetadata = item.getDescMetadata().stream().filter(n -> n.getType().equalsIgnoreCase("mpd-tags")).findFirst();
         if (descMetadata.isPresent())
         {
@@ -325,19 +314,19 @@ public class DtoBuilder
             for (int i = 0; i < metaChildNodes.getChildNodes().getLength(); i++)
             {
                 Node n = metaChildNodes.getChildNodes().item(i);
-                String nodeName = n.getNodeName().toLowerCase(); 
+                String nodeName = n.getNodeName().toLowerCase();
                 switch (nodeName)
                 {
                     case "musicbrainztrackid":
-                        ids.musicBrainzIdTrackId = n.getTextContent();
+                        ids.musicBrainzIdTrackId = getTextAndCheckForNull(n);
                         log.debug("musicbrainztrackid : " + ids.musicBrainzIdTrackId);
                         break;
                     case "musicbrainzreleaseid":
-                        mb.ReleaseTrackId = n.getTextContent();
+                        mb.ReleaseTrackId = getTextAndCheckForNull(n);
                         log.debug("musicbrainzreleaseid : " + mb.ReleaseTrackId);
                         break;
                     case "numberofthisdisc":
-                        itemDto.numberOfThisDisc = n.getTextContent();
+                        itemDto.numberOfThisDisc = getTextAndCheckForNull(n);
                         log.debug("numberofthisdisc : " + itemDto.numberOfThisDisc);
                         break;
                     case "date":
@@ -364,18 +353,19 @@ public class DtoBuilder
                         }
                         break;
                     case "audiotrackid":
-                    	try
-                    	{
+                        try
+                        {
                             String strFileId = n.getTextContent();
-                            if (NumberUtils.isParsable(strFileId)) {
+                            if (NumberUtils.isParsable(strFileId))
+                            {
                                 ids.umsAudiotrackId = Integer.parseInt(strFileId);
                                 log.debug("audiotrackId : " + strFileId);
                             }
-                    	}
-                    	catch (Exception e )
-                    	{
+                        }
+                        catch (Exception e)
+                        {
                             log.debug("parsing fileid failed", e);
-                    	}
+                        }
                         break;
                     default:
                         log.warn("unknown ums-tags attribute : " + n.getNodeName());
@@ -383,6 +373,11 @@ public class DtoBuilder
                 }
             }
         }
+    }
+
+    private String getTextAndCheckForNull(Node n)
+    {
+        return n.getTextContent().equals("null") ? null : n.getTextContent();
     }
 
     private void addAudioItem(AudioItem item, MusicItemDto itemDto)
@@ -536,7 +531,7 @@ public class DtoBuilder
         List<MediaRendererDto> mediaRenderer = new ArrayList<>();
         for (MediaRendererDevice device : mediaRendererDevices)
         {
-            mediaRenderer.add(buildMediaRendererDevice(device));
+            mediaRenderer.add(device.getAsDto());
         }
         return mediaRenderer;
     }

@@ -123,9 +123,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     @PostConstruct
     private void init()
     {
-        rendererConfig = rendererConfigService.getMediaRendererConfig(getUDN().getIdentifierString());
-        // ATTENTION: Initialize services first
-        serviceInitializer.initializeServices(getUpnpService(), getDevice(), this, services);
+        initServices();
         
         if (hasUpnpAvTransport())
         {
@@ -203,6 +201,14 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
         // must be called after OH Services!
         deviceDriver = createDeviceDriver();
+    }
+
+    private void initServices()
+    {
+        rendererConfig = rendererConfigService.getMediaRendererConfig(getUDN().getIdentifierString());
+        serviceInitializer.initializeServices(getUpnpService(), getDevice(), this, services);
+        rendererConfig.mediaRenderer = getAsDto();
+        rendererConfigService.updateRendererDevice(rendererConfig);
     }
     
     public List<MediaRendererServicesDto> getServices()

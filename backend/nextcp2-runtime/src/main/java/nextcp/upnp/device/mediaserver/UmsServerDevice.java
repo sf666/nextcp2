@@ -87,6 +87,10 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     {
         try
         {
+            if (musicBrainzReleaseId == null)
+            {
+                return false;
+            }
             String strResponse = executeCall(musicBrainzReleaseId, "api/like/isalbumliked");
             return Boolean.valueOf(strResponse);
         }
