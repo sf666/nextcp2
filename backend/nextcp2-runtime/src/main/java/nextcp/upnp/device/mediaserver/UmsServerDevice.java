@@ -322,9 +322,8 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
         if (res.code() != 200)
         {
-            log.warn("API error : " + respBody);
             toastDeviceResponse(respBody, res.code(), false);
-            throw new RuntimeException(respBody);
+            log.warn("API error : " + res.code() + " : " + respBody);
         }
         if (showOkMessage)
         {
