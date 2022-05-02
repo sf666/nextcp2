@@ -127,7 +127,7 @@ public class RendererConfig
         return true;
     }
 
-    public RendererDeviceConfiguration addMediaRendererDeviceConfig(MediaRendererDevice device)
+    public void addMediaRendererDeviceConfig(MediaRendererDevice device)
     {
         RemoteDevice remoteDevice = device.getDevice();
         Optional<RendererDeviceConfiguration> configEntry = config.rendererDevices.stream()
@@ -136,7 +136,6 @@ public class RendererConfig
         {
             log.debug(remoteDevice.getDetails().getFriendlyName() + " is already known.");
             updateDefaults(remoteDevice, configEntry.get());
-            return configEntry.get();
         }
         else
         {
@@ -150,9 +149,8 @@ public class RendererConfig
             c.mediaRenderer = device.getAsDto();
             c.setCoveredUpnpDeviceToMaxVolume = false;
             config.rendererDevices.add(c);
-            writeAndSendConfig();           
+            writeAndSendConfig();
             log.info(remoteDevice.getDetails().getFriendlyName() + " added RendererDevice config : " + c);
-            return c;
         }
     }
 
