@@ -1,0 +1,23 @@
+How to do a release 
+====================
+
+Attention. The deploy repo ist "free" and has only limited transfer volume!
+
+
+What to do :
+
+Set release version i.e. "2.1", call build script and commit changes, create tag, checkout and deploy
+
+mvn versions:set -DnewVersion=2.1
+../build.sh
+
+git commit
+git tag v2.1
+git checkout v2.1
+mvn deploy
+
+set next development version and commit changes 
+
+mvn versions:set -DnewVersion=2.2-SNAPSHOT
+git commit
+
