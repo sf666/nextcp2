@@ -8,7 +8,7 @@
 
         <ref type="tag">
             <pattern>v([0-9].*)</pattern>
-            <version>${ref.version}</version>
+            <version>${version.release}</version>
         </ref>
 </refs>
     <!-- optional fallback configuration in case of no matching ref configuration-->
