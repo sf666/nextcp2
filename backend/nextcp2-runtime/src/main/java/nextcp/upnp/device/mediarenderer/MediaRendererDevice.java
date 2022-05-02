@@ -206,6 +206,10 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     private void initServices()
     {
         rendererConfig = rendererConfigService.getMediaRendererConfig(getUDN().getIdentifierString());
+        if (rendererConfig == null)
+        {
+            rendererConfig = rendererConfigService.addMediaRendererDeviceConfig(this);
+        }
         serviceInitializer.initializeServices(getUpnpService(), getDevice(), this, services);
         rendererConfig.mediaRenderer = getAsDto();
         rendererConfigService.updateRendererDevice(rendererConfig);
