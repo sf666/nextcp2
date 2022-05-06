@@ -7,6 +7,15 @@ import { HttpEvent } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { SpinnerService } from './spinner.service';
 
+/**
+ * Purpose:
+ * ==========================
+ * 
+ * 1. show / hide spinner on the view
+ * 
+ * 2. add nextcp2 user agent header
+ * 
+ */
 @Injectable()
 export class CustomHttpInterceptor implements HttpInterceptor {
 
@@ -16,7 +25,11 @@ export class CustomHttpInterceptor implements HttpInterceptor {
 
         this.spinnerService.show();
 
-        return next.handle(req)
+        const modifiedReq = req.clone({ 
+            headers: req.headers.set('control-point', 'nextcp2'),
+          });
+
+        return next.handle(modifiedReq)
              .pipe(tap((event: HttpEvent<any>) => {
                     if (event instanceof HttpResponse) {
                         this.spinnerService.hide();
