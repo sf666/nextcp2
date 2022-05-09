@@ -26,7 +26,7 @@ export class CustomHttpInterceptor implements HttpInterceptor {
         this.spinnerService.show();
 
         const modifiedReq = req.clone({ 
-            headers: req.headers.set('control-point', 'nextcp2'),
+            headers: req.headers.set('control-point', 'nextcp/2.0'),
           });
 
         return next.handle(modifiedReq)
