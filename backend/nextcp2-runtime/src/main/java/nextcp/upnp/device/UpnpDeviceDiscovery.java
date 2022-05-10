@@ -55,7 +55,7 @@ public class UpnpDeviceDiscovery implements RegistryListener
     public void remoteDeviceAdded(Registry registry, RemoteDevice device)
     {
         log.info(String.format("remoteDeviceAdded of type '%s'. Device [%s] ", device.getType(), device.toString()));
-        if (device.getType().getType().equals(MEDIA_SERVER_TYPE) && device.getDetails().getManufacturerDetails().getManufacturer().equalsIgnoreCase("ums"))
+        if (isUmsServer(device))
         {
             deviceRegistry.addMediaServerDevice(device, MediaServerType.UMS);
         }
@@ -71,6 +71,23 @@ public class UpnpDeviceDiscovery implements RegistryListener
         {
             deviceRegistry.addMediaServerExtDevice(deviceFactory.mediaServerJMinim(device));
         }
+    }
+
+    private boolean isUmsServer(RemoteDevice device)
+    {
+        if (device.getType().getType().equals(MEDIA_SERVER_TYPE))
+        {
+            String manufacturer = device.getDetails().getManufacturerDetails().getManufacturer();
+            if ("Universal Media Server".equalsIgnoreCase(manufacturer))
+            {
+                return true;
+            }
+            if ("ums".equalsIgnoreCase(manufacturer))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
