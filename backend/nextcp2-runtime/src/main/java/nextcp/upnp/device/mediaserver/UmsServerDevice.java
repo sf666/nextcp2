@@ -2,6 +2,8 @@ package nextcp.upnp.device.mediaserver;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -287,7 +289,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     private String executeCall(String bodyString, String uri) throws IOException
     {
         RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/text"));
-        String requestUrl = String.format("%s%s", getDevice().getDetails().getBaseURL(), uri);
+        String requestUrl = String.format("%s%s", getBaseUrl(), uri);
         Request request = new Request.Builder().url(requestUrl).addHeader("api-key", getApiKey()).post(body).build();
         Call call = okClient.newCall(request);
         Response response = call.execute();
@@ -296,10 +298,31 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         return respString;
     }
 
+    private URL getBaseUrl()
+    {
+        if (getDevice().getDetails().getBaseURL() != null)
+        {
+            return getDevice().getDetails().getBaseURL();
+        }
+        else
+        {
+            try
+            {
+                return new URL(String.format("%s://%s:%d/", getDevice().getIdentity().getDescriptorURL().getProtocol(), getDevice().getIdentity().getDescriptorURL().getHost(),
+                        getDevice().getIdentity().getDescriptorURL().getPort()));
+            }
+            catch (MalformedURLException e)
+            {
+                log.error("cannot acquire base url ", e);
+                return null;
+            }
+        }
+    }
+
     private Response executeCallWithResponse(String bodyString, String uri) throws IOException
     {
         RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/text"));
-        String requestUrl = String.format("%s%s", getDevice().getDetails().getBaseURL(), uri);
+        String requestUrl = String.format("%s%s", getBaseUrl(), uri);
         Request request = new Request.Builder().url(requestUrl).addHeader("api-key", getApiKey()).post(body).build();
         Call call = okClient.newCall(request);
         Response response = call.execute();
