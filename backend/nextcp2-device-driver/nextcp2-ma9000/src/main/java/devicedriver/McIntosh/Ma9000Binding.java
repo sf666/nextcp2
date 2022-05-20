@@ -34,6 +34,7 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
 
         state.rendererUDN = rendererUdn;
         state.volume = 0;
+        state.standby = true;
         state.hasDeviceDriver = true;
         this.callback = callback;
         device = new McIntoshDeviceConnection(this);
@@ -74,7 +75,12 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
 
     public int getVolume()
     {
-        return state.volume;
+        if (state.volume != null)
+        {
+            return state.volume;
+        }
+        
+        return 0;
     }
 
     @Override
@@ -116,6 +122,11 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
     @Override
     public boolean getStandby()
     {
-        return state.standby;
+        if (state.standby != null)
+        {
+            return state.standby;
+        }
+        
+        return false;
     }
 }
