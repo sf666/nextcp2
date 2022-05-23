@@ -28,14 +28,15 @@ export class SettingsComponent {
     public systemService: SystemService,
     public myMusicService: MyMusicService,
     public configService: ConfigurationService) {
-  
-      var currentLocation = window.location;
-      currentLocation.hostname;
-      if (window.navigator) {
-        window.navigator.registerProtocolHandler("web+nextcp", `http://${currentLocation.hostname}:${currentLocation.port}/SystemService/spotifyCallbackOAuth/%s`);
-      } else {
-        console.log("cannot register protocolHandler");
-      }
+
+    var currentLocation = window.location;
+    if (window.navigator) {
+      const url = `http://${currentLocation.hostname}:${currentLocation.port}/SystemService/spotifyCallbackOAuth/%s`;
+      console.log("register protocolHandler : " + url);
+      window.navigator.registerProtocolHandler("web+nextcp", url);
+    } else {
+      console.log("cannot register protocolHandler");
+    }
   }
 
   isRendererConfigActive(deviceConfig: RendererDeviceConfiguration): boolean {
