@@ -21,10 +21,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import nextcp.db.DatabaseConfig;
+import nextcp.dto.ApplicationConfig;
 import nextcp.dto.Config;
 import nextcp.dto.MusicbrainzSupport;
 import nextcp.dto.SpotifyConfigDto;
-import nextcp.dto.UmsServerApiKey;
 import nextcp.lastfm.ILastFmConfig;
 import nextcp.musicbrainz.MusicBrainzConfig;
 import nextcp.util.FileOpsNio;
@@ -42,7 +42,7 @@ public class ConfigPersistence
     private String configurationFilename = null;
 
     private Configuration systemConfig = new SystemConfiguration();
-    
+
     private ConfigDefaults configDefaults = new ConfigDefaults();
 
     private static final String DEFAULT_CONFIG_FILENAME = "nextcp2config.json";
@@ -66,12 +66,12 @@ public class ConfigPersistence
             log.warn("Error while reading config file.", e);
         }
     }
-    
+
     @Bean
     public DatabaseConfig dbConfigProducer()
     {
-        return new DatabaseConfig(config.databaseFilename);
-    }    
+        return new DatabaseConfig(config.applicationConfig.databaseFilename);
+    }
 
     @Bean
     public MusicBrainzConfig musicBraintConfig()
@@ -195,7 +195,6 @@ public class ConfigPersistence
         }
     }
 
-
     public void writeConfig()
     {
         if (configurationFilename != null)
@@ -219,17 +218,21 @@ public class ConfigPersistence
     private Config getDefaultConfig()
     {
         Config c = new Config();
-        c.generateUpnpCode = false;
-        c.generateUpnpCodePath = System.getProperty("java.io.tmpdir");
-        c.embeddedServerPort = 8085;
-        c.sseEmitterTimeout = 180000L;
-        c.log4jConfigFile = FilenameUtils.concat(systemConfig.getString("user.dir"), "log4j2.xml");
-        c.libraryPath = systemConfig.getString("user.dir");
+
+        c.applicationConfig = new ApplicationConfig();
+        c.applicationConfig.generateUpnpCode = false;
+        c.applicationConfig.generateUpnpCodePath = System.getProperty("java.io.tmpdir");
+        c.applicationConfig.databaseFilename = FilenameUtils.concat(systemConfig.getString("user.dir"), "nextcp2_db");
+        c.applicationConfig.embeddedServerPort = 8085;
+        c.applicationConfig.sseEmitterTimeout = 180000L;
+        c.applicationConfig.log4jConfigFile = FilenameUtils.concat(systemConfig.getString("user.dir"), "log4j2.xml");
+        c.applicationConfig.libraryPath = systemConfig.getString("user.dir");
+        c.applicationConfig.loggingDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+
+        createDefaultLog(c.applicationConfig.log4jConfigFile);
+
         c.clientConfig = new ArrayList<>();
         c.radioStation = new ArrayList<>();
-        c.loggingDateTimeFormat = "HH:mm:ss";
-        createDefaultLog(c.log4jConfigFile);
-        c.loggingDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
         c.musicbrainzSupport = new MusicbrainzSupport("", "");
         c.spotifyConfig = new SpotifyConfigDto();
         return c;

@@ -65,7 +65,7 @@ public class SsePublisher
     {
         response.setHeader("Cache-Control", "no-store");
 
-        SseEmitter emitter = new SseEmitter(config.sseEmitterTimeout);
+        SseEmitter emitter = new SseEmitter(config.applicationConfig.sseEmitterTimeout);
         sseEmitterList.add(emitter);
 
         emitter.onCompletion(() -> sseEmitterList.remove(emitter));

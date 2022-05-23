@@ -1,6 +1,18 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2022-04-25 14:31:52.
+// Generated using typescript-generator version 2.32.889 on 2022-05-23 15:26:14.
+
+export interface ApplicationConfig {
+    generateUpnpCode: boolean;
+    generateUpnpCodePath: string;
+    libraryPath: string;
+    embeddedServerPort: number;
+    sseEmitterTimeout: number;
+    log4jConfigFile: string;
+    loggingDateTimeFormat: string;
+    globalSearchDelay: number;
+    databaseFilename: string;
+}
 
 export interface AudioFormat {
     nrAudioChannels: number;
@@ -19,20 +31,12 @@ export interface BrowseRequestDto {
 }
 
 export interface Config {
-    generateUpnpCode: boolean;
-    generateUpnpCodePath: string;
-    libraryPath: string;
-    embeddedServerPort: number;
-    sseEmitterTimeout: number;
-    log4jConfigFile: string;
-    loggingDateTimeFormat: string;
+    applicationConfig: ApplicationConfig;
     clientConfig: UiClientConfig[];
     radioStation: RadioStation[];
     musicbrainzSupport: MusicbrainzSupport;
-    globalSearchDelay: number;
     lastFmSessionKey: string;
     spotifyConfig: SpotifyConfigDto;
-    databaseFilename: string;
 }
 
 export interface ContainerDto {
@@ -187,12 +191,6 @@ export interface MusicbrainzSupport {
     password: string;
 }
 
-export interface NextcpFileConfigDto {
-    libraryPath: string;
-    embeddedServerPort: number;
-    databaseFilename: string;
-}
-
 export interface PlayOpenHomeRadioDto {
     mediaRendererDto: MediaRendererDto;
     radioStation: MusicItemDto;
@@ -271,7 +269,6 @@ export interface SearchResultDto {
 }
 
 export interface ServerConfigDto {
-    nextcpFileConfigDto: NextcpFileConfigDto;
     serverDevices: ServerDeviceConfiguration[];
 }
 

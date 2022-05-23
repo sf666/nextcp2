@@ -6,8 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.embedded.jetty.ConfigurableJettyWebServerFactory;
 import org.springframework.boot.web.embedded.jetty.JettyServerCustomizer;
-import org.springframework.boot.web.server.ConfigurableWebServerFactory;
-import org.springframework.boot.web.server.Http2;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.stereotype.Component;
 
@@ -24,9 +22,9 @@ public class SpringBootServerPortCustomizer implements WebServerFactoryCustomize
     @Override
     public void customize(ConfigurableJettyWebServerFactory factory)
     {
-        log.info("starting application on port " + config.embeddedServerPort);
+        log.info("starting application on port " + config.applicationConfig.embeddedServerPort);
 
-        factory.setPort(config.embeddedServerPort);
+        factory.setPort(config.applicationConfig.embeddedServerPort);
 //        Http2 http2 = new Http2();
 //        http2.setEnabled(true);
 //        factory.setHttp2(http2);

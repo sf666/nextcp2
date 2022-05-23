@@ -13,6 +13,14 @@ DeviceDriverCapability:
 #
 
 Config:
+   applicationConfig: ApplicationConfig
+   clientConfig: List<UiClientConfig>
+   radioStation: List<RadioStation>
+   musicbrainzSupport: MusicbrainzSupport
+   lastFmSessionKey: String
+   spotifyConfig: SpotifyConfigDto
+
+ApplicationConfig:
    generateUpnpCode: Boolean
    generateUpnpCodePath: String
    libraryPath: String
@@ -20,12 +28,7 @@ Config:
    sseEmitterTimeout: Long
    log4jConfigFile: String
    loggingDateTimeFormat: String
-   clientConfig: List<UiClientConfig>
-   radioStation: List<RadioStation>
-   musicbrainzSupport: MusicbrainzSupport
    globalSearchDelay: Long
-   lastFmSessionKey: String
-   spotifyConfig: SpotifyConfigDto
    databaseFilename: String
 
 UmsServerApiKey:
@@ -44,14 +47,7 @@ RendererConfigDto:
 
 
 # Client/Server DTO exchange of file based configuration entries 
-NextcpFileConfigDto:
-   libraryPath: String
-   embeddedServerPort: Integer
-   databaseFilename: String
-
-
 ServerConfigDto:
-   nextcpFileConfigDto: NextcpFileConfigDto
    serverDevices: List<ServerDeviceConfiguration>
 
 ServerDeviceConfiguration:

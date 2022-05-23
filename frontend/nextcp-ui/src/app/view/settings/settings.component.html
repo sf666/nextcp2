@@ -176,27 +176,31 @@
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>device driver library path</mat-label>
-            <input matInput type="text" [(ngModel)]="configService.serverConfig.libraryPath" placeholder="undefined">
+            <input matInput type="text" [(ngModel)]="configService.applicationConfig.libraryPath" placeholder="undefined">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>database path</mat-label>
+            <input matInput type="text" [(ngModel)]="configService.applicationConfig.databaseFilename" placeholder="undefined">
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>server listening port</mat-label>
-            <input matInput type="text" [(ngModel)]="configService.serverConfig.embeddedServerPort" placeholder="undefined">
+            <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerPort" placeholder="undefined">
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Log4j config file</mat-label>
-            <input matInput type="text" [(ngModel)]="configService.serverConfig.log4jConfigFile" placeholder="undefined">
+            <input matInput type="text" [(ngModel)]="configService.applicationConfig.log4jConfigFile" placeholder="undefined">
         </mat-form-field>
         <mat-form-field appearance="fill">
-            <mat-label>Logging date time format</mat-label>
-            <input matInput type="text" [(ngModel)]="configService.serverConfig.loggingDateTimeFormat" placeholder="yyyy-MM-dd HH:mm:ss">
+            <mat-label>Logging date format</mat-label>
+            <input matInput type="text" [(ngModel)]="configService.applicationConfig.loggingDateTimeFormat" placeholder="yyyy-MM-dd HH:mm:ss">
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Generate UPnP code</mat-label>
-            <input matInput type="text" [(ngModel)]="configService.serverConfig.generateUpnpCode" placeholder="">
+            <input matInput type="text" [(ngModel)]="configService.applicationConfig.generateUpnpCode" placeholder="">
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>path for generated UPnP code</mat-label>
-            <input matInput type="text" [(ngModel)]="configService.serverConfig.generateUpnpCodePath" placeholder="">
+            <input matInput type="text" [(ngModel)]="configService.applicationConfig.generateUpnpCodePath" placeholder="">
         </mat-form-field>
         <div class="d-flex section ms-4">
             <button mat-flat-button color="primary" (click)="saveGeneralConfig()">save</button>

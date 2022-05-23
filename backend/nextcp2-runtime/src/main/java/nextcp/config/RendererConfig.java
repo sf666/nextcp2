@@ -75,6 +75,7 @@ public class RendererConfig
             String value = "";
             value = dbService.selectJsonStoreValue(CONFIG_KEY_RENDERER_DEVICES);
             RendererConfigDto renderer = readConfig(value);
+            filterBrokenRendererDevice(); 
             return renderer;
         }
         catch (Exception e)
@@ -186,6 +187,13 @@ public class RendererConfig
         writeAndSendConfig();
     }
 
+    public void filterBrokenRendererDevice()
+    {
+        config.rendererDevices.removeIf(d -> d.active == null);
+        writeAndSendConfig();
+    }
+
+    
     private void writeAndSendConfig()
     {
         writeConfig();

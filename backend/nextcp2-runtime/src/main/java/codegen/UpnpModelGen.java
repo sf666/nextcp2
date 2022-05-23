@@ -67,13 +67,13 @@ public class UpnpModelGen implements RegistryListener
     @EventListener
     public void onApplicationStartedEvent(ContextRefreshedEvent event)
     {
-        log.info("code generation for upnp services is " + (config.generateUpnpCode ? "enabled" : "disabled"));
+        log.info("code generation for upnp services is " + (config.applicationConfig.generateUpnpCode ? "enabled" : "disabled"));
     }
 
     @PostConstruct
     private void init()
     {
-        if (config.generateUpnpCode)
+        if (config.applicationConfig.generateUpnpCode)
         {
             log.info("starting control point RegistryListener ... ");
             upnpService.getRegistry().addListener(this);
@@ -216,7 +216,7 @@ public class UpnpModelGen implements RegistryListener
     protected String getFilename(String packageName, String className)
     {
         String replacedPackagename = packageName.replaceAll("\\.", File.separator);
-        String path = FilenameUtils.concat(config.generateUpnpCodePath, replacedPackagename);
+        String path = FilenameUtils.concat(config.applicationConfig.generateUpnpCodePath, replacedPackagename);
         path = FilenameUtils.concat(path, className + ".java");
         return path;
     }
@@ -238,7 +238,7 @@ public class UpnpModelGen implements RegistryListener
     {
         String packageName = getPackage(service);
         String replacedPackagename = packageName.replaceAll("\\.", File.separator);
-        String path = FilenameUtils.concat(config.generateUpnpCodePath, replacedPackagename);
+        String path = FilenameUtils.concat(config.applicationConfig.generateUpnpCodePath, replacedPackagename);
         return path;
     }
 

@@ -69,7 +69,7 @@ export class SettingsComponent {
   }
 
   saveGeneralConfig(): void {
-    // todo save object
+    this.configService.saveApplicationConfig();
   }
 
   saveMusicBrainzConfig(): void {

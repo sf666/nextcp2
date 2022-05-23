@@ -2,7 +2,7 @@ import { UuidService } from './../util/uuid.service';
 import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { SseService } from './sse/sse.service';
-import { UiClientConfig, RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, MediaServerDto } from './dto.d';
+import { UiClientConfig, RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, ApplicationConfig } from './dto.d';
 import { GenericResultService } from './generic-result.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -22,10 +22,10 @@ export class ConfigurationService {
   // Configs
   // ===============================================================================
 
-  serverConfig: Config;                     // global serverside configuration file (server state) (read only)
-  rendererConfig: RendererConfigDto;        // renderer configurations
-  serverConfigDto: ServerConfigDto;         // server side object, can be used to update server config
-
+  serverConfig: Config;                       // global serverside configuration file (server state) (read only)
+  private rendererConfig: RendererConfigDto;  // renderer configurations
+  serverConfigDto: ServerConfigDto;           // List of server devices
+  applicationConfig: ApplicationConfig;       // This is a DTO copy and can be used to update server configuration
 
   private clientUUID = this.getStoredClientId();
 
@@ -88,6 +88,11 @@ export class ConfigurationService {
     return this.serverConfigDto;
   }
 
+  public saveApplicationConfig(): void {
+    const uri = '/saveApplicationConfig';
+    this.httpService.postWithSuccessMessage(this.baseUri, uri, this.applicationConfig, "Save application config", "success").subscribe();
+  }
+
   public saveMediaRendererConfig(mediaRendererConfig: RendererDeviceConfiguration): void {
     const uri = '/saveMediaRendererConfig';
     this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaRendererConfig, "Save mediarenderer config", "success").subscribe();
@@ -110,7 +115,10 @@ export class ConfigurationService {
 
   public getMediaRendererConfig(): void {
     const uri = '/getMediaRendererConfig';
-    this.httpService.get<RendererConfigDto>(this.baseUri, uri).subscribe(data => this.rendererConfig = data);
+    this.httpService.get<RendererConfigDto>(this.baseUri, uri).subscribe(data => {
+      console.log(data);
+      this.rendererConfig = data
+    });
   }
 
   public getMediaServerConfig(): void {
@@ -147,6 +155,7 @@ export class ConfigurationService {
 
   private applyServerConfigurationFile(serverConfig: Config) {
     this.serverConfig = serverConfig;
+    this.applicationConfig = Object.assign({}, serverConfig.applicationConfig);
     this.updateUiClientConfig();
   }
 
@@ -171,7 +180,12 @@ export class ConfigurationService {
   }
 
   public getRendererDevicesConfig(): RendererDeviceConfiguration[] {
-    return this.rendererConfig?.rendererDevices;
+    if (this.rendererConfig) {
+      console.log("renderer devices available");
+      return this.rendererConfig?.rendererDevices;
+    }
+    console.log("no renderer devices available");
+    return [];
   }
 
   public isRenderDeviceUdnActive(deviceUdn: string): boolean {

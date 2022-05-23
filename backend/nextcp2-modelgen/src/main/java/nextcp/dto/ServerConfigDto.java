@@ -12,16 +12,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ServerConfigDto
 {
 
-    public NextcpFileConfigDto nextcpFileConfigDto;
     public List<ServerDeviceConfiguration> serverDevices;
 
     public ServerConfigDto()
     {
     }
 
-    public ServerConfigDto(NextcpFileConfigDto nextcpFileConfigDto, List<ServerDeviceConfiguration> serverDevices)
+    public ServerConfigDto(List<ServerDeviceConfiguration> serverDevices)
     {
-        this.nextcpFileConfigDto = nextcpFileConfigDto;
         this.serverDevices = serverDevices;
     }
     
@@ -30,7 +28,6 @@ public class ServerConfigDto
     {
         StringBuilder sb = new StringBuilder();
         sb.append("ServerConfigDto [");
-        sb.append("nextcpFileConfigDto=").append(this.nextcpFileConfigDto).append(", ");
         sb.append("serverDevices=").append(this.serverDevices).append(", ");
         sb.append("]");
         return sb.toString();

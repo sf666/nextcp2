@@ -37,10 +37,10 @@ public class ConfigDefaults
             config.radioStation = new ArrayList<>();
         }
 
-        if (config.generateUpnpCode == null)
+        if (config.applicationConfig.generateUpnpCode == null)
         {
             log.info("adding new configuration value 'generateUpnpCode' as disabled.");
-            config.generateUpnpCode = false;
+            config.applicationConfig.generateUpnpCode = false;
         }
 
         if (config.musicbrainzSupport == null)
@@ -49,10 +49,10 @@ public class ConfigDefaults
             config.musicbrainzSupport = new MusicbrainzSupport("", "");
         }
 
-        if (config.globalSearchDelay == null)
+        if (config.applicationConfig.globalSearchDelay == null)
         {
             log.info("adding new configuration value 'globalSearchDelay = 500'");
-            config.globalSearchDelay = Long.valueOf(500);
+            config.applicationConfig.globalSearchDelay = Long.valueOf(500);
         }
     }
 

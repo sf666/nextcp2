@@ -138,7 +138,7 @@ export class NavBarComponent {
   }
 
   getSearchDelay(): number {
-    const delay = this.configurationService.serverConfig?.globalSearchDelay != null ? this.configurationService.serverConfig.globalSearchDelay : 600;
+    const delay = this.configurationService.serverConfig?.applicationConfig?.globalSearchDelay != null ? this.configurationService.serverConfig.applicationConfig?.globalSearchDelay : 600;
     return Math.max(300, delay);
   }
 }

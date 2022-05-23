@@ -22,9 +22,9 @@ import nextcp.config.RendererConfig;
 import nextcp.config.ServerConfig;
 import nextcp.devicedriver.DeviceCapabilityDto;
 import nextcp.devicedriver.DeviceDriverDiscoveryService;
+import nextcp.dto.ApplicationConfig;
 import nextcp.dto.Config;
 import nextcp.dto.DeviceDriverCapability;
-import nextcp.dto.NextcpFileConfigDto;
 import nextcp.dto.RendererConfigDto;
 import nextcp.dto.RendererDeviceConfiguration;
 import nextcp.dto.ServerConfigDto;
@@ -124,8 +124,8 @@ public class RestConfigurationService
         }
     }
 
-    @PostMapping("/saveFileServerConfig")
-    public void saveFileServerConfig(@RequestBody NextcpFileConfigDto rendererDevice)
+    @PostMapping("/saveApplicationConfig")
+    public void saveApplicationConfig(@RequestBody ApplicationConfig rendererDevice)
     {
         try
         {

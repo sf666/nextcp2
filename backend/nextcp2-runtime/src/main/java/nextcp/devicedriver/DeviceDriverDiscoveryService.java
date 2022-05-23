@@ -44,8 +44,8 @@ public class DeviceDriverDiscoveryService
     {
         try
         {
-            log.info("searching for device driver in directory : " + config.libraryPath);
-            File loc = new File(config.libraryPath);
+            log.info("searching for device driver in directory : " + config.applicationConfig.libraryPath);
+            File loc = new File(config.applicationConfig.libraryPath);
 
             File[] flist = loc.listFiles(new FileFilter()
             {

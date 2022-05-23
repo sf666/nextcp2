@@ -22,8 +22,8 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 
 import nextcp.db.service.BasicDbService;
 import nextcp.db.service.KeyValuePair;
+import nextcp.dto.ApplicationConfig;
 import nextcp.dto.Config;
-import nextcp.dto.NextcpFileConfigDto;
 import nextcp.dto.ServerConfigDto;
 import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.eventBridge.SsePublisher;
@@ -45,7 +45,6 @@ public class ServerConfig
 
     private ConfigService configService = null;
 
-    private NextcpFileConfigDto nextcpConfig = null;
     private ObjectMapper om = new ObjectMapper();
 
     private SsePublisher ssePublisher = null;
@@ -108,8 +107,6 @@ public class ServerConfig
     private ServerConfigDto readConfig()
     {
         ServerConfigDto sc = new ServerConfigDto();
-        sc.nextcpFileConfigDto = getNextcpFileConfigDto();
-
         try
         {
             String value = "";
@@ -157,11 +154,9 @@ public class ServerConfig
      * @param fileConfig
      *            Is the editable part of the filesystem config entries
      */
-    public void updateFileServerConfig(NextcpFileConfigDto fileConfig)
+    public void updateFileServerConfig(ApplicationConfig applicationConfig)
     {
-        globalConfig.databaseFilename = fileConfig.databaseFilename;
-        globalConfig.embeddedServerPort = fileConfig.embeddedServerPort;
-        globalConfig.libraryPath = fileConfig.libraryPath;
+        globalConfig.applicationConfig = applicationConfig;
         configService.writeAndSendConfig();
     }
 
@@ -207,18 +202,6 @@ public class ServerConfig
         ServerConfigDto c = new ServerConfigDto();
         c.serverDevices = new ArrayList<ServerDeviceConfiguration>();
         return c;
-    }
-
-    private NextcpFileConfigDto getNextcpFileConfigDto()
-    {
-        if (nextcpConfig == null)
-        {
-            nextcpConfig = new NextcpFileConfigDto();
-            nextcpConfig.databaseFilename = globalConfig.databaseFilename;
-            nextcpConfig.embeddedServerPort = globalConfig.embeddedServerPort;
-            nextcpConfig.libraryPath = globalConfig.libraryPath;
-        }
-        return nextcpConfig;
     }
 
     private List<ServerDeviceConfiguration> readMediaServerConfig(String json)
