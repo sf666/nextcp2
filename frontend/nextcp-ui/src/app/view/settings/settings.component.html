@@ -48,7 +48,8 @@
 <div class="d-flex flex-row flex-wrap ms-4">
     <div class="cardContainer" *ngFor="let serverConfig of configService?.getServerConfig()?.serverDevices">
         <mat-card class="card-width me-4 mb-3">
-            <mat-card-subtitle class="no-wrap myCardTitle mb-3">{{serverConfig.mediaServer.friendlyName}}</mat-card-subtitle>
+            <mat-card-subtitle class="no-wrap myCardTitle mb-3">{{serverConfig.mediaServer.friendlyName}}
+            </mat-card-subtitle>
             <mat-card-subtitle class="online" *ngIf="isServerConfigActive(serverConfig)">ONLINE</mat-card-subtitle>
             <mat-card-subtitle class="offline" *ngIf="!isServerConfigActive(serverConfig)">OFFLINE</mat-card-subtitle>
             <mat-card-subtitle>IP: {{serverConfig.ip}}</mat-card-subtitle>
@@ -83,8 +84,10 @@
         <div class="cardContainer" *ngFor="let rendererConfig of configService.getRendererDevicesConfig()">
             <mat-card class="card-width me-4 mb-3">
                 <mat-card-title class="no-wrap mb-3">{{rendererConfig.mediaRenderer.friendlyName}}</mat-card-title>
-                <mat-card-subtitle class="online" *ngIf="isRendererConfigActive(rendererConfig)">ONLINE</mat-card-subtitle>
-                <mat-card-subtitle class="offline" *ngIf="!isRendererConfigActive(rendererConfig)">OFFLINE</mat-card-subtitle>
+                <mat-card-subtitle class="online" *ngIf="isRendererConfigActive(rendererConfig)">ONLINE
+                </mat-card-subtitle>
+                <mat-card-subtitle class="offline" *ngIf="!isRendererConfigActive(rendererConfig)">OFFLINE
+                </mat-card-subtitle>
                 <mat-card-subtitle class="no-wrap">{{rendererConfig.displayString}}</mat-card-subtitle>
                 <mat-card-subtitle>IP: {{rendererConfig.ip}}</mat-card-subtitle>
                 <mat-card-subtitle>UDN: {{rendererConfig.mediaRenderer
@@ -136,84 +139,122 @@
         </div>
     </div>
     <!-- -->
+</div>
+<div class="section head ">Active media server</div>
+<div class="section subhead subsect" *ngIf="!extendedApiNotAvailable()">Actions for currently selected media server:
+</div>
+<div class="section subhead subsect" *ngIf="extendedApiNotAvailable()">Advanced actions are only available for Universal
+    Media Player.</div>
+<div class="section subhead d-flex flex-column">
+    <div class="d-flex flex-wrap">
+        <button mat-flat-button class="ms-2 settings maxButton" (click)="rescan()"
+            [disabled]="extendedApiNotAvailable()">rescan media library</button>
+        <button mat-flat-button class="ms-2 settings maxButton" (click)="myMusicService.backupLikedAlbums()"
+            [disabled]="extendedApiNotAvailable()">
+            backup liked albums
+        </button>
+        <button mat-flat-button class="ms-2 settings maxButton" (click)="myMusicService.restoreLikedAlbums()"
+            [disabled]="extendedApiNotAvailable()">
+            restore liked albums
+        </button>
+    </div>
+    <div d-flex flex-column>
+        <div>import star rating from musicbrainz.org</div>
+        <button mat-flat-button class="ms-2 settings maxButton" [disabled]="extendedApiNotAvailable()"
+            (click)="ratingServiceService.syncRatingsFromMusicBrainzToBackend()">sync</button>
+    </div>
+</div>
 
-    <div class="section head ">General config options</div>
-    <div class="generalConfigOptions">
+
+<div class="section head ">General configuration</div>
+
+<div class="generalConfigOptions">
+    <div class="section subhead d-flex flex-column">
+        <mat-form-field appearance="fill">
+            <mat-label>build number</mat-label>
+            <input matInput type="text" [ngModel]="buildNumber" placeholder="undefined">
+        </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>device driver library path</mat-label>
-            <input matInput type="text" placeholder="undefined">
+            <input matInput type="text" [(ngModel)]="configService.serverConfig.libraryPath" placeholder="undefined">
         </mat-form-field>
-    </div>
-
-    <div class="section head ">Administration</div>
-
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-4">Build number</div>
-            <div class="col-8">{{buildNumber}}</div>
+        <mat-form-field appearance="fill">
+            <mat-label>server listening port</mat-label>
+            <input matInput type="text" [(ngModel)]="configService.serverConfig.embeddedServerPort" placeholder="undefined">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Log4j config file</mat-label>
+            <input matInput type="text" [(ngModel)]="configService.serverConfig.log4jConfigFile" placeholder="undefined">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Logging date time format</mat-label>
+            <input matInput type="text" [(ngModel)]="configService.serverConfig.loggingDateTimeFormat" placeholder="yyyy-MM-dd HH:mm:ss">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Generate UPnP code</mat-label>
+            <input matInput type="text" [(ngModel)]="configService.serverConfig.generateUpnpCode" placeholder="">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>path for generated UPnP code</mat-label>
+            <input matInput type="text" [(ngModel)]="configService.serverConfig.generateUpnpCodePath" placeholder="">
+        </mat-form-field>
+        <div class="d-flex section ms-4">
+            <button mat-flat-button color="primary" (click)="saveGeneralConfig()">save</button>
         </div>
     </div>
+</div>
 
-    <div class="section subhead subsect">active media server actions</div>
-    <div class="section subhead d-flex flex-column">
-        <div class="d-flex flex-wrap">
-            <button mat-flat-button class="ms-2 settings maxButton" (click)="rescan()"
-                [disabled]="extendedApiNotAvailable()">rescan media library</button>
-            <button mat-flat-button class="ms-2 settings maxButton" (click)="myMusicService.backupLikedAlbums()"
-                [disabled]="extendedApiNotAvailable()">
-                backup liked albums
-            </button>
-            <button mat-flat-button class="ms-2 settings maxButton" (click)="myMusicService.restoreLikedAlbums()"
-                [disabled]="extendedApiNotAvailable()">
-                restore liked albums
-            </button>
-        </div>
-        <div d-flex flex-column>
-            <div>import star rating from musicbrainz.org (need media server support)</div>
-            <button mat-flat-button class="ms-2 settings maxButton" [disabled]="extendedApiNotAvailable()"
-                (click)="ratingServiceService.syncRatingsFromMusicBrainzToBackend()">sync</button>
-        </div>
-    </div>
+<div class="section head ">Accounts</div>
 
-    <div class="section subhead subsect">Last FM</div>
-    <div class="d-flex section flex-wrap subhead flex-column">
-        <div class="para">
-            1. Click this button. A new window will open. Login and approve access to nextCP/2 :
-        </div>
-        <button mat-flat-button class="settings maxButton" (click)="activateLastFM()">
-            nextCP/2 LastFM access
-        </button>
-        <div class="para">
-            2. After step 1 is done, click this button to connect nextCP/2 to LastFM :
-        </div>
-        <button mat-flat-button class="settings maxButton" (click)="generateSession()">
-            generate LastFM session
-        </button>
-    </div>
-
-    <div class="section subhead subsect">Spotify</div>
+<div class="section subhead subsect">Spotify</div>
+<div class="d-flex section flex-wrap subhead flex-column">
     <div class="para" *ngIf="configService.spotifyAccountConnected()">
-        Your Spotify account is connected.
+        <mat-icon class="icn" style="vertical-align: top;color: aqua;" svgIcon="account-check"></mat-icon><span class="">     Your Spotify account is connected.</span>
     </div>
-    <div class="d-flex section flex-wrap subhead flex-column" *ngIf="!configService.spotifyAccountConnected()">
-        <div class="para">
-            1. Click this button. A new window will open. Login and approve access to nextCP/2 :
-        </div>
-        <button id="spotifyLoginBtn" mat-flat-button class="settings maxButton"
-            (click)="registerAppAtSpotify()">nextCP/2 Spotify access
-        </button>
-        <div class="para">
-            2. After granting access you wil be redirected to a localhost URL (error page). Copy spotify access code
-            from your browsers URL bar into the input field below and
-        </div>
-        <div>
-            <input class="section input" [(ngModel)]="code">
-        </div>
-        <button id="spotifyLoginBtn" mat-flat-button class="settings maxButton" (click)="sendSpotifyCode()">send
-            it</button>
-        <div class="para">
-            Hint: To copy the access code, click in your browsers URL bar and copy everything after
-            'http://localhost:65525/?code='
+</div>
+<div class="d-flex section flex-wrap subhead flex-column" *ngIf="!configService.spotifyAccountConnected()">
+    <div class="para">
+        Click this button. A new window will open. Login and approve access to nextCP/2 :
+    </div>
+    <button id="spotifyLoginBtn" mat-flat-button class="settings maxButton" (click)="registerAppAtSpotify()">nextCP/2
+        Spotify access
+    </button>
+</div>
+
+<div class="section subhead subsect">MusicBrainz</div>
+<div class="d-flex section flex-wrap subhead flex-column">
+    <div class="para">
+        Star-rating will update musicbrainz.org site if song has musicbrainzID metadata set.
+    </div>
+</div>
+<div class="d-flex flex-wrap">
+    <div class="d-flex section flex-wrap subhead flex-wrap">
+        <mat-form-field appearance="fill">
+            <mat-label>Username</mat-label>
+            <input matInput type="text" placeholder="">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Password</mat-label>
+            <input matInput type="text" placeholder="">
+        </mat-form-field>
+        <div class="d-flex section ms-4">
+            <button mat-flat-button color="primary" (click)="saveMusicBrainzConfig()">save</button>
         </div>
     </div>
+</div>
+
+<div class="section subhead subsect">Last FM</div>
+<div class="d-flex section flex-wrap subhead flex-column">
+    <div class="para">
+        1. Click this button. A new window will open. Login and approve access to nextCP/2 :
+    </div>
+    <button mat-flat-button class="settings maxButton" (click)="activateLastFM()">
+        nextCP/2 LastFM access
+    </button>
+    <div class="para">
+        2. After step 1 is done, click this button to connect nextCP/2 to LastFM :
+    </div>
+    <button mat-flat-button class="settings maxButton" (click)="generateSession()">
+        generate LastFM session
+    </button>
 </div>

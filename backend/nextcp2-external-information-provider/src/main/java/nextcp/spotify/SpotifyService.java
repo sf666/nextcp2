@@ -61,7 +61,7 @@ public class SpotifyService
             try
             {
                 SpotifyApi.Builder builder = new SpotifyApi.Builder();
-                spotifyApi = builder.setClientId(config.getClientId()).setRedirectUri(new URI("http://localhost:65525")).build();
+                spotifyApi = builder.setClientId(config.getClientId()).setRedirectUri(new URI("web+nextcp://localhost/")).build();
 
                 if (!StringUtils.isAllBlank(config.getSpotifyRefreshToken()))
                 {

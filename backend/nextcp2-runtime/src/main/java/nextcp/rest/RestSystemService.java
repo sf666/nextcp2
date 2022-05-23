@@ -5,8 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import nextcp.dto.SystemInformationDto;
@@ -63,6 +65,23 @@ public class RestSystemService
     public void createSpotifySession()
     {
         lastFmAuth.createLastFmSession();
+    }
+
+    @GetMapping("/spotifyCallbackOAuth/{spotifyCode}")
+    @ResponseBody
+    public String spotifyCallbackCode(@PathVariable("spotifyCode") String spotifyCode)
+    {
+        int codeIdx = spotifyCode.indexOf("?code=");
+        String token = spotifyCode.substring(codeIdx + 6);
+
+        if (log.isDebugEnabled())
+        {
+            log.debug("received OAuth callback from spotify : " + spotifyCode);
+            log.debug("token : " + token);
+        }
+        spotifyService.registerSpotifyCode(token);
+        
+        return "<a href=\"JavaScript:window.close()\">Close this window</a>";
     }
 
     @GetMapping("/spotifyCallback")

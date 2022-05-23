@@ -7,7 +7,7 @@ input {
 }
 
 .card-width {
-    max-width: 250px;
+    max-width  : 250px;
     font-weight: 500;
 }
 
@@ -18,7 +18,7 @@ input {
 
 .myCardTitle {
     font-size: larger;
-    color: var(--snow-white);
+    color    : var(--snow-white);
 }
 
 .settings {
@@ -31,6 +31,7 @@ input {
 }
 
 .subsect {
+    margin-top : 2rem;
     font-weight: 500;
 }
 
@@ -51,7 +52,7 @@ input {
     align-self: center;
 }
 
-#icnId > svg {
+#icnId>svg {
     vertical-align: middle;
 }
 

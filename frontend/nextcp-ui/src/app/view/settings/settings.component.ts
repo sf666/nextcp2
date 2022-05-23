@@ -28,6 +28,10 @@ export class SettingsComponent {
     public systemService: SystemService,
     public myMusicService: MyMusicService,
     public configService: ConfigurationService) {
+  
+      var currentLocation = window.location;
+      currentLocation.hostname
+      navigator.registerProtocolHandler("web+nextcp", `http://${currentLocation.hostname}:${currentLocation.port}/SystemService/spotifyCallbackOAuth/%s`);
   }
 
   isRendererConfigActive(deviceConfig: RendererDeviceConfiguration): boolean {
@@ -62,6 +66,14 @@ export class SettingsComponent {
 
   saveClientConfig(): void {
     this.configService.saveClientProfile();
+  }
+
+  saveGeneralConfig(): void {
+    // todo save object
+  }
+
+  saveMusicBrainzConfig(): void {
+    // todo save object
   }
 
   selectConfig(config: UiClientConfig): void {

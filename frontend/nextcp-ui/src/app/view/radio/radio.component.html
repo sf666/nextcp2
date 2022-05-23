@@ -1,19 +1,5 @@
-<div *ngIf="configurationService.serverConfig?.radioStation.length > 0; else noRadio" class="cardLayout">
-    <div class="cardLayout cover-card" *ngFor="let item of configurationService.serverConfig.radioStation">
-        <img src="{{item.artworkUrl}}" class="cardLayout image-container" alt="{{item.stationName}}">
-        <div class="d-flex cardLayout card-body">
-            <div class="highlightFolderText">RADIO</div>
-            <div class="card-title">{{item.stationName}}</div>
-        </div>
-        <div class="play-overlay d-flex justify-content-center align-items-center">
-            <mat-icon (click)="play(item)" class="play-overlay-button" svgIcon="play" aria-label="play"></mat-icon>
-        </div>
-    </div>
-</div>
-<ng-template #noRadio><div class="regularText infotext">There are no configured radio stations available.</div></ng-template>
-
 <div *ngIf="radioService.radioItems?.length > 0">
-    <div class="section head">Radio stations by selected player</div>
+    <div class="section head">Radio stations provided by selected player</div>
 
     <div class="cardLayout">
         <div class="cardLayout cover-card" *ngFor="let item of radioService.radioItems">
@@ -29,3 +15,18 @@
         </div>
     </div>    
 </div>
+
+<div *ngIf="configurationService.serverConfig?.radioStation.length > 0; else noRadio" class="cardLayout">
+    <div class="cardLayout cover-card" *ngFor="let item of configurationService.serverConfig.radioStation">
+        <img src="{{item.artworkUrl}}" class="cardLayout image-container" alt="{{item.stationName}}">
+        <div class="d-flex cardLayout card-body">
+            <div class="highlightFolderText">RADIO</div>
+            <div class="card-title">{{item.stationName}}</div>
+        </div>
+        <div class="play-overlay d-flex justify-content-center align-items-center">
+            <mat-icon (click)="play(item)" class="play-overlay-button" svgIcon="play" aria-label="play"></mat-icon>
+        </div>
+    </div>
+</div>
+<ng-template #noRadio><div class="regularText infotext">There are no configured radio stations available.</div></ng-template>
+
