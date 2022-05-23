@@ -30,8 +30,12 @@ export class SettingsComponent {
     public configService: ConfigurationService) {
   
       var currentLocation = window.location;
-      currentLocation.hostname
-      navigator.registerProtocolHandler("web+nextcp", `http://${currentLocation.hostname}:${currentLocation.port}/SystemService/spotifyCallbackOAuth/%s`);
+      currentLocation.hostname;
+      if (window.navigator) {
+        window.navigator.registerProtocolHandler("web+nextcp", `http://${currentLocation.hostname}:${currentLocation.port}/SystemService/spotifyCallbackOAuth/%s`);
+      } else {
+        console.log("cannot register protocolHandler");
+      }
   }
 
   isRendererConfigActive(deviceConfig: RendererDeviceConfiguration): boolean {

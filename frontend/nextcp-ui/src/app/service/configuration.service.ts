@@ -116,8 +116,7 @@ export class ConfigurationService {
   public getMediaRendererConfig(): void {
     const uri = '/getMediaRendererConfig';
     this.httpService.get<RendererConfigDto>(this.baseUri, uri).subscribe(data => {
-      console.log(data);
-      this.rendererConfig = data
+      this.rendererConfig = data;
     });
   }
 
