@@ -30,10 +30,10 @@ export class SettingsComponent {
     public configService: ConfigurationService) {
 
     var currentLocation = window.location;
-    if (window.navigator) {
+    if (navigator.registerProtocolHandler) {
       const url = `http://${currentLocation.hostname}:${currentLocation.port}/SystemService/spotifyCallbackOAuth/%s`;
       console.log("register protocolHandler : " + url);
-      window.navigator.registerProtocolHandler("web+nextcp", url);
+      navigator.registerProtocolHandler("web+nextcp", url);
     } else {
       console.log("cannot register protocolHandler");
     }
