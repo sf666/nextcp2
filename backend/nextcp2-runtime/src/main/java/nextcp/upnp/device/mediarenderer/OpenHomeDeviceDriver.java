@@ -152,13 +152,23 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
     @Override
     public int getVolume()
     {
-        return physicalDeviceDriver.getVolume();
+        if (physicalDeviceDriver != null)
+        {
+            return physicalDeviceDriver.getVolume();
+        }
+        log.warn("volume: physical device driver anavailable.");
+        return 0;
     }
 
     @Override
     public boolean getStandby()
     {
-        return physicalDeviceDriver.getStandby();
+        if (physicalDeviceDriver != null)
+        {
+            return physicalDeviceDriver.getStandby();
+        }
+        log.warn("standby: physical device driver anavailable.");
+        return true;
     }
 
 }

@@ -189,7 +189,7 @@ public class RendererConfig
 
     public void filterBrokenRendererDevice()
     {
-        config.rendererDevices.removeIf(d -> d.active == null);
+        config.rendererDevices.removeIf(d -> d.mediaRenderer == null);
         writeAndSendConfig();
     }
 
