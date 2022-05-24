@@ -28,9 +28,9 @@ public class SpotifyAuthServiceBridge
     {
     }
 
-    public String getSpotifyRegistrationUrl()
+    public String getSpotifyRegistrationUrl(boolean protocolHandlerAvailable)
     {
-        return spotifyService.getSpotifyRegistrationUrl();
+        return spotifyService.getSpotifyRegistrationUrl(protocolHandlerAvailable);
     }
 
     public void registerSpotifyCode(String token)

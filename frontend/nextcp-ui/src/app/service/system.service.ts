@@ -35,7 +35,15 @@ export class SystemService {
     const options = {
       responseType: 'text',
     };
-    this.http.get("/SystemService/getSpotifyAppRegistration", { responseType: 'text' }).subscribe(url => window.open(url, "_blanc"));
+    
+    let protocolHandler: boolean;
+    if (navigator.registerProtocolHandler) {
+      protocolHandler = true;
+    } else {
+      protocolHandler = false;
+    }
+
+    this.http.post("/SystemService/getSpotifyAppRegistration", protocolHandler, { responseType: 'text' }).subscribe(url => window.open(url, "_blanc"));
   }
 
   public setSpotifyCode(code: string): void {

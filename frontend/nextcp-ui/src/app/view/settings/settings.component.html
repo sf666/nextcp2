@@ -223,6 +223,22 @@
     <button id="spotifyLoginBtn" mat-flat-button class="settings maxButton" (click)="registerAppAtSpotify()">nextCP/2
         Spotify access
     </button>
+
+    <div *ngIf="!protocolHandlerAvailable()">
+        <div class="para">
+            After granting access you wil be redirected to a localhost URL (error page). Copy spotify access code
+            from your browsers URL bar into the input field below and
+        </div>
+        <div>
+            <input class="section input" [(ngModel)]="code">
+        </div>
+        <button id="spotifyLoginBtn" mat-flat-button class="settings maxButton" (click)="sendSpotifyCode()">send
+            it</button>
+        <div class="para">
+            Hint: To copy the access code, click in your browsers URL bar and copy everything after
+            'http://localhost:65525/?code='
+        </div>
+    </div>
 </div>
 
 <div class="section subhead subsect">MusicBrainz</div>

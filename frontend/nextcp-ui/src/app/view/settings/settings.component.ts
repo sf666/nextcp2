@@ -6,6 +6,7 @@ import { RatingServiceService } from './../../service/rating-service.service';
 import { UiClientConfig, MediaServerDto, RendererDeviceConfiguration, MediaRendererDto, ServerDeviceConfiguration } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
 import { Component, ViewEncapsulation } from '@angular/core';
+import { asLiteral } from '@angular/compiler/src/render3/view/util';
 
 @Component({
   selector: 'settings',
@@ -30,12 +31,20 @@ export class SettingsComponent {
     public configService: ConfigurationService) {
 
     var currentLocation = window.location;
-    if (navigator.registerProtocolHandler) {
+    if (this.protocolHandlerAvailable()) {
       const url = `http://${currentLocation.hostname}:${currentLocation.port}/SystemService/spotifyCallbackOAuth/%s`;
       console.log("register protocolHandler : " + url);
       navigator.registerProtocolHandler("web+nextcp", url);
     } else {
-      console.log("cannot register protocolHandler");
+      console.log("browser doesn't support registration of protocolHandler");
+    }
+  }
+
+  protocolHandlerAvailable() : boolean {
+    if (navigator.registerProtocolHandler) {
+      return true;
+    } else {
+      return false;
     }
   }
 

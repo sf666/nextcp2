@@ -75,17 +75,29 @@ public class SpotifyService
         }
     }
 
-    public String getSpotifyRegistrationUrl()
+    public String getSpotifyRegistrationUrl(boolean protocolHandlerAvailable)
     {
-        AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyApi.authorizationCodePKCEUri(codeChallange).build();
-        URI uri = authorizationCodeUriRequest.execute();
+        SpotifyApi.Builder builder = new SpotifyApi.Builder();
+        String redirect = null;
+        
+        if (protocolHandlerAvailable)
+        {
+            redirect = "web+nextcp://localhost/";
+        }
+        else
+        {
+            redirect = "http://localhost:65525";
+        }
         try
         {
+            SpotifyApi spotifyTokenReq = builder.setClientId(config.getClientId()).setRedirectUri(new URI(redirect)).build();
+            AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyTokenReq.authorizationCodePKCEUri(codeChallange).build();
+            URI uri = authorizationCodeUriRequest.execute();
             String url = uri.toURL().toString();
             log.info("spotify registration url : " + url);
             return url;
         }
-        catch (MalformedURLException e)
+        catch (MalformedURLException | URISyntaxException e)
         {
             log.warn("Spotify API connect failed.", e);
         }
