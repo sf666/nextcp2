@@ -15,16 +15,18 @@ public class SpotifyConfigDto
     public boolean accountConnected;
     public String clientId;
     public String refreshToken;
+    public String redirectUrl;
 
     public SpotifyConfigDto()
     {
     }
 
-    public SpotifyConfigDto(boolean accountConnected, String clientId, String refreshToken)
+    public SpotifyConfigDto(boolean accountConnected, String clientId, String refreshToken, String redirectUrl)
     {
         this.accountConnected = accountConnected;
         this.clientId = clientId;
         this.refreshToken = refreshToken;
+        this.redirectUrl = redirectUrl;
     }
     
     @Override
@@ -35,6 +37,7 @@ public class SpotifyConfigDto
         sb.append("accountConnected=").append(this.accountConnected).append(", ");
         sb.append("clientId=").append(this.clientId).append(", ");
         sb.append("refreshToken=").append(this.refreshToken).append(", ");
+        sb.append("redirectUrl=").append(this.redirectUrl).append(", ");
         sb.append("]");
         return sb.toString();
     }

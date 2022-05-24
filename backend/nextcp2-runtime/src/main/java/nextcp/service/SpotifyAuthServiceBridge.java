@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import nextcp.config.ConfigPersistence;
 import nextcp.dto.Config;
 import nextcp.dto.ToastrMessage;
 import nextcp.spotify.SpotifyService;
@@ -20,7 +21,7 @@ public class SpotifyAuthServiceBridge
 
     @Autowired
     private SpotifyService spotifyService = null;
-
+    
     @Autowired
     private ApplicationEventPublisher publisher = null;
 
@@ -30,6 +31,16 @@ public class SpotifyAuthServiceBridge
 
     public String getSpotifyRegistrationUrl(boolean protocolHandlerAvailable)
     {
+        String redirect = "";
+        if (protocolHandlerAvailable)
+        {
+            redirect = "web+nextcp://localhost/";
+        }
+        else
+        {
+            redirect = "http://localhost:65525";
+        }
+        config.spotifyConfig.redirectUrl = redirect;
         return spotifyService.getSpotifyRegistrationUrl(protocolHandlerAvailable);
     }
 

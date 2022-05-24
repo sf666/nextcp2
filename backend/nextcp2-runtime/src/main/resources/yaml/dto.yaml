@@ -40,7 +40,7 @@ SpotifyConfigDto:
    accountConnected: boolean
    clientId: String
    refreshToken: String
-
+   redirectUrl: String
 
 RendererConfigDto:
    rendererDevices: List<RendererDeviceConfiguration>

@@ -55,53 +55,30 @@ public class SpotifyService
         if (StringUtils.isAllBlank(config.getClientId()))
         {
             log.warn("Spotify clientId or spotify clientSecret is not set. Spotify support disabled.");
+            config.setUserAuthorizationNeeded(true);
+            return;
         }
-        else
+        if (StringUtils.isAllBlank(config.getRedirectUrl()))
         {
-            try
-            {
-                SpotifyApi.Builder builder = new SpotifyApi.Builder();
-                spotifyApi = builder.setClientId(config.getClientId()).setRedirectUri(new URI("web+nextcp://localhost/")).build();
+            log.warn("API not linked yet. Please connect nextcp to your Spotify account.");
+            config.setUserAuthorizationNeeded(true);
+            return;
+        }
 
-                if (!StringUtils.isAllBlank(config.getSpotifyRefreshToken()))
-                {
-                    renewToken();
-                }
-            }
-            catch (URISyntaxException e)
-            {
-                log.warn("Spotify API connect failed.", e);
-            }
-        }
-    }
-
-    public String getSpotifyRegistrationUrl(boolean protocolHandlerAvailable)
-    {
-        SpotifyApi.Builder builder = new SpotifyApi.Builder();
-        String redirect = null;
-        
-        if (protocolHandlerAvailable)
-        {
-            redirect = "web+nextcp://localhost/";
-        }
-        else
-        {
-            redirect = "http://localhost:65525";
-        }
         try
         {
-            SpotifyApi spotifyTokenReq = builder.setClientId(config.getClientId()).setRedirectUri(new URI(redirect)).build();
-            AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyTokenReq.authorizationCodePKCEUri(codeChallange).build();
-            URI uri = authorizationCodeUriRequest.execute();
-            String url = uri.toURL().toString();
-            log.info("spotify registration url : " + url);
-            return url;
+            SpotifyApi.Builder builder = new SpotifyApi.Builder();
+            spotifyApi = builder.setClientId(config.getClientId()).setRedirectUri(new URI(config.getRedirectUrl())).build();
+
+            if (!StringUtils.isAllBlank(config.getSpotifyRefreshToken()))
+            {
+                renewToken();
+            }
         }
-        catch (MalformedURLException | URISyntaxException e)
+        catch (URISyntaxException e)
         {
             log.warn("Spotify API connect failed.", e);
         }
-        return "";
     }
 
     @Scheduled(fixedRate = 60000)
@@ -115,6 +92,12 @@ public class SpotifyService
 
     public void renewToken()
     {
+        if (StringUtils.isAllBlank(config.getRedirectUrl()))
+        {
+            log.trace("checkToken: API not linked yet.");
+            return;
+        }
+
         log.info("renew Spotify token ...");
         spotifyApi.setRefreshToken(config.getSpotifyRefreshToken());
         AuthorizationCodePKCERefreshRequest authorizationCodePKCERefreshRequest = spotifyApi.authorizationCodePKCERefresh().build();
@@ -138,6 +121,25 @@ public class SpotifyService
             config.setUserAuthorizationNeeded(true);
             log.warn("Spotify Web Api exception. Error renewing spotify access token. " + e.getMessage());
         }
+    }
+
+    public String getSpotifyRegistrationUrl(boolean protocolHandlerAvailable)
+    {
+        try
+        {
+            init();
+            AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyApi.authorizationCodePKCEUri(codeChallange).build();
+            URI uri = authorizationCodeUriRequest.execute();
+            String url = uri.toURL().toString();
+            log.info("spotify registration url : " + url);
+            return url;
+        }
+        catch (MalformedURLException e)
+        {
+            log.warn("Spotify API connect failed.", e);
+            config.setUserAuthorizationNeeded(true);
+        }
+        return "";
     }
 
     /**

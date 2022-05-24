@@ -87,6 +87,12 @@ public class ConfigService
             {
                 return config.spotifyConfig.accountConnected;
             }
+
+            @Override
+            public String getRedirectUrl()
+            {
+                return config.spotifyConfig.redirectUrl;
+            }
         };
     }
 }

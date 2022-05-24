@@ -16,4 +16,6 @@ public interface ISpotifyConfig
     public void setUserAuthorizationNeeded(boolean authNeeded);
     
     public boolean userIsAuthorized();
+    
+    public String getRedirectUrl();
 }

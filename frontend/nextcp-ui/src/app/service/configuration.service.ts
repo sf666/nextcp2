@@ -190,10 +190,8 @@ export class ConfigurationService {
 
   public getRendererDevicesConfig(): RendererDeviceConfiguration[] {
     if (this.rendererConfig) {
-      console.log("renderer devices available");
       return this.rendererConfig?.rendererDevices;
     }
-    console.log("no renderer devices available");
     return [];
   }
 

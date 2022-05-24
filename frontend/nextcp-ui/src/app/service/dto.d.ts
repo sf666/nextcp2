@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2022-05-23 15:26:14.
+// Generated using typescript-generator version 2.32.889 on 2022-05-24 13:27:10.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -290,6 +290,7 @@ export interface SpotifyConfigDto {
     accountConnected: boolean;
     clientId: string;
     refreshToken: string;
+    redirectUrl: string;
 }
 
 export interface SystemInformationDto {
