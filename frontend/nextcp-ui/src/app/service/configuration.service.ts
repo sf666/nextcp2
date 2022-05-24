@@ -25,7 +25,17 @@ export class ConfigurationService {
   serverConfig: Config;                       // global serverside configuration file (server state) (read only)
   private rendererConfig: RendererConfigDto;  // renderer configurations
   serverConfigDto: ServerConfigDto;           // List of server devices
-  applicationConfig: ApplicationConfig;       // This is a DTO copy and can be used to update server configuration
+  applicationConfig: ApplicationConfig =  {   // This is a DTO copy and can be used to update server configuration
+    databaseFilename:'',
+    embeddedServerPort: 0,
+    generateUpnpCode:false,
+    generateUpnpCodePath:'',
+    globalSearchDelay:0,
+    libraryPath:'',
+    log4jConfigFile:'',
+    loggingDateTimeFormat: '',
+    sseEmitterTimeout: 0
+  }      
 
   private clientUUID = this.getStoredClientId();
 

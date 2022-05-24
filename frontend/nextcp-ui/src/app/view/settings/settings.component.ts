@@ -6,7 +6,6 @@ import { RatingServiceService } from './../../service/rating-service.service';
 import { UiClientConfig, MediaServerDto, RendererDeviceConfiguration, MediaRendererDto, ServerDeviceConfiguration } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
 import { Component, ViewEncapsulation } from '@angular/core';
-import { asLiteral } from '@angular/compiler/src/render3/view/util';
 
 @Component({
   selector: 'settings',
