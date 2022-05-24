@@ -202,7 +202,7 @@
                                 <div *ngIf="!contentDirectoryService.allTracksSameAlbum()"
                                     class="col-2 d-none d-lg-block">
                                     ALBUM</div>
-                                <div *ngIf="contentDirectoryService.oneTrackWithMusicBrainzId()"
+                                <div *ngIf="contentDirectoryService.getCurrentMediaServerDto().extendedApi"
                                     class="col-1 col-sm-2 col-lg-1 d-none text-right d-sm-block">RATING
                                 </div>
                                 <div class="col-1 text-right mid-col d-none d-lg-block">LG</div>
@@ -243,7 +243,7 @@
                                     </div>
                                     <div *ngIf="!contentDirectoryService.allTracksSameAlbum()" (click)="play(item)"
                                         class="col-2 no-wrap d-none d-lg-block">{{item.album}}</div>
-                                    <div *ngIf="contentDirectoryService.oneTrackWithMusicBrainzId()"
+                                    <div *ngIf="contentDirectoryService.getCurrentMediaServerDto().extendedApi"
                                         class="col-1 col-sm-2 col-lg-1 d-none d-sm-block ">
                                         <star-rating [currentSong]="item"></star-rating>
                                     </div>
