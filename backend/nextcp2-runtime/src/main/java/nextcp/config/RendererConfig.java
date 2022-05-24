@@ -75,11 +75,12 @@ public class RendererConfig
             String value = "";
             value = dbService.selectJsonStoreValue(CONFIG_KEY_RENDERER_DEVICES);
             RendererConfigDto renderer = readConfig(value);
-            filterBrokenRendererDevice(); 
+            filterBrokenRendererDevice();
             return renderer;
         }
         catch (Exception e)
         {
+            log.error("readConfig" , e);
             return generateDefaultConfig();
         }
     }
@@ -131,8 +132,8 @@ public class RendererConfig
     public RendererDeviceConfiguration addMediaRendererDeviceConfig(MediaRendererDevice device)
     {
         RemoteDevice remoteDevice = device.getDevice();
-        Optional<RendererDeviceConfiguration> configEntry = config.rendererDevices.stream()
-                .filter(d -> d.mediaRenderer.udn.contentEquals(remoteDevice.getIdentity().getUdn().getIdentifierString())).findFirst();
+        System.out.println("  --> " + remoteDevice.getIdentity().getUdn().getIdentifierString());
+        Optional<RendererDeviceConfiguration> configEntry = config.rendererDevices.stream().filter(d -> checkIfRendererConfigExists(remoteDevice, d)).findFirst();
         if (configEntry.isPresent())
         {
             log.debug(remoteDevice.getDetails().getFriendlyName() + " is already known.");
@@ -151,10 +152,16 @@ public class RendererConfig
             c.mediaRenderer = device.getAsDto();
             c.setCoveredUpnpDeviceToMaxVolume = false;
             config.rendererDevices.add(c);
-            writeAndSendConfig();           
+            writeAndSendConfig();
             log.info(remoteDevice.getDetails().getFriendlyName() + " added RendererDevice config : " + c);
             return c;
         }
+    }
+
+    private boolean checkIfRendererConfigExists(RemoteDevice remoteDevice, RendererDeviceConfiguration d)
+    {
+        System.out.println(" --> " + d.mediaRenderer.udn);
+        return d.mediaRenderer.udn.equals(remoteDevice.getIdentity().getUdn().getIdentifierString());
     }
 
     private void updateDefaults(RemoteDevice remoteDevice, RendererDeviceConfiguration configEntry)
@@ -189,11 +196,14 @@ public class RendererConfig
 
     public void filterBrokenRendererDevice()
     {
+        if (config.rendererDevices == null)
+        {
+            return;
+        }
         config.rendererDevices.removeIf(d -> d.mediaRenderer == null);
         writeAndSendConfig();
     }
 
-    
     private void writeAndSendConfig()
     {
         writeConfig();
