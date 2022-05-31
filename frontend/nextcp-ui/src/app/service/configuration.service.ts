@@ -2,7 +2,7 @@ import { UuidService } from './../util/uuid.service';
 import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { SseService } from './sse/sse.service';
-import { UiClientConfig, RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, ApplicationConfig } from './dto.d';
+import { UiClientConfig, RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, ApplicationConfig, MusicbrainzSupport } from './dto.d';
 import { GenericResultService } from './generic-result.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -35,7 +35,11 @@ export class ConfigurationService {
     log4jConfigFile:'',
     loggingDateTimeFormat: '',
     sseEmitterTimeout: 0
-  }      
+  }
+  musicBrainzConfig: MusicbrainzSupport = {   // MusicBrainz username/password
+    password: '',
+    username: ''
+  }
 
   private clientUUID = this.getStoredClientId();
 
@@ -96,6 +100,11 @@ export class ConfigurationService {
 
   public getServerConfig() {
     return this.serverConfigDto;
+  }
+
+  public saveMusicBrainzConfig(): void {
+    const uri = '/saveMusicBrainzConfig';
+    this.httpService.postWithSuccessMessage(this.baseUri, uri, this.musicBrainzConfig, "Save application config", "success").subscribe();
   }
 
   public saveApplicationConfig(): void {
@@ -165,6 +174,7 @@ export class ConfigurationService {
   private applyServerConfigurationFile(serverConfig: Config) {
     this.serverConfig = serverConfig;
     this.applicationConfig = Object.assign({}, serverConfig.applicationConfig);
+    this.musicBrainzConfig = Object.assign({}, serverConfig.musicbrainzSupport);
     this.updateUiClientConfig();
   }
 

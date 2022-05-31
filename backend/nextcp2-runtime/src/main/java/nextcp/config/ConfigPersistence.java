@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Base64;
 
 import javax.annotation.PostConstruct;
 
@@ -78,7 +79,7 @@ public class ConfigPersistence
     {
         MusicBrainzConfig mb = new MusicBrainzConfig();
         mb.username = config.musicbrainzSupport.username;
-        mb.password = config.musicbrainzSupport.password;
+        mb.password = new String(Base64.getDecoder().decode(config.musicbrainzSupport.password));
         return mb;
     }
 

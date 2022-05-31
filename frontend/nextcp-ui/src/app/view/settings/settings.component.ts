@@ -86,7 +86,7 @@ export class SettingsComponent {
   }
 
   saveMusicBrainzConfig(): void {
-    // todo save object
+    this.configService.saveMusicBrainzConfig();
   }
 
   selectConfig(config: UiClientConfig): void {

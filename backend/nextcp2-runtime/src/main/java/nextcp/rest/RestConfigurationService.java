@@ -25,6 +25,7 @@ import nextcp.devicedriver.DeviceDriverDiscoveryService;
 import nextcp.dto.ApplicationConfig;
 import nextcp.dto.Config;
 import nextcp.dto.DeviceDriverCapability;
+import nextcp.dto.MusicbrainzSupport;
 import nextcp.dto.RendererConfigDto;
 import nextcp.dto.RendererDeviceConfiguration;
 import nextcp.dto.ServerConfigDto;
@@ -81,6 +82,19 @@ public class RestConfigurationService
     public List<DeviceDriverCapability> getAvailableDeviceDriver()
     {
         return deviceDriverList;
+    }    
+    
+    @PostMapping("/saveMusicBrainzConfig")
+    public void saveClientConfig(@RequestBody MusicbrainzSupport mbConfig)
+    {
+        try
+        {
+            configService.saveMusicBrainzConfig(mbConfig);
+        }
+        catch (Exception e)
+        {
+            log.error("saveMusicBrainzConfig", e);
+        }
     }
 
     @PostMapping("/saveClientProfile")

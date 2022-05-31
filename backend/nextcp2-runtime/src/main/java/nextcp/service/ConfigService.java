@@ -1,5 +1,7 @@
 package nextcp.service;
 
+import java.util.Base64;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Controller;
 
 import nextcp.config.ConfigPersistence;
 import nextcp.dto.Config;
+import nextcp.dto.MusicbrainzSupport;
 import nextcp.dto.UiClientConfig;
 import nextcp.eventBridge.SsePublisher;
 import nextcp.spotify.ISpotifyConfig;
@@ -27,6 +30,20 @@ public class ConfigService
 
     @Autowired
     private SsePublisher ssePublisher = null;
+
+    public void saveMusicBrainzConfig(MusicbrainzSupport mbConfig)
+    {
+        if (!isCurrentBase64Password(mbConfig.password)) {
+            mbConfig.password = Base64.getEncoder().encodeToString(mbConfig.password.getBytes());
+        }
+        config.musicbrainzSupport = mbConfig;        
+        writeAndSendConfig();
+    }
+
+    private boolean isCurrentBase64Password(String newPassword)
+    {
+        return config.musicbrainzSupport.password.equals(newPassword);
+    }
 
     public void addClientProfile(UiClientConfig clientConfig)
     {
