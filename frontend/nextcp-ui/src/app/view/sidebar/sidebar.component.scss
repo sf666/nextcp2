@@ -10,7 +10,7 @@ $col-grey : $col-4;
 
 a {
     line-height: 1.5rem;
-    color      : rgba(229, 238, 255, 0.6);
+    color      : var(--glas-white-4);
 }
 
 .icn {
@@ -18,8 +18,9 @@ a {
 }
 
 .app-label-text {
-    font-size    : 1.8rem;
-    font-weight  : 300;
+    font-size  : 1.8rem;
+    font-weight: 300;
+
     margin-left  : 16px;
     margin-bottom: 40px;
     margin-top   : 8 px;
@@ -28,6 +29,24 @@ a {
 @media only screen and (max-width: 900px) {
     .app-label-text {
         visibility: hidden;
+    }
+}
+
+.mat-button {
+    height: 3.15rem;
+
+    margin-left  : 1rem;
+    margin-right : 1rem;
+    padding-left : 12px;
+    padding-right: 12px;
+    border-radius: 8px;
+
+    &:hover {
+        color: var(--glas-white-3) !important;
+
+        &.active {
+            color: aqua !important;
+        }
     }
 }
 
@@ -42,15 +61,23 @@ a {
     width   : var(--sidebar-width);
     height  : calc(var(--vh, 1vh) * 100 - var(--footer-height));
 
-    display         : flex;
-    flex-direction  : column;
-    flex-shrink     : 0;
-    background      : #242428;
-    transition      : 50ms ease-in;
-    overflow-y      : auto;
-    letter-spacing  : 0.04rem;
-    font-weight     : 300;
-    //z-index       : 20;
+    display       : flex;
+    flex-direction: column;
+    flex-shrink   : 0;
+    background    : #242428;
+    transition    : 50ms ease-in;
+    overflow-y    : auto;
+    letter-spacing: 0.04rem;
+    font-weight   : 300;
+}
+
+.sub-label {
+    color      : var(--glas-white-4);
+    font-weight: 500;
+    font-size  : 0.8rem;
+
+    margin-top : 3rem;
+    margin-left: 1rem;
 }
 
 .sidebar {
@@ -61,7 +88,7 @@ a {
 @media only screen and (max-width: 900px) {
     .sidebar {
         @extend.sidebar-base;
-        width: var(--sidebar-width-min);
+        width    : var(--sidebar-width-min);
         max-width: var(--sidebar-width-min);
     }
 }
@@ -75,8 +102,8 @@ a {
     height     : 50px;
     line-height: 45px;
 
-    background      : #242428;
-    color           : rgba(229, 238, 255, 0.6);
+    background: #242428;
+    color     : rgba(229, 238, 255, 0.6);
 
     &:hover {
         background-color: var(--grey-5);

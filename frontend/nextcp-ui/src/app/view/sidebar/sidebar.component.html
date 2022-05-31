@@ -12,7 +12,7 @@
     </a>
     -->
     <a #btn2 mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/playlist'">
-        <mat-icon class="icn" style="vertical-align: top;" svgIcon="playlist-music-outline"></mat-icon><span class="{{getTextClass(btn2)}}">Queue</span>
+        <mat-icon class="icn" style="vertical-align: top;" svgIcon="playlist-music-outline"></mat-icon><span class="{{getTextClass(btn2)}}">Player Queue</span>
     </a>
     <a #btn3 mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/player'">
         <mat-icon class="icn" style="vertical-align: top;" svgIcon="surround-sound"></mat-icon><span class="{{getTextClass(btn3)}}">Now listening</span>
@@ -29,4 +29,5 @@
         <mat-icon class="icn" style="vertical-align: top;" svgIcon="cog-outline"></mat-icon><span class="{{getTextClass(btn5)}}">App settings</span>
     </a>
 
+    <div class="sub-label">MY PLAYLISTS</div>
 </div>
