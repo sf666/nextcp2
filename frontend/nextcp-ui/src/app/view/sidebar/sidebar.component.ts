@@ -50,6 +50,7 @@ export class SidebarComponent {
    * @param id playlist id
    */
   public browseToPlaylist(id: number) {
+    this.contentDirectoryService.browseToMyPlaylist(id);
     this.afterButtonClicked(id);
   }
 

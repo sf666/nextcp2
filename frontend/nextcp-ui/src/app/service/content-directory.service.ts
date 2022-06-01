@@ -192,6 +192,13 @@ export class ContentDirectoryService {
   }
 
   /**
+  * Browses to special MyMusic Folder. TODO: URL should be retrieved from media server (i.e. UMS)
+  */
+  public browseToMyPlaylist(playlistId : number) {
+    this.browseChildren("$DBID$PLAYLIST$" + playlistId, "");
+  }
+  
+  /**
    * 
    * @param objectID 
    * @param sortCriteria 
