@@ -1,6 +1,6 @@
 import { SseService } from './sse/sse.service';
 import { GenericResultService } from './generic-result.service';
-import { GenericBooleanRequest, GenericNumberRequest, MusicItemDto, PlayRequestDto, PlaylistState, ContainerDto, PlaylistAddContainerRequest, ServerPlaylistEntry, MediaServerDto } from './dto.d';
+import { GenericBooleanRequest, GenericNumberRequest, MusicItemDto, PlayRequestDto, PlaylistState, ContainerDto, PlaylistAddContainerRequest, ServerPlaylistEntry, MediaServerDto, ServerPlaylistDto } from './dto.d';
 import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
 import { Injectable, OnInit } from '@angular/core';
@@ -24,6 +24,7 @@ export class PlaylistService implements OnInit {
 
   // Default server based playlists
   serverPlaylists: string[] = [];
+  serverAccessiblePlaylists: ServerPlaylistDto[] = [];
   selectedMediaServer : MediaServerDto;
 
   // Playlist items of selected media renderer device
@@ -51,7 +52,7 @@ export class PlaylistService implements OnInit {
       }
     });
 
-    deviceService.mediaServerChanged$.subscribe(server => this.updateServerBasedPlaylists(server))
+    deviceService.mediaServerChanged$.subscribe(server => this.afterMediaServerChanged(server))
   }
 
   ngOnInit(): void {
@@ -68,11 +69,24 @@ export class PlaylistService implements OnInit {
     })
   }
 
+  private afterMediaServerChanged(server: MediaServerDto) {
+    this.updateServerBasedPlaylists(server);
+    this.updateServerAccessiblePlaylists(server);
+  }
+
   public updatePlaylistItems(): void {
     if (this.deviceService.selectedMediaRendererDevice.udn !== '') {
       this.getPlaylistItems(this.deviceService.selectedMediaRendererDevice.udn);
       this.getPlaylistState(this.deviceService.selectedMediaRendererDevice.udn);
     }
+  }
+
+  private updateServerAccessiblePlaylists(server: MediaServerDto) {
+    const uri = '/getServerPlaylists';
+    this.selectedMediaServer = server;
+    this.httpService.post<ServerPlaylistDto[]>(this.baseUri, uri, server.udn).subscribe(data => {
+      this.serverAccessiblePlaylists = data;
+    });
   }
 
   private updateServerBasedPlaylists(server: MediaServerDto) {
@@ -82,6 +96,7 @@ export class PlaylistService implements OnInit {
       this.serverPlaylists = data.sort();
     });
   }
+
   //
   // Ui action endpoints
   // ===========================================================================

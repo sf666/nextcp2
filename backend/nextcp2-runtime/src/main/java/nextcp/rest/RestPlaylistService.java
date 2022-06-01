@@ -23,6 +23,7 @@ import nextcp.dto.MusicItemDto;
 import nextcp.dto.PlayRequestDto;
 import nextcp.dto.PlaylistAddContainerRequest;
 import nextcp.dto.PlaylistState;
+import nextcp.dto.ServerPlaylistDto;
 import nextcp.dto.ServerPlaylistEntry;
 import nextcp.dto.ToastrMessage;
 import nextcp.upnp.device.DeviceRegistry;
@@ -66,6 +67,20 @@ public class RestPlaylistService extends BaseRestService
         }
     }
 
+    @PostMapping("/getServerPlaylists")
+    public List<ServerPlaylistDto> getServerPlaylists(@RequestBody String serverUdn)
+    {
+        try
+        {
+            return getExtendedMediaServerByUdn(serverUdn).getServerPlaylists();
+        }
+        catch (Exception e)
+        {
+            log.warn("getServerPlaylists", e);
+            return new ArrayList<ServerPlaylistDto>();
+        }
+    }
+    
     @PostMapping("/addToServerPlaylist")
     public void addToServerPlaylist(@RequestBody ServerPlaylistEntry addRequest)
     {

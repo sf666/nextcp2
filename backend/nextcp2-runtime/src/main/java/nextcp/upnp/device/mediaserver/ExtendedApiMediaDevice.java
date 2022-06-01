@@ -5,6 +5,8 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import nextcp.dto.ServerPlaylistDto;
+
 /**
  * Devices with extended API support
  */
@@ -47,4 +49,6 @@ public interface ExtendedApiMediaDevice
     public void removeSongFromPlaylist(Integer audiotracId, String playlistName);
     
     public List<String> getAllPlaylists() throws JsonMappingException, JsonProcessingException;
+
+    public List<ServerPlaylistDto> getServerPlaylists() throws JsonMappingException, JsonProcessingException;
 }

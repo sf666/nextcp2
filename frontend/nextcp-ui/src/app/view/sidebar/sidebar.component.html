@@ -1,33 +1,48 @@
 <div class="sidebar">
     <div class="app-label-text">nextCP/2</div>
-    <a #btn1 mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/music-library'" (click)="musicLibraryClicked()">
-        <mat-icon class="icn" style="vertical-align: top;" svgIcon="music-box-multiple-outline"></mat-icon><span class="{{getTextClass(btn1)}}">Music Library</span>
+    <a #btn1 mat-button style="text-align:left" [routerLink]="'/music-library'"
+        class="{{getTextClass(-1)}}" (click)="musicLibraryClicked(-1)">
+        <mat-icon class="icn" style="vertical-align: top;" svgIcon="music-box-multiple-outline"></mat-icon><span>Music
+            Library</span>
     </a>
     <!--
-    <a #btn5 mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/myAlbums'">
+    <a #btn5 mat-button style="text-align:left" [routerLink]="'/myAlbums'">
         <mat-icon class="icn" style="vertical-align: top;" svgIcon="music-circle-outline"></mat-icon><span class="{{getTextClass(btn5)}}">Albums</span>
     </a>
-    <a #btn6 mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/myTracks'">
+    <a #btn6 mat-button style="text-align:left" [routerLink]="'/myTracks'">
         <mat-icon class="icn" style="vertical-align: top;" svgIcon="music"></mat-icon><span class="{{getTextClass(btn6)}}">Tracks</span>
     </a>
     -->
-    <a #btn2 mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/playlist'">
-        <mat-icon class="icn" style="vertical-align: top;" svgIcon="playlist-music-outline"></mat-icon><span class="{{getTextClass(btn2)}}">Player Queue</span>
+    <a #btn2 mat-button style="text-align:left" [routerLink]="'/playlist'"
+        (click)="buttonClicked(-2)" class="{{getTextClass(-2)}}">
+        <mat-icon class="icn" style="vertical-align: top;" svgIcon="playlist-music-outline"></mat-icon><span>Player
+            Queue</span>
     </a>
-    <a #btn3 mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/player'">
-        <mat-icon class="icn" style="vertical-align: top;" svgIcon="surround-sound"></mat-icon><span class="{{getTextClass(btn3)}}">Now listening</span>
+    <a #btn3 mat-button style="text-align:left" [routerLink]="'/player'"
+        (click)="buttonClicked(-3)" class="{{getTextClass(-3)}}">
+        <mat-icon class="icn" style="vertical-align: top;" svgIcon="surround-sound"></mat-icon><span>Now
+            listening</span>
     </a>
-    <a #btn4 mat-button routerLinkActive="active" style="text-align:left" [routerLink]="'/radio'">
-        <mat-icon class="icn" style="vertical-align: top;" svgIcon="radio"></mat-icon><span class="{{getTextClass(btn4)}}">Radio</span>
+    <a #btn4 mat-button style="text-align:left" [routerLink]="'/radio'"
+        (click)="buttonClicked(-4)" class="{{getTextClass(-4)}}">
+        <mat-icon class="icn" style="vertical-align: top;" svgIcon="radio"></mat-icon><span>Radio</span>
     </a>
 
-    <a #btn6 mat-button routerLinkActive="active" style="text-align:left; vertical-align: top;" [routerLink]="'/myAlbums'" (click)="myAlbum()">
-        <mat-icon class="icn" style="vertical-align: top;" svgIcon="heart-box-outline"></mat-icon><span class="{{getTextClass(btn6)}}">My Albums</span>
+    <a #btn6 mat-button style="text-align:left; vertical-align: top;"
+        [routerLink]="'/myAlbums'" (click)="myAlbumClicked(-5)" class="{{getTextClass(-5)}}">
+        <mat-icon class="icn" style="vertical-align: top;" svgIcon="heart-box-outline"></mat-icon><span>My Albums</span>
     </a>
 
-    <a #btn5 mat-button routerLinkActive="active" style="text-align:left; vertical-align: top;" [routerLink]="'/settings'">
-        <mat-icon class="icn" style="vertical-align: top;" svgIcon="cog-outline"></mat-icon><span class="{{getTextClass(btn5)}}">App settings</span>
+    <a #btn5 mat-button style="text-align:left; vertical-align: top;"
+        [routerLink]="'/settings'" (click)="buttonClicked(-6)" class="{{getTextClass(-6)}}">
+        <mat-icon class="icn" style="vertical-align: top;" svgIcon="cog-outline"></mat-icon><span>App settings</span>
     </a>
 
     <div class="sub-label">MY PLAYLISTS</div>
+
+    <a mat-button style="text-align:left; vertical-align: top;"
+        class="playlist {{getTextClass(item.playlistId)}}"
+        *ngFor="let item of playlistService.serverAccessiblePlaylists"
+        (click)="browseToPlaylist(item.playlistId)">{{item.playlistName}}</a>
+
 </div>

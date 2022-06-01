@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -23,6 +24,7 @@ import nextcp.config.ConfigPersistence;
 import nextcp.config.ServerConfig;
 import nextcp.dto.MediaServerDto;
 import nextcp.dto.ServerDeviceConfiguration;
+import nextcp.dto.ServerPlaylistDto;
 import nextcp.dto.ToastrMessage;
 import okhttp3.Call;
 import okhttp3.MediaType;
@@ -399,4 +401,12 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         return new MediaServerDto(getUDN().getIdentifierString(), getFriendlyName(), true);
     }
 
+    @Override
+    public List<ServerPlaylistDto> getServerPlaylists() throws JsonMappingException, JsonProcessingException
+    {
+        String playlists = doGenericCall("", "api/playlist/getserverplaylists", false);
+        return om.readValue(playlists, new TypeReference<List<ServerPlaylistDto>>()
+        {
+        });
+    }
 }
