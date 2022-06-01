@@ -16,7 +16,7 @@ Please see the [Wiki](https://github.com/sf666/nextcp2/wiki) for some documentat
 java -Xms256m -Xmx512m -jar [-DconfigFile=path_to_config_file] nextcp2-2.2.jar
 ```
 
-If no config file is given or found, a config-file will be generated next to the JAR file on the first startup. In this case the application might complain about incorrect or missing (default) configuration. In this case stop the application, adopt the config to your system and start it again. The configiguration file is [documented here](https://github.com/sf666/nextcp2/wiki/config-file).
+If no config file is given or found, a config-file will be generated next to the JAR file on the first startup. In this case the application might complain about incorrect or missing (default) configuration. In this case adopt the config to your system by navigating to `App setting' and restart the application. The configiguration elements are [documented here](https://github.com/sf666/nextcp2/wiki/config-file).
 
 ## system requirements
 
