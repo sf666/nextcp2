@@ -12,41 +12,23 @@ export class MyMusicService {
 
   baseUri = '/MyMusicService';
 
-  public currentAlbumLiked = false;
-  public currentAlbumReleaseID = "";
-
   constructor(
     private httpService: HttpService,
     private genericResultService: GenericResultService,
     private contentDirectoryService: ContentDirectoryService) {
-    contentDirectoryService.browseFinished$.subscribe(data => this.updateContainerStatus())
   }
 
-  private updateContainerStatus(): void {
-    if (this.contentDirectoryService.allTracksSameMusicBrainzReleaseId()) {
-      if (this.contentDirectoryService.getMusicTracks()[0]?.musicBrainzId?.ReleaseTrackId) {
-        this.currentAlbumReleaseID = this.contentDirectoryService.getMusicTracks()[0].musicBrainzId.ReleaseTrackId;
-        this.isAlbumLiked(this.currentAlbumReleaseID).subscribe(
-          res => this.currentAlbumLiked = res
-        )
-      }
-    } else {
-      this.currentAlbumLiked = false;
-      this.currentAlbumReleaseID = undefined;
-    }
-  }
-
-  public likeAlbum(mbReleaseID: string): void {
+  public likeAlbum(mbReleaseID: string): Subject<any> {
     const uri = '/likeAlbum/' + this.contentDirectoryService.getCurrentMediaServerDto().udn;
     if (mbReleaseID !== '') {
-      this.httpService.post(this.baseUri, uri, mbReleaseID).subscribe(d => this.updateContainerStatus());
+      return this.httpService.post(this.baseUri, uri, mbReleaseID);
     }
   }
 
-  public deleteAlbumLike(mbReleaseID: string): void {
+  public deleteAlbumLike(mbReleaseID: string): Subject<any> {
     const uri = '/deleteAlbumLike/' + this.contentDirectoryService.getCurrentMediaServerDto().udn;
     if (mbReleaseID !== '') {
-      this.httpService.post(this.baseUri, uri, mbReleaseID).subscribe(d => this.updateContainerStatus());
+      return this.httpService.post(this.baseUri, uri, mbReleaseID);
     }
   }
 

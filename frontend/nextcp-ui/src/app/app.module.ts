@@ -13,7 +13,6 @@ import { AppComponent } from './app.component';
 import { NgbModule, NgbToast } from '@ng-bootstrap/ng-bootstrap';
 import { ServerDropdownComponent } from './mediaserver/dropdown/dropdown.component';
 import { MediarendererComponent } from './mediarenderer/mediarenderer/mediarenderer.component';
-import { BrowseResultComponent } from './mediaserver/browse-result/browse-result.component';
 import { DeviceViewComponent } from './view/device-view/device-view.component';
 import { NavBarComponent } from './view/nav-bar/nav-bar.component';
 import { MusicLibraryComponent } from './view/music-library/music-library.component';
@@ -55,7 +54,8 @@ import { AvailableServerComponent } from './popup/available-server/available-ser
 import { MyAlbumComponent } from './view/my-album/my-album.component';
 import { MySongsComponent } from './view/my-songs/my-songs.component';
 import { ToastContainerComponent } from './service/toast/toast-container/toast-container.component';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { DisplayContainerComponent } from './mediaserver/display-container/display-container.component'
 
 @NgModule({
    declarations: [
@@ -65,7 +65,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
       RendererDropdownComponent,
       ServerDropdownComponent,
       MediarendererComponent,
-      BrowseResultComponent,
       DeviceViewComponent,
       NavBarComponent,
       MusicLibraryComponent,
@@ -89,6 +88,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
       MyAlbumComponent,
       MySongsComponent,
       ToastContainerComponent,
+      DisplayContainerComponent,
    ],
    imports: [
       // Material Design
