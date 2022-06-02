@@ -15,6 +15,7 @@ export class MusicLibraryComponent {
   constructor(
     public layoutService: LayoutService,
     public contentDirectoryService: ContentDirectoryService) {
+      console.log("constructor call : MusicLibraryComponent");
   }
 
 

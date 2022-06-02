@@ -48,11 +48,14 @@ export class ContentDirectoryService {
     private cdsBrowsePathService: CdsBrowsePathService,
     private toastService: ToastService,
     private deviceService: DeviceService) {
+
     // Initialize empty result object
     this.currentContainerList = this.dtoGeneratorService.generateEmptyContainerItemDto();
     this.quickSearchResultList = this.dtoGeneratorService.generateEmptySearchResultDto();
     this.quickSearchPanelVisible = false;
 
+    // select current mediaServer and subscribe to changes ...
+    this.mediaServerChanged(deviceService.selectedMediaServerDevice);
     deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));
   }
 
