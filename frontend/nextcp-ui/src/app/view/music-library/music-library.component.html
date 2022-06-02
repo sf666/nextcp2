@@ -1,2 +1,11 @@
 <!-- display music library -->
-<mediaServer-display-container></mediaServer-display-container>
+<mediaServer-display-container 
+    [showTopHeader]="showTopHeader()"
+    [currentContainer]="currentContainer()"
+    [musicTracks]="musicTracks()"
+    [otherItems_]="otherItems_()"
+    [albums]="albums()"
+    [playlists]="playlists()"
+    [otherContainer]="otherContainer()"
+    [scrollToID]="scrollToID()"
+></mediaServer-display-container>

@@ -10,7 +10,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgbModule, NgbToast } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ServerDropdownComponent } from './mediaserver/dropdown/dropdown.component';
 import { MediarendererComponent } from './mediarenderer/mediarenderer/mediarenderer.component';
 import { DeviceViewComponent } from './view/device-view/device-view.component';
