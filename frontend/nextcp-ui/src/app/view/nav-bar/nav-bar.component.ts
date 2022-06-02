@@ -1,12 +1,10 @@
 import { ConfigurationService } from './../../service/configuration.service';
 import { debounce } from 'src/app/global';
-import { CdsBrowsePathService } from './../../util/cds-browse-path.service';
 import { ContainerDto } from './../../service/dto.d';
-import { PlaylistService } from './../../service/playlist.service';
 import { Router, NavigationStart, Event as NavigationEvent } from '@angular/router';
 import { DeviceService } from './../../service/device.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 
 
 @Component({
@@ -16,6 +14,12 @@ import { Component } from '@angular/core';
 })
 
 export class NavBarComponent {
+  @Input() parentTitle: string;
+
+  // Inform parent about actions
+  @Output() executeSearch = new EventEmitter<string>();
+  @Output() searchKeyUp = new EventEmitter<KeyboardEvent>();
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private doSearchFunc: any;
 
@@ -29,8 +33,6 @@ export class NavBarComponent {
   constructor(
     public contentDirectoryService: ContentDirectoryService,
     private router: Router,
-    private cdsBrowsePathService: CdsBrowsePathService,
-    public playlistService: PlaylistService,
     private configurationService: ConfigurationService,
     private deviceService: DeviceService) {
 
@@ -42,20 +44,6 @@ export class NavBarComponent {
     this.doSearchFunc = debounce(this.getSearchDelay(), this.doSearchThrotteled);
   }
 
-  // UI state management for navbar   
-
-  get musicLibraryVisible(): boolean {
-    return this.currentPath === '/music-library' || this.currentPath === '/' || this.currentPath === '/myAlbums';
-  }
-  get playlistVisible(): boolean {
-    return this.currentPath === '/playlist';
-  }
-  get playerVisible(): boolean {
-    return this.currentPath === '/player';
-  }
-  get radioVisible(): boolean {
-    return this.currentPath === '/radio';
-  }
   get searchResultSingleVisible(): boolean {
     return this.currentPath === '/searchResultSingleItem';
   }
@@ -76,10 +64,6 @@ export class NavBarComponent {
   // music-library
   public get currentContainer(): ContainerDto {
     return this.contentDirectoryService.currentContainerList.currentContainer;
-  }
-
-  public get parentTitle(): string {
-    return this.contentDirectoryService.currentContainerList.parentFolderTitle;
   }
 
   gotoParent(): void {

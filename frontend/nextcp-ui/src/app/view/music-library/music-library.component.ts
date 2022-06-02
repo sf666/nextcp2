@@ -1,3 +1,4 @@
+import { LayoutService } from './../../service/layout.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { ContainerItemDto, MediaRendererDto, MediaServerDto, ContainerDto, MusicItemDto } from './../../service/dto.d';
 import { Component } from '@angular/core';
@@ -11,22 +12,25 @@ import { Component } from '@angular/core';
 
 export class MusicLibraryComponent {
 
-  private containerItemDto: ContainerItemDto;
-
   constructor(
-    private contentDirectoryService: ContentDirectoryService) {
-    contentDirectoryService.browseFinished$.subscribe(data => this.browseFinished(data));
-    contentDirectoryService.searchFinished$.subscribe(data => this.searchFinished(data));
+    public layoutService: LayoutService,
+    public contentDirectoryService: ContentDirectoryService) {
   }
 
-  searchFinished(data: ContainerItemDto): void {
-    throw new Error('Method not implemented.');
-  }
 
-  browseFinished(data: ContainerItemDto): void {
-    this.containerItemDto = data;
-  }
+  //
+  // Nav-Bar bindngs
+  //
+  getParentTitle(): string {
+    return this.contentDirectoryService.currentContainerList.parentFolderTitle;
+  } 
 
+  //
+  // Event
+  //
+  containerSelected(event: ContainerDto) {
+    this.contentDirectoryService.browseChildrenByContiner(event);
+  }
 
   //
   // bindings
@@ -37,7 +41,7 @@ export class MusicLibraryComponent {
   }
 
   currentContainer(): ContainerDto {
-    return this.containerItemDto.currentContainer;
+    return this.contentDirectoryService.currentContainerList.currentContainer;
   }
 
   musicTracks(): MusicItemDto[] {

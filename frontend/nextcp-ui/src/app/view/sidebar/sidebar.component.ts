@@ -3,8 +3,7 @@ import { PlaylistService } from './../../service/playlist.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
-import { Component, ViewEncapsulation } from '@angular/core';
-import { MatAnchor } from '@angular/material/button';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-sidebar',
@@ -17,7 +16,6 @@ export class SidebarComponent {
   private _mediaRendererUdn: string;
 
   private activeId: number;
-  private rememberedLastCdsObjectId: ContainerDto;
 
   constructor(
     public deviceService: DeviceService,
@@ -36,13 +34,7 @@ export class SidebarComponent {
    * @param itemId Button ID
    */
   public musicLibraryClicked(itemId: number): void {
-    if (this.rememberedLastCdsObjectId) {
-      this.contentDirectoryService.browseChildrenByContiner(this.rememberedLastCdsObjectId);
-    }
     this.activeId = itemId;
-    if (!this.contentDirectoryService.currentContainerList.currentContainer) {
-      this.contentDirectoryService.browseToRoot('');
-    }
   }
 
   /**
@@ -73,7 +65,6 @@ export class SidebarComponent {
   }
 
   private afterButtonClicked(itemId: number): void {
-    this.rememberedLastCdsObjectId = this.contentDirectoryService.currentContainerList.currentContainer;
     this.activeId = itemId;
   }
 

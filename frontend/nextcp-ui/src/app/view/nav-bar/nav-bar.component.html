@@ -1,6 +1,6 @@
 <div id="navbar" class="navbar">
     <!-- First div section in the routing cascade. Follow the else parts ...-->
-    <div class="headLeftContainer minWidth" *ngIf="musicLibraryVisible; else playlist">
+    <div class="headLeftContainer minWidth">
         <button mat-mini-fab [disabled]="isDisabled()" (click)="gotoParent()">
             <mat-icon class="left-button" style="vertical-align: top;" svgIcon="arrow-left"></mat-icon>
         </button>
@@ -17,27 +17,6 @@
 
 <app-modal-search-result *ngIf="contentDirectoryService.quickSearchPanelVisible"></app-modal-search-result>
 
-<ng-template #playlist>
-    <div class="headLeftContainer" *ngIf="playlistVisible; else player">
-        <div class="headFont">Playlist Tracks</div>
-        <button mat-flat-button class="ms-4 headButton" (click)="playlistService.deleteAll()">
-            <mat-icon class="me-1" style="vertical-align: top;" svgIcon="close"></mat-icon>
-            clear tracks
-        </button>
-    </div>
-</ng-template>
-
-<ng-template #player>
-    <div *ngIf="playerVisible; else radio">
-        <div class="headFont">Now playing</div>
-    </div>
-</ng-template>
-
-<ng-template #radio>
-    <div *ngIf="radioVisible; else search">
-        <div class="headFont">Radio</div>
-    </div>
-</ng-template>
 
 <ng-template #search>
     <div *ngIf="searchResultVisible; else settings">
