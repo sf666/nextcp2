@@ -15,10 +15,12 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
 
 export class NavBarComponent {
   @Input() parentTitle: string;
+  @Input() backButtonDisabled: boolean = false;
 
   // Inform parent about actions
   @Output() executeSearch = new EventEmitter<string>();
   @Output() searchKeyUp = new EventEmitter<KeyboardEvent>();
+  @Output() backButtonPressed = new EventEmitter<any>();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private doSearchFunc: any;
@@ -31,8 +33,8 @@ export class NavBarComponent {
   private doSearchThrotteled = (): void => this.contentDirectoryService.quickSearch(this.currentSearchText, "", this.deviceService.selectedMediaServerDevice.udn);
 
   constructor(
-    public contentDirectoryService: ContentDirectoryService,
     private router: Router,
+    public contentDirectoryService: ContentDirectoryService,
     private configurationService: ConfigurationService,
     private deviceService: DeviceService) {
 
@@ -59,11 +61,6 @@ export class NavBarComponent {
 
   get searchResultVisible(): boolean {
     return this.searchResultSingleVisible || this.searchResultMultiVisible;
-  }
-
-  // music-library
-  public get currentContainer(): ContainerDto {
-    return this.contentDirectoryService.currentContainerList.currentContainer;
   }
 
   gotoParent(): void {

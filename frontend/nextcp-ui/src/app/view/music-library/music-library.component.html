@@ -14,5 +14,8 @@
     [playlists]="playlists()"
     [otherContainer]="otherContainer()"
     [scrollToID]="scrollToID()"
+    [backButtonDisabled]="backButtonDisabled()"
+
+    (backButtonPressed)="backButtonPressed($event)"
     (containerSelected)="containerSelected($event)"
 ></mediaServer-display-container>

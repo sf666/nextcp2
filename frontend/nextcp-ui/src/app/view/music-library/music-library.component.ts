@@ -1,6 +1,6 @@
 import { LayoutService } from './../../service/layout.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
-import { ContainerItemDto, MediaRendererDto, MediaServerDto, ContainerDto, MusicItemDto } from './../../service/dto.d';
+import { ContainerDto, MusicItemDto } from './../../service/dto.d';
 import { Component } from '@angular/core';
 
 @Component({
@@ -15,7 +15,7 @@ export class MusicLibraryComponent {
   constructor(
     public layoutService: LayoutService,
     public contentDirectoryService: ContentDirectoryService) {
-      console.log("constructor call : MusicLibraryComponent");
+    console.log("constructor call : MusicLibraryComponent");
   }
 
 
@@ -24,7 +24,16 @@ export class MusicLibraryComponent {
   //
   getParentTitle(): string {
     return this.contentDirectoryService.currentContainerList.parentFolderTitle;
-  } 
+  }
+
+  public backButtonPressed(event: any) {
+    this.contentDirectoryService.gotoParent();
+  }
+
+  public backButtonDisabled(): boolean {
+    return this.contentDirectoryService.currentContainerList.currentContainer.id === '0' ||
+      this.contentDirectoryService.currentContainerList.currentContainer.id === '';
+  }
 
   //
   // Event
