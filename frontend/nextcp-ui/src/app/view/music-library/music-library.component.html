@@ -1,5 +1,7 @@
 <nav-bar *ngIf="layoutService.headerVisible"
     [parentTitle]="getParentTitle()"
+
+    (backButtonPressed)="backButtonPressed($event)"
 ></nav-bar>
 
 
@@ -16,6 +18,5 @@
     [scrollToID]="scrollToID()"
     [backButtonDisabled]="backButtonDisabled()"
 
-    (backButtonPressed)="backButtonPressed($event)"
     (containerSelected)="containerSelected($event)"
 ></mediaServer-display-container>

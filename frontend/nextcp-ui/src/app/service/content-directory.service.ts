@@ -16,7 +16,6 @@ export class ContentDirectoryService {
 
   baseUri = '/ContentDirectoryService';
   public currentContainerList: ContainerItemDto;
-  private customParentID: string;
   private currentMediaServerDto: MediaServerDto;
   public orderAlbumsByGenre = false;
 
@@ -119,32 +118,7 @@ export class ContentDirectoryService {
     this.quickSearchResultList = this.dtoGeneratorService.generateEmptySearchResultDto();
     this.quickSearchPanelVisible = false;
   }
-
-  public gotoParent(): void {
-    this.browseChildren(this.getParentTarget(), "", this.deviceService.selectedMediaServerDevice.udn, true);
-  }
-
-  public popCurrentPathAsParent(): void {
-    this.setIndividualParentID(this.currentContainerList.currentContainer.id);
-  }
-
-  private getParentTarget(): string {
-    let targetUDN: string;
-
-    if (this.customParentID) {
-      targetUDN = this.customParentID;
-      this.customParentID = null;
-    } else {
-      console.log("Parent ID : " + this.currentContainerList.currentContainer.parentID);
-      targetUDN = this.currentContainerList.currentContainer.parentID;
-    }
-    return targetUDN;
-  }
-
-  public setIndividualParentID(parentID: string): void {
-    this.customParentID = parentID;
-  }
-
+ 
   /**
    * Browses to special MyMusic Folder. TODO: URL should be retrieved from media server (i.e. UMS)
    */
@@ -165,7 +139,7 @@ export class ContentDirectoryService {
    * @param sortCriteria 
    * @param mediaServerUdn 
    */
-  public browseChildren(objectID: string, sortCriteria: string, mediaServerUdn?: string, isStepOut?: boolean): Subject<ContainerItemDto> {
+  public browseChildren(objectID: string, sortCriteria: string, mediaServerUdn?: string): Subject<ContainerItemDto> {
     if (!mediaServerUdn) {
       if (!this.currentMediaServerDto?.udn) {
         this.toastService.error("select media server", "MediaLibrary");
@@ -173,27 +147,11 @@ export class ContentDirectoryService {
         mediaServerUdn = this.currentMediaServerDto.udn;
       }
     }
-    this.updateBrowsePath(objectID, isStepOut);
     return this.browseChildrenByRequest(this.createBrowseRequest(objectID, sortCriteria, mediaServerUdn));
   }
 
-  public browseToRoot(sortCriteria: string): void {
-    this.cdsBrowsePathService.clearPath();
-    this.updateBrowsePath("0");
-    this.browseChildrenByRequest(this.createBrowseRequest("0", sortCriteria, this.currentMediaServerDto.udn));
-  }
-
   public browseChildrenByContiner(containerDto: ContainerDto): Subject<ContainerItemDto> {
-    this.updateBrowsePath(containerDto.id);
     return this.browseChildrenByRequest(this.createBrowseRequest(containerDto.id, "", containerDto.mediaServerUDN));
-  }
-
-  private updateBrowsePath(id: string, isStepOut?: boolean) {
-    if (isStepOut) {
-      this.cdsBrowsePathService.stepOut();
-    } else {
-      this.cdsBrowsePathService.stepIn(id);
-    }
   }
 
   private browseChildrenByRequest(browseRequestDto: BrowseRequestDto): Subject<ContainerItemDto> {

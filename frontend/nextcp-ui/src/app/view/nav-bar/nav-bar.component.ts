@@ -63,7 +63,7 @@ export class NavBarComponent {
   }
 
   gotoParent(): void {
-    this.contentDirectoryService.gotoParent();
+    this.backButtonPressed.emit("");
   }
   
   /**

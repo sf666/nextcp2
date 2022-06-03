@@ -17,6 +17,7 @@ export class MusicLibraryComponent {
 
 
   private lastOidIsResoredFromCache: boolean;
+  private currentMediaServcerDto: MediaServerDto;
 
   constructor(
     public layoutService: LayoutService,
@@ -27,15 +28,13 @@ export class MusicLibraryComponent {
     console.log("constructor call : MusicLibraryComponent");
     // select current mediaServer and subscribe to changes ...
     this.mediaServerChanged(deviceService.selectedMediaServerDevice);
-    deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));     
+    deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));
   }
 
-  //
-  // Browse responses
-  //
   mediaServerChanged(data: MediaServerDto): void {
     // Update to root folder of media server
     let oid: string;
+    this.currentMediaServcerDto = data;
     if (this.persistenceService.isCurrentMediaServer(data.udn)) {
       oid = this.persistenceService.getLastMediaServerPath();
       this.cdsBrowsePathService.restorePathToRoot();
@@ -46,12 +45,22 @@ export class MusicLibraryComponent {
       this.cdsBrowsePathService.clearPath();
       this.persistenceService.setNewMediaServerDevice(data.udn);
     }
+
     this.contentDirectoryService.browseChildren(oid, "", data.udn).subscribe(data => this.contentReceived(data));
-    // objectID: string, sortCriteria: string, mediaServerUdn?: string, isStepOut?: boolean): void {
   }
 
   contentReceived(data: ContainerItemDto): void {
-    // BrowseTo Root
+    // Check if 
+    if (this.lastOidIsResoredFromCache && !(data.containerDto.length > 0 || data.musicItemDto.length > 0)) {
+      this.browseToRoot('');
+      this.lastOidIsResoredFromCache = false;
+    }
+  }
+
+  public browseToRoot(sortCriteria: string): void {
+    this.cdsBrowsePathService.clearPath();
+    this.cdsBrowsePathService.stepIn("0");
+    this.contentDirectoryService.browseChildren("0", sortCriteria, this.currentMediaServcerDto.udn);
   }
 
   //
@@ -62,7 +71,11 @@ export class MusicLibraryComponent {
   }
 
   public backButtonPressed(event: any) {
-    this.contentDirectoryService.gotoParent();
+    const currentParent = this.contentDirectoryService?.currentContainerList?.currentContainer?.parentID;
+    if (currentParent) {
+      this.contentDirectoryService.browseChildren(currentParent, "", this.currentMediaServcerDto.udn);
+      this.cdsBrowsePathService.stepOut();
+    }
   }
 
   public backButtonDisabled(): boolean {
@@ -74,12 +87,14 @@ export class MusicLibraryComponent {
   // Event
   //
   containerSelected(event: ContainerDto) {
+    // remember path here
+    this.cdsBrowsePathService.stepIn(event.id);
     this.contentDirectoryService.browseChildrenByContiner(event);
   }
 
   //
   // bindings
-  //
+  // =======================================================================
 
   showTopHeader(): boolean {
     return true;

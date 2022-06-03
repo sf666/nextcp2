@@ -12,7 +12,8 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-modal-search-result',
   templateUrl: './modal-search-result.component.html',
-  styleUrls: ['./modal-search-result.component.scss']
+  styleUrls: ['./modal-search-result.component.scss'],
+  providers: [ContentDirectoryService]
 })
 
 export class ModalSearchResultComponent {
@@ -31,7 +32,6 @@ export class ModalSearchResultComponent {
   //
 
   musicItemSelected(musicItem: MusicItemDto): void {
-    this.contentDirectoryService.popCurrentPathAsParent();
     console.debug("search item selected : " + musicItem);
     this.searchItemService.musicItem = musicItem;
     this.contentDirectoryService.clearSearch();
@@ -39,7 +39,6 @@ export class ModalSearchResultComponent {
   }
 
   albumItemSelected(albumItem: ContainerDto): void {
-    this.contentDirectoryService.popCurrentPathAsParent();
     console.debug("album selected : " + albumItem);
     this.contentDirectoryService.clearSearch();
     this.contentDirectoryService.browseChildrenByContiner(albumItem);
@@ -47,7 +46,6 @@ export class ModalSearchResultComponent {
   }
 
   playlistItemSelected(playlistItem: ContainerDto): void {
-    this.contentDirectoryService.popCurrentPathAsParent();
     console.debug("album selected : " + playlistItem);
     this.contentDirectoryService.clearSearch();
     this.contentDirectoryService.browseChildrenByContiner(playlistItem);
@@ -55,7 +53,6 @@ export class ModalSearchResultComponent {
   }
 
   artistItemSelected(artistItem: ContainerDto): void {
-    this.contentDirectoryService.popCurrentPathAsParent();
     console.debug("album selected : " + artistItem);
     this.contentDirectoryService.clearSearch();
     this.contentDirectoryService.browseChildrenByContiner(artistItem);
@@ -74,7 +71,6 @@ export class ModalSearchResultComponent {
   }
 
   showAllItem(): void {
-    this.contentDirectoryService.popCurrentPathAsParent();
     this.contentDirectoryService.searchAllItems(
       this.dtoGeneratorService.generateQuickSearchDto(
         this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "-upnp:rating, +dc:title", this.currentContainerID, 0, 100));
@@ -82,7 +78,6 @@ export class ModalSearchResultComponent {
   }
 
   showAllAlbum(): void {
-    this.contentDirectoryService.popCurrentPathAsParent();
     this.contentDirectoryService.searchAllAlbum(
       this.dtoGeneratorService.generateQuickSearchDto(
         this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "-ums:likedAlbum, +dc:title", this.currentContainerID, 0, 100));
@@ -90,7 +85,6 @@ export class ModalSearchResultComponent {
   }
 
   showAllItemArtist(): void {
-    this.contentDirectoryService.popCurrentPathAsParent();
     this.contentDirectoryService.searchAllArtists(
       this.dtoGeneratorService.generateQuickSearchDto(
         this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", this.currentContainerID, 0, 100));
@@ -98,7 +92,6 @@ export class ModalSearchResultComponent {
   }
 
   showAllPlaylist(): void {
-    this.contentDirectoryService.popCurrentPathAsParent();
     this.contentDirectoryService.searchAllPlaylist(
       this.dtoGeneratorService.generateQuickSearchDto(
         this.contentDirectoryService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", this.currentContainerID, 0, 100));
