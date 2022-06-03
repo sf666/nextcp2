@@ -1,3 +1,9 @@
+<nav-bar *ngIf="layoutService.headerVisible"
+    [parentTitle]="getParentTitle()"
+    [backButtonDisabled]="backButtonDisabled()"
+    
+    (backButtonPressed)="backButtonPressed($event)"
+></nav-bar>
 
 <mediaServer-display-container 
     [showTopHeader]="showTopHeader()"

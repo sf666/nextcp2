@@ -21,7 +21,7 @@ export class MyAlbumComponent implements OnInit {
   }
 
   mediaServerChanged(data: MediaServerDto): void {
-    // TODO check if media server has extended api
+    this.loadMyAlbums();
   }
 
   ngOnInit(): void {
@@ -30,7 +30,9 @@ export class MyAlbumComponent implements OnInit {
 
   private loadMyAlbums() {
     const oid = "$DBID$MYMUSIC$";
-    this.contentDirectoryService.browseChildren(oid, "", this.deviceService.selectedMediaServerDevice.udn).subscribe();
+    if (this.deviceService.selectedMediaServerDevice.udn) {
+      this.contentDirectoryService.browseChildren(oid, "", this.deviceService.selectedMediaServerDevice.udn).subscribe();
+    }
   }
 
   hasExtendedApi(): boolean {
@@ -40,13 +42,36 @@ export class MyAlbumComponent implements OnInit {
   //
   // Event
   //
+
+  getParentTitle(): string {
+    if (this.isMyMusicRoot()) {
+      return "";
+    }
+    return "back to my music";
+  }
+
+  public backButtonPressed(event: any) {
+    this.loadMyAlbums();
+  }
+
+
   containerSelected(event: ContainerDto) {
     this.contentDirectoryService.browseChildrenByContiner(event);
   }
 
   //
+  // Util methods
+  //
+  isMyMusicRoot(): boolean {
+    return this.contentDirectoryService.currentContainerID.lastIndexOf("$DBID$MYMUSIC$", 0) === 0;
+  }
+
+  //
   // bindings
   //
+  backButtonDisabled() {
+    return this.isMyMusicRoot();
+  }
 
   showTopHeader(): boolean {
     return true;
