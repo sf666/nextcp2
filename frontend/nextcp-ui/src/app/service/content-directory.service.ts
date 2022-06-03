@@ -40,7 +40,6 @@ export class ContentDirectoryService {
     private httpService: HttpService,
     private dtoGeneratorService: DtoGeneratorService,
     private cdsBrowsePathService: CdsBrowsePathService,
-    private persistenceService: PersistenceService,
     private deviceService: DeviceService,
     private toastService: ToastService
     ) {
@@ -120,13 +119,6 @@ export class ContentDirectoryService {
   }
  
   /**
-   * Browses to special MyMusic Folder. TODO: URL should be retrieved from media server (i.e. UMS)
-   */
-  public browseToMyMusic() {
-    this.browseChildren("$DBID$MYMUSIC$", "");
-  }
-
-  /**
   * Browses to special MyMusic Folder. TODO: URL should be retrieved from media server (i.e. UMS)
   */
   public browseToMyPlaylist(playlistId : number) {
@@ -158,7 +150,6 @@ export class ContentDirectoryService {
     const uri = '/browseChildren';
     const sub = this.httpService.post<ContainerItemDto>(this.baseUri, uri, browseRequestDto)
     sub.subscribe(data => this.updateContainer(data));
-    this.persistenceService.setCurrentObjectID(browseRequestDto.objectID);
     this.cdsBrowsePathService.persistPathToRoot();
     return sub;
   }

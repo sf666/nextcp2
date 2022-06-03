@@ -1,3 +1,4 @@
+import { Subject } from 'rxjs';
 import { CdsBrowsePathService } from './../../util/cds-browse-path.service';
 import { PersistenceService } from './../../service/persistence/persistence.service';
 import { DeviceService } from 'src/app/service/device.service';
@@ -32,9 +33,12 @@ export class MusicLibraryComponent {
   }
 
   mediaServerChanged(data: MediaServerDto): void {
-    // Update to root folder of media server
-    let oid: string;
+    if (!data.udn) {
+      return;
+    }
     this.currentMediaServcerDto = data;
+
+    let oid: string;
     if (this.persistenceService.isCurrentMediaServer(data.udn)) {
       oid = this.persistenceService.getLastMediaServerPath();
       this.cdsBrowsePathService.restorePathToRoot();
@@ -46,7 +50,12 @@ export class MusicLibraryComponent {
       this.persistenceService.setNewMediaServerDevice(data.udn);
     }
 
-    this.contentDirectoryService.browseChildren(oid, "", data.udn).subscribe(data => this.contentReceived(data));
+    this.browseToOid(oid, "").subscribe(data => this.contentReceived(data));
+  }
+
+  private browseToOid(oid : string, sortCriteria?: string): Subject<ContainerItemDto> {
+    this.persistenceService.setCurrentObjectID(oid);
+    return this.contentDirectoryService.browseChildren(oid, sortCriteria, this.deviceService.selectedMediaServerDevice.udn);
   }
 
   contentReceived(data: ContainerItemDto): void {
@@ -57,10 +66,10 @@ export class MusicLibraryComponent {
     }
   }
 
-  public browseToRoot(sortCriteria: string): void {
+  public browseToRoot(sortCriteria?: string): void {
     this.cdsBrowsePathService.clearPath();
     this.cdsBrowsePathService.stepIn("0");
-    this.contentDirectoryService.browseChildren("0", sortCriteria, this.currentMediaServcerDto.udn);
+    this.browseToOid("0", sortCriteria);
   }
 
   //
@@ -73,7 +82,7 @@ export class MusicLibraryComponent {
   public backButtonPressed(event: any) {
     const currentParent = this.contentDirectoryService?.currentContainerList?.currentContainer?.parentID;
     if (currentParent) {
-      this.contentDirectoryService.browseChildren(currentParent, "", this.currentMediaServcerDto.udn);
+      this.browseToOid(currentParent, "");
       this.cdsBrowsePathService.stepOut();
     }
   }
@@ -89,6 +98,7 @@ export class MusicLibraryComponent {
   containerSelected(event: ContainerDto) {
     // remember path here
     this.cdsBrowsePathService.stepIn(event.id);
+    this.persistenceService.setCurrentObjectID(event.id);
     this.contentDirectoryService.browseChildrenByContiner(event);
   }
 

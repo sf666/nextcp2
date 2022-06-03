@@ -130,6 +130,12 @@ export class DeviceService {
     return this._selectedMediaServerDevice;
   }
 
+  public get selectedMediaServerDeviceHasExtendedApi(): boolean {
+    if (this._selectedMediaServerDevice) {
+      return this._selectedMediaServerDevice.extendedApi;
+    }
+  }
+
   public set selectedMediaServerDevice(device: MediaServerDto) {
     this._selectedMediaServerDevice = device;
     this.mediaServerChanged$.next(device);

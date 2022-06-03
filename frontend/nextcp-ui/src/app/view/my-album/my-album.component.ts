@@ -1,6 +1,6 @@
 import { DeviceService } from 'src/app/service/device.service';
 import { LayoutService } from './../../service/layout.service';
-import { ContainerDto, MusicItemDto } from './../../service/dto.d';
+import { ContainerDto, MusicItemDto, MediaServerDto } from './../../service/dto.d';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -14,14 +14,28 @@ export class MyAlbumComponent implements OnInit {
 
   constructor(
     public layoutService: LayoutService,
+    private deviceService: DeviceService,
     public contentDirectoryService: ContentDirectoryService) {
-    console.log("constructor call : MyAlbumComponent");   
+    console.log("constructor call : MyAlbumComponent");
+    deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));
+  }
+
+  mediaServerChanged(data: MediaServerDto): void {
+    // TODO check if media server has extended api
   }
 
   ngOnInit(): void {
-    this.contentDirectoryService.browseToMyMusic();
+    this.loadMyAlbums();
   }
 
+  private loadMyAlbums() {
+    const oid = "$DBID$MYMUSIC$";
+    this.contentDirectoryService.browseChildren(oid, "", this.deviceService.selectedMediaServerDevice.udn).subscribe();
+  }
+
+  hasExtendedApi(): boolean {
+    return this.deviceService.selectedMediaServerDeviceHasExtendedApi;
+  }
 
   //
   // Event
