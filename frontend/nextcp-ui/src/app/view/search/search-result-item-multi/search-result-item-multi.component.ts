@@ -26,7 +26,6 @@ export class SearchResultItemMultiComponent {
 
   browseToContainer(container: ContainerDto): void {
     this.contentDirectoryService.browseChildrenByContiner(container);
-    void this.router.navigateByUrl('music-library');
   }
 
   play(musicItemDto: MusicItemDto): void {

@@ -1,10 +1,9 @@
+import { DeviceService } from './device.service';
 import { ToastService } from './toast/toast.service';
 import { PersistenceService } from './persistence/persistence.service';
 import { Subject } from 'rxjs';
 import { CdsBrowsePathService } from './../util/cds-browse-path.service';
-import { Router } from '@angular/router';
 import { DtoGeneratorService } from './../util/dto-generator.service';
-import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
 import { ContainerItemDto, BrowseRequestDto, MediaServerDto, ContainerDto, SearchRequestDto, SearchResultDto, MusicItemDto } from './dto.d';
 import { Injectable } from '@angular/core';
@@ -20,8 +19,6 @@ export class ContentDirectoryService {
   private customParentID: string;
   private currentMediaServerDto: MediaServerDto;
   public orderAlbumsByGenre = false;
-
-  private lastOidIsResoredFromCache: boolean;
 
   // QuickSearch Support
   public quickSearchResultList: SearchResultDto;
@@ -42,21 +39,17 @@ export class ContentDirectoryService {
 
   constructor(
     private httpService: HttpService,
-    private router: Router,
-    private persistenceService: PersistenceService,
     private dtoGeneratorService: DtoGeneratorService,
     private cdsBrowsePathService: CdsBrowsePathService,
-    private toastService: ToastService,
-    private deviceService: DeviceService) {
+    private persistenceService: PersistenceService,
+    private deviceService: DeviceService,
+    private toastService: ToastService
+    ) {
 
     // Initialize empty result object
     this.currentContainerList = this.dtoGeneratorService.generateEmptyContainerItemDto();
     this.quickSearchResultList = this.dtoGeneratorService.generateEmptySearchResultDto();
     this.quickSearchPanelVisible = false;
-
-    // select current mediaServer and subscribe to changes ...
-    this.mediaServerChanged(deviceService.selectedMediaServerDevice);
-    deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));
   }
 
   public getCurrentMediaServerDto(): MediaServerDto {
@@ -110,31 +103,8 @@ export class ContentDirectoryService {
     }
   }
 
-
-
   public minimTagsList(): ContainerDto[] {
     return this.currentContainerList.minimServerSupportTags;
-  }
-
-  //
-  // --------------------------------------------------------------------------------------------
-  //
-
-  mediaServerChanged(data: MediaServerDto): void {
-    // Update to root folder of media server
-    let oid: string;
-    if (this.persistenceService.isCurrentMediaServer(data.udn)) {
-      oid = this.persistenceService.getLastMediaServerPath();
-      this.cdsBrowsePathService.restorePathToRoot();
-      this.lastOidIsResoredFromCache = true;
-    } else {
-      this.lastOidIsResoredFromCache = false;
-      oid = '0';
-      this.cdsBrowsePathService.clearPath();
-      this.persistenceService.setNewMediaServerDevice(data.udn);
-    }
-    this.currentMediaServerDto = data;
-    this.browseChildrenByRequest(this.createBrowseRequest(oid, "", data.udn));
   }
 
   public showQuickSearchPanel(): void {
@@ -195,7 +165,7 @@ export class ContentDirectoryService {
    * @param sortCriteria 
    * @param mediaServerUdn 
    */
-  public browseChildren(objectID: string, sortCriteria: string, mediaServerUdn?: string, isStepOut?: boolean): void {
+  public browseChildren(objectID: string, sortCriteria: string, mediaServerUdn?: string, isStepOut?: boolean): Subject<ContainerItemDto> {
     if (!mediaServerUdn) {
       if (!this.currentMediaServerDto?.udn) {
         this.toastService.error("select media server", "MediaLibrary");
@@ -204,7 +174,7 @@ export class ContentDirectoryService {
       }
     }
     this.updateBrowsePath(objectID, isStepOut);
-    this.browseChildrenByRequest(this.createBrowseRequest(objectID, sortCriteria, mediaServerUdn));
+    return this.browseChildrenByRequest(this.createBrowseRequest(objectID, sortCriteria, mediaServerUdn));
   }
 
   public browseToRoot(sortCriteria: string): void {
@@ -232,9 +202,6 @@ export class ContentDirectoryService {
     sub.subscribe(data => this.updateContainer(data));
     this.persistenceService.setCurrentObjectID(browseRequestDto.objectID);
     this.cdsBrowsePathService.persistPathToRoot();
-    if (browseRequestDto.objectID == '0') {
-      this.router.navigateByUrl('music-library');
-    }
     return sub;
   }
 
@@ -248,15 +215,10 @@ export class ContentDirectoryService {
    */
   public updateContainer(data: ContainerItemDto): void {
     this.currentContainerList = data;
-    if (this.lastOidIsResoredFromCache && !(data.containerDto.length > 0 || data.musicItemDto.length > 0)) {
-      this.browseToRoot('');
-      this.lastOidIsResoredFromCache = false;
-    } else {
-      this.containerList_ = this.currentContainerList.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer");
-      this.playlistList_ = this.currentContainerList.containerDto.filter(item => item.objectClass === "object.container.playlistContainer");
-      this.musicTracks_ = this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0);
-      this.otherItems_ = this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0);
-    }
+    this.containerList_ = this.currentContainerList.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer");
+    this.playlistList_ = this.currentContainerList.containerDto.filter(item => item.objectClass === "object.container.playlistContainer");
+    this.musicTracks_ = this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0);
+    this.otherItems_ = this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0);
     this.browseFinished$.next(data);
   }
 

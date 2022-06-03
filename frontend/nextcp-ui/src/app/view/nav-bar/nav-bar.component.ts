@@ -1,6 +1,5 @@
 import { ConfigurationService } from './../../service/configuration.service';
 import { debounce } from 'src/app/global';
-import { ContainerDto } from './../../service/dto.d';
 import { Router, NavigationStart, Event as NavigationEvent } from '@angular/router';
 import { DeviceService } from './../../service/device.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
@@ -67,6 +66,9 @@ export class NavBarComponent {
     this.contentDirectoryService.gotoParent();
   }
   
+  /**
+   * Close serach ?
+   */
   searchBackPressed(): void {
     //    this.contentDirectoryService.browseToRoot("", this.contentDirectoryService.currentContainerList.currentContainer.mediaServerUDN);
     void this.router.navigateByUrl('music-library');

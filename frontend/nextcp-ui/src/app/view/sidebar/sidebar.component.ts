@@ -52,7 +52,6 @@ export class SidebarComponent {
    * @param id ID of my album button
    */
   public myAlbumClicked(id: number): void {
-    this.contentDirectoryService.browseToMyMusic();
     this.afterButtonClicked(id);
   }
 
