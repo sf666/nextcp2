@@ -1,7 +1,6 @@
 import { CdsBrowsePathService } from './../../util/cds-browse-path.service';
 import { SongOptionsServiceService } from 'src/app/mediaserver/popup/song-options/song-options-service.service';
 import { AvtransportService } from 'src/app/service/avtransport.service';
-import { ContentDirectoryService } from './../../service/content-directory.service';
 import { PlaylistService } from './../../service/playlist.service';
 import { TrackQualityService } from './../../util/track-quality.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
@@ -29,6 +28,7 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
   @Input() otherContainer: ContainerDto[];
 
   @Input() scrollToID: string;
+  @Input() extendedApi: boolean = true;
 
   // Inform parent about actions
   @Output() containerSelected = new EventEmitter<ContainerDto>();
@@ -54,7 +54,6 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
     private timeDisplayService: TimeDisplayService,
     public playlistService: PlaylistService,
     public avtransportService: AvtransportService,
-    public contentDirectoryService: ContentDirectoryService,
     private cdsBrowsePathService: CdsBrowsePathService,
     private songOptionsServiceService: SongOptionsServiceService,
     public trackQualityService: TrackQualityService) {
@@ -410,4 +409,10 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
     return "";
   }
 
+  //
+  // Access
+  //
+  getAllMusicTracks() {
+    return this.musicTracks;
+  }
 }

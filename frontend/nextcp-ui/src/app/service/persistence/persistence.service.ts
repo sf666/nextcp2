@@ -9,8 +9,6 @@ import { MediaServerDto } from '../dto';
 })
 export class PersistenceService {
 
-  private lastVisitedPath : LastVisitedPath;
-
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor(private cdsBrowsePathService: CdsBrowsePathService) {}
 

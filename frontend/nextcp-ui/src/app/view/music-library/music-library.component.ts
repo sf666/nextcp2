@@ -115,7 +115,7 @@ export class MusicLibraryComponent {
   }
 
   musicTracks(): MusicItemDto[] {
-    return this.contentDirectoryService.getMusicTracks();
+    return this.contentDirectoryService.musicTracks_;
   }
 
   otherItems_(): MusicItemDto[] {

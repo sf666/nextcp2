@@ -57,7 +57,7 @@ export class MyAlbumComponent implements OnInit {
   }
 
   musicTracks(): MusicItemDto[] {
-    return this.contentDirectoryService.getMusicTracks();
+    return this.contentDirectoryService.musicTracks_;
   }
 
   otherItems_(): MusicItemDto[] {

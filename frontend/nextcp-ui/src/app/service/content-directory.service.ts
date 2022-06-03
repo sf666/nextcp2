@@ -59,48 +59,6 @@ export class ContentDirectoryService {
   // --------------------------------------------------------------------------------------------
   //
 
-  // container without playlists
-  public containerList(filter?: string): ContainerDto[] {
-    if (filter) {
-      return this.containerList_.filter(item => this.doFilterText(item.title, filter));
-    } else {
-      return this.containerList_;
-    }
-  }
-
-  // playlist container
-  public playlistList(filter?: string): ContainerDto[] {
-    if (filter) {
-      return this.playlistList_.filter(item => this.doFilterText(item.title, filter));
-    } else {
-      return this.playlistList_;
-    }
-  }
-
-  // container with album tags
-  public albumList(filter?: string): ContainerDto[] {
-    if (filter) {
-      return this.currentContainerList.albumDto.filter(item => this.doFilterText(item.title, filter));
-    } else {
-      return this.currentContainerList.albumDto;
-    }
-  }
-
-  private doFilterText(title: string, filter?: string) {
-    if (!filter) {
-      return true;
-    }
-    return title.toLowerCase().includes(filter.toLowerCase());
-  }
-
-  public getMusicTracks(filter?: string): MusicItemDto[] {
-    if (filter) {
-      return this.musicTracks_.filter(item => this.doFilterText(item.title, filter));
-    } else {
-      return this.musicTracks_;
-    }
-  }
-
   public minimTagsList(): ContainerDto[] {
     return this.currentContainerList.minimServerSupportTags;
   }
@@ -169,6 +127,14 @@ export class ContentDirectoryService {
     this.musicTracks_ = this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0);
     this.otherItems_ = this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0);
     this.browseFinished$.next(data);
+  }
+
+  private isMusicTrack(item: MusicItemDto) {
+    if (item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0) {
+      return true;
+    }
+    
+    return false;
   }
 
   private createBrowseRequest(objectID: string, sortCriteria: string, mediaServerUdn: string): BrowseRequestDto {
