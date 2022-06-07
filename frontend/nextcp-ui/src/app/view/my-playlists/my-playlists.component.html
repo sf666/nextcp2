@@ -1,0 +1,17 @@
+<nav-bar *ngIf="layoutService.headerVisible"
+    [parentTitle]="getParentTitle()"
+    [backButtonDisabled]="true"
+></nav-bar>
+
+<mediaServer-display-container 
+    [showTopHeader]="showTopHeader()"
+    [currentContainer]="currentContainer()"
+    [musicTracks]="musicTracks()"
+    [otherItems_]="otherItems_()"
+    [albums]="albums()"
+    [playlists]="playlists()"
+    [otherContainer]="otherContainer()"
+    [scrollToID]="scrollToID()"
+
+    (containerSelected)="containerSelected($event)"
+></mediaServer-display-container>

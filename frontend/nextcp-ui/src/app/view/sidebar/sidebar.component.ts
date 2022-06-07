@@ -1,6 +1,5 @@
-import { ContainerDto } from './../../service/dto.d';
+import { MyPlaylistService } from './../my-playlists/my-playlist.service';
 import { PlaylistService } from './../../service/playlist.service';
-import { ContentDirectoryService } from './../../service/content-directory.service';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
 import { Component } from '@angular/core';
@@ -20,7 +19,7 @@ export class SidebarComponent {
   constructor(
     public deviceService: DeviceService,
     public playlistService: PlaylistService,
-    private contentDirectoryService: ContentDirectoryService,
+    private myPlaylistService: MyPlaylistService,
     public rendererService: RendererService) {
     deviceService.mediaRendererChanged$.subscribe(data => this._mediaRendererUdn = data.udn);
     deviceService.mediaServerChanged$.subscribe(data => this._mediaServerUdn = data.udn);
@@ -42,7 +41,7 @@ export class SidebarComponent {
    * @param id playlist id
    */
   public browseToPlaylist(id: number) {
-    this.contentDirectoryService.browseToMyPlaylist(id);
+    this.myPlaylistService.selectPlaylist(id);
     this.afterButtonClicked(id);
   }
 

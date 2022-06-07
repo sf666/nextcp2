@@ -1,3 +1,4 @@
+import { MyPlaylistsComponent } from './view/my-playlists/my-playlists.component';
 import { MyAlbumComponent } from './view/my-album/my-album.component';
 import { MySongsComponent } from './view/my-songs/my-songs.component';
 import { SearchResultItemMultiComponent } from './view/search/search-result-item-multi/search-result-item-multi.component';
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'settings', component: SettingsComponent },
   { path: 'myAlbums', component: MyAlbumComponent },
   { path: 'myTracks', component: MySongsComponent },
+  { path: 'myPlaylists', component: MyPlaylistsComponent },
   { path: 'radio', component: RadioComponent },
   { path: 'playlist', component: PlaylistComponent },  
   { path: 'searchResultSingleItem', component: SearchResultItemSingleComponent },  
