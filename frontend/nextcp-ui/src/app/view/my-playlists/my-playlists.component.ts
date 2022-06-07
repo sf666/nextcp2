@@ -33,10 +33,6 @@ export class MyPlaylistsComponent implements OnInit {
   // Event
   //
 
-  getParentTitle(): string {
-    return "";
-  }
-
   containerSelected(event: ContainerDto) {
     this.contentDirectoryService.browseChildrenByContiner(event);
   }
