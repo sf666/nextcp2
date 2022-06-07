@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { MyPlaylistService } from './../my-playlists/my-playlist.service';
 import { PlaylistService } from './../../service/playlist.service';
 import { RendererService } from './../../service/renderer.service';
@@ -13,6 +14,8 @@ export class SidebarComponent {
 
   private _mediaServerUdn: string;
   private _mediaRendererUdn: string;
+  public routerMap = new Map<string, number>();
+
 
   private activeId: number;
 
@@ -20,11 +23,31 @@ export class SidebarComponent {
     public deviceService: DeviceService,
     public playlistService: PlaylistService,
     private myPlaylistService: MyPlaylistService,
+    private router: Router,
     public rendererService: RendererService) {
     deviceService.mediaRendererChanged$.subscribe(data => this._mediaRendererUdn = data.udn);
     deviceService.mediaServerChanged$.subscribe(data => this._mediaServerUdn = data.udn);
 
-    this.activeId = -1; // default active route is "Media Library"
+    this.routerMap.set("/music-library", -1);
+    this.routerMap.set("/playlist", -2);
+    this.routerMap.set("/player", -3);
+    this.routerMap.set("/radio", -4);
+    this.routerMap.set("/myAlbums", -5);
+    this.routerMap.set("/settings", -6);
+    this.routerMap.set("/myPlaylists", 0); // All positives ID's are playlists
+
+    this.routerMap.set("/myTracks", -999); // not used yet
+
+    this.activeId = this.calActiveId(); // default active route is "Media Library"
+  }
+
+  private calActiveId(): number {
+    let id = this.routerMap.get(this.router.url);
+    if (id < 0) {
+      return id;
+    } else {
+      return this.activeId = this.myPlaylistService.activePlaylistId;
+    }
   }
 
   /**
@@ -32,8 +55,8 @@ export class SidebarComponent {
    * 
    * @param itemId Button ID
    */
-  public musicLibraryClicked(itemId: number): void {
-    this.activeId = itemId;
+  public musicLibraryClicked(): void {
+    this.afterButtonClicked(this.routerMap.get("/music-library"));
   }
 
   /**
@@ -50,23 +73,31 @@ export class SidebarComponent {
    * 
    * @param id ID of my album button
    */
-  public myAlbumClicked(id: number): void {
-    this.afterButtonClicked(id);
+  public myAlbumClicked(): void {
+    this.afterButtonClicked(this.routerMap.get("/myAlbums"));
   }
 
   /**
    * One Button is clicked. ID will be tracked for delivering the active class.
    * @param itemId 
    */
-  public buttonClicked(itemId: number): void {
-    this.afterButtonClicked(itemId);
+  public buttonClicked(routerUrl: string): void {
+    this.afterButtonClicked(this.routerMap.get(routerUrl));
   }
 
   private afterButtonClicked(itemId: number): void {
     this.activeId = itemId;
   }
 
-  public getTextClass(id: number): string {
+  public getTextClass(url: string): string {
+    let id = this.routerMap.get(url);
+    if (id == this.activeId) {
+      return "active";
+    }
+    return "button-text";
+  }
+
+  public getPlaylistClass(id: number) {
     if (id == this.activeId) {
       return "active";
     }
