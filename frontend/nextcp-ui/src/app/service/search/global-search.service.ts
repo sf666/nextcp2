@@ -18,6 +18,7 @@ export class GlobalSearchService {
   public quickSearchQueryString: string;
   public quickSearchPanelVisible: boolean;
 
+  public lastSearch;
 
   private currentSearchText: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -92,6 +93,12 @@ export class GlobalSearchService {
     this.quickSearchPanelVisible = false;
   }
 
+  public backToLastSearch() {
+    if (this.lastSearch) {
+      this.lastSearch();
+    }
+  }
+
   //
   // show all clicked
   // 
@@ -105,6 +112,7 @@ export class GlobalSearchService {
       this.dtoGeneratorService.generateQuickSearchDto(
         this.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "-upnp:rating, +dc:title", this.currentContainerID, 0, 100));
     this.hideQuickSearchPanel();
+    this.lastSearch = this.showAllItem;
     void this.router.navigateByUrl('searchResult');
   }
 
@@ -113,6 +121,7 @@ export class GlobalSearchService {
       this.dtoGeneratorService.generateQuickSearchDto(
         this.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "-ums:likedAlbum, +dc:title", this.currentContainerID, 0, 100));
     this.hideQuickSearchPanel();
+    this.lastSearch = this.showAllAlbum;
     void this.router.navigateByUrl('searchResult');
   }
 
@@ -121,6 +130,7 @@ export class GlobalSearchService {
       this.dtoGeneratorService.generateQuickSearchDto(
         this.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", this.currentContainerID, 0, 100));
     this.hideQuickSearchPanel();
+    this.lastSearch = this.showAllItemArtist;
     void this.router.navigateByUrl('searchResult');
   }
 
@@ -129,6 +139,7 @@ export class GlobalSearchService {
       this.dtoGeneratorService.generateQuickSearchDto(
         this.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", this.currentContainerID, 0, 100));
     this.hideQuickSearchPanel();
+    this.lastSearch = this.showAllPlaylist;
     void this.router.navigateByUrl('searchResult');
   }
 }

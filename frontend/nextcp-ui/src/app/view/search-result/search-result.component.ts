@@ -12,17 +12,17 @@ import { Component, OnInit } from '@angular/core';
   selector: 'search-result',
   templateUrl: './search-result.component.html',
   styleUrls: ['./search-result.component.scss'],
-  providers: [ContentDirectoryService, CdsBrowsePathService, {provide: 'uniqueId', useValue: 'search-result_'} ]
+  providers: [ContentDirectoryService, CdsBrowsePathService, { provide: 'uniqueId', useValue: 'search-result_' }]
 })
 
 export class SearchResultComponent implements OnInit {
 
+  private showTopHeader_ = false;
+
   constructor(
     public layoutService: LayoutService,
     public globalSearchService: GlobalSearchService,
-    private deviceService: DeviceService,
     private cdsBrowsePathService: CdsBrowsePathService,
-    private persistenceService: PersistenceService
   ) {
   }
 
@@ -37,17 +37,8 @@ export class SearchResultComponent implements OnInit {
   }
 
   public backButtonPressed(event: any) {
-    const currentParent = this.globalSearchService.contentDirectoryService?.currentContainerList?.currentContainer?.parentID;
-    if (currentParent) {
-      this.browseToOid(currentParent, "");
-      this.cdsBrowsePathService.stepOut();
-    }
-  }
-
-  private browseToOid(oid: string, sortCriteria?: string): Subject<ContainerItemDto> {
-    this.persistenceService.setCurrentObjectID(oid);
-    this.cdsBrowsePathService.stepIn(oid);
-    return this.globalSearchService.contentDirectoryService.browseChildren(oid, sortCriteria, this.deviceService.selectedMediaServerDevice.udn);
+    this.showTopHeader_ = false;
+    this.globalSearchService.backToLastSearch();
   }
 
   public backButtonDisabled(): boolean {
@@ -60,6 +51,7 @@ export class SearchResultComponent implements OnInit {
   //
   containerSelected(event: ContainerDto) {
     // remember path here
+    this.showTopHeader_ = true;
     this.cdsBrowsePathService.stepIn(event.id);
     this.globalSearchService.contentDirectoryService.browseChildrenByContiner(event);
   }
@@ -67,6 +59,10 @@ export class SearchResultComponent implements OnInit {
   //
   // bindings
   // =======================================================================
+
+  showTopHeader() : boolean {
+    return this.showTopHeader_;
+  }
 
   currentContainer(): ContainerDto {
     return this.globalSearchService.contentDirectoryService.currentContainerList.currentContainer;
