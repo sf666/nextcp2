@@ -19,11 +19,6 @@ export class ContentDirectoryService {
   private currentMediaServerDto: MediaServerDto;
   public orderAlbumsByGenre = false;
 
-  // QuickSearch Support
-  public quickSearchResultList: SearchResultDto;
-  public quickSearchQueryString: string;
-  public quickSearchPanelVisible: boolean;
-
   // result container split by types
   public containerList_: ContainerDto[] = [];  // not playlist container
   public playlistList_: ContainerDto[] = [];   // playlist container
@@ -46,8 +41,6 @@ export class ContentDirectoryService {
 
     // Initialize empty result object
     this.currentContainerList = this.dtoGeneratorService.generateEmptyContainerItemDto();
-    this.quickSearchResultList = this.dtoGeneratorService.generateEmptySearchResultDto();
-    this.quickSearchPanelVisible = false;
   }
 
   public getCurrentMediaServerDto(): MediaServerDto {
@@ -63,19 +56,6 @@ export class ContentDirectoryService {
     return this.currentContainerList.minimServerSupportTags;
   }
 
-  public showQuickSearchPanel(): void {
-    this.quickSearchPanelVisible = true;
-  }
-
-  public hideQuickSearchPanel(): void {
-    this.quickSearchPanelVisible = false;
-  }
-
-  public clearSearch(): void {
-    this.quickSearchResultList = this.dtoGeneratorService.generateEmptySearchResultDto();
-    this.quickSearchPanelVisible = false;
-  }
- 
   /**
   * Browses to special MyMusic Folder. TODO: URL should be retrieved from media server (i.e. UMS)
   */
@@ -153,16 +133,13 @@ export class ContentDirectoryService {
   // Search Section
   // =====================================================================================
   //
-  public quickSearch(searchQuery: string, sortCriteria: string, mediaServerUdn: string): void {
-    this.quickSearchByDto(this.dtoGeneratorService.generateQuickSearchDto(searchQuery, mediaServerUdn, sortCriteria, this.currentContainerID));
+  public quickSearch(searchQuery: string, sortCriteria: string, mediaServerUdn: string): Subject<SearchResultDto> {
+    return this.quickSearchByDto(this.dtoGeneratorService.generateQuickSearchDto(searchQuery, mediaServerUdn, sortCriteria, this.currentContainerID));
   }
 
-  public quickSearchByDto(quickSearchDto: SearchRequestDto): void {
-
+  public quickSearchByDto(quickSearchDto: SearchRequestDto): Subject<SearchResultDto> {
     const uri = '/quickSearch';
-    this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
-      this.quickSearchResultList = data;
-    });
+    return this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto);
   }
 
   public rescanContent(mediaServerUdn: string): void {
@@ -203,7 +180,6 @@ export class ContentDirectoryService {
     ci.containerDto = searchResultContainer;
     ci.currentContainer = this.currentContainerList.currentContainer;
     ci.currentContainer.parentID = this.cdsBrowsePathService.peekCurrentPathID();
-    this.clearSearch();
     this.updateContainer(ci);
     this.searchFinished$.next(ci);
   }
@@ -217,7 +193,6 @@ export class ContentDirectoryService {
     ci.currentContainer.artist = '';
     ci.currentContainer.title = '';
     ci.currentContainer.parentID = this.cdsBrowsePathService.peekCurrentPathID();
-    this.clearSearch();
     this.updateContainer(ci);
     this.searchFinished$.next(ci);
   }
