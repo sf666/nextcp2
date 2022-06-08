@@ -1,9 +1,5 @@
 import { GlobalSearchService } from './../../service/search/global-search.service';
-import { DtoGeneratorService } from './../../util/dto-generator.service';
-import { SearchResultDto } from './../../service/dto.d';
-import { ConfigurationService } from './../../service/configuration.service';
 import { Router, NavigationStart, Event as NavigationEvent } from '@angular/router';
-import { DeviceService } from './../../service/device.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { Component, Output, EventEmitter, Input } from '@angular/core';
 
@@ -26,8 +22,6 @@ export class NavBarComponent {
   showBackButton = false;
 
   private currentPath: string;
-
-
 
   constructor(
     private router: Router,

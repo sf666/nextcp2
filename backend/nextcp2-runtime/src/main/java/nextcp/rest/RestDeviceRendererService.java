@@ -85,7 +85,6 @@ public class RestDeviceRendererService
         {
             log.info(String.format("Getting device state for device %s : %s", dto.friendlyName, device.getDeviceDriverState()));
             DeviceDriverState dd = device.getDeviceDriverState();
-            dd.hasDeviceDriver = true;
             return dd;
         }
         else

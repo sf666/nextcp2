@@ -5,20 +5,20 @@ import { DeviceService } from 'src/app/service/device.service';
 import { LayoutService } from './../../service/layout.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { ContainerDto, MusicItemDto, MediaServerDto, ContainerItemDto } from './../../service/dto.d';
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 
 @Component({
   selector: 'music-library',
   templateUrl: './music-library.component.html',
   styleUrls: ['./music-library.component.scss'],
-  providers: [ContentDirectoryService]
+  providers: [ContentDirectoryService, CdsBrowsePathService, {provide: 'uniqueId', useValue: 'music-library_'}]
 })
 
 export class MusicLibraryComponent {
 
-
   private lastOidIsResoredFromCache: boolean;
-  private currentMediaServcerDto: MediaServerDto;
+
+  private scrollToId_: string;
 
   constructor(
     public layoutService: LayoutService,
@@ -36,7 +36,6 @@ export class MusicLibraryComponent {
     if (!data.udn) {
       return;
     }
-    this.currentMediaServcerDto = data;
 
     let oid: string;
     if (this.persistenceService.isCurrentMediaServer(data.udn)) {
@@ -53,7 +52,7 @@ export class MusicLibraryComponent {
     this.browseToOid(oid, "").subscribe(data => this.contentReceived(data));
   }
 
-  private browseToOid(oid : string, sortCriteria?: string): Subject<ContainerItemDto> {
+  private browseToOid(oid: string, sortCriteria?: string): Subject<ContainerItemDto> {
     this.persistenceService.setCurrentObjectID(oid);
     return this.contentDirectoryService.browseChildren(oid, sortCriteria, this.deviceService.selectedMediaServerDevice.udn);
   }
@@ -135,6 +134,6 @@ export class MusicLibraryComponent {
   }
 
   scrollToID(): string {
-    return "";
+    return this.scrollToId_;
   }
 }

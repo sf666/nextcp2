@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import Stack from 'ts-data.stack';
 
 @Injectable({
@@ -10,11 +10,16 @@ export class CdsBrowsePathService {
   private visitedPathFromRoot: Stack<string>;
   private visitedPathFromRootAsString: string;
   private scrollId: string;
+  private uniqueId: string;
 
-  constructor() {
+  constructor(@Inject('uniqueId') private uniqueId_: string) {
+    this.uniqueId = uniqueId_;
     this.visitedPathFromRoot = new Stack();
     this.scrollId = 'ID_SCROLL_TO_ELEMENT_STEP_IN';
     this.visitedPathFromRootAsString = '';
+    if (uniqueId_?.length == 0) {
+      console.error("provide uniqueId");
+    }
   }
 
   public stepIn(path: string): void {
@@ -59,11 +64,11 @@ export class CdsBrowsePathService {
   }
 
   public persistPathToRoot(): void {
-    localStorage.setItem('visitedPath', this.visitedPathFromRootAsString);
+    localStorage.setItem(this.uniqueId + 'visitedPath', this.visitedPathFromRootAsString);
   }
 
   public restorePathToRoot(): void {
-    const pathStack = localStorage.getItem('visitedPath');
+    const pathStack = localStorage.getItem(this.uniqueId + 'visitedPath');
     this.clearPath();
     if (pathStack) {
       pathStack.split(',').forEach(p => {

@@ -56,7 +56,8 @@ import { MySongsComponent } from './view/my-songs/my-songs.component';
 import { ToastContainerComponent } from './service/toast/toast-container/toast-container.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DisplayContainerComponent } from './mediaserver/display-container/display-container.component';
-import { MyPlaylistsComponent } from './view/my-playlists/my-playlists.component'
+import { MyPlaylistsComponent } from './view/my-playlists/my-playlists.component';
+import { SearchResultComponent } from './view/search-result/search-result.component'
 
 @NgModule({
    declarations: [
@@ -91,6 +92,7 @@ import { MyPlaylistsComponent } from './view/my-playlists/my-playlists.component
       ToastContainerComponent,
       DisplayContainerComponent,
       MyPlaylistsComponent,
+      SearchResultComponent,
    ],
    imports: [
       // Material Design

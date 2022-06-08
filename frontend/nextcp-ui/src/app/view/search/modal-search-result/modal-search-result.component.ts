@@ -5,8 +5,6 @@ import { AvtransportService } from './../../../service/avtransport.service';
 import { ContentDirectoryService } from './../../../service/content-directory.service';
 import { ContainerDto, MusicItemDto } from './../../../service/dto.d';
 import { SearchItemService } from './../../../service/search/search-item.service';
-import { DtoGeneratorService } from './../../../util/dto-generator.service';
-import { DeviceService } from './../../../service/device.service';
 import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 
@@ -20,11 +18,8 @@ import { Component } from '@angular/core';
 export class ModalSearchResultComponent {
 
   constructor(
-    public contentDirectoryService: ContentDirectoryService,
     private searchItemService: SearchItemService,
-    private dtoGeneratorService: DtoGeneratorService,
     public globalSearchService: GlobalSearchService,
-    private deviceService: DeviceService,
     private avtransportService: AvtransportService,
     private router: Router) {
   }
@@ -43,60 +38,21 @@ export class ModalSearchResultComponent {
   albumItemSelected(albumItem: ContainerDto): void {
     console.debug("album selected : " + albumItem);
     this.globalSearchService.clearSearch();
-    this.contentDirectoryService.browseChildrenByContiner(albumItem);
-    void this.router.navigateByUrl('music-library');
+    this.globalSearchService.contentDirectoryService.browseChildrenByContiner(albumItem);
+    void this.router.navigateByUrl('searchResult');
   }
 
   playlistItemSelected(playlistItem: ContainerDto): void {
     console.debug("album selected : " + playlistItem);
     this.globalSearchService.clearSearch();
-    this.contentDirectoryService.browseChildrenByContiner(playlistItem);
-    void this.router.navigateByUrl('music-library');
+    this.globalSearchService.contentDirectoryService.browseChildrenByContiner(playlistItem);
+    void this.router.navigateByUrl('searchResult');
   }
 
   artistItemSelected(artistItem: ContainerDto): void {
     console.debug("album selected : " + artistItem);
     this.globalSearchService.clearSearch();
-    this.contentDirectoryService.browseChildrenByContiner(artistItem);
-    void this.router.navigateByUrl('music-library');
+    this.globalSearchService.contentDirectoryService.browseChildrenByContiner(artistItem);
+    void this.router.navigateByUrl('searchResult');
   }
-
-  //
-  // show all clicked
-  // 
-
-
-  // TODO: Should include a "please wait ..." dialog for long 'showAll...' queries ?
-
-  get currentContainerID(): string {
-    return this.contentDirectoryService.currentContainerList.currentContainer.id;
-  }
-
-  showAllItem(): void {
-    this.contentDirectoryService.searchAllItems(
-      this.dtoGeneratorService.generateQuickSearchDto(
-        this.globalSearchService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "-upnp:rating, +dc:title", this.currentContainerID, 0, 100));
-    this.globalSearchService.hideQuickSearchPanel();
-  }
-
-  showAllAlbum(): void {
-    this.contentDirectoryService.searchAllAlbum(
-      this.dtoGeneratorService.generateQuickSearchDto(
-        this.globalSearchService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "-ums:likedAlbum, +dc:title", this.currentContainerID, 0, 100));
-    this.globalSearchService.hideQuickSearchPanel();
-  }
-
-  showAllItemArtist(): void {
-    this.contentDirectoryService.searchAllArtists(
-      this.dtoGeneratorService.generateQuickSearchDto(
-        this.globalSearchService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", this.currentContainerID, 0, 100));
-    this.globalSearchService.hideQuickSearchPanel();
-  }
-
-  showAllPlaylist(): void {
-    this.contentDirectoryService.searchAllPlaylist(
-      this.dtoGeneratorService.generateQuickSearchDto(
-        this.globalSearchService.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", this.currentContainerID, 0, 100));
-    this.globalSearchService.hideQuickSearchPanel();
-  }  
 }

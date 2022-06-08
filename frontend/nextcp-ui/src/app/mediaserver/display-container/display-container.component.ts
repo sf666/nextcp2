@@ -1,4 +1,3 @@
-import { CdsBrowsePathService } from './../../util/cds-browse-path.service';
 import { SongOptionsServiceService } from 'src/app/mediaserver/popup/song-options/song-options-service.service';
 import { AvtransportService } from 'src/app/service/avtransport.service';
 import { PlaylistService } from './../../service/playlist.service';
@@ -11,7 +10,10 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitte
 @Component({
   selector: 'mediaServer-display-container',
   templateUrl: './display-container.component.html',
-  styleUrls: ['./display-container.component.scss']
+  styleUrls: ['./display-container.component.scss'],
+  providers: [
+   {provide: 'uniqueId', useValue: 'displayContainer'},
+ ]
 })
 export class DisplayContainerComponent implements OnInit, OnChanges {
 
@@ -48,13 +50,11 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
   currentAlbumLiked = false;
   private currentAlbumReleaseID = "";
 
-
   constructor(
     private myMusicService: MyMusicService,
     private timeDisplayService: TimeDisplayService,
     public playlistService: PlaylistService,
     public avtransportService: AvtransportService,
-    private cdsBrowsePathService: CdsBrowsePathService,
     private songOptionsServiceService: SongOptionsServiceService,
     public trackQualityService: TrackQualityService) {
   }
@@ -64,10 +64,7 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.init();
-    if (this.scrollToID) {
-      this.cdsBrowsePathService.scrollIntoViewID(this.scrollToID);
-    }    
+    this.init(); 
   }
 
   private init(): void {

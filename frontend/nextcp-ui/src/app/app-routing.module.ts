@@ -1,3 +1,4 @@
+import { SearchResultComponent } from './view/search-result/search-result.component';
 import { MyPlaylistsComponent } from './view/my-playlists/my-playlists.component';
 import { MyAlbumComponent } from './view/my-album/my-album.component';
 import { MySongsComponent } from './view/my-songs/my-songs.component';
@@ -20,11 +21,14 @@ const routes: Routes = [
   { path: 'myTracks', component: MySongsComponent },
   { path: 'myPlaylists', component: MyPlaylistsComponent },
   { path: 'radio', component: RadioComponent },
-  { path: 'playlist', component: PlaylistComponent },  
-  { path: 'searchResultSingleItem', component: SearchResultItemSingleComponent },  
-  { path: 'searchResultContainer', component: SearchResultItemMultiComponent },  
+  { path: 'playlist', component: PlaylistComponent },
+  { path: 'searchResultSingleItem', component: SearchResultItemSingleComponent },
+  { path: 'searchResultContainer', component: SearchResultItemMultiComponent },
+  { path: 'searchResult', component: SearchResultComponent },
   { path: '', redirectTo: '/music-library', pathMatch: 'full' },
 ];
+
+// SearchResultComponent
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { useHash: true, relativeLinkResolution: 'legacy' })],

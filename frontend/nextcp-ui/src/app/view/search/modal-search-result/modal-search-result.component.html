@@ -3,7 +3,7 @@
     <div class="section-box">
         <div class="d-flex justify-content-between mb-3">
             <div class="search-title">Title</div>
-            <div class="search-show-all" (click)="showAllItem()">show all</div>
+            <div class="search-show-all" (click)="globalSearchService.showAllItem()">show all</div>
         </div>
 
         <div class="search-row" *ngIf="globalSearchService.quickSearchResultList?.musicItems?.length > 0; else noContentBlock">
@@ -25,7 +25,7 @@
     <div class="section-box">
         <div class="d-flex justify-content-between mb-3">
             <div class="search-title">Album</div>
-            <div class="search-show-all" (click)="showAllAlbum()">show all</div>
+            <div class="search-show-all" (click)="globalSearchService.showAllAlbum()">show all</div>
         </div>
         <div *ngIf="globalSearchService.quickSearchResultList?.albumItems?.length > 0; else noContentBlock">
             <div *ngFor="let item of globalSearchService.quickSearchResultList?.albumItems"
@@ -42,7 +42,7 @@
     <div class="section-box">
         <div class="d-flex justify-content-between mb-3">
             <div class="search-title">Playlist</div>
-            <div class="search-show-all" (click)="showAllPlaylist()">show all</div>
+            <div class="search-show-all" (click)="globalSearchService.showAllPlaylist()">show all</div>
         </div>
         <div *ngIf="globalSearchService.quickSearchResultList?.playlistItems?.length > 0; else noContentBlock">
             <div *ngFor="let item of globalSearchService.quickSearchResultList?.playlistItems"
@@ -58,7 +58,7 @@
     <div class="section-box">
         <div class="d-flex justify-content-between mb-3">
             <div class="search-title">Artist</div>
-            <div class="search-show-all" (click)="showAllItemArtist()">show all</div>
+            <div class="search-show-all" (click)="globalSearchService.showAllItemArtist()">show all</div>
         </div>
         <div class="search-row" *ngIf="globalSearchService.quickSearchResultList?.artistItems?.length > 0; else noContentBlock">
             <div *ngFor="let item of globalSearchService.quickSearchResultList?.artistItems"

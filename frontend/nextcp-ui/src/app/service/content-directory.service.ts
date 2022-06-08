@@ -1,8 +1,5 @@
-import { DeviceService } from './device.service';
 import { ToastService } from './toast/toast.service';
-import { PersistenceService } from './persistence/persistence.service';
 import { Subject } from 'rxjs';
-import { CdsBrowsePathService } from './../util/cds-browse-path.service';
 import { DtoGeneratorService } from './../util/dto-generator.service';
 import { HttpService } from './http.service';
 import { ContainerItemDto, BrowseRequestDto, MediaServerDto, ContainerDto, SearchRequestDto, SearchResultDto, MusicItemDto } from './dto.d';
@@ -34,8 +31,6 @@ export class ContentDirectoryService {
   constructor(
     private httpService: HttpService,
     private dtoGeneratorService: DtoGeneratorService,
-    private cdsBrowsePathService: CdsBrowsePathService,
-    private deviceService: DeviceService,
     private toastService: ToastService
     ) {
 
@@ -88,7 +83,6 @@ export class ContentDirectoryService {
     const uri = '/browseChildren';
     const sub = this.httpService.post<ContainerItemDto>(this.baseUri, uri, browseRequestDto)
     sub.subscribe(data => this.updateContainer(data));
-    this.cdsBrowsePathService.persistPathToRoot();
     return sub;
   }
 
@@ -107,14 +101,6 @@ export class ContentDirectoryService {
     this.musicTracks_ = this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0);
     this.otherItems_ = this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0);
     this.browseFinished$.next(data);
-  }
-
-  private isMusicTrack(item: MusicItemDto) {
-    if (item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0) {
-      return true;
-    }
-    
-    return false;
   }
 
   private createBrowseRequest(objectID: string, sortCriteria: string, mediaServerUdn: string): BrowseRequestDto {
@@ -150,41 +136,41 @@ export class ContentDirectoryService {
   public searchAllItems(quickSearchDto: SearchRequestDto): void {
     const uri = '/searchAllItems';
     this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
-      this.updateSearchResultItemAndNavigate(data.musicItems);
+      this.updateSearchResultItem(data.musicItems);
     });
   }
 
   public searchAllPlaylist(quickSearchDto: SearchRequestDto): void {
     const uri = '/searchAllPlaylist';
     this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
-      this.updateSearchResultAndNavigate(data.playlistItems);
+      this.updateSearchResult(data.playlistItems);
     });
   }
 
   public searchAllAlbum(quickSearchDto: SearchRequestDto): void {
     const uri = '/searchAllAlbum';
     this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
-      this.updateSearchResultAndNavigate(data.albumItems);
+      this.updateSearchResult(data.albumItems);
     });
   }
 
   public searchAllArtists(quickSearchDto: SearchRequestDto): void {
     const uri = '/searchAllArtists';
     this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
-      this.updateSearchResultAndNavigate(data.artistItems);
+      this.updateSearchResult(data.artistItems);
     });
   }
 
-  private updateSearchResultAndNavigate(searchResultContainer: ContainerDto[]) {
+  private updateSearchResult(searchResultContainer: ContainerDto[]) {
     let ci = this.dtoGeneratorService.generateEmptyContainerItemDto();
     ci.containerDto = searchResultContainer;
     ci.currentContainer = this.currentContainerList.currentContainer;
-    ci.currentContainer.parentID = this.cdsBrowsePathService.peekCurrentPathID();
+    ci.currentContainer.parentID = '';
     this.updateContainer(ci);
     this.searchFinished$.next(ci);
   }
 
-  private updateSearchResultItemAndNavigate(searchResultItems: MusicItemDto[]) {
+  private updateSearchResultItem(searchResultItems: MusicItemDto[]) {
     let ci = this.dtoGeneratorService.generateEmptyContainerItemDto();
     ci.musicItemDto = searchResultItems;
     ci.currentContainer = this.currentContainerList.currentContainer;
@@ -192,7 +178,6 @@ export class ContentDirectoryService {
     ci.currentContainer.childCount = searchResultItems.length;
     ci.currentContainer.artist = '';
     ci.currentContainer.title = '';
-    ci.currentContainer.parentID = this.cdsBrowsePathService.peekCurrentPathID();
     this.updateContainer(ci);
     this.searchFinished$.next(ci);
   }
