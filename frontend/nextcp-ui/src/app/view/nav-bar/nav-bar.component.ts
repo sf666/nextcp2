@@ -71,7 +71,9 @@ export class NavBarComponent {
   }
 
   keyUp(event: KeyboardEvent): void {
-    this.globalSearchService.clearSearch();
+    if (event.key === 'Escape') {
+      this.globalSearchService.clearSearch();
+    }
   }
 
   focus(): void {
