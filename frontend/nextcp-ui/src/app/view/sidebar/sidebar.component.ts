@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import { NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { MyPlaylistService } from './../my-playlists/my-playlist.service';
 import { PlaylistService } from './../../service/playlist.service';
 import { RendererService } from './../../service/renderer.service';
@@ -40,15 +40,15 @@ export class SidebarComponent {
 
     this.routerMap.set("/myTracks", -999);      // not used yet
 
-    this.activeId = this.calActiveId(); 
+    router.events.subscribe(event => this.calActiveId(event));
   }
 
-  private calActiveId(): number {
-    let id = this.routerMap.get(this.router.url);
-    if (id < 0) {
-      return id;
-    } else {
-      return this.activeId = this.myPlaylistService.activePlaylistId;
+  private calActiveId(nav: any) {
+    if (nav instanceof NavigationEnd) {
+      this.activeId = this.routerMap.get(nav.url);
+      if (this.activeId == 0) {
+        this.activeId = this.myPlaylistService.activePlaylistId;
+      }
     }
   }
 
