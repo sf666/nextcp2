@@ -29,17 +29,18 @@ export class SidebarComponent {
     deviceService.mediaRendererChanged$.subscribe(data => this._mediaRendererUdn = data.udn);
     deviceService.mediaServerChanged$.subscribe(data => this._mediaServerUdn = data.udn);
 
+    this.routerMap.set("/", -1);                // default route is music-library
     this.routerMap.set("/music-library", -1);
     this.routerMap.set("/playlist", -2);
     this.routerMap.set("/player", -3);
     this.routerMap.set("/radio", -4);
     this.routerMap.set("/myAlbums", -5);
     this.routerMap.set("/settings", -6);
-    this.routerMap.set("/myPlaylists", 0); // All positives ID's are playlists
+    this.routerMap.set("/myPlaylists", 0);      // All positives ID's are playlists
 
-    this.routerMap.set("/myTracks", -999); // not used yet
+    this.routerMap.set("/myTracks", -999);      // not used yet
 
-    this.activeId = this.calActiveId(); // default active route is "Media Library"
+    this.activeId = this.calActiveId(); 
   }
 
   private calActiveId(): number {
