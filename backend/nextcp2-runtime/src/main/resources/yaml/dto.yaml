@@ -46,7 +46,13 @@ RendererConfigDto:
    rendererDevices: List<RendererDeviceConfiguration>
 
 
-# Client/Server DTO exchange of file based configuration entries 
+# Client/Server DTO exchange of file based configuration entries
+ 
+ServerPlaylists:
+   mediaServerUdn: String
+   playlists: List<String>
+   serverPlaylists: List<ServerPlaylistDto>   
+
 ServerConfigDto:
    serverDevices: List<ServerDeviceConfiguration>
 

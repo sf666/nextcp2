@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -22,10 +21,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import nextcp.config.ConfigPersistence;
 import nextcp.config.ServerConfig;
+import nextcp.db.service.BasicDbService;
 import nextcp.dto.MediaServerDto;
 import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.ServerPlaylistDto;
+import nextcp.dto.ServerPlaylists;
 import nextcp.dto.ToastrMessage;
+import nextcp.upnp.device.mediaserver.extended.DefaultPlaylistManager;
 import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -48,6 +50,11 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     @Autowired
     private ApplicationEventPublisher publisher = null;
 
+    @Autowired
+    private BasicDbService db = null;
+
+    private DefaultPlaylistManager playlistManager = null;
+
     public UmsServerDevice(RemoteDevice device)
     {
         super(device);
@@ -56,6 +63,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     @PostConstruct
     private void init()
     {
+        playlistManager = new DefaultPlaylistManager(db);
     }
 
     @Override
@@ -391,9 +399,11 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     public List<String> getAllPlaylists() throws JsonMappingException, JsonProcessingException
     {
         String playlists = doGenericCall("", "api/playlist/getallplaylists", false);
-        return om.readValue(playlists, new TypeReference<List<String>>()
+        List<String> pl = om.readValue(playlists, new TypeReference<List<String>>()
         {
         });
+
+        return playlistManager.getSortedDefaultPlaylist(pl);
     }
 
     public MediaServerDto getAsDto()
@@ -405,8 +415,29 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     public List<ServerPlaylistDto> getServerPlaylists() throws JsonMappingException, JsonProcessingException
     {
         String playlists = doGenericCall("", "api/playlist/getserverplaylists", false);
-        return om.readValue(playlists, new TypeReference<List<ServerPlaylistDto>>()
+        List<ServerPlaylistDto> pl = om.readValue(playlists, new TypeReference<List<ServerPlaylistDto>>()
         {
         });
+        return playlistManager.getSortedServerPlaylists(pl);
     }
+
+    @Override
+    public void touchPlaylist(String playlistName)
+    {
+        playlistManager.touchPlaylist(this, playlistName);
+        publishCurrentPlaylists();
+    }
+
+    private void publishCurrentPlaylists()
+    {
+        try
+        {
+            publisher.publishEvent(new ServerPlaylists(getUdnAsString(), getAllPlaylists(), getServerPlaylists()));
+        }
+        catch (Exception e)
+        {
+            log.warn("cannot publish new server playlist state", e);
+        }
+    }
+
 }

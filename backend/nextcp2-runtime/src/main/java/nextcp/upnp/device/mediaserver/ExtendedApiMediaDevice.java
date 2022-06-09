@@ -51,4 +51,6 @@ public interface ExtendedApiMediaDevice
     public List<String> getAllPlaylists() throws JsonMappingException, JsonProcessingException;
 
     public List<ServerPlaylistDto> getServerPlaylists() throws JsonMappingException, JsonProcessingException;
+    
+    public void touchPlaylist (String playlistName);
 }

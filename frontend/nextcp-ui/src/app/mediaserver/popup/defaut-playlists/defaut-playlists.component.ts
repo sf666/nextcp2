@@ -26,7 +26,7 @@ export class DefautPlaylistsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const popupHeight = this.playlistService.serverPlaylists.length * 20 + 120;
+    const popupHeight = this.playlistService.serverPl.playlists.length * 20 + 120;
     this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 250, popupHeight);
   }
 

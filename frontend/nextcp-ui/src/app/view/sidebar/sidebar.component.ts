@@ -4,6 +4,7 @@ import { PlaylistService } from './../../service/playlist.service';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
 import { Component } from '@angular/core';
+import { ServerPlaylistDto } from 'src/app/service/dto';
 
 @Component({
   selector: 'app-sidebar',
@@ -63,9 +64,10 @@ export class SidebarComponent {
    * Browse to a UMS playlist
    * @param id playlist id
    */
-  public browseToPlaylist(id: number) {
-    this.myPlaylistService.selectPlaylist(id);
-    this.afterButtonClicked(id);
+  public browseToPlaylist(item: ServerPlaylistDto) {
+    this.playlistService.touchPlaylist(item.playlistName);
+    this.myPlaylistService.selectPlaylist(item.playlistId);
+    this.afterButtonClicked(item.playlistId);
   }
 
   /**

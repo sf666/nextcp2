@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2022-06-07 15:14:24.
+// Generated using typescript-generator version 2.32.889 on 2022-06-09 12:59:52.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -289,6 +289,12 @@ export interface ServerPlaylistEntry {
     serverUdn: string;
     playlistName: string;
     songid: number;
+}
+
+export interface ServerPlaylists {
+    mediaServerUdn: string;
+    playlists: string[];
+    serverPlaylists: ServerPlaylistDto[];
 }
 
 export interface SpotifyConfigDto {

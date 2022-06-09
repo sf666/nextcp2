@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { MediaRendererDto, PlaylistState } from '../dto';
-import { MediaServerDto, UpnpAvTransportState, Config, DeviceDriverState, TrackTimeDto, TrackInfoDto, RendererConfigDto, RendererPlaylist, ToastrMessage, ServerConfigDto } from './../dto.d';
+import { MediaServerDto, UpnpAvTransportState, Config, DeviceDriverState, TrackTimeDto, TrackInfoDto, RendererConfigDto, RendererPlaylist, ToastrMessage, ServerConfigDto, ServerPlaylistDto, ServerPlaylists } from './../dto.d';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +25,9 @@ export class SseService {
   mediaRendererAvTransportStateChanged$: Subject<UpnpAvTransportState> = new Subject();
   mediaRendererTrackInfoChanged$: Subject<TrackInfoDto> = new Subject();
   mediaRendererPositionChanged$: Subject<TrackTimeDto> = new Subject();
+
+  // MediaServer state changes
+  mediaServerPlaylistChanged$: Subject<ServerPlaylists> = new Subject();
 
   // Playlist Events [ playlist items removed or added. repeat / shuffle states ]
   mediaRendererPlaylistStateChanged$: Subject<PlaylistState> = new Subject();
@@ -57,6 +60,7 @@ export class SseService {
     eventSource.addEventListener('TOASTR_INFO', m => { this.sendNotification(this.toasterMessageReceived$, m) }, false);
     eventSource.addEventListener('RENDERER_CONFIG_CHANGED', m => { this.sendNotification(this.rendererConfigChanged$, m) }, false);
     eventSource.addEventListener('SERVER_DEVICES_CONFIG_CHANGED', m => { this.sendNotification(this.serverDevicesConfigChanged$, m) }, false);
+    eventSource.addEventListener('DEVICE_MEDIASERVER_PLAYLIST_STATE', m => { this.sendNotification(this.mediaServerPlaylistChanged$, m) }, false);
   }
 
   processError(e: any) {

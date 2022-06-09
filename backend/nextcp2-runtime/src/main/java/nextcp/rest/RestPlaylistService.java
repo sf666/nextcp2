@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,6 +54,19 @@ public class RestPlaylistService extends BaseRestService
     // Media Server based playlists
     // =======================================================================
 
+    @PostMapping("/touchPlaylist/{serverUdn}")
+    public void touchPlaylist(@PathVariable("serverUdn") String serverUdn, @RequestBody String playlistName)
+    {
+        try
+        {
+            getExtendedMediaServerByUdn(serverUdn).touchPlaylist(playlistName);
+        }
+        catch (Exception e)
+        {
+            log.warn("touchPlaylist", e);
+        }
+    }
+
     @PostMapping("/getDefaultPlaylists")
     public List<String> getDefaultPlaylists(@RequestBody String serverUdn)
     {
@@ -80,7 +94,7 @@ public class RestPlaylistService extends BaseRestService
             return new ArrayList<ServerPlaylistDto>();
         }
     }
-    
+
     @PostMapping("/addToServerPlaylist")
     public void addToServerPlaylist(@RequestBody ServerPlaylistEntry addRequest)
     {

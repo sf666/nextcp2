@@ -30,11 +30,11 @@
         <mat-icon class="icn" style="vertical-align: top;" svgIcon="cog-outline"></mat-icon><span>App settings</span>
     </a>
 
-    <div *ngIf="playlistService.serverAccessiblePlaylists.length > 0" class="sub-label">MY PLAYLISTS</div>
+    <div *ngIf="playlistService.serverPl.serverPlaylists.length > 0" class="sub-label">MY PLAYLISTS</div>
 
     <a mat-button style="text-align:left; vertical-align: top;" [routerLink]="'/myPlaylists'"
         class="playlist {{getPlaylistClass(item.playlistId)}}"
-        *ngFor="let item of playlistService.serverAccessiblePlaylists"
-        (click)="browseToPlaylist(item.playlistId)">{{item.playlistName}}</a>
+        *ngFor="let item of playlistService.serverPl.serverPlaylists"
+        (click)="browseToPlaylist(item)">{{item.playlistName}}</a>
 
 </div>
