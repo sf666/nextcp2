@@ -66,7 +66,6 @@ export class SidebarComponent {
    * @param id playlist id
    */
   public browseToPlaylist(item: ServerPlaylistDto) {
-    this.playlistService.touchPlaylist(item.playlistName);
     this.myPlaylistService.selectPlaylist(item.playlistId);
     this.afterButtonClicked(item.playlistId);
   }

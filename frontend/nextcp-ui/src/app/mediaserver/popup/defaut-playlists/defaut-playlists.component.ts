@@ -36,6 +36,7 @@ export class DefautPlaylistsComponent implements OnInit {
 
   addToPlaylist(playlistName: string) {
     this.playlistService.addSongToServerPlaylist(this.data.id, playlistName);
+    this.playlistService.touchPlaylist(playlistName);
     this._matDialogRef.close();
     this.data.parentPanel.closeThisPopup();
   }
