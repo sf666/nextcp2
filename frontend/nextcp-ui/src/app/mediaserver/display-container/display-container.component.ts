@@ -247,6 +247,17 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
   // Sorted container access to albums, playlists or other container 
   // ===============================================================================================
 
+  get allMusicTracks() {
+    return this.filteredMusicTracks(this.quickSearchString);
+  }
+  private filteredMusicTracks(filter?: string): MusicItemDto[] {
+    if (filter) {
+      return this.musicTracks.filter(item => this.doFilterText(item.title, filter));
+    } else {
+      return this.musicTracks;
+    }
+  }
+
   private doFilterText(title: string, filter?: string) {
     if (!filter) {
       return true;
@@ -257,6 +268,7 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
   get albumList(): ContainerDto[] {
     return this.filteredAlbumList(this.quickSearchString);
   }
+
   private filteredAlbumList(filter?: string): ContainerDto[] {
     if (filter) {
       return this.albums.filter(item => this.doFilterText(item.title, filter));
@@ -292,7 +304,7 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
   }
 
   get items(): MusicItemDto[] {
-    return this.getOtherItemsFilter();
+    return this.getOtherItemsFilter(this.quickSearchString);
   }
 
   private getOtherItemsFilter(filter?: string): MusicItemDto[] {
@@ -406,10 +418,5 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
     return "";
   }
 
-  //
-  // Access
-  //
-  getAllMusicTracks() {
-    return this.musicTracks;
-  }
+
 }

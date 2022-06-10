@@ -186,7 +186,7 @@
             <!--                                                                -->
             <!-- Template : Browse Result Items                                 -->
             <!-- ############################################################## -->
-            <div id="top-div" tabindex="-1" *ngIf="getAllMusicTracks().length > 0" class="itemDetails">
+            <div id="top-div" tabindex="-1" *ngIf="allMusicTracks.length > 0" class="itemDetails">
                 <div *ngIf="isListView(); else mixedTitles">
                     <div id="head_browse_result_items_list_view_ID" class="container-fluid item-table">
                         <div class="item-thead">
@@ -209,7 +209,7 @@
                             </div>
                         </div>
 
-                        <div id="{{item.objectID}}" *ngFor="let item of getAllMusicTracks()">
+                        <div id="{{item.objectID}}" *ngFor="let item of allMusicTracks">
                             <div class="item-tbody"
                                 *ngIf="allTracksSameAlbum() && !allTracksSameDisc()">
                                 <div *ngIf="newDiscLabel(item)" class="row">
@@ -258,7 +258,7 @@
 
                 <ng-template #mixedTitles>
                     <div id="head_browse_result_items_mixed_titles_ID" class="mixedTitles">
-                        <div id="{{item.objectID}}" class="cover-card" *ngFor="let item of getAllMusicTracks()">
+                        <div id="{{item.objectID}}" class="cover-card" *ngFor="let item of allMusicTracks">
                             <img src="{{item.albumArtUrl}}" class="image-container" alt="{{item.title}}">
                             <div class="d-flex card-body">
                                 <div class="d-flex">
