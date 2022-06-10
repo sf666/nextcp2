@@ -224,7 +224,7 @@
                                         class="col-3 col-sm-2 col-md-2 col-lg-1" (click)="play(item)">
                                         <img class="img-small" src="{{item.albumArtUrl}}">
                                     </div>
-                                    <div class="{{getTitleResponsiveClass()}} d-flex flex-column">
+                                    <div class="{{getTitleResponsiveClass()}} mb-2 mt-2 d-flex flex-column">
                                         <div (click)="play(item)" class="no-wrap d-flex justify-content-between">
                                             <div class=""><span
                                                     *ngIf="allTracksSameAlbum()">{{item.originalTrackNumber}}&nbsp;&nbsp;</span>
