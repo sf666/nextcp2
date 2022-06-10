@@ -350,6 +350,10 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
             updateSongUrls();
             int firstElementPosition = playlistItems.indexOf(songsToAdd.get(0));
             int lastElementPosition = playlistItems.indexOf(songsToAdd.get(songsToAdd.size() - 1));
+            if (log.isDebugEnabled())
+            {
+                log.debug(String.format("firstElementPosition : %d / lastElementPosition : %d", firstElementPosition, lastElementPosition));
+            }
             playbackItems = getFillStrategy().addAllElement(playbackItems, firstElementPosition, lastElementPosition);
             log.info(String.format("added %d songs", songsToAdd.size()));
             getEventPublisher().publishEvent(createPlaylistEventObject());
@@ -586,8 +590,11 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
             return;
         }
 
-        log.debug("set first song url  : " + song.streamingURL);
-        log.debug("set first song meta : " + song.currentTrackMetadata);
+        if (log.isDebugEnabled())
+        {
+            log.debug("set first song url  : " + song.streamingURL);
+            log.debug("set first song meta : " + song.currentTrackMetadata);
+        }
 
         getDevice().getAvTransportServiceBridge().setUrl(song.streamingURL, song.currentTrackMetadata);
         getDevice().getAvTransportServiceBridge().play();
@@ -718,6 +725,14 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
     public void insertAndPlayContainer(ContainerItemDto items)
     {
         insertContainer(items);
+        try
+        {
+            Thread.sleep(200);
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
         play();
     }
 

@@ -20,5 +20,4 @@ public class MediaServerSseEvents
     {
         ssePublisher.sendObjectAsJson(DEVICE_MEDIASERVER_PLAYLIST_STATE, serverPlaylists);
     }
-
 }

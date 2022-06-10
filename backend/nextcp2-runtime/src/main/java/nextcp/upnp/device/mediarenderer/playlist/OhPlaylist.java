@@ -280,6 +280,7 @@ public class OhPlaylist implements IPlaylistService
     @Override
     public void insertContainer(ContainerItemDto items)
     {
+        int sumInsert = 0;
         Long lastid = null;
         if (playlistIds.isEmpty())
         {
@@ -296,9 +297,26 @@ public class OhPlaylist implements IPlaylistService
             insertInput.Metadata = music.currentTrackMetadata;
             insertInput.Uri = music.streamingURL;
             insertInput.AfterId = lastid;
-            
+
             // Workaround for some rare situations where a media player is reporting negative IDs.
             lastid = Math.max(0, insert(insertInput));
+            sumInsert++;
+            if (sumInsert % 10 == 0)
+            {
+                waitSomeTime(100);
+            }
+        }
+    }
+
+    private void waitSomeTime(int millis)
+    {
+        try
+        {
+            Thread.sleep(millis);
+        }
+        catch (InterruptedException e)
+        {
+            log.warn("cannot sleep", e);
         }
     }
 
@@ -316,7 +334,9 @@ public class OhPlaylist implements IPlaylistService
     public void insertAndPlayContainer(ContainerItemDto items)
     {
         deleteAll();
+        waitSomeTime(100);
         insertContainer(items);
+        waitSomeTime(100);
         play();
     }
 }
