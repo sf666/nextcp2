@@ -46,18 +46,6 @@ export class StarRatingComponent {
     }
   }
 
-  getBtnSizeClass(): string  {
-    if (this.size === 'sm') {
-      return "mat-icon-button-sm";
-    }
-  }
-
-  getIconSizeClass(): string  {
-    if (this.size === 'sm') {
-      return "mat-icon-sm";
-    }
-  }
-
   isActive(num: number): string  {
     if (this.currentSong) {
       if (this.currentSong.rating && this.currentSong.rating >= num) {

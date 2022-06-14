@@ -52,14 +52,16 @@ input {
     align-self: center;
 }
 
-#icnId>svg {
-    vertical-align: middle;
-}
-
 .online {
     color: green;
 }
 
 .offline {
     color: red;
+}
+
+.material-symbols-outlined {
+    &.icon-middle {
+        margin-top: 0.6rem;
+    }
 }
