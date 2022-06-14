@@ -37,10 +37,11 @@ mat-slider {
 }
 
 .icon-button {
+    font-variation-settings: 'wght'300, 'FILL'0, 'GRAD'-25, 'opsz'24;
+
     margin-left: 1rem;
+    font-size  : 24px;
     color      : var(--glas-white-5);
-    width      : 2rem;
-    height     : 2rem;
 
     &.active {
         color: $blue-pantone-2;

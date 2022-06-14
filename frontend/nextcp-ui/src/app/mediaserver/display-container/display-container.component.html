@@ -32,25 +32,20 @@
                             </div>
                             <div class="button-row">
                                 <button mat-flat-button class="my-buttons" (click)="toggleListView()">
-                                    <mat-icon class="me-1" style="vertical-align: top;" svgIcon="format-list-text">
-                                    </mat-icon>
-                                    switch view
+                                    <span class="material-symbols-outlined">dashboard_customize</span>
+                                    <span class="button button-text">switch view</span>                                    
                                 </button>
                                 <button mat-flat-button class="my-buttons" (click)="playPlaylist(currentContainer)">
-                                    <mat-icon class="me-1" style="vertical-align: top;" svgIcon="play"></mat-icon>
-                                    play
+                                    <span class="material-symbols-outlined">play_arrow</span>
+                                    <span class="button button-text">play</span>
                                 </button>
                                 <button mat-flat-button class="my-buttons" (click)="shufflePlaylist(currentContainer)">
-                                    <mat-icon class="me-1" style="vertical-align: top;" svgIcon="shuffle-variant">
-                                    </mat-icon>
-                                    shuffle
+                                    <span class="material-symbols-outlined">shuffle</span>
+                                    <span class="button button-text">shuffle</span>                                                                        
                                 </button>
-                                <button mat-flat-button class="my-buttons"
-                                    (click)="playlistService.addContainerToPlaylist(currentContainer)">
-                                    <mat-icon class="me-1" style="vertical-align: top;" svgIcon="playlist-plus"
-                                        aria-label="add to playlist">
-                                    </mat-icon>
-                                    add tracks
+                                <button mat-flat-button class="my-buttons" (click)="playlistService.addContainerToPlaylist(currentContainer)">
+                                    <span class="material-symbols-outlined">playlist_add</span>
+                                    <span class="button button-text">add tracks</span>                                    
                                 </button>
                             </div>
                         </div>
@@ -73,10 +68,10 @@
             </div>
             <div class="d-flex mt-4 d-sm-none">
                 <div class="search-container">
-                    <mat-icon class="me-1 search-icon" svgIcon="card-search-outline"></mat-icon>
+                    <span class="material-symbols-outlined thin md-light">search</span>
                     <input class="search" [(ngModel)]="quickSearchString" matInput placeholder="search content"
                         #searchInput (keyup)="keyUp($event)">
-                    <mat-icon class="me-1 search-icon" svgIcon="close" (click)="clearSearch()"></mat-icon>
+                    <span class="material-symbols-outlined thin md-light" (click)="clearSearch()">close</span>
                 </div>
             </div>
         </div>

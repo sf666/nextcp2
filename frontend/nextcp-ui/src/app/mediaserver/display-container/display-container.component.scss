@@ -353,22 +353,29 @@ input {
     align-items: center;
 }
 
+.button {
+    &.button-text {
+        margin-left: 0.7rem;
+    }
+}
+
 // Liked view
 .material-symbols-outlined {
     &.liked {
         vertical-align: text-bottom;
-        color: rgb(0, 255, 255);
+        color         : rgb(0, 255, 255);
         font-variation-settings:
             'FILL'1,
             'wght'300,
             'GRAD'-25,
             'opsz'24
     }
+
     &.like-possible {
         vertical-align: text-bottom;
         font-variation-settings:
             'FILL'0,
-            'wght'300,
+            'wght'500,
             'GRAD'-25,
             'opsz'24
     }
