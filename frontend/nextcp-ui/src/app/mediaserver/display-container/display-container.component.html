@@ -19,11 +19,8 @@
                         <div *ngIf="hasSongs(); else containerTitle">
                             <div class="d-flex flex-column mt-2">
                                 <div class="title">{{currentContainer.title}}
-                                    <mat-icon *ngIf="currentAlbumLiked" (click)="dislikeAlbum()" class="me-1 liked"
-                                        svgIcon="heart">
-                                    </mat-icon>
-                                    <mat-icon *ngIf="likePossible()" (click)="likeAlbum()" class="me-1 unliked"
-                                        svgIcon="heart-outline"></mat-icon>
+                                    <span *ngIf="currentAlbumLiked" (click)="dislikeAlbum()" class="material-symbols-outlined liked">favorite</span>                                    
+                                    <span *ngIf="likePossible()" (click)="likeAlbum()" class="material-symbols-outlined like-possible">favorite</span>                                    
                                 </div>
                                 <div *ngIf="currentContainer.artist" class="regular">by <span
                                         class="highlight">{{currentContainer.artist}}</span>
@@ -61,10 +58,10 @@
                         <!-- current content search box -->
                         <div class="d-none mt-4 d-sm-flex">
                             <div class="search-container">
-                                <mat-icon class="me-1 search-icon" svgIcon="card-search-outline"></mat-icon>
+                                <span class="material-symbols-outlined thin md-light">search</span>
                                 <input class="search" [(ngModel)]="quickSearchString" matInput
                                     placeholder="search content" #searchInput (keyup)="keyUp($event)">
-                                <mat-icon class="me-1 search-icon" svgIcon="close" (click)="clearSearch()"></mat-icon>
+                                <span class="material-symbols-outlined thin md-light" (click)="clearSearch()">close</span>
                             </div>
                         </div>
                     </div>

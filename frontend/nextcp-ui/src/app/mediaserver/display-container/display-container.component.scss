@@ -137,10 +137,6 @@
     color: rgba(255, 255, 255, 0.2);
 }
 
-.liked {
-    color: rgb(0, 255, 255);
-}
-
 img {
     object-fit   : cover;
     width        : $imgCardWidth;
@@ -354,5 +350,26 @@ input {
 }
 
 .row-alignment {
-    align-items  : center;
+    align-items: center;
+}
+
+// Liked view
+.material-symbols-outlined {
+    &.liked {
+        vertical-align: text-bottom;
+        color: rgb(0, 255, 255);
+        font-variation-settings:
+            'FILL'1,
+            'wght'300,
+            'GRAD'-25,
+            'opsz'24
+    }
+    &.like-possible {
+        vertical-align: text-bottom;
+        font-variation-settings:
+            'FILL'0,
+            'wght'300,
+            'GRAD'-25,
+            'opsz'24
+    }
 }

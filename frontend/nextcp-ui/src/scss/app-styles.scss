@@ -77,12 +77,15 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:100,300,700" !defa
     &.md-18 {
         font-size: 18px;
     }
+
     &.md-24 {
         font-size: 24px;
     }
+
     &.md-36 {
         font-size: 18px;
     }
+
     &.md-48 {
         font-size: 18px;
     }
@@ -90,19 +93,27 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:100,300,700" !defa
     &.utltra-thin {
         font-variation-settings: 'wght'100, 'FILL'0, 'GRAD'-25, 'opsz'24;
     }
-    
+
     &.thin {
         font-variation-settings: 'wght'300, 'FILL'0, 'GRAD'-25, 'opsz'24;
     }
-    
+
     &.bold {
         font-variation-settings: 'wght'500, 'FILL'0, 'GRAD'-25, 'opsz'24;
     }
-    
+
     &.extra-bold {
         font-variation-settings: 'wght'700, 'FILL'0, 'GRAD'-25, 'opsz'24;
     }
-    
+
+    &.extra-bold {
+        font-variation-settings: 'wght'700, 'FILL'0, 'GRAD'-25, 'opsz'24;
+    }
+
+    &.md-light {
+        color: var(--glas-white-7);
+    }
+
 }
 
 /* Rules for sizing the icon. */

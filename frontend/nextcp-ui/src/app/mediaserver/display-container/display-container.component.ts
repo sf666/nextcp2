@@ -102,10 +102,13 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
     console.log("number of tracs : " + numtrack);
     console.log("number of tracs with mbid: " + numMbid);
 
+    this.allTracksSameMusicBrainzReleaseId_ = false;
+
     if ((numMbid > 0) && (numtrack == numMbid)) {
       const firstTrackMbid = this.musicTracks[0].musicBrainzId?.ReleaseTrackId;
       const numSameMbid = this.musicTracks.filter(item => item.musicBrainzId?.ReleaseTrackId === firstTrackMbid).length;
       this.allTracksSameAlbum_ = numSameMbid == numMbid;
+      this.allTracksSameMusicBrainzReleaseId_ = this.allTracksSameAlbum_;
       console.log("number of tracs with same mbid like first track : " + numSameMbid);
     } else {
       if (this.musicTracks.length > 0) {
@@ -116,6 +119,7 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
       }
     }
     console.log("checkAllTracksSameAlbum : " + this.allTracksSameAlbum_);
+    console.log("checkAllTracksSameMusicbrainzReleaseId : " + this.allTracksSameMusicBrainzReleaseId_);
   }
 
   private checkOneTrackWithMusicBrainzId(): void {
