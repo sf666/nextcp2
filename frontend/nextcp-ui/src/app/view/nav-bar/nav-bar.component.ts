@@ -21,35 +21,11 @@ export class NavBarComponent {
 
   showBackButton = false;
 
-  private currentPath: string;
-
   constructor(
     private router: Router,
     public globalSearchService: GlobalSearchService,
     public searchContentDirectoryService: ContentDirectoryService) {
 
-    this.router.events.subscribe((event: NavigationEvent) => {
-      if (event instanceof NavigationStart) {
-        this.currentPath = event.url;
-      }
-    });
-  }
-
-  get searchResultSingleVisible(): boolean {
-    return this.currentPath === '/searchResultSingleItem';
-  }
-  get searchResultMultiVisible(): boolean {
-    return this.currentPath === '/searchResultContainer';
-  }
-  get settingsVisible(): boolean {
-    return this.currentPath === '/settings';
-  }
-  get inputOutputVisible(): boolean {
-    return this.currentPath === '/input-output';
-  }
-
-  get searchResultVisible(): boolean {
-    return this.searchResultSingleVisible || this.searchResultMultiVisible;
   }
 
   gotoParent(): void {

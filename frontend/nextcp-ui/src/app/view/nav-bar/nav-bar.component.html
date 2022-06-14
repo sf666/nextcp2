@@ -2,43 +2,20 @@
     <!-- First div section in the routing cascade. Follow the else parts ...-->
     <div class="headLeftContainer minWidth">
         <button mat-mini-fab [disabled]="isDisabled()" (click)="gotoParent()">
-            <mat-icon class="left-button" style="vertical-align: top;" svgIcon="arrow-left"></mat-icon>
+            <span class="material-symbols-outlined extra-bold"> arrow_back</span>
         </button>
         <div class="headFont no-wrap d-none d-sm-block">{{parentTitle}}</div>
     </div>
 
     <div class="nav-search-container">
-        <mat-icon class="me-1 search-icon" svgIcon="card-search-outline"></mat-icon>
+        <span class="material-symbols-outlined thin">search</span>
         <input class="nav-search" [(ngModel)]="globalSearchService.quickSearchString" matInput placeholder="global search" #searchInput
             (keyup)="keyUp($event)" (focus)="focus()">
-        <mat-icon class="me-1 search-icon" svgIcon="close" (click)="globalSearchService.clearSearch()"></mat-icon>
+            <span class="material-symbols-outlined thin" (click)="globalSearchService.clearSearch()">close</span>            
     </div>
 </div>
 
 <app-modal-search-result *ngIf="globalSearchService.quickSearchPanelVisible"></app-modal-search-result>
-
-<ng-template #search>
-    <div *ngIf="searchResultVisible; else settings">
-        <div class="headLeftContainer minWidth">
-            <button mat-mini-fab (click)="searchBackPressed()">
-                <mat-icon class="left-button" style="vertical-align: top;" svgIcon="arrow-left"></mat-icon>
-            </button>
-            <div class="headFont no-wrap">search result</div>
-        </div>
-    </div>
-</ng-template>
-
-<ng-template #settings>
-    <div *ngIf="settingsVisible; else inputOutput">
-        <div class="headFont">Settings</div>
-    </div>
-</ng-template>
-
-<ng-template #inputOutput>
-    <div *ngIf="inputOutputVisible; else default">
-        <div class="headFont">Input &amp; Output</div>
-    </div>
-</ng-template>
 
 <ng-template #default>
     <div>&nbsp;</div>

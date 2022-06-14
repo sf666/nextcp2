@@ -2,8 +2,6 @@ import { SearchResultComponent } from './view/search-result/search-result.compon
 import { MyPlaylistsComponent } from './view/my-playlists/my-playlists.component';
 import { MyAlbumComponent } from './view/my-album/my-album.component';
 import { MySongsComponent } from './view/my-songs/my-songs.component';
-import { SearchResultItemMultiComponent } from './view/search/search-result-item-multi/search-result-item-multi.component';
-import { SearchResultItemSingleComponent } from './view/search/search-result-item-single/search-result-item-single.component';
 import { PlaylistComponent } from './view/playlist/playlist.component';
 import { RadioComponent } from './view/radio/radio.component';
 import { SettingsComponent } from './view/settings/settings.component';
@@ -22,8 +20,6 @@ const routes: Routes = [
   { path: 'myPlaylists', component: MyPlaylistsComponent },
   { path: 'radio', component: RadioComponent },
   { path: 'playlist', component: PlaylistComponent },
-  { path: 'searchResultSingleItem', component: SearchResultItemSingleComponent },
-  { path: 'searchResultContainer', component: SearchResultItemMultiComponent },
   { path: 'searchResult', component: SearchResultComponent },
   { path: '', redirectTo: '/music-library', pathMatch: 'full' },
 ];

@@ -41,8 +41,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDialogModule } from '@angular/material/dialog';
-import { SearchResultItemMultiComponent } from './view/search/search-result-item-multi/search-result-item-multi.component';
-import { SearchResultItemSingleComponent } from './view/search/search-result-item-single/search-result-item-single.component';
 import { DomChangedDirective } from './directive/watch-dom-tree.directive';
 import { StarRatingComponent } from './view/star-rating/star-rating.component';
 import { DefautPlaylistsComponent } from './mediaserver/popup/defaut-playlists/defaut-playlists.component';
@@ -76,8 +74,6 @@ import { SearchResultComponent } from './view/search-result/search-result.compon
       PlaylistComponent,
       SidebarComponent,
       ModalSearchResultComponent,
-      SearchResultItemMultiComponent,
-      SearchResultItemSingleComponent,
       DomChangedDirective,
       MinimTagComponent,
       StarRatingComponent,
