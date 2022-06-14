@@ -1,5 +1,3 @@
 <div class="d-flex justify-content-end icon-sm minWidth" *ngIf="isVisible()">
-    <div class="{{getClass(num)}} {{getBtnSizeClass()}}" *ngFor="let num of starsAvail" (click)="starSelected(num)">
-        <mat-icon class="{{getIconSizeClass()}}">star</mat-icon>
-    </div>
+    <span class="material-symbols-outlined star-class {{isActive(num)}}" *ngFor="let num of starsAvail" (click)="starSelected(num)">{{getIconFor(num)}}</span>
 </div>

@@ -25,10 +25,7 @@ export class StarRatingComponent {
 
   constructor(
     private genericResultService: GenericResultService,
-    private ratingServiceService: RatingServiceService,
-    private uuidService: UuidService,
-    private deviceService: DeviceService,
-    private sseService: SseService) {
+    private ratingServiceService: RatingServiceService) {
 
     this.starsAvail = Array(5).fill(1).map((x, i) => i + 1);
   }
@@ -61,12 +58,21 @@ export class StarRatingComponent {
     }
   }
 
-  getClass(num: number): string  {
+  isActive(num: number): string  {
     if (this.currentSong) {
       if (this.currentSong.rating && this.currentSong.rating >= num) {
         return "active";
       }
     }
     return "inactive";
+  }
+
+  getIconFor(num: number): string  {
+    if (this.currentSong) {
+      if (this.currentSong.rating && this.currentSong.rating >= num) {
+        return "star";
+      }
+    }
+    return "grade";
   }
 }
