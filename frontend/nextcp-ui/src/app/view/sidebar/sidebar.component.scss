@@ -32,6 +32,10 @@ a {
     }
 }
 
+.buttonText {
+    margin-left: 0.8rem;
+}
+
 .mat-button {
     height: 3.15rem;
 
@@ -56,9 +60,16 @@ a {
             color: aqua !important;
         }
     }
+
     &.playlist {
         color: white;
     }
+}
+
+.create-icon {
+    border-radius   : 50%;
+    color           : white;
+    background-color: var(--bg-grey-8);
 }
 
 

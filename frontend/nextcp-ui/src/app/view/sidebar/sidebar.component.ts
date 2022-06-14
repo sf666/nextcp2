@@ -79,6 +79,11 @@ export class SidebarComponent {
     this.afterButtonClicked(this.routerMap.get("/myAlbums"));
   }
 
+
+  public createPlaylistClicked(): void {
+
+  }
+
   /**
    * One Button is clicked. ID will be tracked for delivering the active class.
    * @param itemId 
@@ -89,6 +94,10 @@ export class SidebarComponent {
 
   private afterButtonClicked(itemId: number): void {
     this.activeId = itemId;
+  }
+
+  get myPlaylistsAvailable() : boolean {
+    return this.playlistService.serverPl.serverPlaylists.length > 0;
   }
 
   public getTextClass(url: string): string {

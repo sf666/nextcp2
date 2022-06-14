@@ -375,6 +375,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     public void restoreMyMusic()
     {
         doGenericCall("", "api/like/restoreLikedAlbums", true);
+        publisher.publishEvent(new ToastrMessage(null, "info", "UMS server " + getFriendlyName(), "My Music albums restored."));        
     }
 
     @Override

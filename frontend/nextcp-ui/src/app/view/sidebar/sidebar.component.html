@@ -1,36 +1,46 @@
 <div class="sidebar">
     <div class="app-label-text">nextCP/2</div>
-    <a #btn1 mat-button style="text-align:left" [routerLink]="'/music-library'" class="{{getTextClass('/music-library')}}"
+    <a mat-button style="text-align:left" [routerLink]="'/music-library'" class="{{getTextClass('/music-library')}}"
         (click)="musicLibraryClicked()">
-        <mat-icon class="icn" style="vertical-align: top;" svgIcon="music-box-multiple-outline"></mat-icon><span>Music
-            Library</span>
+        <span class="material-symbols-outlined">library_music</span>
+        <span class="buttonText">Music Library</span>
     </a>
-    <a #btn2 mat-button style="text-align:left" [routerLink]="'/playlist'" (click)="buttonClicked('/playlist')"
+    <a mat-button style="text-align:left" [routerLink]="'/playlist'" (click)="buttonClicked('/playlist')"
         class="{{getTextClass('/playlist')}}">
-        <mat-icon class="icn" style="vertical-align: top;" svgIcon="playlist-music-outline"></mat-icon><span>Player
-            Queue</span>
+        <span class="material-symbols-outlined">queue_music</span>
+        <span class="buttonText">Player Queue</span>
     </a>
-    <a #btn3 mat-button style="text-align:left" [routerLink]="'/player'" (click)="buttonClicked('/player')"
+    <a mat-button style="text-align:left" [routerLink]="'/player'" (click)="buttonClicked('/player')"
         class="{{getTextClass('/player')}}">
-        <mat-icon class="icn" style="vertical-align: top;" svgIcon="surround-sound"></mat-icon><span>Now
-            listening</span>
+        <span class="material-symbols-outlined">surround_sound</span>
+        <span class="buttonText">Now listening</span>
     </a>
-    <a #btn4 mat-button style="text-align:left" [routerLink]="'/radio'" (click)="buttonClicked('/radio')"
+    <a mat-button style="text-align:left" [routerLink]="'/radio'" (click)="buttonClicked('/radio')"
         class="{{getTextClass('/radio')}}">
-        <mat-icon class="icn" style="vertical-align: top;" svgIcon="radio"></mat-icon><span>Radio</span>
+        <span class="material-symbols-outlined">radio</span>
+        <span class="buttonText">Radio</span>
     </a>
 
-    <a #btn6 mat-button style="text-align:left; vertical-align: top;" [routerLink]="'/myAlbums'"
-        (click)="myAlbumClicked()" class="{{getTextClass('/myAlbums')}}">
-        <mat-icon class="icn" style="vertical-align: top;" svgIcon="heart-box-outline"></mat-icon><span>My Albums</span>
+    <a mat-button style="text-align:left; vertical-align: top;" [routerLink]="'/myAlbums'" (click)="myAlbumClicked()"
+        class="{{getTextClass('/myAlbums')}}">
+        <span class="material-symbols-outlined">album</span>
+        <span class="buttonText">My Albums</span>
     </a>
 
-    <a #btn5 mat-button style="text-align:left; vertical-align: top;" [routerLink]="'/settings'"
+    <a mat-button style="text-align:left; vertical-align: top;" [routerLink]="'/settings'"
         (click)="buttonClicked('/settings')" class="{{getTextClass('/settings')}}">
-        <mat-icon class="icn" style="vertical-align: top;" svgIcon="cog-outline"></mat-icon><span>App settings</span>
+        <span class="material-symbols-outlined">settings</span>
+        <span class="buttonText">App settings</span>
     </a>
 
-    <div *ngIf="playlistService.serverPl.serverPlaylists.length > 0" class="sub-label">MY PLAYLISTS</div>
+    <div *ngIf="myPlaylistsAvailable" class="sub-label">MY PLAYLISTS</div>
+
+    <button mat-button style="text-align:left;">
+        <span class="material-symbols-outlined create-icon">add</span>
+        <span class="buttonText">Create ...</span>
+    </button>
+
+
 
     <a mat-button style="text-align:left; vertical-align: top;" [routerLink]="'/myPlaylists'"
         class="playlist {{getPlaylistClass(item.playlistId)}}"
