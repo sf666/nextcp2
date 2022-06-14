@@ -53,7 +53,10 @@ mat-slider {
 }
 
 .icon-main {
-    color: var(--glas-white-5);
+    font-variation-settings: 'wght'300, 'FILL'0, 'GRAD'-25, 'opsz'24;
+
+    color     : var(--glas-white-5);
+    align-self: center;
 }
 
 .progress-bar {

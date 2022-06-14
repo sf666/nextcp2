@@ -80,16 +80,10 @@
 
         <!-- right footer section -->
         <div class="m-2 ps-2 right-footer me-4 d-none d-md-flex">
-            <mat-icon class="icon-main align-self-center" (click)="serverClicked($event)" svgIcon="server-network">
-            </mat-icon>
-            <mat-icon class="icon-main align-self-center" style="margin-top: 4px;" (click)="rendererClicked($event)"
-                svgIcon="cast-audio"></mat-icon>
-            <mat-icon class="icon-main align-self-center" svgIcon="volume-high" aria-hidden="false"
-                aria-label="high volume icon" (click)="volumeClicked($event)">
-            </mat-icon>
-            <mat-icon class="{{getStandbyClass()}} align-self-center" svgIcon="power-standby" aria-hidden="false"
-                aria-label="POWER icon" (click)="powerClicked()" *ngIf="hasDeviceDriver()">
-            </mat-icon>
+            <span class="material-symbols-outlined icon-main" (click)="serverClicked($event)">dns</span>
+            <span class="material-symbols-outlined icon-main" (click)="rendererClicked($event)">speaker</span>
+            <span class="material-symbols-outlined icon-main" (click)="volumeClicked($event)">volume_up</span>
+            <span class="material-symbols-outlined {{getStandbyClass()}} icon-main" (click)="powerClicked()" *ngIf="hasDeviceDriver()">power_settings_new</span>
         </div>
     </div>
 </div>
