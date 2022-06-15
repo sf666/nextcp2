@@ -11,29 +11,25 @@
         <div class="header-container">
             <div class="d-flex w-100">
                 <div class="top-img-container">
-                    <img class="image-container" src="{{currentContainer.albumartUri}}" class="img-top"
-                        alt="select media server">
+                    <img class="image-container" src="{{currentContainer.albumartUri}}" class="img-top" alt="select media server">
                 </div>
                 <div class="d-flex flex-column w-100" id="ID_SCROLL_TO_ELEMENT_STEP_IN" tabindex="-1">
                     <div class="right-button">
                         <div *ngIf="hasSongs(); else containerTitle">
                             <div class="d-flex flex-column mt-2">
                                 <div class="title">{{currentContainer.title}}
-                                    <span *ngIf="currentAlbumLiked" (click)="dislikeAlbum()" class="material-symbols-outlined liked">favorite</span>                                    
-                                    <span *ngIf="likePossible()" (click)="likeAlbum()" class="material-symbols-outlined like-possible">favorite</span>                                    
+                                    <span *ngIf="currentAlbumLiked" (click)="dislikeAlbum()" class="material-symbols-outlined liked">favorite</span>
+                                    <span *ngIf="likePossible()" (click)="likeAlbum()" class="material-symbols-outlined like-possible">favorite</span>
                                 </div>
-                                <div *ngIf="currentContainer.artist" class="regular">by <span
-                                        class="highlight">{{currentContainer.artist}}</span>
+                                <div *ngIf="currentContainer.artist" class="regular">by <span class="highlight">{{currentContainer.artist}}</span>
                                 </div>
-                                <div *ngIf="itemsCount > 0" class="pt-3 regular">{{containerType}} contains <span
-                                        class="highlight">{{itemsCount}}</span> audio title</div>
-                                <div *ngIf="totalPlaytime.length > 0" class="pt-1 regular">Total play time <span
-                                        class="highlight">{{totalPlaytime}}</span></div>
+                                <div *ngIf="itemsCount > 0" class="pt-3 regular">{{containerType}} contains <span class="highlight">{{itemsCount}}</span> audio title</div>
+                                <div *ngIf="totalPlaytime.length > 0" class="pt-1 regular">Total play time <span class="highlight">{{totalPlaytime}}</span></div>
                             </div>
                             <div class="button-row">
                                 <button mat-flat-button class="my-buttons" (click)="toggleListView()">
                                     <span class="material-symbols-outlined">dashboard_customize</span>
-                                    <span class="button button-text">switch view</span>                                    
+                                    <span class="button button-text">switch view</span>
                                 </button>
                                 <button mat-flat-button class="my-buttons" (click)="playPlaylist(currentContainer)">
                                     <span class="material-symbols-outlined">play_arrow</span>
@@ -41,11 +37,11 @@
                                 </button>
                                 <button mat-flat-button class="my-buttons" (click)="shufflePlaylist(currentContainer)">
                                     <span class="material-symbols-outlined">shuffle</span>
-                                    <span class="button button-text">shuffle</span>                                                                        
+                                    <span class="button button-text">shuffle</span>
                                 </button>
                                 <button mat-flat-button class="my-buttons" (click)="playlistService.addContainerToPlaylist(currentContainer)">
                                     <span class="material-symbols-outlined">playlist_add</span>
-                                    <span class="button button-text">add tracks</span>                                    
+                                    <span class="button button-text">add tracks</span>
                                 </button>
                             </div>
                         </div>
@@ -54,8 +50,7 @@
                         <div class="d-none mt-4 d-sm-flex">
                             <div class="search-container">
                                 <span class="material-symbols-outlined thin md-light">search</span>
-                                <input class="search" [(ngModel)]="quickSearchString" matInput
-                                    placeholder="search content" #searchInput (keyup)="keyUp($event)">
+                                <input class="search" [(ngModel)]="quickSearchString" matInput placeholder="search content" #searchInput (keyup)="keyUp($event)">
                                 <span class="material-symbols-outlined thin md-light" (click)="clearSearch()">close</span>
                             </div>
                         </div>
@@ -69,8 +64,7 @@
             <div class="d-flex mt-4 d-sm-none">
                 <div class="search-container">
                     <span class="material-symbols-outlined thin md-light">search</span>
-                    <input class="search" [(ngModel)]="quickSearchString" matInput placeholder="search content"
-                        #searchInput (keyup)="keyUp($event)">
+                    <input class="search" [(ngModel)]="quickSearchString" matInput placeholder="search content" #searchInput (keyup)="keyUp($event)">
                     <span class="material-symbols-outlined thin md-light" (click)="clearSearch()">close</span>
                 </div>
             </div>
@@ -82,14 +76,11 @@
             <div class="title">{{currentContainer.title}}</div>
             <div *ngIf="albumList?.length > 0" class="regular"><span class="highlight pe-2">{{albumList?.length}}</span>
                 Playlist<span *ngIf="albumList?.length > 1">s</span></div>
-            <div *ngIf="playlistList.length > 0" class="regular"><span
-                    class="highlight pe-2">{{playlistList.length}}</span>
+            <div *ngIf="playlistList.length > 0" class="regular"><span class="highlight pe-2">{{playlistList.length}}</span>
                 Playlist<span *ngIf="playlistList.length > 1">s</span></div>
-            <div *ngIf="containerList.length > 0" class="regular"><span
-                    class="highlight pe-2">{{containerList.length}}</span> Folder<span
-                    *ngIf="containerList.length > 1">s</span></div>
-            <div *ngIf="itemsCount > 0" class="regular"><span class="highlight pe-2">{{itemsCount}}</span> Track<span
-                    *ngIf="itemsCount > 1">s</span></div>
+            <div *ngIf="containerList.length > 0" class="regular"><span class="highlight pe-2">{{containerList.length}}</span> Folder<span *ngIf="containerList.length > 1">s</span>
+            </div>
+            <div *ngIf="itemsCount > 0" class="regular"><span class="highlight pe-2">{{itemsCount}}</span> Track<span *ngIf="itemsCount > 1">s</span></div>
         </div>
     </ng-template>
 
@@ -112,21 +103,12 @@
                                 <img src="{{container.albumartUri}}" alt="{{container.title}}">
                                 <div class="play-overlay d-flex flex-column justify-content-center align-items-center">
                                     <div class="d-flex justify-content-center align-items-center">
-                                        <mat-icon (click)="browseTo(container)" class="play-overlay-button"
-                                            svgIcon="folder-move-outline" aria-label="step into folder">
-                                        </mat-icon>
-                                        <mat-icon (click)="playlistService.addContainerToPlaylist(container)"
-                                            class="play-overlay-button" svgIcon="playlist-plus"
-                                            aria-label="add to playlist">
-                                        </mat-icon>
+                                        <span class="material-symbols-outlined md-36 m-3" (click)="browseTo(container)">drive_file_move</span>
+                                        <span class="material-symbols-outlined md-36 m-3" (click)="playlistService.addContainerToPlaylist(container)">playlist_add</span>
                                     </div>
                                     <div class="d-flex justify-content-center align-items-center">
-                                        <mat-icon (click)="playPlaylist(container)" class="play-overlay-button"
-                                            svgIcon="play" aria-label="app to playlist and play">
-                                        </mat-icon>
-                                        <mat-icon (click)="shufflePlaylist(container)" class="play-overlay-button"
-                                            svgIcon="shuffle-variant" aria-label="app to playlist and shuffle play">
-                                        </mat-icon>
+                                        <span class="material-symbols-outlined md-36 m-3" (click)="playPlaylist(container)">play_arrow</span>
+                                        <span class="material-symbols-outlined md-36 m-3" (click)="shufflePlaylist(container)">shuffle</span>
                                     </div>
                                 </div>
                             </div>
@@ -147,21 +129,13 @@
                     <div id="{{container.id}}" tabindex="-1" class="albumTile" *ngFor="let container of albumList">
                         <div class="albumImageContainer">
                             <img src="{{container.albumartUri}}" alt="{{container.title}}">
-                            <div
-                                class="play-overlay-album d-flex flex-column justify-content-center align-items-center">
+                            <div class="play-overlay-album d-flex flex-column justify-content-center align-items-center">
                                 <div class="d-flex justify-content-center align-items-center">
-                                    <mat-icon (click)="browseTo(container)" class="play-overlay-button-album"
-                                        svgIcon="folder-move-outline" aria-label="step into folder">
-                                    </mat-icon>
+                                    <span class="material-symbols-outlined md-36 m-3" (click)="browseTo(container)">drive_file_move</span>
                                 </div>
                                 <div class="d-flex justify-content-center align-items-center">
-                                    <mat-icon (click)="playAlbum(container)" class="play-overlay-button-album"
-                                        svgIcon="play" aria-label="app to playlist and play">
-                                    </mat-icon>
-                                    <mat-icon (click)="playlistService.addContainerToPlaylist(container)"
-                                        class="play-overlay-button-album" svgIcon="playlist-plus"
-                                        aria-label="add to playlist">
-                                    </mat-icon>
+                                    <span class="material-symbols-outlined md-36 m-3" (click)="playAlbum(container)">play_arrow</span>
+                                    <span class="material-symbols-outlined md-36 m-3" (click)="playlistService.addContainerToPlaylist(container)">playlist_add</span>
                                 </div>
                             </div>
                         </div>
@@ -183,18 +157,15 @@
                     <div id="head_browse_result_items_list_view_ID" class="container-fluid item-table">
                         <div class="item-thead">
                             <div class="row col-greyed">
-                                <div *ngIf="!allTracksSameAlbum()"
-                                    class="col-3 col-sm-2 col-md-2 col-lg-1">&nbsp;</div>
-                                <div *ngIf="allTracksSameAlbum()"
-                                    class="{{getTitleResponsiveClass()}}">#&nbsp;&nbsp;TITLE</div>
-                                <div *ngIf="!allTracksSameAlbum()"
-                                    class="{{getTitleResponsiveClass()}}">TITLE</div>
+                                <div *ngIf="!allTracksSameAlbum()" class="col-3 col-sm-2 col-md-2 col-lg-1">&nbsp;</div>
+                                <div *ngIf="allTracksSameAlbum()" class="{{getTitleResponsiveClass()}}">
+                                    #&nbsp;&nbsp;TITLE</div>
+                                <div *ngIf="!allTracksSameAlbum()" class="{{getTitleResponsiveClass()}}">TITLE</div>
                                 <div class="col-2 d-none d-md-block">ARTIST</div>
-                                <div *ngIf="!allTracksSameAlbum()"
-                                    class="col-2 d-none d-lg-block">
+                                <div *ngIf="!allTracksSameAlbum()" class="col-2 d-none d-lg-block">
                                     ALBUM</div>
-                                <div *ngIf="extendedApi"
-                                    class="col-1 col-sm-2 col-lg-1 d-none text-right d-sm-block">RATING
+                                <div *ngIf="extendedApi" class="col-1 col-sm-2 col-lg-1 d-none text-right d-sm-block">
+                                    RATING
                                 </div>
                                 <div class="col-1 text-right mid-col d-none d-lg-block">LG</div>
                                 <div class="col-1">&nbsp;</div>
@@ -202,8 +173,7 @@
                         </div>
 
                         <div id="{{item.objectID}}" *ngFor="let item of allMusicTracks">
-                            <div class="item-tbody"
-                                *ngIf="allTracksSameAlbum() && !allTracksSameDisc()">
+                            <div class="item-tbody" *ngIf="allTracksSameAlbum() && !allTracksSameDisc()">
                                 <div *ngIf="newDiscLabel(item)" class="row">
                                     <div class="col disc-label">
                                         {{getDiscLabel(item)}}
@@ -212,30 +182,25 @@
                             </div>
                             <div class="item-tbody">
                                 <div class="row row-alignment">
-                                    <div *ngIf="!allTracksSameAlbum()"
-                                        class="col-3 col-sm-2 col-md-2 col-lg-1" (click)="play(item)">
+                                    <div *ngIf="!allTracksSameAlbum()" class="col-3 col-sm-2 col-md-2 col-lg-1" (click)="play(item)">
                                         <img class="img-small" src="{{item.albumArtUrl}}">
                                     </div>
                                     <div class="{{getTitleResponsiveClass()}} mb-2 mt-2 d-flex flex-column">
                                         <div (click)="play(item)" class="no-wrap d-flex justify-content-between">
-                                            <div class=""><span
-                                                    *ngIf="allTracksSameAlbum()">{{item.originalTrackNumber}}&nbsp;&nbsp;</span>
+                                            <div class=""><span *ngIf="allTracksSameAlbum()">{{item.originalTrackNumber}}&nbsp;&nbsp;</span>
                                                 {{item.title}}</div>
                                             <div class="d-none d-md-block">
                                                 <quality-badge [item]="item"></quality-badge>
                                             </div>
                                         </div>
-                                        <div *ngIf="!allTracksSameAlbum()" (click)="play(item)"
-                                            class="col-2 no-wrap albumSubtitle d-block d-lg-none">{{item.album}}
+                                        <div *ngIf="!allTracksSameAlbum()" (click)="play(item)" class="col-2 no-wrap albumSubtitle d-block d-lg-none">{{item.album}}
                                         </div>
                                     </div>
                                     <div (click)="play(item)" class="col-2 no-wrap d-none d-md-block">
                                         {{item.artistName}}
                                     </div>
-                                    <div *ngIf="!allTracksSameAlbum()" (click)="play(item)"
-                                        class="col-2 no-wrap d-none d-lg-block">{{item.album}}</div>
-                                    <div *ngIf="extendedApi"
-                                        class="col-1 col-sm-2 col-lg-1 d-none d-sm-block ">
+                                    <div *ngIf="!allTracksSameAlbum()" (click)="play(item)" class="col-2 no-wrap d-none d-lg-block">{{item.album}}</div>
+                                    <div *ngIf="extendedApi" class="col-1 col-sm-2 col-lg-1 d-none d-sm-block ">
                                         <star-rating [currentSong]="item"></star-rating>
                                     </div>
                                     <div class="col-1 text-right d-none d-lg-block">{{getDuration(item)}}</div>
@@ -259,21 +224,9 @@
                             </div>
                             <div class="play-overlay d-flex flex-column justify-content-end">
                                 <div class="d-flex justify-content-around align-items-center pb-4">
-                                    <div class="scaleBigger">
-                                        <mat-icon (click)="avtransportService.playResource(item)"
-                                            class="play-overlay-button" svgIcon="play-circle" aria-label="play">
-                                        </mat-icon>
-                                    </div>
-                                    <div>
-                                        <mat-icon (click)="playlistService.addToPlaylist(item)"
-                                            class="play-overlay-button" svgIcon="playlist-plus" aria-label="play">
-                                        </mat-icon>
-                                    </div>
-                                    <div>
-                                        <mat-icon (click)="showSongPopup($event, item)" class="play-overlay-button"
-                                            svgIcon="dots-vertical-circle-outline" aria-label="options">
-                                        </mat-icon>
-                                    </div>
+                                    <span class="material-symbols-outlined md-36 m-3" (click)="avtransportService.playResource(item)">play_circle</span>
+                                    <span class="material-symbols-outlined md-36 m-3" (click)="playlistService.addToPlaylist(item)">playlist_add</span>
+                                    <span class="material-symbols-outlined md-36 m-3" (click)="showSongPopup($event, item)">more_vert</span>
                                 </div>
                             </div>
                         </div>
@@ -286,8 +239,7 @@
             <!--                                -->
             <div *ngIf="containerList?.length > 0">
                 <div id="head_browse_result_playlist_container_ID" class="albumLayout">
-                    <div class="albumTile" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)"
-                        *ngFor="let container of containerList">
+                    <div class="albumTile" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)" *ngFor="let container of containerList">
                         <div class="albumImageContainer">
                             <img class="image-container" src="{{container.albumartUri}}" alt="{{container.title}}">
                         </div>
@@ -304,8 +256,7 @@
             <!--                                -->
             <div *ngIf="items?.length > 0">
                 <div id="head_browse_other_items_ID" class="albumLayout">
-                    <div class="albumTile" id="{{item.objectID}}" tabindex="-1"
-                        (click)="avtransportService.playResource(item)" *ngFor="let item of items">
+                    <div class="albumTile" id="{{item.objectID}}" tabindex="-1" (click)="avtransportService.playResource(item)" *ngFor="let item of items">
                         <div class="albumImageContainer">
                             <img class="image-container" src="{{item.albumArtUrl}}" alt="{{item.title}}">
                         </div>

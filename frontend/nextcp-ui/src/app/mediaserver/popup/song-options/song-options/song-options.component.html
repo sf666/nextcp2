@@ -18,20 +18,18 @@
     <div class="divider mt-2 mb-1">&nbsp;</div>
 
     <div class="dialogItems d-flex flex-column flex-wrap">
-        <div class="d-flex justify-content-between playlist-item" *ngIf="hasValidSongId()"
-            (click)="openAddToPlaylistDialog($event)" (mouseenter)="openAddToPlaylistDialog($event)">
+        <div class="d-flex justify-content-between playlist-item" *ngIf="hasValidSongId()" (click)="openAddToPlaylistDialog($event)" (mouseenter)="openAddToPlaylistDialog($event)">
             <div class="d-flex justify-content-between" style="align-self: center;">
                 Add to playlist
             </div>
-            <mat-icon class="chevron-right" style="align-self: center;" svgIcon="chevron-right"></mat-icon>
+            <span class="material-symbols-outlined">chevron_right</span>
         </div>
-        <div *ngIf="isParentPlaylist" class="playlist-item" (mouseover)="closeAllDialogs()"
-            (click)="deleteFromPlaylist()">
+        <div *ngIf="isParentPlaylist" class="playlist-item" (mouseover)="closeAllDialogs()" (click)="deleteFromPlaylist()">
             Delete from playlist
         </div>
-        
+
         <div *ngIf="hasValidSongId()" class="divider mb-1 mt-1">&nbsp;</div>
-        
+
         <div class="playlist-item" (mouseenter)="closeAllDialogs()" (click)="actionPlayNext()">
             Play next
         </div>

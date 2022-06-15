@@ -83,11 +83,11 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:100,300,700" !defa
     }
 
     &.md-36 {
-        font-size: 18px;
+        font-size: 36px;
     }
 
     &.md-48 {
-        font-size: 18px;
+        font-size: 48px;
     }
 
     &.utltra-thin {
@@ -353,10 +353,6 @@ input {
 
 button:focus {
     outline: none;
-}
-
-.mat-icon {
-    vertical-align: top;
 }
 
 .col-greyed {

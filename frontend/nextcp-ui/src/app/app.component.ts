@@ -22,8 +22,10 @@ export class AppComponent {
 //  private throttleResize = _.throttle(this.resiseVh, 100);
 
   constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer, public layoutService: LayoutService, public spinnerService: SpinnerService) {
+    // SVG icon set was removed. This is for futere documentation, how to register icon sets
+    //
     // Globally register SVG mat-icon 
-    iconRegistry.addSvgIconSet(sanitizer.bypassSecurityTrustResourceUrl('assets/icon-set.svg'));
+    // iconRegistry.addSvgIconSet(sanitizer.bypassSecurityTrustResourceUrl('assets/icon-set.svg'));
   }
 
   public showBlur(): boolean {

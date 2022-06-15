@@ -215,8 +215,8 @@
 <div class="section subhead subsect">Spotify</div>
 <div class="d-flex section flex-wrap subhead flex-column">
     <div class="para" *ngIf="configService.spotifyAccountConnected()">
-        <mat-icon class="icn" style="vertical-align: top;color: aqua;" svgIcon="account-check"></mat-icon><span
-            class=""> Your Spotify account is connected.</span>
+        <span class="material-symbols-outlined" style="color: aqua;">how_to_reg</span>
+        <span class=""> Your Spotify account is connected.</span>
     </div>
 </div>
 <div class="d-flex section flex-wrap subhead flex-column" *ngIf="!configService.spotifyAccountConnected()">
