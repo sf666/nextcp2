@@ -1,5 +1,4 @@
 import { CustomHttpInterceptor } from './service/http-interceptor';
-import { MinimTagComponent } from './mediaserver/popup/minim-tag/minim-tag.component';
 import { SidebarComponent } from './view/sidebar/sidebar.component';
 import { RendererDropdownComponent } from './mediarenderer/dropdown/dropdown.component';
 import { MediaServerComponent } from './mediaserver/mediaServer/mediaServer.component';
@@ -75,7 +74,6 @@ import { SearchResultComponent } from './view/search-result/search-result.compon
       SidebarComponent,
       ModalSearchResultComponent,
       DomChangedDirective,
-      MinimTagComponent,
       StarRatingComponent,
       DefautPlaylistsComponent,
       SongOptionsComponent,
