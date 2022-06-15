@@ -45,9 +45,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     private ServerConfig config = null;
 
     @Autowired
-    private ConfigPersistence cp = null;
-
-    @Autowired
     private ApplicationEventPublisher publisher = null;
 
     @Autowired

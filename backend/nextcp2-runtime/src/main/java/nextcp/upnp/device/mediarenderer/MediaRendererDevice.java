@@ -67,6 +67,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
     @Autowired
     private RendererConfig rendererConfigService = null;
+    
     private RendererDeviceConfiguration rendererConfig = null;
 
     @Autowired
@@ -200,19 +201,29 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         }
 
         // must be called after OH Services!
+        updateDeviceDriver();
+    }
+
+    public void updateDeviceDriver()
+    {
         deviceDriver = createDeviceDriver();
     }
 
     private void initServices()
+    {
+        updateRendererConfig();
+        serviceInitializer.initializeServices(getUpnpService(), getDevice(), this, services);
+        rendererConfig.mediaRenderer = getAsDto();
+        rendererConfigService.updateRendererDevice(rendererConfig);
+    }
+
+    private void updateRendererConfig()
     {
         rendererConfig = rendererConfigService.getMediaRendererConfig(getUDN().getIdentifierString());
         if (rendererConfig == null)
         {
             rendererConfig = rendererConfigService.addMediaRendererDeviceConfig(this);
         }
-        serviceInitializer.initializeServices(getUpnpService(), getDevice(), this, services);
-        rendererConfig.mediaRenderer = getAsDto();
-        rendererConfigService.updateRendererDevice(rendererConfig);
     }
     
     public List<MediaRendererServicesDto> getServices()
@@ -319,8 +330,12 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         return deviceDriver;
     }
 
+    /**
+     * Create or recreate device driver. Can be called, after configuration has changed.
+     */
     private IDeviceDriver createDeviceDriver()
     {
+        updateRendererConfig();
         IDeviceDriver dd = null;
         IDeviceDriver physicalDriver = null;
 

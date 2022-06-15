@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.fourthline.cling.model.types.UDN;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,10 @@ import nextcp.dto.ServerConfigDto;
 import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.UiClientConfig;
 import nextcp.service.ConfigService;
+import nextcp.upnp.device.DeviceRegistry;
+import nextcp.upnp.device.mediarenderer.DeviceDriver;
+import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
+import nextcp.upnp.device.mediarenderer.MediaRendererFactories;
 import nextcp.util.IApplicationRestartable;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -61,6 +66,9 @@ public class RestConfigurationService
     private DeviceDriverDiscoveryService deviceDriverDiscoveryService = null;
 
     @Autowired
+    private DeviceRegistry deviceRegistry = null;
+
+    @Autowired
     private ApplicationContext context;
 
     @PostConstruct
@@ -82,8 +90,8 @@ public class RestConfigurationService
     public List<DeviceDriverCapability> getAvailableDeviceDriver()
     {
         return deviceDriverList;
-    }    
-    
+    }
+
     @PostMapping("/saveMusicBrainzConfig")
     public void saveClientConfig(@RequestBody MusicbrainzSupport mbConfig)
     {
@@ -158,6 +166,9 @@ public class RestConfigurationService
         try
         {
             rendererConfigService.updateRendererDevice(rendererDevice);
+
+            MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(rendererDevice.mediaRenderer.udn));
+            device.updateDeviceDriver();
         }
         catch (Exception e)
         {
