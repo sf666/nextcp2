@@ -54,6 +54,25 @@ public class RestPlaylistService extends BaseRestService
     // Media Server based playlists
     // =======================================================================
 
+    /**
+     * Creates a server based playlist.
+     * 
+     * @param serverUdn server must support extended API
+     * @param playlistName should be unique
+     */
+    @PostMapping("/createPlaylist/{serverUdn}")
+    public void createPlaylist(@PathVariable("serverUdn") String serverUdn, @RequestBody String playlistName)
+    {
+        try
+        {
+            getExtendedMediaServerByUdn(serverUdn).createPlaylist(playlistName);
+        }
+        catch (Exception e)
+        {
+            log.warn("touchPlaylist", e);
+        }
+    }
+
     @PostMapping("/touchPlaylist/{serverUdn}")
     public void touchPlaylist(@PathVariable("serverUdn") String serverUdn, @RequestBody String playlistName)
     {
