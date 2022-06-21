@@ -35,7 +35,7 @@
 
     <div *ngIf="myPlaylistsAvailable" class="sub-label">MY PLAYLISTS</div>
 
-    <button mat-button style="text-align:left;">
+    <button mat-button style="text-align:left;" (click)="createPlaylistClicked()">
         <span class="material-symbols-outlined thin create-icon">add</span>
         <span class="buttonText">Create ...</span>
     </button>

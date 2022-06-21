@@ -111,6 +111,11 @@ export class PlaylistService implements OnInit {
     this.httpService.post<string[]>(this.baseUri, uri, playlistName).subscribe();
   }
 
+  public createPlaylist(playlistName : string) {
+    const uri = '/createPlaylist/'+ this.selectedMediaServer.udn;
+    this.httpService.post<string[]>(this.baseUri, uri, playlistName).subscribe();
+  }
+
 
   //
   // Ui action endpoints

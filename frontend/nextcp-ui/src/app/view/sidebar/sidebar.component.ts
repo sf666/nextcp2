@@ -1,3 +1,5 @@
+import { InputFieldDialogComponent } from './../../popup/input-field-dialog/input-field-dialog.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { MyPlaylistService } from './../my-playlists/my-playlist.service';
 import { PlaylistService } from './../../service/playlist.service';
@@ -17,6 +19,8 @@ export class SidebarComponent {
   private _mediaRendererUdn: string;
   public routerMap = new Map<string, number>();
 
+  // Dialogs
+  createPlaylistDialogRef: MatDialogRef<InputFieldDialogComponent>;
 
   private activeId: number;
 
@@ -25,6 +29,7 @@ export class SidebarComponent {
     public playlistService: PlaylistService,
     private myPlaylistService: MyPlaylistService,
     private router: Router,
+    private dialog: MatDialog,
     public rendererService: RendererService) {
     deviceService.mediaRendererChanged$.subscribe(data => this._mediaRendererUdn = data.udn);
     deviceService.mediaServerChanged$.subscribe(data => this._mediaServerUdn = data.udn);
@@ -81,7 +86,11 @@ export class SidebarComponent {
 
 
   public createPlaylistClicked(): void {
+    this.createPlaylistDialogRef = this.dialog.open(InputFieldDialogComponent, {
+      hasBackdrop: true
+    });
 
+    this.createPlaylistDialogRef.afterClosed().subscribe(data => { if (data) { this.playlistService.createPlaylist(data) } });
   }
 
   /**
@@ -96,7 +105,7 @@ export class SidebarComponent {
     this.activeId = itemId;
   }
 
-  get myPlaylistsAvailable() : boolean {
+  get myPlaylistsAvailable(): boolean {
     return this.playlistService.serverPl.serverPlaylists.length > 0;
   }
 

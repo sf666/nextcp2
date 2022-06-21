@@ -4,7 +4,7 @@ import { RendererDropdownComponent } from './mediarenderer/dropdown/dropdown.com
 import { MediaServerComponent } from './mediaserver/mediaServer/mediaServer.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -54,7 +54,8 @@ import { ToastContainerComponent } from './service/toast/toast-container/toast-c
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DisplayContainerComponent } from './mediaserver/display-container/display-container.component';
 import { MyPlaylistsComponent } from './view/my-playlists/my-playlists.component';
-import { SearchResultComponent } from './view/search-result/search-result.component'
+import { SearchResultComponent } from './view/search-result/search-result.component';
+import { InputFieldDialogComponent } from './popup/input-field-dialog/input-field-dialog.component'
 
 @NgModule({
    declarations: [
@@ -87,6 +88,7 @@ import { SearchResultComponent } from './view/search-result/search-result.compon
       DisplayContainerComponent,
       MyPlaylistsComponent,
       SearchResultComponent,
+      InputFieldDialogComponent,
    ],
    imports: [
       // Material Design
@@ -111,6 +113,7 @@ import { SearchResultComponent } from './view/search-result/search-result.compon
       BrowserAnimationsModule,
       AppRoutingModule,
       FormsModule,
+      ReactiveFormsModule,
       HttpClientModule,
       NgbModule
    ],
@@ -122,6 +125,9 @@ import { SearchResultComponent } from './view/search-result/search-result.compon
    }, {
       provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true
    }],
+   
+   // add dynamically at runtime created components as "entryComponents"
+   entryComponents:[InputFieldDialogComponent],
 
    bootstrap: [
       AppComponent
