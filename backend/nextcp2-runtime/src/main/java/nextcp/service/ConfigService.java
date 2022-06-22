@@ -5,12 +5,14 @@ import java.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 
 import nextcp.config.ConfigPersistence;
 import nextcp.dto.Config;
 import nextcp.dto.MusicbrainzSupport;
+import nextcp.dto.ToastrMessage;
 import nextcp.dto.UiClientConfig;
 import nextcp.eventBridge.SsePublisher;
 import nextcp.spotify.ISpotifyConfig;
@@ -31,12 +33,16 @@ public class ConfigService
     @Autowired
     private SsePublisher ssePublisher = null;
 
+    @Autowired
+    private ApplicationEventPublisher publisher = null;
+
     public void saveMusicBrainzConfig(MusicbrainzSupport mbConfig)
     {
-        if (!isCurrentBase64Password(mbConfig.password)) {
+        if (!isCurrentBase64Password(mbConfig.password))
+        {
             mbConfig.password = Base64.getEncoder().encodeToString(mbConfig.password.getBytes());
         }
-        config.musicbrainzSupport = mbConfig;        
+        config.musicbrainzSupport = mbConfig;
         writeAndSendConfig();
     }
 
@@ -47,18 +53,23 @@ public class ConfigService
 
     public void addClientProfile(UiClientConfig clientConfig)
     {
-        try
+        deleteClientProfile(clientConfig);
+        config.clientConfig.add(clientConfig);
+        writeAndSendConfig();
+        log.debug("Client profile added or updated : " + clientConfig);
+        publisher.publishEvent(new ToastrMessage(null, "info", "client profile", "profile added or updated : " + clientConfig.clientName));
+    }
+
+    public void deleteClientProfile(UiClientConfig clientConfig)
+    {
+        if (config.clientConfig != null && config.clientConfig.size() > 0)
         {
-            if (config.clientConfig != null && config.clientConfig.size() > 0)
+            if (!config.clientConfig.removeIf(e -> e.uuid.contentEquals(clientConfig.uuid)))
             {
-                config.clientConfig.removeIf(e -> e.uuid.contentEquals(clientConfig.uuid));
+                log.debug("Client config not found : " + clientConfig);
+                publisher.publishEvent(new ToastrMessage(null, "info", "client profile", "profile not found : " + clientConfig.clientName));
             }
         }
-        catch (Exception e)
-        {
-            log.warn("could not remove element. Client conig:  " + clientConfig, e);
-        }
-        config.clientConfig.add(clientConfig);
         writeAndSendConfig();
     }
 
@@ -112,4 +123,5 @@ public class ConfigService
             }
         };
     }
+
 }

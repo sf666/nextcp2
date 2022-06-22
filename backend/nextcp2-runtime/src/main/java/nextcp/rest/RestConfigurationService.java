@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,7 @@ import nextcp.dto.RendererConfigDto;
 import nextcp.dto.RendererDeviceConfiguration;
 import nextcp.dto.ServerConfigDto;
 import nextcp.dto.ServerDeviceConfiguration;
+import nextcp.dto.ToastrMessage;
 import nextcp.dto.UiClientConfig;
 import nextcp.service.ConfigService;
 import nextcp.upnp.device.DeviceRegistry;
@@ -70,6 +72,9 @@ public class RestConfigurationService
 
     @Autowired
     private ApplicationContext context;
+
+    @Autowired
+    private ApplicationEventPublisher publisher = null;
 
     @PostConstruct
     private void init()
@@ -115,6 +120,22 @@ public class RestConfigurationService
         catch (Exception e)
         {
             log.error("saveClientConfig", e);
+        }
+    }
+
+    @PostMapping("/deleteClientProfile")
+    public void deleteClientProfile(@RequestBody UiClientConfig clientProfile)
+    {
+        try
+        {
+            configService.deleteClientProfile(clientProfile);
+            publisher.publishEvent(new ToastrMessage(null, "info", "client profile", "profile deleted : " + clientProfile.clientName));
+            log.debug("Client config removed : " + clientProfile);
+        }
+        catch (Exception e)
+        {
+            log.error("deleteClientProfile", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "client profile", "profile not deleted because of : " + clientProfile.clientName));
         }
     }
 

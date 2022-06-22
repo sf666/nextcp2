@@ -246,7 +246,15 @@ export class ConfigurationService {
     }, err => {
       this.genericResultService.displayHttpError(err, "cannot save client configuration");
     });
+  }
 
+  public deleteClientProfile(): void {
+    const uri = '/deleteClientProfile';
+    this.http.post(this.baseUri + uri, this.clientConfig).subscribe(data => {
+      this.genericResultService.displayGenericMessage("configuration", "client configuration saved.");
+    }, err => {
+      this.genericResultService.displayHttpError(err, "cannot save client configuration");
+    });
   }
 
   public existClientConfig(uuid: string): boolean {

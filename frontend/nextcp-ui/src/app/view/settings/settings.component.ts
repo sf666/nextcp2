@@ -1,3 +1,4 @@
+import { ToastService } from './../../service/toast/toast.service';
 import { MyMusicService } from './../../service/my-music.service';
 import { SystemService } from './../../service/system.service';
 import { DeviceService } from './../../service/device.service';
@@ -25,6 +26,7 @@ export class SettingsComponent {
     public ratingServiceService: RatingServiceService,
     public contentDirectoryService: ContentDirectoryService,
     public deviceService: DeviceService,
+    public toastService: ToastService,
     public systemService: SystemService,
     public myMusicService: MyMusicService,
     public configService: ConfigurationService) {
@@ -81,6 +83,10 @@ export class SettingsComponent {
     this.configService.saveClientProfile();
   }
 
+  deleteClientConfig(): void {
+    this.configService.deleteClientProfile();
+  }
+
   saveGeneralConfig(): void {
     this.configService.saveApplicationConfig();
   }
@@ -91,6 +97,12 @@ export class SettingsComponent {
 
   selectConfig(config: UiClientConfig): void {
     this.configService.selectClientConfig(config.uuid);
+    if(!this.deviceService.getMediaRendererList().some(renderer => renderer.udn === config.defaultMediaRenderer.udn)) {
+      this.toastService.info("media renderer is not available", "ATTENTION");
+    }
+    if(!this.deviceService.getMediaServerList().some(device => device.udn === config.defaultMediaServer.udn)) {
+      this.toastService.info("media server is not available", "ATTENTION");
+    }
   }
 
   saveRendererConfig(rendererConfig: RendererDeviceConfiguration): void {

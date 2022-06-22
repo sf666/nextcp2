@@ -3,7 +3,7 @@
 
     <div class="d-flex flex-wrap">
         <mat-form-field appearance="fill" class="bigger">
-            <mat-label>Available server side profiles</mat-label>
+            <mat-label>available profiles</mat-label>
             <mat-select [(ngModel)]="configService.clientConfig" [compareWith]="compareProfile">
                 <mat-option (click)="configService.addNewClientConfig()">CREATE NEW PROFILE</mat-option>
                 <mat-option [value]="clientConfig"
@@ -41,6 +41,7 @@
 
     <div class="d-flex section ms-4">
         <button mat-flat-button color="primary" (click)="saveClientConfig()">save</button>
+        <button mat-flat-button class="ms-2" color="warn" (click)="deleteClientConfig()">delete</button>        
     </div>
 </div>
 
