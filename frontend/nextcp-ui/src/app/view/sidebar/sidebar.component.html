@@ -1,41 +1,41 @@
 <div class="sidebar">
     <div class="app-label-text">nextCP/2</div>
-    <a mat-button style="text-align:left" [routerLink]="'/music-library'" class="{{getTextClass('/music-library')}}"
+    <a mat-button style="text-align:left" [routerLink]="'/music-library'" class="margin-reactive {{getTextClass('/music-library')}}"
         (click)="musicLibraryClicked()">
         <span class="material-symbols-outlined thin">library_music</span>
-        <span class="buttonText">Music Library</span>
+        <span class="hide-element buttonText">Music Library</span>
     </a>
     <a mat-button style="text-align:left" [routerLink]="'/playlist'" (click)="buttonClicked('/playlist')"
-        class="{{getTextClass('/playlist')}}">
+        class="margin-reactive {{getTextClass('/playlist')}}">
         <span class="material-symbols-outlined thin">queue_music</span>
-        <span class="buttonText">Player Queue</span>
+        <span class="hide-element buttonText">Player Queue</span>
     </a>
     <a mat-button style="text-align:left" [routerLink]="'/player'" (click)="buttonClicked('/player')"
-        class="{{getTextClass('/player')}}">
+        class="margin-reactive {{getTextClass('/player')}}">
         <span class="material-symbols-outlined thin">surround_sound</span>
-        <span class="buttonText">Now listening</span>
+        <span class="buttonText hide-element">Now listening</span>
     </a>
     <a mat-button style="text-align:left" [routerLink]="'/radio'" (click)="buttonClicked('/radio')"
-        class="{{getTextClass('/radio')}}">
+        class="margin-reactive  {{getTextClass('/radio')}}">
         <span class="material-symbols-outlined thin">radio</span>
-        <span class="buttonText">Radio</span>
+        <span class="hide-element buttonText">Radio</span>
     </a>
 
     <a mat-button style="text-align:left;" [routerLink]="'/myAlbums'" (click)="myAlbumClicked()"
-        class="{{getTextClass('/myAlbums')}}">
+        class="margin-reactive {{getTextClass('/myAlbums')}}">
         <span class="material-symbols-outlined thin">album</span>
-        <span class="buttonText">My Albums</span>
+        <span class="hide-element buttonText">My Albums</span>
     </a>
 
     <a mat-button style="text-align:left" [routerLink]="'/settings'"
-        (click)="buttonClicked('/settings')" class="{{getTextClass('/settings')}}">
+        (click)="buttonClicked('/settings')" class="margin-reactive  {{getTextClass('/settings')}}">
         <span class="material-symbols-outlined thin">settings</span>
-        <span class="buttonText">App settings</span>
+        <span class="hide-element buttonText">App settings</span>
     </a>
 
-    <div *ngIf="myPlaylistsAvailable" class="sub-label">MY PLAYLISTS</div>
+    <div *ngIf="myPlaylistsAvailable" class="hide-element sub-label">MY PLAYLISTS</div>
 
-    <button mat-button style="text-align:left;" (click)="createPlaylistClicked()">
+    <button mat-button style="text-align:left;" (click)="createPlaylistClicked()" class="hide-element">
         <span class="material-symbols-outlined thin create-icon">add</span>
         <span class="buttonText">Create ...</span>
     </button>
@@ -43,7 +43,7 @@
 
 
     <a mat-button style="text-align:left;" [routerLink]="'/myPlaylists'"
-        class="playlist {{getPlaylistClass(item.playlistId)}}"
+        class="hide-element playlist {{getPlaylistClass(item.playlistId)}}"
         *ngFor="let item of playlistService.serverPl.serverPlaylists"
         (click)="browseToPlaylist(item)">{{item.playlistName}}</a>
 

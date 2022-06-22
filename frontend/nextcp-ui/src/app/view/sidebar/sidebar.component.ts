@@ -88,10 +88,10 @@ export class SidebarComponent {
 
   public createPlaylistClicked(): void {
     let inputFieldConfig: InputFieldConfig = {
+      submitButtonText: "add",
       cancelButtonText: "cancel",
       placeholder: "enter playlist name",
-      submitButtonText: "add",
-      title: "Create new playlist"
+      title: "create playlist"
     }
 
     this.createPlaylistDialogRef = this.dialog.open(InputFieldDialogComponent, {

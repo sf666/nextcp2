@@ -34,7 +34,6 @@ export class InputFieldDialogComponent implements OnInit {
     this.form = this.formBuilder.group({
       myText: ''
     });
-
   }
 
   submit(form) {
