@@ -1,12 +1,12 @@
 <form [formGroup]="form" (ngSubmit)="submit(form)">
-    <h1 mat-dialog-title>My Header</h1>
+    <h1 mat-dialog-title>{{inputFieldConfig.title}}</h1>
     <mat-dialog-content>
       <mat-form-field>
-        <input matInput formControlName="myText" placeholder="enter text">
+        <input matInput formControlName="myText" placeholder="{{inputFieldConfig.placeholder}}">
       </mat-form-field>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <button mat-button type="submit">Add</button>
-      <button mat-button type="button" mat-dialog-close>Cancel</button>
+      <button mat-button type="submit">{{inputFieldConfig.submitButtonText}}</button>
+      <button mat-button type="button" mat-dialog-close>{{inputFieldConfig.cancelButtonText}}</button>
     </mat-dialog-actions>
   </form>

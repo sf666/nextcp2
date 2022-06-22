@@ -1,3 +1,4 @@
+import { InputFieldConfig } from './../../popup/input-field-dialog/input-field-dialog.d';
 import { InputFieldDialogComponent } from './../../popup/input-field-dialog/input-field-dialog.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NavigationEnd, Router, RouterEvent } from '@angular/router';
@@ -86,7 +87,15 @@ export class SidebarComponent {
 
 
   public createPlaylistClicked(): void {
+    let inputFieldConfig: InputFieldConfig = {
+      cancelButtonText: "cancel",
+      placeholder: "enter playlist name",
+      submitButtonText: "add",
+      title: "Create new playlist"
+    }
+
     this.createPlaylistDialogRef = this.dialog.open(InputFieldDialogComponent, {
+      data: inputFieldConfig,
       hasBackdrop: true
     });
 
