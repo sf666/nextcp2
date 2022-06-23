@@ -36,9 +36,7 @@ import nextcp.dto.ToastrMessage;
 import nextcp.dto.UiClientConfig;
 import nextcp.service.ConfigService;
 import nextcp.upnp.device.DeviceRegistry;
-import nextcp.upnp.device.mediarenderer.DeviceDriver;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
-import nextcp.upnp.device.mediarenderer.MediaRendererFactories;
 import nextcp.util.IApplicationRestartable;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)

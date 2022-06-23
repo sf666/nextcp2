@@ -138,6 +138,10 @@ $grid-flex-sm-max-width : 9rem;
     max-width : $imgCardWidth;
 }
 
+.imgCardHeight {
+    max-height: $imgCardWidth;
+}
+
 // old card layout
 .cardLayout {
     display  : flex;
