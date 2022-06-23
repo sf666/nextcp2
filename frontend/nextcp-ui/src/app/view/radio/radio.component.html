@@ -3,29 +3,34 @@
 
     <div class="cardLayout">
         <div class="cardLayout cover-card" *ngFor="let item of radioService.radioItems">
-            <img src="{{item.albumArtUrl}}" class="cardLayout image-container" alt="{{item.title}}">
+            <div class="overlay-container">
+                <img src="{{item.albumArtUrl}}" class="cardLayout image-container" alt="{{item.title}}">
+                <div class="cardLayout overlay-child d-flex justify-content-center align-items-center">
+                    <span class="material-symbols-outlined md-48" (click)="playOh(item)">play_arrow</span>
+                </div>
+            </div>
             <div class="d-flex cardLayout card-body">
                 <div class="highlightFolderText">RADIO</div>
                 <div class="card-title">{{item.title}}</div>
             </div>
-            <div class="cardLayout play-overlay d-flex justify-content-center align-items-center">
-                <span class="material-symbols-outlined md-48" (click)="playOh(item)">play_arrow</span>
-            </div>
         </div>
-    </div>    
+    </div>
 </div>
 
 <div *ngIf="configurationService.serverConfig?.radioStation.length > 0; else noRadio" class="cardLayout">
     <div class="cardLayout cover-card" *ngFor="let item of configurationService.serverConfig.radioStation">
-        <img src="{{item.artworkUrl}}" class="cardLayout image-container" alt="{{item.stationName}}">
+        <div class="overlay-container">
+            <img src="{{item.artworkUrl}}" class="cardLayout image-container" alt="{{item.stationName}}">
+            <div class="overlay-child d-flex justify-content-center align-items-center">
+                <span class="material-symbols-outlined md-48" (click)="play(item)">play_arrow</span>
+            </div>
+        </div>
         <div class="d-flex cardLayout card-body">
             <div class="highlightFolderText">RADIO</div>
             <div class="card-title">{{item.stationName}}</div>
         </div>
-        <div class="play-overlay d-flex justify-content-center align-items-center">
-            <span class="material-symbols-outlined md-48" (click)="play(item)">play_arrow</span>
-        </div>
     </div>
 </div>
-<ng-template #noRadio><div class="regularText infotext">There are no configured radio stations available.</div></ng-template>
-
+<ng-template #noRadio>
+    <div class="regularText infotext">There are no configured radio stations available.</div>
+</ng-template>

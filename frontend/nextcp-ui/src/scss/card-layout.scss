@@ -133,6 +133,10 @@ $grid-flex-sm-max-width : 9rem;
     letter-spacing: 0.15rem;
 }
 
+.imgCardWidth {
+    flex-basis: $imgCardWidth;
+    max-width : $imgCardWidth;
+}
 
 // old card layout
 .cardLayout {
@@ -163,7 +167,7 @@ $grid-flex-sm-max-width : 9rem;
         position: relative;
     }
 
-    &.play-overlay {
+    &.overlay {
         position        : absolute;
         top             : 0;
         bottom          : 0;

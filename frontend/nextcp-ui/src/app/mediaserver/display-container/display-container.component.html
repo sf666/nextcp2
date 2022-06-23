@@ -99,9 +99,9 @@
                 <div id="head_browse_result_playlist_items_ID" tabindex="-1" class="albumLayout">
                     <div id="{{container.id}}" tabindex="-1" class="albumTile" *ngFor="let container of playlistList">
                         <div class="image-container">
-                            <div class="albumImageContainer">
+                            <div class="overlay-container">
                                 <img src="{{container.albumartUri}}" alt="{{container.title}}">
-                                <div class="play-overlay d-flex flex-column justify-content-center align-items-center">
+                                <div class="overlay-child d-flex flex-column justify-content-center align-items-center">
                                     <div class="d-flex justify-content-center align-items-center">
                                         <span class="material-symbols-outlined md-36 m-3" (click)="browseTo(container)">drive_file_move</span>
                                         <span class="material-symbols-outlined md-36 m-3" (click)="playlistService.addContainerToPlaylist(container)">playlist_add</span>
@@ -127,9 +127,9 @@
             <div *ngIf="albumList?.length > 0">
                 <div id="head_browse_result_album_ID" class="albumLayout">
                     <div id="{{container.id}}" tabindex="-1" class="albumTile" *ngFor="let container of albumList">
-                        <div class="albumImageContainer">
+                        <div class="overlay-container">
                             <img src="{{container.albumartUri}}" alt="{{container.title}}">
-                            <div class="play-overlay-album d-flex flex-column justify-content-center align-items-center">
+                            <div class="overlay-child d-flex flex-column justify-content-center align-items-center" id="id_play_overlay_div_album">
                                 <div class="d-flex justify-content-center align-items-center">
                                     <span class="material-symbols-outlined md-36 m-3" (click)="browseTo(container)">drive_file_move</span>
                                 </div>
@@ -153,7 +153,7 @@
             <!-- Template : Browse Result Items                                 -->
             <!-- ############################################################## -->
             <div id="top-div" tabindex="-1" *ngIf="allMusicTracks.length > 0" class="itemDetails">
-                <div *ngIf="isListView(); else mixedTitles">
+                <div *ngIf="isListView(); else cardLayoutTitles">
                     <div id="head_browse_result_items_list_view_ID" class="container-fluid item-table">
                         <div class="item-thead">
                             <div class="row col-greyed">
@@ -213,20 +213,22 @@
                     </div>
                 </div>
 
-                <ng-template #mixedTitles>
-                    <div id="head_browse_result_items_mixed_titles_ID" class="mixedTitles">
-                        <div id="{{item.objectID}}" class="cover-card" *ngFor="let item of allMusicTracks">
-                            <img src="{{item.albumArtUrl}}" class="image-container" alt="{{item.title}}">
-                            <div class="d-flex card-body">
-                                <div class="d-flex">
-                                    <div class="card-title">{{item.title}}</div>
+                <ng-template #cardLayoutTitles>
+                    <div id="head_browse_result_items_mixed_titles_ID" class="cardLayoutTitles">
+                        <div id="{{item.objectID}}" class="imgCardWidth mb-5 ms-4" *ngFor="let item of allMusicTracks">
+                            <div class="overlay-container">
+                                <img src="{{item.albumArtUrl}}" class="image-container" alt="{{item.title}}">
+                                <div class="overlay-child d-flex flex-column justify-content-end">
+                                    <div class="d-flex justify-content-around align-items-center pb-4">
+                                        <span class="material-symbols-outlined md-36 m-3" (click)="avtransportService.playResource(item)">play_circle</span>
+                                        <span class="material-symbols-outlined md-36 m-3" (click)="playlistService.addToPlaylist(item)">playlist_add</span>
+                                        <span class="material-symbols-outlined md-36 m-3" (click)="showSongPopup($event, item)">more_vert</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="play-overlay d-flex flex-column justify-content-end">
-                                <div class="d-flex justify-content-around align-items-center pb-4">
-                                    <span class="material-symbols-outlined md-36 m-3" (click)="avtransportService.playResource(item)">play_circle</span>
-                                    <span class="material-symbols-outlined md-36 m-3" (click)="playlistService.addToPlaylist(item)">playlist_add</span>
-                                    <span class="material-symbols-outlined md-36 m-3" (click)="showSongPopup($event, item)">more_vert</span>
+                            <div class="d-flex card-body">
+                                <div class="d-flex minWidth">
+                                    <div class="card-title no-wrap">{{item.title}}</div>
                                 </div>
                             </div>
                         </div>

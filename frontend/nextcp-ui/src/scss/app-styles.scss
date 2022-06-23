@@ -71,6 +71,31 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:100,300,700" !defa
 
 
 //
+// Overlay
+//
+
+.overlay-container {
+    position: relative;
+}
+
+.overlay-child {
+    position        : absolute;
+    top             : 0;
+    right           : 0;
+    height          : 100%;
+    width           : 100%;
+    opacity         : 0;
+    background-color: rgba($color: $pantone-Neutral-Black-C, $alpha: 0.95);
+    text-align      : center;
+    transition      : .3s ease;
+    opacity         : 0;
+
+    &:hover {
+        opacity: 0.7;
+    }
+}
+
+//
 // Icons : See design guide at : https://developers.google.com/fonts/docs/material_icons
 // 
 .material-symbols-outlined {
