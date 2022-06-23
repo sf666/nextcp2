@@ -1,7 +1,7 @@
 <div *ngIf="radioService.radioItems?.length > 0">
     <div class="section head">Radio stations provided by selected player</div>
 
-    <div class="cardLayoutTitles">
+    <div class="cardLayoutTitles ps-3">
         <div class="imgCardWidth" *ngFor="let item of radioService.radioItems">
             <div class="overlay-container">
                 <img src="{{item.albumArtUrl}}" class="cardLayout image-container" alt="{{item.title}}">
@@ -18,7 +18,7 @@
 </div>
 
 <div *ngIf="configurationService.serverConfig?.radioStation.length > 0; else noRadio" class="cardLayout">
-    <div class="cardLayoutTitles">
+    <div class="cardLayoutTitles ps-3">
         <div class="imgCardWidth" *ngFor="let item of configurationService.serverConfig.radioStation">
             <div class="overlay-container">
                 <img src="{{item.artworkUrl}}" class="cardLayout image-container" alt="{{item.stationName}}">
