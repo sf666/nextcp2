@@ -11,7 +11,7 @@
         <div class="header-container">
             <div class="d-flex w-100">
                 <div class="top-img-container">
-                    <img class="image-container" src="{{currentContainer.albumartUri}}" class="img-top" alt="select media server">
+                    <img src="{{currentContainer.albumartUri}}" class="img-top" alt="select media server">
                 </div>
                 <div class="d-flex flex-column w-100" id="ID_SCROLL_TO_ELEMENT_STEP_IN" tabindex="-1">
                     <div class="right-button">
@@ -98,18 +98,16 @@
             <div *ngIf="playlistList?.length > 0">
                 <div id="head_browse_result_playlist_items_ID" tabindex="-1" class="albumLayout">
                     <div id="{{container.id}}" tabindex="-1" class="albumTile" *ngFor="let container of playlistList">
-                        <div class="image-container">
-                            <div class="overlay-container">
-                                <img src="{{container.albumartUri}}" alt="{{container.title}}">
-                                <div class="overlay-child d-flex flex-column justify-content-center align-items-center">
-                                    <div class="d-flex justify-content-center align-items-center">
-                                        <span class="material-symbols-outlined md-36 m-3" (click)="browseTo(container)">drive_file_move</span>
-                                        <span class="material-symbols-outlined md-36 m-3" (click)="playlistService.addContainerToPlaylist(container)">playlist_add</span>
-                                    </div>
-                                    <div class="d-flex justify-content-center align-items-center">
-                                        <span class="material-symbols-outlined md-36 m-3" (click)="playPlaylist(container)">play_arrow</span>
-                                        <span class="material-symbols-outlined md-36 m-3" (click)="shufflePlaylist(container)">shuffle</span>
-                                    </div>
+                        <div class="albumImageContainer">
+                            <img src="{{container.albumartUri}}" alt="{{container.title}}">
+                            <div class="overlay-child d-flex flex-column justify-content-center align-items-center">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <span class="material-symbols-outlined md-36 m-3" (click)="browseTo(container)">drive_file_move</span>
+                                    <span class="material-symbols-outlined md-36 m-3" (click)="playlistService.addContainerToPlaylist(container)">playlist_add</span>
+                                </div>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <span class="material-symbols-outlined md-36 m-3" (click)="playPlaylist(container)">play_arrow</span>
+                                    <span class="material-symbols-outlined md-36 m-3" (click)="shufflePlaylist(container)">shuffle</span>
                                 </div>
                             </div>
                         </div>
@@ -127,7 +125,7 @@
             <div *ngIf="albumList?.length > 0">
                 <div id="head_browse_result_album_ID" class="albumLayout">
                     <div id="{{container.id}}" tabindex="-1" class="albumTile" *ngFor="let container of albumList">
-                        <div class="overlay-container">
+                        <div class="albumImageContainer">
                             <img src="{{container.albumartUri}}" alt="{{container.title}}">
                             <div class="overlay-child d-flex flex-column justify-content-center align-items-center" id="id_play_overlay_div_album">
                                 <div class="d-flex justify-content-center align-items-center">
@@ -153,7 +151,7 @@
             <!-- Template : Browse Result Items                                 -->
             <!-- ############################################################## -->
             <div id="top-div" tabindex="-1" *ngIf="allMusicTracks.length > 0" class="itemDetails">
-                <div *ngIf="isListView(); else cardLayoutTitles">
+                <div *ngIf="isListView(); else cardLayoutTiles">
                     <div id="head_browse_result_items_list_view_ID" class="container-fluid item-table">
                         <div class="item-thead">
                             <div class="row col-greyed">
@@ -213,11 +211,11 @@
                     </div>
                 </div>
 
-                <ng-template #cardLayoutTitles>
-                    <div id="head_browse_result_items_mixed_titles_ID" class="cardLayoutTitles">
+                <ng-template #cardLayoutTiles>
+                    <div id="head_browse_result_items_mixed_titles_ID" class="cardLayoutTiles">
                         <div id="{{item.objectID}}" class="imgCardWidth mb-5 ms-4" *ngFor="let item of allMusicTracks">
-                            <div class="overlay-container">
-                                <img src="{{item.albumArtUrl}}" class="image-container" alt="{{item.title}}">
+                            <div class="albumImageContainer">
+                                <img src="{{item.albumArtUrl}}" alt="{{item.title}}">
                                 <div class="overlay-child d-flex flex-column justify-content-end">
                                     <div class="d-flex justify-content-around align-items-center pb-4">
                                         <span class="material-symbols-outlined md-36 m-3" (click)="avtransportService.playResource(item)">play_circle</span>
@@ -243,7 +241,7 @@
                 <div id="head_browse_result_playlist_container_ID" class="albumLayout">
                     <div class="albumTile" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)" *ngFor="let container of containerList">
                         <div class="albumImageContainer">
-                            <img class="image-container" src="{{container.albumartUri}}" alt="{{container.title}}">
+                            <img src="{{container.albumartUri}}" alt="{{container.title}}">
                         </div>
                         <div class="d-flex flex-column albumDesc">
                             <div class="playlistText">{{getOtherContainerHeadline(container)}}</div>
@@ -260,7 +258,7 @@
                 <div id="head_browse_other_items_ID" class="albumLayout">
                     <div class="albumTile" id="{{item.objectID}}" tabindex="-1" (click)="avtransportService.playResource(item)" *ngFor="let item of items">
                         <div class="albumImageContainer">
-                            <img class="image-container" src="{{item.albumArtUrl}}" alt="{{item.title}}">
+                            <img src="{{item.albumArtUrl}}" alt="{{item.title}}">
                         </div>
                         <div class="d-flex flex-column albumDesc">
                             <div class="playlistText">{{getOtherItemHeadline(item)}}</div>

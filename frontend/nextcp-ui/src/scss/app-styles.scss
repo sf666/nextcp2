@@ -95,10 +95,11 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:100,300,700" !defa
     }
 }
 
-.cardLayoutTitles {
-    display    : flex;
-    flex-wrap  : wrap;
-    padding-top: 3rem;
+.cardLayoutTiles {
+    display       : flex;
+    flex-wrap     : wrap;
+    padding-top   : 3rem;
+    padding-bottom: 6rem;
 }
 
 

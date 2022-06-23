@@ -1,11 +1,11 @@
 <div *ngIf="radioService.radioItems?.length > 0">
     <div class="section head">Radio stations provided by selected player</div>
 
-    <div class="cardLayoutTitles ps-3">
+    <div class="albumLayout ps-3">
         <div class="imgCardWidth" *ngFor="let item of radioService.radioItems">
-            <div class="overlay-container">
-                <img src="{{item.albumArtUrl}}" class="cardLayout image-container" alt="{{item.title}}">
-                <div class="cardLayout overlay-child d-flex justify-content-center align-items-center">
+            <div class="albumImageContainer">
+                <img src="{{item.albumArtUrl}}" alt="{{item.title}}">
+                <div class="overlay-child d-flex justify-content-center align-items-center">
                     <span class="material-symbols-outlined md-48" (click)="playOh(item)">play_arrow</span>
                 </div>
             </div>
@@ -17,11 +17,11 @@
     </div>
 </div>
 
-<div *ngIf="configurationService.serverConfig?.radioStation.length > 0; else noRadio" class="cardLayout">
-    <div class="cardLayoutTitles ps-3">
-        <div class="imgCardWidth" *ngFor="let item of configurationService.serverConfig.radioStation">
-            <div class="overlay-container">
-                <img src="{{item.artworkUrl}}" class="cardLayout image-container" alt="{{item.stationName}}">
+<div *ngIf="configurationService.serverConfig?.radioStation.length > 0; else noRadio">
+    <div class="albumLayout ps-3">
+        <div class="albumTile" *ngFor="let item of configurationService.serverConfig.radioStation">
+            <div class="albumImageContainer">
+                <img src="{{item.artworkUrl}}" alt="{{item.stationName}}">
                 <div class="overlay-child d-flex justify-content-center align-items-center">
                     <span class="material-symbols-outlined md-48" (click)="play(item)">play_arrow</span>
                 </div>
