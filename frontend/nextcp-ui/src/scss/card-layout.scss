@@ -21,7 +21,8 @@ $grid-flex-sm-max-width : 9rem;
     max-width : $grid-flex-max-width;
     flex-grow : 1;
 
-    margin: auto;
+    margin    : auto;
+    object-fit: contain;
 }
 
 .albumTile {
@@ -91,7 +92,8 @@ $grid-flex-sm-max-width : 9rem;
         max-width : $grid-flex-sm-max-width;
         flex-grow : 1;
 
-        margin: auto;
+        margin    : auto;
+        object-fit: contain;
     }
 
     .albumTile {
@@ -114,8 +116,9 @@ $grid-flex-sm-max-width : 9rem;
 
 
 .albumImageContainer img {
-    width : 100%;
-    height: auto;
+    width     : 100%;
+    height    : auto;
+    object-fit: contain;
 }
 
 .albumSubheader {
