@@ -2,7 +2,7 @@
     <div class="section head">Radio stations provided by selected player</div>
 
     <div class="albumLayout ps-3">
-        <div class="imgCardWidth" *ngFor="let item of radioService.radioItems">
+        <div class="albumTile" *ngFor="let item of radioService.radioItems">
             <div class="albumImageContainer">
                 <img src="{{item.albumArtUrl}}" alt="{{item.title}}">
                 <div class="overlay-child d-flex justify-content-center align-items-center">
