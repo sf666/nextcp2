@@ -1,9 +1,11 @@
 <div class="d-flex flex-column section">
     <div class="section head">Client profiles</div>
-
+    <div class="para m-3">Select a client profile to associate with this browser. Repeated calls with this browser will select renderer and server by default.
+        Profiles should be renamed to some meaningful name like 'livingroom' or 'kitchen' for easy to remember and switchable setup.
+    </div>
     <div class="d-flex flex-wrap">
         <mat-form-field appearance="fill" class="bigger">
-            <mat-label>available profiles</mat-label>
+            <mat-label>select profile or create new one</mat-label>
             <mat-select [(ngModel)]="configService.clientConfig" [compareWith]="compareProfile">
                 <mat-option (click)="configService.addNewClientConfig()">CREATE NEW PROFILE</mat-option>
                 <mat-option [value]="clientConfig"
@@ -46,6 +48,13 @@
 </div>
 
 <div class="section head">server configuration</div>
+<div class="para m-3">Media Server displayed here were discovered in the past until now. Server may be offline, if not yet found.
+    Disabled server will not show up for selection in some popups or lists.
+</div>
+<div class="para m-3 mb-3">Important: If an Universal Media Server (UMS) is found, enter the API key from UMS.conf, for unlocking
+    all features. Otherwise most audio convenience functions will not work!
+</div>
+
 <div class="d-flex flex-row flex-wrap ms-4">
     <div class="cardContainer" *ngFor="let serverConfig of configService?.getServerConfig()?.serverDevices">
         <mat-card class="card-width me-4 mb-3">
@@ -80,6 +89,13 @@
 </div>
 
 <div class="section head">renderer configuration</div>
+<div class="para m-3">Media Renderer displayed here were discovered in the past until now. Renderer may be offline, if not yet found.
+    Disabled renderer will not show up for selection in some popups or lists.
+</div>
+<div class="para m-3">If a streaming device is attached to an amplifier, a device device driver can be selected for controling the amplifier power and volume state
+    instead of the streamer volume and power state. A default volume percentage can be applied to the external amplifier on power up. The streaming device volume can be
+    set to 100% on power up, if 'UPnP max volume' is enabled.
+</div>
 <div>
     <div class="d-flex flex-row flex-wrap ms-4">
         <div class="cardContainer" *ngFor="let rendererConfig of configService.getRendererDevicesConfig()">

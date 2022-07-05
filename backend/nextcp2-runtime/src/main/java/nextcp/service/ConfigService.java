@@ -53,7 +53,7 @@ public class ConfigService
 
     public void addClientProfile(UiClientConfig clientConfig)
     {
-        deleteClientProfile(clientConfig);
+        deleteProfileInternal(clientConfig);
         config.clientConfig.add(clientConfig);
         writeAndSendConfig();
         log.debug("Client profile added or updated : " + clientConfig);
@@ -61,6 +61,18 @@ public class ConfigService
     }
 
     public boolean deleteClientProfile(UiClientConfig clientConfig)
+    {
+        deleteProfileInternal(clientConfig);
+        writeAndSendConfig();
+        return true;
+    }
+
+    /**
+     * @param clientConfig
+     *            Profile to delete
+     * @return return TRUE if profile is deleted else FALSE
+     */
+    private boolean deleteProfileInternal(UiClientConfig clientConfig)
     {
         if (config.clientConfig != null && config.clientConfig.size() > 0)
         {
@@ -70,7 +82,7 @@ public class ConfigService
                 return false;
             }
         }
-        return true;
+        return false;
     }
 
     public void writeAndSendConfig()
