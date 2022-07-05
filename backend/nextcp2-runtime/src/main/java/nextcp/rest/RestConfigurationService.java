@@ -126,8 +126,14 @@ public class RestConfigurationService
     {
         try
         {
-            configService.deleteClientProfile(clientProfile);
-            publisher.publishEvent(new ToastrMessage(null, "info", "client profile", "profile deleted : " + clientProfile.clientName));
+            if (configService.deleteClientProfile(clientProfile))
+            {
+                publisher.publishEvent(new ToastrMessage(null, "info", "client profile", "profile deleted : " + clientProfile.clientName));
+            }
+            else 
+            {
+                publisher.publishEvent(new ToastrMessage(null, "error", "client profile", "profile not found : " + clientProfile.clientName));
+            }
             log.debug("Client config removed : " + clientProfile);
         }
         catch (Exception e)

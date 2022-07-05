@@ -60,17 +60,17 @@ public class ConfigService
         publisher.publishEvent(new ToastrMessage(null, "info", "client profile", "profile added or updated : " + clientConfig.clientName));
     }
 
-    public void deleteClientProfile(UiClientConfig clientConfig)
+    public boolean deleteClientProfile(UiClientConfig clientConfig)
     {
         if (config.clientConfig != null && config.clientConfig.size() > 0)
         {
             if (!config.clientConfig.removeIf(e -> e.uuid.contentEquals(clientConfig.uuid)))
             {
                 log.debug("Client config not found : " + clientConfig);
-                publisher.publishEvent(new ToastrMessage(null, "info", "client profile", "profile not found : " + clientConfig.clientName));
+                return false;
             }
         }
-        writeAndSendConfig();
+        return true;
     }
 
     public void writeAndSendConfig()
