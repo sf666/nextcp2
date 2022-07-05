@@ -1,0 +1,19 @@
+[Unit]
+Description = nextcp-2 UPnP control point
+After = network.target
+
+[Service]
+User=nextcp2
+Group=nextcp2
+ExecStart = /usr/local/sdkman/candidates/java/15.0.2.7.1-amzn/bin/java -Xms256m -Xmx512m -jar /opt/nextcp2/nextcp2.jar
+RemainAfterExit=no
+Restart=on-failure
+RestartSec=45s
+PIDFile=/var/run/nextcp2.pid
+
+StandardOutput=null
+StandardError=null
+
+[Install]
+WantedBy = multi-user.target
+
