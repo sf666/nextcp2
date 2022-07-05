@@ -1,6 +1,7 @@
+import { DeviceService } from './device.service';
 import { ContentDirectoryService } from './content-directory.service';
 import { Subject } from 'rxjs';
-import { MusicBrainzId, MusicItemIdDto } from './dto.d';
+import { MusicItemIdDto } from './dto.d';
 import { HttpService } from './http.service';
 import { Injectable } from '@angular/core';
 
@@ -13,10 +14,10 @@ export class RatingServiceService {
 
   constructor(
     private httpService: HttpService,
-    private contentDirectoryService: ContentDirectoryService) { }
+    private deviceSerice: DeviceService) { }
 
   public setStarRating(ids: MusicItemIdDto, stars: number): Subject<number> {
-    const uri = `/setStarRating/${stars}/${this.contentDirectoryService.getCurrentMediaServerDto().udn}`;    
+    const uri = `/setStarRating/${stars}/${this.deviceSerice.selectedMediaServerDevice.udn}`;    
     return this.httpService.post<number>(this.baseUri, uri, ids);
   }
 

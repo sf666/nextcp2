@@ -38,7 +38,7 @@ export class ContentDirectoryService {
     this.currentContainerList = this.dtoGeneratorService.generateEmptyContainerItemDto();
   }
 
-  public getCurrentMediaServerDto(): MediaServerDto {
+  private getCurrentMediaServerDto(): MediaServerDto {
     return this.currentMediaServerDto;
   }
 
