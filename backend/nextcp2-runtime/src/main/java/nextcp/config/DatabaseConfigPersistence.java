@@ -3,6 +3,7 @@ package nextcp.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,17 +52,21 @@ public class DatabaseConfigPersistence
     public List<UiClientConfig> readClientConfigDatabaseProperties()
     {
         String cc_json = db.selectJsonStoreValue(UI_DEFAULT_CLIENT_CONFIG_VALUE);
-        try
+        if (!StringUtils.isAllBlank(cc_json))
         {
-            return om.readValue(cc_json, new TypeReference<List<UiClientConfig>>()
+            try
             {
-            });
+                return om.readValue(cc_json, new TypeReference<List<UiClientConfig>>()
+                {
+                });
+            }
+            catch (Exception e)
+            {
+                log.warn("client config list : initializing empty array list", e);
+            }
         }
-        catch (Exception e)
-        {
-            log.warn("client config list : initializing empty array list", e);
-            return new ArrayList<>();
-        }
+        log.debug("no client configuration available yet ...");
+        return new ArrayList<>();
     }
 
 }
