@@ -156,7 +156,7 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
         {
             return physicalDeviceDriver.getVolume();
         }
-        log.warn("volume: physical device driver anavailable.");
+        log.debug("volume: physical device driver unavailable.");
         return 0;
     }
 
@@ -167,7 +167,7 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
         {
             return physicalDeviceDriver.getStandby();
         }
-        log.warn("standby: physical device driver anavailable.");
+        log.debug("standby: physical device driver unavailable.");
         return true;
     }
 
