@@ -1,8 +1,7 @@
 import { InputFieldConfig } from './input-field-dialog.d';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, OnInit, ElementRef, Inject } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { title } from 'process';
 
 @Component({
   selector: 'app-input-field-dialog',

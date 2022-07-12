@@ -31,6 +31,7 @@ export class SongOptionsComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) data: { trigger: ElementRef, item: MusicItemDto, event: PointerEvent },
   ) {
     this.item = data.item;
+    console.log("current popup item : " + this.item);
     this._matDialogRef = _matDialogRef;
     this.triggerElementRef = data.trigger;
     this.playlistDialogOpen = false;

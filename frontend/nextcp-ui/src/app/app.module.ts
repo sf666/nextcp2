@@ -120,14 +120,14 @@ import { InputFieldDialogComponent } from './popup/input-field-dialog/input-fiel
    schemas: [
       CUSTOM_ELEMENTS_SCHEMA
    ],
-   providers: [{ 
-      provide: LocationStrategy, useClass: HashLocationStrategy 
+   providers: [{
+      provide: LocationStrategy, useClass: HashLocationStrategy
    }, {
       provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true
    }],
-   
+
    // add dynamically at runtime created components as "entryComponents"
-   entryComponents:[InputFieldDialogComponent],
+   entryComponents: [InputFieldDialogComponent, SongOptionsComponent, DefautPlaylistsComponent, AvailableServerComponent, AvailableRendererComponent],
 
    bootstrap: [
       AppComponent
