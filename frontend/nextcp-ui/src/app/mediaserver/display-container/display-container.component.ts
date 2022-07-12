@@ -347,6 +347,7 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
   // ===============================================================================================
 
   public browseTo(containerDto: ContainerDto): void {
+    this.clearSearch();
     this.containerSelected.emit(containerDto);
   }
 
