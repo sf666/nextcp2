@@ -1,5 +1,4 @@
 import { PopupService } from './../../../../util/popup.service';
-import { UuidService } from './../../../../util/uuid.service';
 import { PlaylistService } from './../../../../service/playlist.service';
 import { ContentDirectoryService } from './../../../../service/content-directory.service';
 import { DownloadService } from './../../../../util/download.service';
@@ -50,6 +49,7 @@ export class SongOptionsComponent implements OnInit {
     if (this.item?.songId.umsAudiotrackId > 0) {
       return true;
     }
+    console.log("song has no ums audio track id : " + this.item);
     return false;
   }
 
