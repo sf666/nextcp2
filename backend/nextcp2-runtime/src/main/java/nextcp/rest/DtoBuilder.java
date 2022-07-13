@@ -138,6 +138,10 @@ public class DtoBuilder
             if (container.getDate() != null)
             {
                 dto.media_date = container.getDate();
+                if (log.isDebugEnabled() && StringUtils.isEmpty(container.getDate()))
+                {
+                    log.debug("dc:date is empty for title : " + container.getTitle());
+                }
             }
             if (container.getGenres().length > 0)
             {
