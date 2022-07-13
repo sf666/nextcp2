@@ -1,8 +1,9 @@
 How to do a release 
 ====================
 
-Attention. The deploy repo ist "free" and has only limited transfer volume!
-
+Attention: 
+- The deploy repo ist "free" and has only limited transfer volume!
+- Use JDK 15. JDK 17 gives an certificate error.
 
 What to do :
 
