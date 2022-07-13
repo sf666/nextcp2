@@ -9,7 +9,8 @@ What to do :
 Set release version i.e. "2.1", call build script and commit changes, create tag, checkout and deploy
 
 mvn versions:set -DnewVersion=2.1
-../build.sh
+cd ..
+./build.sh
 
 git commit
 git tag v2.1

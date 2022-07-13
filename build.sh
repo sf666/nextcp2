@@ -18,6 +18,7 @@ mvn package
 
 rm -rf ../build
 mkdir ../build
-cp nextcp2-assembly/target/nextcp2-assembly-spring-boot-2.0.0-SNAPSHOT.jar ../build/nextcp2.jar
-cp nextcp2-device-driver/nextcp2-ma9000/target/nextcp2-ma9000-2.0.0-SNAPSHOT.jar ../build/nextcp2-ma9000.jar
+cp nextcp2-assembly/target/nextcp2.jar ../build
+cp nextcp2-assembly/target/nextcp2.exe ../build
+cp nextcp2-device-driver/nextcp2-ma9000/target/device_driver_ma9000.jar ../build/nextcp2-ma9000.jar
 
