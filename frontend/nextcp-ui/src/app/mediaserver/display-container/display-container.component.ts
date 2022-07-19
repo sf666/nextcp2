@@ -5,23 +5,23 @@ import { TrackQualityService } from './../../util/track-quality.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { MyMusicService } from './../../service/my-music.service';
 import { MusicItemDto, ContainerDto } from './../../service/dto.d';
-import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, AfterViewChecked } from '@angular/core';
 
 @Component({
   selector: 'mediaServer-display-container',
   templateUrl: './display-container.component.html',
   styleUrls: ['./display-container.component.scss'],
   providers: [
-   {provide: 'uniqueId', useValue: 'displayContainer'},
- ]
+    { provide: 'uniqueId', useValue: 'displayContainer' },
+  ]
 })
-export class DisplayContainerComponent implements OnInit, OnChanges {
+export class DisplayContainerComponent implements OnInit, OnChanges, AfterViewChecked {
 
   @Input() showTopHeader = true;
 
   // Songs & Albums & Items to display
   @Input() currentContainer: ContainerDto;
-  
+
   @Input() musicTracks: MusicItemDto[] = [];
   @Input() otherItems_: MusicItemDto[] = [];
 
@@ -59,12 +59,26 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
     public trackQualityService: TrackQualityService) {
   }
 
+  ngAfterViewChecked(): void {
+    this.scrollIntoViewID(this.scrollToID);
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     this.init();
   }
 
+  /**
+ * @param elementID ATTENTION: elementID needs to have tabindex set to '-1': <div id="elementID" tabindex="-1">
+ */
+  public scrollIntoViewID(elementID: string): void {
+    const targetElement = document.getElementById(elementID); // querySelector('#someElementId');
+    if (targetElement) {
+      targetElement.focus();
+    }
+  }
+
   ngOnInit(): void {
-    this.init(); 
+    this.init();
   }
 
   private init(): void {
@@ -354,7 +368,7 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
   playAlbum(container: ContainerDto): void {
     this.playlistService.addContainerToPlaylistAndPlay(container, false);
   }
-  
+
   play(musicItemDto: MusicItemDto): void {
     this.avtransportService.playResource(musicItemDto);
   }
@@ -422,6 +436,4 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
     }
     return "";
   }
-
-
 }

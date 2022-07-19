@@ -16,9 +16,7 @@ import { Component} from '@angular/core';
 
 export class MusicLibraryComponent {
 
-  private lastOidIsResoredFromCache: boolean;
-
-  private scrollToId_: string;
+  private lastOidIsRestoredFromCache: boolean;
 
   constructor(
     public layoutService: LayoutService,
@@ -29,7 +27,7 @@ export class MusicLibraryComponent {
     console.log("constructor call : MusicLibraryComponent");
     // select current mediaServer and subscribe to changes ...
     this.mediaServerChanged(deviceService.selectedMediaServerDevice);
-    deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));
+    deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));    
   }
 
   mediaServerChanged(data: MediaServerDto): void {
@@ -41,9 +39,9 @@ export class MusicLibraryComponent {
     if (this.persistenceService.isCurrentMediaServer(data.udn)) {
       oid = this.persistenceService.getLastMediaServerPath();
       this.cdsBrowsePathService.restorePathToRoot();
-      this.lastOidIsResoredFromCache = true;
+      this.lastOidIsRestoredFromCache = true;
     } else {
-      this.lastOidIsResoredFromCache = false;
+      this.lastOidIsRestoredFromCache = false;
       oid = '0';
       this.cdsBrowsePathService.clearPath();
       this.persistenceService.setNewMediaServerDevice(data.udn);
@@ -59,9 +57,9 @@ export class MusicLibraryComponent {
 
   contentReceived(data: ContainerItemDto): void {
     // Check if 
-    if (this.lastOidIsResoredFromCache && !(data.containerDto.length > 0 || data.musicItemDto.length > 0)) {
+    if (this.lastOidIsRestoredFromCache && !(data.containerDto.length > 0 || data.musicItemDto.length > 0)) {
       this.browseToRoot('');
-      this.lastOidIsResoredFromCache = false;
+      this.lastOidIsRestoredFromCache = false;
     }
   }
 
@@ -134,6 +132,6 @@ export class MusicLibraryComponent {
   }
 
   scrollToID(): string {
-    return this.scrollToId_;
+    return this.cdsBrowsePathService.scrollToID;  // this.scrollToId_;
   }
 }
