@@ -5,7 +5,7 @@ import { TrackQualityService } from './../../util/track-quality.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { MyMusicService } from './../../service/my-music.service';
 import { MusicItemDto, ContainerDto } from './../../service/dto.d';
-import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, AfterViewChecked, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'mediaServer-display-container',
@@ -15,7 +15,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitte
     { provide: 'uniqueId', useValue: 'displayContainer' },
   ]
 })
-export class DisplayContainerComponent implements OnInit, OnChanges, AfterViewChecked {
+export class DisplayContainerComponent implements OnInit, OnChanges {
 
   @Input() showTopHeader = true;
 
@@ -58,8 +58,8 @@ export class DisplayContainerComponent implements OnInit, OnChanges, AfterViewCh
     private songOptionsServiceService: SongOptionsServiceService,
     public trackQualityService: TrackQualityService) {
   }
-
-  ngAfterViewChecked(): void {
+  
+  domChange(event: any): void {
     this.scrollIntoViewID(this.scrollToID);
   }
 
