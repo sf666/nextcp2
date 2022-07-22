@@ -20,7 +20,7 @@ public class NextcpClientInfo extends ClientInfo
 
     private void setUserAgent()
     {
-        String userAgent = String.format("%s/%s UPnP/1.0 nextcp/2.0", SystemUtils.OS_NAME, SystemUtils.OS_VERSION);
+        String userAgent = String.format("nextcp/2.0");
         setRequestUserAgent(userAgent);
     }
 

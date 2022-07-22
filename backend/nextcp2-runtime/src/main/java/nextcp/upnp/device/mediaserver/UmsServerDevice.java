@@ -41,7 +41,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     private static final Logger log = LoggerFactory.getLogger(UmsServerDevice.class.getName());
     private OkHttpClient okClient = new OkHttpClient.Builder().build();
     private ObjectMapper om = new ObjectMapper();
-    private final String userAgent = String.format("%s/%s UPnP/1.0 nextcp/2.0", SystemUtils.OS_NAME, SystemUtils.OS_VERSION);
+    private final String userAgent = String.format("nextcp/2.0");
     private final String userAgentType = "USER-AGENT";
 
     
