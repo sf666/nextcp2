@@ -38,6 +38,8 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
   private listView = true;
   private lastDiscLabel = '';
 
+  private lastScrollToId = '';
+
   quickSearchString: string;
 
   // some calculated constants
@@ -60,7 +62,10 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
   }
   
   domChange(event: any): void {
-    this.scrollIntoViewID(this.scrollToID);
+    if (this.scrollToID !== this.lastScrollToId) {
+      this.scrollIntoViewID(this.scrollToID);
+      this.lastScrollToId = this.scrollToID;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -257,7 +262,7 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
     }
   }
 
-  clearSearch(): void {
+  public clearSearch(): void {
     this.quickSearchString = '';
   }
 

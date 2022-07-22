@@ -1,3 +1,4 @@
+import { DisplayContainerComponent } from './../../mediaserver/display-container/display-container.component';
 import { Subject } from 'rxjs';
 import { CdsBrowsePathService } from './../../util/cds-browse-path.service';
 import { PersistenceService } from './../../service/persistence/persistence.service';
@@ -5,7 +6,7 @@ import { DeviceService } from 'src/app/service/device.service';
 import { LayoutService } from './../../service/layout.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { ContainerDto, MusicItemDto, MediaServerDto, ContainerItemDto } from './../../service/dto.d';
-import { Component} from '@angular/core';
+import { Component, ViewChild} from '@angular/core';
 
 @Component({
   selector: 'music-library',
@@ -17,6 +18,8 @@ import { Component} from '@angular/core';
 export class MusicLibraryComponent {
 
   private lastOidIsRestoredFromCache: boolean;
+
+  @ViewChild(DisplayContainerComponent) dispContainer:DisplayContainerComponent;
 
   constructor(
     public layoutService: LayoutService,
@@ -79,6 +82,7 @@ export class MusicLibraryComponent {
   public backButtonPressed(event: any) {
     const currentParent = this.contentDirectoryService?.currentContainerList?.currentContainer?.parentID;
     if (currentParent) {
+      this.dispContainer.clearSearch();
       this.browseToOid(currentParent, "");
       this.cdsBrowsePathService.stepOut();
     }
