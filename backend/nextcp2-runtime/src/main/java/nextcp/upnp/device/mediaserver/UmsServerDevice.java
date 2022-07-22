@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang.SystemUtils;
 import org.fourthline.cling.model.meta.RemoteDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,10 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     private static final Logger log = LoggerFactory.getLogger(UmsServerDevice.class.getName());
     private OkHttpClient okClient = new OkHttpClient.Builder().build();
     private ObjectMapper om = new ObjectMapper();
+    private final String userAgent = String.format("%s/%s UPnP/1.0 nextcp/2.0", SystemUtils.OS_NAME, SystemUtils.OS_VERSION);
+    private final String userAgentType = "USER-AGENT";
 
+    
     @Autowired
     private ServerConfig config = null;
 
@@ -297,7 +301,10 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     {
         RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/text"));
         String requestUrl = String.format("%s%s", getBaseUrl(), uri);
-        Request request = new Request.Builder().url(requestUrl).addHeader("api-key", getApiKey()).post(body).build();
+        Request request = new Request.Builder().url(requestUrl).
+                addHeader("api-key", getApiKey()).
+                addHeader(userAgentType, userAgent).
+                post(body).build();
         Call call = okClient.newCall(request);
         Response response = call.execute();
         String respString = response.body().string();
@@ -330,7 +337,10 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     {
         RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/text"));
         String requestUrl = String.format("%s%s", getBaseUrl(), uri);
-        Request request = new Request.Builder().url(requestUrl).addHeader("api-key", getApiKey()).post(body).build();
+        Request request = new Request.Builder().url(requestUrl).
+                addHeader("api-key", getApiKey()).
+                addHeader(userAgentType, userAgent).
+                post(body).build();
         Call call = okClient.newCall(request);
         Response response = call.execute();
         return response;
