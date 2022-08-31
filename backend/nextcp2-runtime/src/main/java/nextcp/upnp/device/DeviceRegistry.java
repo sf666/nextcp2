@@ -51,7 +51,7 @@ public class DeviceRegistry
     //
     // Media Renderer
     //
-    public void addMediaRendererDevice(RemoteDevice remoteDevice)
+    public synchronized void addMediaRendererDevice(RemoteDevice remoteDevice)
     {
         MediaRendererDevice device = deviceFactory.mediaRendererDeviceFactory(remoteDevice);
         rendererConfigService.addMediaRendererDeviceConfig(device);
@@ -59,7 +59,7 @@ public class DeviceRegistry
         eventPublisher.publishEvent(new MediaRendererListChanged(getAvailableMediaRenderer()));
     }
 
-    public void removeMediaRendererDevice(RemoteDevice remoteDevice)
+    public synchronized void removeMediaRendererDevice(RemoteDevice remoteDevice)
     {
         MediaRendererDevice mr_device = mediaRendererList.remove(remoteDevice.getIdentity().getUdn());
         eventPublisher.publishEvent(new MediaRendererListChanged(getAvailableMediaRenderer()));
@@ -79,7 +79,7 @@ public class DeviceRegistry
     //
     // Media Server
     //
-    public void addMediaServerDevice(RemoteDevice remoteDevice, MediaServerType serverType)
+    public synchronized void addMediaServerDevice(RemoteDevice remoteDevice, MediaServerType serverType)
     {
         MediaServerDevice device = deviceFactory.mediaServerDeviceFactory(remoteDevice, serverType);
         serverConfigService.addMediaServerDeviceConfig(remoteDevice, device);
@@ -87,7 +87,7 @@ public class DeviceRegistry
         eventPublisher.publishEvent(new MediaServerListChanged(getAvailableMediaServer()));
     }
 
-    public void removeMediaServerDevice(RemoteDevice remoteDevice)
+    public synchronized void removeMediaServerDevice(RemoteDevice remoteDevice)
     {
         MediaServerDevice device = mediaServerList.remove(remoteDevice.getIdentity().getUdn());
         eventPublisher.publishEvent(new MediaServerListChanged(getAvailableMediaServer()));
@@ -101,7 +101,7 @@ public class DeviceRegistry
     //
     // Media Server Extended Support Devices
     //
-    public void addMediaServerExtDevice(IMediaServerExtendedSupport device)
+    public synchronized void addMediaServerExtDevice(IMediaServerExtendedSupport device)
     {
         mediaServerExtList.put(device.getUdn(), device);
     }

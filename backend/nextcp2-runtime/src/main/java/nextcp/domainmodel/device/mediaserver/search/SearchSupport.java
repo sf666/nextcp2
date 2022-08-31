@@ -13,6 +13,7 @@ import nextcp.dto.ContainerDto;
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.SearchRequestDto;
 import nextcp.dto.SearchResultDto;
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.ContentDirectoryService;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.SearchInput;
@@ -39,6 +40,10 @@ public class SearchSupport
         try
         {
             searchCaps = contentDirectoryService.getSearchCapabilities().SearchCaps;
+        }
+        catch (GenActionException e)
+        {
+            log.warn(String.format("%s -> %s", "No search capability for device", e.description));
         }
         catch (Exception e)
         {

@@ -2,6 +2,7 @@ package nextcp.upnp;
 
 import java.net.URL;
 
+import org.fourthline.cling.binding.xml.Descriptor.Device;
 import org.fourthline.cling.controlpoint.ControlPoint;
 import org.fourthline.cling.model.action.ActionException;
 import org.fourthline.cling.model.action.ActionInvocation;
@@ -45,8 +46,6 @@ public abstract class ActionCallback
         this.controlPoint = controlPoint;
         return this;
     }
-
-
 
     protected ActionInvocation execute()
     {
@@ -95,7 +94,8 @@ public abstract class ActionCallback
             }
             else if (response.getOperation().isFailed())
             {
-                throw new GenActionException(GenActionException.ACTION_FAILED, response.getOperation().toString());
+                throw new GenActionException(GenActionException.ACTION_FAILED,
+                        String.format("%s : %s", remoteService.getDevice().getDisplayString(), response.getOperation().toString()));
             }
         }
 
