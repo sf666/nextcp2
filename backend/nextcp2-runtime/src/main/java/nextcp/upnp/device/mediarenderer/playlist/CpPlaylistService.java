@@ -299,8 +299,10 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 
     public MusicItemDto getCurrentTrack()
     {
+        log.debug("currentSongIdx is : " + currentSongIdx);
         if (playlistItems.isEmpty())
         {
+            log.debug("getCurrentTrack is Empty.");
             return null;
         }
         return playlistItems.get(playbackItems.get(currentSongIdx));
@@ -340,7 +342,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 
     public int addAllSongToPlaylist(List<MusicItemDto> songsToAdd)
     {
-        log.debug("addAllSongToPlaylist ...");            
+        log.debug("addAllSongToPlaylist. Number of Songs given : " + songsToAdd.size());            
         // remove double entries ...
         songsToAdd.removeAll(playlistItems);
 
@@ -731,7 +733,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
         }
         catch (InterruptedException e)
         {
-            e.printStackTrace();
+            log.warn("interrupted ... ", e);
         }
         play();
     }

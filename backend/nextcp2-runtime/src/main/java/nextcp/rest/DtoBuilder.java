@@ -252,6 +252,8 @@ public class DtoBuilder
                     itemDto.genre = property.getValue().toString();
                 case "date":
                     itemDto.date = property.getValue().toString();
+                case "rating":
+                    addRating(itemDto, property.getValue().toString());
                 default:
                     log.debug("unprocessed property : " + property.getDescriptorName() + " : " + property.getValue());
             }
@@ -345,11 +347,7 @@ public class DtoBuilder
                         try
                         {
                             String strRating = n.getTextContent();
-                            if (NumberUtils.isParsable(strRating))
-                            {
-                                itemDto.rating = Integer.parseInt(strRating);
-                                log.debug("rating : " + strRating);
-                            }
+                            addRating(itemDto, strRating);
                         }
                         catch (Exception e)
                         {
@@ -376,6 +374,15 @@ public class DtoBuilder
                         break;
                 }
             }
+        }
+    }
+
+    private void addRating(MusicItemDto itemDto, String strRating)
+    {
+        if (NumberUtils.isParsable(strRating))
+        {
+            itemDto.rating = Integer.parseInt(strRating);
+            log.debug("rating : " + strRating);
         }
     }
 
@@ -420,7 +427,10 @@ public class DtoBuilder
         }
         else
         {
-            log.debug(String.format("Empty URL for ID : %s ", item.getId()));
+            log.debug(String.format("Empty URL for item : %s ", item.getTitle()));
+            item.getResources().stream()
+                    .forEach(res -> log.debug(String.format("  -> resource content format : %s,  Value : %s", res.getProtocolInfo().getContentFormat(), res.getValue())));
+
             return "";
         }
     }
@@ -433,8 +443,7 @@ public class DtoBuilder
         }
         if (res.getProtocolInfo().getContentFormat().startsWith("MIMETYPE_AUTO"))
         {
-            // UMS unknown renderer
-            return true;
+            return true; // UMS unknown renderer ... maybe it should be fixed in UMS ?
         }
 
         return false;

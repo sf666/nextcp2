@@ -116,13 +116,11 @@ public class MediaServerDevice extends BaseDevice
             addContainerObjects(result, didl);
             addItemObjects(result.musicItemDto, didl);
 
-            // addDirectoryUpContainer(inp, result, curContainer);
             return result;
         }
         catch (Exception e)
         {
-            e.printStackTrace();
-            throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage());
+            throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
         }
     }
 

@@ -240,8 +240,8 @@ public class RestPlaylistService extends BaseRestService
         MediaServerDevice serverDevice = deviceRegistry.getMediaServerByUDN(new UDN(udn));
         BrowseInput browseInp = new BrowseInput();
         browseInp.ObjectID = containerID;
-        ContainerItemDto itemsToAdd = serverDevice.browseChildren(browseInp);
-        return itemsToAdd;
+        ContainerItemDto containerWithChildren = serverDevice.browseChildren(browseInp);
+        return containerWithChildren;
     }
 
     @PostMapping("/insertAndPlayContainer")
@@ -251,12 +251,10 @@ public class RestPlaylistService extends BaseRestService
         {
             MediaRendererDevice rendererDevice = getMediaRendererByUdn(req.mediaRendererUdn);
             checkDevice(rendererDevice);
+            rendererDevice.getPlaylistServiceBridge().deleteAll();
             if (req.shuffle != null)
             {
-                rendererDevice.getPlaylistServiceBridge().deleteAll();
-                Thread.sleep(200);
                 rendererDevice.getPlaylistServiceBridge().setShuffle(req.shuffle);
-                Thread.sleep(200);
             }
             ContainerItemDto itemsToAdd = getChildElements(req.containerDto.mediaServerUDN, req.containerDto.id);
             rendererDevice.getPlaylistServiceBridge().insertAndPlayContainer(itemsToAdd);

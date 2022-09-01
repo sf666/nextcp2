@@ -33,4 +33,11 @@ public class BackendException extends RuntimeException
         this.errorCode = errorCode;
         this.description = description;
     }
+
+    public BackendException(int errorCode, String description, Exception e)
+    {
+        super(e);
+        this.errorCode = errorCode;
+        this.description = description;
+    }
 }
