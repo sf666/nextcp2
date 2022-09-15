@@ -55,7 +55,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DisplayContainerComponent } from './mediaserver/display-container/display-container.component';
 import { MyPlaylistsComponent } from './view/my-playlists/my-playlists.component';
 import { SearchResultComponent } from './view/search-result/search-result.component';
-import { InputFieldDialogComponent } from './popup/input-field-dialog/input-field-dialog.component'
+import { InputFieldDialogComponent } from './popup/input-field-dialog/input-field-dialog.component';
+import { ImageCropperComponent } from './util/comp/image-cropper/image-cropper.component'
 
 @NgModule({
    declarations: [
@@ -89,6 +90,7 @@ import { InputFieldDialogComponent } from './popup/input-field-dialog/input-fiel
       MyPlaylistsComponent,
       SearchResultComponent,
       InputFieldDialogComponent,
+      ImageCropperComponent,
    ],
    imports: [
       // Material Design

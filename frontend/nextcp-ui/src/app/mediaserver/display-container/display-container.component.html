@@ -11,7 +11,7 @@
         <div class="header-container">
             <div class="d-flex w-100">
                 <div class="top-img-container">
-                    <img src="{{currentContainer.albumartUri}}" class="img-top" alt="select media server">
+                    <img src="{{currentContainer.albumartUri}}" class="img-top imgContainer" alt="select media server">
                 </div>
                 <div class="d-flex flex-column w-100" id="ID_SCROLL_TO_ELEMENT_STEP_IN" tabindex="-1">
                     <div class="right-button">
@@ -99,7 +99,7 @@
                 <div id="head_browse_result_playlist_items_ID" tabindex="-1" class="albumLayout">
                     <div id="{{container.id}}" tabindex="-1" class="albumTile" *ngFor="let container of playlistList">
                         <div class="albumImageContainer">
-                            <img src="{{container.albumartUri}}" alt="{{container.title}}">
+                            <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
                             <div class="overlay-child d-flex flex-column justify-content-center align-items-center">
                                 <div class="d-flex justify-content-center align-items-center">
                                     <span class="material-symbols-outlined md-36 m-3" (click)="browseTo(container)">drive_file_move</span>
@@ -126,7 +126,7 @@
                 <div id="head_browse_result_album_ID" class="albumLayout">
                     <div id="{{container.id}}" tabindex="-1" class="albumTile" *ngFor="let container of albumList">
                         <div class="albumImageContainer">
-                            <img src="{{container.albumartUri}}" alt="{{container.title}}">
+                            <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
                             <div class="overlay-child d-flex flex-column justify-content-center align-items-center" id="id_play_overlay_div_album">
                                 <div class="d-flex justify-content-center align-items-center">
                                     <span class="material-symbols-outlined md-36 m-3" (click)="browseTo(container)">drive_file_move</span>
@@ -181,7 +181,7 @@
                             <div class="item-tbody">
                                 <div class="row row-alignment">
                                     <div *ngIf="!allTracksSameAlbum()" class="col-3 col-sm-2 col-md-2 col-lg-1" (click)="play(item)">
-                                        <img class="img-small" src="{{item.albumArtUrl}}">
+                                        <img class="img-small imgContainer" src="{{item.albumArtUrl}}">
                                     </div>
                                     <div class="{{getTitleResponsiveClass()}} mb-2 mt-2 d-flex flex-column">
                                         <div (click)="play(item)" class="no-wrap d-flex justify-content-between">
@@ -241,7 +241,8 @@
                 <div id="head_browse_result_playlist_container_ID" class="albumLayout">
                     <div class="albumTile" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)" *ngFor="let container of containerList">
                         <div class="albumImageContainer">
-                            <img src="{{container.albumartUri}}" alt="{{container.title}}">
+                            <!-- <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">  -->
+                            <image-cropper src="{{container.albumartUri}}"></image-cropper>
                         </div>
                         <div class="d-flex flex-column albumDesc">
                             <div class="playlistText">{{getOtherContainerHeadline(container)}}</div>
