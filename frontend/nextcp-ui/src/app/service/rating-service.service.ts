@@ -23,6 +23,6 @@ export class RatingServiceService {
 
   public syncRatingsFromMusicBrainzToBackend(): Subject<string> {
     const uri = "/syncRatingsFromMusicBrainzToBackend";
-    return this.httpService.get(this.baseUri, uri);
+    return this.httpService.post(this.baseUri, uri, this.deviceSerice.selectedMediaServerDevice.udn);
   }
 }
