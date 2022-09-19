@@ -94,13 +94,17 @@ export class MusicLibraryComponent {
   }
 
   //
-  // Event
+  // Events
   //
   containerSelected(event: ContainerDto) {
     // remember path here
     this.cdsBrowsePathService.stepIn(event.id);
     this.persistenceService.setCurrentObjectID(event.id);
     this.contentDirectoryService.browseChildrenByContiner(event);
+  }
+
+  itemDeleted(event: MusicItemDto) {
+    this.contentDirectoryService.refreshCurrentContainer();
   }
 
   //

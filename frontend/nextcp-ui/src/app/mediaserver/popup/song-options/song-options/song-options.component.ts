@@ -2,9 +2,9 @@ import { PopupService } from './../../../../util/popup.service';
 import { PlaylistService } from './../../../../service/playlist.service';
 import { ContentDirectoryService } from './../../../../service/content-directory.service';
 import { DownloadService } from './../../../../util/download.service';
-import { MusicItemDto } from './../../../../service/dto.d';
+import { MusicItemDto, ContainerDto, ContainerItemDto } from './../../../../service/dto.d';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, Inject, ElementRef, OnInit } from '@angular/core';
+import { Component, Inject, ElementRef, OnInit, ViewContainerRef } from '@angular/core';
 import { DefaultPlaylistService } from '../../defaut-playlists/default-playlist.service';
 import { AvtransportService } from 'src/app/service/avtransport.service';
 
@@ -19,18 +19,27 @@ export class SongOptionsComponent implements OnInit {
   private readonly _matDialogRef: MatDialogRef<SongOptionsComponent>;
   private readonly triggerElementRef: ElementRef;
   private playlistDialogOpen: boolean;
+  private currentContainer: ContainerDto;
+  private viewContainerRef: ViewContainerRef;
 
   constructor(
     private playlistService: PlaylistService,
-    private contentDirectoryService: ContentDirectoryService,
     private downloadService: DownloadService,
     private avtransportService: AvtransportService,
     private defaultPlaylistService: DefaultPlaylistService,
     private popupService: PopupService,
     _matDialogRef: MatDialogRef<SongOptionsComponent>,
-    @Inject(MAT_DIALOG_DATA) data: { trigger: ElementRef, item: MusicItemDto, event: PointerEvent },
+    @Inject(MAT_DIALOG_DATA) data: { 
+      trigger: ElementRef, 
+      item: MusicItemDto, 
+      event: PointerEvent,
+      viewContainerRef: ViewContainerRef,
+      currentContainer: ContainerDto
+      },
   ) {
+    this.viewContainerRef = data.viewContainerRef;
     this.item = data.item;
+    this.currentContainer = data.currentContainer;
     console.log("current popup item : " + this.item);
     this._matDialogRef = _matDialogRef;
     this.triggerElementRef = data.trigger;
@@ -73,10 +82,12 @@ export class SongOptionsComponent implements OnInit {
 
   deleteFromPlaylist(): void {
     if (this.item?.songId.umsAudiotrackId != null) {
-      this.playlistService.removeSongFromServerPlaylist(this.item.songId.umsAudiotrackId, this.contentDirectoryService.currentContainerList.currentContainer.title);
+      this.playlistService.removeSongFromServerPlaylist(this.item.songId.umsAudiotrackId, this.currentContainer.title);
     }
     this.closeThisPopup();
-    setTimeout(() => { this.contentDirectoryService.refreshCurrentContainer() }, 200);
+    setTimeout(() => { 
+      this.viewContainerRef; 
+    }, 200);
   }
 
   closeThisPopup(): void {
@@ -102,6 +113,6 @@ export class SongOptionsComponent implements OnInit {
   }
 
   get isParentPlaylist(): boolean {
-    return this.contentDirectoryService.currentContainerList.currentContainer.objectClass === "object.container.playlistContainer";
+    return this.currentContainer.objectClass === "object.container.playlistContainer";
   }
 }

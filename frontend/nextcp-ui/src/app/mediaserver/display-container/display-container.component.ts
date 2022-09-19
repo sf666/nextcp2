@@ -4,8 +4,8 @@ import { PlaylistService } from './../../service/playlist.service';
 import { TrackQualityService } from './../../util/track-quality.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { MyMusicService } from './../../service/my-music.service';
-import { MusicItemDto, ContainerDto } from './../../service/dto.d';
-import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, AfterViewChecked, AfterViewInit } from '@angular/core';
+import { MusicItemDto, ContainerDto, ContainerItemDto } from './../../service/dto.d';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, ViewContainerRef } from '@angular/core';
 
 @Component({
   selector: 'mediaServer-display-container',
@@ -31,6 +31,8 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
 
   @Input() scrollToID: string;
   @Input() extendedApi: boolean = true;
+
+  @Input() refreshTrigger : () => any;
 
   // Inform parent about actions
   @Output() containerSelected = new EventEmitter<ContainerDto>();
@@ -398,9 +400,8 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
   }
 
   showSongPopup(event: MouseEvent, item: MusicItemDto): void {
-    this.songOptionsServiceService.openOptionsDialog(event, item);
+    this.songOptionsServiceService.openOptionsDialog(event, item, this.currentContainer);
   }
-
 
   getOtherContainerHeadline(item: ContainerDto): string {
     if (item.objectClass.startsWith("object.container.person")) {
