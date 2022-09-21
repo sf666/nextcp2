@@ -32,10 +32,10 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
   @Input() scrollToID: string;
   @Input() extendedApi: boolean = true;
 
-  @Input() refreshTrigger : () => any;
 
   // Inform parent about actions
   @Output() containerSelected = new EventEmitter<ContainerDto>();
+  @Output() itemDeleted = new EventEmitter<MusicItemDto>();
 
   private listView = true;
   private lastDiscLabel = '';
@@ -62,7 +62,7 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
     private songOptionsServiceService: SongOptionsServiceService,
     public trackQualityService: TrackQualityService) {
   }
-  
+
   domChange(event: any): void {
     if (this.scrollToID !== this.lastScrollToId) {
       this.scrollIntoViewID(this.scrollToID);
@@ -400,7 +400,23 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
   }
 
   showSongPopup(event: MouseEvent, item: MusicItemDto): void {
-    this.songOptionsServiceService.openOptionsDialog(event, item, this.currentContainer);
+    this.songOptionsServiceService.openOptionsDialog(event, item, this.currentContainer).subscribe(result => {
+      // handle user action from dialog ...
+      if (result) {
+        if (result.type == 'add') {
+          console.log("added song to playlist : ");
+        } else if (result.type == 'delete') {
+          console.log("deleted song from playlist : ");
+          setTimeout(() => {
+            this.itemDeleted.emit(result.data);
+          }, 200);
+        } else if (result.type == 'download') {
+          console.log("download song : ");
+        } else if (result.type == 'next') {
+          console.log("play next song : ");
+        }
+      }
+    });
   }
 
   getOtherContainerHeadline(item: ContainerDto): string {

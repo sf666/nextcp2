@@ -1,8 +1,9 @@
+import { DeviceService } from './device.service';
 import { ToastService } from './toast/toast.service';
 import { Subject } from 'rxjs';
 import { DtoGeneratorService } from './../util/dto-generator.service';
 import { HttpService } from './http.service';
-import { ContainerItemDto, BrowseRequestDto, MediaServerDto, ContainerDto, SearchRequestDto, SearchResultDto, MusicItemDto } from './dto.d';
+import { ContainerItemDto, BrowseRequestDto, ContainerDto, SearchRequestDto, SearchResultDto, MusicItemDto } from './dto.d';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -13,7 +14,6 @@ export class ContentDirectoryService {
 
   baseUri = '/ContentDirectoryService';
   public currentContainerList: ContainerItemDto;
-  private currentMediaServerDto: MediaServerDto;
   public orderAlbumsByGenre = false;
 
   // result container split by types
@@ -31,15 +31,12 @@ export class ContentDirectoryService {
   constructor(
     private httpService: HttpService,
     private dtoGeneratorService: DtoGeneratorService,
+    private deviceService: DeviceService,
     private toastService: ToastService
     ) {
 
     // Initialize empty result object
     this.currentContainerList = this.dtoGeneratorService.generateEmptyContainerItemDto();
-  }
-
-  private getCurrentMediaServerDto(): MediaServerDto {
-    return this.currentMediaServerDto;
   }
 
   //
@@ -66,10 +63,10 @@ export class ContentDirectoryService {
    */
   public browseChildren(objectID: string, sortCriteria: string, mediaServerUdn?: string): Subject<ContainerItemDto> {
     if (!mediaServerUdn) {
-      if (!this.currentMediaServerDto?.udn) {
+      if (!this.deviceService.selectedMediaServerDevice.udn) {
         this.toastService.error("select media server", "MediaLibrary");
       } else {
-        mediaServerUdn = this.currentMediaServerDto.udn;
+        mediaServerUdn = this.deviceService.selectedMediaServerDevice.udn;
       }
     }
     return this.browseChildrenByRequest(this.createBrowseRequest(objectID, sortCriteria, mediaServerUdn));
@@ -87,7 +84,7 @@ export class ContentDirectoryService {
   }
 
   public refreshCurrentContainer(): void {
-    this.browseChildrenByRequest(this.createBrowseRequest(this.currentContainerID, "", this.currentMediaServerDto.udn));
+    this.browseChildrenByRequest(this.createBrowseRequest(this.currentContainerID, "", this.deviceService.selectedMediaServerDevice.udn));
   }
 
   /**

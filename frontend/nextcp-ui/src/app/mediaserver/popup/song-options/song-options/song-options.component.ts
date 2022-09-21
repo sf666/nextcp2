@@ -1,8 +1,8 @@
+import { SongOptionsEvent } from './../song-options-event.d';
 import { PopupService } from './../../../../util/popup.service';
 import { PlaylistService } from './../../../../service/playlist.service';
-import { ContentDirectoryService } from './../../../../service/content-directory.service';
 import { DownloadService } from './../../../../util/download.service';
-import { MusicItemDto, ContainerDto, ContainerItemDto } from './../../../../service/dto.d';
+import { MusicItemDto, ContainerDto} from './../../../../service/dto.d';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, ElementRef, OnInit, ViewContainerRef } from '@angular/core';
 import { DefaultPlaylistService } from '../../defaut-playlists/default-playlist.service';
@@ -20,7 +20,6 @@ export class SongOptionsComponent implements OnInit {
   private readonly triggerElementRef: ElementRef;
   private playlistDialogOpen: boolean;
   private currentContainer: ContainerDto;
-  private viewContainerRef: ViewContainerRef;
 
   constructor(
     private playlistService: PlaylistService,
@@ -37,7 +36,6 @@ export class SongOptionsComponent implements OnInit {
       currentContainer: ContainerDto
       },
   ) {
-    this.viewContainerRef = data.viewContainerRef;
     this.item = data.item;
     this.currentContainer = data.currentContainer;
     console.log("current popup item : " + this.item);
@@ -65,7 +63,7 @@ export class SongOptionsComponent implements OnInit {
 
   download(): void {
     this.downloadService.downloadFileByMBID(this.item, this);
-    this.closeThisPopup();
+    this.closeThisPopup({type: 'download', data: this.item});
   }
 
   openAddToPlaylistDialog(event: Event): void {
@@ -84,15 +82,12 @@ export class SongOptionsComponent implements OnInit {
     if (this.item?.songId.umsAudiotrackId != null) {
       this.playlistService.removeSongFromServerPlaylist(this.item.songId.umsAudiotrackId, this.currentContainer.title);
     }
-    this.closeThisPopup();
-    setTimeout(() => { 
-      this.viewContainerRef; 
-    }, 200);
+    this.closeThisPopup({type: 'delete', data: this.item});
   }
 
-  closeThisPopup(): void {
+  closeThisPopup(result: SongOptionsEvent): void {
     this.closeAllDialogs();
-    this._matDialogRef.close();
+    this._matDialogRef.close(result);
   }
 
   closeAllDialogs(): void {
@@ -104,8 +99,8 @@ export class SongOptionsComponent implements OnInit {
   }
 
   actionPlayNext(): void {
-    this.avtransportService.playResourceNext(this.selectedMusicItem);
-    this.closeThisPopup();
+    this.avtransportService.playResourceNext(this.item);
+    this.closeThisPopup({type: 'next', data: this.item});
   }
 
   get selectedMusicItem(): MusicItemDto {

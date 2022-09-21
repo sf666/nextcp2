@@ -17,7 +17,7 @@
     [playlists]="playlists()"
     [otherContainer]="otherContainer()"
     [scrollToID]="scrollToID()"
-    [refreshTrigger]="contentDirectoryService.refreshCurrentContainer"
 
+    (itemDeleted)="itemDeleted($event)"
     (containerSelected)="containerSelected($event)"
 ></mediaServer-display-container>

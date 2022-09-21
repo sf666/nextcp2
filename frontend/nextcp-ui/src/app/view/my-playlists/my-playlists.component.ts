@@ -37,6 +37,10 @@ export class MyPlaylistsComponent implements OnInit {
     this.contentDirectoryService.browseChildrenByContiner(event);
   }
 
+  itemDeleted(event: MusicItemDto) {
+    this.contentDirectoryService.refreshCurrentContainer();
+  }
+
   //
   // Util methods
   //

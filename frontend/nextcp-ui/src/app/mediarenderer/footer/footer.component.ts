@@ -61,7 +61,7 @@ export class FooterComponent {
       console.log(_res);
     });
   }
-  
+
 
   public get avTransportState(): UpnpAvTransportState {
     return this.avtransportService.upnpAvTransportState;
