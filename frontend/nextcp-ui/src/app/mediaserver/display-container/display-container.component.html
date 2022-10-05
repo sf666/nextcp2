@@ -97,7 +97,7 @@
             -->
             <div *ngIf="playlistList?.length > 0">
                 <div id="head_browse_result_playlist_items_ID" tabindex="-1" class="albumLayout">
-                    <div id="{{container.id}}" tabindex="-1" class="" *ngFor="let container of playlistList">
+                    <div id="{{container.id}}" tabindex="-1" class="albumTile" *ngFor="let container of playlistList">
                         <div class="albumImageContainer">
                             <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
                             <div class="overlay-child d-flex flex-column justify-content-center align-items-center">
