@@ -19,7 +19,7 @@
                         <span class="artist">{{rendererService.trackInfo?.currentTrack?.artistName}}</span>
                     </div>
                     <div class="currentTime align-self-start" *ngIf="rendererService.trackInfo?.currentTrack?.album; else emptyDiv">
-                        <span class="finishedTime">{{rendererService.trackInfo?.currentTrack?.album}}</span>
+                        <span class="artist">{{rendererService.trackInfo?.currentTrack?.album}}</span>
                     </div>
                 </div>
             </div>

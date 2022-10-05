@@ -1,8 +1,7 @@
 <div class="playlistMainScreen">
     <div *ngIf="deviceService.isAnyMediaRendererSelected(); else noMediaRenderer">
         <div *ngIf="hasPlaylistItems; else noPlaylistItems">
-            <div *ngFor="let item of playlistService.playlistItems" class="playlistItem d-flex {{getActiveClass(item)}}"
-                (click)="playlistService.seekId(item.objectID)">
+            <div *ngFor="let item of playlistService.playlistItems" class="playlistItem d-flex {{getActiveClass(item)}}" (click)="playlistService.seekId(item.objectID)">
 
                 <img src="{{item.albumArtUrl}}" class="cropImg" alt="{{item.title}}" id="PL-{{item.objectID}}" tabindex="-1">
                 <div class="d-flex flex-column minWidth albumAndTitle">
@@ -10,22 +9,19 @@
                         <div class="title no-wrap">{{item.title}}</div>
                         <quality-badge [item]="item"></quality-badge>
                     </div>
-                    <div class="d-flex flex-column no-wrap">
+                    <div class="d-flex flex-column no-wrap mt-2">
                         <div class="currentTime align-self-start">
-                            by <span class="finishedTime">{{item.artistName}}</span>
+                            <span class="finishedTime">{{item.artistName}}</span>
                         </div>
                         <div class="currentTime align-self-start">
-                            <div>
-                                from the album <span
-                                    class="finishedTime">{{item.album}}</span>
-                            </div>
+                            <div class="finishedTime">{{item.album}}</div>
                         </div>
                     </div>
                 </div>
                 <div class="middle-spacer"></div>
                 <div class="rightButtons">
                     <span class="material-symbols-outlined me-1" (click)="playlistService.delete(item.objectID)">close</span>
-                </div>    
+                </div>
             </div>
         </div>
     </div>
