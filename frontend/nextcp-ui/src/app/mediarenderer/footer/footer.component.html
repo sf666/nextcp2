@@ -18,12 +18,8 @@
                         *ngIf="rendererService.trackInfo?.currentTrack?.artistName ; else emptyDiv">
                         <span class="artist">{{rendererService.trackInfo?.currentTrack?.artistName}}</span>
                     </div>
-                    <div class="currentTime align-self-start"
-                        *ngIf="rendererService.trackInfo?.currentTrack?.album; else emptyDiv">
-                        <div *ngIf="!streaming(); else stream">
-                            <span class="albumLabel">from the album </span> <span
-                                class="album">{{rendererService.trackInfo?.currentTrack?.album}}</span>
-                        </div>
+                    <div class="currentTime align-self-start" *ngIf="rendererService.trackInfo?.currentTrack?.album; else emptyDiv">
+                        <span class="finishedTime">{{rendererService.trackInfo?.currentTrack?.album}}</span>
                     </div>
                 </div>
             </div>
@@ -33,20 +29,6 @@
         <div class="d-none d-sm-flex qualityBadge">
             <quality-badge [item]="rendererService.trackInfo?.currentTrack"></quality-badge>
         </div>
-
-        <!-- song options -->
-        <div class="middle-spacer" (click)="showSongPopup($event)">
-            &nbsp;
-        </div>
-        <div class="col-greyed songPopup" (click)="showSongPopup($event)">
-            &#x22EE;
-        </div>
-
-        <ng-template #stream>
-            <div>
-                broadcasted by <span class="finishedTime">{{rendererService.trackInfo?.currentTrack?.album}}</span>
-            </div>
-        </ng-template>
 
         <!-- Middle footer section -->
         <div class="middle-footer flex-column align-items-center">
