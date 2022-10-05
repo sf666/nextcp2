@@ -2,14 +2,14 @@
     <div class="section head">Radio stations provided by selected player</div>
 
     <div class="albumLayout ps-3">
-        <div class="imgCardWidth" *ngFor="let item of radioService.radioItems">
+        <div class="albumTile" *ngFor="let item of radioService.radioItems">
             <div class="albumImageContainer">
-                <img src="{{item.albumArtUrl}}" alt="{{item.title}}">
+                <img src="{{item.albumArtUrl}}" class="imgContainer" alt="{{item.title}}">
                 <div class="overlay-child d-flex justify-content-center align-items-center">
                     <span class="material-symbols-outlined md-48" (click)="playOh(item)">play_arrow</span>
                 </div>
             </div>
-            <div class="d-flex card-body flex-column ps-3 pt-3">
+            <div class="d-flex flex-column albumDesc">
                 <div class="highlightFolderText">RADIO</div>
                 <div class="card-title">{{item.title}}</div>
             </div>
@@ -19,14 +19,14 @@
 
 <div *ngIf="configurationService.serverConfig?.radioStation.length > 0; else noRadio">
     <div class="albumLayout ps-3">
-        <div class="imgCardWidth" *ngFor="let item of configurationService.serverConfig.radioStation">
+        <div class="albumTile" *ngFor="let item of configurationService.serverConfig.radioStation">
             <div class="albumImageContainer">
-                <img src="{{item.artworkUrl}}" alt="{{item.stationName}}">
+                <img src="{{item.artworkUrl}}" class="imgContainer" alt="{{item.stationName}}">
                 <div class="overlay-child d-flex justify-content-center align-items-center">
                     <span class="material-symbols-outlined md-48" (click)="play(item)">play_arrow</span>
                 </div>
             </div>
-            <div class="d-flex card-body flex-column ps-3 pt-3">
+            <div class="d-flex flex-column albumDesc">
                 <div class="highlightFolderText">RADIO</div>
                 <div class="card-title">{{item.stationName}}</div>
             </div>
