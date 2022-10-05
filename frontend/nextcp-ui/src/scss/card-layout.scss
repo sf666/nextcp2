@@ -14,14 +14,13 @@ $grid-flex-sm-max-width : 9rem;
 .albumImageContainer {
     display    : flex;
     position   : relative;
-    margin-left: 1rem;
+    margin-left: 1.5rem;
 
     flex-basis: $grid-flex-basis;
     min-width : $grid-flex-min-width;
     max-width : $grid-flex-max-width;
-    flex-grow : 1;
 
-    margin    : auto;
+    margin: auto;
 }
 
 .albumTile {
@@ -59,6 +58,7 @@ $grid-flex-sm-max-width : 9rem;
     margin-top : 1rem;
     min-width  : 10rem;
     width      : 100%;
+    flex       : 1 1 auto;
 }
 
 // small devices card layout config
@@ -115,9 +115,9 @@ $grid-flex-sm-max-width : 9rem;
 
 
 .albumImageContainer img {
-    width     : 100%;
-    height    : auto;
-    object-fit: cover;
+    width       : 100%;
+    height      : auto;
+    object-fit  : cover;
     aspect-ratio: 1 / 1;
 }
 
