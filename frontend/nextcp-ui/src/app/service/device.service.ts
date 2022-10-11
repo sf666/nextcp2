@@ -97,7 +97,7 @@ export class DeviceService {
     this.mediaRenderList = data;
     this.applyDefaultRenderer();
     console.log("renderer list updated.");
-    this.logMediaRendererServices(data);
+    // this.logMediaRendererServices(data);
   }
 
   private clientConfigChanged(data: UiClientConfig): void {
@@ -197,7 +197,7 @@ export class DeviceService {
       this.applyDefaultRenderer();
       this.mediaRendererInitiated$.next(data);
 
-      this.logMediaRendererServices(data);
+      // this.logMediaRendererServices(data);
     });
   }
 

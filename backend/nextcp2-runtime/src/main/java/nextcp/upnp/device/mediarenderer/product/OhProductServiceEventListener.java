@@ -44,7 +44,6 @@ public class OhProductServiceEventListener extends ProductServiceEventListenerIm
     public void sourceIndexChange(Long value)
     {
         super.sourceIndexChange(value);
-
         if (value != null)
         {
             try

@@ -49,24 +49,29 @@ export class SseService {
       console.log("received unknown global message : " + msg);
     };
 
-    eventSource.addEventListener('DEVICE_MEDIARENDERER_LIST_CHANGED', m => { this.sendNotification(this.mediaRendererListChanged$, m) }, false);
-    eventSource.addEventListener('DEVICE_MEDIASERVER_CHANGED', m => { this.sendNotification(this.mediaServerListChanged$, m) }, false);
     eventSource.addEventListener('AVTRANSPORT_STATE', m => { this.sendNotification(this.mediaRendererAvTransportStateChanged$, m) }, false);
     eventSource.addEventListener('CONFIG_CHANGED', m => { this.sendNotification(this.configChanged$, m) }, false);
+
+    eventSource.addEventListener('DEVICE_MEDIARENDERER_LIST_CHANGED', m => { this.sendNotification(this.mediaRendererListChanged$, m) }, false);
     eventSource.addEventListener('DEVICE_MEDIARENDERER_DEVICE_DRIVER_STATE_CHANGED', m => { this.sendNotification(this.mediaRendererDeviceDriverStateChanged$, m) }, false);
     eventSource.addEventListener('DEVICE_MEDIARENDERER_TRACK_INFO', m => { this.sendNotification(this.mediaRendererTrackInfoChanged$, m) }, false);
     eventSource.addEventListener('DEVICE_MEDIARENDERER_TRACK_TIME', m => { this.sendNotification(this.mediaRendererPositionChanged$, m) }, false);
     eventSource.addEventListener('DEVICE_MEDIARENDERER_PLAYLIST_STATE', m => { this.sendNotification(this.mediaRendererPlaylistStateChanged$, m) }, false);
     eventSource.addEventListener('DEVICE_MEDIARENDERER_PLAYLIST_ITEMS', m => { this.sendNotification(this.mediaRendererPlaylistItemsChanged$, m) }, false);
+    eventSource.addEventListener('DEVICE_MEDIARENDERER_INPUT_SOURCE', m => { this.sendNotification(this.mediaRendererInputSourceChanged$, m) }, false);
+
+    eventSource.addEventListener('DEVICE_MEDIASERVER_CHANGED', m => { this.sendNotification(this.mediaServerListChanged$, m) }, false);
+    eventSource.addEventListener('DEVICE_MEDIASERVER_PLAYLIST_STATE', m => { this.sendNotification(this.mediaServerPlaylistChanged$, m) }, false);
+
     eventSource.addEventListener('TOASTR_INFO', m => { this.sendNotification(this.toasterMessageReceived$, m) }, false);
     eventSource.addEventListener('RENDERER_CONFIG_CHANGED', m => { this.sendNotification(this.rendererConfigChanged$, m) }, false);
     eventSource.addEventListener('SERVER_DEVICES_CONFIG_CHANGED', m => { this.sendNotification(this.serverDevicesConfigChanged$, m) }, false);
-    eventSource.addEventListener('DEVICE_MEDIASERVER_PLAYLIST_STATE', m => { this.sendNotification(this.mediaServerPlaylistChanged$, m) }, false);
-    eventSource.addEventListener('DEVICE_MEDIARENDERER_INPUT_SOURCE', m => { this.sendNotification(this.mediaRendererInputSourceChanged$, m) }, false);
+
   }
 
   processError(e: any) {
     const event: MessageEvent = e;
+    console.log("Event : " + e);
     console.log('error : source [' + event.source + "] / origin [" + event.origin + "] / data [" + event.data + "]");
   }
 
