@@ -25,14 +25,14 @@ export class ConfigurationService {
   serverConfig: Config;                       // global serverside configuration file (server state) (read only)
   private rendererConfig: RendererConfigDto;  // renderer configurations
   serverConfigDto: ServerConfigDto;           // List of server devices
-  applicationConfig: ApplicationConfig =  {   // This is a DTO copy and can be used to update server configuration
-    databaseFilename:'',
+  applicationConfig: ApplicationConfig = {   // This is a DTO copy and can be used to update server configuration
+    databaseFilename: '',
     embeddedServerPort: 0,
-    generateUpnpCode:false,
-    generateUpnpCodePath:'',
-    globalSearchDelay:0,
-    libraryPath:'',
-    log4jConfigFile:'',
+    generateUpnpCode: false,
+    generateUpnpCodePath: '',
+    globalSearchDelay: 0,
+    libraryPath: '',
+    log4jConfigFile: '',
     loggingDateTimeFormat: '',
     sseEmitterTimeout: 0
   }
@@ -58,7 +58,9 @@ export class ConfigurationService {
     defaultMediaRenderer: {
       friendlyName: "",
       udn: "",
-      services: []
+      services: [],
+      allSources: [],
+      currentSource: null
     },
     defaultMediaServer: {
       friendlyName: "",
@@ -81,7 +83,7 @@ export class ConfigurationService {
   }
 
   public createNewUiClientConfig(newUUID: string): UiClientConfig {
-    return { clientName: 'NewProfile', uuid: newUUID, defaultMediaRenderer: { friendlyName: '', udn: '', services: [] }, defaultMediaServer: { friendlyName: '', udn: '', extendedApi: false } };
+    return { clientName: 'NewProfile', uuid: newUUID, defaultMediaRenderer: { friendlyName: '', udn: '', services: [], allSources: [], currentSource: null }, defaultMediaServer: { friendlyName: '', udn: '', extendedApi: false } };
   }
 
   public restart(): void {

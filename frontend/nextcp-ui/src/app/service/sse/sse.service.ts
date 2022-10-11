@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { MediaRendererDto, PlaylistState } from '../dto';
-import { MediaServerDto, UpnpAvTransportState, Config, DeviceDriverState, TrackTimeDto, TrackInfoDto, RendererConfigDto, RendererPlaylist, ToastrMessage, ServerConfigDto, ServerPlaylistDto, ServerPlaylists } from './../dto.d';
+import { MediaServerDto, UpnpAvTransportState, Config, DeviceDriverState, TrackTimeDto, TrackInfoDto, RendererConfigDto, RendererPlaylist, ToastrMessage, ServerConfigDto, ServerPlaylistDto, ServerPlaylists, InputSourceDto, InputSourceChangeDto } from './../dto.d';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +25,7 @@ export class SseService {
   mediaRendererAvTransportStateChanged$: Subject<UpnpAvTransportState> = new Subject();
   mediaRendererTrackInfoChanged$: Subject<TrackInfoDto> = new Subject();
   mediaRendererPositionChanged$: Subject<TrackTimeDto> = new Subject();
+  mediaRendererInputSourceChanged$: Subject<InputSourceChangeDto> = new Subject();
 
   // MediaServer state changes
   mediaServerPlaylistChanged$: Subject<ServerPlaylists> = new Subject();
@@ -61,6 +62,7 @@ export class SseService {
     eventSource.addEventListener('RENDERER_CONFIG_CHANGED', m => { this.sendNotification(this.rendererConfigChanged$, m) }, false);
     eventSource.addEventListener('SERVER_DEVICES_CONFIG_CHANGED', m => { this.sendNotification(this.serverDevicesConfigChanged$, m) }, false);
     eventSource.addEventListener('DEVICE_MEDIASERVER_PLAYLIST_STATE', m => { this.sendNotification(this.mediaServerPlaylistChanged$, m) }, false);
+    eventSource.addEventListener('DEVICE_MEDIARENDERER_INPUT_SOURCE', m => { this.sendNotification(this.mediaRendererInputSourceChanged$, m) }, false);
   }
 
   processError(e: any) {
@@ -68,8 +70,7 @@ export class SseService {
     console.log('error : source [' + event.source + "] / origin [" + event.origin + "] / data [" + event.data + "]");
   }
 
-  sendNotification(f: Subject<any>, e: any) {
-    const event: MessageEvent = e;
-    f.next(JSON.parse(event.data));
+  sendNotification(f: Subject<any>, e: MessageEvent) {
+    f.next(JSON.parse(e.data));
   }
 }

@@ -6,7 +6,7 @@
         </mat-progress-bar>
     </div>
 
-    <div class="d-flex flex-row justify-content-between">
+    <div class="d-flex flex-row justify-content-between spacer">
         <!-- left footer section -->
         <div class="d-flex left-footer">
             <img *ngIf="rendererService.trackInfoAvailable" src="{{getImgSrc()}}">
@@ -47,10 +47,15 @@
                     <span class="material-symbols-outlined icon-button d-none d-sm-block {{repeatClass}}"
                         (click)="playlistService.toggleRepeat()">repeat</span>
                 </div>
-                <div class="timeDispContainer d-none d-lg-flex">
-                    <div class="currentTime">{{rendererService.trackTime.secondsDisp}}</div>
-                    <div class="ms-2 currentTime">/</div>
-                    <div class="ms-2 finishedTime" *ngIf="!streaming(); else streamDisplayString">{{getFinishTime()}}
+                <div class="d-flex align-self-center flex-column d-none d-lg-flex">
+                    <div class="timeDispContainer">
+                        <div class="currentTime">{{rendererService.trackTime.secondsDisp}}</div>
+                        <div class="ms-2 currentTime">/</div>
+                        <div class="ms-2 finishedTime" *ngIf="!streaming(); else streamDisplayString">{{getFinishTime()}}
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <div class="finishedTime mt-2">{{currentInputSource}}</div>
                     </div>
                 </div>
             </div>

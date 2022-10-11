@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2022-07-13 08:09:37.
+// Generated using typescript-generator version 2.32.889 on 2022-10-11 10:19:22.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -114,6 +114,11 @@ export interface GenericStringRequest {
     value: string;
 }
 
+export interface InputSourceChangeDto {
+    udn: string;
+    inputSource: InputSourceDto;
+}
+
 export interface InputSourceDto {
     id: number;
     Name: string;
@@ -125,6 +130,8 @@ export interface MediaRendererDto {
     udn: string;
     friendlyName: string;
     services: MediaRendererServicesDto[];
+    currentSource: InputSourceDto;
+    allSources: InputSourceDto[];
 }
 
 export interface MediaRendererServicesDto {

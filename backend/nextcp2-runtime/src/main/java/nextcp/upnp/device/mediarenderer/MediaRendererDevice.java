@@ -67,7 +67,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
     @Autowired
     private RendererConfig rendererConfigService = null;
-    
+
     private RendererDeviceConfiguration rendererConfig = null;
 
     @Autowired
@@ -125,7 +125,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     private void init()
     {
         initServices();
-        
+
         if (hasUpnpAvTransport())
         {
             avTransportBridge = new Upnp_AVTransportBridge(upnp_avTransportService, this);
@@ -225,7 +225,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             rendererConfig = rendererConfigService.addMediaRendererDeviceConfig(this);
         }
     }
-    
+
     public List<MediaRendererServicesDto> getServices()
     {
         return services;
@@ -397,7 +397,11 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
     public MediaRendererDto getAsDto()
     {
-        return new MediaRendererDto(getUDN().getIdentifierString(), getFriendlyName(), services);
+        if (productService != null)
+        {
+            return new MediaRendererDto(getUDN().getIdentifierString(), getFriendlyName(), services, productService.getCurrentInputSource(), productService.getSourceList());
+        }
+        return new MediaRendererDto(getUDN().getIdentifierString(), getFriendlyName(), services, null, null);
     }
 
     //
@@ -475,5 +479,5 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     public boolean getStandby()
     {
         return getDeviceDriver().getStandby();
-    }    
+    }
 }

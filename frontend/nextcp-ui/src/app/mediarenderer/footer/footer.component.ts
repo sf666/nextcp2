@@ -132,5 +132,10 @@ export class FooterComponent {
     }
   }
 
-
+  currentInputSource() : string {
+    if (this.deviceService.selectedMediaRendererDevice?.currentSource?.Name) {
+      return this.deviceService.selectedMediaRendererDevice?.currentSource.Name;
+    }
+    return "";
+  }
 }

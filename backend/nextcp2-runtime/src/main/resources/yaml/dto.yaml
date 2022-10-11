@@ -152,6 +152,8 @@ MediaRendererDto:
    udn: String
    friendlyName: String
    services: List<MediaRendererServicesDto>
+   currentSource: InputSourceDto
+   allSources: List<InputSourceDto>
 
 
 MediaRendererServicesDto:
@@ -277,6 +279,10 @@ InputSourceDto:
    Type: String
    Visible: Boolean
       
+InputSourceChangeDto:
+   udn: String
+   inputSource: InputSourceDto
+
  #
  # Client Request classes
  #

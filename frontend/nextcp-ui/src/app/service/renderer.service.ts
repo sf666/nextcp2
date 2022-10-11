@@ -2,7 +2,7 @@ import { DtoGeneratorService } from './../util/dto-generator.service';
 import { BackgroundImageService } from './../util/background-image.service';
 import { HttpService } from './http.service';
 import { DeviceService } from './device.service';
-import { DeviceDriverState, MediaRendererSwitchPower, MediaRendererSetVolume, MediaRendererDto, TrackInfoDto, TrackTimeDto, InputSourceDto, MusicItemDto, AudioFormat } from './dto.d';
+import { DeviceDriverState, MediaRendererSwitchPower, MediaRendererSetVolume, MediaRendererDto, TrackInfoDto, TrackTimeDto, InputSourceDto, MusicItemDto, AudioFormat, InputSourceChangeDto } from './dto.d';
 import { SseService } from './sse/sse.service';
 import { Injectable } from '@angular/core';
 
@@ -33,7 +33,7 @@ export class RendererService {
     this.trackTime = this.dtoGeneratorService.emptyTrackTime();
 
     sseService.mediaRendererDeviceDriverStateChanged$.subscribe(data => this.updateRenderDeviceDriverState(data));
-
+  
     sseService.mediaRendererTrackInfoChanged$.subscribe(data => {
       if (deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
         // console.log("updating trackInfo : " + data.currentTrack?.artistName);

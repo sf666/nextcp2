@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 
 import nextcp.devicedriver.IDeviceDriverCallback;
+import nextcp.dto.InputSourceChangeDto;
 import nextcp.dto.InputSourceDto;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.ProductServiceEventListenerImpl;
@@ -50,8 +51,8 @@ public class OhProductServiceEventListener extends ProductServiceEventListenerIm
             {
                 InputSourceDto inpDto = device.getProductService().getInputSource(value);
 
-                InputSourceChange event = new InputSourceChange();
-                event.mediaRendererUDN = device.getUdnAsString();
+                InputSourceChangeDto event = new InputSourceChangeDto();
+                event.udn = device.getUdnAsString();
                 event.inputSource = inpDto;
 
                 eventPublisher.publishEvent(event);

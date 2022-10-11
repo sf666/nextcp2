@@ -19,7 +19,7 @@ export class SettingsComponent {
   code: string;
 
   none_serverdevice: MediaServerDto = { 'udn': '', 'friendlyName': '', extendedApi: false };
-  none_renderdevice: MediaRendererDto = { 'udn': '', 'friendlyName': '', services: [] };
+  none_renderdevice: MediaRendererDto = { 'udn': '', 'friendlyName': '', services: [], allSources: [], currentSource: null };
   newProfileName: string;
 
   constructor(
@@ -41,7 +41,7 @@ export class SettingsComponent {
     }
   }
 
-  protocolHandlerAvailable() : boolean {
+  protocolHandlerAvailable(): boolean {
     if (navigator.registerProtocolHandler) {
       return true;
     } else {
@@ -97,10 +97,10 @@ export class SettingsComponent {
 
   selectConfig(config: UiClientConfig): void {
     this.configService.selectClientConfig(config.uuid);
-    if(!this.deviceService.getMediaRendererList().some(renderer => renderer.udn === config.defaultMediaRenderer.udn)) {
+    if (!this.deviceService.getMediaRendererList().some(renderer => renderer.udn === config.defaultMediaRenderer.udn)) {
       this.toastService.info("media renderer is not available", "ATTENTION");
     }
-    if(!this.deviceService.getMediaServerList().some(device => device.udn === config.defaultMediaServer.udn)) {
+    if (!this.deviceService.getMediaServerList().some(device => device.udn === config.defaultMediaServer.udn)) {
       this.toastService.info("media server is not available", "ATTENTION");
     }
   }

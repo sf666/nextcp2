@@ -5,13 +5,13 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 import nextcp.dto.DeviceDriverState;
+import nextcp.dto.InputSourceChangeDto;
 import nextcp.dto.PlaylistState;
 import nextcp.dto.TrackInfoDto;
 import nextcp.dto.TrackTimeDto;
 import nextcp.dto.UpnpAvTransportState;
 import nextcp.rest.DtoBuilder;
 import nextcp.upnp.device.mediarenderer.avtransport.event.AvTransportStateChangedEvent;
-import nextcp.upnp.device.mediarenderer.avtransport.event.AvTransportTransportStateChangeEvent;
 import nextcp.upnp.device.mediarenderer.playlist.PlaylistChangedEvent;
 
 @Controller
@@ -19,6 +19,7 @@ public class MediaRendererSseEvents
 {
     public static final String DEVICE_MEDIARENDERER_DEVICE_DRIVER_STATE_CHANGED = "DEVICE_MEDIARENDERER_DEVICE_DRIVER_STATE_CHANGED";
     public static final String DEVICE_MEDIARENDERER_AVTRANSPORT = "AVTRANSPORT_STATE";
+    public static final String DEVICE_MEDIARENDERER_INPUT_SOURCE = "DEVICE_MEDIARENDERER_INPUT_SOURCE";
     public static final String DEVICE_MEDIARENDERER_TRACK_INFO = "DEVICE_MEDIARENDERER_TRACK_INFO";
     public static final String DEVICE_MEDIARENDERER_TRACK_TIME = "DEVICE_MEDIARENDERER_TRACK_TIME";
     public static final String DEVICE_MEDIARENDERER_PLAYLIST_ITEMS = "DEVICE_MEDIARENDERER_PLAYLIST_ITEMS";
@@ -35,7 +36,13 @@ public class MediaRendererSseEvents
     // =============================================================================================================================================================================
 
     @EventListener
-    public void mediaServerChanged(DeviceDriverState deviceDriverState)
+    public void listenForInputSourceChanged(InputSourceChangeDto inputSource)
+    {
+        ssePublisher.sendObjectAsJson(DEVICE_MEDIARENDERER_INPUT_SOURCE, inputSource);
+    }
+    
+    @EventListener
+    public void listenForDeviceDriverStateChanged(DeviceDriverState deviceDriverState)
     {
         ssePublisher.sendObjectAsJson(DEVICE_MEDIARENDERER_DEVICE_DRIVER_STATE_CHANGED, deviceDriverState);
     }

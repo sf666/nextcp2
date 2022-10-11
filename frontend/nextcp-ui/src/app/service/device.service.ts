@@ -2,7 +2,7 @@ import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { ConfigurationService } from './configuration.service';
 import { SseService } from './sse/sse.service';
-import { MediaServerDto, MediaRendererDto, UiClientConfig, RendererDeviceConfiguration } from './dto.d';
+import { MediaServerDto, MediaRendererDto, UiClientConfig, RendererDeviceConfiguration, InputSourceChangeDto } from './dto.d';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -19,7 +19,7 @@ export class DeviceService {
   private defaultMediaServerAlreadySelected = false;
 
   private _selectedMediaServerDevice: MediaServerDto = { udn: '', friendlyName: 'please select Media-Server', extendedApi: false };
-  private _selectedMediaRendererDevice: MediaRendererDto = { udn: '', friendlyName: 'please select Media-Renderer', services: [] };
+  private _selectedMediaRendererDevice: MediaRendererDto = { udn: '', friendlyName: 'please select Media-Renderer', services: [], allSources: [], currentSource: null };
 
   mediaRendererChanged$: Subject<MediaRendererDto> = new Subject();
   mediaServerChanged$: Subject<MediaServerDto> = new Subject();
@@ -42,6 +42,14 @@ export class DeviceService {
     configService.clientConfigChanged$.subscribe(data => this.clientConfigChanged(data));
     sse.mediaRendererListChanged$.subscribe(data => this.mediarendererListChanged(data));
     sse.mediaServerListChanged$.subscribe(data => this.mediaserverListChanged(data));
+
+    sse.mediaRendererInputSourceChanged$.subscribe(data => this.updateRenderDeviceSource(data));
+  }
+
+  private updateRenderDeviceSource(source: InputSourceChangeDto) {
+    if (source.udn == this._selectedMediaRendererDevice.udn) {
+      this._selectedMediaRendererDevice.currentSource = source.inputSource;
+    }    
   }
 
   public isRenderOnline(device: MediaRendererDto): boolean {
@@ -148,7 +156,7 @@ export class DeviceService {
   public set selectedMediaRendererDevice(device: MediaRendererDto) {
     this._selectedMediaRendererDevice = device;
     this.mediaRendererChanged$.next(device);
-    this.logMediaRendererDeviceServices(device);
+//    this.logMediaRendererDeviceServices(device);
   }
 
   public setMediaRendererByUdn(udn: string): void {
