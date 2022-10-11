@@ -47,7 +47,9 @@ export class DeviceService {
   }
 
   private updateRenderDeviceSource(source: InputSourceChangeDto) {
+    console.log("new input source : " + source)
     if (source.udn == this._selectedMediaRendererDevice.udn) {
+      console.log("new input source applied");
       this._selectedMediaRendererDevice.currentSource = source.inputSource;
     }    
   }
