@@ -8,6 +8,7 @@ import nextcp.rest.DtoBuilder;
 import nextcp.upnp.device.mediarenderer.OpenHomeUtils;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.ProductService;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetStandbyInput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceIndex;
 
 /**
  * Actions
@@ -28,6 +29,8 @@ public class OhProductServiceBridge implements IProductService
 
         String xml = productService.sourceXml().Value;
         sourceList = ohUtil.convertToInputSourceList(xml);
+
+        listener.getStateVariable().SourceIndex = productService.sourceIndex().Value;
     }
 
     @Override
@@ -53,7 +56,14 @@ public class OhProductServiceBridge implements IProductService
     @Override
     public InputSourceDto getInputSource(Long value)
     {
-        return sourceList.get(Math.toIntExact(value));
+        if (value != null)
+        {
+            return sourceList.get(Math.toIntExact(value));
+        }
+        else
+        {
+            return null;
+        }
     }
 
     @Override
