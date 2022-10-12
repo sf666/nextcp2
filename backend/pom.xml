@@ -66,12 +66,12 @@
 	</properties>
 
 	<modules>
-		<module>nextcp2-runtime</module>
+		<module>nextcp2-external-information-provider</module>
 		<module>nextcp2-modelgen</module>
 		<module>nextcp2-device-driver</module>
-		<module>nextcp2-assembly</module>
 		<module>nextcp2-db</module>
-		<module>nextcp2-external-information-provider</module>
+		<module>nextcp2-runtime</module>
+		<module>nextcp2-assembly</module>
 	</modules>
 
 	<build>
