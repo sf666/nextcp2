@@ -79,10 +79,25 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
+
 			</resource>
 		</resources>
 
 		<plugins>
+			<!-- do not filter binay files -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<nonFilteredFileExtensions>
+						<nonFilteredFileExtension>woff</nonFilteredFileExtension>
+						<nonFilteredFileExtension>woff2</nonFilteredFileExtension>
+						<nonFilteredFileExtension>ttf</nonFilteredFileExtension>
+						<nonFilteredFileExtension>otf</nonFilteredFileExtension>
+					</nonFilteredFileExtensions>
+				</configuration>
+			</plugin>
+			
 			<!-- do not deploy -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

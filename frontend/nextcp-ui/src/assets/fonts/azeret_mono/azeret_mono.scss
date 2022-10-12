@@ -1,13 +1,19 @@
 @font-face {
   font-family: 'azeret';
   src:  url('AzeretMono-VariableFont_wght.woff2') format('woff2 supports variations'),
-        url('AzeretMono-VariableFont_wght.woff') format('woff2-variations');
+        url('AzeretMono-VariableFont_wght.woff2') format('woff2-variations');
 }
 
 @font-face {
   font-family: 'azeret';
   src:  url('AzeretMono-VariableFont_wght.woff2') format('woff2'),
-        url('AzeretMono-VariableFont_wght.woff') format('woff2');
+        url('AzeretMono-VariableFont_wght.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'azeret';
+  src:  url('AzeretMono-VariableFont_wght.woff') format('woff'),
+        url('AzeretMono-VariableFont_wght.woff') format('woff');
 }
 
 
