@@ -113,7 +113,7 @@ mat-slider {
 }
 
 .currentTime {
-    font-size              : 0.9rem;
+    font-size              : 1rem;
     color                  : rgba(229, 238, 255, .3);
     font-weight            : 100;
     font-variation-settings: "wght"100;
@@ -121,7 +121,7 @@ mat-slider {
 }
 
 .finishedTime {
-    font-size              : 0.9rem;
+    font-size              : 1rem;
     color                  : var(--glas-white-5);
     font-weight            : 100;
     font-variation-settings: "wght"100;
@@ -129,6 +129,10 @@ mat-slider {
 }
 
 .inputSource {
+    margin-top : 1rem;
+    margin-left: 1rem;
+
+    font-size     : 1rem;
     color         : var(--glas-white-5);
     letter-spacing: 0.07rem;
 }
