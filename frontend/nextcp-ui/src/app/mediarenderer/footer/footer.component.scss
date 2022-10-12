@@ -10,7 +10,7 @@ $col-grey: $col-4;
 
 .footer {
     font-weight     : 300;
-    font-size       : 1.2rem;
+    font-size       : 1rem;
     position        : fixed;
     left            : 0;
     bottom          : 0;
@@ -109,19 +109,28 @@ mat-slider {
 }
 
 .baseFontsize {
-    font-size  : 1.1rem;
-    font-weight: 100;
-    font-variation-settings: "wght" 100;
+    font-size: 1rem;
 }
 
 .currentTime {
-    @extend .baseFontsize;
-    color                : rgba(229, 238, 255, .3);
+    font-size              : 0.9rem;
+    color                  : rgba(229, 238, 255, .3);
+    font-weight            : 100;
+    font-variation-settings: "wght"100;
+    letter-spacing         : -0.02rem;
 }
 
 .finishedTime {
-    @extend .baseFontsize;
-    color                : var(--glas-white-5);
+    font-size              : 0.9rem;
+    color                  : var(--glas-white-5);
+    font-weight            : 100;
+    font-variation-settings: "wght"100;
+    letter-spacing         : -0.02rem;
+}
+
+.inputSource {
+    color         : var(--glas-white-5);
+    letter-spacing: 0.07rem;
 }
 
 img {
@@ -144,6 +153,11 @@ img {
 }
 
 .albumAndTitle {
+    font-size: 1.2rem;
+    color    : rgba(229, 238, 255, .3);
+
+    font-variation-settings: "wght"200;
+
     margin-left    : 1.5rem;
     margin-top     : 0.2rem;
     margin-bottom  : 0.2rem;
@@ -153,10 +167,11 @@ img {
 
 .title {
     @extend .baseFontsize;
-    font-size    : 0.95rem;
-    font-weight  : 500;
-    color        : rgb(252, 252, 252);
-    margin-bottom: 4px;
+    font-size              : 0.95rem;
+    font-weight            : 500;
+    font-variation-settings: "wght"500;
+    color                  : rgb(252, 252, 252);
+    margin-bottom          : 4px;
 }
 
 .artist {

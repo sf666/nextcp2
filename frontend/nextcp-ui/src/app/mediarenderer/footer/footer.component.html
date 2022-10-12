@@ -14,10 +14,10 @@
             <div class="d-flex flex-column minWidth albumAndTitle">
                 <div class="title no-wrap">{{getCurrentSongTitle()}}</div>
                 <div class="d-flex flex-column no-wrap">
-                    <div class="currentTime align-self-start" *ngIf="rendererService.trackInfo?.currentTrack?.artistName ; else emptyDiv">
+                    <div class="align-self-start" *ngIf="rendererService.trackInfo?.currentTrack?.artistName ; else emptyDiv">
                         <span class="artist">{{rendererService.trackInfo?.currentTrack?.artistName}}</span>
                     </div>
-                    <div class="currentTime align-self-start" *ngIf="rendererService.trackInfo?.currentTrack?.album; else emptyDiv">
+                    <div class="align-self-start" *ngIf="rendererService.trackInfo?.currentTrack?.album; else emptyDiv">
                         <span class="artist">{{rendererService.trackInfo?.currentTrack?.album}}</span>
                     </div>
                 </div>
@@ -45,20 +45,20 @@
                 <div class="d-flex align-self-center flex-column d-none d-lg-flex">
                     <div class="timeDispContainer">
                         <div class="currentTime">{{rendererService.trackTime.secondsDisp}}</div>
-                        <div class="ms-2 currentTime">/</div>
-                        <div class="ms-2 finishedTime" *ngIf="!streaming(); else streamDisplayString">{{getFinishTime()}}
+                        <div class="ms-2 currentTime" *ngIf="!streaming()">/</div>
+                        <div class="ms-2 finishedTime" *ngIf="!streaming()">{{getFinishTime()}}
                         </div>
                     </div>
+                    <!--  -->
                     <div *ngIf="currentInputSourceVisible()" class="d-flex justify-content-center minWidth">
-                        <div class="finishedTime no-wrap mt-2"><span class="material-symbols-outlined">input</span>{{currentInputSource()}}</div>
+                        <div class="no-wrap d-flex mt-2 justify-content-center inputSource">
+                            <div class="material-symbols-outlined md-18 icon-main">input</div>
+                            <div class="ms-2">{{currentInputSource()}}</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <ng-template #streamDisplayString>
-            <div class="ms-2 finishedTime">streaming</div>
-        </ng-template>
 
         <!-- right footer section -->
         <div class="m-2 ps-2 right-footer me-4 d-none d-md-flex">
