@@ -14,8 +14,7 @@
             <div class="d-flex flex-column minWidth albumAndTitle">
                 <div class="title no-wrap">{{getCurrentSongTitle()}}</div>
                 <div class="d-flex flex-column no-wrap">
-                    <div class="currentTime align-self-start"
-                        *ngIf="rendererService.trackInfo?.currentTrack?.artistName ; else emptyDiv">
+                    <div class="currentTime align-self-start" *ngIf="rendererService.trackInfo?.currentTrack?.artistName ; else emptyDiv">
                         <span class="artist">{{rendererService.trackInfo?.currentTrack?.artistName}}</span>
                     </div>
                     <div class="currentTime align-self-start" *ngIf="rendererService.trackInfo?.currentTrack?.album; else emptyDiv">
@@ -34,18 +33,14 @@
         <div class="middle-footer flex-column align-items-center">
             <div class="middle-div">
                 <div class="d-flex align-self-center">
-                    <span class="material-symbols-outlined icon-button d-none d-sm-block {{shuffleClass}}"
-                        (click)="playlistService.toggleShuffle()">shuffle</span>
-                    <span class="material-symbols-outlined icon-button d-none d-sm-block "
-                        (click)="playlistService.previous()">skip_previous</span>
+                    <span class="material-symbols-outlined icon-button d-none d-sm-block {{shuffleClass}}" (click)="playlistService.toggleShuffle()">shuffle</span>
+                    <span class="material-symbols-outlined icon-button d-none d-sm-block " (click)="playlistService.previous()">skip_previous</span>
                     <span *ngIf="!avtransportService.isPlaying()" class="material-symbols-outlined md-48 icon-button d-none d-sm-block"
                         (click)="playlistService.play()">play_arrow</span>
                     <span *ngIf="avtransportService.isPlaying()" class="material-symbols-outlined md-48 icon-button d-none d-sm-block"
                         (click)="playlistService.pause()">pause_circle</span>
-                    <span class="material-symbols-outlined icon-button d-none d-sm-block "
-                        (click)="playlistService.next()">skip_next</span>
-                    <span class="material-symbols-outlined icon-button d-none d-sm-block {{repeatClass}}"
-                        (click)="playlistService.toggleRepeat()">repeat</span>
+                    <span class="material-symbols-outlined icon-button d-none d-sm-block " (click)="playlistService.next()">skip_next</span>
+                    <span class="material-symbols-outlined icon-button d-none d-sm-block {{repeatClass}}" (click)="playlistService.toggleRepeat()">repeat</span>
                 </div>
                 <div class="d-flex align-self-center flex-column d-none d-lg-flex">
                     <div class="timeDispContainer">
@@ -54,8 +49,8 @@
                         <div class="ms-2 finishedTime" *ngIf="!streaming(); else streamDisplayString">{{getFinishTime()}}
                         </div>
                     </div>
-                    <div class="d-flex justify-content-center minWidth">
-                        <div class="finishedTime no-wrap mt-2">{{currentInputSource()}}</div>
+                    <div *ngIf="currentInputSourceVisible()" class="d-flex justify-content-center minWidth">
+                        <div class="finishedTime no-wrap mt-2"><span class="material-symbols-outlined">input</span>{{currentInputSource()}}</div>
                     </div>
                 </div>
             </div>

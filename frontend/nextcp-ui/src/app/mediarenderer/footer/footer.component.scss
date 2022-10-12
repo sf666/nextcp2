@@ -27,10 +27,12 @@ mat-slider {
 }
 
 .timeDispContainer {
+    font-family: 'azeret';
+
     flex           : 1 2 auto;
     display        : flex;
     flex-direction : row;
-    justify-content: flex-end;
+    justify-content: center;
     align-self     : center; // vertical center
     width          : 150px;
     min-width      : 150px;
@@ -107,20 +109,19 @@ mat-slider {
 }
 
 .baseFontsize {
-    font-size  : 1rem;
-    font-weight: 300;
+    font-size  : 1.1rem;
+    font-weight: 100;
+    font-variation-settings: "wght" 100;
 }
 
 .currentTime {
     @extend .baseFontsize;
     color                : rgba(229, 238, 255, .3);
-    font-feature-settings: "tnum";
 }
 
 .finishedTime {
     @extend .baseFontsize;
     color                : var(--glas-white-5);
-    font-feature-settings: "tnum";
 }
 
 img {
@@ -215,10 +216,10 @@ img {
 }
 
 .middle-div {
-    flex      : 1 1 0;
-    display   : flex;
-    height    : 100%;
-    align-self: top;
+    flex           : 1 1 0;
+    display        : flex;
+    height         : 100%;
+    align-self     : top;
     justify-content: space-around;
 }
 
