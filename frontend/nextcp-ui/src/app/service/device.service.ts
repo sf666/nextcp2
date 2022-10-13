@@ -106,18 +106,20 @@ export class DeviceService {
   }
 
   private applyDefaultServer() {
-    if (!this.defaultMediaServerAlreadySelected && this.mediaServerList.some(e => e.udn === this.configService.clientConfig.defaultMediaServer.udn)) {
-      console.log("selecting default media server to " + this.configService.clientConfig.defaultMediaServer.friendlyName);
+    const defServer = this.mediaServerList.filter(e => e.udn === this.configService.clientConfig.defaultMediaServer.udn).find(e => true);
+    if (!this.defaultMediaServerAlreadySelected && defServer) {
+      console.log("selecting default media server to " + defServer.friendlyName);
       this.defaultMediaServerAlreadySelected = true;
-      this.selectedMediaServerDevice = this.configService.clientConfig.defaultMediaServer;
+      this.selectedMediaServerDevice = defServer;
     }
   }
 
   private applyDefaultRenderer() {
-    if (!this.defaultMediaRendererAlreadySelected && this.mediaRenderList.some(e => e.udn === this.configService.clientConfig.defaultMediaRenderer.udn)) {
+    const defRenderer = this.mediaRenderList.filter(e => e.udn === this.configService.clientConfig.defaultMediaRenderer.udn).find(e => true);;
+    if (!this.defaultMediaRendererAlreadySelected && defRenderer) {
       console.log("selecting default media renderer to " + this.configService.clientConfig.defaultMediaRenderer.friendlyName);
       this.defaultMediaRendererAlreadySelected = true;
-      this.selectedMediaRendererDevice = this.configService.clientConfig.defaultMediaRenderer;
+      this.selectedMediaRendererDevice = defRenderer;
     }
   }
 

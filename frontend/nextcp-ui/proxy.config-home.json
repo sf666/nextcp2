@@ -1,0 +1,51 @@
+{
+    "/DeviceRegistry/*": {
+      "target": "http://192.168.112.5:8085",
+      "secure": false
+    },
+    "/ContentDirectoryService/*": {
+      "target": "http://192.168.112.5:8085",
+      "secure": false
+    },
+    "/AvTransportService/*": {
+      "target": "http://192.168.112.5:8085",
+      "secure": false
+    },
+    "/SSE/*": {
+      "target": "http://192.168.112.5:8085",
+      "secure": false
+    },
+    "/ConfigurationService/*": {
+      "target": "http://192.168.112.5:8085",
+      "secure": false
+    },
+    "/RadioService/*": {
+      "target": "http://192.168.112.5:8085",
+      "secure": false
+    },
+    "/DeviceRendererService/*": {
+      "target": "http://192.168.112.5:8085",
+      "secure": false
+    },
+    "/PlaylistService/*": {
+      "target": "http://192.168.112.5:8085",
+      "secure": false
+    },
+    "/RatingService/*": {
+      "target": "http://192.168.112.5:8085",
+      "secure": false
+    },
+    "/MyMusicService/*": {
+      "target": "http://192.168.112.5:8085",
+      "secure": false
+    },  
+    "/SystemService/*": {
+      "target": "http://192.168.112.5:8085",
+      "secure": false
+    },  
+    "/DownloadService/*": {
+      "target": "http://192.168.112.5:8085",
+      "secure": false
+    }  
+  }
+  
