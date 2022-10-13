@@ -44,12 +44,6 @@ export class AvtransportService {
 
   private renderDeviceChanged(device: MediaRendererDto) {
     this.selectedMediaRenderer = device;
-    this.getInitialAvTransportState();
-  }
-
-  public getInitialAvTransportState(): void {
-    const uri = '/MediaRendererAvTransportState';
-    this.httpService.post<UpnpAvTransportState>(this.baseUri, uri, this.selectedMediaRenderer).subscribe();
   }
 
   //
