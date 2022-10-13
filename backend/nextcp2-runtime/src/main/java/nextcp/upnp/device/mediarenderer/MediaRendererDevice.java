@@ -493,7 +493,8 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             return false;
         }
         TransportServiceStateDto state = transportBridge.getCurrentTransportServiceState();
-        return state.transportState.equals("PLAYING");
+        
+        return "PLAYING".equals(state.transportState);
     }
 
     // Device operations

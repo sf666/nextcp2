@@ -20,6 +20,11 @@ public class OhTransportEventListener extends TransportServiceEventListenerImpl
     @Override
     public void eventProcessed()
     {
+        publishState();        
+    }
+
+    private void publishState()
+    {
         TransportServiceStateDto dto = new TransportServiceStateDto();
         
         dto.udn = device.getUdnAsString();
@@ -34,10 +39,5 @@ public class OhTransportEventListener extends TransportServiceEventListenerImpl
         dto.transportState = getStateVariable().TransportState;
         
         device.getEventPublisher().publishEvent(dto);
-        
-        if (log.isDebugEnabled())
-        {
-            log.debug("eventProcessed : " + dto);
-        }
     }
 }
