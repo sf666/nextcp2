@@ -26,6 +26,7 @@ import nextcp.dto.RendererDeviceConfiguration;
 import nextcp.dto.ToastrMessage;
 import nextcp.dto.TrackInfoDto;
 import nextcp.dto.TrackTimeDto;
+import nextcp.dto.TransportServiceStateDto;
 import nextcp.service.ISchedulerService;
 import nextcp.service.SchedulerService;
 import nextcp.upnp.device.BaseDevice;
@@ -484,8 +485,8 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
     private boolean avTransportIsPlaying()
     {
-        AvTransportState state = avTransportEventPublisher.getCurrentAvTransportState();
-        return state.TransportState.equals("PLAYING");
+        TransportServiceStateDto state = transportBridge.getCurrentTransportServiceState();
+        return state.transportState.equals("PLAYING");
     }
 
     // Device operations
