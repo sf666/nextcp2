@@ -139,6 +139,8 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         if (hasUpnpAvTransport())
         {
             avTransportBridge = new Upnp_AVTransportBridge(upnp_avTransportService, this);
+            avTransportEventListener = new AvTransportEventListener(this);
+            upnp_avTransportService.addSubscriptionEventListener(avTransportEventListener);
         }
         else
         {
@@ -185,7 +187,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         else
         {
             // no OH servies. Playlist will be internally controlled by this control point.
-            if (hasUpnpAvTransport())
+            if (avTransportEventListener != null && hasUpnpAvTransport())
             {
                 CpPlaylistService playlist = new CpPlaylistService(this);
                 playlistService = playlist;
@@ -205,26 +207,27 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         {
             radioService = new OhRadioBridge(oh_radioService, getDtoBuilder());
         }
+        
+        //
+        // 2nd step: Identify available services and glue correct bridges together
+        //
 
-        //
-        // Identify available services and glue correct bridges together
-        //
+        // transport bridge (transport state publishing) ... 
         if (hasOhTransport())
         {
             transportBridge = new OhTransportBridge(this, oh_transportService, getDtoBuilder());
             ohTransportEventListener = new OhTransportEventListener(this);
+            oh_transportService.addSubscriptionEventListener(ohTransportEventListener);
+
         }
-        else if (hasUpnpAvTransport())
+        else
         {
             transportBridge = avTransportBridge;
-
-            // Publish transport changes
-            avTransportEventListener = new AvTransportEventListener(this);
             avTransportEventPublisher = new AvTransportEventPublisher(this);
             avTransportEventListener.addEventListener(avTransportEventPublisher);
-            upnp_avTransportService.addSubscriptionEventListener(avTransportEventListener);
         }
 
+        
         // must be called after OH Services!
         updateDeviceDriver();
     }

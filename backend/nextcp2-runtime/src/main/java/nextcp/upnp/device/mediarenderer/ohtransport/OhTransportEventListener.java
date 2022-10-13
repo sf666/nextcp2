@@ -1,11 +1,15 @@
 package nextcp.upnp.device.mediarenderer.ohtransport;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import nextcp.dto.TransportServiceStateDto;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.TransportServiceEventListenerImpl;
 
 public class OhTransportEventListener extends TransportServiceEventListenerImpl
 {
+    private static final Logger log = LoggerFactory.getLogger(OhTransportEventListener.class.getName());
     private MediaRendererDevice device = null;
 
     public OhTransportEventListener(MediaRendererDevice device)
@@ -30,5 +34,10 @@ public class OhTransportEventListener extends TransportServiceEventListenerImpl
         dto.transportState = getStateVariable().TransportState;
         
         device.getEventPublisher().publishEvent(dto);
+        
+        if (log.isDebugEnabled())
+        {
+            log.debug("eventProcessed : " + dto);
+        }
     }
 }
