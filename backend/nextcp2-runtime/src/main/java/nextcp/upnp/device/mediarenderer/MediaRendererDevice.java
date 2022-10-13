@@ -101,7 +101,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     RenderingControlService upnp_renderingControlService = null;
     ConnectionManagerService upnp_connectionManagerService = null;
     UpnpDeviceDriver upnpDeviceDriver = null;
-    
+
     // upnp wrapper
     Upnp_AVTransportBridge avTransportBridge = null;
 
@@ -204,26 +204,23 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             radioService = new OhRadioBridge(oh_radioService, getDtoBuilder());
         }
 
-        
         //
         // Identify available services and glue correct bridges together
         //
         if (hasOhTransport())
         {
-            transportBridge = new OhTransportBridge(this, oh_transportService, getDtoBuilder());  
+            transportBridge = new OhTransportBridge(this, oh_transportService, getDtoBuilder());
         }
         else if (hasUpnpAvTransport())
         {
             transportBridge = avTransportBridge;
-            
+
             // Publish transport changes
             avTransportEventListener = new AvTransportEventListener(this);
             avTransportEventPublisher = new AvTransportEventPublisher(this);
             avTransportEventListener.addEventListener(avTransportEventPublisher);
             upnp_avTransportService.addSubscriptionEventListener(avTransportEventListener);
         }
-
-        
 
         // must be called after OH Services!
         updateDeviceDriver();
@@ -447,7 +444,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     {
         return transportBridge;
     }
-    
+
     public IAvTransport getAvTransportBridge()
     {
         return avTransportBridge;
@@ -476,7 +473,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     @Override
     public void tick(long counter)
     {
-        if (!hasOhInfoService() && avTransportIsPlaying())
+        if (transportBridge != null && !hasOhInfoService() && avTransportIsPlaying())
         {
             TrackTimeDto dto = avTransportBridge.generateTractTimeDto();
             eventPublisher.publishEvent(dto);
