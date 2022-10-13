@@ -17,13 +17,11 @@ public class OhPlaylistServiceEventListener extends PlaylistServiceEventListener
 {
     private static final Logger log = LoggerFactory.getLogger(OhPlaylistServiceEventListener.class.getName());
 
-    private ApplicationEventPublisher eventPublisher = null;
     private OhPlaylist playlist;
     private MediaRendererDevice device;
 
-    public OhPlaylistServiceEventListener(ApplicationEventPublisher eventPublisher, OhPlaylist playlist, MediaRendererDevice mediaRendererDevice)
+    public OhPlaylistServiceEventListener(OhPlaylist playlist, MediaRendererDevice mediaRendererDevice)
     {
-        this.eventPublisher = eventPublisher;
         this.playlist = playlist;
         this.device = mediaRendererDevice;
     }
@@ -44,7 +42,7 @@ public class OhPlaylistServiceEventListener extends PlaylistServiceEventListener
         dto.TracksMax = state.TracksMax;
         dto.TransportState = state.TransportState;
         
-        eventPublisher.publishEvent(dto);
+        device.getEventPublisher().publishEvent(dto);
     }
     
     @Override
@@ -54,7 +52,7 @@ public class OhPlaylistServiceEventListener extends PlaylistServiceEventListener
         PlaylistChangedEvent event = new PlaylistChangedEvent();
         List<MusicItemDto> playlistItems = playlist.convertIdArrayToMusicItemList(value);
         event.rendererPlaylist = new RendererPlaylist(device.getUDN().getIdentifierString(), playlistItems);
-        eventPublisher.publishEvent(event);
+        device.getEventPublisher().publishEvent(event);
     }
     
     @Override

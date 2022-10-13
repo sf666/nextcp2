@@ -39,6 +39,7 @@ import nextcp.upnp.device.mediarenderer.ohinfo.Oh_InfoServiceImpl;
 import nextcp.upnp.device.mediarenderer.ohradio.OhRadioBridge;
 import nextcp.upnp.device.mediarenderer.ohtime.OhTimeServiceEventListener;
 import nextcp.upnp.device.mediarenderer.ohtransport.OhTransportBridge;
+import nextcp.upnp.device.mediarenderer.ohtransport.OhTransportEventListener;
 import nextcp.upnp.device.mediarenderer.playlist.CpPlaylistService;
 import nextcp.upnp.device.mediarenderer.playlist.OhPlaylist;
 import nextcp.upnp.device.mediarenderer.playlist.OhPlaylistServiceEventListener;
@@ -95,6 +96,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     private OhTimeServiceEventListener ohTimeServiceEventListener = null;
     private OhProductServiceEventListener ohProductServiceEventListener = null;
     private OhVolumeServiceEventListener ohVolumeServiceEventListener = null;
+    private OhTransportEventListener ohTransportEventListener = null;
 
     // upnp
     AVTransportService upnp_avTransportService = null;
@@ -177,7 +179,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         if (hasOhPlaylistService())
         {
             OhPlaylist ohPlaylist = new OhPlaylist(oh_playlistService, getDtoBuilder());
-            oh_playlistService.addSubscriptionEventListener(new OhPlaylistServiceEventListener(getEventPublisher(), ohPlaylist, this));
+            oh_playlistService.addSubscriptionEventListener(new OhPlaylistServiceEventListener(ohPlaylist, this));
             playlistService = ohPlaylist;
         }
         else
@@ -210,6 +212,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         if (hasOhTransport())
         {
             transportBridge = new OhTransportBridge(this, oh_transportService, getDtoBuilder());
+            ohTransportEventListener = new OhTransportEventListener(this);
         }
         else if (hasUpnpAvTransport())
         {
