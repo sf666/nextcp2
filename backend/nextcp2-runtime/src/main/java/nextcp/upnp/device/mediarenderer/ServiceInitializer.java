@@ -15,6 +15,7 @@ import nextcp.upnp.modelGen.avopenhomeorg.playlist1.PlaylistService;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.ProductService;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.RadioService;
 import nextcp.upnp.modelGen.avopenhomeorg.time1.TimeService;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.TransportService;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.VolumeService;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.AVTransportService;
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.ConnectionManagerService;
@@ -40,6 +41,8 @@ public class ServiceInitializer
     static final String OH_Playlist = "Playlist";
     static final String OH_Radio = "Radio";
     static final String OH_Product = "Product";
+    static final String OH_Transport = "Transport";
+    
 
     void initializeServices(UpnpService upnpService, RemoteDevice device, MediaRendererDevice renderer, List<MediaRendererServicesDto> services)
     {
@@ -104,6 +107,10 @@ public class ServiceInitializer
                 else if (service.getServiceType().getType().equalsIgnoreCase(OH_Product))
                 {
                     renderer.oh_productService = new ProductService(upnpService, device);
+                }
+                else if (service.getServiceType().getType().equalsIgnoreCase(OH_Transport))
+                {
+                    renderer.oh_transportService = new TransportService(upnpService, device);
                 }
                 else
                 {

@@ -31,11 +31,18 @@ public class OhProductServiceBridge implements IProductService
         this.ohUtil = new OpenHomeUtils(dtoBuilder);
         this.listener = listener;
 
-        String xml = productService.sourceXml().Value;
-        log.info("Input Sources : " + xml);
-        sourceList = ohUtil.convertToInputSourceList(xml);
-        listener.getStateVariable().SourceIndex = productService.sourceIndex().Value;
-        log.info("current input source index : " + productService.sourceIndex().Value);
+        try
+        {
+            String xml = productService.sourceXml().Value;
+            log.info("Input Sources : " + xml);
+            sourceList = ohUtil.convertToInputSourceList(xml);
+            listener.getStateVariable().SourceIndex = productService.sourceIndex().Value;
+            log.info("current input source index : " + productService.sourceIndex().Value);
+        }
+        catch (Exception e)
+        {
+            log.info("SourceXML not implemented ...");
+        }
     }
 
     @Override

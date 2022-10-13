@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { MediaRendererDto, PlaylistState } from '../dto';
-import { MediaServerDto, UpnpAvTransportState, Config, DeviceDriverState, TrackTimeDto, TrackInfoDto, RendererConfigDto, RendererPlaylist, ToastrMessage, ServerConfigDto, ServerPlaylistDto, ServerPlaylists, InputSourceDto, InputSourceChangeDto } from './../dto.d';
+import { MediaServerDto, UpnpAvTransportState, Config, DeviceDriverState, TrackTimeDto, TrackInfoDto, RendererConfigDto, RendererPlaylist, ToastrMessage, ServerConfigDto, ServerPlaylistDto, ServerPlaylists, InputSourceDto, InputSourceChangeDto, TransportServiceStateDto } from './../dto.d';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +23,7 @@ export class SseService {
 
   // Renderer States Events [track position and player states]
   mediaRendererAvTransportStateChanged$: Subject<UpnpAvTransportState> = new Subject();
+  mediaRendererTransportStateChanged$: Subject<TransportServiceStateDto> = new Subject();
   mediaRendererTrackInfoChanged$: Subject<TrackInfoDto> = new Subject();
   mediaRendererPositionChanged$: Subject<TrackTimeDto> = new Subject();
   mediaRendererInputSourceChanged$: Subject<InputSourceChangeDto> = new Subject();
@@ -50,6 +51,7 @@ export class SseService {
     };
 
     eventSource.addEventListener('AVTRANSPORT_STATE', m => { this.sendNotification(this.mediaRendererAvTransportStateChanged$, m) }, false);
+    eventSource.addEventListener('TRANSPORT_STATE', m => { this.sendNotification(this.mediaRendererTransportStateChanged$, m) }, false);
     eventSource.addEventListener('CONFIG_CHANGED', m => { this.sendNotification(this.configChanged$, m) }, false);
 
     eventSource.addEventListener('DEVICE_MEDIARENDERER_LIST_CHANGED', m => { this.sendNotification(this.mediaRendererListChanged$, m) }, false);

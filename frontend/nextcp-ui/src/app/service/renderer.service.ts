@@ -2,7 +2,7 @@ import { DtoGeneratorService } from './../util/dto-generator.service';
 import { BackgroundImageService } from './../util/background-image.service';
 import { HttpService } from './http.service';
 import { DeviceService } from './device.service';
-import { DeviceDriverState, MediaRendererSwitchPower, MediaRendererSetVolume, MediaRendererDto, TrackInfoDto, TrackTimeDto, InputSourceDto, MusicItemDto, AudioFormat, InputSourceChangeDto } from './dto.d';
+import { DeviceDriverState, MediaRendererSwitchPower, MediaRendererSetVolume, MediaRendererDto, TrackInfoDto, TrackTimeDto, InputSourceDto, MusicItemDto, AudioFormat, InputSourceChangeDto, TransportServiceStateDto } from './dto.d';
 import { SseService } from './sse/sse.service';
 import { Injectable } from '@angular/core';
 
@@ -19,6 +19,7 @@ export class RendererService {
 
   public trackInfo: TrackInfoDto;
   public trackTime: TrackTimeDto;
+  public transportServiceStateDto: TransportServiceStateDto;
   public inputSourceList: InputSourceDto;
   public deviceDriverState: DeviceDriverState = { hasDeviceDriver: false, standby: true, volume: 0, rendererUDN: '' };
 
@@ -54,15 +55,24 @@ export class RendererService {
       }
     });
 
+    sseService.mediaRendererTransportStateChanged$.subscribe(data => this.updateTransportState(data));
     this.deviceService.mediaRendererChanged$.subscribe(data => this.renderDeviceChanged(data));
   }
 
-  private renderDeviceChanged(device: MediaRendererDto) {
-    this.updateDeviceDriverState(device);
-    this.updateTrackInfoState(device);
+  private updateTransportState(state: TransportServiceStateDto) {
+    if (state.udn == this.deviceService.selectedMediaRendererDevice.udn) {
+      console.log("new transport state : " + state.transportState);
+      this.transportServiceStateDto = state;
+    }
   }
 
-  private updateTrackInfoState(device: MediaRendererDto) {
+  private renderDeviceChanged(device: MediaRendererDto) {
+    this.readDeviceDriverState(device);
+    this.readTrackInfoState(device);
+    this.readDeviceDriverState(device)
+  }
+
+  private readTrackInfoState(device: MediaRendererDto) {
     const uri = '/getCurrentSourceTrackInfo';
     this.httpService.post<TrackInfoDto>(this.baseUri, uri, device).subscribe(data => {
       if (this.deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
@@ -71,7 +81,16 @@ export class RendererService {
     });
   }
 
-  private updateDeviceDriverState(device: MediaRendererDto) {
+  private readTransportServiceState(device: MediaRendererDto) {
+    const uri = '/getDeviceTransportServiceState';
+    this.httpService.post<TransportServiceStateDto>(this.baseUri, uri, device).subscribe(data => {
+      if (this.deviceService.isMediaRendererSelected(data.udn)) {
+        this.transportServiceStateDto = data
+      }
+    });
+  }
+
+  private readDeviceDriverState(device: MediaRendererDto) {
     const uri = '/getDeviceState';
     this.httpService.post<DeviceDriverState>(this.baseUri, uri, device).subscribe(data => {
       if (this.deviceService.isMediaRendererSelected(data.rendererUDN)) {
@@ -89,6 +108,11 @@ export class RendererService {
 
   public get trackInfoAvailable(): boolean {
     return this.trackInfo?.currentTrack?.title?.length > 0;
+  }
+  
+  public isPlaying(): boolean {
+    const playing: boolean = this.transportServiceStateDto?.transportState === 'PLAYING';
+    return playing;      
   }
 
   //
@@ -120,6 +144,30 @@ export class RendererService {
     };
     this.httpService.post(this.baseUri, uri, request, "volume control");
   }
+
+  //
+  // Renderer transport services
+  // ================================================================================================================
+  public pause() {
+    const uri = '/pause';
+    this.httpService.post(this.baseUri, uri, this.deviceService.selectedMediaRendererDevice.udn, "pause");
+  }
+
+  public stop() {
+    const uri = '/stop';
+    this.httpService.post(this.baseUri, uri, this.deviceService.selectedMediaRendererDevice.udn, "stop");
+  }
+
+  public play() {
+    const uri = '/play';
+    this.httpService.post(this.baseUri, uri, this.deviceService.selectedMediaRendererDevice.udn, "play");
+  }
+
+  public next() {
+    const uri = '/next';
+    this.httpService.post(this.baseUri, uri, this.deviceService.selectedMediaRendererDevice.udn, "next");
+  }
+
 
   //
   // Renderer : information about the current played song
@@ -203,5 +251,4 @@ export class RendererService {
       return "no track info available";
     }
   }
-
 }

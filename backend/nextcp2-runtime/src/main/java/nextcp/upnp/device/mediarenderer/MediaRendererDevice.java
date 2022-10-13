@@ -13,11 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 
 import nextcp.config.RendererConfig;
+import nextcp.domainmodel.device.services.IAvTransport;
 import nextcp.domainmodel.device.services.IInfoService;
 import nextcp.domainmodel.device.services.IPlaylistService;
 import nextcp.domainmodel.device.services.IProductService;
 import nextcp.domainmodel.device.services.IRadioService;
-import nextcp.domainmodel.device.services.IUpnpAvTransport;
+import nextcp.domainmodel.device.services.ITransport;
 import nextcp.dto.DeviceDriverState;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.MediaRendererServicesDto;
@@ -36,6 +37,7 @@ import nextcp.upnp.device.mediarenderer.ohinfo.OhInfoServiceEventListener;
 import nextcp.upnp.device.mediarenderer.ohinfo.Oh_InfoServiceImpl;
 import nextcp.upnp.device.mediarenderer.ohradio.OhRadioBridge;
 import nextcp.upnp.device.mediarenderer.ohtime.OhTimeServiceEventListener;
+import nextcp.upnp.device.mediarenderer.ohtransport.OhTransportBridge;
 import nextcp.upnp.device.mediarenderer.playlist.CpPlaylistService;
 import nextcp.upnp.device.mediarenderer.playlist.OhPlaylist;
 import nextcp.upnp.device.mediarenderer.playlist.OhPlaylistServiceEventListener;
@@ -49,6 +51,7 @@ import nextcp.upnp.modelGen.avopenhomeorg.playlist1.PlaylistService;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.ProductService;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.RadioService;
 import nextcp.upnp.modelGen.avopenhomeorg.time1.TimeService;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.TransportService;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.VolumeService;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.AVTransportService;
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.ConnectionManagerService;
@@ -97,6 +100,9 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     RenderingControlService upnp_renderingControlService = null;
     ConnectionManagerService upnp_connectionManagerService = null;
     UpnpDeviceDriver upnpDeviceDriver = null;
+    
+    // upnp wrapper
+    Upnp_AVTransportBridge avTransportBridge = null;
 
     // openhome services
     InfoService oh_infoService = null;
@@ -106,10 +112,11 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     PlaylistService oh_playlistService = null;
     RadioService oh_radioService = null;
     ProductService oh_productService = null;
+    TransportService oh_transportService = null;
     OpenHomeDeviceDriver ohDeviceDriver = null;
 
     // Delegate services to generated models
-    Upnp_AVTransportBridge avTransportBridge = null;
+    ITransport transportBridge = null;
     IPlaylistService playlistService = null;
     IRadioService radioService = null;
     IProductService productService = null;
@@ -129,10 +136,6 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         if (hasUpnpAvTransport())
         {
             avTransportBridge = new Upnp_AVTransportBridge(upnp_avTransportService, this);
-            avTransportEventListener = new AvTransportEventListener(this);
-            avTransportEventPublisher = new AvTransportEventPublisher(this);
-            avTransportEventListener.addEventListener(avTransportEventPublisher);
-            upnp_avTransportService.addSubscriptionEventListener(avTransportEventListener);
         }
         else
         {
@@ -199,6 +202,27 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         {
             radioService = new OhRadioBridge(oh_radioService, getDtoBuilder());
         }
+
+        
+        //
+        // Identify available services and glue correct bridges together
+        //
+        if (hasOhTransport())
+        {
+            transportBridge = new OhTransportBridge(this, oh_transportService, getDtoBuilder());  
+        }
+        else if (hasUpnpAvTransport())
+        {
+            transportBridge = avTransportBridge;
+            
+            // Publish transport changes
+            avTransportEventListener = new AvTransportEventListener(this);
+            avTransportEventPublisher = new AvTransportEventPublisher(this);
+            avTransportEventListener.addEventListener(avTransportEventPublisher);
+            upnp_avTransportService.addSubscriptionEventListener(avTransportEventListener);
+        }
+
+        
 
         // must be called after OH Services!
         updateDeviceDriver();
@@ -385,6 +409,11 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         return upnp_avTransportService != null;
     }
 
+    public boolean hasOhTransport()
+    {
+        return oh_transportService != null;
+    }
+
     public boolean hasUpnpRenderingControlService()
     {
         return upnp_renderingControlService != null;
@@ -413,7 +442,12 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         return playlistService;
     }
 
-    public IUpnpAvTransport getAvTransportServiceBridge()
+    public ITransport getTransportServiceBridge()
+    {
+        return transportBridge;
+    }
+    
+    public IAvTransport getAvTransportBridge()
     {
         return avTransportBridge;
     }

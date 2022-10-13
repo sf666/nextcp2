@@ -188,5 +188,4 @@ public class OpenHomeUtils
 
         return result;
     }
-
 }

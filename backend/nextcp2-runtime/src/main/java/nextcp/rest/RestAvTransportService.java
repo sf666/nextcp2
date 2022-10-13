@@ -43,7 +43,7 @@ public class RestAvTransportService extends BaseRestService
     public void playResource(@RequestBody PlayRequestDto playRequest)
     {
         MediaRendererDevice device = checkPlayInput(playRequest);
-        device.getAvTransportServiceBridge().play(playRequest.streamUrl, playRequest.streamMetadata);
+        device.getAvTransportBridge().play(playRequest.streamUrl, playRequest.streamMetadata);
     }
 
     @PostMapping("/playResourceNext")
@@ -52,7 +52,7 @@ public class RestAvTransportService extends BaseRestService
         try
         {
             MediaRendererDevice device = checkPlayInput(playRequest);
-            device.getAvTransportServiceBridge().playNext(playRequest.streamUrl, playRequest.streamMetadata);
+            device.getAvTransportBridge().playNext(playRequest.streamUrl, playRequest.streamMetadata);
             publisher.publishEvent(new ToastrMessage(null, "success", "play", "song will be played next."));
         }
         catch (Exception e)
@@ -74,7 +74,7 @@ public class RestAvTransportService extends BaseRestService
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED,
                     "playing failed. Select an available media renderer. Unavailable : " + playRequest.mediaRendererDto.udn);
         }
-        if (device.getAvTransportServiceBridge() == null)
+        if (device.getTransportServiceBridge() == null)
         {
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "playing failed. No AvTransport service available. UDN : " + playRequest.mediaRendererDto.udn);
         }
@@ -85,7 +85,7 @@ public class RestAvTransportService extends BaseRestService
     public void pause(@RequestBody String rendererUdn)
     {
         MediaRendererDevice device = getMediaRendererByUdn(rendererUdn);
-        device.getAvTransportServiceBridge().pause();
+        device.getTransportServiceBridge().pause();
     }
 
     @PostMapping("/play")
@@ -96,7 +96,7 @@ public class RestAvTransportService extends BaseRestService
         {
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "play failed. Select an available media renderer.");
         }
-        device.getAvTransportServiceBridge().play();
+        device.getTransportServiceBridge().play();
     }
 
     @PostMapping("/playOnlineResource")
@@ -107,7 +107,7 @@ public class RestAvTransportService extends BaseRestService
         try
         {
             music.addProperty(new ALBUM_ART_URI(new URI(playRequest.radioStation.artworkUrl)));
-            device.getAvTransportServiceBridge().play(playRequest.radioStation.resourceUrl, dtoBuilder.generateMetadataFromItem(music));
+            device.getAvTransportBridge().play(playRequest.radioStation.resourceUrl, dtoBuilder.generateMetadataFromItem(music));
         }
         catch (URISyntaxException e)
         {

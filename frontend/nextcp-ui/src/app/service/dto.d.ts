@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2022-10-11 10:19:22.
+// Generated using typescript-generator version 2.32.889 on 2022-10-13 11:32:26.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -344,6 +344,19 @@ export interface TrackTimeDto {
     trackCount: number;
     percent: number;
     streaming: boolean;
+}
+
+export interface TransportServiceStateDto {
+    udn: string;
+    transportState: string;
+    canSkipNext: boolean;
+    canSkipPrevious: boolean;
+    canRepeat: boolean;
+    canShuffle: boolean;
+    canSeek: boolean;
+    canPause: boolean;
+    repeat: boolean;
+    shuffle: boolean;
 }
 
 export interface UiClientConfig {

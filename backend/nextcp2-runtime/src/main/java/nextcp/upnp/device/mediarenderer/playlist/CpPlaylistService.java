@@ -157,8 +157,8 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
                 if (nextSong != null)
                 {
                     log.info(String.format("proceedToNextSongToPlayNoNextUriSupport : set URL to %s", nextSong.streamingURL));
-                    getDevice().getAvTransportServiceBridge().setUrl(nextSong.streamingURL, nextSong.currentTrackMetadata);
-                    getDevice().getAvTransportServiceBridge().play();
+                    getDevice().getAvTransportBridge().setUrl(nextSong.streamingURL, nextSong.currentTrackMetadata);
+                    getDevice().getTransportServiceBridge().play();
                 }
                 else
                 {
@@ -542,7 +542,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
     public void pause()
     {
         setPlaylistTransportState(TransportState.Paused);
-        getDevice().getAvTransportServiceBridge().pause();
+        getDevice().getTransportServiceBridge().pause();
         getEventPublisher().publishEvent(state);
     }
 
@@ -598,8 +598,8 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
             log.debug("set first song meta : " + song.currentTrackMetadata);
         }
 
-        getDevice().getAvTransportServiceBridge().setUrl(song.streamingURL, song.currentTrackMetadata);
-        getDevice().getAvTransportServiceBridge().play();
+        getDevice().getAvTransportBridge().setUrl(song.streamingURL, song.currentTrackMetadata);
+        getDevice().getTransportServiceBridge().play();
 
         setNextSongFromQueue();
 
@@ -624,7 +624,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
             if (nextSong != null)
             {
                 nextSongUrl = nextSong.streamingURL;
-                getDevice().getAvTransportServiceBridge().setNextUrl(nextSong.streamingURL, nextSong.currentTrackMetadata);
+                getDevice().getAvTransportBridge().setNextUrl(nextSong.streamingURL, nextSong.currentTrackMetadata);
             }
             else
             {
@@ -640,7 +640,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
     @Override
     public void next()
     {
-        getDevice().getAvTransportServiceBridge().next();
+        getDevice().getTransportServiceBridge().next();
         // moveToNextTrack();
     }
 
@@ -701,7 +701,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
     public void stop()
     {
         setPlaylistTransportState(TransportState.Stopped);
-        getDevice().getAvTransportServiceBridge().stop();
+        getDevice().getTransportServiceBridge().stop();
         getEventPublisher().publishEvent(state);
     }
 

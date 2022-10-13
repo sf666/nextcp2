@@ -3,12 +3,16 @@ package nextcp.upnp.device.mediarenderer.avtransport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.domainmodel.device.services.IAvTransport;
 import nextcp.domainmodel.device.services.IInfoService;
 import nextcp.domainmodel.device.services.ITimeService;
-import nextcp.domainmodel.device.services.IUpnpAvTransport;
+import nextcp.domainmodel.device.services.ITransport;
 import nextcp.dto.TrackInfoDto;
 import nextcp.dto.TrackTimeDto;
+import nextcp.dto.TransportServiceStateDto;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.ModeInfoOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.StreamInfoOutput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.AVTransportService;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetPositionInfoInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetPositionInfoOutput;
@@ -20,7 +24,7 @@ import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.SetNextAVTranspo
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.StopInput;
 import nextcp.util.DisplayUtils;
 
-public class Upnp_AVTransportBridge implements IInfoService, IUpnpAvTransport, ITimeService
+public class Upnp_AVTransportBridge implements IInfoService, ITransport, ITimeService, IAvTransport
 {
     private static final Logger log = LoggerFactory.getLogger(Upnp_AVTransportBridge.class.getName());
 
@@ -180,6 +184,29 @@ public class Upnp_AVTransportBridge implements IInfoService, IUpnpAvTransport, I
         }
 
         return (int) ((seconds * 100) / duration);
+    }
+
+    @Override
+    public TransportServiceStateDto getCurrentTransportServiceState()
+    {
+        TransportServiceStateDto dto = new TransportServiceStateDto();
+        
+        // TODO : current service must be identified and must be read from playlist service ...
+        dto.udn = device.getUdnAsString();
+        dto.canPause = true;
+        dto.canRepeat = true;
+        dto.canSeek = true;
+        dto.canShuffle = true;
+        dto.canSkipNext = true;
+        dto.canSkipPrevious = false;
+        dto.repeat = true;
+        dto.shuffle = true;
+
+        // dto.transportState = currentAvTransportState.TransportStatus;
+        
+        dto.udn = device.getUdnAsString();
+        
+        return dto;
     }
 
     @Override

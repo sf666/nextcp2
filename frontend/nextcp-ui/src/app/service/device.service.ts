@@ -2,7 +2,7 @@ import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { ConfigurationService } from './configuration.service';
 import { SseService } from './sse/sse.service';
-import { MediaServerDto, MediaRendererDto, UiClientConfig, RendererDeviceConfiguration, InputSourceChangeDto } from './dto.d';
+import { MediaServerDto, MediaRendererDto, UiClientConfig, RendererDeviceConfiguration, InputSourceChangeDto, TransportServiceStateDto } from './dto.d';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -51,7 +51,7 @@ export class DeviceService {
     if (source.udn == this._selectedMediaRendererDevice.udn) {
       console.log("new input source applied");
       this._selectedMediaRendererDevice.currentSource = source.inputSource;
-    }    
+    }
   }
 
   public isRenderOnline(device: MediaRendererDto): boolean {
@@ -160,7 +160,7 @@ export class DeviceService {
   public set selectedMediaRendererDevice(device: MediaRendererDto) {
     this._selectedMediaRendererDevice = device;
     this.mediaRendererChanged$.next(device);
-//    this.logMediaRendererDeviceServices(device);
+    //    this.logMediaRendererDeviceServices(device);
   }
 
   public setMediaRendererByUdn(udn: string): void {

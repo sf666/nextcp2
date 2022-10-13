@@ -3,6 +3,7 @@ package nextcp.upnp.device.mediarenderer.avtransport;
 import org.springframework.context.ApplicationEventPublisher;
 
 import nextcp.dto.TrackInfoDto;
+import nextcp.dto.TransportServiceStateDto;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediarenderer.avtransport.event.AvTransportStateChangedEvent;
 
@@ -46,6 +47,14 @@ public class AvTransportEventPublisher extends BaseAvTransportChangeEventImpl
         event.state = currentAvTransportState;
         event.device = device;
         getEventPublisher().publishEvent(event);
+        
+        TransportServiceStateDto dto = device.getTransportServiceBridge().getCurrentTransportServiceState();
+        
+        // TODO : current service must be identified and must be read from playlist service ...
+        dto.udn = device.getUdnAsString();
+        dto.transportState = currentAvTransportState.TransportStatus;
+        
+        device.getEventPublisher().publishEvent(dto);
     }
 
     private TrackInfoDto getAsTrackInfo(AvTransportState transportState)

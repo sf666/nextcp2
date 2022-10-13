@@ -9,6 +9,7 @@ import nextcp.dto.InputSourceChangeDto;
 import nextcp.dto.PlaylistState;
 import nextcp.dto.TrackInfoDto;
 import nextcp.dto.TrackTimeDto;
+import nextcp.dto.TransportServiceStateDto;
 import nextcp.dto.UpnpAvTransportState;
 import nextcp.rest.DtoBuilder;
 import nextcp.upnp.device.mediarenderer.avtransport.event.AvTransportStateChangedEvent;
@@ -19,6 +20,7 @@ public class MediaRendererSseEvents
 {
     public static final String DEVICE_MEDIARENDERER_DEVICE_DRIVER_STATE_CHANGED = "DEVICE_MEDIARENDERER_DEVICE_DRIVER_STATE_CHANGED";
     public static final String DEVICE_MEDIARENDERER_AVTRANSPORT = "AVTRANSPORT_STATE";
+    public static final String DEVICE_MEDIARENDERER_TRANSPORT = "TRANSPORT_STATE";
     public static final String DEVICE_MEDIARENDERER_INPUT_SOURCE = "DEVICE_MEDIARENDERER_INPUT_SOURCE";
     public static final String DEVICE_MEDIARENDERER_TRACK_INFO = "DEVICE_MEDIARENDERER_TRACK_INFO";
     public static final String DEVICE_MEDIARENDERER_TRACK_TIME = "DEVICE_MEDIARENDERER_TRACK_TIME";
@@ -54,6 +56,13 @@ public class MediaRendererSseEvents
         ssePublisher.sendObjectAsJson(DEVICE_MEDIARENDERER_AVTRANSPORT, dto);
     }
 
+    @EventListener
+    public void listenForTransportStateVariable(TransportServiceStateDto event)
+    {
+        ssePublisher.sendObjectAsJson(DEVICE_MEDIARENDERER_TRANSPORT, event);
+    }
+    
+    
     @EventListener
     public void listenForTrackInfoStateVariable(TrackInfoDto event)
     {

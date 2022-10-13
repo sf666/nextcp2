@@ -94,14 +94,26 @@ RendererDeviceConfiguration:
 # StateVariables
 #
 PlaylistState:
-    udn: String
-    TracksMax: Long
-    Shuffle: Boolean
-    Repeat: Boolean
-    TransportState: String
-    ProtocolInfo: String
-    Id: Long
+   udn: String
+   TracksMax: Long
+   Shuffle: Boolean
+   Repeat: Boolean
+   TransportState: String
+   ProtocolInfo: String
+   Id: Long
 
+
+TransportServiceStateDto:
+   udn: String
+   transportState: String
+   canSkipNext: boolean
+   canSkipPrevious: boolean
+   canRepeat: boolean
+   canShuffle: boolean
+   canSeek: boolean
+   canPause: boolean
+   repeat: boolean
+   shuffle: boolean
 
 UpnpAvTransportState:
    mediaRenderer: MediaRendererDto 

@@ -20,6 +20,9 @@ public class OhVolumeServiceEventListener extends VolumeServiceEventListenerImpl
     public void volumeChange(Long value)
     {
         super.volumeChange(value);
-        callback.volumeChanged(Math.toIntExact(value));
+        if (callback != null)
+        {
+            callback.volumeChanged(Math.toIntExact(value));
+        }
     }
 }

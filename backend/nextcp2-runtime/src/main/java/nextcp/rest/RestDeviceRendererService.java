@@ -23,6 +23,7 @@ import nextcp.dto.MediaRendererDto;
 import nextcp.dto.MediaRendererSetVolume;
 import nextcp.dto.MediaRendererSwitchPower;
 import nextcp.dto.TrackInfoDto;
+import nextcp.dto.TransportServiceStateDto;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediarenderer.product.OpenHomeProductDevice;
@@ -94,6 +95,14 @@ public class RestDeviceRendererService
         }
     }
 
+    @PostMapping("/getDeviceTransportServiceState")
+    public TransportServiceStateDto getDeviceTransportServiceState(@RequestBody MediaRendererDto dto)
+    {
+        MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(dto.udn));
+        checkDevice(device, "get Device Transport Service State");
+        return device.getTransportServiceBridge().getCurrentTransportServiceState();
+    }
+
     @PostMapping("/getDeviceInputSourceList")
     public LinkedList<InputSourceDto> getDeviceInputSourceList(@RequestBody MediaRendererDto dto)
     {
@@ -115,10 +124,49 @@ public class RestDeviceRendererService
     {
         MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(dto.udn));
         checkDevice(device, "get device input sources");
-        return null;
-        // return device.getProductService().get
+        return device.getProductService().getCurrentInputSource();
     }
 
+    
+    //
+    // Transport Services
+    //
+    @PostMapping("/play")
+    public void play(@RequestBody String udn)
+    {
+        MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(udn));
+        checkDevice(device, "play");
+        device.getTransportServiceBridge().play();
+    }
+
+    @PostMapping("/stop")
+    public void stop(@RequestBody String udn)
+    {
+        MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(udn));
+        checkDevice(device, "play");
+        device.getTransportServiceBridge().stop();
+    }
+    
+    @PostMapping("/pause")
+    public void pause(@RequestBody String udn)
+    {
+        MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(udn));
+        checkDevice(device, "play");
+        device.getTransportServiceBridge().pause();
+    }
+
+    @PostMapping("/next")
+    public void next(@RequestBody String udn)
+    {
+        MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(udn));
+        checkDevice(device, "play");
+        device.getTransportServiceBridge().next();
+    }
+
+    //
+    // Utility methods
+    //
+    
     private void checkDevice(MediaRendererDevice device, String action)
     {
         if (device == null)

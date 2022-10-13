@@ -53,15 +53,6 @@ export class AvtransportService {
   }
 
   //
-  // Status Infos
-  // ================================================================================
-
-  public isPlaying(): boolean {
-    const playing: boolean = this.upnpAvTransportState?.TransportState === 'PLAYING';
-    return playing;
-  }
-
-  //
   // AvTransportService actions ()
   // ================================================================================
 
