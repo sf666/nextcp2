@@ -111,7 +111,7 @@ export class RendererService {
   }
   
   public isPlaying(): boolean {
-    const playing: boolean = this.transportServiceStateDto?.transportState === 'PLAYING';
+    const playing: boolean = this.transportServiceStateDto?.transportState.toUpperCase() === 'PLAYING';
     return playing;      
   }
 
