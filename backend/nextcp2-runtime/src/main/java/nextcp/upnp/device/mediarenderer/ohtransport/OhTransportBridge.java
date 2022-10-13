@@ -24,6 +24,7 @@ public class OhTransportBridge implements ITransport
     {
         this.transportService = transportService;
         this.ohUtil = new OpenHomeUtils(dtoBuilder);
+        this.device = device;
     }
 
     @Override
