@@ -476,15 +476,19 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     @Override
     public void tick(long counter)
     {
-        if (transportBridge != null && !hasOhInfoService() && avTransportIsPlaying())
+        if (transportBridge != null && !hasOhInfoService() && transportIsPlaying())
         {
             TrackTimeDto dto = avTransportBridge.generateTractTimeDto();
             eventPublisher.publishEvent(dto);
         }
     }
 
-    private boolean avTransportIsPlaying()
+    private boolean transportIsPlaying()
     {
+        if (transportBridge == null)
+        {
+            return false;
+        }
         TransportServiceStateDto state = transportBridge.getCurrentTransportServiceState();
         return state.transportState.equals("PLAYING");
     }
