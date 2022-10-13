@@ -69,7 +69,7 @@ export class RendererService {
   private renderDeviceChanged(device: MediaRendererDto) {
     this.readDeviceDriverState(device);
     this.readTrackInfoState(device);
-    this.readDeviceDriverState(device)
+    this.readTransportServiceState(device)
   }
 
   private readTrackInfoState(device: MediaRendererDto) {
