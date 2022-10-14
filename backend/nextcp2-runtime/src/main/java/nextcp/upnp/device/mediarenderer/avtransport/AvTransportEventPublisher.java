@@ -81,6 +81,5 @@ public class AvTransportEventPublisher extends BaseAvTransportChangeEventImpl
     public AvTransportState getCurrentAvTransportState()
     {
         return currentAvTransportState;
-    }
-    
+    }    
 }

@@ -222,30 +222,12 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
     @Override
     public TrackInfoDto getTrackinfo()
     {
-        log.warn("NOT IMPLEMENTED YET ...");
-
         TrackInfoDto dto = new TrackInfoDto();
 
-         DetailsOutput details = details();
-         dto.lossless = details.Lossless;
-         dto.bitDepth = details.BitDepth;
-         dto.bitRate = details.BitRate;
-         dto.sampleRate = details.SampleRate;
-         dto.codecName = details.CodecName;
-         dto.duration = details.Duration;
-         dto.durationDisp = DisplayUtils.convertToDigitString(details.Duration);
-        
-         CountersOutput counter = counters();
-         dto.detailsCount = counter.DetailsCount;
-         dto.metatextCount = counter.MetatextCount;
-         dto.trackCount = counter.TrackCount;
-        
-         MetatextOutput meta = metatext();
-         dto.metatext = meta.Value;
-        
-         TrackOutput track = track();
-         dto.metadata = track.Metadata;
-         dto.uri = track.Uri;
+        dto.mediaRendererUdn = device.getUdnAsString();
+        dto.metatext = currentAvTransportState.CurrentTrackMetaData;
+        dto.uri = currentAvTransportState.CurrentTrackURI;
+        dto.currentTrack = device.getDtoBuilder().extractXmlAsMusicItem(currentAvTransportState.CurrentTrackMetaData);
 
         return dto;
     }
