@@ -32,7 +32,6 @@ import nextcp.service.SchedulerService;
 import nextcp.upnp.device.BaseDevice;
 import nextcp.upnp.device.mediarenderer.avtransport.AvTransportEventListener;
 import nextcp.upnp.device.mediarenderer.avtransport.AvTransportEventPublisher;
-import nextcp.upnp.device.mediarenderer.avtransport.AvTransportState;
 import nextcp.upnp.device.mediarenderer.avtransport.Upnp_AVTransportBridge;
 import nextcp.upnp.device.mediarenderer.ohinfo.OhInfoServiceEventListener;
 import nextcp.upnp.device.mediarenderer.ohinfo.Oh_InfoServiceImpl;
@@ -225,6 +224,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             transportBridge = avTransportBridge;
             avTransportEventPublisher = new AvTransportEventPublisher(this);
             avTransportEventListener.addEventListener(avTransportEventPublisher);
+            avTransportEventListener.addEventListener(avTransportBridge);
         }
 
         

@@ -30,4 +30,20 @@ public class AvTransportState
     public String CurrentTransportActions = "";
     public String PossibleRecordStorageMedia = "";
     public String LastChange = "";
+    @Override
+    public String toString()
+    {
+        return "AvTransportState [InstanceId=" + InstanceId + ", AbsoluteTimePosition=" + AbsoluteTimePosition + ", CurrentTrackURI=" + CurrentTrackURI + ", CurrentTrackMetaData="
+                + CurrentTrackMetaData + ", RelativeCounterPosition=" + RelativeCounterPosition + ", TransportStatus=" + TransportStatus + ", AVTransportURIMetaData="
+                + AVTransportURIMetaData + ", TransportState=" + TransportState + ", CurrentTrack=" + CurrentTrack + ", PlaybackStorageMedium=" + PlaybackStorageMedium
+                + ", PossibleRecordQualityModes=" + PossibleRecordQualityModes + ", NextAVTransportURIMetaData=" + NextAVTransportURIMetaData + ", NumberOfTracks=" + NumberOfTracks
+                + ", CurrentMediaDuration=" + CurrentMediaDuration + ", NextAVTransportURI=" + NextAVTransportURI + ", RecordStorageMedium=" + RecordStorageMedium
+                + ", AVTransportURI=" + AVTransportURI + ", TransportPlaySpeed=" + TransportPlaySpeed + ", AbsoluteCounterPosition=" + AbsoluteCounterPosition
+                + ", RelativeTimePosition=" + RelativeTimePosition + ", CurrentPlayMode=" + CurrentPlayMode + ", CurrentTrackDuration=" + CurrentTrackDuration
+                + ", PossiblePlaybackStorageMedia=" + PossiblePlaybackStorageMedia + ", CurrentRecordQualityMode=" + CurrentRecordQualityMode + ", RecordMediumWriteStatus="
+                + RecordMediumWriteStatus + ", CurrentTransportActions=" + CurrentTransportActions + ", PossibleRecordStorageMedia=" + PossibleRecordStorageMedia + ", LastChange="
+                + LastChange + "]";
+    }
+    
+    
 }

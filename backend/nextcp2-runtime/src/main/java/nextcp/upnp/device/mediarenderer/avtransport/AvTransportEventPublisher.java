@@ -1,5 +1,7 @@
 package nextcp.upnp.device.mediarenderer.avtransport;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 
 import nextcp.dto.TrackInfoDto;
@@ -9,6 +11,8 @@ import nextcp.upnp.device.mediarenderer.avtransport.event.AvTransportStateChange
 
 public class AvTransportEventPublisher extends BaseAvTransportChangeEventImpl
 {
+    private static final Logger log = LoggerFactory.getLogger(AvTransportEventPublisher.class.getName());
+    
     private MediaRendererDevice device = null;
     
     private AvTransportState currentAvTransportState = new AvTransportState(); // Init with empty state object 
@@ -28,6 +32,11 @@ public class AvTransportEventPublisher extends BaseAvTransportChangeEventImpl
     public void processingFinished(AvTransportState currentAvTransportState)
     {
         this.currentAvTransportState = currentAvTransportState;
+        log.warn("AVTransportState : " + currentAvTransportState.TransportState);
+        if (log.isDebugEnabled())
+        {
+            log.debug("AVTransportState : " + currentAvTransportState);
+        }
         publishAllAvEvents();
     }
 

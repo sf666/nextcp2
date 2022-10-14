@@ -11,8 +11,6 @@ import nextcp.dto.TrackInfoDto;
 import nextcp.dto.TrackTimeDto;
 import nextcp.dto.TransportServiceStateDto;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.ModeInfoOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.StreamInfoOutput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.AVTransportService;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetPositionInfoInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetPositionInfoOutput;
@@ -24,12 +22,14 @@ import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.SetNextAVTranspo
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.StopInput;
 import nextcp.util.DisplayUtils;
 
-public class Upnp_AVTransportBridge implements IInfoService, ITransport, ITimeService, IAvTransport
+public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl implements IInfoService, ITransport, ITimeService, IAvTransport
 {
     private static final Logger log = LoggerFactory.getLogger(Upnp_AVTransportBridge.class.getName());
 
     private AVTransportService avTransportService = null;
     private MediaRendererDevice device = null;
+    private AvTransportState currentAvTransportState = new AvTransportState(); // Init with empty state object 
+
 
     public Upnp_AVTransportBridge(AVTransportService upnp_avTransportService, MediaRendererDevice device)
     {
@@ -187,6 +187,16 @@ public class Upnp_AVTransportBridge implements IInfoService, ITransport, ITimeSe
     }
 
     @Override
+    public void processingFinished(AvTransportState currentAvTransportState)
+    {
+        this.currentAvTransportState = currentAvTransportState;
+        if (log.isDebugEnabled())
+        {
+            log.debug("AVTransportState : " + currentAvTransportState);
+        }
+    }
+    
+    @Override
     public TransportServiceStateDto getCurrentTransportServiceState()
     {
         TransportServiceStateDto dto = new TransportServiceStateDto();
@@ -202,7 +212,7 @@ public class Upnp_AVTransportBridge implements IInfoService, ITransport, ITimeSe
         dto.repeat = true;
         dto.shuffle = true;
 
-        // dto.transportState = currentAvTransportState.TransportStatus;
+        dto.transportState = currentAvTransportState.TransportState;
         
         dto.udn = device.getUdnAsString();
         
@@ -216,28 +226,26 @@ public class Upnp_AVTransportBridge implements IInfoService, ITransport, ITimeSe
 
         TrackInfoDto dto = new TrackInfoDto();
 
-        // TODO: Implement
-        //
-        // DetailsOutput details = details();
-        // dto.lossless = details.Lossless;
-        // dto.bitDepth = details.BitDepth;
-        // dto.bitRate = details.BitRate;
-        // dto.sampleRate = details.SampleRate;
-        // dto.codecName = details.CodecName;
-        // dto.duration = details.Duration;
-        // dto.durationDisp = DisplayUtils.convertToDigitString(details.Duration);
-        //
-        // CountersOutput counter = counters();
-        // dto.detailsCount = counter.DetailsCount;
-        // dto.metatextCount = counter.MetatextCount;
-        // dto.trackCount = counter.TrackCount;
-        //
-        // MetatextOutput meta = metatext();
-        // dto.metatext = meta.Value;
-        //
-        // TrackOutput track = track();
-        // dto.metadata = track.Metadata;
-        // dto.uri = track.Uri;
+         DetailsOutput details = details();
+         dto.lossless = details.Lossless;
+         dto.bitDepth = details.BitDepth;
+         dto.bitRate = details.BitRate;
+         dto.sampleRate = details.SampleRate;
+         dto.codecName = details.CodecName;
+         dto.duration = details.Duration;
+         dto.durationDisp = DisplayUtils.convertToDigitString(details.Duration);
+        
+         CountersOutput counter = counters();
+         dto.detailsCount = counter.DetailsCount;
+         dto.metatextCount = counter.MetatextCount;
+         dto.trackCount = counter.TrackCount;
+        
+         MetatextOutput meta = metatext();
+         dto.metatext = meta.Value;
+        
+         TrackOutput track = track();
+         dto.metadata = track.Metadata;
+         dto.uri = track.Uri;
 
         return dto;
     }
