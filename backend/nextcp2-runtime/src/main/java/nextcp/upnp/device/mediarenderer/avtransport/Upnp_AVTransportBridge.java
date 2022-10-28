@@ -201,7 +201,6 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
     {
         TransportServiceStateDto dto = new TransportServiceStateDto();
         
-        // TODO : current service must be identified and must be read from playlist service ...
         dto.udn = device.getUdnAsString();
         dto.canPause = true;
         dto.canRepeat = true;
@@ -209,8 +208,8 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
         dto.canShuffle = true;
         dto.canSkipNext = true;
         dto.canSkipPrevious = false;
-        dto.repeat = true;
-        dto.shuffle = true;
+        dto.repeat = false;
+        dto.shuffle = false;
 
         dto.transportState = currentAvTransportState.TransportState;
         

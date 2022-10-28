@@ -6,8 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.domainmodel.device.services.IRadioService;
+import nextcp.domainmodel.device.services.ITransport;
 import nextcp.dto.MusicItemDto;
+import nextcp.dto.TransportServiceStateDto;
 import nextcp.rest.DtoBuilder;
+import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediarenderer.OpenHomeUtils;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.RadioService;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.ChannelOutput;
@@ -19,16 +22,18 @@ import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.ReadOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.SetChannelInput;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.SetIdInput;
 
-public class OhRadioBridge implements IRadioService
+public class OhRadioBridge implements IRadioService, ITransport
 {
     private static final Logger log = LoggerFactory.getLogger(OhRadioBridge.class.getName());
 
     private RadioService radioService = null;
     private OpenHomeUtils ohUtil = null;
+    private MediaRendererDevice device = null;
 
-    public OhRadioBridge(RadioService radioService, DtoBuilder dtoBuilder)
+    public OhRadioBridge(RadioService radioService, DtoBuilder dtoBuilder, MediaRendererDevice device)
     {
         this.radioService = radioService;
+        this.device = device;
         this.ohUtil = new OpenHomeUtils(dtoBuilder);
     }
 
@@ -96,5 +101,31 @@ public class OhRadioBridge implements IRadioService
     public void setId(SetIdInput inp)
     {
         radioService.setId(inp);
+    }
+
+    @Override
+    public void next()
+    {
+        log.debug("play next is unsupported on radio service.");
+    }
+
+    @Override
+    public TransportServiceStateDto getCurrentTransportServiceState()
+    {
+        TransportServiceStateDto dto = new TransportServiceStateDto();
+
+        dto.canRepeat = false;
+        dto.canShuffle = false;
+        dto.canSkipNext = false;
+        dto.canSkipPrevious = false;
+
+        dto.transportState = radioService.transportState().Value;
+
+        dto.canPause = true;
+        dto.canSeek = false;
+
+        dto.udn = device.getUdnAsString();
+
+        return dto;
     }
 }

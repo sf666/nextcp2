@@ -115,6 +115,46 @@ export class RendererService {
     return playing;      
   }
 
+  public isShuffle(): boolean {
+    const playing: boolean = this.transportServiceStateDto?.shuffle;
+    return playing;      
+  }
+
+  public isRepeat(): boolean {
+    const playing: boolean = this.transportServiceStateDto?.repeat;
+    return playing;      
+  }
+
+  public canShuffle(): boolean {
+    const playing: boolean = this.transportServiceStateDto?.canShuffle;
+    return playing;      
+  }
+
+  public canPause(): boolean {
+    const playing: boolean = this.transportServiceStateDto?.canPause;
+    return playing;      
+  }
+
+  public canRepeat(): boolean {
+    const playing: boolean = this.transportServiceStateDto?.canRepeat;
+    return playing;      
+  }
+
+  public canSeek(): boolean {
+    const playing: boolean = this.transportServiceStateDto?.canSeek;
+    return playing;      
+  }
+
+  public canSkipNext(): boolean {
+    const playing: boolean = this.transportServiceStateDto?.canSkipNext;
+    return playing;      
+  }
+
+  public canSkipPrevious(): boolean {
+    const playing: boolean = this.transportServiceStateDto?.canSkipPrevious;
+    return playing;      
+  }
+
   //
   // Renderer actions
   // ================================================================================================================

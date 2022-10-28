@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationEventPublisher;
 
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.PlaylistState;
@@ -17,10 +16,11 @@ public class OhPlaylistServiceEventListener extends PlaylistServiceEventListener
 {
     private static final Logger log = LoggerFactory.getLogger(OhPlaylistServiceEventListener.class.getName());
 
-    private OhPlaylist playlist;
+    private OhPlaylistBridge playlist;
     private MediaRendererDevice device;
-
-    public OhPlaylistServiceEventListener(OhPlaylist playlist, MediaRendererDevice mediaRendererDevice)
+    private boolean shouldPublishTransportServiceState = false;
+    
+    public OhPlaylistServiceEventListener(OhPlaylistBridge playlist, MediaRendererDevice mediaRendererDevice)
     {
         this.playlist = playlist;
         this.device = mediaRendererDevice;
@@ -29,7 +29,10 @@ public class OhPlaylistServiceEventListener extends PlaylistServiceEventListener
     @Override
     public void eventProcessed()
     {
-        super.eventProcessed();
+        if (!shouldPublishTransportServiceState)
+        {
+            return;
+        }
 
         PlaylistServiceStateVariable state = getStateVariable();
         
@@ -62,4 +65,15 @@ public class OhPlaylistServiceEventListener extends PlaylistServiceEventListener
 //        ReadOutput out = playlist.read(value);
 //        log.debug("idArrayChange Event Metadata : " + out.Metadata);
     }
+    
+    public boolean isShouldPublishTransportServiceState()
+    {
+        return shouldPublishTransportServiceState;
+    }
+
+    public void setShouldPublishTransportServiceState(boolean shouldPublishTransportServiceState)
+    {
+        this.shouldPublishTransportServiceState = shouldPublishTransportServiceState;
+    }
+
 }

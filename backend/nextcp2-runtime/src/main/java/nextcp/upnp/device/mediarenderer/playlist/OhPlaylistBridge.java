@@ -15,11 +15,14 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
 import nextcp.domainmodel.device.services.IPlaylistService;
+import nextcp.domainmodel.device.services.ITransport;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MusicBrainzId;
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.PlaylistState;
+import nextcp.dto.TransportServiceStateDto;
 import nextcp.rest.DtoBuilder;
+import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediarenderer.OpenHomeUtils;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.PlaylistService;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.DeleteIdInput;
@@ -38,9 +41,9 @@ import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SetShuffleInput;
 /**
  * Devices with Open Home playlist support
  */
-public class OhPlaylist implements IPlaylistService
+public class OhPlaylistBridge implements IPlaylistService, ITransport
 {
-    private static final Logger log = LoggerFactory.getLogger(OhPlaylist.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(OhPlaylistBridge.class.getName());
 
     private PlaylistService playlistService = null;
 
@@ -48,10 +51,12 @@ public class OhPlaylist implements IPlaylistService
 
     private LinkedList<Long> playlistIds = new LinkedList<>();
     private Set<String> playlistUrls = new CopyOnWriteArraySet<>();
+    private MediaRendererDevice device = null;
 
-    public OhPlaylist(PlaylistService playlistService, DtoBuilder dtoBuilder)
+    public OhPlaylistBridge(PlaylistService playlistService, DtoBuilder dtoBuilder, MediaRendererDevice device)
     {
         this.playlistService = playlistService;
+        this.device = device;
         ohUtil = new OpenHomeUtils(dtoBuilder);
     }
 
@@ -338,5 +343,27 @@ public class OhPlaylist implements IPlaylistService
         insertContainer(items);
         waitSomeTime(100);
         play();
+    }
+
+    @Override
+    public TransportServiceStateDto getCurrentTransportServiceState()
+    {
+        TransportServiceStateDto dto = new TransportServiceStateDto();
+
+        dto.canRepeat = true;
+        dto.canShuffle = true;
+        dto.canSkipNext = true;
+        dto.canSkipPrevious = true;
+
+        dto.transportState = playlistService.transportState().Value;
+        dto.repeat = playlistService.repeat().Value;
+        dto.shuffle = playlistService.shuffle().Value;
+
+        dto.canPause = true;
+        dto.canSeek = true;
+
+        dto.udn = device.getUdnAsString();
+
+        return dto;
     }
 }

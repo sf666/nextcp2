@@ -14,6 +14,7 @@ public class AvTransportEventPublisher extends BaseAvTransportChangeEventImpl
     private static final Logger log = LoggerFactory.getLogger(AvTransportEventPublisher.class.getName());
     
     private MediaRendererDevice device = null;
+    private boolean shouldPublishTransportServiceState = false;
     
     private AvTransportState currentAvTransportState = new AvTransportState(); // Init with empty state object 
 
@@ -41,7 +42,7 @@ public class AvTransportEventPublisher extends BaseAvTransportChangeEventImpl
     }
 
     public void publishAllAvEvents()
-    {
+    {        
         publishGlobalAvTransportState(currentAvTransportState);
          
         if (!device.hasOhInfoService())
@@ -57,13 +58,16 @@ public class AvTransportEventPublisher extends BaseAvTransportChangeEventImpl
         event.device = device;
         getEventPublisher().publishEvent(event);
         
-        TransportServiceStateDto dto = device.getTransportServiceBridge().getCurrentTransportServiceState();
-        
-        // TODO : current service must be identified and must be read from playlist service ...
-        dto.udn = device.getUdnAsString();
-        dto.transportState = currentAvTransportState.TransportStatus;
-        
-        device.getEventPublisher().publishEvent(dto);
+        if (shouldPublishTransportServiceState)
+        {
+            TransportServiceStateDto dto = device.getTransportServiceBridge().getCurrentTransportServiceState();
+            
+            // TODO : current service must be identified and must be read from playlist service ...
+            dto.udn = device.getUdnAsString();
+            dto.transportState = currentAvTransportState.TransportStatus;
+            
+            device.getEventPublisher().publishEvent(dto);
+        }        
     }
 
     private TrackInfoDto getAsTrackInfo(AvTransportState transportState)
@@ -81,5 +85,17 @@ public class AvTransportEventPublisher extends BaseAvTransportChangeEventImpl
     public AvTransportState getCurrentAvTransportState()
     {
         return currentAvTransportState;
-    }    
+    }
+
+    public boolean isShouldPublishTransportServiceState()
+    {
+        return shouldPublishTransportServiceState;
+    }
+
+    public void setShouldPublishTransportServiceState(boolean shouldPublishTransportServiceState)
+    {
+        this.shouldPublishTransportServiceState = shouldPublishTransportServiceState;
+    }
+    
+    
 }

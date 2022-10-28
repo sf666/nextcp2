@@ -113,14 +113,20 @@ export class FooterComponent {
   // =========================================================================================================
 
   get shuffleClass(): string {
-    if (this.playlistService.playlistState.Shuffle) {
+    if (!this.rendererService.canShuffle()) {
+      return "disabled";
+    }
+    if (this.rendererService.isShuffle()) {
       return "active"
     }
     return "";
   }
 
   get repeatClass(): string {
-    if (this.playlistService.playlistState.Repeat) {
+    if (!this.rendererService.canRepeat()) {
+      return "disabled";
+    }
+    if (this.rendererService.isRepeat()) {
       return "active"
     }
     return "";

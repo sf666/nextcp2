@@ -11,9 +11,11 @@ public class OhTransportEventListener extends TransportServiceEventListenerImpl
 {
     private static final Logger log = LoggerFactory.getLogger(OhTransportEventListener.class.getName());
     private MediaRendererDevice device = null;
+    private long dupCount = 0;
+    private boolean shouldPublishTransportServiceState = false;
 
     private TransportServiceStateDto last_dto = new TransportServiceStateDto();
-    
+
     public OhTransportEventListener(MediaRendererDevice device)
     {
         this.device = device;
@@ -22,13 +24,18 @@ public class OhTransportEventListener extends TransportServiceEventListenerImpl
     @Override
     public void eventProcessed()
     {
-        publishState();        
+        publishState();
     }
 
     private void publishState()
     {
+        if (!shouldPublishTransportServiceState)
+        {
+            return;
+        }
+
         TransportServiceStateDto dto = new TransportServiceStateDto();
-        
+
         dto.udn = device.getUdnAsString();
         dto.canPause = getStateVariable().CanPause;
         dto.canRepeat = getStateVariable().CanRepeat;
@@ -39,10 +46,15 @@ public class OhTransportEventListener extends TransportServiceEventListenerImpl
         dto.repeat = getStateVariable().Repeat;
         dto.shuffle = getStateVariable().Shuffle;
         dto.transportState = getStateVariable().TransportState;
-        
+
         if (!dtoEqual(dto))
         {
             device.getEventPublisher().publishEvent(dto);
+        }
+        else
+        {
+            log.debug("NO STATE CHANGE.");
+            dupCount++;
         }
         last_dto = dto;
     }
@@ -81,7 +93,18 @@ public class OhTransportEventListener extends TransportServiceEventListenerImpl
         {
             return false;
         }
-        
+
         return true;
     }
+
+    public boolean isShouldPublishTransportServiceState()
+    {
+        return shouldPublishTransportServiceState;
+    }
+
+    public void setShouldPublishTransportServiceState(boolean shouldPublishTransportServiceState)
+    {
+        this.shouldPublishTransportServiceState = shouldPublishTransportServiceState;
+    }
+
 }

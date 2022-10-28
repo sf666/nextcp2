@@ -36,11 +36,12 @@ import nextcp.upnp.device.mediarenderer.avtransport.Upnp_AVTransportBridge;
 import nextcp.upnp.device.mediarenderer.ohinfo.OhInfoServiceEventListener;
 import nextcp.upnp.device.mediarenderer.ohinfo.Oh_InfoServiceImpl;
 import nextcp.upnp.device.mediarenderer.ohradio.OhRadioBridge;
+import nextcp.upnp.device.mediarenderer.ohradio.OhRadioServiceEventListener;
 import nextcp.upnp.device.mediarenderer.ohtime.OhTimeServiceEventListener;
 import nextcp.upnp.device.mediarenderer.ohtransport.OhTransportBridge;
 import nextcp.upnp.device.mediarenderer.ohtransport.OhTransportEventListener;
 import nextcp.upnp.device.mediarenderer.playlist.CpPlaylistService;
-import nextcp.upnp.device.mediarenderer.playlist.OhPlaylist;
+import nextcp.upnp.device.mediarenderer.playlist.OhPlaylistBridge;
 import nextcp.upnp.device.mediarenderer.playlist.OhPlaylistServiceEventListener;
 import nextcp.upnp.device.mediarenderer.product.OhProductServiceBridge;
 import nextcp.upnp.device.mediarenderer.product.OhProductServiceEventListener;
@@ -88,41 +89,47 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     private ServiceInitializer serviceInitializer = new ServiceInitializer();
 
     // Event Listener for services. Service state variable is held here.
-    private AvTransportEventListener avTransportEventListener = null;
-    private AvTransportEventPublisher avTransportEventPublisher = null;
-    private RenderingControlEventListener renderingControlEventListener = null;
-    private OhInfoServiceEventListener ohInfoServiceEventListener = null;
-    private OhTimeServiceEventListener ohTimeServiceEventListener = null;
-    private OhProductServiceEventListener ohProductServiceEventListener = null;
-    private OhVolumeServiceEventListener ohVolumeServiceEventListener = null;
-    private OhTransportEventListener ohTransportEventListener = null;
+    protected AvTransportEventListener avTransportEventListener = null;
+    protected AvTransportEventPublisher avTransportEventPublisher = null;
+    protected RenderingControlEventListener renderingControlEventListener = null;
+    protected OhInfoServiceEventListener ohInfoServiceEventListener = null;
+    protected OhTimeServiceEventListener ohTimeServiceEventListener = null;
+    protected OhRadioServiceEventListener ohRadioServiceEventListener = null;
+    protected OhProductServiceEventListener ohProductServiceEventListener = null;
+    protected OhVolumeServiceEventListener ohVolumeServiceEventListener = null;
+    protected OhTransportEventListener ohTransportEventListener = null;
+    protected OhPlaylistServiceEventListener ohPlaylistServiceEventListener = null;
 
     // upnp
-    AVTransportService upnp_avTransportService = null;
-    RenderingControlService upnp_renderingControlService = null;
-    ConnectionManagerService upnp_connectionManagerService = null;
-    UpnpDeviceDriver upnpDeviceDriver = null;
+    protected AVTransportService upnp_avTransportService = null;
+    protected RenderingControlService upnp_renderingControlService = null;
+    protected ConnectionManagerService upnp_connectionManagerService = null;
+    protected UpnpDeviceDriver upnpDeviceDriver = null;
 
     // upnp wrapper
-    Upnp_AVTransportBridge avTransportBridge = null;
+    protected Upnp_AVTransportBridge avTransportBridge = null;
 
     // openhome services
-    InfoService oh_infoService = null;
-    TimeService oh_timeService = null;
-    VolumeService oh_volumeService = null;
-    CredentialsService oh_credentialsService = null;
-    PlaylistService oh_playlistService = null;
-    RadioService oh_radioService = null;
-    ProductService oh_productService = null;
-    TransportService oh_transportService = null;
-    OpenHomeDeviceDriver ohDeviceDriver = null;
+    protected InfoService oh_infoService = null;
+    protected TimeService oh_timeService = null;
+    protected VolumeService oh_volumeService = null;
+    protected CredentialsService oh_credentialsService = null;
+    protected PlaylistService oh_playlistService = null;
+    protected RadioService oh_radioService = null;
+    protected ProductService oh_productService = null;
+    protected TransportService oh_transportService = null;
+    protected OpenHomeDeviceDriver ohDeviceDriver = null;
 
+    // Bridges to openhome services above
+    protected OhRadioBridge oh_radioBridge = null; 
+    protected OhPlaylistBridge oh_playlistBridge = null;
+    
     // Delegate services to generated models
-    ITransport transportBridge = null;
-    IPlaylistService playlistService = null;
-    IRadioService radioService = null;
-    IProductService productService = null;
-    IInfoService infoService = null;
+    protected ITransport transportBridge = null;
+    protected IPlaylistService playlistService = null;
+    protected IRadioService radioService = null;
+    protected IProductService productService = null;
+    protected IInfoService infoService = null;
 
     public MediaRendererDevice(RemoteDevice device)
     {
@@ -131,7 +138,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     }
 
     @PostConstruct
-    private void init()
+    protected void init()
     {
         initServices();
 
@@ -179,8 +186,10 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
         if (hasOhPlaylistService())
         {
-            OhPlaylist ohPlaylist = new OhPlaylist(oh_playlistService, getDtoBuilder());
-            oh_playlistService.addSubscriptionEventListener(new OhPlaylistServiceEventListener(ohPlaylist, this));
+            oh_playlistBridge = new OhPlaylistBridge(oh_playlistService, getDtoBuilder(), this);
+            OhPlaylistBridge ohPlaylist = oh_playlistBridge;
+            ohPlaylistServiceEventListener = new OhPlaylistServiceEventListener(ohPlaylist, this);
+            oh_playlistService.addSubscriptionEventListener(ohPlaylistServiceEventListener);
             playlistService = ohPlaylist;
         }
         else
@@ -198,26 +207,28 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         {
             ohProductServiceEventListener = new OhProductServiceEventListener(getEventPublisher(), this);
             oh_productService.addSubscriptionEventListener(ohProductServiceEventListener);
-            OhProductServiceBridge productService = new OhProductServiceBridge(oh_productService, ohProductServiceEventListener, getDtoBuilder());
-            this.productService = productService;
+            productService = new OhProductServiceBridge(oh_productService, ohProductServiceEventListener, getDtoBuilder());
         }
 
         if (hasRadioService())
         {
-            radioService = new OhRadioBridge(oh_radioService, getDtoBuilder());
+            oh_radioBridge = new OhRadioBridge(oh_radioService, getDtoBuilder(), this);
+            radioService = oh_radioBridge;
+            ohRadioServiceEventListener = new OhRadioServiceEventListener(this);
+            oh_radioService.addSubscriptionEventListener(ohRadioServiceEventListener);
         }
-        
+
         //
         // 2nd step: Identify available services and glue correct bridges together
         //
 
-        // transport bridge (transport state publishing) ... 
+        // transport bridge (transport state publishing) ...
         if (hasOhTransport())
         {
             transportBridge = new OhTransportBridge(this, oh_transportService, getDtoBuilder());
             ohTransportEventListener = new OhTransportEventListener(this);
             oh_transportService.addSubscriptionEventListener(ohTransportEventListener);
-
+            ohTransportEventListener.setShouldPublishTransportServiceState(true);
         }
         else
         {
@@ -227,7 +238,6 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             avTransportEventListener.addEventListener(avTransportBridge);
         }
 
-        
         // must be called after OH Services!
         updateDeviceDriver();
     }
@@ -351,6 +361,11 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     public boolean hasOhInfoService()
     {
         return oh_infoService != null;
+    }
+
+    public boolean hasOhRadioService()
+    {
+        return oh_radioService != null;
     }
 
     protected IDeviceDriver getDeviceDriver()
@@ -493,7 +508,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             return false;
         }
         TransportServiceStateDto state = transportBridge.getCurrentTransportServiceState();
-        
+
         return "PLAYING".equals(state.transportState);
     }
 
@@ -522,5 +537,11 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     public boolean getStandby()
     {
         return getDeviceDriver().getStandby();
+    }
+
+    @Override
+    public String toString()
+    {
+        return "MediaRenderer : " + getFriendlyName();
     }
 }

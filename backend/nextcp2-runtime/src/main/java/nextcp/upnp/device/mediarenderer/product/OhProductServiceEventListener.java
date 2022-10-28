@@ -17,7 +17,8 @@ public class OhProductServiceEventListener extends ProductServiceEventListenerIm
 
     private ApplicationEventPublisher eventPublisher = null;
     private MediaRendererDevice device = null;
-    private IDeviceDriverCallback callback;
+    private IDeviceDriverCallback standbyCallback;
+    private ISourceChangedCallback sourceChangedCallback;
     
     public OhProductServiceEventListener(ApplicationEventPublisher eventPublisher, MediaRendererDevice device)
     {
@@ -28,7 +29,12 @@ public class OhProductServiceEventListener extends ProductServiceEventListenerIm
     
     public void addStandbyCallback(IDeviceDriverCallback callback)
     {
-        this.callback = callback;
+        this.standbyCallback = callback;
+    }
+    
+    public void setSourceChangedCallback(ISourceChangedCallback callback)
+    {
+        this.sourceChangedCallback = callback;
     }
     
     @Override
@@ -55,6 +61,7 @@ public class OhProductServiceEventListener extends ProductServiceEventListenerIm
                 event.inputSource = inpDto;
 
                 eventPublisher.publishEvent(event);
+                sourceChangedCallback.sourceChanged(inpDto);
             }
             catch (NullPointerException e)
             {
@@ -66,9 +73,9 @@ public class OhProductServiceEventListener extends ProductServiceEventListenerIm
     @Override
     public void standbyChange(Boolean value)
     {
-        if (callback != null)
+        if (standbyCallback != null)
         {
-            callback.standbyChanged(value);
+            standbyCallback.standbyChanged(value);
         }
     }
 }

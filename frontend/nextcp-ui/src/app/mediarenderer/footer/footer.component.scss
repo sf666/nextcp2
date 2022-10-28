@@ -49,6 +49,10 @@ mat-slider {
         color: $blue-pantone-2;
     }
 
+    &.disabled {
+        color: var(--glas-white-8);
+    }
+
     &:first-child {
         margin-left: 0;
     }
