@@ -117,7 +117,7 @@ public class RestAvTransportService extends BaseRestService
     }
 
     /**
-     * Aquire current AvTransportState
+     * Acquire current AvTransportState
      * 
      * @param renderer
      * @return

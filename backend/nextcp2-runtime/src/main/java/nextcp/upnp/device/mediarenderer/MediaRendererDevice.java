@@ -147,6 +147,9 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             avTransportBridge = new Upnp_AVTransportBridge(upnp_avTransportService, this);
             avTransportEventListener = new AvTransportEventListener(this);
             upnp_avTransportService.addSubscriptionEventListener(avTransportEventListener);
+            avTransportEventPublisher = new AvTransportEventPublisher(this);
+            avTransportEventListener.addEventListener(avTransportEventPublisher);
+            avTransportEventListener.addEventListener(avTransportBridge);            
         }
         else
         {
@@ -229,13 +232,13 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             ohTransportEventListener = new OhTransportEventListener(this);
             oh_transportService.addSubscriptionEventListener(ohTransportEventListener);
             ohTransportEventListener.setShouldPublishTransportServiceState(true);
+            
+            // In case we have an OhTransport service, disable sending AVTransport
+            avTransportEventPublisher.setShouldPublishTransportServiceState(false);
         }
         else
         {
             transportBridge = avTransportBridge;
-            avTransportEventPublisher = new AvTransportEventPublisher(this);
-            avTransportEventListener.addEventListener(avTransportEventPublisher);
-            avTransportEventListener.addEventListener(avTransportBridge);
         }
 
         // must be called after OH Services!

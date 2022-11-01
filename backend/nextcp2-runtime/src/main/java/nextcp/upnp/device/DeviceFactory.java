@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
-import nextcp.upnp.device.mediarenderer.LuminDevice;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediaserver.JMinimDevice;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
@@ -19,10 +18,10 @@ public class DeviceFactory
     @Scope(value = "prototype")
     public MediaRendererDevice mediaRendererDeviceFactory(RemoteDevice name)
     {
-        if ("LUMIN".equalsIgnoreCase(name.getDetails().getModelDetails().getModelDescription()))
-        {
-            return new LuminDevice(name);
-        }
+//        if ("LUMIN".equalsIgnoreCase(name.getDetails().getModelDetails().getModelDescription()))
+//        {
+//            return new LuminDevice(name);
+//        }
         return new MediaRendererDevice(name);
     }
 

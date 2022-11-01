@@ -11,10 +11,7 @@ public class OhTransportEventListener extends TransportServiceEventListenerImpl
 {
     private static final Logger log = LoggerFactory.getLogger(OhTransportEventListener.class.getName());
     private MediaRendererDevice device = null;
-    private long dupCount = 0;
     private boolean shouldPublishTransportServiceState = false;
-
-    private TransportServiceStateDto last_dto = new TransportServiceStateDto();
 
     public OhTransportEventListener(MediaRendererDevice device)
     {
@@ -47,54 +44,12 @@ public class OhTransportEventListener extends TransportServiceEventListenerImpl
         dto.shuffle = getStateVariable().Shuffle;
         dto.transportState = getStateVariable().TransportState;
 
-        if (!dtoEqual(dto))
+        device.getEventPublisher().publishEvent(dto);
+        if (log.isDebugEnabled())
         {
-            device.getEventPublisher().publishEvent(dto);
+            log.debug(dto.toString());
         }
-        else
-        {
-            log.debug("NO STATE CHANGE.");
-            dupCount++;
-        }
-        last_dto = dto;
-    }
-
-    private boolean dtoEqual(TransportServiceStateDto newDto)
-    {
-        if (newDto.canPause != last_dto.canPause)
-        {
-            return false;
-        }
-        if (newDto.canRepeat != last_dto.canRepeat)
-        {
-            return false;
-        }
-        if (newDto.canSeek != last_dto.canSeek)
-        {
-            return false;
-        }
-        if (newDto.canShuffle != last_dto.canShuffle)
-        {
-            return false;
-        }
-        if (newDto.canSkipNext != last_dto.canSkipNext)
-        {
-            return false;
-        }
-        if (newDto.repeat != last_dto.repeat)
-        {
-            return false;
-        }
-        if (newDto.shuffle != last_dto.shuffle)
-        {
-            return false;
-        }
-        if (!newDto.transportState.equals(newDto.transportState))
-        {
-            return false;
-        }
-
-        return true;
+        System.out.println(">>>" + dto.transportState);
     }
 
     public boolean isShouldPublishTransportServiceState()

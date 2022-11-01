@@ -48,7 +48,7 @@ public class OhTransportBridge implements ITransport
     @Override
     public void next()
     {
-        transportService.stop();
+        transportService.skipNext();
     }
 
     @Override

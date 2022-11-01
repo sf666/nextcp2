@@ -61,11 +61,15 @@ public class OhProductServiceEventListener extends ProductServiceEventListenerIm
                 event.inputSource = inpDto;
 
                 eventPublisher.publishEvent(event);
-                sourceChangedCallback.sourceChanged(inpDto);
+                
+                if (sourceChangedCallback != null)
+                {
+                    sourceChangedCallback.sourceChanged(inpDto);
+                }
             }
             catch (NullPointerException e)
             {
-                log.warn("to fast ... ");
+                log.warn("to fast ... ", e);
             }
         }
     }
