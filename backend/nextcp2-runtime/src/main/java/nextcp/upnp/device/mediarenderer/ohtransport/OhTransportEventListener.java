@@ -49,7 +49,6 @@ public class OhTransportEventListener extends TransportServiceEventListenerImpl
         {
             log.debug(dto.toString());
         }
-        System.out.println(">>>" + dto.transportState);
     }
 
     public boolean isShouldPublishTransportServiceState()
