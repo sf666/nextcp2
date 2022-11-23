@@ -1,3 +1,4 @@
+import { ScrollLoadHandler } from './../../mediaserver/display-container/defs.d';
 import { DisplayContainerComponent } from './../../mediaserver/display-container/display-container.component';
 import { Subject } from 'rxjs';
 import { CdsBrowsePathService } from './../../util/cds-browse-path.service';
@@ -6,20 +7,20 @@ import { DeviceService } from 'src/app/service/device.service';
 import { LayoutService } from './../../service/layout.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { ContainerDto, MusicItemDto, MediaServerDto, ContainerItemDto } from './../../service/dto.d';
-import { Component, ViewChild} from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'music-library',
   templateUrl: './music-library.component.html',
   styleUrls: ['./music-library.component.scss'],
-  providers: [ContentDirectoryService, CdsBrowsePathService, {provide: 'uniqueId', useValue: 'music-library_'}]
+  providers: [ContentDirectoryService, CdsBrowsePathService, { provide: 'uniqueId', useValue: 'music-library_' }]
 })
 
 export class MusicLibraryComponent {
 
   private lastOidIsRestoredFromCache: boolean;
 
-  @ViewChild(DisplayContainerComponent) dispContainer:DisplayContainerComponent;
+  @ViewChild(DisplayContainerComponent) dispContainer: DisplayContainerComponent;
 
   constructor(
     public layoutService: LayoutService,
@@ -30,7 +31,7 @@ export class MusicLibraryComponent {
     console.log("constructor call : MusicLibraryComponent");
     // select current mediaServer and subscribe to changes ...
     this.mediaServerChanged(deviceService.selectedMediaServerDevice);
-    deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));    
+    deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));
   }
 
   mediaServerChanged(data: MediaServerDto): void {
@@ -97,10 +98,7 @@ export class MusicLibraryComponent {
   // Events
   //
   containerSelected(event: ContainerDto) {
-    // remember path here
-    this.cdsBrowsePathService.stepIn(event.id);
-    this.persistenceService.setCurrentObjectID(event.id);
-    this.contentDirectoryService.browseChildrenByContiner(event);
+    // no special activities yet ... 
   }
 
   itemDeleted(event: MusicItemDto) {
@@ -142,4 +140,9 @@ export class MusicLibraryComponent {
   scrollToID(): string {
     return this.cdsBrowsePathService.scrollToID;  // this.scrollToId_;
   }
+
+  getContentHandler(): ScrollLoadHandler {
+    return { cdsBrowsePathService: this.cdsBrowsePathService, contentDirectoryService: this.contentDirectoryService, persistenceService: this.persistenceService }
+  }
+
 }

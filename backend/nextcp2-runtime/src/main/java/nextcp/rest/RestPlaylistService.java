@@ -240,6 +240,8 @@ public class RestPlaylistService extends BaseRestService
         MediaServerDevice serverDevice = deviceRegistry.getMediaServerByUDN(new UDN(udn));
         BrowseInput browseInp = new BrowseInput();
         browseInp.ObjectID = containerID;
+        browseInp.StartingIndex = 0L;
+        browseInp.RequestedCount = 2000L;
         ContainerItemDto containerWithChildren = serverDevice.browseChildren(browseInp);
         return containerWithChildren;
     }

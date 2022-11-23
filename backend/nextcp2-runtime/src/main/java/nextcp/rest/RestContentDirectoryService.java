@@ -51,6 +51,8 @@ public class RestContentDirectoryService extends BaseRestService
         BrowseInput inp = new BrowseInput();
         inp.ObjectID = browseRequest.objectID;
         inp.SortCriteria = browseRequest.sortCriteria;
+        inp.StartingIndex = browseRequest.start;
+        inp.RequestedCount = browseRequest.count; 
         return device.browseChildren(inp);
     }
 

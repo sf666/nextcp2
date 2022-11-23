@@ -1,3 +1,4 @@
+import { ScrollLoadHandler } from './../../mediaserver/display-container/defs.d';
 import { GlobalSearchService } from './../../service/search/global-search.service';
 import { LayoutService } from './../../service/layout.service';
 import { DeviceService } from 'src/app/service/device.service';
@@ -50,15 +51,16 @@ export class SearchResultComponent implements OnInit {
   // Event
   //
   containerSelected(event: ContainerDto) {
-    // remember path here
     this.showTopHeader_ = true;
-    this.cdsBrowsePathService.stepIn(event.id);
-    this.globalSearchService.contentDirectoryService.browseChildrenByContiner(event);
   }
 
   //
   // bindings
   // =======================================================================
+
+  getContentHandler(): ScrollLoadHandler {
+    return { cdsBrowsePathService: this.cdsBrowsePathService, contentDirectoryService: this.globalSearchService.contentDirectoryService, persistenceService: null }
+  }
 
   showTopHeader() : boolean {
     return this.showTopHeader_;

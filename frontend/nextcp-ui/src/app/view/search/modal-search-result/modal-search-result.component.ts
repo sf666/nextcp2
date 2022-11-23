@@ -38,21 +38,21 @@ export class ModalSearchResultComponent {
   albumItemSelected(albumItem: ContainerDto): void {
     console.debug("album selected : " + albumItem);
     this.globalSearchService.clearSearch();
-    this.globalSearchService.contentDirectoryService.browseChildrenByContiner(albumItem);
+    this.globalSearchService.contentDirectoryService.browseChildrenByContainer(albumItem);
     void this.router.navigateByUrl('searchResult');
   }
 
   playlistItemSelected(playlistItem: ContainerDto): void {
     console.debug("album selected : " + playlistItem);
     this.globalSearchService.clearSearch();
-    this.globalSearchService.contentDirectoryService.browseChildrenByContiner(playlistItem);
+    this.globalSearchService.contentDirectoryService.browseChildrenByContainer(playlistItem);
     void this.router.navigateByUrl('searchResult');
   }
 
   artistItemSelected(artistItem: ContainerDto): void {
     console.debug("album selected : " + artistItem);
     this.globalSearchService.clearSearch();
-    this.globalSearchService.contentDirectoryService.browseChildrenByContiner(artistItem);
+    this.globalSearchService.contentDirectoryService.browseChildrenByContainer(artistItem);
     void this.router.navigateByUrl('searchResult');
   }
 }

@@ -173,6 +173,7 @@ MediaRendererServicesDto:
    serviceName: String
    version: String
 
+
 ContainerItemDto:
    parentFolderTitle: String
    currentContainer: ContainerDto
@@ -180,7 +181,8 @@ ContainerItemDto:
    albumDto: List<ContainerDto>
    musicItemDto: List<MusicItemDto>
    minimServerSupportTags: List<ContainerDto>
-
+   totalMatches: Long
+   
 
 ContainerDto:
    id: String 
@@ -325,6 +327,8 @@ BrowseRequestDto:
    mediaServerUDN: String
    objectID: String
    sortCriteria: String
+   start : Long
+   count : Long
 
 SearchRequestDto:
    parentObjectID : String  

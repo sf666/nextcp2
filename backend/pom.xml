@@ -33,6 +33,11 @@
 
 	<repositories>
 		<repository>
+			<id>central-maven</id>
+			<name>public Central Repository</name>
+			<url>https://repo1.maven.org/maven2/</url>
+		</repository>	
+		<repository>
 			<id>repsy-mb</id>
 			<name>public repo hosted at Repsy</name>
 			<url>https://repo.repsy.io/mvn/sf666/musicbrainz</url>

@@ -110,9 +110,10 @@ public class MediaServerDevice extends BaseDevice
 
             DIDLContent didl = generateDidlContent(out.Result);
             ContainerItemDto result = initEmptyContainerItemDto();
+            result.totalMatches = out.TotalMatches;
 
             result.currentContainer = curContainer;
-            result.parentFolderTitle = removeMinimTagChars(getParentName(curContainer));
+//            result.parentFolderTitle = removeMinimTagChars(getParentName(curContainer));
             addContainerObjects(result, didl);
             addItemObjects(result.musicItemDto, didl);
 
@@ -181,7 +182,7 @@ public class MediaServerDevice extends BaseDevice
                 DIDLContent didl = generateDidlContent(out.Result);
                 result = getDtoBuilder().buildContainerDto(didl.getFirstContainer());
                 // minimserver support
-                result.title = removeMinimTagChars(result.title);
+//                result.title = removeMinimTagChars(result.title);
             }
             result.mediaServerUDN = getUDN().getIdentifierString();
             return result;

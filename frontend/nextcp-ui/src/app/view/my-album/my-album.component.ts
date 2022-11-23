@@ -1,3 +1,4 @@
+import { ScrollLoadHandler } from './../../mediaserver/display-container/defs.d';
 import { DeviceService } from 'src/app/service/device.service';
 import { LayoutService } from './../../service/layout.service';
 import { ContainerDto, MusicItemDto, MediaServerDto } from './../../service/dto.d';
@@ -56,7 +57,7 @@ export class MyAlbumComponent implements OnInit {
 
 
   containerSelected(event: ContainerDto) {
-    this.contentDirectoryService.browseChildrenByContiner(event);
+    
   }
 
   //
@@ -69,6 +70,10 @@ export class MyAlbumComponent implements OnInit {
   //
   // bindings
   //
+  getContentHandler(): ScrollLoadHandler {
+    return { cdsBrowsePathService: null, contentDirectoryService: this.contentDirectoryService, persistenceService: null }
+  }
+
   backButtonDisabled() {
     return this.isMyMusicRoot();
   }

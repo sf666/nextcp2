@@ -1,3 +1,4 @@
+import { ScrollLoadHandler } from './defs.d';
 import { SongOptionsServiceService } from 'src/app/mediaserver/popup/song-options/song-options-service.service';
 import { AvtransportService } from 'src/app/service/avtransport.service';
 import { PlaylistService } from './../../service/playlist.service';
@@ -6,6 +7,7 @@ import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { MyMusicService } from './../../service/my-music.service';
 import { MusicItemDto, ContainerDto, ContainerItemDto } from './../../service/dto.d';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, ViewContainerRef } from '@angular/core';
+import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'mediaServer-display-container',
@@ -15,7 +17,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitte
     { provide: 'uniqueId', useValue: 'displayContainer' },
   ]
 })
-export class DisplayContainerComponent implements OnInit, OnChanges {
+export class DisplayContainerComponent implements OnInit {
 
   @Input() showTopHeader = true;
 
@@ -32,6 +34,7 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
   @Input() scrollToID: string;
   @Input() extendedApi: boolean = true;
 
+  @Input() contentHandler: ScrollLoadHandler;
 
   // Inform parent about actions
   @Output() containerSelected = new EventEmitter<ContainerDto>();
@@ -41,6 +44,9 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
   private lastDiscLabel = '';
 
   private lastScrollToId = '';
+  private intersecObserver: IntersectionObserver;
+
+  private nextPageId = null;
 
   quickSearchString: string;
 
@@ -61,6 +67,7 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
     public avtransportService: AvtransportService,
     private songOptionsServiceService: SongOptionsServiceService,
     public trackQualityService: TrackQualityService) {
+    console.log("constructor : DisplayContainerComponent")
   }
 
   domChange(event: any): void {
@@ -68,10 +75,11 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
       this.scrollIntoViewID(this.scrollToID);
       this.lastScrollToId = this.scrollToID;
     }
-  }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.init();
+    if (this.nextPageId) {
+      this.nextPageId = null;
+      this.updateIntersec();
+    }
   }
 
   /**
@@ -85,10 +93,10 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.init();
+    this.checkAlbumAndLikeStatus();
   }
 
-  private init(): void {
+  private checkAlbumAndLikeStatus(): void {
     this.checkAllTracksSameAlbum();
     this.checkOneTrackWithMusicBrainzId();
     this.checkAllTracksSameDisc();
@@ -116,7 +124,6 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
   }
 
   private checkAllTracksSameAlbum(): void {
-    console.log("checkAllTracksSameAlbum ..." + this.allTracksSameAlbum_);
     const numtrack = this.musicTracks.length;
     const numMbid = this.musicTracks.filter(item => item.musicBrainzId?.ReleaseTrackId?.length > 0).length;
 
@@ -369,7 +376,86 @@ export class DisplayContainerComponent implements OnInit, OnChanges {
 
   public browseTo(containerDto: ContainerDto): void {
     this.clearSearch();
+
+    if (!this.contentHandler) {
+      console.error("contentHandler not initialized.");
+      return;
+    }
+
+    if (this.contentHandler.cdsBrowsePathService) {
+      this.contentHandler.cdsBrowsePathService.stepIn(containerDto.id);
+    }
+    if (this.contentHandler.persistenceService) {
+      this.contentHandler.persistenceService.setCurrentObjectID(containerDto.id);
+    }
+    if (this.contentHandler.contentDirectoryService) {
+      this.contentHandler.contentDirectoryService.browseChildrenByContainer(containerDto).subscribe(data => this.broseFinished(data));
+    } else {
+      console.error("display-container.component: contentDirectoryService not set.");
+    }
     this.containerSelected.emit(containerDto);
+  }
+
+  private broseFinished(data: ContainerItemDto) {
+    this.nextPageId = this.contentHandler.contentDirectoryService.getPageTurnId()
+    this.currentContainer = this.contentHandler.contentDirectoryService.currentContainerList.currentContainer;
+    this.musicTracks = this.contentHandler.contentDirectoryService.musicTracks_;
+    this.otherItems_ = this.contentHandler.contentDirectoryService.otherItems_;
+    this.albums = this.contentHandler.contentDirectoryService.currentContainerList.albumDto;
+    this.playlists = this.contentHandler.contentDirectoryService.playlistList_;
+    this.otherContainer = this.contentHandler.contentDirectoryService.containerList_;
+
+    if (this.contentHandler.cdsBrowsePathService) {
+      this.scrollToID = this.contentHandler.cdsBrowsePathService.scrollToID;
+    }
+
+    this.checkAlbumAndLikeStatus();
+  }
+
+  public loadNextBrowsePage() {
+    this.contentHandler.contentDirectoryService.browseToNextPage().subscribe(data => this.nextPageId = this.contentHandler.contentDirectoryService.getPageTurnId());
+  }
+
+  private isElementInViewport(el: HTMLElement): boolean {
+    if (!el) {
+      return false;
+    }
+    var rect = el.getBoundingClientRect();
+
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /* or $(window).height() */
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth) /* or $(window).width() */
+    );
+  }
+
+  private updateIntersec() {
+    let element: HTMLElement;
+    let id = this.contentHandler.contentDirectoryService.getPageTurnId();
+    element = document.getElementById(id);
+
+    if (this.isElementInViewport(element)) {
+      this.loadNextBrowsePage();
+    } else {
+      var options = {
+        threshold: 0.75 //root: document.documentElement,
+      };
+      if (element) {
+        if (this.intersecObserver) {
+          this.intersecObserver.disconnect();
+        }
+        this.intersecObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting || entry.intersectionRatio > 0) {
+              this.loadNextBrowsePage();
+            }
+          });
+        }, options);
+
+        this.intersecObserver.observe(element);
+      }
+    }
   }
 
   playAlbum(container: ContainerDto): void {

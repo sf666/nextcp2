@@ -52,7 +52,8 @@ export class DtoGeneratorService {
       containerDto: [],
       minimServerSupportTags: [],
       musicItemDto: [],
-      albumDto: []
+      albumDto: [],
+      totalMatches:0
     }
   }
 

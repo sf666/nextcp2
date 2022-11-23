@@ -1,3 +1,4 @@
+import { ScrollLoadHandler } from './../../mediaserver/display-container/defs.d';
 import { MyPlaylistService } from './my-playlist.service';
 import { ContainerDto, MusicItemDto } from './../../service/dto.d';
 import { DeviceService } from 'src/app/service/device.service';
@@ -34,7 +35,7 @@ export class MyPlaylistsComponent implements OnInit {
   //
 
   containerSelected(event: ContainerDto) {
-    this.contentDirectoryService.browseChildrenByContiner(event);
+    
   }
 
   itemDeleted(event: MusicItemDto) {
@@ -52,6 +53,10 @@ export class MyPlaylistsComponent implements OnInit {
   //
   // bindings
   //
+
+  getContentHandler(): ScrollLoadHandler {
+    return { cdsBrowsePathService: null, contentDirectoryService: this.contentDirectoryService, persistenceService: null}
+  }
 
   showTopHeader(): boolean {
     return true;

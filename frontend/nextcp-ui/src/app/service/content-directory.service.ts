@@ -12,6 +12,7 @@ import { Injectable } from '@angular/core';
 
 export class ContentDirectoryService {
 
+  
   baseUri = '/ContentDirectoryService';
   public currentContainerList: ContainerItemDto;
   public orderAlbumsByGenre = false;
@@ -27,6 +28,14 @@ export class ContentDirectoryService {
   // notfiy other about content change
   browseFinished$: Subject<ContainerItemDto> = new Subject();
   searchFinished$: Subject<ContainerItemDto> = new Subject();
+
+  // to which page was browsed 
+
+  private page = 0;
+  private TURN_PAGE_AFTER = 8;
+  private MAX_REQUEST_ITEMS = 10;
+  private PAGED_BROWSE_REQUEST : BrowseRequestDto;
+  private turn_page_id : string;
 
   constructor(
     private httpService: HttpService,
@@ -72,27 +81,44 @@ export class ContentDirectoryService {
     return this.browseChildrenByRequest(this.createBrowseRequest(objectID, sortCriteria, mediaServerUdn));
   }
 
-  public browseChildrenByContiner(containerDto: ContainerDto): Subject<ContainerItemDto> {
+  public browseChildrenByContainer(containerDto: ContainerDto): Subject<ContainerItemDto> {
     return this.browseChildrenByRequest(this.createBrowseRequest(containerDto.id, "", containerDto.mediaServerUDN));
   }
 
-  private browseChildrenByRequest(browseRequestDto: BrowseRequestDto): Subject<ContainerItemDto> {
+  private browseChildrenByRequest(browseRequestDto: BrowseRequestDto, additive? : boolean): Subject<ContainerItemDto> {
+    if (this.PAGED_BROWSE_REQUEST && browseRequestDto.objectID != this.PAGED_BROWSE_REQUEST.objectID) {
+      this.page = 0;
+    }
+
+    this.PAGED_BROWSE_REQUEST = browseRequestDto;
+    browseRequestDto.start = this.MAX_REQUEST_ITEMS * this.page;
+    browseRequestDto.count = this.MAX_REQUEST_ITEMS;
+
     const uri = '/browseChildren';
     const sub = this.httpService.post<ContainerItemDto>(this.baseUri, uri, browseRequestDto)
-    sub.subscribe(data => this.updateContainer(data));
+    if (additive) {
+      sub.subscribe(data => this.addContainer(data));
+    } else {
+      sub.subscribe(data => this.updateContainer(data));
+    }
     return sub;
+  }
+
+  public browseToNextPage(): Subject<ContainerItemDto> {
+    this.page++;
+    return this.browseChildrenByRequest(this.PAGED_BROWSE_REQUEST, true);
   }
 
   public refreshCurrentContainer(): void {
     this.browseChildrenByRequest(this.createBrowseRequest(this.currentContainerID, "", this.deviceService.selectedMediaServerDevice.udn));
-  }
+  }  
 
   /**
-   * 
    * @param data Gets called after a browse request returns ...
    */
   public updateContainer(data: ContainerItemDto): void {
     this.currentContainerList = data;
+    this.updatePageTurnId(data);
     this.containerList_ = this.currentContainerList.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer");
     this.playlistList_ = this.currentContainerList.containerDto.filter(item => item.objectClass === "object.container.playlistContainer");
     this.musicTracks_ = this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0);
@@ -100,11 +126,50 @@ export class ContentDirectoryService {
     this.browseFinished$.next(data);
   }
 
+  public addContainer(data: ContainerItemDto): void {
+    this.currentContainerList = data;
+    this.updatePageTurnId(data);
+    this.containerList_ = this.containerList_.concat(this.currentContainerList.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer"));
+    this.playlistList_ = this.playlistList_.concat(this.currentContainerList.containerDto.filter(item => item.objectClass === "object.container.playlistContainer"));
+    this.musicTracks_ = this.musicTracks_.concat(this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0));
+    this.otherItems_ = this.otherItems_.concat(this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0));
+    this.browseFinished$.next(data);
+  }
+
+  public getPageTurnId() : string {
+    return this.turn_page_id;
+  }
+
+  private updatePageTurnId(data: ContainerItemDto) : string{
+    let idxObj : number;
+    idxObj = this.TURN_PAGE_AFTER - data.albumDto.length;
+    if (idxObj <= 0) {
+      this.turn_page_id = data.albumDto[data.albumDto.length + idxObj - 1].id;
+      return;
+    }
+
+    idxObj = idxObj - data.containerDto.length;
+    if (idxObj <= 0) {
+      this.turn_page_id = data.containerDto[data.containerDto.length + idxObj - 1].id;
+      return;
+    }
+
+    idxObj = idxObj - data.musicItemDto.length;
+    if (idxObj <= 0) {
+      this.turn_page_id = data.musicItemDto[data.musicItemDto.length + idxObj - 1].objectID;
+      return;
+    }
+
+    return ""
+  }
+
   private createBrowseRequest(objectID: string, sortCriteria: string, mediaServerUdn: string): BrowseRequestDto {
     const br: BrowseRequestDto = {
       mediaServerUDN: mediaServerUdn,
       objectID: objectID,
-      sortCriteria: sortCriteria
+      sortCriteria: sortCriteria,
+      start: 0,
+      count: 999
     }
     return br;
   }

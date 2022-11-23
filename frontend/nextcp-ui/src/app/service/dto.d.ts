@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2022-10-13 11:32:26.
+// Generated using typescript-generator version 2.32.889 on 2022-11-21 12:39:56.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -28,6 +28,8 @@ export interface BrowseRequestDto {
     mediaServerUDN: string;
     objectID: string;
     sortCriteria: string;
+    start: number;
+    count: number;
 }
 
 export interface Config {
@@ -64,6 +66,7 @@ export interface ContainerItemDto {
     albumDto: ContainerDto[];
     musicItemDto: MusicItemDto[];
     minimServerSupportTags: ContainerDto[];
+    totalMatches: number;
 }
 
 export interface DeviceDriverCapability {
