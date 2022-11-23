@@ -74,7 +74,7 @@ export class DisplayContainerComponent implements OnInit {
         this.lastScrollToId = this.scrollToID;
       }
     }
-    
+
     if (this.contentHandler.contentDirectoryService.getPageTurnId()) {
       this.updateIntersec();
     } else {

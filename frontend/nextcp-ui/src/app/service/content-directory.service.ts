@@ -32,8 +32,8 @@ export class ContentDirectoryService {
   // to which page was browsed 
 
   private page = 0;
-  private TURN_PAGE_AFTER = 8;
-  private MAX_REQUEST_ITEMS = 10;
+  private TURN_PAGE_AFTER = 1;
+  private MAX_REQUEST_ITEMS = 30;
   private PAGED_BROWSE_REQUEST : BrowseRequestDto;
   private turn_page_id : string;
 

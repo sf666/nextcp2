@@ -74,13 +74,8 @@
     <ng-template #containerTitle>
         <div id="template_containerTitle" class="d-flex flex-column infobox align-self-start">
             <div class="title">{{currentContainer.title}}</div>
-            <div *ngIf="albumList?.length > 0" class="regular"><span class="highlight pe-2">{{albumList?.length}}</span>
-                Playlist<span *ngIf="albumList?.length > 1">s</span></div>
-            <div *ngIf="playlistList.length > 0" class="regular"><span class="highlight pe-2">{{playlistList.length}}</span>
-                Playlist<span *ngIf="playlistList.length > 1">s</span></div>
-            <div *ngIf="containerList.length > 0" class="regular"><span class="highlight pe-2">{{containerList.length}}</span> Folder<span *ngIf="containerList.length > 1">s</span>
+            <div *ngIf="containerList.length > 0 || itemsCount > 0" class="regular"><span class="highlight pe-2">{{contentHandler.contentDirectoryService.currentContainerList.totalMatches}}</span> total elements
             </div>
-            <div *ngIf="itemsCount > 0" class="regular"><span class="highlight pe-2">{{itemsCount}}</span> Track<span *ngIf="itemsCount > 1">s</span></div>
         </div>
     </ng-template>
 
