@@ -160,7 +160,7 @@ export class ContentDirectoryService {
       return;
     }
 
-    return ""
+    this.turn_page_id = null;
   }
 
   private createBrowseRequest(objectID: string, sortCriteria: string, mediaServerUdn: string): BrowseRequestDto {

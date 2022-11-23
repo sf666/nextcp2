@@ -6,8 +6,7 @@ import { TrackQualityService } from './../../util/track-quality.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { MyMusicService } from './../../service/my-music.service';
 import { MusicItemDto, ContainerDto, ContainerItemDto } from './../../service/dto.d';
-import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, ViewContainerRef } from '@angular/core';
-import { ThisReceiver } from '@angular/compiler';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'mediaServer-display-container',
@@ -46,8 +45,6 @@ export class DisplayContainerComponent implements OnInit {
   private lastScrollToId = '';
   private intersecObserver: IntersectionObserver;
 
-  private nextPageId = null;
-
   quickSearchString: string;
 
   // some calculated constants
@@ -71,14 +68,19 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   domChange(event: any): void {
-    if (this.scrollToID !== this.lastScrollToId) {
-      this.scrollIntoViewID(this.scrollToID);
-      this.lastScrollToId = this.scrollToID;
+    if (this.contentHandler.cdsBrowsePathService) {
+      if (this.contentHandler.cdsBrowsePathService.scrollToID !== this.lastScrollToId) {
+        this.scrollIntoViewID(this.scrollToID);
+        this.lastScrollToId = this.scrollToID;
+      }
     }
-
-    if (this.nextPageId) {
-      this.nextPageId = null;
+    
+    if (this.contentHandler.contentDirectoryService.getPageTurnId()) {
       this.updateIntersec();
+    } else {
+      if (this.intersecObserver) {
+        this.intersecObserver.disconnect();
+      }
     }
   }
 
@@ -397,7 +399,6 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   private broseFinished(data: ContainerItemDto) {
-    this.nextPageId = this.contentHandler.contentDirectoryService.getPageTurnId()
     this.currentContainer = this.contentHandler.contentDirectoryService.currentContainerList.currentContainer;
     this.musicTracks = this.contentHandler.contentDirectoryService.musicTracks_;
     this.otherItems_ = this.contentHandler.contentDirectoryService.otherItems_;
@@ -413,7 +414,7 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   public loadNextBrowsePage() {
-    this.contentHandler.contentDirectoryService.browseToNextPage().subscribe(data => this.nextPageId = this.contentHandler.contentDirectoryService.getPageTurnId());
+    this.contentHandler.contentDirectoryService.browseToNextPage().subscribe();
   }
 
   private isElementInViewport(el: HTMLElement): boolean {
