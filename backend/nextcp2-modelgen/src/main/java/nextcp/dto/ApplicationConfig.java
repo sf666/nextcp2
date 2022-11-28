@@ -21,12 +21,14 @@ public class ApplicationConfig
     public String loggingDateTimeFormat;
     public Long globalSearchDelay;
     public String databaseFilename;
+    public Long itemsPerPage;
+    public Long nextPageAfter;
 
     public ApplicationConfig()
     {
     }
 
-    public ApplicationConfig(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, Long globalSearchDelay, String databaseFilename)
+    public ApplicationConfig(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter)
     {
         this.generateUpnpCode = generateUpnpCode;
         this.generateUpnpCodePath = generateUpnpCodePath;
@@ -37,6 +39,8 @@ public class ApplicationConfig
         this.loggingDateTimeFormat = loggingDateTimeFormat;
         this.globalSearchDelay = globalSearchDelay;
         this.databaseFilename = databaseFilename;
+        this.itemsPerPage = itemsPerPage;
+        this.nextPageAfter = nextPageAfter;
     }
     
     @Override
@@ -53,6 +57,8 @@ public class ApplicationConfig
         sb.append("loggingDateTimeFormat=").append(this.loggingDateTimeFormat).append(", ");
         sb.append("globalSearchDelay=").append(this.globalSearchDelay).append(", ");
         sb.append("databaseFilename=").append(this.databaseFilename).append(", ");
+        sb.append("itemsPerPage=").append(this.itemsPerPage).append(", ");
+        sb.append("nextPageAfter=").append(this.nextPageAfter).append(", ");
         sb.append("]");
         return sb.toString();
     }

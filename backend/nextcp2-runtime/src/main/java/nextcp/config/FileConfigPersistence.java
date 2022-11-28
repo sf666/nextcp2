@@ -39,6 +39,7 @@ public class FileConfigPersistence
     private String configurationFilename = null;
     private Config config = null;
     private ObjectMapper om = new ObjectMapper();
+    private ConfigDefaults configDefaults = new ConfigDefaults();
 
     public FileConfigPersistence()
     {
@@ -101,7 +102,7 @@ public class FileConfigPersistence
                 log.warn("supplied config file is broken. Generating default config ...");
                 config = getDefaultConfig();
             }
-            // configDefaults.applyDefaults(config);
+            configDefaults.applyDefaults(config);
         }
         else
         {
@@ -157,6 +158,8 @@ public class FileConfigPersistence
         c.applicationConfig.generateUpnpCodePath = System.getProperty("java.io.tmpdir");
         c.applicationConfig.databaseFilename = FilenameUtils.concat(systemConfig.getString("user.dir"), "nextcp2_db");
         c.applicationConfig.embeddedServerPort = 8085;
+        c.applicationConfig.itemsPerPage = 100L;
+        c.applicationConfig.nextPageAfter = 60L;
         c.applicationConfig.sseEmitterTimeout = 180000L;
         c.applicationConfig.log4jConfigFile = FilenameUtils.concat(systemConfig.getString("user.dir"), "log4j2.xml");
         c.applicationConfig.libraryPath = systemConfig.getString("user.dir");

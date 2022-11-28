@@ -54,6 +54,17 @@ public class ConfigDefaults
             log.info("adding new configuration value 'globalSearchDelay = 500'");
             config.applicationConfig.globalSearchDelay = Long.valueOf(500);
         }
+
+        if (config.applicationConfig.itemsPerPage == null)
+        {
+            log.info("adding new configuration value 'itemsPerPage = 100'");
+            config.applicationConfig.itemsPerPage = Long.valueOf(100);
+        }
+        if (config.applicationConfig.nextPageAfter == null)
+        {
+            log.info("adding new configuration value 'nextPageAfter = 60'");
+            config.applicationConfig.nextPageAfter = Long.valueOf(60);
+        }
     }
 
 }

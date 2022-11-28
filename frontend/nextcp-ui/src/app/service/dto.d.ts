@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2022-11-24 08:14:57.
+// Generated using typescript-generator version 2.32.889 on 2022-11-28 13:52:01.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -12,6 +12,8 @@ export interface ApplicationConfig {
     loggingDateTimeFormat: string;
     globalSearchDelay: number;
     databaseFilename: string;
+    itemsPerPage: number;
+    nextPageAfter: number;
 }
 
 export interface AudioFormat {

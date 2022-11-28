@@ -30,6 +30,8 @@ ApplicationConfig:
    loggingDateTimeFormat: String
    globalSearchDelay: Long
    databaseFilename: String
+   itemsPerPage: Long
+   nextPageAfter: Long
 
 UmsServerApiKey:
    serverUuid: String

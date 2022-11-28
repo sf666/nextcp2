@@ -34,7 +34,9 @@ export class ConfigurationService {
     libraryPath: '',
     log4jConfigFile: '',
     loggingDateTimeFormat: '',
-    sseEmitterTimeout: 0
+    sseEmitterTimeout: 0,
+    itemsPerPage: 100,
+    nextPageAfter: 60
   }
   musicBrainzConfig: MusicbrainzSupport = {   // MusicBrainz username/password
     password: '',

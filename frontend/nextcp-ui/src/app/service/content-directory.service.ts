@@ -1,3 +1,4 @@
+import { ConfigurationService } from './configuration.service';
 import { DeviceService } from './device.service';
 import { ToastService } from './toast/toast.service';
 import { Subject } from 'rxjs';
@@ -12,7 +13,7 @@ import { Injectable } from '@angular/core';
 
 export class ContentDirectoryService {
 
-  
+
   baseUri = '/ContentDirectoryService';
   public currentContainerList: ContainerItemDto;
   public orderAlbumsByGenre = false;
@@ -33,20 +34,26 @@ export class ContentDirectoryService {
   // to which page was browsed 
 
   private page = 0;
-  private TURN_PAGE_AFTER = 8;
-  private MAX_REQUEST_ITEMS = 10;
-  private PAGED_BROWSE_REQUEST : BrowseRequestDto;
-  private turn_page_id : string;
+  private TURN_PAGE_AFTER = 60;
+  private MAX_REQUEST_ITEMS = 100;
+  private PAGED_BROWSE_REQUEST: BrowseRequestDto;
+  private turn_page_id: string;
 
   constructor(
+    public configService: ConfigurationService,
     private httpService: HttpService,
     private dtoGeneratorService: DtoGeneratorService,
     private deviceService: DeviceService,
     private toastService: ToastService
-    ) {
-
+  ) {
     // Initialize empty result object
     this.currentContainerList = this.dtoGeneratorService.generateEmptyContainerItemDto();
+    if (configService.applicationConfig.nextPageAfter) {
+      this.TURN_PAGE_AFTER = configService.applicationConfig.nextPageAfter;
+    }
+    if (configService.applicationConfig.itemsPerPage) {
+      this.MAX_REQUEST_ITEMS = configService.applicationConfig.itemsPerPage;
+    }
   }
 
   //
@@ -57,7 +64,7 @@ export class ContentDirectoryService {
   public minimTagsList(): ContainerDto[] {
     return this.currentContainerList.minimServerSupportTags;
   }
-  
+
   /**
    * 
    * @param objectID 
@@ -91,7 +98,7 @@ export class ContentDirectoryService {
     return this.browseChildrenByRequest(this.createBrowseRequest(this.currentContainerList.currentContainer.id, "", this.currentContainerList.currentContainer.mediaServerUDN, searchStr));
   }
 
-  private browseChildrenByRequest(browseRequestDto: BrowseRequestDto, additive? : boolean): Subject<ContainerItemDto> {
+  private browseChildrenByRequest(browseRequestDto: BrowseRequestDto, additive?: boolean): Subject<ContainerItemDto> {
     if (!additive) {
       this.page = 0;
     }
@@ -122,9 +129,9 @@ export class ContentDirectoryService {
   public refreshCurrentContainer(): void {
     let browseRequestDto = this.createBrowseRequest(this.currentContainerID, "", this.deviceService.selectedMediaServerDevice.udn, "");
     this.page = 0;
-    this.setActivePage(browseRequestDto);    
+    this.setActivePage(browseRequestDto);
     this.browseChildrenByRequest(browseRequestDto);
-  }  
+  }
 
   /**
    * @param data Gets called after a browse request returns ...
@@ -148,16 +155,16 @@ export class ContentDirectoryService {
     this.playlistList_ = this.playlistList_.concat(data.containerDto.filter(item => item.objectClass === "object.container.playlistContainer"));
     this.musicTracks_ = this.musicTracks_.concat(data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0));
     this.otherItems_ = this.otherItems_.concat(data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0));
-    
+
     this.browseFinished$.next(data);
   }
 
-  public getPageTurnId() : string {
+  public getPageTurnId(): string {
     return this.turn_page_id;
   }
 
-  private updatePageTurnId(data: ContainerItemDto) : string{
-    let idxObj : number;
+  private updatePageTurnId(data: ContainerItemDto): string {
+    let idxObj: number;
     idxObj = this.TURN_PAGE_AFTER - data.albumDto.length;
     if (idxObj <= 0) {
       this.turn_page_id = data.albumDto[data.albumDto.length + idxObj - 1].id;
@@ -187,7 +194,7 @@ export class ContentDirectoryService {
       start: 0,
       filter: "*",
       count: 999,
-      searchInOID : ""
+      searchInOID: ""
     }
     return br;
   }
