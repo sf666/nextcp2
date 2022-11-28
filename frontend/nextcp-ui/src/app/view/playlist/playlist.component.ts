@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
   selector: 'playlist',
   templateUrl: './playlist.component.html',
   styleUrls: ['./playlist.component.scss'],
-  providers: [CdsBrowsePathService, {provide: 'uniqueId', useValue: 'myplaylist_'}]
+  providers: [CdsBrowsePathService, { provide: 'uniqueId', useValue: 'cds_playlist' }]
 })
 export class PlaylistComponent implements OnInit {
 

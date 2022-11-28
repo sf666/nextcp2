@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang.SystemUtils;
 import org.fourthline.cling.model.meta.RemoteDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +19,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import nextcp.config.ConfigPersistence;
 import nextcp.config.ServerConfig;
 import nextcp.db.service.BasicDbService;
 import nextcp.dto.MediaServerDto;

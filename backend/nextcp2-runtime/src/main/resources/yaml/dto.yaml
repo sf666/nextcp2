@@ -327,8 +327,10 @@ BrowseRequestDto:
    mediaServerUDN: String
    objectID: String
    sortCriteria: String
+   filter: String
    start : Long
    count : Long
+   searchInOID : String
 
 SearchRequestDto:
    parentObjectID : String  

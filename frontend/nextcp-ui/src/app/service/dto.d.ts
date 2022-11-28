@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2022-11-21 12:39:56.
+// Generated using typescript-generator version 2.32.889 on 2022-11-24 08:14:57.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -28,8 +28,10 @@ export interface BrowseRequestDto {
     mediaServerUDN: string;
     objectID: string;
     sortCriteria: string;
+    filter: string;
     start: number;
     count: number;
+    searchInOID: string;
 }
 
 export interface Config {

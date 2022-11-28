@@ -3,6 +3,7 @@ package nextcp.upnp.device.mediaserver;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -90,34 +91,71 @@ public class MediaServerDevice extends BaseDevice
         return searchSupportDelegate.searchAllPlaylist(searchReques);
     }
 
+    /**
+     * Hacking a search in the current directory by browsing COMPLETE content and manual filtering afterwards. Search would be much nicer ...
+     * 
+     * @param inp
+     * @param search
+     *            The search string
+     * @return
+     */
+    public ContainerItemDto browseChildren(BrowseInput inp, String search)
+    {
+        inp.RequestedCount = 9999L; // Should be pageable in future ... 
+        Collection<Container> toDeleteContainer = new ArrayList<>();
+        Collection<Item> toDeleteItem = new ArrayList<>();
+        BrowseOutput out = requestContent(inp);
+        DIDLContent didl = generateDidlContent(out);
+        for (Container container : didl.getContainers())
+        {
+            if (!container.getTitle().contains(search))
+            {
+                toDeleteContainer.add(container);
+            }
+        }
+        for (Item item : didl.getItems())
+        {
+            if (!item.getTitle().contains(search))
+            {
+                toDeleteItem.add(item);
+            }
+        }
+        
+        didl.getContainers().removeAll(toDeleteContainer);
+        didl.getItems().removeAll(toDeleteItem);
+        
+        ContainerItemDto result = initEmptyContainerItemDto();
+        result.totalMatches = (long) (didl.getContainers().size() + didl.getItems().size());
+
+        return fillResultStructureextracted(inp, didl, result);
+    }
+
     public ContainerItemDto browseChildren(BrowseInput inp)
     {
-        ContainerDto curContainer = getCurrentMeta(inp);
+        BrowseOutput out = requestContent(inp);
+        DIDLContent didl = generateDidlContent(out);
+        ContainerItemDto result = initEmptyContainerItemDto();
+        result.totalMatches = out.TotalMatches;
 
-        inp.BrowseFlag = "BrowseDirectChildren";
-        checkInp(inp);
+        return fillResultStructureextracted(inp, didl, result);
+    }
+
+    private ContainerItemDto fillResultStructureextracted(BrowseInput inp, DIDLContent didl, ContainerItemDto result)
+    {
+        ContainerDto curContainer = getCurrentMeta(inp);
+        result.currentContainer = curContainer;
+        addContainerObjects(result, didl);
+        addItemObjects(result.musicItemDto, didl);
+
+        return result;
+    }
+
+    private DIDLContent generateDidlContent(BrowseOutput out)
+    {
         try
         {
-            BrowseOutput out = contentDirectoryService.browse(inp);
-            if (out != null && out.NumberReturned != null)
-            {
-                log.info("Response Objects: " + out.NumberReturned);
-                if (log.isDebugEnabled())
-                {
-                    log.debug("DIDL Object : " + out.Result);
-                }
-            }
-
             DIDLContent didl = generateDidlContent(out.Result);
-            ContainerItemDto result = initEmptyContainerItemDto();
-            result.totalMatches = out.TotalMatches;
-
-            result.currentContainer = curContainer;
-//            result.parentFolderTitle = removeMinimTagChars(getParentName(curContainer));
-            addContainerObjects(result, didl);
-            addItemObjects(result.musicItemDto, didl);
-
-            return result;
+            return didl;
         }
         catch (Exception e)
         {
@@ -125,47 +163,20 @@ public class MediaServerDevice extends BaseDevice
         }
     }
 
-    /**
-     * Removes '// ' in front of the title
-     * 
-     * @param title
-     * @return
-     */
-    private String removeMinimTagChars(String title)
+    private BrowseOutput requestContent(BrowseInput inp)
     {
-        if (title.startsWith(">> "))
+        inp.BrowseFlag = "BrowseDirectChildren";
+        checkInp(inp);
+        BrowseOutput out = contentDirectoryService.browse(inp);
+        if (out != null && out.NumberReturned != null)
         {
-            return title.substring(3);
-        }
-        return title;
-    }
-
-    private String getParentName(ContainerDto current)
-    {
-        if (current == null || current.id == null || current.id.equals("0"))
-        {
-            return "";
-        }
-        BrowseInput bi = new BrowseInput();
-        bi.ObjectID = current.parentID;
-        bi.SortCriteria = "";
-        bi.BrowseFlag = "BrowseMetadata";
-        checkInp(bi);
-        try
-        {
-            BrowseOutput out = contentDirectoryService.browse(bi);
-            if (out.NumberReturned == 1)
+            log.info("Response Objects: " + out.NumberReturned);
+            if (log.isDebugEnabled())
             {
-                DIDLContent didl = generateDidlContent(out.Result);
-                return getDtoBuilder().buildContainerDto(didl.getFirstContainer()).title;
+                log.debug("DIDL Object : " + out.Result);
             }
-            return "";
         }
-        catch (Exception e)
-        {
-            log.warn("cannot get parent name", e);
-            throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage());
-        }
+        return out;
     }
 
     private ContainerDto getCurrentMeta(BrowseInput inp)
@@ -181,8 +192,6 @@ public class MediaServerDevice extends BaseDevice
             {
                 DIDLContent didl = generateDidlContent(out.Result);
                 result = getDtoBuilder().buildContainerDto(didl.getFirstContainer());
-                // minimserver support
-//                result.title = removeMinimTagChars(result.title);
             }
             result.mediaServerUDN = getUDN().getIdentifierString();
             return result;

@@ -1,24 +1,24 @@
+import { DisplayContainerComponent } from './../../mediaserver/display-container/display-container.component';
 import { ScrollLoadHandler } from './../../mediaserver/display-container/defs.d';
 import { GlobalSearchService } from './../../service/search/global-search.service';
 import { LayoutService } from './../../service/layout.service';
-import { DeviceService } from 'src/app/service/device.service';
-import { Subject } from 'rxjs';
-import { PersistenceService } from './../../service/persistence/persistence.service';
 import { CdsBrowsePathService } from './../../util/cds-browse-path.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { ContainerDto, MusicItemDto, ContainerItemDto } from './../../service/dto.d';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'search-result',
   templateUrl: './search-result.component.html',
   styleUrls: ['./search-result.component.scss'],
-  providers: [ContentDirectoryService, CdsBrowsePathService, { provide: 'uniqueId', useValue: 'search-result_' }]
+  providers: [ContentDirectoryService, CdsBrowsePathService, { provide: 'uniqueId', useValue: 'search-result_' }] // uniqueId is used for CdsBrowseService !
 })
 
-export class SearchResultComponent implements OnInit {
+export class SearchResultComponent implements AfterViewInit {
 
   private showTopHeader_ = false;
+
+  @ViewChild(DisplayContainerComponent) dispContainer: DisplayContainerComponent;
 
   constructor(
     public layoutService: LayoutService,
@@ -27,7 +27,9 @@ export class SearchResultComponent implements OnInit {
   ) {
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
+    // Navigate to search result
+    this.dispContainer.browseTo(this.globalSearchService.selectedRootContainer);
   }
 
   //
@@ -38,8 +40,12 @@ export class SearchResultComponent implements OnInit {
   }
 
   public backButtonPressed(event: any) {
-    this.showTopHeader_ = false;
-    this.globalSearchService.backToLastSearch();
+    const currentParent = this.globalSearchService.contentDirectoryService?.currentContainerList?.currentContainer?.parentID;
+    if (currentParent) {
+      this.dispContainer.clearSearch();
+      this.dispContainer.browseToOid(currentParent, this.globalSearchService.selectedRootContainer.mediaServerUDN);
+      return;
+    }
   }
 
   public backButtonDisabled(): boolean {
@@ -66,27 +72,5 @@ export class SearchResultComponent implements OnInit {
     return this.showTopHeader_;
   }
 
-  currentContainer(): ContainerDto {
-    return this.globalSearchService.contentDirectoryService.currentContainerList.currentContainer;
-  }
 
-  musicTracks(): MusicItemDto[] {
-    return this.globalSearchService.contentDirectoryService.musicTracks_;
-  }
-
-  otherItems_(): MusicItemDto[] {
-    return this.globalSearchService.contentDirectoryService.otherItems_;
-  }
-
-  albums(): ContainerDto[] {
-    return this.globalSearchService.contentDirectoryService.currentContainerList.albumDto;
-  }
-
-  playlists(): ContainerDto[] {
-    return this.globalSearchService.contentDirectoryService.playlistList_;
-  }
-
-  otherContainer(): ContainerDto[] {
-    return this.globalSearchService.contentDirectoryService.containerList_;
-  }
 }

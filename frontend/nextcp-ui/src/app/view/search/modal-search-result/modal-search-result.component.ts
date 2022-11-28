@@ -29,7 +29,7 @@ export class ModalSearchResultComponent {
   //
 
   musicItemSelected(musicItem: MusicItemDto): void {
-    console.debug("search item selected : " + musicItem);
+    console.debug("music item selected : " + musicItem);
     this.searchItemService.musicItem = musicItem;
     this.globalSearchService.clearSearch();
     this.avtransportService.playResource(musicItem);
@@ -38,21 +38,21 @@ export class ModalSearchResultComponent {
   albumItemSelected(albumItem: ContainerDto): void {
     console.debug("album selected : " + albumItem);
     this.globalSearchService.clearSearch();
-    this.globalSearchService.contentDirectoryService.browseChildrenByContainer(albumItem);
+    this.globalSearchService.selectedRootContainer = albumItem;
     void this.router.navigateByUrl('searchResult');
   }
 
   playlistItemSelected(playlistItem: ContainerDto): void {
-    console.debug("album selected : " + playlistItem);
+    console.debug("playlist selected : " + playlistItem);
     this.globalSearchService.clearSearch();
-    this.globalSearchService.contentDirectoryService.browseChildrenByContainer(playlistItem);
+    this.globalSearchService.selectedRootContainer = playlistItem;
     void this.router.navigateByUrl('searchResult');
   }
 
   artistItemSelected(artistItem: ContainerDto): void {
-    console.debug("album selected : " + artistItem);
+    console.debug("artist selected : " + artistItem);
     this.globalSearchService.clearSearch();
-    this.globalSearchService.contentDirectoryService.browseChildrenByContainer(artistItem);
+    this.globalSearchService.selectedRootContainer = artistItem;
     void this.router.navigateByUrl('searchResult');
   }
 }

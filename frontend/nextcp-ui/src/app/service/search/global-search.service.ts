@@ -3,13 +3,13 @@ import { ConfigurationService } from './../configuration.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { DtoGeneratorService } from './../../util/dto-generator.service';
 import { ContentDirectoryService } from './../content-directory.service';
-import { SearchResultDto } from './../dto.d';
+import { SearchResultDto, ContainerDto } from './../dto.d';
 import { Injectable } from '@angular/core';
 import { debounce } from 'src/app/global';
 
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GlobalSearchService {
 
@@ -19,6 +19,9 @@ export class GlobalSearchService {
   public quickSearchPanelVisible: boolean;
 
   public lastSearch;
+
+  // Selected root container for "show all" 
+  selectedRootContainer : ContainerDto;
 
   private currentSearchText: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

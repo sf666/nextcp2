@@ -18,6 +18,7 @@ export class ContentDirectoryService {
   public orderAlbumsByGenre = false;
 
   // result container split by types
+  public albumList_: ContainerDto[] = [];  // not playlist container
   public containerList_: ContainerDto[] = [];  // not playlist container
   public playlistList_: ContainerDto[] = [];   // playlist container
 
@@ -32,8 +33,8 @@ export class ContentDirectoryService {
   // to which page was browsed 
 
   private page = 0;
-  private TURN_PAGE_AFTER = 1;
-  private MAX_REQUEST_ITEMS = 30;
+  private TURN_PAGE_AFTER = 8;
+  private MAX_REQUEST_ITEMS = 10;
   private PAGED_BROWSE_REQUEST : BrowseRequestDto;
   private turn_page_id : string;
 
@@ -56,13 +57,6 @@ export class ContentDirectoryService {
   public minimTagsList(): ContainerDto[] {
     return this.currentContainerList.minimServerSupportTags;
   }
-
-  /**
-  * Browses to special MyMusic Folder. TODO: URL should be retrieved from media server (i.e. UMS)
-  */
-  public browseToMyPlaylist(playlistId : number, mediaServerUdn: string) {
-    this.browseChildren("$DBID$PLAYLIST$" + playlistId, "", mediaServerUdn);
-  }
   
   /**
    * 
@@ -78,24 +72,34 @@ export class ContentDirectoryService {
         mediaServerUdn = this.deviceService.selectedMediaServerDevice.udn;
       }
     }
-    return this.browseChildrenByRequest(this.createBrowseRequest(objectID, sortCriteria, mediaServerUdn));
+    let browseRequestDto = this.createBrowseRequest(objectID, sortCriteria, mediaServerUdn);
+    this.setActivePage(browseRequestDto);
+    return this.browseChildrenByRequest(browseRequestDto);
   }
 
-  public browseChildrenByContainer(containerDto: ContainerDto): Subject<ContainerItemDto> {
-    return this.browseChildrenByRequest(this.createBrowseRequest(containerDto.id, "", containerDto.mediaServerUDN));
+  public browseChildrenByContainer(containerDto: ContainerDto, sortCriteria?: string): Subject<ContainerItemDto> {
+    return this.browseChildrenByOID(containerDto.id, containerDto.mediaServerUDN, sortCriteria);
+  }
+
+  public browseChildrenByOID(oid: string, udn: string, sortCriteria?: string): Subject<ContainerItemDto> {
+    let browseRequestDto = this.createBrowseRequest(oid, sortCriteria, udn);
+    return this.browseChildrenByRequest(browseRequestDto);
+  }
+
+  public searchCurrentContainer(searchStr: string): Subject<ContainerItemDto> {
+    // At this time, we filter the content by posting a browse request and afterwards a manual filter (backend)
+    return this.browseChildrenByRequest(this.createBrowseRequest(this.currentContainerList.currentContainer.id, "", this.currentContainerList.currentContainer.mediaServerUDN, searchStr));
   }
 
   private browseChildrenByRequest(browseRequestDto: BrowseRequestDto, additive? : boolean): Subject<ContainerItemDto> {
-    if (this.PAGED_BROWSE_REQUEST && browseRequestDto.objectID != this.PAGED_BROWSE_REQUEST.objectID) {
+    if (!additive) {
       this.page = 0;
     }
 
-    this.PAGED_BROWSE_REQUEST = browseRequestDto;
-    browseRequestDto.start = this.MAX_REQUEST_ITEMS * this.page;
-    browseRequestDto.count = this.MAX_REQUEST_ITEMS;
+    this.setActivePage(browseRequestDto);
 
     const uri = '/browseChildren';
-    const sub = this.httpService.post<ContainerItemDto>(this.baseUri, uri, browseRequestDto)
+    const sub = this.httpService.post<ContainerItemDto>(this.baseUri, uri, browseRequestDto);
     if (additive) {
       sub.subscribe(data => this.addContainer(data));
     } else {
@@ -104,13 +108,22 @@ export class ContentDirectoryService {
     return sub;
   }
 
+  private setActivePage(browseRequestDto: BrowseRequestDto) {
+    this.PAGED_BROWSE_REQUEST = browseRequestDto;
+    browseRequestDto.start = this.MAX_REQUEST_ITEMS * this.page;
+    browseRequestDto.count = this.MAX_REQUEST_ITEMS;
+  }
+
   public browseToNextPage(): Subject<ContainerItemDto> {
     this.page++;
     return this.browseChildrenByRequest(this.PAGED_BROWSE_REQUEST, true);
   }
 
   public refreshCurrentContainer(): void {
-    this.browseChildrenByRequest(this.createBrowseRequest(this.currentContainerID, "", this.deviceService.selectedMediaServerDevice.udn));
+    let browseRequestDto = this.createBrowseRequest(this.currentContainerID, "", this.deviceService.selectedMediaServerDevice.udn, "");
+    this.page = 0;
+    this.setActivePage(browseRequestDto);    
+    this.browseChildrenByRequest(browseRequestDto);
   }  
 
   /**
@@ -119,20 +132,23 @@ export class ContentDirectoryService {
   public updateContainer(data: ContainerItemDto): void {
     this.currentContainerList = data;
     this.updatePageTurnId(data);
-    this.containerList_ = this.currentContainerList.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer");
-    this.playlistList_ = this.currentContainerList.containerDto.filter(item => item.objectClass === "object.container.playlistContainer");
-    this.musicTracks_ = this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0);
-    this.otherItems_ = this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0);
+    this.albumList_ = data.albumDto;
+    this.containerList_ = data.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer");
+    this.playlistList_ = data.containerDto.filter(item => item.objectClass === "object.container.playlistContainer");
+    this.musicTracks_ = data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0);
+    this.otherItems_ = data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0);
     this.browseFinished$.next(data);
   }
 
   public addContainer(data: ContainerItemDto): void {
     this.currentContainerList = data;
     this.updatePageTurnId(data);
-    this.containerList_ = this.containerList_.concat(this.currentContainerList.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer"));
-    this.playlistList_ = this.playlistList_.concat(this.currentContainerList.containerDto.filter(item => item.objectClass === "object.container.playlistContainer"));
-    this.musicTracks_ = this.musicTracks_.concat(this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0));
-    this.otherItems_ = this.otherItems_.concat(this.currentContainerList.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0));
+    this.albumList_ = this.albumList_.concat(data.albumDto);
+    this.containerList_ = this.containerList_.concat(data.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer"));
+    this.playlistList_ = this.playlistList_.concat(data.containerDto.filter(item => item.objectClass === "object.container.playlistContainer"));
+    this.musicTracks_ = this.musicTracks_.concat(data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0));
+    this.otherItems_ = this.otherItems_.concat(data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0));
+    
     this.browseFinished$.next(data);
   }
 
@@ -163,13 +179,15 @@ export class ContentDirectoryService {
     this.turn_page_id = null;
   }
 
-  private createBrowseRequest(objectID: string, sortCriteria: string, mediaServerUdn: string): BrowseRequestDto {
+  private createBrowseRequest(objectID: string, sortCriteria: string, mediaServerUdn: string, searchInOID?: string): BrowseRequestDto {
     const br: BrowseRequestDto = {
       mediaServerUDN: mediaServerUdn,
       objectID: objectID,
       sortCriteria: sortCriteria,
       start: 0,
-      count: 999
+      filter: "*",
+      count: 999,
+      searchInOID : ""
     }
     return br;
   }

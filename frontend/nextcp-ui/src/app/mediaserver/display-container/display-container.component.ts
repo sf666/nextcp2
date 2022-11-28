@@ -1,3 +1,5 @@
+import { DtoGeneratorService } from './../../util/dto-generator.service';
+import { ConfigurationService } from './../../service/configuration.service';
 import { ScrollLoadHandler } from './defs.d';
 import { SongOptionsServiceService } from 'src/app/mediaserver/popup/song-options/song-options-service.service';
 import { AvtransportService } from 'src/app/service/avtransport.service';
@@ -7,36 +9,26 @@ import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { MyMusicService } from './../../service/my-music.service';
 import { MusicItemDto, ContainerDto, ContainerItemDto } from './../../service/dto.d';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { debounce } from 'src/app/global';
 
 @Component({
   selector: 'mediaServer-display-container',
   templateUrl: './display-container.component.html',
   styleUrls: ['./display-container.component.scss'],
-  providers: [
-    { provide: 'uniqueId', useValue: 'displayContainer' },
-  ]
+  providers: [{ provide: 'uniqueId', useValue: 'default_display_container' }]
 })
 export class DisplayContainerComponent implements OnInit {
 
   @Input() showTopHeader = true;
 
-  // Songs & Albums & Items to display
-  @Input() currentContainer: ContainerDto;
-
-  @Input() musicTracks: MusicItemDto[] = [];
-  @Input() otherItems_: MusicItemDto[] = [];
-
-  @Input() albums: ContainerDto[];
-  @Input() playlists: ContainerDto[];
-  @Input() otherContainer: ContainerDto[];
-
-  @Input() scrollToID: string;
+  scrollToID: string;
   @Input() extendedApi: boolean = true;
 
   @Input() contentHandler: ScrollLoadHandler;
 
   // Inform parent about actions
   @Output() containerSelected = new EventEmitter<ContainerDto>();
+  @Output() browseFinish = new EventEmitter<ContainerItemDto>();
   @Output() itemDeleted = new EventEmitter<MusicItemDto>();
 
   private listView = true;
@@ -57,14 +49,26 @@ export class DisplayContainerComponent implements OnInit {
   currentAlbumLiked = false;
   private currentAlbumReleaseID = "";
 
+  // Filter function for current displayed elements
+  // 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private filteredBrowseToFunc: any;
+  private doFilteredSearchThrotteled = (): void => {
+    // this.contentDirectoryService.quickSearch(this.currentSearchText, "", this.deviceService.selectedMediaServerDevice.udn).subscribe(data => this.searchResultReceived(data));
+    this.contentHandler.contentDirectoryService.browseChildrenByContainer(this.currentContainer).subscribe(data => this.browseFinished(data));
+  };
+
   constructor(
     private myMusicService: MyMusicService,
     private timeDisplayService: TimeDisplayService,
     public playlistService: PlaylistService,
     public avtransportService: AvtransportService,
+    private dtoGeneratorService: DtoGeneratorService,
     private songOptionsServiceService: SongOptionsServiceService,
+    private configurationService: ConfigurationService,
     public trackQualityService: TrackQualityService) {
-    console.log("constructor : DisplayContainerComponent")
+    console.log("constructor : DisplayContainerComponent");
+    this.filteredBrowseToFunc = debounce(this.getSearchDelay(), this.doFilteredSearchThrotteled);
   }
 
   domChange(event: any): void {
@@ -104,6 +108,36 @@ export class DisplayContainerComponent implements OnInit {
     this.checkAllTracksSameDisc();
     this.checkLikeStatus();
   }
+
+  getSearchDelay(): number {
+    const delay = this.configurationService.serverConfig?.applicationConfig?.globalSearchDelay != null ? this.configurationService.serverConfig.applicationConfig?.globalSearchDelay : 600;
+    return Math.max(300, delay);
+  }
+
+  //
+  // Accessor
+  //
+
+  get musicTracks(): MusicItemDto[] {
+    return this.contentHandler.contentDirectoryService.musicTracks_;
+  }
+
+  get otherItems_(){
+    return this.contentHandler.contentDirectoryService.otherItems_;
+  }
+
+  get albums() : ContainerDto[]{
+    return this.contentHandler.contentDirectoryService.albumList_;
+  }
+
+  get playlists(): ContainerDto[] {
+    return this.contentHandler.contentDirectoryService.playlistList_;
+  }
+  
+  get container(): ContainerDto[] {
+    return this.contentHandler.contentDirectoryService.containerList_;
+  }
+
 
   //
   // Initial checks
@@ -247,6 +281,13 @@ export class DisplayContainerComponent implements OnInit {
     return "";
   }
 
+  public get currentContainer() : ContainerDto {
+    if (this.contentHandler?.contentDirectoryService?.currentContainerList?.currentContainer) {
+      return this.contentHandler.contentDirectoryService.currentContainerList.currentContainer;
+    }
+    return this.dtoGeneratorService.generateEmptyContainerDto();
+  }
+
   //
   // Button actions
   // ===============================================================================================
@@ -326,14 +367,14 @@ export class DisplayContainerComponent implements OnInit {
 
   // other container
   get containerList(): ContainerDto[] {
-    return this.otherContainerFilter(this.quickSearchString);
+    return this.containerFilter(this.quickSearchString);
   }
 
-  public otherContainerFilter(filter?: string): ContainerDto[] {
+  public containerFilter(filter?: string): ContainerDto[] {
     if (filter) {
-      return this.otherContainer.filter(item => this.doFilterText(item.title, filter));
+      return this.container.filter(item => this.doFilterText(item.title, filter));
     } else {
-      return this.otherContainer;
+      return this.container;
     }
   }
 
@@ -371,46 +412,43 @@ export class DisplayContainerComponent implements OnInit {
     return false;
   }
 
-
-  //
-  // Actions (click events)
-  // ===============================================================================================
-
-  public browseTo(containerDto: ContainerDto): void {
+  public browseToOid(oid: string, udn: string, sortCriteria?: string): void {
     this.clearSearch();
-
+    
     if (!this.contentHandler) {
       console.error("contentHandler not initialized.");
       return;
     }
 
     if (this.contentHandler.cdsBrowsePathService) {
-      this.contentHandler.cdsBrowsePathService.stepIn(containerDto.id);
+      this.contentHandler.cdsBrowsePathService.stepIn(oid);
     }
     if (this.contentHandler.persistenceService) {
-      this.contentHandler.persistenceService.setCurrentObjectID(containerDto.id);
+      this.contentHandler.persistenceService.setCurrentObjectID(oid);
     }
     if (this.contentHandler.contentDirectoryService) {
-      this.contentHandler.contentDirectoryService.browseChildrenByContainer(containerDto).subscribe(data => this.broseFinished(data));
+      this.contentHandler.contentDirectoryService.browseChildrenByOID(oid, udn , "").subscribe(data => this.browseFinished(data));
     } else {
       console.error("display-container.component: contentDirectoryService not set.");
     }
+  }
+
+  //
+  // Actions (click events)
+  // ===============================================================================================
+
+  public browseTo(containerDto: ContainerDto): void {
+    this.browseToOid(containerDto.id, containerDto.mediaServerUDN, "");
     this.containerSelected.emit(containerDto);
   }
 
-  private broseFinished(data: ContainerItemDto) {
-    this.currentContainer = this.contentHandler.contentDirectoryService.currentContainerList.currentContainer;
-    this.musicTracks = this.contentHandler.contentDirectoryService.musicTracks_;
-    this.otherItems_ = this.contentHandler.contentDirectoryService.otherItems_;
-    this.albums = this.contentHandler.contentDirectoryService.currentContainerList.albumDto;
-    this.playlists = this.contentHandler.contentDirectoryService.playlistList_;
-    this.otherContainer = this.contentHandler.contentDirectoryService.containerList_;
-
+  private browseFinished(data: ContainerItemDto) {
     if (this.contentHandler.cdsBrowsePathService) {
       this.scrollToID = this.contentHandler.cdsBrowsePathService.scrollToID;
     }
 
     this.checkAlbumAndLikeStatus();
+    this.browseFinish.emit(data);
   }
 
   public loadNextBrowsePage() {

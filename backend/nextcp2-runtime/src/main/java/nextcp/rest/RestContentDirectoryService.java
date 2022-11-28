@@ -53,6 +53,7 @@ public class RestContentDirectoryService extends BaseRestService
         inp.SortCriteria = browseRequest.sortCriteria;
         inp.StartingIndex = browseRequest.start;
         inp.RequestedCount = browseRequest.count; 
+        inp.Filter = browseRequest.filter;
         return device.browseChildren(inp);
     }
 

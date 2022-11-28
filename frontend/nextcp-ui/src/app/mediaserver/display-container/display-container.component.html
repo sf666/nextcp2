@@ -72,9 +72,9 @@
     </div>
 
     <ng-template #containerTitle>
-        <div id="template_containerTitle" class="d-flex flex-column infobox align-self-start">
+        <div *ngIf="currentContainer" id="template_containerTitle" class="d-flex flex-column infobox align-self-start">
             <div class="title">{{currentContainer.title}}</div>
-            <div *ngIf="containerList.length > 0 || itemsCount > 0" class="regular"><span class="highlight pe-2">{{contentHandler.contentDirectoryService.currentContainerList.totalMatches}}</span> total elements
+            <div *ngIf="contentHandler?.contentDirectoryService?.currentContainerList?.totalMatches > 0 || itemsCount > 0" class="regular"><span class="highlight pe-2">{{contentHandler.contentDirectoryService.currentContainerList.totalMatches}}</span> total elements
             </div>
         </div>
     </ng-template>

@@ -114,8 +114,8 @@ export class SidebarComponent {
     this.activeId = itemId;
   }
 
-  get myPlaylistsAvailable(): boolean {
-    return this.playlistService.serverPl.serverPlaylists.length > 0;
+  get myPlaylistsAvailable(): boolean {    
+    return this.deviceService.selectedMediaServerDevice.extendedApi;
   }
 
   public getTextClass(url: string): string {

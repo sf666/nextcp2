@@ -27,8 +27,8 @@
         <span class="hide-element buttonText">App Settings</span>
     </a>
 
-    <div class="myPlaylistSection hide-element">
-        <div *ngIf="myPlaylistsAvailable" class="hide-element sub-label">MY PLAYLISTS</div>
+    <div *ngIf="myPlaylistsAvailable" class="myPlaylistSection hide-element">
+        <div class="hide-element sub-label">MY PLAYLISTS</div>
 
         <button mat-button style="text-align:left;" (click)="createPlaylistClicked()" class="hide-element">
             <span class="material-symbols-outlined thin create-icon">add</span>

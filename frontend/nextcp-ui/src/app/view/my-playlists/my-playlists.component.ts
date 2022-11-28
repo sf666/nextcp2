@@ -20,22 +20,28 @@ export class MyPlaylistsComponent implements OnInit {
     private myPlaylistService: MyPlaylistService,
     public contentDirectoryService: ContentDirectoryService
   ) {
-    this.deviceService.mediaServerChanged$.subscribe(server => this.contentDirectoryService.browseToMyPlaylist(this.myPlaylistService.activePlaylistId, server.udn));
+    this.deviceService.mediaServerChanged$.subscribe(server => this.browseToMyPlaylist(this.myPlaylistService.activePlaylistId, server.udn));
   }
 
   ngOnInit(): void {
     if (this.deviceService.selectedMediaServerDevice.udn) {
-      this.contentDirectoryService.browseToMyPlaylist(this.myPlaylistService.activePlaylistId, this.deviceService.selectedMediaServerDevice.udn);
+      this.browseToMyPlaylist(this.myPlaylistService.activePlaylistId, this.deviceService.selectedMediaServerDevice.udn);
     }
-    this.myPlaylistService.activePlaylistId$.subscribe(id => this.contentDirectoryService.browseToMyPlaylist(id, this.deviceService.selectedMediaServerDevice.udn));
+    this.myPlaylistService.activePlaylistId$.subscribe(id => this.browseToMyPlaylist(id, this.deviceService.selectedMediaServerDevice.udn));
+  }
+
+  /**
+  * Browses to special MyMusic Folder. TODO: URL should be retrieved from media server (i.e. UMS)
+  */
+  public browseToMyPlaylist(playlistId: number, mediaServerUdn: string) {
+    this.contentDirectoryService.browseChildren("$DBID$PLAYLIST$" + playlistId, "", mediaServerUdn);
   }
 
   //
   // Event
   //
-
   containerSelected(event: ContainerDto) {
-    
+
   }
 
   itemDeleted(event: MusicItemDto) {
@@ -55,7 +61,7 @@ export class MyPlaylistsComponent implements OnInit {
   //
 
   getContentHandler(): ScrollLoadHandler {
-    return { cdsBrowsePathService: null, contentDirectoryService: this.contentDirectoryService, persistenceService: null}
+    return { cdsBrowsePathService: null, contentDirectoryService: this.contentDirectoryService, persistenceService: null }
   }
 
   showTopHeader(): boolean {

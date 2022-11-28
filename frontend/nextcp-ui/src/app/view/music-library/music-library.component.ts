@@ -7,18 +7,19 @@ import { DeviceService } from 'src/app/service/device.service';
 import { LayoutService } from './../../service/layout.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { ContainerDto, MusicItemDto, MediaServerDto, ContainerItemDto } from './../../service/dto.d';
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'music-library',
   templateUrl: './music-library.component.html',
   styleUrls: ['./music-library.component.scss'],
-  providers: [ContentDirectoryService, CdsBrowsePathService, { provide: 'uniqueId', useValue: 'music-library_' }]
+  providers: [ContentDirectoryService, PersistenceService, CdsBrowsePathService, { provide: 'uniqueId', useValue: 'music-library_' }]
 })
 
-export class MusicLibraryComponent {
+export class MusicLibraryComponent implements AfterViewInit{
 
   private lastOidIsRestoredFromCache: boolean;
+  private currentMediaServerDto : MediaServerDto;
 
   @ViewChild(DisplayContainerComponent) dispContainer: DisplayContainerComponent;
 
@@ -30,15 +31,18 @@ export class MusicLibraryComponent {
     public contentDirectoryService: ContentDirectoryService) {
     console.log("constructor call : MusicLibraryComponent");
     // select current mediaServer and subscribe to changes ...
-    this.mediaServerChanged(deviceService.selectedMediaServerDevice);
     deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));
+  }
+
+  ngAfterViewInit(): void {
+    this.mediaServerChanged(this.deviceService.selectedMediaServerDevice);
   }
 
   mediaServerChanged(data: MediaServerDto): void {
     if (!data.udn) {
       return;
     }
-
+    this.currentMediaServerDto = data;
     let oid: string;
     if (this.persistenceService.isCurrentMediaServer(data.udn)) {
       oid = this.persistenceService.getLastMediaServerPath();
@@ -51,12 +55,11 @@ export class MusicLibraryComponent {
       this.persistenceService.setNewMediaServerDevice(data.udn);
     }
 
-    this.browseToOid(oid, "").subscribe(data => this.contentReceived(data));
+    this.browseToOid(oid, data.udn, ""); // .subscribe(data => this.contentReceived(data));
   }
 
-  private browseToOid(oid: string, sortCriteria?: string): Subject<ContainerItemDto> {
-    this.persistenceService.setCurrentObjectID(oid);
-    return this.contentDirectoryService.browseChildren(oid, sortCriteria, this.deviceService.selectedMediaServerDevice.udn);
+  private browseToOid(oid: string, udn: string, sortCriteria?: string) : void {    
+    this.dispContainer.browseToOid(oid, udn, sortCriteria);
   }
 
   contentReceived(data: ContainerItemDto): void {
@@ -84,8 +87,7 @@ export class MusicLibraryComponent {
     const currentParent = this.contentDirectoryService?.currentContainerList?.currentContainer?.parentID;
     if (currentParent) {
       this.dispContainer.clearSearch();
-      this.browseToOid(currentParent, "");
-      this.cdsBrowsePathService.stepOut();
+      this.browseToOid(currentParent, this.currentMediaServerDto.udn, "");
     }
   }
 
@@ -111,34 +113,6 @@ export class MusicLibraryComponent {
 
   showTopHeader(): boolean {
     return true;
-  }
-
-  currentContainer(): ContainerDto {
-    return this.contentDirectoryService.currentContainerList.currentContainer;
-  }
-
-  musicTracks(): MusicItemDto[] {
-    return this.contentDirectoryService.musicTracks_;
-  }
-
-  otherItems_(): MusicItemDto[] {
-    return this.contentDirectoryService.otherItems_;
-  }
-
-  albums(): ContainerDto[] {
-    return this.contentDirectoryService.currentContainerList.albumDto;
-  }
-
-  playlists(): ContainerDto[] {
-    return this.contentDirectoryService.playlistList_;
-  }
-
-  otherContainer(): ContainerDto[] {
-    return this.contentDirectoryService.containerList_;
-  }
-
-  scrollToID(): string {
-    return this.cdsBrowsePathService.scrollToID;  // this.scrollToId_;
   }
 
   getContentHandler(): ScrollLoadHandler {
