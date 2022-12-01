@@ -145,10 +145,12 @@ export class ContentDirectoryService {
     this.musicTracks_ = data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0);
     this.otherItems_ = data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0);
     this.browseFinished$.next(data);
+    this.browseToNextPage();
   }
 
   public addContainer(data: ContainerItemDto): void {
     this.currentContainerList = data;
+    const count = data.albumDto.length + data.containerDto.length + data.musicItemDto.length;
     this.updatePageTurnId(data);
     this.albumList_ = this.albumList_.concat(data.albumDto);
     this.containerList_ = this.containerList_.concat(data.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer"));
@@ -157,6 +159,12 @@ export class ContentDirectoryService {
     this.otherItems_ = this.otherItems_.concat(data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0));
 
     this.browseFinished$.next(data);
+    
+    if (count > 0) {
+      this.browseToNextPage();
+    } else {
+      console.log("loaded last page.");
+    }
   }
 
   public getPageTurnId(): string {
