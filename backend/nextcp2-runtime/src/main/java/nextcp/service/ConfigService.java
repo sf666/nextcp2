@@ -42,6 +42,7 @@ public class ConfigService
         {
             mbConfig.password = Base64.getEncoder().encodeToString(mbConfig.password.getBytes());
         }
+        persistence.updateMusicBrainzInjectionBean(mbConfig);        
         config.musicbrainzSupport = mbConfig;
         writeAndSendConfig();
     }

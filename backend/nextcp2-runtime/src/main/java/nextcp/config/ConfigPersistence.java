@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import nextcp.db.service.BasicDbService;
 import nextcp.dto.Config;
+import nextcp.dto.MusicbrainzSupport;
 import nextcp.lastfm.ILastFmConfig;
 import nextcp.musicbrainz.MusicBrainzConfig;
 
@@ -26,6 +27,8 @@ public class ConfigPersistence
     private Config config = null;
 
     private ConfigDefaults configDefaults = new ConfigDefaults();
+
+    private MusicBrainzConfig mb = new MusicBrainzConfig();
 
     @Autowired
     private FileConfigPersistence fileConfigPersistence = null;
@@ -56,12 +59,17 @@ public class ConfigPersistence
         config.clientConfig = databaseConfigPersistence.readClientConfigDatabaseProperties();
     }
 
+    public void updateMusicBrainzInjectionBean(MusicbrainzSupport mbConfig)
+    {
+        mb.username = mbConfig.username;
+        mb.password = new String(Base64.getDecoder().decode(mbConfig.password));
+    }
+    
     // Beans
 
     @Bean
     public MusicBrainzConfig musicBraintConfig()
     {
-        MusicBrainzConfig mb = new MusicBrainzConfig();
         mb.username = config.musicbrainzSupport.username;
         mb.password = new String(Base64.getDecoder().decode(config.musicbrainzSupport.password));
         return mb;
