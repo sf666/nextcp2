@@ -1,6 +1,5 @@
 import { ScrollLoadHandler } from './../../mediaserver/display-container/defs.d';
 import { DisplayContainerComponent } from './../../mediaserver/display-container/display-container.component';
-import { Subject } from 'rxjs';
 import { CdsBrowsePathService } from './../../util/cds-browse-path.service';
 import { PersistenceService } from './../../service/persistence/persistence.service';
 import { DeviceService } from 'src/app/service/device.service';
@@ -16,10 +15,10 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
   providers: [ContentDirectoryService, PersistenceService, CdsBrowsePathService, { provide: 'uniqueId', useValue: 'music-library_' }]
 })
 
-export class MusicLibraryComponent implements AfterViewInit{
+export class MusicLibraryComponent implements AfterViewInit {
 
   private lastOidIsRestoredFromCache: boolean;
-  private currentMediaServerDto : MediaServerDto;
+  private currentMediaServerDto: MediaServerDto;
 
   @ViewChild(DisplayContainerComponent) dispContainer: DisplayContainerComponent;
 
@@ -35,45 +34,46 @@ export class MusicLibraryComponent implements AfterViewInit{
   }
 
   ngAfterViewInit(): void {
-    this.mediaServerChanged(this.deviceService.selectedMediaServerDevice);
+    this.browseToLastKnownUdn();
   }
 
   mediaServerChanged(data: MediaServerDto): void {
-    if (!data.udn) {
-      return;
-    }
     this.currentMediaServerDto = data;
-    let oid: string;
-    if (this.persistenceService.isCurrentMediaServer(data.udn)) {
-      oid = this.persistenceService.getLastMediaServerPath();
-      this.cdsBrowsePathService.restorePathToRoot();
-      this.lastOidIsRestoredFromCache = true;
-    } else {
-      this.lastOidIsRestoredFromCache = false;
-      oid = '0';
-      this.cdsBrowsePathService.clearPath();
-      this.persistenceService.setNewMediaServerDevice(data.udn);
-    }
 
-    this.browseToOid(oid, data.udn, ""); // .subscribe(data => this.contentReceived(data));
+    if (this.persistenceService.isCurrentMediaServer(data.udn)) {
+      this.browseToLastKnownUdn();
+    } else {
+      this.persistenceService.setNewMediaServerDevice(data.udn);
+      this.browseToRoot(data.udn);
+    }
   }
 
-  private browseToOid(oid: string, udn: string, sortCriteria?: string) : void {    
+  private browseToLastKnownUdn() {
+    let oid: string;
+    let udn: string;
+    oid = this.persistenceService.getLastMediaServerPath();
+    this.cdsBrowsePathService.restorePathToRoot();
+    this.lastOidIsRestoredFromCache = true;
+    udn = this.persistenceService.getCurrentMediaServerDevice();
+    this.browseToOid(oid, udn, ""); // .subscribe(data => this.contentReceived(data));
+  }
+
+  private browseToOid(oid: string, udn: string, sortCriteria?: string): void {
     this.dispContainer.browseToOid(oid, udn, sortCriteria);
   }
 
-  contentReceived(data: ContainerItemDto): void {
+  contentReceived(udn: string, data: ContainerItemDto): void {
     // Check if 
     if (this.lastOidIsRestoredFromCache && !(data.containerDto.length > 0 || data.musicItemDto.length > 0)) {
-      this.browseToRoot('');
+      this.browseToRoot(udn, '');
       this.lastOidIsRestoredFromCache = false;
     }
   }
 
-  public browseToRoot(sortCriteria?: string): void {
+  public browseToRoot(udn: string, sortCriteria?: string): void {
     this.cdsBrowsePathService.clearPath();
     this.cdsBrowsePathService.stepIn("0");
-    this.browseToOid("0", sortCriteria);
+    this.browseToOid("0", udn, sortCriteria);
   }
 
   //
