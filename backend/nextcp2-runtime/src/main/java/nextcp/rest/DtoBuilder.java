@@ -360,7 +360,7 @@ public class DtoBuilder
                             String strFileId = n.getTextContent();
                             if (NumberUtils.isParsable(strFileId))
                             {
-                                ids.umsAudiotrackId = Integer.parseInt(strFileId);
+                                ids.umsAudiotrackId = Long.parseLong(strFileId);
                                 log.debug("audiotrackId : " + strFileId);
                             }
                         }

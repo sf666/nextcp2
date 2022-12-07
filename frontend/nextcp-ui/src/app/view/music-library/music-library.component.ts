@@ -34,7 +34,7 @@ export class MusicLibraryComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.browseToLastKnownUdn();
+    this.deviceService.setMediaServerByUdn(this.persistenceService.getCurrentMediaServerDevice());
   }
 
   mediaServerChanged(data: MediaServerDto): void {

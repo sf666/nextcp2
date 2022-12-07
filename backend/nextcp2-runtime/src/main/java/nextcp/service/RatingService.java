@@ -49,7 +49,7 @@ public class RatingService
         // Send rating to device
         if (device != null)
         {
-            device.rateSong(ids.umsAudiotrackId, rating);
+            device.rateSong(ids.umsAudiotrackId, ids.globalID, rating);
         }
         
         // send rating to musicBrainz

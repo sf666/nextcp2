@@ -42,7 +42,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     private final String userAgent = String.format("nextcp/2.0");
     private final String userAgentType = "USER-AGENT";
 
-    
     @Autowired
     private ServerConfig config = null;
 
@@ -199,11 +198,11 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     }
 
     @Override
-    public void rateSong(Integer audiotrackId, int stars)
+    public void rateSong(Long audiotrackId, String oid, int stars)
     {
         try
         {
-            Response response = executeCallWithResponse(String.format("%s/%s", audiotrackId, stars), "api/rating/setratingbyaudiotrackid");
+            Response response = executeCallWithResponse(String.format("%s/%s/%s", audiotrackId, stars, oid), "api/rating/setratingbyaudiotrackid");
             String body = response.body().string();
             int code = response.code();
             toastDeviceResponse(body, code, true);
@@ -299,10 +298,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     {
         RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/text"));
         String requestUrl = String.format("%s%s", getBaseUrl(), uri);
-        Request request = new Request.Builder().url(requestUrl).
-                addHeader("api-key", getApiKey()).
-                addHeader(userAgentType, userAgent).
-                post(body).build();
+        Request request = new Request.Builder().url(requestUrl).addHeader("api-key", getApiKey()).addHeader(userAgentType, userAgent).post(body).build();
         Call call = okClient.newCall(request);
         Response response = call.execute();
         String respString = response.body().string();
@@ -335,10 +331,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     {
         RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/text"));
         String requestUrl = String.format("%s%s", getBaseUrl(), uri);
-        Request request = new Request.Builder().url(requestUrl).
-                addHeader("api-key", getApiKey()).
-                addHeader(userAgentType, userAgent).
-                post(body).build();
+        Request request = new Request.Builder().url(requestUrl).addHeader("api-key", getApiKey()).addHeader(userAgentType, userAgent).post(body).build();
         Call call = okClient.newCall(request);
         Response response = call.execute();
         return response;
@@ -380,7 +373,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     public void restoreMyMusic()
     {
         doGenericCall("", "api/like/restoreLikedAlbums", true);
-        publisher.publishEvent(new ToastrMessage(null, "info", "UMS server " + getFriendlyName(), "My Music albums restored."));        
+        publisher.publishEvent(new ToastrMessage(null, "info", "UMS server " + getFriendlyName(), "My Music albums restored."));
     }
 
     @Override

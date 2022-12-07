@@ -26,7 +26,7 @@ public interface ExtendedApiMediaDevice
     
     public boolean isSongLiked(String musicBrainzTrackId);
     
-    public void rateSong(Integer audiotrackId, int stars);
+    public void rateSong(Long audiotrackId, String oid, int stars);
 
     public void rateSongByMusicBrainzID(String musicbrainzId, int stars);
 

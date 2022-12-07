@@ -227,7 +227,8 @@ RadioStation:
 MusicItemIdDto:
    acoustID: String
    musicBrainzIdTrackId: String
-   umsAudiotrackId: Integer
+   umsAudiotrackId: Long
+   globalID: String
 
 
 MusicItemDto:

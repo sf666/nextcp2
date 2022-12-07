@@ -1,7 +1,4 @@
-import { UuidService } from './../../util/uuid.service';
 import { GenericResultService } from './../../service/generic-result.service';
-import { DeviceService } from './../../service/device.service';
-import { SseService } from './../../service/sse/sse.service';
 import { RatingServiceService } from './../../service/rating-service.service';
 import { MusicItemDto } from './../../service/dto.d';
 import { Component, Input, ViewEncapsulation } from '@angular/core';
@@ -40,6 +37,7 @@ export class StarRatingComponent {
   starSelected(num: number): void {
     this.currentSong.rating = num;
     if (this.currentSong?.songId?.umsAudiotrackId != null) {
+      this.currentSong.songId.globalID = this.currentSong.objectID;
       this.ratingServiceService.setStarRating(this.currentSong.songId, num);
     } else {
       this.genericResultService.displayErrorMessage("current track has no identifier.", "add star rating");

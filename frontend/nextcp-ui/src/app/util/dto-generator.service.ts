@@ -97,7 +97,8 @@ export class DtoGeneratorService {
     return {
       umsAudiotrackId: -1,
       acoustID: '',
-      musicBrainzIdTrackId: ''
+      musicBrainzIdTrackId: '',
+      globalID: '',
     }
   }
 
