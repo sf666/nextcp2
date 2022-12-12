@@ -89,6 +89,7 @@ public class TcpDeviceConnection
                 }
                 catch (IOException e)
                 {
+                    closeIfOpen();
                     e.printStackTrace();
                 }
             }
