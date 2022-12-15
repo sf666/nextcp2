@@ -25,13 +25,23 @@
         </div>
 
         <!-- Quality Badge -->
-        <div class="d-none d-sm-flex qualityBadge">
-            <quality-badge [item]="rendererService.trackInfo?.currentTrack"></quality-badge>
-        </div>
+        <div class="infoItems">
+            <div class="d-none d-sm-flex qualityBadge">
+                <quality-badge [item]="rendererService.trackInfo?.currentTrack"></quality-badge>
+            </div>
 
-        <!-- Info popup -->
-        <div class="icon-font">
-            <span class="material-symbols-outlined md-36" (click)="openInfoPopup($event)">Info</span>
+            <!-- Info popup -->
+            <div class="icon-font">
+                <span class="material-symbols-outlined md-36" (click)="openInfoPopup($event)">Info</span>
+            </div>
+        </div>
+        <div class="d-flex align-self-center flex-column d-none d-lg-flex">
+            <div class="timeDispContainer">
+                <div class="currentTime">{{rendererService.trackTime.secondsDisp}}</div>
+                <div class="finishedTime">&nbsp;-&nbsp;</div>
+                <div class="finishedTime" *ngIf="!streaming()">{{getFinishTime()}}
+                </div>
+            </div>
         </div>
 
         <!-- Middle footer section -->
@@ -46,13 +56,6 @@
                         (click)="rendererService.pause()">pause_circle</span>
                     <span class="material-symbols-outlined icon-button d-none d-sm-block " (click)="rendererService.next()">skip_next</span>
                     <span class="material-symbols-outlined icon-button d-none d-sm-block {{repeatClass}}" (click)="playlistService.toggleRepeat()">repeat</span>
-                </div>
-                <div class="d-flex align-self-center flex-column d-none d-lg-flex">
-                    <div class="timeDispContainer">
-                        <div class="currentTime">{{rendererService.trackTime.secondsDisp}}</div>
-                        <div class="finishedTime" *ngIf="!streaming()">{{getFinishTime()}}
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

@@ -34,7 +34,7 @@ mat-slider {
 
     flex           : 1 2 auto;
     display        : flex;
-    flex-direction : column;
+    flex-direction : row;
     justify-content: center;
     align-self     : center; // vertical center
     width          : 150px;
@@ -43,9 +43,18 @@ mat-slider {
 
 .icon-font {
     font-variation-settings: 'wght'300, 'FILL'0, 'GRAD'-25, 'opsz'24;
-    align-self : center;
-    color      : var(--glas-white-5);
-    margin-left: 1rem;
+    align-self             : center;
+    color                  : var(--glas-white-5);
+    margin-left            : 1rem;
+}
+
+.infoItems {
+    display      : flex;
+    border-left  : 2px solid var(--dark-grey);
+    border-right : 2px solid var(--dark-grey);
+    padding-right: 10px;
+    margin-top   : 24px;
+    margin-bottom: 24px;
 }
 
 .icon-button {
@@ -96,6 +105,8 @@ mat-slider {
     flex           : 1 1 8rem;
     align-self     : center;
     justify-content: space-evenly;
+
+    border-left  : 2px solid var(--dark-grey);
 }
 
 .audioInfoLabel {
@@ -126,14 +137,14 @@ mat-slider {
     font-size     : 1rem;
     color         : rgba(229, 238, 255, .3);
     letter-spacing: 0.02rem;
-    align-self     : center; // vertical center
+    align-self    : center; // vertical center
 }
 
 .finishedTime {
     font-size     : 1rem;
     color         : var(--glas-white-5);
     letter-spacing: 0.02rem;
-    align-self     : center; // vertical center
+    align-self    : center; // vertical center
 }
 
 .inputSource {
