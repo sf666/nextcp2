@@ -29,6 +29,11 @@
             <quality-badge [item]="rendererService.trackInfo?.currentTrack"></quality-badge>
         </div>
 
+        <!-- Info popup -->
+        <div class="icon-font">
+            <span class="material-symbols-outlined md-36" (click)="openInfoPopup($event)">Info</span>
+        </div>
+
         <!-- Middle footer section -->
         <div class="middle-footer flex-column align-items-center">
             <div class="middle-div">
@@ -45,15 +50,7 @@
                 <div class="d-flex align-self-center flex-column d-none d-lg-flex">
                     <div class="timeDispContainer">
                         <div class="currentTime">{{rendererService.trackTime.secondsDisp}}</div>
-                        <div class="ms-2 currentTime" *ngIf="!streaming()">/</div>
-                        <div class="ms-2 finishedTime" *ngIf="!streaming()">{{getFinishTime()}}
-                        </div>
-                    </div>
-                    <!--  -->
-                    <div *ngIf="currentInputSourceVisible()" class="d-flex justify-content-center minWidth">
-                        <div class="no-wrap d-flex mt-2 justify-content-center inputSource">
-                            <div class="material-symbols-outlined md-18 align-self-end">input</div>
-                            <div class="ms-2">{{currentInputSource()}}</div>
+                        <div class="finishedTime" *ngIf="!streaming()">{{getFinishTime()}}
                         </div>
                     </div>
                 </div>

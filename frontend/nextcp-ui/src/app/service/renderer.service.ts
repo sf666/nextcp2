@@ -291,4 +291,8 @@ export class RendererService {
       return "no track info available";
     }
   }
+
+  public getCurrentTrack() : MusicItemDto{
+    return this.trackInfo?.currentTrack;
+  }
 }

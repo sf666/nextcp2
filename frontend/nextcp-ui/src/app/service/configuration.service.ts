@@ -25,7 +25,8 @@ export class ConfigurationService {
   serverConfig: Config;                       // global serverside configuration file (server state) (read only)
   private rendererConfig: RendererConfigDto;  // renderer configurations
   serverConfigDto: ServerConfigDto;           // List of server devices
-  applicationConfig: ApplicationConfig = {   // This is a DTO copy and can be used to update server configuration
+  
+  applicationConfig: ApplicationConfig = {    // This is a DTO copy and can be used to update server configuration
     databaseFilename: '',
     embeddedServerPort: 0,
     generateUpnpCode: false,
@@ -38,6 +39,7 @@ export class ConfigurationService {
     itemsPerPage: 100,
     nextPageAfter: 60
   }
+
   musicBrainzConfig: MusicbrainzSupport = {   // MusicBrainz username/password
     password: '',
     username: ''
@@ -82,6 +84,7 @@ export class ConfigurationService {
     sseService.configChanged$.subscribe(serverConfig => this.applyServerConfigurationFile(serverConfig));
     sseService.rendererConfigChanged$.subscribe(data => this.applyRendererServerRendererList(data));
     sseService.serverDevicesConfigChanged$.subscribe(data => this.applyMediaServerList(data));
+    console.log("ConfigurationService constructor call");
   }
 
   public createNewUiClientConfig(newUUID: string): UiClientConfig {
@@ -197,6 +200,7 @@ export class ConfigurationService {
       return cid;
     } else {
       cid = this.uuidService.getUnique5();
+      localStorage.setItem("clientID", cid);
       console.log("created new client UUID of : " + cid);
       return cid;
     }

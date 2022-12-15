@@ -27,23 +27,29 @@ mat-slider {
 }
 
 .timeDispContainer {
-    font-family: 'azeret';
+    font-family: 'HK Grotesk';
+    font-weight: 500;
+    font-style : normal;
+
 
     flex           : 1 2 auto;
     display        : flex;
-    flex-direction : row;
+    flex-direction : column;
     justify-content: center;
     align-self     : center; // vertical center
     width          : 150px;
     min-width      : 150px;
 }
 
-.icon-button {
+.icon-font {
     font-variation-settings: 'wght'300, 'FILL'0, 'GRAD'-25, 'opsz'24;
-
     align-self : center;
-    margin-left: 1rem;
     color      : var(--glas-white-5);
+    margin-left: 1rem;
+}
+
+.icon-button {
+    @extend .icon-font;
 
     &.active {
         color: $blue-pantone-2;
@@ -117,23 +123,21 @@ mat-slider {
 }
 
 .currentTime {
-    font-size              : 1rem;
-    color                  : rgba(229, 238, 255, .3);
-    font-weight            : 100;
-    font-variation-settings: "wght"100;
-    letter-spacing         : -0.02rem;
+    font-size     : 1rem;
+    color         : rgba(229, 238, 255, .3);
+    letter-spacing: 0.02rem;
+    align-self     : center; // vertical center
 }
 
 .finishedTime {
-    font-size              : 1rem;
-    color                  : var(--glas-white-5);
-    font-weight            : 100;
-    font-variation-settings: "wght"100;
-    letter-spacing         : -0.02rem;
+    font-size     : 1rem;
+    color         : var(--glas-white-5);
+    letter-spacing: 0.02rem;
+    align-self     : center; // vertical center
 }
 
 .inputSource {
-    margin-top : 1.2rem;
+    margin-top: 1.2rem;
 
     font-size     : 1rem;
     color         : var(--glas-white-5);

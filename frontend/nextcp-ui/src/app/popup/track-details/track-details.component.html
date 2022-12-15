@@ -1,0 +1,16 @@
+<div class="popupContainer">
+    <div class="alubumArt">
+        <img src="{{data.albumartUri}}">
+    </div>
+
+    <star-rating [currentSong]="data.currentTrack"></star-rating>
+
+    <!-- Input Source -->
+    <div class="inputSource d-flex justify-content-center minWidth">
+        <div class="no-wrap d-flex mt-2 justify-content-center inputSource">
+            <div class="material-symbols-outlined md-18 align-self-end">input</div>
+            <div class="ms-2">{{data.inputSource}}</div>
+        </div>
+    </div>
+
+</div>

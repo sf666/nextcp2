@@ -56,7 +56,8 @@ import { DisplayContainerComponent } from './mediaserver/display-container/displ
 import { MyPlaylistsComponent } from './view/my-playlists/my-playlists.component';
 import { SearchResultComponent } from './view/search-result/search-result.component';
 import { InputFieldDialogComponent } from './popup/input-field-dialog/input-field-dialog.component';
-import { ImageCropperComponent } from './util/comp/image-cropper/image-cropper.component'
+import { ImageCropperComponent } from './util/comp/image-cropper/image-cropper.component';
+import { TrackDetailsComponent } from './popup/track-details/track-details.component'
 
 @NgModule({
    declarations: [
@@ -91,6 +92,7 @@ import { ImageCropperComponent } from './util/comp/image-cropper/image-cropper.c
       SearchResultComponent,
       InputFieldDialogComponent,
       ImageCropperComponent,
+      TrackDetailsComponent,
    ],
    imports: [
       // Material Design

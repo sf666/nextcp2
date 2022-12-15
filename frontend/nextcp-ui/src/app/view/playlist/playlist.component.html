@@ -1,4 +1,9 @@
 <div class="playlistMainScreen">
+    <button mat-flat-button class="mv-4 my-buttons" (click)="play()">
+        <span class="material-symbols-outlined">play_arrow</span>
+        <span class="button button-text">play</span>
+    </button>
+
     <div *ngIf="deviceService.isAnyMediaRendererSelected(); else noMediaRenderer">
         <div *ngIf="hasPlaylistItems; else noPlaylistItems">
             <div *ngFor="let item of playlistService.playlistItems" class="playlistItem d-flex {{getActiveClass(item)}}" (click)="playlistService.seekId(item.objectID)">

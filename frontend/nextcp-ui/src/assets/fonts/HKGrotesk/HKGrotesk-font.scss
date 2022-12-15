@@ -1,0 +1,198 @@
+@font-face {
+    font-family: 'HK Grotesk';
+    src: url('HKGrotesk-Italic.woff2') format('woff2'),
+        url('HKGrotesk-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk';
+    src: url('HKGrotesk-ExtraBold.woff2') format('woff2'),
+        url('HKGrotesk-ExtraBold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk';
+    src: url('HKGrotesk-Bold.woff2') format('woff2'),
+        url('HKGrotesk-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk Legacy';
+    src: url('HKGrotesk-BoldLegacyItalic.woff2') format('woff2'),
+        url('HKGrotesk-BoldLegacyItalic.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk';
+    src: url('HKGrotesk-Black.woff2') format('woff2'),
+        url('HKGrotesk-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk Legacy';
+    src: url('HKGrotesk-LegacyItalic.woff2') format('woff2'),
+        url('HKGrotesk-LegacyItalic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk';
+    src: url('HKGrotesk-Light.woff2') format('woff2'),
+        url('HKGrotesk-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk';
+    src: url('HKGrotesk-BoldItalic.woff2') format('woff2'),
+        url('HKGrotesk-BoldItalic.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk Legacy';
+    src: url('HKGrotesk-BoldLegacy.woff2') format('woff2'),
+        url('HKGrotesk-BoldLegacy.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk';
+    src: url('HKGrotesk-MediumItalic.woff2') format('woff2'),
+        url('HKGrotesk-MediumItalic.woff') format('woff');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk Medium Legacy';
+    src: url('HKGrotesk-MediumLegacy.woff2') format('woff2'),
+        url('HKGrotesk-MediumLegacy.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk Legacy';
+    src: url('HKGrotesk-RegularLegacy.woff2') format('woff2'),
+        url('HKGrotesk-RegularLegacy.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk';
+    src: url('HKGrotesk-Regular.woff2') format('woff2'),
+        url('HKGrotesk-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk SemiBold Legacy';
+    src: url('HKGrotesk-SemiBoldLegacy.woff2') format('woff2'),
+        url('HKGrotesk-SemiBoldLegacy.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk';
+    src: url('HKGrotesk-SemiBold.woff2') format('woff2'),
+        url('HKGrotesk-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk Medium Legacy';
+    src: url('HKGrotesk-MediumLegacyItalic.woff2') format('woff2'),
+        url('HKGrotesk-MediumLegacyItalic.woff') format('woff');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk Light Legacy';
+    src: url('HKGrotesk-LightLegacyItalic.woff2') format('woff2'),
+        url('HKGrotesk-LightLegacyItalic.woff') format('woff');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk';
+    src: url('HKGrotesk-Medium.woff2') format('woff2'),
+        url('HKGrotesk-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk Light Legacy';
+    src: url('HKGrotesk-LightLegacy.woff2') format('woff2'),
+        url('HKGrotesk-LightLegacy.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk';
+    src: url('HKGrotesk-SemiBoldItalic.woff2') format('woff2'),
+        url('HKGrotesk-SemiBoldItalic.woff') format('woff');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk';
+    src: url('HKGrotesk-LightItalic.woff2') format('woff2'),
+        url('HKGrotesk-LightItalic.woff') format('woff');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HK Grotesk SmBold Legacy';
+    src: url('HKGrotesk-SemiBoldLegacyItalic.woff2') format('woff2'),
+        url('HKGrotesk-SemiBoldLegacyItalic.woff') format('woff');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+
