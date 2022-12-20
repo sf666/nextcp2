@@ -1,14 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>de.sf666</groupId>
 	<artifactId>nextcp2-root</artifactId>
 	<version>2.4.1-SNAPSHOT</version>
-
 	<packaging>pom</packaging>
 	<name>Next Control Point 2</name>
 	<description>UPnP control point with nice web interface</description>
-
 	<url />
 	<organization />
 	<issueManagement />
@@ -18,25 +15,22 @@
 	<licenses>
 		<license />
 	</licenses>
-
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.7.5</version>
 	</parent>
-
 	<scm>
 		<connection>scm:git:https://github.com/sf666/nextcp2.git</connection>
 		<developerConnection>scm:git:https://github.com/sf666/nextcp2.git</developerConnection>
 		<url>https://github.com/sf666/nextcp2.git</url>
 	</scm>
-
 	<repositories>
 		<repository>
 			<id>central-maven</id>
 			<name>public Central Repository</name>
 			<url>https://repo1.maven.org/maven2/</url>
-		</repository>	
+		</repository>
 		<repository>
 			<id>repsy-mb</id>
 			<name>public repo hosted at Repsy</name>
@@ -48,7 +42,6 @@
 			<url>https://repo.repsy.io/mvn/sf666/4l</url>
 		</repository>
 	</repositories>
-
 	<distributionManagement>
 		<repository>
 			<id>repsy</id>
@@ -56,20 +49,18 @@
 			<url>https://repo.repsy.io/mvn/sf666/nextcp2</url>
 		</repository>
 	</distributionManagement>
-
 	<properties>
 		<maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
 		<java.version>11</java.version>
 		<maven.compiler.release>11</maven.compiler.release>
-
 		<log4j2.version>2.17.2</log4j2.version>
 		<slf4j.version>1.7.21</slf4j.version>
 		<cling.version>2.1.2</cling.version>
 		<freemarker.version>2.3.30</freemarker.version>
 		<h2database.version>2.1.210</h2database.version>
 		<jackson.version>2.12.4</jackson.version>
+		<app.version>${project.version}</app.version>
 	</properties>
-
 	<modules>
 		<module>nextcp2-external-information-provider</module>
 		<module>nextcp2-modelgen</module>
@@ -78,16 +69,16 @@
 		<module>nextcp2-runtime</module>
 		<module>nextcp2-assembly</module>
 	</modules>
-
 	<build>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
-
+				<includes>
+					<include>version.txt</include>
+				</includes>
 			</resource>
 		</resources>
-
 		<plugins>
 			<!-- do not filter binay files -->
 			<plugin>
@@ -102,7 +93,6 @@
 					</nonFilteredFileExtensions>
 				</configuration>
 			</plugin>
-			
 			<!-- do not deploy -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -111,7 +101,6 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -119,7 +108,6 @@
 					<release>${maven.compiler.release}</release>
 				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
@@ -128,7 +116,6 @@
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -144,9 +131,13 @@
 			</plugin>
 		</plugins>
 	</build>
-
 	<!-- common dependencies for all modules -->
 	<dependencies>
+		<dependency>
+			<groupId>me.qoomon</groupId>
+			<artifactId>maven-git-versioning-extension</artifactId>
+			<version>9.3.4</version>
+		</dependency>
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -168,14 +159,12 @@
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-web</artifactId>
 		</dependency>
-
 		<!-- JUnit test -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 		<!-- Spring Test -->
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
 		<dependency>
@@ -198,80 +187,65 @@
 			</exclusions>
 		</dependency>
 	</dependencies>
-
-
 	<dependencyManagement>
 		<dependencies>
-
 			<dependency>
 				<groupId>de.sf666</groupId>
 				<artifactId>nextcp2-runtime</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>de.sf666</groupId>
 				<artifactId>nextcp2-db</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>de.sf666</groupId>
 				<artifactId>nextcp2-modelgen</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>de.sf666</groupId>
 				<artifactId>nextcp2-external-information-provider</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>de.sf666</groupId>
 				<artifactId>nextcp2-indexer</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>de.sf666</groupId>
 				<artifactId>nextcp2-DeviceDriver</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>de.sf666</groupId>
 				<artifactId>nextcp2-ma9000</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>de.sf666</groupId>
 				<artifactId>nextcp2-assembly-spring-boot</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-
-
 			<!-- Database and OR mapper -->
 			<dependency>
 				<groupId>com.h2database</groupId>
 				<artifactId>h2</artifactId>
 				<version>${h2database.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.mybatis</groupId>
 				<artifactId>mybatis</artifactId>
 				<version>3.5.8</version>
 			</dependency>
-
 			<!-- Freemarker Template -->
 			<dependency>
 				<groupId>org.freemarker</groupId>
 				<artifactId>freemarker</artifactId>
 				<version>${freemarker.version}</version>
 			</dependency>
-
 			<!-- UPnP -->
 			<dependency>
 				<groupId>org.fourthline.cling-forked</groupId>
@@ -283,26 +257,22 @@
 				<artifactId>cling-support</artifactId>
 				<version>${cling.version}</version>
 			</dependency>
-
 			<!-- Utils -->
 			<dependency>
 				<groupId>commons-configuration</groupId>
 				<artifactId>commons-configuration</artifactId>
 				<version>1.10</version>
 			</dependency>
-
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
 				<version>2.6</version>
 			</dependency>
-
 			<dependency>
 				<groupId>commons-collections</groupId>
 				<artifactId>commons-collections</artifactId>
 				<version>3.2.2</version>
 			</dependency>
-
 			<dependency>
 				<groupId>net.jthink</groupId>
 				<artifactId>jaudiotagger</artifactId>
@@ -318,23 +288,19 @@
 				<artifactId>okhttp-urlconnection</artifactId>
 				<version>4.9.1</version>
 			</dependency>
-
 			<!-- Cover and Artist lookup -->
 			<dependency>
 				<groupId>se.michaelthelin.spotify</groupId>
 				<artifactId>spotify-web-api-java</artifactId>
 				<version>6.5.4</version>
 			</dependency>
-
 			<dependency>
 				<groupId>de.sf666</groupId>
 				<artifactId>musicbrainz</artifactId>
 				<version>1.2</version>
 			</dependency>
-
 		</dependencies>
 	</dependencyManagement>
-
 	<profiles>
 		<!-- JDK 8 profile -->
 		<profile>
