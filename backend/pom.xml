@@ -59,7 +59,6 @@
 		<freemarker.version>2.3.30</freemarker.version>
 		<h2database.version>2.1.210</h2database.version>
 		<jackson.version>2.12.4</jackson.version>
-		<app.version>${project.version}</app.version>
 	</properties>
 	<modules>
 		<module>nextcp2-external-information-provider</module>
@@ -133,11 +132,6 @@
 	</build>
 	<!-- common dependencies for all modules -->
 	<dependencies>
-		<dependency>
-			<groupId>me.qoomon</groupId>
-			<artifactId>maven-git-versioning-extension</artifactId>
-			<version>9.3.4</version>
-		</dependency>
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
