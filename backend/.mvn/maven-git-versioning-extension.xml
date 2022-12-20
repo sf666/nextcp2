@@ -2,12 +2,12 @@
                xsi:schemaLocation="https://github.com/qoomon/maven-git-versioning-extension https://qoomon.github.io/maven-git-versioning-extension/configuration-6.4.0.xsd">
 <refs>
         <ref type="tag">
-            <pattern>v([0-9].*)></pattern>
+            <pattern>v([0-9].*)</pattern>
             <version>${version.release}</version>
         </ref>
 
         <ref type="branch">
-            <pattern>.+></pattern>
+            <pattern>.+</pattern>
             <version>${ref}-${commit.timestamp.datetime}</version>
         </ref>
 
