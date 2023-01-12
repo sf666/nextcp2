@@ -15,7 +15,7 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
   providers: [ContentDirectoryService, PersistenceService, CdsBrowsePathService, { provide: 'uniqueId', useValue: 'music-library_' }]
 })
 
-export class MusicLibraryComponent implements AfterViewInit {
+export class MusicLibraryComponent {
 
   private lastOidIsRestoredFromCache: boolean;
   private currentMediaServerDto: MediaServerDto;
@@ -31,10 +31,7 @@ export class MusicLibraryComponent implements AfterViewInit {
     console.log("constructor call : MusicLibraryComponent");
     // select current mediaServer and subscribe to changes ...
     deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));
-  }
-
-  ngAfterViewInit(): void {
-    this.deviceService.setMediaServerByUdn(this.persistenceService.getCurrentMediaServerDevice());
+    deviceService.mediaServerInitiated$.subscribe(d => this.deviceService.setMediaServerByUdn(this.persistenceService.getCurrentMediaServerDevice()));
   }
 
   mediaServerChanged(data: MediaServerDto): void {
@@ -55,11 +52,15 @@ export class MusicLibraryComponent implements AfterViewInit {
     this.cdsBrowsePathService.restorePathToRoot();
     this.lastOidIsRestoredFromCache = true;
     udn = this.persistenceService.getCurrentMediaServerDevice();
-    this.browseToOid(oid, udn, ""); // .subscribe(data => this.contentReceived(data));
+
+    this.browseToOid(oid, udn, "").then(
+      (val) => {if (!val) this.browseToRoot(udn)},
+      (err) => console.error(err)
+    );
   }
 
-  private browseToOid(oid: string, udn: string, sortCriteria?: string): void {
-    this.dispContainer.browseToOid(oid, udn, sortCriteria);
+  private browseToOid(oid: string, udn: string, sortCriteria?: string): Promise<boolean> {
+    return this.dispContainer.browseToOid(oid, udn, sortCriteria);
   }
 
   contentReceived(udn: string, data: ContainerItemDto): void {

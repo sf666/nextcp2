@@ -122,18 +122,18 @@ export class DisplayContainerComponent implements OnInit {
     return this.contentHandler.contentDirectoryService.musicTracks_;
   }
 
-  get otherItems_(){
+  get otherItems_() {
     return this.contentHandler.contentDirectoryService.otherItems_;
   }
 
-  get albums() : ContainerDto[]{
+  get albums(): ContainerDto[] {
     return this.contentHandler.contentDirectoryService.albumList_;
   }
 
   get playlists(): ContainerDto[] {
     return this.contentHandler.contentDirectoryService.playlistList_;
   }
-  
+
   get container(): ContainerDto[] {
     return this.contentHandler.contentDirectoryService.containerList_;
   }
@@ -281,7 +281,7 @@ export class DisplayContainerComponent implements OnInit {
     return "";
   }
 
-  public get currentContainer() : ContainerDto {
+  public get currentContainer(): ContainerDto {
     if (this.contentHandler?.contentDirectoryService?.currentContainerList?.currentContainer) {
       return this.contentHandler.contentDirectoryService.currentContainerList.currentContainer;
     }
@@ -412,25 +412,36 @@ export class DisplayContainerComponent implements OnInit {
     return false;
   }
 
-  public browseToOid(oid: string, udn: string, sortCriteria?: string): void {
+  public browseToOid(oid: string, udn: string, sortCriteria?: string): Promise<boolean> {
     this.clearSearch();
-    
     if (!this.contentHandler) {
       console.error("contentHandler not initialized.");
       return;
     }
 
-    if (this.contentHandler.cdsBrowsePathService) {
-      this.contentHandler.cdsBrowsePathService.stepIn(oid);
-    }
-    if (this.contentHandler.persistenceService) {
-      this.contentHandler.persistenceService.setCurrentObjectID(oid);
-    }
-    if (this.contentHandler.contentDirectoryService) {
-      this.contentHandler.contentDirectoryService.browseChildrenByOID(oid, udn , "").subscribe(data => this.browseFinished(data));
-    } else {
-      console.error("display-container.component: contentDirectoryService not set.");
-    }
+    const promise = new Promise<boolean>((resolve, reject) => {
+      if (this.contentHandler.cdsBrowsePathService) {
+        this.contentHandler.cdsBrowsePathService.stepIn(oid);
+      }
+      if (this.contentHandler.persistenceService) {
+        this.contentHandler.persistenceService.setCurrentObjectID(oid);
+      }
+      if (this.contentHandler.contentDirectoryService) {
+        this.contentHandler.contentDirectoryService.browseChildrenByOID(oid, udn, "").subscribe(data =>{
+          this.browseFinished(data);
+          if (data.currentContainer.id) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        } );
+      } else {
+        console.error("display-container.component: contentDirectoryService not set.");
+        reject("display-container.component: contentDirectoryService not set.");
+      }
+    });
+
+    return promise;
   }
 
   //

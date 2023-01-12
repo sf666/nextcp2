@@ -35,8 +35,8 @@ export class DeviceService {
     private configService: ConfigurationService) {
 
     // Initialize MediaRenderer & MediaServer ...
-    this.getAllMediaServer();
-    this.getAllMediaRenderer();
+    this.initAllMediaServer();
+    this.initAllMediaRenderer();
 
     // push notification: We are interested in added and removed devices
     configService.clientConfigChanged$.subscribe(data => this.clientConfigChanged(data));
@@ -181,9 +181,8 @@ export class DeviceService {
   // renderer and server initialization
   //
 
-  private getAllMediaServer() {
+  private initAllMediaServer() {
     const uri = '/mediaServer';
-
     this.httpService.get<MediaServerDto[]>(this.baseUri, uri).subscribe(data => {
       this.mediaServerList = data;
       this.applyDefaultServer();
@@ -191,7 +190,7 @@ export class DeviceService {
     });
   }
 
-  private getAllMediaRenderer() {
+  private initAllMediaRenderer() {
     const uri = '/mediaRenderer';
 
     this.httpService.get<MediaRendererDto[]>(this.baseUri, uri).subscribe(data => {
