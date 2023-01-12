@@ -114,6 +114,14 @@ export class FooterComponent {
   // styling of elements depending on state information
   // =========================================================================================================
 
+  get infoSongClass(): string {
+    if (this.rendererService.trackInfoAvailable) {
+      return "active"
+    } else {
+      return "disabled";
+    }
+  }
+
   get shuffleClass(): string {
     if (!this.rendererService.canShuffle()) {
       return "disabled";
@@ -140,27 +148,29 @@ export class FooterComponent {
     }
   }
 
-  currentInputSourceVisible() : boolean {
+  currentInputSourceVisible(): boolean {
     return this.currentInputSource() != "";
   }
 
-  currentInputSource() : string {
+  currentInputSource(): string {
     if (this.deviceService.selectedMediaRendererDevice?.currentSource?.Name) {
       return this.deviceService.selectedMediaRendererDevice?.currentSource.Name;
     }
     return "";
   }
 
-  openInfoPopup(event: Event) : void {
-    let trackData: TrackDetailsData = {
-      albumartUri : this.getImgSrc(),
-      inputSource : this.currentInputSource(),
-      currentTrack : this.rendererService.getCurrentTrack()
-    }
+  openInfoPopup(event: Event): void {
+    if (this.rendererService.trackInfoAvailable) {
+      let trackData: TrackDetailsData = {
+        albumartUri: this.getImgSrc(),
+        inputSource: this.currentInputSource(),
+        currentTrack: this.rendererService.getCurrentTrack()
+      }
 
-    this.dialog.open(TrackDetailsComponent, {
-      data: trackData,
-      hasBackdrop: true
-    });    
+      this.dialog.open(TrackDetailsComponent, {
+        data: trackData,
+        hasBackdrop: true
+      });
+    }
   }
 }
