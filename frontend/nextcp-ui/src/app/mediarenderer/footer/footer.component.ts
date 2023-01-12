@@ -116,7 +116,7 @@ export class FooterComponent {
 
   get infoSongClass(): string {
     if (this.rendererService.trackInfoAvailable) {
-      return "active"
+      return ""
     } else {
       return "disabled";
     }

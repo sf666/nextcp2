@@ -27,7 +27,10 @@ public class SchedulerService
 
     public void addNotifier(ISchedulerService notifier)
     {
-        notifyList.add(notifier);
+        if (!notifyList.contains(notifier))
+        {
+            notifyList.add(notifier);
+        }
     }
 
     @Scheduled(fixedRate = 1000)

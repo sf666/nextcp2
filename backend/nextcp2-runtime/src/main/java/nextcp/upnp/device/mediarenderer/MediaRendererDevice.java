@@ -186,6 +186,10 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             ohTimeServiceEventListener = new OhTimeServiceEventListener(getEventPublisher(), this);
             oh_timeService.addSubscriptionEventListener(ohTimeServiceEventListener);
         }
+        else
+        {
+            schedulerService.addNotifier(this);
+        }
 
         if (hasOhPlaylistService())
         {
