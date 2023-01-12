@@ -250,10 +250,13 @@ public class DtoBuilder
                     break;
                 case "genre":
                     itemDto.genre = property.getValue().toString();
+                    break;
                 case "date":
                     itemDto.date = property.getValue().toString();
+                    break;
                 case "rating":
                     addRating(itemDto, property.getValue().toString());
+                    break;
                 default:
                     log.debug("unprocessed property : " + property.getDescriptorName() + " : " + property.getValue());
             }
