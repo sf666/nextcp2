@@ -9,11 +9,13 @@ package nextcp.upnp.modelGen.magictvcom.magicAudio1;
 public class MagicAudioServiceStateVariable
 {
 
+    public Boolean InputLabelSupport = null;
     public Boolean SpotifyEnable = null;
     public String NewBitDepth = null;
     public String Brightness = null;
     public Long Port = null;
     public Integer FirmwareDownloadProgress = null;
+    public Boolean DefaultRadioSupport = null;
     public String BitDepth = null;
     public String AboutString = null;
     public Boolean ServerEnabled = null;
@@ -34,16 +36,19 @@ public class MagicAudioServiceStateVariable
     public Boolean MagicPlay = null;
     public Boolean LeedhVolumeSupport = null;
     public Long MQASampleRate = null;
+    public Integer AnalogBalance = null;
     public String FirmwareCommand = null;
     public String USFilterDSD = null;
     public Long OutputBitDepth = null;
     public Boolean AutoPlay = null;
+    public Boolean AnalogBalanceSupport = null;
     public String MagicAudioVer = null;
     public String VolumeControl = null;
     public String RAATVer = null;
     public Boolean OutputInvertPhase = null;
     public Boolean NetworkLED = null;
     public String ServiceId = null;
+    public Boolean PublicDNS = null;
     public String ResamplingTag = null;
     public String MQAMode = null;
     public Boolean NetworkLEDControl = null;
@@ -57,16 +62,20 @@ public class MagicAudioServiceStateVariable
     public Boolean RAATEnable = null;
     public String PlaybackClockSource = null;
     public String DAEnable = null;
+    public Boolean DefaultRadioEnable = null;
     public String DSDtoPCM_type = null;
     public byte[] TidalAccessToken = null;
     public String FirmwareResult = null;
     public Boolean MQASupport = null;
     public String AnalogOutLvl = null;
+    public String SourceName = null;
     public Boolean TidalConnectEnable = null;
     public Long OutputSampleRate = null;
     public String SamplingRate = null;
     public String MQAProvenance = null;
     public Boolean SongcastSupport = null;
+    public Long SourceIndex = null;
+    public String FPMode = null;
     public String FileType = null;
     public String TuneInUserName = null;
     public byte[] TidalClientSecret = null;

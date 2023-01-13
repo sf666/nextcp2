@@ -2,12 +2,12 @@ package nextcp.upnp.device;
 
 import javax.annotation.PostConstruct;
 
-import org.fourthline.cling.UpnpService;
-import org.fourthline.cling.model.message.header.STAllHeader;
-import org.fourthline.cling.model.meta.LocalDevice;
-import org.fourthline.cling.model.meta.RemoteDevice;
-import org.fourthline.cling.registry.Registry;
-import org.fourthline.cling.registry.RegistryListener;
+import org.jupnp.UpnpService;
+import org.jupnp.model.message.header.STAllHeader;
+import org.jupnp.model.meta.LocalDevice;
+import org.jupnp.model.meta.RemoteDevice;
+import org.jupnp.registry.Registry;
+import org.jupnp.registry.RegistryListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

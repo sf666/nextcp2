@@ -1,7 +1,7 @@
 package nextcp.util;
 
-import org.fourthline.cling.support.contentdirectory.DIDLParser;
-import org.fourthline.cling.support.model.DIDLContent;
+import org.jupnp.support.contentdirectory.DIDLParser;
+import org.jupnp.support.model.DIDLContent;
 
 public class DidlContent
 {

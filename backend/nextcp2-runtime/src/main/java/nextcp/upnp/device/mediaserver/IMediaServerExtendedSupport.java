@@ -1,6 +1,6 @@
 package nextcp.upnp.device.mediaserver;
 
-import org.fourthline.cling.model.types.UDN;
+import org.jupnp.model.types.UDN;
 
 public interface IMediaServerExtendedSupport
 {

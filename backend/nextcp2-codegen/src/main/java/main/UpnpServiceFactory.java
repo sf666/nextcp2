@@ -1,10 +1,11 @@
 package main;
 
-import org.fourthline.cling.DefaultUpnpServiceConfiguration;
-import org.fourthline.cling.UpnpService;
-import org.fourthline.cling.UpnpServiceImpl;
-import org.fourthline.cling.model.message.UpnpHeaders;
-import org.fourthline.cling.model.meta.RemoteDeviceIdentity;
+
+import org.jupnp.DefaultUpnpServiceConfiguration;
+import org.jupnp.UpnpService;
+import org.jupnp.UpnpServiceImpl;
+import org.jupnp.model.message.UpnpHeaders;
+import org.jupnp.model.meta.RemoteDeviceIdentity;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -28,7 +29,7 @@ public class UpnpServiceFactory
                 return 10000;
             }
         };        
-        upnpService = new UpnpServiceImpl(sc);
+        upnpService = new UpnpServiceImpl();
     }
     
     @Bean

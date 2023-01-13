@@ -4,13 +4,13 @@ import java.util.Map;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.fourthline.cling.model.UnsupportedDataException;
-import org.fourthline.cling.model.gena.CancelReason;
-import org.fourthline.cling.model.gena.RemoteGENASubscription;
-import org.fourthline.cling.model.message.UpnpResponse;
-import org.fourthline.cling.model.meta.RemoteService;
-import org.fourthline.cling.model.state.StateVariableValue;
-import org.fourthline.cling.model.types.UnsignedVariableInteger;
+import org.jupnp.model.UnsupportedDataException;
+import org.jupnp.model.gena.CancelReason;
+import org.jupnp.model.gena.RemoteGENASubscription;
+import org.jupnp.model.message.UpnpResponse;
+import org.jupnp.model.meta.RemoteService;
+import org.jupnp.model.state.StateVariableValue;
+import org.jupnp.model.types.UnsignedVariableInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

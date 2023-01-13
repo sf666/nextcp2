@@ -2,8 +2,8 @@ package nextcp.rest;
 
 import static org.junit.Assert.assertTrue;
 
-import org.fourthline.cling.support.model.Res;
 import org.junit.jupiter.api.Test;
+import org.jupnp.support.model.Res;
 
 import nextcp.dto.AudioFormat;
 

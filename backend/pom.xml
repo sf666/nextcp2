@@ -198,6 +198,11 @@
 			</dependency>
 			<dependency>
 				<groupId>de.sf666</groupId>
+				<artifactId>nextcp2-codegen</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.sf666</groupId>
 				<artifactId>nextcp2-external-information-provider</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -240,14 +245,25 @@
 			</dependency>
 			<!-- UPnP -->
 			<dependency>
-				<groupId>org.fourthline.cling-forked</groupId>
-				<artifactId>cling-core</artifactId>
-				<version>${cling.version}</version>
+				<groupId>org.jupnp</groupId>
+				<artifactId>org.jupnp</artifactId>
+				<version>2.6.1</version>
 			</dependency>
 			<dependency>
-				<groupId>org.fourthline.cling-forked</groupId>
-				<artifactId>cling-support</artifactId>
-				<version>${cling.version}</version>
+				<groupId>org.jupnp</groupId>
+				<artifactId>org.jupnp.support</artifactId>
+				<version>2.6.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.service.http</artifactId>
+				<version>1.2.2</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-server</artifactId>
+				<version>11.0.13</version>
 			</dependency>
 			<!-- Utils -->
 			<dependency>

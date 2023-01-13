@@ -2,66 +2,56 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<parent>
 		<groupId>de.sf666</groupId>
 		<artifactId>nextcp2-root</artifactId>
 		<version>2.4.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-
 	<artifactId>nextcp2-runtime</artifactId>
-
 	<packaging>jar</packaging>
-
 	<dependencies>
 		<!--  cover and album lookup  -->
 		<dependency>
 			<groupId>se.michaelthelin.spotify</groupId>
 			<artifactId>spotify-web-api-java</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>de.sf666</groupId>
 			<artifactId>nextcp2-external-information-provider</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>de.sf666</groupId>
 			<artifactId>nextcp2-db</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>de.sf666</groupId>
 			<artifactId>musicbrainz</artifactId>
 		</dependency>
-
-
+		<dependency>
+			<groupId>de.sf666</groupId>
+			<artifactId>nextcp2-codegen</artifactId>
+		</dependency>
 		<!-- YAML code generator support -->
 		<dependency>
 			<groupId>org.yaml</groupId>
 			<artifactId>snakeyaml</artifactId>
 		</dependency>
-
 		<!-- generated models -->
 		<dependency>
 			<groupId>de.sf666</groupId>
 			<artifactId>nextcp2-modelgen</artifactId>
 		</dependency>
-
 		<!-- Freemarker Template -->
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
 		</dependency>
-
 		<!-- JDOM parsing xml structure -->
 		<dependency>
 			<groupId>org.jdom</groupId>
 			<artifactId>jdom2</artifactId>
 		</dependency>
-
-
 		<!-- SpringBoot / WebSocket -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -81,13 +71,11 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
 		<!-- using spring boot with embedded jetty -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jetty</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-alpn-server</artifactId>
@@ -100,45 +88,47 @@
 			<groupId>org.eclipse.jetty.http2</groupId>
 			<artifactId>http2-server</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
 		</dependency>
-
 		<!-- UPnP -->
 		<dependency>
-			<groupId>org.fourthline.cling-forked</groupId>
-			<artifactId>cling-core</artifactId>
+			<groupId>org.jupnp</groupId>
+			<artifactId>org.jupnp</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.fourthline.cling-forked</groupId>
-			<artifactId>cling-support</artifactId>
+			<groupId>org.jupnp</groupId>
+			<artifactId>org.jupnp.support</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.service.http</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+		</dependency>
 		<!-- Utils -->
 		<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>
-
 		<!-- SHA Digist -->
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 		</dependency>
-
 		<!-- Database -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 		</dependency>
-
 		<!-- Jackson -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.module</groupId>
@@ -148,19 +138,16 @@
 			<groupId>com.fasterxml.jackson.jaxrs</groupId>
 			<artifactId>jackson-jaxrs-json-provider</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
 		</dependency>
-
 		<!-- JUnit -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 		<!-- UMS Server connect uses okhttp3 -->
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
@@ -170,7 +157,5 @@
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp-urlconnection</artifactId>
 		</dependency>
-		
 	</dependencies>
-
 </project>

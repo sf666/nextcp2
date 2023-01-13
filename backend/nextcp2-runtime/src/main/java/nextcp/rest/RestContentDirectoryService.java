@@ -1,7 +1,7 @@
 package nextcp.rest;
 
 import org.apache.commons.lang.StringUtils;
-import org.fourthline.cling.model.types.UDN;
+import org.jupnp.model.types.UDN;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;

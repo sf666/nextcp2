@@ -1,10 +1,10 @@
 package nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1;
 
-import org.fourthline.cling.model.UnsupportedDataException;
-import org.fourthline.cling.model.gena.CancelReason;
-import org.fourthline.cling.model.message.UpnpResponse;
-import org.fourthline.cling.model.meta.RemoteService;
-import org.fourthline.cling.model.state.StateVariableValue;
+import org.jupnp.model.UnsupportedDataException;
+import org.jupnp.model.gena.CancelReason;
+import org.jupnp.model.message.UpnpResponse;
+import org.jupnp.model.meta.RemoteService;
+import org.jupnp.model.state.StateVariableValue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,21 +108,21 @@ public class X_MS_MediaReceiverRegistrarServiceEventListenerImpl implements IX_M
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void validationSucceededUpdateIDChange(Long value)
-    {
-        stateVariable.ValidationSucceededUpdateID = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "ValidationSucceededUpdateID", value));
-        }
-    }
-    
     public void validationRevokedUpdateIDChange(Long value)
     {
         stateVariable.ValidationRevokedUpdateID = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "ValidationRevokedUpdateID", value));
+        }
+    }
+    
+    public void validationSucceededUpdateIDChange(Long value)
+    {
+        stateVariable.ValidationSucceededUpdateID = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "ValidationSucceededUpdateID", value));
         }
     }
     

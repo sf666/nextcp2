@@ -10,17 +10,17 @@ import java.util.Optional;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.fourthline.cling.support.contentdirectory.DIDLParser;
-import org.fourthline.cling.support.model.DIDLContent;
-import org.fourthline.cling.support.model.DIDLObject;
-import org.fourthline.cling.support.model.DIDLObject.Property;
-import org.fourthline.cling.support.model.DescMeta;
-import org.fourthline.cling.support.model.Res;
-import org.fourthline.cling.support.model.container.MusicAlbum;
-import org.fourthline.cling.support.model.container.MusicArtist;
-import org.fourthline.cling.support.model.item.AudioItem;
-import org.fourthline.cling.support.model.item.Item;
-import org.fourthline.cling.support.model.item.MusicTrack;
+import org.jupnp.support.contentdirectory.DIDLParser;
+import org.jupnp.support.model.DIDLContent;
+import org.jupnp.support.model.DIDLObject;
+import org.jupnp.support.model.DIDLObject.Property;
+import org.jupnp.support.model.DescMeta;
+import org.jupnp.support.model.Res;
+import org.jupnp.support.model.container.MusicAlbum;
+import org.jupnp.support.model.container.MusicArtist;
+import org.jupnp.support.model.item.AudioItem;
+import org.jupnp.support.model.item.Item;
+import org.jupnp.support.model.item.MusicTrack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -165,7 +165,7 @@ public class DtoBuilder
         dto.objectClass = container.getClazz().getValue();
 
         // Add album art in any case if possible
-        Optional<Property> uri = extractProperty("albumArtURI", container.getProperties());
+        Optional<Property<?>> uri = extractProperty("albumArtURI", container.getProperties());
         if (uri.isPresent())
         {
             dto.albumartUri = uri.get().toString();
@@ -195,7 +195,7 @@ public class DtoBuilder
         return dto;
     }
 
-    public Optional<Property> extractProperty(String name, List<Property> list)
+    public Optional<Property<?>> extractProperty(String name, List<Property<?>> list)
     {
         return list.stream().filter(p -> p.getDescriptorName().equalsIgnoreCase(name)).findFirst();
     }
@@ -279,7 +279,7 @@ public class DtoBuilder
         itemDto.songId = ids;
         itemDto.musicBrainzId = mb;
 
-        Optional<DescMeta> descMetadata = item.getDescMetadata().stream().filter(n -> n.getType().equalsIgnoreCase("mpd-tags")).findFirst();
+        Optional<DescMeta<?>> descMetadata = item.getDescMetadata().stream().filter(n -> n.getType().equalsIgnoreCase("mpd-tags")).findFirst();
         if (descMetadata.isPresent())
         {
             Node metaChildNodes = ((Node) descMetadata.get().getMetadata()).getFirstChild();

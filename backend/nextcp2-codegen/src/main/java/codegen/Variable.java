@@ -1,16 +1,16 @@
 package codegen;
 
-import org.fourthline.cling.model.meta.ActionArgument;
-import org.fourthline.cling.model.meta.StateVariable;
-import org.fourthline.cling.model.types.Base64Datatype;
-import org.fourthline.cling.model.types.BooleanDatatype;
-import org.fourthline.cling.model.types.Datatype;
-import org.fourthline.cling.model.types.Datatype.Builtin;
-import org.fourthline.cling.model.types.IntegerDatatype;
-import org.fourthline.cling.model.types.StringDatatype;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytesDatatype;
-import org.fourthline.cling.model.types.UnsignedIntegerOneByteDatatype;
-import org.fourthline.cling.model.types.UnsignedIntegerTwoBytesDatatype;
+import org.jupnp.model.meta.ActionArgument;
+import org.jupnp.model.meta.StateVariable;
+import org.jupnp.model.types.Base64Datatype;
+import org.jupnp.model.types.BooleanDatatype;
+import org.jupnp.model.types.Datatype;
+import org.jupnp.model.types.Datatype.Builtin;
+import org.jupnp.model.types.IntegerDatatype;
+import org.jupnp.model.types.StringDatatype;
+import org.jupnp.model.types.UnsignedIntegerFourBytesDatatype;
+import org.jupnp.model.types.UnsignedIntegerOneByteDatatype;
+import org.jupnp.model.types.UnsignedIntegerTwoBytesDatatype;
 
 public class Variable
 {

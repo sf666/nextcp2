@@ -4,13 +4,13 @@ import java.util.Map;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.fourthline.cling.model.UnsupportedDataException;
-import org.fourthline.cling.model.gena.CancelReason;
-import org.fourthline.cling.model.gena.RemoteGENASubscription;
-import org.fourthline.cling.model.message.UpnpResponse;
-import org.fourthline.cling.model.meta.RemoteService;
-import org.fourthline.cling.model.state.StateVariableValue;
-import org.fourthline.cling.model.types.UnsignedVariableInteger;
+import org.jupnp.model.UnsupportedDataException;
+import org.jupnp.model.gena.CancelReason;
+import org.jupnp.model.gena.RemoteGENASubscription;
+import org.jupnp.model.message.UpnpResponse;
+import org.jupnp.model.meta.RemoteService;
+import org.jupnp.model.state.StateVariableValue;
+import org.jupnp.model.types.UnsignedVariableInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,11 +108,17 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
+                    case "TransferIDs":
+                        transferIDsChange((String) stateVar.getValue());
+                        break;
                     case "SystemUpdateID":
                         systemUpdateIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "SortCapabilities":
                         sortCapabilitiesChange((String) stateVar.getValue());
+                        break;
+                    case "ContainerUpdateIDs":
+                        containerUpdateIDsChange((String) stateVar.getValue());
                         break;
                     case "SearchCapabilities":
                         searchCapabilitiesChange((String) stateVar.getValue());
@@ -137,6 +143,14 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
         }
     }
 
+    private void transferIDsChange(String value)
+    {
+        for (IContentDirectoryServiceEventListener listener : eventListener)
+        {
+            listener.transferIDsChange(value);
+        }
+    }    
+
     private void systemUpdateIDChange(Long value)
     {
         for (IContentDirectoryServiceEventListener listener : eventListener)
@@ -150,6 +164,14 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
         for (IContentDirectoryServiceEventListener listener : eventListener)
         {
             listener.sortCapabilitiesChange(value);
+        }
+    }    
+
+    private void containerUpdateIDsChange(String value)
+    {
+        for (IContentDirectoryServiceEventListener listener : eventListener)
+        {
+            listener.containerUpdateIDsChange(value);
         }
     }    
 

@@ -1,11 +1,9 @@
 package nextcp.upnp.modelGen.avopenhomeorg.transport1.actions;
 
-import org.fourthline.cling.controlpoint.ControlPoint;
-
-import org.fourthline.cling.model.action.ActionInvocation;
-import org.fourthline.cling.model.meta.Service;
-
-import org.fourthline.cling.model.types.*;
+import org.jupnp.controlpoint.ControlPoint;
+import org.jupnp.model.action.ActionInvocation;
+import org.jupnp.model.meta.Service;
+import org.jupnp.model.types.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

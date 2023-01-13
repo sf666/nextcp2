@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import codegen.ICodegenConfig;
 import nextcp.db.service.BasicDbService;
 import nextcp.dto.Config;
 import nextcp.dto.MusicbrainzSupport;
@@ -29,6 +30,8 @@ public class ConfigPersistence
     private ConfigDefaults configDefaults = new ConfigDefaults();
 
     private MusicBrainzConfig mb = new MusicBrainzConfig();
+
+    private CodeGenConfig codegen = new CodeGenConfig();
 
     @Autowired
     private FileConfigPersistence fileConfigPersistence = null;
@@ -64,8 +67,16 @@ public class ConfigPersistence
         mb.username = mbConfig.username;
         mb.password = new String(Base64.getDecoder().decode(mbConfig.password));
     }
-    
+
     // Beans
+
+    @Bean
+    public CodeGenConfig createCodegenConfigElements()
+    {
+        codegen.setGenerateUpnpCode(config.applicationConfig.generateUpnpCode);
+        codegen.setGenerateUpnpCodePath(config.applicationConfig.generateUpnpCodePath);
+        return codegen;
+    }
 
     @Bean
     public MusicBrainzConfig musicBraintConfig()

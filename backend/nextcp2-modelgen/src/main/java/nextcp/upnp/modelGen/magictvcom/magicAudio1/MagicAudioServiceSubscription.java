@@ -4,13 +4,13 @@ import java.util.Map;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.fourthline.cling.model.UnsupportedDataException;
-import org.fourthline.cling.model.gena.CancelReason;
-import org.fourthline.cling.model.gena.RemoteGENASubscription;
-import org.fourthline.cling.model.message.UpnpResponse;
-import org.fourthline.cling.model.meta.RemoteService;
-import org.fourthline.cling.model.state.StateVariableValue;
-import org.fourthline.cling.model.types.UnsignedVariableInteger;
+import org.jupnp.model.UnsupportedDataException;
+import org.jupnp.model.gena.CancelReason;
+import org.jupnp.model.gena.RemoteGENASubscription;
+import org.jupnp.model.message.UpnpResponse;
+import org.jupnp.model.meta.RemoteService;
+import org.jupnp.model.state.StateVariableValue;
+import org.jupnp.model.types.UnsignedVariableInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,6 +108,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
+                    case "InputLabelSupport":
+                        inputLabelSupportChange((Boolean) stateVar.getValue());
+                        break;
                     case "SpotifyEnable":
                         spotifyEnableChange((Boolean) stateVar.getValue());
                         break;
@@ -122,6 +125,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         break;
                     case "FirmwareDownloadProgress":
                         firmwareDownloadProgressChange((Integer) stateVar.getValue());
+                        break;
+                    case "DefaultRadioSupport":
+                        defaultRadioSupportChange((Boolean) stateVar.getValue());
                         break;
                     case "BitDepth":
                         bitDepthChange((String) stateVar.getValue());
@@ -183,6 +189,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     case "MQASampleRate":
                         mQASampleRateChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
+                    case "AnalogBalance":
+                        analogBalanceChange((Integer) stateVar.getValue());
+                        break;
                     case "FirmwareCommand":
                         firmwareCommandChange((String) stateVar.getValue());
                         break;
@@ -194,6 +203,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         break;
                     case "AutoPlay":
                         autoPlayChange((Boolean) stateVar.getValue());
+                        break;
+                    case "AnalogBalanceSupport":
+                        analogBalanceSupportChange((Boolean) stateVar.getValue());
                         break;
                     case "MagicAudioVer":
                         magicAudioVerChange((String) stateVar.getValue());
@@ -212,6 +224,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         break;
                     case "ServiceId":
                         serviceIdChange((String) stateVar.getValue());
+                        break;
+                    case "PublicDNS":
+                        publicDNSChange((Boolean) stateVar.getValue());
                         break;
                     case "ResamplingTag":
                         resamplingTagChange((String) stateVar.getValue());
@@ -252,6 +267,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     case "DAEnable":
                         dAEnableChange((String) stateVar.getValue());
                         break;
+                    case "DefaultRadioEnable":
+                        defaultRadioEnableChange((Boolean) stateVar.getValue());
+                        break;
                     case "DSDtoPCM_type":
                         dSDtoPCM_typeChange((String) stateVar.getValue());
                         break;
@@ -267,6 +285,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     case "AnalogOutLvl":
                         analogOutLvlChange((String) stateVar.getValue());
                         break;
+                    case "SourceName":
+                        sourceNameChange((String) stateVar.getValue());
+                        break;
                     case "TidalConnectEnable":
                         tidalConnectEnableChange((Boolean) stateVar.getValue());
                         break;
@@ -281,6 +302,12 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         break;
                     case "SongcastSupport":
                         songcastSupportChange((Boolean) stateVar.getValue());
+                        break;
+                    case "SourceIndex":
+                        sourceIndexChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "FPMode":
+                        fPModeChange((String) stateVar.getValue());
                         break;
                     case "FileType":
                         fileTypeChange((String) stateVar.getValue());
@@ -329,6 +356,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }
 
+    private void inputLabelSupportChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.inputLabelSupportChange(value);
+        }
+    }    
+
     private void spotifyEnableChange(Boolean value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
@@ -366,6 +401,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.firmwareDownloadProgressChange(value);
+        }
+    }    
+
+    private void defaultRadioSupportChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.defaultRadioSupportChange(value);
         }
     }    
 
@@ -529,6 +572,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void analogBalanceChange(Integer value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.analogBalanceChange(value);
+        }
+    }    
+
     private void firmwareCommandChange(String value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
@@ -558,6 +609,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.autoPlayChange(value);
+        }
+    }    
+
+    private void analogBalanceSupportChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.analogBalanceSupportChange(value);
         }
     }    
 
@@ -606,6 +665,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.serviceIdChange(value);
+        }
+    }    
+
+    private void publicDNSChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.publicDNSChange(value);
         }
     }    
 
@@ -713,6 +780,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void defaultRadioEnableChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.defaultRadioEnableChange(value);
+        }
+    }    
+
     private void dSDtoPCM_typeChange(String value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
@@ -753,6 +828,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void sourceNameChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.sourceNameChange(value);
+        }
+    }    
+
     private void tidalConnectEnableChange(Boolean value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
@@ -790,6 +873,22 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.songcastSupportChange(value);
+        }
+    }    
+
+    private void sourceIndexChange(Long value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.sourceIndexChange(value);
+        }
+    }    
+
+    private void fPModeChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.fPModeChange(value);
         }
     }    
 

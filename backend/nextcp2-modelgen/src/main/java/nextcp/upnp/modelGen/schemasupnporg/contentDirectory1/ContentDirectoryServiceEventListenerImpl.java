@@ -1,10 +1,10 @@
 package nextcp.upnp.modelGen.schemasupnporg.contentDirectory1;
 
-import org.fourthline.cling.model.UnsupportedDataException;
-import org.fourthline.cling.model.gena.CancelReason;
-import org.fourthline.cling.model.message.UpnpResponse;
-import org.fourthline.cling.model.meta.RemoteService;
-import org.fourthline.cling.model.state.StateVariableValue;
+import org.jupnp.model.UnsupportedDataException;
+import org.jupnp.model.gena.CancelReason;
+import org.jupnp.model.message.UpnpResponse;
+import org.jupnp.model.meta.RemoteService;
+import org.jupnp.model.state.StateVariableValue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,6 +108,15 @@ public class ContentDirectoryServiceEventListenerImpl implements IContentDirecto
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
+    public void transferIDsChange(String value)
+    {
+        stateVariable.TransferIDs = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "TransferIDs", value));
+        }
+    }
+    
     public void systemUpdateIDChange(Long value)
     {
         stateVariable.SystemUpdateID = value;
@@ -123,6 +132,15 @@ public class ContentDirectoryServiceEventListenerImpl implements IContentDirecto
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "SortCapabilities", value));
+        }
+    }
+    
+    public void containerUpdateIDsChange(String value)
+    {
+        stateVariable.ContainerUpdateIDs = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "ContainerUpdateIDs", value));
         }
     }
     

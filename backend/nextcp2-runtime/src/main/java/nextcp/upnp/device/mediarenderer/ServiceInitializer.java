@@ -2,9 +2,9 @@ package nextcp.upnp.device.mediarenderer;
 
 import java.util.List;
 
-import org.fourthline.cling.UpnpService;
-import org.fourthline.cling.model.meta.RemoteDevice;
-import org.fourthline.cling.model.meta.RemoteService;
+import org.jupnp.UpnpService;
+import org.jupnp.model.meta.RemoteDevice;
+import org.jupnp.model.meta.RemoteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

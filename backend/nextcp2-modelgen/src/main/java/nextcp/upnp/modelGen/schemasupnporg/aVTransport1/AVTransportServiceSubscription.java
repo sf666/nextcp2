@@ -4,13 +4,13 @@ import java.util.Map;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.fourthline.cling.model.UnsupportedDataException;
-import org.fourthline.cling.model.gena.CancelReason;
-import org.fourthline.cling.model.gena.RemoteGENASubscription;
-import org.fourthline.cling.model.message.UpnpResponse;
-import org.fourthline.cling.model.meta.RemoteService;
-import org.fourthline.cling.model.state.StateVariableValue;
-import org.fourthline.cling.model.types.UnsignedVariableInteger;
+import org.jupnp.model.UnsupportedDataException;
+import org.jupnp.model.gena.CancelReason;
+import org.jupnp.model.gena.RemoteGENASubscription;
+import org.jupnp.model.message.UpnpResponse;
+import org.jupnp.model.meta.RemoteService;
+import org.jupnp.model.state.StateVariableValue;
+import org.jupnp.model.types.UnsignedVariableInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,11 +120,11 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
                     case "RelativeCounterPosition":
                         relativeCounterPositionChange((Integer) stateVar.getValue());
                         break;
-                    case "AVTransportURIMetaData":
-                        aVTransportURIMetaDataChange((String) stateVar.getValue());
-                        break;
                     case "TransportStatus":
                         transportStatusChange((String) stateVar.getValue());
+                        break;
+                    case "AVTransportURIMetaData":
+                        aVTransportURIMetaDataChange((String) stateVar.getValue());
                         break;
                     case "TransportState":
                         transportStateChange((String) stateVar.getValue());
@@ -132,14 +132,14 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
                     case "CurrentTrack":
                         currentTrackChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
+                    case "PlaybackStorageMedium":
+                        playbackStorageMediumChange((String) stateVar.getValue());
+                        break;
                     case "PossibleRecordQualityModes":
                         possibleRecordQualityModesChange((String) stateVar.getValue());
                         break;
                     case "NextAVTransportURIMetaData":
                         nextAVTransportURIMetaDataChange((String) stateVar.getValue());
-                        break;
-                    case "PlaybackStorageMedium":
-                        playbackStorageMediumChange((String) stateVar.getValue());
                         break;
                     case "NumberOfTracks":
                         numberOfTracksChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
@@ -241,19 +241,19 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void aVTransportURIMetaDataChange(String value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.aVTransportURIMetaDataChange(value);
-        }
-    }    
-
     private void transportStatusChange(String value)
     {
         for (IAVTransportServiceEventListener listener : eventListener)
         {
             listener.transportStatusChange(value);
+        }
+    }    
+
+    private void aVTransportURIMetaDataChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.aVTransportURIMetaDataChange(value);
         }
     }    
 
@@ -273,6 +273,14 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void playbackStorageMediumChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.playbackStorageMediumChange(value);
+        }
+    }    
+
     private void possibleRecordQualityModesChange(String value)
     {
         for (IAVTransportServiceEventListener listener : eventListener)
@@ -286,14 +294,6 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
         for (IAVTransportServiceEventListener listener : eventListener)
         {
             listener.nextAVTransportURIMetaDataChange(value);
-        }
-    }    
-
-    private void playbackStorageMediumChange(String value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.playbackStorageMediumChange(value);
         }
     }    
 

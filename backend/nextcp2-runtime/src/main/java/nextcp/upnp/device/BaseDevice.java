@@ -1,10 +1,10 @@
 package nextcp.upnp.device;
 
 import org.apache.commons.lang.StringUtils;
-import org.fourthline.cling.UpnpService;
-import org.fourthline.cling.model.meta.RemoteDevice;
-import org.fourthline.cling.model.types.UDN;
-import org.fourthline.cling.support.model.DIDLContent;
+import org.jupnp.UpnpService;
+import org.jupnp.model.meta.RemoteDevice;
+import org.jupnp.model.types.UDN;
+import org.jupnp.support.model.DIDLContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

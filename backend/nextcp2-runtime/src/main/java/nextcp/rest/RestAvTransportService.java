@@ -3,8 +3,8 @@ package nextcp.rest;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.fourthline.cling.support.model.DIDLObject.Property.UPNP.ALBUM_ART_URI;
-import org.fourthline.cling.support.model.item.MusicTrack;
+import org.jupnp.support.model.DIDLObject.Property.UPNP.ALBUM_ART_URI;
+import org.jupnp.support.model.item.MusicTrack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

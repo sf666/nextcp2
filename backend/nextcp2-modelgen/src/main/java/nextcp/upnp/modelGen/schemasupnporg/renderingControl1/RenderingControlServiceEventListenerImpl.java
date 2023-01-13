@@ -1,10 +1,10 @@
 package nextcp.upnp.modelGen.schemasupnporg.renderingControl1;
 
-import org.fourthline.cling.model.UnsupportedDataException;
-import org.fourthline.cling.model.gena.CancelReason;
-import org.fourthline.cling.model.message.UpnpResponse;
-import org.fourthline.cling.model.meta.RemoteService;
-import org.fourthline.cling.model.state.StateVariableValue;
+import org.jupnp.model.UnsupportedDataException;
+import org.jupnp.model.gena.CancelReason;
+import org.jupnp.model.message.UpnpResponse;
+import org.jupnp.model.meta.RemoteService;
+import org.jupnp.model.state.StateVariableValue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,12 +108,93 @@ public class RenderingControlServiceEventListenerImpl implements IRenderingContr
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void minVolumeDBChange(Integer value)
+    public void loudnessChange(Boolean value)
     {
-        stateVariable.MinVolumeDB = value;
+        stateVariable.Loudness = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "MinVolumeDB", value));
+            log.debug(String.format("StateVariable : %s: %s", "Loudness", value));
+        }
+    }
+    
+    public void brightnessChange(Long value)
+    {
+        stateVariable.Brightness = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Brightness", value));
+        }
+    }
+    
+    public void greenVideoBlackLevelChange(Long value)
+    {
+        stateVariable.GreenVideoBlackLevel = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "GreenVideoBlackLevel", value));
+        }
+    }
+    
+    public void blueVideoBlackLevelChange(Long value)
+    {
+        stateVariable.BlueVideoBlackLevel = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "BlueVideoBlackLevel", value));
+        }
+    }
+    
+    public void presetNameListChange(String value)
+    {
+        stateVariable.PresetNameList = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "PresetNameList", value));
+        }
+    }
+    
+    public void contrastChange(Long value)
+    {
+        stateVariable.Contrast = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Contrast", value));
+        }
+    }
+    
+    public void sharpnessChange(Long value)
+    {
+        stateVariable.Sharpness = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Sharpness", value));
+        }
+    }
+    
+    public void greenVideoGainChange(Long value)
+    {
+        stateVariable.GreenVideoGain = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "GreenVideoGain", value));
+        }
+    }
+    
+    public void colorTemperatureChange(Long value)
+    {
+        stateVariable.ColorTemperature = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "ColorTemperature", value));
+        }
+    }
+    
+    public void horizontalKeystoneChange(Integer value)
+    {
+        stateVariable.HorizontalKeystone = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "HorizontalKeystone", value));
         }
     }
     
@@ -126,15 +207,6 @@ public class RenderingControlServiceEventListenerImpl implements IRenderingContr
         }
     }
     
-    public void maxVolumeDBChange(Integer value)
-    {
-        stateVariable.MaxVolumeDB = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "MaxVolumeDB", value));
-        }
-    }
-    
     public void lastChangeChange(String value)
     {
         stateVariable.LastChange = value;
@@ -144,12 +216,39 @@ public class RenderingControlServiceEventListenerImpl implements IRenderingContr
         }
     }
     
-    public void presetNameListChange(String value)
+    public void blueVideoGainChange(Long value)
     {
-        stateVariable.PresetNameList = value;
+        stateVariable.BlueVideoGain = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "PresetNameList", value));
+            log.debug(String.format("StateVariable : %s: %s", "BlueVideoGain", value));
+        }
+    }
+    
+    public void redVideoGainChange(Long value)
+    {
+        stateVariable.RedVideoGain = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "RedVideoGain", value));
+        }
+    }
+    
+    public void verticalKeystoneChange(Integer value)
+    {
+        stateVariable.VerticalKeystone = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "VerticalKeystone", value));
+        }
+    }
+    
+    public void redVideoBlackLevelChange(Long value)
+    {
+        stateVariable.RedVideoBlackLevel = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "RedVideoBlackLevel", value));
         }
     }
     

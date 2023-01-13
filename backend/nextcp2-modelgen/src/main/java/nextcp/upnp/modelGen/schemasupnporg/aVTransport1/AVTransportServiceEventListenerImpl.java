@@ -1,10 +1,10 @@
 package nextcp.upnp.modelGen.schemasupnporg.aVTransport1;
 
-import org.fourthline.cling.model.UnsupportedDataException;
-import org.fourthline.cling.model.gena.CancelReason;
-import org.fourthline.cling.model.message.UpnpResponse;
-import org.fourthline.cling.model.meta.RemoteService;
-import org.fourthline.cling.model.state.StateVariableValue;
+import org.jupnp.model.UnsupportedDataException;
+import org.jupnp.model.gena.CancelReason;
+import org.jupnp.model.message.UpnpResponse;
+import org.jupnp.model.meta.RemoteService;
+import org.jupnp.model.state.StateVariableValue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -144,21 +144,21 @@ public class AVTransportServiceEventListenerImpl implements IAVTransportServiceE
         }
     }
     
-    public void aVTransportURIMetaDataChange(String value)
-    {
-        stateVariable.AVTransportURIMetaData = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "AVTransportURIMetaData", value));
-        }
-    }
-    
     public void transportStatusChange(String value)
     {
         stateVariable.TransportStatus = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "TransportStatus", value));
+        }
+    }
+    
+    public void aVTransportURIMetaDataChange(String value)
+    {
+        stateVariable.AVTransportURIMetaData = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "AVTransportURIMetaData", value));
         }
     }
     
@@ -180,6 +180,15 @@ public class AVTransportServiceEventListenerImpl implements IAVTransportServiceE
         }
     }
     
+    public void playbackStorageMediumChange(String value)
+    {
+        stateVariable.PlaybackStorageMedium = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "PlaybackStorageMedium", value));
+        }
+    }
+    
     public void possibleRecordQualityModesChange(String value)
     {
         stateVariable.PossibleRecordQualityModes = value;
@@ -195,15 +204,6 @@ public class AVTransportServiceEventListenerImpl implements IAVTransportServiceE
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "NextAVTransportURIMetaData", value));
-        }
-    }
-    
-    public void playbackStorageMediumChange(String value)
-    {
-        stateVariable.PlaybackStorageMedium = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "PlaybackStorageMedium", value));
         }
     }
     

@@ -8,12 +8,12 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.fourthline.cling.model.meta.RemoteDevice;
-import org.fourthline.cling.support.model.DIDLContent;
-import org.fourthline.cling.support.model.DIDLObject.Property.UPNP;
-import org.fourthline.cling.support.model.container.Container;
-import org.fourthline.cling.support.model.container.MusicAlbum;
-import org.fourthline.cling.support.model.item.Item;
+import org.jupnp.model.meta.RemoteDevice;
+import org.jupnp.support.model.DIDLContent;
+import org.jupnp.support.model.DIDLObject.Property.UPNP;
+import org.jupnp.support.model.container.Container;
+import org.jupnp.support.model.container.MusicAlbum;
+import org.jupnp.support.model.item.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

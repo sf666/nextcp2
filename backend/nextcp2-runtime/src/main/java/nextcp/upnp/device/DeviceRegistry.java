@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
-import org.fourthline.cling.model.meta.RemoteDevice;
-import org.fourthline.cling.model.types.UDN;
+import org.jupnp.model.meta.RemoteDevice;
+import org.jupnp.model.types.UDN;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;

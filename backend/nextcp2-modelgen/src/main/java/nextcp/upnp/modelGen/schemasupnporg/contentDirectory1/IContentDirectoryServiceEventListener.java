@@ -12,9 +12,13 @@ import nextcp.upnp.ISubscriptionEventListener;
  */
 public interface IContentDirectoryServiceEventListener extends ISubscriptionEventListener 
 {
+    public void transferIDsChange(String value);
+    
     public void systemUpdateIDChange(Long value);
     
     public void sortCapabilitiesChange(String value);
+    
+    public void containerUpdateIDsChange(String value);
     
     public void searchCapabilitiesChange(String value);
     

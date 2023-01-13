@@ -12,6 +12,8 @@ import nextcp.upnp.ISubscriptionEventListener;
  */
 public interface IMagicAudioServiceEventListener extends ISubscriptionEventListener 
 {
+    public void inputLabelSupportChange(Boolean value);
+    
     public void spotifyEnableChange(Boolean value);
     
     public void newBitDepthChange(String value);
@@ -21,6 +23,8 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     public void portChange(Long value);
     
     public void firmwareDownloadProgressChange(Integer value);
+    
+    public void defaultRadioSupportChange(Boolean value);
     
     public void bitDepthChange(String value);
     
@@ -62,6 +66,8 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     
     public void mQASampleRateChange(Long value);
     
+    public void analogBalanceChange(Integer value);
+    
     public void firmwareCommandChange(String value);
     
     public void uSFilterDSDChange(String value);
@@ -69,6 +75,8 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     public void outputBitDepthChange(Long value);
     
     public void autoPlayChange(Boolean value);
+    
+    public void analogBalanceSupportChange(Boolean value);
     
     public void magicAudioVerChange(String value);
     
@@ -81,6 +89,8 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     public void networkLEDChange(Boolean value);
     
     public void serviceIdChange(String value);
+    
+    public void publicDNSChange(Boolean value);
     
     public void resamplingTagChange(String value);
     
@@ -108,6 +118,8 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     
     public void dAEnableChange(String value);
     
+    public void defaultRadioEnableChange(Boolean value);
+    
     public void dSDtoPCM_typeChange(String value);
     
     public void tidalAccessTokenChange(byte[] value);
@@ -118,6 +130,8 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     
     public void analogOutLvlChange(String value);
     
+    public void sourceNameChange(String value);
+    
     public void tidalConnectEnableChange(Boolean value);
     
     public void outputSampleRateChange(Long value);
@@ -127,6 +141,10 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     public void mQAProvenanceChange(String value);
     
     public void songcastSupportChange(Boolean value);
+    
+    public void sourceIndexChange(Long value);
+    
+    public void fPModeChange(String value);
     
     public void fileTypeChange(String value);
     

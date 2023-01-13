@@ -2,16 +2,17 @@ package nextcp.upnp;
 
 import java.net.URL;
 
-import org.fourthline.cling.binding.xml.Descriptor.Device;
-import org.fourthline.cling.controlpoint.ControlPoint;
-import org.fourthline.cling.model.action.ActionException;
-import org.fourthline.cling.model.action.ActionInvocation;
-import org.fourthline.cling.model.message.UpnpResponse;
-import org.fourthline.cling.model.message.control.IncomingActionResponseMessage;
-import org.fourthline.cling.model.meta.LocalService;
-import org.fourthline.cling.model.meta.RemoteService;
-import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.protocol.sync.SendingAction;
+import org.jupnp.controlpoint.ControlPoint;
+import org.jupnp.model.action.ActionException;
+import org.jupnp.model.action.ActionInvocation;
+import org.jupnp.model.message.UpnpResponse;
+import org.jupnp.model.message.control.IncomingActionResponseMessage;
+import org.jupnp.model.meta.LocalService;
+import org.jupnp.model.meta.RemoteService;
+import org.jupnp.model.meta.Service;
+import org.jupnp.protocol.sync.SendingAction;
+
+
 
 public abstract class ActionCallback
 {

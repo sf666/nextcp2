@@ -7,11 +7,16 @@
 	</parent>
 	<artifactId>nextcp2-codegen</artifactId>
 	<description>codegen module</description>
+	<packaging>jar</packaging>
 	<dependencies>
-		<!-- generated models -->
+		<!-- UPnP -->
 		<dependency>
-			<groupId>de.sf666</groupId>
-			<artifactId>nextcp2-modelgen</artifactId>
+			<groupId>org.jupnp</groupId>
+			<artifactId>org.jupnp</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jupnp</groupId>
+			<artifactId>org.jupnp.support</artifactId>
 		</dependency>
 		<!-- YAML code generator support -->
 		<dependency>
@@ -67,15 +72,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
-		</dependency>
-		<!-- UPnP -->
-		<dependency>
-			<groupId>org.fourthline.cling-forked</groupId>
-			<artifactId>cling-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.fourthline.cling-forked</groupId>
-			<artifactId>cling-support</artifactId>
 		</dependency>
 		<!-- Utils -->
 		<dependency>

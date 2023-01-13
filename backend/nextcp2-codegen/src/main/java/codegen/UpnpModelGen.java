@@ -12,17 +12,17 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.FilenameUtils;
-import org.fourthline.cling.UpnpService;
-import org.fourthline.cling.model.message.header.STAllHeader;
-import org.fourthline.cling.model.meta.Action;
-import org.fourthline.cling.model.meta.ActionArgument;
-import org.fourthline.cling.model.meta.LocalDevice;
-import org.fourthline.cling.model.meta.RemoteDevice;
-import org.fourthline.cling.model.meta.RemoteService;
-import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.meta.StateVariable;
-import org.fourthline.cling.registry.Registry;
-import org.fourthline.cling.registry.RegistryListener;
+import org.jupnp.UpnpService;
+import org.jupnp.model.message.header.STAllHeader;
+import org.jupnp.model.meta.Action;
+import org.jupnp.model.meta.ActionArgument;
+import org.jupnp.model.meta.LocalDevice;
+import org.jupnp.model.meta.RemoteDevice;
+import org.jupnp.model.meta.RemoteService;
+import org.jupnp.model.meta.Service;
+import org.jupnp.model.meta.StateVariable;
+import org.jupnp.registry.Registry;
+import org.jupnp.registry.RegistryListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,6 @@ import org.springframework.stereotype.Component;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
-import nextcp.dto.Config;
 
 @Component
 public class UpnpModelGen implements RegistryListener
@@ -51,7 +50,7 @@ public class UpnpModelGen implements RegistryListener
     private UpnpService upnpService = null;
 
     @Autowired
-    private Config config = null;
+    private ICodegenConfig config = null;
 
     public UpnpModelGen()
     {
@@ -67,13 +66,13 @@ public class UpnpModelGen implements RegistryListener
     @EventListener
     public void onApplicationStartedEvent(ContextRefreshedEvent event)
     {
-        log.info("code generation for upnp services is " + (config.applicationConfig.generateUpnpCode ? "enabled" : "disabled"));
+        log.info("code generation for upnp services is " + (config.isGenerateUpnpCode() ? "enabled" : "disabled"));
     }
 
     @PostConstruct
     private void init()
     {
-        if (config.applicationConfig.generateUpnpCode)
+        if (config.isGenerateUpnpCode())
         {
             log.info("starting control point RegistryListener ... ");
             upnpService.getRegistry().addListener(this);
@@ -216,7 +215,7 @@ public class UpnpModelGen implements RegistryListener
     protected String getFilename(String packageName, String className)
     {
         String replacedPackagename = packageName.replaceAll("\\.", File.separator);
-        String path = FilenameUtils.concat(config.applicationConfig.generateUpnpCodePath, replacedPackagename);
+        String path = FilenameUtils.concat(config.getGenerateUpnpCodePath(), replacedPackagename);
         path = FilenameUtils.concat(path, className + ".java");
         return path;
     }
@@ -238,7 +237,7 @@ public class UpnpModelGen implements RegistryListener
     {
         String packageName = getPackage(service);
         String replacedPackagename = packageName.replaceAll("\\.", File.separator);
-        String path = FilenameUtils.concat(config.applicationConfig.generateUpnpCodePath, replacedPackagename);
+        String path = FilenameUtils.concat(config.getGenerateUpnpCodePath(), replacedPackagename);
         return path;
     }
 

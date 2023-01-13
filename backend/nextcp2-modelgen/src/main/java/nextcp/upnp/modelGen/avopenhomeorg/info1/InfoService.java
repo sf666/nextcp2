@@ -1,12 +1,11 @@
 package nextcp.upnp.modelGen.avopenhomeorg.info1;
 
-import org.fourthline.cling.UpnpService;
-
-import org.fourthline.cling.model.meta.RemoteDevice;
-import org.fourthline.cling.model.meta.RemoteService;
-import org.fourthline.cling.model.types.ServiceType;
-import org.fourthline.cling.protocol.ProtocolCreationException;
-import org.fourthline.cling.protocol.sync.SendingSubscribe;
+import org.jupnp.UpnpService;
+import org.jupnp.model.meta.RemoteDevice;
+import org.jupnp.model.meta.RemoteService;
+import org.jupnp.model.types.ServiceType;
+import org.jupnp.protocol.ProtocolCreationException;
+import org.jupnp.protocol.sync.SendingSubscribe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

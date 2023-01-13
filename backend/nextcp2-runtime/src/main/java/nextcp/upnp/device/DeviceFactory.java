@@ -1,6 +1,6 @@
 package nextcp.upnp.device;
 
-import org.fourthline.cling.model.meta.RemoteDevice;
+import org.jupnp.model.meta.RemoteDevice;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;

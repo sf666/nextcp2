@@ -1,10 +1,10 @@
 package nextcp.upnp.modelGen.magictvcom.magicAudio1;
 
-import org.fourthline.cling.model.UnsupportedDataException;
-import org.fourthline.cling.model.gena.CancelReason;
-import org.fourthline.cling.model.message.UpnpResponse;
-import org.fourthline.cling.model.meta.RemoteService;
-import org.fourthline.cling.model.state.StateVariableValue;
+import org.jupnp.model.UnsupportedDataException;
+import org.jupnp.model.gena.CancelReason;
+import org.jupnp.model.message.UpnpResponse;
+import org.jupnp.model.meta.RemoteService;
+import org.jupnp.model.state.StateVariableValue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,6 +108,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
+    public void inputLabelSupportChange(Boolean value)
+    {
+        stateVariable.InputLabelSupport = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "InputLabelSupport", value));
+        }
+    }
+    
     public void spotifyEnableChange(Boolean value)
     {
         stateVariable.SpotifyEnable = value;
@@ -150,6 +159,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "FirmwareDownloadProgress", value));
+        }
+    }
+    
+    public void defaultRadioSupportChange(Boolean value)
+    {
+        stateVariable.DefaultRadioSupport = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "DefaultRadioSupport", value));
         }
     }
     
@@ -333,6 +351,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         }
     }
     
+    public void analogBalanceChange(Integer value)
+    {
+        stateVariable.AnalogBalance = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "AnalogBalance", value));
+        }
+    }
+    
     public void firmwareCommandChange(String value)
     {
         stateVariable.FirmwareCommand = value;
@@ -366,6 +393,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "AutoPlay", value));
+        }
+    }
+    
+    public void analogBalanceSupportChange(Boolean value)
+    {
+        stateVariable.AnalogBalanceSupport = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "AnalogBalanceSupport", value));
         }
     }
     
@@ -420,6 +456,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "ServiceId", value));
+        }
+    }
+    
+    public void publicDNSChange(Boolean value)
+    {
+        stateVariable.PublicDNS = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "PublicDNS", value));
         }
     }
     
@@ -540,6 +585,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         }
     }
     
+    public void defaultRadioEnableChange(Boolean value)
+    {
+        stateVariable.DefaultRadioEnable = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "DefaultRadioEnable", value));
+        }
+    }
+    
     public void dSDtoPCM_typeChange(String value)
     {
         stateVariable.DSDtoPCM_type = value;
@@ -585,6 +639,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         }
     }
     
+    public void sourceNameChange(String value)
+    {
+        stateVariable.SourceName = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "SourceName", value));
+        }
+    }
+    
     public void tidalConnectEnableChange(Boolean value)
     {
         stateVariable.TidalConnectEnable = value;
@@ -627,6 +690,24 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "SongcastSupport", value));
+        }
+    }
+    
+    public void sourceIndexChange(Long value)
+    {
+        stateVariable.SourceIndex = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "SourceIndex", value));
+        }
+    }
+    
+    public void fPModeChange(String value)
+    {
+        stateVariable.FPMode = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "FPMode", value));
         }
     }
     

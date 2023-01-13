@@ -4,13 +4,13 @@ import java.util.Map;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.fourthline.cling.model.UnsupportedDataException;
-import org.fourthline.cling.model.gena.CancelReason;
-import org.fourthline.cling.model.gena.RemoteGENASubscription;
-import org.fourthline.cling.model.message.UpnpResponse;
-import org.fourthline.cling.model.meta.RemoteService;
-import org.fourthline.cling.model.state.StateVariableValue;
-import org.fourthline.cling.model.types.UnsignedVariableInteger;
+import org.jupnp.model.UnsupportedDataException;
+import org.jupnp.model.gena.CancelReason;
+import org.jupnp.model.gena.RemoteGENASubscription;
+import org.jupnp.model.message.UpnpResponse;
+import org.jupnp.model.meta.RemoteService;
+import org.jupnp.model.state.StateVariableValue;
+import org.jupnp.model.types.UnsignedVariableInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,20 +108,53 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "MinVolumeDB":
-                        minVolumeDBChange((Integer) stateVar.getValue());
+                    case "Loudness":
+                        loudnessChange((Boolean) stateVar.getValue());
+                        break;
+                    case "Brightness":
+                        brightnessChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "GreenVideoBlackLevel":
+                        greenVideoBlackLevelChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "BlueVideoBlackLevel":
+                        blueVideoBlackLevelChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "PresetNameList":
+                        presetNameListChange((String) stateVar.getValue());
+                        break;
+                    case "Contrast":
+                        contrastChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "Sharpness":
+                        sharpnessChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "GreenVideoGain":
+                        greenVideoGainChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "ColorTemperature":
+                        colorTemperatureChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "HorizontalKeystone":
+                        horizontalKeystoneChange((Integer) stateVar.getValue());
                         break;
                     case "Volume":
                         volumeChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
-                    case "MaxVolumeDB":
-                        maxVolumeDBChange((Integer) stateVar.getValue());
-                        break;
                     case "LastChange":
                         lastChangeChange((String) stateVar.getValue());
                         break;
-                    case "PresetNameList":
-                        presetNameListChange((String) stateVar.getValue());
+                    case "BlueVideoGain":
+                        blueVideoGainChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "RedVideoGain":
+                        redVideoGainChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "VerticalKeystone":
+                        verticalKeystoneChange((Integer) stateVar.getValue());
+                        break;
+                    case "RedVideoBlackLevel":
+                        redVideoBlackLevelChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "Mute":
                         muteChange((Boolean) stateVar.getValue());
@@ -149,11 +182,83 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
         }
     }
 
-    private void minVolumeDBChange(Integer value)
+    private void loudnessChange(Boolean value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
-            listener.minVolumeDBChange(value);
+            listener.loudnessChange(value);
+        }
+    }    
+
+    private void brightnessChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.brightnessChange(value);
+        }
+    }    
+
+    private void greenVideoBlackLevelChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.greenVideoBlackLevelChange(value);
+        }
+    }    
+
+    private void blueVideoBlackLevelChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.blueVideoBlackLevelChange(value);
+        }
+    }    
+
+    private void presetNameListChange(String value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.presetNameListChange(value);
+        }
+    }    
+
+    private void contrastChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.contrastChange(value);
+        }
+    }    
+
+    private void sharpnessChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.sharpnessChange(value);
+        }
+    }    
+
+    private void greenVideoGainChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.greenVideoGainChange(value);
+        }
+    }    
+
+    private void colorTemperatureChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.colorTemperatureChange(value);
+        }
+    }    
+
+    private void horizontalKeystoneChange(Integer value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.horizontalKeystoneChange(value);
         }
     }    
 
@@ -165,14 +270,6 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void maxVolumeDBChange(Integer value)
-    {
-        for (IRenderingControlServiceEventListener listener : eventListener)
-        {
-            listener.maxVolumeDBChange(value);
-        }
-    }    
-
     private void lastChangeChange(String value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
@@ -181,11 +278,35 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void presetNameListChange(String value)
+    private void blueVideoGainChange(Long value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
-            listener.presetNameListChange(value);
+            listener.blueVideoGainChange(value);
+        }
+    }    
+
+    private void redVideoGainChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.redVideoGainChange(value);
+        }
+    }    
+
+    private void verticalKeystoneChange(Integer value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.verticalKeystoneChange(value);
+        }
+    }    
+
+    private void redVideoBlackLevelChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.redVideoBlackLevelChange(value);
         }
     }    
 
