@@ -67,6 +67,7 @@
 		<module>nextcp2-db</module>
 		<module>nextcp2-runtime</module>
 		<module>nextcp2-assembly</module>
+		<module>nextcp2-codegen</module>
 	</modules>
 	<build>
 		<resources>
@@ -292,14 +293,4 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	<profiles>
-		<!-- JDK 8 profile -->
-		<profile>
-			<id>jdk8</id>
-			<properties>
-				<java.version>8</java.version>
-				<maven.compiler.release>8</maven.compiler.release>
-			</properties>
-		</profile>
-	</profiles>
 </project>
