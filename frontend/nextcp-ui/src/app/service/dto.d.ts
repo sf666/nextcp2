@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2023-01-13 13:56:06.
+// Generated using typescript-generator version 2.32.889 on 2023-01-16 17:08:58.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;

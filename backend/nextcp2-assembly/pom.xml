@@ -1,17 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<parent>
 		<groupId>de.sf666</groupId>
 		<artifactId>nextcp2-root</artifactId>
 		<version>2.4.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-
 	<artifactId>nextcp2</artifactId>
 	<name>spring boot assembly project</name>
-
-
 	<build>
 		<finalName>nextcp2</finalName>
 		<plugins>
@@ -27,7 +23,6 @@
 					<skip>false</skip>
 				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>com.akathist.maven.plugins.launch4j</groupId>
 				<artifactId>launch4j-maven-plugin</artifactId>
@@ -68,19 +63,28 @@
 			</plugin>
 		</plugins>
 	</build>
-
-
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.service.http</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+		</dependency>
+		
 		<dependency>
 			<groupId>de.sf666</groupId>
 			<artifactId>nextcp2-runtime</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>de.sf666</groupId>
 			<artifactId>nextcp2-modelgen</artifactId>
 		</dependency>
 	</dependencies>
-
-
 </project>
