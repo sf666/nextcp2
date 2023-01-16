@@ -108,17 +108,17 @@ public class X_MS_MediaReceiverRegistrarServiceSubscription extends RemoteGENASu
             {
                 switch (key)
                 {
-                    case "ValidationRevokedUpdateID":
-                        validationRevokedUpdateIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
                     case "ValidationSucceededUpdateID":
                         validationSucceededUpdateIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
-                    case "AuthorizationGrantedUpdateID":
-                        authorizationGrantedUpdateIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                    case "ValidationRevokedUpdateID":
+                        validationRevokedUpdateIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "AuthorizationDeniedUpdateID":
                         authorizationDeniedUpdateIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "AuthorizationGrantedUpdateID":
+                        authorizationGrantedUpdateIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -140,14 +140,6 @@ public class X_MS_MediaReceiverRegistrarServiceSubscription extends RemoteGENASu
         }
     }
 
-    private void validationRevokedUpdateIDChange(Long value)
-    {
-        for (IX_MS_MediaReceiverRegistrarServiceEventListener listener : eventListener)
-        {
-            listener.validationRevokedUpdateIDChange(value);
-        }
-    }    
-
     private void validationSucceededUpdateIDChange(Long value)
     {
         for (IX_MS_MediaReceiverRegistrarServiceEventListener listener : eventListener)
@@ -156,11 +148,11 @@ public class X_MS_MediaReceiverRegistrarServiceSubscription extends RemoteGENASu
         }
     }    
 
-    private void authorizationGrantedUpdateIDChange(Long value)
+    private void validationRevokedUpdateIDChange(Long value)
     {
         for (IX_MS_MediaReceiverRegistrarServiceEventListener listener : eventListener)
         {
-            listener.authorizationGrantedUpdateIDChange(value);
+            listener.validationRevokedUpdateIDChange(value);
         }
     }    
 
@@ -169,6 +161,14 @@ public class X_MS_MediaReceiverRegistrarServiceSubscription extends RemoteGENASu
         for (IX_MS_MediaReceiverRegistrarServiceEventListener listener : eventListener)
         {
             listener.authorizationDeniedUpdateIDChange(value);
+        }
+    }    
+
+    private void authorizationGrantedUpdateIDChange(Long value)
+    {
+        for (IX_MS_MediaReceiverRegistrarServiceEventListener listener : eventListener)
+        {
+            listener.authorizationGrantedUpdateIDChange(value);
         }
     }    
 }

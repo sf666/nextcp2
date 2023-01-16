@@ -18,7 +18,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.5</version>
+		<version>2.7.7</version>
 	</parent>
 	<scm>
 		<connection>scm:git:https://github.com/sf666/nextcp2.git</connection>
@@ -51,11 +51,9 @@
 	</distributionManagement>
 	<properties>
 		<maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
-		<java.version>11</java.version>
-		<maven.compiler.release>11</maven.compiler.release>
-		<log4j2.version>2.17.2</log4j2.version>
-		<slf4j.version>1.7.21</slf4j.version>
-		<cling.version>2.1.2</cling.version>
+		<java.version>17</java.version>
+		<maven.compiler.release>17</maven.compiler.release>
+		<slf4j.version>1.7.26</slf4j.version>
 		<freemarker.version>2.3.30</freemarker.version>
 		<h2database.version>2.1.210</h2database.version>
 		<jackson.version>2.12.4</jackson.version>
@@ -132,24 +130,8 @@
 	<dependencies>
 		<!-- Logging -->
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-web</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
 		<!-- JUnit test -->
 		<dependency>
@@ -175,6 +157,10 @@
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -259,11 +245,6 @@
 				<artifactId>org.osgi.service.http</artifactId>
 				<version>1.2.2</version>
 				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-server</artifactId>
-				<version>11.0.13</version>
 			</dependency>
 			<!-- Utils -->
 			<dependency>

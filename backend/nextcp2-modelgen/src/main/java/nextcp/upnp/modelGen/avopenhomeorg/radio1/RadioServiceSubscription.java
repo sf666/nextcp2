@@ -108,12 +108,6 @@ public class RadioServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "Relative":
-                        relativeChange((Integer) stateVar.getValue());
-                        break;
-                    case "IdArrayChanged":
-                        idArrayChangedChange((Boolean) stateVar.getValue());
-                        break;
                     case "Metadata":
                         metadataChange((String) stateVar.getValue());
                         break;
@@ -123,17 +117,8 @@ public class RadioServiceSubscription extends RemoteGENASubscription
                     case "TransportState":
                         transportStateChange((String) stateVar.getValue());
                         break;
-                    case "Absolute":
-                        absoluteChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
                     case "Uri":
                         uriChange((String) stateVar.getValue());
-                        break;
-                    case "IdList":
-                        idListChange((String) stateVar.getValue());
-                        break;
-                    case "IdArrayToken":
-                        idArrayTokenChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "ProtocolInfo":
                         protocolInfoChange((String) stateVar.getValue());
@@ -143,9 +128,6 @@ public class RadioServiceSubscription extends RemoteGENASubscription
                         break;
                     case "Id":
                         idChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "ChannelList":
-                        channelListChange((String) stateVar.getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -166,22 +148,6 @@ public class RadioServiceSubscription extends RemoteGENASubscription
             listener.eventProcessed();
         }
     }
-
-    private void relativeChange(Integer value)
-    {
-        for (IRadioServiceEventListener listener : eventListener)
-        {
-            listener.relativeChange(value);
-        }
-    }    
-
-    private void idArrayChangedChange(Boolean value)
-    {
-        for (IRadioServiceEventListener listener : eventListener)
-        {
-            listener.idArrayChangedChange(value);
-        }
-    }    
 
     private void metadataChange(String value)
     {
@@ -207,35 +173,11 @@ public class RadioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void absoluteChange(Long value)
-    {
-        for (IRadioServiceEventListener listener : eventListener)
-        {
-            listener.absoluteChange(value);
-        }
-    }    
-
     private void uriChange(String value)
     {
         for (IRadioServiceEventListener listener : eventListener)
         {
             listener.uriChange(value);
-        }
-    }    
-
-    private void idListChange(String value)
-    {
-        for (IRadioServiceEventListener listener : eventListener)
-        {
-            listener.idListChange(value);
-        }
-    }    
-
-    private void idArrayTokenChange(Long value)
-    {
-        for (IRadioServiceEventListener listener : eventListener)
-        {
-            listener.idArrayTokenChange(value);
         }
     }    
 
@@ -260,14 +202,6 @@ public class RadioServiceSubscription extends RemoteGENASubscription
         for (IRadioServiceEventListener listener : eventListener)
         {
             listener.idChange(value);
-        }
-    }    
-
-    private void channelListChange(String value)
-    {
-        for (IRadioServiceEventListener listener : eventListener)
-        {
-            listener.channelListChange(value);
         }
     }    
 }

@@ -9,9 +9,9 @@ package nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1;
 public class X_MS_MediaReceiverRegistrarServiceStateVariable
 {
 
-    public Long ValidationRevokedUpdateID = null;
     public Long ValidationSucceededUpdateID = null;
-    public Long AuthorizationGrantedUpdateID = null;
+    public Long ValidationRevokedUpdateID = null;
     public Long AuthorizationDeniedUpdateID = null;
+    public Long AuthorizationGrantedUpdateID = null;
 
 }

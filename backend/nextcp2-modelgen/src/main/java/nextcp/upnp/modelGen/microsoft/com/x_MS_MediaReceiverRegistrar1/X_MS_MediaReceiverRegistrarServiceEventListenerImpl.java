@@ -108,15 +108,6 @@ public class X_MS_MediaReceiverRegistrarServiceEventListenerImpl implements IX_M
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void validationRevokedUpdateIDChange(Long value)
-    {
-        stateVariable.ValidationRevokedUpdateID = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "ValidationRevokedUpdateID", value));
-        }
-    }
-    
     public void validationSucceededUpdateIDChange(Long value)
     {
         stateVariable.ValidationSucceededUpdateID = value;
@@ -126,12 +117,12 @@ public class X_MS_MediaReceiverRegistrarServiceEventListenerImpl implements IX_M
         }
     }
     
-    public void authorizationGrantedUpdateIDChange(Long value)
+    public void validationRevokedUpdateIDChange(Long value)
     {
-        stateVariable.AuthorizationGrantedUpdateID = value;
+        stateVariable.ValidationRevokedUpdateID = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "AuthorizationGrantedUpdateID", value));
+            log.debug(String.format("StateVariable : %s: %s", "ValidationRevokedUpdateID", value));
         }
     }
     
@@ -141,6 +132,15 @@ public class X_MS_MediaReceiverRegistrarServiceEventListenerImpl implements IX_M
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "AuthorizationDeniedUpdateID", value));
+        }
+    }
+    
+    public void authorizationGrantedUpdateIDChange(Long value)
+    {
+        stateVariable.AuthorizationGrantedUpdateID = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "AuthorizationGrantedUpdateID", value));
         }
     }
     

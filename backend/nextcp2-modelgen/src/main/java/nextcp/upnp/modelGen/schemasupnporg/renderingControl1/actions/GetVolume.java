@@ -37,7 +37,7 @@ public class GetVolume extends ActionCallback
 
         GetVolumeOutput result = new GetVolumeOutput();
 
-        result.CurrentVolume = ((UnsignedIntegerTwoBytes) invocation.getOutput("CurrentVolume").getValue()).getValue();
+        result.CurrentVolume = ((UnsignedIntegerFourBytes) invocation.getOutput("CurrentVolume").getValue()).getValue();
 
         return result;
     }

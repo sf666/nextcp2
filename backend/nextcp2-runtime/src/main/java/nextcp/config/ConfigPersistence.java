@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
-import codegen.ICodegenConfig;
 import nextcp.db.service.BasicDbService;
 import nextcp.dto.Config;
 import nextcp.dto.MusicbrainzSupport;

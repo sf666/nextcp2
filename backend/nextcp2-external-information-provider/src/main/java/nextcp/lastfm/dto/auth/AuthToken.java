@@ -3,8 +3,6 @@ package nextcp.lastfm.dto.auth;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.processing.Generated;
-
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
