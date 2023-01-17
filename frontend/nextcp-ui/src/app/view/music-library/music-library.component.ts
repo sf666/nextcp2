@@ -15,7 +15,7 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
   providers: [ContentDirectoryService, PersistenceService, CdsBrowsePathService, { provide: 'uniqueId', useValue: 'music-library_' }]
 })
 
-export class MusicLibraryComponent {
+export class MusicLibraryComponent implements AfterViewInit{
 
   private lastOidIsRestoredFromCache: boolean;
   private currentMediaServerDto: MediaServerDto;
@@ -32,6 +32,9 @@ export class MusicLibraryComponent {
     // select current mediaServer and subscribe to changes ...
     deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));
     deviceService.mediaServerInitiated$.subscribe(d => this.deviceService.setMediaServerByUdn(this.persistenceService.getCurrentMediaServerDevice()));
+  }
+  ngAfterViewInit(): void {
+    this.browseToLastKnownUdn();
   }
 
   mediaServerChanged(data: MediaServerDto): void {

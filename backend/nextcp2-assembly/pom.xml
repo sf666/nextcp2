@@ -46,29 +46,33 @@
 						<addDependencies>false</addDependencies>
 					</classPath>
 					<jre>
-						<minVersion>15</minVersion>
+						<minVersion>17</minVersion>
 					</jre>
 					<versionInfo>
-						<fileVersion>2.3.1.0</fileVersion>
-						<txtFileVersion>2.3.1.0</txtFileVersion>
-						<fileDescription>a description</fileDescription>
+						<fileVersion>${project.version}</fileVersion>
+						<txtFileVersion>${project.version}</txtFileVersion>
+						<fileDescription>nextcp/2 control point</fileDescription>
 						<copyright>MIT</copyright>
-						<productVersion>2.3.1.0</productVersion>
-						<txtProductVersion>2.3.1.0</txtProductVersion>
-						<productName>2.3.1.0</productName>
-						<internalName>2.3.1.0</internalName>
-						<originalFilename>nextcp2.exe</originalFilename>
+						<productVersion>${project.version}</productVersion>
+						<txtProductVersion>${project.version}</txtProductVersion>
+						<productName>nextcp/2</productName>
+						<internalName>nextcp/2</internalName>
+						<originalFilename>nextcp2_${project.version}.exe</originalFilename>
 					</versionInfo>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
+		<!-- Assemble Spring Boot Application with        -->
+		<!-- ============================================ -->
+		<!-- * Jetty as http server -->
+		<!-- * Log4j2 as logging system-->
+		<!-- -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 			<exclusions>
-				<!-- Exclude the Tomcat dependency -->
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-tomcat</artifactId>
@@ -79,7 +83,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<!-- Use Jetty instead -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jetty</artifactId>
@@ -92,10 +95,9 @@
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.service.http</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-server</artifactId>
-		</dependency>
+		<!--
+			include all internal modules required for runtime environment 
+		--> 
 		<dependency>
 			<groupId>de.sf666</groupId>
 			<artifactId>nextcp2-runtime</artifactId>
@@ -103,6 +105,10 @@
 		<dependency>
 			<groupId>de.sf666</groupId>
 			<artifactId>nextcp2-modelgen</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.sf666</groupId>
+			<artifactId>nextcp2-codegen</artifactId>
 		</dependency>
 	</dependencies>
 </project>
