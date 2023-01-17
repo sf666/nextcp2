@@ -440,3 +440,7 @@ button:focus {
     text-transform: uppercase;
     color         : rgb(255, 190, 125);
 }
+
+.footer-block {
+    height: var(--footer-height);
+}

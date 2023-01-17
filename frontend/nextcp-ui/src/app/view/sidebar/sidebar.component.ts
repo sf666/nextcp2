@@ -1,3 +1,4 @@
+import { LayoutService } from './../../service/layout.service';
 import { InputFieldConfig } from './../../popup/input-field-dialog/input-field-dialog.d';
 import { InputFieldDialogComponent } from './../../popup/input-field-dialog/input-field-dialog.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -30,6 +31,7 @@ export class SidebarComponent {
     public playlistService: PlaylistService,
     private myPlaylistService: MyPlaylistService,
     private router: Router,
+    public layoutService: LayoutService,
     private dialog: MatDialog,
     public rendererService: RendererService) {
     deviceService.mediaRendererChanged$.subscribe(data => this._mediaRendererUdn = data.udn);

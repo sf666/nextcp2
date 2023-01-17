@@ -38,5 +38,5 @@
         <a mat-button [routerLink]="'/myPlaylists'" class="hide-element playlist {{getPlaylistClass(item.playlistId)}}"
             *ngFor="let item of playlistService.serverPl.serverPlaylists" (click)="browseToPlaylist(item)">{{item.playlistName}}</a>
     </div>
-
 </div>
+<div id="mobileDeviceEmptyBlock" *ngIf="layoutService.isMobileDevice()" class="footer-block">&nbsp;</div>
