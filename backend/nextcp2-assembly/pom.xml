@@ -8,6 +8,9 @@
 	</parent>
 	<artifactId>nextcp2</artifactId>
 	<name>spring boot assembly project</name>
+	<properties>
+		<exe.version>2.4.1.0</exe.version>
+	</properties>
 	<build>
 		<finalName>nextcp2</finalName>
 		<plugins>
@@ -49,12 +52,12 @@
 						<minVersion>17</minVersion>
 					</jre>
 					<versionInfo>
-						<fileVersion>${project.version}</fileVersion>
-						<txtFileVersion>${project.version}</txtFileVersion>
+						<fileVersion>${exe.version}</fileVersion>
+						<txtFileVersion>${exe.version}</txtFileVersion>
 						<fileDescription>nextcp/2 control point</fileDescription>
 						<copyright>MIT</copyright>
-						<productVersion>${project.version}</productVersion>
-						<txtProductVersion>${project.version}</txtProductVersion>
+						<productVersion>${exe.version}</productVersion>
+						<txtProductVersion>${exe.version}</txtProductVersion>
 						<productName>nextcp/2</productName>
 						<internalName>nextcp/2</internalName>
 						<originalFilename>nextcp2_${project.version}.exe</originalFilename>
@@ -97,7 +100,7 @@
 		</dependency>
 		<!--
 			include all internal modules required for runtime environment 
-		--> 
+		-->
 		<dependency>
 			<groupId>de.sf666</groupId>
 			<artifactId>nextcp2-runtime</artifactId>

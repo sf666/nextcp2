@@ -35,7 +35,6 @@ public class FileConfigPersistence
     private static final String DEFAULT_CONFIG_FILENAME = "nextcp2config.json";
     private static final String DEFAULT_UNIX_CONFIG_PATH = "/etc/nextcp2";
 
-    private String log4jConfigFile = "";
     private String configurationFilename = null;
     private Config config = null;
     private ObjectMapper om = new ObjectMapper();
@@ -244,15 +243,4 @@ public class FileConfigPersistence
             return null;
         }
     }
-
-    public String getLog4jConfigFile()
-    {
-        return log4jConfigFile;
-    }
-
-    public void setLog4jConfigFile(String log4jConfigFile)
-    {
-        this.log4jConfigFile = log4jConfigFile;
-    }
-
 }
