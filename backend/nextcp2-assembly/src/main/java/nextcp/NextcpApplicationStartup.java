@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -40,9 +41,10 @@ public class NextcpApplicationStartup implements IApplicationRestartable
 
     public static void main(String[] args)
     {
+        System.setProperty("org.springframework.boot.logging.LoggingSystem", NextcpLoggingSystemConfiguration.class.getName());
         // Startup ...
         NextcpApplicationStartup.args = args;
-        NextcpApplicationStartup.context = SpringApplication.run(NextcpApplicationStartup.class, args);
+        NextcpApplicationStartup.context = new SpringApplicationBuilder(NextcpApplicationStartup.class).run(args);
     }
 
     public void restart()
