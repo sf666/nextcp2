@@ -132,7 +132,6 @@ public class RendererConfig
     public RendererDeviceConfiguration addMediaRendererDeviceConfig(MediaRendererDevice device)
     {
         RemoteDevice remoteDevice = device.getDevice();
-        System.out.println("  --> " + remoteDevice.getIdentity().getUdn().getIdentifierString());
         Optional<RendererDeviceConfiguration> configEntry = config.rendererDevices.stream().filter(d -> checkIfRendererConfigExists(remoteDevice, d)).findFirst();
         if (configEntry.isPresent())
         {
@@ -160,7 +159,6 @@ public class RendererConfig
 
     private boolean checkIfRendererConfigExists(RemoteDevice remoteDevice, RendererDeviceConfiguration d)
     {
-        System.out.println(" --> " + d.mediaRenderer.udn);
         return d.mediaRenderer.udn.equals(remoteDevice.getIdentity().getUdn().getIdentifierString());
     }
 
