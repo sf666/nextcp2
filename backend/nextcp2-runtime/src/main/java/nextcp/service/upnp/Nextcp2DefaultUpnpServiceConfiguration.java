@@ -44,7 +44,6 @@ import org.jupnp.transport.impl.MulticastReceiverConfigurationImpl;
 import org.jupnp.transport.impl.MulticastReceiverImpl;
 import org.jupnp.transport.impl.NetworkAddressFactoryImpl;
 import org.jupnp.transport.impl.SOAPActionProcessorImpl;
-import org.jupnp.transport.impl.jetty.StreamClientConfigurationImpl;
 import org.jupnp.transport.spi.DatagramIO;
 import org.jupnp.transport.spi.DatagramProcessor;
 import org.jupnp.transport.spi.GENAEventProcessor;
@@ -187,16 +186,11 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
         return new ApacheStreamClient(new ApacheStreamClientConfiguration(getSyncProtocolExecutorService()));
     }
 
-    private StreamClientConfiguration createStreamClientConfiguration()
-    {
-        return new StreamClientConfigurationImpl(defaultExecutorService); // , 20, 5, 5, 5);
-    }
-
     @Override
     @SuppressWarnings("rawtypes")
     public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory)
     {
-        return transportConfiguration.createStreamServer(networkAddressFactory.getStreamListenPort());
+        return new JdkHttpServerStreamServer(new UmsStreamServerConfiguration());
     }
 
     @Override
