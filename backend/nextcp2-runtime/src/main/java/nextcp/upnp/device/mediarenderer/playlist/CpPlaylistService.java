@@ -166,7 +166,8 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
                     stop();
                 }
             }
-        } else 
+        }
+        else
         {
             log.debug("device has nextUriSupport. Do nothing ... ");
         }
@@ -211,7 +212,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
         }
         else
         {
-            log.debug("device has no nextUriSupport. Do nothing ...");            
+            log.debug("device has no nextUriSupport. Do nothing ...");
         }
     }
 
@@ -328,7 +329,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
     {
         if (!playlistItems.contains(song))
         {
-            log.debug("adding song to playlist : " + song != null ? song.toString() : "NULL");            
+            log.debug("adding song to playlist : " + song != null ? song.toString() : "NULL");
             playlistItems.addLast(song);
             playbackItems = getFillStrategy().addElement(playbackItems, position);
             updateSongUrls();
@@ -342,7 +343,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 
     public int addAllSongToPlaylist(List<MusicItemDto> songsToAdd)
     {
-        log.debug("addAllSongToPlaylist. Number of Songs given : " + songsToAdd.size());            
+        log.debug("addAllSongToPlaylist. Number of Songs given : " + songsToAdd.size());
         // remove double entries ...
         songsToAdd.removeAll(playlistItems);
 
@@ -465,7 +466,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
         {
             log.info(String.format("moving to next track : %s", playlistItems.get(currentSongIdx)));
         }
-        
+
         return playlistItems.get(currentSongIdx);
     }
 
@@ -653,20 +654,39 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
     @Override
     public void previous()
     {
-
+        log.warn("previous NOT IMPLEMENTED");
     }
 
     @Override
     public void seekId(long id)
     {
-        // TODO Auto-generated method stub
+        log.warn("seekId NOT IMPLEMENTED");
+    }
 
+    @Override
+    public boolean seekId(String streamUrl)
+    {
+        Optional<MusicItemDto> item = playlistItems.stream().filter(musicItem -> musicItem.streamingURL.equals(streamUrl)).findFirst();
+        if (item.isPresent())
+        {
+            MusicItemDto dto = item.get();
+            int idxSong = playlistItems.indexOf(dto);
+            boolean removed = playbackItems.remove(Integer.valueOf(idxSong));
+            if (!removed)
+            {
+                log.warn("playbackIndex couldn't be found for index " + idxSong + " : " + dto);
+                return false;
+            }
+            playbackItems.addFirst(idxSong);
+            play();
+            return true;
+        }
+        return false;
     }
 
     public long insert(MusicItemDto song)
     {
         // TODO : handle inp.AfterId
-
         addSongToPlaylist(song);
         return 0;
     }
@@ -674,15 +694,13 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
     @Override
     public void seekSecondRelative(int sec)
     {
-        // TODO Auto-generated method stub
-
+        log.warn("seekSecondRelative NOT IMPLEMENTED");
     }
 
     @Override
     public void seekSecondAbsolute(long sec)
     {
-        // TODO Auto-generated method stub
-
+        log.warn("seekSecondAbsolute NOT IMPLEMENTED");
     }
 
     @Override

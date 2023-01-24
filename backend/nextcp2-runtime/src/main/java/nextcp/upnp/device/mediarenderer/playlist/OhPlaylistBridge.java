@@ -2,8 +2,7 @@ package nextcp.upnp.device.mediarenderer.playlist;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -50,7 +49,7 @@ public class OhPlaylistBridge implements IPlaylistService, ITransport
     private OpenHomeUtils ohUtil = null;
 
     private LinkedList<Long> playlistIds = new LinkedList<>();
-    private Set<String> playlistUrls = new CopyOnWriteArraySet<>();
+    private CopyOnWriteArrayList<String> playlistUrls = new CopyOnWriteArrayList<>();
     private MediaRendererDevice device = null;
 
     public OhPlaylistBridge(PlaylistService playlistService, DtoBuilder dtoBuilder, MediaRendererDevice device)
@@ -70,7 +69,7 @@ public class OhPlaylistBridge implements IPlaylistService, ITransport
         }
         catch (Exception e)
         {
-            log.error("read id: ");
+            log.error("read id: ", e);
         }
         dto.ProtocolInfo = playlistService.protocolInfo().Value;
         try
@@ -79,7 +78,7 @@ public class OhPlaylistBridge implements IPlaylistService, ITransport
         }
         catch (Exception e)
         {
-            log.error("read repeat: ");
+            log.error("read repeat: ", e);
         }
         try
         {
@@ -87,7 +86,7 @@ public class OhPlaylistBridge implements IPlaylistService, ITransport
         }
         catch (Exception e)
         {
-            log.error("read shuffle: ");
+            log.error("read shuffle: ", e);
         }
         dto.TracksMax = playlistService.tracksMax().Value;
         dto.TransportState = playlistService.transportState().Value;
@@ -159,6 +158,34 @@ public class OhPlaylistBridge implements IPlaylistService, ITransport
         SeekIdInput inp = new SeekIdInput();
         inp.Value = id;
         playlistService.seekId(inp);
+    }
+
+    @Override
+    public boolean seekId(String streamUrl)
+    {
+        log.debug("Seeking to musicItem with URL of : " + streamUrl);
+        int listIndex = playlistUrls.indexOf(streamUrl);
+        if (listIndex > -1)
+        {
+            log.debug("index is : " + listIndex);
+            Long arrayId = playlistIds.get(listIndex);
+            if (arrayId != null)
+            {
+                log.debug("seeking to id : " + arrayId);
+                seekId(arrayId);
+                return true;
+            }
+            else
+            {
+                log.warn("couldn't acquire song's plalyist index.");
+                return false;
+            }
+        }
+        else
+        {
+            log.warn("song is not in playlist");
+            return false;
+        }
     }
 
     public ReadListOutput readList(String idList)
@@ -308,7 +335,7 @@ public class OhPlaylistBridge implements IPlaylistService, ITransport
             sumInsert++;
             if (sumInsert % 10 == 0)
             {
-                waitSomeTime(100);
+                waitSomeTime(20);
             }
         }
     }
@@ -339,9 +366,9 @@ public class OhPlaylistBridge implements IPlaylistService, ITransport
     public void insertAndPlayContainer(ContainerItemDto items)
     {
         deleteAll();
-        waitSomeTime(100);
+        waitSomeTime(30);
         insertContainer(items);
-        waitSomeTime(100);
+        waitSomeTime(30);
         play();
     }
 

@@ -43,6 +43,19 @@ public class RestAvTransportService extends BaseRestService
     public void playResource(@RequestBody PlayRequestDto playRequest)
     {
         MediaRendererDevice device = checkPlayInput(playRequest);
+        if (device.getProductService() != null)
+        {
+            if (device.getProductService().getCurrentInputSource().Type.equalsIgnoreCase("playlist"))
+            {
+                log.info("Try to find current song in playlist ... ");
+                if (device.getPlaylistServiceBridge().seekId(playRequest.streamUrl))
+                {
+                    log.debug("playing streamURL from playlist ... ");
+                    return;
+                }
+            }
+        }
+        log.debug("try playing on AVTransport ... ");
         device.getAvTransportBridge().play(playRequest.streamUrl, playRequest.streamMetadata);
     }
 

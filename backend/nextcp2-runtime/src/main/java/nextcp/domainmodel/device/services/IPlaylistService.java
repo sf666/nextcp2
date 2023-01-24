@@ -36,6 +36,14 @@ public interface IPlaylistService
 
     void seekId(long id);
 
+    /**
+     * 
+     * @param streamUrl
+     * 
+     * @return TRUE if url/song was found in playlist.
+     */
+    boolean seekId(String streamUrl);
+
     void seekSecondRelative(int sec);
 
     void seekSecondAbsolute(long sec);
