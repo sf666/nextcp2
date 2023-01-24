@@ -190,7 +190,7 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
     @SuppressWarnings("rawtypes")
     public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory)
     {
-        return new JdkHttpServerStreamServer(new UmsStreamServerConfiguration());
+        return new JdkHttpServerStreamServer(new Nextcp2StreamServerConfiguration());
     }
 
     @Override

@@ -31,15 +31,15 @@ import org.slf4j.LoggerFactory;
 /**
  * Implementation based on the built-in SUN JDK HttpServer.
  */
-public class JdkHttpServerStreamServer implements StreamServer<UmsStreamServerConfiguration> {
+public class JdkHttpServerStreamServer implements StreamServer<Nextcp2StreamServerConfiguration> {
 
 	//base the logger inside org.jupnp.transport.spi.StreamServer to reflect old behavior
 	private static final Logger LOGGER = LoggerFactory.getLogger(StreamServer.class);
 
-	protected final UmsStreamServerConfiguration configuration;
+	protected final Nextcp2StreamServerConfiguration configuration;
 	protected HttpServer server;
 
-	public JdkHttpServerStreamServer(UmsStreamServerConfiguration configuration) {
+	public JdkHttpServerStreamServer(Nextcp2StreamServerConfiguration configuration) {
 		this.configuration = configuration;
 	}
 
@@ -64,7 +64,7 @@ public class JdkHttpServerStreamServer implements StreamServer<UmsStreamServerCo
 	}
 
 	@Override
-	public UmsStreamServerConfiguration getConfiguration() {
+	public Nextcp2StreamServerConfiguration getConfiguration() {
 		return configuration;
 	}
 

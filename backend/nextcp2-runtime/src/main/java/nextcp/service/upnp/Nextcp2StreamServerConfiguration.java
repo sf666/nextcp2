@@ -18,7 +18,7 @@ package nextcp.service.upnp;
 
 import org.jupnp.transport.spi.StreamServerConfiguration;
 
-public class UmsStreamServerConfiguration implements StreamServerConfiguration
+public class Nextcp2StreamServerConfiguration implements StreamServerConfiguration
 {
 
     private int listenPort;
@@ -27,12 +27,12 @@ public class UmsStreamServerConfiguration implements StreamServerConfiguration
     /**
      * Defaults to port '0', ephemeral.
      */
-    public UmsStreamServerConfiguration()
+    public Nextcp2StreamServerConfiguration()
     {
         this(0);
     }
 
-    public UmsStreamServerConfiguration(int listenPort)
+    public Nextcp2StreamServerConfiguration(int listenPort)
     {
         this.listenPort = listenPort;
     }
