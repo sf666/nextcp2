@@ -1,3 +1,5 @@
+import { DeviceService } from 'src/app/service/device.service';
+import { SseService } from './../../service/sse/sse.service';
 import { DtoGeneratorService } from './../../util/dto-generator.service';
 import { ConfigurationService } from './../../service/configuration.service';
 import { ScrollLoadHandler } from './defs.d';
@@ -45,6 +47,8 @@ export class DisplayContainerComponent implements OnInit {
   private allTracksSameMusicBrainzReleaseId_: boolean;
   private allTracksSameDisc_: boolean;
 
+  private currentUrl = '';
+
   // like member
   currentAlbumLiked = false;
   private currentAlbumReleaseID = "";
@@ -60,6 +64,8 @@ export class DisplayContainerComponent implements OnInit {
 
   constructor(
     private myMusicService: MyMusicService,
+    private sseService: SseService,
+    private deviceService: DeviceService,
     private timeDisplayService: TimeDisplayService,
     public playlistService: PlaylistService,
     public avtransportService: AvtransportService,
@@ -69,6 +75,11 @@ export class DisplayContainerComponent implements OnInit {
     public trackQualityService: TrackQualityService) {
     console.log("constructor : DisplayContainerComponent");
     this.filteredBrowseToFunc = debounce(this.getSearchDelay(), this.doFilteredSearchThrotteled);
+    sseService.mediaRendererTrackInfoChanged$.subscribe(data => {
+      if (deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
+        this.currentUrl = data.currentTrack.streamingURL;
+      }
+    });
   }
 
   domChange(event: any): void {
@@ -427,14 +438,14 @@ export class DisplayContainerComponent implements OnInit {
         this.contentHandler.persistenceService.setCurrentObjectID(oid);
       }
       if (this.contentHandler.contentDirectoryService) {
-        this.contentHandler.contentDirectoryService.browseChildrenByOID(oid, udn, "").subscribe(data =>{
+        this.contentHandler.contentDirectoryService.browseChildrenByOID(oid, udn, "").subscribe(data => {
           this.browseFinished(data);
           if (data.currentContainer.id) {
             resolve(true);
           } else {
             resolve(false);
           }
-        } );
+        });
       } else {
         console.error("display-container.component: contentDirectoryService not set.");
         reject("display-container.component: contentDirectoryService not set.");
@@ -514,6 +525,13 @@ export class DisplayContainerComponent implements OnInit {
 
   play(musicItemDto: MusicItemDto): void {
     this.avtransportService.playResource(musicItemDto);
+  }
+
+  public selectedRowClass(musicItemDto: MusicItemDto): string {
+    if (musicItemDto.streamingURL == this.currentUrl) {
+      return "selectRow";
+    }
+    return "";
   }
 
   //

@@ -174,7 +174,7 @@
                                 </div>
                             </div>
                             <div class="item-tbody">
-                                <div class="row row-alignment">
+                                <div class="row row-alignment {{selectedRowClass(item)}}">
                                     <div *ngIf="!allTracksSameAlbum()" class="col-3 col-sm-2 col-md-2 col-lg-1" (click)="play(item)">
                                         <img class="img-small imgContainer" src="{{item.albumArtUrl}}">
                                     </div>
