@@ -51,6 +51,7 @@
 	</distributionManagement>
 	<properties>
 		<maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+		<jupnp.version>2.6.1</jupnp.version>
 		<java.version>17</java.version>
 		<maven.compiler.release>17</maven.compiler.release>
 		<slf4j.version>1.7.26</slf4j.version>
@@ -233,18 +234,17 @@
 			<dependency>
 				<groupId>org.jupnp</groupId>
 				<artifactId>org.jupnp</artifactId>
-				<version>2.6.1</version>
+				<version>${jupnp.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.jupnp</groupId>
 				<artifactId>org.jupnp.support</artifactId>
-				<version>2.6.1</version>
+				<version>${jupnp.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.osgi</groupId>
 				<artifactId>org.osgi.service.http</artifactId>
 				<version>1.2.2</version>
-				<scope>provided</scope>
 			</dependency>
 			<!-- Utils -->
 			<dependency>

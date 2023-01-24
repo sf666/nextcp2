@@ -13,8 +13,7 @@ public class UpnpServiceFactory
 
     public UpnpServiceFactory()
     {
-        CodegenUpnpServiceConfiguration sc = new CodegenUpnpServiceConfiguration();
-        upnpService = new UpnpServiceImpl(sc);
+        upnpService = new UpnpServiceImpl(new Nextcp2DefaultUpnpServiceConfiguration());
         upnpService.startup();
     }
 
