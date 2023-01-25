@@ -25,7 +25,7 @@ public class SchedulerService
     {
     }
 
-    public void addNotifier(ISchedulerService notifier)
+    public synchronized void addNotifier(ISchedulerService notifier)
     {
         if (!notifyList.contains(notifier))
         {
@@ -34,7 +34,7 @@ public class SchedulerService
     }
 
     @Scheduled(fixedRate = 1000)
-    public void reportCurrentTime()
+    public synchronized void reportCurrentTime()
     {
         counter++;
         for (ISchedulerService iSchedulerService : notifyList)

@@ -76,7 +76,7 @@ export class DisplayContainerComponent implements OnInit {
     console.log("constructor : DisplayContainerComponent");
     this.filteredBrowseToFunc = debounce(this.getSearchDelay(), this.doFilteredSearchThrotteled);
     sseService.mediaRendererTrackInfoChanged$.subscribe(data => {
-      if (deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
+      if (data?.mediaRendererUdn && data?.currentTrack && deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
         this.currentUrl = data.currentTrack.streamingURL;
       }
     });
@@ -528,7 +528,7 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   public selectedRowClass(musicItemDto: MusicItemDto): string {
-    if (musicItemDto.streamingURL == this.currentUrl) {
+    if (this.currentUrl && (musicItemDto?.streamingURL == this.currentUrl)) {
       return "selectRow";
     }
     return "";
