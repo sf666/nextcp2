@@ -37,20 +37,17 @@ export class RendererService {
   
     sseService.mediaRendererTrackInfoChanged$.subscribe(data => {
       if (deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
-        // console.log("updating trackInfo : " + data.currentTrack?.artistName);
         this.trackInfo = data;
         if (data.currentTrack?.albumArtUrl) {
+          // update background images 
           this.backgroundImageService.setFooterBackgroundImage(data.currentTrack?.albumArtUrl);
-        }
-        if (data.duration) {
-//          this.trackTime.durationDisp = data.duration;
+          this.backgroundImageService.setBackgroundImageMainScreen(data.currentTrack?.albumArtUrl);
         }
       }
     });
 
     sseService.mediaRendererPositionChanged$.subscribe(data => {
       if (deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
-        //        console.log(data);
         this.trackTime = data;
       }
     });
