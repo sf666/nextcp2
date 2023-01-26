@@ -35,12 +35,24 @@
                 <span class="material-symbols-outlined icon-button md-36 {{infoSongClass}}" (click)="openInfoPopup($event)">Info</span>
             </div>
         </div>
-        <div class="d-flex align-self-center flex-column d-none d-lg-flex">
+        
+        <!-- TIME -->
+        <!-- =========== -->
+
+        <!--Time side by side for larger displays-->
+        <div class="d-flex align-self-center d-none d-lg-flex">
             <div class="timeDispContainer">
                 <div class="currentTime">{{rendererService.trackTime.secondsDisp}}</div>
-                <div class="finishedTime">&nbsp;-&nbsp;</div>
+                <div class="finishedTime" *ngIf="!streaming()">&nbsp;-&nbsp;</div>
                 <div class="finishedTime" *ngIf="!streaming()">{{getFinishTime()}}
                 </div>
+            </div>
+        </div>
+        <!--Time up / down for smaller displays-->
+        <div class="d-flex align-self-center d-none d-sm-block d-lg-none">
+            <div class="d-flex flex-column timeDispContainer">
+                <div class="currentTime">{{rendererService.trackTime.secondsDisp}}</div>
+                <div class="finishedTime" *ngIf="!streaming()">{{getFinishTime()}}</div>
             </div>
         </div>
 
@@ -49,12 +61,12 @@
             <div class="middle-div">
                 <div class="d-flex align-self-center">
                     <span class="material-symbols-outlined icon-button d-none d-sm-block {{shuffleClass}}" (click)="playlistService.toggleShuffle()">shuffle</span>
-                    <span class="material-symbols-outlined icon-button d-none d-sm-block " (click)="playlistService.previous()">skip_previous</span>
-                    <span *ngIf="!rendererService.isPlaying()" class="material-symbols-outlined md-48 icon-button d-none d-sm-block"
+                    <span class="material-symbols-outlined icon-button d-none d-md-block " (click)="playlistService.previous()">skip_previous</span>
+                    <span *ngIf="!rendererService.isPlaying()" class="material-symbols-outlined md-48 icon-button"
                         (click)="rendererService.play()">play_arrow</span>
-                    <span *ngIf="rendererService.isPlaying()" class="material-symbols-outlined md-48 icon-button d-none d-sm-block"
+                    <span *ngIf="rendererService.isPlaying()" class="material-symbols-outlined md-48 icon-button"
                         (click)="rendererService.pause()">pause_circle</span>
-                    <span class="material-symbols-outlined icon-button d-none d-sm-block " (click)="rendererService.next()">skip_next</span>
+                    <span class="material-symbols-outlined icon-button d-none d-md-block " (click)="rendererService.next()">skip_next</span>
                     <span class="material-symbols-outlined icon-button d-none d-sm-block {{repeatClass}}" (click)="playlistService.toggleRepeat()">repeat</span>
                 </div>
             </div>

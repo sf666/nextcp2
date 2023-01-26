@@ -539,9 +539,9 @@ export class DisplayContainerComponent implements OnInit {
   // ===============================================================================================
   getTitleResponsiveClass(): string {
     if (!this.allTracksSameAlbum()) {
-      return "col-8 col-sm-7 col-md-5 col-lg-4";
+      return "col-8 col-sm-7 col-md-6 col-lg-5 col-xl-3";
     } else {
-      return "col-11 col-sm-9 col-md-7 col-lg-7";
+      return "col-11 col-sm-9 col-md-7 col-lg-6 col-xl-4";
     }
   }
 
