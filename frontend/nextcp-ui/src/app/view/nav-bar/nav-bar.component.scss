@@ -29,6 +29,24 @@
     }
 }
 
+@media only screen and (max-width: 1200px) and (min-width: 900px) {
+    .navbar {
+        position: fixed;
+        top     : 0px;
+        right   : 0px;
+        height  : var(--nav-height);
+        z-index : 3;
+    
+        display         : flex;
+        flex-direction  : row;
+        flex-wrap       : nowrap;
+        font-weight     : 300;
+        background-color: black;
+        width: calc(100% - var(--sidebar-width-mid));
+    }
+}
+
+
 .headFont {
     font-size     : 1.5rem;
     font-weight   : 500;
