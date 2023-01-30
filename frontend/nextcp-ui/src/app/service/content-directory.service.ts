@@ -276,5 +276,9 @@ export class ContentDirectoryService {
     this.updateContainer(ci);
     this.searchFinished$.next(ci);
   }
+
+  public deleteMusicTrack(item : MusicItemDto) {
+    this.musicTracks_ = this.musicTracks_.filter(listitem => listitem.songId !== item.songId);
+  }
 }
 

@@ -107,8 +107,9 @@ export class MusicLibraryComponent implements AfterViewInit{
     // no special activities yet ... 
   }
 
-  itemDeleted(event: MusicItemDto) {
-    this.contentDirectoryService.refreshCurrentContainer();
+  itemDeleted(event: MusicItemDto) {    
+    this.contentDirectoryService.deleteMusicTrack(event);
+//    this.contentDirectoryService.refreshCurrentContainer();
   }
 
   //
