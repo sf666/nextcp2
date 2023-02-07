@@ -49,11 +49,18 @@ mat-slider {
 
 .infoItems {
     display      : flex;
+    flex         : 1 1 6rem;
     border-left  : 2px solid var(--dark-grey);
-    border-right : 2px solid var(--dark-grey);
     padding-right: 10px;
     margin-top   : 24px;
     margin-bottom: 24px;
+}
+
+.button-group {
+    display        : flex;
+    flex           : 1 1;
+    align-self     : center;
+    justify-content: space-evenly;
 }
 
 .icon-button {
@@ -94,18 +101,6 @@ mat-slider {
     margin-right: 0.5rem;
     margin-left : 0.5rem;
     align-self  : center;
-}
-
-.middle-footer {
-    flex: 3 3 20rem;
-}
-
-.right-footer {
-    flex           : 1 1 8rem;
-    align-self     : center;
-    justify-content: space-evenly;
-
-    border-left  : 2px solid var(--dark-grey);
 }
 
 .audioInfoLabel {
@@ -252,12 +247,25 @@ img {
 }
 
 .middle-div {
-    flex           : 1 1 0;
+    flex           : 1 1 6rem;
     display        : flex;
     height         : 100%;
     align-self     : top;
     justify-content: space-around;
 }
+
+.footer-spacer {
+    display: flex;
+    flex: 1 1 0;
+}
+
+.right-footer {
+    flex           : 1 1 8rem;
+    align-self     : center;
+    justify-content: space-evenly;
+    border-left    : 2px solid var(--dark-grey);
+}
+
 
 .volume-bar {
     line-height: 1.6rem;

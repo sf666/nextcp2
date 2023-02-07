@@ -56,21 +56,25 @@
             </div>
         </div>
 
+        <!-- spacer -->
+        <div class="footer-spacer"></div>
+
         <!-- Middle footer section -->
-        <div class="middle-footer flex-column align-items-center">
-            <div class="middle-div">
-                <div class="d-flex align-self-center">
-                    <span class="material-symbols-outlined icon-button d-none d-sm-block {{shuffleClass}}" (click)="playlistService.toggleShuffle()">shuffle</span>
-                    <span class="material-symbols-outlined icon-button d-none d-md-block " (click)="playlistService.previous()">skip_previous</span>
-                    <span *ngIf="!rendererService.isPlaying()" class="material-symbols-outlined md-48 icon-button"
-                        (click)="rendererService.play()">play_arrow</span>
-                    <span *ngIf="rendererService.isPlaying()" class="material-symbols-outlined md-48 icon-button"
-                        (click)="rendererService.pause()">pause_circle</span>
-                    <span class="material-symbols-outlined icon-button d-none d-md-block " (click)="rendererService.next()">skip_next</span>
-                    <span class="material-symbols-outlined icon-button d-none d-sm-block {{repeatClass}}" (click)="playlistService.toggleRepeat()">repeat</span>
-                </div>
+        <div class="middle-div">
+            <div class="button-group">
+                <span class="material-symbols-outlined icon-button d-none d-sm-block {{shuffleClass}}" (click)="playlistService.toggleShuffle()">shuffle</span>
+                <span class="material-symbols-outlined icon-button d-none d-md-block " (click)="playlistService.previous()">skip_previous</span>
+                <span *ngIf="!rendererService.isPlaying()" class="material-symbols-outlined md-48 icon-button"
+                    (click)="rendererService.play()">play_arrow</span>
+                <span *ngIf="rendererService.isPlaying()" class="material-symbols-outlined md-48 icon-button"
+                    (click)="rendererService.pause()">pause_circle</span>
+                <span class="material-symbols-outlined icon-button d-none d-md-block " (click)="rendererService.next()">skip_next</span>
+                <span class="material-symbols-outlined icon-button d-none d-sm-block {{repeatClass}}" (click)="playlistService.toggleRepeat()">repeat</span>
             </div>
         </div>
+
+        <!-- spacer -->
+        <div class="footer-spacer"></div>
 
         <!-- right footer section -->
         <div class="m-2 ps-2 right-footer me-4 d-none d-md-flex">
