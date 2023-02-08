@@ -13,6 +13,7 @@ import nextcp.devicedriver.IDeviceDriverService;
 import nextcp.dto.DeviceDriverState;
 import nextcp.dto.DevicePowerChanged;
 import nextcp.dto.DeviceVolumeChanged;
+import nextcp.dto.InputSourceChangeDto;
 import nextcp.dto.InputSourceDto;
 
 /**
@@ -86,6 +87,15 @@ public class DeviceDriver implements IDeviceDriverCallback, IDeviceDriver
     }
 
     @Override
+    public void inputChanged(InputSourceDto input)
+    {
+        InputSourceChangeDto event = new InputSourceChangeDto(rendererUdn, input);
+        eventPublisher.publishEvent(event);
+        eventPublisher.publishEvent(getDeviceDriverState());
+        log.info(String.format("%s -> new input -> %d", driverName, input));
+    }
+
+    @Override
     public DeviceDriverState getDeviceDriverState()
     {
         if (physicalDeviceDriver == null)
@@ -135,13 +145,6 @@ public class DeviceDriver implements IDeviceDriverCallback, IDeviceDriver
     public boolean getStandby()
     {
         return physicalDeviceDriver.getStandby();
-    }
-
-    @Override
-    public void inputChanged(InputSourceDto input)
-    {
-        // TODO
-        log.warn("NOT YET IMPLEMENTED");
     }
 
 }
