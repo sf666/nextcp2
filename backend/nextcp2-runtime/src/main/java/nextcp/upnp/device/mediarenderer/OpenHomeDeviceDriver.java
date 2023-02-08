@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import nextcp.devicedriver.IDeviceDriverCallback;
 import nextcp.domainmodel.device.services.IProductService;
 import nextcp.dto.DeviceDriverState;
+import nextcp.dto.InputSourceDto;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.ProductServiceEventListenerImpl;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.VolumeService;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetVolumeInput;
@@ -111,7 +112,7 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
     {
         if (physicalDeviceDriver == null)
         {
-            return new DeviceDriverState(true, device.getUdnAsString(), volume, standby);
+            return new DeviceDriverState(true, device.getUdnAsString(), volume, standby, new InputSourceDto());
         }
         else
         {
@@ -169,6 +170,26 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
         }
         log.debug("standby: physical device driver unavailable.");
         return true;
+    }
+
+    @Override
+    public void setInput(String input)
+    {
+        log.warn("not yet implemented");
+    }
+
+    @Override
+    public InputSourceDto getInput()
+    {
+        log.warn("not yet implemented");
+        return null;
+    }
+
+    @Override
+    public void inputChanged(InputSourceDto input)
+    {
+        //TODO 
+        log.warn("NOT YET IMPLEMENTED");
     }
 
 }

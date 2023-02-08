@@ -21,7 +21,7 @@ export class RendererService {
   public trackTime: TrackTimeDto;
   public transportServiceStateDto: TransportServiceStateDto;
   public inputSourceList: InputSourceDto;
-  public deviceDriverState: DeviceDriverState = { hasDeviceDriver: false, standby: true, volume: 0, rendererUDN: '' };
+  public deviceDriverState: DeviceDriverState;
 
   constructor(
     sseService: SseService,
@@ -30,6 +30,7 @@ export class RendererService {
     private backgroundImageService: BackgroundImageService,
     private httpService: HttpService) {
 
+    this.deviceDriverState = { hasDeviceDriver: false, standby: true, volume: 0, rendererUDN: '' , input: dtoGeneratorService.emptyInputSourceDto()};
     this.trackInfo = this.dtoGeneratorService.emptyTrackInfo();
     this.trackTime = this.dtoGeneratorService.emptyTrackTime();
 

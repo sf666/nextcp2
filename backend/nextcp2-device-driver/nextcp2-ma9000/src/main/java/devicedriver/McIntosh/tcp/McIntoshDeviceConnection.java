@@ -107,7 +107,7 @@ public class McIntoshDeviceConnection extends TcpDeviceConnection
                 else if (aCommand.startsWith("INP"))
                 {
                     String inp = aCommand.split(" ")[1];
-                    //                    subscriptionCallback.inputStatusChanged(inp);
+                    subscriptionCallback.inputChanged(inp);
                 }
                 else if (aCommand.startsWith("FW "))
                 {

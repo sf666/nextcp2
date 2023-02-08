@@ -275,6 +275,7 @@ input {
 
 .row-alignment {
     align-items: center;
+    overflow   : hidden;
 }
 
 .button {
@@ -302,5 +303,23 @@ input {
             'wght'500,
             'GRAD'-25,
             'opsz'24
+    }
+}
+
+.scrollText {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    position: relative;    
+    animation  : marquee 5s linear infinite;
+}
+
+@keyframes marquee {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(-100%, 0);
     }
 }

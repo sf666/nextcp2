@@ -91,12 +91,6 @@ mat-slider {
     width : 100%;
 }
 
-.left-footer {
-    flex      : 5 1 26rem;
-    min-height: 0;
-    min-width : 200px;
-}
-
 .qualityBadge {
     margin-right: 0.5rem;
     margin-left : 0.5rem;
@@ -246,6 +240,16 @@ img {
     vertical-align: middle;
 }
 
+/**
+    Footer sections
+    ==============================================================
+**/
+.left-footer {
+    flex      : 7 1 26rem;
+    min-height: 0;
+    min-width : 200px;
+}
+
 .middle-div {
     flex           : 1 1 6rem;
     display        : flex;
@@ -272,7 +276,7 @@ img {
 }
 
 .songPopup {
-    flex           : 1 1 0;
+    flex           : 1 1 10px;
     align-self     : center;
     justify-content: center;
     margin-left    : 0.5rem;

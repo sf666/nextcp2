@@ -20,6 +20,7 @@ import nextcp.domainmodel.device.services.IProductService;
 import nextcp.domainmodel.device.services.IRadioService;
 import nextcp.domainmodel.device.services.ITransport;
 import nextcp.dto.DeviceDriverState;
+import nextcp.dto.InputSourceDto;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.MediaRendererServicesDto;
 import nextcp.dto.RendererDeviceConfiguration;
@@ -529,6 +530,16 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             return;
         }
         getDeviceDriver().setVolume(vol);
+    }
+
+    public void setInput(String input)
+    {
+        if (getDeviceDriver() == null)
+        {
+            eventPublisher.publishEvent(new ToastrMessage(null, "error", "Volume", "no device driver available"));
+            return;
+        }
+        getDeviceDriver().setInput(input);
     }
 
     public DeviceDriverState getDeviceDriverState()

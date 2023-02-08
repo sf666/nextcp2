@@ -12,6 +12,7 @@ import devicedriver.McIntosh.tcp.McIntoshDeviceConnection;
 import nextcp.devicedriver.IDeviceDriverCallback;
 import nextcp.devicedriver.IDeviceDriverService;
 import nextcp.dto.DeviceDriverState;
+import nextcp.dto.InputSourceDto;
 
 public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverService
 {
@@ -23,20 +24,23 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
 
     private IDeviceDriverCallback callback = null;
 
+    private InputManager inputManager = new InputManager();
+
     public Ma9000Binding(SocketAddress hostAddress, IDeviceDriverCallback callback, String rendererUdn) throws IOException
     {
         if (hostAddress == null)
         {
             throw new RuntimeException("hostAddress shall not be null");
         }
-        
+
         log.info("Initializing MA 9000 driver. connecting to : " + hostAddress.toString());
+        this.callback = callback;
 
         state.rendererUDN = rendererUdn;
         state.volume = 0;
         state.standby = true;
         state.hasDeviceDriver = true;
-        this.callback = callback;
+        state.input = new InputSourceDto();
         device = new McIntoshDeviceConnection(this);
         device.open(hostAddress);
 
@@ -71,6 +75,7 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
     {
         device.send(Commands.INPUT_STATUS);
         device.send(Commands.VOLUME_STATUS);
+        device.send(Commands.POWER_STATUS);
     }
 
     public int getVolume()
@@ -79,7 +84,7 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
         {
             return state.volume;
         }
-        
+
         return 0;
     }
 
@@ -126,7 +131,34 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
         {
             return state.standby;
         }
-        
+
         return false;
+    }
+
+    @Override
+    public void setInput(String id)
+    {
+        device.send(Commands.INPUT_SELECT, id);
+    }
+
+    @Override
+    public InputSourceDto getInput()
+    {
+        return state.input;
+    }
+
+    @Override
+    public void inputChanged(String input)
+    {
+        try
+        {
+            int id = Integer.parseInt(input);
+            state.input = inputManager.getInputSource(id);
+            callback.inputChanged(state.input);
+        }
+        catch (Exception e)
+        {
+            log.warn("cannot parse input : " + input);
+        }
     }
 }

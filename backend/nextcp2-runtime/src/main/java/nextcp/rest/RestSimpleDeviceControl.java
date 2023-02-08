@@ -81,4 +81,19 @@ public class RestSimpleDeviceControl extends BaseRestService
         device.getRadioServiceBridge().pause();
     }
 
+    @GetMapping("/selectInput/{mediaRendererDevice}/{input}")
+    public void pauseRadio(@PathVariable("mediaRendererDevice") String udn, @PathVariable("input") String inp)
+    {
+        if (udn == null)
+        {
+            log.warn("selectInput: no device selected ... ");
+        }
+        if (inp == null)
+        {
+            log.warn("selectInput: no input set ... ");
+        }
+        log.info("select input to " + inp);
+        MediaRendererDevice device = getMediaRendererByUdn(udn);
+        device.getRadioServiceBridge().pause();
+    }
 }

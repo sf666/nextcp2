@@ -1,6 +1,7 @@
 package nextcp.devicedriver;
 
 import nextcp.dto.DeviceDriverState;
+import nextcp.dto.InputSourceDto;
 
 public interface IDeviceDriverService
 {
@@ -36,4 +37,8 @@ public interface IDeviceDriverService
     public boolean getStandby();
 
     public DeviceDriverState getCurrentState();
+
+    public void setInput(String input);
+
+    public InputSourceDto getInput();
 }

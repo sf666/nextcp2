@@ -13,12 +13,13 @@ import nextcp.devicedriver.IDeviceDriverService;
 import nextcp.dto.DeviceDriverState;
 import nextcp.dto.DevicePowerChanged;
 import nextcp.dto.DeviceVolumeChanged;
+import nextcp.dto.InputSourceDto;
 
 /**
  * This class is responsible for controlling external AV devices directly by it's proprietary device protocol.
  * 
- * Use case: Having a OH/UPnP network streamer connected to a receiver or amplifier with volume control. Volume control should be
- * controled by the hardware device, not the network streamer. 
+ * Use case: Having a OH/UPnP network streamer connected to a receiver or amplifier with volume control. Volume control should be controled by the hardware device, not the network
+ * streamer.
  *
  * <pre>
  * Current direct device control features are:
@@ -95,6 +96,18 @@ public class DeviceDriver implements IDeviceDriverCallback, IDeviceDriver
     }
 
     @Override
+    public void setInput(String id)
+    {
+        physicalDeviceDriver.setInput(id);
+    }
+
+    @Override
+    public InputSourceDto getInput()
+    {
+        return physicalDeviceDriver.getInput();
+    }
+
+    @Override
     public void setVolume(int vol)
     {
         physicalDeviceDriver.setVolume(vol);
@@ -122,6 +135,13 @@ public class DeviceDriver implements IDeviceDriverCallback, IDeviceDriver
     public boolean getStandby()
     {
         return physicalDeviceDriver.getStandby();
+    }
+
+    @Override
+    public void inputChanged(InputSourceDto input)
+    {
+        // TODO
+        log.warn("NOT YET IMPLEMENTED");
     }
 
 }

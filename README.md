@@ -4,25 +4,22 @@ nextCP/2 is a Java and Typescript web-based UPnP control point.
 
 Screenshots and basic usage is shown in [GitHub Pages](https://sf666.github.io/).
 
-Please see the [Wiki](https://github.com/sf666/nextcp2/wiki) for some documentation.
-
 ## installation
 
 - Download prebuild binaries from the [release](https://github.com/sf666/nextcp2/releases) page (JAR files) and put them in a directory with write permissions.
-- optionally create a [config file](https://github.com/sf666/nextcp2/wiki/config-file).
-- start the application (with optional more memory by adding "-Xms256m -Xmx256m")
+- start the application (with optional more memory by adding "-Xms256m -Xmx512m")
 
 ```
-java [-Xms256m -Xmx512m] -jar [-DconfigFile=path_to_config_file] nextcp2-2.2.jar
+java [-Xms256m -Xmx512m] -jar [-DconfigFile=path_to_config_file] nextcp2.jar
 ```
 
-If no config file is given or found, a config-file will be generated next to the JAR file on the first startup. In this case the application might complain about incorrect or missing (default) configuration. In this case adopt the config to your system by navigating to `App setting' and restart the application. The configiguration elements are [documented here](https://github.com/sf666/nextcp2/wiki/config-file).
+If no config file is given or found, a config-file will be generated next to the JAR file on the first startup. In this case the application might complain about incorrect or missing (default) configuration. In this case adopt the config to your system by navigating to `App setting' and restart the application.
 
 ## system requirements
 
-- minimum JDK 8
-- maven 3.6
-- npm 6.14
+- minimum JDK 17
+- maven 3.8
+- yarn
 - GIT client
 
 ## browser requirements
@@ -31,55 +28,14 @@ If no config file is given or found, a config-file will be generated next to the
 
 ## Install maven dependencies
 
-```diff
-! ATTENTION: Lemma needs JDK 8 to build. JDK 9 and higher will not work!
-```
+Call `./build_dependencies.sh` script for installing dependent libraries from source into local maven repository.
 
-Before calling the `./build_dependencies.sh` script or installing build dependencies manually, switch to JDK 8.
-
-Switching between Java versions can be done with SDKMAN : https://sdkman.io/install
-
-list available JDK installations with
+For manual installation clone the following repositories :
 
 ```bash
-sdk list java
-```
-
-and select one Java 8 version by typing
-
-```bash
-sdk use java <identifier>
-```
-
-### automated dependencies installation
-
-Install dependent libraries by calling the script
-
-```bash
-./build_dependencies.sh
-```
-
-### manual installation
-
-Install dependent libraries by checking out the repositories in a different directory, following the build instructions of each library. Install each library by calling
-
-```bash
-mvn install
-```
-
-Repositories to clone:
-
-```bash
-git clone https://github.com/sf666/lemma.git
-git clone https://github.com/sf666/seamless.git
-git clone https://github.com/sf666/cling.git
 git clone https://bitbucket.org/ijabz/jaudiotagger.git
 git clone https://github.com/sf666/musicbrainz.git
 ```
-
-## build instructions
-
-Before calling the `./build.sh` script or doing manual build steps, switch to JDK 8 or higher.
 
 ### automated build
 
@@ -87,11 +43,11 @@ Before calling the `./build.sh` script or doing manual build steps, switch to JD
 
 Build artifacts are located in the `build` directory.
 
-- call `build_jdk8.sh` for a JDK 8 runtime compatible release.
-
 ### manual building
 
-Since the frontend is deployed into the backend, it has to be build first.
+```diff
+! The frontend has to be packaged before the backend is build.
+```
 
 #### build frontend
 
@@ -124,7 +80,7 @@ Build artifacts are located in the maven `target` directories.
 
 #### main application
 
-After a successfull build, the main application build artifact will be located here `backend/nextcp2-assembly/target`
+After a successful build, the main application build artifact will be located here `backend/nextcp2-assembly/target`
 
 #### McIntosh device driver
 
@@ -134,21 +90,16 @@ Current implemented features:
 
 - power control
 - volume control
+- input source control
 
-After a successfull build, the device driver (tested with McIntosh MA9000 amplifier) is located here: `backend/nextcp2-device-driver/nextcp2-ma9000/target/`.
+After a successful build, the device driver (tested with McIntosh MA9000 amplifier) is located here: `backend/nextcp2-device-driver/nextcp2-ma9000/target/`.
 
 # running the application
 
-To run the snapshot - in this example with 256m memory - call :
+To run the snapshot call :
 
 ```bash
-java -Xms256m -Xmx256m -jar [-DconfigFile=path_to_config_file] nextcp2.jar
-```
-
-or if build manually, replace `nextcp2.jar` with the your current version of the `nextcp2-assembly-spring-boot` file, i.e.
-
-```bash
-java -Xms256m -Xmx256m -jar [-DconfigFile=path_to_config_file] nextcp2-assembly-spring-boot-2.0.0-SNAPSHOT.jar
+java -Xms256m -Xmx512m -jar [-DconfigFile=path_to_config_file] nextcp2.jar
 ```
 
 By default the application will start on the current interface on port `8085`.
@@ -159,7 +110,7 @@ Open your browser and connect to the application:
 http://localhost:8085
 ```
 
-If nextcp runs on a remote mashine, replace `localhost` by the IP address of your remote maschine.
+If nextcp runs on a server or remote machine, replace `localhost` by the IP address of your device.
 
 
 ## config file
@@ -171,18 +122,9 @@ The application tries to load the config file from the following locations in th
 3. file located 'USER_HOME/nextcp2Config.json'
 4. file located 'WORK_DIR/nextcp2Config.json'
 
-If no config file is found, a config file will be generated at this location : 'WORK_DIR/nextcp2Config.json'.
-
-See the Wiki [config file page](https://github.com/sf666/nextcp2/wiki/config-file) for documentation.
+If no config file is found, a config file will be generated at this location : `WORK_DIR/nextcp2Config.json`.
 
 # developer notice
-
-## Choosing JDK 8 release
-
-There is a JDK 8 build profile that can be used by calling
-```
-    mvn clean package -P jdk8
-```
 
 ## debugging
 
@@ -197,14 +139,14 @@ For having a frontend build, `yarn` has to be installed in the build environment
 To start the front-end in Visual Studio Code switch to TERMINAL, change into the directory `nextcp2/frontend/nextcp-ui` and start the front-end by typing
 
 ```
-yarn start
+yarn start -c dev
 ```
 
 Launch your favorite chromium browser from the Visual Studio Code debug perspective.
 
 ## code generation
 
-Generatied classes are located in the package `codegen` within the maven module `nextcp2-runtime`.
+Generatied classes are located in the package `codegen` within the maven module `nextcp2-codegen`.
 
 ### DTO
 
@@ -221,7 +163,7 @@ This file has many elements of
     [PROPERTY]: [TYPE]
 ```
 
-Call `DtoModelGen` each time you modify the yaml file. Generate the file into the maven project `nextcp2-modelgen` in the package `nextcp.dto` by pointing to this absolt path as first parameter.
+Call `DtoModelGen` each time you modify the yaml file. Generate the file into the maven project `nextcp2-modelgen` in the package `nextcp.dto` by pointing to this absolute path as first parameter.
 
 ```diff
 ! ATTENTION: Never modify the generated DTOs files since changes to them will be overwritten by the next call to the generator.
@@ -241,4 +183,4 @@ Typescript DTO's will be generated in the file `nextcp-ui/src/app/service/dto.d.
 
 ### UPnP services
 
-If activated in the configuration file, java code (service classes, input and output classes, event consumer) will be generated for all discovered UPnP services. The generated code uses [cling](https://github.com/4thline/cling) as UPnP stack.
+If activated in the configuration file, java code (service classes, input and output classes, event consumer) will be generated for all discovered UPnP services. The generated code uses [jupnp](https://github.com/jupnp/jupnp) as UPnP stack.

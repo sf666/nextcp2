@@ -1,5 +1,7 @@
 package nextcp.devicedriver;
 
+import nextcp.dto.InputSourceDto;
+
 /**
  * <pre>
  * Callbacks from external device
@@ -24,4 +26,6 @@ public interface IDeviceDriverCallback
      *            new Standy state. true = device is in standby. false = device is power on.
      */
     public void standbyChanged(boolean standbyState);
+    
+    public void inputChanged(InputSourceDto input);
 }

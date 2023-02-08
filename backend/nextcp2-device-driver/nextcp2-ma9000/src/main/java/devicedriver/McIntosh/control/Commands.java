@@ -23,7 +23,7 @@ public class Commands
     public static CommandStructure VOLUME_SET_PERCENT = new CommandStructure("VOL", 1);
     public static CommandStructure VOLUME_STATUS = new CommandStructure("VOL");
 
-    public static CommandStructure SELECT_INPUT = new CommandStructure("INP", 1);
+    public static CommandStructure INPUT_SELECT = new CommandStructure("INP", 1);
     public static CommandStructure INPUT_STATUS = new CommandStructure("INP");
 
     public static CommandStructure MUTE_ON = new CommandStructure("MUT 1");

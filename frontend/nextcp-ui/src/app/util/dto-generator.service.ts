@@ -1,4 +1,4 @@
-import { ContainerDto, SearchResultDto, ContainerItemDto, SearchRequestDto, MusicItemDto, AudioFormat, MusicBrainzId, TrackTimeDto, TrackInfoDto, SystemInformationDto, MusicItemIdDto } from './../service/dto.d';
+import { ContainerDto, SearchResultDto, ContainerItemDto, SearchRequestDto, MusicItemDto, AudioFormat, MusicBrainzId, TrackTimeDto, TrackInfoDto, SystemInformationDto, MusicItemIdDto, InputSourceDto } from './../service/dto.d';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -53,7 +53,7 @@ export class DtoGeneratorService {
       minimServerSupportTags: [],
       musicItemDto: [],
       albumDto: [],
-      totalMatches:0
+      totalMatches: 0
     }
   }
 
@@ -139,6 +139,15 @@ export class DtoGeneratorService {
       sampleFrequency: 0,
       durationDisp: '',
       durationInSeconds: 0
+    }
+  }
+
+  emptyInputSourceDto(): InputSourceDto {
+    return {
+      id: 0,
+      Name: '',
+      Type: '',
+      Visible: false
     }
   }
 

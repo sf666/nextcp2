@@ -49,7 +49,7 @@ public class RestDeviceRendererService
     {
         log.info(String.format("Setting standby state on device %s to : %s", newState.rendererUDN, newState.standby.toString()));
         MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(newState.rendererUDN));
-        
+
         if (newState.standby)
         {
             device.getPlaylistServiceBridge().pause();
@@ -91,7 +91,7 @@ public class RestDeviceRendererService
         else
         {
             log.info(String.format("device %s has no active device driver service", dto.friendlyName));
-            return new DeviceDriverState(false, dto.udn, null, null);
+            return new DeviceDriverState(false, dto.udn, null, null, null);
         }
     }
 
@@ -127,7 +127,6 @@ public class RestDeviceRendererService
         return device.getProductService().getCurrentInputSource();
     }
 
-    
     //
     // Transport Services
     //
@@ -146,7 +145,7 @@ public class RestDeviceRendererService
         checkDevice(device, "play");
         device.getTransportServiceBridge().stop();
     }
-    
+
     @PostMapping("/pause")
     public void pause(@RequestBody String udn)
     {
@@ -166,7 +165,7 @@ public class RestDeviceRendererService
     //
     // Utility methods
     //
-    
+
     private void checkDevice(MediaRendererDevice device, String action)
     {
         if (device == null)

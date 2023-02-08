@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import nextcp.devicedriver.IDeviceDriverCallback;
 import nextcp.domainmodel.device.services.IProductService;
 import nextcp.dto.DeviceDriverState;
+import nextcp.dto.InputSourceDto;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.RenderingControlService;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.RenderingControlServiceEventListenerImpl;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.SetVolumeInput;
@@ -67,7 +68,7 @@ public class UpnpDeviceDriver extends RenderingControlServiceEventListenerImpl i
     {
         if (physicalDeviceDriver == null)
         {
-            return new DeviceDriverState(true, device.getUdnAsString(), volume, standby);
+            return new DeviceDriverState(true, device.getUdnAsString(), volume, standby, new InputSourceDto());
         }
         else
         {
@@ -137,6 +138,25 @@ public class UpnpDeviceDriver extends RenderingControlServiceEventListenerImpl i
     public boolean getStandby()
     {
         return physicalDeviceDriver.getStandby();
+    }
+
+    @Override
+    public void setInput(String input)
+    {
+        physicalDeviceDriver.setInput(input);
+    }
+
+    @Override
+    public InputSourceDto getInput()
+    {
+        return physicalDeviceDriver.getInput();
+    }
+
+    @Override
+    public void inputChanged(InputSourceDto input)
+    {
+        //TODO 
+        log.warn("NOT YET IMPLEMENTED");
     }
 
 }

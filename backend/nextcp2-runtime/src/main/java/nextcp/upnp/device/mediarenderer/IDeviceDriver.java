@@ -1,6 +1,7 @@
 package nextcp.upnp.device.mediarenderer;
 
 import nextcp.dto.DeviceDriverState;
+import nextcp.dto.InputSourceDto;
 
 public interface IDeviceDriver
 {
@@ -11,11 +12,14 @@ public interface IDeviceDriver
 
     void setStandby(boolean standbyState);
 
+    void setInput(String id);
+
+    InputSourceDto getInput();
+
     int getVolume();
 
     boolean getStandby();
 
     boolean isMonitoringExternalAV();
-    
-    
+
 }

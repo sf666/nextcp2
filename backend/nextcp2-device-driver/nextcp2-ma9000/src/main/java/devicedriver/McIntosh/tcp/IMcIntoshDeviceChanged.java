@@ -14,4 +14,6 @@ public interface IMcIntoshDeviceChanged
      * @param input
      */
     public void volumeStatusChanged(int volInPercent);
+    
+    public void inputChanged(String input);
 }
