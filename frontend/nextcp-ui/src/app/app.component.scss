@@ -7,6 +7,7 @@
     overflow-y    : scroll;
     letter-spacing: 0.07rem;
     flex          : 1;
+    height        : calc(var(--vh, 1vh) * 100 - var(--nav-height));
 }
 
 .mainContent {
@@ -28,9 +29,10 @@
         position      : fixed;
         overflow-y    : scroll;
         letter-spacing: 0.07rem;
+        height        : calc(var(--vh, 1vh) * 100 - var(--nav-height));
         flex          : 1;
-        left : var(--sidebar-width-mid);
-        width: calc(100% - var(--sidebar-width-mid));
+        left          : var(--sidebar-width-mid);
+        width         : calc(100% - var(--sidebar-width-mid));
     }
 }
 
@@ -82,14 +84,14 @@
         display : block;
         right   : 0px;
         position: fixed;
-    
+
         background-repeat: calc(var(--vh, 1vh) * 100);
         background-size  : cover;
         background-color : rgb(0, 0, 0);
-    
+
         height: calc(var(--vh, 1vh) * 100 - var(--nav-height) - var(--footer-height));
-        left : var(--sidebar-width-mid);
-        width: calc(100% - var(--sidebar-width-mid));
+        left  : var(--sidebar-width-mid);
+        width : calc(100% - var(--sidebar-width-mid));
     }
 }
 
