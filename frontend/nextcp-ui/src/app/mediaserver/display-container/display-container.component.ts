@@ -440,7 +440,7 @@ export class DisplayContainerComponent implements OnInit {
       if (this.contentHandler.contentDirectoryService) {
         this.contentHandler.contentDirectoryService.browseChildrenByOID(oid, udn, "").subscribe(data => {
           this.browseFinished(data);
-          if (data.currentContainer.id) {
+          if (data?.currentContainer?.id) {
             resolve(true);
           } else {
             resolve(false);

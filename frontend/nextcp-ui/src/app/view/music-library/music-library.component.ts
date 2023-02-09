@@ -75,6 +75,7 @@ export class MusicLibraryComponent implements AfterViewInit{
   }
 
   public browseToRoot(udn: string, sortCriteria?: string): void {
+    console.log("browsing to root folder ... ")
     this.cdsBrowsePathService.clearPath();
     this.cdsBrowsePathService.stepIn("0");
     this.browseToOid("0", udn, sortCriteria);

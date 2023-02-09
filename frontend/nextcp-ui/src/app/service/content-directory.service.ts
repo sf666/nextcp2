@@ -137,33 +137,37 @@ export class ContentDirectoryService {
    * @param data Gets called after a browse request returns ...
    */
   public updateContainer(data: ContainerItemDto): void {
-    this.currentContainerList = data;
-    this.updatePageTurnId(data);
-    this.albumList_ = data.albumDto;
-    this.containerList_ = data.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer");
-    this.playlistList_ = data.containerDto.filter(item => item.objectClass === "object.container.playlistContainer");
-    this.musicTracks_ = data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0);
-    this.otherItems_ = data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0);
-    this.browseFinished$.next(data);
-    this.browseToNextPage();
+    if (data) {
+      this.currentContainerList = data;
+      this.updatePageTurnId(data);
+      this.albumList_ = data.albumDto;
+      this.containerList_ = data.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer");
+      this.playlistList_ = data.containerDto.filter(item => item.objectClass === "object.container.playlistContainer");
+      this.musicTracks_ = data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0);
+      this.otherItems_ = data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0);
+      this.browseFinished$.next(data);
+      this.browseToNextPage();
+    }
   }
 
   public addContainer(data: ContainerItemDto): void {
-    this.currentContainerList = data;
-    const count = data.albumDto.length + data.containerDto.length + data.musicItemDto.length;
-    this.updatePageTurnId(data);
-    this.albumList_ = this.albumList_.concat(data.albumDto);
-    this.containerList_ = this.containerList_.concat(data.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer"));
-    this.playlistList_ = this.playlistList_.concat(data.containerDto.filter(item => item.objectClass === "object.container.playlistContainer"));
-    this.musicTracks_ = this.musicTracks_.concat(data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0));
-    this.otherItems_ = this.otherItems_.concat(data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0));
+    if (data) {
+      this.currentContainerList = data;
+      const count = data.albumDto.length + data.containerDto.length + data.musicItemDto.length;
+      this.updatePageTurnId(data);
+      this.albumList_ = this.albumList_.concat(data.albumDto);
+      this.containerList_ = this.containerList_.concat(data.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer"));
+      this.playlistList_ = this.playlistList_.concat(data.containerDto.filter(item => item.objectClass === "object.container.playlistContainer"));
+      this.musicTracks_ = this.musicTracks_.concat(data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0));
+      this.otherItems_ = this.otherItems_.concat(data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0));
 
-    this.browseFinished$.next(data);
-    
-    if (count > 0) {
-      this.browseToNextPage();
-    } else {
-      console.log("loaded last page.");
+      this.browseFinished$.next(data);
+
+      if (count > 0) {
+        this.browseToNextPage();
+      } else {
+        console.log("loaded last page.");
+      }
     }
   }
 
@@ -277,7 +281,7 @@ export class ContentDirectoryService {
     this.searchFinished$.next(ci);
   }
 
-  public deleteMusicTrack(item : MusicItemDto) {
+  public deleteMusicTrack(item: MusicItemDto) {
     this.musicTracks_ = this.musicTracks_.filter(listitem => listitem.songId !== item.songId);
   }
 }
