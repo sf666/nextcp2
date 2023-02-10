@@ -7,7 +7,8 @@
     overflow-y    : scroll;
     letter-spacing: 0.07rem;
     flex          : 1;
-    height        : calc(var(--vh, 1vh) * 100 - var(--nav-height));
+//    height        : calc(var(--vh, 1vh) * 100 - var(--nav-height));
+    height        : calc(var(--vh, 1vh) * 100);
 }
 
 .mainContent {
@@ -29,7 +30,7 @@
         position      : fixed;
         overflow-y    : scroll;
         letter-spacing: 0.07rem;
-        height        : calc(var(--vh, 1vh) * 100 - var(--nav-height));
+        height        : calc(var(--vh, 1vh) * 100);
         flex          : 1;
         left          : var(--sidebar-width-mid);
         width         : calc(100% - var(--sidebar-width-mid));
