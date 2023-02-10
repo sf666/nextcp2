@@ -152,6 +152,7 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
     {
         try
         {
+            log.debug("McIntosh input changed to : " + input);
             int id = Integer.parseInt(input);
             state.input = inputManager.getInputSource(id);
             callback.inputChanged(state.input);

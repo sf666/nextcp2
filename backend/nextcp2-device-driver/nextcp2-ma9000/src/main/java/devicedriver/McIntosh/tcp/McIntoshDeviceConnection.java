@@ -80,6 +80,7 @@ public class McIntoshDeviceConnection extends TcpDeviceConnection
      * (MA9000)(Serial Number: AFK1456)(FW Version: 1.04)(PWR 1)(VOL 56)(MUT 0)(OP1 1)(OP2 1)(INP 15)(STA 1)(TBA -2)(TIN 0)(TEQ 0)(TPR 3)(TPC 1)(TMO 0)(TML 1)(TDB 3)(THH 1)(HPS 2)
      * 
      * </pre>
+     * 
      * @param aCommand
      */
     private void asyncStateChange(String aCommand)
@@ -88,6 +89,7 @@ public class McIntoshDeviceConnection extends TcpDeviceConnection
         {
             public void run()
             {
+                log.info(String.format("status received from device : %s", aCommand));
                 if (aCommand.startsWith("PWR"))
                 {
                     if (aCommand.endsWith("0"))
@@ -111,7 +113,7 @@ public class McIntoshDeviceConnection extends TcpDeviceConnection
                 }
                 else if (aCommand.startsWith("FW "))
                 {
-//                    subscriptionCallback.firmwareVersionChanged(aCommand.substring(11));
+                    // subscriptionCallback.firmwareVersionChanged(aCommand.substring(11));
                 }
             }
         });
