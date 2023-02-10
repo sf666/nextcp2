@@ -81,18 +81,19 @@
 }
 
 @media only screen and (max-width: 1200px) and (min-width: 900px) {
-    .mainContent {
+    .bg-img {
         display : block;
+        top     : var(--nav-height);
         right   : 0px;
         position: fixed;
-
+    
         background-repeat: calc(var(--vh, 1vh) * 100);
         background-size  : cover;
         background-color : rgb(0, 0, 0);
-
+    
         height: calc(var(--vh, 1vh) * 100 - var(--nav-height) - var(--footer-height));
-        left  : var(--sidebar-width-mid);
-        width : calc(100% - var(--sidebar-width-mid));
+        width: calc(100% - var(--sidebar-width-mid));
+        left : var(--sidebar-width-mid);
     }
 }
 
