@@ -90,8 +90,8 @@ public class DeviceDriver implements IDeviceDriverCallback, IDeviceDriver
     public void inputChanged(InputSourceDto input)
     {
         InputSourceChangeDto event = new InputSourceChangeDto(rendererUdn, input);
-        eventPublisher.publishEvent(event);
-        eventPublisher.publishEvent(getDeviceDriverState());
+//        eventPublisher.publishEvent(event);
+//        eventPublisher.publishEvent(getDeviceDriverState());
         log.info(String.format("%s -> new input -> %d", driverName, input));
     }
 
