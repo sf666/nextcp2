@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2023-02-08 10:34:15.
+// Generated using typescript-generator version 2.32.889 on 2023-02-13 08:58:56.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -83,7 +83,7 @@ export interface DeviceDriverState {
     rendererUDN: string;
     volume: number;
     standby: boolean;
-    input : InputSourceDto;
+    input: InputSourceDto;
 }
 
 export interface DevicePowerChanged {

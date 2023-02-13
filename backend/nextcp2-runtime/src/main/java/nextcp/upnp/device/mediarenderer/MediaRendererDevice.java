@@ -122,9 +122,9 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     protected OpenHomeDeviceDriver ohDeviceDriver = null;
 
     // Bridges to openhome services above
-    protected OhRadioBridge oh_radioBridge = null; 
+    protected OhRadioBridge oh_radioBridge = null;
     protected OhPlaylistBridge oh_playlistBridge = null;
-    
+
     // Delegate services to generated models
     protected ITransport transportBridge = null;
     protected IPlaylistService playlistService = null;
@@ -150,7 +150,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             upnp_avTransportService.addSubscriptionEventListener(avTransportEventListener);
             avTransportEventPublisher = new AvTransportEventPublisher(this);
             avTransportEventListener.addEventListener(avTransportEventPublisher);
-            avTransportEventListener.addEventListener(avTransportBridge);            
+            avTransportEventListener.addEventListener(avTransportBridge);
         }
         else
         {
@@ -237,7 +237,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             ohTransportEventListener = new OhTransportEventListener(this);
             oh_transportService.addSubscriptionEventListener(ohTransportEventListener);
             ohTransportEventListener.setShouldPublishTransportServiceState(true);
-            
+
             // In case we have an OhTransport service, disable sending AVTransport
             avTransportEventPublisher.setShouldPublishTransportServiceState(false);
         }
@@ -283,7 +283,11 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     }
 
     /**
+     * <pre>
+     * The streamer connected to the physical device driver (amplifier / receiver) is OpenHome compatible. 
+     * 
      * Attention: Openhome product & volume service must be initialized first!
+     * </pre>
      * 
      * @return
      */
@@ -325,6 +329,12 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         return ohDeviceDriver;
     }
 
+    /**
+     * The streamer connected to the physical device driver (amplifier / receiver) has an UPnP AV implementation.
+     * 
+     * @param physicalDeviceDriver
+     * @return
+     */
     private IDeviceDriver getUpnpDeviceDriver(IDeviceDriver physicalDeviceDriver)
     {
         if (upnp_renderingControlService == null)
