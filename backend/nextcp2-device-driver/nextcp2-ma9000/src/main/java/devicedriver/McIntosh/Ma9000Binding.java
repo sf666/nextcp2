@@ -26,11 +26,6 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
 
     private InputManager inputManager = new InputManager();
 
-    /**
-     * On first creation, we need to check the device state, if device is already powered up ... 
-     */
-    private boolean deviceStateInitilized = false;
-
     public Ma9000Binding(SocketAddress hostAddress, IDeviceDriverCallback callback, String rendererUdn) throws IOException
     {
         if (hostAddress == null)
@@ -60,9 +55,9 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
     @Override
     public void standbyStateChanged(boolean standbyState)
     {
-        if (!deviceStateInitilized && deviceSwitchedOn(standbyState))
+        if (deviceSwitchedOn(standbyState))
         {
-            readDeviceInfo();
+            readDeviceInfoAfterPowerChange();
         }
         state.standby = standbyState;
         callback.standbyChanged(standbyState); // convert from power logic to standby logic
@@ -76,12 +71,11 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
     /**
      * device information can only be read, if the device is powered on.
      */
-    private void readDeviceInfo()
+    private void readDeviceInfoAfterPowerChange()
     {
-        deviceStateInitilized = true;
         device.send(Commands.INPUT_STATUS);
         device.send(Commands.VOLUME_STATUS);
-        device.send(Commands.POWER_STATUS);
+        // Do not read power status, since this method is called on power change ... this would end in a loop
     }
 
     public int getVolume()
