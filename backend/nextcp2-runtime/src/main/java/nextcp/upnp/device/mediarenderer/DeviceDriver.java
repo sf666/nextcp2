@@ -27,6 +27,7 @@ import nextcp.dto.InputSourceDto;
  * 
  * - power control 
  * - volume control
+ * - input control
  * 
  * A reference implementation located in module nextcp2-ma9000 shows how to communicate to a McIntosh Amplifier.
  * A TCP/IP to RS-232 converter (bridge) is attached to the amplifiers RS-232 control port. 

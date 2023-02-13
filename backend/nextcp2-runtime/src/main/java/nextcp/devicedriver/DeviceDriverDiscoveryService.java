@@ -98,7 +98,7 @@ public class DeviceDriverDiscoveryService
         {
             if (StringUtils.isBlank(connectionString) || StringUtils.isBlank(type))
             {
-                log.warn("device driver needs type and ip addess");
+                log.warn("device driver needs type and connection string");
             }
             if (availableDeviceDriver.get(type) != null)
             {

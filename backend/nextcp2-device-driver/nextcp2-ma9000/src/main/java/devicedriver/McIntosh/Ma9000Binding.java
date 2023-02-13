@@ -26,6 +26,11 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
 
     private InputManager inputManager = new InputManager();
 
+    /**
+     * On first creation, we need to check the device state, if device is already powered up ... 
+     */
+    private boolean deviceStateInitilized = false;
+
     public Ma9000Binding(SocketAddress hostAddress, IDeviceDriverCallback callback, String rendererUdn) throws IOException
     {
         if (hostAddress == null)
@@ -55,7 +60,7 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
     @Override
     public void standbyStateChanged(boolean standbyState)
     {
-        if (deviceSwitchedOn(standbyState))
+        if (!deviceStateInitilized && deviceSwitchedOn(standbyState))
         {
             readDeviceInfo();
         }
@@ -64,7 +69,7 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
     }
 
     private boolean deviceSwitchedOn(boolean standbyState)
-    {
+    {        
         return standbyState == false;
     }
 
@@ -73,6 +78,7 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
      */
     private void readDeviceInfo()
     {
+        deviceStateInitilized = true;
         device.send(Commands.INPUT_STATUS);
         device.send(Commands.VOLUME_STATUS);
         device.send(Commands.POWER_STATUS);
@@ -153,13 +159,13 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
         try
         {
             log.debug("McIntosh input changed to : " + input);
-            int id = Integer.parseInt(input);
+            int id = Integer.parseInt(input.trim());
             state.input = inputManager.getInputSource(id);
             callback.inputChanged(state.input);
         }
         catch (Exception e)
         {
-            log.warn("cannot parse input : " + input);
+            log.warn("cannot parse input : " + input != null ? input : "NULL", e);
         }
     }
 }
