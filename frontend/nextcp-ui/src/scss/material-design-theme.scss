@@ -1,70 +1,45 @@
-//
-// Read https://dev.to/nephiw/theming-material-design-mm3 in case of having trouble applying an individual color theme.
-//
-
-//
-// Merging maps :
-// https://stackoverflow.com/questions/43438305/how-to-change-font-color-of-primary-palette-in-angular-material2
-//
-
-@import 'pantone';
-@import 'custom_variables';
-@import '~@angular/material/theming';
-@import "../assets/fonts/quicksand.scss";
-@import "../assets/fonts/nationale.scss";
-
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat-core();
+@use '@angular/material' as mat;
+
+@import "@angular/material/theming";
+
+@include mat.core();
+
+// Read https://dev.to/nephiw/theming-material-design-mm3 in case of having trouble applying an individual color theme.
+// Merging maps :
+// https://stackoverflow.com/questions/43438305/how-to-change-font-color-of-primary-palette-in-angular-material2
+
+@import 'pantone';
+@import 'custom_variables';
+
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 
-$my-app-primary: mat-palette($mat-pink);
-$my-app-accent:  mat-palette($mat-cyan, 800, 900, A100);
-$my-app-warn:    mat-palette($mat-deep-orange);
+$my-app-primary: mat.define-palette(mat.$pink-palette);
+$my-app-accent : mat.define-palette(mat.$cyan-palette, 800, 900, A100);
+$my-app-warn   : mat.define-palette(mat.$deep-orange-palette);
 
-// Create the theme object (a Sass map containing all of the palettes).
-$my-app-theme: mat-dark-theme($my-app-primary, $my-app-accent, $my-app-warn);
+$custom-typography: mat.define-typography-config($font-family: 'HK Grotesk, Lato, Quicksand, sans-serif',
+);
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include angular-material-theme($my-app-theme);
+$my-app-theme: mat.define-dark-theme((color: (primary: $my-app-primary,
+      accent: $my-app-accent,
+      warn: $my-app-warn,
+    ),
+    // Only include `typography` and `density` in the default dark theme.
+    typography: $custom-typography,
+    density: 0,
+  ));
 
-//
-// Custom typography theme
-//
-
-
-// display-4	.mat-display-4	Large, one-off header, usually at the top of the page (e.g. a hero header).
-// display-3	.mat-display-3	Large, one-off header, usually at the top of the page (e.g. a hero header).
-// display-2	.mat-display-2	Large, one-off header, usually at the top of the page (e.g. a hero header).
-// display-1	.mat-display-1	Large, one-off header, usually at the top of the page (e.g. a hero header).
-// headline	.mat-h1, .mat-headline	Section heading corresponding to the <h1> tag.
-// title	.mat-h2, .mat-title	Section heading corresponding to the <h2> tag.
-// subheading-2	.mat-h3, .mat-subheading-2	Section heading corresponding to the <h3> tag.
-// subheading-1	.mat-h4, .mat-subheading-1	Section heading corresponding to the <h4> tag.
-// body-1	.mat-body, .mat-body-1	Base body text.
-// body-2	.mat-body-strong, .mat-body-2	Bolder body text.
-// caption	.mat-small, .mat-caption	Smaller body and hint text.
-// button	None. Used only in components.	Buttons and anchors.
-// input	None. Used only in components.	Form input fields.
-
-// Define a custom typography config that overrides the font-family: Quicksand, sans-serif
-
-$custom-typography: mat-typography-config($font-family : 'HK Grotesk, Lato, Quicksand, sans-serif');
-
-// Override typography for all Angular Material, including mat-base-typography and all components.
-@include angular-material-typography($custom-typography);
-
+// Apply the dark theme by default
+@include mat.all-component-themes($my-app-theme);
 
 /*
-
 // DEMO: This is how a custom color palette is being defined :
-
 $app-primary: (50: $pantone-1205-C,
   100: $pantone-1215-C,
   200: $pantone-1225-C,
