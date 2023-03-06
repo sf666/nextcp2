@@ -29,7 +29,6 @@
     "@angular/router": "^15.2.1",
     "@babel/core": "^7.21.0",
     "@babel/preset-env": "^7.20.2",
-    "@material/linear-progress": "^14.0.0",
     "@ng-bootstrap/ng-bootstrap": "^14.0.1",
     "@popperjs/core": "^2.11.6",
     "@types/streamsaver": "^2.0.0",
