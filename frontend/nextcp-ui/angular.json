@@ -2,9 +2,9 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "cli": {
     "cache": {
-        "enabled": false,
-        "path": ".cache",
-        "environment": "all"
+      "enabled": false,
+      "path": ".cache",
+      "environment": "all"
     }
   },
   "version": 1,
@@ -22,7 +22,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:browser-esbuild",
           "options": {
             "outputPath": "../../backend/nextcp2-runtime/src/main/resources/static",
             "index": "src/index.html",
@@ -162,5 +162,13 @@
       }
     }
   },
-  "defaultProject": "nextcp-ui"
+  "defaultProject": "nextcp-ui",
+  "schematics": {
+    "@angular-eslint/schematics:application": {
+      "setParserOptionsProject": true
+    },
+    "@angular-eslint/schematics:library": {
+      "setParserOptionsProject": true
+    }
+  }
 }

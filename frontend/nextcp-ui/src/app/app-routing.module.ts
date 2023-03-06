@@ -27,7 +27,7 @@ const routes: Routes = [
 // SearchResultComponent
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true, relativeLinkResolution: 'legacy', onSameUrlNavigation: 'reload' })],
+  imports: [RouterModule.forRoot(routes, { useHash: true, onSameUrlNavigation: 'reload' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
