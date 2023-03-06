@@ -8,6 +8,14 @@ $col-3    : $amber-pantone-5;
 $col-4    : $amber-pantone-6;
 $col-grey : $col-4;
 
+.mdc-button {
+    letter-spacing : 0.04rem;
+    font-weight    : 600;
+    align-items    : center;
+    justify-content: flex-start;
+    width: 200px;
+}
+
 a {
     line-height: 1.5rem;
     color      : var(--glas-white-4);
@@ -107,6 +115,7 @@ a {
     height  : calc(var(--vh, 1vh) * 100 - var(--footer-height));
 
     display       : flex;
+    align-items   : flex-start;
     flex-direction: column;
     flex-shrink   : 0;
     background    : #242428;
