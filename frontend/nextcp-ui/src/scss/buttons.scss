@@ -2,11 +2,16 @@
 .my-buttons {
     color           : var(--glas-white-3);
     background-color: rgba(229, 238, 255, .1);
-//    color           : rgba(229, 238, 255, .7);
     text-align      : left;
     min-width       : 8rem;
-//    margin-right    : 16px;
     margin-top      : 16px;
+
+    font-weight     : 600;
+    font-size       : 0.9rem;
+
+    letter-spacing  : 1.25px;
+
+    justify-content : flex-start;
 
     &:first-child {
         margin-left: 0;

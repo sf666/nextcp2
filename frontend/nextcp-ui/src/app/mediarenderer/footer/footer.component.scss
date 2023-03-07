@@ -1,11 +1,10 @@
-@use '@angular/material' as mat;
-$slider-theme: mat.define-dark-theme((
- color: (
-   primary: mat.define-palette(mat.$cyan-palette),
-   accent: mat.define-palette(mat.$cyan-palette),
-   warn: mat.define-palette(mat.$cyan-palette),
- ),
-));
+// individual style for mat-slider component
+@use '@angular/material'as mat;
+$slider-theme: mat.define-dark-theme((color: (primary: mat.define-palette(mat.$cyan-palette),
+            accent: mat.define-palette(mat.$cyan-palette),
+            warn: mat.define-palette(mat.$cyan-palette),
+        ),
+    ));
 @include mat.slider-color($slider-theme);
 
 @import "app-variables";
@@ -18,13 +17,14 @@ $col-4: $amber-pantone-6;
 
 $col-grey: $col-4;
 
+
 .footer {
-    font-weight     : 300;
+    font-weight     : 600;
     font-size       : 1rem;
     position        : fixed;
     left            : 0;
     bottom          : 0;
-    height          : var(--);
+    height          : var(--footer-height);
     width           : 100%;
     background-color: rgba(0, 0, 0, 0.7);
     text-align      : left;
@@ -38,7 +38,7 @@ mat-slider {
 
 .timeDispContainer {
     font-family: 'HK Grotesk';
-    font-weight: 500;
+    font-weight: 600;
     font-style : normal;
 
 
@@ -68,7 +68,7 @@ mat-slider {
 
 .button-group {
     display        : flex;
-    flex           : 1 1;
+    flex           : 3 1;
     align-self     : center;
     justify-content: space-evenly;
 }
@@ -91,13 +91,14 @@ mat-slider {
 
 .icon-main {
     font-variation-settings: 'wght'300, 'FILL'0, 'GRAD'-25, 'opsz'24;
-
-    color     : var(--glas-white-5);
-    align-self: center;
+    padding-left           : 0.2rem;
+    padding-right          : 0.2rem;
+    color                  : var(--glas-white-5);
+    align-self             : center;
 }
 
-.progress-bar {
-    height: 2px;
+.time-progressbar {
+    height: 5px;
     width : 100%;
 }
 
@@ -131,18 +132,22 @@ mat-slider {
     font-size: 1rem;
 }
 
-.currentTime {
-    font-size     : 1rem;
-    color         : rgba(229, 238, 255, .3);
-    letter-spacing: 0.02rem;
-    align-self    : center; // vertical center
-}
-
-.finishedTime {
-    font-size     : 1rem;
+.timeText {
+    font-size     : 0.8rem;
+    font-weight   : 600;
     color         : var(--glas-white-5);
     letter-spacing: 0.02rem;
     align-self    : center; // vertical center
+    padding-left  : 1rem;
+    padding-right : 1rem;
+}
+
+.timeProgessContainer {
+    margin-bottom: 1rem;
+    position     : relative;
+    align-self   : center;
+    display      : flex;
+    width        : 100%;
 }
 
 .inputSource {
@@ -173,6 +178,7 @@ img {
 }
 
 .albumAndTitle {
+    flex     : 3 3 6rem;
     font-size: 1.2rem;
     color    : rgba(229, 238, 255, .3);
 
@@ -255,13 +261,13 @@ img {
     ==============================================================
 **/
 .left-footer {
-    flex      : 7 1 26rem;
+    flex      : 4 1 26rem;
     min-height: 0;
     min-width : 200px;
 }
 
 .middle-div {
-    flex           : 1 1 8rem;
+    flex           : 6 1 16rem;
     display        : flex;
     height         : 100%;
     align-self     : top;
@@ -274,25 +280,51 @@ img {
 }
 
 .right-footer {
-    flex           : 1 1 8rem;
+    flex           : 2 1 8rem;
     align-self     : center;
     justify-content: space-evenly;
     border-left    : 2px solid var(--dark-grey);
 }
 
 .mySlider {
-    max-width: 150px;
-    height   : 48px;
-    width    : 100%;
+    max-width : 150px;
+    height    : 48px;
+    width     : 100%;
     align-self: center;
+    opacity   : 0;
 }
 
 .progressbar {
     align-self: center;
 }
 
+.time-slider {
+    height : 48px;
+    width  : 100%;
+    opacity: 0;
+    top      : -1rem;
+}
+
+.timeSliderBox {
+    position : relative;
+    display  : flex;
+    width    : 100%;
+    min-width: 150px;
+    max-width: 400px;
+
+    &:hover .hidden {
+        opacity: 1;
+        margin : auto;
+    }
+
+    &:hover>.progressbar {
+        opacity: 0;
+    }
+}
+
 .overlayBox {
-    position: relative;
+    position    : relative;
+    padding-left: 0.5rem;
 
     &:hover .hidden {
         opacity: 1;
@@ -306,7 +338,6 @@ img {
 
 .absolute {
     position: absolute;
-    display : inline-block;
 }
 
 .hidden {
