@@ -1,11 +1,12 @@
 <div class="d-flex flex-column footer">
 
     <!-- upper footer section -->
+    <!--
     <div class="progress-bar">
         <mat-progress-bar class="progress-bar" mode="determinate" value="{{rendererService.trackTime.percent}}">
         </mat-progress-bar>
     </div>
-
+-->
     <div class="d-flex flex-row justify-content-between spacer">
         <!-- left footer section -->
         <div class="d-flex left-footer">
@@ -35,7 +36,7 @@
                 <span class="material-symbols-outlined icon-button md-36 {{infoSongClass}}" (click)="openInfoPopup($event)">Info</span>
             </div>
         </div>
-        
+
         <!-- TIME -->
         <!-- =========== -->
 
@@ -64,10 +65,8 @@
             <div class="button-group">
                 <span class="material-symbols-outlined icon-button d-none d-sm-block {{shuffleClass}}" (click)="playlistService.toggleShuffle()">shuffle</span>
                 <span class="material-symbols-outlined icon-button d-none d-md-block " (click)="playlistService.previous()">skip_previous</span>
-                <span *ngIf="!rendererService.isPlaying()" class="material-symbols-outlined md-48 icon-button"
-                    (click)="rendererService.play()">play_arrow</span>
-                <span *ngIf="rendererService.isPlaying()" class="material-symbols-outlined md-48 icon-button"
-                    (click)="rendererService.pause()">pause_circle</span>
+                <span *ngIf="!rendererService.isPlaying()" class="material-symbols-outlined md-48 icon-button" (click)="rendererService.play()">play_arrow</span>
+                <span *ngIf="rendererService.isPlaying()" class="material-symbols-outlined md-48 icon-button" (click)="rendererService.pause()">pause_circle</span>
                 <span class="material-symbols-outlined icon-button d-none d-md-block " (click)="rendererService.next()">skip_next</span>
                 <span class="material-symbols-outlined icon-button d-none d-sm-block {{repeatClass}}" (click)="playlistService.toggleRepeat()">repeat</span>
             </div>
@@ -80,8 +79,15 @@
         <div class="m-2 ps-2 right-footer me-4 d-none d-md-flex">
             <span class="material-symbols-outlined icon-main" (click)="serverClicked($event)">dns</span>
             <span class="material-symbols-outlined icon-main" (click)="rendererClicked($event)">speaker</span>
-            <span class="material-symbols-outlined icon-main" (click)="volumeClicked($event)">volume_up</span>
             <span class="material-symbols-outlined {{getStandbyClass()}} icon-main" (click)="powerClicked()" *ngIf="hasDeviceDriver()">power_settings_new</span>
+            <span class="material-symbols-outlined icon-main">volume_up</span>
+            <div class="d-flex overlayBox" style="width: 120px;">
+                <mat-slider class="absolute hidden mySlider" min="0" max="90" step="1" value="0" [disabled]="!deviceService.isAnyMediaRendererSelected()">
+                    <input matSliderThumb (valueChange)="volChanged($event)" [value]="rendererService.deviceDriverState.volume">
+                </mat-slider>
+                <mat-progress-bar class="absolute progressbar" mode="determinate" [value]="rendererService.deviceDriverState.volume">
+                </mat-progress-bar>
+            </div>
         </div>
     </div>
 </div>

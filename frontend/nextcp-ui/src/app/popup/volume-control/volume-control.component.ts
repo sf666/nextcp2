@@ -1,4 +1,3 @@
-import { MatSliderChange } from '@angular/material/slider';
 import { PopupService } from './../../util/popup.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RendererService } from './../../service/renderer.service';
@@ -31,8 +30,8 @@ export class VolumeControlComponent implements OnInit {
     this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 50, 482);
   }
 
-  volChanged(event: MatSliderChange): void {
-    this.rendererService.setVolume(event.value);
+  volChanged(event): void {
+    this.rendererService.setVolume(event);
     this.closeOnMs = Date.now() + 3000;
     if (this.myTimer) {
       clearTimeout(this.myTimer);

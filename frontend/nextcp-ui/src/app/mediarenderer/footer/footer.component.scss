@@ -1,3 +1,13 @@
+@use '@angular/material' as mat;
+$slider-theme: mat.define-dark-theme((
+ color: (
+   primary: mat.define-palette(mat.$cyan-palette),
+   accent: mat.define-palette(mat.$cyan-palette),
+   warn: mat.define-palette(mat.$cyan-palette),
+ ),
+));
+@include mat.slider-color($slider-theme);
+
 @import "app-variables";
 @import "pantone";
 
@@ -260,7 +270,7 @@ img {
 
 .footer-spacer {
     display: flex;
-    flex: 1 1 0;
+    flex   : 1 1 0;
 }
 
 .right-footer {
@@ -270,6 +280,38 @@ img {
     border-left    : 2px solid var(--dark-grey);
 }
 
+.mySlider {
+    max-width: 150px;
+    height   : 48px;
+    width    : 100%;
+    align-self: center;
+}
+
+.progressbar {
+    align-self: center;
+}
+
+.overlayBox {
+    position: relative;
+
+    &:hover .hidden {
+        opacity: 1;
+        margin : auto;
+    }
+
+    &:hover>.progressbar {
+        opacity: 0;
+    }
+}
+
+.absolute {
+    position: absolute;
+    display : inline-block;
+}
+
+.hidden {
+    opacity: 0;
+}
 
 .volume-bar {
     line-height: 1.6rem;

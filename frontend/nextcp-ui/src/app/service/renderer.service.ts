@@ -30,12 +30,12 @@ export class RendererService {
     private backgroundImageService: BackgroundImageService,
     private httpService: HttpService) {
 
-    this.deviceDriverState = { hasDeviceDriver: false, standby: true, volume: 0, rendererUDN: '' , input: dtoGeneratorService.emptyInputSourceDto()};
+    this.deviceDriverState = { hasDeviceDriver: false, standby: true, volume: 0, rendererUDN: '', input: dtoGeneratorService.emptyInputSourceDto() };
     this.trackInfo = this.dtoGeneratorService.emptyTrackInfo();
     this.trackTime = this.dtoGeneratorService.emptyTrackTime();
 
     sseService.mediaRendererDeviceDriverStateChanged$.subscribe(data => this.updateRenderDeviceDriverState(data));
-  
+
     sseService.mediaRendererTrackInfoChanged$.subscribe(data => {
       if (deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
         this.trackInfo = data;
@@ -73,7 +73,7 @@ export class RendererService {
   private readTrackInfoState(device: MediaRendererDto) {
     const uri = '/getCurrentSourceTrackInfo';
     this.httpService.post<TrackInfoDto>(this.baseUri, uri, device).subscribe(data => {
-      if (this.deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
+      if (data && this.deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
         this.trackInfo = data
       }
     });
@@ -107,50 +107,50 @@ export class RendererService {
   public get trackInfoAvailable(): boolean {
     return this.trackInfo?.currentTrack?.title?.length > 0;
   }
-  
+
   public isPlaying(): boolean {
     const playing: boolean = this.transportServiceStateDto?.transportState.toUpperCase() === 'PLAYING';
-    return playing;      
+    return playing;
   }
 
   public isShuffle(): boolean {
     const playing: boolean = this.transportServiceStateDto?.shuffle;
-    return playing;      
+    return playing;
   }
 
   public isRepeat(): boolean {
     const playing: boolean = this.transportServiceStateDto?.repeat;
-    return playing;      
+    return playing;
   }
 
   public canShuffle(): boolean {
     const playing: boolean = this.transportServiceStateDto?.canShuffle;
-    return playing;      
+    return playing;
   }
 
   public canPause(): boolean {
     const playing: boolean = this.transportServiceStateDto?.canPause;
-    return playing;      
+    return playing;
   }
 
   public canRepeat(): boolean {
     const playing: boolean = this.transportServiceStateDto?.canRepeat;
-    return playing;      
+    return playing;
   }
 
   public canSeek(): boolean {
     const playing: boolean = this.transportServiceStateDto?.canSeek;
-    return playing;      
+    return playing;
   }
 
   public canSkipNext(): boolean {
     const playing: boolean = this.transportServiceStateDto?.canSkipNext;
-    return playing;      
+    return playing;
   }
 
   public canSkipPrevious(): boolean {
     const playing: boolean = this.transportServiceStateDto?.canSkipPrevious;
-    return playing;      
+    return playing;
   }
 
   //
@@ -175,12 +175,14 @@ export class RendererService {
    * Set's volume in percent 
    */
   public setVolume(vol: number) {
-    const uri = '/setVolume';
-    let request: MediaRendererSetVolume = {
-      rendererUDN: this.deviceService.selectedMediaRendererDevice.udn,
-      volume: vol
-    };
-    this.httpService.post(this.baseUri, uri, request, "volume control");
+    if (this.deviceService.selectedMediaRendererDevice.udn) {
+      const uri = '/setVolume';
+      let request: MediaRendererSetVolume = {
+        rendererUDN: this.deviceService.selectedMediaRendererDevice.udn,
+        volume: vol
+      };
+      this.httpService.post(this.baseUri, uri, request, "volume control");
+    }
   }
 
   //
@@ -234,16 +236,16 @@ export class RendererService {
     }
   }
 
-  public isHifi() : boolean {
+  public isHifi(): boolean {
     let bps = this.getBitsPerSample();
     let sFreq = this.getSampleFreq();
-    if (bps >= 16 && sFreq>= 44100) { // CD Quality
+    if (bps >= 16 && sFreq >= 44100) { // CD Quality
       return true;
     }
     return false;
   }
 
-  public getHifiString() : string {
+  public getHifiString(): string {
     let bps = this.getBitsPerSample();
     let sFreq = this.getSampleFreq();
     if (!this.isHifi) {
@@ -290,7 +292,7 @@ export class RendererService {
     }
   }
 
-  public getCurrentTrack() : MusicItemDto{
+  public getCurrentTrack(): MusicItemDto {
     return this.trackInfo?.currentTrack;
   }
 }

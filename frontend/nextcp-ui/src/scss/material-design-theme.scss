@@ -19,8 +19,8 @@
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 
-$my-app-primary: mat.define-palette(mat.$pink-palette);
-$my-app-accent : mat.define-palette(mat.$cyan-palette, 800, 900, A100);
+$my-app-primary: mat.define-palette(mat.$gray-palette);
+$my-app-accent : mat.define-palette(mat.$blue-grey-palette, 800, 900, A100);
 $my-app-warn   : mat.define-palette(mat.$deep-orange-palette);
 
 $custom-typography: mat.define-typography-config($font-family: 'HK Grotesk, Lato, Quicksand, sans-serif',

@@ -98,6 +98,10 @@ export class FooterComponent {
     }
   }
 
+  volChanged(event): void {
+    this.rendererService.setVolume(event);
+  }
+
   //
   // for demontration purpose : locally provided actions intended to be used by the template
   // =========================================================================================================
