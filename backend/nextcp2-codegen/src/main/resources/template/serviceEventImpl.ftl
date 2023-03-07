@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ${className}EventListenerImpl implements I${className}EventListener 
 {
-    private static Logger log = LoggerFactory.getLogger(${className}.class.getName());
+    private static Logger log = LoggerFactory.getLogger(${className}EventListenerImpl.class.getName());
     private ${className}StateVariable stateVariable = new ${className}StateVariable();
 
     /**
