@@ -176,5 +176,10 @@ a {
 .myPlaylistSection {
     display       : flex;
     flex-direction: column;
-    margin-left   : 1rem;
+    margin-left   : 0.5rem;
+}
+
+.myRouterLinkSection {
+    display       : flex;
+    flex-direction: column;
 }
