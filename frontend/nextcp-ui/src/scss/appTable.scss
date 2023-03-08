@@ -1,13 +1,13 @@
 .item-table {
     font-size     : 1rem;
-    font-weight   : 300;
+    font-weight   : 600;
     text-align    : left;
     align-self    : stretch;
     text-transform: initial;
 
     .item-thead {
-        font-size     : 0.9rem;
-        font-weight   : 500;
+        font-size     : 0.7rem;
+        font-weight   : 600;
         margin        : 15px 0;
         text-align    : left;
         align-self    : stretch;
@@ -17,10 +17,10 @@
     .item-tbody {
         flex          : 1 1 auto;
         font-size     : 0.9rem;
-        font-weight   : 300;
         text-align    : left;
         align-self    : stretch;
         text-transform: initial;
+        letter-spacing: 1.15px;
         min-width     : 100px;
     }
 }
