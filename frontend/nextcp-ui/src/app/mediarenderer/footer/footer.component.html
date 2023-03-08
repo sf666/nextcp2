@@ -51,7 +51,7 @@
                     <span class="material-symbols-outlined icon-button d-none d-md-block " (click)="rendererService.next()">skip_next</span>
                     <span class="material-symbols-outlined icon-button d-none d-sm-block {{repeatClass}}" (click)="playlistService.toggleRepeat()">repeat</span>
                 </div>
-                <div class="timeProgessContainer">
+                <div class="timeProgessContainer d-none d-md-flex">
                     <div class="timeText">{{rendererService.trackTime.secondsDisp}}</div>
                     <div class="timeSliderBox">
                         <mat-slider class="absolute hidden time-slider" min="0" max="100" step="1">

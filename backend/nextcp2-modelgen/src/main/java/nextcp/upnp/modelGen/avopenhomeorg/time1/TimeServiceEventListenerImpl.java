@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  */
 public class TimeServiceEventListenerImpl implements ITimeServiceEventListener 
 {
-    private static Logger log = LoggerFactory.getLogger(TimeService.class.getName());
+    private static Logger log = LoggerFactory.getLogger(TimeServiceEventListenerImpl.class.getName());
     private TimeServiceStateVariable stateVariable = new TimeServiceStateVariable();
 
     /**
@@ -41,7 +41,7 @@ public class TimeServiceEventListenerImpl implements ITimeServiceEventListener
     {
         if (log.isInfoEnabled())
         {
-            log.info(String.format("invalidMessage : %s", ex.getMessage()));
+            log.info(String.format("%s > invalidMessage : %s",  ex.getMessage()));
         }
     }
 

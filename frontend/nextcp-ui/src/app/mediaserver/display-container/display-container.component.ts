@@ -12,6 +12,7 @@ import { MyMusicService } from './../../service/my-music.service';
 import { MusicItemDto, ContainerDto, ContainerItemDto } from './../../service/dto.d';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { debounce } from 'src/app/global';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'mediaServer-display-container',
@@ -20,6 +21,8 @@ import { debounce } from 'src/app/global';
   providers: [{ provide: 'uniqueId', useValue: 'default_display_container' }]
 })
 export class DisplayContainerComponent implements OnInit {
+
+  genresForm = new FormControl('');
 
   @Input() showTopHeader = true;
 
@@ -39,7 +42,10 @@ export class DisplayContainerComponent implements OnInit {
   private lastScrollToId = '';
   private intersecObserver: IntersectionObserver;
 
+
   quickSearchString: string;
+  genresList: Set<String>;
+  selectedGenres: Array<string> = [];
 
   // some calculated constants
   private allTracksSameAlbum_: boolean;
@@ -118,6 +124,19 @@ export class DisplayContainerComponent implements OnInit {
     this.checkOneTrackWithMusicBrainzId();
     this.checkAllTracksSameDisc();
     this.checkLikeStatus();
+    this.fillGenres();
+  }
+
+  private fillGenres(): void {
+    this.genresList = new Set();
+    this.musicTracks.forEach((value) => {
+      if (value?.genre) {
+        let aGenre = value.genre.split("/");
+        aGenre.forEach((gen) => {
+          this.genresList.add(gen.trim());
+        })
+      }
+    });
   }
 
   getSearchDelay(): number {
@@ -222,10 +241,11 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   hasSongs(): boolean {
-    if (this.musicTracks.length > 0) {
-      return true;
-    }
-    return false;
+    return this.musicTracks?.length > 0 ? true : false;
+  }
+
+  hasGenres(): boolean {
+    return this.genresList?.size > 0 ? true : false;
   }
 
   //
@@ -334,19 +354,42 @@ export class DisplayContainerComponent implements OnInit {
   // ===============================================================================================
 
   get allMusicTracks() {
-    return this.filteredMusicTracks(this.quickSearchString);
+    return this.filteredMusicTracks(true);
   }
-  private filteredMusicTracks(filter?: string): MusicItemDto[] {
+  private filteredMusicTracks(filter?: boolean): MusicItemDto[] {
     if (filter) {
-      return this.musicTracks.filter(item => this.doFilterText(item.title, filter));
+      let tracks: Array<MusicItemDto>;
+      if (this.quickSearchString) {
+        tracks = this.musicTracks.filter(item => this.doFilterText(item.title, this.quickSearchString));
+      } else {
+        tracks = this.musicTracks;
+      }
+      if (this?.selectedGenres?.length > 0) {
+        tracks = tracks.filter(item => this.doFilterGenre(item));
+      }
+      return tracks;
     } else {
       return this.musicTracks;
     }
   }
 
-  private doFilterText(title: string, filter?: string) {
+  private doFilterGenre(item: MusicItemDto) : boolean {
+    let add = false;
+    this.selectedGenres.forEach(genre => {
+      if (this.doFilterText(item.genre, genre)) {
+        add = true;
+      }
+    })
+    return add;
+  }
+
+
+  private doFilterText(title: string, filter?: string) : boolean {
     if (!filter) {
       return true;
+    }
+    if (!title) {
+      return false;
     }
     return title.toLowerCase().includes(filter.toLowerCase());
   }

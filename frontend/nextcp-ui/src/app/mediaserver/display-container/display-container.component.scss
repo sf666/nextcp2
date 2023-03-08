@@ -12,16 +12,11 @@
     max-width      : 750px;
 }
 
-.button-row {
-    display        : flex;
-    justify-content: space-between;
-    margin-top     : 1rem;
-}
-
 .header-container {
-    display      : flex;
-    padding-right: 32px;
-    flex         : 1 1 auto;
+    display       : flex;
+    flex-direction: column;
+    padding-right : 32px;
+    flex          : 1 1 auto;
 }
 
 .top-img-container {
@@ -41,15 +36,12 @@
     min-height: 15rem;
 }
 
-@media only screen and (max-width: 1100px) {
-    .button-row {
-        display        : flex;
-        justify-content: space-between;
-        margin-top     : 1rem;
-        flex-wrap      : wrap;
-    }
+.button-row {
+    display        : flex;
+    justify-content: space-between;
+    margin-top     : 1rem;
+    flex-wrap      : wrap;
 }
-
 
 @media only screen and (max-width: 900px) {
     .img-top {
@@ -109,11 +101,10 @@
 
 
 .outer-container {
-    display   : flex;
-    flex      : 1 5 auto;
-    position  : relative;
-    margin-top: 2rem;
-    max-width : 1700px;
+    display  : flex;
+    flex     : 1 5 auto;
+    position : relative;
+    max-width: 1700px;
 }
 
 
@@ -220,6 +211,16 @@ img {
     max-height   : 1.25rem;
 }
 
+.growingContainer {
+    display: flex;
+    flex   : 1 1 0;
+}
+
+.genreContainer {
+    display  : flex;
+    flex     : 1 1 0;
+    min-width: 200px;
+}
 
 .search-container {
     display           : flex;

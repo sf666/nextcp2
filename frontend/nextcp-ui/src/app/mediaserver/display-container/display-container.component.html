@@ -23,7 +23,7 @@
                                 </div>
                                 <div *ngIf="currentContainer.artist" class="regular">by <span class="highlight">{{currentContainer.artist}}</span>
                                 </div>
-                                <div *ngIf="itemsCount > 0" class="pt-3 regular">{{containerType}} contains <span class="highlight">{{itemsCount}}</span> audio title</div>
+                                <div *ngIf="itemsCount > 0" class="pt-3 regular"> {{containerType}} contains <span class="highlight">{{itemsCount}}</span> audio title</div>
                                 <div *ngIf="totalPlaytime.length > 0" class="pt-1 regular">Total play time <span class="highlight">{{totalPlaytime}}</span></div>
                             </div>
                             <div class="button-row">
@@ -47,11 +47,20 @@
                         </div>
 
                         <!-- current content search box -->
-                        <div class="d-none mt-4 d-sm-flex">
-                            <div class="search-container">
-                                <span class="material-symbols-outlined thin md-light">search</span>
-                                <input class="search" [(ngModel)]="quickSearchString" matInput placeholder="search content" #searchInput (keyup)="keyUp($event)">
-                                <span class="material-symbols-outlined thin md-light" (click)="clearSearch()">close</span>
+                        <div class="d-flex justify-content-between d-none mt-4 d-sm-flex">
+                            <mat-form-field appearance="outline" class="growingContainer me-2">
+                                <mat-label>Search content</mat-label>
+                                <span matPrefix class="material-symbols-outlined thin md-light">search</span>
+                                <input [(ngModel)]="quickSearchString" matInput placeholder="search content" #searchInput (keyup)="keyUp($event)">
+                                <span matSuffix class="material-symbols-outlined thin md-light" (click)="clearSearch()">close</span>
+                            </mat-form-field>
+                            <div *ngIf="hasGenres()" class="">
+                                <mat-form-field appearance="outline" class="">
+                                    <mat-label>Genre</mat-label>
+                                    <mat-select [formControl]="genresForm" multiple [(ngModel)]="selectedGenres">
+                                        <mat-option *ngFor="let genre of genresList" [value]="genre">{{genre}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
                             </div>
                         </div>
                     </div>
@@ -61,11 +70,22 @@
                 </div>
 
             </div>
-            <div class="d-flex mt-4 d-sm-none">
-                <div class="search-container">
-                    <span class="material-symbols-outlined thin md-light">search</span>
-                    <input class="search" [(ngModel)]="quickSearchString" matInput placeholder="search content" #searchInput (keyup)="keyUp($event)">
-                    <span class="material-symbols-outlined thin md-light" (click)="clearSearch()">close</span>
+            <div class="d-flex mt-4 ms-2 d-sm-none flex-column">
+                <div class="w-100">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Search content</mat-label>
+                        <span matPrefix class="material-symbols-outlined thin md-light">search</span>
+                        <input [(ngModel)]="quickSearchString" matInput placeholder="search content" #searchInput (keyup)="keyUp($event)">
+                        <span matSuffix class="material-symbols-outlined thin md-light" (click)="clearSearch()">close</span>
+                    </mat-form-field>
+                </div>
+                <div class="w-100" *ngIf="hasGenres()">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Genre</mat-label>
+                        <mat-select [formControl]="genresForm" multiple>
+                            <mat-option *ngFor="let genre of genresList" [value]="genre">{{genre}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
                 </div>
             </div>
         </div>

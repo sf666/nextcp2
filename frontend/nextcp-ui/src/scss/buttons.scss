@@ -3,17 +3,13 @@
     color           : var(--glas-white-3);
     background-color: rgba(229, 238, 255, .1);
     text-align      : left;
-    min-width       : 8rem;
-    margin-top      : 16px;
+    min-width       : 11rem;
+    margin          : 4px;
 
-    font-weight     : 600;
-    font-size       : 0.9rem;
+    font-weight: 600;
+    font-size  : 0.9rem;
 
-    letter-spacing  : 1.25px;
+    letter-spacing: 1.25px;
 
-    justify-content : flex-start;
-
-    &:first-child {
-        margin-left: 0;
-    }
+    justify-content: flex-start;
 }
