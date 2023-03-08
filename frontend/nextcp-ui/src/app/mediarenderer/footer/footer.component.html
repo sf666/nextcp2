@@ -54,7 +54,7 @@
                 <div class="timeProgessContainer d-none d-md-flex">
                     <div class="timeText">{{rendererService.trackTime.secondsDisp}}</div>
                     <div class="timeSliderBox">
-                        <mat-slider class="absolute hidden time-slider" min="0" max="100" step="1">
+                        <mat-slider *ngIf="!streaming()" class="absolute hidden time-slider" min="0" max="100" step="1">
                             <input matSliderThumb (valueChange)="volChanged($event)" [value]="rendererService.trackTime.percent">
                         </mat-slider>                        
                         <mat-progress-bar class="absolute time-progressbar align-self-center" mode="determinate" value="{{rendererService.trackTime.percent}}">

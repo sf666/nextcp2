@@ -27,19 +27,19 @@
                                 <div *ngIf="totalPlaytime.length > 0" class="pt-1 regular">Total play time <span class="highlight">{{totalPlaytime}}</span></div>
                             </div>
                             <div class="button-row">
-                                <button mat-flat-button class="my-buttons" (click)="toggleListView()">
+                                <button mat-stroked-button class="my-buttons" (click)="toggleListView()">
                                     <mat-icon class="material-symbols-outlined thin">dashboard_customize</mat-icon>
                                     <span class="button button-text">switch view</span>
                                 </button>
-                                <button mat-flat-button class="my-buttons" (click)="playPlaylist(currentContainer)">
+                                <button mat-stroked-button class="my-buttons" (click)="playPlaylist(currentContainer)">
                                     <mat-icon class="material-symbols-outlined thin">play_arrow</mat-icon>
                                     <span class="button button-text">play</span>
                                 </button>
-                                <button mat-flat-button class="my-buttons" (click)="shufflePlaylist(currentContainer)">
+                                <button mat-stroked-button class="my-buttons" (click)="shufflePlaylist(currentContainer)">
                                     <mat-icon class="material-symbols-outlined thin">shuffle</mat-icon>
                                     <span class="button button-text">shuffle</span>
                                 </button>
-                                <button mat-flat-button class="my-buttons" (click)="playlistService.addContainerToPlaylist(currentContainer)">
+                                <button mat-stroked-button class="my-buttons" (click)="playlistService.addContainerToPlaylist(currentContainer)">
                                     <mat-icon class="material-symbols-outlined thin">playlist_add</mat-icon>
                                     <span class="button button-text">add tracks</span>
                                 </button>

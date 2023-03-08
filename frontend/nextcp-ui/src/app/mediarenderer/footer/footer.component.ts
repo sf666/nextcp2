@@ -102,16 +102,16 @@ export class FooterComponent {
     this.rendererService.setVolume(event);
   }
 
-  //
-  // for demontration purpose : locally provided actions intended to be used by the template
-  // =========================================================================================================
-
   streaming(): boolean {
     return this.rendererService.streaming();
   }
 
   getFinishTime(): string {
     return this.rendererService.getFinishTime();
+  }
+
+  trackTimePercent(): number {
+    return this.streaming() ? 0 : this.rendererService.trackTime.percent;
   }
 
   //
