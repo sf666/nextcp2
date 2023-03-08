@@ -54,17 +54,24 @@ public class OhProductServiceEventListener extends ProductServiceEventListenerIm
         {
             try
             {
-                InputSourceDto inpDto = device.getProductService().getInputSource(value);
-
-                InputSourceChangeDto event = new InputSourceChangeDto();
-                event.udn = device.getUdnAsString();
-                event.inputSource = inpDto;
-
-                eventPublisher.publishEvent(event);
-                
-                if (sourceChangedCallback != null)
+                if (device.getProductService() != null)
                 {
-                    sourceChangedCallback.sourceChanged(inpDto);
+                    InputSourceDto inpDto = device.getProductService().getInputSource(value);
+                    
+                    InputSourceChangeDto event = new InputSourceChangeDto();
+                    event.udn = device.getUdnAsString();
+                    event.inputSource = inpDto;
+
+                    eventPublisher.publishEvent(event);
+                    
+                    if (sourceChangedCallback != null)
+                    {
+                        sourceChangedCallback.sourceChanged(inpDto);
+                    }
+                }
+                else
+                {
+                    log.warn("product service not yet initialized.");
                 }
             }
             catch (NullPointerException e)

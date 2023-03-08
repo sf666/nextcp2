@@ -2,7 +2,7 @@
       *ngFor="let toast of toastService.toasts"
       [class]="toast.classname"
       [autohide]="true"
-      [delay]="toast.delay || 5000"
+      [delay]="toast.delay || 100000"
       [header]="toast.header"
       (hidden)="toastService.remove(toast)"
     >
