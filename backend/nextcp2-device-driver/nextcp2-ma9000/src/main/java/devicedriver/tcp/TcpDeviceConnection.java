@@ -15,11 +15,18 @@ public class TcpDeviceConnection
     private SocketChannel socketToDevice = null;
     private boolean terminateReadThread = false;
     private IDataReceivedCallback receivedCallback = null;
+    private Thread readThread = null;
 
+    private long lastSend = System.currentTimeMillis();
+    private long lastReceive = lastSend;
+    
     private SocketAddress address;
 
     public void reconnect()
     {
+        log.info("reconnecting ... ");
+        lastSend = System.currentTimeMillis();
+        lastReceive = lastSend;        
         open(address, receivedCallback);
     }
 
@@ -72,19 +79,21 @@ public class TcpDeviceConnection
         Runnable readRunnable = () -> {
             ByteBuffer buffer = ByteBuffer.allocateDirect(4096);
             terminateReadThread = false;
-            while (!terminateReadThread)
+            while (!readThread.isInterrupted() && !terminateReadThread)
             {
                 try
                 {
                     int size = socketToDevice.read(buffer);
-                    if (size == -1)
+                    if (size <= 0)
                     {
                         closeIfOpen();
+                        reconnect();
                     }
                     else
                     {
                         buffer.flip();
                         dataReceived(buffer);
+                        lastReceive = System.currentTimeMillis();
                     }
                 }
                 catch (IOException e)
@@ -95,14 +104,20 @@ public class TcpDeviceConnection
             }
         };
 
-        Thread readThread = new Thread(readRunnable);
-        readThread.setName("incoming thread for device " + address);
+        readThread = new Thread(readRunnable);
+        readThread.setName("incoming read thread for device " + address + " : " + System.currentTimeMillis());
         readThread.setDaemon(true);
         readThread.start();
     }
 
     public void sendData(ByteBuffer data)
     {
+        if ((lastSend - lastReceive) > 1000)
+        {
+            log.warn("did not receive any data in the last second ... reconnecting");
+            reconnect();
+        }
+        
         if (socketToDevice == null)
         {
             log.error("Not connected to device ... ");
@@ -117,6 +132,7 @@ public class TcpDeviceConnection
             if (socketToDevice.isConnected())
             {
                 socketToDevice.write(data);
+                lastSend = System.currentTimeMillis();
             }
             else
             {
@@ -133,6 +149,7 @@ public class TcpDeviceConnection
     private void closeIfOpen()
     {
         terminateReadThread = true;
+        readThread.interrupt();
         if (socketToDevice != null && socketToDevice.isConnected())
         {
             try
