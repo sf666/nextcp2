@@ -88,6 +88,10 @@ export class DisplayContainerComponent implements OnInit {
     });
   }
 
+  private partialPageLoaded() {
+    this.fillGenres();
+  }
+
   domChange(event: any): void {
     if (this.contentHandler.cdsBrowsePathService) {
       if (this.contentHandler.cdsBrowsePathService.scrollToID !== this.lastScrollToId) {
@@ -106,8 +110,8 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   /**
- * @param elementID ATTENTION: elementID needs to have tabindex set to '-1': <div id="elementID" tabindex="-1">
- */
+   * @param elementID ATTENTION: elementID needs to have tabindex set to '-1': <div id="elementID" tabindex="-1">
+   */
   public scrollIntoViewID(elementID: string): void {
     const targetElement = document.getElementById(elementID); // querySelector('#someElementId');
     if (targetElement) {
@@ -117,6 +121,9 @@ export class DisplayContainerComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkAlbumAndLikeStatus();
+    if (this.contentHandler?.contentDirectoryService) {
+      this.contentHandler.contentDirectoryService.browseFinished$.subscribe(data => this.partialPageLoaded());
+    }
   }
 
   private checkAlbumAndLikeStatus(): void {
@@ -124,12 +131,19 @@ export class DisplayContainerComponent implements OnInit {
     this.checkOneTrackWithMusicBrainzId();
     this.checkAllTracksSameDisc();
     this.checkLikeStatus();
-    this.fillGenres();
   }
 
   private fillGenres(): void {
     this.genresList = new Set();
     this.musicTracks.forEach((value) => {
+      if (value?.genre) {
+        let aGenre = value.genre.split("/");
+        aGenre.forEach((gen) => {
+          this.genresList.add(gen.trim());
+        })
+      }
+    });
+    this.albumList.forEach((value) => {
       if (value?.genre) {
         let aGenre = value.genre.split("/");
         aGenre.forEach((gen) => {
@@ -373,7 +387,17 @@ export class DisplayContainerComponent implements OnInit {
     }
   }
 
-  private doFilterGenre(item: MusicItemDto) : boolean {
+  private doFilterGenreByContainer(item: ContainerDto): boolean {
+    let add = false;
+    this.selectedGenres.forEach(genre => {
+      if (this.doFilterText(item.genre, genre)) {
+        add = true;
+      }
+    })
+    return add;
+  }
+
+  private doFilterGenre(item: MusicItemDto): boolean {
     let add = false;
     this.selectedGenres.forEach(genre => {
       if (this.doFilterText(item.genre, genre)) {
@@ -384,7 +408,7 @@ export class DisplayContainerComponent implements OnInit {
   }
 
 
-  private doFilterText(title: string, filter?: string) : boolean {
+  private doFilterText(title: string, filter?: string): boolean {
     if (!filter) {
       return true;
     }
@@ -395,13 +419,23 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   get albumList(): ContainerDto[] {
-    return this.filteredAlbumList(this.quickSearchString);
+    return this.filteredAlbumList(true);
   }
 
-  private filteredAlbumList(filter?: string): ContainerDto[] {
+  private filteredAlbumList(filter: boolean): ContainerDto[] {
     if (filter) {
-      return this.albums.filter(item => this.doFilterText(item.title, filter));
+      let cont: Array<ContainerDto>;
+      if (this.quickSearchString) {
+        cont = this.albums.filter(item => this.doFilterText(item.title, this.quickSearchString));
+      } else {
+        cont = this.albums;
+      }
+      if (this?.selectedGenres?.length > 0) {
+        cont = cont.filter(item => this.doFilterGenreByContainer(item));
+      }
+      return cont;
     } else {
+      console.log("size : " + this.albums.length);
       return this.albums;
     }
   }
