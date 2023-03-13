@@ -149,7 +149,10 @@ public class TcpDeviceConnection
     private void closeIfOpen()
     {
         terminateReadThread = true;
-        readThread.interrupt();
+        if (readThread != null)
+        {
+            readThread.interrupt();
+        }
         if (socketToDevice != null && socketToDevice.isConnected())
         {
             try
