@@ -24,10 +24,12 @@ public class TcpDeviceConnection
 
     public TcpDeviceConnection(SocketAddress address, IDataReceivedCallback receivedCallback)
     {
+        if (address == null)
+        {
+            throw new RuntimeException("Missing address parameter ...");
+        }
         this.address = address;
         this.receivedCallback = receivedCallback;
-        
-        throw new RuntimeException("Missing address parameter ...");
     }
     
     public void reconnect()
