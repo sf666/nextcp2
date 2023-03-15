@@ -41,8 +41,8 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
         state.standby = true;
         state.hasDeviceDriver = true;
         state.input = new InputSourceDto();
-        device = new McIntoshDeviceConnection(this);
-        device.open(hostAddress);
+        device = new McIntoshDeviceConnection(this, hostAddress, null);
+        device.open();
 
         checkPowerState();
     }

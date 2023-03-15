@@ -1,5 +1,6 @@
 package devicedriver.McIntosh.tcp;
 
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
@@ -14,7 +15,9 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import devicedriver.McIntosh.Ma9000Binding;
 import devicedriver.McIntosh.control.BaseCommandStructure;
+import devicedriver.tcp.IDataReceivedCallback;
 import devicedriver.tcp.TcpDeviceConnection;
 import devicedriver.util.CharBufferUtil;
 
@@ -33,19 +36,11 @@ public class McIntoshDeviceConnection extends TcpDeviceConnection
     private ArrayBlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(10);
     private ThreadPoolExecutor threadPool = new ThreadPoolExecutor(1, 10, 5, TimeUnit.SECONDS, queue);
 
-    public McIntoshDeviceConnection()
+    public McIntoshDeviceConnection(Ma9000Binding ma9000Binding, SocketAddress address, IDataReceivedCallback receivedCallback)
     {
+        super(address, receivedCallback);
     }
 
-    /**
-     * MA9000 Brodcast Meldungen kommen hier an ...
-     * 
-     * @param subscriptionCallback
-     */
-    public McIntoshDeviceConnection(IMcIntoshDeviceChanged subscriptionCallback)
-    {
-        this.subscriptionCallback = subscriptionCallback;
-    }
 
     @Override
     protected void dataReceived(ByteBuffer receivedBuffer)
