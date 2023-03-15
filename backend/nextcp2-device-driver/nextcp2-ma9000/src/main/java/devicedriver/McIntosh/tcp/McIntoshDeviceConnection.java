@@ -60,7 +60,6 @@ public class McIntoshDeviceConnection extends TcpDeviceConnection
                     asyncStateChange(matcher.group(1));
                 }
             }
-
         }
         catch (CharacterCodingException e)
         {
@@ -106,9 +105,9 @@ public class McIntoshDeviceConnection extends TcpDeviceConnection
                     String inp = aCommand.split(" ")[1];
                     subscriptionCallback.inputChanged(inp);
                 }
-                else if (aCommand.startsWith("FW "))
+                else
                 {
-                    // subscriptionCallback.firmwareVersionChanged(aCommand.substring(11));
+                    log.info("received data : " + aCommand);
                 }
             }
         });

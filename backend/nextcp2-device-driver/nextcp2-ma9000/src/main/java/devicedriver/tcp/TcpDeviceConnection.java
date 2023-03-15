@@ -89,7 +89,7 @@ public class TcpDeviceConnection
                     int size = socketToDevice.read(buffer);
                     if (size <= 0)
                     {
-                        log.info("received 0 or less data. Reconnecting.");
+                        log.info("received 0 or less data. Reconnecting ...");
                         reconnect();
                     }
                     else
@@ -105,10 +105,10 @@ public class TcpDeviceConnection
                     e.printStackTrace();
                 }
             }
-            log.warn("terminated read thread. Reason  :");
-            log.info("!readThread.isInterrupted()     : " + !readThread.isInterrupted());
-            log.info("!terminateReadThread            : " + !terminateReadThread);
-            log.info("socketToDevice.isConnected()    : " + socketToDevice.isConnected());
+            log.debug("terminated read thread. Reason  :");
+            log.debug("!readThread.isInterrupted()     : " + !readThread.isInterrupted());
+            log.debug("!terminateReadThread            : " + !terminateReadThread);
+            log.debug("socketToDevice.isConnected()    : " + socketToDevice.isConnected());
             readThread = null;
         };
 
@@ -155,22 +155,6 @@ public class TcpDeviceConnection
     private void closeIfOpen()
     {
         terminateReadThread = true;
-        if (readThread != null)
-        {
-            log.info("interrupting tcp read thread " + readThread.getName());
-            readThread.interrupt();
-            while (readThread != null)
-            {
-                try
-                {
-                    Thread.currentThread().wait(1000);
-                }
-                catch (InterruptedException e)
-                {
-                    log.warn("wait 1 sec ", e);
-                }
-            }
-        }
         if (socketToDevice != null)
         {
             try
@@ -184,11 +168,17 @@ public class TcpDeviceConnection
             try
             {
                 socketToDevice.close();
+                log.debug("socker close() called ... ");
             }
             catch (Exception e)
             {
                 log.warn("closing socket", e);
             }
+        }
+        if (readThread != null)
+        {
+            log.info("interrupting tcp read thread " + readThread.getName());
+            readThread.interrupt();
         }
     }
 }
