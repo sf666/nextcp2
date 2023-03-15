@@ -17,8 +17,8 @@ public class TcpDeviceConnection
     private IDataReceivedCallback receivedCallback = null;
     private volatile Thread readThread = null;
 
-    private long lastSend = System.currentTimeMillis();
-    private long lastReceive = lastSend;
+    private volatile long lastSend = System.currentTimeMillis();
+    private volatile long lastReceive = lastSend;
 
     private SocketAddress address;
 
@@ -85,7 +85,7 @@ public class TcpDeviceConnection
             {
                 try
                 {
-                    log.info("waiting for receiving data ... ");
+                    log.info("waiting data ... ");
                     int size = socketToDevice.read(buffer);
                     if (size <= 0)
                     {
@@ -94,9 +94,10 @@ public class TcpDeviceConnection
                     }
                     else
                     {
+                        log.debug("data received. Processing ... ");
+                        lastReceive = System.currentTimeMillis();
                         buffer.flip();
                         dataReceived(buffer);
-                        lastReceive = System.currentTimeMillis();
                     }
                 }
                 catch (IOException e)
@@ -135,20 +136,23 @@ public class TcpDeviceConnection
 
         try
         {
-            if (socketToDevice.isConnected())
-            {
-                socketToDevice.write(data);
-                lastSend = System.currentTimeMillis();
-            }
-            else
+            if (!socketToDevice.isConnected())
             {
                 log.warn("Not connected to tcpDevice ... " + socketToDevice);
+                reconnect();
             }
+            if (!socketToDevice.isConnected())
+            {
+                log.error("reconnection failed. returning without sending data ... ");
+                return;
+            }
+            socketToDevice.write(data);
+            lastSend = System.currentTimeMillis();
         }
         catch (IOException e)
         {
             log.error("send error", e);
-            closeIfOpen();
+            reconnect();
         }
     }
 
@@ -157,14 +161,6 @@ public class TcpDeviceConnection
         terminateReadThread = true;
         if (socketToDevice != null)
         {
-            try
-            {
-                log.info("closing connection to device : " + socketToDevice.getRemoteAddress().toString());
-            }
-            catch (IOException e1)
-            {
-                log.warn("logging data", e1);
-            }
             try
             {
                 socketToDevice.close();
