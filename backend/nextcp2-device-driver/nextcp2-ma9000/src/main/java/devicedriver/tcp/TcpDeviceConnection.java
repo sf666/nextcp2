@@ -13,26 +13,29 @@ public class TcpDeviceConnection
     private static final Logger log = LoggerFactory.getLogger(TcpDeviceConnection.class.getName());
 
     private SocketChannel socketToDevice = null;
-    private boolean terminateReadThread = false;
+    private volatile boolean terminateReadThread = false;
     private IDataReceivedCallback receivedCallback = null;
-    private Thread readThread = null;
+    private volatile Thread readThread = null;
 
     private long lastSend = System.currentTimeMillis();
     private long lastReceive = lastSend;
-    
+
     private SocketAddress address;
 
+    public TcpDeviceConnection(SocketAddress address, IDataReceivedCallback receivedCallback)
+    {
+        this.address = address;
+        this.receivedCallback = receivedCallback;
+        
+        throw new RuntimeException("Missing address parameter ...");
+    }
+    
     public void reconnect()
     {
         log.info("reconnecting ... ");
         lastSend = System.currentTimeMillis();
-        lastReceive = lastSend;        
-        open(address, receivedCallback);
-    }
-
-    public void open(SocketAddress address)
-    {
-        open(address, null);
+        lastReceive = lastSend;
+        open();
     }
 
     public SocketAddress getSocketAddress()
@@ -40,24 +43,21 @@ public class TcpDeviceConnection
         return address;
     }
 
-    public void open(SocketAddress address, IDataReceivedCallback receivedCallback)
+    public void open()
     {
-        if (address == null)
-        {
-            throw new RuntimeException("Missing address parameter ...");
-        }
-
-        this.address = address;
         closeIfOpen();
         try
         {
             socketToDevice = SocketChannel.open(address);
-            this.receivedCallback = receivedCallback;
+            if (!socketToDevice.finishConnect())
+            {
+                log.error("cannot finish connect to remote address " + address);
+            }
             createReadTread();
         }
         catch (IOException e)
         {
-            log.error("Cannot open Socket", e);
+            log.error("cannot open socket", e);
         }
     }
 
@@ -79,7 +79,7 @@ public class TcpDeviceConnection
         Runnable readRunnable = () -> {
             ByteBuffer buffer = ByteBuffer.allocateDirect(4096);
             terminateReadThread = false;
-            while (!readThread.isInterrupted() && !terminateReadThread)
+            while (!readThread.isInterrupted() && !terminateReadThread && !socketToDevice.isConnected())
             {
                 try
                 {
@@ -102,12 +102,15 @@ public class TcpDeviceConnection
                     e.printStackTrace();
                 }
             }
+            log.warn("terminated read thread ...");
+            readThread = null;
         };
 
         readThread = new Thread(readRunnable);
-        readThread.setName("incoming read thread for device " + address + " : " + System.currentTimeMillis());
-        readThread.setDaemon(true);
+        readThread.setName("tcp read thread for device " + address + " : " + System.currentTimeMillis());
+        readThread.setDaemon(false);
         readThread.start();
+        log.info("Started tcp read thread : " + readThread.getName());
     }
 
     public void sendData(ByteBuffer data)
@@ -117,14 +120,11 @@ public class TcpDeviceConnection
             log.warn("did not receive any data in the last second ... reconnecting");
             reconnect();
         }
-        
+
         if (socketToDevice == null)
         {
-            log.error("Not connected to device ... ");
-            if (address != null)
-            {
-                open(address);
-            }
+            log.error("Not connected to device. Reconnecting to address " + this.address);
+            reconnect();
         }
 
         try
@@ -136,7 +136,7 @@ public class TcpDeviceConnection
             }
             else
             {
-                log.warn("Not connected to tcpDevice ... ");
+                log.warn("Not connected to tcpDevice ... " + socketToDevice);
             }
         }
         catch (IOException e)
@@ -151,9 +151,21 @@ public class TcpDeviceConnection
         terminateReadThread = true;
         if (readThread != null)
         {
+            log.info("interrupting tcp read thread " + readThread.getName());
             readThread.interrupt();
+            while (readThread != null)
+            {
+                try
+                {
+                    Thread.currentThread().wait(1000);
+                }
+                catch (InterruptedException e)
+                {
+                    log.warn("wait 1 sec ", e);
+                }
+            }
         }
-        if (socketToDevice != null && socketToDevice.isConnected())
+        if (socketToDevice != null)
         {
             try
             {
@@ -161,15 +173,15 @@ public class TcpDeviceConnection
             }
             catch (IOException e1)
             {
-                e1.printStackTrace();
+                log.warn("logging data", e1);
             }
             try
             {
                 socketToDevice.close();
             }
-            catch (IOException e)
+            catch (Exception e)
             {
-                e.printStackTrace();
+                log.warn("closing socket", e);
             }
         }
     }
