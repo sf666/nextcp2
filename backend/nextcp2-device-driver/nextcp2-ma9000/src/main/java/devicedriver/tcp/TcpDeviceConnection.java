@@ -81,14 +81,15 @@ public class TcpDeviceConnection
         Runnable readRunnable = () -> {
             ByteBuffer buffer = ByteBuffer.allocateDirect(4096);
             terminateReadThread = false;
-            while (!readThread.isInterrupted() && !terminateReadThread && !socketToDevice.isConnected())
+            while (!readThread.isInterrupted() && !terminateReadThread && socketToDevice.isConnected())
             {
                 try
                 {
+                    log.info("waiting for receiving data ... ");
                     int size = socketToDevice.read(buffer);
                     if (size <= 0)
                     {
-                        closeIfOpen();
+                        log.info("received 0 or less data. Reconnecting.");
                         reconnect();
                     }
                     else
@@ -104,7 +105,10 @@ public class TcpDeviceConnection
                     e.printStackTrace();
                 }
             }
-            log.warn("terminated read thread ...");
+            log.warn("terminated read thread. Reason  :");
+            log.info("!readThread.isInterrupted()     : " + !readThread.isInterrupted());
+            log.info("!terminateReadThread            : " + !terminateReadThread);
+            log.info("socketToDevice.isConnected()    : " + socketToDevice.isConnected());
             readThread = null;
         };
 
