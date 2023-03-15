@@ -86,28 +86,33 @@ public class McIntoshDeviceConnection extends TcpDeviceConnection
                 log.info(String.format("status received from device : %s", aCommand));
                 if (aCommand.startsWith("PWR"))
                 {
+                    log.debug("PWR command received.");
                     if (aCommand.endsWith("0"))
                     {
                         subscriptionCallback.standbyStateChanged(true);
+                        log.debug("nextcp standby changed to true");
                     }
                     else
                     {
                         subscriptionCallback.standbyStateChanged(false);
+                        log.debug("nextcp standby changed to false");
                     }
                 }
                 else if (aCommand.startsWith("VOL"))
                 {
+                    log.debug("VOL command received.");
                     int vol = Integer.parseInt(aCommand.split(" ")[1]);
                     subscriptionCallback.volumeStatusChanged(vol);
                 }
                 else if (aCommand.startsWith("INP"))
                 {
+                    log.debug("INP command received.");
                     String inp = aCommand.split(" ")[1];
                     subscriptionCallback.inputChanged(inp);
                 }
                 else
                 {
-                    log.info("received data : " + aCommand);
+                    log.info("received unhandled data : " + aCommand);
                 }
             }
         });
