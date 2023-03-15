@@ -29,16 +29,16 @@ public class McIntoshDeviceConnection extends TcpDeviceConnection
 
     private CharBuffer reply = null;
 
-    private IMcIntoshDeviceChanged subscriptionCallback = null;
-
     private final Pattern pattern = Pattern.compile("\\((.+?)\\)");
 
     private ArrayBlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(10);
     private ThreadPoolExecutor threadPool = new ThreadPoolExecutor(1, 10, 5, TimeUnit.SECONDS, queue);
-
+    
+    private Ma9000Binding ma9000Binding = null;
     public McIntoshDeviceConnection(Ma9000Binding ma9000Binding, SocketAddress address, IDataReceivedCallback receivedCallback)
     {
         super(address, receivedCallback);
+        this.ma9000Binding = ma9000Binding;
     }
 
 
@@ -79,22 +79,34 @@ public class McIntoshDeviceConnection extends TcpDeviceConnection
      */
     private void asyncStateChange(String aCommand)
     {
+        if (aCommand == null)
+        {
+            log.warn("aCommand is NULL !");
+            return;
+        }
         threadPool.execute(new Runnable()
         {
             public void run()
             {
                 log.info(String.format("status received from device : %s", aCommand));
+                
+                if (ma9000Binding == null)
+                {
+                    log.warn("subscriptionCallback is null. Not processing command ... ");
+                    return;
+                }
+                
                 if (aCommand.startsWith("PWR"))
                 {
                     log.debug("PWR command received.");
                     if (aCommand.endsWith("0"))
                     {
-                        subscriptionCallback.standbyStateChanged(true);
+                        ma9000Binding.standbyStateChanged(true);
                         log.debug("nextcp standby changed to true");
                     }
                     else
                     {
-                        subscriptionCallback.standbyStateChanged(false);
+                        ma9000Binding.standbyStateChanged(false);
                         log.debug("nextcp standby changed to false");
                     }
                 }
@@ -102,13 +114,13 @@ public class McIntoshDeviceConnection extends TcpDeviceConnection
                 {
                     log.debug("VOL command received.");
                     int vol = Integer.parseInt(aCommand.split(" ")[1]);
-                    subscriptionCallback.volumeStatusChanged(vol);
+                    ma9000Binding.volumeStatusChanged(vol);
                 }
                 else if (aCommand.startsWith("INP"))
                 {
                     log.debug("INP command received.");
                     String inp = aCommand.split(" ")[1];
-                    subscriptionCallback.inputChanged(inp);
+                    ma9000Binding.inputChanged(inp);
                 }
                 else
                 {
