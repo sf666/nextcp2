@@ -52,14 +52,6 @@ input {
     align-self: center;
 }
 
-.online {
-    color: green;
-}
-
-.offline {
-    color: red;
-}
-
 .material-symbols-outlined {
     &.icon-middle {
         margin-top: 0.6rem;
@@ -68,5 +60,39 @@ input {
 
 .no-online {
     font-size: 1.5rem;
-    color: aqua;
+    color    : aqua;
+}
+
+.setting-dropdown {
+    max-width: 500px;
+}
+
+
+.media-container {
+    display: flex;
+    flex-direction: row;
+    
+    >.media-device {
+        display       : flex;
+        flex-direction: column;
+        min-width     : 400px;
+        border-style  : solid;
+        border-width  : 1px;
+        border-radius : 4px;
+        border-color  : rgba(255, 255, 255, 0.38);
+        padding       : 1rem;
+
+        >.title {
+            font-weight   : 600;
+            padding-bottom: 1rem;
+        }
+
+        >.online {
+            color: green;
+        }
+
+        >.offline {
+            color: red;
+        }
+    }
 }

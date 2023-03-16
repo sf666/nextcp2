@@ -3,8 +3,8 @@
     <div class="para m-3">Select a client profile to associate with this browser. Repeated calls with this browser will select renderer and server by default.
         Profiles should be renamed to some meaningful name like 'livingroom' or 'kitchen' for easy to remember and switchable setup.
     </div>
-    <div class="d-flex flex-wrap">
-        <mat-form-field appearance="fill" class="bigger">
+    <div class="d-flex flex-wrap ms-3 me-1">
+        <mat-form-field appearance="outline" class="setting-dropdown">
             <mat-label>select profile or create new one</mat-label>
             <mat-select [(ngModel)]="configService.clientConfig" [compareWith]="compareProfile">
                 <mat-option (click)="configService.addNewClientConfig()">CREATE NEW PROFILE</mat-option>
@@ -13,14 +13,14 @@
             </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="fill" class="smaller">
+        <mat-form-field appearance="outline" class="ms-3 me-1 setting-dropdown">
             <mat-label>rename profile to</mat-label>
             <input matInput class="align-self-center" type="text" [(ngModel)]="newProfileName">
-            <span matSuffix class="material-symbols-outlined icon-middle md-18" (click)="renameProfile()">edit</span>
+            <span matSuffix class="material-symbols-outlined icon-middle md-18 me-2" (click)="renameProfile()">edit</span>
         </mat-form-field>
     </div>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="outline" class="ms-3 me-1 setting-dropdown">
         <mat-label>Default Media Renderer</mat-label>
         <mat-select [(ngModel)]="configService.clientConfig.defaultMediaRenderer" [compareWith]="compareUdn" placeholder="select server defined profile">
             <mat-option [value]="none_renderdevice" (click)="noRendererSelected()">NONE</mat-option>
@@ -29,7 +29,7 @@
         </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="outline" class="ms-3 me-1 setting-dropdown">
         <mat-label>Default Media Server</mat-label>
         <mat-select [(ngModel)]="configService.clientConfig.defaultMediaServer" [compareWith]="compareUdn">
             <mat-option [value]="none_serverdevice" (click)="noServerSelected()">NONE</mat-option>
@@ -57,32 +57,37 @@
 </div>
 
 <div class="d-flex flex-row flex-wrap ms-4">
-    <div class="cardContainer" *ngFor="let serverConfig of getMediaServer()">
-        <mat-card class="card-width me-4 mb-3">
-            <mat-card-subtitle class="no-wrap myCardTitle mb-3">{{serverConfig.mediaServer.friendlyName}}
-            </mat-card-subtitle>
-            <mat-card-subtitle class="online" *ngIf="isServerConfigActive(serverConfig)">ONLINE</mat-card-subtitle>
-            <mat-card-subtitle class="offline" *ngIf="!isServerConfigActive(serverConfig)">OFFLINE</mat-card-subtitle>
-            <mat-card-subtitle>IP: {{serverConfig.ip}}</mat-card-subtitle>
-            <mat-card-subtitle>UDN: {{serverConfig.mediaServer.udn}}</mat-card-subtitle>
-            <mat-card-content>
-                <section>
-                    <mat-slide-toggle class="mb-2" [(ngModel)]="serverConfig.enabled">
-                        Enable
-                    </mat-slide-toggle>
-                </section>
-                <section *ngIf="serverConfig.mediaServer.extendedApi">
-                    <mat-form-field appearance="fill">
-                        <mat-label>API key</mat-label>
-                        <input matInput type="text" [(ngModel)]="serverConfig.apiKey" placeholder="must match with 'api_key' in UMS.conf">
-                    </mat-form-field>
-                </section>
-                <div class="d-flex mt-4">
-                    <button mat-flat-button class="ms-2" color="primary" (click)="saveServerConfig(serverConfig)">save</button>
-                    <button mat-flat-button class="ms-2" color="warn" (click)="deleteServerConfig(serverConfig)">delete</button>
-                </div>
-            </mat-card-content>
-        </mat-card>
+    <div class="media-container" *ngFor="let serverConfig of getMediaServer()">
+        <div class="media-device">
+            <div class="no-wrap title">{{serverConfig.mediaServer.friendlyName}}
+                <mat-slide-toggle class="mb-2" [(ngModel)]="serverConfig.enabled">
+                    Enable
+                </mat-slide-toggle>
+            </div>
+            <mat-form-field appearance="outline">
+                <mat-label>Status</mat-label>
+                <input class="online" matInput type="text" value="ONLINE" readonly="true" *ngIf="isServerConfigActive(serverConfig)">
+                <input matInput type="text" value="OFFLINE" readonly="true" *ngIf="!isServerConfigActive(serverConfig)">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>IP</mat-label>
+                <input matInput type="text" value="{{serverConfig.ip}}" readonly="true">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>UDN</mat-label>
+                <input matInput type="text" value="{{serverConfig.mediaServer.udn}}" readonly="true">
+            </mat-form-field>
+            <section *ngIf="serverConfig.mediaServer.extendedApi">
+                <mat-form-field appearance="outline">
+                    <mat-label>API key</mat-label>
+                    <input matInput type="text" [(ngModel)]="serverConfig.apiKey" placeholder="must match with 'api_key' in UMS.conf">
+                </mat-form-field>
+            </section>
+            <div class="d-flex mt-4">
+                <button mat-flat-button class="ms-2" color="primary" (click)="saveServerConfig(serverConfig)">save</button>
+                <button mat-flat-button class="ms-2" color="warn" (click)="deleteServerConfig(serverConfig)">delete</button>
+            </div>
+        </div>
 
         <div class="no-online" *ngIf="showOnlyActiveServer && getMediaServer().length == 0">
             No media server online
@@ -122,7 +127,7 @@
                         </mat-slide-toggle>
                     </section>
                     <section>
-                        <mat-form-field appearance="fill">
+                        <mat-form-field appearance="outline">
                             <mat-label>device driver type</mat-label>
                             <mat-select [(ngModel)]="rendererConfig.deviceDriverType">
                                 <mat-option value="">None</mat-option>
@@ -132,13 +137,13 @@
                         </mat-form-field>
                     </section>
                     <section>
-                        <mat-form-field appearance="fill">
+                        <mat-form-field appearance="outline">
                             <mat-label>device driver connection</mat-label>
                             <input matInput type="text" [(ngModel)]="rendererConfig.connectionString" placeholder="ip:port">
                         </mat-form-field>
                     </section>
                     <section>
-                        <mat-form-field appearance="fill">
+                        <mat-form-field appearance="outline">
                             <mat-label>power on defaut volume</mat-label>
                             <input matInput type="number" min="0" max="100" [(ngModel)]="rendererConfig.powerOnVolPercent" placeholder="undefined">
                         </mat-form-field>
@@ -188,31 +193,31 @@
 
 <div class="generalConfigOptions">
     <div class="section subhead d-flex flex-column">
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline" class="setting-dropdown">
             <mat-label>device driver library path</mat-label>
             <input matInput type="text" [(ngModel)]="configService.applicationConfig.libraryPath" placeholder="undefined">
         </mat-form-field>
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline" class="setting-dropdown">
             <mat-label>database path</mat-label>
             <input matInput type="text" [(ngModel)]="configService.applicationConfig.databaseFilename" placeholder="undefined">
         </mat-form-field>
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline" class="setting-dropdown">
             <mat-label>server listening port</mat-label>
             <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerPort" placeholder="undefined">
         </mat-form-field>
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline" class="setting-dropdown">
             <mat-label>Log4j config file</mat-label>
             <input matInput type="text" [(ngModel)]="configService.applicationConfig.log4jConfigFile" placeholder="undefined">
         </mat-form-field>
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline" class="setting-dropdown">
             <mat-label>Logging date format</mat-label>
             <input matInput type="text" [(ngModel)]="configService.applicationConfig.loggingDateTimeFormat" placeholder="yyyy-MM-dd HH:mm:ss">
         </mat-form-field>
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline" class="setting-dropdown">
             <mat-label>Generate UPnP code</mat-label>
             <input matInput type="text" [(ngModel)]="configService.applicationConfig.generateUpnpCode" placeholder="">
         </mat-form-field>
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline" class="setting-dropdown">
             <mat-label>path for generated UPnP code</mat-label>
             <input matInput type="text" [(ngModel)]="configService.applicationConfig.generateUpnpCodePath" placeholder="">
         </mat-form-field>
@@ -264,11 +269,11 @@
 </div>
 <div class="d-flex flex-wrap">
     <div class="d-flex section flex-wrap subhead flex-wrap">
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
             <mat-label>Username</mat-label>
             <input matInput type="text" placeholder="for www.musicbrainz.org" [(ngModel)]="configService.musicBrainzConfig.username">
         </mat-form-field>
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
             <mat-label>Password</mat-label>
             <input matInput type="text" placeholder="for www.musicbrainz.org" [(ngModel)]="configService.musicBrainzConfig.password">
         </mat-form-field>
@@ -296,8 +301,8 @@
 
 <div class="section head ">System Information</div>
 <div class="generalConfigOptions">
-    <div class="section subhead d-flex flex-column">
-        <mat-form-field>
+    <div class="section subhead d-flex flex-column setting-dropdown">
+        <mat-form-field appearance="outline">
             <mat-label>build number</mat-label>
             <input matInput type="text" [ngModel]="buildNumber" placeholder="undefined" readonly="true">
         </mat-form-field>
