@@ -24,6 +24,7 @@ import { ModalSearchResultComponent } from './view/search/modal-search-result/mo
 
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 // Material Design
 import { MatSliderModule } from '@angular/material/slider';
@@ -50,7 +51,6 @@ import { VolumeControlComponent } from './popup/volume-control/volume-control.co
 import { AvailableServerComponent } from './popup/available-server/available-server.component';
 import { MyAlbumComponent } from './view/my-album/my-album.component';
 import { MySongsComponent } from './view/my-songs/my-songs.component';
-import { ToastContainerComponent } from './service/toast/toast-container/toast-container.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DisplayContainerComponent } from './mediaserver/display-container/display-container.component';
 import { MyPlaylistsComponent } from './view/my-playlists/my-playlists.component';
@@ -86,7 +86,6 @@ import { TrackDetailsComponent } from './popup/track-details/track-details.compo
       AvailableServerComponent,
       MyAlbumComponent,
       MySongsComponent,
-      ToastContainerComponent,
       DisplayContainerComponent,
       MyPlaylistsComponent,
       SearchResultComponent,
@@ -119,7 +118,14 @@ import { TrackDetailsComponent } from './popup/track-details/track-details.compo
       FormsModule,
       ReactiveFormsModule,
       HttpClientModule,
-      NgbModule
+      NgbModule,
+      ToastrModule.forRoot({
+         timeOut: 3000,
+         countDuplicates: true,
+         maxOpened: 10,
+         preventDuplicates: true,         
+       }         
+      )
    ],
    schemas: [
       CUSTOM_ELEMENTS_SCHEMA

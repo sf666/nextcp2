@@ -3,6 +3,11 @@
 /* You can add global styles to this file, and also import other style files */
 
 /*
+    ngx-toast : regular style toast
+ */
+@import 'ngx-toastr/toastr';
+
+/*
     BOOTSTRAP 5
     We add global bootstrap theme and overwrite with own style.
 */

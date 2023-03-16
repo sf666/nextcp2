@@ -1,40 +1,20 @@
+import { ToastrService } from 'ngx-toastr';
 import { ToastMessage } from './toast.service.d';
 import { Injectable, TemplateRef } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class ToastService {
-  toasts: ToastMessage[] = [];
-
-  show(textOrTpl: ToastMessage) {
-    this.toasts.push(textOrTpl);
-  }
-
-  remove(toast) {
-    this.toasts = this.toasts.filter(t => t !== toast);
-  }
+  constructor(private toastr: ToastrService) {}
 
   info(message, header : string) {
-    let m = this.generateDefaultToastMessage(message, header, 'bg-info');
-    this.show(m);
+    this.toastr.info(message, header);
   }
   
   error(message, header : string) {
-    let m = this.generateDefaultToastMessage(message, header, 'bg-danger');
-    this.show(m);
+    this.toastr.error(message, header);
   }
   
   success(message, header : string) {
-    let m = this.generateDefaultToastMessage(message, header, 'bg-success');
-    this.show(m);
-  }
-
-  public generateDefaultToastMessage(message, header, classname : string): ToastMessage {
-    return {
-      classname: classname,
-      autohide: 'true',
-      delay: 5000,
-      header: header,
-      textToDisplay: message
-    }
+    this.toastr.success(message, header);
   }
 }
