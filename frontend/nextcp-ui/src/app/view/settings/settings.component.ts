@@ -17,6 +17,8 @@ import { Component, ViewEncapsulation } from '@angular/core';
 export class SettingsComponent {
 
   code: string;
+  public showOnlyActiveServer: boolean = true;
+  public showOnlyActiveRenderer: boolean = true;
 
   none_serverdevice: MediaServerDto = { 'udn': '', 'friendlyName': '', extendedApi: false };
   none_renderdevice: MediaRendererDto = { 'udn': '', 'friendlyName': '', services: [], allSources: [], currentSource: null };
@@ -38,6 +40,26 @@ export class SettingsComponent {
       navigator.registerProtocolHandler("web+nextcp", url);
     } else {
       console.log("browser doesn't support registration of protocolHandler");
+    }
+  }
+
+  public getMediaRenderer(): RendererDeviceConfiguration[] {
+    if (this.showOnlyActiveRenderer) {
+      return this.configService.getRendererDevicesConfig().filter(renderer => this.isRendererConfigActive(renderer));
+    } else {
+      return this.configService.getRendererDevicesConfig();
+    }
+  }
+
+  public getMediaServer(): ServerDeviceConfiguration[] {
+    if (this.configService?.getServerConfig()?.serverDevices) {
+      if (this.showOnlyActiveServer) {
+        return this.configService.getServerConfig().serverDevices.filter(server => this.isServerConfigActive(server));
+      } else {
+        return this.configService.getServerConfig().serverDevices;
+      }
+    } else {
+      return [];
     }
   }
 

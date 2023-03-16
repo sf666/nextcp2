@@ -8,9 +8,7 @@
             <mat-label>select profile or create new one</mat-label>
             <mat-select [(ngModel)]="configService.clientConfig" [compareWith]="compareProfile">
                 <mat-option (click)="configService.addNewClientConfig()">CREATE NEW PROFILE</mat-option>
-                <mat-option [value]="clientConfig"
-                    *ngFor="let clientConfig of configService?.serverConfig?.clientConfig"
-                    (click)="selectConfig(clientConfig)">
+                <mat-option [value]="clientConfig" *ngFor="let clientConfig of configService?.serverConfig?.clientConfig" (click)="selectConfig(clientConfig)">
                     {{clientConfig.clientName}}</mat-option>
             </mat-select>
         </mat-form-field>
@@ -24,8 +22,7 @@
 
     <mat-form-field appearance="fill">
         <mat-label>Default Media Renderer</mat-label>
-        <mat-select [(ngModel)]="configService.clientConfig.defaultMediaRenderer" [compareWith]="compareUdn"
-            placeholder="select server defined profile">
+        <mat-select [(ngModel)]="configService.clientConfig.defaultMediaRenderer" [compareWith]="compareUdn" placeholder="select server defined profile">
             <mat-option [value]="none_renderdevice" (click)="noRendererSelected()">NONE</mat-option>
             <mat-option [value]="mr" *ngFor="let mr of deviceService.getMediaRendererList()">
                 {{mr.friendlyName}}</mat-option>
@@ -43,11 +40,15 @@
 
     <div class="d-flex section ms-4">
         <button mat-flat-button color="primary" (click)="saveClientConfig()">save</button>
-        <button mat-flat-button class="ms-2" color="warn" (click)="deleteClientConfig()">delete</button>        
+        <button mat-flat-button class="ms-2" color="warn" (click)="deleteClientConfig()">delete</button>
     </div>
 </div>
 
-<div class="section head">Server Configuration</div>
+<div class="section head">Server Configuration
+    <mat-slide-toggle class="ms-4" [(ngModel)]="showOnlyActiveServer">
+        show only active server
+    </mat-slide-toggle>
+</div>
 <div class="para m-3">Media Server displayed here were discovered in the past until now. Server may be offline, if not yet found.
     Disabled server will not show up for selection in some popups or lists.
 </div>
@@ -56,7 +57,7 @@
 </div>
 
 <div class="d-flex flex-row flex-wrap ms-4">
-    <div class="cardContainer" *ngFor="let serverConfig of configService?.getServerConfig()?.serverDevices">
+    <div class="cardContainer" *ngFor="let serverConfig of getMediaServer()">
         <mat-card class="card-width me-4 mb-3">
             <mat-card-subtitle class="no-wrap myCardTitle mb-3">{{serverConfig.mediaServer.friendlyName}}
             </mat-card-subtitle>
@@ -73,22 +74,27 @@
                 <section *ngIf="serverConfig.mediaServer.extendedApi">
                     <mat-form-field appearance="fill">
                         <mat-label>API key</mat-label>
-                        <input matInput type="text" [(ngModel)]="serverConfig.apiKey"
-                            placeholder="must match with 'api_key' in UMS.conf">
+                        <input matInput type="text" [(ngModel)]="serverConfig.apiKey" placeholder="must match with 'api_key' in UMS.conf">
                     </mat-form-field>
                 </section>
                 <div class="d-flex mt-4">
-                    <button mat-flat-button class="ms-2" color="primary"
-                        (click)="saveServerConfig(serverConfig)">save</button>
-                    <button mat-flat-button class="ms-2" color="warn"
-                        (click)="deleteServerConfig(serverConfig)">delete</button>
+                    <button mat-flat-button class="ms-2" color="primary" (click)="saveServerConfig(serverConfig)">save</button>
+                    <button mat-flat-button class="ms-2" color="warn" (click)="deleteServerConfig(serverConfig)">delete</button>
                 </div>
             </mat-card-content>
         </mat-card>
+
+        <div class="no-online" *ngIf="showOnlyActiveServer && getMediaServer().length == 0">
+            No media server online
+        </div>
     </div>
 </div>
 
-<div class="section head">Renderer Configuration</div>
+<div class="section head">Renderer Configuration
+    <mat-slide-toggle class="ms-4" [(ngModel)]="showOnlyActiveRenderer">
+        show only active renderer
+    </mat-slide-toggle>
+</div>
 <div class="para m-3">Media Renderer displayed here were discovered in the past until now. Renderer may be offline, if not yet found.
     Disabled renderer will not show up for selection in some popups or lists.
 </div>
@@ -98,7 +104,7 @@
 </div>
 <div>
     <div class="d-flex flex-row flex-wrap ms-4">
-        <div class="cardContainer" *ngFor="let rendererConfig of configService.getRendererDevicesConfig()">
+        <div class="cardContainer" *ngFor="let rendererConfig of getMediaRenderer()">
             <mat-card class="card-width me-4 mb-3">
                 <mat-card-title class="no-wrap mb-3">{{rendererConfig.mediaRenderer.friendlyName}}</mat-card-title>
                 <mat-card-subtitle class="online" *ngIf="isRendererConfigActive(rendererConfig)">ONLINE
@@ -128,31 +134,29 @@
                     <section>
                         <mat-form-field appearance="fill">
                             <mat-label>device driver connection</mat-label>
-                            <input matInput type="text" [(ngModel)]="rendererConfig.connectionString"
-                                placeholder="ip:port">
+                            <input matInput type="text" [(ngModel)]="rendererConfig.connectionString" placeholder="ip:port">
                         </mat-form-field>
                     </section>
                     <section>
                         <mat-form-field appearance="fill">
                             <mat-label>power on defaut volume</mat-label>
-                            <input matInput type="number" min="0" max="100"
-                                [(ngModel)]="rendererConfig.powerOnVolPercent" placeholder="undefined">
+                            <input matInput type="number" min="0" max="100" [(ngModel)]="rendererConfig.powerOnVolPercent" placeholder="undefined">
                         </mat-form-field>
-                        <mat-slide-toggle class="mb-2" [(ngModel)]="rendererConfig.setCoveredUpnpDeviceToMaxVolume"
-                            [disabled]="!rendererConfig.deviceDriverType">
+                        <mat-slide-toggle class="mb-2" [(ngModel)]="rendererConfig.setCoveredUpnpDeviceToMaxVolume" [disabled]="!rendererConfig.deviceDriverType">
                             UPnP max volume
                         </mat-slide-toggle>
                     </section>
                     <div class="middle-spacer">&nbsp;</div>
                     <div class="d-flex mt-4">
-                        <button mat-flat-button class="ms-2" color="primary"
-                            (click)="saveRendererConfig(rendererConfig)">save</button>
-                        <button mat-flat-button class="ms-2" color="warn"
-                            (click)="deleteRendererConfig(rendererConfig)">delete</button>
+                        <button mat-flat-button class="ms-2" color="primary" (click)="saveRendererConfig(rendererConfig)">save</button>
+                        <button mat-flat-button class="ms-2" color="warn" (click)="deleteRendererConfig(rendererConfig)">delete</button>
                     </div>
                     <div class="middle-spacer">&nbsp;</div>
                 </mat-card-content>
             </mat-card>
+        </div>
+        <div class="no-online" *ngIf="showOnlyActiveRenderer && getMediaRenderer().length == 0">
+            No media renderer online
         </div>
     </div>
     <!-- -->
@@ -164,14 +168,11 @@
     Media Player.</div>
 <div class="section subhead d-flex flex-column">
     <div class="d-flex flex-wrap">
-        <button mat-flat-button class="ms-2 settings maxButton" (click)="rescan()"
-            [disabled]="extendedApiNotAvailable()">rescan media library</button>
-        <button mat-flat-button class="ms-2 settings maxButton" (click)="myMusicService.backupLikedAlbums()"
-            [disabled]="extendedApiNotAvailable()">
+        <button mat-flat-button class="ms-2 settings maxButton" (click)="rescan()" [disabled]="extendedApiNotAvailable()">rescan media library</button>
+        <button mat-flat-button class="ms-2 settings maxButton" (click)="myMusicService.backupLikedAlbums()" [disabled]="extendedApiNotAvailable()">
             backup liked albums
         </button>
-        <button mat-flat-button class="ms-2 settings maxButton" (click)="myMusicService.restoreLikedAlbums()"
-            [disabled]="extendedApiNotAvailable()">
+        <button mat-flat-button class="ms-2 settings maxButton" (click)="myMusicService.restoreLikedAlbums()" [disabled]="extendedApiNotAvailable()">
             restore liked albums
         </button>
     </div>
@@ -189,28 +190,23 @@
     <div class="section subhead d-flex flex-column">
         <mat-form-field appearance="fill">
             <mat-label>device driver library path</mat-label>
-            <input matInput type="text" [(ngModel)]="configService.applicationConfig.libraryPath"
-                placeholder="undefined">
+            <input matInput type="text" [(ngModel)]="configService.applicationConfig.libraryPath" placeholder="undefined">
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>database path</mat-label>
-            <input matInput type="text" [(ngModel)]="configService.applicationConfig.databaseFilename"
-                placeholder="undefined">
+            <input matInput type="text" [(ngModel)]="configService.applicationConfig.databaseFilename" placeholder="undefined">
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>server listening port</mat-label>
-            <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerPort"
-                placeholder="undefined">
+            <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerPort" placeholder="undefined">
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Log4j config file</mat-label>
-            <input matInput type="text" [(ngModel)]="configService.applicationConfig.log4jConfigFile"
-                placeholder="undefined">
+            <input matInput type="text" [(ngModel)]="configService.applicationConfig.log4jConfigFile" placeholder="undefined">
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Logging date format</mat-label>
-            <input matInput type="text" [(ngModel)]="configService.applicationConfig.loggingDateTimeFormat"
-                placeholder="yyyy-MM-dd HH:mm:ss">
+            <input matInput type="text" [(ngModel)]="configService.applicationConfig.loggingDateTimeFormat" placeholder="yyyy-MM-dd HH:mm:ss">
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Generate UPnP code</mat-label>
@@ -218,8 +214,7 @@
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>path for generated UPnP code</mat-label>
-            <input matInput type="text" [(ngModel)]="configService.applicationConfig.generateUpnpCodePath"
-                placeholder="">
+            <input matInput type="text" [(ngModel)]="configService.applicationConfig.generateUpnpCodePath" placeholder="">
         </mat-form-field>
         <div class="d-flex section ms-4">
             <button mat-flat-button color="primary" (click)="saveGeneralConfig()">save</button>
