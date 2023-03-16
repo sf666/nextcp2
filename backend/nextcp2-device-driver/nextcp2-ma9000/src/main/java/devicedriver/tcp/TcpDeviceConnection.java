@@ -13,7 +13,6 @@ public class TcpDeviceConnection
     private static final Logger log = LoggerFactory.getLogger(TcpDeviceConnection.class.getName());
 
     private SocketChannel socketToDevice = null;
-    private volatile boolean terminateReadThread = false;
     private IDataReceivedCallback receivedCallback = null;
     private volatile Thread readThread = null;
 
@@ -80,8 +79,7 @@ public class TcpDeviceConnection
     {
         Runnable readRunnable = () -> {
             ByteBuffer buffer = ByteBuffer.allocateDirect(4096);
-            terminateReadThread = false;
-            while (!readThread.isInterrupted() && !terminateReadThread && socketToDevice.isConnected())
+            while (!Thread.currentThread().isInterrupted())
             {
                 try
                 {
@@ -106,11 +104,7 @@ public class TcpDeviceConnection
                     e.printStackTrace();
                 }
             }
-            log.debug("terminated read thread. Reason  :");
-            log.debug("!readThread.isInterrupted()     : " + !readThread.isInterrupted());
-            log.debug("!terminateReadThread            : " + !terminateReadThread);
-            log.debug("socketToDevice.isConnected()    : " + socketToDevice.isConnected());
-            readThread = null;
+            log.info("read tread terminated : " + Thread.currentThread().getName());            
         };
 
         readThread = new Thread(readRunnable);
@@ -158,7 +152,6 @@ public class TcpDeviceConnection
 
     private void closeIfOpen()
     {
-        terminateReadThread = true;
         if (socketToDevice != null)
         {
             try
@@ -166,7 +159,7 @@ public class TcpDeviceConnection
                 log.info(String.format("socket state while closing : isOpen [%b], isBlocking [%b], isConnected [%b]", socketToDevice.isOpen(), socketToDevice.isBlocking(),
                         socketToDevice.isConnected()));
                 socketToDevice.close();
-                log.debug("socker close() called ... ");
+                log.debug("socker close() called");
             }
             catch (Exception e)
             {
