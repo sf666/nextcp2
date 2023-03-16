@@ -31,7 +31,7 @@ public class TcpDeviceConnection
         this.address = address;
         this.receivedCallback = receivedCallback;
     }
-    
+
     public void reconnect()
     {
         log.info("reconnecting ... ");
@@ -85,7 +85,7 @@ public class TcpDeviceConnection
             {
                 try
                 {
-                    log.info("waiting data ... ");
+                    log.info("blocked wait for reading data ... ");
                     int size = socketToDevice.read(buffer);
                     if (size <= 0)
                     {
@@ -163,6 +163,8 @@ public class TcpDeviceConnection
         {
             try
             {
+                log.info(String.format("socket state while closing : isOpen [%b], isBlocking [%b], isConnected [%b]", socketToDevice.isOpen(), socketToDevice.isBlocking(),
+                        socketToDevice.isConnected()));
                 socketToDevice.close();
                 log.debug("socker close() called ... ");
             }
