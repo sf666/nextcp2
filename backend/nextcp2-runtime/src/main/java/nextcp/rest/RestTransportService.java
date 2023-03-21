@@ -66,7 +66,7 @@ public class RestTransportService extends BaseRestService
         try
         {
             MediaRendererDevice device = getMediaRendererByUdn(secondsAbsolute.rendererUDN);
-            device.getAvTransportBridge().seek(secondsAbsolute.seconds);
+            device.getTransportServiceBridge().seek(secondsAbsolute.seconds);
         }
         catch (Exception e)
         {
