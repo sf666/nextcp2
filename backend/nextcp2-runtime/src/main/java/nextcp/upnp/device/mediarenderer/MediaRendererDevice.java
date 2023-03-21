@@ -231,10 +231,10 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         // transport bridge (transport state publishing) ...
         if (hasOhTransport())
         {
-            transportBridge = new OhTransportBridge(this, oh_transportService, eventPublisher);
             ohTransportEventListener = new OhTransportEventListener(this);
             oh_transportService.addSubscriptionEventListener(ohTransportEventListener);
             ohTransportEventListener.setShouldPublishTransportServiceState(true);
+            transportBridge = new OhTransportBridge(this, oh_transportService, ohTransportEventListener, eventPublisher);
 
             // In case we have an OhTransport service, disable sending AVTransport
             avTransportEventPublisher.setShouldPublishTransportServiceState(false);

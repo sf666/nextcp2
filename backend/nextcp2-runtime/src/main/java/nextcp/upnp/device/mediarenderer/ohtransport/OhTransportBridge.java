@@ -26,15 +26,17 @@ public class OhTransportBridge implements ITransport
 
     private TransportService transportService = null;
     private MediaRendererDevice device = null;
-
+    private OhTransportEventListener ohTransportEventListener = null;
+    
     private ApplicationEventPublisher publisher = null;
 
     
-    public OhTransportBridge(MediaRendererDevice device,  TransportService transportService, ApplicationEventPublisher publisher)
+    public OhTransportBridge(MediaRendererDevice device,  TransportService transportService, OhTransportEventListener ohTransportEventListener, ApplicationEventPublisher publisher)
     {
         this.transportService = transportService;
         this.device = device;
         this.publisher = publisher;
+        this.ohTransportEventListener = ohTransportEventListener;
     }
 
     @Override
@@ -66,10 +68,17 @@ public class OhTransportBridge implements ITransport
     {
         try
         {
-            SeekSecondAbsoluteInput inp = new SeekSecondAbsoluteInput();
-            inp.SecondAbsolute = secondsAbsolute;
-            inp.StreamId = transportService.streamId().StreamId;
-            transportService.seekSecondAbsolute(inp);
+            if (ohTransportEventListener.getStateVariable().CanSeek)
+            {
+                SeekSecondAbsoluteInput inp = new SeekSecondAbsoluteInput();
+                inp.SecondAbsolute = secondsAbsolute;
+                inp.StreamId = transportService.streamId().StreamId;
+                transportService.seekSecondAbsolute(inp);
+            }
+            else
+            {
+                publisher.publishEvent(new ToastrMessage(null, "warn", "seek", "current stream cannot be seeked."));
+            }
         }
         catch (Exception e)
         {
