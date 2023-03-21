@@ -29,9 +29,9 @@ import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/AvTransportService")
-public class RestAvTransportService extends BaseRestService
+public class RestTransportService extends BaseRestService
 {
-    private static final Logger log = LoggerFactory.getLogger(RestAvTransportService.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(RestTransportService.class.getName());
 
     @Autowired
     private DtoBuilder dtoBuilder = null;

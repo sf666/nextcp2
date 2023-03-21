@@ -16,7 +16,7 @@ public interface ITransport
 
     void next();
 
-    void seek(int secondsAbsolute);
+    void seek(long secondsAbsolute);
     
     TransportServiceStateDto getCurrentTransportServiceState();
 }

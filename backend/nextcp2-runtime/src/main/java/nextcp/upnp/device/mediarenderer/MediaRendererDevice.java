@@ -19,7 +19,6 @@ import nextcp.domainmodel.device.services.IProductService;
 import nextcp.domainmodel.device.services.IRadioService;
 import nextcp.domainmodel.device.services.ITransport;
 import nextcp.dto.DeviceDriverState;
-import nextcp.dto.InputSourceDto;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.MediaRendererServicesDto;
 import nextcp.dto.RendererDeviceConfiguration;
@@ -232,7 +231,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         // transport bridge (transport state publishing) ...
         if (hasOhTransport())
         {
-            transportBridge = new OhTransportBridge(this, oh_transportService, getDtoBuilder());
+            transportBridge = new OhTransportBridge(this, oh_transportService, eventPublisher);
             ohTransportEventListener = new OhTransportEventListener(this);
             oh_transportService.addSubscriptionEventListener(ohTransportEventListener);
             ohTransportEventListener.setShouldPublishTransportServiceState(true);

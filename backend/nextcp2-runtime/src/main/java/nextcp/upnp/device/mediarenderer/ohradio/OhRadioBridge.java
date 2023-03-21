@@ -128,4 +128,10 @@ public class OhRadioBridge implements IRadioService, ITransport
 
         return dto;
     }
+
+    @Override
+    public void seek(long secondsAbsolute)
+    {
+        throw new RuntimeException("Radio Service doesn't implement seek action.");
+    }
 }

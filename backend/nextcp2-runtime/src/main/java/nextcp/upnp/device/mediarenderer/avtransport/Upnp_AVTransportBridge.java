@@ -37,7 +37,7 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
         this.device = device;
     }
 
-    public void seek(int secondsAbsolute)
+    public void seek(long secondsAbsolute)
     {
         SeekInput inp = new SeekInput();
         inp.InstanceID = 0L;
