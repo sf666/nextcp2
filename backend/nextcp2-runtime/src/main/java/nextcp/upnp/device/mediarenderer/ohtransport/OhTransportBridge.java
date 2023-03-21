@@ -68,8 +68,12 @@ public class OhTransportBridge implements ITransport
     {
         try
         {
-            if (ohTransportEventListener.getStateVariable().CanSeek)
+            if (ohTransportEventListener.getStateVariable().CanSeek == null || ohTransportEventListener.getStateVariable().CanSeek)
             {
+                if (ohTransportEventListener.getStateVariable().CanSeek == null)
+                {
+                    log.warn("CanSeek state variable not set. Trying anyway ... ");
+                }
                 SeekSecondAbsoluteInput inp = new SeekSecondAbsoluteInput();
                 inp.SecondAbsolute = secondsAbsolute;
                 inp.StreamId = transportService.streamId().StreamId;
