@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 
 import nextcp.config.RendererConfig;
-import nextcp.domainmodel.device.services.IAvTransport;
 import nextcp.domainmodel.device.services.IInfoService;
 import nextcp.domainmodel.device.services.IPlaylistService;
 import nextcp.domainmodel.device.services.IProductService;
@@ -484,7 +483,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         return transportBridge;
     }
 
-    public IAvTransport getAvTransportBridge()
+    public Upnp_AVTransportBridge getAvTransportBridge()
     {
         return avTransportBridge;
     }

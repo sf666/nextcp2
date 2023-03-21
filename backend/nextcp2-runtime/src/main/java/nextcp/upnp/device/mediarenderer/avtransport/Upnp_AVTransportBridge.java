@@ -3,7 +3,6 @@ package nextcp.upnp.device.mediarenderer.avtransport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nextcp.domainmodel.device.services.IAvTransport;
 import nextcp.domainmodel.device.services.IInfoService;
 import nextcp.domainmodel.device.services.ITimeService;
 import nextcp.domainmodel.device.services.ITransport;
@@ -17,12 +16,13 @@ import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetPositionInfoO
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.NextInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.PauseInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.PlayInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.SeekInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.SetAVTransportURIInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.SetNextAVTransportURIInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.StopInput;
 import nextcp.util.DisplayUtils;
 
-public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl implements IInfoService, ITransport, ITimeService, IAvTransport
+public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl implements IInfoService, ITransport, ITimeService
 {
     private static final Logger log = LoggerFactory.getLogger(Upnp_AVTransportBridge.class.getName());
 
@@ -37,6 +37,14 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
         this.device = device;
     }
 
+    public void seek(int secondsAbsolute)
+    {
+        SeekInput inp = new SeekInput();
+        inp.InstanceID = 0L;
+        inp.Unit = "ABS_TIME";
+        inp.Target = "01:00"; // check out ... 
+    }
+    
     /**
      * Starts playing
      */
@@ -49,20 +57,17 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
         avTransportService.play(inp);
     }
 
-    @Override
     public void play(String uri, String metaData)
     {
         setUrl(uri, metaData);
         play();
     }
 
-    @Override
     public void playNext(String uri, String metaData)
     {
         setNextUrl(uri, metaData);
     }
 
-    @Override
     public void setUrl(String currentUri, String metadata)
     {
         SetAVTransportURIInput uri = new SetAVTransportURIInput();
@@ -93,7 +98,6 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
         avTransportService.stop(inp);
     }
 
-    @Override
     public void setNextUrl(String streamingURL, String trackMetadata)
     {
         SetNextAVTransportURIInput inp = new SetNextAVTransportURIInput();
@@ -230,4 +234,5 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
 
         return dto;
     }
+
 }

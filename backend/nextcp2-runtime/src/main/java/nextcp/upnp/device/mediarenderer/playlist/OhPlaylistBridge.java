@@ -40,7 +40,7 @@ import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SetShuffleInput;
 /**
  * Devices with Open Home playlist support
  */
-public class OhPlaylistBridge implements IPlaylistService, ITransport
+public class OhPlaylistBridge implements IPlaylistService
 {
     private static final Logger log = LoggerFactory.getLogger(OhPlaylistBridge.class.getName());
 
@@ -372,7 +372,6 @@ public class OhPlaylistBridge implements IPlaylistService, ITransport
         play();
     }
 
-    @Override
     public TransportServiceStateDto getCurrentTransportServiceState()
     {
         TransportServiceStateDto dto = new TransportServiceStateDto();
