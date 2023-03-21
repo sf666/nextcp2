@@ -237,7 +237,7 @@
                                 <img src="{{item.albumArtUrl}}" alt="{{item.title}}">
                                 <div class="overlay-child d-flex flex-column justify-content-end">
                                     <div class="d-flex justify-content-around align-items-center pb-4">
-                                        <span class="material-symbols-outlined md-36 m-3" (click)="avtransportService.playResource(item)">play_circle</span>
+                                        <span class="material-symbols-outlined md-36 m-3" (click)="transportService.playResource(item)">play_circle</span>
                                         <span class="material-symbols-outlined md-36 m-3" (click)="playlistService.addToPlaylist(item)">playlist_add</span>
                                         <span class="material-symbols-outlined md-36 m-3" (click)="showSongPopup($event, item)">more_vert</span>
                                     </div>
@@ -276,7 +276,7 @@
             <!--                                -->
             <div *ngIf="items?.length > 0">
                 <div id="head_browse_other_items_ID" class="albumLayout">
-                    <div class="albumTile" id="{{item.objectID}}" tabindex="-1" (click)="avtransportService.playResource(item)" *ngFor="let item of items">
+                    <div class="albumTile" id="{{item.objectID}}" tabindex="-1" (click)="transportService.playResource(item)" *ngFor="let item of items">
                         <div class="albumImageContainer">
                             <img src="{{item.albumArtUrl}}" alt="{{item.title}}">
                         </div>

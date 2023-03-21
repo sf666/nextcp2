@@ -7,7 +7,7 @@
     "target": "http://localhost:8085",
     "secure": false
   },
-  "/AvTransportService/*": {
+  "/TransportService/*": {
     "target": "http://localhost:8085",
     "secure": false
   },

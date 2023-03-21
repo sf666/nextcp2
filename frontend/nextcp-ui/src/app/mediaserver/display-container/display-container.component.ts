@@ -4,7 +4,7 @@ import { DtoGeneratorService } from './../../util/dto-generator.service';
 import { ConfigurationService } from './../../service/configuration.service';
 import { ScrollLoadHandler } from './defs.d';
 import { SongOptionsServiceService } from 'src/app/mediaserver/popup/song-options/song-options-service.service';
-import { AvtransportService } from 'src/app/service/avtransport.service';
+import { TransportService } from 'src/app/service/avtransport.service';
 import { PlaylistService } from './../../service/playlist.service';
 import { TrackQualityService } from './../../util/track-quality.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
@@ -74,7 +74,7 @@ export class DisplayContainerComponent implements OnInit {
     private deviceService: DeviceService,
     private timeDisplayService: TimeDisplayService,
     public playlistService: PlaylistService,
-    public avtransportService: AvtransportService,
+    public transportService: TransportService,
     private dtoGeneratorService: DtoGeneratorService,
     private songOptionsServiceService: SongOptionsServiceService,
     private configurationService: ConfigurationService,
@@ -601,7 +601,7 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   play(musicItemDto: MusicItemDto): void {
-    this.avtransportService.playResource(musicItemDto);
+    this.transportService.playResource(musicItemDto);
   }
 
   public selectedRowClass(musicItemDto: MusicItemDto): string {

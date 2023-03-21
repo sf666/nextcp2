@@ -1,6 +1,6 @@
 import { BackgroundImageService } from './../../util/background-image.service';
 import { RadioService } from './../../service/radio.service';
-import { AvtransportService } from './../../service/avtransport.service';
+import { TransportService } from './../../service/avtransport.service';
 import { RadioStation, MusicItemDto } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
 import { Component } from '@angular/core';
@@ -16,7 +16,7 @@ export class RadioComponent {
       public configurationService: ConfigurationService,
       public radioService: RadioService,
       private backgroundImageService: BackgroundImageService,
-      private avtransportService: AvtransportService) { 
+      private avtransportService: TransportService) { 
         console.log("[constructor] RadioComponent");
       }
 

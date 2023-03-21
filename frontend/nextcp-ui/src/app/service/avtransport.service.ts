@@ -8,12 +8,12 @@ import { DeviceService } from './device.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AvtransportService {
+export class TransportService {
 
   upnpAvTransportState: UpnpAvTransportState;
   selectedMediaRenderer: MediaRendererDto;
   public lastPlayedMusicItem : MusicItemDto;
-  baseUri = '/AvTransportService';
+  baseUri = '/TransportService';
 
   constructor(
     private sse: SseService,
@@ -47,7 +47,7 @@ export class AvtransportService {
   }
 
   //
-  // AvTransportService actions ()
+  // TransportService actions ()
   // ================================================================================
 
   public play(): void {

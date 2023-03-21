@@ -1,5 +1,5 @@
 import { GlobalSearchService } from './../../../service/search/global-search.service';
-import { AvtransportService } from './../../../service/avtransport.service';
+import { TransportService } from './../../../service/avtransport.service';
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable no-restricted-syntax */
 import { ContentDirectoryService } from './../../../service/content-directory.service';
@@ -20,7 +20,7 @@ export class ModalSearchResultComponent {
   constructor(
     private searchItemService: SearchItemService,
     public globalSearchService: GlobalSearchService,
-    private avtransportService: AvtransportService,
+    private avtransportService: TransportService,
     private router: Router) {
   }
 

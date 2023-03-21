@@ -6,7 +6,7 @@ import { MusicItemDto, ContainerDto} from './../../../../service/dto.d';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, ElementRef, OnInit, ViewContainerRef } from '@angular/core';
 import { DefaultPlaylistService } from '../../defaut-playlists/default-playlist.service';
-import { AvtransportService } from 'src/app/service/avtransport.service';
+import { TransportService } from 'src/app/service/avtransport.service';
 
 @Component({
   selector: 'app-song-options',
@@ -24,7 +24,7 @@ export class SongOptionsComponent implements OnInit {
   constructor(
     private playlistService: PlaylistService,
     private downloadService: DownloadService,
-    private avtransportService: AvtransportService,
+    private transportService: TransportService,
     private defaultPlaylistService: DefaultPlaylistService,
     private popupService: PopupService,
     _matDialogRef: MatDialogRef<SongOptionsComponent>,
@@ -99,7 +99,7 @@ export class SongOptionsComponent implements OnInit {
   }
 
   actionPlayNext(): void {
-    this.avtransportService.playResourceNext(this.item);
+    this.transportService.playResourceNext(this.item);
     this.closeThisPopup({type: 'next', data: this.item});
   }
 

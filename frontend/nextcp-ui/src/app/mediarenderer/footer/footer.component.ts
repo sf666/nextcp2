@@ -9,7 +9,7 @@ import { PlaylistService } from './../../service/playlist.service';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
 import { UpnpAvTransportState } from './../../service/dto.d';
-import { AvtransportService } from './../../service/avtransport.service';
+import { TransportService as TransportService } from './../../service/avtransport.service';
 import { Component, ElementRef } from '@angular/core';
 
 @Component({
@@ -23,7 +23,7 @@ export class FooterComponent {
 
   constructor(
     private dialog: MatDialog,
-    public avtransportService: AvtransportService,
+    public transportService: TransportService,
     public deviceService: DeviceService,
     public playlistService: PlaylistService,
     public songOptionsServiceService: SongOptionsServiceService,
@@ -66,7 +66,7 @@ export class FooterComponent {
 
 
   public get avTransportState(): UpnpAvTransportState {
-    return this.avtransportService.upnpAvTransportState;
+    return this.transportService.upnpAvTransportState;
   }
 
   public getImgSrc(): string {
