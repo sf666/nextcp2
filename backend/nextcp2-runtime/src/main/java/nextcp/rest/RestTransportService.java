@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.PlayRadioDto;
 import nextcp.dto.PlayRequestDto;
+import nextcp.dto.SeekSecondsDto;
 import nextcp.dto.ToastrMessage;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 
@@ -59,6 +60,21 @@ public class RestTransportService extends BaseRestService
         device.getAvTransportBridge().play(playRequest.streamUrl, playRequest.streamMetadata);
     }
 
+    @PostMapping("/seekSecondsAbsolute")
+    public void playResourceNext(@RequestBody SeekSecondsDto secondsAbsolute)
+    {
+        try
+        {
+            MediaRendererDevice device = getMediaRendererByUdn(secondsAbsolute.rendererUDN);
+            device.getAvTransportBridge().seek(secondsAbsolute.seconds);
+            publisher.publishEvent(new ToastrMessage(null, "success", "play", "song will be played next."));
+        }
+        catch (Exception e)
+        {
+            publisher.publishEvent(new ToastrMessage(null, "error", "play next", e.getMessage()));
+        }
+    }
+
     @PostMapping("/playResourceNext")
     public void playResourceNext(@RequestBody PlayRequestDto playRequest)
     {
@@ -72,26 +88,6 @@ public class RestTransportService extends BaseRestService
         {
             publisher.publishEvent(new ToastrMessage(null, "error", "play next", e.getMessage()));
         }
-    }
-
-    private MediaRendererDevice checkPlayInput(PlayRequestDto playRequest)
-    {
-        if (playRequest.mediaRendererDto == null)
-        {
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Playing failed. Media renderer is not set.");
-        }
-
-        MediaRendererDevice device = getMediaRendererByUdn(playRequest.mediaRendererDto.udn);
-        if (device == null)
-        {
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED,
-                    "playing failed. Select an available media renderer. Unavailable : " + playRequest.mediaRendererDto.udn);
-        }
-        if (device.getTransportServiceBridge() == null)
-        {
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "playing failed. No AvTransport service available. UDN : " + playRequest.mediaRendererDto.udn);
-        }
-        return device;
     }
 
     @PostMapping("/pause")
@@ -144,7 +140,26 @@ public class RestTransportService extends BaseRestService
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Tranport state cannot be retrieved: Select an available media renderer.");
         }
         device.getAvTransportEventPublisher().publishAllAvEvents();
-        // return dtoBuilder.buildAvTransportStateDto(device.getAvTransportEventListener().getCurrentAvTransportState(), device);
     }
 
+    
+    private MediaRendererDevice checkPlayInput(PlayRequestDto playRequest)
+    {
+        if (playRequest.mediaRendererDto == null)
+        {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Playing failed. Media renderer is not set.");
+        }
+
+        MediaRendererDevice device = getMediaRendererByUdn(playRequest.mediaRendererDto.udn);
+        if (device == null)
+        {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED,
+                    "playing failed. Select an available media renderer. Unavailable : " + playRequest.mediaRendererDto.udn);
+        }
+        if (device.getTransportServiceBridge() == null)
+        {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "playing failed. No AvTransport service available. UDN : " + playRequest.mediaRendererDto.udn);
+        }
+        return device;
+    }
 }

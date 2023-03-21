@@ -9,7 +9,7 @@ import { PlaylistService } from './../../service/playlist.service';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
 import { UpnpAvTransportState } from './../../service/dto.d';
-import { TransportService as TransportService } from './../../service/avtransport.service';
+import { TransportService as TransportService } from '../../service/transport.service';
 import { Component, ElementRef } from '@angular/core';
 
 @Component({

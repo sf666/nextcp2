@@ -150,6 +150,10 @@ UpnpAvTransportState:
 #
 # Transfer classes for some ui views
 #
+SeekSecondsDto:
+   rendererUDN: String
+   seconds: Long
+
 DeviceDriverState:
    hasDeviceDriver: Boolean
    rendererUDN: String

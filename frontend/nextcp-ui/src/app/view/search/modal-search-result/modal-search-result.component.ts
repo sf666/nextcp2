@@ -1,5 +1,5 @@
 import { GlobalSearchService } from './../../../service/search/global-search.service';
-import { TransportService } from './../../../service/avtransport.service';
+import { TransportService } from '../../../service/transport.service';
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable no-restricted-syntax */
 import { ContentDirectoryService } from './../../../service/content-directory.service';
@@ -20,7 +20,7 @@ export class ModalSearchResultComponent {
   constructor(
     private searchItemService: SearchItemService,
     public globalSearchService: GlobalSearchService,
-    private avtransportService: TransportService,
+    private transportService: TransportService,
     private router: Router) {
   }
 
@@ -32,7 +32,7 @@ export class ModalSearchResultComponent {
     console.debug("music item selected : " + musicItem);
     this.searchItemService.musicItem = musicItem;
     this.globalSearchService.clearSearch();
-    this.avtransportService.playResource(musicItem);
+    this.transportService.playResource(musicItem);
   }
 
   albumItemSelected(albumItem: ContainerDto): void {

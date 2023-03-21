@@ -4,7 +4,7 @@ import { DtoGeneratorService } from './../../util/dto-generator.service';
 import { ConfigurationService } from './../../service/configuration.service';
 import { ScrollLoadHandler } from './defs.d';
 import { SongOptionsServiceService } from 'src/app/mediaserver/popup/song-options/song-options-service.service';
-import { TransportService } from 'src/app/service/avtransport.service';
+import { TransportService } from 'src/app/service/transport.service';
 import { PlaylistService } from './../../service/playlist.service';
 import { TrackQualityService } from './../../util/track-quality.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';

@@ -1,7 +1,7 @@
 import { ToastService } from './toast/toast.service';
 import { HttpService } from './http.service';
 import { SseService } from './sse/sse.service';
-import { MusicItemDto, PlayRequestDto, MediaRendererDto, UpnpAvTransportState, RadioStation, PlayRadioDto } from './dto.d';
+import { MusicItemDto, PlayRequestDto, MediaRendererDto, UpnpAvTransportState, RadioStation, PlayRadioDto, SeekSecondsDto } from './dto';
 import { Injectable } from '@angular/core';
 import { DeviceService } from './device.service';
 
@@ -58,6 +58,14 @@ export class TransportService {
   public pause(): void {
     const uri = '/pause';
     this.httpService.post(this.baseUri, uri, this.selectedMediaRenderer.udn).subscribe();
+  }
+
+  public seek(secondsAbsolute : number): void {
+    const uri = '/seekSecondsAbsolute';
+    let seek : SeekSecondsDto;
+    seek.rendererUDN = this.selectedMediaRenderer.udn;
+    seek.seconds = secondsAbsolute;
+    this.httpService.post(this.baseUri, uri, seek).subscribe();
   }
 
   public playResource(musicItemDto: MusicItemDto): void {

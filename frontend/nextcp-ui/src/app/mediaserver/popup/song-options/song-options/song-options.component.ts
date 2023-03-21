@@ -6,7 +6,7 @@ import { MusicItemDto, ContainerDto} from './../../../../service/dto.d';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, ElementRef, OnInit, ViewContainerRef } from '@angular/core';
 import { DefaultPlaylistService } from '../../defaut-playlists/default-playlist.service';
-import { TransportService } from 'src/app/service/avtransport.service';
+import { TransportService } from 'src/app/service/transport.service';
 
 @Component({
   selector: 'app-song-options',
