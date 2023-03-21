@@ -69,13 +69,14 @@ input {
 
 
 .media-container {
-    display: flex;
+    display       : flex;
     flex-direction: row;
-    
+
     >.media-device {
         display       : flex;
         flex-direction: column;
-        min-width     : 400px;
+        max-width     : 400px;
+        min-width     : 300px;
         border-style  : solid;
         border-width  : 1px;
         border-radius : 4px;
@@ -86,13 +87,19 @@ input {
             font-weight   : 600;
             padding-bottom: 1rem;
         }
-
-        >.online {
-            color: green;
-        }
-
-        >.offline {
-            color: red;
-        }
     }
+}
+
+.mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input {
+    &.online {
+        color: green;
+    }
+
+    &.offline {
+        color: red;
+    }
+}
+
+.mat-mdc-outlined-button:not(:disabled) {
+    background-color: rgba(255, 255, 255, 0.1);
 }
