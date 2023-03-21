@@ -10,7 +10,7 @@ import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
 import { UpnpAvTransportState } from './../../service/dto.d';
 import { TransportService as TransportService } from '../../service/transport.service';
-import { Component, ElementRef } from '@angular/core';
+import { Component, ElementRef, Optional } from '@angular/core';
 
 @Component({
   selector: 'renderer-footer',
@@ -110,8 +110,16 @@ export class FooterComponent {
     return this.rendererService.getFinishTime();
   }
 
-  trackTimePercent(): number {
-    return this.streaming() ? 0 : this.rendererService.trackTime.percent;
+  public get trackTimePercent(): number {
+    if (this.rendererService?.trackTime?.percent) {
+      return this.streaming() ? 0 : this.rendererService.trackTime.percent;
+    }
+    return 0;
+  }
+
+  public trackTimePercentSeek(value : any) {
+    let timeAbs = Math.floor(this.rendererService.trackTime.duration * value/100);
+    this.transportService.seek(timeAbs);
   }
 
   //

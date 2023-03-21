@@ -67,7 +67,6 @@ public class RestTransportService extends BaseRestService
         {
             MediaRendererDevice device = getMediaRendererByUdn(secondsAbsolute.rendererUDN);
             device.getAvTransportBridge().seek(secondsAbsolute.seconds);
-            publisher.publishEvent(new ToastrMessage(null, "success", "play", "song will be played next."));
         }
         catch (Exception e)
         {

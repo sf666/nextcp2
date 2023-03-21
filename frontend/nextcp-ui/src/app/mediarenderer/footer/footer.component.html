@@ -1,12 +1,4 @@
 <div class="d-flex flex-column footer">
-
-    <!-- upper footer section -->
-    <!--
-    <div class="progress-bar">
-        <mat-progress-bar class="progress-bar" mode="determinate" value="{{rendererService.trackTime.percent}}">
-        </mat-progress-bar>
-    </div>
--->
     <div class="d-flex flex-row justify-content-between spacer">
         <!-- left footer section -->
         <div class="d-flex left-footer">
@@ -55,9 +47,9 @@
                     <div class="timeText">{{rendererService.trackTime.secondsDisp}}</div>
                     <div class="timeSliderBox">
                         <mat-slider *ngIf="!streaming()" class="absolute hidden time-slider" min="0" max="100" step="1">
-                            <input matSliderThumb (valueChange)="volChanged($event)" [value]="rendererService.trackTime.percent">
+                            <input matSliderThumb (valueChange)="trackTimePercentSeek($event)" [value]="trackTimePercent">
                         </mat-slider>                        
-                        <mat-progress-bar class="absolute time-progressbar align-self-center" mode="determinate" value="{{trackTimePercent()}}">
+                        <mat-progress-bar class="absolute time-progressbar align-self-center" mode="determinate" (value)="trackTimePercent">
                         </mat-progress-bar>
                     </div>
                     <div class="timeText" *ngIf="!streaming()">{{getFinishTime()}}

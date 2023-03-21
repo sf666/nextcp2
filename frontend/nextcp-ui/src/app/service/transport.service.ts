@@ -11,8 +11,7 @@ import { DeviceService } from './device.service';
 export class TransportService {
 
   upnpAvTransportState: UpnpAvTransportState;
-  selectedMediaRenderer: MediaRendererDto;
-  public lastPlayedMusicItem : MusicItemDto;
+  public lastPlayedMusicItem: MusicItemDto;
   baseUri = '/TransportService';
 
   constructor(
@@ -21,15 +20,16 @@ export class TransportService {
     private toastr: ToastService,
     private deviceService: DeviceService) {
 
-    // Register for application event (user selected new media player within the UI)
-    this.deviceService.mediaRendererChanged$.subscribe(data => this.renderDeviceChanged(data));
-
     // Register to domain event (change of TransportState)
     this.sse.mediaRendererAvTransportStateChanged$.subscribe(data => {
       if (this.deviceService.isMediaRendererSelected(data.mediaRenderer.udn)) {
         this.updateTransportState(data);
       }
     });
+  }
+
+  get selectedMediaRenderer(): MediaRendererDto {
+    return this.deviceService.selectedMediaRendererDevice;
   }
 
   // 
@@ -40,10 +40,6 @@ export class TransportService {
     if (this.deviceService.isMediaRendererSelected(upnpAvTransportState.mediaRenderer.udn)) {
       this.upnpAvTransportState = upnpAvTransportState;
     }
-  }
-
-  private renderDeviceChanged(device: MediaRendererDto) {
-    this.selectedMediaRenderer = device;
   }
 
   //
@@ -60,12 +56,12 @@ export class TransportService {
     this.httpService.post(this.baseUri, uri, this.selectedMediaRenderer.udn).subscribe();
   }
 
-  public seek(secondsAbsolute : number): void {
+  public seek(secondsAbsolute: number): void {
     const uri = '/seekSecondsAbsolute';
-    let seek : SeekSecondsDto;
-    seek.rendererUDN = this.selectedMediaRenderer.udn;
-    seek.seconds = secondsAbsolute;
-    this.httpService.post(this.baseUri, uri, seek).subscribe();
+    if (this.deviceService.selectedMediaRendererDevice?.udn) {
+      let seek: SeekSecondsDto = { rendererUDN: this.deviceService.selectedMediaRendererDevice.udn, seconds: secondsAbsolute };
+      this.httpService.post(this.baseUri, uri, seek).subscribe();
+    }
   }
 
   public playResource(musicItemDto: MusicItemDto): void {
@@ -101,5 +97,4 @@ export class TransportService {
 
     this.httpService.post(this.baseUri, uri, playReq).subscribe();
   }
-
 }
