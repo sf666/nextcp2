@@ -7,4 +7,11 @@ public class AvTransportStateChangedEvent
 {
     public AvTransportState state = null;
     public MediaRendererDevice device = null;
+
+    @Override
+    public String toString()
+    {
+        return "AvTransportStateChangedEvent [state=" + state + ", device=" + device + "]";
+    }
+
 }

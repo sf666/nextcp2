@@ -33,7 +33,6 @@ public class AvTransportEventPublisher extends BaseAvTransportChangeEventImpl
     public void processingFinished(AvTransportState currentAvTransportState)
     {
         this.currentAvTransportState = currentAvTransportState;
-        log.warn("AVTransportState : " + currentAvTransportState.TransportState);
         if (log.isDebugEnabled())
         {
             log.debug("AVTransportState : " + currentAvTransportState);
@@ -56,18 +55,22 @@ public class AvTransportEventPublisher extends BaseAvTransportChangeEventImpl
         AvTransportStateChangedEvent event = new AvTransportStateChangedEvent();
         event.state = currentAvTransportState;
         event.device = device;
+        log.debug("publishing AvTransportStateChangedEvent for device {}" , event.device.getFriendlyName());
         getEventPublisher().publishEvent(event);
         
         if (shouldPublishTransportServiceState)
         {
             TransportServiceStateDto dto = device.getTransportServiceBridge().getCurrentTransportServiceState();
-            
-            // TODO : current service must be identified and must be read from playlist service ...
             dto.udn = device.getUdnAsString();
             dto.transportState = currentAvTransportState.TransportStatus;
             
+            log.debug("publishing TransportServiceStateDto : " + dto);
             device.getEventPublisher().publishEvent(dto);
-        }        
+        }
+        else
+        {
+            log.debug("shouldPublishTransportServiceState is false.");
+        }
     }
 
     private TrackInfoDto getAsTrackInfo(AvTransportState transportState)
