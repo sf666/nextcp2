@@ -417,7 +417,11 @@ export class DisplayContainerComponent implements OnInit {
     if (!title) {
       return false;
     }
-    return title.toLowerCase().includes(filter.toLowerCase());
+    if ("NONE" == filter) {
+      return title.toLowerCase().length == 0;
+    } else {
+      return title.toLowerCase().includes(filter.toLowerCase());
+    }
   }
 
   get albumList(): ContainerDto[] {
