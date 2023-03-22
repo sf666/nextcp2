@@ -42,11 +42,17 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
 
     public void seek(long secondsAbsolute)
     {
-        log.info("seeking to position {} seconds", secondsAbsolute);
+        long hours = secondsAbsolute / 3600;
+        long minutes = (secondsAbsolute % 3600) / 60;
+        long seconds = secondsAbsolute % 60;
+
+        String time = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        
+        log.info("seeking to position {} seconds : {}", secondsAbsolute, time);
         SeekInput inp = new SeekInput();
         inp.InstanceID = 0L;
         inp.Unit = "ABS_TIME";
-        inp.Target = "00:01:00"; // check out ... 
+        inp.Target = time; 
     }
     
     /**
