@@ -59,7 +59,7 @@
                                     <mat-label>Genre</mat-label>
                                     <mat-select [formControl]="genresForm" multiple [(ngModel)]="selectedGenres">
                                         <mat-option [value]="">NONE</mat-option>
-                                        <mat-option *ngFor="let genre of genresList" [value]="genre">{{genre}}</mat-option>
+                                        <mat-option *ngFor="let genre of genresListSorted" [value]="genre">{{genre}}</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>

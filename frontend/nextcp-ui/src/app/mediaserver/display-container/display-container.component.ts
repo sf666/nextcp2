@@ -42,9 +42,9 @@ export class DisplayContainerComponent implements OnInit {
   private lastScrollToId = '';
   private intersecObserver: IntersectionObserver;
 
-
   quickSearchString: string;
   genresList: Set<String>;
+  genresListSorted: Array<String>;
   selectedGenres: Array<string> = [];
 
   // some calculated constants
@@ -151,6 +151,8 @@ export class DisplayContainerComponent implements OnInit {
         })
       }
     });
+
+    this.genresListSorted = [...this.genresList].sort();
   }
 
   getSearchDelay(): number {
