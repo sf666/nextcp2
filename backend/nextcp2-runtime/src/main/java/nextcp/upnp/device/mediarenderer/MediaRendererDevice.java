@@ -242,6 +242,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         else
         {
             transportBridge = avTransportBridge;
+            avTransportEventPublisher.setShouldPublishTransportServiceState(true);
         }
 
         // must be called after OH Services!
