@@ -62,7 +62,6 @@ public class AvTransportEventPublisher extends BaseAvTransportChangeEventImpl
         {
             TransportServiceStateDto dto = device.getTransportServiceBridge().getCurrentTransportServiceState();
             dto.udn = device.getUdnAsString();
-            dto.transportState = currentAvTransportState.TransportStatus;
             
             log.debug("publishing TransportServiceStateDto : " + dto);
             device.getEventPublisher().publishEvent(dto);
