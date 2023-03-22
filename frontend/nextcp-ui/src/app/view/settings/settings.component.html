@@ -7,7 +7,7 @@
         <mat-form-field appearance="outline" class="setting-dropdown">
             <mat-label>select profile or create new one</mat-label>
             <mat-select [(ngModel)]="configService.clientConfig" [compareWith]="compareProfile">
-                <mat-option (click)="configService.addNewClientConfig()">CREATE NEW PROFILE</mat-option>
+                <mat-option (click)="configService.addNewClientConfig()">CREATE PROFILE</mat-option>
                 <mat-option [value]="clientConfig" *ngFor="let clientConfig of configService?.serverConfig?.clientConfig" (click)="selectConfig(clientConfig)">
                     {{clientConfig.clientName}}</mat-option>
             </mat-select>
