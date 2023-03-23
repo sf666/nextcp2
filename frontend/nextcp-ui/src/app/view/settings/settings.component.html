@@ -202,6 +202,10 @@
             <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerPort" placeholder="undefined">
         </mat-form-field>
         <mat-form-field appearance="outline" class="setting-dropdown">
+            <mat-label>path to restart script</mat-label>
+            <input matInput type="text" [(ngModel)]="configService.applicationConfig.pathToRestartScript" placeholder="undefined">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="setting-dropdown">
             <mat-label>Log4j config file</mat-label>
             <input matInput type="text" [(ngModel)]="configService.applicationConfig.log4jConfigFile" placeholder="undefined">
         </mat-form-field>

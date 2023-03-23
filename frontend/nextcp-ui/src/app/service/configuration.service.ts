@@ -37,7 +37,8 @@ export class ConfigurationService {
     loggingDateTimeFormat: '',
     sseEmitterTimeout: 0,
     itemsPerPage: 100,
-    nextPageAfter: 60
+    nextPageAfter: 60,
+    pathToRestartScript:''
   }
 
   musicBrainzConfig: MusicbrainzSupport = {   // MusicBrainz username/password

@@ -23,12 +23,13 @@ public class ApplicationConfig
     public String databaseFilename;
     public Long itemsPerPage;
     public Long nextPageAfter;
+    public String pathToRestartScript;
 
     public ApplicationConfig()
     {
     }
 
-    public ApplicationConfig(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter)
+    public ApplicationConfig(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript)
     {
         this.generateUpnpCode = generateUpnpCode;
         this.generateUpnpCodePath = generateUpnpCodePath;
@@ -41,6 +42,7 @@ public class ApplicationConfig
         this.databaseFilename = databaseFilename;
         this.itemsPerPage = itemsPerPage;
         this.nextPageAfter = nextPageAfter;
+        this.pathToRestartScript = pathToRestartScript;
     }
     
     @Override
@@ -59,6 +61,7 @@ public class ApplicationConfig
         sb.append("databaseFilename=").append(this.databaseFilename).append(", ");
         sb.append("itemsPerPage=").append(this.itemsPerPage).append(", ");
         sb.append("nextPageAfter=").append(this.nextPageAfter).append(", ");
+        sb.append("pathToRestartScript=").append(this.pathToRestartScript).append(", ");
         sb.append("]");
         return sb.toString();
     }

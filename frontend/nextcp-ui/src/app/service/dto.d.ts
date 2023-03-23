@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2023-03-21 13:46:32.
+// Generated using typescript-generator version 2.32.889 on 2023-03-23 09:08:58.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -14,6 +14,7 @@ export interface ApplicationConfig {
     databaseFilename: string;
     itemsPerPage: number;
     nextPageAfter: number;
+    pathToRestartScript: string;
 }
 
 export interface AudioFormat {

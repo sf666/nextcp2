@@ -32,6 +32,7 @@ ApplicationConfig:
    databaseFilename: String
    itemsPerPage: Long
    nextPageAfter: Long
+   pathToRestartScript: String
 
 UmsServerApiKey:
    serverUuid: String
