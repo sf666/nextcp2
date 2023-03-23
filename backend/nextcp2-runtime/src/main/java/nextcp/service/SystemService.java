@@ -3,6 +3,7 @@ package nextcp.service;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +55,8 @@ public class SystemService
         if (!execFile.exists())
         {
             log.info("restart > file doesn't exist / cannot be read : " + config.applicationConfig.pathToRestartScript);
-            publisher.publishEvent(new ToastrMessage(null, "error", "Restart", "Restart script doesn't exist or user permissions are missing :  " + config.applicationConfig.pathToRestartScript));
+            publisher.publishEvent(
+                    new ToastrMessage(null, "error", "Restart", "Restart script doesn't exist or user permissions are missing :  " + config.applicationConfig.pathToRestartScript));
             return;
         }
 
@@ -78,7 +80,9 @@ public class SystemService
 
             ProcessBuilder pb = new ProcessBuilder(exec);
             pb.directory(execFile.getParentFile());
+            pb.redirectErrorStream(true);
             process = pb.start();
+            log.info(new String(IOUtils.toByteArray(process.getInputStream())));
             int exitCode = process.waitFor();
             if (exitCode != 0)
             {
@@ -89,6 +93,8 @@ public class SystemService
             else
             {
                 log.info("restart completed.");
+                publisher.publishEvent(
+                        new ToastrMessage(null, "info", "Restart", "Restart successful. Please reload current page."));
             }
         }
         catch (IOException e)
