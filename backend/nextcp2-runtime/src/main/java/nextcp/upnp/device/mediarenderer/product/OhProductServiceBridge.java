@@ -68,7 +68,7 @@ public class OhProductServiceBridge implements IProductService
     @Override
     public InputSourceDto getInputSource(Long value)
     {
-        if (value != null)
+        if (value != null && sourceList != null)
         {
             return sourceList.get(Math.toIntExact(value));
         }
