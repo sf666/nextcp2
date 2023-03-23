@@ -50,6 +50,14 @@ public class SystemService
             return;
         }
 
+        File execFile = new File(config.applicationConfig.pathToRestartScript);
+        if (!execFile.exists())
+        {
+            log.info("restart > file doesn't exist : " + config.applicationConfig.pathToRestartScript);
+            publisher.publishEvent(new ToastrMessage(null, "error", "Restart", "Restart script doesn't exist :  " + config.applicationConfig.pathToRestartScript));
+            return;
+        }
+
         boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
 
         Process process;
@@ -66,14 +74,6 @@ public class SystemService
             {
                 exec = String.format("/bin/sh -c %s", config.applicationConfig.pathToRestartScript);
                 log.info("restart > exec on unix : " + exec);
-            }
-
-            File execFile = new File(exec);
-            if (!execFile.exists())
-            {
-                log.info("restart > file doesn't exist : " + exec);
-                publisher.publishEvent(new ToastrMessage(null, "error", "Restart", "Restart script doesn't exist :  " + exec));
-                return;
             }
 
             ProcessBuilder pb = new ProcessBuilder(exec);
