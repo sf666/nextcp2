@@ -50,11 +50,11 @@ public class SystemService
             return;
         }
 
-        File execFile = new File(config.applicationConfig.pathToRestartScript);
+        File execFile = new File(config.applicationConfig.pathToRestartScript.trim());
         if (!execFile.exists())
         {
-            log.info("restart > file doesn't exist : " + config.applicationConfig.pathToRestartScript);
-            publisher.publishEvent(new ToastrMessage(null, "error", "Restart", "Restart script doesn't exist :  " + config.applicationConfig.pathToRestartScript));
+            log.info("restart > file doesn't exist / cannot be read : " + config.applicationConfig.pathToRestartScript);
+            publisher.publishEvent(new ToastrMessage(null, "error", "Restart", "Restart script doesn't exist or user permissions are missing :  " + config.applicationConfig.pathToRestartScript));
             return;
         }
 
