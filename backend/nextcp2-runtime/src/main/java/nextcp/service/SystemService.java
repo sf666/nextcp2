@@ -51,15 +51,6 @@ public class SystemService
             return;
         }
 
-        File execFile = new File(config.applicationConfig.pathToRestartScript.trim());
-        if (!execFile.exists())
-        {
-            log.info("restart > file doesn't exist / cannot be read : " + config.applicationConfig.pathToRestartScript);
-            publisher.publishEvent(
-                    new ToastrMessage(null, "error", "Restart", "Restart script doesn't exist or user permissions are missing :  " + config.applicationConfig.pathToRestartScript));
-            return;
-        }
-
         boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
 
         Process process;
@@ -79,7 +70,6 @@ public class SystemService
             }
 
             ProcessBuilder pb = new ProcessBuilder(exec);
-            pb.directory(execFile.getParentFile());
             pb.redirectErrorStream(true);
             process = pb.start();
             log.info(new String(IOUtils.toByteArray(process.getInputStream())));
