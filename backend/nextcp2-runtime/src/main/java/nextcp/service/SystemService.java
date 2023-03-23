@@ -1,5 +1,6 @@
 package nextcp.service;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
@@ -52,20 +53,32 @@ public class SystemService
         boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
 
         Process process;
+        String exec;
         try
         {
             if (isWindows)
             {
-                String exec = String.format("cmd.exe /c %s", config.applicationConfig.pathToRestartScript);
+                exec = String.format("cmd.exe /c %s", config.applicationConfig.pathToRestartScript);
                 log.info("restart > exec on windows : " + exec);
-                process = Runtime.getRuntime().exec(exec);
+
             }
             else
             {
-                String exec = String.format("/bin/sh -c %s", config.applicationConfig.pathToRestartScript);
+                exec = String.format("/bin/sh -c %s", config.applicationConfig.pathToRestartScript);
                 log.info("restart > exec on unix : " + exec);
-                process = Runtime.getRuntime().exec(exec);
             }
+
+            File execFile = new File(exec);
+            if (!execFile.exists())
+            {
+                log.info("restart > file doesn't exist : " + exec);
+                publisher.publishEvent(new ToastrMessage(null, "error", "Restart", "Restart script doesn't exist :  " + exec));
+                return;
+            }
+
+            ProcessBuilder pb = new ProcessBuilder(exec);
+            pb.directory(execFile.getParentFile());
+            process = pb.start();
             int exitCode = process.waitFor();
             if (exitCode != 0)
             {
