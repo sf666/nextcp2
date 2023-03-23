@@ -31,6 +31,10 @@ export class SystemService {
     this.http.get("/SystemService/getLastFmAppRegistration", { responseType: 'text' }).subscribe(url => this.openUrl(url));
   }
 
+  public restart(): void {
+    this.http.get("/SystemService/restartNextcp2").subscribe();
+  } 
+
   public registerNextcp2AtSpotify(): void {
     const options = {
       responseType: 'text',

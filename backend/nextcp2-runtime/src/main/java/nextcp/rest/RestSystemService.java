@@ -94,9 +94,8 @@ public class RestSystemService
     }
 
     @GetMapping("/restartNextcp2")
-    public void restart(@RequestParam String code)
+    public void restart()
     {
-        spotifyService.registerSpotifyCode(code);
-        log.info("Spotify account connected with code : " + code);
+        systemService.restartNextcp();
     }
 }
