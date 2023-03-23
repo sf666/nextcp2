@@ -54,22 +54,21 @@ public class SystemService
         boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
 
         Process process;
-        String exec;
+        ProcessBuilder pb;
         try
         {
             if (isWindows)
             {
-                exec = String.format("cmd.exe /c %s", config.applicationConfig.pathToRestartScript);
-                log.info("restart > exec on windows : " + exec);
+                log.info("restart > exec on windows : " + String.format("cmd.exe /c %s", config.applicationConfig.pathToRestartScript));
+                pb = new ProcessBuilder("cmd.exe", "/c", config.applicationConfig.pathToRestartScript);
 
             }
             else
             {
-                exec = String.format("/bin/sh -c %s", config.applicationConfig.pathToRestartScript);
-                log.info("restart > exec on unix : " + exec);
+                log.info("restart > exec on unix : " + String.format("/bin/sh -c %s", config.applicationConfig.pathToRestartScript));
+                pb = new ProcessBuilder("/bin/sh", "-c", config.applicationConfig.pathToRestartScript);
             }
 
-            ProcessBuilder pb = new ProcessBuilder(exec);
             pb.redirectErrorStream(true);
             process = pb.start();
             log.info(new String(IOUtils.toByteArray(process.getInputStream())));
@@ -83,8 +82,7 @@ public class SystemService
             else
             {
                 log.info("restart completed.");
-                publisher.publishEvent(
-                        new ToastrMessage(null, "info", "Restart", "Restart successful. Please reload current page."));
+                publisher.publishEvent(new ToastrMessage(null, "info", "Restart", "Restart successful. Please reload current page."));
             }
         }
         catch (IOException e)
