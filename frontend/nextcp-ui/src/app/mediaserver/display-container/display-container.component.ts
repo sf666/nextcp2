@@ -389,10 +389,15 @@ export class DisplayContainerComponent implements OnInit {
     }
   }
 
-  private doFilterGenreByContainer(item: ContainerDto): boolean {
+  /**
+   * Filter an album by genre
+   * @param container album container
+   * @returns 
+   */
+  private doFilterGenreByContainer(container: ContainerDto): boolean {
     let add = false;
     this.selectedGenres.forEach(genre => {
-      if (this.doFilterText(item.genre, genre)) {
+      if (this.doFilterText(container.genre, genre)) {
         add = true;
       }
     })
@@ -414,14 +419,12 @@ export class DisplayContainerComponent implements OnInit {
     if (!filter) {
       return true;
     }
-    if (!title) {
+    if (!title && "NONE" == filter) {
+      return true;
+    } else if (!title) {
       return false;
-    }
-    if ("NONE" == filter) {
-      return title.toLowerCase().length == 0;
-    } else {
-      return title.toLowerCase().includes(filter.toLowerCase());
-    }
+    }    
+    return title.toLowerCase().includes(filter.toLowerCase());
   }
 
   get albumList(): ContainerDto[] {
