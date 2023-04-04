@@ -154,6 +154,7 @@ public class MediaServerDevice extends BaseDevice
     {
         try
         {
+            log.debug("generateDidlContent : {}", out.Result);
             DIDLContent didl = generateDidlContent(out.Result);
             return didl;
         }

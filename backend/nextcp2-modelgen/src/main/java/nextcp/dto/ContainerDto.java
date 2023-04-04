@@ -16,6 +16,8 @@ public class ContainerDto
     public String parentID;
     public String title;
     public String objectClass;
+    public String conductor;
+    public String composer;
     public Integer childCount;
     public String createClass;
     public String searchClass;
@@ -32,12 +34,14 @@ public class ContainerDto
     {
     }
 
-    public ContainerDto(String id, String parentID, String title, String objectClass, Integer childCount, String createClass, String searchClass, Boolean searchable, String mediaServerUDN, String albumartUri, String artist, Integer rating, String creator, String media_date, String genre)
+    public ContainerDto(String id, String parentID, String title, String objectClass, String conductor, String composer, Integer childCount, String createClass, String searchClass, Boolean searchable, String mediaServerUDN, String albumartUri, String artist, Integer rating, String creator, String media_date, String genre)
     {
         this.id = id;
         this.parentID = parentID;
         this.title = title;
         this.objectClass = objectClass;
+        this.conductor = conductor;
+        this.composer = composer;
         this.childCount = childCount;
         this.createClass = createClass;
         this.searchClass = searchClass;
@@ -60,6 +64,8 @@ public class ContainerDto
         sb.append("parentID=").append(this.parentID).append(", ");
         sb.append("title=").append(this.title).append(", ");
         sb.append("objectClass=").append(this.objectClass).append(", ");
+        sb.append("conductor=").append(this.conductor).append(", ");
+        sb.append("composer=").append(this.composer).append(", ");
         sb.append("childCount=").append(this.childCount).append(", ");
         sb.append("createClass=").append(this.createClass).append(", ");
         sb.append("searchClass=").append(this.searchClass).append(", ");

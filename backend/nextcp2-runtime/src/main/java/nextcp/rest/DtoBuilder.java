@@ -15,6 +15,7 @@ import org.jupnp.support.model.DIDLContent;
 import org.jupnp.support.model.DIDLObject;
 import org.jupnp.support.model.DIDLObject.Property;
 import org.jupnp.support.model.DescMeta;
+import org.jupnp.support.model.PersonWithRole;
 import org.jupnp.support.model.Res;
 import org.jupnp.support.model.container.MusicAlbum;
 import org.jupnp.support.model.container.MusicArtist;
@@ -147,7 +148,7 @@ public class DtoBuilder
             {
                 dto.genre = container.getFirstGenre();
             }
-            // TODO extracting more info's necessary ... Role, etc. ?
+
         }
         catch (MalformedURLException e)
         {
@@ -237,7 +238,25 @@ public class DtoBuilder
             switch (property.getDescriptorName())
             {
                 case "artist":
-                    itemDto.artistName = property.getValue().toString();
+                    if (property.getValue() instanceof PersonWithRole r)
+                    {
+                        if ("composer".equalsIgnoreCase(r.getRole()))
+                        {
+                            itemDto.composer = r.getName();
+                        }
+                        else if ("conductor".equalsIgnoreCase(r.getRole()))
+                        {
+                            itemDto.conductor = r.getName();
+                        }
+                        else
+                        {
+                            itemDto.artistName = r.getName();                            
+                        }
+                    }
+                    else
+                    {
+                        log.debug("author not handled properly ! " + property.getDescriptorName() + " : " + property.getValue());
+                    }
                     break;
                 case "album":
                     itemDto.album = property.getValue().toString();
@@ -256,6 +275,23 @@ public class DtoBuilder
                     break;
                 case "rating":
                     addRating(itemDto, property.getValue().toString());
+                    break;
+                case "author":
+                    if (property.getValue() instanceof PersonWithRole r)
+                    {
+                        if ("composer".equalsIgnoreCase(r.getRole()))
+                        {
+                            itemDto.composer = r.getName();
+                        }
+                        else if ("conductor".equalsIgnoreCase(r.getRole()))
+                        {
+                            itemDto.conductor = r.getName();
+                        }
+                    }
+                    else
+                    {
+                        log.debug("author not handled properly ! " + property.getDescriptorName() + " : " + property.getValue());
+                    }
                     break;
                 default:
                     log.debug("unprocessed property : " + property.getDescriptorName() + " : " + property.getValue());

@@ -197,6 +197,9 @@ ContainerDto:
    title: String
    objectClass: String
   
+   conductor: String
+   composer: String
+  
    childCount: Integer
    createClass: String
    searchClass: String
@@ -245,6 +248,8 @@ MusicItemDto:
    refId: String
    songId: MusicItemIdDto
    
+   conductor: String
+   composer: String
    currentTrackMetadata: String
    creator: String
    title: String
