@@ -117,7 +117,7 @@ public class DtoBuilder
         }
         catch (Exception e)
         {
-            log.info(String.format("cannot create didl item with content '%s'. ErrorMessage : %s", xml, e.getMessage()));
+            log.info(String.format("cannot create didl item with content '%s'. ErrorMessage : %s", xml, e.getMessage()), e);
         }
 
         return null;
@@ -250,7 +250,7 @@ public class DtoBuilder
                         }
                         else
                         {
-                            itemDto.artistName = r.getName();                            
+                            itemDto.artistName = r.getName();
                         }
                     }
                     else
@@ -315,7 +315,7 @@ public class DtoBuilder
         itemDto.songId = ids;
         itemDto.musicBrainzId = mb;
 
-        Optional<DescMeta<?>> descMetadata = item.getDescMetadata().stream().filter(n -> n.getType().equalsIgnoreCase("mpd-tags")).findFirst();
+        Optional<DescMeta<?>> descMetadata = item.getDescMetadata().stream().filter(n -> n.getType() != null && n.getType().equalsIgnoreCase("mpd-tags")).findFirst();
         if (descMetadata.isPresent())
         {
             Node metaChildNodes = ((Node) descMetadata.get().getMetadata()).getFirstChild();
@@ -352,7 +352,7 @@ public class DtoBuilder
         //
         // Support for UniversalMediaServer Tags (https://www.universalmediaserver.com/)
         //
-        descMetadata = item.getDescMetadata().stream().filter(n -> n.getType().equalsIgnoreCase("ums-tags")).findFirst();
+        descMetadata = item.getDescMetadata().stream().filter(n -> n.getType() != null && n.getType().equalsIgnoreCase("ums-tags")).findFirst();
         if (descMetadata.isPresent())
         {
             Node metaChildNodes = ((Node) descMetadata.get().getMetadata()).getFirstChild();
