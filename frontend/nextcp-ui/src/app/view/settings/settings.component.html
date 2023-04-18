@@ -140,7 +140,7 @@
                             {{dd.deviceType}}</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <div class="d-flex flex-column">
+                <div class="d-flex flex-column" *ngIf="showAdvancedRendererSettings(rendererConfig)">
                     <mat-form-field appearance="outline">
                         <mat-label>amplifier driver connection</mat-label>
                         <input matInput type="text" [(ngModel)]="rendererConfig.connectionString" placeholder="ip:port">
