@@ -18,7 +18,6 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 export class MusicLibraryComponent implements AfterViewInit{
 
   private lastOidIsRestoredFromCache: boolean;
-  private currentMediaServerDto: MediaServerDto;
 
   @ViewChild(DisplayContainerComponent) dispContainer: DisplayContainerComponent;
 
@@ -33,13 +32,12 @@ export class MusicLibraryComponent implements AfterViewInit{
     deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));
     deviceService.mediaServerInitiated$.subscribe(d => this.deviceService.setMediaServerByUdn(this.persistenceService.getCurrentMediaServerDevice()));
   }
+
   ngAfterViewInit(): void {
     this.browseToLastKnownUdn();
   }
 
   mediaServerChanged(data: MediaServerDto): void {
-    this.currentMediaServerDto = data;
-
     if (this.persistenceService.isCurrentMediaServer(data.udn)) {
       this.browseToLastKnownUdn();
     } else {
@@ -92,7 +90,7 @@ export class MusicLibraryComponent implements AfterViewInit{
     const currentParent = this.contentDirectoryService?.currentContainerList?.currentContainer?.parentID;
     if (currentParent) {
       this.dispContainer.clearSearch();
-      this.browseToOid(currentParent, this.currentMediaServerDto.udn, "");
+      this.browseToOid(currentParent, this.deviceService.selectedMediaServerDevice.udn, "");
     }
   }
 
