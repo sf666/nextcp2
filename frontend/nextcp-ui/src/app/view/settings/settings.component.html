@@ -112,8 +112,6 @@
     <div class="d-flex flex-row flex-wrap ms-4">
         <div class="media-container m-3" *ngFor="let rendererConfig of getMediaRenderer()">
             <div class="media-device">
-
-
                 <div class="no-wrap title">{{rendererConfig.mediaRenderer.friendlyName}}
                     <mat-slide-toggle class="mb-2" [(ngModel)]="rendererConfig.active">
                         Enable
@@ -142,17 +140,19 @@
                             {{dd.deviceType}}</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field appearance="outline">
-                    <mat-label>amplifier driver connection</mat-label>
-                    <input matInput type="text" [(ngModel)]="rendererConfig.connectionString" placeholder="ip:port">
-                </mat-form-field>
-                <mat-form-field appearance="outline">
-                    <mat-label>amplifier on power default volume</mat-label>
-                    <input matInput type="number" min="0" max="100" [(ngModel)]="rendererConfig.powerOnVolPercent" placeholder="undefined">
-                </mat-form-field>
-                <mat-slide-toggle class="mb-2" [(ngModel)]="rendererConfig.setCoveredUpnpDeviceToMaxVolume" [disabled]="!rendererConfig.deviceDriverType">
-                    UPnP/streamer max volume
-                </mat-slide-toggle>
+                <div class="d-flex flex-column">
+                    <mat-form-field appearance="outline">
+                        <mat-label>amplifier driver connection</mat-label>
+                        <input matInput type="text" [(ngModel)]="rendererConfig.connectionString" placeholder="ip:port">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>amplifier on power default volume</mat-label>
+                        <input matInput type="number" min="0" max="100" [(ngModel)]="rendererConfig.powerOnVolPercent" placeholder="undefined">
+                    </mat-form-field>
+                    <mat-slide-toggle class="mb-2" [(ngModel)]="rendererConfig.setCoveredUpnpDeviceToMaxVolume" [disabled]="!rendererConfig.deviceDriverType">
+                        UPnP/streamer max volume
+                    </mat-slide-toggle>
+                </div>
                 <div class="middle-spacer">&nbsp;</div>
                 <div class="d-flex mt-4">
                     <button mat-stroked-button class="ms-2" color="primary" (click)="saveRendererConfig(rendererConfig)">save</button>

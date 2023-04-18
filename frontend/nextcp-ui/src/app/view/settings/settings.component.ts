@@ -43,6 +43,15 @@ export class SettingsComponent {
     }
   }
 
+  showAdvancedRendererSettings(rendererConfig: RendererDeviceConfiguration): boolean {
+    if (rendererConfig.deviceDriverType) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
   public getMediaRenderer(): RendererDeviceConfiguration[] {
     if (this.showOnlyActiveRenderer) {
       return this.configService.getRendererDevicesConfig().filter(renderer => this.isRendererConfigActive(renderer));
