@@ -43,7 +43,7 @@ export class SearchResultComponent implements AfterViewInit {
     const currentParent = this.globalSearchService.contentDirectoryService?.currentContainerList?.currentContainer?.parentID;
     if (currentParent) {
       this.dispContainer.clearSearch();
-      this.dispContainer.browseToOid(currentParent, this.globalSearchService.selectedRootContainer.mediaServerUDN);
+      this.dispContainer.browseToOid(currentParent, this.globalSearchService.selectedRootContainer.mediaServerUDN, false);
       return;
     }
   }

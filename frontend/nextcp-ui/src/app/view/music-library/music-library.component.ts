@@ -54,14 +54,14 @@ export class MusicLibraryComponent implements AfterViewInit{
     this.lastOidIsRestoredFromCache = true;
     udn = this.persistenceService.getCurrentMediaServerDevice();
 
-    this.browseToOid(oid, udn, "").then(
+    this.browseToOid(oid, udn, true, "").then(
       (val) => {if (!val) this.browseToRoot(udn)},
       (err) => console.error(err)
     );
   }
 
-  private browseToOid(oid: string, udn: string, sortCriteria?: string): Promise<boolean> {
-    return this.dispContainer.browseToOid(oid, udn, sortCriteria);
+  private browseToOid(oid: string, udn: string, stepIn: boolean, sortCriteria?: string): Promise<boolean> {
+    return this.dispContainer.browseToOid(oid, udn, stepIn, sortCriteria);
   }
 
   contentReceived(udn: string, data: ContainerItemDto): void {
@@ -75,8 +75,8 @@ export class MusicLibraryComponent implements AfterViewInit{
   public browseToRoot(udn: string, sortCriteria?: string): void {
     console.log("browsing to root folder ... ")
     this.cdsBrowsePathService.clearPath();
-    this.cdsBrowsePathService.stepIn("0");
-    this.browseToOid("0", udn, sortCriteria);
+//    this.cdsBrowsePathService.stepIn("0");
+    this.browseToOid("0", udn, true, sortCriteria);
   }
 
   //
@@ -90,7 +90,7 @@ export class MusicLibraryComponent implements AfterViewInit{
     const currentParent = this.contentDirectoryService?.currentContainerList?.currentContainer?.parentID;
     if (currentParent) {
       this.dispContainer.clearSearch();
-      this.browseToOid(currentParent, this.deviceService.selectedMediaServerDevice.udn, "");
+      this.browseToOid(currentParent, this.deviceService.selectedMediaServerDevice.udn, false, "");
     }
   }
 

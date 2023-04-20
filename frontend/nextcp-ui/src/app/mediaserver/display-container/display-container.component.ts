@@ -93,6 +93,7 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   domChange(event: any): void {
+    console.log("DOM changed event ... ");
     if (this.contentHandler.cdsBrowsePathService) {
       if (this.contentHandler.cdsBrowsePathService.scrollToID !== this.lastScrollToId) {
         this.scrollIntoViewID(this.scrollToID);
@@ -509,7 +510,7 @@ export class DisplayContainerComponent implements OnInit {
     return false;
   }
 
-  public browseToOid(oid: string, udn: string, sortCriteria?: string): Promise<boolean> {
+  public browseToOid(oid: string, udn: string, stepIn : boolean, sortCriteria?: string): Promise<boolean> {
     this.clearSearch();
     if (!this.contentHandler) {
       console.error("contentHandler not initialized.");
@@ -518,7 +519,11 @@ export class DisplayContainerComponent implements OnInit {
 
     const promise = new Promise<boolean>((resolve, reject) => {
       if (this.contentHandler.cdsBrowsePathService) {
-        this.contentHandler.cdsBrowsePathService.stepIn(oid);
+        if (stepIn) {
+          this.contentHandler.cdsBrowsePathService.stepIn(oid);
+        } else {
+          this.contentHandler.cdsBrowsePathService.stepOut();
+        }
       }
       if (this.contentHandler.persistenceService) {
         this.contentHandler.persistenceService.setCurrentObjectID(oid);
@@ -546,7 +551,7 @@ export class DisplayContainerComponent implements OnInit {
   // ===============================================================================================
 
   public browseTo(containerDto: ContainerDto): void {
-    this.browseToOid(containerDto.id, containerDto.mediaServerUDN, "");
+    this.browseToOid(containerDto.id, containerDto.mediaServerUDN, true, "");
     this.containerSelected.emit(containerDto);
   }
 
