@@ -91,45 +91,6 @@ public class MediaServerDevice extends BaseDevice
         return searchSupportDelegate.searchAllPlaylist(searchReques);
     }
 
-    /**
-     * Hacking a search in the current directory by browsing COMPLETE content and manual filtering afterwards. Search would be much nicer ...
-     * 
-     * @param inp
-     * @param search
-     *            The search string
-     * @return
-     */
-    public ContainerItemDto browseChildren(BrowseInput inp, String search)
-    {
-        inp.RequestedCount = 9999L; // Should be pageable in future ... 
-        Collection<Container> toDeleteContainer = new ArrayList<>();
-        Collection<Item> toDeleteItem = new ArrayList<>();
-        BrowseOutput out = requestContent(inp);
-        DIDLContent didl = generateDidlContent(out);
-        for (Container container : didl.getContainers())
-        {
-            if (!container.getTitle().contains(search))
-            {
-                toDeleteContainer.add(container);
-            }
-        }
-        for (Item item : didl.getItems())
-        {
-            if (!item.getTitle().contains(search))
-            {
-                toDeleteItem.add(item);
-            }
-        }
-        
-        didl.getContainers().removeAll(toDeleteContainer);
-        didl.getItems().removeAll(toDeleteItem);
-        
-        ContainerItemDto result = initEmptyContainerItemDto();
-        result.totalMatches = (long) (didl.getContainers().size() + didl.getItems().size());
-
-        return fillResultStructureextracted(inp, didl, result);
-    }
-
     public ContainerItemDto browseChildren(BrowseInput inp)
     {
         BrowseOutput out = requestContent(inp);
@@ -137,12 +98,14 @@ public class MediaServerDevice extends BaseDevice
         ContainerItemDto result = initEmptyContainerItemDto();
         result.totalMatches = out.TotalMatches;
 
-        return fillResultStructureextracted(inp, didl, result);
+        return fillResultStructureExtracted(inp, didl, result);
     }
 
-    private ContainerItemDto fillResultStructureextracted(BrowseInput inp, DIDLContent didl, ContainerItemDto result)
+    private ContainerItemDto fillResultStructureExtracted(BrowseInput inp, DIDLContent didl, ContainerItemDto result)
     {
-        ContainerDto curContainer = getCurrentMeta(inp);
+        ContainerDto curContainer = browseMetadataMeta(inp);
+        ContainerDto parentContainer = browseMetadataMeta(createGenericBrowseInput(curContainer.parentID));
+        result.parentFolderTitle = parentContainer.title;
         result.currentContainer = curContainer;
         addContainerObjects(result, didl);
         addItemObjects(result.musicItemDto, didl);
@@ -180,7 +143,7 @@ public class MediaServerDevice extends BaseDevice
         return out;
     }
 
-    private ContainerDto getCurrentMeta(BrowseInput inp)
+    private ContainerDto browseMetadataMeta(BrowseInput inp)
     {
         ContainerDto result = new ContainerDto();
         inp.BrowseFlag = "BrowseMetadata";
@@ -293,5 +256,15 @@ public class MediaServerDevice extends BaseDevice
     {
         log.warn("scan file not implemented for this device : " + getFriendlyName());
     }
-
+    
+    private BrowseInput createGenericBrowseInput(String objectID)
+    {
+        BrowseInput inp = new BrowseInput();
+        inp.ObjectID = objectID;
+        inp.SortCriteria = "";
+        inp.StartingIndex = 0L;
+        inp.RequestedCount = 1L; 
+        inp.Filter = "*";
+        return inp;
+    }
 }
