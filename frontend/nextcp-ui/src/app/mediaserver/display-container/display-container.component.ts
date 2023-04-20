@@ -26,7 +26,6 @@ export class DisplayContainerComponent implements OnInit {
 
   @Input() showTopHeader = true;
 
-  scrollToID: string;
   @Input() extendedApi: boolean = true;
 
   @Input() contentHandler: ScrollLoadHandler;
@@ -96,8 +95,9 @@ export class DisplayContainerComponent implements OnInit {
     console.log("DOM changed event ... ");
     if (this.contentHandler.cdsBrowsePathService) {
       if (this.contentHandler.cdsBrowsePathService.scrollToID !== this.lastScrollToId) {
-        this.scrollIntoViewID(this.scrollToID);
-        this.lastScrollToId = this.scrollToID;
+        if (this.scrollIntoViewID(this.contentHandler.cdsBrowsePathService.scrollToID)) {
+          this.lastScrollToId = this.contentHandler.cdsBrowsePathService.scrollToID;
+        }
       }
     }
 
@@ -113,11 +113,13 @@ export class DisplayContainerComponent implements OnInit {
   /**
    * @param elementID ATTENTION: elementID needs to have tabindex set to '-1': <div id="elementID" tabindex="-1">
    */
-  public scrollIntoViewID(elementID: string): void {
+  public scrollIntoViewID(elementID: string): boolean {
     const targetElement = document.getElementById(elementID); // querySelector('#someElementId');
     if (targetElement) {
       targetElement.focus();
+      return true;
     }
+    return false;
   }
 
   ngOnInit(): void {
@@ -424,7 +426,7 @@ export class DisplayContainerComponent implements OnInit {
       return true;
     } else if (!title) {
       return false;
-    }    
+    }
     return title.toLowerCase().includes(filter.toLowerCase());
   }
 
@@ -510,7 +512,7 @@ export class DisplayContainerComponent implements OnInit {
     return false;
   }
 
-  public browseToOid(oid: string, udn: string, stepIn : boolean, sortCriteria?: string): Promise<boolean> {
+  public browseToOid(oid: string, udn: string, stepIn: boolean, sortCriteria?: string): Promise<boolean> {
     this.clearSearch();
     if (!this.contentHandler) {
       console.error("contentHandler not initialized.");
@@ -556,10 +558,6 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   private browseFinished(data: ContainerItemDto) {
-    if (this.contentHandler.cdsBrowsePathService) {
-      this.scrollToID = this.contentHandler.cdsBrowsePathService.scrollToID;
-    }
-
     this.checkAlbumAndLikeStatus();
     this.browseFinish.emit(data);
   }
