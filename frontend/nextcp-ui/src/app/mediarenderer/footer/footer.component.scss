@@ -76,6 +76,8 @@ mat-slider {
 .icon-button {
     @extend .icon-font;
 
+    margin-left: 1rem;
+
     &.active {
         color: $blue-pantone-2;
     }
@@ -302,7 +304,7 @@ img {
     height : 48px;
     width  : 100%;
     opacity: 0;
-    top      : -1rem;
+    top    : -1rem;
 }
 
 .timeSliderBox {
