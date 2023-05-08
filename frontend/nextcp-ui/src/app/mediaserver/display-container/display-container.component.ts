@@ -117,6 +117,7 @@ export class DisplayContainerComponent implements OnInit {
     const targetElement = document.getElementById(elementID); // querySelector('#someElementId');
     if (targetElement) {
       targetElement.focus();
+      console.log("scrolled to element ID : " + elementID);
       return true;
     }
     return false;
