@@ -2,7 +2,7 @@ package nextcp.lastfm.service;
 
 import java.util.TreeSet;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

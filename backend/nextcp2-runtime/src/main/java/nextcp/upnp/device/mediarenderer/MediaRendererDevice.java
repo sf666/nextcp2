@@ -3,7 +3,7 @@ package nextcp.upnp.device.mediarenderer;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.apache.commons.lang.StringUtils;
 import org.jupnp.model.meta.RemoteDevice;

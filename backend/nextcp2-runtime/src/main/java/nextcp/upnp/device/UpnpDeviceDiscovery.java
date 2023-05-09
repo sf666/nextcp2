@@ -1,6 +1,6 @@
 package nextcp.upnp.device;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.jupnp.UpnpService;
 import org.jupnp.model.message.header.STAllHeader;

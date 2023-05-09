@@ -3,10 +3,9 @@ package nextcp.upnp.device.mediaserver;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.support.model.DIDLContent;

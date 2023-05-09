@@ -3,7 +3,7 @@ package nextcp.rest;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.jupnp.model.types.UDN;
 import org.slf4j.Logger;
