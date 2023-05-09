@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2023-03-23 09:08:58.
+// Generated using typescript-generator version 2.32.889 on 2023-05-09 07:29:43.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -51,6 +51,8 @@ export interface ContainerDto {
     parentID: string;
     title: string;
     objectClass: string;
+    conductor: string;
+    composer: string;
     childCount: number;
     createClass: string;
     searchClass: string;
@@ -181,6 +183,8 @@ export interface MusicItemDto {
     parentId: string;
     refId: string;
     songId: MusicItemIdDto;
+    conductor: string;
+    composer: string;
     currentTrackMetadata: string;
     creator: string;
     title: string;

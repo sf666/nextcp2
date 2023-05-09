@@ -25,7 +25,9 @@ export class DtoGeneratorService {
       searchable: false,
       title: '',
       genre: '',
-      media_date: ''
+      media_date: '',
+      composer : '',
+      conductor : ''
     };
   }
 
@@ -89,7 +91,9 @@ export class DtoGeneratorService {
       title: '',
       genre: '',
       musicBrainzId: this.emptyMusicBrainzId(),
-      songId: this.emptySongId()
+      songId: this.emptySongId(),
+      composer : '',
+      conductor : ''
     }
   }
 
