@@ -136,9 +136,6 @@ import { TrackDetailsComponent } from './popup/track-details/track-details.compo
       provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true
    }],
 
-   // add dynamically at runtime created components as "entryComponents"
-   entryComponents: [InputFieldDialogComponent, SongOptionsComponent, DefautPlaylistsComponent, AvailableServerComponent, AvailableRendererComponent],
-
    bootstrap: [
       AppComponent
    ]
