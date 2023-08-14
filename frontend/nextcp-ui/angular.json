@@ -162,7 +162,6 @@
       }
     }
   },
-  "defaultProject": "nextcp-ui",
   "schematics": {
     "@angular-eslint/schematics:application": {
       "setParserOptionsProject": true
