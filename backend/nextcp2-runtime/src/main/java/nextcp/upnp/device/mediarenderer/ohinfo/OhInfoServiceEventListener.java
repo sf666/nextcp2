@@ -47,7 +47,7 @@ public class OhInfoServiceEventListener extends InfoServiceEventListenerImpl
 
         // Experimental: If we receive Metatext, this is usually send by a radio station in the format "artist - songtitle" (or vice versa)
         // In this case the radio station name is mapped to the album field, artist and songtitle extracted from Metatext.
-        if (dto.metatextCount > 0)
+        if (dto.metatextCount > 0 && state.Metatext != null && !state.Metatext.contains("<DIDL-Lite"))
         {
             log.debug(String.format("Metatext present. Count: %d. Text: %s", dto.metatextCount, dto.metatext));
             String[] splitMeta = state.Metatext.split(" - ");

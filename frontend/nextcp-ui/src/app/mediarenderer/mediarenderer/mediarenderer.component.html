@@ -24,20 +24,70 @@
             <div class="d-flex buttons-container">
                 <button *ngIf="canBeAddedToPlaylist" mat-flat-button class="mr-buttons" (click)="openAddPlaylistDialog($event, getCurrentTrack().songId.umsAudiotrackId)">
                     <span class="material-symbols-outlined">playlist_add</span>
-                    <span>   Playlists</span>                    
+                    <span> Playlists</span>
                 </button>
             </div>
 
             <star-rating [currentSong]="getCurrentTrack()"></star-rating>
 
-            <!-- Input Source -->
-            <div class="inputSource d-flex justify-content-center minWidth">
-                <div class="no-wrap d-flex mt-2 justify-content-center inputSource">
-                    <div class="material-symbols-outlined md-18 align-self-end">input</div>
-                    <div class="ms-2">{{deviceService.getCurrentInputSource.name}}</div>
-                </div>
+            <!-- Input Source       <div class="material-symbols-outlined md-18 align-self-end">input</div> -->
+            <div mat-subheader class="p-2">current player</div>
+            <div class="inputSource d-flex justify-content-center">
+                <form>
+                    <mat-form-field appearance="outline" class="p-2">
+                        <mat-label>input source</mat-label>
+                        <div matPrefix class="material-symbols-outlined md-18 ps-3">input</div>
+                        <input matInput type="text" value="{{deviceService.getCurrentInputSource().Name}}" readonly="true">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="p-2">
+                        <mat-label>bit depth</mat-label>
+                        <input matInput type="text" value="{{rendererService.trackInfo.bitDepth}}" readonly="true">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="p-2">
+                        <mat-label>codec name</mat-label>
+                        <input matInput type="text" value="{{rendererService.trackInfo.codecName}}" readonly="true">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="p-2">
+                        <mat-label>lossless</mat-label>
+                        <input matInput type="text" value="{{rendererService.trackInfo.lossless}}" readonly="true">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="p-2">
+                        <mat-label>sample rate</mat-label>
+                        <input matInput type="text" value="{{rendererService.trackInfo.sampleRate}}" readonly="true">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="p-2">
+                        <mat-label>track count</mat-label>
+                        <input matInput type="text" value="{{rendererService.trackInfo.trackCount}}" readonly="true">
+                    </mat-form-field>
+                </form>
             </div>
-            
+
+            <div mat-subheader>media server</div>
+            <div>
+                <form>
+                    <mat-form-field appearance="outline" class="p-2">
+                        <mat-label>Bitrate</mat-label>
+                        <input matInput type="text" value="{{getCurrentTrack().audioFormat.bitrate}}" readonly="true">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="p-2">
+                        <mat-label>bits per sample</mat-label>
+                        <input matInput type="text" value="{{getCurrentTrack().audioFormat.bitsPerSample}}" readonly="true">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="p-2">
+                        <mat-label>bps</mat-label>
+                        <input matInput type="text" value="{{getCurrentTrack().audioFormat.bitsPerSample}}" readonly="true">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="p-2">
+                        <mat-label>sample frequency</mat-label>
+                        <input matInput type="text" value="{{getCurrentTrack().audioFormat.sampleFrequency}}" readonly="true">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="p-2">
+                        <mat-label>filetype</mat-label>
+                        <input matInput type="text" value="{{getCurrentTrack().audioFormat.filetype}}" readonly="true">
+                    </mat-form-field>
+                </form>
+            </div>
+
         </div>
     </div>
 </div>
