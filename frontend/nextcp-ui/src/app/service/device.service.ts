@@ -2,7 +2,7 @@ import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { ConfigurationService } from './configuration.service';
 import { SseService } from './sse/sse.service';
-import { MediaServerDto, MediaRendererDto, UiClientConfig, RendererDeviceConfiguration, InputSourceChangeDto, TransportServiceStateDto } from './dto.d';
+import { MediaServerDto, MediaRendererDto, UiClientConfig, RendererDeviceConfiguration, InputSourceChangeDto, TransportServiceStateDto, InputSourceDto } from './dto.d';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -52,6 +52,10 @@ export class DeviceService {
       console.log("new input source applied");
       this._selectedMediaRendererDevice.currentSource = source.inputSource;
     }
+  }
+
+  public getCurrentInputSource(): InputSourceDto {
+    return this._selectedMediaRendererDevice.currentSource;
   }
 
   public isRenderOnline(device: MediaRendererDto): boolean {

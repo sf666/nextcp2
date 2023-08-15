@@ -22,12 +22,15 @@ public class TrackInfoDto
     public String metatext;
     public MusicItemDto currentTrack;
     public String duration;
+    public Long sampleRate;
+    public Boolean lossless;
+    public Long bitDepth;
 
     public TrackInfoDto()
     {
     }
 
-    public TrackInfoDto(String mediaRendererUdn, Long detailsCount, Long metatextCount, String metadata, Long trackCount, String uri, String codecName, String metatext, MusicItemDto currentTrack, String duration)
+    public TrackInfoDto(String mediaRendererUdn, Long detailsCount, Long metatextCount, String metadata, Long trackCount, String uri, String codecName, String metatext, MusicItemDto currentTrack, String duration, Long sampleRate, Boolean lossless, Long bitDepth)
     {
         this.mediaRendererUdn = mediaRendererUdn;
         this.detailsCount = detailsCount;
@@ -39,6 +42,9 @@ public class TrackInfoDto
         this.metatext = metatext;
         this.currentTrack = currentTrack;
         this.duration = duration;
+        this.sampleRate = sampleRate;
+        this.lossless = lossless;
+        this.bitDepth = bitDepth;
     }
     
     @Override
@@ -56,6 +62,9 @@ public class TrackInfoDto
         sb.append("metatext=").append(this.metatext).append(", ");
         sb.append("currentTrack=").append(this.currentTrack).append(", ");
         sb.append("duration=").append(this.duration).append(", ");
+        sb.append("sampleRate=").append(this.sampleRate).append(", ");
+        sb.append("lossless=").append(this.lossless).append(", ");
+        sb.append("bitDepth=").append(this.bitDepth).append(", ");
         sb.append("]");
         return sb.toString();
     }

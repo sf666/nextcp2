@@ -1,3 +1,4 @@
+import { DeviceService } from 'src/app/service/device.service';
 import { DefaultPlaylistService } from './../../mediaserver/popup/defaut-playlists/default-playlist.service';
 import { LayoutService } from './../../service/layout.service';
 import { MusicItemDto } from './../../service/dto.d';
@@ -17,6 +18,7 @@ export class MediarendererComponent implements OnInit {
 
   constructor(
     private defaultPlaylistService: DefaultPlaylistService,
+    public deviceService: DeviceService,
     private layoutService: LayoutService,
     private backgroundImageService: BackgroundImageService,
     public rendererService: RendererService) {
