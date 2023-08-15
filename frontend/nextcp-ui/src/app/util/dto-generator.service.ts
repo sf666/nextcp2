@@ -131,6 +131,9 @@ export class DtoGeneratorService {
       uri: '',
       duration: '',
       currentTrack: this.emptyMusicItem(),
+      bitDepth: 0,
+      lossless: false,
+      sampleRate: 0
     }
   }
 
