@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ConnectionManagerServiceEventListenerImpl implements IConnectionManagerServiceEventListener 
 {
-    private static Logger log = LoggerFactory.getLogger(ConnectionManagerService.class.getName());
+    private static Logger log = LoggerFactory.getLogger(ConnectionManagerServiceEventListenerImpl.class.getName());
     private ConnectionManagerServiceStateVariable stateVariable = new ConnectionManagerServiceStateVariable();
 
     /**

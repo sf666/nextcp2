@@ -8,7 +8,7 @@ public class OhRadioServiceEventListener extends RadioServiceEventListenerImpl
 {
     private MediaRendererDevice device = null;
 
-    private boolean shouldPublishTransportServiceState = true;
+    private boolean shouldPublishTransportServiceState = false;
 
     public OhRadioServiceEventListener(MediaRendererDevice device)
     {

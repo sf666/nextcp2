@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ReceiverServiceEventListenerImpl implements IReceiverServiceEventListener 
 {
-    private static Logger log = LoggerFactory.getLogger(ReceiverService.class.getName());
+    private static Logger log = LoggerFactory.getLogger(ReceiverServiceEventListenerImpl.class.getName());
     private ReceiverServiceStateVariable stateVariable = new ReceiverServiceStateVariable();
 
     /**

@@ -36,7 +36,7 @@ public class GetColorTemperature extends ActionCallback
 
         GetColorTemperatureOutput result = new GetColorTemperatureOutput();
 
-        result.CurrentColorTemperature = ((UnsignedIntegerFourBytes) invocation.getOutput("CurrentColorTemperature").getValue()).getValue();
+        result.CurrentColorTemperature = ((UnsignedIntegerTwoBytes) invocation.getOutput("CurrentColorTemperature").getValue()).getValue();
 
         return result;
     }

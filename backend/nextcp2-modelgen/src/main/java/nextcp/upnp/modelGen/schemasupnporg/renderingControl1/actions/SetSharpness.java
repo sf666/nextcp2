@@ -28,7 +28,7 @@ public class SetSharpness extends ActionCallback
         super(new ActionInvocation(service.getAction("SetSharpness"), new NextcpClientInfo()), cp);
 
         getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("DesiredSharpness", new UnsignedIntegerFourBytes(input.DesiredSharpness));
+        getActionInvocation().setInput("DesiredSharpness", new UnsignedIntegerTwoBytes(input.DesiredSharpness));
     }
 
     public void executeAction()

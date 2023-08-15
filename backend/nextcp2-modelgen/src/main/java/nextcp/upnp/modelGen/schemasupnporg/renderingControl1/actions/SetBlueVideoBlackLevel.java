@@ -28,7 +28,7 @@ public class SetBlueVideoBlackLevel extends ActionCallback
         super(new ActionInvocation(service.getAction("SetBlueVideoBlackLevel"), new NextcpClientInfo()), cp);
 
         getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("DesiredBlueVideoBlackLevel", new UnsignedIntegerFourBytes(input.DesiredBlueVideoBlackLevel));
+        getActionInvocation().setInput("DesiredBlueVideoBlackLevel", new UnsignedIntegerTwoBytes(input.DesiredBlueVideoBlackLevel));
     }
 
     public void executeAction()

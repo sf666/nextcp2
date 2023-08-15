@@ -147,6 +147,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     case "LangID":
                         langIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
+                    case "USBSPDIFMode":
+                        uSBSPDIFModeChange((Boolean) stateVar.getValue());
+                        break;
                     case "TidalAccessExpiry":
                         tidalAccessExpiryChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
@@ -158,6 +161,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         break;
                     case "CustomCode":
                         customCodeChange((String) stateVar.getValue());
+                        break;
+                    case "PlexFriendlyName":
+                        plexFriendlyNameChange((String) stateVar.getValue());
                         break;
                     case "TidalClientId":
                         tidalClientIdChange((byte[]) stateVar.getValue());
@@ -176,6 +182,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         break;
                     case "OutputDeemphasis":
                         outputDeemphasisChange((Boolean) stateVar.getValue());
+                        break;
+                    case "PlexSupport":
+                        plexSupportChange((Boolean) stateVar.getValue());
                         break;
                     case "QobuzQuality":
                         qobuzQualityChange((String) stateVar.getValue());
@@ -207,6 +216,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     case "AnalogBalanceSupport":
                         analogBalanceSupportChange((Boolean) stateVar.getValue());
                         break;
+                    case "PlexEnable":
+                        plexEnableChange((Boolean) stateVar.getValue());
+                        break;
                     case "MagicAudioVer":
                         magicAudioVerChange((String) stateVar.getValue());
                         break;
@@ -215,6 +227,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         break;
                     case "RAATVer":
                         rAATVerChange((String) stateVar.getValue());
+                        break;
+                    case "QPlayEnable":
+                        qPlayEnableChange((Boolean) stateVar.getValue());
                         break;
                     case "OutputInvertPhase":
                         outputInvertPhaseChange((Boolean) stateVar.getValue());
@@ -227,6 +242,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         break;
                     case "PublicDNS":
                         publicDNSChange((Boolean) stateVar.getValue());
+                        break;
+                    case "PlexCode":
+                        plexCodeChange((String) stateVar.getValue());
                         break;
                     case "ResamplingTag":
                         resamplingTagChange((String) stateVar.getValue());
@@ -243,6 +261,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     case "ExternalClockSupport":
                         externalClockSupportChange((String) stateVar.getValue());
                         break;
+                    case "PlexUsername":
+                        plexUsernameChange((String) stateVar.getValue());
+                        break;
                     case "ScreensaverMode":
                         screensaverModeChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
@@ -255,8 +276,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     case "OutputClockSource":
                         outputClockSourceChange((String) stateVar.getValue());
                         break;
+                    case "QPlaySupport":
+                        qPlaySupportChange((Boolean) stateVar.getValue());
+                        break;
                     case "TidalRefreshToken":
                         tidalRefreshTokenChange((byte[]) stateVar.getValue());
+                        break;
+                    case "SpotifyNormalization":
+                        spotifyNormalizationChange((Boolean) stateVar.getValue());
                         break;
                     case "RAATEnable":
                         rAATEnableChange((Boolean) stateVar.getValue());
@@ -317,6 +344,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         break;
                     case "TidalClientSecret":
                         tidalClientSecretChange((byte[]) stateVar.getValue());
+                        break;
+                    case "PlexEmail":
+                        plexEmailChange((String) stateVar.getValue());
                         break;
                     case "VolumeControlSupport":
                         volumeControlSupportChange((Boolean) stateVar.getValue());
@@ -460,6 +490,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void uSBSPDIFModeChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.uSBSPDIFModeChange(value);
+        }
+    }    
+
     private void tidalAccessExpiryChange(Long value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
@@ -489,6 +527,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.customCodeChange(value);
+        }
+    }    
+
+    private void plexFriendlyNameChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.plexFriendlyNameChange(value);
         }
     }    
 
@@ -537,6 +583,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.outputDeemphasisChange(value);
+        }
+    }    
+
+    private void plexSupportChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.plexSupportChange(value);
         }
     }    
 
@@ -620,6 +674,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void plexEnableChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.plexEnableChange(value);
+        }
+    }    
+
     private void magicAudioVerChange(String value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
@@ -641,6 +703,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.rAATVerChange(value);
+        }
+    }    
+
+    private void qPlayEnableChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.qPlayEnableChange(value);
         }
     }    
 
@@ -673,6 +743,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.publicDNSChange(value);
+        }
+    }    
+
+    private void plexCodeChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.plexCodeChange(value);
         }
     }    
 
@@ -716,6 +794,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void plexUsernameChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.plexUsernameChange(value);
+        }
+    }    
+
     private void screensaverModeChange(Long value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
@@ -748,11 +834,27 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void qPlaySupportChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.qPlaySupportChange(value);
+        }
+    }    
+
     private void tidalRefreshTokenChange(byte[] value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.tidalRefreshTokenChange(value);
+        }
+    }    
+
+    private void spotifyNormalizationChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.spotifyNormalizationChange(value);
         }
     }    
 
@@ -913,6 +1015,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.tidalClientSecretChange(value);
+        }
+    }    
+
+    private void plexEmailChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.plexEmailChange(value);
         }
     }    
 

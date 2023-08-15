@@ -13,9 +13,9 @@ public class ProductServiceStateVariable
     public String ModelImageUri = null;
     public String ProductInfo = null;
     public String ModelInfo = null;
-    public String ManufacturerName = null;
     public String ManufacturerInfo = null;
     public String ModelName = null;
+    public String ManufacturerName = null;
     public Boolean SourceVisible = null;
     public String ProductName = null;
     public Long SourceCount = null;
@@ -25,10 +25,10 @@ public class ProductServiceStateVariable
     public String ProductRoom = null;
     public String SourceXml = null;
     public Boolean Standby = null;
-    public String ManufacturerImageUri = null;
     public String ProductUrl = null;
-    public String ModelUrl = null;
+    public String ManufacturerImageUri = null;
     public Long SourceIndex = null;
+    public String ModelUrl = null;
     public String ProductImageUri = null;
     public Long SourceXmlChangeCount = null;
 

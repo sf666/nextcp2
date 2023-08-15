@@ -19,8 +19,8 @@ import org.slf4j.LoggerFactory;
  */
 public class dialServiceEventListenerImpl implements IdialServiceEventListener 
 {
-    private static Logger log = LoggerFactory.getLogger(dialService.class.getName());
-    //private dialServiceStateVariable stateVariable = new dialServiceStateVariable();
+    private static Logger log = LoggerFactory.getLogger(dialServiceEventListenerImpl.class.getName());
+//    private dialServiceStateVariable stateVariable = new dialServiceStateVariable();
 
     /**
      * Access to state variable

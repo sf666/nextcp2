@@ -65,11 +65,11 @@ import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.SetGreenVid
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetContrast;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetContrastOutput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetContrastInput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.SetLoudness;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.SetLoudnessInput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetVolumeDBRange;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetVolumeDBRangeOutput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetVolumeDBRangeInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.SetLoudness;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.SetLoudnessInput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetBrightness;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetBrightnessOutput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetBrightnessInput;
@@ -87,11 +87,11 @@ import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetRedVideo
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetBlueVideoBlackLevel;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetBlueVideoBlackLevelOutput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetBlueVideoBlackLevelInput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.SetSharpness;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.SetSharpnessInput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetSharpness;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetSharpnessOutput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetSharpnessInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.SetSharpness;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.SetSharpnessInput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetGreenVideoBlackLevel;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetGreenVideoBlackLevelOutput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetGreenVideoBlackLevelInput;
@@ -300,17 +300,17 @@ public class RenderingControlService
         return res;        
     }
 
-    public void setLoudness(SetLoudnessInput inp)
-    {
-        SetLoudness setLoudness = new SetLoudness(renderingControlService, inp, upnpService.getControlPoint());
-        setLoudness.executeAction();
-    }
-
     public GetVolumeDBRangeOutput getVolumeDBRange(GetVolumeDBRangeInput inp)
     {
         GetVolumeDBRange getVolumeDBRange = new GetVolumeDBRange(renderingControlService, inp, upnpService.getControlPoint());
         GetVolumeDBRangeOutput res = getVolumeDBRange.executeAction();
         return res;        
+    }
+
+    public void setLoudness(SetLoudnessInput inp)
+    {
+        SetLoudness setLoudness = new SetLoudness(renderingControlService, inp, upnpService.getControlPoint());
+        setLoudness.executeAction();
     }
 
     public GetBrightnessOutput getBrightness(GetBrightnessInput inp)
@@ -358,17 +358,17 @@ public class RenderingControlService
         return res;        
     }
 
-    public void setSharpness(SetSharpnessInput inp)
-    {
-        SetSharpness setSharpness = new SetSharpness(renderingControlService, inp, upnpService.getControlPoint());
-        setSharpness.executeAction();
-    }
-
     public GetSharpnessOutput getSharpness(GetSharpnessInput inp)
     {
         GetSharpness getSharpness = new GetSharpness(renderingControlService, inp, upnpService.getControlPoint());
         GetSharpnessOutput res = getSharpness.executeAction();
         return res;        
+    }
+
+    public void setSharpness(SetSharpnessInput inp)
+    {
+        SetSharpness setSharpness = new SetSharpness(renderingControlService, inp, upnpService.getControlPoint());
+        setSharpness.executeAction();
     }
 
     public GetGreenVideoBlackLevelOutput getGreenVideoBlackLevel(GetGreenVideoBlackLevelInput inp)

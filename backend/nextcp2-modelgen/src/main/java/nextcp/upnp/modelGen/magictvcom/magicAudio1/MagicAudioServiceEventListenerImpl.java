@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  */
 public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEventListener 
 {
-    private static Logger log = LoggerFactory.getLogger(MagicAudioService.class.getName());
+    private static Logger log = LoggerFactory.getLogger(MagicAudioServiceEventListenerImpl.class.getName());
     private MagicAudioServiceStateVariable stateVariable = new MagicAudioServiceStateVariable();
 
     /**
@@ -225,6 +225,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         }
     }
     
+    public void uSBSPDIFModeChange(Boolean value)
+    {
+        stateVariable.USBSPDIFMode = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "USBSPDIFMode", value));
+        }
+    }
+    
     public void tidalAccessExpiryChange(Long value)
     {
         stateVariable.TidalAccessExpiry = value;
@@ -258,6 +267,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "CustomCode", value));
+        }
+    }
+    
+    public void plexFriendlyNameChange(String value)
+    {
+        stateVariable.PlexFriendlyName = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "PlexFriendlyName", value));
         }
     }
     
@@ -312,6 +330,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "OutputDeemphasis", value));
+        }
+    }
+    
+    public void plexSupportChange(Boolean value)
+    {
+        stateVariable.PlexSupport = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "PlexSupport", value));
         }
     }
     
@@ -405,6 +432,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         }
     }
     
+    public void plexEnableChange(Boolean value)
+    {
+        stateVariable.PlexEnable = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "PlexEnable", value));
+        }
+    }
+    
     public void magicAudioVerChange(String value)
     {
         stateVariable.MagicAudioVer = value;
@@ -429,6 +465,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "RAATVer", value));
+        }
+    }
+    
+    public void qPlayEnableChange(Boolean value)
+    {
+        stateVariable.QPlayEnable = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "QPlayEnable", value));
         }
     }
     
@@ -465,6 +510,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "PublicDNS", value));
+        }
+    }
+    
+    public void plexCodeChange(String value)
+    {
+        stateVariable.PlexCode = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "PlexCode", value));
         }
     }
     
@@ -513,6 +567,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         }
     }
     
+    public void plexUsernameChange(String value)
+    {
+        stateVariable.PlexUsername = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "PlexUsername", value));
+        }
+    }
+    
     public void screensaverModeChange(Long value)
     {
         stateVariable.ScreensaverMode = value;
@@ -549,12 +612,30 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         }
     }
     
+    public void qPlaySupportChange(Boolean value)
+    {
+        stateVariable.QPlaySupport = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "QPlaySupport", value));
+        }
+    }
+    
     public void tidalRefreshTokenChange(byte[] value)
     {
         stateVariable.TidalRefreshToken = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "TidalRefreshToken", value));
+        }
+    }
+    
+    public void spotifyNormalizationChange(Boolean value)
+    {
+        stateVariable.SpotifyNormalization = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "SpotifyNormalization", value));
         }
     }
     
@@ -735,6 +816,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "TidalClientSecret", value));
+        }
+    }
+    
+    public void plexEmailChange(String value)
+    {
+        stateVariable.PlexEmail = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "PlexEmail", value));
         }
     }
     

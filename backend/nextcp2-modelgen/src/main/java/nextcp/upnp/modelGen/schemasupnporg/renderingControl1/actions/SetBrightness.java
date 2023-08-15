@@ -28,7 +28,7 @@ public class SetBrightness extends ActionCallback
         super(new ActionInvocation(service.getAction("SetBrightness"), new NextcpClientInfo()), cp);
 
         getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("DesiredBrightness", new UnsignedIntegerFourBytes(input.DesiredBrightness));
+        getActionInvocation().setInput("DesiredBrightness", new UnsignedIntegerTwoBytes(input.DesiredBrightness));
     }
 
     public void executeAction()

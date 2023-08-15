@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  */
 public class TransportServiceEventListenerImpl implements ITransportServiceEventListener 
 {
-    private static Logger log = LoggerFactory.getLogger(TransportService.class.getName());
+    private static Logger log = LoggerFactory.getLogger(TransportServiceEventListenerImpl.class.getName());
     private TransportServiceStateVariable stateVariable = new TransportServiceStateVariable();
 
     /**
@@ -153,21 +153,21 @@ public class TransportServiceEventListenerImpl implements ITransportServiceEvent
         }
     }
     
-    public void canShuffleChange(Boolean value)
-    {
-        stateVariable.CanShuffle = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "CanShuffle", value));
-        }
-    }
-    
     public void transportStateChange(String value)
     {
         stateVariable.TransportState = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "TransportState", value));
+        }
+    }
+    
+    public void canShuffleChange(Boolean value)
+    {
+        stateVariable.CanShuffle = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "CanShuffle", value));
         }
     }
     

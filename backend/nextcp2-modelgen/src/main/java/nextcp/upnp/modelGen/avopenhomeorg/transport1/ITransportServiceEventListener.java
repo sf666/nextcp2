@@ -22,9 +22,9 @@ public interface ITransportServiceEventListener extends ISubscriptionEventListen
     
     public void canSkipNextChange(Boolean value);
     
-    public void canShuffleChange(Boolean value);
-    
     public void transportStateChange(String value);
+    
+    public void canShuffleChange(Boolean value);
     
     public void canRepeatChange(Boolean value);
     

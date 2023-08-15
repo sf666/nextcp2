@@ -123,26 +123,26 @@ public class InfoServiceSubscription extends RemoteGENASubscription
                     case "Duration":
                         durationChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
-                    case "TrackCount":
-                        trackCountChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
                     case "BitRate":
                         bitRateChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
-                    case "Uri":
-                        uriChange((String) stateVar.getValue());
-                        break;
-                    case "BitDepth":
-                        bitDepthChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "Lossless":
-                        losslessChange((Boolean) stateVar.getValue());
+                    case "TrackCount":
+                        trackCountChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "CodecName":
                         codecNameChange((String) stateVar.getValue());
                         break;
+                    case "Uri":
+                        uriChange((String) stateVar.getValue());
+                        break;
+                    case "Lossless":
+                        losslessChange((Boolean) stateVar.getValue());
+                        break;
                     case "Metatext":
                         metatextChange((String) stateVar.getValue());
+                        break;
+                    case "BitDepth":
+                        bitDepthChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -204,14 +204,6 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void trackCountChange(Long value)
-    {
-        for (IInfoServiceEventListener listener : eventListener)
-        {
-            listener.trackCountChange(value);
-        }
-    }    
-
     private void bitRateChange(Long value)
     {
         for (IInfoServiceEventListener listener : eventListener)
@@ -220,27 +212,11 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void uriChange(String value)
+    private void trackCountChange(Long value)
     {
         for (IInfoServiceEventListener listener : eventListener)
         {
-            listener.uriChange(value);
-        }
-    }    
-
-    private void bitDepthChange(Long value)
-    {
-        for (IInfoServiceEventListener listener : eventListener)
-        {
-            listener.bitDepthChange(value);
-        }
-    }    
-
-    private void losslessChange(Boolean value)
-    {
-        for (IInfoServiceEventListener listener : eventListener)
-        {
-            listener.losslessChange(value);
+            listener.trackCountChange(value);
         }
     }    
 
@@ -252,11 +228,35 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void uriChange(String value)
+    {
+        for (IInfoServiceEventListener listener : eventListener)
+        {
+            listener.uriChange(value);
+        }
+    }    
+
+    private void losslessChange(Boolean value)
+    {
+        for (IInfoServiceEventListener listener : eventListener)
+        {
+            listener.losslessChange(value);
+        }
+    }    
+
     private void metatextChange(String value)
     {
         for (IInfoServiceEventListener listener : eventListener)
         {
             listener.metatextChange(value);
+        }
+    }    
+
+    private void bitDepthChange(Long value)
+    {
+        for (IInfoServiceEventListener listener : eventListener)
+        {
+            listener.bitDepthChange(value);
         }
     }    
 }

@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  */
 public class RenderingControlServiceEventListenerImpl implements IRenderingControlServiceEventListener 
 {
-    private static Logger log = LoggerFactory.getLogger(RenderingControlService.class.getName());
+    private static Logger log = LoggerFactory.getLogger(RenderingControlServiceEventListenerImpl.class.getName());
     private RenderingControlServiceStateVariable stateVariable = new RenderingControlServiceStateVariable();
 
     /**

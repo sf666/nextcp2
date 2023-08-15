@@ -129,8 +129,8 @@ public class VolumeServiceSubscription extends RemoteGENASubscription
                     case "VolumeMax":
                         volumeMaxChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
-                    case "Mute":
-                        muteChange((Boolean) stateVar.getValue());
+                    case "VolumeUnity":
+                        volumeUnityChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "Balance":
                         balanceChange((Integer) stateVar.getValue());
@@ -138,8 +138,8 @@ public class VolumeServiceSubscription extends RemoteGENASubscription
                     case "Fade":
                         fadeChange((Integer) stateVar.getValue());
                         break;
-                    case "VolumeUnity":
-                        volumeUnityChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                    case "Mute":
+                        muteChange((Boolean) stateVar.getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -217,11 +217,11 @@ public class VolumeServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void muteChange(Boolean value)
+    private void volumeUnityChange(Long value)
     {
         for (IVolumeServiceEventListener listener : eventListener)
         {
-            listener.muteChange(value);
+            listener.volumeUnityChange(value);
         }
     }    
 
@@ -241,11 +241,11 @@ public class VolumeServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void volumeUnityChange(Long value)
+    private void muteChange(Boolean value)
     {
         for (IVolumeServiceEventListener listener : eventListener)
         {
-            listener.volumeUnityChange(value);
+            listener.muteChange(value);
         }
     }    
 }

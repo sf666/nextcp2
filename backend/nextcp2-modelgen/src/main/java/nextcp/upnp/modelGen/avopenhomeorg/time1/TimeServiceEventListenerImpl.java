@@ -41,7 +41,7 @@ public class TimeServiceEventListenerImpl implements ITimeServiceEventListener
     {
         if (log.isInfoEnabled())
         {
-            log.info(String.format("%s > invalidMessage : %s",  ex.getMessage()));
+            log.info(String.format("invalidMessage : %s", ex.getMessage()));
         }
     }
 
@@ -108,21 +108,21 @@ public class TimeServiceEventListenerImpl implements ITimeServiceEventListener
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void durationChange(Long value)
-    {
-        stateVariable.Duration = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Duration", value));
-        }
-    }
-    
     public void secondsChange(Long value)
     {
         stateVariable.Seconds = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "Seconds", value));
+        }
+    }
+    
+    public void durationChange(Long value)
+    {
+        stateVariable.Duration = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Duration", value));
         }
     }
     

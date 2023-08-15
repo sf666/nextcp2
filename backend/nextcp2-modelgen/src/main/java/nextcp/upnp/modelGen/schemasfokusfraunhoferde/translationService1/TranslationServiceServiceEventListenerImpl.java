@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  */
 public class TranslationServiceServiceEventListenerImpl implements ITranslationServiceServiceEventListener 
 {
-    private static Logger log = LoggerFactory.getLogger(TranslationServiceService.class.getName());
+    private static Logger log = LoggerFactory.getLogger(TranslationServiceServiceEventListenerImpl.class.getName());
     private TranslationServiceServiceStateVariable stateVariable = new TranslationServiceServiceStateVariable();
 
     /**

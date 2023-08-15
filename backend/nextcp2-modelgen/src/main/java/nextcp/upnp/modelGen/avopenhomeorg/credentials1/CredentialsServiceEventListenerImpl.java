@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CredentialsServiceEventListenerImpl implements ICredentialsServiceEventListener 
 {
-    private static Logger log = LoggerFactory.getLogger(CredentialsService.class.getName());
+    private static Logger log = LoggerFactory.getLogger(CredentialsServiceEventListenerImpl.class.getName());
     private CredentialsServiceStateVariable stateVariable = new CredentialsServiceStateVariable();
 
     /**

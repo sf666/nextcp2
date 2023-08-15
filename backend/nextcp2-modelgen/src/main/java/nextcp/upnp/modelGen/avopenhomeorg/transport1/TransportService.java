@@ -21,9 +21,9 @@ import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.StreamIdOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Pause;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Shuffle;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.ShuffleOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Stop;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.PlayAs;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.PlayAsInput;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Stop;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SkipNext;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Repeat;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.RepeatOutput;
@@ -137,16 +137,16 @@ public class TransportService
         return res;        
     }
 
-    public void playAs(PlayAsInput inp)
-    {
-        PlayAs playAs = new PlayAs(transportService, inp, upnpService.getControlPoint());
-        playAs.executeAction();
-    }
-
     public void stop()
     {
         Stop stop = new Stop(transportService,  upnpService.getControlPoint());
         stop.executeAction();
+    }
+
+    public void playAs(PlayAsInput inp)
+    {
+        PlayAs playAs = new PlayAs(transportService, inp, upnpService.getControlPoint());
+        playAs.executeAction();
     }
 
     public void skipNext()

@@ -28,7 +28,7 @@ public class SetGreenVideoGain extends ActionCallback
         super(new ActionInvocation(service.getAction("SetGreenVideoGain"), new NextcpClientInfo()), cp);
 
         getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("DesiredGreenVideoGain", new UnsignedIntegerFourBytes(input.DesiredGreenVideoGain));
+        getActionInvocation().setInput("DesiredGreenVideoGain", new UnsignedIntegerTwoBytes(input.DesiredGreenVideoGain));
     }
 
     public void executeAction()

@@ -38,6 +38,8 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     
     public void langIDChange(Long value);
     
+    public void uSBSPDIFModeChange(Boolean value);
+    
     public void tidalAccessExpiryChange(Long value);
     
     public void maxVolumeChange(Long value);
@@ -45,6 +47,8 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     public void invertPhaseChange(Boolean value);
     
     public void customCodeChange(String value);
+    
+    public void plexFriendlyNameChange(String value);
     
     public void tidalClientIdChange(byte[] value);
     
@@ -57,6 +61,8 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     public void newSamplingRateChange(String value);
     
     public void outputDeemphasisChange(Boolean value);
+    
+    public void plexSupportChange(Boolean value);
     
     public void qobuzQualityChange(String value);
     
@@ -78,11 +84,15 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     
     public void analogBalanceSupportChange(Boolean value);
     
+    public void plexEnableChange(Boolean value);
+    
     public void magicAudioVerChange(String value);
     
     public void volumeControlChange(String value);
     
     public void rAATVerChange(String value);
+    
+    public void qPlayEnableChange(Boolean value);
     
     public void outputInvertPhaseChange(Boolean value);
     
@@ -91,6 +101,8 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     public void serviceIdChange(String value);
     
     public void publicDNSChange(Boolean value);
+    
+    public void plexCodeChange(String value);
     
     public void resamplingTagChange(String value);
     
@@ -102,6 +114,8 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     
     public void externalClockSupportChange(String value);
     
+    public void plexUsernameChange(String value);
+    
     public void screensaverModeChange(Long value);
     
     public void mQACreatorIdChange(Long value);
@@ -110,7 +124,11 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     
     public void outputClockSourceChange(String value);
     
+    public void qPlaySupportChange(Boolean value);
+    
     public void tidalRefreshTokenChange(byte[] value);
+    
+    public void spotifyNormalizationChange(Boolean value);
     
     public void rAATEnableChange(Boolean value);
     
@@ -151,6 +169,8 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     public void tuneInUserNameChange(String value);
     
     public void tidalClientSecretChange(byte[] value);
+    
+    public void plexEmailChange(String value);
     
     public void volumeControlSupportChange(Boolean value);
     

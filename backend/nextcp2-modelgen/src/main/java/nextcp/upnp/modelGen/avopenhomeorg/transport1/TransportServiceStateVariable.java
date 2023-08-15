@@ -14,8 +14,8 @@ public class TransportServiceStateVariable
     public Boolean Shuffle = null;
     public Boolean Repeat = null;
     public Boolean CanSkipNext = null;
-    public Boolean CanShuffle = null;
     public String TransportState = null;
+    public Boolean CanShuffle = null;
     public Boolean CanRepeat = null;
     public Boolean CanPause = null;
     public Boolean CanSeek = null;

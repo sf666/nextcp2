@@ -30,7 +30,7 @@ public class dialService
 
     private UpnpService upnpService = null;
 
-    //private dialServiceStateVariable dialServiceStateVariable = new dialServiceStateVariable();
+//    private dialServiceStateVariable dialServiceStateVariable = new dialServiceStateVariable();
     
     private dialServiceSubscription subscription = null;
     

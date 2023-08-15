@@ -36,7 +36,7 @@ public class GetBrightness extends ActionCallback
 
         GetBrightnessOutput result = new GetBrightnessOutput();
 
-        result.CurrentBrightness = ((UnsignedIntegerFourBytes) invocation.getOutput("CurrentBrightness").getValue()).getValue();
+        result.CurrentBrightness = ((UnsignedIntegerTwoBytes) invocation.getOutput("CurrentBrightness").getValue()).getValue();
 
         return result;
     }

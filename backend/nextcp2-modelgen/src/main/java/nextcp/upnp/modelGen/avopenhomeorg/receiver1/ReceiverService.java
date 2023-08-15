@@ -16,10 +16,10 @@ import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.Sender;
 import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.SenderOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.Play;
 import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.Stop;
-import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.ProtocolInfo;
-import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.ProtocolInfoOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.SetSender;
 import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.SetSenderInput;
+import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.ProtocolInfo;
+import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.ProtocolInfoOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.TransportState;
 import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.TransportStateOutput;
 
@@ -104,17 +104,17 @@ public class ReceiverService
         stop.executeAction();
     }
 
+    public void setSender(SetSenderInput inp)
+    {
+        SetSender setSender = new SetSender(receiverService, inp, upnpService.getControlPoint());
+        setSender.executeAction();
+    }
+
     public ProtocolInfoOutput protocolInfo()
     {
         ProtocolInfo protocolInfo = new ProtocolInfo(receiverService,  upnpService.getControlPoint());
         ProtocolInfoOutput res = protocolInfo.executeAction();
         return res;        
-    }
-
-    public void setSender(SetSenderInput inp)
-    {
-        SetSender setSender = new SetSender(receiverService, inp, upnpService.getControlPoint());
-        setSender.executeAction();
     }
 
     public TransportStateOutput transportState()

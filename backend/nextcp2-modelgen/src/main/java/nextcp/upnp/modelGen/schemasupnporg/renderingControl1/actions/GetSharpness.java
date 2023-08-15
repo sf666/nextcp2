@@ -36,7 +36,7 @@ public class GetSharpness extends ActionCallback
 
         GetSharpnessOutput result = new GetSharpnessOutput();
 
-        result.CurrentSharpness = ((UnsignedIntegerFourBytes) invocation.getOutput("CurrentSharpness").getValue()).getValue();
+        result.CurrentSharpness = ((UnsignedIntegerTwoBytes) invocation.getOutput("CurrentSharpness").getValue()).getValue();
 
         return result;
     }

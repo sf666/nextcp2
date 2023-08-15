@@ -12,9 +12,9 @@ import nextcp.upnp.ISubscriptionEventListener;
  */
 public interface IX_MS_MediaReceiverRegistrarServiceEventListener extends ISubscriptionEventListener 
 {
-    public void validationSucceededUpdateIDChange(Long value);
-    
     public void validationRevokedUpdateIDChange(Long value);
+    
+    public void validationSucceededUpdateIDChange(Long value);
     
     public void authorizationDeniedUpdateIDChange(Long value);
     

@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  */
 public class VolumeServiceEventListenerImpl implements IVolumeServiceEventListener 
 {
-    private static Logger log = LoggerFactory.getLogger(VolumeService.class.getName());
+    private static Logger log = LoggerFactory.getLogger(VolumeServiceEventListenerImpl.class.getName());
     private VolumeServiceStateVariable stateVariable = new VolumeServiceStateVariable();
 
     /**
@@ -171,12 +171,12 @@ public class VolumeServiceEventListenerImpl implements IVolumeServiceEventListen
         }
     }
     
-    public void muteChange(Boolean value)
+    public void volumeUnityChange(Long value)
     {
-        stateVariable.Mute = value;
+        stateVariable.VolumeUnity = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "Mute", value));
+            log.debug(String.format("StateVariable : %s: %s", "VolumeUnity", value));
         }
     }
     
@@ -198,12 +198,12 @@ public class VolumeServiceEventListenerImpl implements IVolumeServiceEventListen
         }
     }
     
-    public void volumeUnityChange(Long value)
+    public void muteChange(Boolean value)
     {
-        stateVariable.VolumeUnity = value;
+        stateVariable.Mute = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "VolumeUnity", value));
+            log.debug(String.format("StateVariable : %s: %s", "Mute", value));
         }
     }
     
