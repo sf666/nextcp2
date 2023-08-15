@@ -9,6 +9,13 @@ import { Component, Inject, OnInit } from '@angular/core';
   templateUrl: './track-details.component.html',
   styleUrls: ['./track-details.component.scss']
 })
+
+/**
+ * Experimental
+ * =========================
+ * Current state : not used 
+ * Alternative: Use link to "Now Listening"
+ */
 export class TrackDetailsComponent implements OnInit {
 
   form: FormGroup;

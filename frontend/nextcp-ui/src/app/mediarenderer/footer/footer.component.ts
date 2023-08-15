@@ -171,6 +171,9 @@ export class FooterComponent {
     return "";
   }
 
+  /*
+  INFO: Removed and moved to "Now Playing"
+
   openInfoPopup(event: Event): void {
     if (this.rendererService.trackInfoAvailable) {
       let trackData: TrackDetailsData = {
@@ -185,4 +188,5 @@ export class FooterComponent {
       });
     }
   }
+  */
 }
