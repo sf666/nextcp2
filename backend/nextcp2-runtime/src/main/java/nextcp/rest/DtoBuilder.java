@@ -93,11 +93,16 @@ public class DtoBuilder
         return stateDto;
     }
 
+    /**
+     * 
+     * @param xml
+     * @return Empty MusicItemDto if xml is not supplied, otherwise DIDL Object is parsed and mapped.
+     */
     public MusicItemDto extractXmlAsMusicItem(String xml)
     {
         if (StringUtils.isBlank(xml) || "NOT_IMPLEMENTED".equalsIgnoreCase(xml))
         {
-            return null;
+            return new MusicItemDto();
         }
 
         if (xml.startsWith("&lt;"))
