@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2023-05-09 08:26:59.
+// Generated using typescript-generator version 2.32.889 on 2023-08-15 09:02:58.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -352,6 +352,9 @@ export interface TrackInfoDto {
     metatext: string;
     currentTrack: MusicItemDto;
     duration: string;
+    sampleRate: number;
+    lossless: boolean;
+    bitDepth: number;
 }
 
 export interface TrackTimeDto {

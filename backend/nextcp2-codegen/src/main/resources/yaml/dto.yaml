@@ -288,7 +288,12 @@ TrackInfoDto:
    codecName: String
    metatext: String
    currentTrack: MusicItemDto
-   duration: String   
+   duration: String
+   sampleRate: Long
+   lossless: Boolean
+   bitDepth: Long
+    
+      
    
 TrackTimeDto:
    mediaRendererUdn: String
