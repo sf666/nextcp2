@@ -38,12 +38,13 @@ export class RendererService {
 
     sseService.mediaRendererTrackInfoChanged$.subscribe(data => {
       if (deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
-        this.trackInfo = data;
-        if (data.currentTrack?.albumArtUrl) {
-          // update background images 
+        if (this.trackInfo.currentTrack?.albumArtUrl != data.currentTrack?.albumArtUrl) {
+          // update background images
+          console.log("updating background images");
           this.backgroundImageService.setFooterBackgroundImage(data.currentTrack?.albumArtUrl);
           this.backgroundImageService.setBackgroundImageMainScreen(data.currentTrack?.albumArtUrl);
         }
+        this.trackInfo = data;
       }
     });
 
