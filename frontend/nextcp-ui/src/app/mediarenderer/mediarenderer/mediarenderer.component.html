@@ -67,15 +67,19 @@
                 <form>
                     <mat-form-field appearance="outline" class="p-2">
                         <mat-label>Bitrate</mat-label>
-                        <input matInput type="text" value="{{getCurrentTrack().audioFormat.bitrate}}" readonly="true">
+                        <input matInput type="text" value="{{rendererService.getBitrate()}}" readonly="true">
                     </mat-form-field>
                     <mat-form-field appearance="outline" class="p-2">
                         <mat-label>bps</mat-label>
-                        <input matInput type="text" value="{{getCurrentTrack().audioFormat.bitsPerSample}}" readonly="true">
+                        <input matInput type="text" value="{{rendererService.getBitsPerSample()}}" readonly="true">
                     </mat-form-field>
                     <mat-form-field appearance="outline" class="p-2">
                         <mat-label>sample frequency</mat-label>
-                        <input matInput type="text" value="{{getCurrentTrack().audioFormat.sampleFrequency}}" readonly="true">
+                        <input matInput type="text" value="{{rendererService.getSampleFreq()}}" readonly="true">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="p-2">
+                        <mat-label>bits per sample</mat-label>
+                        <input matInput type="text" value="{{rendererService.getBitsPerSample()}}" readonly="true">
                     </mat-form-field>
                     <mat-form-field appearance="outline" class="p-2">
                         <mat-label>filetype</mat-label>
