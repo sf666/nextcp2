@@ -19,12 +19,13 @@ public class AudioFormat
     public String filetype;
     public String durationDisp;
     public Long durationInSeconds;
+    public String contentFormat;
 
     public AudioFormat()
     {
     }
 
-    public AudioFormat(Long nrAudioChannels, Long sampleFrequency, Long bitsPerSample, Long bitrate, String filetype, String durationDisp, Long durationInSeconds)
+    public AudioFormat(Long nrAudioChannels, Long sampleFrequency, Long bitsPerSample, Long bitrate, String filetype, String durationDisp, Long durationInSeconds, String contentFormat)
     {
         this.nrAudioChannels = nrAudioChannels;
         this.sampleFrequency = sampleFrequency;
@@ -33,6 +34,7 @@ public class AudioFormat
         this.filetype = filetype;
         this.durationDisp = durationDisp;
         this.durationInSeconds = durationInSeconds;
+        this.contentFormat = contentFormat;
     }
     
     @Override
@@ -47,6 +49,7 @@ public class AudioFormat
         sb.append("filetype=").append(this.filetype).append(", ");
         sb.append("durationDisp=").append(this.durationDisp).append(", ");
         sb.append("durationInSeconds=").append(this.durationInSeconds).append(", ");
+        sb.append("contentFormat=").append(this.contentFormat).append(", ");
         sb.append("]");
         return sb.toString();
     }

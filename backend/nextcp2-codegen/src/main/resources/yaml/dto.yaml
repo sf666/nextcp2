@@ -223,7 +223,7 @@ AudioFormat:
    filetype: String
    durationDisp: String
    durationInSeconds: Long 
-
+   contentFormat: String
 
 RadioStation:
    id: Long

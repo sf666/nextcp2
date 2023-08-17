@@ -16,6 +16,7 @@ import org.jupnp.support.model.DIDLObject;
 import org.jupnp.support.model.DIDLObject.Property;
 import org.jupnp.support.model.DescMeta;
 import org.jupnp.support.model.PersonWithRole;
+import org.jupnp.support.model.ProtocolInfo;
 import org.jupnp.support.model.Res;
 import org.jupnp.support.model.container.MusicAlbum;
 import org.jupnp.support.model.container.MusicArtist;
@@ -533,6 +534,7 @@ public class DtoBuilder
             af.nrAudioChannels = res.getNrAudioChannels();
             af.sampleFrequency = res.getSampleFrequency();
             af.durationDisp = res.getDuration();
+            af.contentFormat = res.getProtocolInfo().getContentFormat();
             try
             {
                 if (!StringUtils.isBlank(af.durationDisp))

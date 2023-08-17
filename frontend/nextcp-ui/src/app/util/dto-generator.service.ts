@@ -26,8 +26,8 @@ export class DtoGeneratorService {
       title: '',
       genre: '',
       media_date: '',
-      composer : '',
-      conductor : ''
+      composer: '',
+      conductor: ''
     };
   }
 
@@ -92,8 +92,8 @@ export class DtoGeneratorService {
       genre: '',
       musicBrainzId: this.emptyMusicBrainzId(),
       songId: this.emptySongId(),
-      composer : '',
-      conductor : ''
+      composer: '',
+      conductor: ''
     }
   }
 
@@ -134,7 +134,7 @@ export class DtoGeneratorService {
       bitDepth: 0,
       lossless: false,
       sampleRate: 0,
-      bitrate:0
+      bitrate: 0
     }
   }
 
@@ -146,7 +146,8 @@ export class DtoGeneratorService {
       nrAudioChannels: 2,
       sampleFrequency: 0,
       durationDisp: '',
-      durationInSeconds: 0
+      durationInSeconds: 0,
+      contentFormat: ''
     }
   }
 

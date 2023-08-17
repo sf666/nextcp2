@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2023-08-17 11:20:40.
+// Generated using typescript-generator version 2.32.889 on 2023-08-17 14:27:23.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -25,6 +25,7 @@ export interface AudioFormat {
     filetype: string;
     durationDisp: string;
     durationInSeconds: number;
+    contentFormat: string;
 }
 
 export interface BrowseRequestDto {
