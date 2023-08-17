@@ -534,7 +534,10 @@ public class DtoBuilder
             af.nrAudioChannels = res.getNrAudioChannels();
             af.sampleFrequency = res.getSampleFrequency();
             af.durationDisp = res.getDuration();
-            af.contentFormat = res.getProtocolInfo().getContentFormat();
+            if (res.getProtocolInfo() != null)
+            {
+                af.contentFormat = res.getProtocolInfo().getContentFormat();
+            }
             try
             {
                 if (!StringUtils.isBlank(af.durationDisp))
