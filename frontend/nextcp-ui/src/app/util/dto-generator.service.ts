@@ -133,7 +133,8 @@ export class DtoGeneratorService {
       currentTrack: this.emptyMusicItem(),
       bitDepth: 0,
       lossless: false,
-      sampleRate: 0
+      sampleRate: 0,
+      bitrate:0
     }
   }
 

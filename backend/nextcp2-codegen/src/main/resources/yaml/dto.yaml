@@ -292,9 +292,9 @@ TrackInfoDto:
    sampleRate: Long
    lossless: Boolean
    bitDepth: Long
+   bitrate: Long
     
-      
-   
+
 TrackTimeDto:
    mediaRendererUdn: String
    duration : Long

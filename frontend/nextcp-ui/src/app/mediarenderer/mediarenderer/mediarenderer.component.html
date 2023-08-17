@@ -28,9 +28,6 @@
                 </button>
             </div>
 
-            <star-rating [currentSong]="getCurrentTrack()"></star-rating>
-
-            <!-- Input Source       <div class="material-symbols-outlined md-18 align-self-end">input</div> -->
             <div mat-subheader class="p-2">current player</div>
             <div class="inputSource d-flex justify-content-center">
                 <form>
@@ -55,6 +52,10 @@
                         <input matInput type="text" value="{{rendererService.trackInfo.sampleRate}}" readonly="true">
                     </mat-form-field>
                     <mat-form-field appearance="outline" class="p-2">
+                        <mat-label>bitrate [bit/s]</mat-label>
+                        <input matInput type="text" value="{{rendererService.trackInfo.bitrate}}" readonly="true">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="p-2">
                         <mat-label>track count</mat-label>
                         <input matInput type="text" value="{{rendererService.trackInfo.trackCount}}" readonly="true">
                     </mat-form-field>
@@ -73,7 +74,7 @@
                         <input matInput type="text" value="{{rendererService.getBitsPerSample()}}" readonly="true">
                     </mat-form-field>
                     <mat-form-field appearance="outline" class="p-2">
-                        <mat-label>sample frequency</mat-label>
+                        <mat-label>sample frequency [Hz]</mat-label>
                         <input matInput type="text" value="{{rendererService.getSampleFreq()}}" readonly="true">
                     </mat-form-field>
                     <mat-form-field appearance="outline" class="p-2">

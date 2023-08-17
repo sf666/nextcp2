@@ -38,12 +38,16 @@ public class OhInfoServiceEventListener extends InfoServiceEventListenerImpl
         dto.codecName = state.CodecName;
         dto.detailsCount = state.DetailsCount;
         dto.metadata = state.Metadata;
-        dto.metatext = state.Metatext;
-        dto.metatextCount = state.MetatextCount;
         dto.trackCount = state.TrackCount;
         dto.uri = state.Uri;
         dto.duration = DisplayUtils.convertToDigitString(state.Duration);
         dto.currentTrack = device.getDtoBuilder().extractXmlAsMusicItem(state.Metadata);
+        dto.bitDepth = state.BitDepth;
+        dto.bitrate = state.BitRate;
+        dto.lossless = state.Lossless;
+        dto.sampleRate = state.SampleRate;
+        dto.metatext = state.Metatext;
+        dto.metatextCount = state.MetatextCount;
 
         // Experimental: If we receive Metatext, this is usually send by a radio station in the format "artist - songtitle" (or vice versa)
         // In this case the radio station name is mapped to the album field, artist and songtitle extracted from Metatext.

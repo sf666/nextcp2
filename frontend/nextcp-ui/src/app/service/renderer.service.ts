@@ -262,7 +262,7 @@ export class RendererService {
 
   public getBitrate(): number {
     if (this.trackInfo?.currentTrack?.audioFormat?.bitrate) {
-      return this.trackInfo?.currentTrack?.audioFormat?.bitrate / 125
+      return this.trackInfo?.currentTrack?.audioFormat?.bitrate
     } else {
       return 0;
     }
@@ -278,7 +278,7 @@ export class RendererService {
 
   public getSampleFreq(): number {
     if (this.trackInfo?.currentTrack?.audioFormat?.sampleFrequency) {
-      return this.trackInfo?.currentTrack?.audioFormat?.sampleFrequency / 1000
+      return this.trackInfo?.currentTrack?.audioFormat?.sampleFrequency
     } else {
       return 0;
     }
