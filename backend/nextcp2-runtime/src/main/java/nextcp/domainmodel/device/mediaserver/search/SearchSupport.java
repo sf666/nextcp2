@@ -121,7 +121,10 @@ public class SearchSupport
         try
         {
             didl = didlContent.generateDidlContent(out.Result);
-            addContainerObjects(container, didl);
+            if (didl != null) 
+            {
+                addContainerObjects(container, didl);
+            }
         }
         catch (Exception e)
         {
@@ -148,7 +151,10 @@ public class SearchSupport
         {
             SearchOutput out = contentDirectoryService.search(searchInput);
             didl = didlContent.generateDidlContent(out.Result);
-            addItemObjects(container.musicItems, didl);
+            if (didl != null) 
+            {
+                addItemObjects(container.musicItems, didl);
+            }
         }
         catch (Exception e)
         {

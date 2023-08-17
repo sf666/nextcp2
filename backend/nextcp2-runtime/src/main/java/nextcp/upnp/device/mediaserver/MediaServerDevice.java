@@ -154,7 +154,10 @@ public class MediaServerDevice extends BaseDevice
             if (out.NumberReturned == 1)
             {
                 DIDLContent didl = generateDidlContent(out.Result);
-                result = getDtoBuilder().buildContainerDto(didl.getFirstContainer());
+                if (didl != null)
+                {
+                    result = getDtoBuilder().buildContainerDto(didl.getFirstContainer());
+                }
             }
             result.mediaServerUDN = getUDN().getIdentifierString();
             return result;
