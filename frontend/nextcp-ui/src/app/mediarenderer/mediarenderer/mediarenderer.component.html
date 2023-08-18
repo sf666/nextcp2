@@ -39,27 +39,27 @@
             <form>
                 <mat-form-field appearance="outline" class="p-2">
                     <mat-label>input source</mat-label>
-                    <input matInput type="text" value="{{deviceService.getCurrentInputSource().Name}}" readonly="true">
+                    <input matInput type="text" value="{{deviceService.getCurrentInputSource()?.Name}}" readonly="true">
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="p-2">
                     <mat-label>codec name</mat-label>
-                    <input matInput type="text" value="{{rendererService.trackInfo.codecName}}" readonly="true">
+                    <input matInput type="text" value="{{rendererService.trackInfo?.codecName}}" readonly="true">
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="p-2">
                     <mat-label>lossless</mat-label>
-                    <input matInput type="text" value="{{rendererService.trackInfo.lossless}}" readonly="true">
+                    <input matInput type="text" value="{{rendererService.trackInfo?.lossless}}" readonly="true">
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="p-2">
                     <mat-label>sample rate [Hz]</mat-label>
-                    <input matInput type="text" value="{{rendererService.trackInfo.sampleRate}}" readonly="true">
+                    <input matInput type="text" value="{{rendererService.trackInfo?.sampleRate}}" readonly="true">
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="p-2">
                     <mat-label>bit depth [bit]</mat-label>
-                    <input matInput type="text" value="{{rendererService.trackInfo.bitDepth}}" readonly="true">
+                    <input matInput type="text" value="{{rendererService.trackInfo?.bitDepth}}" readonly="true">
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="p-2">
                     <mat-label>bitrate [bit/s]</mat-label>
-                    <input matInput type="text" value="{{rendererService.trackInfo.bitrate}}" readonly="true">
+                    <input matInput type="text" value="{{rendererService.trackInfo?.bitrate}}" readonly="true">
                 </mat-form-field>
             </form>
         </div>
@@ -81,7 +81,7 @@
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="p-2">
                     <mat-label>content format</mat-label>
-                    <input matInput type="text" value="{{getCurrentTrack().audioFormat.contentFormat}}" readonly="true">
+                    <input matInput type="text" value="{{getCurrentTrack()?.audioFormat?.contentFormat}}" readonly="true">
                 </mat-form-field>
             </form>
         </div>
