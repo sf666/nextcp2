@@ -15,6 +15,8 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.StAXEventBuilder;
+import org.jupnp.model.gena.CancelReason;
+import org.jupnp.model.message.UpnpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,7 +77,7 @@ public class AvTransportEventListener extends AVTransportServiceEventListenerImp
         }
 
         // AvTransport doesn't use "regular" upnp eventing, because of virtual instanceID's support.
-        // All state changes are beeing send in the lastChange attribute.
+        // All state changes are send in the lastChange attribute.
 
         Document doc = getStAXParsedDocument(value, false);
         if (doc == null)
@@ -308,5 +310,16 @@ public class AvTransportEventListener extends AVTransportServiceEventListenerImp
                 log.warn("unknown state variable : " + key);
         }
 
+    }
+
+    //
+    // Subscription
+    //
+
+    @Override
+    public void ended(CancelReason reason, UpnpResponse responseStatus)
+    {
+        log.warn(String.format("Subscription ended for device %s. Reason: %s. StatusMessage: %s. Code: %d", getDevice().getFriendlyName(), reason.toString(),
+                responseStatus.getStatusMessage(), responseStatus.getStatusCode()));
     }
 }

@@ -16,12 +16,13 @@ import nextcp.util.DidlContent;
 public class BaseDevice
 {
     private static final Logger log = LoggerFactory.getLogger(BaseDevice.class.getName());
-    
+
     private RemoteDevice device;
     private DidlContent didlContent = new DidlContent();
 
     @Autowired
     private UpnpService upnpService;
+
     @Autowired
     private ApplicationEventPublisher eventPublisher = null;
 
