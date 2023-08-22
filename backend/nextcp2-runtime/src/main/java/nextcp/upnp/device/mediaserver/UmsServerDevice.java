@@ -209,7 +209,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
         }
         catch (Exception e)
         {
-            log.debug("rateSong failed ...", e);
+            log.error("rateSong failed ...", e);
             publisher.publishEvent(new ToastrMessage(null, "error", "UMS server device" + getFriendlyName(), "File rating failed : " + e.getMessage()));
         }
     }
