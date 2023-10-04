@@ -1,5 +1,6 @@
 package nextcp.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jupnp.support.contentdirectory.DIDLParser;
 import org.jupnp.support.model.DIDLContent;
 import org.slf4j.Logger;
@@ -13,6 +14,12 @@ public class DidlContent
     {
         try
         {
+            if (StringUtils.isAllBlank(didlContentXml))
+            {
+                log.warn("DIDL is NULL or empty.");
+                return null;
+            }
+            
             DIDLParser didlParser = new DIDLParser();
             DIDLContent didl = didlParser.parse(didlContentXml);
             return didl;
