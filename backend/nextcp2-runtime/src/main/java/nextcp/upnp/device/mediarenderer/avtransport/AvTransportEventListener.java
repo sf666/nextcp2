@@ -320,6 +320,6 @@ public class AvTransportEventListener extends AVTransportServiceEventListenerImp
     public void ended(CancelReason reason, UpnpResponse responseStatus)
     {
         log.warn(String.format("Subscription ended for device %s. Reason: %s. StatusMessage: %s. Code: %d", getDevice().getFriendlyName(), reason.toString(),
-                responseStatus.getStatusMessage(), responseStatus.getStatusCode()));
+                responseStatus.getStatusMessage(), responseStatus != null ? responseStatus.getStatusCode() : "response status is NULL"));
     }
 }
