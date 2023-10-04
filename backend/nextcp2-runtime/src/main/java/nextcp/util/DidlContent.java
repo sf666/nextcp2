@@ -19,6 +19,7 @@ public class DidlContent
         }
         catch (Exception e)
         {
+            log.warn(String.format("DIDL Content is : %s", didlContentXml));
             log.warn("error parsing xml", e);
             return null;
         }
