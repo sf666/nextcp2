@@ -1,5 +1,6 @@
 package nextcp.util;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jupnp.support.contentdirectory.DIDLParser;
 import org.jupnp.support.model.DIDLContent;
@@ -19,9 +20,21 @@ public class DidlContent
                 log.warn("DIDL is NULL or empty.");
                 return null;
             }
-            
+
             DIDLParser didlParser = new DIDLParser();
-            DIDLContent didl = didlParser.parse(didlContentXml);
+            String normalizedXml;
+            if (didlContentXml.contains("&lt;"))
+            {
+                log.warn("DIDL content contains unescaped XML content !");
+                normalizedXml = StringEscapeUtils.unescapeXml(didlContentXml);
+            }
+            else
+            {
+                log.debug("DIDL content has regular XML.");
+                normalizedXml = didlContentXml;
+            }
+
+            DIDLContent didl = didlParser.parse(normalizedXml);
             return didl;
         }
         catch (Exception e)
