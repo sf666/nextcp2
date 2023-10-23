@@ -511,61 +511,115 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     @Override
     public void tick(long counter)
     {
-        if (transportBridge != null && !hasOhInfoService() && transportIsPlaying())
+        try
         {
-            log.debug(String.format("%s: transportBridge: %b. HasOhInfo: %b. TransportIsPlaying: %b", getFriendlyName(), transportBridge != null, hasOhInfoService(),
-                    transportIsPlaying()));
-            TrackTimeDto dto = avTransportBridge.generateTractTimeDto();
-            eventPublisher.publishEvent(dto);
+            if (transportBridge != null && !hasOhInfoService() && transportIsPlaying())
+            {
+                log.debug(String.format("%s: transportBridge: %b. HasOhInfo: %b. TransportIsPlaying: %b", getFriendlyName(), transportBridge != null, hasOhInfoService(),
+                        transportIsPlaying()));
+                TrackTimeDto dto = avTransportBridge.generateTractTimeDto();
+                eventPublisher.publishEvent(dto);
+            }
+        }
+        catch (Exception e)
+        {
+            log.warn("tick failed", e);
         }
     }
 
     private boolean transportIsPlaying()
     {
-        if (transportBridge == null)
+        try
         {
+            if (transportBridge == null)
+            {
+                return false;
+            }
+            TransportServiceStateDto state = transportBridge.getCurrentTransportServiceState();
+
+            return "PLAYING".equals(state.transportState);
+        }
+        catch (Exception e)
+        {
+            log.warn("transportIsPlaying failed", e);
             return false;
         }
-        TransportServiceStateDto state = transportBridge.getCurrentTransportServiceState();
-
-        return "PLAYING".equals(state.transportState);
     }
 
     // Device operations
 
     public void setVolume(int vol)
     {
-        if (getDeviceDriver() == null)
+        try
         {
-            eventPublisher.publishEvent(new ToastrMessage(null, "error", "Volume", "no device driver available"));
-            return;
+            log.debug("setting volume to {}", vol);
+            if (getDeviceDriver() == null)
+            {
+                eventPublisher.publishEvent(new ToastrMessage(null, "error", "Volume", "no device driver available"));
+                return;
+            }
+            getDeviceDriver().setVolume(vol);
         }
-        getDeviceDriver().setVolume(vol);
+        catch (Exception e)
+        {
+            log.warn("setVolume failed", e);
+        }
     }
 
     public void setInput(String input)
     {
-        if (getDeviceDriver() == null)
+        try
         {
-            eventPublisher.publishEvent(new ToastrMessage(null, "error", "Volume", "no device driver available"));
-            return;
+            log.debug("setting input to {}", input);
+            if (getDeviceDriver() == null)
+            {
+                eventPublisher.publishEvent(new ToastrMessage(null, "error", "Volume", "no device driver available"));
+                return;
+            }
+            getDeviceDriver().setInput(input);
         }
-        getDeviceDriver().setInput(input);
+        catch (Exception e)
+        {
+            log.warn("setInput failed", e);
+        }
     }
 
     public DeviceDriverState getDeviceDriverState()
     {
-        return getDeviceDriver().getDeviceDriverState();
+        try
+        {
+            return getDeviceDriver().getDeviceDriverState();
+        }
+        catch (Exception e)
+        {
+            log.warn("getDeviceDriverState failed", e);
+            return null;
+        }
     }
 
     public void setStandby(boolean standbyState)
     {
-        getDeviceDriver().setStandby(standbyState);
+        try
+        {
+            getDeviceDriver().setStandby(standbyState);
+        }
+        catch (Exception e)
+        {
+            log.warn("setStandby failed", e);
+        }
     }
 
     public boolean getStandby()
     {
-        return getDeviceDriver().getStandby();
+        try
+        {
+            return getDeviceDriver().getStandby();
+        }
+        catch (Exception e)
+        {
+            log.warn("getStandby failed", e);
+            return true;
+        }
     }
 
     @Override
