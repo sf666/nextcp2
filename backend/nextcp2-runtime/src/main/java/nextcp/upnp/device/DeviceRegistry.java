@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.types.UDN;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,8 @@ import nextcp.upnp.device.mediaserver.MediaServerListChanged;
 @Component
 public class DeviceRegistry
 {
+    private static final Logger log = LoggerFactory.getLogger(DeviceRegistry.class.getName());
+
     private HashMap<UDN, MediaRendererDevice> mediaRendererList = new HashMap<>();
     private HashMap<UDN, MediaServerDevice> mediaServerList = new HashMap<>();
     private HashMap<UDN, IMediaServerExtendedSupport> mediaServerExtList = new HashMap<>();
@@ -55,7 +59,11 @@ public class DeviceRegistry
     {
         MediaRendererDevice device = deviceFactory.mediaRendererDeviceFactory(remoteDevice);
         rendererConfigService.addMediaRendererDeviceConfig(device);
-        mediaRendererList.put(remoteDevice.getIdentity().getUdn(), device);
+        MediaRendererDevice oldDevice = mediaRendererList.put(remoteDevice.getIdentity().getUdn(), device);
+        if (oldDevice != null)
+        {
+            log.info("removed old media renderer device : {} ", oldDevice.getAsDto());
+        }
         eventPublisher.publishEvent(new MediaRendererListChanged(getAvailableMediaRenderer()));
     }
 
@@ -67,8 +75,8 @@ public class DeviceRegistry
 
     public Collection<MediaRendererDevice> getActiveMediaRenderer()
     {
-        return Collections
-                .unmodifiableCollection(mediaRendererList.values().stream().filter(r -> rendererConfigService.isMediaRendererActive(r.getUdnAsString())).collect(Collectors.toList()));
+        return Collections.unmodifiableCollection(
+                mediaRendererList.values().stream().filter(r -> rendererConfigService.isMediaRendererActive(r.getUdnAsString())).collect(Collectors.toList()));
     }
 
     public Collection<MediaRendererDevice> getAvailableMediaRenderer()
@@ -83,7 +91,11 @@ public class DeviceRegistry
     {
         MediaServerDevice device = deviceFactory.mediaServerDeviceFactory(remoteDevice, serverType);
         serverConfigService.addMediaServerDeviceConfig(remoteDevice, device);
-        mediaServerList.put(remoteDevice.getIdentity().getUdn(), device);
+        MediaServerDevice oldDevice =  mediaServerList.put(remoteDevice.getIdentity().getUdn(), device);
+        if (oldDevice != null)
+        {
+            log.info("removed old media server device : {} ", oldDevice.getAsDto());
+        }
         eventPublisher.publishEvent(new MediaServerListChanged(getAvailableMediaServer()));
     }
 
