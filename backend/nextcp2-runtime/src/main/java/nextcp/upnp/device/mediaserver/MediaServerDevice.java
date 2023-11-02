@@ -103,8 +103,15 @@ public class MediaServerDevice extends BaseDevice
     private ContainerItemDto fillResultStructureExtracted(BrowseInput inp, DIDLContent didl, ContainerItemDto result)
     {
         ContainerDto curContainer = browseMetadataMeta(inp);
-        ContainerDto parentContainer = browseMetadataMeta(createGenericBrowseInput(curContainer.parentID));
-        result.parentFolderTitle = parentContainer.title;
+        if (!"-1".equals(curContainer.parentID))
+        {
+            ContainerDto parentContainer = browseMetadataMeta(createGenericBrowseInput(curContainer.parentID));
+            result.parentFolderTitle = parentContainer.title;
+        }
+        else
+        {
+            result.parentFolderTitle = "";
+        }
         result.currentContainer = curContainer;
         addContainerObjects(result, didl);
         addItemObjects(result.musicItemDto, didl);
@@ -228,6 +235,10 @@ public class MediaServerDevice extends BaseDevice
 
     private void checkInp(BrowseInput inp)
     {
+        if ("-1".equals(inp.ObjectID))
+        {
+            log.warn("browsing to objectID -1 is not permited ... ");
+        }
         inp.Filter = getDefault(inp.Filter, "*");
         inp.ObjectID = getDefault(inp.ObjectID, "0");
         inp.StartingIndex = getDefault(inp.StartingIndex, 0L);
