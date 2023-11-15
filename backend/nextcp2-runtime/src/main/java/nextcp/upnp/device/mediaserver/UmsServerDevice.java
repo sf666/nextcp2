@@ -4,27 +4,20 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-
-import jakarta.annotation.PostConstruct;
-import org.apache.logging.log4j.core.pattern.EqualsIgnoreCaseReplacementConverter;
 import org.jupnp.model.meta.RemoteDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import jakarta.annotation.PostConstruct;
 import nextcp.config.ServerConfig;
 import nextcp.db.service.BasicDbService;
-import nextcp.dto.ContainerDto;
 import nextcp.dto.MediaServerDto;
-import nextcp.dto.SearchRequestDto;
 import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.ServerPlaylistDto;
 import nextcp.dto.ServerPlaylists;
@@ -416,7 +409,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     @Override
     public List<ServerPlaylistDto> getServerPlaylists() throws JsonMappingException, JsonProcessingException
     {
-    	List<ServerPlaylistDto> pl = searchMyPlaylistsItems("playlists");
+    	List<ServerPlaylistDto> pl = searchMyPlaylistsItems("Musiksammlung");
         return playlistManager.getSortedServerPlaylists(pl);
     }
 
