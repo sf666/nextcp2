@@ -19,6 +19,7 @@ import nextcp.db.service.BasicDbService;
 import nextcp.db.service.KeyValuePair;
 import nextcp.dto.ServerPlaylistDto;
 import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
+import nextcp.upnp.device.mediaserver.UmsServerDevice;
 
 public class DefaultPlaylistManager
 {
@@ -29,11 +30,14 @@ public class DefaultPlaylistManager
     private final static String KEY_ALL_PLAYLISTS = "ALL_PLAYLISTS";
 
     private BasicDbService db = null;
+    
+    private UmsServerDevice umsServerDevice = null;
 
-    public DefaultPlaylistManager(BasicDbService db)
+    public DefaultPlaylistManager(BasicDbService db, UmsServerDevice umsServerDevice)
     {
         super();
         this.db = db;
+        this.umsServerDevice = umsServerDevice;
     }
 
     public List<String> getSortedDefaultPlaylist(List<String> serverList)

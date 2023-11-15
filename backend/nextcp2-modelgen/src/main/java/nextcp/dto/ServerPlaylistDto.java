@@ -13,13 +13,13 @@ public class ServerPlaylistDto
 {
 
     public String playlistName;
-    public Long playlistId;
+    public String playlistId;
 
     public ServerPlaylistDto()
     {
     }
 
-    public ServerPlaylistDto(String playlistName, Long playlistId)
+    public ServerPlaylistDto(String playlistName, String playlistId)
     {
         this.playlistName = playlistName;
         this.playlistId = playlistId;

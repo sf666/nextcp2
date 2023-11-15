@@ -19,12 +19,12 @@ export class SidebarComponent {
 
   private _mediaServerUdn: string;
   private _mediaRendererUdn: string;
-  public routerMap = new Map<string, number>();
+  public routerMap = new Map<string, string>();
 
   // Dialogs
   createPlaylistDialogRef: MatDialogRef<InputFieldDialogComponent>;
 
-  private activeId: number;
+  private activeId: string;
 
   constructor(
     public deviceService: DeviceService,
@@ -37,16 +37,16 @@ export class SidebarComponent {
     deviceService.mediaRendererChanged$.subscribe(data => this._mediaRendererUdn = data.udn);
     deviceService.mediaServerChanged$.subscribe(data => this._mediaServerUdn = data.udn);
 
-    this.routerMap.set("/", -1);                // default route is music-library
-    this.routerMap.set("/music-library", -1);
-    this.routerMap.set("/playlist", -2);
-    this.routerMap.set("/player", -3);
-    this.routerMap.set("/radio", -4);
-    this.routerMap.set("/myAlbums", -5);
-    this.routerMap.set("/settings", -6);
-    this.routerMap.set("/myPlaylists", 0);      // All positives ID's are playlists
+    this.routerMap.set("/", "-1");                // default route is music-library
+    this.routerMap.set("/music-library", "-1");
+    this.routerMap.set("/playlist", "-2");
+    this.routerMap.set("/player", "-3");
+    this.routerMap.set("/radio", "-4");
+    this.routerMap.set("/myAlbums", "-5");
+    this.routerMap.set("/settings", "-6");
+    this.routerMap.set("/myPlaylists", "0");      // All positives ID's are playlists
 
-    this.routerMap.set("/myTracks", -999);      // not used yet
+    this.routerMap.set("/myTracks", "-999");      // not used yet
 
     router.events.subscribe(event => this.calActiveId(event));
   }
@@ -54,7 +54,7 @@ export class SidebarComponent {
   private calActiveId(nav: any) {
     if (nav instanceof NavigationEnd) {
       this.activeId = this.routerMap.get(nav.url);
-      if (this.activeId == 0) {
+      if (this.activeId == "0") {
         this.activeId = this.myPlaylistService.activePlaylistId;
       }
     }
@@ -112,7 +112,7 @@ export class SidebarComponent {
     this.afterButtonClicked(this.routerMap.get(routerUrl));
   }
 
-  private afterButtonClicked(itemId: number): void {
+  private afterButtonClicked(itemId: string): void {
     this.activeId = itemId;
   }
 
@@ -128,7 +128,7 @@ export class SidebarComponent {
     return "button-text";
   }
 
-  public getPlaylistClass(id: number) {
+  public getPlaylistClass(id: string) {
     if (id == this.activeId) {
       return "active";
     }

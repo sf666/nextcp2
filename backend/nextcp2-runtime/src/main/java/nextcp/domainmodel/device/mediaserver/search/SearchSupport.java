@@ -230,4 +230,34 @@ public class SearchSupport
 
         return container;
     }
+
+	public List<ContainerDto> searchPlaylistItems(SearchRequestDto searchRequest) {
+		List<ContainerDto> container = new ArrayList<>();
+
+        SearchInput searchInput = new SearchInput();
+        searchInput.ContainerID = "0";
+        searchInput.SearchCriteria = String.format("( upnp:class derivedfrom \"%s\" and dc:title contains \"%s\")", "object.container.storageFolder", searchRequest.searchRequest);
+        searchInput.StartingIndex = 0L;
+        searchInput.Filter = "*";
+        searchInput.RequestedCount = searchRequest.requestCount;
+        searchInput.SortCriteria = searchRequest.sortCriteria;
+
+        SearchOutput out = contentDirectoryService.search(searchInput);
+
+        DIDLContent didl;
+        try
+        {
+            didl = didlContent.generateDidlContent(out.Result);
+            if (didl != null) 
+            {
+                addContainerObjects(container, didl);
+            }
+        }
+        catch (Exception e)
+        {
+            log.warn("search error", e);
+        }
+        return container;
+	}
+
 }

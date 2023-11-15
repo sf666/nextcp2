@@ -4,10 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.annotation.PostConstruct;
-
+import org.apache.logging.log4j.core.pattern.EqualsIgnoreCaseReplacementConverter;
 import org.jupnp.model.meta.RemoteDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import nextcp.config.ServerConfig;
 import nextcp.db.service.BasicDbService;
+import nextcp.dto.ContainerDto;
 import nextcp.dto.MediaServerDto;
+import nextcp.dto.SearchRequestDto;
 import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.ServerPlaylistDto;
 import nextcp.dto.ServerPlaylists;
@@ -61,7 +64,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     @PostConstruct
     private void init()
     {
-        playlistManager = new DefaultPlaylistManager(db);
+        playlistManager = new DefaultPlaylistManager(db, this);
     }
 
     @Override
@@ -413,10 +416,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     @Override
     public List<ServerPlaylistDto> getServerPlaylists() throws JsonMappingException, JsonProcessingException
     {
-        String playlists = doGenericCall("", "api/playlist/getserverplaylists", false);
-        List<ServerPlaylistDto> pl = om.readValue(playlists, new TypeReference<List<ServerPlaylistDto>>()
-        {
-        });
+    	List<ServerPlaylistDto> pl = searchMyPlaylistsItems("playlists");
         return playlistManager.getSortedServerPlaylists(pl);
     }
 

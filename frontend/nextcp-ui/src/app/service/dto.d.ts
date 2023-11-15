@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2023-08-17 14:27:23.
+// Generated using typescript-generator version 2.32.889 on 2023-11-15 14:54:51.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -309,7 +309,7 @@ export interface ServerDeviceConfiguration {
 
 export interface ServerPlaylistDto {
     playlistName: string;
-    playlistId: number;
+    playlistId: string;
 }
 
 export interface ServerPlaylistEntry {

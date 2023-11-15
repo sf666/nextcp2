@@ -8,6 +8,7 @@ import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.Datatype.Builtin;
 import org.jupnp.model.types.IntegerDatatype;
 import org.jupnp.model.types.StringDatatype;
+import org.jupnp.model.types.URIDatatype;
 import org.jupnp.model.types.UnsignedIntegerFourBytesDatatype;
 import org.jupnp.model.types.UnsignedIntegerOneByteDatatype;
 import org.jupnp.model.types.UnsignedIntegerTwoBytesDatatype;
@@ -112,6 +113,10 @@ public class Variable
         else if (builtin.getDatatype() instanceof UnsignedIntegerOneByteDatatype)
         {
             return "Long";
+        }
+        else if (builtin.getDatatype() instanceof URIDatatype)
+        {
+            return "String";
         }
 
         throw new RuntimeException("Unknown Datatype : " + builtin.getDatatype().toString());

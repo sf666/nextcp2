@@ -6,20 +6,20 @@ import { Injectable, OnInit } from '@angular/core';
 })
 export class MyPlaylistService {
 
-  private activePlaylistId_: number;
-  public activePlaylistId$: Subject<number> = new Subject();
+  private activePlaylistId_: string;
+  public activePlaylistId$: Subject<string> = new Subject();
 
   constructor(
 
   ) {
-    this.activePlaylistId_ = parseInt(localStorage.getItem('lastMyPlaylistId'));
+    this.activePlaylistId_ = localStorage.getItem('lastMyPlaylistId');
   }
 
   ngOnInit(): void {
 
   }
 
-  selectPlaylist(id: number) {
+  selectPlaylist(id: string) {
     this.activePlaylistId_ = id;
     this.activePlaylistId$.next(id);
     localStorage.setItem('lastMyPlaylistId', id.toString());

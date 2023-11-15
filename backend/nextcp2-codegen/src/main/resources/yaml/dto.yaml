@@ -73,7 +73,7 @@ MusicbrainzSupport:
 
 ServerPlaylistDto:
    playlistName:  String
-   playlistId: Long
+   playlistId: String
    
 UiClientConfig:
    uuid: String

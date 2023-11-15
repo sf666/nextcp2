@@ -5,7 +5,7 @@ import { TransportService } from '../../../service/transport.service';
 import { ContentDirectoryService } from './../../../service/content-directory.service';
 import { ContainerDto, MusicItemDto } from './../../../service/dto.d';
 import { SearchItemService } from './../../../service/search/search-item.service';
-import { Router } from '@angular/router';
+import { RouteReuseStrategy, Router } from '@angular/router';
 import { Component } from '@angular/core';
 
 @Component({
@@ -39,20 +39,20 @@ export class ModalSearchResultComponent {
     console.debug("album selected : " + albumItem);
     this.globalSearchService.clearSearch();
     this.globalSearchService.selectedRootContainer = albumItem;
-    void this.router.navigateByUrl('searchResult');
+    void this.router.navigateByUrl('searchResult', {onSameUrlNavigation: 'reload'});
   }
 
   playlistItemSelected(playlistItem: ContainerDto): void {
     console.debug("playlist selected : " + playlistItem);
     this.globalSearchService.clearSearch();
     this.globalSearchService.selectedRootContainer = playlistItem;
-    void this.router.navigateByUrl('searchResult');
+    void this.router.navigateByUrl('searchResult', {onSameUrlNavigation: 'reload'});
   }
 
   artistItemSelected(artistItem: ContainerDto): void {
     console.debug("artist selected : " + artistItem);
     this.globalSearchService.clearSearch();
     this.globalSearchService.selectedRootContainer = artistItem;
-    void this.router.navigateByUrl('searchResult');
+    void this.router.navigateByUrl('searchResult', {onSameUrlNavigation: 'reload'});
   }
 }

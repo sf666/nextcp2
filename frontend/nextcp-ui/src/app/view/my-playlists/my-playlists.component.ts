@@ -33,8 +33,8 @@ export class MyPlaylistsComponent implements OnInit {
   /**
   * Browses to special MyMusic Folder. TODO: URL should be retrieved from media server (i.e. UMS)
   */
-  public browseToMyPlaylist(playlistId: number, mediaServerUdn: string) {
-    this.contentDirectoryService.browseChildren("$DBID$PLAYLIST$" + playlistId, "", mediaServerUdn);
+  public browseToMyPlaylist(playlistId: string, mediaServerUdn: string) {
+    this.contentDirectoryService.browseChildren(playlistId + "", "", mediaServerUdn);
   }
 
   //
