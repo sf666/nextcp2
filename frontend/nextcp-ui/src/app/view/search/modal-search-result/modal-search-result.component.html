@@ -29,7 +29,7 @@
         </div>
         <div *ngIf="globalSearchService.quickSearchResultList?.albumItems?.length > 0; else noContentBlock">
             <div *ngFor="let item of globalSearchService.quickSearchResultList?.albumItems"
-                class="search-row d-flex" (click)="albumItemSelected(item)">
+                class="search-row d-flex" (click)="containerSelected(item)">
                 <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
                 <div class="ms-3 d-flex flex-column justify-content-between min-width">
                     <div class="title">{{item.title}}</div>
@@ -46,7 +46,7 @@
         </div>
         <div *ngIf="globalSearchService.quickSearchResultList?.playlistItems?.length > 0; else noContentBlock">
             <div *ngFor="let item of globalSearchService.quickSearchResultList?.playlistItems"
-                class="search-row d-flex" (click)="playlistItemSelected(item)">
+                class="search-row d-flex" (click)="containerSelected(item)">
                 <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
                 <div class="ms-3 d-flex flex-column justify-content-between min-width">
                     <div class="title">{{item.title}}</div>
@@ -62,7 +62,7 @@
         </div>
         <div class="search-row" *ngIf="globalSearchService.quickSearchResultList?.artistItems?.length > 0; else noContentBlock">
             <div *ngFor="let item of globalSearchService.quickSearchResultList?.artistItems"
-                class="search-row d-flex" (click)="artistItemSelected(item)">
+                class="search-row d-flex" (click)="containerSelected(item)">
                 <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
                 <div class="ms-3 d-flex flex-column justify-content-between min-width">
                     <div class="title">{{item.title}}</div>

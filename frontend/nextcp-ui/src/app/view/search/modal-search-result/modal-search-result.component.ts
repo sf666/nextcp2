@@ -6,7 +6,8 @@ import { ContentDirectoryService } from './../../../service/content-directory.se
 import { ContainerDto, MusicItemDto } from './../../../service/dto.d';
 import { SearchItemService } from './../../../service/search/search-item.service';
 import { RouteReuseStrategy, Router } from '@angular/router';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { MusicLibraryComponent } from '../../music-library/music-library.component';
 
 @Component({
   selector: 'app-modal-search-result',
@@ -21,6 +22,7 @@ export class ModalSearchResultComponent {
     private searchItemService: SearchItemService,
     public globalSearchService: GlobalSearchService,
     private transportService: TransportService,
+    private musicLibraryComponent: MusicLibraryComponent,
     private router: Router) {
   }
 
@@ -35,24 +37,10 @@ export class ModalSearchResultComponent {
     this.transportService.playResource(musicItem);
   }
 
-  albumItemSelected(albumItem: ContainerDto): void {
-    console.debug("album selected : " + albumItem);
-    this.globalSearchService.clearSearch();
-    this.globalSearchService.selectedRootContainer = albumItem;
-    void this.router.navigateByUrl('searchResult', {onSameUrlNavigation: 'reload'});
-  }
-
-  playlistItemSelected(playlistItem: ContainerDto): void {
-    console.debug("playlist selected : " + playlistItem);
-    this.globalSearchService.clearSearch();
-    this.globalSearchService.selectedRootContainer = playlistItem;
-    void this.router.navigateByUrl('searchResult', {onSameUrlNavigation: 'reload'});
-  }
-
-  artistItemSelected(artistItem: ContainerDto): void {
-    console.debug("artist selected : " + artistItem);
-    this.globalSearchService.clearSearch();
-    this.globalSearchService.selectedRootContainer = artistItem;
-    void this.router.navigateByUrl('searchResult', {onSameUrlNavigation: 'reload'});
+  containerSelected(container: ContainerDto): void {
+    console.debug("container selected : " + container);
+    this.globalSearchService.quickSearchPanelVisible = false;
+    this.musicLibraryComponent.contentDirectoryService.browseChildrenByContainer(container);
+    void this.router.navigateByUrl('music-library');
   }
 }

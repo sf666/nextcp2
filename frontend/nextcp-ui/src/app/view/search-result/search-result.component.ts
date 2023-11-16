@@ -29,7 +29,7 @@ export class SearchResultComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     // Navigate to search result
-    this.dispContainer.browseTo(this.globalSearchService.selectedRootContainer);
+    //this.dispContainer.browseTo(this.globalSearchService.selectedRootContainer);
   }
 
   //
@@ -43,7 +43,7 @@ export class SearchResultComponent implements AfterViewInit {
     const currentParent = this.globalSearchService.contentDirectoryService?.currentContainerList?.currentContainer?.parentID;
     if (currentParent) {
       this.dispContainer.clearSearch();
-      this.dispContainer.browseToOid(currentParent, this.globalSearchService.selectedRootContainer.mediaServerUDN, false);
+//      this.dispContainer.browseToOid(currentParent, this.globalSearchService.selectedRootContainer.mediaServerUDN, false);
       return;
     }
   }
