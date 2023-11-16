@@ -21,6 +21,7 @@ Config:
    spotifyConfig: SpotifyConfigDto
 
 ApplicationConfig:
+   myPlaylistFolderName: String
    generateUpnpCode: Boolean
    generateUpnpCodePath: String
    libraryPath: String

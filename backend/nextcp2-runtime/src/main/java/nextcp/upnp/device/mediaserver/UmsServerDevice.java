@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import nextcp.config.ServerConfig;
 import nextcp.db.service.BasicDbService;
+import nextcp.dto.Config;
 import nextcp.dto.MediaServerDto;
 import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.ServerPlaylistDto;
@@ -39,8 +40,11 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     private final String userAgentType = "USER-AGENT";
 
     @Autowired
-    private ServerConfig config = null;
+    private ServerConfig serverConfig = null;
 
+    @Autowired
+    private Config config = null;    
+    
     @Autowired
     private ApplicationEventPublisher publisher = null;
 
@@ -180,14 +184,14 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
     private String getApiKey()
     {
-        ServerDeviceConfiguration deviceConfig = config.getMediaServerConfig(getUdnAsString());
+        ServerDeviceConfiguration deviceConfig = serverConfig.getMediaServerConfig(getUdnAsString());
         if (deviceConfig == null)
         {
             log.warn("no configuration for server device " + getFriendlyName());
         }
         else
         {
-            String key = config.getMediaServerConfig(getUdnAsString()).apiKey;
+            String key = serverConfig.getMediaServerConfig(getUdnAsString()).apiKey;
             return key != null ? key : "";
         }
         return "";
@@ -409,7 +413,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     @Override
     public List<ServerPlaylistDto> getServerPlaylists() throws JsonMappingException, JsonProcessingException
     {
-    	List<ServerPlaylistDto> pl = searchMyPlaylistsItems("Musiksammlung");
+    	List<ServerPlaylistDto> pl = searchMyPlaylistsItems(config.applicationConfig.myPlaylistFolderName);
         return playlistManager.getSortedServerPlaylists(pl);
     }
 

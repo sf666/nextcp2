@@ -12,6 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ApplicationConfig
 {
 
+    public String myPlaylistFolderName;
     public Boolean generateUpnpCode;
     public String generateUpnpCodePath;
     public String libraryPath;
@@ -29,8 +30,9 @@ public class ApplicationConfig
     {
     }
 
-    public ApplicationConfig(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript)
+    public ApplicationConfig(String myPlaylistFolderName, Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript)
     {
+        this.myPlaylistFolderName = myPlaylistFolderName;
         this.generateUpnpCode = generateUpnpCode;
         this.generateUpnpCodePath = generateUpnpCodePath;
         this.libraryPath = libraryPath;
@@ -50,6 +52,7 @@ public class ApplicationConfig
     {
         StringBuilder sb = new StringBuilder();
         sb.append("ApplicationConfig [");
+        sb.append("myPlaylistFolderName=").append(this.myPlaylistFolderName).append(", ");
         sb.append("generateUpnpCode=").append(this.generateUpnpCode).append(", ");
         sb.append("generateUpnpCodePath=").append(this.generateUpnpCodePath).append(", ");
         sb.append("libraryPath=").append(this.libraryPath).append(", ");

@@ -1,8 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2023-11-15 14:54:51.
+// Generated using typescript-generator version 2.32.889 on 2023-11-16 08:17:56.
 
 export interface ApplicationConfig {
+    myPlaylistFolderName: string;
     generateUpnpCode: boolean;
     generateUpnpCodePath: string;
     libraryPath: string;

@@ -38,7 +38,8 @@ export class ConfigurationService {
     sseEmitterTimeout: 0,
     itemsPerPage: 100,
     nextPageAfter: 60,
-    pathToRestartScript:''
+    pathToRestartScript:'',
+    myPlaylistFolderName:''
   }
 
   musicBrainzConfig: MusicbrainzSupport = {   // MusicBrainz username/password
