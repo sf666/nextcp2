@@ -29,8 +29,14 @@ public class DeviceRegistry
     private HashMap<UDN, MediaRendererDevice> mediaRendererList = new HashMap<>();
     private HashMap<UDN, MediaServerDevice> mediaServerList = new HashMap<>();
     private HashMap<UDN, IMediaServerExtendedSupport> mediaServerExtList = new HashMap<>();
+    private HashMap<UDN, MediaServerDevice> inactiveMediaServerList = new HashMap<>();
+    
+    
+	public HashMap<UDN, MediaServerDevice> getInactiveMediaServerList() {
+		return inactiveMediaServerList;
+	}
 
-    @Autowired
+	@Autowired
     public DeviceFactory deviceFactory = null;
 
     @Autowired
@@ -58,7 +64,7 @@ public class DeviceRegistry
     public synchronized void addMediaRendererDevice(RemoteDevice remoteDevice)
     {
         MediaRendererDevice device = deviceFactory.mediaRendererDeviceFactory(remoteDevice);
-        rendererConfigService.addMediaRendererDeviceConfig(device);
+        rendererConfigService.addMediaRendererDeviceConfig(device);        
         MediaRendererDevice oldDevice = mediaRendererList.put(remoteDevice.getIdentity().getUdn(), device);
         if (oldDevice != null)
         {
@@ -92,6 +98,7 @@ public class DeviceRegistry
         MediaServerDevice device = deviceFactory.mediaServerDeviceFactory(remoteDevice, serverType);
         serverConfigService.addMediaServerDeviceConfig(remoteDevice, device);
         MediaServerDevice oldDevice =  mediaServerList.put(remoteDevice.getIdentity().getUdn(), device);
+        inactiveMediaServerList.remove(remoteDevice.getIdentity().getUdn());
         if (oldDevice != null)
         {
             log.info("removed old media server device : {} ", oldDevice.getAsDto());
@@ -102,6 +109,7 @@ public class DeviceRegistry
     public synchronized void removeMediaServerDevice(RemoteDevice remoteDevice)
     {
         MediaServerDevice device = mediaServerList.remove(remoteDevice.getIdentity().getUdn());
+        inactiveMediaServerList.put(device.getUDN(), device);
         eventPublisher.publishEvent(new MediaServerListChanged(getAvailableMediaServer()));
     }
 

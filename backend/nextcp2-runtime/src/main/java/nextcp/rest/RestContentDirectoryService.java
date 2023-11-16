@@ -3,6 +3,7 @@ package nextcp.rest;
 import org.apache.commons.lang.StringUtils;
 import org.jupnp.model.types.UDN;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import nextcp.dto.BrowseRequestDto;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.SearchRequestDto;
 import nextcp.dto.SearchResultDto;
+import nextcp.dto.ToastrMessage;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseInput;
@@ -26,6 +28,10 @@ public class RestContentDirectoryService extends BaseRestService
 {
     @Autowired
     private DeviceRegistry deviceRegistry = null;
+    
+    @Autowired
+    private ApplicationEventPublisher publisher = null;
+    
 
     @PostMapping("/rescanContent")
     public void rescanContent(@RequestBody String mediaServerUDN)
@@ -46,7 +52,17 @@ public class RestContentDirectoryService extends BaseRestService
     public ContainerItemDto browse(@RequestBody BrowseRequestDto browseRequest)
     {
         checkUdn(browseRequest);
-        MediaServerDevice device = deviceRegistry.getMediaServerByUDN(new UDN(browseRequest.mediaServerUDN));
+        UDN udn = new UDN(browseRequest.mediaServerUDN);
+        MediaServerDevice device = deviceRegistry.getMediaServerByUDN(udn);
+        if (device == null) {
+        	device = deviceRegistry.getInactiveMediaServerList().get(udn);
+        	if (device != null) {
+                publisher.publishEvent(new ToastrMessage(null, "error", "server", "media server '" + device.getFriendlyName() + "' is unavailable "));        	
+        	} else {
+                publisher.publishEvent(new ToastrMessage(null, "error", "server", "media server is unavailable "));        	
+        	}
+        	return new ContainerItemDto();
+        }
         checkDeviceAvailability(browseRequest, device);
         BrowseInput inp = new BrowseInput();
         inp.ObjectID = browseRequest.objectID;
