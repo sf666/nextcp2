@@ -39,6 +39,7 @@ export class AvailableServerComponent implements OnInit {
     // delete last stored path if server is selected manually
     this.persistenceService.clearLastMediaServerDevice();    
     this.deviceService.setMediaServerByUdn(udn);
+    this.close();
   }
 
   getSelectedClass(udn: string): string {

@@ -35,6 +35,7 @@ export class AvailableRendererComponent implements OnInit {
 
   selectRenderer(udn : string): void {
     this.deviceService.setMediaRendererByUdn(udn);
+    this.close();
   }
 
   getSelectedClass(udn: string): string {

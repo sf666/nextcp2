@@ -50,6 +50,10 @@ export class NavBarComponent {
     // this.quickSearchString = this.quickSearchString;
   }
 
+  blur(): void {
+    this.globalSearchService.clearSearch();
+  }
+
   isDisabled(): boolean {
     return this.backButtonDisabled;
   }
