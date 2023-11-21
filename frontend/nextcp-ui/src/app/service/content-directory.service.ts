@@ -146,7 +146,13 @@ export class ContentDirectoryService {
       this.musicTracks_ = data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0);
       this.otherItems_ = data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0);
       this.browseFinished$.next(data);
-      this.browseToNextPage();
+
+      const count = data.albumDto.length + data.containerDto.length + data.musicItemDto.length;
+      if (count >= this.MAX_REQUEST_ITEMS) {
+        this.browseToNextPage();
+      } else {
+        console.log("updateContainer : loaded last page.");
+      }
     }
   }
 
@@ -163,10 +169,10 @@ export class ContentDirectoryService {
 
       this.browseFinished$.next(data);
 
-      if (count > 0) {
+      if (count >= this.MAX_REQUEST_ITEMS) {
         this.browseToNextPage();
       } else {
-        console.log("loaded last page.");
+        console.log("addContainer: loaded last page.");
       }
     }
   }
