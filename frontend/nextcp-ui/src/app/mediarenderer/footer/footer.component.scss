@@ -60,7 +60,6 @@ mat-slider {
 .infoItems {
     display      : flex;
     flex         : 1 1 6rem;
-    border-left  : 2px solid var(--dark-grey);
     padding-right: 10px;
     margin-top   : 24px;
     margin-bottom: 24px;
@@ -285,7 +284,6 @@ img {
     flex           : 2 1 8rem;
     align-self     : center;
     justify-content: space-evenly;
-    border-left    : 2px solid var(--dark-grey);
 }
 
 .mySlider {

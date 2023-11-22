@@ -35,6 +35,7 @@ export class ModalSearchResultComponent {
     this.searchItemService.musicItem = musicItem;
     this.globalSearchService.clearSearch();
     this.transportService.playResource(musicItem);
+    this.globalSearchService.clearSearch();
   }
 
   containerSelected(container: ContainerDto): void {
@@ -42,5 +43,6 @@ export class ModalSearchResultComponent {
     this.globalSearchService.quickSearchPanelVisible = false;
     this.musicLibraryComponent.contentDirectoryService.browseChildrenByContainer(container);
     void this.router.navigateByUrl('music-library');
+    this.globalSearchService.clearSearch();
   }
 }

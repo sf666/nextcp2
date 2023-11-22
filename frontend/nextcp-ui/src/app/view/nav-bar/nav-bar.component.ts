@@ -51,7 +51,7 @@ export class NavBarComponent {
   }
 
   blur(): void {
-    this.globalSearchService.clearSearch();
+    //this.globalSearchService.clearSearch();
   }
 
   isDisabled(): boolean {
