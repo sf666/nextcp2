@@ -1,8 +1,20 @@
-<div class="playlistMainScreen">
-    <button mat-flat-button class="mv-4 my-buttons" (click)="play()">
-        <span class="material-symbols-outlined">play_arrow</span>
-        <span class="button button-text">play</span>
-    </button>
+<div class="playlistMainScreen" id="Player_Queue">
+    <div *ngIf="deviceService.noMediaRendererSelected" class="ms-3">
+        No player
+    </div>
+    <div *ngIf="!deviceService.noMediaRendererSelected" class="ms-3">
+        Playlist of {{deviceService.selectedMediaRendererDevice.friendlyName}}
+    </div>
+    <div class="d-flex border-bottom border-secondary">
+        <button mat-stroked-button class="mv-4 my-buttons m-4" [disabled]="deviceService.noMediaRendererSelected" (click)="play()">
+            <mat-icon class="material-symbols-outlined thin">play_arrow</mat-icon>
+            <span class="button button-text">play</span>
+        </button>
+        <button mat-stroked-button class="mv-4 my-buttons m-4" [disabled]="deviceService.noMediaRendererSelected" (click)="delete()">
+            <mat-icon class="material-symbols-outlined thin">delete</mat-icon>
+            <span class="button button-text">delete</span>
+        </button>
+    </div>
 
     <div *ngIf="deviceService.isAnyMediaRendererSelected(); else noMediaRenderer">
         <div *ngIf="hasPlaylistItems; else noPlaylistItems">
@@ -34,14 +46,12 @@
 
 <ng-template #noMediaRenderer>
     <div class="regularText infotext">
-        Please select a media renderer in the <a href="#/input-output">I/O settings</a> or define a default media
-        renderer
-        in the <a href="#/settings">App settings</a>.
+        Please select a media renderer below or define a default media renderer in the <a href="#/settings">App settings</a>.
     </div>
 </ng-template>
 
 <ng-template #noPlaylistItems>
     <div class="regularText infotext">
-        The active playlist is empty.
+        The players playlist is empty.
     </div>
 </ng-template>

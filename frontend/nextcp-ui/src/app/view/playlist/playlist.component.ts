@@ -44,6 +44,10 @@ export class PlaylistComponent implements OnInit {
     this.playlistService.play();
   }
 
+  delete() : void {
+    this.playlistService.deleteAll();
+  }
+
   get hasPlaylistItems(): boolean {
     return this.playlistService.playlistItems?.length > 0;
   }

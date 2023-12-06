@@ -77,6 +77,10 @@ export class DeviceService {
     return udn === this._selectedMediaRendererDevice.udn;
   }
 
+  get noMediaRendererSelected() : boolean {
+    return this._selectedMediaRendererDevice.udn === '';
+  }
+
   public isMediaServerSelected(udn: string): boolean {
     return udn === this._selectedMediaServerDevice.udn;
   }
