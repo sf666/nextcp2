@@ -34,7 +34,7 @@
 
     <!-- Detail Info -->
     <div *ngIf="rendererService.trackInfoAvailable">
-        <div mat-subheader class="p-2">current player</div>
+        <div mat-subheader class="p-2">audio information provided by player {{deviceService.selectedMediaRendererDevice.friendlyName}}</div>
         <div class="inputSource d-flex">
             <form>
                 <mat-form-field appearance="outline" class="p-2">
