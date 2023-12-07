@@ -63,7 +63,7 @@
     background-size  : cover;
     background-color : rgb(0, 0, 0);
 
-    height: calc(var(--vh, 1vh) * 100 - var(--nav-height) - var(--footer-height));
+    height: calc(var(--vh, 1vh) * 100 - var(--footer-height));
 }
 
 .bg-img {
