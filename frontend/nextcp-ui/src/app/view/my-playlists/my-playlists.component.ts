@@ -24,6 +24,7 @@ export class MyPlaylistsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.layoutService.setFramedViewWithoutNavbar();
     if (this.deviceService.selectedMediaServerDevice.udn) {
       this.browseToMyPlaylist(this.myPlaylistService.activePlaylistId, this.deviceService.selectedMediaServerDevice.udn);
     }

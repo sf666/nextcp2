@@ -28,6 +28,7 @@ export class SearchResultComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.layoutService.setFramedViewWithoutNavbar();
     // Navigate to search result
     //this.dispContainer.browseTo(this.globalSearchService.selectedRootContainer);
   }
@@ -36,7 +37,7 @@ export class SearchResultComponent implements AfterViewInit {
   // Nav-Bar bindngs
   //
   getParentTitle(): string {
-    return "search result for ... ";
+    return "search result";
   }
 
   public backButtonPressed(event: any) {

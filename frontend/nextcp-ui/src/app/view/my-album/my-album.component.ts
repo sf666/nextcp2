@@ -26,6 +26,7 @@ export class MyAlbumComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.layoutService.setFramedView();
     this.loadMyAlbums();
   }
 

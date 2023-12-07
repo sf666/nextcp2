@@ -34,6 +34,7 @@ export class MusicLibraryComponent implements AfterViewInit{
   }
 
   ngAfterViewInit(): void {
+    this.layoutService.setFramedView();
     this.browseToLastKnownUdn();
   }
 

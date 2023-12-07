@@ -6,7 +6,8 @@ import { ContentDirectoryService } from './../../service/content-directory.servi
 import { RatingServiceService } from './../../service/rating-service.service';
 import { UiClientConfig, MediaServerDto, RendererDeviceConfiguration, MediaRendererDto, ServerDeviceConfiguration } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { LayoutService } from 'src/app/service/layout.service';
 
 @Component({
   selector: 'settings',
@@ -14,7 +15,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
   styleUrls: ['./settings.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class SettingsComponent {
+export class SettingsComponent implements OnInit {
 
   code: string;
   public showOnlyActiveServer: boolean = true;
@@ -31,6 +32,7 @@ export class SettingsComponent {
     public toastService: ToastService,
     public systemService: SystemService,
     public myMusicService: MyMusicService,
+    private layoutService: LayoutService,
     public configService: ConfigurationService) {
 
     var currentLocation = window.location;
@@ -41,6 +43,10 @@ export class SettingsComponent {
     } else {
       console.log("browser doesn't support registration of protocolHandler");
     }
+  }
+
+  ngOnInit(): void {
+    this.layoutService.setFramedViewWithoutNavbar();
   }
 
   showAdvancedRendererSettings(rendererConfig: RendererDeviceConfiguration): boolean {

@@ -1,5 +1,6 @@
 import { Subject } from 'rxjs';
 import { Injectable, OnInit } from '@angular/core';
+import { LayoutService } from 'src/app/service/layout.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,13 +11,9 @@ export class MyPlaylistService {
   public activePlaylistId$: Subject<string> = new Subject();
 
   constructor(
-
+    private layoutService: LayoutService
   ) {
     this.activePlaylistId_ = localStorage.getItem('lastMyPlaylistId');
-  }
-
-  ngOnInit(): void {
-
   }
 
   selectPlaylist(id: string) {

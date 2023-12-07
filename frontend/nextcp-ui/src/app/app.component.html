@@ -14,7 +14,7 @@
   <app-sidebar *ngIf="layoutService.sidebarVisible"></app-sidebar>
   
   <div id="mainContent" class="mainContent">
-    <div class="topPosition">&nbsp;</div>
+    <div *ngIf="layoutService.headerVisible" class="topPosition">&nbsp;</div>
     <router-outlet></router-outlet>
     <div class="footer-block">&nbsp;</div>
     <!--

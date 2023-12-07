@@ -5,6 +5,7 @@ import { DeviceService } from './../../service/device.service';
 import { MusicItemDto } from './../../service/dto.d';
 import { PlaylistService } from '../../service/playlist.service';
 import { Component, OnInit } from '@angular/core';
+import { LayoutService } from 'src/app/service/layout.service';
 
 @Component({
   selector: 'playlist',
@@ -17,6 +18,7 @@ export class PlaylistComponent implements OnInit {
   constructor(
     public deviceService: DeviceService,
     private sseService: SseService,
+    private layoutService: LayoutService,
     private backgroundImageService: BackgroundImageService,
     scrollViewService: CdsBrowsePathService,
     public playlistService: PlaylistService) {
@@ -29,6 +31,7 @@ export class PlaylistComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.layoutService.setFramedViewWithoutNavbar();
     this.playlistService.updatePlaylistItems();
     this.backgroundImageService.setBackgroundImageMainScreen("/assets/images/playlist_bg.png");
   }

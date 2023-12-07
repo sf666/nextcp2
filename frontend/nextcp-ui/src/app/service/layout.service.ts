@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LayoutService {
+
+  constructor(private deviceService: DeviceDetectorService) {
+
+  }
 
   public sidebarVisible = true;
   public footerVisible = true;
@@ -15,14 +20,19 @@ export class LayoutService {
     this.headerVisible = true;
   }
 
+  public setFramedViewWithoutNavbar() : void{ 
+    this.sidebarVisible = true;
+    this.footerVisible = true;
+    this.headerVisible = false;
+  }
+
   public setPlainView(): void { 
     this.sidebarVisible = false;
     this.footerVisible = false;
     this.headerVisible = false;
   }
 
-  public isMobileDevice(): boolean { 
-    const isTouchDevice = window.screenX === 0 && ('ontouchstart' in window || 'onmsgesturechange' in window);
-    return isTouchDevice;
+  public isMobileDevice(): boolean {
+      return this.deviceService.isMobile() || this.deviceService.isTablet();
   }  
 }
