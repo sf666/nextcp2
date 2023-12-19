@@ -59,6 +59,11 @@
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis</artifactId>
 		</dependency>
+		<!-- Digiter -->
+		<dependency>
+		    <groupId>commons-codec</groupId>
+		    <artifactId>commons-codec</artifactId>
+		</dependency>
 		<!-- Some other stuff -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>

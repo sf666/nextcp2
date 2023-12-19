@@ -17,7 +17,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.6</version>
+		<version>3.2.0</version>
 	</parent>
 	<scm>
 		<connection>scm:git:https://github.com/sf666/nextcp2.git</connection>
@@ -50,13 +50,13 @@
 	</distributionManagement>
 	<properties>
 		<maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
-		<jupnp.version>2.6.1</jupnp.version>
+		<jupnp.version>2.7.1</jupnp.version>
 		<java.version>17</java.version>
 		<maven.compiler.release>17</maven.compiler.release>
 		<slf4j.version>2.0.5</slf4j.version>
-		<freemarker.version>2.3.30</freemarker.version>
+		<freemarker.version>2.3.32</freemarker.version>
 		<h2database.version>2.1.210</h2database.version>
-		<jackson.version>2.12.4</jackson.version>
+		<jackson.version>2.16.0</jackson.version>
 	</properties>
 	<modules>
 		<module>nextcp2-external-information-provider</module>
@@ -254,7 +254,7 @@
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
-				<version>2.6</version>
+				<version>2.15.1</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-collections</groupId>
