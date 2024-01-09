@@ -22,7 +22,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
+import org.jupnp.DefaultUpnpServiceConfiguration;
 import org.jupnp.UpnpServiceConfiguration;
 import org.jupnp.binding.xml.DeviceDescriptorBinder;
 import org.jupnp.binding.xml.ServiceDescriptorBinder;
@@ -112,9 +112,10 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
 
     final private DeviceDescriptorBinder deviceDescriptorBinderUDA10;
     final private ServiceDescriptorBinder serviceDescriptorBinderUDA10;
+	final private ExecutorService streamClientExecutorService;
 
+    
     final private Namespace namespace;
-    private StreamClientConfiguration configuration;
 
     @SuppressWarnings("rawtypes")
     final private TransportConfiguration transportConfiguration;
@@ -146,7 +147,9 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
         this.streamListenPort = streamListenPort;
         this.multicastResponsePort = multicastResponsePort;
 
-        defaultExecutorService = createDefaultExecutorService();
+        defaultExecutorService = createDefaultExecutorService("default");
+		streamClientExecutorService = createDefaultExecutorService("stream-client");
+
 
         datagramProcessor = createDatagramProcessor();
         soapActionProcessor = createSOAPActionProcessor();
@@ -175,12 +178,23 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
         return genaEventProcessor;
     }
 
-    @Override
-    @SuppressWarnings("rawtypes")
-    public StreamClient createStreamClient() {
-        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService(), createStreamClientConfiguration());
-    }
+	@Override
+	public StreamClient createStreamClient() {
+		return new JdkStreamClients(
+				new JdkStreamClientConfiguration(
+						getStreamClientExecutorService()
+				)
+		);
+	}
 
+	public ExecutorService getStreamClientExecutorService() {
+		return streamClientExecutorService;
+	}
+	
+	private ExecutorService createDefaultExecutorService(String name) {
+		return new JUPnPExecutor(name);
+	}
+	
     private StreamClientConfiguration createStreamClientConfiguration() {
         return new StreamClientConfigurationImpl(defaultExecutorService); //, 20, 5, 5, 5);
     }
@@ -348,56 +362,56 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
         return defaultExecutorService;
     }
 
-    protected ExecutorService createDefaultExecutorService() {
-        return new JUPnPExecutor();
-    }
+	public static class JUPnPExecutor extends ThreadPoolExecutor {
 
-    public static class JUPnPExecutor extends ThreadPoolExecutor {
+		public JUPnPExecutor(String name) {
+			this(new SimpleThreadFactory("jupnp-" + name),
+					new ThreadPoolExecutor.DiscardPolicy() {
+				// The pool is bounded and rejections will happen during shutdown
+				@Override
+				public void rejectedExecution(Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
+					// Log and discard
+					LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class).warn("Thread pool rejected execution of " + runnable.getClass());
+					super.rejectedExecution(runnable, threadPoolExecutor);
+				}
+			}
+			);
+		}
 
-        public JUPnPExecutor() {
-            this(new JUPnPThreadFactory(),
-                 new ThreadPoolExecutor.DiscardPolicy() {
-                     // The pool is bounded and rejections will happen during shutdown
-                     @Override
-                     public void rejectedExecution(Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
-                         // Log and discard
-                         LoggerFactory.getLogger(Nextcp2DefaultUpnpServiceConfiguration.class).warn("Thread pool rejected execution of " + runnable.getClass());
-                         super.rejectedExecution(runnable, threadPoolExecutor);
-                     }
-                 }
-            );
-        }
+		public JUPnPExecutor(ThreadFactory threadFactory, RejectedExecutionHandler rejectedHandler) {
+			// This is the same as Executors.newCachedThreadPool
+			super(CORE_THREAD_POOL_SIZE,
+					THREAD_POOL_SIZE,
+					10L,
+					TimeUnit.SECONDS,
+					new ArrayBlockingQueue<>(THREAD_QUEUE_SIZE),
+					threadFactory,
+					rejectedHandler
+			);
+			allowCoreThreadTimeOut();
+		}
 
-        public JUPnPExecutor(ThreadFactory threadFactory, RejectedExecutionHandler rejectedHandler) {
-            // This is the same as Executors.newCachedThreadPool
-            super(CORE_THREAD_POOL_SIZE,
-                  THREAD_POOL_SIZE,
-                  10L,
-                  TimeUnit.SECONDS,
-                  new ArrayBlockingQueue<Runnable>(THREAD_QUEUE_SIZE),
-                  threadFactory,
-                  rejectedHandler
-            );
-            allowCoreThreadTimeOut(THREAD_POOL_CORE_TIMEOUT);
-        }
+		private void allowCoreThreadTimeOut() {
+			allowCoreThreadTimeOut(THREAD_POOL_CORE_TIMEOUT);
+		}
 
-        @Override
-        protected void afterExecute(Runnable runnable, Throwable throwable) {
-            super.afterExecute(runnable, throwable);
-            if (throwable != null) {
-                Throwable cause = Exceptions.unwrap(throwable);
-                if (cause instanceof InterruptedException) {
-                    // Ignore this, might happen when we shutdownNow() the executor. We can't
-                    // log at this point as the logging system might be stopped already (e.g.
-                    // if it's a CDI component).
-                    return;
-                }
-                // Log only
-                LoggerFactory.getLogger(Nextcp2DefaultUpnpServiceConfiguration.class).warn("Thread terminated " + runnable + " abruptly with exception: " + throwable);
-                LoggerFactory.getLogger(Nextcp2DefaultUpnpServiceConfiguration.class).warn("Root cause: " + cause);
-            }
-        }
-    }
+		@Override
+		protected void afterExecute(Runnable runnable, Throwable throwable) {
+			super.afterExecute(runnable, throwable);
+			if (throwable != null) {
+				Throwable cause = Exceptions.unwrap(throwable);
+				if (cause instanceof InterruptedException) {
+					// Ignore this, might happen when we shutdownNow() the executor. We can't
+					// log at this point as the logging system might be stopped already (e.g.
+					// if it's a CDI component).
+					return;
+				}
+				// Log only
+				LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class).warn("Thread terminated " + runnable + " abruptly with exception: " + throwable);
+				LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class).warn("Root cause: " + cause);
+			}
+		}
+	}
 
     // Executors.DefaultThreadFactory is package visibility (...no touching, you unworthy JDK user!)
     public static class JUPnPThreadFactory implements ThreadFactory {
@@ -426,5 +440,4 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
             return t;
         }
     }
-
 }
