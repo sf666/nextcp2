@@ -1,10 +1,8 @@
 package nextcp.upnp.device.mediarenderer.playlist;
 
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.PlaylistState;
 import nextcp.dto.RendererPlaylist;
@@ -31,6 +29,7 @@ public class OhPlaylistServiceEventListener extends PlaylistServiceEventListener
     {
         if (!shouldPublishTransportServiceState)
         {
+        	log.info(String.format("[%s] OhPlaylistServiceEventListener ignoring event.", device.getFriendlyName()));
             return;
         }
 
@@ -62,8 +61,6 @@ public class OhPlaylistServiceEventListener extends PlaylistServiceEventListener
     public void idChange(Long value)
     {
         super.idChange(value);
-//        ReadOutput out = playlist.read(value);
-//        log.debug("idArrayChange Event Metadata : " + out.Metadata);
     }
     
     public boolean isShouldPublishTransportServiceState()
