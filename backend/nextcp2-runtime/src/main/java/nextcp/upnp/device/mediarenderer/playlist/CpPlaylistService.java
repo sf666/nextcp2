@@ -120,6 +120,11 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
     @Override
     public void transportStateChange(String value)
     {
+    	if (getDevice().hasProductService() && !"Playlist".equalsIgnoreCase(getDevice().getProductService().getCurrentInputSource().Type)) {
+    		log.debug(String.format("[%s] ignoring transport state change, because input source type is not 'Playlist'", getDevice().getFriendlyName()));
+    		return;
+    	}
+    	
         log.debug("transportStateChange to : " + value);
         if ("PAUSED_PLAYBACK".equalsIgnoreCase(value))
         {

@@ -44,7 +44,6 @@ import org.jupnp.transport.impl.MulticastReceiverConfigurationImpl;
 import org.jupnp.transport.impl.MulticastReceiverImpl;
 import org.jupnp.transport.impl.NetworkAddressFactoryImpl;
 import org.jupnp.transport.impl.SOAPActionProcessorImpl;
-import org.jupnp.transport.impl.jetty.StreamClientConfigurationImpl;
 import org.jupnp.transport.spi.DatagramIO;
 import org.jupnp.transport.spi.DatagramProcessor;
 import org.jupnp.transport.spi.GENAEventProcessor;
@@ -52,7 +51,6 @@ import org.jupnp.transport.spi.MulticastReceiver;
 import org.jupnp.transport.spi.NetworkAddressFactory;
 import org.jupnp.transport.spi.SOAPActionProcessor;
 import org.jupnp.transport.spi.StreamClient;
-import org.jupnp.transport.spi.StreamClientConfiguration;
 import org.jupnp.transport.spi.StreamServer;
 import org.jupnp.util.Exceptions;
 import org.slf4j.Logger;
@@ -194,10 +192,6 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
 	private ExecutorService createDefaultExecutorService(String name) {
 		return new JUPnPExecutor(name);
 	}
-	
-    private StreamClientConfiguration createStreamClientConfiguration() {
-        return new StreamClientConfigurationImpl(defaultExecutorService); //, 20, 5, 5, 5);
-    }
     
     @Override
     @SuppressWarnings("rawtypes")
