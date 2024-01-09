@@ -196,7 +196,8 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
     @Override
     @SuppressWarnings("rawtypes")
     public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
-        return transportConfiguration.createStreamServer(networkAddressFactory.getStreamListenPort());
+    	return null;
+//         return transportConfiguration.createStreamServer(networkAddressFactory.getStreamListenPort());
     }
 
     @Override

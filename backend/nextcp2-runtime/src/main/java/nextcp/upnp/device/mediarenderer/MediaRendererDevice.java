@@ -143,7 +143,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
         if (hasUpnpAvTransport())
         {
-        	log.info(String.format("[%s] init AVTransportService."), getFriendlyName());
+        	log.info(String.format("[%s] init AVTransportService.", getFriendlyName()));
             avTransportBridge = new Upnp_AVTransportBridge(upnp_avTransportService, this);
             avTransportEventListener = new AvTransportEventListener(this);
             upnp_avTransportService.addSubscriptionEventListener(avTransportEventListener);
@@ -153,12 +153,12 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         }
         else
         {
-        	log.info(String.format("[%s] Device doesn't support AVTransportService."), getFriendlyName());
+        	log.info(String.format("[%s] Device doesn't support AVTransportService.", getFriendlyName()));
         }
 
         if (hasOhInfoService())
         {
-        	log.info(String.format("[%s] initialize OpenHome info service ..."), getFriendlyName());
+        	log.info(String.format("[%s] initialize OpenHome info service ...", getFriendlyName()));
             ohInfoServiceEventListener = new OhInfoServiceEventListener(this);
             oh_infoService.addSubscriptionEventListener(ohInfoServiceEventListener);
             this.infoService = new Oh_InfoServiceImpl(this, oh_infoService);
@@ -166,40 +166,40 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         else
         {
             // Extract Info's from AVTransport ...
-        	log.info(String.format("[%s] polling AVTransport track information ..."), getFriendlyName());
+        	log.info(String.format("[%s] polling AVTransport track information ...", getFriendlyName()));
             this.infoService = avTransportBridge;
             schedulerService.addNotifier(this);
         }
 
         if (hasOhVolumeService())
         {
-        	log.info(String.format("[%s] initialize OpenHome volume service ..."), getFriendlyName());
+        	log.info(String.format("[%s] initialize OpenHome volume service ...", getFriendlyName()));
             ohVolumeServiceEventListener = new OhVolumeServiceEventListener();
             oh_volumeService.addSubscriptionEventListener(ohVolumeServiceEventListener);
         }
 
         if (hasUpnpRenderingControlService())
         {
-        	log.info(String.format("[%s] initialize OpenHome rendering control service ..."), getFriendlyName());
+        	log.info(String.format("[%s] initialize OpenHome rendering control service ...", getFriendlyName()));
             renderingControlEventListener = new RenderingControlEventListener();
             upnp_renderingControlService.addSubscriptionEventListener(renderingControlEventListener);
         }
 
         if (hasOhTimeService())
         {
-        	log.info(String.format("[%s] initialize OpenHome time service ..."), getFriendlyName());
+        	log.info(String.format("[%s] initialize OpenHome time service ...", getFriendlyName()));
             ohTimeServiceEventListener = new OhTimeServiceEventListener(getEventPublisher(), this);
             oh_timeService.addSubscriptionEventListener(ohTimeServiceEventListener);
         }
         else
         {
-        	log.info(String.format("[%s] polling AVTransport time information ..."), getFriendlyName());
+        	log.info(String.format("[%s] polling AVTransport time information ...", getFriendlyName()));
             schedulerService.addNotifier(this);
         }
 
         if (hasOhPlaylistService())
         {
-        	log.info(String.format("[%s] PlaylistSerive: initialize OpenHome playlist implementation ..."), getFriendlyName());
+        	log.info(String.format("[%s] PlaylistSerive: initialize OpenHome playlist implementation ...", getFriendlyName()));
             oh_playlistBridge = new OhPlaylistBridge(oh_playlistService, getDtoBuilder(), this);
             OhPlaylistBridge ohPlaylist = oh_playlistBridge;
             ohPlaylistServiceEventListener = new OhPlaylistServiceEventListener(ohPlaylist, this);
@@ -209,7 +209,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         else
         {
             // no OH servies. Playlist will be internally controlled by this control point.
-        	log.info(String.format("[%s] PlaylistSerive: initialize nextCp/2 playlist implementation ..."), getFriendlyName());
+        	log.info(String.format("[%s] PlaylistSerive: initialize nextCp/2 playlist implementation ...", getFriendlyName()));
             if (avTransportEventListener != null && hasUpnpAvTransport())
             {
                 CpPlaylistService playlist = new CpPlaylistService(this);
@@ -220,7 +220,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
         if (hasProductService())
         {
-        	log.info(String.format("[%s] initialize OpenHome product service ..."), getFriendlyName());
+        	log.info(String.format("[%s] initialize OpenHome product service ...", getFriendlyName()));
             ohProductServiceEventListener = new OhProductServiceEventListener(getEventPublisher(), this);
             oh_productService.addSubscriptionEventListener(ohProductServiceEventListener);
             productService = new OhProductServiceBridge(oh_productService, ohProductServiceEventListener, getDtoBuilder());
@@ -228,7 +228,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
         if (hasRadioService())
         {
-        	log.info(String.format("[%s] initialize OpenHome radio service ..."), getFriendlyName());
+        	log.info(String.format("[%s] initialize OpenHome radio service ...", getFriendlyName()));
             oh_radioBridge = new OhRadioBridge(oh_radioService, getDtoBuilder(), this);
             radioService = oh_radioBridge;
             ohRadioServiceEventListener = new OhRadioServiceEventListener(this);
@@ -242,7 +242,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         // transport bridge (transport state publishing) ...
         if (hasOhTransport())
         {
-        	log.info(String.format("[%s] initialize OpenHome transport service ..."), getFriendlyName());
+        	log.info(String.format("[%s] initialize OpenHome transport service ...", getFriendlyName()));
             ohTransportEventListener = new OhTransportEventListener(this);
             oh_transportService.addSubscriptionEventListener(ohTransportEventListener);
             ohTransportEventListener.setShouldPublishTransportServiceState(true);
@@ -253,7 +253,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         }
         else
         {
-        	log.info(String.format("[%s] using AVTransport information for transport services ..."), getFriendlyName());
+        	log.info(String.format("[%s] using AVTransport information for transport services ...", getFriendlyName()));
             transportBridge = avTransportBridge;
             avTransportEventPublisher.setShouldPublishTransportServiceState(true);
         }
