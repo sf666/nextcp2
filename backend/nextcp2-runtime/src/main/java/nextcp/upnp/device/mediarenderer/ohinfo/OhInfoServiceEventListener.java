@@ -66,7 +66,14 @@ public class OhInfoServiceEventListener extends InfoServiceEventListenerImpl
                 log.warn("No split chat found in Metatext. Text: " + dto.metatext);
                 dto.currentTrack.album = dto.metatext;
             }
+        } else {
+        	log.debug("metatext not processed.");
         }
+        
+        if (log.isInfoEnabled()) {
+        	log.info(dto.toString());
+        }
+        
         return dto;
     }
 
