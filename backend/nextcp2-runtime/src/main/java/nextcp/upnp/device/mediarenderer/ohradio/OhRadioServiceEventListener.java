@@ -12,7 +12,13 @@ public class OhRadioServiceEventListener extends RadioServiceEventListenerImpl
 
     public OhRadioServiceEventListener(MediaRendererDevice device)
     {
+        this(device, true);
+    }
+
+    public OhRadioServiceEventListener(MediaRendererDevice device, boolean shouldPublishTransportServiceState)
+    {
         this.device = device;
+        this.shouldPublishTransportServiceState = shouldPublishTransportServiceState;
     }
 
     @Override
