@@ -209,14 +209,12 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         else
         {
             // no OH servies. Playlist will be internally controlled by this control point.
+        	log.info(String.format("[%s] PlaylistSerive: initialize nextCp/2 playlist implementation ..."), getFriendlyName());
             if (avTransportEventListener != null && hasUpnpAvTransport())
             {
-            	log.info(String.format("[%s] PlaylistService: initialize nextCp/2 playlist implementation ..."), getFriendlyName());
                 CpPlaylistService playlist = new CpPlaylistService(this);
                 playlistService = playlist;
                 avTransportEventListener.addEventListener(playlist);
-            } else {
-            	log.info(String.format("[%s] No AVTransport. PlaylistService unavailable ..."), getFriendlyName());
             }
         }
 

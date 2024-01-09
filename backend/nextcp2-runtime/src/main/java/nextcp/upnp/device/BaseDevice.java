@@ -83,12 +83,8 @@ public class BaseDevice
     }
 
     public String getFriendlyName()
-    {	
-    	try {
-        	return getDevice().getDetails().getFriendlyName();
-    	} catch (Exception e) {
-    		return "NULL";
-    	}
+    {
+        return getDevice().getDetails().getFriendlyName();
     }
 
     protected DIDLContent generateDidlContent(String didlContentXml) throws Exception
