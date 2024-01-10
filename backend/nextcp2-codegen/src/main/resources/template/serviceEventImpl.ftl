@@ -21,7 +21,17 @@ public class ${className}EventListenerImpl implements I${className}EventListener
 {
     private static Logger log = LoggerFactory.getLogger(${className}EventListenerImpl.class.getName());
     private ${className}StateVariable stateVariable = new ${className}StateVariable();
-
+    private RemoteDevice device = null;
+    
+    
+	public ${className}EventListenerImpl(RemoteDevice device) {
+		this.device = device;
+	}
+    
+	private String getFriendlyName() {
+        return device.getDetails().getFriendlyName();
+	}
+    
     /**
      * Access to state variable
      * 
@@ -41,7 +51,7 @@ public class ${className}EventListenerImpl implements I${className}EventListener
     {
         if (log.isInfoEnabled())
         {
-            log.info(String.format("invalidMessage : %s", ex.getMessage()));
+            log.info(String.format("[%s] invalidMessage : %s", getFriendlyName(), ex.getMessage()));
         }
     }
 
@@ -50,7 +60,11 @@ public class ${className}EventListenerImpl implements I${className}EventListener
     {
         if (log.isWarnEnabled())
         {
-            log.warn(String.format("failed : %s", responseStatus.getResponseDetails()));
+        	if (responseStatus != null) {
+                log.warn(String.format("[%s] failed : %s", getFriendlyName(), responseStatus.getResponseDetails()));
+        	} else {
+                log.warn(String.format("[%s] failed with responseStatus NULL", getFriendlyName()));
+        	}
         }
     }
 
@@ -59,7 +73,9 @@ public class ${className}EventListenerImpl implements I${className}EventListener
     {
         if (log.isInfoEnabled())
         {
-            log.info(String.format("ended : %s", reason.toString()));
+        	String reasonStr = reason != null ? reason.toString() : "NULL";
+        	String responseStatusStr = responseStatus != null ? responseStatus.toString() : "NULL";
+            log.info(String.format("[%s] ended. reason : %s. UpnpResponse : %s", getFriendlyName(), reasonStr, responseStatusStr));
         }
     }
 
@@ -68,7 +84,7 @@ public class ${className}EventListenerImpl implements I${className}EventListener
     {
         if (log.isInfoEnabled())
         {
-            log.info(String.format("events missed : %d", numberOfMissedEvents));
+            log.info(String.format("[%s] events missed : %d", getFriendlyName(), numberOfMissedEvents));
         }
     }
 
@@ -77,7 +93,7 @@ public class ${className}EventListenerImpl implements I${className}EventListener
     {
         if (log.isInfoEnabled())
         {
-            log.info(String.format("established."));
+            log.info(String.format("[%s] established.", getFriendlyName()));
         }
     }
 
@@ -89,7 +105,7 @@ public class ${className}EventListenerImpl implements I${className}EventListener
     {
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("event received."));
+            log.debug(String.format("[%s] event received.", getFriendlyName()));
         }
     }
 
@@ -101,7 +117,7 @@ public class ${className}EventListenerImpl implements I${className}EventListener
     {
         if (log.isDebugEnabled())
         {
-            log.debug("finished processing event attributes.");
+            log.debug(String.format("[%s] finished processing event attributes.", getFriendlyName()));
         }
     }
 
