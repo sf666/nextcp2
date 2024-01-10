@@ -21,6 +21,7 @@ public class OhRadioServiceEventListener extends RadioServiceEventListenerImpl
 
     public OhRadioServiceEventListener(MediaRendererDevice device, boolean shouldPublishTransportServiceState)
     {
+    	super(device.getDevice());
         this.device = device;
         this.shouldPublishTransportServiceState = shouldPublishTransportServiceState;
     }

@@ -17,6 +17,7 @@ public class OhInfoServiceEventListener extends InfoServiceEventListenerImpl
 
     public OhInfoServiceEventListener(MediaRendererDevice device)
     {
+    	super(device.getDevice());
         this.device = device;
     }
 

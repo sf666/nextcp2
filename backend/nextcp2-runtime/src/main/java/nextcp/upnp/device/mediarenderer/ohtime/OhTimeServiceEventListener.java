@@ -16,6 +16,7 @@ public class OhTimeServiceEventListener extends TimeServiceEventListenerImpl
 
     public OhTimeServiceEventListener(ApplicationEventPublisher eventPublisher, MediaRendererDevice device)
     {
+    	super(device.getDevice());
         this.eventPublisher = eventPublisher;
         this.device = device;
     }

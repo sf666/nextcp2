@@ -32,7 +32,7 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
     public OpenHomeDeviceDriver(MediaRendererDevice device, ApplicationEventPublisher eventPublisher, IProductService productService, VolumeService volumeService,
             IDeviceDriver physicalDeviceDriver, Boolean setCoveredUpnpDeviceToMaxVolume)
     {
-        super();
+    	super(device.getDevice());
         this.device = device;
         this.eventPublisher = eventPublisher;
         this.productService = productService;

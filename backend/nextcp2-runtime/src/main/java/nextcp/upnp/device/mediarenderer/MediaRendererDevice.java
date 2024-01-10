@@ -174,14 +174,14 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         if (hasOhVolumeService())
         {
         	log.info(String.format("[%s] initialize OpenHome volume service ...", getFriendlyName()));
-            ohVolumeServiceEventListener = new OhVolumeServiceEventListener();
+            ohVolumeServiceEventListener = new OhVolumeServiceEventListener(this);
             oh_volumeService.addSubscriptionEventListener(ohVolumeServiceEventListener);
         }
 
         if (hasUpnpRenderingControlService())
         {
         	log.info(String.format("[%s] initialize OpenHome rendering control service ...", getFriendlyName()));
-            renderingControlEventListener = new RenderingControlEventListener();
+            renderingControlEventListener = new RenderingControlEventListener(this);
             upnp_renderingControlService.addSubscriptionEventListener(renderingControlEventListener);
         }
 
@@ -342,7 +342,9 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     }
 
     /**
-     * The streamer connected to the physical device driver (amplifier / receiver) has an UPnP AV implementation.
+     * The streamer which is connected to an amplifier / receiver has an UPnP AV implementation.
+     * 
+     * The amplifier is controlled by the physical device driver. The streamer by the class UpnpDeviceDriver.
      * 
      * @param physicalDeviceDriver
      * @return

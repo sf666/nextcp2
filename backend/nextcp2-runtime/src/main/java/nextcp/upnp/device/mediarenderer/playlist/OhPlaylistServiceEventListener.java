@@ -22,6 +22,7 @@ public class OhPlaylistServiceEventListener extends PlaylistServiceEventListener
     
     public OhPlaylistServiceEventListener(OhPlaylistBridge playlist, MediaRendererDevice mediaRendererDevice)
     {
+    	super(mediaRendererDevice.getDevice());
         this.playlist = playlist;
         this.device = mediaRendererDevice;
     }

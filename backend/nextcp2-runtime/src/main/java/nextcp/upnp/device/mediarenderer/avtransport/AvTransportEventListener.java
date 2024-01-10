@@ -38,6 +38,7 @@ public class AvTransportEventListener extends AVTransportServiceEventListenerImp
 
     public AvTransportEventListener(MediaRendererDevice device)
     {
+    	super(device.getDevice());
         this.device = device;
     }
 

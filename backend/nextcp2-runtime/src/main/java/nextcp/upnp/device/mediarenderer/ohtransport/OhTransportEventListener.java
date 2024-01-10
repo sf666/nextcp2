@@ -15,6 +15,7 @@ public class OhTransportEventListener extends TransportServiceEventListenerImpl
 
     public OhTransportEventListener(MediaRendererDevice device)
     {
+    	super(device.getDevice());
         this.device = device;
     }
 

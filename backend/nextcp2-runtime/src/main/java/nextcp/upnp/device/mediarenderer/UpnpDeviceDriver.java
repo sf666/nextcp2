@@ -27,7 +27,7 @@ public class UpnpDeviceDriver extends RenderingControlServiceEventListenerImpl i
     public UpnpDeviceDriver(MediaRendererDevice device, ApplicationEventPublisher eventPublisher, RenderingControlService volumeService, IDeviceDriver physicalDeviceDriver,
             Boolean setMaxVol)
     {
-        super();
+    	super(device.getDevice());
         this.device = device;
         this.eventPublisher = eventPublisher;
         this.volumeService = volumeService;

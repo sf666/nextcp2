@@ -4,12 +4,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.devicedriver.IDeviceDriverCallback;
+import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediarenderer.UpnpDeviceDriver;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.RenderingControlServiceEventListenerImpl;
 
 public class RenderingControlEventListener extends RenderingControlServiceEventListenerImpl
 {
-    private static final Logger log = LoggerFactory.getLogger(RenderingControlEventListener.class.getName());
+    public RenderingControlEventListener(MediaRendererDevice device) {
+		super(device.getDevice());
+		// TODO Auto-generated constructor stub
+	}
+
+	private static final Logger log = LoggerFactory.getLogger(RenderingControlEventListener.class.getName());
 
     private IDeviceDriverCallback callback = null;
 

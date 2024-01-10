@@ -22,6 +22,7 @@ public class OhProductServiceEventListener extends ProductServiceEventListenerIm
     
     public OhProductServiceEventListener(ApplicationEventPublisher eventPublisher, MediaRendererDevice device)
     {
+    	super(device.getDevice());
         this.eventPublisher = eventPublisher;
         this.device = device;
     }
