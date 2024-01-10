@@ -116,8 +116,10 @@ public class DeviceRegistry
     public synchronized void updatedMediaRendererDevice(RemoteDevice remoteDevice)
     {
         MediaRendererDevice device = mediaRendererList.get(remoteDevice.getIdentity().getUdn());
-    	log.debug("");
-        device.deviceUpdated();
+        if (device != null) {
+        	log.debug("DeviceRegistry. Renderer updated : " + device.getFriendlyName());
+            device.deviceUpdated();
+        }
     }
     
     public Collection<MediaServerDevice> getAvailableMediaServer()
