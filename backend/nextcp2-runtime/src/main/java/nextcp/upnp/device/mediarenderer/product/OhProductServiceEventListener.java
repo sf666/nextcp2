@@ -1,5 +1,7 @@
 package nextcp.upnp.device.mediarenderer.product;
 
+import org.jupnp.model.gena.CancelReason;
+import org.jupnp.model.message.UpnpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
@@ -89,5 +91,11 @@ public class OhProductServiceEventListener extends ProductServiceEventListenerIm
         {
             standbyCallback.standbyChanged(value);
         }
+    }
+    
+    @Override
+    public void ended(CancelReason reason, UpnpResponse responseStatus) {
+    	super.ended(reason, responseStatus);
+        device.setServicesEnded(true);            	
     }
 }

@@ -1,5 +1,7 @@
 package nextcp.upnp.device.mediarenderer.ohtime;
 
+import org.jupnp.model.gena.CancelReason;
+import org.jupnp.model.message.UpnpResponse;
 import org.springframework.context.ApplicationEventPublisher;
 
 import nextcp.dto.TrackTimeDto;
@@ -71,5 +73,11 @@ public class OhTimeServiceEventListener extends TimeServiceEventListenerImpl
         }
 
         return (int) ((seconds * 100) / duration);
+    }
+    
+    @Override
+    public void ended(CancelReason reason, UpnpResponse responseStatus) {
+    	super.ended(reason, responseStatus);
+    	device.setServicesEnded(true);    	
     }
 }

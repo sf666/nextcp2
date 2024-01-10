@@ -1,5 +1,7 @@
 package nextcp.upnp.device.mediarenderer.ohinfo;
 
+import org.jupnp.model.gena.CancelReason;
+import org.jupnp.model.message.UpnpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,4 +80,9 @@ public class OhInfoServiceEventListener extends InfoServiceEventListenerImpl
         return dto;
     }
 
+    @Override
+    public void ended(CancelReason reason, UpnpResponse responseStatus) {
+    	super.ended(reason, responseStatus);
+    	device.setServicesEnded(true);
+    }
 }

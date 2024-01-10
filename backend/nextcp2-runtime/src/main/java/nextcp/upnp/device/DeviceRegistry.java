@@ -113,6 +113,13 @@ public class DeviceRegistry
         eventPublisher.publishEvent(new MediaServerListChanged(getAvailableMediaServer()));
     }
 
+    public synchronized void updatedMediaRendererDevice(RemoteDevice remoteDevice)
+    {
+        MediaRendererDevice device = mediaRendererList.get(remoteDevice.getIdentity().getUdn());
+    	log.debug("");
+        device.deviceUpdated();
+    }
+    
     public Collection<MediaServerDevice> getAvailableMediaServer()
     {
         return Collections.unmodifiableCollection(mediaServerList.values());

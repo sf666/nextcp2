@@ -1,7 +1,8 @@
 package nextcp.upnp.device.mediarenderer.playlist;
 
 import java.util.List;
-
+import org.jupnp.model.gena.CancelReason;
+import org.jupnp.model.message.UpnpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,4 +78,9 @@ public class OhPlaylistServiceEventListener extends PlaylistServiceEventListener
         this.shouldPublishTransportServiceState = shouldPublishTransportServiceState;
     }
 
+    @Override
+    public void ended(CancelReason reason, UpnpResponse responseStatus) {
+    	super.ended(reason, responseStatus);
+    	device.setServicesEnded(true);    	
+    }
 }

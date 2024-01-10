@@ -1,5 +1,7 @@
 package nextcp.upnp.device.mediarenderer.ohradio;
 
+import org.jupnp.model.gena.CancelReason;
+import org.jupnp.model.message.UpnpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import nextcp.dto.TransportServiceStateDto;
@@ -63,4 +65,9 @@ public class OhRadioServiceEventListener extends RadioServiceEventListenerImpl
         this.shouldPublishTransportServiceState = shouldPublishTransportServiceState;
     }
     
+    @Override
+    public void ended(CancelReason reason, UpnpResponse responseStatus) {
+    	super.ended(reason, responseStatus);
+        device.setServicesEnded(true);            	
+    }
 }

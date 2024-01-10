@@ -84,6 +84,8 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
     private List<MediaRendererServicesDto> services = new ArrayList<>();
 
+    private boolean servicesEnded = false;
+    
     // private IDeviceDriverService
     private ServiceInitializer serviceInitializer = new ServiceInitializer();
 
@@ -139,6 +141,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     @PostConstruct
     protected void init()
     {
+    	servicesEnded = false;
         initServices();
 
         if (hasUpnpAvTransport())
@@ -262,11 +265,19 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         updateDeviceDriver();
     }
 
+    public void setServicesEnded(boolean value) {
+    	this.servicesEnded = value;
+    }
+    
     public void updateDeviceDriver()
     {
         deviceDriver = createDeviceDriver();
     }
 
+    public void deviceUpdated() {
+    	init();
+    }
+    
     private void initServices()
     {
         updateRendererConfig();
@@ -534,6 +545,11 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
                         transportIsPlaying()));
                 TrackTimeDto dto = avTransportBridge.generateTractTimeDto();
                 eventPublisher.publishEvent(dto);
+            }
+            
+            if (servicesEnded) {
+            	log.warn(String.format("[%s] services ended. Renewing ... ", getFriendlyName()));
+            	init();
             }
         }
         catch (Exception e)

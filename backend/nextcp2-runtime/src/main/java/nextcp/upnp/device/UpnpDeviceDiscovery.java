@@ -105,7 +105,11 @@ public class UpnpDeviceDiscovery implements RegistryListener
     @Override
     public void remoteDeviceUpdated(Registry registry, RemoteDevice device)
     {
-        log.info(String.format("remoteDeviceUpdated : %s ", device.toString()));
+    	if (device.getType().getType().equals(MEDIA_RENDERE_TYPE) && device.getType().getNamespace().equalsIgnoreCase("schemas-upnp-org"))
+        {
+            log.info(String.format("remoteDeviceUpdated : %s ", device.toString()));
+            deviceRegistry.updatedMediaRendererDevice(device);
+        }    	
     }
 
     @Override
