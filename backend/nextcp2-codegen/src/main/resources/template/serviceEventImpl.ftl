@@ -4,6 +4,7 @@ import org.jupnp.model.UnsupportedDataException;
 import org.jupnp.model.gena.CancelReason;
 import org.jupnp.model.message.UpnpResponse;
 import org.jupnp.model.meta.RemoteService;
+import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.state.StateVariableValue;
 
 import org.slf4j.Logger;
