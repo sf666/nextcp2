@@ -324,4 +324,10 @@ public class AvTransportEventListener extends AVTransportServiceEventListenerImp
                 responseStatus != null ? responseStatus.getStatusMessage() : "NULL", responseStatus != null ? responseStatus.getStatusCode() : "response status is NULL"));
         device.setServicesEnded(true);        
     }
+    
+    @Override
+    public void failed(UpnpResponse responseStatus) {
+    	super.failed(responseStatus);
+    	device.setServicesEnded(true);
+    }
 }

@@ -83,4 +83,10 @@ public class OhPlaylistServiceEventListener extends PlaylistServiceEventListener
     	super.ended(reason, responseStatus);
     	device.setServicesEnded(true);    	
     }
+    
+    @Override
+    public void failed(UpnpResponse responseStatus) {
+    	super.failed(responseStatus);
+    	device.setServicesEnded(true);    	
+    }
 }

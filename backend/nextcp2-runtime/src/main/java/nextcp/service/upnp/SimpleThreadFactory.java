@@ -19,9 +19,6 @@ package nextcp.service.upnp;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * The default UMS thread factory.
- */
 public class SimpleThreadFactory implements ThreadFactory {
 	private static final AtomicInteger POOL_NUMBER = new AtomicInteger(1);
 	private final AtomicInteger threadNumber = new AtomicInteger(1);

@@ -1,5 +1,6 @@
 package nextcp.upnp.device.mediarenderer.ohtransport;
 
+import org.jupnp.model.message.UpnpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,4 +63,9 @@ public class OhTransportEventListener extends TransportServiceEventListenerImpl
         this.shouldPublishTransportServiceState = shouldPublishTransportServiceState;
     }
 
+    @Override
+    public void failed(UpnpResponse responseStatus) {
+    	super.failed(responseStatus);
+    	device.setServicesEnded(true);
+    }
 }

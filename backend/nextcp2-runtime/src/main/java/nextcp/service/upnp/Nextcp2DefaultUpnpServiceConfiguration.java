@@ -94,8 +94,8 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
     // core size is a poor choice when there are lots of long-running + idle jobs.
     // a brief intro to the issue:
     // http://www.bigsoft.co.uk/blog/2009/11/27/rules-of-a-threadpoolexecutor-pool-size
-    final private static int CORE_THREAD_POOL_SIZE = 16;
-    final private static int THREAD_POOL_SIZE = 200;
+    final private static int CORE_THREAD_POOL_SIZE = 50;
+    final private static int THREAD_POOL_SIZE = 400;
     final private static int THREAD_QUEUE_SIZE = 1000;
     final private static boolean THREAD_POOL_CORE_TIMEOUT = true;
 
@@ -377,7 +377,7 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
 			// This is the same as Executors.newCachedThreadPool
 			super(CORE_THREAD_POOL_SIZE,
 					THREAD_POOL_SIZE,
-					10L,
+					20L,
 					TimeUnit.SECONDS,
 					new ArrayBlockingQueue<>(THREAD_QUEUE_SIZE),
 					threadFactory,
