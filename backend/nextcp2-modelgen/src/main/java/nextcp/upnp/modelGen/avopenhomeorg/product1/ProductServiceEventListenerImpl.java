@@ -4,6 +4,7 @@ import org.jupnp.model.UnsupportedDataException;
 import org.jupnp.model.gena.CancelReason;
 import org.jupnp.model.message.UpnpResponse;
 import org.jupnp.model.meta.RemoteService;
+import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.state.StateVariableValue;
 
 import org.slf4j.Logger;
@@ -21,7 +22,17 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
 {
     private static Logger log = LoggerFactory.getLogger(ProductServiceEventListenerImpl.class.getName());
     private ProductServiceStateVariable stateVariable = new ProductServiceStateVariable();
-
+    private RemoteDevice device = null;
+    
+    
+	public ProductServiceEventListenerImpl(RemoteDevice device) {
+		this.device = device;
+	}
+    
+	private String getFriendlyName() {
+        return device.getDetails().getFriendlyName();
+	}
+    
     /**
      * Access to state variable
      * 
@@ -41,7 +52,7 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
     {
         if (log.isInfoEnabled())
         {
-            log.info(String.format("invalidMessage : %s", ex.getMessage()));
+            log.info(String.format("[%s] invalidMessage : %s", getFriendlyName(), ex.getMessage()));
         }
     }
 
@@ -50,7 +61,11 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
     {
         if (log.isWarnEnabled())
         {
-            log.warn(String.format("failed : %s", responseStatus.getResponseDetails()));
+        	if (responseStatus != null) {
+                log.warn(String.format("[%s] failed : %s", getFriendlyName(), responseStatus.getResponseDetails()));
+        	} else {
+                log.warn(String.format("[%s] failed with responseStatus NULL", getFriendlyName()));
+        	}
         }
     }
 
@@ -59,7 +74,9 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
     {
         if (log.isInfoEnabled())
         {
-            log.info(String.format("ended : %s", reason.toString()));
+        	String reasonStr = reason != null ? reason.toString() : "NULL";
+        	String responseStatusStr = responseStatus != null ? responseStatus.toString() : "NULL";
+            log.info(String.format("[%s] ended. reason : %s. UpnpResponse : %s", getFriendlyName(), reasonStr, responseStatusStr));
         }
     }
 
@@ -68,7 +85,7 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
     {
         if (log.isInfoEnabled())
         {
-            log.info(String.format("events missed : %d", numberOfMissedEvents));
+            log.info(String.format("[%s] events missed : %d", getFriendlyName(), numberOfMissedEvents));
         }
     }
 
@@ -77,7 +94,7 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
     {
         if (log.isInfoEnabled())
         {
-            log.info(String.format("established."));
+            log.info(String.format("[%s] established.", getFriendlyName()));
         }
     }
 
@@ -89,7 +106,7 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
     {
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("event received."));
+            log.debug(String.format("[%s] event received.", getFriendlyName()));
         }
     }
 
@@ -101,7 +118,7 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
     {
         if (log.isDebugEnabled())
         {
-            log.debug("finished processing event attributes.");
+            log.debug(String.format("[%s] finished processing event attributes.", getFriendlyName()));
         }
     }
 
@@ -153,12 +170,12 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
         }
     }
     
-    public void modelNameChange(String value)
+    public void sourceVisibleChange(Boolean value)
     {
-        stateVariable.ModelName = value;
+        stateVariable.SourceVisible = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "ModelName", value));
+            log.debug(String.format("StateVariable : %s: %s", "SourceVisible", value));
         }
     }
     
@@ -171,12 +188,12 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
         }
     }
     
-    public void sourceVisibleChange(Boolean value)
+    public void modelNameChange(String value)
     {
-        stateVariable.SourceVisible = value;
+        stateVariable.ModelName = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "SourceVisible", value));
+            log.debug(String.format("StateVariable : %s: %s", "ModelName", value));
         }
     }
     
@@ -252,15 +269,6 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
         }
     }
     
-    public void productUrlChange(String value)
-    {
-        stateVariable.ProductUrl = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "ProductUrl", value));
-        }
-    }
-    
     public void manufacturerImageUriChange(String value)
     {
         stateVariable.ManufacturerImageUri = value;
@@ -270,12 +278,12 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
         }
     }
     
-    public void sourceIndexChange(Long value)
+    public void productUrlChange(String value)
     {
-        stateVariable.SourceIndex = value;
+        stateVariable.ProductUrl = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "SourceIndex", value));
+            log.debug(String.format("StateVariable : %s: %s", "ProductUrl", value));
         }
     }
     
@@ -285,6 +293,15 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "ModelUrl", value));
+        }
+    }
+    
+    public void sourceIndexChange(Long value)
+    {
+        stateVariable.SourceIndex = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "SourceIndex", value));
         }
     }
     

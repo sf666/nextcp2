@@ -20,16 +20,13 @@ import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSearchCa
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSortCapabilities;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSortCapabilitiesOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.X_GetFeatureList;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.X_GetFeatureListOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.Search;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.SearchOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.SearchInput;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSortExtensionCapabilities;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSortExtensionCapabilitiesOutput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.X_SetBookmark;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.X_SetBookmarkInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSystemUpdateID;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSystemUpdateIDOutput;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetFeatureList;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetFeatureListOutput;
 
 
 /**
@@ -114,11 +111,10 @@ public class ContentDirectoryService
         return res;        
     }
 
-    public X_GetFeatureListOutput x_GetFeatureList()
+    public void x_GetFeatureList()
     {
         X_GetFeatureList x_GetFeatureList = new X_GetFeatureList(contentDirectoryService,  upnpService.getControlPoint());
-        X_GetFeatureListOutput res = x_GetFeatureList.executeAction();
-        return res;        
+        x_GetFeatureList.executeAction();
     }
 
     public SearchOutput search(SearchInput inp)
@@ -128,24 +124,16 @@ public class ContentDirectoryService
         return res;        
     }
 
-    public GetSortExtensionCapabilitiesOutput getSortExtensionCapabilities()
+    public void x_SetBookmark(X_SetBookmarkInput inp)
     {
-        GetSortExtensionCapabilities getSortExtensionCapabilities = new GetSortExtensionCapabilities(contentDirectoryService,  upnpService.getControlPoint());
-        GetSortExtensionCapabilitiesOutput res = getSortExtensionCapabilities.executeAction();
-        return res;        
+        X_SetBookmark x_SetBookmark = new X_SetBookmark(contentDirectoryService, inp, upnpService.getControlPoint());
+        x_SetBookmark.executeAction();
     }
 
     public GetSystemUpdateIDOutput getSystemUpdateID()
     {
         GetSystemUpdateID getSystemUpdateID = new GetSystemUpdateID(contentDirectoryService,  upnpService.getControlPoint());
         GetSystemUpdateIDOutput res = getSystemUpdateID.executeAction();
-        return res;        
-    }
-
-    public GetFeatureListOutput getFeatureList()
-    {
-        GetFeatureList getFeatureList = new GetFeatureList(contentDirectoryService,  upnpService.getControlPoint());
-        GetFeatureListOutput res = getFeatureList.executeAction();
         return res;        
     }
 }

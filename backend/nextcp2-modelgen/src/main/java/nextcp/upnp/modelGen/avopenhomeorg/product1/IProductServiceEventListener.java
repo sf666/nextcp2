@@ -22,11 +22,11 @@ public interface IProductServiceEventListener extends ISubscriptionEventListener
     
     public void manufacturerInfoChange(String value);
     
-    public void modelNameChange(String value);
+    public void sourceVisibleChange(Boolean value);
     
     public void manufacturerNameChange(String value);
     
-    public void sourceVisibleChange(Boolean value);
+    public void modelNameChange(String value);
     
     public void productNameChange(String value);
     
@@ -44,13 +44,13 @@ public interface IProductServiceEventListener extends ISubscriptionEventListener
     
     public void standbyChange(Boolean value);
     
-    public void productUrlChange(String value);
-    
     public void manufacturerImageUriChange(String value);
     
-    public void sourceIndexChange(Long value);
+    public void productUrlChange(String value);
     
     public void modelUrlChange(String value);
+    
+    public void sourceIndexChange(Long value);
     
     public void productImageUriChange(String value);
     

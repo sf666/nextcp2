@@ -4,6 +4,7 @@ import org.jupnp.model.UnsupportedDataException;
 import org.jupnp.model.gena.CancelReason;
 import org.jupnp.model.message.UpnpResponse;
 import org.jupnp.model.meta.RemoteService;
+import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.state.StateVariableValue;
 
 import org.slf4j.Logger;
@@ -21,7 +22,17 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
 {
     private static Logger log = LoggerFactory.getLogger(InfoServiceEventListenerImpl.class.getName());
     private InfoServiceStateVariable stateVariable = new InfoServiceStateVariable();
-
+    private RemoteDevice device = null;
+    
+    
+	public InfoServiceEventListenerImpl(RemoteDevice device) {
+		this.device = device;
+	}
+    
+	private String getFriendlyName() {
+        return device.getDetails().getFriendlyName();
+	}
+    
     /**
      * Access to state variable
      * 
@@ -41,7 +52,7 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
     {
         if (log.isInfoEnabled())
         {
-            log.info(String.format("invalidMessage : %s", ex.getMessage()));
+            log.info(String.format("[%s] invalidMessage : %s", getFriendlyName(), ex.getMessage()));
         }
     }
 
@@ -50,7 +61,11 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
     {
         if (log.isWarnEnabled())
         {
-            log.warn(String.format("failed : %s", responseStatus.getResponseDetails()));
+        	if (responseStatus != null) {
+                log.warn(String.format("[%s] failed : %s", getFriendlyName(), responseStatus.getResponseDetails()));
+        	} else {
+                log.warn(String.format("[%s] failed with responseStatus NULL", getFriendlyName()));
+        	}
         }
     }
 
@@ -59,7 +74,9 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
     {
         if (log.isInfoEnabled())
         {
-            log.info(String.format("ended : %s", reason.toString()));
+        	String reasonStr = reason != null ? reason.toString() : "NULL";
+        	String responseStatusStr = responseStatus != null ? responseStatus.toString() : "NULL";
+            log.info(String.format("[%s] ended. reason : %s. UpnpResponse : %s", getFriendlyName(), reasonStr, responseStatusStr));
         }
     }
 
@@ -68,7 +85,7 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
     {
         if (log.isInfoEnabled())
         {
-            log.info(String.format("events missed : %d", numberOfMissedEvents));
+            log.info(String.format("[%s] events missed : %d", getFriendlyName(), numberOfMissedEvents));
         }
     }
 
@@ -77,7 +94,7 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
     {
         if (log.isInfoEnabled())
         {
-            log.info(String.format("established."));
+            log.info(String.format("[%s] established.", getFriendlyName()));
         }
     }
 
@@ -89,7 +106,7 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
     {
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("event received."));
+            log.debug(String.format("[%s] event received.", getFriendlyName()));
         }
     }
 
@@ -101,7 +118,7 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
     {
         if (log.isDebugEnabled())
         {
-            log.debug("finished processing event attributes.");
+            log.debug(String.format("[%s] finished processing event attributes.", getFriendlyName()));
         }
     }
 
@@ -153,6 +170,15 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
+    public void trackCountChange(Long value)
+    {
+        stateVariable.TrackCount = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "TrackCount", value));
+        }
+    }
+    
     public void bitRateChange(Long value)
     {
         stateVariable.BitRate = value;
@@ -162,12 +188,12 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
-    public void trackCountChange(Long value)
+    public void bitDepthChange(Long value)
     {
-        stateVariable.TrackCount = value;
+        stateVariable.BitDepth = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "TrackCount", value));
+            log.debug(String.format("StateVariable : %s: %s", "BitDepth", value));
         }
     }
     
@@ -189,15 +215,6 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
-    public void losslessChange(Boolean value)
-    {
-        stateVariable.Lossless = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Lossless", value));
-        }
-    }
-    
     public void metatextChange(String value)
     {
         stateVariable.Metatext = value;
@@ -207,12 +224,12 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
-    public void bitDepthChange(Long value)
+    public void losslessChange(Boolean value)
     {
-        stateVariable.BitDepth = value;
+        stateVariable.Lossless = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "BitDepth", value));
+            log.debug(String.format("StateVariable : %s: %s", "Lossless", value));
         }
     }
     

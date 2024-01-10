@@ -16,9 +16,9 @@ public class VolumeServiceStateVariable
     public Long BalanceMax = null;
     public Long VolumeMilliDbPerStep = null;
     public Long VolumeMax = null;
-    public Long VolumeUnity = null;
-    public Integer Balance = null;
     public Integer Fade = null;
     public Boolean Mute = null;
+    public Integer Balance = null;
+    public Long VolumeUnity = null;
 
 }

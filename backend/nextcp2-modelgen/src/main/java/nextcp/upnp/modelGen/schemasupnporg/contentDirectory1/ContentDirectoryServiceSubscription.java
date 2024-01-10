@@ -108,29 +108,20 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "TransferIDs":
-                        transferIDsChange((String) stateVar.getValue());
-                        break;
                     case "SystemUpdateID":
                         systemUpdateIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "SortCapabilities":
                         sortCapabilitiesChange((String) stateVar.getValue());
                         break;
-                    case "X_FeatureList":
-                        x_FeatureListChange((String) stateVar.getValue());
+                    case "A_ARG_Type_TransferStatus":
+                        a_ARG_Type_TransferStatusChange((String) stateVar.getValue());
                         break;
-                    case "SortExtensionCapabilities":
-                        sortExtensionCapabilitiesChange((String) stateVar.getValue());
-                        break;
-                    case "ContainerUpdateIDs":
-                        containerUpdateIDsChange((String) stateVar.getValue());
+                    case "A_ARG_Type_TransferID":
+                        a_ARG_Type_TransferIDChange((String) stateVar.getValue());
                         break;
                     case "SearchCapabilities":
                         searchCapabilitiesChange((String) stateVar.getValue());
-                        break;
-                    case "FeatureList":
-                        featureListChange((String) stateVar.getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -152,14 +143,6 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
         }
     }
 
-    private void transferIDsChange(String value)
-    {
-        for (IContentDirectoryServiceEventListener listener : eventListener)
-        {
-            listener.transferIDsChange(value);
-        }
-    }    
-
     private void systemUpdateIDChange(Long value)
     {
         for (IContentDirectoryServiceEventListener listener : eventListener)
@@ -176,27 +159,19 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void x_FeatureListChange(String value)
+    private void a_ARG_Type_TransferStatusChange(String value)
     {
         for (IContentDirectoryServiceEventListener listener : eventListener)
         {
-            listener.x_FeatureListChange(value);
+            listener.a_ARG_Type_TransferStatusChange(value);
         }
     }    
 
-    private void sortExtensionCapabilitiesChange(String value)
+    private void a_ARG_Type_TransferIDChange(String value)
     {
         for (IContentDirectoryServiceEventListener listener : eventListener)
         {
-            listener.sortExtensionCapabilitiesChange(value);
-        }
-    }    
-
-    private void containerUpdateIDsChange(String value)
-    {
-        for (IContentDirectoryServiceEventListener listener : eventListener)
-        {
-            listener.containerUpdateIDsChange(value);
+            listener.a_ARG_Type_TransferIDChange(value);
         }
     }    
 
@@ -205,14 +180,6 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
         for (IContentDirectoryServiceEventListener listener : eventListener)
         {
             listener.searchCapabilitiesChange(value);
-        }
-    }    
-
-    private void featureListChange(String value)
-    {
-        for (IContentDirectoryServiceEventListener listener : eventListener)
-        {
-            listener.featureListChange(value);
         }
     }    
 }

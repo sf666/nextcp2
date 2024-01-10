@@ -20,10 +20,10 @@ import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Product;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.ProductOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceXml;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceXmlOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexByName;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexByNameInput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndex;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexInput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexByName;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexByNameInput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Standby;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.StandbyOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Source;
@@ -33,10 +33,10 @@ import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceIndex;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceIndexOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetStandby;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetStandbyInput;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Manufacturer;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.ManufacturerOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Model;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.ModelOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Manufacturer;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.ManufacturerOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceXmlChangeCount;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceXmlChangeCountOutput;
 
@@ -130,16 +130,16 @@ public class ProductService
         return res;        
     }
 
-    public void setSourceIndexByName(SetSourceIndexByNameInput inp)
-    {
-        SetSourceIndexByName setSourceIndexByName = new SetSourceIndexByName(productService, inp, upnpService.getControlPoint());
-        setSourceIndexByName.executeAction();
-    }
-
     public void setSourceIndex(SetSourceIndexInput inp)
     {
         SetSourceIndex setSourceIndex = new SetSourceIndex(productService, inp, upnpService.getControlPoint());
         setSourceIndex.executeAction();
+    }
+
+    public void setSourceIndexByName(SetSourceIndexByNameInput inp)
+    {
+        SetSourceIndexByName setSourceIndexByName = new SetSourceIndexByName(productService, inp, upnpService.getControlPoint());
+        setSourceIndexByName.executeAction();
     }
 
     public StandbyOutput standby()
@@ -169,17 +169,17 @@ public class ProductService
         setStandby.executeAction();
     }
 
-    public ManufacturerOutput manufacturer()
-    {
-        Manufacturer manufacturer = new Manufacturer(productService,  upnpService.getControlPoint());
-        ManufacturerOutput res = manufacturer.executeAction();
-        return res;        
-    }
-
     public ModelOutput model()
     {
         Model model = new Model(productService,  upnpService.getControlPoint());
         ModelOutput res = model.executeAction();
+        return res;        
+    }
+
+    public ManufacturerOutput manufacturer()
+    {
+        Manufacturer manufacturer = new Manufacturer(productService,  upnpService.getControlPoint());
+        ManufacturerOutput res = manufacturer.executeAction();
         return res;        
     }
 

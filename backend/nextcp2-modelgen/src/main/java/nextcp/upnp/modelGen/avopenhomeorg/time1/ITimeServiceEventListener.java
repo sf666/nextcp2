@@ -12,9 +12,9 @@ import nextcp.upnp.ISubscriptionEventListener;
  */
 public interface ITimeServiceEventListener extends ISubscriptionEventListener 
 {
-    public void secondsChange(Long value);
-    
     public void durationChange(Long value);
+    
+    public void secondsChange(Long value);
     
     public void trackCountChange(Long value);
     
