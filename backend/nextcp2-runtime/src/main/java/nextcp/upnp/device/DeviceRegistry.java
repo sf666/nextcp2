@@ -118,7 +118,7 @@ public class DeviceRegistry
         MediaRendererDevice device = mediaRendererList.get(remoteDevice.getIdentity().getUdn());
         if (device != null) {
         	log.debug("DeviceRegistry. Renderer updated : " + device.getFriendlyName());
-            device.deviceUpdated();
+            device.setServicesEnded(true);
         }
     }
     
