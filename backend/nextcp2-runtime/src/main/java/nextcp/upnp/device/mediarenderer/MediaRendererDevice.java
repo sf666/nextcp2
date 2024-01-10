@@ -2,7 +2,7 @@ package nextcp.upnp.device.mediarenderer;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.concurrent.atomic.AtomicBoolean;
 import jakarta.annotation.PostConstruct;
 
 import org.apache.commons.lang.StringUtils;
@@ -84,7 +84,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
     private List<MediaRendererServicesDto> services = new ArrayList<>();
 
-    private boolean servicesEnded = false;
+    private AtomicBoolean servicesEnded = new AtomicBoolean(false);
     
     // private IDeviceDriverService
     private ServiceInitializer serviceInitializer = new ServiceInitializer();
@@ -141,7 +141,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     @PostConstruct
     protected void init()
     {
-    	servicesEnded = false;
+    	servicesEnded.set(false);
         initServices();
 
         if (hasUpnpAvTransport())
@@ -266,7 +266,8 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     }
 
     public void setServicesEnded(boolean value) {
-    	this.servicesEnded = value;
+    	log.debug("serviceEnded : " + value);
+    	this.servicesEnded.set(value);;
     }
     
     public void updateDeviceDriver()
@@ -547,7 +548,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
                 eventPublisher.publishEvent(dto);
             }
             
-            if (servicesEnded) {
+            if (servicesEnded.get()) {
             	log.warn(String.format("[%s] services ended. Renewing ... ", getFriendlyName()));
             	init();
             }
