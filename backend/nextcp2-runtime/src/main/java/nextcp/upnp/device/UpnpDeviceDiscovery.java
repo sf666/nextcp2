@@ -105,7 +105,7 @@ public class UpnpDeviceDiscovery implements RegistryListener
     @Override
     public void remoteDeviceUpdated(Registry registry, RemoteDevice device)
     {
-        log.trace(String.format("remoteDeviceUpdated : %s ", device.toString()));
+        log.info(String.format("remoteDeviceUpdated : %s ", device.toString()));
     }
 
     @Override
