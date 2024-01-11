@@ -549,8 +549,10 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             }
             
             
-            if ("PLAYING".equalsIgnoreCase(getTransportServiceBridge().getCurrentTransportServiceState().transportState) &&  // !getStandby() && 
-            		servicesEnded.get()) {            	
+            if (servicesEnded.get() &&
+            	    getTransportServiceBridge() != null && 
+            	    "PLAYING".equalsIgnoreCase(getTransportServiceBridge().getCurrentTransportServiceState().transportState) // !getStandby() && 
+            		) {            	
             	log.warn(String.format("[%s] services ended. Device is powered & playing -> renewing ... ", getFriendlyName()));
             	init();
             }
