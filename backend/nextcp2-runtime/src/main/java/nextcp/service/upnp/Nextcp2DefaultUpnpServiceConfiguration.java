@@ -176,12 +176,14 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
         return genaEventProcessor;
     }
 
-    @Override
-    @SuppressWarnings("rawtypes")
-    public StreamClient createStreamClient()
-    {
-        return new ApacheStreamClient(new ApacheStreamClientConfiguration(getStreamClientExecutorService())); // getStreamClientExecutorService()
-    }
+	@Override
+	public StreamClient createStreamClient() {
+		return new JdkStreamClients(
+				new JdkStreamClientConfiguration(
+						getStreamClientExecutorService()
+				)
+		);
+	}
 
 	public ExecutorService getStreamClientExecutorService() {
 		return streamClientExecutorService;
@@ -194,8 +196,8 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
     @Override
     @SuppressWarnings("rawtypes")
     public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
-    	return null;
-//         return transportConfiguration.createStreamServer(networkAddressFactory.getStreamListenPort());
+		return new JdkHttpServerStreamServer(
+			new Nextcp2StreamServerConfiguration());
     }
 
     @Override
