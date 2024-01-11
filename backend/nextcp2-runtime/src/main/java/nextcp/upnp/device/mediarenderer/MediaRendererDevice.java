@@ -319,12 +319,12 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     {
         if (productService == null)
         {
-            log.warn("Product service is not initialized ... OH device driver is not being created for device " + getFriendlyName());
+            log.debug("Product service is not initialized ... OH device driver is not being created for device " + getFriendlyName());
             return null;
         }
         if (oh_volumeService == null)
         {
-            log.warn("Volume service is not initialized ... OH device driver is not being created." + getFriendlyName());
+            log.debug("Volume service is not initialized ... OH device driver is not being created." + getFriendlyName());
             return null;
         }
 
@@ -339,7 +339,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             }
             else
             {
-                log.warn("no ohProductServiceEventListener available. No standby updates will be available for device " + getFriendlyName());
+                log.debug("no ohProductServiceEventListener available. No standby updates will be available for device " + getFriendlyName());
             }
             if (ohVolumeServiceEventListener != null)
             {
@@ -347,7 +347,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             }
             else
             {
-                log.warn("no ohVolumeServiceEventListener available. No volume updates will be available.");
+                log.debug("no ohVolumeServiceEventListener available. No volume updates will be available.");
             }
         }
         return ohDeviceDriver;
@@ -365,7 +365,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     {
         if (upnp_renderingControlService == null)
         {
-            log.warn("Rendering Control Service is not initialized ... UPnP device driver is not being created.");
+            log.debug("Rendering Control Service is not initialized ... UPnP device driver is not being created.");
             return null;
         }
 
@@ -380,7 +380,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             }
             else
             {
-                log.warn("no renderingControlEventListener available. No volume updates will be available.");
+                log.debug("no renderingControlEventListener available. No volume updates will be available.");
             }
         }
         return upnpDeviceDriver;
