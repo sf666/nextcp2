@@ -12,6 +12,14 @@ import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.RenderingControlSer
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.RenderingControlServiceEventListenerImpl;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.SetVolumeInput;
 
+/**
+ * This class bridges rendering control actions like standby or volume control to an external device, so standby/volume can be controlled
+ * by an attached amplifier instead of an attached UPnP device (streamer).
+ * 
+ * For example, if you attach an "usr-tcp232-304" device, which is an tcp/ip to RS232 converter, to an McIntosh amplifier, and use the 
+ * MA9000 driver for an attached network streamer, the amplifier's volume and power is being controlled. For best quality, the streamer
+ * volume can be set to 100% if "setMaxVol" is set to TRUE.     
+ */
 public class UpnpDeviceDriver extends RenderingControlServiceEventListenerImpl implements IDeviceDriver, IDeviceDriverCallback
 {
     private static final Logger log = LoggerFactory.getLogger(UpnpDeviceDriver.class.getName());
@@ -107,7 +115,7 @@ public class UpnpDeviceDriver extends RenderingControlServiceEventListenerImpl i
     {
         if (physicalDeviceDriver == null)
         {
-            log.warn("not handled setStandby ...");
+            log.warn("physicalDeviceDriver not available : cannnot handled standby state ...");
         }
         else
         {
