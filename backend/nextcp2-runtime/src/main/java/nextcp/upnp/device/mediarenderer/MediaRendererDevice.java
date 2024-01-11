@@ -549,10 +549,9 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             }
             
             
-            if (!getStandby() &&
-//            		"PLAYING".equalsIgnoreCase(getTransportServiceBridge().getCurrentTransportServiceState().transportState) && 
+            if ("PLAYING".equalsIgnoreCase(getTransportServiceBridge().getCurrentTransportServiceState().transportState) &&  // !getStandby() && 
             		servicesEnded.get()) {            	
-            	log.warn(String.format("[%s] services ended. Device is powered -> renewing ... ", getFriendlyName()));
+            	log.warn(String.format("[%s] services ended. Device is powered & playing -> renewing ... ", getFriendlyName()));
             	init();
             }
         }
@@ -644,6 +643,11 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         }
     }
 
+    /**
+     * Attention: UPnP device driver has not Standby information!
+     * 
+     * @return
+     */
     public boolean getStandby()
     {
         try

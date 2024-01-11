@@ -131,25 +131,36 @@ public class UpnpDeviceDriver extends RenderingControlServiceEventListenerImpl i
     @Override
     public int getVolume()
     {
-        return physicalDeviceDriver.getVolume();
+    	if (isMonitoringExternalAV()) {
+    		return physicalDeviceDriver.getVolume();
+    	}
+    	return 0;
     }
 
     @Override
     public boolean getStandby()
     {
-        return physicalDeviceDriver.getStandby();
+    	if (isMonitoringExternalAV()) {
+    		return physicalDeviceDriver.getStandby();
+    	}
+    	return true;
     }
 
     @Override
     public void setInput(String input)
     {
-        physicalDeviceDriver.setInput(input);
+    	if (isMonitoringExternalAV()) {
+    		physicalDeviceDriver.setInput(input);
+    	}
     }
 
     @Override
     public InputSourceDto getInput()
     {
-        return physicalDeviceDriver.getInput();
+    	if (isMonitoringExternalAV()) {
+    		return physicalDeviceDriver.getInput();
+    	}
+    	return new InputSourceDto();
     }
 
     @Override
