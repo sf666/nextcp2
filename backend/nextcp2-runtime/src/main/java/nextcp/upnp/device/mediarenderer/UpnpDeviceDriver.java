@@ -134,6 +134,7 @@ public class UpnpDeviceDriver extends RenderingControlServiceEventListenerImpl i
     	if (isMonitoringExternalAV()) {
     		return physicalDeviceDriver.getVolume();
     	}
+    	log.warn("physical device driver is not set : return default volume of : 0");
     	return 0;
     }
 
@@ -143,6 +144,7 @@ public class UpnpDeviceDriver extends RenderingControlServiceEventListenerImpl i
     	if (isMonitoringExternalAV()) {
     		return physicalDeviceDriver.getStandby();
     	}
+    	log.warn("physical device driver is not set : return default standby : TRUE");
     	return true;
     }
 
@@ -152,6 +154,7 @@ public class UpnpDeviceDriver extends RenderingControlServiceEventListenerImpl i
     	if (isMonitoringExternalAV()) {
     		physicalDeviceDriver.setInput(input);
     	}
+    	log.warn("physical device driver is not set : cannot set input");    	
     }
 
     @Override
@@ -160,6 +163,7 @@ public class UpnpDeviceDriver extends RenderingControlServiceEventListenerImpl i
     	if (isMonitoringExternalAV()) {
     		return physicalDeviceDriver.getInput();
     	}
+    	log.warn("physical device driver is not set : return empty InputSourceDto");
     	return new InputSourceDto();
     }
 
