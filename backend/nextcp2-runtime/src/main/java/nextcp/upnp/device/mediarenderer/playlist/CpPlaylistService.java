@@ -125,22 +125,24 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
     		return;
     	}
     	
-        log.debug("transportStateChange to : " + value);
+        log.debug(String.format("[%s] transportStateChange to : %s", getDevice().getFriendlyName(), value));
         if ("PAUSED_PLAYBACK".equalsIgnoreCase(value))
         {
+            log.debug(String.format("[%s] transportStateChange to PAUSED_PLAYBACK. Proceeding to next song ...", getDevice().getFriendlyName()));
             proceedToNextSongToPlayNoNextUriSupport();
         }
         else if ("STOPPED".equalsIgnoreCase(value) || "TRANSITIONING".equalsIgnoreCase(value))
         {
+            log.debug(String.format("[%s] transportStateChange to STOPPED/TRANSITIONING. Proceeding to next song ...", getDevice().getFriendlyName()));
             proceedToNextSongToPlayNoNextUriSupport();
         }
         else if ("PLAYING".equalsIgnoreCase(value))
         {
-            log.debug("transportStateChange to PLAYING. Do nothing ...: ");
+            log.debug(String.format("[%s] transportStateChange to PLAYING. Do nothing ...", getDevice().getFriendlyName()));
         }
         else
         {
-            log.debug("not processed : " + value);
+            log.debug(String.format("[%s] not processed : %s", getDevice().getFriendlyName(), value));
         }
     }
 
@@ -181,19 +183,19 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
     @Override
     public void currentTrackURIChange(String value)
     {
-        log.debug("currentTrackURIChange to : " + value);
+        log.debug(String.format("[%s] currentTrackURIChange to : %s", getDevice().getFriendlyName(), value));
         super.currentTrackURIChange(value);
         proceedToNextSongNextUriSupport(value);
     }
 
     private void proceedToNextSongNextUriSupport(String value)
     {
-        log.debug("proceedToNextSongNextUriSupport ...");
+        log.debug(String.format("[%s] proceedToNextSongNextUriSupport ...", getDevice().getFriendlyName()));
         if (hasNextUriSupport())
         {
             if (StringUtils.isEmpty(value))
             {
-                log.debug("device has no 'current track' uri set.");
+                log.debug(String.format("[%s] device has no 'current track' uri set.", getDevice().getFriendlyName()));
                 return;
             }
 
@@ -201,23 +203,23 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
             {
                 if (getCurrentTrack() != null && getCurrentTrack().streamingURL.equals(value))
                 {
-                    log.debug("media renderer device is playing current song : " + value);
+                    log.debug(String.format("[%s] media renderer device is playing current track : %s", getDevice().getFriendlyName(), value));
                 }
                 else if (nextSongUrl != null && nextSongUrl.contentEquals(value))
                 {
-                    log.debug("media renderer device proceeded to next song in queue : " + value);
+                    log.debug(String.format("[%s] media renderer device proceeded to next song in queue : %s", getDevice().getFriendlyName(), value));
                     moveToNextTrack();
                     setNextSongFromQueue();
                 }
                 else
                 {
-                    log.info("media renderer device is controlled by another device. pause playing queue until playback stops ... current uri : " + value);
+                    log.info(String.format("[%s] media renderer device is controlled by another device. pause playing queue until playback stops ... current uri : %s", getDevice().getFriendlyName(), value));
                 }
             }
         }
         else
         {
-            log.debug("device has no nextUriSupport. Do nothing ...");
+            log.debug(String.format("[%s] device has no nextUriSupport. Do nothing ...", getDevice().getFriendlyName()));
         }
     }
 
