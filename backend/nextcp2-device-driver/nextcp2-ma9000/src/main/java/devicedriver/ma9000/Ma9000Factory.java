@@ -1,11 +1,9 @@
 package devicedriver.ma9000;
 
 import java.net.InetSocketAddress;
-
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import devicedriver.McIntosh.Ma9000Binding;
 import nextcp.devicedriver.IDeviceCapabilities;
 import nextcp.devicedriver.IDeviceDriverCallback;
