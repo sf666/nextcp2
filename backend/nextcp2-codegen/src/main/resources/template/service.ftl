@@ -61,7 +61,19 @@ public class ${className}
 	        log.warn(String.format("initialized service '${upnpService}' failed for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
 	    }
     }
-    
+
+    public void unsubscribeService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingUnsubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingUnsubscribe(subscription);
+        protocol.run();
+    }
+
+    public void renewService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingRenewal protocol = upnpService.getControlPoint().getProtocolFactory().createSendingRenewal(subscription);
+        protocol.run();
+    }
+
     public void addSubscriptionEventListener(I${className}EventListener listener)
     {
         subscription.addSubscriptionEventListener(listener);
@@ -76,6 +88,13 @@ public class ${className}
     {
         return ${className?uncap_first};
     }    
+
+
+//
+// Actions
+// =========================================================================
+//
+
 
 <#list actionNames as action>
 
