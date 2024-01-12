@@ -56,7 +56,7 @@ public class OhInfoServiceEventListener extends InfoServiceEventListenerImpl
         // In this case the radio station name is mapped to the album field, artist and songtitle extracted from Metatext.
         if (dto.metatextCount > 0 && state.Metatext != null && !state.Metatext.contains("<DIDL-Lite"))
         {
-            log.debug(String.format("Metatext present. Count: %d. Text: %s", dto.metatextCount, dto.metatext));
+            log.debug(String.format("[%s] Metatext present. Count: %d. Text: %s",device.getFriendlyName(), dto.metatextCount, dto.metatext));
             String[] splitMeta = state.Metatext.split(" - ");
             if (splitMeta.length == 2)
             {
@@ -66,15 +66,16 @@ public class OhInfoServiceEventListener extends InfoServiceEventListenerImpl
             }
             else
             {
-                log.warn("No split chat found in Metatext. Text: " + dto.metatext);
+                log.warn(String.format("[%s] No split chat found in Metatext. Text: %s" , device.getFriendlyName(), dto.metatext));
                 dto.currentTrack.album = dto.metatext;
             }
         } else {
         	log.debug("metatext not processed.");
+            log.warn(String.format("[%s] metatext not processed." , device.getFriendlyName()));
         }
         
         if (log.isInfoEnabled()) {
-        	log.info(dto.toString());
+            log.info(String.format("[%s] %s" , device.getFriendlyName(), dto.toString()));
         }
         
         return dto;
