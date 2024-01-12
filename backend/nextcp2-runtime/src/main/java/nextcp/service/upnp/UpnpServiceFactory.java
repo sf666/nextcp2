@@ -1,29 +1,43 @@
 package nextcp.service.upnp;
 
-import org.jupnp.UpnpService;
-import org.jupnp.UpnpServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import jakarta.annotation.PostConstruct;
+import nextcp.config.RendererConfig;
+import nextcp.upnp.device.DeviceRegistry;
 
 @Component
 public class UpnpServiceFactory
 {
-    private UpnpService upnpService = null;
+    private Nextcp2UpnpServiceImpl upnpService = null;
+    private Nextcp2DefaultUpnpServiceConfiguration nextcp2DefaultUpnpServiceConfiguration = new Nextcp2DefaultUpnpServiceConfiguration();
 
+    @Autowired
+	private RendererConfig rendererConfigService;
+    
+    @Autowired
+    private DeviceRegistry deviceRegistry = null;
+    
     public UpnpServiceFactory()
     {
-        
-        // UpnpService upnpService = new UpnpServiceImpl(new DefaultUpnpServiceConfiguration());
-        // CodegenUpnpServiceConfiguration sc = new CodegenUpnpServiceConfiguration();
-
-        upnpService = new UpnpServiceImpl(new Nextcp2DefaultUpnpServiceConfiguration());
-        upnpService.startup();
     }
 
+    @PostConstruct
+    public void init() {
+        // UpnpService upnpService = new UpnpServiceImpl(new DefaultUpnpServiceConfiguration());
+        // CodegenUpnpServiceConfiguration sc = new CodegenUpnpServiceConfiguration();
+    	
+    	nextcp2DefaultUpnpServiceConfiguration.setDeviceRegistry(deviceRegistry);
+        upnpService = new Nextcp2UpnpServiceImpl(nextcp2DefaultUpnpServiceConfiguration, rendererConfigService);
+        
+        upnpService.startup();
+    }
+    
     @Bean
     @Scope(value = "prototype")
-    public UpnpService upnpService()
+    public Nextcp2UpnpServiceImpl upnpService()
     {
         return upnpService;
     }

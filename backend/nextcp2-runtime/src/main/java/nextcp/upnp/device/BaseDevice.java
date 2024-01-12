@@ -9,8 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-
 import nextcp.rest.DtoBuilder;
+import nextcp.service.upnp.RemoteDeviceFacade;
 import nextcp.util.DidlContent;
 
 public class BaseDevice
@@ -18,6 +18,8 @@ public class BaseDevice
     private static final Logger log = LoggerFactory.getLogger(BaseDevice.class.getName());
 
     private RemoteDevice device;
+    private RemoteDeviceFacade deviceFacade = new RemoteDeviceFacade();
+    
     private DidlContent didlContent = new DidlContent();
 
     @Autowired
@@ -74,17 +76,17 @@ public class BaseDevice
 
     public UDN getUDN()
     {
-        return getDevice().getIdentity().getUdn();
+        return deviceFacade.getUDN(device);
     }
 
     public String getUdnAsString()
     {
-        return getDevice().getIdentity().getUdn().getIdentifierString();
+        return deviceFacade.getUdnAsString(device);
     }
 
     public String getFriendlyName()
     {
-        return getDevice().getDetails().getFriendlyName();
+        return deviceFacade.getFriendlyName(device);
     }
 
     protected DIDLContent generateDidlContent(String didlContentXml) throws Exception

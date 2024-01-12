@@ -31,6 +31,7 @@ import org.jupnp.binding.xml.UDA10ServiceDescriptorBinderImpl;
 import org.jupnp.model.ModelUtil;
 import org.jupnp.model.Namespace;
 import org.jupnp.model.message.UpnpHeaders;
+import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteDeviceIdentity;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.types.ServiceType;
@@ -55,6 +56,7 @@ import org.jupnp.transport.spi.StreamServer;
 import org.jupnp.util.Exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import nextcp.upnp.device.DeviceRegistry;
 
 /**
  * Default configuration data of a typical UPnP stack.
@@ -115,6 +117,8 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
     
     final private Namespace namespace;
 
+    private DeviceRegistry deviceRegistry = null;
+    
     @SuppressWarnings("rawtypes")
     final private TransportConfiguration transportConfiguration;
 
@@ -435,4 +439,14 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
             return t;
         }
     }
+
+	void inactiveDeviceFound(RemoteDevice remoteDevice) {
+		if (deviceRegistry != null) {
+			deviceRegistry.addInactiveRemoteDevice(remoteDevice);
+		}
+	}
+
+	public void setDeviceRegistry(DeviceRegistry deviceRegistry) {
+		this.deviceRegistry = deviceRegistry;
+	}
 }

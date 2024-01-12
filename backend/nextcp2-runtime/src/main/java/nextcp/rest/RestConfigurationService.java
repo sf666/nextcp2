@@ -35,6 +35,7 @@ import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.ToastrMessage;
 import nextcp.dto.UiClientConfig;
 import nextcp.service.ConfigService;
+import nextcp.service.upnp.Nextcp2UpnpServiceImpl;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.util.IApplicationRestartable;
@@ -49,6 +50,9 @@ public class RestConfigurationService
     public static String CLIENT_CONFIG_QUEUENAME = "CONFIG_CHANGED";
 
     private List<DeviceDriverCapability> deviceDriverList = new ArrayList<DeviceDriverCapability>();
+
+    @Autowired
+    private Nextcp2UpnpServiceImpl upnp = null;
 
     @Autowired
     private Config config = null;
@@ -190,8 +194,21 @@ public class RestConfigurationService
     {
         try
         {
-            rendererConfigService.updateRendererDevice(rendererDevice);
-
+            boolean activeStateSwitched = rendererConfigService.updateRendererDevice(rendererDevice);
+            
+            if (activeStateSwitched) {
+        		MediaRendererDevice mr = deviceRegistry.getMediaRendererByUDN(new UDN(rendererDevice.mediaRenderer.udn));
+        		if (mr != null) {
+                	if (rendererDevice.active == true) {
+                		log.debug("[saveMediaRendererConfig] state changed to active. Register device in registry ...");
+                    	upnp.getRegistry().addDevice(mr.getDevice());
+                	} else {
+                		log.debug("[saveMediaRendererConfig] state changed to inactive. Unregister device in registry ...");
+                    	upnp.getRegistry().removeDevice(mr.getDevice());
+                	}
+        		}
+            }
+            
             MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(rendererDevice.mediaRenderer.udn));
             device.updateDeviceDriver();
         }
