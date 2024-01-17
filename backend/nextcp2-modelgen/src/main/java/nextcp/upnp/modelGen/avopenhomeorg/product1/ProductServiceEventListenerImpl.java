@@ -134,15 +134,6 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
         }
     }
     
-    public void modelImageUriChange(String value)
-    {
-        stateVariable.ModelImageUri = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "ModelImageUri", value));
-        }
-    }
-    
     public void productInfoChange(String value)
     {
         stateVariable.ProductInfo = value;
@@ -152,12 +143,30 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
         }
     }
     
+    public void modelImageUriChange(String value)
+    {
+        stateVariable.ModelImageUri = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "ModelImageUri", value));
+        }
+    }
+    
     public void modelInfoChange(String value)
     {
         stateVariable.ModelInfo = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "ModelInfo", value));
+        }
+    }
+    
+    public void modelNameChange(String value)
+    {
+        stateVariable.ModelName = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "ModelName", value));
         }
     }
     
@@ -185,15 +194,6 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "ManufacturerName", value));
-        }
-    }
-    
-    public void modelNameChange(String value)
-    {
-        stateVariable.ModelName = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "ModelName", value));
         }
     }
     
@@ -242,21 +242,21 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
         }
     }
     
-    public void productRoomChange(String value)
-    {
-        stateVariable.ProductRoom = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "ProductRoom", value));
-        }
-    }
-    
     public void sourceXmlChange(String value)
     {
         stateVariable.SourceXml = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "SourceXml", value));
+        }
+    }
+    
+    public void productRoomChange(String value)
+    {
+        stateVariable.ProductRoom = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "ProductRoom", value));
         }
     }
     
@@ -269,21 +269,21 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
         }
     }
     
-    public void manufacturerImageUriChange(String value)
-    {
-        stateVariable.ManufacturerImageUri = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "ManufacturerImageUri", value));
-        }
-    }
-    
     public void productUrlChange(String value)
     {
         stateVariable.ProductUrl = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "ProductUrl", value));
+        }
+    }
+    
+    public void manufacturerImageUriChange(String value)
+    {
+        stateVariable.ManufacturerImageUri = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "ManufacturerImageUri", value));
         }
     }
     

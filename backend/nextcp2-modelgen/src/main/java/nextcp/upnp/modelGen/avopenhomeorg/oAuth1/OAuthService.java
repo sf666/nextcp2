@@ -5,7 +5,9 @@ import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.types.ServiceType;
 import org.jupnp.protocol.ProtocolCreationException;
+import org.jupnp.protocol.sync.SendingRenewal;
 import org.jupnp.protocol.sync.SendingSubscribe;
+import org.jupnp.protocol.sync.SendingUnsubscribe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +21,10 @@ import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.GetUpdateId;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.GetUpdateIdOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.ClearLonglivedLivedToken;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.ClearLonglivedLivedTokenInput;
-import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.GetServiceStatus;
-import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.GetServiceStatusOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.ClearAllTokens;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.ClearAllTokensInput;
+import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.GetServiceStatus;
+import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.GetServiceStatusOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.ClearToken;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.ClearTokenInput;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.SetToken;
@@ -88,7 +90,19 @@ public class OAuthService
 	        log.warn(String.format("initialized service 'OAuth' failed for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
 	    }
     }
-    
+
+    public void unsubscribeService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingUnsubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingUnsubscribe(subscription);
+        protocol.run();
+    }
+
+    public void renewService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingRenewal protocol = upnpService.getControlPoint().getProtocolFactory().createSendingRenewal(subscription);
+        protocol.run();
+    }
+
     public void addSubscriptionEventListener(IOAuthServiceEventListener listener)
     {
         subscription.addSubscriptionEventListener(listener);
@@ -103,6 +117,13 @@ public class OAuthService
     {
         return oAuthService;
     }    
+
+
+//
+// Actions
+// =========================================================================
+//
+
 
 
     public GetJobUpdateIdOutput getJobUpdateId(GetJobUpdateIdInput inp)
@@ -125,17 +146,17 @@ public class OAuthService
         clearLonglivedLivedToken.executeAction();
     }
 
+    public void clearAllTokens(ClearAllTokensInput inp)
+    {
+        ClearAllTokens clearAllTokens = new ClearAllTokens(oAuthService, inp, upnpService.getControlPoint());
+        clearAllTokens.executeAction();
+    }
+
     public GetServiceStatusOutput getServiceStatus()
     {
         GetServiceStatus getServiceStatus = new GetServiceStatus(oAuthService,  upnpService.getControlPoint());
         GetServiceStatusOutput res = getServiceStatus.executeAction();
         return res;        
-    }
-
-    public void clearAllTokens(ClearAllTokensInput inp)
-    {
-        ClearAllTokens clearAllTokens = new ClearAllTokens(oAuthService, inp, upnpService.getControlPoint());
-        clearAllTokens.executeAction();
     }
 
     public void clearToken(ClearTokenInput inp)

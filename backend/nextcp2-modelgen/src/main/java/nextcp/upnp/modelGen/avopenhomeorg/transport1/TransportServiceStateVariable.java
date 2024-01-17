@@ -13,9 +13,9 @@ public class TransportServiceStateVariable
     public Long StreamId = null;
     public Boolean Shuffle = null;
     public Boolean Repeat = null;
-    public Boolean CanSkipNext = null;
     public String TransportState = null;
     public Boolean CanShuffle = null;
+    public Boolean CanSkipNext = null;
     public Boolean CanRepeat = null;
     public Boolean CanPause = null;
     public Boolean CanSeek = null;

@@ -5,7 +5,9 @@ import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.types.ServiceType;
 import org.jupnp.protocol.ProtocolCreationException;
+import org.jupnp.protocol.sync.SendingRenewal;
 import org.jupnp.protocol.sync.SendingSubscribe;
+import org.jupnp.protocol.sync.SendingUnsubscribe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,19 +22,19 @@ import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Product;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.ProductOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceXml;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceXmlOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndex;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexInput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexByName;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexByNameInput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndex;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexInput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Standby;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.StandbyOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Source;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceInput;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceIndex;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceIndexOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetStandby;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetStandbyInput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceIndex;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceIndexOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Model;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.ModelOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Manufacturer;
@@ -85,7 +87,19 @@ public class ProductService
 	        log.warn(String.format("initialized service 'Product' failed for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
 	    }
     }
-    
+
+    public void unsubscribeService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingUnsubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingUnsubscribe(subscription);
+        protocol.run();
+    }
+
+    public void renewService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingRenewal protocol = upnpService.getControlPoint().getProtocolFactory().createSendingRenewal(subscription);
+        protocol.run();
+    }
+
     public void addSubscriptionEventListener(IProductServiceEventListener listener)
     {
         subscription.addSubscriptionEventListener(listener);
@@ -100,6 +114,13 @@ public class ProductService
     {
         return productService;
     }    
+
+
+//
+// Actions
+// =========================================================================
+//
+
 
 
     public SourceCountOutput sourceCount()
@@ -130,16 +151,16 @@ public class ProductService
         return res;        
     }
 
-    public void setSourceIndex(SetSourceIndexInput inp)
-    {
-        SetSourceIndex setSourceIndex = new SetSourceIndex(productService, inp, upnpService.getControlPoint());
-        setSourceIndex.executeAction();
-    }
-
     public void setSourceIndexByName(SetSourceIndexByNameInput inp)
     {
         SetSourceIndexByName setSourceIndexByName = new SetSourceIndexByName(productService, inp, upnpService.getControlPoint());
         setSourceIndexByName.executeAction();
+    }
+
+    public void setSourceIndex(SetSourceIndexInput inp)
+    {
+        SetSourceIndex setSourceIndex = new SetSourceIndex(productService, inp, upnpService.getControlPoint());
+        setSourceIndex.executeAction();
     }
 
     public StandbyOutput standby()
@@ -156,17 +177,17 @@ public class ProductService
         return res;        
     }
 
+    public void setStandby(SetStandbyInput inp)
+    {
+        SetStandby setStandby = new SetStandby(productService, inp, upnpService.getControlPoint());
+        setStandby.executeAction();
+    }
+
     public SourceIndexOutput sourceIndex()
     {
         SourceIndex sourceIndex = new SourceIndex(productService,  upnpService.getControlPoint());
         SourceIndexOutput res = sourceIndex.executeAction();
         return res;        
-    }
-
-    public void setStandby(SetStandbyInput inp)
-    {
-        SetStandby setStandby = new SetStandby(productService, inp, upnpService.getControlPoint());
-        setStandby.executeAction();
     }
 
     public ModelOutput model()

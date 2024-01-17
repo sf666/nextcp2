@@ -170,15 +170,6 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
-    public void trackCountChange(Long value)
-    {
-        stateVariable.TrackCount = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "TrackCount", value));
-        }
-    }
-    
     public void bitRateChange(Long value)
     {
         stateVariable.BitRate = value;
@@ -188,12 +179,12 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
-    public void bitDepthChange(Long value)
+    public void trackCountChange(Long value)
     {
-        stateVariable.BitDepth = value;
+        stateVariable.TrackCount = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "BitDepth", value));
+            log.debug(String.format("StateVariable : %s: %s", "TrackCount", value));
         }
     }
     
@@ -206,12 +197,12 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
-    public void uriChange(String value)
+    public void bitDepthChange(Long value)
     {
-        stateVariable.Uri = value;
+        stateVariable.BitDepth = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "Uri", value));
+            log.debug(String.format("StateVariable : %s: %s", "BitDepth", value));
         }
     }
     
@@ -230,6 +221,15 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "Lossless", value));
+        }
+    }
+    
+    public void uriChange(String value)
+    {
+        stateVariable.Uri = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Uri", value));
         }
     }
     

@@ -5,7 +5,9 @@ import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.types.ServiceType;
 import org.jupnp.protocol.ProtocolCreationException;
+import org.jupnp.protocol.sync.SendingRenewal;
 import org.jupnp.protocol.sync.SendingSubscribe;
+import org.jupnp.protocol.sync.SendingUnsubscribe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,22 +21,22 @@ import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.BalanceDec;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.FadeDec;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.BalanceInc;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.VolumeInc;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Characteristics;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.CharacteristicsOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Volume;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.VolumeOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetVolume;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetVolumeInput;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Volume;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.VolumeOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Characteristics;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.CharacteristicsOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetFade;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetFadeInput;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Balance;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.BalanceOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetMute;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetMuteInput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Fade;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.FadeOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetMute;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetMuteInput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Mute;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.MuteOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Balance;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.BalanceOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.VolumeDec;
 
 
@@ -82,7 +84,19 @@ public class VolumeService
 	        log.warn(String.format("initialized service 'Volume' failed for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
 	    }
     }
-    
+
+    public void unsubscribeService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingUnsubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingUnsubscribe(subscription);
+        protocol.run();
+    }
+
+    public void renewService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingRenewal protocol = upnpService.getControlPoint().getProtocolFactory().createSendingRenewal(subscription);
+        protocol.run();
+    }
+
     public void addSubscriptionEventListener(IVolumeServiceEventListener listener)
     {
         subscription.addSubscriptionEventListener(listener);
@@ -97,6 +111,13 @@ public class VolumeService
     {
         return volumeService;
     }    
+
+
+//
+// Actions
+// =========================================================================
+//
+
 
 
     public void setBalance(SetBalanceInput inp)
@@ -135,11 +156,10 @@ public class VolumeService
         volumeInc.executeAction();
     }
 
-    public CharacteristicsOutput characteristics()
+    public void setVolume(SetVolumeInput inp)
     {
-        Characteristics characteristics = new Characteristics(volumeService,  upnpService.getControlPoint());
-        CharacteristicsOutput res = characteristics.executeAction();
-        return res;        
+        SetVolume setVolume = new SetVolume(volumeService, inp, upnpService.getControlPoint());
+        setVolume.executeAction();
     }
 
     public VolumeOutput volume()
@@ -149,29 +169,17 @@ public class VolumeService
         return res;        
     }
 
-    public void setVolume(SetVolumeInput inp)
+    public CharacteristicsOutput characteristics()
     {
-        SetVolume setVolume = new SetVolume(volumeService, inp, upnpService.getControlPoint());
-        setVolume.executeAction();
+        Characteristics characteristics = new Characteristics(volumeService,  upnpService.getControlPoint());
+        CharacteristicsOutput res = characteristics.executeAction();
+        return res;        
     }
 
     public void setFade(SetFadeInput inp)
     {
         SetFade setFade = new SetFade(volumeService, inp, upnpService.getControlPoint());
         setFade.executeAction();
-    }
-
-    public BalanceOutput balance()
-    {
-        Balance balance = new Balance(volumeService,  upnpService.getControlPoint());
-        BalanceOutput res = balance.executeAction();
-        return res;        
-    }
-
-    public void setMute(SetMuteInput inp)
-    {
-        SetMute setMute = new SetMute(volumeService, inp, upnpService.getControlPoint());
-        setMute.executeAction();
     }
 
     public FadeOutput fade()
@@ -181,10 +189,23 @@ public class VolumeService
         return res;        
     }
 
+    public void setMute(SetMuteInput inp)
+    {
+        SetMute setMute = new SetMute(volumeService, inp, upnpService.getControlPoint());
+        setMute.executeAction();
+    }
+
     public MuteOutput mute()
     {
         Mute mute = new Mute(volumeService,  upnpService.getControlPoint());
         MuteOutput res = mute.executeAction();
+        return res;        
+    }
+
+    public BalanceOutput balance()
+    {
+        Balance balance = new Balance(volumeService,  upnpService.getControlPoint());
+        BalanceOutput res = balance.executeAction();
         return res;        
     }
 

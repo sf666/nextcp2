@@ -129,9 +129,6 @@ public class VolumeServiceSubscription extends RemoteGENASubscription
                     case "VolumeMax":
                         volumeMaxChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
-                    case "Fade":
-                        fadeChange((Integer) stateVar.getValue());
-                        break;
                     case "Mute":
                         muteChange((Boolean) stateVar.getValue());
                         break;
@@ -140,6 +137,9 @@ public class VolumeServiceSubscription extends RemoteGENASubscription
                         break;
                     case "VolumeUnity":
                         volumeUnityChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "Fade":
+                        fadeChange((Integer) stateVar.getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -217,14 +217,6 @@ public class VolumeServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void fadeChange(Integer value)
-    {
-        for (IVolumeServiceEventListener listener : eventListener)
-        {
-            listener.fadeChange(value);
-        }
-    }    
-
     private void muteChange(Boolean value)
     {
         for (IVolumeServiceEventListener listener : eventListener)
@@ -246,6 +238,14 @@ public class VolumeServiceSubscription extends RemoteGENASubscription
         for (IVolumeServiceEventListener listener : eventListener)
         {
             listener.volumeUnityChange(value);
+        }
+    }    
+
+    private void fadeChange(Integer value)
+    {
+        for (IVolumeServiceEventListener listener : eventListener)
+        {
+            listener.fadeChange(value);
         }
     }    
 }

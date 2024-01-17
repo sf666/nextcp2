@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.avopenhomeorg.time1;
 public class TimeServiceStateVariable
 {
 
-    public Long Duration = null;
     public Long Seconds = null;
+    public Long Duration = null;
     public Long TrackCount = null;
 
 }

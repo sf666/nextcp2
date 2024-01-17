@@ -5,7 +5,9 @@ import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.types.ServiceType;
 import org.jupnp.protocol.ProtocolCreationException;
+import org.jupnp.protocol.sync.SendingRenewal;
 import org.jupnp.protocol.sync.SendingSubscribe;
+import org.jupnp.protocol.sync.SendingUnsubscribe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,9 +50,9 @@ import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekIdInput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ReadList;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ReadListOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ReadListInput;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.Next;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SetRepeat;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SetRepeatInput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.Next;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ProtocolInfo;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ProtocolInfoOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.Previous;
@@ -104,7 +106,19 @@ public class PlaylistService
 	        log.warn(String.format("initialized service 'Playlist' failed for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
 	    }
     }
-    
+
+    public void unsubscribeService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingUnsubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingUnsubscribe(subscription);
+        protocol.run();
+    }
+
+    public void renewService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingRenewal protocol = upnpService.getControlPoint().getProtocolFactory().createSendingRenewal(subscription);
+        protocol.run();
+    }
+
     public void addSubscriptionEventListener(IPlaylistServiceEventListener listener)
     {
         subscription.addSubscriptionEventListener(listener);
@@ -119,6 +133,13 @@ public class PlaylistService
     {
         return playlistService;
     }    
+
+
+//
+// Actions
+// =========================================================================
+//
+
 
 
     public void setShuffle(SetShuffleInput inp)
@@ -238,16 +259,16 @@ public class PlaylistService
         return res;        
     }
 
-    public void next()
-    {
-        Next next = new Next(playlistService,  upnpService.getControlPoint());
-        next.executeAction();
-    }
-
     public void setRepeat(SetRepeatInput inp)
     {
         SetRepeat setRepeat = new SetRepeat(playlistService, inp, upnpService.getControlPoint());
         setRepeat.executeAction();
+    }
+
+    public void next()
+    {
+        Next next = new Next(playlistService,  upnpService.getControlPoint());
+        next.executeAction();
     }
 
     public ProtocolInfoOutput protocolInfo()

@@ -5,7 +5,9 @@ import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.types.ServiceType;
 import org.jupnp.protocol.ProtocolCreationException;
+import org.jupnp.protocol.sync.SendingRenewal;
 import org.jupnp.protocol.sync.SendingSubscribe;
+import org.jupnp.protocol.sync.SendingUnsubscribe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +26,9 @@ import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.ShuffleOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.PlayAs;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.PlayAsInput;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Stop;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SkipNext;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Repeat;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.RepeatOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SkipNext;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.TransportState;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.TransportStateOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SeekSecondAbsolute;
@@ -87,7 +89,19 @@ public class TransportService
 	        log.warn(String.format("initialized service 'Transport' failed for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
 	    }
     }
-    
+
+    public void unsubscribeService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingUnsubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingUnsubscribe(subscription);
+        protocol.run();
+    }
+
+    public void renewService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingRenewal protocol = upnpService.getControlPoint().getProtocolFactory().createSendingRenewal(subscription);
+        protocol.run();
+    }
+
     public void addSubscriptionEventListener(ITransportServiceEventListener listener)
     {
         subscription.addSubscriptionEventListener(listener);
@@ -102,6 +116,13 @@ public class TransportService
     {
         return transportService;
     }    
+
+
+//
+// Actions
+// =========================================================================
+//
+
 
 
     public ModesOutput modes()
@@ -149,17 +170,17 @@ public class TransportService
         stop.executeAction();
     }
 
-    public void skipNext()
-    {
-        SkipNext skipNext = new SkipNext(transportService,  upnpService.getControlPoint());
-        skipNext.executeAction();
-    }
-
     public RepeatOutput repeat()
     {
         Repeat repeat = new Repeat(transportService,  upnpService.getControlPoint());
         RepeatOutput res = repeat.executeAction();
         return res;        
+    }
+
+    public void skipNext()
+    {
+        SkipNext skipNext = new SkipNext(transportService,  upnpService.getControlPoint());
+        skipNext.executeAction();
     }
 
     public TransportStateOutput transportState()

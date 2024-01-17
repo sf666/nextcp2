@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 public class dialServiceEventListenerImpl implements IdialServiceEventListener 
 {
     private static Logger log = LoggerFactory.getLogger(dialServiceEventListenerImpl.class.getName());
-//     private dialServiceStateVariable stateVariable = new dialServiceStateVariable();
     private RemoteDevice device = null;
     
     
@@ -33,15 +32,6 @@ public class dialServiceEventListenerImpl implements IdialServiceEventListener
         return device.getDetails().getFriendlyName();
 	}
     
-    /**
-     * Access to state variable
-     * 
-     * @return state variable
-     */
-//    public dialServiceStateVariable getStateVariable()
-//    {
-//        return stateVariable;
-//    }
 
     //
     // Generic event callbacks

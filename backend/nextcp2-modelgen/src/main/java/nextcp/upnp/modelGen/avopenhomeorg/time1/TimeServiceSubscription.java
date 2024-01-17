@@ -108,11 +108,11 @@ public class TimeServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "Duration":
-                        durationChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
                     case "Seconds":
                         secondsChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "Duration":
+                        durationChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "TrackCount":
                         trackCountChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
@@ -137,19 +137,19 @@ public class TimeServiceSubscription extends RemoteGENASubscription
         }
     }
 
-    private void durationChange(Long value)
-    {
-        for (ITimeServiceEventListener listener : eventListener)
-        {
-            listener.durationChange(value);
-        }
-    }    
-
     private void secondsChange(Long value)
     {
         for (ITimeServiceEventListener listener : eventListener)
         {
             listener.secondsChange(value);
+        }
+    }    
+
+    private void durationChange(Long value)
+    {
+        for (ITimeServiceEventListener listener : eventListener)
+        {
+            listener.durationChange(value);
         }
     }    
 
