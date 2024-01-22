@@ -540,10 +540,9 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     {
         try
         {
-            if (transportBridge != null && !hasOhInfoService() && transportIsPlaying())
+            if (!hasOhInfoService())
             {
-                log.debug(String.format("%s: transportBridge: %b. HasOhInfo: %b. TransportIsPlaying: %b", getFriendlyName(), transportBridge != null, hasOhInfoService(),
-                        transportIsPlaying()));
+                log.trace(String.format("%s: polling AVTransport state ...", getFriendlyName()));
                 TrackTimeDto dto = avTransportBridge.generateTractTimeDto();
                 eventPublisher.publishEvent(dto);
             }
