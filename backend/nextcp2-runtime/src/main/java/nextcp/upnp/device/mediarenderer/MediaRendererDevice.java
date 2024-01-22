@@ -542,12 +542,16 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         {
             if (!hasOhInfoService())
             {
+            	// no OpenHome -> need to poll time and transport state information from AVTransport
+            	
                 log.trace(String.format("%s: polling AVTransport state ...", getFriendlyName()));
                 TrackTimeDto dto = avTransportBridge.generateTractTimeDto();
                 eventPublisher.publishEvent(dto);
+                
+                TransportServiceStateDto transportState = transportBridge.getCurrentTransportServiceState();
+                eventPublisher.publishEvent(transportState);
             }
-            
-            
+                        
             if (servicesEnded.get() &&
             	    getTransportServiceBridge() != null && 
             	    "PLAYING".equalsIgnoreCase(getTransportServiceBridge().getCurrentTransportServiceState().transportState) // !getStandby() && 
