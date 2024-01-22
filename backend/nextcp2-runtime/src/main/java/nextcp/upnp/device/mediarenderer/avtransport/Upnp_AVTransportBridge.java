@@ -229,6 +229,7 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
         
         dto.udn = device.getUdnAsString();
         
+        log.debug(String.format("%s: %s", device.getFriendlyName(), dto.toString()));
         return dto;
     }
 
