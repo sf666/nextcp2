@@ -206,7 +206,7 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
         this.currentAvTransportState = currentAvTransportState;
         if (log.isDebugEnabled())
         {
-            log.debug("AVTransportState : " + currentAvTransportState);
+            log.debug(String.format("%s: AVTransportState: %s", device.getFriendlyName(), currentAvTransportState.toString()));
         }
     }
     
@@ -229,7 +229,7 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
         
         dto.udn = device.getUdnAsString();
         
-        log.debug(String.format("%s: %s", device.getFriendlyName(), dto.toString()));
+        log.trace(String.format("%s: %s", device.getFriendlyName(), dto.toString()));
         return dto;
     }
 
@@ -245,5 +245,4 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
 
         return dto;
     }
-
 }
