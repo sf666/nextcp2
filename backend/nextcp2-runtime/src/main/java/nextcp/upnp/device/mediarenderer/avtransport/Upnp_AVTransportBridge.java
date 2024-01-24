@@ -1,5 +1,6 @@
 package nextcp.upnp.device.mediarenderer.avtransport;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -128,31 +129,35 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
     public TrackTimeDto generateTractTimeDto()
     {
         TrackTimeDto dto = new TrackTimeDto();
-        dto.mediaRendererUdn = device.getUDN().getIdentifierString();
+    	try {
+            dto.mediaRendererUdn = device.getUDN().getIdentifierString();
 
-        GetPositionInfoInput inp = new GetPositionInfoInput();
-        inp.InstanceID = 0L;
-        GetPositionInfoOutput out = avTransportService.getPositionInfo(inp);
+            GetPositionInfoInput inp = new GetPositionInfoInput();
+            inp.InstanceID = 0L;
+            GetPositionInfoOutput out = avTransportService.getPositionInfo(inp);
 
-        dto.duration = getAsSeconds(out.TrackDuration);
-        dto.seconds = getAsSeconds(out.RelTime);
-        dto.trackCount = out.Track;
+            dto.duration = getAsSeconds(out.TrackDuration);
+            dto.seconds = getAsSeconds(out.RelTime);
+            dto.trackCount = out.Track;
 
-        dto.durationDisp = DisplayUtils.convertToDigitString(dto.duration);
-        if ("00:00".equals(dto.durationDisp))
-        {
-            dto.streaming = true;
-            if (dto.seconds != null && dto.seconds > 0)
+            dto.durationDisp = DisplayUtils.convertToDigitString(dto.duration);
+            if ("00:00".equals(dto.durationDisp))
             {
-                dto.durationDisp = "streaming";
+                dto.streaming = true;
+                if (dto.seconds != null && dto.seconds > 0)
+                {
+                    dto.durationDisp = "streaming";
+                }
             }
-        }
-        else
-        {
-            dto.streaming = false;
-        }
-        dto.secondsDisp = DisplayUtils.convertToDigitString(dto.seconds);
-        dto.percent = calcPercent(dto.seconds, dto.duration);
+            else
+            {
+                dto.streaming = false;
+            }
+            dto.secondsDisp = DisplayUtils.convertToDigitString(dto.seconds);
+            dto.percent = calcPercent(dto.seconds, dto.duration);
+    	} catch (Exception e) {
+    		log.warn("could not generate TrackTimeDto", e);
+    	}
         return dto;
     }
 
@@ -173,14 +178,18 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
                 asSeconds = Integer.valueOf(values[0]) * 60 * 60;
                 idx++;
             }
-            asSeconds = asSeconds + Integer.valueOf(values[idx]) * 60;
-            idx++;
-            asSeconds = asSeconds + Integer.valueOf(values[idx]);
+            if (!StringUtils.isAllBlank(values[idx])) {
+                asSeconds = asSeconds + Integer.valueOf(values[idx]) * 60;
+                idx++;
+                if (!StringUtils.isAllBlank(values[idx])) {
+                	asSeconds = asSeconds + Integer.valueOf(values[idx]);
+                }
+            }
             return asSeconds;
         }
         catch (Exception e)
         {
-            log.warn("error reading duration time", e);
+            log.warn("{}:error reading duration time", device.getFriendlyName(), e);
             return 0L;
         }
     }

@@ -540,7 +540,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     {
         try
         {
-            if (!hasOhInfoService())
+            if (!hasOhInfoService() && transportIsPlaying())
             {
             	// no OpenHome -> need to poll time and transport state information from AVTransport
             	
@@ -562,7 +562,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         }
         catch (Exception e)
         {
-            log.warn("tick failed", e);
+            log.debug("tick failed", e);
         }
     }
 
@@ -575,7 +575,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
                 return false;
             }
             TransportServiceStateDto state = transportBridge.getCurrentTransportServiceState();
-
+            log.debug("Transport State is : {}" , state != null ? state.transportState : "NULL");
             return "PLAYING".equals(state.transportState);
         }
         catch (Exception e)
