@@ -576,7 +576,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             }
             TransportServiceStateDto state = transportBridge.getCurrentTransportServiceState();
             log.debug("Transport State is : {}" , state != null ? state.transportState : "NULL");
-            return "PLAYING".equals(state.transportState);
+            return "PLAYING".equals(state.transportState) || "TRANSITIONING".equals(state.transportState);
         }
         catch (Exception e)
         {
