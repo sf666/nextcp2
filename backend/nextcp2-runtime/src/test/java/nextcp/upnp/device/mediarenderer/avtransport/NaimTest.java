@@ -19,7 +19,7 @@ public class NaimTest {
 		try {
 			RemoteDeviceIdentity di = new RemoteDeviceIdentity(new UDN("TEST"), 1, new URL("http://TEST"), null, null);
 			RemoteDevice rd = new RemoteDevice(di);
-			return new MediaRendererDevice(rd);
+			return new MediaRendererDevice(rd, true);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

@@ -19,14 +19,14 @@ public class DeviceFactory
 
     @Bean
     @Scope(value = "prototype")
-    public MediaRendererDevice mediaRendererDeviceFactory(RemoteDevice name)
+    public MediaRendererDevice mediaRendererDeviceFactory(RemoteDevice name, boolean enabledByUser)
     {
         // if ("LUMIN".equalsIgnoreCase(name.getDetails().getModelDetails().getModelDescription()))
         // {
         // return new LuminDevice(name);
         // }
         log.info("created new media renderer device : {} ", name);
-        return new MediaRendererDevice(name);
+        return new MediaRendererDevice(name, enabledByUser);
     }
 
     @Bean

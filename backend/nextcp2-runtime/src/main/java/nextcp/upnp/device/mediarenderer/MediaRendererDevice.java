@@ -66,6 +66,8 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 {
     private static final Logger log = LoggerFactory.getLogger(MediaRendererDevice.class.getName());
 
+    private boolean deviceIsEnabledByUser;
+    
     @Autowired
     private MediaRendererFactories factories = null;
 
@@ -132,15 +134,20 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     protected IProductService productService = null;
     protected IInfoService infoService = null;
 
-    public MediaRendererDevice(RemoteDevice device)
+    public MediaRendererDevice(RemoteDevice device, boolean enabledByUser)
     {
         super(device);
-
+        this.deviceIsEnabledByUser = enabledByUser;
     }
 
     @PostConstruct
     protected void init()
     {
+    	if (deviceIsEnabledByUser) {
+    		log.debug("{} is disabled by user. No services will be created ... ", getFriendlyName());
+    		return;
+    	}
+    	
     	servicesEnded.set(false);
         initServices();
 

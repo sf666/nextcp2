@@ -440,12 +440,6 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
         }
     }
 
-	void inactiveDeviceFound(RemoteDevice remoteDevice) {
-		if (deviceRegistry != null) {
-			deviceRegistry.addInactiveRemoteDevice(remoteDevice);
-		}
-	}
-
 	public void setDeviceRegistry(DeviceRegistry deviceRegistry) {
 		this.deviceRegistry = deviceRegistry;
 	}

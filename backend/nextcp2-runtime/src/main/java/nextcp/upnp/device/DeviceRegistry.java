@@ -65,7 +65,8 @@ public class DeviceRegistry
     //
     public synchronized void addMediaRendererDevice(RemoteDevice remoteDevice)
     {
-        MediaRendererDevice device = deviceFactory.mediaRendererDeviceFactory(remoteDevice);
+        MediaRendererDevice device = deviceFactory.mediaRendererDeviceFactory(remoteDevice, 
+        	rendererConfigService.isMediaRendererActive(remoteFacade.getUdnAsString(remoteDevice)));
         rendererConfigService.addMediaRendererDeviceConfig(device);        
         MediaRendererDevice oldDevice = mediaRendererList.put(remoteFacade.getUDN(remoteDevice), device);
         if (oldDevice != null)
@@ -150,9 +151,9 @@ public class DeviceRegistry
         return Collections.unmodifiableCollection(mediaServerExtList.values());
     }
 
-	public void addInactiveRemoteDevice(RemoteDevice remoteDevice) {
-		log.debug("adding as inactive marked device to registry : " + remoteFacade.getFriendlyName(remoteDevice));
-		MediaRendererDevice device = deviceFactory.mediaRendererDeviceFactory(remoteDevice);
-		mediaRendererList.put(remoteFacade.getUDN(remoteDevice), device);
-	}
+//	public void addInactiveRemoteDevice(RemoteDevice remoteDevice) {
+//		log.debug("adding as inactive marked device to registry : " + remoteFacade.getFriendlyName(remoteDevice));
+//		MediaRendererDevice device = deviceFactory.mediaRendererDeviceFactory(remoteDevice);
+//		mediaRendererList.put(remoteFacade.getUDN(remoteDevice), device);
+//	}
 }
