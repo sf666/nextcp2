@@ -253,6 +253,13 @@ public class RestPlaylistService extends BaseRestService
         {
             MediaRendererDevice rendererDevice = getMediaRendererByUdn(req.mediaRendererUdn);
             checkDevice(rendererDevice);
+            if (rendererDevice.getPlaylistServiceBridge() == null) {
+                log.warn("{} no playlist service bridge available", rendererDevice.getFriendlyName());
+                publisher.publishEvent(new ToastrMessage(null, "error", "adding songs ", 
+                	"Device " + rendererDevice.getFriendlyName() + " has no playlist implementation set."));
+                return;
+            }
+            	
             rendererDevice.getPlaylistServiceBridge().deleteAll();
             if (req.shuffle != null)
             {
@@ -264,7 +271,8 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("insertAndPlayContainer", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "adding songs ", "Cannot play folder. Message : " + e.getMessage()));
+            publisher.publishEvent(new ToastrMessage(null, "error", "adding songs ", 
+            	getMediaRendererByUdn(req.mediaRendererUdn).getFriendlyName() + ": Cannot play folder. Message : " + e.getMessage()));
         }
     }
 

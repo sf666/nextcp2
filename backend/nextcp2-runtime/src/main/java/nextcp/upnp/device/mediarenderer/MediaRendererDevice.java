@@ -545,6 +545,10 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     @Override
     public void tick(long counter)
     {
+    	if (!deviceIsEnabledByUser) {
+    		log.trace("{}: skipping tick, because device is not enabled.", getFriendlyName());
+    		return;
+    	}
         try
         {
             if (!hasOhInfoService() && transportIsPlaying())
