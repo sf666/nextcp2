@@ -3,12 +3,14 @@
 }
 
 .mainContent-base {
-    position      : fixed;
-    overflow-y    : scroll;
-    letter-spacing: 0.07rem;
-    flex          : 1;
+    position        : fixed;
+    overflow-y      : scroll;
+    overflow-x      : hidden;
+    letter-spacing  : 0.07rem;
+    flex            : 1;
 //    height        : calc(var(--vh, 1vh) * 100 - var(--nav-height));
-    height        : calc(var(--vh, 1vh) * 100);
+    height          : calc(var(--vh, 1vh) * 100);
+    scrollbar-width : none 
 }
 
 .mainContent {

@@ -121,6 +121,7 @@ a {
     background    : #242428;
     transition    : 50ms ease-in;
     overflow-y    : auto;
+    overflow-x    : hidden;
     letter-spacing: 0.04rem;
     font-weight   : 300;
 }
@@ -143,6 +144,7 @@ a {
         background    : #242428;
         transition    : 50ms ease-in;
         overflow-y    : auto;
+        overflow-x    : hidden;
         letter-spacing: 0.04rem;
         font-weight   : 300;
         width         : var(--sidebar-width-mid);
