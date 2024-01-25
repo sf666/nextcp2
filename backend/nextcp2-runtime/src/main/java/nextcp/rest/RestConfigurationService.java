@@ -210,7 +210,11 @@ public class RestConfigurationService
             }
             
             MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(rendererDevice.mediaRenderer.udn));
-            device.updateDeviceDriver();
+            if (device != null) {
+                device.updateDeviceDriver();
+            } else {
+            	log.info("no update because device is offline : {}", rendererDevice.mediaRenderer.udn);
+            }
         }
         catch (Exception e)
         {

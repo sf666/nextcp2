@@ -216,6 +216,7 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
         if (log.isDebugEnabled())
         {
             log.debug(String.format("%s: %s", device.getFriendlyName(), currentAvTransportState.toString()));
+            Thread.dumpStack();
         }
     }
     
@@ -253,5 +254,11 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
         dto.currentTrack = device.getDtoBuilder().extractXmlAsMusicItem(currentAvTransportState.CurrentTrackMetaData);
 
         return dto;
+    }
+    
+    @Override
+    public void transportStateChange(String value) {
+    	currentAvTransportState.TransportState = value;
+    	log.debug("{}: received transport state {} ", device.getFriendlyName(), value);
     }
 }
