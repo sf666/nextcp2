@@ -4,6 +4,7 @@
 
 .mainContent-base {
     position      : fixed;
+    overflow-y    : scroll;
     letter-spacing: 0.07rem;
     flex          : 1;
 //    height        : calc(var(--vh, 1vh) * 100 - var(--nav-height));
@@ -27,6 +28,7 @@
 @media only screen and (max-width: 1200px) and (min-width: 900px) {
     .mainContent {
         position      : fixed;
+        overflow-y    : scroll;
         letter-spacing: 0.07rem;
         height        : calc(var(--vh, 1vh) * 100);
         flex          : 1;
