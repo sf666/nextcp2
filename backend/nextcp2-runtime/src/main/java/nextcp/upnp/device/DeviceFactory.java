@@ -25,7 +25,7 @@ public class DeviceFactory
         // {
         // return new LuminDevice(name);
         // }
-        log.info("created new media renderer device : {} ", name);
+        log.info("created new media renderer device : {} - {}", name.getDetails().getFriendlyName(), name.getIdentity().getUdn().toString());
         return new MediaRendererDevice(name, enabledByUser);
     }
 

@@ -150,10 +150,4 @@ public class DeviceRegistry
     {
         return Collections.unmodifiableCollection(mediaServerExtList.values());
     }
-
-//	public void addInactiveRemoteDevice(RemoteDevice remoteDevice) {
-//		log.debug("adding as inactive marked device to registry : " + remoteFacade.getFriendlyName(remoteDevice));
-//		MediaRendererDevice device = deviceFactory.mediaRendererDeviceFactory(remoteDevice);
-//		mediaRendererList.put(remoteFacade.getUDN(remoteDevice), device);
-//	}
 }
