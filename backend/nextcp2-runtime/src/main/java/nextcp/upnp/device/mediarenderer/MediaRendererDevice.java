@@ -143,7 +143,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     @PostConstruct
     protected void init()
     {
-    	if (deviceIsEnabledByUser) {
+    	if (!deviceIsEnabledByUser) {
     		log.debug("{} is disabled by user. No services will be created ... ", getFriendlyName());
     		return;
     	}
