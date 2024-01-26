@@ -125,4 +125,84 @@ public class ServiceInitializer
         }
     }
 
+    void renewServices(UpnpService upnpService, RemoteDevice device, MediaRendererDevice renderer, List<MediaRendererServicesDto> services)
+    {
+        log.info("Services for device : " + renderer.getFriendlyName());
+        for (RemoteService service : device.getServices())
+        {
+            MediaRendererServicesDto serviceDto = new MediaRendererServicesDto(service.getServiceType().getNamespace(), service.getServiceType().toFriendlyString(),
+                    "" + service.getServiceType().getVersion());
+            log.info(serviceDto.toString());
+            services.add(serviceDto);
+
+            if (device.hasEmbeddedDevices())
+            {
+                log.warn("Device has embedded devices.");
+            }
+            if (service.getServiceType().getNamespace().equalsIgnoreCase(UPNP_SCHEMA))
+            {
+                if (service.getServiceType().getType().equalsIgnoreCase(UPNP_AVTransport))
+                {
+                    renderer.upnp_avTransportService.renewService(upnpService, device);
+                }
+                else if (service.getServiceType().getType().equalsIgnoreCase(UPNP_RenderingControl))
+                {
+                    renderer.upnp_renderingControlService.renewService(upnpService, device);
+                }
+                else if (service.getServiceType().getType().equalsIgnoreCase(UPNP_ConnectionManager))
+                {
+                    renderer.upnp_connectionManagerService.renewService(upnpService, device);
+                }
+                else
+                {
+                    log.warn("Device has unknown upnp services : " + service.getServiceType().getType());
+                }
+
+            }
+            else if (service.getServiceType().getNamespace().equalsIgnoreCase(OH_SCHEMA))
+            {
+                if (service.getServiceType().getType().equalsIgnoreCase(OH_Info))
+                {
+                    renderer.oh_infoService.renewService(upnpService, device);
+                }
+                else if (service.getServiceType().getType().equalsIgnoreCase(OH_Time))
+                {
+                    renderer.oh_timeService.renewService(upnpService, device);
+                }
+                else if (service.getServiceType().getType().equalsIgnoreCase(OH_Volume))
+                {
+                    renderer.oh_volumeService.renewService(upnpService, device);
+                }
+                else if (service.getServiceType().getType().equalsIgnoreCase(OH_Credentials))
+                {
+                    renderer.oh_credentialsService.renewService(upnpService, device);
+                }
+                else if (service.getServiceType().getType().equalsIgnoreCase(OH_Playlist))
+                {
+                    renderer.oh_playlistService.renewService(upnpService, device);
+                }
+                else if (service.getServiceType().getType().equalsIgnoreCase(OH_Radio))
+                {
+                    renderer.oh_radioService.renewService(upnpService, device);
+                }
+                else if (service.getServiceType().getType().equalsIgnoreCase(OH_Product))
+                {
+                    renderer.oh_productService.renewService(upnpService, device);
+                }
+                else if (service.getServiceType().getType().equalsIgnoreCase(OH_Transport))
+                {
+                    renderer.oh_transportService.renewService(upnpService, device);
+                }
+                else
+                {
+                    log.warn("Device has unknown openhome services : " + service.getServiceType().getType());
+                }
+            }
+            else
+            {
+                log.warn("Device has unknown services in namespace : " + service.getServiceType().getNamespace());
+            }
+        }
+    }
+
 }

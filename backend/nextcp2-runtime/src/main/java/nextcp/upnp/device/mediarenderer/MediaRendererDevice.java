@@ -141,7 +141,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     }
 
     @PostConstruct
-    public void initServices()
+    private void initServices()
     {
     	if (!deviceIsEnabledByUser) {
     		log.debug("{} is disabled by user. No services will be created ... ", getFriendlyName());
@@ -284,6 +284,12 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
     public void deviceUpdated() {
     	initServices();
+    }
+    
+    
+    public void renewServices() {
+    	log.info("{}: renewing services ...", getFriendlyName());
+    	serviceInitializer.renewServices(getUpnpService(), getDevice(), this, services);
     }
     
     private void initDeviceServices()
