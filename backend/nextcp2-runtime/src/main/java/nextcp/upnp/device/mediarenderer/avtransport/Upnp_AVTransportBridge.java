@@ -157,6 +157,7 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
             dto.percent = calcPercent(dto.seconds, dto.duration);
     	} catch (Exception e) {
     		log.warn("could not generate TrackTimeDto", e);
+    		device.initServices();
     	}
         return dto;
     }
@@ -235,7 +236,7 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
         dto.repeat = false;
         dto.shuffle = false;
 
-        dto.transportState = currentAvTransportState.TransportState;
+        dto.transportState = "PLAYING";//currentAvTransportState.TransportState;
         
         dto.udn = device.getUdnAsString();
         

@@ -109,7 +109,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     protected ConnectionManagerService upnp_connectionManagerService = null;
     protected UpnpDeviceDriver upnpDeviceDriver = null;
 
-    // upnp wrapper
+    // upnp wrapper for transport information. OpenHome has an own implementation.
     protected Upnp_AVTransportBridge avTransportBridge = null;
 
     // openhome services
@@ -141,7 +141,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     }
 
     @PostConstruct
-    protected void init()
+    public void initServices()
     {
     	if (!deviceIsEnabledByUser) {
     		log.debug("{} is disabled by user. No services will be created ... ", getFriendlyName());
@@ -149,7 +149,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     	}
     	
     	servicesEnded.set(false);
-        initServices();
+        initDeviceServices();
 
         if (hasUpnpAvTransport())
         {
@@ -178,7 +178,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             // Extract Info's from AVTransport ...
         	log.info(String.format("[%s] polling AVTransport track information ...", getFriendlyName()));
             this.infoService = avTransportBridge;
-            schedulerService.addNotifier(this);
+            schedulerService.addNotifierOneSecond(this);
         }
 
         if (hasOhVolumeService())
@@ -204,7 +204,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         else
         {
         	log.info(String.format("[%s] polling AVTransport time information ...", getFriendlyName()));
-            schedulerService.addNotifier(this);
+            schedulerService.addNotifierOneSecond(this);
         }
 
         if (hasOhPlaylistService())
@@ -283,10 +283,10 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     }
 
     public void deviceUpdated() {
-    	init();
+    	initServices();
     }
     
-    private void initServices()
+    private void initDeviceServices()
     {
         updateRendererConfig();
         serviceInitializer.initializeServices(getUpnpService(), getDevice(), this, services);
@@ -551,7 +551,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     	}
         try
         {
-            if (!hasOhInfoService() && transportIsPlaying())
+            if (tickWaitPeriodPassed(counter) && !hasOhInfoService() && transportIsPlaying())
             {
             	// no OpenHome -> need to poll time and transport state information from AVTransport
             	
@@ -568,15 +568,21 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             	    "PLAYING".equalsIgnoreCase(getTransportServiceBridge().getCurrentTransportServiceState().transportState) // !getStandby() && 
             		) {            	
             	log.warn(String.format("[%s] services ended. Device is powered & playing -> renewing ... ", getFriendlyName()));
-            	init();
+            	initServices();
             }
         }
         catch (Exception e)
         {
             log.debug("tick failed", e);
+            initServices();
         }
     }
 
+    private boolean tickWaitPeriodPassed(long counter) {
+    	return counter % 5 == 0;
+    }
+    
+    
     private boolean transportIsPlaying()
     {
         try
