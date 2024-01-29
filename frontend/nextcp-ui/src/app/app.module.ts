@@ -1,3 +1,4 @@
+import {provideClientHydration} from '@angular/platform-browser';
 import { CustomHttpInterceptor } from './service/http-interceptor';
 import { SidebarComponent } from './view/sidebar/sidebar.component';
 import { RendererDropdownComponent } from './mediarenderer/dropdown/dropdown.component';
@@ -130,7 +131,8 @@ import { TrackDetailsComponent } from './popup/track-details/track-details.compo
    schemas: [
       CUSTOM_ELEMENTS_SCHEMA
    ],
-   providers: [{
+   providers: [provideClientHydration(),
+      {
       provide: LocationStrategy, useClass: HashLocationStrategy
    }, {
       provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true
