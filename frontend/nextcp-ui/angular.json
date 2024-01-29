@@ -27,7 +27,9 @@
             "outputPath": "../../backend/nextcp2-runtime/src/main/resources/static",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "tsconfig.app.json",
             "aot": true,
             "assets": [
@@ -104,28 +106,31 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "nextcp-ui:build"
+            "buildTarget": "nextcp-ui:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "nextcp-ui:build:production"
+              "buildTarget": "nextcp-ui:build:production"
             },
             "dev": {
-              "browserTarget": "nextcp-ui:build:dev"
+              "buildTarget": "nextcp-ui:build:dev"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "nextcp-ui:build"
+            "buildTarget": "nextcp-ui:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": [

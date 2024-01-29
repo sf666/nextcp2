@@ -3,8 +3,6 @@
 // Be sure that you only ever include this mixin once!
 @use '@angular/material' as mat;
 
-@import "@angular/material/theming";
-
 @include mat.core();
 
 // Read https://dev.to/nephiw/theming-material-design-mm3 in case of having trouble applying an individual color theme.
