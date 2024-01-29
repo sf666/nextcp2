@@ -289,7 +289,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     
     public void renewServices() {
     	try {
-        	log.info("{}: renewing services ...", getFriendlyName());
+        	log.trace("{}: renewing services ...", getFriendlyName());
         	serviceInitializer.renewServices(getUpnpService(), getDevice(), this, services);
     	} catch (Exception e) {
     		log.warn("renew service failed. Setting ");
@@ -562,7 +562,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     	}
         try
         {
-            if (tickWaitPeriodPassed(counter) && !hasOhInfoService() && transportIsPlaying() && !serviceOffline)
+            if (tickWaitPeriodPassed(counter) && !hasOhInfoService() && transportIsPlaying())
             {
             	// no OpenHome -> need to poll time and transport state information from AVTransport
             	
@@ -573,20 +573,22 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
                 TransportServiceStateDto transportState = transportBridge.getCurrentTransportServiceState();
                 eventPublisher.publishEvent(transportState);
             }
-                        
-            if (servicesEnded.get() && !serviceOffline) {
-            	log.warn(String.format("[%s] services ended. Renewing ... ", getFriendlyName()));
-            	renewServices();;
-            }
         }
         catch (GenActionException e) {
             log.debug("Action call failed.", e);
         	this.serviceOffline = true;
+        	if (!this.serviceOffline) {
+        		log.debug("{} recreate services ... ", getFriendlyName());
+                initServices();
+        	}
         }
         catch (Exception e)
         {
             log.debug("tick failed", e);
-            initServices();
+        	if (!this.serviceOffline) {
+	    		log.debug("{} recreate services ... ", getFriendlyName());
+	            initServices();
+        	}
         }
     }
 
