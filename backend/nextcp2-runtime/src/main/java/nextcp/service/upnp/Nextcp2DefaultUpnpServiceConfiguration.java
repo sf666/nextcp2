@@ -99,7 +99,7 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
     final private static int CORE_THREAD_POOL_SIZE = 50;
     final private static int THREAD_POOL_SIZE = 400;
     final private static int THREAD_QUEUE_SIZE = 1000;
-    final private static boolean THREAD_POOL_CORE_TIMEOUT = true;
+    final private static boolean THREAD_POOL_CORE_TIMEOUT = false;
 
     final private int streamListenPort;
     final private int multicastResponsePort;
@@ -114,6 +114,7 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
     final private ServiceDescriptorBinder serviceDescriptorBinderUDA10;
 	final private ExecutorService streamClientExecutorService;
 
+	private String streamClient;
     
     final private Namespace namespace;
 
@@ -165,7 +166,12 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
         transportConfiguration = TransportConfigurationProvider.getDefaultTransportConfiguration();
     }
 
-    @Override
+    public Nextcp2DefaultUpnpServiceConfiguration(String upnpStreamClient) {
+        this(NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT);
+    	this.streamClient = upnpStreamClient;
+	}
+
+	@Override
     public DatagramProcessor getDatagramProcessor() {
         return datagramProcessor;
     }
@@ -182,11 +188,20 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
 
 	@Override
 	public StreamClient createStreamClient() {
-		return new JdkStreamClients(
+		if ("apache".equalsIgnoreCase(streamClient)) {
+			log.info("using apache stream client configuration ... ");
+			return new ApacheStreamClient(new ApacheStreamClientConfiguration(getStreamClientExecutorService()));
+		} else if ("jdk".equalsIgnoreCase(streamClient)) {
+			log.info("using JDK stream client configuration ... ");
+			return new JdkStreamClients(
 				new JdkStreamClientConfiguration(
 						getStreamClientExecutorService()
 				)
 		);
+		} else {
+			log.info("no stream client set. Available clients are APACHE and JDK. Using default APACHE stream client configuration ... ");
+			return new ApacheStreamClient(new ApacheStreamClientConfiguration(getStreamClientExecutorService()));
+		}
 	}
 
 	public ExecutorService getStreamClientExecutorService() {

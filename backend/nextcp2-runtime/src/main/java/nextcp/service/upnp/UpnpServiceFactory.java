@@ -6,20 +6,24 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import jakarta.annotation.PostConstruct;
 import nextcp.config.RendererConfig;
+import nextcp.dto.Config;
 import nextcp.upnp.device.DeviceRegistry;
 
 @Component
 public class UpnpServiceFactory
 {
     private Nextcp2UpnpServiceImpl upnpService = null;
-    private Nextcp2DefaultUpnpServiceConfiguration nextcp2DefaultUpnpServiceConfiguration = new Nextcp2DefaultUpnpServiceConfiguration();
+    private Nextcp2DefaultUpnpServiceConfiguration nextcp2DefaultUpnpServiceConfiguration = null;
 
     @Autowired
 	private RendererConfig rendererConfigService;
     
     @Autowired
     private DeviceRegistry deviceRegistry = null;
-    
+
+    @Autowired
+    private Config config = null;
+
     public UpnpServiceFactory()
     {
     }
@@ -28,7 +32,7 @@ public class UpnpServiceFactory
     public void init() {
         // UpnpService upnpService = new UpnpServiceImpl(new DefaultUpnpServiceConfiguration());
         // CodegenUpnpServiceConfiguration sc = new CodegenUpnpServiceConfiguration();
-    	
+    	nextcp2DefaultUpnpServiceConfiguration = new Nextcp2DefaultUpnpServiceConfiguration(config.applicationConfig.upnpStreamClient);
     	nextcp2DefaultUpnpServiceConfiguration.setDeviceRegistry(deviceRegistry);
         upnpService = new Nextcp2UpnpServiceImpl(nextcp2DefaultUpnpServiceConfiguration, rendererConfigService);
         

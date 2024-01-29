@@ -25,12 +25,13 @@ public class ApplicationConfig
     public Long itemsPerPage;
     public Long nextPageAfter;
     public String pathToRestartScript;
+    public String upnpStreamClient;
 
     public ApplicationConfig()
     {
     }
 
-    public ApplicationConfig(String myPlaylistFolderName, Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript)
+    public ApplicationConfig(String myPlaylistFolderName, Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript, String upnpStreamClient)
     {
         this.myPlaylistFolderName = myPlaylistFolderName;
         this.generateUpnpCode = generateUpnpCode;
@@ -45,6 +46,7 @@ public class ApplicationConfig
         this.itemsPerPage = itemsPerPage;
         this.nextPageAfter = nextPageAfter;
         this.pathToRestartScript = pathToRestartScript;
+        this.upnpStreamClient = upnpStreamClient;
     }
     
     @Override
@@ -65,6 +67,7 @@ public class ApplicationConfig
         sb.append("itemsPerPage=").append(this.itemsPerPage).append(", ");
         sb.append("nextPageAfter=").append(this.nextPageAfter).append(", ");
         sb.append("pathToRestartScript=").append(this.pathToRestartScript).append(", ");
+        sb.append("upnpStreamClient=").append(this.upnpStreamClient).append(", ");
         sb.append("]");
         return sb.toString();
     }

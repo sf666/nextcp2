@@ -34,6 +34,7 @@ ApplicationConfig:
    itemsPerPage: Long
    nextPageAfter: Long
    pathToRestartScript: String
+   upnpStreamClient: String
 
 UmsServerApiKey:
    serverUuid: String
