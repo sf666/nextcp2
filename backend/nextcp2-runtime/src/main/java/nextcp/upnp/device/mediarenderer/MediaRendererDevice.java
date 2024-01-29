@@ -66,7 +66,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     private static final Logger log = LoggerFactory.getLogger(MediaRendererDevice.class.getName());
 
     private boolean deviceIsEnabledByUser;
-    private boolean avServiceOffline = false;
+    private boolean serviceOffline = false;
     
     @Autowired
     private MediaRendererFactories factories = null;
@@ -288,8 +288,13 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     
     
     public void renewServices() {
-    	log.info("{}: renewing services ...", getFriendlyName());
-    	serviceInitializer.renewServices(getUpnpService(), getDevice(), this, services);
+    	try {
+        	log.info("{}: renewing services ...", getFriendlyName());
+        	serviceInitializer.renewServices(getUpnpService(), getDevice(), this, services);
+    	} catch (Exception e) {
+    		log.warn("renew service failed. Setting ");
+    		setServicesOffline(true);
+    	}
     }
     
     private void initDeviceServices()
@@ -557,7 +562,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     	}
         try
         {
-            if (tickWaitPeriodPassed(counter) && !hasOhInfoService() && transportIsPlaying() && !avServiceOffline)
+            if (tickWaitPeriodPassed(counter) && !hasOhInfoService() && transportIsPlaying() && !serviceOffline)
             {
             	// no OpenHome -> need to poll time and transport state information from AVTransport
             	
@@ -569,14 +574,13 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
                 eventPublisher.publishEvent(transportState);
             }
                         
-            if (servicesEnded.get()) {
+            if (servicesEnded.get() && !serviceOffline) {
             	log.warn(String.format("[%s] services ended. Renewing ... ", getFriendlyName()));
             	renewServices();;
             }
         }
         catch (GenActionException e) {
-        	// Device went probably offline
-        	this.avServiceOffline = true;
+        	this.serviceOffline = true;
         }
         catch (Exception e)
         {
@@ -701,10 +705,11 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
      *  
      * @param state
      */
-    public void setAvServicesOffline(boolean state) {
-    	if (state == false && this.avServiceOffline) {
+    public void setServicesOffline(boolean state) {
+    	if (state == false && this.serviceOffline) {
+    		log.info("{} : trying to initialize services again ...", getFriendlyName());
     		initServices();
     	}
-    	this.avServiceOffline = state;
+    	this.serviceOffline = state;
     }
 }

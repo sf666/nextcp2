@@ -66,7 +66,7 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
         inp.InstanceID = 0L;
         inp.Speed = "1";
         avTransportService.play(inp);
-        device.setAvServicesOffline(false);
+        device.setServicesOffline(false);
     }
 
     public void play(String uri, String metaData)
