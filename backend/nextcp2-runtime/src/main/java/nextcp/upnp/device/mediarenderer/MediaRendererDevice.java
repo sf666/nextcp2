@@ -3,15 +3,13 @@ package nextcp.upnp.device.mediarenderer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import jakarta.annotation.PostConstruct;
-
 import org.apache.commons.lang.StringUtils;
 import org.jupnp.model.meta.RemoteDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-
+import jakarta.annotation.PostConstruct;
 import nextcp.config.RendererConfig;
 import nextcp.domainmodel.device.services.IInfoService;
 import nextcp.domainmodel.device.services.IPlaylistService;
@@ -28,6 +26,7 @@ import nextcp.dto.TrackTimeDto;
 import nextcp.dto.TransportServiceStateDto;
 import nextcp.service.ISchedulerService;
 import nextcp.service.SchedulerService;
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.device.BaseDevice;
 import nextcp.upnp.device.mediarenderer.avtransport.AvTransportEventListener;
 import nextcp.upnp.device.mediarenderer.avtransport.AvTransportEventPublisher;
@@ -67,6 +66,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     private static final Logger log = LoggerFactory.getLogger(MediaRendererDevice.class.getName());
 
     private boolean deviceIsEnabledByUser;
+    private boolean avServiceOffline = false;
     
     @Autowired
     private MediaRendererFactories factories = null;
@@ -557,7 +557,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     	}
         try
         {
-            if (tickWaitPeriodPassed(counter) && !hasOhInfoService() && transportIsPlaying())
+            if (tickWaitPeriodPassed(counter) && !hasOhInfoService() && transportIsPlaying() && !avServiceOffline)
             {
             	// no OpenHome -> need to poll time and transport state information from AVTransport
             	
@@ -573,6 +573,10 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             	log.warn(String.format("[%s] services ended. Renewing ... ", getFriendlyName()));
             	renewServices();;
             }
+        }
+        catch (GenActionException e) {
+        	// Device went probably offline
+        	this.avServiceOffline = true;
         }
         catch (Exception e)
         {
@@ -690,5 +694,17 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     public String toString()
     {
         return "MediaRenderer : " + getFriendlyName();
+    }
+    
+    /**
+     * If a device doesn't respond to UPnP actions, it will be set offline.
+     *  
+     * @param state
+     */
+    public void setAvServicesOffline(boolean state) {
+    	if (state == false && this.avServiceOffline) {
+    		initServices();
+    	}
+    	this.avServiceOffline = state;
     }
 }

@@ -259,7 +259,7 @@ public class OhPlaylistBridge implements IPlaylistService
     @Override
     public void play()
     {
-        playlistService.play();
+        playlistService.play();        
     }
 
     @Override

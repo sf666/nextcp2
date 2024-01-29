@@ -608,6 +608,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 
         getDevice().getAvTransportBridge().setUrl(song.streamingURL, song.currentTrackMetadata);
         getDevice().getTransportServiceBridge().play();
+        getDevice().setAvServicesOffline(false);
 
         setNextSongFromQueue();
 
