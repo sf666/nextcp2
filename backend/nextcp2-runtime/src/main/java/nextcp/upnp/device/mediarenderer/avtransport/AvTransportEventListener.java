@@ -323,7 +323,7 @@ public class AvTransportEventListener extends AVTransportServiceEventListenerImp
         log.warn(String.format("Subscription ended for device %s. Reason: %s. StatusMessage: %s. Code: %s", getDevice().getFriendlyName(), reason.toString(),
                 responseStatus != null ? responseStatus.getStatusMessage() : "NULL", responseStatus != null ? responseStatus.getStatusCode() : "response status is NULL"));
         device.setServicesEnded(true);
-        if (CancelReason.RENEWAL_FAILED.equals(reason.toString()) || CancelReason.DEVICE_WAS_REMOVED.equals(reason.toString())) {
+        if (CancelReason.RENEWAL_FAILED.equals(reason) || CancelReason.DEVICE_WAS_REMOVED.equals(reason)) {
         	log.warn("{} : setting device services to offline ...", device.getFriendlyName());
             device.setServicesOffline(true);
         }
