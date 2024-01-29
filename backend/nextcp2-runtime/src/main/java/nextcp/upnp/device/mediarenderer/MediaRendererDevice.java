@@ -580,6 +580,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             }
         }
         catch (GenActionException e) {
+            log.debug("Action call failed.", e);
         	this.serviceOffline = true;
         }
         catch (Exception e)

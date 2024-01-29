@@ -24,7 +24,7 @@ import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.AVTransportServiceEventListenerImpl;
 
 /**
- * Do not overwrite this class.
+ * 
  */
 public class AvTransportEventListener extends AVTransportServiceEventListenerImpl
 {
@@ -322,7 +322,11 @@ public class AvTransportEventListener extends AVTransportServiceEventListenerImp
     {
         log.warn(String.format("Subscription ended for device %s. Reason: %s. StatusMessage: %s. Code: %s", getDevice().getFriendlyName(), reason.toString(),
                 responseStatus != null ? responseStatus.getStatusMessage() : "NULL", responseStatus != null ? responseStatus.getStatusCode() : "response status is NULL"));
-        device.setServicesEnded(true);        
+        device.setServicesEnded(true);
+        if (CancelReason.RENEWAL_FAILED.equals(reason.toString()) || CancelReason.DEVICE_WAS_REMOVED.equals(reason.toString())) {
+        	log.warn("{} : setting device services to offline ...", device.getFriendlyName());
+            device.setServicesOffline(true);
+        }
     }
     
     @Override
