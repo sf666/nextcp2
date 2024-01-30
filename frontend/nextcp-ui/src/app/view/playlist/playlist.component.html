@@ -24,7 +24,7 @@
     <div>
       @if (hasPlaylistItems) {
         <div>
-          @for (item of playlistService.playlistItems; track item) {
+          @for (item of playlistService.playlistItems; track item.objectID) {
             <div class="playlistItem d-flex {{getActiveClass(item)}}" (click)="playlistService.seekId(item.objectID)">
               <img src="{{item.albumArtUrl}}" class="cropImg" alt="{{item.title}}" id="PL-{{item.objectID}}" tabindex="-1">
               <div class="d-flex flex-column minWidth albumAndTitle">

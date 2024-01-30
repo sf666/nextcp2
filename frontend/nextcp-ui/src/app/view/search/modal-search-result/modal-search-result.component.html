@@ -8,7 +8,7 @@
 
     @if (globalSearchService.quickSearchResultList?.musicItems?.length > 0) {
       <div class="search-row">
-        @for (item of globalSearchService.quickSearchResultList?.musicItems; track item) {
+        @for (item of globalSearchService.quickSearchResultList?.musicItems; track item.objectID) {
           <div
             class="search-row d-flex" (click)="musicItemSelected(item)">
             <img src="{{item.albumArtUrl}}" class="cropImg searchImgHeight align-self-center" alt="">
@@ -34,7 +34,7 @@
     </div>
     @if (globalSearchService.quickSearchResultList?.albumItems?.length > 0) {
       <div>
-        @for (item of globalSearchService.quickSearchResultList?.albumItems; track item) {
+        @for (item of globalSearchService.quickSearchResultList?.albumItems; track item.id) {
           <div
             class="search-row d-flex" (click)="containerSelected(item)">
             <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
@@ -57,7 +57,7 @@
     </div>
     @if (globalSearchService.quickSearchResultList?.playlistItems?.length > 0) {
       <div>
-        @for (item of globalSearchService.quickSearchResultList?.playlistItems; track item) {
+        @for (item of globalSearchService.quickSearchResultList?.playlistItems; track item.id) {
           <div
             class="search-row d-flex" (click)="containerSelected(item)">
             <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
@@ -79,7 +79,7 @@
     </div>
     @if (globalSearchService.quickSearchResultList?.artistItems?.length > 0) {
       <div class="search-row">
-        @for (item of globalSearchService.quickSearchResultList?.artistItems; track item) {
+        @for (item of globalSearchService.quickSearchResultList?.artistItems; track item.id) {
           <div
             class="search-row d-flex" (click)="containerSelected(item)">
             <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
@@ -94,6 +94,4 @@
       <div class="no-match">no match</div>
     }
   </div>
-
-
 </div>

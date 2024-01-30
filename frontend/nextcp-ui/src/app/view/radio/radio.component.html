@@ -2,7 +2,7 @@
   <div class="mt-3">
     <div class="section head">Radio stations provided by {{deviceService.selectedMediaRendererDevice.friendlyName}}</div>
     <div class="albumLayout ps-3">
-      @for (item of radioService.radioItems; track item) {
+      @for (item of radioService.radioItems; track item.objectID) {
         <div class="albumTile">
           <div class="albumImageContainer">
             <img src="{{item.albumArtUrl}}" class="imgContainer" alt="{{item.title}}">
@@ -23,7 +23,7 @@
 @if (configurationService.serverConfig?.radioStation.length > 0) {
   <div>
     <div class="albumLayout ps-3">
-      @for (item of configurationService.serverConfig.radioStation; track item) {
+      @for (item of configurationService.serverConfig.radioStation; track item.id) {
         <div class="albumTile">
           <div class="albumImageContainer">
             <img src="{{item.artworkUrl}}" class="imgContainer" alt="{{item.stationName}}">

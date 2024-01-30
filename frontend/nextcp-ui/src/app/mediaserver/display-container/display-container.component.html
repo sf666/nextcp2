@@ -245,7 +245,7 @@ Main Content
               <!--                                  -->
               <!-- one item is displayed over a row -->
               <!--                                  -->
-              @for (item of allMusicTracks; track item) {
+              @for (item of allMusicTracks; track item.objectID) {
                 <div id="{{item.objectID}}">
                   @if (allTracksSameAlbum() && !allTracksSameDisc()) {
                     <div class="item-tbody">
@@ -301,7 +301,7 @@ Main Content
         </div>
       } @else {
         <div id="head_browse_result_items_mixed_titles_ID" class="cardLayoutTiles">
-          @for (item of allMusicTracks; track item) {
+          @for (item of allMusicTracks; track item.objectID) {
             <div id="{{item.objectID}}" class="imgCardWidth mb-5 ms-4">
               <div class="albumImageContainer">
                 <img src="{{item.albumArtUrl}}" alt="{{item.title}}">
@@ -324,7 +324,7 @@ Main Content
       }
       <ng-template #cardLayoutTiles>
         <div id="head_browse_result_items_mixed_titles_ID" class="cardLayoutTiles">
-          @for (item of allMusicTracks; track item) {
+          @for (item of allMusicTracks; track item.objectID) {
             <div id="{{item.objectID}}" class="imgCardWidth mb-5 ms-4">
               <div class="albumImageContainer">
                 <img src="{{item.albumArtUrl}}" alt="{{item.title}}">
@@ -354,7 +354,7 @@ Main Content
   @if (containerList?.length > 0) {
     <div>
       <div id="head_browse_result_playlist_container_ID" class="albumLayout">
-        @for (container of containerList; track container) {
+        @for (container of containerList; track container.id) {
           <div class="albumTile" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)">
             <div class="albumImageContainer">
               <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
@@ -376,7 +376,7 @@ Main Content
   @if (items?.length > 0) {
     <div>
       <div id="head_browse_other_items_ID" class="albumLayout">
-        @for (item of items; track item) {
+        @for (item of items; track item.objectID) {
           <div class="albumTile" id="{{item.objectID}}" tabindex="-1" (click)="transportService.playResource(item)">
             <div class="albumImageContainer">
               <img src="{{item.albumArtUrl}}" alt="{{item.title}}">

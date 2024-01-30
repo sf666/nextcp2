@@ -36,7 +36,7 @@
         <mat-icon class="material-symbols-outlined thin create-icon">add</mat-icon>
         <span class="buttonText">Create ...</span>
       </button>
-      @for (item of playlistService.serverPl.serverPlaylists; track item) {
+      @for (item of playlistService.serverPl.serverPlaylists; track item.playlistId) {
         <a mat-button [routerLink]="'/myPlaylists'" class="hide-element playlist {{getPlaylistClass(item.playlistId)}}"
         (click)="browseToPlaylist(item)">{{item.playlistName}}</a>
       }
