@@ -148,6 +148,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     		return;
     	}
     	
+    	setServicesOffline(false);
     	servicesEnded.set(false);
         initDeviceServices();
 
@@ -573,20 +574,13 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
                 TransportServiceStateDto transportState = transportBridge.getCurrentTransportServiceState();
                 eventPublisher.publishEvent(transportState);
             }
-            
-            if (servicesEnded.get() && !serviceOffline) {
-            	log.warn(String.format("[%s] services ended. Renewing ... ", getFriendlyName()));
-            	renewServices();;
-            }
-            
+        }
+        catch (GenActionException e) {
+            log.debug("Action call failed.", e);
         	if (!this.serviceOffline) {
         		log.debug("{} recreate services ... ", getFriendlyName());
                 initServices();
         	}
-        }
-        catch (GenActionException e) {
-            log.debug("Action call failed.", e);
-        	this.serviceOffline = true;
         }
         catch (Exception e)
         {
