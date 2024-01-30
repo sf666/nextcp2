@@ -569,26 +569,28 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
                 log.trace(String.format("%s: polling AVTransport state ...", getFriendlyName()));
                 TrackTimeDto dto = avTransportBridge.generateTractTimeDto();
                 eventPublisher.publishEvent(dto);
-                
+
                 TransportServiceStateDto transportState = transportBridge.getCurrentTransportServiceState();
                 eventPublisher.publishEvent(transportState);
             }
-        }
-        catch (GenActionException e) {
-            log.debug("Action call failed.", e);
-        	this.serviceOffline = true;
+            
+            if (servicesEnded.get() && !serviceOffline) {
+            	log.warn(String.format("[%s] services ended. Renewing ... ", getFriendlyName()));
+            	renewServices();;
+            }
+            
         	if (!this.serviceOffline) {
         		log.debug("{} recreate services ... ", getFriendlyName());
                 initServices();
         	}
         }
+        catch (GenActionException e) {
+            log.debug("Action call failed.", e);
+        	this.serviceOffline = true;
+        }
         catch (Exception e)
         {
             log.debug("tick failed", e);
-        	if (!this.serviceOffline) {
-	    		log.debug("{} recreate services ... ", getFriendlyName());
-	            initServices();
-        	}
         }
     }
 
