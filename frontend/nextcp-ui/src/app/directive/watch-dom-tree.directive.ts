@@ -1,7 +1,8 @@
 import { Directive, ElementRef, OnInit } from '@angular/core';
 
 @Directive({
-  selector: '[domTreeChange]'
+    selector: '[domTreeChange]',
+    standalone: true
 })
 export class DomChangedDirective implements OnInit {
   constructor(private elRef: ElementRef) { }

@@ -2,11 +2,14 @@ import { DeviceService } from 'src/app/service/device.service';
 import { PopupService } from './../../util/popup.service';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 import { Component, OnInit, Inject, ElementRef } from '@angular/core';
+import { NgIf, NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-available-renderer',
-  templateUrl: './available-renderer.component.html',
-  styleUrls: ['./available-renderer.component.scss']
+    selector: 'app-available-renderer',
+    templateUrl: './available-renderer.component.html',
+    styleUrls: ['./available-renderer.component.scss'],
+    standalone: true,
+    imports: [NgIf, NgFor]
 })
 export class AvailableRendererComponent implements OnInit {
 

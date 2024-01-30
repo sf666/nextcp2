@@ -7,12 +7,17 @@ import { LayoutService } from './../../service/layout.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { ContainerDto, MusicItemDto, MediaServerDto, ContainerItemDto } from './../../service/dto.d';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { DisplayContainerComponent as DisplayContainerComponent_1 } from '../../mediaserver/display-container/display-container.component';
+import { NavBarComponent } from '../nav-bar/nav-bar.component';
+import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'music-library',
-  templateUrl: './music-library.component.html',
-  styleUrls: ['./music-library.component.scss'],
-  providers: [ContentDirectoryService, PersistenceService, CdsBrowsePathService, { provide: 'uniqueId', useValue: 'music-library_' }]
+    selector: 'music-library',
+    templateUrl: './music-library.component.html',
+    styleUrls: ['./music-library.component.scss'],
+    providers: [ContentDirectoryService, PersistenceService, CdsBrowsePathService, { provide: 'uniqueId', useValue: 'music-library_' }],
+    standalone: true,
+    imports: [NgIf, NavBarComponent, DisplayContainerComponent_1]
 })
 
 export class MusicLibraryComponent implements AfterViewInit{

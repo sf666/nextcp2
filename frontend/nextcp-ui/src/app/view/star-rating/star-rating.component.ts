@@ -2,12 +2,15 @@ import { GenericResultService } from './../../service/generic-result.service';
 import { RatingServiceService } from './../../service/rating-service.service';
 import { MusicItemDto } from './../../service/dto.d';
 import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { NgIf, NgFor } from '@angular/common';
 
 @Component({
-  selector: 'star-rating',
-  encapsulation: ViewEncapsulation.None,
-  templateUrl: './star-rating.component.html',
-  styleUrls: ['./star-rating.component.scss']
+    selector: 'star-rating',
+    encapsulation: ViewEncapsulation.None,
+    templateUrl: './star-rating.component.html',
+    styleUrls: ['./star-rating.component.scss'],
+    standalone: true,
+    imports: [NgIf, NgFor]
 })
 
 export class StarRatingComponent {

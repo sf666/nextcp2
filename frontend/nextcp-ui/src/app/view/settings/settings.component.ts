@@ -8,12 +8,22 @@ import { UiClientConfig, MediaServerDto, RendererDeviceConfiguration, MediaRende
 import { ConfigurationService } from './../../service/configuration.service';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { LayoutService } from 'src/app/service/layout.service';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { MatButton } from '@angular/material/button';
+import { MatInput } from '@angular/material/input';
+import { NgFor, NgIf } from '@angular/common';
+import { MatOption } from '@angular/material/core';
+import { FormsModule } from '@angular/forms';
+import { MatSelect } from '@angular/material/select';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
 
 @Component({
-  selector: 'settings',
-  templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'settings',
+    templateUrl: './settings.component.html',
+    styleUrls: ['./settings.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: true,
+    imports: [MatFormField, MatLabel, MatSelect, FormsModule, MatOption, NgFor, MatInput, MatSuffix, MatButton, MatSlideToggle, NgIf]
 })
 export class SettingsComponent implements OnInit {
 

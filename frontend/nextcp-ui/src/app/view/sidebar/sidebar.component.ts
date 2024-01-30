@@ -2,18 +2,30 @@ import { LayoutService } from './../../service/layout.service';
 import { InputFieldConfig } from './../../popup/input-field-dialog/input-field-dialog.d';
 import { InputFieldDialogComponent } from './../../popup/input-field-dialog/input-field-dialog.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { NavigationEnd, Router, RouterEvent } from '@angular/router';
+import { NavigationEnd, Router, RouterEvent, RouterLink } from '@angular/router';
 import { MyPlaylistService } from './../my-playlists/my-playlist.service';
 import { PlaylistService } from './../../service/playlist.service';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
 import { Component } from '@angular/core';
 import { ServerPlaylistDto } from 'src/app/service/dto';
+import { NgIf, NgFor } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton, MatAnchor } from '@angular/material/button';
 
 @Component({
-  selector: 'app-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss'],
+    selector: 'app-sidebar',
+    templateUrl: './sidebar.component.html',
+    styleUrls: ['./sidebar.component.scss'],
+    standalone: true,
+    imports: [
+        MatButton,
+        RouterLink,
+        MatIcon,
+        MatAnchor,
+        NgIf,
+        NgFor,
+    ],
 })
 export class SidebarComponent {
 

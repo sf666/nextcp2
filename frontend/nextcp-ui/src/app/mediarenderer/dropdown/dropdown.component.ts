@@ -1,11 +1,15 @@
 import { MediaRendererDto } from './../../service/dto.d';
 import { DeviceService } from './../../service/device.service';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { NgFor } from '@angular/common';
+import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgbDropdownButtonItem, NgbDropdownItem } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'mediaRendererDropdown',
-  templateUrl: './dropdown.component.html',
-  styleUrls: ['./dropdown.component.scss']
+    selector: 'mediaRendererDropdown',
+    templateUrl: './dropdown.component.html',
+    styleUrls: ['./dropdown.component.scss'],
+    standalone: true,
+    imports: [NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgFor, NgbDropdownButtonItem, NgbDropdownItem]
 })
 
 export class RendererDropdownComponent {

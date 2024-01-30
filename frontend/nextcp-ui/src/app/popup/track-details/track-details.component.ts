@@ -3,11 +3,14 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TrackDetailsData } from './track-details-config.d';
 import { FormGroup } from '@angular/forms';
 import { Component, Inject, OnInit } from '@angular/core';
+import { StarRatingComponent } from '../../view/star-rating/star-rating.component';
 
 @Component({
-  selector: 'app-track-details',
-  templateUrl: './track-details.component.html',
-  styleUrls: ['./track-details.component.scss']
+    selector: 'app-track-details',
+    templateUrl: './track-details.component.html',
+    styleUrls: ['./track-details.component.scss'],
+    standalone: true,
+    imports: [StarRatingComponent]
 })
 
 /**

@@ -6,11 +6,14 @@ import { RadioStation, MusicItemDto } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
 import { Component, OnInit } from '@angular/core';
 import { LayoutService } from 'src/app/service/layout.service';
+import { NgIf, NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-radio',
-  templateUrl: './radio.component.html',
-  styleUrls: ['./radio.component.scss']
+    selector: 'app-radio',
+    templateUrl: './radio.component.html',
+    styleUrls: ['./radio.component.scss'],
+    standalone: true,
+    imports: [NgIf, NgFor]
 })
 export class RadioComponent implements OnInit{
 

@@ -8,12 +8,16 @@ import { SearchItemService } from './../../../service/search/search-item.service
 import { RouteReuseStrategy, Router } from '@angular/router';
 import { Component, ViewChild } from '@angular/core';
 import { MusicLibraryComponent } from '../../music-library/music-library.component';
+import { QualityBadgeComponent } from '../../../util/comp/quality-badge/quality-badge.component';
+import { NgIf, NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-modal-search-result',
-  templateUrl: './modal-search-result.component.html',
-  styleUrls: ['./modal-search-result.component.scss'],
-  providers: [ContentDirectoryService]
+    selector: 'app-modal-search-result',
+    templateUrl: './modal-search-result.component.html',
+    styleUrls: ['./modal-search-result.component.scss'],
+    providers: [ContentDirectoryService],
+    standalone: true,
+    imports: [NgIf, NgFor, QualityBadgeComponent]
 })
 
 export class ModalSearchResultComponent {

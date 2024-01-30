@@ -46,7 +46,7 @@
     "modernizr": "^3.11.4",
     "ngx-device-detector": "7",
     "ngx-infinite-scroll": "17",
-    "ngx-toastr": "^16.1.0",
+    "ngx-toastr": "^18.0.0",
     "rxjs": "~7.8.0",
     "service": "0.1.4",
     "streamsaver": "^2.0.5",

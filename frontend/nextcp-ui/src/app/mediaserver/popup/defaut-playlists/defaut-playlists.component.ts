@@ -2,11 +2,14 @@ import { PopupService } from './../../../util/popup.service';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 import { PlaylistService } from './../../../service/playlist.service';
 import { Component, OnInit, Inject, ElementRef } from '@angular/core';
+import { NgIf, NgFor } from '@angular/common';
 
 @Component({
-  selector: 'defaut-playlists',
-  templateUrl: './defaut-playlists.component.html',
-  styleUrls: ['./defaut-playlists.component.scss']
+    selector: 'defaut-playlists',
+    templateUrl: './defaut-playlists.component.html',
+    styleUrls: ['./defaut-playlists.component.scss'],
+    standalone: true,
+    imports: [NgIf, NgFor]
 })
 export class DefautPlaylistsComponent implements OnInit {
 

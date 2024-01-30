@@ -8,8 +8,8 @@ describe('DeviceViewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DeviceViewComponent ]
-    })
+    imports: [DeviceViewComponent]
+})
     .compileComponents();
   }));
 

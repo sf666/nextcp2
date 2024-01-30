@@ -5,11 +5,20 @@ import { MusicItemDto } from './../../service/dto.d';
 import { BackgroundImageService } from './../../util/background-image.service';
 import { RendererService } from './../../service/renderer.service';
 import { Component, OnInit } from '@angular/core';
+import { MatInput } from '@angular/material/input';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { MatListSubheaderCssMatStyler } from '@angular/material/list';
+import { MatButton } from '@angular/material/button';
+import { StarRatingComponent } from '../../view/star-rating/star-rating.component';
+import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-mediarenderer',
-  templateUrl: './mediarenderer.component.html',
-  styleUrls: ['./mediarenderer.component.scss']
+    selector: 'app-mediarenderer',
+    templateUrl: './mediarenderer.component.html',
+    styleUrls: ['./mediarenderer.component.scss'],
+    standalone: true,
+    imports: [NgIf, StarRatingComponent, MatButton, MatListSubheaderCssMatStyler, FormsModule, MatFormField, MatLabel, MatInput]
 })
 
 export class MediarendererComponent implements OnInit {

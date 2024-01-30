@@ -8,8 +8,8 @@ describe('AvailableServerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AvailableServerComponent ]
-    })
+    imports: [AvailableServerComponent]
+})
     .compileComponents();
   });
 

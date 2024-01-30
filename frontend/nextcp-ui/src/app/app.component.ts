@@ -1,15 +1,22 @@
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SpinnerService } from './service/spinner.service';
 import { LayoutService } from './service/layout.service';
 import { Component, HostListener } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as _ from "lodash";
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { SidebarComponent } from './view/sidebar/sidebar.component';
+import { FooterComponent } from './mediarenderer/footer/footer.component';
+import { CommonModule, NgIf } from '@angular/common';
 
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  imports: [NgIf, CommonModule, RouterOutlet, RouterLink, RouterLinkActive, MatProgressSpinnerModule, SidebarComponent, FooterComponent],  
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
   title = 'nextCP/2';

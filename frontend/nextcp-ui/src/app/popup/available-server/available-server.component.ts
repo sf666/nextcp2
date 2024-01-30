@@ -3,11 +3,14 @@ import { DeviceService } from 'src/app/service/device.service';
 import { PopupService } from './../../util/popup.service';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 import { Component, OnInit, Inject, ElementRef } from '@angular/core';
+import { NgIf, NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-available-server',
-  templateUrl: './available-server.component.html',
-  styleUrls: ['./available-server.component.scss']
+    selector: 'app-available-server',
+    templateUrl: './available-server.component.html',
+    styleUrls: ['./available-server.component.scss'],
+    standalone: true,
+    imports: [NgIf, NgFor]
 })
 
 export class AvailableServerComponent implements OnInit {

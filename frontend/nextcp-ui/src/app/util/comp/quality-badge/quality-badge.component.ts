@@ -1,11 +1,14 @@
 import { MusicItemDto } from './../../../service/dto.d';
 import { TrackQualityService } from './../../track-quality.service';
 import { Component, OnInit, Input } from '@angular/core';
+import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'quality-badge',
-  templateUrl: './quality-badge.component.html',
-  styleUrls: ['./quality-badge.component.scss']
+    selector: 'quality-badge',
+    templateUrl: './quality-badge.component.html',
+    styleUrls: ['./quality-badge.component.scss'],
+    standalone: true,
+    imports: [NgIf]
 })
 export class QualityBadgeComponent implements OnInit {
 

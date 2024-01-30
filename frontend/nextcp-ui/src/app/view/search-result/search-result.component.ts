@@ -6,12 +6,18 @@ import { CdsBrowsePathService } from './../../util/cds-browse-path.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { ContainerDto, MusicItemDto, ContainerItemDto } from './../../service/dto.d';
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { DisplayContainerComponent as DisplayContainerComponent_1 } from '../../mediaserver/display-container/display-container.component';
+import { NavBarComponent } from '../nav-bar/nav-bar.component';
+import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'search-result',
-  templateUrl: './search-result.component.html',
-  styleUrls: ['./search-result.component.scss'],
-  providers: [ContentDirectoryService, CdsBrowsePathService, { provide: 'uniqueId', useValue: 'search-result_' }] // uniqueId is used for CdsBrowseService !
+    selector: 'search-result',
+    templateUrl: './search-result.component.html',
+    styleUrls: ['./search-result.component.scss'],
+    providers: [ContentDirectoryService, CdsBrowsePathService, { provide: 'uniqueId', useValue: 'search-result_' }] // uniqueId is used for CdsBrowseService !
+    ,
+    standalone: true,
+    imports: [NgIf, NavBarComponent, DisplayContainerComponent_1]
 })
 
 export class SearchResultComponent implements AfterViewInit {
