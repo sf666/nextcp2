@@ -1,20 +1,28 @@
 <router-outlet></router-outlet>
 
 <div class="app-root">
-  
-  <div *ngIf="showBlur()" class="bg-img" id="main-screen">
-  </div>
 
-  <div class="spinner-overlay" *ngIf="spinnerService.visibility | async">
-    <div class="spinner">
-      <mat-spinner [diameter]="50" mode="indeterminate"></mat-spinner>
+  @if (showBlur()) {
+    <div class="bg-img" id="main-screen">
     </div>
-  </div>
-  
-  <app-sidebar *ngIf="layoutService.sidebarVisible"></app-sidebar>
-  
+  }
+
+  @if (spinnerService.visibility | async) {
+    <div class="spinner-overlay">
+      <div class="spinner">
+        <mat-spinner [diameter]="50" mode="indeterminate"></mat-spinner>
+      </div>
+    </div>
+  }
+
+  @if (layoutService.sidebarVisible) {
+    <app-sidebar></app-sidebar>
+  }
+
   <div id="mainContent" class="mainContent">
-    <div *ngIf="layoutService.headerVisible" class="topPosition">&nbsp;</div>
+    @if (layoutService.headerVisible) {
+      <div class="topPosition">&nbsp;</div>
+    }
     <router-outlet></router-outlet>
     <div class="footer-block">&nbsp;</div>
     <!--
@@ -22,9 +30,13 @@
     -->
   </div>
 
-  <renderer-footer *ngIf="layoutService.footerVisible"></renderer-footer>    
-  <div class="bg-img-footer" id="footer-background" *ngIf="layoutService.footerVisible && showBlur()">
-  </div>
+  @if (layoutService.footerVisible) {
+    <renderer-footer></renderer-footer>
+  }
+  @if (layoutService.footerVisible && showBlur()) {
+    <div class="bg-img-footer" id="footer-background">
+    </div>
+  }
 
 </div>
 

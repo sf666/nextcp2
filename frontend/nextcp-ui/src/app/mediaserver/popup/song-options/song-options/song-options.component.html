@@ -1,41 +1,47 @@
 <div class="d-flex flex-column">
-    <!-- (mouseleave)="close()" -->
-    <div class="d-flex" (mouseenter)="closeAllDialogs()">
-        <div class="top-image">
-            <img src="{{selectedMusicItem.albumArtUrl}}">
-        </div>
-
-        <div class="d-flex flex-column minWidth albumAndTitle">
-            <div class="title no-wrap">{{selectedMusicItem.title}}</div>
-            <div class="artist no-wrap">{{selectedMusicItem.artistName}}</div>
-        </div>
+  <!-- (mouseleave)="close()" -->
+  <div class="d-flex" (mouseenter)="closeAllDialogs()">
+    <div class="top-image">
+      <img src="{{selectedMusicItem.albumArtUrl}}">
     </div>
 
-    <div class="divider mt-2 mb-1">&nbsp;</div>
-    <div class="starRating">
-        <star-rating [currentSong]="selectedMusicItem"></star-rating>
+    <div class="d-flex flex-column minWidth albumAndTitle">
+      <div class="title no-wrap">{{selectedMusicItem.title}}</div>
+      <div class="artist no-wrap">{{selectedMusicItem.artistName}}</div>
     </div>
-    <div class="divider mt-2 mb-1">&nbsp;</div>
+  </div>
 
-    <div class="dialogItems d-flex flex-column flex-wrap">
-        <div class="d-flex justify-content-between playlist-item" *ngIf="hasValidSongId()" (click)="openAddToPlaylistDialog($event)" (mouseenter)="openAddToPlaylistDialog($event)">
-            <div class="d-flex justify-content-between" style="align-self: center;">
-                Add to playlist
-            </div>
-            <span class="material-symbols-outlined">chevron_right</span>
-        </div>
-        <div *ngIf="isParentPlaylist" class="playlist-item" (mouseover)="closeAllDialogs()" (click)="deleteFromPlaylist()">
-            Delete from playlist
-        </div>
+  <div class="divider mt-2 mb-1">&nbsp;</div>
+  <div class="starRating">
+    <star-rating [currentSong]="selectedMusicItem"></star-rating>
+  </div>
+  <div class="divider mt-2 mb-1">&nbsp;</div>
 
-        <div *ngIf="hasValidSongId()" class="divider mb-1 mt-1">&nbsp;</div>
+  <div class="dialogItems d-flex flex-column flex-wrap">
+    @if (hasValidSongId()) {
+      <div class="d-flex justify-content-between playlist-item" (click)="openAddToPlaylistDialog($event)" (mouseenter)="openAddToPlaylistDialog($event)">
+        <div class="d-flex justify-content-between" style="align-self: center;">
+          Add to playlist
+        </div>
+        <span class="material-symbols-outlined">chevron_right</span>
+      </div>
+    }
+    @if (isParentPlaylist) {
+      <div class="playlist-item" (mouseover)="closeAllDialogs()" (click)="deleteFromPlaylist()">
+        Delete from playlist
+      </div>
+    }
 
-        <div class="playlist-item" (mouseenter)="closeAllDialogs()" (click)="actionPlayNext()">
-            Play next
-        </div>
-        <div class="playlist-item" (mouseover)="closeAllDialogs()" (click)="download()">
-            Download
-        </div>
+    @if (hasValidSongId()) {
+      <div class="divider mb-1 mt-1">&nbsp;</div>
+    }
+
+    <div class="playlist-item" (mouseenter)="closeAllDialogs()" (click)="actionPlayNext()">
+      Play next
     </div>
-    <div class="spaces">&nbsp;</div>
+    <div class="playlist-item" (mouseover)="closeAllDialogs()" (click)="download()">
+      Download
+    </div>
+  </div>
+  <div class="spaces">&nbsp;</div>
 </div>

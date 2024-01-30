@@ -1,44 +1,48 @@
 <div class="sidebar">
-    <div class="app-label-text">nextCP/2</div>
-    <div class="myRouterLinkSection">
-        <button mat-button [routerLink]="'/music-library'" class="margin-reactive {{getTextClass('/music-library')}}" (click)="musicLibraryClicked()">
-            <mat-icon class="material-symbols-outlined thin">library_music</mat-icon>
-            <span class="hide-element buttonText">Music Library</span>
-        </button>
-        <a mat-button [routerLink]="'/playlist'" (click)="buttonClicked('/playlist')" class="margin-reactive {{getTextClass('/playlist')}}">
-            <mat-icon class="material-symbols-outlined thin">queue_music</mat-icon>
-            <span class="hide-element buttonText">Player Queue</span>
-        </a>
-        <a mat-button [routerLink]="'/player'" (click)="buttonClicked('/player')" class="margin-reactive {{getTextClass('/player')}}">
-            <mat-icon class="material-symbols-outlined thin">surround_sound</mat-icon>
-            <span class="buttonText hide-element">Now Listening</span>
-        </a>
-        <a mat-button [routerLink]="'/radio'" (click)="buttonClicked('/radio')" class="margin-reactive  {{getTextClass('/radio')}}">
-            <mat-icon class="material-symbols-outlined thin">radio</mat-icon>
-            <span class="hide-element buttonText">Radio</span>
-        </a>
-    
-        <a mat-button [routerLink]="'/myAlbums'" (click)="myAlbumClicked()" class="margin-reactive {{getTextClass('/myAlbums')}}">
-            <mat-icon class="material-symbols-outlined thin">album</mat-icon>
-            <span class="hide-element buttonText">My Albums</span>
-        </a>
-    
-        <a mat-button [routerLink]="'/settings'" (click)="buttonClicked('/settings')" class="margin-reactive  {{getTextClass('/settings')}}">
-            <mat-icon class="material-symbols-outlined thin">settings</mat-icon>
-            <span class="hide-element buttonText">App Settings</span>
-        </a>    
-    </div>
+  <div class="app-label-text">nextCP/2</div>
+  <div class="myRouterLinkSection">
+    <button mat-button [routerLink]="'/music-library'" class="margin-reactive {{getTextClass('/music-library')}}" (click)="musicLibraryClicked()">
+      <mat-icon class="material-symbols-outlined thin">library_music</mat-icon>
+      <span class="hide-element buttonText">Music Library</span>
+    </button>
+    <a mat-button [routerLink]="'/playlist'" (click)="buttonClicked('/playlist')" class="margin-reactive {{getTextClass('/playlist')}}">
+      <mat-icon class="material-symbols-outlined thin">queue_music</mat-icon>
+      <span class="hide-element buttonText">Player Queue</span>
+    </a>
+    <a mat-button [routerLink]="'/player'" (click)="buttonClicked('/player')" class="margin-reactive {{getTextClass('/player')}}">
+      <mat-icon class="material-symbols-outlined thin">surround_sound</mat-icon>
+      <span class="buttonText hide-element">Now Listening</span>
+    </a>
+    <a mat-button [routerLink]="'/radio'" (click)="buttonClicked('/radio')" class="margin-reactive  {{getTextClass('/radio')}}">
+      <mat-icon class="material-symbols-outlined thin">radio</mat-icon>
+      <span class="hide-element buttonText">Radio</span>
+    </a>
 
-    <div *ngIf="myPlaylistsAvailable" class="myPlaylistSection hide-element">
-        <div class="hide-element sub-label">MY PLAYLISTS</div>
+    <a mat-button [routerLink]="'/myAlbums'" (click)="myAlbumClicked()" class="margin-reactive {{getTextClass('/myAlbums')}}">
+      <mat-icon class="material-symbols-outlined thin">album</mat-icon>
+      <span class="hide-element buttonText">My Albums</span>
+    </a>
 
-        <button mat-button (click)="createPlaylistClicked()" class="hide-element">
-            <mat-icon class="material-symbols-outlined thin create-icon">add</mat-icon>
-            <span class="buttonText">Create ...</span>
-        </button>
+    <a mat-button [routerLink]="'/settings'" (click)="buttonClicked('/settings')" class="margin-reactive  {{getTextClass('/settings')}}">
+      <mat-icon class="material-symbols-outlined thin">settings</mat-icon>
+      <span class="hide-element buttonText">App Settings</span>
+    </a>
+  </div>
 
+  @if (myPlaylistsAvailable) {
+    <div class="myPlaylistSection hide-element">
+      <div class="hide-element sub-label">MY PLAYLISTS</div>
+      <button mat-button (click)="createPlaylistClicked()" class="hide-element">
+        <mat-icon class="material-symbols-outlined thin create-icon">add</mat-icon>
+        <span class="buttonText">Create ...</span>
+      </button>
+      @for (item of playlistService.serverPl.serverPlaylists; track item) {
         <a mat-button [routerLink]="'/myPlaylists'" class="hide-element playlist {{getPlaylistClass(item.playlistId)}}"
-            *ngFor="let item of playlistService.serverPl.serverPlaylists" (click)="browseToPlaylist(item)">{{item.playlistName}}</a>
+        (click)="browseToPlaylist(item)">{{item.playlistName}}</a>
+      }
     </div>
+  }
 </div>
-<div id="mobileDeviceEmptyBlock" *ngIf="layoutService.isMobileDevice()" class="footer-block">&nbsp;</div>
+@if (layoutService.isMobileDevice()) {
+  <div id="mobileDeviceEmptyBlock" class="footer-block">&nbsp;</div>
+}
