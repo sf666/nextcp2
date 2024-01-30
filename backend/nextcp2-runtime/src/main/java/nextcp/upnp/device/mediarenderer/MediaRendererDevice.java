@@ -574,10 +574,6 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
                 TransportServiceStateDto transportState = transportBridge.getCurrentTransportServiceState();
                 eventPublisher.publishEvent(transportState);
             }
-        	if (!this.serviceOffline) {
-        		log.debug("{} recreate services ... ", getFriendlyName());
-                initServices();
-        	}
         }
         catch (GenActionException e) {
             log.debug("Action call failed.", e);
