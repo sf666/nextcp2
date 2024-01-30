@@ -563,7 +563,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     	}
         try
         {
-            if (tickWaitPeriodPassed(counter) && !hasOhInfoService() && transportIsPlaying())
+            if (tickWaitPeriodPassed(counter) && !hasOhInfoService() && transportIsPlaying() && !this.serviceOffline)
             {
             	// no OpenHome -> need to poll time and transport state information from AVTransport
             	
@@ -574,13 +574,14 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
                 TransportServiceStateDto transportState = transportBridge.getCurrentTransportServiceState();
                 eventPublisher.publishEvent(transportState);
             }
-        }
-        catch (GenActionException e) {
-            log.debug("Action call failed.", e);
         	if (!this.serviceOffline) {
         		log.debug("{} recreate services ... ", getFriendlyName());
                 initServices();
         	}
+        }
+        catch (GenActionException e) {
+            log.debug("Action call failed.", e);
+            setServicesOffline(true);
         }
         catch (Exception e)
         {

@@ -130,36 +130,31 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
     public TrackTimeDto generateTractTimeDto()
     {
         TrackTimeDto dto = new TrackTimeDto();
-    	try {
-            dto.mediaRendererUdn = device.getUDN().getIdentifierString();
+        dto.mediaRendererUdn = device.getUDN().getIdentifierString();
 
-            GetPositionInfoInput inp = new GetPositionInfoInput();
-            inp.InstanceID = 0L;
-            GetPositionInfoOutput out = avTransportService.getPositionInfo(inp);
+        GetPositionInfoInput inp = new GetPositionInfoInput();
+        inp.InstanceID = 0L;
+        GetPositionInfoOutput out = avTransportService.getPositionInfo(inp);
 
-            dto.duration = getAsSeconds(out.TrackDuration);
-            dto.seconds = getAsSeconds(out.RelTime);
-            dto.trackCount = out.Track;
+        dto.duration = getAsSeconds(out.TrackDuration);
+        dto.seconds = getAsSeconds(out.RelTime);
+        dto.trackCount = out.Track;
 
-            dto.durationDisp = DisplayUtils.convertToDigitString(dto.duration);
-            if ("00:00".equals(dto.durationDisp))
+        dto.durationDisp = DisplayUtils.convertToDigitString(dto.duration);
+        if ("00:00".equals(dto.durationDisp))
+        {
+            dto.streaming = true;
+            if (dto.seconds != null && dto.seconds > 0)
             {
-                dto.streaming = true;
-                if (dto.seconds != null && dto.seconds > 0)
-                {
-                    dto.durationDisp = "streaming";
-                }
+                dto.durationDisp = "streaming";
             }
-            else
-            {
-                dto.streaming = false;
-            }
-            dto.secondsDisp = DisplayUtils.convertToDigitString(dto.seconds);
-            dto.percent = calcPercent(dto.seconds, dto.duration);
-    	} catch (Exception e) {
-    		log.warn("could not generate TrackTimeDto", e);
-    		device.renewServices();
-    	}
+        }
+        else
+        {
+            dto.streaming = false;
+        }
+        dto.secondsDisp = DisplayUtils.convertToDigitString(dto.seconds);
+        dto.percent = calcPercent(dto.seconds, dto.duration);
         return dto;
     }
 

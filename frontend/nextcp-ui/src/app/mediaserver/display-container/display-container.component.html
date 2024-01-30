@@ -151,7 +151,7 @@ Main Content
     @if (playlistList?.length > 0) {
       <div>
         <div id="head_browse_result_playlist_items_ID" tabindex="-1" class="albumLayout">
-          @for (container of playlistList; track container) {
+          @for (container of playlistList; track container.id) {
             <div id="{{container.id}}" tabindex="-1" class="albumTile">
               <div class="albumImageContainer">
                 <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
@@ -182,7 +182,7 @@ Main Content
     @if (albumList?.length > 0) {
       <div>
         <div id="head_browse_result_album_ID" class="albumLayout">
-          @for (container of albumList; track container) {
+          @for (container of albumList; track container.id) {
             <div id="{{container.id}}" tabindex="-1" class="albumTile">
               <div class="albumImageContainer">
                 <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
