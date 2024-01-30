@@ -1,8 +1,10 @@
 <div class="d-inline-block" ngbDropdown #serverDrop>
-    <button class="btn btn-outline-primary me-2" id="dropdownManual"
-        ngbDropdownToggle>{{labelName}}</button>
-    <div ngbDropdownMenu aria-labelledby="dropdownManual">
-        <button ngbDropdownItem *ngFor="let server of mediaServerList()"
-            (click)="setCurrentMediaServer(server)">{{server.friendlyName}}</button>
-    </div>
+  <button class="btn btn-outline-primary me-2" id="dropdownManual"
+  ngbDropdownToggle>{{labelName}}</button>
+  <div ngbDropdownMenu aria-labelledby="dropdownManual">
+    @for (server of mediaServerList(); track server) {
+      <button ngbDropdownItem
+      (click)="setCurrentMediaServer(server)">{{server.friendlyName}}</button>
+    }
+  </div>
 </div>

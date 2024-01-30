@@ -1,16 +1,17 @@
-<nav-bar *ngIf="layoutService.headerVisible"
+@if (layoutService.headerVisible) {
+  <nav-bar
     [parentTitle]="getParentTitle()"
     [backButtonDisabled]="backButtonDisabled()"
-    
     (backButtonPressed)="backButtonPressed($event)"
-></nav-bar>
+  ></nav-bar>
+}
 
 
 <!-- display music library -->
 
-<mediaServer-display-container 
-    [showTopHeader]="showTopHeader()"
-    [contentHandler]="getContentHandler()"
+<mediaServer-display-container
+  [showTopHeader]="showTopHeader()"
+  [contentHandler]="getContentHandler()"
 
-    (containerSelected)="containerSelected($event)"
+  (containerSelected)="containerSelected($event)"
 ></mediaServer-display-container>

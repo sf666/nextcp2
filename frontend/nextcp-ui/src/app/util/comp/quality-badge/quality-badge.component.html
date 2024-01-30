@@ -1,5 +1,7 @@
-<div *ngIf="isHifi" class="comp-badge">
+@if (isHifi) {
+  <div class="comp-badge">
     <span class="app-badge">
-        <span class="app-badge-text no-wrap">{{hifiString}}</span>
+      <span class="app-badge-text no-wrap">{{hifiString}}</span>
     </span>
-</div>
+  </div>
+}

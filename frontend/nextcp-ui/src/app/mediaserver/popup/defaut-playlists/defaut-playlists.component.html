@@ -1,11 +1,15 @@
 <!-- Default playlists -->
 
-<div class="panel" *ngIf="true" (mouseleave)="close()">
+@if (playlistService.serverPl.playlists) {
+  <div class="panel" (mouseleave)="close()">
     <div class="dialogTitle">PLAYLISTS</div>
     <div class="dialogItems d-flex flex-column flex-wrap mt-4">
-        <div *ngFor="let playlist of playlistService.serverPl.playlists" class="playlist-item"
-            (click)="addToPlaylist(playlist)">
-            {{playlist}}
+      @for (playlist of playlistService.serverPl.playlists; track playlist) {
+        <div class="playlist-item"
+          (click)="addToPlaylist(playlist)">
+          {{playlist}}
         </div>
+      }
     </div>
-</div>
+  </div>
+}

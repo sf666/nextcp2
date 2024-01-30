@@ -1,103 +1,114 @@
 <div class="d-flex flex-column">
-    <div class="d-flex">
-        <div class="ms-4 mt-4 d-flex flex-column">
-            <div class="mb-3 max-image-width">
-                <img *ngIf="rendererService.trackInfoAvailable" src="{{getImgSrc()}}">
-            </div>
-            <star-rating [size]="getStarSize()" [currentSong]="getCurrentTrack()"></star-rating>
-        </div>
-        <div *ngIf="hasCurrentSongTitle(); else noTitle">
-            <div class="d-flex flex-column ms-5 mt-5">
-                <div class="d-flex flex-column">
-                    <div class="title">{{getCurrentSongTitle()}}</div>
-                    <div class="d-flex flex-column">
-                        <div class="regularText align-self-start" *ngIf="rendererService.trackInfo?.currentTrack?.artistName ; else emptyDiv">
-                            by <span class="highlightText">{{rendererService.trackInfo?.currentTrack?.artistName}}</span>
-                        </div>
-                        <div class="regularText align-self-start" *ngIf="rendererService.trackInfo?.currentTrack?.album; else emptyDiv">
-                            <div *ngIf="!streaming(); else stream">
-                                from the album <span class="highlightText">{{rendererService.trackInfo?.currentTrack?.album}}</span>
-                            </div>
-                        </div>
+  <div class="d-flex">
+    <div class="ms-4 mt-4 d-flex flex-column">
+      <div class="mb-3 max-image-width">
+        @if (rendererService.trackInfoAvailable) {
+          <img src="{{getImgSrc()}}">
+        }
+      </div>
+      <star-rating [size]="getStarSize()" [currentSong]="getCurrentTrack()"></star-rating>
+    </div>
+    @if (hasCurrentSongTitle()) {
+      <div>
+        <div class="d-flex flex-column ms-5 mt-5">
+          <div class="d-flex flex-column">
+            <div class="title">{{getCurrentSongTitle()}}</div>
+            <div class="d-flex flex-column">
+              @if (rendererService.trackInfo?.currentTrack?.artistName ) {
+                <div class="regularText align-self-start">
+                  by <span class="highlightText">{{rendererService.trackInfo?.currentTrack?.artistName}}</span>
+                </div>
+              } @else {
+                <div>&nbsp;</div>
+              }
+              @if (rendererService.trackInfo?.currentTrack?.album) {
+                <div class="regularText align-self-start">
+                  @if (!streaming()) {
+                    <div>
+                      from the album <span class="highlightText">{{rendererService.trackInfo?.currentTrack?.album}}</span>
                     </div>
+                  } @else {
+                    <div>
+                      broadcasted by <span class="highlightText">{{rendererService.trackInfo?.currentTrack?.album}}</span>
+                    </div>
+                  }
                 </div>
-
-                <div class="d-flex buttons-container">
-                    <button *ngIf="canBeAddedToPlaylist" mat-flat-button class="mr-buttons" (click)="openAddPlaylistDialog($event, getCurrentTrack().songId.umsAudiotrackId)">
-                        <span class="material-symbols-outlined">playlist_add</span>
-                        <span> Playlists</span>
-                    </button>
-                </div>
+              } @else {
+                <div>&nbsp;</div>
+              }
             </div>
+          </div>
+          <div class="d-flex buttons-container">
+            @if (canBeAddedToPlaylist) {
+              <button mat-flat-button class="mr-buttons" (click)="openAddPlaylistDialog($event, getCurrentTrack().songId.umsAudiotrackId)">
+                <span class="material-symbols-outlined">playlist_add</span>
+                <span> Playlists</span>
+              </button>
+            }
+          </div>
         </div>
-    </div>
+      </div>
+    } @else {
+      <div class="regularText infotext">song info not available</div>
+    }
+  </div>
 
-    <!-- Detail Info -->
-    <div *ngIf="rendererService.trackInfoAvailable">
-        <div mat-subheader class="p-2">audio information provided by player {{deviceService.selectedMediaRendererDevice.friendlyName}}</div>
-        <div class="inputSource d-flex">
-            <form>
-                <mat-form-field appearance="outline" class="p-2">
-                    <mat-label>input source</mat-label>
-                    <input matInput type="text" value="{{deviceService.getCurrentInputSource()?.Name}}" readonly="true">
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="p-2">
-                    <mat-label>codec name</mat-label>
-                    <input matInput type="text" value="{{rendererService.trackInfo?.codecName}}" readonly="true">
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="p-2">
-                    <mat-label>lossless</mat-label>
-                    <input matInput type="text" value="{{rendererService.trackInfo?.lossless}}" readonly="true">
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="p-2">
-                    <mat-label>sample rate [Hz]</mat-label>
-                    <input matInput type="text" value="{{rendererService.trackInfo?.sampleRate}}" readonly="true">
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="p-2">
-                    <mat-label>bit depth [bit]</mat-label>
-                    <input matInput type="text" value="{{rendererService.trackInfo?.bitDepth}}" readonly="true">
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="p-2">
-                    <mat-label>bitrate [bit/s]</mat-label>
-                    <input matInput type="text" value="{{rendererService.trackInfo?.bitrate}}" readonly="true">
-                </mat-form-field>
-            </form>
-        </div>
-
-        <div mat-subheader class="p-2">media server</div>
-        <div>
-            <form>
-                <mat-form-field appearance="outline" class="p-2">
-                    <mat-label>sample rate [Hz]</mat-label>
-                    <input matInput type="text" value="{{rendererService.getSampleFreq()}}" placeholder="N/A" readonly="true">
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="p-2">
-                    <mat-label>bit depth</mat-label>
-                    <input matInput type="text" value="{{rendererService.getBitsPerSample()}}" readonly="true">
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="p-2">
-                    <mat-label>bitrate [bit/s]</mat-label>
-                    <input matInput type="text" value="{{rendererService.getBitrate()}}" readonly="true">
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="p-2">
-                    <mat-label>content format</mat-label>
-                    <input matInput type="text" value="{{getCurrentTrack()?.audioFormat?.contentFormat}}" readonly="true">
-                </mat-form-field>
-            </form>
-        </div>
+  <!-- Detail Info -->
+  @if (rendererService.trackInfoAvailable) {
+    <div>
+      <div mat-subheader class="p-2">audio information provided by player {{deviceService.selectedMediaRendererDevice.friendlyName}}</div>
+      <div class="inputSource d-flex">
+        <form>
+          <mat-form-field appearance="outline" class="p-2">
+            <mat-label>input source</mat-label>
+            <input matInput type="text" value="{{deviceService.getCurrentInputSource()?.Name}}" readonly="true">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="p-2">
+            <mat-label>codec name</mat-label>
+            <input matInput type="text" value="{{rendererService.trackInfo?.codecName}}" readonly="true">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="p-2">
+            <mat-label>lossless</mat-label>
+            <input matInput type="text" value="{{rendererService.trackInfo?.lossless}}" readonly="true">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="p-2">
+            <mat-label>sample rate [Hz]</mat-label>
+            <input matInput type="text" value="{{rendererService.trackInfo?.sampleRate}}" readonly="true">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="p-2">
+            <mat-label>bit depth [bit]</mat-label>
+            <input matInput type="text" value="{{rendererService.trackInfo?.bitDepth}}" readonly="true">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="p-2">
+            <mat-label>bitrate [bit/s]</mat-label>
+            <input matInput type="text" value="{{rendererService.trackInfo?.bitrate}}" readonly="true">
+          </mat-form-field>
+        </form>
+      </div>
+      <div mat-subheader class="p-2">media server</div>
+      <div>
+        <form>
+          <mat-form-field appearance="outline" class="p-2">
+            <mat-label>sample rate [Hz]</mat-label>
+            <input matInput type="text" value="{{rendererService.getSampleFreq()}}" placeholder="N/A" readonly="true">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="p-2">
+            <mat-label>bit depth</mat-label>
+            <input matInput type="text" value="{{rendererService.getBitsPerSample()}}" readonly="true">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="p-2">
+            <mat-label>bitrate [bit/s]</mat-label>
+            <input matInput type="text" value="{{rendererService.getBitrate()}}" readonly="true">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="p-2">
+            <mat-label>content format</mat-label>
+            <input matInput type="text" value="{{getCurrentTrack()?.audioFormat?.contentFormat}}" readonly="true">
+          </mat-form-field>
+        </form>
+      </div>
     </div>
+  }
 </div>
 
-<ng-template #emptyDiv>
-    <div>&nbsp;</div>
-</ng-template>
 
-<ng-template #noTitle>
-    <div class="regularText infotext">song info not available</div>
-</ng-template>
 
-<ng-template #stream>
-    <div>
-        broadcasted by <span class="highlightText">{{rendererService.trackInfo?.currentTrack?.album}}</span>
-    </div>
-</ng-template>

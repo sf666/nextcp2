@@ -1,7 +1,9 @@
 <div class="d-inline-block" ngbDropdown #serverDrop>
-    <button class="btn btn-outline-primary me-2" id="dropdownManual" ngbDropdownToggle>{{labelName}}</button>
-    <div ngbDropdownMenu aria-labelledby="dropdownManual">
-        <button ngbDropdownItem *ngFor="let renderer of mediaRendererList"
-            (click)="setCurrentMediaRenderer(renderer)">{{renderer.friendlyName}}</button>
-    </div>
+  <button class="btn btn-outline-primary me-2" id="dropdownManual" ngbDropdownToggle>{{labelName}}</button>
+  <div ngbDropdownMenu aria-labelledby="dropdownManual">
+    @for (renderer of mediaRendererList; track renderer) {
+      <button ngbDropdownItem
+      (click)="setCurrentMediaRenderer(renderer)">{{renderer.friendlyName}}</button>
+    }
+  </div>
 </div>

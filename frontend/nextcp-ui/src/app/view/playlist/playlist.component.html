@@ -1,57 +1,64 @@
 <div class="playlistMainScreen" id="Player_Queue">
-    <div *ngIf="deviceService.noMediaRendererSelected" class="ms-3 mt-3">
-        No player
+  @if (deviceService.noMediaRendererSelected) {
+    <div class="ms-3 mt-3">
+      No player
     </div>
-    <div *ngIf="!deviceService.noMediaRendererSelected" class="ms-3">
-        Playlist of {{deviceService.selectedMediaRendererDevice.friendlyName}}
+  }
+  @if (!deviceService.noMediaRendererSelected) {
+    <div class="ms-3">
+      Playlist of {{deviceService.selectedMediaRendererDevice.friendlyName}}
     </div>
-    <div class="d-flex border-bottom border-secondary">
-        <button mat-stroked-button class="mv-4 my-buttons m-4" [disabled]="deviceService.noMediaRendererSelected" (click)="play()">
-            <mat-icon class="material-symbols-outlined thin">play_arrow</mat-icon>
-            <span class="button button-text">play</span>
-        </button>
-        <button mat-stroked-button class="mv-4 my-buttons m-4" [disabled]="deviceService.noMediaRendererSelected" (click)="delete()">
-            <mat-icon class="material-symbols-outlined thin">delete</mat-icon>
-            <span class="button button-text">delete</span>
-        </button>
-    </div>
+  }
+  <div class="d-flex border-bottom border-secondary">
+    <button mat-stroked-button class="mv-4 my-buttons m-4" [disabled]="deviceService.noMediaRendererSelected" (click)="play()">
+      <mat-icon class="material-symbols-outlined thin">play_arrow</mat-icon>
+      <span class="button button-text">play</span>
+    </button>
+    <button mat-stroked-button class="mv-4 my-buttons m-4" [disabled]="deviceService.noMediaRendererSelected" (click)="delete()">
+      <mat-icon class="material-symbols-outlined thin">delete</mat-icon>
+      <span class="button button-text">delete</span>
+    </button>
+  </div>
 
-    <div *ngIf="deviceService.isAnyMediaRendererSelected(); else noMediaRenderer">
-        <div *ngIf="hasPlaylistItems; else noPlaylistItems">
-            <div *ngFor="let item of playlistService.playlistItems" class="playlistItem d-flex {{getActiveClass(item)}}" (click)="playlistService.seekId(item.objectID)">
-
-                <img src="{{item.albumArtUrl}}" class="cropImg" alt="{{item.title}}" id="PL-{{item.objectID}}" tabindex="-1">
-                <div class="d-flex flex-column minWidth albumAndTitle">
-                    <div class="minWidth d-flex">
-                        <div class="title no-wrap">{{item.title}}</div>
-                        <quality-badge [item]="item"></quality-badge>
-                    </div>
-                    <div class="d-flex flex-column no-wrap mt-2">
-                        <div class="currentTime align-self-start">
-                            <span class="finishedTime">{{item.artistName}}</span>
-                        </div>
-                        <div class="currentTime align-self-start">
-                            <div class="finishedTime">{{item.album}}</div>
-                        </div>
-                    </div>
+  @if (deviceService.isAnyMediaRendererSelected()) {
+    <div>
+      @if (hasPlaylistItems) {
+        <div>
+          @for (item of playlistService.playlistItems; track item) {
+            <div class="playlistItem d-flex {{getActiveClass(item)}}" (click)="playlistService.seekId(item.objectID)">
+              <img src="{{item.albumArtUrl}}" class="cropImg" alt="{{item.title}}" id="PL-{{item.objectID}}" tabindex="-1">
+              <div class="d-flex flex-column minWidth albumAndTitle">
+                <div class="minWidth d-flex">
+                  <div class="title no-wrap">{{item.title}}</div>
+                  <quality-badge [item]="item"></quality-badge>
                 </div>
-                <div class="middle-spacer"></div>
-                <div class="rightButtons">
-                    <span class="material-symbols-outlined me-1" (click)="playlistService.delete(item.objectID)">close</span>
+                <div class="d-flex flex-column no-wrap mt-2">
+                  <div class="currentTime align-self-start">
+                    <span class="finishedTime">{{item.artistName}}</span>
+                  </div>
+                  <div class="currentTime align-self-start">
+                    <div class="finishedTime">{{item.album}}</div>
+                  </div>
                 </div>
+              </div>
+              <div class="middle-spacer"></div>
+              <div class="rightButtons">
+                <span class="material-symbols-outlined me-1" (click)="playlistService.delete(item.objectID)">close</span>
+              </div>
             </div>
+          }
         </div>
+      } @else {
+        <div class="regularText infotext">
+          The players playlist is empty.
+        </div>
+      }
     </div>
+  } @else {
+    <div class="regularText infotext">
+      Please select a media renderer below or define a default media renderer in the <a href="#/settings">App settings</a>.
+    </div>
+  }
 </div>
 
-<ng-template #noMediaRenderer>
-    <div class="regularText infotext">
-        Please select a media renderer below or define a default media renderer in the <a href="#/settings">App settings</a>.
-    </div>
-</ng-template>
 
-<ng-template #noPlaylistItems>
-    <div class="regularText infotext">
-        The players playlist is empty.
-    </div>
-</ng-template>
