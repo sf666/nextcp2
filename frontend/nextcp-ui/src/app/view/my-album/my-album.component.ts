@@ -4,12 +4,16 @@ import { LayoutService } from './../../service/layout.service';
 import { ContainerDto, MusicItemDto, MediaServerDto } from './../../service/dto.d';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { Component, OnInit } from '@angular/core';
+import { DisplayContainerComponent } from '../../mediaserver/display-container/display-container.component';
+import { NavBarComponent } from '../nav-bar/nav-bar.component';
 
 @Component({
-  selector: 'myAlbums',
-  templateUrl: './my-album.component.html',
-  styleUrls: ['./my-album.component.scss'],
-  providers: [ContentDirectoryService]
+    selector: 'myAlbums',
+    templateUrl: './my-album.component.html',
+    styleUrls: ['./my-album.component.scss'],
+    providers: [ContentDirectoryService],
+    standalone: true,
+    imports: [NavBarComponent, DisplayContainerComponent]
 })
 export class MyAlbumComponent implements OnInit {
 

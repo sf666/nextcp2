@@ -12,22 +12,31 @@ import { MyMusicService } from './../../service/my-music.service';
 import { MusicItemDto, ContainerDto, ContainerItemDto } from './../../service/dto.d';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { debounce } from 'src/app/global';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { StarRatingComponent } from '../../view/star-rating/star-rating.component';
+import { QualityBadgeComponent } from '../../util/comp/quality-badge/quality-badge.component';
+import { MatOption } from '@angular/material/core';
+import { MatSelect } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { MatFormField, MatLabel, MatPrefix, MatSuffix } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { DomChangedDirective } from '../../directive/watch-dom-tree.directive';
 
 @Component({
-  selector: 'mediaServer-display-container',
-  templateUrl: './display-container.component.html',
-  styleUrls: ['./display-container.component.scss'],
-  providers: [{ provide: 'uniqueId', useValue: 'default_display_container' }]
+    selector: 'mediaServer-display-container',
+    templateUrl: './display-container.component.html',
+    styleUrls: ['./display-container.component.scss'],
+    providers: [{ provide: 'uniqueId', useValue: 'default_display_container' }],
+    standalone: true,
+    imports: [DomChangedDirective, MatButton, MatIcon, MatFormField, MatLabel, MatPrefix, MatInput, FormsModule, MatSuffix, MatSelect, ReactiveFormsModule, MatOption, QualityBadgeComponent, StarRatingComponent]
 })
 export class DisplayContainerComponent implements OnInit {
 
   genresForm = new FormControl('');
 
   @Input() showTopHeader = true;
-
   @Input() extendedApi: boolean = true;
-
   @Input() contentHandler: ScrollLoadHandler;
 
   // Inform parent about actions

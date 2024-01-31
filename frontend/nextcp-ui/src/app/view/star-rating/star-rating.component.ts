@@ -4,10 +4,11 @@ import { MusicItemDto } from './../../service/dto.d';
 import { Component, Input, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'star-rating',
-  encapsulation: ViewEncapsulation.None,
-  templateUrl: './star-rating.component.html',
-  styleUrls: ['./star-rating.component.scss']
+    selector: 'star-rating',
+    encapsulation: ViewEncapsulation.None,
+    templateUrl: './star-rating.component.html',
+    styleUrls: ['./star-rating.component.scss'],
+    standalone: true
 })
 
 export class StarRatingComponent {

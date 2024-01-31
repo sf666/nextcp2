@@ -8,8 +8,8 @@ describe('ImageCropperComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ImageCropperComponent ]
-    })
+    imports: [ImageCropperComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(ImageCropperComponent);

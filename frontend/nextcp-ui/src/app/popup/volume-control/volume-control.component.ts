@@ -2,11 +2,15 @@ import { PopupService } from './../../util/popup.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RendererService } from './../../service/renderer.service';
 import { Component, OnInit, ElementRef, Inject } from '@angular/core';
+import { MatSlider, MatSliderThumb } from '@angular/material/slider';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-volume-control',
-  templateUrl: './volume-control.component.html',
-  styleUrls: ['./volume-control.component.scss']
+    selector: 'app-volume-control',
+    templateUrl: './volume-control.component.html',
+    styleUrls: ['./volume-control.component.scss'],
+    standalone: true,
+    imports: [MatIcon, MatSlider, MatSliderThumb]
 })
 export class VolumeControlComponent implements OnInit {
 

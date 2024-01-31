@@ -4,9 +4,10 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angular/materia
 import { Component, OnInit, Inject, ElementRef } from '@angular/core';
 
 @Component({
-  selector: 'app-available-renderer',
-  templateUrl: './available-renderer.component.html',
-  styleUrls: ['./available-renderer.component.scss']
+    selector: 'app-available-renderer',
+    templateUrl: './available-renderer.component.html',
+    styleUrls: ['./available-renderer.component.scss'],
+    standalone: true
 })
 export class AvailableRendererComponent implements OnInit {
 

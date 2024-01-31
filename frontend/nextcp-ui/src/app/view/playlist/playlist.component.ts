@@ -6,12 +6,17 @@ import { MusicItemDto } from './../../service/dto.d';
 import { PlaylistService } from '../../service/playlist.service';
 import { Component, OnInit } from '@angular/core';
 import { LayoutService } from 'src/app/service/layout.service';
+import { QualityBadgeComponent } from '../../util/comp/quality-badge/quality-badge.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'playlist',
-  templateUrl: './playlist.component.html',
-  styleUrls: ['./playlist.component.scss'],
-  providers: [CdsBrowsePathService, { provide: 'uniqueId', useValue: 'cds_playlist' }]
+    selector: 'playlist',
+    templateUrl: './playlist.component.html',
+    styleUrls: ['./playlist.component.scss'],
+    providers: [CdsBrowsePathService, { provide: 'uniqueId', useValue: 'cds_playlist' }],
+    standalone: true,
+    imports: [MatButton, MatIcon, QualityBadgeComponent]
 })
 export class PlaylistComponent implements OnInit {
 

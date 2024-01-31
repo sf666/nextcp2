@@ -7,11 +7,14 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, ElementRef, OnInit, ViewContainerRef } from '@angular/core';
 import { DefaultPlaylistService } from '../../defaut-playlists/default-playlist.service';
 import { TransportService } from 'src/app/service/transport.service';
+import { StarRatingComponent } from '../../../../view/star-rating/star-rating.component';
 
 @Component({
-  selector: 'app-song-options',
-  templateUrl: './song-options.component.html',
-  styleUrls: ['./song-options.component.scss']
+    selector: 'app-song-options',
+    templateUrl: './song-options.component.html',
+    styleUrls: ['./song-options.component.scss'],
+    standalone: true,
+    imports: [StarRatingComponent]
 })
 export class SongOptionsComponent implements OnInit {
 

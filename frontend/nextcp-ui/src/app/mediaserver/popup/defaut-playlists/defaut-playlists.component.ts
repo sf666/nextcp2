@@ -4,9 +4,10 @@ import { PlaylistService } from './../../../service/playlist.service';
 import { Component, OnInit, Inject, ElementRef } from '@angular/core';
 
 @Component({
-  selector: 'defaut-playlists',
-  templateUrl: './defaut-playlists.component.html',
-  styleUrls: ['./defaut-playlists.component.scss']
+    selector: 'defaut-playlists',
+    templateUrl: './defaut-playlists.component.html',
+    styleUrls: ['./defaut-playlists.component.scss'],
+    standalone: true
 })
 export class DefautPlaylistsComponent implements OnInit {
 

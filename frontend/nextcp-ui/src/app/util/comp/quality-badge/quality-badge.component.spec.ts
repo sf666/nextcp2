@@ -8,8 +8,8 @@ describe('QualityBadgeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ QualityBadgeComponent ]
-    })
+    imports: [QualityBadgeComponent]
+})
     .compileComponents();
   });
 

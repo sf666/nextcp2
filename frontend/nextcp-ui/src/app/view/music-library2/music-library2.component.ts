@@ -14,10 +14,10 @@ import { PersistenceService } from 'src/app/service/persistence/persistence.serv
   standalone: true,
   imports: [NavBarComponent, DisplayContainerComponent],
   providers: [ContentDirectoryService, PersistenceService, CdsBrowsePathService, { provide: 'uniqueId', useValue: 'music-library_' }],
-  templateUrl: './music-library.component.html',
-  styleUrl: './music-library.component.scss'
+  templateUrl: './music-library2.component.html',
+  styleUrl: './music-library2.component.scss'
 })
-export class MusicLibraryComponent implements AfterViewInit{
+export class MusicLibrary2Component  implements AfterViewInit{
 
   private lastOidIsRestoredFromCache: boolean;
 

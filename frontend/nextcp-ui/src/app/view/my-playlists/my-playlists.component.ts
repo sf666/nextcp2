@@ -5,12 +5,15 @@ import { DeviceService } from 'src/app/service/device.service';
 import { LayoutService } from './../../service/layout.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { Component, OnInit } from '@angular/core';
+import { DisplayContainerComponent } from '../../mediaserver/display-container/display-container.component';
 
 @Component({
-  selector: 'my-playlists',
-  templateUrl: './my-playlists.component.html',
-  styleUrls: ['./my-playlists.component.scss'],
-  providers: [ContentDirectoryService]
+    selector: 'my-playlists',
+    templateUrl: './my-playlists.component.html',
+    styleUrls: ['./my-playlists.component.scss'],
+    providers: [ContentDirectoryService],
+    standalone: true,
+    imports: [DisplayContainerComponent]
 })
 export class MyPlaylistsComponent implements OnInit {
 

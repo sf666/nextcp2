@@ -5,9 +5,10 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angular/materia
 import { Component, OnInit, Inject, ElementRef } from '@angular/core';
 
 @Component({
-  selector: 'app-available-server',
-  templateUrl: './available-server.component.html',
-  styleUrls: ['./available-server.component.scss']
+    selector: 'app-available-server',
+    templateUrl: './available-server.component.html',
+    styleUrls: ['./available-server.component.scss'],
+    standalone: true
 })
 
 export class AvailableServerComponent implements OnInit {

@@ -10,8 +10,8 @@ describe('MediaServerComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ MediaServerComponent ]
-    })
+    imports: [MediaServerComponent]
+})
     .compileComponents();
   }));
 

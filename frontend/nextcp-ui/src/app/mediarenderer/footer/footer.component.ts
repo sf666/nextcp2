@@ -11,11 +11,16 @@ import { DeviceService } from './../../service/device.service';
 import { UpnpAvTransportState } from './../../service/dto.d';
 import { TransportService as TransportService } from '../../service/transport.service';
 import { Component, ElementRef, Optional } from '@angular/core';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { MatSlider, MatSliderThumb } from '@angular/material/slider';
+import { QualityBadgeComponent } from '../../util/comp/quality-badge/quality-badge.component';
 
 @Component({
-  selector: 'renderer-footer',
-  templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.scss']
+    selector: 'renderer-footer',
+    templateUrl: './footer.component.html',
+    styleUrls: ['./footer.component.scss'],
+    standalone: true,
+    imports: [QualityBadgeComponent, MatSlider, MatSliderThumb, MatProgressBar]
 })
 export class FooterComponent {
 

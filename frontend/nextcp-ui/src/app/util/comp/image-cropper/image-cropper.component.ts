@@ -3,7 +3,8 @@ import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 @Component({
     selector: 'image-cropper',
     templateUrl: './image-cropper.component.html',
-    styleUrls: ['./image-cropper.component.scss']
+    styleUrls: ['./image-cropper.component.scss'],
+    standalone: true
 })
 export class ImageCropperComponent implements OnInit {
 

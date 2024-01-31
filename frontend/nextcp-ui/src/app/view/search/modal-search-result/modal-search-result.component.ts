@@ -7,13 +7,16 @@ import { ContainerDto, MusicItemDto } from './../../../service/dto.d';
 import { SearchItemService } from './../../../service/search/search-item.service';
 import { RouteReuseStrategy, Router } from '@angular/router';
 import { Component, ViewChild } from '@angular/core';
+import { QualityBadgeComponent } from '../../../util/comp/quality-badge/quality-badge.component';
 import { MusicLibraryComponent } from '../../music-library/music-library.component';
 
 @Component({
-  selector: 'app-modal-search-result',
-  templateUrl: './modal-search-result.component.html',
-  styleUrls: ['./modal-search-result.component.scss'],
-  providers: [ContentDirectoryService]
+    selector: 'app-modal-search-result',
+    templateUrl: './modal-search-result.component.html',
+    styleUrls: ['./modal-search-result.component.scss'],
+    providers: [ContentDirectoryService],
+    standalone: true,
+    imports: [QualityBadgeComponent]
 })
 
 export class ModalSearchResultComponent {
