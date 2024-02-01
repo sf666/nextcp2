@@ -248,6 +248,22 @@
         <input matInput type="text" [(ngModel)]="configService.applicationConfig.loggingDateTimeFormat" placeholder="yyyy-MM-dd HH:mm:ss">
       </mat-form-field>
       <mat-form-field appearance="outline" class="setting-dropdown">
+        <mat-label>UPnP stream client</mat-label>
+        <mat-select [(ngModel)]="configService.applicationConfig.upnpStreamClient">
+          <mat-option value="JDK">JDK</mat-option>
+          <mat-option value="APACHE">Apache</mat-option>
+          <mat-option value="">default</mat-option>
+        </mat-select>
+      </mat-form-field>      
+      <mat-form-field appearance="outline" class="setting-dropdown">
+        <mat-label>UPnP stream server</mat-label>
+        <mat-select [(ngModel)]="configService.applicationConfig.upnpStreamServer">
+          <mat-option value="JDK">JDK</mat-option>
+          <mat-option value="UPNP">UPnP</mat-option>
+          <mat-option value="">default</mat-option>
+        </mat-select>
+      </mat-form-field>      
+      <mat-form-field appearance="outline" class="setting-dropdown">
         <mat-label>Generate UPnP code</mat-label>
         <input matInput type="text" [(ngModel)]="configService.applicationConfig.generateUpnpCode" placeholder="">
       </mat-form-field>
