@@ -3,15 +3,28 @@ import { ConfigurationService } from './../configuration.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { DtoGeneratorService } from './../../util/dto-generator.service';
 import { ContentDirectoryService } from './../content-directory.service';
-import { SearchResultDto, ContainerDto } from './../dto.d';
+import { SearchResultDto, ContainerDto, MusicItemDto } from './../dto.d';
 import { Injectable } from '@angular/core';
 import { debounce } from 'src/app/global';
+import { Subject } from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class GlobalSearchService {
+
+  //
+  // Event publishing
+  //
+
+  // User clicked on an quick search music item
+  musicItemClicked$: Subject<MusicItemDto> = new Subject();
+
+  // User clicked on an quick search container like album, person or playlist
+  containerClicked$: Subject<ContainerDto> = new Subject();
+
+
 
   // QuickSearch Support (Global search) 
   public quickSearchResultList: SearchResultDto;
@@ -115,6 +128,23 @@ export class GlobalSearchService {
   public setSelectedContainer(container : ContainerDto): void {
     this.selectedRootContainer = container;
     this.contentDirectoryService.browseChildrenByContainer(container);
+  }
+
+  //
+  // item or container selected
+  //
+  musicItemSelected(musicItem: MusicItemDto): void {
+    console.debug("music item selected : " + musicItem);
+    this.quickSearchPanelVisible = false;
+    this.clearSearch();
+    this.musicItemClicked$.next(musicItem);
+  }
+
+  containerSelected(container: ContainerDto): void {
+    console.debug("container selected : " + container.id);
+    this.quickSearchPanelVisible = false;
+    this.clearSearch();
+    this.containerClicked$.next(container);
   }
 
   //

@@ -1,7 +1,8 @@
+import { ContainerDto, MusicItemDto } from './../../service/dto.d';
+import { GlobalSearchService } from './../../service/search/global-search.service';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { ScrollLoadHandler } from 'src/app/mediaserver/display-container/defs';
 import { ContentDirectoryService } from 'src/app/service/content-directory.service';
-import { ContainerDto, MusicItemDto } from 'src/app/service/dto';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { DisplayContainerComponent } from 'src/app/mediaserver/display-container/display-container.component';
 import { LayoutService } from 'src/app/service/layout.service';
@@ -17,7 +18,7 @@ import { PersistenceService } from 'src/app/service/persistence/persistence.serv
   templateUrl: './music-library.component.html',
   styleUrl: './music-library.component.scss'
 })
-export class MusicLibraryComponent implements AfterViewInit{
+export class MusicLibraryComponent  implements AfterViewInit{
 
   private lastOidIsRestoredFromCache: boolean;
 
@@ -30,9 +31,23 @@ export class MusicLibraryComponent implements AfterViewInit{
     private cdsBrowsePathService: CdsBrowsePathService,
     private persistenceService: PersistenceService,
     private deviceService: DeviceService,
+    private globalSearchService: GlobalSearchService
   ) {
-    console.log("constructor call : MusicLibrary2Component");
+    console.log("constructor call : MusicLibraryComponent");
+    globalSearchService.musicItemClicked$.subscribe(musicItem => this.musicItemClickedFromSearch(musicItem))
+    globalSearchService.containerClicked$.subscribe(containerItem => this.containerItemClickedFromSearch(containerItem))
   }
+
+  private musicItemClickedFromSearch(musicItem: MusicItemDto) {
+    // Just play
+    this.dispContainer.play(musicItem);
+  }
+
+  private containerItemClickedFromSearch(container: ContainerDto) {
+    console.debug("selected container : " + container.objectClass);
+    this.contentDirectoryService.browseChildrenByContainer(container);
+  }
+
 
   ngAfterViewInit(): void {
     this.layoutService.setFramedView();
