@@ -40,7 +40,8 @@ export class ConfigurationService {
     nextPageAfter: 60,
     pathToRestartScript:'',
     myPlaylistFolderName:'',
-    upnpStreamClient:''
+    upnpStreamClient:'',
+    upnpStreamServer:''
   }
 
   musicBrainzConfig: MusicbrainzSupport = {   // MusicBrainz username/password

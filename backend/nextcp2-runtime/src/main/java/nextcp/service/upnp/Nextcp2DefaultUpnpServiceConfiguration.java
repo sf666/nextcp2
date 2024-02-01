@@ -115,6 +115,7 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
 	final private ExecutorService streamClientExecutorService;
 
 	private String streamClient;
+	private String streamServer;
     
     final private Namespace namespace;
 
@@ -166,9 +167,10 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
         transportConfiguration = TransportConfigurationProvider.getDefaultTransportConfiguration();
     }
 
-    public Nextcp2DefaultUpnpServiceConfiguration(String upnpStreamClient) {
+    public Nextcp2DefaultUpnpServiceConfiguration(String upnpStreamClient, String upnpStreamServer) {
         this(NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT);
     	this.streamClient = upnpStreamClient;
+    	this.streamServer = upnpStreamServer;
 	}
 
 	@Override
@@ -199,7 +201,7 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
 				)
 		);
 		} else {
-			log.info("no stream client set. Available clients are APACHE and JDK. Using default APACHE stream client configuration ... ");
+			log.info("no or unknown stream client set. Available clients are APACHE and JDK. Using default APACHE stream client ... ");
 			return new ApacheStreamClient(new ApacheStreamClientConfiguration(getStreamClientExecutorService()));
 		}
 	}
@@ -215,8 +217,17 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
     @Override
     @SuppressWarnings("rawtypes")
     public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
-		return new JdkHttpServerStreamServer(
-			new Nextcp2StreamServerConfiguration());
+		if ("upnp".equalsIgnoreCase(streamServer)) {
+			log.info("using UPnP stream server configuration ... ");
+			return transportConfiguration.createStreamServer(networkAddressFactory.getStreamListenPort());
+		} else if ("jdk".equalsIgnoreCase(streamServer)) {
+			log.info("using JDK stream server configuration ... ");
+			return new JdkHttpServerStreamServer(new Nextcp2StreamServerConfiguration());
+		}
+		else {
+			log.info("no or unknown stream server set. Available clients are UPNP and JDK. Using default UPnP stream server ... ");
+			return new JdkHttpServerStreamServer(new Nextcp2StreamServerConfiguration());
+		}
     }
 
     @Override

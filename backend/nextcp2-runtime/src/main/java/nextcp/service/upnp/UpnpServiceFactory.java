@@ -32,7 +32,8 @@ public class UpnpServiceFactory
     public void init() {
         // UpnpService upnpService = new UpnpServiceImpl(new DefaultUpnpServiceConfiguration());
         // CodegenUpnpServiceConfiguration sc = new CodegenUpnpServiceConfiguration();
-    	nextcp2DefaultUpnpServiceConfiguration = new Nextcp2DefaultUpnpServiceConfiguration(config.applicationConfig.upnpStreamClient);
+    	nextcp2DefaultUpnpServiceConfiguration = new Nextcp2DefaultUpnpServiceConfiguration(
+    		config.applicationConfig.upnpStreamClient, config.applicationConfig.upnpStreamServer);
     	nextcp2DefaultUpnpServiceConfiguration.setDeviceRegistry(deviceRegistry);
         upnpService = new Nextcp2UpnpServiceImpl(nextcp2DefaultUpnpServiceConfiguration, rendererConfigService);
         
