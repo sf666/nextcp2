@@ -218,8 +218,9 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
     @SuppressWarnings("rawtypes")
     public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
 		if ("upnp".equalsIgnoreCase(streamServer)) {
-			log.info("using UPnP stream server configuration ... ");
-			return transportConfiguration.createStreamServer(networkAddressFactory.getStreamListenPort());
+			log.info("UPnP stream server is not compatible with current libraries. Using JDK stream server instead.");
+			return new JdkHttpServerStreamServer(new Nextcp2StreamServerConfiguration());
+//			return transportConfiguration.createStreamServer(networkAddressFactory.getStreamListenPort());
 		} else if ("jdk".equalsIgnoreCase(streamServer)) {
 			log.info("using JDK stream server configuration ... ");
 			return new JdkHttpServerStreamServer(new Nextcp2StreamServerConfiguration());
