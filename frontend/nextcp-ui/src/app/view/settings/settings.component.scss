@@ -6,6 +6,10 @@ input {
     }
 }
 
+.header {
+    margin-bottom: 1rem;
+}
+
 .card-width {
     max-width  : 250px;
     font-weight: 500;
@@ -26,8 +30,16 @@ input {
 }
 
 .para {
-    font-size : 1rem;
-    margin-top: 1rem;
+    font-size: 1rem;
+    margin   : 1rem;
+    max-width: 1000px;
+}
+
+.paraAppConf {
+    font-size    : 1rem;
+    margin-top   : 1rem;
+    max-width    : 600px;
+    margin-bottom: 1rem;
 }
 
 .subsect {

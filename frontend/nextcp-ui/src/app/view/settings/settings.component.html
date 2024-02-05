@@ -1,7 +1,8 @@
 <div class="d-flex flex-column section mt-3">
   <div class="section head">Client Profiles</div>
-  <div class="para m-3">Select a client profile to associate with this browser. Repeated calls with this browser will select renderer and server by default.
-    Profiles should be renamed to some meaningful name like 'livingroom' or 'kitchen' for easy to remember and switchable setup.
+  <div class="para">Select a client profile to associate with this browser. Repeated calls with this browser will select renderer and server by default.
+    Profiles should be renamed to some meaningful name like 'livingroom' or 'kitchen' for easy to remember and switchable setup. Renaming will be done after
+    clicking the pen symbol.
   </div>
   <div class="d-flex flex-wrap ms-3 me-1">
     <mat-form-field appearance="outline" class="setting-dropdown">
@@ -9,7 +10,7 @@
       <mat-select [(ngModel)]="configService.clientConfig" [compareWith]="compareProfile">
         <mat-option (click)="configService.addNewClientConfig()">CREATE PROFILE</mat-option>
         @for (clientConfig of configService?.serverConfig?.clientConfig; track clientConfig) {
-          <mat-option [value]="clientConfig" (click)="selectConfig(clientConfig)">
+        <mat-option [value]="clientConfig" (click)="selectConfig(clientConfig)">
           {{clientConfig.clientName}}</mat-option>
         }
       </mat-select>
@@ -27,7 +28,7 @@
     <mat-select [(ngModel)]="configService.clientConfig.defaultMediaRenderer" [compareWith]="compareUdn" placeholder="select server defined profile">
       <mat-option [value]="none_renderdevice" (click)="noRendererSelected()">NONE</mat-option>
       @for (mr of deviceService.getMediaRendererList(); track mr) {
-        <mat-option [value]="mr">
+      <mat-option [value]="mr">
         {{mr.friendlyName}}</mat-option>
       }
     </mat-select>
@@ -38,7 +39,7 @@
     <mat-select [(ngModel)]="configService.clientConfig.defaultMediaServer" [compareWith]="compareUdn">
       <mat-option [value]="none_serverdevice" (click)="noServerSelected()">NONE</mat-option>
       @for (mediaServer of deviceService.getMediaServerList(); track mediaServer) {
-        <mat-option [value]="mediaServer">
+      <mat-option [value]="mediaServer">
         {{mediaServer.friendlyName}}</mat-option>
       }
     </mat-select>
@@ -52,144 +53,142 @@
 
 <div class="section head">Server Configuration
   <mat-slide-toggle class="ms-4" [(ngModel)]="showOnlyActiveServer">
-    show only active server
+    show only online server
   </mat-slide-toggle>
 </div>
-<div class="para m-3">Media Server displayed here were discovered in the past until now. Server may be offline, if not yet found.
-  Disabled server will not show up for selection in some popups or lists.
+<div class="para">Server discovered in the past may be offline. Disabled server will not show up for selection in some popups or lists.
 </div>
-<div class="para m-3 mb-3">Important: If an Universal Media Server (UMS) is found, enter the API key from UMS.conf, for unlocking
+<div class="para">Important: If an Universal Media Server (UMS) is found, enter the API key from UMS.conf, for unlocking
   all features. Otherwise most audio convenience functions will not work!
 </div>
 
 <div class="d-flex flex-row flex-wrap ms-4">
   @for (serverConfig of getMediaServer(); track serverConfig) {
-    <div class="media-container m-3">
-      <div class="media-device">
-        <div class="d-flex ">
-          <div class="no-wrap title">{{serverConfig.mediaServer.friendlyName}}</div>
-          <mat-slide-toggle class="mb-2" [(ngModel)]="serverConfig.enabled">
-            Enable
-          </mat-slide-toggle>
-        </div>
-        <div class="d-flex">
-          <mat-form-field appearance="outline" class="me-2">
-            <mat-label>Status</mat-label>
-            @if (isServerConfigActive(serverConfig)) {
-              <input class="online" matInput type="text" value="ONLINE" readonly="true">
-            }
-            @if (!isServerConfigActive(serverConfig)) {
-              <input class="offline" matInput type="text" value="OFFLINE" readonly="true">
-            }
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>IP</mat-label>
-            <input matInput type="text" value="{{serverConfig.ip}}" readonly="true">
-          </mat-form-field>
-        </div>
-        <mat-form-field appearance="outline">
-          <mat-label>UDN</mat-label>
-          <input matInput type="text" value="{{serverConfig.mediaServer.udn}}" readonly="true">
-        </mat-form-field>
-        @if (serverConfig.mediaServer.extendedApi) {
-          <mat-form-field appearance="outline">
-            <mat-label>UMS API key</mat-label>
-            <input matInput type="text" [(ngModel)]="serverConfig.apiKey" placeholder="must match with 'api_key' in UMS.conf">
-          </mat-form-field>
-        }
-        <div class="d-flex mt-4">
-          <button mat-stroked-button class="ms-2" color="primary" (click)="saveServerConfig(serverConfig)">save</button>
-          <button mat-stroked-button class="ms-2" color="warn" (click)="deleteServerConfig(serverConfig)">delete</button>
-        </div>
+  <div class="media-container m-3">
+    <div class="media-device">
+      <div class="d-flex header">
+        <div class="no-wrap title">{{serverConfig.mediaServer.friendlyName}}</div>
+        <mat-slide-toggle class="ms-2" [(ngModel)]="serverConfig.enabled">
+          Enable
+        </mat-slide-toggle>
       </div>
-      @if (showOnlyActiveServer && getMediaServer().length == 0) {
-        <div class="no-online">
-          No media server online
-        </div>
+      <div class="d-flex">
+        <mat-form-field appearance="outline" class="me-2">
+          <mat-label>Status</mat-label>
+          @if (isServerConfigActive(serverConfig)) {
+          <input class="online" matInput type="text" value="ONLINE" readonly="true">
+          }
+          @if (!isServerConfigActive(serverConfig)) {
+          <input class="offline" matInput type="text" value="OFFLINE" readonly="true">
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>IP</mat-label>
+          <input matInput type="text" value="{{serverConfig.ip}}" readonly="true">
+        </mat-form-field>
+      </div>
+      <mat-form-field appearance="outline">
+        <mat-label>UDN</mat-label>
+        <input matInput type="text" value="{{serverConfig.mediaServer.udn}}" readonly="true">
+      </mat-form-field>
+      @if (serverConfig.mediaServer.extendedApi) {
+      <mat-form-field appearance="outline">
+        <mat-label>UMS API key</mat-label>
+        <input matInput type="text" [(ngModel)]="serverConfig.apiKey" placeholder="must match with 'api_key' in UMS.conf">
+      </mat-form-field>
       }
+      <div class="d-flex mt-4">
+        <button mat-stroked-button class="ms-2" color="primary" (click)="saveServerConfig(serverConfig)">save</button>
+        <button mat-stroked-button class="ms-2" color="warn" (click)="deleteServerConfig(serverConfig)">delete</button>
+      </div>
     </div>
+    @if (showOnlyActiveServer && getMediaServer().length == 0) {
+    <div class="no-online">
+      No media server online
+    </div>
+    }
+  </div>
   }
 </div>
 
 <div class="section head">Renderer Configuration
   <mat-slide-toggle class="ms-4" [(ngModel)]="showOnlyActiveRenderer">
-    show only active renderer
+    show only online renderer
   </mat-slide-toggle>
 </div>
-<div class="para m-3">Media Renderer displayed here were discovered in the past until now. Renderer may be offline, if not yet found.
-  Disabled renderer will not show up for selection in some popups or lists.
+<div class="para">Renderer may be offline. Disabled renderer will not show up for selection in some popups or lists.
 </div>
-<div class="para m-3">If a streaming device is attached to an amplifier, a device device driver can be selected for controlling the amplifier power and volume state
+<div class="para">If a streaming device is attached to an amplifier, a device device driver can be selected for controlling the amplifier power and volume state
   instead of the streamer volume and power state. A default volume percentage can be applied to the external amplifier on power up. The streaming device volume can be
   set to 100% on power up, if 'UPnP max volume' is enabled.
 </div>
 <div>
   <div class="d-flex flex-row flex-wrap ms-4">
     @for (rendererConfig of getMediaRenderer(); track rendererConfig) {
-      <div class="media-container m-3">
-        <div class="media-device">
-          <div class="no-wrap title">{{rendererConfig.mediaRenderer.friendlyName}}
-            <mat-slide-toggle class="mb-2" [(ngModel)]="rendererConfig.active">
-              Enable
-            </mat-slide-toggle>
-          </div>
-          <div class="d-flex">
-            <mat-form-field appearance="outline" class="me-2">
-              <mat-label>Status</mat-label>
-              @if (isRendererConfigActive(rendererConfig)) {
-                <input class="online" matInput type="text" value="ONLINE" readonly="true">
-              }
-              @if (!isRendererConfigActive(rendererConfig)) {
-                <input class="offline" matInput type="text" value="OFFLINE" readonly="true">
-              }
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>IP</mat-label>
-              <input matInput type="text" value="{{rendererConfig.ip}}" readonly="true">
-            </mat-form-field>
-          </div>
-          <mat-form-field appearance="outline">
-            <mat-label>UDN</mat-label>
-            <input matInput type="text" value="{{rendererConfig.mediaRenderer.udn}}" readonly="true">
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>amplifier type</mat-label>
-            <mat-select [(ngModel)]="rendererConfig.deviceDriverType">
-              <mat-option value="">None</mat-option>
-              @for (dd of configService.deviceDriverList; track dd) {
-                <mat-option [value]="dd.deviceType">
-                {{dd.deviceType}}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-          @if (showAdvancedRendererSettings(rendererConfig)) {
-            <div class="d-flex flex-column">
-              <mat-form-field appearance="outline">
-                <mat-label>amplifier driver connection</mat-label>
-                <input matInput type="text" [(ngModel)]="rendererConfig.connectionString" placeholder="ip:port">
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>amplifier on power default volume</mat-label>
-                <input matInput type="number" min="0" max="100" [(ngModel)]="rendererConfig.powerOnVolPercent" placeholder="undefined">
-              </mat-form-field>
-              <mat-slide-toggle class="mb-2" [(ngModel)]="rendererConfig.setCoveredUpnpDeviceToMaxVolume" [disabled]="!rendererConfig.deviceDriverType">
-                UPnP/streamer max volume
-              </mat-slide-toggle>
-            </div>
-          }
-          <div class="middle-spacer">&nbsp;</div>
-          <div class="d-flex mt-4">
-            <button mat-stroked-button class="ms-2" color="primary" (click)="saveRendererConfig(rendererConfig)">save</button>
-            <button mat-stroked-button class="ms-2" color="warn" (click)="deleteRendererConfig(rendererConfig)">delete</button>
-          </div>
-          <div class="middle-spacer">&nbsp;</div>
+    <div class="media-container m-3">
+      <div class="media-device">
+        <div class="no-wrap title">{{rendererConfig.mediaRenderer.friendlyName}}
+          <mat-slide-toggle class="ms-2" [(ngModel)]="rendererConfig.active">
+            Enable
+          </mat-slide-toggle>
         </div>
+        <div class="d-flex">
+          <mat-form-field appearance="outline" class="me-2">
+            <mat-label>Status</mat-label>
+            @if (isRendererConfigActive(rendererConfig)) {
+            <input class="online" matInput type="text" value="ONLINE" readonly="true">
+            }
+            @if (!isRendererConfigActive(rendererConfig)) {
+            <input class="offline" matInput type="text" value="OFFLINE" readonly="true">
+            }
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>IP</mat-label>
+            <input matInput type="text" value="{{rendererConfig.ip}}" readonly="true">
+          </mat-form-field>
+        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>UDN</mat-label>
+          <input matInput type="text" value="{{rendererConfig.mediaRenderer.udn}}" readonly="true">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>amplifier type</mat-label>
+          <mat-select [(ngModel)]="rendererConfig.deviceDriverType">
+            <mat-option value="">None</mat-option>
+            @for (dd of configService.deviceDriverList; track dd) {
+            <mat-option [value]="dd.deviceType">
+              {{dd.deviceType}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        @if (showAdvancedRendererSettings(rendererConfig)) {
+        <div class="d-flex flex-column">
+          <mat-form-field appearance="outline">
+            <mat-label>amplifier driver connection</mat-label>
+            <input matInput type="text" [(ngModel)]="rendererConfig.connectionString" placeholder="ip:port">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>amplifier on power default volume</mat-label>
+            <input matInput type="number" min="0" max="100" [(ngModel)]="rendererConfig.powerOnVolPercent" placeholder="undefined">
+          </mat-form-field>
+          <mat-slide-toggle class="mb-2" [(ngModel)]="rendererConfig.setCoveredUpnpDeviceToMaxVolume" [disabled]="!rendererConfig.deviceDriverType">
+            UPnP/streamer max volume
+          </mat-slide-toggle>
+        </div>
+        }
+        <div class="middle-spacer">&nbsp;</div>
+        <div class="d-flex mt-4">
+          <button mat-stroked-button class="ms-2" color="primary" (click)="saveRendererConfig(rendererConfig)">save</button>
+          <button mat-stroked-button class="ms-2" color="warn" (click)="deleteRendererConfig(rendererConfig)">delete</button>
+        </div>
+        <div class="middle-spacer">&nbsp;</div>
       </div>
+    </div>
     }
     @if (showOnlyActiveRenderer && getMediaRenderer().length == 0) {
-      <div class="no-online">
-        No media renderer online
-      </div>
+    <div class="no-online">
+      No media renderer online
+    </div>
     }
   </div>
   <!-- -->
@@ -198,171 +197,187 @@
 
 <div class="section head ">server actions for : {{currentMediaServer.friendlyName}}</div>
 @if (extendedApiNotAvailable()) {
-  <div class="section subhead subsect">Selected media server has no extended API. Advanced actions are only available
-    for <i>Universal Media Server</i>.</div>
-  }
-  <div class="section subhead d-flex flex-column">
-    <div class="d-flex flex-wrap">
-      <button mat-stroked-button class="ms-2 mb-2 my-buttons" (click)="rescan()" [disabled]="extendedApiNotAvailable()">rescan media library</button>
-      <button mat-stroked-button class="ms-2 mb-2 my-buttons" (click)="myMusicService.backupLikedAlbums()" [disabled]="extendedApiNotAvailable()">
-        backup liked albums
-      </button>
-      <button mat-stroked-button class="ms-2 mb-2 my-buttons" (click)="myMusicService.restoreLikedAlbums()" [disabled]="extendedApiNotAvailable()">
-        restore liked albums
-      </button>
-      <button mat-stroked-button class="ms-2 my-buttons" [disabled]="extendedApiNotAvailable()" (click)="ratingServiceService.syncRatingsFromMusicBrainzToBackend()">import rating
-      from musicBrainz.org</button>
-    </div>
-  </div>
-
-
-  <div class="section head ">General Configuration</div>
-  <div class="generalConfigOptions">
-    <div class="section subhead d-flex flex-column">
-      <mat-form-field appearance="outline" class="setting-dropdown">
-        <mat-label>MY PLAYLISTS - folder name</mat-label>
-        <input matInput type="text" [(ngModel)]="configService.applicationConfig.myPlaylistFolderName" placeholder="PlaylistsFolderName">
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="setting-dropdown">
-        <mat-label>device driver library path</mat-label>
-        <input matInput type="text" [(ngModel)]="configService.applicationConfig.libraryPath" placeholder="undefined">
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="setting-dropdown">
-        <mat-label>database path</mat-label>
-        <input matInput type="text" [(ngModel)]="configService.applicationConfig.databaseFilename" placeholder="undefined">
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="setting-dropdown">
-        <mat-label>server listening port</mat-label>
-        <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerPort" placeholder="undefined">
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="setting-dropdown">
-        <mat-label>path to restart script</mat-label>
-        <input matInput type="text" [(ngModel)]="configService.applicationConfig.pathToRestartScript" placeholder="undefined">
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="setting-dropdown">
-        <mat-label>Log4j config file</mat-label>
-        <input matInput type="text" [(ngModel)]="configService.applicationConfig.log4jConfigFile" placeholder="undefined">
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="setting-dropdown">
-        <mat-label>Logging date format</mat-label>
-        <input matInput type="text" [(ngModel)]="configService.applicationConfig.loggingDateTimeFormat" placeholder="yyyy-MM-dd HH:mm:ss">
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="setting-dropdown">
-        <mat-label>UPnP stream client</mat-label>
-        <mat-select [(ngModel)]="configService.applicationConfig.upnpStreamClient">
-          <mat-option value="JDK">JDK</mat-option>
-          <mat-option value="APACHE">Apache</mat-option>
-          <mat-option value="">default</mat-option>
-        </mat-select>
-      </mat-form-field>      
-      <mat-form-field appearance="outline" class="setting-dropdown">
-        <mat-label>UPnP stream server</mat-label>
-        <mat-select [(ngModel)]="configService.applicationConfig.upnpStreamServer">
-          <mat-option value="JDK">JDK</mat-option>
-          <mat-option value="UPNP">UPnP</mat-option>
-          <mat-option value="">default</mat-option>
-        </mat-select>
-      </mat-form-field>      
-      <mat-form-field appearance="outline" class="setting-dropdown">
-        <mat-label>Generate UPnP code</mat-label>
-        <input matInput type="text" [(ngModel)]="configService.applicationConfig.generateUpnpCode" placeholder="">
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="setting-dropdown">
-        <mat-label>path for generated UPnP code</mat-label>
-        <input matInput type="text" [(ngModel)]="configService.applicationConfig.generateUpnpCodePath" placeholder="">
-      </mat-form-field>
-      <div class="d-flex section ms-4">
-        <button mat-stroked-button color="primary" (click)="saveGeneralConfig()">save</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="section head ">Accounts</div>
-
-  <div class="section subhead subsect">Spotify</div>
-  <div class="d-flex section flex-wrap subhead flex-column">
-    @if (configService.spotifyAccountConnected()) {
-      <div class="para">
-        <span class="material-symbols-outlined" style="color: aqua;">how_to_reg</span>
-        <span class=""> Your Spotify account is connected.</span>
-      </div>
-    }
-  </div>
-  @if (!configService.spotifyAccountConnected()) {
-    <div class="d-flex section flex-wrap subhead flex-column">
-      <div class="para">
-        Click this button. A new window will open. Login and approve access to nextCP/2 :
-      </div>
-      <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="registerAppAtSpotify()">nextCP/2
-        Spotify access
-      </button>
-      @if (!protocolHandlerAvailable()) {
-        <div>
-          <div class="para">
-            After granting access you wil be redirected to a localhost URL (error page). Copy spotify access code
-            from your browsers URL bar into the input field below and
-          </div>
-          <div>
-            <input class="section input" [(ngModel)]="code">
-          </div>
-          <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="sendSpotifyCode()">send
-          it</button>
-          <div class="para">
-            Hint: To copy the access code, click in your browsers URL bar and copy everything after
-            'http://localhost:65525/?code='
-        </div>
-    </div>
+<div class="section subhead subsect">Selected media server has no extended API. Advanced actions are only available
+  for <i>Universal Media Server</i>.</div>
 }
+<div class="section subhead d-flex flex-column">
+  <div class="d-flex flex-wrap">
+    <button mat-stroked-button class="ms-2 mb-2 my-buttons" (click)="rescan()" [disabled]="extendedApiNotAvailable()">rescan media library</button>
+    <button mat-stroked-button class="ms-2 mb-2 my-buttons" (click)="myMusicService.backupLikedAlbums()" [disabled]="extendedApiNotAvailable()">
+      backup liked albums
+    </button>
+    <button mat-stroked-button class="ms-2 mb-2 my-buttons" (click)="myMusicService.restoreLikedAlbums()" [disabled]="extendedApiNotAvailable()">
+      restore liked albums
+    </button>
+    <button mat-stroked-button class="ms-2 my-buttons" [disabled]="extendedApiNotAvailable()" (click)="ratingServiceService.syncRatingsFromMusicBrainzToBackend()">import rating
+      from musicBrainz.org</button>
+  </div>
+</div>
+
+
+<div class="section head ">General Configuration</div>
+<div class="generalConfigOptions">
+  <div class="section subhead d-flex flex-column">
+    <div class="paraAppConf">Enter the physical name of the folder where managed playlists are located on your media server.
+      Playlists will appear as directly accessible links inside the left sidebar. Sidebar has to be expanded. The media server must offer search
+      support for folder names.
+    </div>
+    <mat-form-field appearance="outline" class="setting-dropdown">
+      <mat-label>MY PLAYLISTS - folder name</mat-label>
+      <input matInput type="text" [(ngModel)]="configService.applicationConfig.myPlaylistFolderName" placeholder="PlaylistsFolderName">
+    </mat-form-field>
+
+    <div class="paraAppConf">Physical name of the folder where device driver files are located. NextCP/2 need read access to this folder.
+    </div>
+    <mat-form-field appearance="outline" class="setting-dropdown">
+      <mat-label>device driver library path</mat-label>
+      <input matInput type="text" [(ngModel)]="configService.applicationConfig.libraryPath" placeholder="undefined">
+    </mat-form-field>
+
+    <div class="paraAppConf">Physical name of the folder where NextCP/2 creates the database files. Read and write access is needed for this folder.
+    </div>
+    <mat-form-field appearance="outline" class="setting-dropdown">
+      <mat-label>database path</mat-label>
+      <input matInput type="text" [(ngModel)]="configService.applicationConfig.databaseFilename" placeholder="undefined">
+    </mat-form-field>
+
+    <div class="paraAppConf">NextCP/2 listen port.</div>
+    <mat-form-field appearance="outline" class="setting-dropdown">
+      <mat-label>server listening port</mat-label>
+      <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerPort" placeholder="undefined">
+    </mat-form-field>
+
+    <div class="paraAppConf">Full path to the restart script. Read access to this resource is needed.</div>
+    <mat-form-field appearance="outline" class="setting-dropdown">
+      <mat-label>path to restart script</mat-label>
+      <input matInput type="text" [(ngModel)]="configService.applicationConfig.pathToRestartScript" placeholder="undefined">
+    </mat-form-field>
+
+    <div class="paraAppConf">Browse with your browser to this listening port.</div>
+    <mat-form-field appearance="outline" class="setting-dropdown">
+      <mat-label>Log4j config file</mat-label>
+      <input matInput type="text" [(ngModel)]="configService.applicationConfig.log4jConfigFile" placeholder="undefined">
+    </mat-form-field>
+
+    <div class="paraAppConf">This is the log4j2 date format. The date is printed at the beginning of each log line.</div>
+    <mat-form-field appearance="outline" class="setting-dropdown">
+      <mat-label>Logging date format</mat-label>
+      <input matInput type="text" [(ngModel)]="configService.applicationConfig.loggingDateTimeFormat" placeholder="yyyy-MM-dd HH:mm:ss">
+    </mat-form-field>
+
+    <div class="paraAppConf">Choose between different http stream client implementation.</div>
+    <mat-form-field appearance="outline" class="setting-dropdown">
+      <mat-label>UPnP stream client</mat-label>
+      <mat-select [(ngModel)]="configService.applicationConfig.upnpStreamClient">
+        <mat-option value="JDK">JDK</mat-option>
+        <mat-option value="APACHE">Apache</mat-option>
+        <mat-option value="">default</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="paraAppConf">If checked, java code will be generated for services a device offers.</div>
+    <mat-form-field appearance="outline" class="setting-dropdown">
+      <mat-label>Generate UPnP code</mat-label>
+      <input matInput type="text" [(ngModel)]="configService.applicationConfig.generateUpnpCode" placeholder="">
+    </mat-form-field>
+
+    <div class="paraAppConf">This is the folder where generated UPnP code will be saved.</div>
+    <mat-form-field appearance="outline" class="setting-dropdown">
+      <mat-label>path for generated UPnP code</mat-label>
+      <input matInput type="text" [(ngModel)]="configService.applicationConfig.generateUpnpCodePath" placeholder="">
+    </mat-form-field>
+    <div class="d-flex section ms-4">
+      <button mat-stroked-button color="primary" (click)="saveGeneralConfig()">save</button>
+    </div>
+  </div>
+</div>
+
+<div class="section head ">Accounts</div>
+
+<div class="section subhead subsect">Spotify</div>
+<div class="d-flex section flex-wrap subhead flex-column">
+  @if (configService.spotifyAccountConnected()) {
+  <div class="para">
+    <span class="material-symbols-outlined" style="color: aqua;">how_to_reg</span>
+    <span class=""> Your Spotify account is connected.</span>
+  </div>
+  }
+</div>
+@if (!configService.spotifyAccountConnected()) {
+<div class="d-flex section flex-wrap subhead flex-column">
+  <div class="para">
+    Click this button. A new window will open. Login and approve access to nextCP/2 :
+  </div>
+  <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="registerAppAtSpotify()">nextCP/2
+    Spotify access
+  </button>
+  @if (!protocolHandlerAvailable()) {
+  <div>
+    <div class="para">
+      After granting access you wil be redirected to a localhost URL (error page). Copy spotify access code
+      from your browsers URL bar into the input field below and
+    </div>
+    <div>
+      <input class="section input" [(ngModel)]="code">
+    </div>
+    <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="sendSpotifyCode()">send
+      it</button>
+    <div class="para">
+      Hint: To copy the access code, click in your browsers URL bar and copy everything after
+      'http://localhost:65525/?code='
+    </div>
+  </div>
+  }
 </div>
 }
 
 <div class="section subhead subsect">MusicBrainz</div>
 <div class="d-flex section flex-wrap subhead flex-column">
-    <div class="para">
-        Star-rating will update musicbrainz.org site if song has musicbrainzID metadata set. Password will be encoded after a successfull save action.
-    </div>
+  <div class="para">
+    Star-rating will update musicbrainz.org site if song has musicbrainzID metadata set. Password will be encoded after a successfull save action.
+  </div>
 </div>
 <div class="d-flex flex-wrap">
-    <div class="d-flex section flex-wrap subhead flex-wrap">
-        <mat-form-field class="me-2" appearance="outline">
-            <mat-label>Username</mat-label>
-            <input matInput type="text" placeholder="for www.musicbrainz.org" [(ngModel)]="configService.musicBrainzConfig.username">
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Password</mat-label>
-            <input matInput type="text" placeholder="for www.musicbrainz.org" [(ngModel)]="configService.musicBrainzConfig.password">
-        </mat-form-field>
-        <div class="d-flex section ms-4">
-            <button mat-stroked-button color="primary" (click)="saveMusicBrainzConfig()">save</button>
-        </div>
+  <div class="d-flex section flex-wrap subhead flex-wrap">
+    <mat-form-field class="me-2" appearance="outline">
+      <mat-label>Username</mat-label>
+      <input matInput type="text" placeholder="for www.musicbrainz.org" [(ngModel)]="configService.musicBrainzConfig.username">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input matInput type="text" placeholder="for www.musicbrainz.org" [(ngModel)]="configService.musicBrainzConfig.password">
+    </mat-form-field>
+    <div class="d-flex section ms-4">
+      <button mat-stroked-button color="primary" (click)="saveMusicBrainzConfig()">save</button>
     </div>
+  </div>
 </div>
 
 <div class="section subhead subsect">Last FM</div>
 <div class="d-flex section flex-wrap subhead flex-column">
-    <div class="para">
-        1. Click this button. A new window will open. Login and approve access to nextCP/2 :
-    </div>
-    <button mat-stroked-button class="settings maxButton" (click)="activateLastFM()">
-        nextCP/2 LastFM access
-    </button>
-    <div class="para">
-        2. After step 1 is done, click this button to connect nextCP/2 to LastFM :
-    </div>
-    <button mat-stroked-button class="settings maxButton" (click)="generateSession()">
-        generate LastFM session
-    </button>
+  <div class="para">
+    1. Click this button. A new window will open. Login and approve access to nextCP/2 :
+  </div>
+  <button mat-stroked-button class="settings maxButton" (click)="activateLastFM()">
+    nextCP/2 LastFM access
+  </button>
+  <div class="para">
+    2. After step 1 is done, click this button to connect nextCP/2 to LastFM :
+  </div>
+  <button mat-stroked-button class="settings maxButton" (click)="generateSession()">
+    generate LastFM session
+  </button>
 </div>
 
 <div class="section head ">System Information</div>
 <div class="generalConfigOptions">
-    <div class="section subhead d-flex flex-column setting-dropdown">
-        <mat-form-field appearance="outline">
-            <mat-label>build number</mat-label>
-            <input matInput type="text" [ngModel]="buildNumber" placeholder="undefined" readonly="true">
-        </mat-form-field>
-        <button mat-stroked-button class="settings maxButton" (click)="systemService.restart()">
-            restart nextcp/2
-        </button>
-    </div>
+  <div class="section subhead d-flex flex-column setting-dropdown">
+    <mat-form-field appearance="outline">
+      <mat-label>build number</mat-label>
+      <input matInput type="text" [ngModel]="buildNumber" placeholder="undefined" readonly="true">
+    </mat-form-field>
+    <button mat-stroked-button class="settings maxButton" (click)="systemService.restart()">
+      restart nextcp/2
+    </button>
+  </div>
 </div>
