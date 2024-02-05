@@ -1,3 +1,4 @@
+import { RendererService } from './../../service/renderer.service';
 import { ToastService } from './../../service/toast/toast.service';
 import { MyMusicService } from './../../service/my-music.service';
 import { SystemService } from './../../service/system.service';
@@ -37,6 +38,7 @@ export class SettingsComponent implements OnInit {
   constructor(
     public ratingServiceService: RatingServiceService,
     public contentDirectoryService: ContentDirectoryService,
+    private rendererService: RendererService,
     public deviceService: DeviceService,
     public toastService: ToastService,
     public systemService: SystemService,
@@ -157,6 +159,10 @@ export class SettingsComponent implements OnInit {
 
   deleteRendererConfig(rendererConfig: RendererDeviceConfiguration): void {
     this.configService.deleteMediaRendererConfig(rendererConfig);
+  }
+
+  initServices(rendererConfig: RendererDeviceConfiguration): void {
+    this.rendererService.initServices(rendererConfig.mediaRenderer.udn);
   }
 
   saveServerConfig(rendererConfig: ServerDeviceConfiguration): void {

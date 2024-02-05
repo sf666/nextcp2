@@ -162,6 +162,19 @@ public class RestDeviceRendererService
         device.getTransportServiceBridge().next();
     }
 
+
+    //
+    // Maintenance methods
+    //
+    
+    @PostMapping("/initServices")
+    public void initServices(@RequestBody String udn)
+    {
+        MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(udn));
+        checkDevice(device, "play");
+        device.initServices();
+    }
+    
     //
     // Utility methods
     //
@@ -172,5 +185,5 @@ public class RestDeviceRendererService
         {
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, action + " failed. Unknown device. Select an available media renderer.");
         }
-    }
+    }    
 }

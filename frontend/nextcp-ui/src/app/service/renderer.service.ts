@@ -191,7 +191,7 @@ export class RendererService {
   }
 
   //
-  // Renderer transport services
+  // Renderer transport services for selected renderer
   // ================================================================================================================
   public pause() {
     const uri = '/pause';
@@ -212,8 +212,13 @@ export class RendererService {
     const uri = '/next';
     this.httpService.post(this.baseUri, uri, this.deviceService.selectedMediaRendererDevice.udn, "next");
   }
-
-
+  
+  // Maintenance methods
+  public initServices(udn : string) {
+    const uri = '/initServices';
+    this.httpService.post(this.baseUri, uri, udn, "init services");
+  }
+  
   //
   // Renderer : information about the current played song
   // ================================================================================================================
