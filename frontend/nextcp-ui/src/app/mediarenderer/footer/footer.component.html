@@ -79,11 +79,9 @@
       }
       <span class="material-symbols-outlined icon-main">volume_up</span>
       <div class="d-flex overlayBox" style="width: 120px;">
-        @if(!deviceService.isAnyMediaRendererSelected()) {
           <mat-slider class="absolute hidden mySlider" min="0" max="90" step="1" value="0">
             <input matSliderThumb (valueChange)="volChanged($event)" [value]="rendererService.deviceDriverState.volume">
           </mat-slider>
-        }
         <mat-progress-bar class="absolute progressbar" mode="determinate" [value]="rendererService.deviceDriverState.volume">
         </mat-progress-bar>
       </div>

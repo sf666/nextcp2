@@ -5,6 +5,7 @@ import { DeviceService } from './device.service';
 import { DeviceDriverState, MediaRendererSwitchPower, MediaRendererSetVolume, MediaRendererDto, TrackInfoDto, TrackTimeDto, InputSourceDto, MusicItemDto, AudioFormat, InputSourceChangeDto, TransportServiceStateDto } from './dto.d';
 import { SseService } from './sse/sse.service';
 import { Injectable } from '@angular/core';
+import { GenericResultService } from './generic-result.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,7 @@ export class RendererService {
     private deviceService: DeviceService,
     private dtoGeneratorService: DtoGeneratorService,
     private backgroundImageService: BackgroundImageService,
+    private genericResultService: GenericResultService,
     private httpService: HttpService) {
 
     this.deviceDriverState = { hasDeviceDriver: false, standby: true, volume: 0, rendererUDN: '', input: dtoGeneratorService.emptyInputSourceDto() };
@@ -183,6 +185,8 @@ export class RendererService {
         volume: vol
       };
       this.httpService.post(this.baseUri, uri, request, "volume control");
+    } else {
+      this.genericResultService.displayGenericMessage("volume","Cannot change volume. No media renderer selected.");      
     }
   }
 
