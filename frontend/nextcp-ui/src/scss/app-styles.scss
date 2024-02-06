@@ -60,7 +60,13 @@
     --sidebar-width-mid: 220px;
     --sidebar-width-min: 55px;
     --nav-height       : 75px;
+    
+    //
+    // Material Design overrides.
+    //
 
+    --mdc-dialog-container-color : rgb(18, 18, 18);
+    --mat-select-panel-background-color: rgb(18, 18, 18);
 }
 
 // Variables ===================================================================
@@ -358,7 +364,7 @@ input {
 // Global Popup definition
 .popup {
     mat-dialog-container {
-        background-color: rgb(#242528, 0.95);
+        background-color: rgba(18,18,18, 1);
         overflow        : hidden;
         overflow-y      : auto;
         padding         : 0px;

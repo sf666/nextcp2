@@ -11,20 +11,18 @@
 
 @import 'pantone';
 @import 'custom_variables';
-
-
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-
-$my-app-primary: mat.define-palette(mat.$gray-palette);
-$my-app-accent : mat.define-palette(mat.$blue-grey-palette, 800, 900, A100);
-$my-app-warn   : mat.define-palette(mat.$deep-orange-palette);
+@import 'nextcp-palette';
 
 $custom-typography: mat.define-typography-config($font-family: 'HK Grotesk, Lato, Quicksand, sans-serif',
 );
 
-$my-app-theme: mat.define-dark-theme((color: (primary: $my-app-primary,
+$my-app-primary: mat.define-palette($md-primary); // In this case the 400 pallette is used as default, using sometimes 100 & 700
+$my-app-accent : mat.define-palette($md-accent, 400, 100, 900);
+$my-app-warn   : mat.define-palette($md-warn, 300, 100, 700);
+
+
+$my-app-theme: mat.define-dark-theme((color: (
+      primary: $my-app-primary,
       accent: $my-app-accent,
       warn: $my-app-warn,
     ),
@@ -36,36 +34,5 @@ $my-app-theme: mat.define-dark-theme((color: (primary: $my-app-primary,
 // Apply the dark theme by default
 @include mat.all-component-themes($my-app-theme);
 
-/*
-// DEMO: This is how a custom color palette is being defined :
-$app-primary: (50: $pantone-1205-C,
-  100: $pantone-1215-C,
-  200: $pantone-1225-C,
-  300: $pantone-1235-C,
-  400: $pantone-1245-C,
-  500: $pantone-1255-C,
-  600: $pantone-1265-C,
-  700: $pantone-7552-C,
-  800: $pantone-7553-C,
-  900: $pantone-7554-C,
-  A100: $pantone-148-C,
-  A200: $pantone-150-C,
-  A400: $pantone-152-C,
-  A700: $pantone-154-C,
-  contrast: (50: $dark-primary-text,
-    100: $dark-primary-text,
-    200: $dark-primary-text,
-    300: $light-primary-text,
-    400: $light-primary-text,
-    500: $light-primary-text,
-    600: $light-primary-text,
-    700: $light-primary-text,
-    800: $light-primary-text,
-    900: $light-primary-text,
-    A100: $dark-primary-text,
-    A200: $light-primary-text,
-    A400: $light-primary-text,
-    A700: $light-primary-text,
-  ));
-
-*/
+// @include mat.core-theme($my-app-theme);
+// @include mat.button-theme($my-app-theme);
