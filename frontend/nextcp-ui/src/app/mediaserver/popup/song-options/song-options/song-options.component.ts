@@ -87,7 +87,7 @@ export class SongOptionsComponent implements OnInit {
 
   deleteFromPlaylist(): void {
     if (this.item?.songId.umsAudiotrackId != null) {
-      this.playlistService.removeSongFromServerPlaylist(this.item.songId.umsAudiotrackId, this.currentContainer.title);
+      this.playlistService.removeSongFromServerPlaylist(this.item.songId.umsAudiotrackId.toString(), this.currentContainer.title);
     }
     this.closeThisPopup({type: 'delete', data: this.item});
   }

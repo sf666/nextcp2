@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.32.889 on 2024-02-01 12:34:41.
+// Generated using typescript-generator version 3.2.1263 on 2024-02-07 14:28:35.
 
 export interface ApplicationConfig {
     myPlaylistFolderName: string;
@@ -311,14 +311,17 @@ export interface ServerDeviceConfiguration {
 }
 
 export interface ServerPlaylistDto {
+    albumArtUrl: string;
     playlistName: string;
     playlistId: string;
+    numberOfElements: number;
+    totalPlaytime: string;
 }
 
 export interface ServerPlaylistEntry {
     serverUdn: string;
-    playlistName: string;
-    songid: number;
+    playlistObjectId: string;
+    songObjectId: string;
 }
 
 export interface ServerPlaylists {

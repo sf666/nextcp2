@@ -250,15 +250,15 @@ export class PlaylistService implements OnInit {
   // Filesystem Playlist actions
   // ========================================================================
 
-  public addSongToServerPlaylist(songId: number, playlistName: string): void {
+  public addSongToServerPlaylist(songId: string, playlistId: string): void {
     const uri = '/addToServerPlaylist';
-    const req: ServerPlaylistEntry = { serverUdn: this.selectedMediaServer.udn, songid: songId, playlistName: playlistName };
+    const req: ServerPlaylistEntry = { serverUdn: this.selectedMediaServer.udn, songObjectId: songId, playlistObjectId: playlistId };
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }
 
-  public removeSongFromServerPlaylist(songId: number, playlistName: string): void {
+  public removeSongFromServerPlaylist(songId: string, playlistId: string): void {
     const uri = '/removeFromServerPlaylist';
-    const req: ServerPlaylistEntry = { serverUdn: this.selectedMediaServer.udn, songid: songId, playlistName: playlistName };
+    const req: ServerPlaylistEntry = { serverUdn: this.selectedMediaServer.udn, songObjectId: songId, playlistObjectId: playlistId };
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }
 }

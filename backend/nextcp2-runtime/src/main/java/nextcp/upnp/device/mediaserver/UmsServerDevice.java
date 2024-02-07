@@ -383,15 +383,15 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     }
 
     @Override
-    public void addSongToPlaylist(Integer audiotracId, String playlistName)
+    public void addSongToPlaylist(String audiotracId, String playlistName)
     {
-        doGenericCall(String.format("%d/%s", audiotracId, playlistName), "api/playlist/addsongtoplaylist", true);
+        doGenericCall(String.format("%s/%s", audiotracId, playlistName), "api/playlist/addsongtoplaylist", true);
     }
 
     @Override
-    public void removeSongFromPlaylist(Integer audiotraclId, String playlistName)
+    public void removeSongFromPlaylist(String audiotraclId, String playlistName)
     {
-        doGenericCall(String.format("%d/%s", audiotraclId, playlistName), "api/playlist/removesongfromplaylist", true);
+        doGenericCall(String.format("%s/%s", audiotraclId, playlistName), "api/playlist/removesongfromplaylist", true);
     }
 
     @Override

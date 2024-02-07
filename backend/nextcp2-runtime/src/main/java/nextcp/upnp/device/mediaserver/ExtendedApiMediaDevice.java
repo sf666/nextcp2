@@ -44,9 +44,9 @@ public interface ExtendedApiMediaDevice
     
     public void createPlaylist(String playlistName);
     
-    public void addSongToPlaylist(Integer audiotraclId, String playlistName);
+    public void addSongToPlaylist(String audiotraclId, String playlistName);
 
-    public void removeSongFromPlaylist(Integer audiotracId, String playlistName);
+    public void removeSongFromPlaylist(String audiotracId, String playlistName);
     
     public List<String> getAllPlaylists() throws JsonMappingException, JsonProcessingException;
 

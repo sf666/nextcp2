@@ -13,18 +13,18 @@ public class ServerPlaylistEntry
 {
 
     public String serverUdn;
-    public String playlistName;
-    public Integer songid;
+    public String playlistObjectId;
+    public String songObjectId;
 
     public ServerPlaylistEntry()
     {
     }
 
-    public ServerPlaylistEntry(String serverUdn, String playlistName, Integer songid)
+    public ServerPlaylistEntry(String serverUdn, String playlistObjectId, String songObjectId)
     {
         this.serverUdn = serverUdn;
-        this.playlistName = playlistName;
-        this.songid = songid;
+        this.playlistObjectId = playlistObjectId;
+        this.songObjectId = songObjectId;
     }
     
     @Override
@@ -33,8 +33,8 @@ public class ServerPlaylistEntry
         StringBuilder sb = new StringBuilder();
         sb.append("ServerPlaylistEntry [");
         sb.append("serverUdn=").append(this.serverUdn).append(", ");
-        sb.append("playlistName=").append(this.playlistName).append(", ");
-        sb.append("songid=").append(this.songid).append(", ");
+        sb.append("playlistObjectId=").append(this.playlistObjectId).append(", ");
+        sb.append("songObjectId=").append(this.songObjectId).append(", ");
         sb.append("]");
         return sb.toString();
     }

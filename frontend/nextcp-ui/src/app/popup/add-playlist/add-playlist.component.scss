@@ -1,3 +1,4 @@
+@import "buttons";
 @import "./app-popup";
 
 .playlist-list {
@@ -6,5 +7,42 @@
 }
 
 .playlist-item {
-    display       : flex;
+    display: flex;
 }
+
+.playlist-img {
+    object-fit      : cover;
+    background-color: rgba(0, 0, 0, 0.5);
+
+    width        : 4rem;
+    height       : 4rem;
+    margin-bottom: 0.5rem;
+    margin-top   : 0.5rem;
+}
+
+.playlist-item-text {
+    display        : flex;
+    flex-direction : column;
+    justify-content: space-between;
+
+    margin-left  : 1rem;
+    margin-top   : 8px;
+    margin-bottom: 12px;
+}
+
+.fineText {
+    color      : var(--glas-white-5);
+    font-weight: 300;
+    font-size  : smaller;
+}
+
+.searchInput {
+    display: flex;
+    justify-content: center;
+}
+
+/*
+    justify-self: center;
+    justify-items: center;
+    align-self: center;
+*/

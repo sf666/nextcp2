@@ -75,8 +75,11 @@ MusicbrainzSupport:
 
 
 ServerPlaylistDto:
+   albumArtUrl: String
    playlistName:  String
    playlistId: String
+   numberOfElements: Integer
+   totalPlaytime: String
    
 UiClientConfig:
    uuid: String
@@ -324,8 +327,8 @@ InputSourceChangeDto:
 
 ServerPlaylistEntry:
    serverUdn : String
-   playlistName : String
-   songid : Integer
+   playlistObjectId : String
+   songObjectId : String
 
 GenericNumberRequest:
    deviceUDN: String

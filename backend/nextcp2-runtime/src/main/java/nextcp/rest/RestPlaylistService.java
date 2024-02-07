@@ -110,7 +110,7 @@ public class RestPlaylistService extends BaseRestService
     {
         try
         {
-            getExtendedMediaServerByUdn(addRequest.serverUdn).addSongToPlaylist(addRequest.songid, addRequest.playlistName);
+            getExtendedMediaServerByUdn(addRequest.serverUdn).addSongToPlaylist(addRequest.songObjectId, addRequest.playlistObjectId);
         }
         catch (Exception e)
         {
@@ -124,7 +124,7 @@ public class RestPlaylistService extends BaseRestService
     {
         try
         {
-            getExtendedMediaServerByUdn(addRequest.serverUdn).removeSongFromPlaylist(addRequest.songid, addRequest.playlistName);
+            getExtendedMediaServerByUdn(addRequest.serverUdn).removeSongFromPlaylist(addRequest.songObjectId, addRequest.playlistObjectId);
         }
         catch (Exception e)
         {

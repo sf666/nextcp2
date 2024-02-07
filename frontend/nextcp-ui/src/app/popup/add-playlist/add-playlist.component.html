@@ -2,17 +2,29 @@
     <div class="popupHeader">add to playlist</div>
     <div class="popupDivider mt-2 mb-1">&nbsp;</div>
     <div class="popupBody">
-        <mat-form-field [style.width.px]=500 class="w100" appearance="outline" class="setting-dropdown">
-            <input matInput type="text" placeholder="search for playlist">
-        </mat-form-field>
+        <div class="searchInput">
+            <mat-form-field [style.width.px]=400 class="w100" appearance="outline" class="setting-dropdown">
+                <input matInput type="text" placeholder="search for playlist">
+            </mat-form-field>
+        </div>
         <div class="playlist-list">
             @for (playlist of getServerPlaylists(); track playlist) {
-                <div class="playlist-item" (click)="addToPlaylist(playlist.playlistId)">
-                    <div>
-                        {{playlist.playlistId}}
+                <div class="d-flex justify-content-between">
+                    <div class="playlist-item" (click)="addTo(playlist)">
+                        <img src="{{playlist.albumArtUrl}}" class="playlist-img">
+                        <div class="playlist-item-text">
+                            <div>{{playlist.playlistName}}</div>
+                            <div class="fineText">
+                                <div>Text 1</div>
+                                <div>Text 2</div>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        {{playlist.playlistName}}
+                    <div class="d-flex align-self-center">
+                        <button mat-stroked-button class="my-buttons" (click)="addTo(playlist)">
+                            <mat-icon class="material-symbols-outlined thin">playlist_add</mat-icon>
+                            <span class="button button-text">add track</span>
+                        </button>
                     </div>
                 </div>
               }

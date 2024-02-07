@@ -99,7 +99,7 @@ public class MediaServerDevice extends BaseDevice {
 					if ("object.container.playlistContainer".equalsIgnoreCase(pl.objectClass)) {
 						// strip extension if delivered 
 						String title = pl.title.lastIndexOf(".") > -1 ? pl.title.substring(0, pl.title.lastIndexOf(".")) : pl.title;
-						ServerPlaylistDto dto = new ServerPlaylistDto(title, pl.id); 
+						ServerPlaylistDto dto = new ServerPlaylistDto(pl.albumartUri, title, pl.id, null, null);
 						myPlaylists.add(dto);
 						log.info("Found server based playlist name : {}", dto);
 					}
