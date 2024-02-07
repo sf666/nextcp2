@@ -75,7 +75,6 @@ export class PlaylistService implements OnInit {
   }
 
   private afterMediaServerChanged(server: MediaServerDto) {
-    this.updateServerBasedPlaylists(server);
     this.updateServerAccessiblePlaylists(server);
   }
 
@@ -88,21 +87,13 @@ export class PlaylistService implements OnInit {
 
 
   //
-  // Media Server based playlists
+  // Playlists located in the configured folder name
   // 
   private updateServerAccessiblePlaylists(server: MediaServerDto) {
     const uri = '/getServerPlaylists';
     this.selectedMediaServer = server;
     this.httpService.post<ServerPlaylistDto[]>(this.baseUri, uri, server.udn).subscribe(data => {
       this.serverPl.serverPlaylists = data;
-    });
-  }
-
-  private updateServerBasedPlaylists(server: MediaServerDto) {
-    const uri = '/getDefaultPlaylists';
-    this.selectedMediaServer = server;
-    this.httpService.post<string[]>(this.baseUri, uri, server.udn).subscribe(data => {
-      this.serverPl.playlists = data;
     });
   }
 

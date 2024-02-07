@@ -86,20 +86,11 @@ public class RestPlaylistService extends BaseRestService
         }
     }
 
-    @PostMapping("/getDefaultPlaylists")
-    public List<String> getDefaultPlaylists(@RequestBody String serverUdn)
-    {
-        try
-        {
-            return getExtendedMediaServerByUdn(serverUdn).getAllPlaylists();
-        }
-        catch (Exception e)
-        {
-            log.warn("getDefaultPlaylists", e);
-            return new ArrayList<String>();
-        }
-    }
-
+    /**
+     * 
+     * @param serverUdn
+     * @return
+     */
     @PostMapping("/getServerPlaylists")
     public List<ServerPlaylistDto> getServerPlaylists(@RequestBody String serverUdn)
     {

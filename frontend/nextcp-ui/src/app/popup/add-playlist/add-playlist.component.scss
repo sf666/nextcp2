@@ -1,1 +1,10 @@
 @import "./app-popup";
+
+.playlist-list {
+    display       : flex;
+    flex-direction: column;
+}
+
+.playlist-item {
+    display       : flex;
+}

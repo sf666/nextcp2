@@ -1,4 +1,4 @@
-import { MusicItemDto } from './../../service/dto.d';
+import { MusicItemDto, ServerPlaylistDto, ServerPlaylists } from './../../service/dto.d';
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormField } from '@angular/material/form-field';
@@ -31,5 +31,9 @@ export class AddPlaylistComponent {
     this.playlistService.addSongToServerPlaylist(this.musicItemToAdd.songId.umsAudiotrackId, playlistName);
     this.playlistService.touchPlaylist(playlistName);
     this.dialogRef.close();
-  }  
+  }
+
+  getServerPlaylists(): ServerPlaylistDto[] {
+    return this.playlistService.serverPl.serverPlaylists;
+  }
 }
