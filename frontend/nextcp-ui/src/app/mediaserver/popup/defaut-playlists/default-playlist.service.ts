@@ -1,7 +1,9 @@
+import { MusicItemDto } from './../../../service/dto.d';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DefautPlaylistsComponent } from './defaut-playlists.component';
 import { Injectable, ElementRef } from '@angular/core';
 import { SongOptionsComponent } from '../song-options/song-options/song-options.component';
+import { AddPlaylistComponent } from 'src/app/popup/add-playlist/add-playlist.component';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +17,23 @@ export class DefaultPlaylistService {
       this.dialog = dialog;
      }
 
+  public openAddGlobalPlaylistDialog(item: MusicItemDto) : MatDialogRef<any,any> {
+    this.dialogRef = this.dialog.open(AddPlaylistComponent, {
+      hasBackdrop: false,
+      data: { item: item},
+    });
+
+    return this.dialogRef;
+  }
+
+  /**
+   * Opens a dialog next to a parent element.
+   * 
+   * @param event
+   * @param trackId 
+   * @param parent 
+   * @returns 
+   */
   public openAddPlaylistDialogWithParent(event: any, trackId: number, parent: SongOptionsComponent) : MatDialogRef<any,any> {
     let target : ElementRef;
 
@@ -26,7 +45,6 @@ export class DefaultPlaylistService {
     this.dialogRef = this.dialog.open(DefautPlaylistsComponent, {
       hasBackdrop: false,
       data: { trigger: target, id : trackId, parentPanel: parent},
-      panelClass: 'popup-rounded'
     });
 
     return this.dialogRef;

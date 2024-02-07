@@ -19,11 +19,13 @@
 
   <div class="dialogItems d-flex flex-column flex-wrap">
     @if (hasValidSongId()) {
-      <div class="d-flex justify-content-between playlist-item" (click)="openAddToPlaylistDialog($event)" (mouseenter)="openAddToPlaylistDialog($event)">
+      <div class="d-flex justify-content-between playlist-item" (click)="openAddToPlaylistDialog($event)">
         <div class="d-flex justify-content-between" style="align-self: center;">
           Add to playlist
         </div>
+        <!--
         <span class="material-symbols-outlined">chevron_right</span>
+        -->
       </div>
     }
     @if (isParentPlaylist) {

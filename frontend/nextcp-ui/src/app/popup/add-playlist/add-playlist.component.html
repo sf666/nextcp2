@@ -1,0 +1,17 @@
+<div class="popupFrame">
+    <div class="popupHeader">add to playlist</div>
+    <div class="popupDivider mt-2 mb-1">&nbsp;</div>
+    <div class="popupBody">
+        <mat-form-field [style.width.px]=500 class="w100" appearance="outline" class="setting-dropdown">
+            <input matInput type="text" placeholder="search for playlist">
+        </mat-form-field>
+        <div>
+            @for (playlist of playlistService.serverPl.playlists; track playlist) {
+                <div class="playlist-item"
+                  (click)="addToPlaylist(playlist)">
+                  {{playlist}}
+                </div>
+              }
+        </div>        
+    </div>
+</div>

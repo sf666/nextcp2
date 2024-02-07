@@ -17,7 +17,6 @@ export class SongOptionsServiceService {
     const dialogRef = this.dialog.open(SongOptionsComponent, {
       hasBackdrop: true,
       data: { trigger: target, item: item, event: event, currentContainer: currentContainer },
-      panelClass: 'popup-rounded'
     });
     return dialogRef.afterClosed();
   }

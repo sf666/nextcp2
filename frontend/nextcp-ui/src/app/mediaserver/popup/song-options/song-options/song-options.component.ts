@@ -47,7 +47,7 @@ export class SongOptionsComponent implements OnInit {
     this.playlistDialogOpen = false;
 
     _matDialogRef.afterClosed().subscribe(_res => {
-      this.closeAllDialogs();
+//      this.closeAllDialogs();
     });
   }
 
@@ -71,13 +71,17 @@ export class SongOptionsComponent implements OnInit {
 
   openAddToPlaylistDialog(event: Event): void {
     if (this.item?.songId.umsAudiotrackId != null) {
+      const dialogRef = this.defaultPlaylistService.openAddGlobalPlaylistDialog(this.item);
+      this._matDialogRef.close();
+      
+      /*
       if (!this.playlistDialogOpen) {
         const dialogRef = this.defaultPlaylistService.openAddPlaylistDialogWithParent(event, this.item.songId.umsAudiotrackId, this);
         dialogRef.afterClosed().subscribe(_res => {
           this.playlistDialogOpen = false;
         });
         this.playlistDialogOpen = true;
-      }
+      } */
     }
   }
 

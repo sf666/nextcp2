@@ -1,5 +1,3 @@
-@import "pantone";
-@import "app-variables";
 @import "../assets/fonts/azeret_mono/azeret_mono.scss";
 @import "../assets/fonts/HKGrotesk/HKGrotesk-font.scss";
 
@@ -27,91 +25,10 @@
     /* hi-res laptops and desktops */
 }
 
-:root {
-    --snow-white             : rgb(255, 255, 250);
-    --glas-white-2           : rgba(255, 255, 255, 0.8);
-    --glas-white-3           : rgba(255, 255, 255, 0.7);
-    --glas-white-4           : rgba(255, 255, 255, 0.6);
-    --glas-white-5           : rgba(255, 255, 255, 0.5);
-    --glas-white-6           : rgba(255, 255, 255, 0.4);
-    --glas-white-7           : rgba(255, 255, 255, 0.3);
-    --glas-white-8           : rgba(255, 255, 255, 0.2);
-    --primary-color          : rgb(0, 255, 255);
-    --primary-color-reduced  : rgba(0, 255, 255, 0.5);
-    --primary-color-reduced-2: rgba(0, 255, 255, 0.2);
-
-    --color-orange-reduced-3: rgba(255, 184, 28, 0.7);
-    --color-orange-reduced-5: rgba(255, 184, 28, 0.5);
-    --color-orange-reduced-7: rgba(255, 184, 28, 0.3);
-
-    --color-transparent: rgba(0, 0, 0, 0);
-
-    --grey-5: rgb(58 61 68);
-
-    --bg-grey-2: rgba(229, 238, 255, .8);
-    --bg-grey-4: rgba(229, 238, 255, .6);
-    --bg-grey-6: rgba(229, 238, 255, .4);
-    --bg-grey-8: rgba(229, 238, 255, .2);
-
-    --dark-grey: rgba(25, 25, 25, .8);
-
-    --footer-height    : 5.4rem;
-    --sidebar-width    : 250px;
-    --sidebar-width-mid: 220px;
-    --sidebar-width-min: 55px;
-    --nav-height       : 75px;
-    
-    //
-    // Material Design overrides.
-    //
-
-    --mdc-dialog-container-color : rgb(18, 18, 18);
-    --mat-select-panel-background-color: rgb(18, 18, 18);
-}
-
-// Variables ===================================================================
-
-$web-font-path: "https://fonts.googleapis.com/css?family=Lato:100,300,700" !default;
-@import url($web-font-path);
-
 // Disable focus frame
 *:focus {
     outline: none;
 }
-
-
-//
-// Overlay
-//
-
-.overlay-container {
-    position: relative;
-}
-
-.overlay-child {
-    position        : absolute;
-    top             : 0;
-    right           : 0;
-    height          : 100%;
-    width           : 100%;
-    opacity         : 0;
-    background-color: rgba($color: $pantone-Neutral-Black-C, $alpha: 0.95);
-    text-align      : center;
-    transition      : .3s ease;
-    opacity         : 0;
-
-    &:hover {
-        opacity: 0.7;
-    }
-}
-
-.cardLayoutTiles {
-    display       : flex;
-    flex-wrap     : wrap;
-    padding-top   : 3rem;
-    padding-bottom: 6rem;
-}
-
 
 //
 // Icons : See design guide at : https://developers.google.com/fonts/docs/material_icons
@@ -176,11 +93,44 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:100,300,700" !defa
     font-size: 48px;
 }
 
+
+
+//
+// Overlay
+//
+
+.overlay-container {
+    position: relative;
+}
+
+.overlay-child {
+    position        : absolute;
+    top             : 0;
+    right           : 0;
+    height          : 100%;
+    width           : 100%;
+    opacity         : 0;
+    background-color: rgba($color: $pantone-Neutral-Black-C, $alpha: 0.95);
+    text-align      : center;
+    transition      : .3s ease;
+    opacity         : 0;
+
+    &:hover {
+        opacity: 0.7;
+    }
+}
+
+.cardLayoutTiles {
+    display       : flex;
+    flex-wrap     : wrap;
+    padding-top   : 3rem;
+    padding-bottom: 6rem;
+}
+
+
 //
 // application classes for individual components
 // ===================================================================================
-
-// overwrite material design ... 
 
 .trans-color {
     color: var(--color-transparent);
@@ -364,7 +314,7 @@ input {
 // Global Popup definition
 .popup {
     mat-dialog-container {
-        background-color: rgba(18,18,18, 1);
+        background-color: rgba(18, 18, 18, 1);
         overflow        : hidden;
         overflow-y      : auto;
         padding         : 0px;

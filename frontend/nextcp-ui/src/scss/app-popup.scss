@@ -1,0 +1,28 @@
+.popupHeader {
+    display      : flex;
+    align-self   : center;
+    color        : aqua;
+    font-size    : larger;
+    border-bottom: #999999;
+    margin       : 1rem;
+}
+
+.popupFrame {
+    width: 600px;
+}
+
+.popupBody {
+    display        : flex;
+    flex-direction : column;
+    justify-content: center;
+    margin         : 1rem;
+}
+
+.popupElement {
+    margin: 8px;
+}
+
+.popupDivider {
+    font-size    : 1px;
+    border-bottom: 1px solid var(--grey-5);
+}

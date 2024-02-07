@@ -13,13 +13,12 @@
 */
 @import "bootstrap-styles";
 
-@import 'pantone';
-
 // cool table look and feel
 // @import 'appTable';
 
 @import 'app-variables';
 @import 'app-styles';
+@import "app-icons";
 
 html {
     min-height: -webkit-fill-available;
