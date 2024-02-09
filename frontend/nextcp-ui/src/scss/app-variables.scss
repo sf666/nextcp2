@@ -22,6 +22,7 @@ $imgCardWidth : calc(#{$cardWidth} - 2*#{$cardBorderWidth});
 
 :root {
     --snow-white             : rgb(255, 255, 250);
+    --glas-white-1           : rgba(255, 255, 255, 0.9);
     --glas-white-2           : rgba(255, 255, 255, 0.8);
     --glas-white-3           : rgba(255, 255, 255, 0.7);
     --glas-white-4           : rgba(255, 255, 255, 0.6);
@@ -29,6 +30,7 @@ $imgCardWidth : calc(#{$cardWidth} - 2*#{$cardBorderWidth});
     --glas-white-6           : rgba(255, 255, 255, 0.4);
     --glas-white-7           : rgba(255, 255, 255, 0.3);
     --glas-white-8           : rgba(255, 255, 255, 0.2);
+    --glas-white-9           : rgba(255, 255, 255, 0.1);
     --primary-color          : rgb(0, 255, 255);
     --primary-color-reduced  : rgba(0, 255, 255, 0.5);
     --primary-color-reduced-2: rgba(0, 255, 255, 0.2);

@@ -3,9 +3,12 @@
     <div class="popupDivider mt-2 mb-1">&nbsp;</div>
     <div class="popupBody">
         <div class="searchInput">
-            <mat-form-field [style.width.px]=400 class="w100" appearance="outline" class="setting-dropdown">
+            <mat-form-field class="w100" appearance="outline" class="setting-dropdown">
                 <input matInput type="text" placeholder="search for playlist">
             </mat-form-field>
+        </div>
+        <div class="headline">
+            my playlists
         </div>
         <div class="playlist-list">
             @for (playlist of getServerPlaylists(); track playlist) {
