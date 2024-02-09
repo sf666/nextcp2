@@ -704,7 +704,6 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     public void setServicesOffline(boolean state) {
     	if (state == false && this.serviceOffline) {
     		log.info("{} : trying to initialize services again ...", getFriendlyName());
-    		initServices();
     	}
     	this.serviceOffline = state;
     }
