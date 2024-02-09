@@ -16,17 +16,19 @@ import { MatInput } from '@angular/material/input';
 import { PlaylistService } from 'src/app/service/playlist.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { DeviceService } from 'src/app/service/device.service';
+import { FormsModule, NgModel } from '@angular/forms';
 
 @Component({
   selector: 'app-add-playlist',
   standalone: true,
-  imports: [MatFormField, MatButton, MatInput, MatIcon],
+  imports: [MatFormField, MatButton, MatInput, MatIcon, FormsModule],
   templateUrl: './add-playlist.component.html',
   styleUrl: './add-playlist.component.scss',
 })
 export class AddPlaylistComponent {
   private musicItemToAdd: MusicItemDto;
   private otherPlaylists: ServerPlaylistDto[];
+  playlistFilter: string = "";
 
   constructor(
     @Inject(MAT_DIALOG_DATA) data: { item: MusicItemDto },
@@ -62,11 +64,11 @@ export class AddPlaylistComponent {
   }
 
   getServerPlaylists(): ServerPlaylistDto[] {
-    return this.playlistService.serverPl.serverPlaylists;
+    return this.playlistService.serverPl.serverPlaylists.filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter.toLowerCase()));
   }
 
   getOtherPlaylists(): ServerPlaylistDto[] {
-    return this.otherPlaylists;
+    return this.otherPlaylists.filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter.toLowerCase()));
   }
 
   addTo(serverPlaylist: ServerPlaylistDto) {
