@@ -33,9 +33,6 @@ export class GlobalSearchService {
 
   public lastSearch;
 
-  // Selected root container
-  private selectedRootContainer : ContainerDto;
-
   private currentSearchText: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private doSearchFunc: any;
@@ -126,7 +123,6 @@ export class GlobalSearchService {
   }
 
   public setSelectedContainer(container : ContainerDto): void {
-    this.selectedRootContainer = container;
     this.contentDirectoryService.browseChildrenByContainer(container);
   }
 
@@ -187,7 +183,6 @@ export class GlobalSearchService {
       this.dtoGeneratorService.generateQuickSearchDto(
         this.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", this.currentContainerID, 0, 100));
     this.hideQuickSearchPanel();
-    this.lastSearch = this.showAllPlaylist;
     void this.router.navigateByUrl('searchResult');
   }
 }

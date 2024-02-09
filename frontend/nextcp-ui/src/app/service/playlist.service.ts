@@ -24,6 +24,8 @@ export class PlaylistService implements OnInit {
 
   // Default server based playlists
   serverPl: ServerPlaylists = { mediaServerUdn:'', playlists: [], serverPlaylists: [] };
+  serverPlPlaylistIds: string[] = [];
+
   selectedMediaServer: MediaServerDto;
 
   // Playlist items of selected media renderer device
@@ -48,6 +50,9 @@ export class PlaylistService implements OnInit {
     sseService.mediaServerPlaylistChanged$.subscribe(data => {
       if (deviceService.isMediaServerSelected(data.mediaServerUdn)) {
         this.serverPl = data;
+        this.serverPl.serverPlaylists.forEach(element => {
+          this.serverPlPlaylistIds.push(element.playlistId);
+        });
       }
     });
 
@@ -85,6 +90,9 @@ export class PlaylistService implements OnInit {
     }
   }
 
+  public playlistIdExistsInServerPlaylists(id: string) : boolean {
+    return this.serverPlPlaylistIds.indexOf(id) > -1;
+  }
 
   //
   // Playlists located in the configured folder name
@@ -94,6 +102,9 @@ export class PlaylistService implements OnInit {
     this.selectedMediaServer = server;
     this.httpService.post<ServerPlaylistDto[]>(this.baseUri, uri, server.udn).subscribe(data => {
       this.serverPl.serverPlaylists = data;
+      this.serverPl.serverPlaylists.forEach(element => {
+        this.serverPlPlaylistIds.push(element.playlistId);
+      });
     });
   }
 

@@ -1,7 +1,7 @@
 import { ConfigurationService } from './configuration.service';
 import { DeviceService } from './device.service';
 import { ToastService } from './toast/toast.service';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { DtoGeneratorService } from './../util/dto-generator.service';
 import { HttpService } from './http.service';
 import { ContainerItemDto, BrowseRequestDto, ContainerDto, SearchRequestDto, SearchResultDto, MusicItemDto } from './dto.d';
@@ -245,11 +245,13 @@ export class ContentDirectoryService {
     });
   }
 
-  public searchAllPlaylist(quickSearchDto: SearchRequestDto): void {
+  public searchAllPlaylist(quickSearchDto: SearchRequestDto): Observable<SearchResultDto> {
     const uri = '/searchAllPlaylist';
-    this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
+    let result = this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto);
+    result.subscribe(data => {
       this.updateSearchResult(data.playlistItems);
     });
+    return result;
   }
 
   public searchAllAlbum(quickSearchDto: SearchRequestDto): void {

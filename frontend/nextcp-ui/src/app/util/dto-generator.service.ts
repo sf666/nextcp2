@@ -59,6 +59,18 @@ export class DtoGeneratorService {
     }
   }
 
+  public generateEmptySearchRequestDto(): SearchRequestDto {
+    return {
+      startElement: 0,
+      requestCount: 999,
+      mediaServerUDN: '',
+      searchRequest: '',
+      sortCriteria: '',
+      parentObjectID: ''
+    }
+  }
+
+
   public generateQuickSearchDto(_searchRequest: string, _mediaServerUDN: string, _sortCriteria: string, parentObjectID: string, start?: number, count?: number): SearchRequestDto {
     return {
       startElement: start ? start : 0,
