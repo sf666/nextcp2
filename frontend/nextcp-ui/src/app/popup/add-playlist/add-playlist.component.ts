@@ -64,11 +64,17 @@ export class AddPlaylistComponent {
   }
 
   getServerPlaylists(): ServerPlaylistDto[] {
-    return this.playlistService.serverPl.serverPlaylists.filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter.toLowerCase()));
+    if (this.playlistService.serverPl.serverPlaylists) {
+      return this.playlistService.serverPl.serverPlaylists.filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter.toLowerCase()));
+    }
+    return [];
   }
 
   getOtherPlaylists(): ServerPlaylistDto[] {
-    return this.otherPlaylists.filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter.toLowerCase()));
+    if (this.otherPlaylists) {
+      return this.otherPlaylists.filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter.toLowerCase()));
+    }
+    return [];
   }
 
   addTo(serverPlaylist: ServerPlaylistDto) {
@@ -77,6 +83,10 @@ export class AddPlaylistComponent {
       serverPlaylist.playlistId,
     );
     //    this.playlistService.touchPlaylist(playlistName);
+    this.close();
+  }
+
+  close() : void {
     this.dialogRef.close();
   }
 }

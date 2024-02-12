@@ -1,5 +1,17 @@
 <div class="popupFrame">
-    <div class="popupHeader">add to playlist</div>
+    <div class="popupHeader d-flex justify-content-between mx-4">
+        <div class="d-flex d-flex justify-content-between w-100 px-4">
+            <div>
+                add to playlist
+            </div>
+            <div>
+                create playlist
+            </div>
+        </div>
+        <div>
+            <span class="material-symbols-outlined thin md-light" (click)="close()">close</span>
+        </div>
+    </div>
     <div class="popupDivider mt-2 mb-1">&nbsp;</div>
     <div class="popupBody">
         <div class="searchInput">
@@ -24,7 +36,7 @@
                         </div>
                     </div>
                     <div class="d-flex align-self-center">
-                        <button mat-stroked-button class="my-buttons" (click)="addTo(playlist)">
+                        <button mat-stroked-button class="my-buttons light-font" (click)="addTo(playlist)">
                             <mat-icon class="material-symbols-outlined thin">playlist_add</mat-icon>
                             <span class="button button-text">add track</span>
                         </button>
