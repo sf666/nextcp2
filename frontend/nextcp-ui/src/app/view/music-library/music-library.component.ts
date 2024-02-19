@@ -118,8 +118,11 @@ export class MusicLibraryComponent  implements AfterViewInit{
   }
 
   public backButtonDisabled(): boolean {
-    return this.contentDirectoryService.currentContainerList.currentContainer.id === '0' ||
+    if (this.contentDirectoryService?.currentContainerList?.currentContainer?.id) {
+      return this.contentDirectoryService.currentContainerList.currentContainer.id === '0' ||
       this.contentDirectoryService.currentContainerList.currentContainer.id === '';
+    }
+    return false;
   }
 
 }

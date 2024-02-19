@@ -183,19 +183,26 @@ export class ContentDirectoryService {
 
   private updatePageTurnId(data: ContainerItemDto): string {
     let idxObj: number;
-    idxObj = this.TURN_PAGE_AFTER - data.albumDto.length;
+    let dataArrayLen : number;
+    if (data.albumDto?.length) {
+      dataArrayLen = data.albumDto.length;
+    } else {
+      dataArrayLen = 0;
+    }
+
+    idxObj = this.TURN_PAGE_AFTER - dataArrayLen;
     if (idxObj <= 0) {
-      this.turn_page_id = data.albumDto[data.albumDto.length + idxObj - 1].id;
+      this.turn_page_id = data.albumDto[dataArrayLen + idxObj - 1].id;
       return;
     }
 
-    idxObj = idxObj - data.containerDto.length;
+    idxObj = idxObj - data.containerDto?.length;
     if (idxObj <= 0) {
       this.turn_page_id = data.containerDto[data.containerDto.length + idxObj - 1].id;
       return;
     }
 
-    idxObj = idxObj - data.musicItemDto.length;
+    idxObj = idxObj - data.musicItemDto?.length;
     if (idxObj <= 0) {
       this.turn_page_id = data.musicItemDto[data.musicItemDto.length + idxObj - 1].objectID;
       return;
