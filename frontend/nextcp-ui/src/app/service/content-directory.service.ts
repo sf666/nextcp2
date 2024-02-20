@@ -287,7 +287,6 @@ export class ContentDirectoryService {
   private updateSearchResultItem(searchResultItems: MusicItemDto[]) {
     let ci = this.dtoGeneratorService.generateEmptyContainerItemDto();
     ci.musicItemDto = searchResultItems;
-    ci.currentContainer = this.currentContainerList.currentContainer;
     ci.currentContainer.albumartUri = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
     ci.currentContainer.childCount = searchResultItems.length;
     ci.currentContainer.artist = '';

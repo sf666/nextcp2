@@ -3,7 +3,7 @@ import { ConfigurationService } from './../configuration.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { DtoGeneratorService } from './../../util/dto-generator.service';
 import { ContentDirectoryService } from './../content-directory.service';
-import { SearchResultDto, ContainerDto, MusicItemDto } from './../dto.d';
+import { SearchResultDto, ContainerDto, MusicItemDto, ContainerItemDto, SearchRequestDto } from './../dto.d';
 import { Injectable } from '@angular/core';
 import { debounce } from 'src/app/global';
 import { Subject } from 'rxjs';
@@ -24,14 +24,17 @@ export class GlobalSearchService {
   // User clicked on an quick search container like album, person or playlist
   containerClicked$: Subject<ContainerDto> = new Subject();
 
+  // User clicked on a SHOW ALL button
+  showAllItemClicked$: Subject<SearchRequestDto> = new Subject();
+  showAllAlbumClicked$: Subject<SearchRequestDto> = new Subject();
+  showAllArtistClicked$: Subject<SearchRequestDto> = new Subject();
+  showAllPlaylistClicked$: Subject<SearchRequestDto> = new Subject();
 
 
   // QuickSearch Support (Global search) 
   public quickSearchResultList: SearchResultDto;
   public quickSearchQueryString: string;
   private quickSearchPanelVisible_: boolean;
-
-  public lastSearch;
 
   private currentSearchText: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -116,12 +119,6 @@ export class GlobalSearchService {
     this.quickSearchPanelVisible_ = false;
   }
 
-  public backToLastSearch() {
-    if (this.lastSearch) {
-      this.lastSearch();
-    }
-  }
-
   public setSelectedContainer(container : ContainerDto): void {
     this.contentDirectoryService.browseChildrenByContainer(container);
   }
@@ -152,38 +149,39 @@ export class GlobalSearchService {
   }
 
   showAllItem(): void {
-    this.contentDirectoryService.searchAllItems(
-      this.dtoGeneratorService.generateQuickSearchDto(
-        this.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "-upnp:rating, +dc:title", this.currentContainerID, 0, 100));
+    this.showAllItemClicked$.next(this.dtoGeneratorService.generateQuickSearchDto(
+      this.quickSearchQueryString, 
+      this.deviceService.selectedMediaServerDevice.udn, 
+      "-upnp:rating, +dc:title", this.currentContainerID, 0, 100));
+      
     this.hideQuickSearchPanel();
-    this.lastSearch = this.showAllItem;
-    void this.router.navigateByUrl('searchResult');
   }
 
   showAllAlbum(): void {
-    this.contentDirectoryService.searchAllAlbum(
-      this.dtoGeneratorService.generateQuickSearchDto(
-        this.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "-ums:likedAlbum, +dc:title", this.currentContainerID, 0, 100));
-    this.hideQuickSearchPanel();
-    this.lastSearch = this.showAllAlbum;
-    void this.router.navigateByUrl('searchResult');
+    this.showAllAlbumClicked$.next(this.dtoGeneratorService.generateQuickSearchDto(
+      this.quickSearchQueryString, 
+      this.deviceService.selectedMediaServerDevice.udn, 
+      "-ums:likedAlbum, +dc:title", this.currentContainerID, 0, 100));
+
+      this.hideQuickSearchPanel();
   }
 
   showAllItemArtist(): void {
-    this.contentDirectoryService.searchAllArtists(
-      this.dtoGeneratorService.generateQuickSearchDto(
-        this.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", this.currentContainerID, 0, 100));
+    this.showAllArtistClicked$.next(this.dtoGeneratorService.generateQuickSearchDto(
+      this.quickSearchQueryString, 
+      this.deviceService.selectedMediaServerDevice.udn, 
+      "", this.currentContainerID, 0, 100));
+
     this.hideQuickSearchPanel();
-    this.lastSearch = this.showAllItemArtist;
-    void this.router.navigateByUrl('searchResult');
   }
 
   showAllPlaylist(): void {
-    this.contentDirectoryService.searchAllPlaylist(
-      this.dtoGeneratorService.generateQuickSearchDto(
-        this.quickSearchQueryString, this.deviceService.selectedMediaServerDevice.udn, "", this.currentContainerID, 0, 100));
-    this.hideQuickSearchPanel();
-    void this.router.navigateByUrl('searchResult');
+    this.showAllPlaylistClicked$.next(this.dtoGeneratorService.generateQuickSearchDto(
+      this.quickSearchQueryString, 
+      this.deviceService.selectedMediaServerDevice.udn, 
+      "", this.currentContainerID, 0, 100));
+
+      this.hideQuickSearchPanel();
   }
 }
 

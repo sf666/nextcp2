@@ -1,4 +1,4 @@
-import { ContainerDto, MusicItemDto } from './../../service/dto.d';
+import { ContainerDto, ContainerItemDto, MusicItemDto } from './../../service/dto.d';
 import { GlobalSearchService } from './../../service/search/global-search.service';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { ScrollLoadHandler } from 'src/app/mediaserver/display-container/defs';
@@ -36,8 +36,16 @@ export class MusicLibraryComponent  implements AfterViewInit{
     console.log("constructor call : MusicLibraryComponent");
     globalSearchService.musicItemClicked$.subscribe(musicItem => this.musicItemClickedFromSearch(musicItem))
     globalSearchService.containerClicked$.subscribe(containerItem => this.containerItemClickedFromSearch(containerItem))
+    
+    globalSearchService.showAllItemClicked$.subscribe(searchReq => this.contentDirectoryService.searchAllItems(searchReq));
+    globalSearchService.showAllAlbumClicked$.subscribe(searchReq => this.contentDirectoryService.searchAllAlbum(searchReq));
+    globalSearchService.showAllArtistClicked$.subscribe(searchReq => this.contentDirectoryService.searchAllArtists(searchReq));
+    globalSearchService.showAllPlaylistClicked$.subscribe(searchReq => this.contentDirectoryService.searchAllPlaylist(searchReq));
   }
 
+  //
+  // Quick Search click on container or item
+  //
   private musicItemClickedFromSearch(musicItem: MusicItemDto) {
     // Just play
     this.dispContainer.play(musicItem);
