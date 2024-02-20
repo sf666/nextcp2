@@ -16,6 +16,14 @@ import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.Browse;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseOutput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateObject;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateObjectInput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateObjectOutput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateReference;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateReferenceInput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateReferenceOutput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.DestroyObject;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.DestroyObjectInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSearchCapabilities;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSearchCapabilitiesOutput;
@@ -108,8 +116,25 @@ public class ContentDirectoryService
 // Actions
 // =========================================================================
 //
+    public void destroyReference(DestroyObjectInput inp)
+    {
+    	DestroyObject ref = new DestroyObject(contentDirectoryService, inp, upnpService.getControlPoint());
+        ref.executeAction();
+    }
 
+    public CreateReferenceOutput createReference(CreateReferenceInput inp)
+    {
+        CreateReference ref = new CreateReference(contentDirectoryService, inp, upnpService.getControlPoint());
+        CreateReferenceOutput res = ref.executeAction();
+        return res;        
+    }
 
+    public CreateObjectOutput createObject(CreateObjectInput inp)
+    {
+    	CreateObject ref = new CreateObject(contentDirectoryService, inp, upnpService.getControlPoint());
+    	CreateObjectOutput res = ref.executeAction();
+        return res;        
+    }
 
     public BrowseOutput browse(BrowseInput inp)
     {
