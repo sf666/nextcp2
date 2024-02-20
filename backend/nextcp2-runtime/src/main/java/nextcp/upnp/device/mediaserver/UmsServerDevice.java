@@ -463,10 +463,4 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     	ServerPlaylists spl = searchMyPlaylistsItems(config.applicationConfig.myPlaylistFolderName);
         return spl;
     }
-
-    @Override
-    public void touchPlaylist(String playlistName)
-    {
-        playlistManager.touchPlaylist(this, playlistName);
-    }
 }
