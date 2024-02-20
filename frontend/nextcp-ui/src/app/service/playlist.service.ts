@@ -4,6 +4,7 @@ import { GenericBooleanRequest, GenericNumberRequest, MusicItemDto, PlayRequestD
 import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
 import { Injectable, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -80,7 +81,8 @@ export class PlaylistService implements OnInit {
   }
 
   private afterMediaServerChanged(server: MediaServerDto) {
-    this.updateServerAccessiblePlaylists(server);
+    this.selectedMediaServer = server;
+    this.updateServerAccessiblePlaylists();
   }
 
   public updatePlaylistItems(): void {
@@ -97,10 +99,9 @@ export class PlaylistService implements OnInit {
   //
   // Playlists located in the configured folder name
   // 
-  private updateServerAccessiblePlaylists(server: MediaServerDto) {
+  public updateServerAccessiblePlaylists() {
     const uri = '/getServerPlaylists';
-    this.selectedMediaServer = server;
-    this.httpService.post<ServerPlaylists>(this.baseUri, uri, server.udn).subscribe(data => {
+    this.httpService.post<ServerPlaylists>(this.baseUri, uri, this.selectedMediaServer.udn).subscribe(data => {
       this.serverPl = data;
       this.serverPl.serverPlaylists.forEach(element => {
         this.serverPlPlaylistIds.push(element.playlistId);
@@ -113,13 +114,13 @@ export class PlaylistService implements OnInit {
     this.httpService.post<string[]>(this.baseUri, uri, playlistName).subscribe();
   }
 
-  public createPlaylist(playlistName : string) {
+  public createPlaylist(playlistName : string) : Observable<string>{
     const createPL : CreateServerPlaylistVO = {
       containerId : this.serverPl.containerId, 
       mediaServerUdn : this.selectedMediaServer.udn, 
       playlistName : playlistName + '.m3u8'};
     const uri = '/createPlaylist';
-    this.httpService.post<string[]>(this.baseUri, uri, createPL).subscribe();
+    return this.httpService.post<string>(this.baseUri, uri, createPL);
   }
 
 

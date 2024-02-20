@@ -120,12 +120,17 @@ export class AddPlaylistComponent {
   }
 
   createPlaylistClicked() : void {
-    this.playlistService.createPlaylist(this.newPlaylistName);
+    this.playlistService.createPlaylist(this.newPlaylistName).subscribe(newId => this.newPlaylistId(newId))
     this.close();
   }
 
   cancelClicked() : void {
     this.newPlaylistName = '',
     this.close();
+  }
+
+  private newPlaylistId(newId : string) {
+    this.addTo({playlistId:newId, albumArtUrl:'', playlistName:'', numberOfElements: 0, totalPlaytime:''});
+    this.playlistService.updateServerAccessiblePlaylists();
   }
 }

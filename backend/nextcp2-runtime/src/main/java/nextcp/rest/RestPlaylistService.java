@@ -1,9 +1,8 @@
 package nextcp.rest;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import org.jupnp.model.types.UDN;
+import org.jupnp.support.model.item.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.CreateServerPlaylistVO;
 import nextcp.dto.GenericBooleanRequest;
@@ -62,15 +60,17 @@ public class RestPlaylistService extends BaseRestService
      * @param createPlaylistVo
      */
     @PostMapping("/createPlaylist")
-    public void createPlaylist(@RequestBody CreateServerPlaylistVO createPlaylistVo)
+    public String createPlaylist(@RequestBody CreateServerPlaylistVO createPlaylistVo)
     {
         try
-        {        	
-            getExtendedMediaServerByUdn(createPlaylistVo.mediaServerUdn).createPlaylist(createPlaylistVo.containerId, createPlaylistVo.playlistName);
+        {	
+            Item pi = getExtendedMediaServerByUdn(createPlaylistVo.mediaServerUdn).createPlaylist(createPlaylistVo.containerId, createPlaylistVo.playlistName);
+        	return pi.getId(); 
         }
         catch (Exception e)
         {
             log.warn("createPlaylist", e);
+            return "";
         }
     }
 

@@ -1,11 +1,9 @@
 package nextcp.upnp.device.mediaserver;
 
 import java.util.List;
-
+import org.jupnp.support.model.item.Item;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-
-import nextcp.dto.ServerPlaylistDto;
 import nextcp.dto.ServerPlaylists;
 
 /**
@@ -43,7 +41,7 @@ public interface ExtendedApiMediaDevice
     
     // PlaylistServices
     
-    public void createPlaylist(String parentContainerId, String playlistName) throws Exception;
+    public Item createPlaylist(String parentContainerId, String playlistName) throws Exception;
     
     public void addSongToPlaylist(String audiotraclId, String playlistName);
 

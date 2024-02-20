@@ -8,7 +8,7 @@ import java.util.List;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.support.contentdirectory.DIDLParser;
 import org.jupnp.support.model.DIDLContent;
-import org.jupnp.support.model.DIDLObject;
+import org.jupnp.support.model.item.Item;
 import org.jupnp.support.model.item.PlaylistItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,20 +22,16 @@ import jakarta.annotation.PostConstruct;
 import nextcp.config.ServerConfig;
 import nextcp.db.service.BasicDbService;
 import nextcp.dto.Config;
-import nextcp.dto.ContainerDto;
 import nextcp.dto.MediaServerDto;
 import nextcp.dto.ServerDeviceConfiguration;
-import nextcp.dto.ServerPlaylistDto;
 import nextcp.dto.ServerPlaylists;
 import nextcp.dto.ToastrMessage;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.device.mediaserver.extended.DefaultPlaylistManager;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateObjectInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateObjectOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateReferenceInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateReferenceOutput;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.DestroyObject;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.DestroyObjectInput;
 import nextcp.util.BackendException;
 import okhttp3.Call;
@@ -391,7 +387,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     }
 
     @Override
-    public void createPlaylist(String parentContainerId, String playlistName) throws Exception
+    public Item createPlaylist(String parentContainerId, String playlistName) throws Exception
     {
     	CreateObjectInput inp = new CreateObjectInput();
     	inp.ContainerID = parentContainerId;
@@ -407,7 +403,11 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		
 		try {
 			CreateObjectOutput out = getContentDirectoryService().createObject(inp);
-			log.debug("created object {} ", out.Result);			
+			log.debug("created object {} ", out.Result);
+			content = parser.parse(out.Result);
+			org.jupnp.support.model.item.Item newPL = content.getItems().get(0);
+			return newPL;
+			
 		} catch (GenActionException e) {
 			e.printStackTrace();
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.description);
