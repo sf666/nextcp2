@@ -96,23 +96,6 @@ export class SidebarComponent {
     this.afterButtonClicked(this.routerMap.get("/myAlbums"));
   }
 
-
-  public createPlaylistClicked(): void {
-    let inputFieldConfig: InputFieldConfig = {
-      submitButtonText: "add",
-      cancelButtonText: "cancel",
-      placeholder: "enter playlist name",
-      title: "create playlist"
-    }
-
-    this.createPlaylistDialogRef = this.dialog.open(InputFieldDialogComponent, {
-      data: inputFieldConfig,
-      hasBackdrop: true
-    });
-
-    this.createPlaylistDialogRef.afterClosed().subscribe(data => { if (data) { this.playlistService.createPlaylist(data) } });
-  }
-
   /**
    * One Button is clicked. ID will be tracked for delivering the active class.
    * @param itemId 

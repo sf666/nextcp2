@@ -32,10 +32,6 @@
   @if (myPlaylistsAvailable) {
     <div class="myPlaylistSection hide-element">
       <div class="hide-element sub-label">MY PLAYLISTS</div>
-      <button mat-button (click)="createPlaylistClicked()" class="hide-element">
-        <mat-icon class="material-symbols-outlined thin create-icon">add</mat-icon>
-        <span class="buttonText">Create ...</span>
-      </button>
       @for (item of playlistService.serverPl.serverPlaylists; track item.playlistId) {
         <a mat-button [routerLink]="'/myPlaylists'" class="hide-element playlist {{getPlaylistClass(item.playlistId)}}"
         (click)="browseToPlaylist(item)">{{item.playlistName}}</a>

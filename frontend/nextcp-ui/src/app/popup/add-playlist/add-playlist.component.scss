@@ -48,6 +48,14 @@
     justify-content: center;
 }
 
+.inactive {
+    color: var(--glas-white-3);
+}
+
+.active {
+    color: cyan;
+}
+
 mat-form-field {
     width: 100%;
 }

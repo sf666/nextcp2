@@ -1,10 +1,10 @@
 <div class="popupFrame">
     <div class="popupHeader d-flex justify-content-between mx-4">
         <div class="d-flex d-flex justify-content-between w-100 px-4">
-            <div>
+            <div (click)="addPlaylistClick()" class="{{addPlaylistClass()}}">
                 add to playlist
             </div>
-            <div>
+            <div (click)="newPlaylistClick()" class="{{createPlaylistClass()}}">
                 create playlist
             </div>
         </div>
@@ -14,6 +14,7 @@
     </div>
     <div class="popupDivider mt-2 mb-1">&nbsp;</div>
     <div class="popupBody">
+        @if (addPlaylist) {
         <div class="searchInput">
             <mat-form-field class="w100" appearance="outline" class="setting-dropdown">
                 <input matInput type="text" [(ngModel)]="playlistFilter" placeholder="search for playlist">
@@ -24,50 +25,67 @@
         </div>
         <div class="playlist-list">
             @for (playlist of getServerPlaylists(); track playlist) {
-                <div class="d-flex justify-content-between">
-                    <div class="playlist-item" (click)="addTo(playlist)">
-                        <img src="{{playlist.albumArtUrl}}" class="playlist-img">
-                        <div class="playlist-item-text">
-                            <div>{{playlist.playlistName}}</div>
-                            <div class="fineText">
-                                <div>Text 1</div>
-                                <div>Text 2</div>
-                            </div>
+            <div class="d-flex justify-content-between">
+                <div class="playlist-item" (click)="addTo(playlist)">
+                    <img src="{{playlist.albumArtUrl}}" class="playlist-img">
+                    <div class="playlist-item-text">
+                        <div>{{playlist.playlistName}}</div>
+                        <div class="fineText">
+                            <div>Text 1</div>
+                            <div>Text 2</div>
                         </div>
                     </div>
-                    <div class="d-flex align-self-center">
-                        <button mat-stroked-button class="my-buttons light-font" (click)="addTo(playlist)">
-                            <mat-icon class="material-symbols-outlined thin">playlist_add</mat-icon>
-                            <span class="button button-text">add track</span>
-                        </button>
-                    </div>
                 </div>
-              }
-        </div>        
+                <div class="d-flex align-self-center">
+                    <button mat-stroked-button class="my-buttons light-font" (click)="addTo(playlist)">
+                        <mat-icon class="material-symbols-outlined thin">playlist_add</mat-icon>
+                        <span class="button button-text">add track</span>
+                    </button>
+                </div>
+            </div>
+            }
+        </div>
         <div class="mt-4 headline">
             other playlists
         </div>
         <div class="playlist-list">
             @for (playlist of getOtherPlaylists(); track playlist) {
-                <div class="d-flex justify-content-between">
-                    <div class="playlist-item" (click)="addTo(playlist)">
-                        <img src="{{playlist.albumArtUrl}}" class="playlist-img">
-                        <div class="playlist-item-text">
-                            <div>{{playlist.playlistName}}</div>
-                            <div class="fineText">
-                                <div>Text 1</div>
-                                <div>Text 2</div>
-                            </div>
+            <div class="d-flex justify-content-between">
+                <div class="playlist-item" (click)="addTo(playlist)">
+                    <img src="{{playlist.albumArtUrl}}" class="playlist-img">
+                    <div class="playlist-item-text">
+                        <div>{{playlist.playlistName}}</div>
+                        <div class="fineText">
+                            <div>Text 1</div>
+                            <div>Text 2</div>
                         </div>
                     </div>
-                    <div class="d-flex align-self-center">
-                        <button mat-stroked-button class="my-buttons" (click)="addTo(playlist)">
-                            <mat-icon class="material-symbols-outlined thin">playlist_add</mat-icon>
-                            <span class="button button-text">add track</span>
-                        </button>
-                    </div>
                 </div>
-              }
-        </div>        
+                <div class="d-flex align-self-center">
+                    <button mat-stroked-button class="my-buttons" (click)="addTo(playlist)">
+                        <mat-icon class="material-symbols-outlined thin">playlist_add</mat-icon>
+                        <span class="button button-text">add track</span>
+                    </button>
+                </div>
+            </div>
+            }
+        </div>
+        } @else {
+        <div class="searchInput">
+            <mat-form-field class="w100" appearance="outline" class="setting-dropdown">
+                <input matInput type="text" [(ngModel)]="newPlaylistName" placeholder="new playlist name">
+            </mat-form-field>
+        </div>
+        <div class="d-flex mx-4">
+            <button mat-stroked-button class="mv-4 my-buttons m-4" (click)="cancelClicked()">
+                <mat-icon class="material-symbols-outlined thin">close</mat-icon>
+                <span class="button button-text">cancel</span>
+            </button>
+            <button mat-stroked-button class="mv-4 my-buttons m-4" (click)="createPlaylistClicked()" [disabled]="addDisabled()" >
+                <mat-icon class="material-symbols-outlined thin">note_add</mat-icon>
+                <span class="button button-text">create playlist</span>
+            </button>
+        </div>
+        }
     </div>
 </div>

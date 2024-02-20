@@ -29,6 +29,8 @@ export class AddPlaylistComponent {
   private musicItemToAdd: MusicItemDto;
   private otherPlaylists: ServerPlaylistDto[];
   playlistFilter: string = "";
+  addPlaylist = true;
+  newPlaylistName = '';
 
   constructor(
     @Inject(MAT_DIALOG_DATA) data: { item: MusicItemDto },
@@ -87,5 +89,43 @@ export class AddPlaylistComponent {
 
   close() : void {
     this.dialogRef.close();
+  }
+
+  addPlaylistClick() : void {
+    this.addPlaylist = true;
+  }
+
+  newPlaylistClick() : void {
+    this.addPlaylist = false;
+  }
+
+  addPlaylistClass() : string {
+    if (this.addPlaylist) {
+      return "active";
+    } else {
+      return "inactive";
+    }
+  }
+
+  createPlaylistClass() : string {
+    if (this.addPlaylist) {
+      return "inactive";
+    } else {
+      return "active";
+    }
+  }
+
+  addDisabled() : boolean {
+    return this.newPlaylistName.length == 0;
+  }
+
+  createPlaylistClicked() : void {
+    this.playlistService.createPlaylist(this.newPlaylistName);
+    this.close();
+  }
+
+  cancelClicked() : void {
+    this.newPlaylistName = '',
+    this.close();
   }
 }
