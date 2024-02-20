@@ -1,12 +1,12 @@
 <!-- Default playlists -->
 
-@if (playlistService.serverPl.playlists) {
+@if (playlistService.serverPl.serverPlaylists) {
   <div class="panel" (mouseleave)="close()">
     <div class="dialogTitle">PLAYLISTS</div>
     <div class="dialogItems d-flex flex-column flex-wrap mt-4">
-      @for (playlist of playlistService.serverPl.playlists; track playlist) {
+      @for (playlist of playlistService.serverPl.serverPlaylists; track playlist.playlistId) {
         <div class="playlist-item"
-          (click)="addToPlaylist(playlist)">
+          (click)="addToPlaylist(playlist.playlistName)">
           {{playlist}}
         </div>
       }

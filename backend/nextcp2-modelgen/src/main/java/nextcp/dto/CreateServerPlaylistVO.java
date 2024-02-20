@@ -9,32 +9,32 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Template: javadataclass.ftl
  *   
  */
-public class ServerPlaylists
+public class CreateServerPlaylistVO
 {
 
     public String mediaServerUdn;
     public String containerId;
-    public List<ServerPlaylistDto> serverPlaylists;
+    public String playlistName;
 
-    public ServerPlaylists()
+    public CreateServerPlaylistVO()
     {
     }
 
-    public ServerPlaylists(String mediaServerUdn, String containerId, List<ServerPlaylistDto> serverPlaylists)
+    public CreateServerPlaylistVO(String mediaServerUdn, String containerId, String playlistName)
     {
         this.mediaServerUdn = mediaServerUdn;
         this.containerId = containerId;
-        this.serverPlaylists = serverPlaylists;
+        this.playlistName = playlistName;
     }
     
     @Override
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("ServerPlaylists [");
+        sb.append("CreateServerPlaylistVO [");
         sb.append("mediaServerUdn=").append(this.mediaServerUdn).append(", ");
         sb.append("containerId=").append(this.containerId).append(", ");
-        sb.append("serverPlaylists=").append(this.serverPlaylists).append(", ");
+        sb.append("playlistName=").append(this.playlistName).append(", ");
         sb.append("]");
         return sb.toString();
     }

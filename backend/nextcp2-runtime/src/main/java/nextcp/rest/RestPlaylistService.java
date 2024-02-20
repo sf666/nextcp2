@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import nextcp.dto.ContainerItemDto;
+import nextcp.dto.CreateServerPlaylistVO;
 import nextcp.dto.GenericBooleanRequest;
 import nextcp.dto.GenericNumberRequest;
 import nextcp.dto.MusicItemDto;
@@ -26,6 +27,7 @@ import nextcp.dto.PlaylistAddContainerRequest;
 import nextcp.dto.PlaylistState;
 import nextcp.dto.ServerPlaylistDto;
 import nextcp.dto.ServerPlaylistEntry;
+import nextcp.dto.ServerPlaylists;
 import nextcp.dto.ToastrMessage;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
@@ -57,19 +59,18 @@ public class RestPlaylistService extends BaseRestService
     /**
      * Creates a server based playlist.
      * 
-     * @param serverUdn server must support extended API
-     * @param playlistName should be unique
+     * @param createPlaylistVo
      */
-    @PostMapping("/createPlaylist/{serverUdn}")
-    public void createPlaylist(@PathVariable("serverUdn") String serverUdn, @RequestBody String playlistName)
+    @PostMapping("/createPlaylist")
+    public void createPlaylist(@RequestBody CreateServerPlaylistVO createPlaylistVo)
     {
         try
-        {
-            getExtendedMediaServerByUdn(serverUdn).createPlaylist(playlistName);
+        {        	
+            getExtendedMediaServerByUdn(createPlaylistVo.mediaServerUdn).createPlaylist(createPlaylistVo.containerId, createPlaylistVo.playlistName);
         }
         catch (Exception e)
         {
-            log.warn("touchPlaylist", e);
+            log.warn("createPlaylist", e);
         }
     }
 
@@ -92,7 +93,7 @@ public class RestPlaylistService extends BaseRestService
      * @return
      */
     @PostMapping("/getServerPlaylists")
-    public List<ServerPlaylistDto> getServerPlaylists(@RequestBody String serverUdn)
+    public ServerPlaylists getServerPlaylists(@RequestBody String serverUdn)
     {
         try
         {
@@ -101,7 +102,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("getServerPlaylists", e);
-            return new ArrayList<ServerPlaylistDto>();
+            return new ServerPlaylists();
         }
     }
 

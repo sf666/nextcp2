@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import nextcp.dto.ServerPlaylistDto;
+import nextcp.dto.ServerPlaylists;
 
 /**
  * Devices with extended API support
@@ -42,7 +43,7 @@ public interface ExtendedApiMediaDevice
     
     // PlaylistServices
     
-    public void createPlaylist(String playlistName);
+    public void createPlaylist(String parentContainerId, String playlistName) throws Exception;
     
     public void addSongToPlaylist(String audiotraclId, String playlistName);
 
@@ -50,7 +51,7 @@ public interface ExtendedApiMediaDevice
     
     public List<String> getAllPlaylists() throws JsonMappingException, JsonProcessingException;
 
-    public List<ServerPlaylistDto> getServerPlaylists() throws JsonMappingException, JsonProcessingException;
+    public ServerPlaylists getServerPlaylists() throws JsonMappingException, JsonProcessingException;
     
     public void touchPlaylist (String playlistName);
 }

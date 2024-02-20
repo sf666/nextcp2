@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2024-02-07 14:28:35.
+// Generated using typescript-generator version 3.2.1263 on 2024-02-19 15:27:01.
 
 export interface ApplicationConfig {
     myPlaylistFolderName: string;
@@ -78,6 +78,12 @@ export interface ContainerItemDto {
     musicItemDto: MusicItemDto[];
     minimServerSupportTags: ContainerDto[];
     totalMatches: number;
+}
+
+export interface CreateServerPlaylistVO {
+    mediaServerUdn: string;
+    containerId: string;
+    playlistName: string;
 }
 
 export interface DeviceDriverCapability {
@@ -326,7 +332,7 @@ export interface ServerPlaylistEntry {
 
 export interface ServerPlaylists {
     mediaServerUdn: string;
-    playlists: string[];
+    containerId: string;
     serverPlaylists: ServerPlaylistDto[];
 }
 

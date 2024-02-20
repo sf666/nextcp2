@@ -79,10 +79,9 @@ export class AddPlaylistComponent {
 
   addTo(serverPlaylist: ServerPlaylistDto) {
     this.playlistService.addSongToServerPlaylist(
-      this.musicItemToAdd.songId.umsAudiotrackId.toString(),
+      this.musicItemToAdd.objectID,
       serverPlaylist.playlistId,
     );
-    //    this.playlistService.touchPlaylist(playlistName);
     this.close();
   }
 

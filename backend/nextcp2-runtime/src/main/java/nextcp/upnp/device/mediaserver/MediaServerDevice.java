@@ -25,6 +25,7 @@ import nextcp.dto.MusicItemDto;
 import nextcp.dto.SearchRequestDto;
 import nextcp.dto.SearchResultDto;
 import nextcp.dto.ServerPlaylistDto;
+import nextcp.dto.ServerPlaylists;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.device.BaseDevice;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.ContentDirectoryService;
@@ -81,13 +82,16 @@ public class MediaServerDevice extends BaseDevice {
 		return searchSupportDelegate.searchAllPlaylist(searchReques);
 	}
 
-	public List<ServerPlaylistDto> searchMyPlaylistsItems(String myPlaylistFolder)
+	public ServerPlaylists searchMyPlaylistsItems(String myPlaylistFolder)
     {
-    	List<ServerPlaylistDto> myPlaylists = new ArrayList<>();
+		ServerPlaylists serverPlaylists = new ServerPlaylists();
+		serverPlaylists.mediaServerUdn = getUdnAsString();
+    	serverPlaylists.serverPlaylists = new ArrayList<>();
     	SearchRequestDto sr = new SearchRequestDto("0", 0L , 999L, getUdnAsString(), myPlaylistFolder, "");
     	List<ContainerDto> playlistFolder = searchSupportDelegate.searchPlaylistItems(sr); 
     	for (ContainerDto folder : playlistFolder) {
 			if (myPlaylistFolder.equalsIgnoreCase(folder.title)) {
+		        serverPlaylists.containerId = folder.id;
 				log.info("Found server based playlists located at folder id : {}", folder.id);
 		        BrowseInput browseInp = new BrowseInput();
 		        browseInp.ObjectID = folder.id;
@@ -100,13 +104,13 @@ public class MediaServerDevice extends BaseDevice {
 						// strip extension if delivered 
 						String title = pl.title.lastIndexOf(".") > -1 ? pl.title.substring(0, pl.title.lastIndexOf(".")) : pl.title;
 						ServerPlaylistDto dto = new ServerPlaylistDto(pl.albumartUri, title, pl.id, null, null);
-						myPlaylists.add(dto);
+						serverPlaylists.serverPlaylists.add(dto);
 						log.info("Found server based playlist name : {}", dto);
 					}
 				}
 			}
 		}    	
-        return myPlaylists;
+        return serverPlaylists;
     }
 
 	public ContainerItemDto browseChildren(BrowseInput inp) {

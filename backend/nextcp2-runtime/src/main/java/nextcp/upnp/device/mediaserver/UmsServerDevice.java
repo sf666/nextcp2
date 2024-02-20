@@ -6,6 +6,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import org.jupnp.model.meta.RemoteDevice;
+import org.jupnp.support.contentdirectory.DIDLParser;
+import org.jupnp.support.model.DIDLContent;
+import org.jupnp.support.model.DIDLObject;
+import org.jupnp.support.model.item.PlaylistItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +22,22 @@ import jakarta.annotation.PostConstruct;
 import nextcp.config.ServerConfig;
 import nextcp.db.service.BasicDbService;
 import nextcp.dto.Config;
+import nextcp.dto.ContainerDto;
 import nextcp.dto.MediaServerDto;
 import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.ServerPlaylistDto;
 import nextcp.dto.ServerPlaylists;
 import nextcp.dto.ToastrMessage;
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.device.mediaserver.extended.DefaultPlaylistManager;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseOutput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateObjectInput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateObjectOutput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateReferenceInput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateReferenceOutput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.DestroyObject;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.DestroyObjectInput;
+import nextcp.util.BackendException;
 import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -377,21 +391,64 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     }
 
     @Override
-    public void createPlaylist(String playlistName)
+    public void createPlaylist(String parentContainerId, String playlistName) throws Exception
     {
-        doGenericCall(playlistName, "api/playlist/createplaylist", true);
+    	CreateObjectInput inp = new CreateObjectInput();
+    	inp.ContainerID = parentContainerId;
+    	PlaylistItem pi = new PlaylistItem();
+    	pi.setTitle(playlistName);
+    	pi.setParentID(parentContainerId);
+    	pi.setId("");
+    	DIDLParser parser = new DIDLParser();
+    	DIDLContent content = new DIDLContent();
+    	content.addItem(pi);
+    	String xml = parser.generate(content);
+		inp.Elements = xml;
+		
+		try {
+			CreateObjectOutput out = getContentDirectoryService().createObject(inp);
+			log.debug("created object {} ", out.Result);			
+		} catch (GenActionException e) {
+			e.printStackTrace();
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.description);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage());
+		}
     }
 
     @Override
-    public void addSongToPlaylist(String audiotracId, String playlistName)
+    public void addSongToPlaylist(String audiotracId, String playlistContainerId)
     {
-        doGenericCall(String.format("%s/%s", audiotracId, playlistName), "api/playlist/addsongtoplaylist", true);
+    	CreateReferenceInput inp = new CreateReferenceInput();
+		inp.ContainerID = playlistContainerId;
+		inp.ObjectID = audiotracId;
+		try {
+			CreateReferenceOutput out = getContentDirectoryService().createReference(inp);
+			log.debug("created object {} ", out.NewID);			
+		} catch (GenActionException e) {
+			e.printStackTrace();
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.description);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage());
+		}
     }
 
     @Override
-    public void removeSongFromPlaylist(String audiotraclId, String playlistName)
+    public void removeSongFromPlaylist(String songObjectId, String playlistContainerId)
     {
-        doGenericCall(String.format("%s/%s", audiotraclId, playlistName), "api/playlist/removesongfromplaylist", true);
+    	DestroyObjectInput inp = new DestroyObjectInput();
+		inp.ObjectID = songObjectId;
+		try {
+			getContentDirectoryService().destroyReference(inp);
+		} catch (GenActionException e) {
+			e.printStackTrace();
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.description);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage());
+		}
     }
 
     @Override
@@ -411,29 +468,15 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     }
 
     @Override
-    public List<ServerPlaylistDto> getServerPlaylists() throws JsonMappingException, JsonProcessingException
+    public ServerPlaylists getServerPlaylists() throws JsonMappingException, JsonProcessingException
     {
-    	List<ServerPlaylistDto> pl = searchMyPlaylistsItems(config.applicationConfig.myPlaylistFolderName);
-        return playlistManager.getSortedServerPlaylists(pl);
+    	ServerPlaylists spl = searchMyPlaylistsItems(config.applicationConfig.myPlaylistFolderName);
+        return spl;
     }
 
     @Override
     public void touchPlaylist(String playlistName)
     {
         playlistManager.touchPlaylist(this, playlistName);
-        publishCurrentPlaylists();
     }
-
-    private void publishCurrentPlaylists()
-    {
-        try
-        {
-            publisher.publishEvent(new ServerPlaylists(getUdnAsString(), getAllPlaylists(), getServerPlaylists()));
-        }
-        catch (Exception e)
-        {
-            log.warn("cannot publish new server playlist state", e);
-        }
-    }
-
 }

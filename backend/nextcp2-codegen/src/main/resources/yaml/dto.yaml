@@ -54,9 +54,14 @@ RendererConfigDto:
 
 # Client/Server DTO exchange of file based configuration entries
  
+CreateServerPlaylistVO:
+   mediaServerUdn: String
+   containerId: String
+   playlistName: String
+   
 ServerPlaylists:
    mediaServerUdn: String
-   playlists: List<String>
+   containerId: String
    serverPlaylists: List<ServerPlaylistDto>   
 
 ServerConfigDto:

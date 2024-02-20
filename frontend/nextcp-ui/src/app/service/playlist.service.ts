@@ -1,6 +1,6 @@
 import { SseService } from './sse/sse.service';
 import { GenericResultService } from './generic-result.service';
-import { GenericBooleanRequest, GenericNumberRequest, MusicItemDto, PlayRequestDto, PlaylistState, ContainerDto, PlaylistAddContainerRequest, ServerPlaylistEntry, MediaServerDto, ServerPlaylistDto, ServerPlaylists } from './dto.d';
+import { GenericBooleanRequest, GenericNumberRequest, MusicItemDto, PlayRequestDto, PlaylistState, ContainerDto, PlaylistAddContainerRequest, ServerPlaylistEntry, MediaServerDto, ServerPlaylistDto, ServerPlaylists, CreateServerPlaylistVO } from './dto.d';
 import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
 import { Injectable, OnInit } from '@angular/core';
@@ -23,7 +23,7 @@ export class PlaylistService implements OnInit {
   }
 
   // Default server based playlists
-  serverPl: ServerPlaylists = { mediaServerUdn:'', playlists: [], serverPlaylists: [] };
+  serverPl: ServerPlaylists = { mediaServerUdn:'', containerId:'', serverPlaylists: [] };
   serverPlPlaylistIds: string[] = [];
 
   selectedMediaServer: MediaServerDto;
@@ -100,8 +100,8 @@ export class PlaylistService implements OnInit {
   private updateServerAccessiblePlaylists(server: MediaServerDto) {
     const uri = '/getServerPlaylists';
     this.selectedMediaServer = server;
-    this.httpService.post<ServerPlaylistDto[]>(this.baseUri, uri, server.udn).subscribe(data => {
-      this.serverPl.serverPlaylists = data;
+    this.httpService.post<ServerPlaylists>(this.baseUri, uri, server.udn).subscribe(data => {
+      this.serverPl = data;
       this.serverPl.serverPlaylists.forEach(element => {
         this.serverPlPlaylistIds.push(element.playlistId);
       });
@@ -114,8 +114,12 @@ export class PlaylistService implements OnInit {
   }
 
   public createPlaylist(playlistName : string) {
-    const uri = '/createPlaylist/'+ this.selectedMediaServer.udn;
-    this.httpService.post<string[]>(this.baseUri, uri, playlistName).subscribe();
+    const createPL : CreateServerPlaylistVO = {
+      containerId : this.serverPl.containerId, 
+      mediaServerUdn : this.selectedMediaServer.udn, 
+      playlistName : playlistName + '.m3u8'};
+    const uri = '/createPlaylist';
+    this.httpService.post<string[]>(this.baseUri, uri, createPL).subscribe();
   }
 
 
