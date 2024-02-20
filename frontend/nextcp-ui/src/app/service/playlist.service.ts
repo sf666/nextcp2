@@ -109,11 +109,6 @@ export class PlaylistService implements OnInit {
     });
   }
 
-  public touchPlaylist(playlistName : string) {
-    const uri = '/touchPlaylist/'+ this.selectedMediaServer.udn;
-    this.httpService.post<string[]>(this.baseUri, uri, playlistName).subscribe();
-  }
-
   public createPlaylist(playlistName : string) : Observable<string>{
     const createPL : CreateServerPlaylistVO = {
       containerId : this.serverPl.containerId, 

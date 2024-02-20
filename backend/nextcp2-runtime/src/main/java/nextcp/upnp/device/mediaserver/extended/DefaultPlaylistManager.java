@@ -55,23 +55,6 @@ public class DefaultPlaylistManager
         }
     }
 
-    public void touchPlaylist(ExtendedApiMediaDevice device, String playlistName)
-    {
-        try
-        {
-            List<String> serverList = device.getAllPlaylists();
-            if (serverList.remove(playlistName.toLowerCase()))
-            {
-                serverList.add(0, playlistName.toLowerCase());
-            }
-            storePlaylist(serverList);
-        }
-        catch (Exception e)
-        {
-            log.warn("touchPlaylist error", e);
-        }
-    }
-
     public List<ServerPlaylistDto> getSortedServerPlaylists(List<ServerPlaylistDto> serverPlaylist)
     {
         try

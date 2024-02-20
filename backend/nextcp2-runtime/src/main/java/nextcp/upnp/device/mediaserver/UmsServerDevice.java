@@ -451,16 +451,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		}
     }
 
-    @Override
-    public List<String> getAllPlaylists() throws JsonMappingException, JsonProcessingException
-    {
-        String playlists = doGenericCall("", "api/playlist/getallplaylists", false);
-        List<String> pl = om.readValue(playlists, new TypeReference<List<String>>()
-        {
-        });
-
-        return playlistManager.getSortedDefaultPlaylist(pl);
-    }
 
     public MediaServerDto getAsDto()
     {

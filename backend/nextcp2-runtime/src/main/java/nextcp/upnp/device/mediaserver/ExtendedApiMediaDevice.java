@@ -47,9 +47,5 @@ public interface ExtendedApiMediaDevice
 
     public void removeSongFromPlaylist(String audiotracId, String playlistName);
     
-    public List<String> getAllPlaylists() throws JsonMappingException, JsonProcessingException;
-
     public ServerPlaylists getServerPlaylists() throws JsonMappingException, JsonProcessingException;
-    
-    public void touchPlaylist (String playlistName);
 }

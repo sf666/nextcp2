@@ -74,19 +74,6 @@ public class RestPlaylistService extends BaseRestService
         }
     }
 
-    @PostMapping("/touchPlaylist/{serverUdn}")
-    public void touchPlaylist(@PathVariable("serverUdn") String serverUdn, @RequestBody String playlistName)
-    {
-        try
-        {
-            getExtendedMediaServerByUdn(serverUdn).touchPlaylist(playlistName);
-        }
-        catch (Exception e)
-        {
-            log.warn("touchPlaylist", e);
-        }
-    }
-
     /**
      * 
      * @param serverUdn
