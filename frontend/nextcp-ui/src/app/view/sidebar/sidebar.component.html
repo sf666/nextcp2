@@ -35,7 +35,7 @@
         <a mat-button [routerLink]="'/myPlaylists'" class="hide-element playlist {{getPlaylistClass(item.playlistId)}}"
         (click)="browseToPlaylist(item)">{{item.playlistName}}</a>
       }
-      @if (myPlaylistsAvailable && playlistService.serverPl.serverPlaylists.length == 0) {
+      @if (myPlaylistsAvailable && playlistService.serverPl?.serverPlaylists?.length == 0) {
         <div>Playlist folder contains no playlists.</div>
       }
       @if (!myPlaylistsAvailable) {

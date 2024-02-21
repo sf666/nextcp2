@@ -102,7 +102,7 @@
         <button mat-stroked-button class="ms-2" color="warn" (click)="deleteServerConfig(serverConfig)">delete</button>
       </div>
     </div>
-    @if (showOnlyActiveServer && getMediaServer().length == 0) {
+    @if (showOnlyActiveServer && getMediaServer()?.length == 0) {
     <div class="no-online">
       No media server online
     </div>
@@ -185,7 +185,7 @@
       </div>
     </div>
     }
-    @if (showOnlyActiveRenderer && getMediaRenderer().length == 0) {
+    @if (showOnlyActiveRenderer && getMediaRenderer()?.length == 0) {
     <div class="no-online">
       No media renderer online
     </div>

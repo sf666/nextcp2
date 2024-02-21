@@ -59,14 +59,14 @@ export class DeviceService {
   }
 
   public isRenderOnline(device: MediaRendererDto): boolean {
-    if (this.mediaRenderList.some(renderer => renderer.udn == device.udn)) {
+    if (this.mediaRenderList?.some(renderer => renderer.udn == device.udn)) {
       return true;
     }
     return false;
   }
 
   public isServerOnline(device: MediaServerDto): boolean {
-    if (this.mediaServerList.some(server => server.udn == device.udn)) {
+    if (this.mediaServerList?.some(server => server.udn == device.udn)) {
       return true;
     }
     return false;
@@ -86,14 +86,14 @@ export class DeviceService {
   }
 
   public isMediaServerAvailable(udn: string): boolean {
-    if (this.mediaServerList.some(e => e.udn === udn)) {
+    if (this.mediaServerList?.some(e => e.udn === udn)) {
       return true;
     }
     return false;
   }
 
   public isAnyMediaRendererSelected(): boolean {
-    return this._selectedMediaRendererDevice.udn.length > 0;
+    return this._selectedMediaRendererDevice?.udn?.length > 0;
   }
 
   private mediaserverListChanged(data: MediaServerDto[]): void {
@@ -173,14 +173,14 @@ export class DeviceService {
 
   public setMediaRendererByUdn(udn: string): void {
     const renderer = this.mediaRenderList.filter(e => e.udn === udn);
-    if (renderer.length > 0) {
+    if (renderer?.length > 0) {
       this.selectedMediaRendererDevice = renderer[0];
     }
   }
 
   public setMediaServerByUdn(udn: string): void {
     const serverDevice = this.mediaServerList.filter(e => e.udn === udn);
-    if (serverDevice.length > 0) {
+    if (serverDevice?.length > 0) {
       this.selectedMediaServerDevice = serverDevice[0];
     }
   }

@@ -105,7 +105,7 @@ export class GlobalSearchService {
     if (value == '') {
       this.quickSearchPanelVisible_ = false;
     } else {
-      if (value && value.length > 2) {
+      if (value && value?.length > 2) {
         this.quickSearchPanelVisible_ = true;
         this.currentSearchText = value;
         this.doSearch();

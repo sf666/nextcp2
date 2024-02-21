@@ -20,7 +20,7 @@
   </div>
 }
 
-@if (configurationService.serverConfig?.radioStation.length > 0) {
+@if (configurationService.serverConfig?.radioStation?.length > 0) {
   <div>
     <div class="albumLayout ps-3">
       @for (item of configurationService.serverConfig.radioStation; track item.id) {
