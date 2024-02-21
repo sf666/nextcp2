@@ -51,7 +51,7 @@ export class AddPlaylistComponent {
     let newPl : ServerPlaylistDto[] = [];
 
     let other = data.playlistItems.filter((spe) => !this.playlistService.playlistIdExistsInServerPlaylists(spe.id));
-    other.forEach(pl => {
+    other?.forEach(pl => {
       const entry = {} as ServerPlaylistDto;
       entry.albumArtUrl = pl.albumartUri,
       entry.playlistId = pl.id,

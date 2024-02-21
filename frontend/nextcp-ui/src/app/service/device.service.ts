@@ -219,7 +219,7 @@ export class DeviceService {
 
   private logMediaRendererServices(rendererList: MediaRendererDto[]): void {
     if (rendererList) {
-      rendererList.forEach(renderer => {
+      rendererList?.forEach(renderer => {
         this.logMediaRendererDeviceServices(renderer);
       });
     }

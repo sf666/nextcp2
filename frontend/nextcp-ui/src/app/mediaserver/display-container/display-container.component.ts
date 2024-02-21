@@ -151,7 +151,7 @@ export class DisplayContainerComponent implements OnInit {
     this.musicTracks?.forEach((value) => {
       if (value?.genre) {
         let aGenre = value.genre.split("/");
-        aGenre.forEach((gen) => {
+        aGenre?.forEach((gen) => {
           this.genresList.add(gen.trim());
         })
       }
@@ -159,7 +159,7 @@ export class DisplayContainerComponent implements OnInit {
     this.albumList?.forEach((value) => {
       if (value?.genre) {
         let aGenre = value.genre.split("/");
-        aGenre.forEach((gen) => {
+        aGenre?.forEach((gen) => {
           this.genresList.add(gen.trim());
         })
       }
@@ -331,7 +331,7 @@ export class DisplayContainerComponent implements OnInit {
     let completeTime: number;
     completeTime = 0;
     if (this.musicTracks.length > 0) {
-      this.musicTracks.forEach(
+      this.musicTracks?.forEach(
         el => completeTime = completeTime + (el.audioFormat?.durationInSeconds ? el.audioFormat.durationInSeconds : 0)
       );
     }
@@ -409,7 +409,7 @@ export class DisplayContainerComponent implements OnInit {
    */
   private doFilterGenreByContainer(container: ContainerDto): boolean {
     let add = false;
-    this.selectedGenres.forEach(genre => {
+    this.selectedGenres?.forEach(genre => {
       if (this.doFilterText(container.genre, genre)) {
         add = true;
       }
@@ -419,7 +419,7 @@ export class DisplayContainerComponent implements OnInit {
 
   private doFilterGenre(item: MusicItemDto): boolean {
     let add = false;
-    this.selectedGenres.forEach(genre => {
+    this.selectedGenres?.forEach(genre => {
       if (this.doFilterText(item.genre, genre)) {
         add = true;
       }
@@ -606,7 +606,7 @@ export class DisplayContainerComponent implements OnInit {
           this.intersecObserver.disconnect();
         }
         this.intersecObserver = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
+          entries?.forEach(entry => {
             if (entry.isIntersecting || entry.intersectionRatio > 0) {
               this.loadNextBrowsePage();
             }

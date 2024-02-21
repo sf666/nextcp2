@@ -51,7 +51,7 @@ export class PlaylistService implements OnInit {
     sseService.mediaServerPlaylistChanged$.subscribe(data => {
       if (deviceService.isMediaServerSelected(data.mediaServerUdn)) {
         this.serverPl = data;
-        this.serverPl.serverPlaylists.forEach(element => {
+        this.serverPl.serverPlaylists?.forEach(element => {
           this.serverPlPlaylistIds.push(element.playlistId);
         });
       }
@@ -103,7 +103,7 @@ export class PlaylistService implements OnInit {
     const uri = '/getServerPlaylists';
     this.httpService.post<ServerPlaylists>(this.baseUri, uri, this.selectedMediaServer.udn).subscribe(data => {
       this.serverPl = data;
-      this.serverPl.serverPlaylists.forEach(element => {
+      this.serverPl.serverPlaylists?.forEach(element => {
         this.serverPlPlaylistIds.push(element.playlistId);
       });
     });
