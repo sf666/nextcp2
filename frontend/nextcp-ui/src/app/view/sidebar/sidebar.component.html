@@ -29,15 +29,21 @@
     </a>
   </div>
 
-  @if (myPlaylistsAvailable) {
     <div class="myPlaylistSection hide-element">
       <div class="hide-element sub-label">MY PLAYLISTS</div>
       @for (item of playlistService.serverPl.serverPlaylists; track item.playlistId) {
         <a mat-button [routerLink]="'/myPlaylists'" class="hide-element playlist {{getPlaylistClass(item.playlistId)}}"
         (click)="browseToPlaylist(item)">{{item.playlistName}}</a>
       }
+      @if (myPlaylistsAvailable && playlistService.serverPl.serverPlaylists.length == 0) {
+        <div>Playlist folder contains no playlists.</div>
+      }
+      @if (!myPlaylistsAvailable) {
+        <div>Media Server doesn't support playlist management.</div>
+      } @else if (!myFolderConfigured) {
+        <div>No playlist folder configured in settings.</div>
+      }
     </div>
-  }
 </div>
 @if (layoutService.isMobileDevice()) {
   <div id="mobileDeviceEmptyBlock" class="footer-block">&nbsp;</div>

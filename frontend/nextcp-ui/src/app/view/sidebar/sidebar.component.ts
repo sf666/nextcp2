@@ -1,3 +1,4 @@
+import { ConfigurationService } from './../../service/configuration.service';
 import { LayoutService } from './../../service/layout.service';
 import { InputFieldConfig } from './../../popup/input-field-dialog/input-field-dialog.d';
 import { InputFieldDialogComponent } from './../../popup/input-field-dialog/input-field-dialog.component';
@@ -42,6 +43,7 @@ export class SidebarComponent {
     private router: Router,
     public layoutService: LayoutService,
     private dialog: MatDialog,
+    private configurationService: ConfigurationService,
     public rendererService: RendererService) {
     deviceService.mediaRendererChanged$.subscribe(data => this._mediaRendererUdn = data.udn);
     deviceService.mediaServerChanged$.subscribe(data => this._mediaServerUdn = data.udn);
@@ -159,5 +161,9 @@ export class SidebarComponent {
   public set mediaRendererUdn(value: string) {
     this._mediaRendererUdn = value;
     this.deviceService.setMediaRendererByUdn(value);
+  }
+
+  public get myFolderConfigured() : boolean {
+    return this.configurationService.applicationConfig.myPlaylistFolderName?.length > 0;
   }
 }
