@@ -256,7 +256,7 @@ export class ContentDirectoryService {
     const uri = '/searchAllPlaylist';
     let result = this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto);
     result.subscribe(data => {
-      this.updateSearchResult(data.playlistItems);
+      this.updateSearchResultContainer(data.playlistItems);
     });
     return result;
   }
@@ -264,22 +264,21 @@ export class ContentDirectoryService {
   public searchAllAlbum(quickSearchDto: SearchRequestDto): void {
     const uri = '/searchAllAlbum';
     this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
-      this.updateSearchResult(data.albumItems);
+      this.updateSearchResultContainer(data.albumItems);
     });
   }
 
   public searchAllArtists(quickSearchDto: SearchRequestDto): void {
     const uri = '/searchAllArtists';
     this.httpService.post<SearchResultDto>(this.baseUri, uri, quickSearchDto).subscribe(data => {
-      this.updateSearchResult(data.artistItems);
+      this.updateSearchResultContainer(data.artistItems);
     });
   }
 
-  private updateSearchResult(searchResultContainer: ContainerDto[]) {
+  private updateSearchResultContainer(searchResultContainer: ContainerDto[]) {
     let ci = this.dtoGeneratorService.generateEmptyContainerItemDto();
     ci.containerDto = searchResultContainer;
-    ci.currentContainer = this.currentContainerList.currentContainer;
-    ci.currentContainer.parentID = '';
+    ci.currentContainer.parentID = this.currentContainerList.currentContainer.id;
     this.updateContainer(ci);
     this.searchFinished$.next(ci);
   }
@@ -288,9 +287,8 @@ export class ContentDirectoryService {
     let ci = this.dtoGeneratorService.generateEmptyContainerItemDto();
     ci.musicItemDto = searchResultItems;
     ci.currentContainer.albumartUri = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+    ci.currentContainer.parentID = this.currentContainerList.currentContainer.id;
     ci.currentContainer.childCount = searchResultItems.length;
-    ci.currentContainer.artist = '';
-    ci.currentContainer.title = '';
     this.updateContainer(ci);
     this.searchFinished$.next(ci);
   }
