@@ -6,6 +6,7 @@ import { ModalSearchResultComponent } from '../search/modal-search-result/modal-
 import { FormsModule } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
 import { MatMiniFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 
 @Component({
@@ -13,7 +14,7 @@ import { MatMiniFabButton } from '@angular/material/button';
     templateUrl: './nav-bar.component.html',
     styleUrls: ['./nav-bar.component.scss'],
     standalone: true,
-    imports: [MatMiniFabButton, MatInput, FormsModule, ModalSearchResultComponent]
+    imports: [MatMiniFabButton, MatInput, MatIcon, FormsModule, ModalSearchResultComponent]
 })
 
 export class NavBarComponent {

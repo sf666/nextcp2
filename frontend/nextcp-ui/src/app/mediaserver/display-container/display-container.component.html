@@ -13,7 +13,9 @@
         <div class="header-container">
           <div class="d-flex w-100">
             <div class="top-img-container">
-              <img src="{{currentContainer.albumartUri}}" class="img-top imgContainer" alt="select media server">
+              @if (currentContainer.albumartUri) {
+              <img src="{{currentContainer.albumartUri}}" class="img-top imgContainer">
+              }
             </div>
             <div class="d-flex flex-column w-100" id="ID_SCROLL_TO_ELEMENT_STEP_IN" tabindex="-1">
               <div class="right-button">
@@ -211,7 +213,7 @@ Main Content
     <!--                                                                -->
     <!-- Template : Browse Result Items                                 -->
     <!-- ############################################################## -->
-    @if (allMusicTracks.length > 0) {
+    @if (allMusicTracks?.length > 0) {
       <div id="top-div" tabindex="-1" class="itemDetails">
         @if (isListView()) {
           <div>

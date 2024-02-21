@@ -141,13 +141,13 @@ export class ContentDirectoryService {
       this.currentContainerList = data;
       this.updatePageTurnId(data);
       this.albumList_ = data.albumDto;
-      this.containerList_ = data.containerDto.filter(item => item.objectClass !== "object.container.playlistContainer");
-      this.playlistList_ = data.containerDto.filter(item => item.objectClass === "object.container.playlistContainer");
-      this.musicTracks_ = data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0);
-      this.otherItems_ = data.musicItemDto.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0);
+      this.containerList_ = data.containerDto?.filter(item => item.objectClass !== "object.container.playlistContainer");
+      this.playlistList_ = data.containerDto?.filter(item => item.objectClass === "object.container.playlistContainer");
+      this.musicTracks_ = data.musicItemDto?.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) === 0);
+      this.otherItems_ = data.musicItemDto?.filter(item => item.objectClass.lastIndexOf("object.item.audioItem", 0) !== 0);
       this.browseFinished$.next(data);
 
-      const count = data.albumDto.length + data.containerDto.length + data.musicItemDto.length;
+      const count = data.albumDto?.length + data.containerDto?.length + data.musicItemDto?.length;
       if (count >= this.MAX_REQUEST_ITEMS) {
         this.browseToNextPage();
       } else {

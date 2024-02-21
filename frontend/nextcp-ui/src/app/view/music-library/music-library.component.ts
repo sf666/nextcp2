@@ -14,7 +14,7 @@ import { PersistenceService } from 'src/app/service/persistence/persistence.serv
   selector: 'app-music-library',
   standalone: true,
   imports: [NavBarComponent, DisplayContainerComponent],
-  providers: [ContentDirectoryService, PersistenceService, CdsBrowsePathService, { provide: 'uniqueId', useValue: 'music-library_' }],
+  providers: [ContentDirectoryService, CdsBrowsePathService, { provide: 'uniqueId', useValue: 'music-library_' }],
   templateUrl: './music-library.component.html',
   styleUrl: './music-library.component.scss'
 })
@@ -41,6 +41,8 @@ export class MusicLibraryComponent  implements AfterViewInit{
     globalSearchService.showAllAlbumClicked$.subscribe(searchReq => this.contentDirectoryService.searchAllAlbum(searchReq));
     globalSearchService.showAllArtistClicked$.subscribe(searchReq => this.contentDirectoryService.searchAllArtists(searchReq));
     globalSearchService.showAllPlaylistClicked$.subscribe(searchReq => this.contentDirectoryService.searchAllPlaylist(searchReq));
+
+    //this.deviceService.mediaServerChanged$.subscribe(data => this.browseToRoot(data.udn))
   }
 
   //
@@ -69,6 +71,10 @@ export class MusicLibraryComponent  implements AfterViewInit{
     this.cdsBrowsePathService.restorePathToRoot();
     this.lastOidIsRestoredFromCache = true;
     udn = this.persistenceService.getCurrentMediaServerDevice();
+    if (!(udn?.length > 0)) {
+      udn = this.deviceService.selectedMediaServerDevice.udn;
+      oid = "0";
+    }
 
     this.browseToOid(oid, udn, true, "").then(
       (val) => {if (!val) this.browseToRoot(udn)},
@@ -107,7 +113,7 @@ export class MusicLibraryComponent  implements AfterViewInit{
   }
 
   getContentHandler(): ScrollLoadHandler {
-    return { cdsBrowsePathService: null, contentDirectoryService: this.contentDirectoryService, persistenceService: null }
+    return { cdsBrowsePathService: this.cdsBrowsePathService, contentDirectoryService: this.contentDirectoryService, persistenceService: this.persistenceService }
   }
 
   //

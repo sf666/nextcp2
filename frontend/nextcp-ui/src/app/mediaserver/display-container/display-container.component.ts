@@ -148,7 +148,7 @@ export class DisplayContainerComponent implements OnInit {
 
   private fillGenres(): void {
     this.genresList = new Set();
-    this.musicTracks.forEach((value) => {
+    this.musicTracks?.forEach((value) => {
       if (value?.genre) {
         let aGenre = value.genre.split("/");
         aGenre.forEach((gen) => {
@@ -156,7 +156,7 @@ export class DisplayContainerComponent implements OnInit {
         })
       }
     });
-    this.albumList.forEach((value) => {
+    this.albumList?.forEach((value) => {
       if (value?.genre) {
         let aGenre = value.genre.split("/");
         aGenre.forEach((gen) => {
@@ -211,16 +211,16 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   private checkAllTracksSameDisc(): void {
-    if (this.musicTracks.length > 0) {
-      const firstTrackDisc = this.musicTracks[0].numberOfThisDisc;
-      this.allTracksSameDisc_ = !this.musicTracks.find(item => item.numberOfThisDisc !== firstTrackDisc);
+    if (this.musicTracks?.length > 0) {
+      const firstTrackDisc = this.musicTracks[0]?.numberOfThisDisc;
+      this.allTracksSameDisc_ = !this.musicTracks?.find(item => item.numberOfThisDisc !== firstTrackDisc);
     }
     console.log("allTracksSameDisc_ : " + this.allTracksSameDisc_);
   }
 
   private checkAllTracksSameAlbum(): void {
-    const numtrack = this.musicTracks.length;
-    const numMbid = this.musicTracks.filter(item => item.musicBrainzId?.ReleaseTrackId?.length > 0).length;
+    const numtrack = this.musicTracks?.length;
+    const numMbid = this.musicTracks?.filter(item => item.musicBrainzId?.ReleaseTrackId?.length > 0).length;
 
     console.log("number of tracs : " + numtrack);
     console.log("number of tracs with mbid: " + numMbid);
@@ -228,13 +228,13 @@ export class DisplayContainerComponent implements OnInit {
     this.allTracksSameMusicBrainzReleaseId_ = false;
 
     if ((numMbid > 0) && (numtrack == numMbid)) {
-      const firstTrackMbid = this.musicTracks[0].musicBrainzId?.ReleaseTrackId;
+      const firstTrackMbid = this.musicTracks[0]?.musicBrainzId?.ReleaseTrackId;
       const numSameMbid = this.musicTracks.filter(item => item.musicBrainzId?.ReleaseTrackId === firstTrackMbid).length;
       this.allTracksSameAlbum_ = numSameMbid == numMbid;
       this.allTracksSameMusicBrainzReleaseId_ = this.allTracksSameAlbum_;
       console.log("number of tracs with same mbid like first track : " + numSameMbid);
     } else {
-      if (this.musicTracks.length > 0) {
+      if (this.musicTracks?.length > 0) {
         const firstTrackAlbum = this.musicTracks[0].album;
         const albumsWithOtherNames = this.musicTracks.filter(item => item.album !== firstTrackAlbum).length;
         this.allTracksSameAlbum_ = albumsWithOtherNames == 0;
@@ -246,7 +246,7 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   private checkOneTrackWithMusicBrainzId(): void {
-    const mbTrackExists = this.musicTracks.filter(item => (this.hasSongId(item)))?.length > 0;
+    const mbTrackExists = this.musicTracks?.filter(item => (this.hasSongId(item)))?.length > 0;
     this.oneTrackWithMusicBrainzId_ = mbTrackExists;
     console.log("checkOneTrackWithMusicBrainzId : " + this.oneTrackWithMusicBrainzId_);
   }
@@ -310,7 +310,7 @@ export class DisplayContainerComponent implements OnInit {
   // ===============================================================================================
 
   public get itemsCount(): number {
-    if (this.musicTracks.length) {
+    if (this.musicTracks?.length) {
       return this.musicTracks.length;
     } else {
       return 0;
