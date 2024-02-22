@@ -1,7 +1,6 @@
 package nextcp.upnp;
 
 import java.net.URL;
-
 import org.jupnp.controlpoint.ControlPoint;
 import org.jupnp.model.action.ActionException;
 import org.jupnp.model.action.ActionInvocation;
@@ -11,12 +10,15 @@ import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.meta.Service;
 import org.jupnp.protocol.sync.SendingAction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
 public abstract class ActionCallback
 {
-
+	private static final Logger log = LoggerFactory.getLogger(ActionCallback.class.getName());
+	
     protected final ActionInvocation actionInvocation;
 
     protected ControlPoint controlPoint;
@@ -95,6 +97,7 @@ public abstract class ActionCallback
             }
             else if (response.getOperation().isFailed())
             {
+            	log.error("UPnP error : {}" , response.getBodyString());
                 throw new GenActionException(GenActionException.ACTION_FAILED,
                         String.format("%s : %s", remoteService.getDevice().getDisplayString(), response.getOperation().toString()));
             }
