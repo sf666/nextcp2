@@ -146,8 +146,13 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
 
 	@Override
 	public void trimBalanceChanged(int balance) {
-		log.debug("trim balance changed to : {}", balance);
-		state.balance = balance;
+		try {
+			log.debug("trim balance changed to : {}", balance);
+			state.balance = balance;
+			callback.trimBalanaceChanged(state.balance);
+		} catch (Exception e) {
+			log.error("trimBalanceChanged", e);
+		}
 	}
 
 	@Override

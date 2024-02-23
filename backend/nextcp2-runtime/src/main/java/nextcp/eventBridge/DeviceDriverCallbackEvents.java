@@ -21,7 +21,8 @@ import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 public class DeviceDriverCallbackEvents
 {
     private static final Logger log = LoggerFactory.getLogger(DeviceDriverCallbackEvents.class.getName());
-
+    
+    private DevicePowerChanged lastEvent = new DevicePowerChanged();
     @Autowired
     private DeviceRegistry deviceRegistry = null;
 
@@ -35,7 +36,7 @@ public class DeviceDriverCallbackEvents
     @EventListener
     public void physicalDeviceDriverPowerStateChange(DevicePowerChanged event)
     {
-        if (event.isPowerOn)
+        if (!event.isPowerOn.equals(lastEvent.isPowerOn) && event.isPowerOn)
         {
             MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(event.udn));
             if (device != null)
@@ -53,5 +54,6 @@ public class DeviceDriverCallbackEvents
                 }
             }
         }
+    	lastEvent = event;
     }
 }
