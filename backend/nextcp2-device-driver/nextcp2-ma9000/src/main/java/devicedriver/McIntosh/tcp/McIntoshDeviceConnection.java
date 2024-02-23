@@ -116,6 +116,12 @@ public class McIntoshDeviceConnection extends TcpDeviceConnection
                     int vol = Integer.parseInt(aCommand.split(" ")[1]);
                     ma9000Binding.volumeStatusChanged(vol);
                 }
+                else if (aCommand.startsWith("TBA"))
+                {
+                    log.debug("Trim Balanace command received.");
+                    int trimBal = Integer.parseInt(aCommand.split(" ")[1]);
+                    ma9000Binding.trimBalanceChanged(trimBal);
+                }
                 else if (aCommand.startsWith("INP"))
                 {
                     log.debug("INP command received.");

@@ -103,6 +103,7 @@ RendererDeviceConfiguration:
    deviceDriverType: String
    connectionString: String
    powerOnVolPercent: Integer
+   powerOnBalance: Integer
 
 #
 # StateVariables
@@ -171,6 +172,7 @@ DeviceDriverState:
    rendererUDN: String
    volume: Integer
    standby: Boolean
+   balance: Integer
    input: InputSourceDto
 
 MediaServerDto:

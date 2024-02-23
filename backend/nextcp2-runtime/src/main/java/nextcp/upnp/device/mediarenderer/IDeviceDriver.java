@@ -22,4 +22,6 @@ public interface IDeviceDriver
 
     boolean isMonitoringExternalAV();
 
+	void setTrimBalance(Integer balance);
+
 }

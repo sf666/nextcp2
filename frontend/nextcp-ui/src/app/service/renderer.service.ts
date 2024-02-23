@@ -32,7 +32,7 @@ export class RendererService {
     private genericResultService: GenericResultService,
     private httpService: HttpService) {
 
-    this.deviceDriverState = { hasDeviceDriver: false, standby: true, volume: 0, rendererUDN: '', input: dtoGeneratorService.emptyInputSourceDto() };
+    this.deviceDriverState = { hasDeviceDriver: false, standby: true, volume: 0, balance:0, rendererUDN: '', input: dtoGeneratorService.emptyInputSourceDto() };
     this.trackInfo = this.dtoGeneratorService.emptyTrackInfo();
     this.trackTime = this.dtoGeneratorService.emptyTrackTime();
 

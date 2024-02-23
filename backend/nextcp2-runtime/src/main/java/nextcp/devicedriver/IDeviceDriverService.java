@@ -41,4 +41,6 @@ public interface IDeviceDriverService
     public void setInput(String input);
 
     public InputSourceDto getInput();
+
+	public void setTrimBalance(Integer balance);
 }

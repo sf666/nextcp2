@@ -171,6 +171,10 @@
             <mat-label>amplifier on power default volume</mat-label>
             <input matInput type="number" min="0" max="100" [(ngModel)]="rendererConfig.powerOnVolPercent" placeholder="undefined">
           </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>amplifier default balance</mat-label>
+            <input matInput type="number" min="-50" max="50" [(ngModel)]="rendererConfig.powerOnBalance" placeholder="undefined">
+          </mat-form-field>
           <mat-slide-toggle class="mb-2" [(ngModel)]="rendererConfig.setCoveredUpnpDeviceToMaxVolume" [disabled]="!rendererConfig.deviceDriverType">
             UPnP/streamer max volume
           </mat-slide-toggle>

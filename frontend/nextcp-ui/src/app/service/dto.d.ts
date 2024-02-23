@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2024-02-19 15:27:01.
+// Generated using typescript-generator version 3.2.1263 on 2024-02-23 10:23:23.
 
 export interface ApplicationConfig {
     myPlaylistFolderName: string;
@@ -96,6 +96,7 @@ export interface DeviceDriverState {
     rendererUDN: string;
     volume: number;
     standby: boolean;
+    balance: number;
     input: InputSourceDto;
 }
 
@@ -275,6 +276,7 @@ export interface RendererDeviceConfiguration {
     deviceDriverType: string;
     connectionString: string;
     powerOnVolPercent: number;
+    powerOnBalance: number;
 }
 
 export interface RendererPlaylist {

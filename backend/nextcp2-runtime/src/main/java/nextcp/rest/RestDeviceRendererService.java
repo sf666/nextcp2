@@ -91,7 +91,7 @@ public class RestDeviceRendererService
         else
         {
             log.info(String.format("device %s has no active device driver service", dto.friendlyName));
-            return new DeviceDriverState(false, dto.udn, null, null, null);
+            return new DeviceDriverState(false, dto.udn, null, null, 0, null);
         }
     }
 

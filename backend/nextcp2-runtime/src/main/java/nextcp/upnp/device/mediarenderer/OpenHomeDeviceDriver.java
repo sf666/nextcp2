@@ -112,7 +112,7 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
     {
         if (physicalDeviceDriver == null)
         {
-            return new DeviceDriverState(true, device.getUdnAsString(), volume, standby, new InputSourceDto());
+            return new DeviceDriverState(true, device.getUdnAsString(), volume, standby, 0, new InputSourceDto());
         }
         else
         {
@@ -125,7 +125,6 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
     {
         if (physicalDeviceDriver == null)
         {
-            // just publish devicedriver state to client
             eventPublisher.publishEvent(getDeviceDriverState());
         }
     }
@@ -191,5 +190,23 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
         //TODO 
         log.warn("NOT YET IMPLEMENTED");
     }
+
+	@Override
+	public void trimBalanaceChanged(int balance) {
+		
+	}
+
+	@Override
+	public void setTrimBalance(Integer balance) {
+        if (physicalDeviceDriver == null)
+        {
+        	log.info("cannot set balance. No device driver.");
+        	return;
+        }
+        else
+        {
+            physicalDeviceDriver.setTrimBalance(balance);
+        }
+	}
 
 }

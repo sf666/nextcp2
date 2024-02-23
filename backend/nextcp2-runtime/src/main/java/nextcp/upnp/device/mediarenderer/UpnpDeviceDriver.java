@@ -76,7 +76,7 @@ public class UpnpDeviceDriver extends RenderingControlServiceEventListenerImpl i
     {
         if (physicalDeviceDriver == null)
         {
-            return new DeviceDriverState(true, device.getUdnAsString(), volume, standby, new InputSourceDto());
+            return new DeviceDriverState(true, device.getUdnAsString(), volume, standby, 0, new InputSourceDto());
         }
         else
         {
@@ -181,5 +181,22 @@ public class UpnpDeviceDriver extends RenderingControlServiceEventListenerImpl i
         //TODO 
         log.warn("NOT YET IMPLEMENTED");
     }
+
+	@Override
+	public void trimBalanaceChanged(int balance) {
+        log.warn("NOT YET IMPLEMENTED");
+	}
+
+	@Override
+	public void setTrimBalance(Integer balance) {
+        if (physicalDeviceDriver == null)
+        {
+            log.info("physicalDeviceDriver not available : cannnot handle balance.");
+        }
+        else
+        {
+            physicalDeviceDriver.setTrimBalance(balance);
+        }
+	}
 
 }

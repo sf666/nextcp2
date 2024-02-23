@@ -28,4 +28,6 @@ public interface IDeviceDriverCallback
     public void standbyChanged(boolean standbyState);
     
     public void inputChanged(InputSourceDto input);
+    
+    public void trimBalanaceChanged(int balance);
 }

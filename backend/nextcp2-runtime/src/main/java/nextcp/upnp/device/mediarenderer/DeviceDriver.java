@@ -91,9 +91,7 @@ public class DeviceDriver implements IDeviceDriverCallback, IDeviceDriver
     @Override
     public void inputChanged(InputSourceDto input)
     {
-        InputSourceChangeDto event = new InputSourceChangeDto(rendererUdn, input);
-        // eventPublisher.publishEvent(event);
-        // eventPublisher.publishEvent(getDeviceDriverState());
+        eventPublisher.publishEvent(getDeviceDriverState());
         log.info(String.format("%s -> new input -> %s", driverName, input.toString()));
     }
 
@@ -148,5 +146,16 @@ public class DeviceDriver implements IDeviceDriverCallback, IDeviceDriver
     {
         return physicalDeviceDriver.getStandby();
     }
+
+	@Override
+	public void trimBalanaceChanged(int balance) {
+        eventPublisher.publishEvent(getDeviceDriverState());
+        log.info("balance changed to : {}", balance);
+	}
+
+	@Override
+	public void setTrimBalance(Integer balance) {
+        physicalDeviceDriver.setTrimBalance(balance);
+	}
 
 }

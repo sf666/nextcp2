@@ -14,4 +14,6 @@ public interface IMA9000DeviceState
      * @return volume in percent
      */
     int getVolumeInPercent();
+    
+    int getBalance();
 }

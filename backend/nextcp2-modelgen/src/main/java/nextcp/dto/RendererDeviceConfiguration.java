@@ -21,12 +21,13 @@ public class RendererDeviceConfiguration
     public String deviceDriverType;
     public String connectionString;
     public Integer powerOnVolPercent;
+    public Integer powerOnBalance;
 
     public RendererDeviceConfiguration()
     {
     }
 
-    public RendererDeviceConfiguration(MediaRendererDto mediaRenderer, String ip, String displayString, Boolean active, Boolean setCoveredUpnpDeviceToMaxVolume, Boolean hasOpenHomeDeviceDriver, String deviceDriverType, String connectionString, Integer powerOnVolPercent)
+    public RendererDeviceConfiguration(MediaRendererDto mediaRenderer, String ip, String displayString, Boolean active, Boolean setCoveredUpnpDeviceToMaxVolume, Boolean hasOpenHomeDeviceDriver, String deviceDriverType, String connectionString, Integer powerOnVolPercent, Integer powerOnBalance)
     {
         this.mediaRenderer = mediaRenderer;
         this.ip = ip;
@@ -37,6 +38,7 @@ public class RendererDeviceConfiguration
         this.deviceDriverType = deviceDriverType;
         this.connectionString = connectionString;
         this.powerOnVolPercent = powerOnVolPercent;
+        this.powerOnBalance = powerOnBalance;
     }
     
     @Override
@@ -53,6 +55,7 @@ public class RendererDeviceConfiguration
         sb.append("deviceDriverType=").append(this.deviceDriverType).append(", ");
         sb.append("connectionString=").append(this.connectionString).append(", ");
         sb.append("powerOnVolPercent=").append(this.powerOnVolPercent).append(", ");
+        sb.append("powerOnBalance=").append(this.powerOnBalance).append(", ");
         sb.append("]");
         return sb.toString();
     }

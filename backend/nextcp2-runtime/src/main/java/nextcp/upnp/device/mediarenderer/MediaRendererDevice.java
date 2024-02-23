@@ -707,4 +707,21 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     	}
     	this.serviceOffline = state;
     }
+
+	public void setTrimBalance(Integer balance) {
+        try
+        {
+            log.debug("setting balance to {}", balance);
+            if (getDeviceDriver() == null)
+            {
+                eventPublisher.publishEvent(new ToastrMessage(null, "error", "Balance", "no device driver available"));
+                return;
+            }
+            getDeviceDriver().setTrimBalance(balance);
+        }
+        catch (Exception e)
+        {
+            log.warn("setVolume failed", e);
+        }
+	}
 }

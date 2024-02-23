@@ -46,6 +46,11 @@ public class DeviceDriverCallbackEvents
                     log.info(String.format("setting default volume for device %s to %d ", event.udn, config.powerOnVolPercent));
                     device.setVolume(config.powerOnVolPercent);
                 }
+                if (config.powerOnBalance != null)
+                {
+                    log.info("setting default balance for device {} to {}", event.udn, config.powerOnBalance);
+                    device.setTrimBalance(config.powerOnBalance);
+                }
             }
         }
     }

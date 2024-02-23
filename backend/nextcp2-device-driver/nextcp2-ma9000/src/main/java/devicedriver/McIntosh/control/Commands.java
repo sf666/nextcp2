@@ -26,6 +26,10 @@ public class Commands
     public static CommandStructure INPUT_SELECT = new CommandStructure("INP", 1);
     public static CommandStructure INPUT_STATUS = new CommandStructure("INP");
 
+    public static CommandStructure TRIM_BALANCE = new CommandStructure("TBA", 1);
+    public static CommandStructure TRIM_INPUT = new CommandStructure("TIN", 1);
+    public static CommandStructure TRIM_EQ = new CommandStructure("TEQ", 1);
+
     public static CommandStructure MUTE_ON = new CommandStructure("MUT 1");
     public static CommandStructure MUTE_OFF = new CommandStructure("MUT 0");
     

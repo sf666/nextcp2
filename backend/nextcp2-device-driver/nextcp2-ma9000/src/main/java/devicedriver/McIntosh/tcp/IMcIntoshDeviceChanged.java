@@ -16,4 +16,8 @@ public interface IMcIntoshDeviceChanged
     public void volumeStatusChanged(int volInPercent);
     
     public void inputChanged(String input);
+    
+    public void trimBalanceChanged(int balance);
+    public void trimInputChanged(float balance);
+    public void trimEqChanged(boolean balance);
 }

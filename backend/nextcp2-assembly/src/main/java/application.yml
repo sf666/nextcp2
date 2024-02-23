@@ -1,0 +1,10 @@
+server:
+  http2:
+    enabled: false
+  ssl:
+    enabled: false
+    key-store: classpath:springboot.p12
+    key-store-password: password
+    key-store-type: pkcs12
+    key-alias: springboot
+    key-password: password

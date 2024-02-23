@@ -213,7 +213,7 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
         if (log.isDebugEnabled())
         {
             log.debug(String.format("%s: %s", device.getFriendlyName(), currentAvTransportState.toString()));
-            Thread.dumpStack();
+//            Thread.dumpStack();
         }
     }
     
