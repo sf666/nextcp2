@@ -70,7 +70,7 @@ public class SpringBootServerPortCustomizer implements WebServerFactoryCustomize
 				HttpConfiguration httpConfig = new HttpConfiguration();
 				// Add the SecureRequestCustomizer because we are using TLS.
 				httpConfig.addCustomizer(new SecureRequestCustomizer());
-				
+
 				// The ConnectionFactory for HTTP/1.1.
 				HttpConnectionFactory http11 = new HttpConnectionFactory(httpConfig);
 				http11.getHttpConfiguration().setUriCompliance(UriCompliance.LEGACY);
@@ -88,13 +88,14 @@ public class SpringBootServerPortCustomizer implements WebServerFactoryCustomize
 				// information.
 				SslContextFactory.Server sslContextFactory = new SslContextFactory.Server();
 				sslContextFactory.setProtocol("TLS");
-//				sslContextFactory.setProvider("SunJSSE");
-				sslContextFactory.setIncludeProtocols("TLSv1.2", "TLSv1.3"); // , "TLSv1.3"
-//				sslContextFactory.setIncludeCipherSuites("TLS_AES_128_GCM_SHA256","TLS_AES_256_GCM_SHA384","TLS_CHACHA20_POLY1305_SHA256");
-//				sslContextFactory.setNeedClientAuth(false);
+				// sslContextFactory.setProvider("SunJSSE");
+				sslContextFactory.setIncludeProtocols("TLSv1.2", "TLSv1.3"); // ,
+																			 // "TLSv1.3"
+				// sslContextFactory.setIncludeCipherSuites("TLS_AES_128_GCM_SHA256","TLS_AES_256_GCM_SHA384","TLS_CHACHA20_POLY1305_SHA256");
+				// sslContextFactory.setNeedClientAuth(false);
 				URL keyStoreResource = getClass().getResource("/springboot.p12");
 				if (keyStoreResource != null) {
-					sslContextFactory.setKeyStorePath(keyStoreResource.toExternalForm());				
+					sslContextFactory.setKeyStorePath(keyStoreResource.toExternalForm());
 					sslContextFactory.setCertAlias("springboot");
 					sslContextFactory.setKeyStorePassword("password");
 
@@ -103,17 +104,22 @@ public class SpringBootServerPortCustomizer implements WebServerFactoryCustomize
 
 					// The ServerConnector instance.
 					ServerConnector connector = new ServerConnector(server, tls, alpn, h2, http11);
-					connector.setPort(config.applicationConfig.embeddedServerSslPort);
-					server.addConnector(connector);
-					
-//					HttpConfiguration httpConfig3 = new HttpConfiguration();
-//					httpConfig.addCustomizer(new SecureRequestCustomizer());
+					if (config.applicationConfig.embeddedServerSslPort != null) {
+						connector.setPort(config.applicationConfig.embeddedServerSslPort);
+						server.addConnector(connector);
+					} else {
+						log.error("SSL port not configured ... ");
+					}
+
+					// HttpConfiguration httpConfig3 = new HttpConfiguration();
+					// httpConfig.addCustomizer(new SecureRequestCustomizer());
 
 					// Create and configure the HTTP/3 connector.
-//					HTTP3ServerConnector connector3 = new HTTP3ServerConnector(server, sslContextFactory, new HTTP3ServerConnectionFactory(httpConfig3));
-//					server.addConnector(connector3);
-				}
-				else {
+					// HTTP3ServerConnector connector3 = new
+					// HTTP3ServerConnector(server, sslContextFactory, new
+					// HTTP3ServerConnectionFactory(httpConfig3));
+					// server.addConnector(connector3);
+				} else {
 					log.error("keystore resource not found. No h2 connection will be available ... ");
 				}
 			}
