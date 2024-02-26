@@ -1,13 +1,10 @@
 package nextcp;
 
 import java.io.File;
-import java.io.InputStream;
 import java.nio.file.Path;
-
 import org.springframework.boot.logging.LogFile;
 import org.springframework.boot.logging.LoggingInitializationContext;
 import org.springframework.boot.logging.log4j2.Log4J2LoggingSystem;
-
 import nextcp.config.FileConfigPersistence;
 
 public class NextcpLoggingSystemConfiguration extends Log4J2LoggingSystem

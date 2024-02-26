@@ -95,6 +95,12 @@ public class DeviceDriver implements IDeviceDriverCallback, IDeviceDriver
         log.info(String.format("%s -> new input -> %s", driverName, input.toString()));
     }
 
+	@Override
+	public void trimBalanaceChanged(int balance) {
+        eventPublisher.publishEvent(getDeviceDriverState());
+        log.info("balance changed to : {}", balance);
+	}
+    
     @Override
     public DeviceDriverState getDeviceDriverState()
     {
@@ -146,12 +152,6 @@ public class DeviceDriver implements IDeviceDriverCallback, IDeviceDriver
     {
         return physicalDeviceDriver.getStandby();
     }
-
-	@Override
-	public void trimBalanaceChanged(int balance) {
-        eventPublisher.publishEvent(getDeviceDriverState());
-        log.info("balance changed to : {}", balance);
-	}
 
 	@Override
 	public void setTrimBalance(Integer balance) {
