@@ -1,6 +1,7 @@
 package nextcp;
 
 import java.io.IOException;
+import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import org.eclipse.jetty.alpn.server.ALPNServerConnectionFactory;
@@ -13,6 +14,7 @@ import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.SslConnectionFactory;
+import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +38,6 @@ public class SpringBootServerPortCustomizer implements WebServerFactoryCustomize
 		log.info("starting application on port " + config.applicationConfig.embeddedServerPort);
 
 		factory.setPort(config.applicationConfig.embeddedServerPort);
-		// Http2 http2 = new Http2();
-		// http2.setEnabled(true);
-		// factory.setHttp2(http2);
 		JettyServerCustomizer c = new JettyServerCustomizer() {
 
 			@Override
@@ -73,7 +72,7 @@ public class SpringBootServerPortCustomizer implements WebServerFactoryCustomize
 				HttpConfiguration httpConfig = new HttpConfiguration();
 				// Add the SecureRequestCustomizer because we are using TLS.
 				httpConfig.addCustomizer(new SecureRequestCustomizer());
-
+				
 				// The ConnectionFactory for HTTP/1.1.
 				HttpConnectionFactory http11 = new HttpConnectionFactory(httpConfig);
 				http11.getHttpConfiguration().setUriCompliance(UriCompliance.LEGACY);
@@ -90,19 +89,24 @@ public class SpringBootServerPortCustomizer implements WebServerFactoryCustomize
 				// Configure the SslContextFactory with the keyStore
 				// information.
 				SslContextFactory.Server sslContextFactory = new SslContextFactory.Server();
-				KeyStore keystore = KeyStore.getInstance("PKCS12");
-				keystore.load(getClass().getResourceAsStream("springboot.p12"), "password".toCharArray());
-				sslContextFactory.setKeyStore(keystore);
+				sslContextFactory.setProtocol("TLS");
+//				sslContextFactory.setProvider("SunJSSE");
+				sslContextFactory.setIncludeProtocols("TLSv1.2", "TLSv1.3"); // , "TLSv1.3"
+//				sslContextFactory.setIncludeCipherSuites("TLS_AES_128_GCM_SHA256","TLS_AES_256_GCM_SHA384","TLS_CHACHA20_POLY1305_SHA256");
+//				sslContextFactory.setNeedClientAuth(false);
+				sslContextFactory.setKeyStorePath(getClass().getResource("/springboot.p12").toExternalForm());				
 				sslContextFactory.setCertAlias("springboot");
-				// sslContextFactory.setKeyStorePath("springboot.p12");
-				// sslContextFactory.setKeyStorePassword("password");
+				sslContextFactory.setKeyStorePassword("password");
 
 				// The ConnectionFactory for TLS.
 				SslConnectionFactory tls = new SslConnectionFactory(sslContextFactory, alpn.getProtocol());
+				// The ConnectionFactory for TLS.
+//				SslConnectionFactory tls = new SslConnectionFactory(sslContextFactory, http11.getProtocol());
 
 				// The ServerConnector instance.
 				ServerConnector connector = new ServerConnector(server, tls, alpn, h2, http11);
-				connector.setPort(38443);
+//				ServerConnector connector = new ServerConnector(server, tls, http11);
+				connector.setPort(config.applicationConfig.embeddedServerSslPort);
 				server.addConnector(connector);
 				
 //				HttpConfiguration httpConfig3 = new HttpConfiguration();

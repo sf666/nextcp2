@@ -251,6 +251,12 @@
       <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerPort" placeholder="undefined">
     </mat-form-field>
 
+    <div class="paraAppConf">NextCP/2 HTTPS listen port.</div>
+    <mat-form-field appearance="outline" class="setting-dropdown">
+      <mat-label>SSL server listening port</mat-label>
+      <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerSslPort" placeholder="undefined">
+    </mat-form-field>
+
     <div class="paraAppConf">Full path to the restart script. Read access to this resource is needed.</div>
     <mat-form-field appearance="outline" class="setting-dropdown">
       <mat-label>path to restart script</mat-label>

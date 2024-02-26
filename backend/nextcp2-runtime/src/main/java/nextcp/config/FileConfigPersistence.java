@@ -157,6 +157,7 @@ public class FileConfigPersistence
         c.applicationConfig.generateUpnpCodePath = System.getProperty("java.io.tmpdir");
         c.applicationConfig.databaseFilename = FilenameUtils.concat(systemConfig.getString("user.dir"), "nextcp2_db");
         c.applicationConfig.embeddedServerPort = 8085;
+        c.applicationConfig.embeddedServerPort = 18085;
         c.applicationConfig.itemsPerPage = 100L;
         c.applicationConfig.nextPageAfter = 60L;
         c.applicationConfig.sseEmitterTimeout = 180000L;

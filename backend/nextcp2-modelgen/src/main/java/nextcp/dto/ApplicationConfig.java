@@ -17,6 +17,7 @@ public class ApplicationConfig
     public String generateUpnpCodePath;
     public String libraryPath;
     public Integer embeddedServerPort;
+    public Integer embeddedServerSslPort;
     public Long sseEmitterTimeout;
     public String log4jConfigFile;
     public String loggingDateTimeFormat;
@@ -32,13 +33,14 @@ public class ApplicationConfig
     {
     }
 
-    public ApplicationConfig(String myPlaylistFolderName, Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript, String upnpStreamClient, String upnpStreamServer)
+    public ApplicationConfig(String myPlaylistFolderName, Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Integer embeddedServerSslPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript, String upnpStreamClient, String upnpStreamServer)
     {
         this.myPlaylistFolderName = myPlaylistFolderName;
         this.generateUpnpCode = generateUpnpCode;
         this.generateUpnpCodePath = generateUpnpCodePath;
         this.libraryPath = libraryPath;
         this.embeddedServerPort = embeddedServerPort;
+        this.embeddedServerSslPort = embeddedServerSslPort;
         this.sseEmitterTimeout = sseEmitterTimeout;
         this.log4jConfigFile = log4jConfigFile;
         this.loggingDateTimeFormat = loggingDateTimeFormat;
@@ -61,6 +63,7 @@ public class ApplicationConfig
         sb.append("generateUpnpCodePath=").append(this.generateUpnpCodePath).append(", ");
         sb.append("libraryPath=").append(this.libraryPath).append(", ");
         sb.append("embeddedServerPort=").append(this.embeddedServerPort).append(", ");
+        sb.append("embeddedServerSslPort=").append(this.embeddedServerSslPort).append(", ");
         sb.append("sseEmitterTimeout=").append(this.sseEmitterTimeout).append(", ");
         sb.append("log4jConfigFile=").append(this.log4jConfigFile).append(", ");
         sb.append("loggingDateTimeFormat=").append(this.loggingDateTimeFormat).append(", ");

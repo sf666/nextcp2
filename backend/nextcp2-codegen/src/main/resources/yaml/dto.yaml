@@ -26,6 +26,7 @@ ApplicationConfig:
    generateUpnpCodePath: String
    libraryPath: String
    embeddedServerPort: Integer
+   embeddedServerSslPort: Integer
    sseEmitterTimeout: Long
    log4jConfigFile: String
    loggingDateTimeFormat: String
