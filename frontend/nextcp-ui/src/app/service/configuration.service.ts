@@ -29,6 +29,7 @@ export class ConfigurationService {
   applicationConfig: ApplicationConfig = {    // This is a DTO copy and can be used to update server configuration
     databaseFilename: '',
     embeddedServerPort: 0,
+    embeddedServerSslPort: 0,
     generateUpnpCode: false,
     generateUpnpCodePath: '',
     globalSearchDelay: 0,
