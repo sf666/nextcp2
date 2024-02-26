@@ -1,6 +1,7 @@
 package nextcp;
 
 import java.io.IOException;
+import java.net.URL;
 import java.security.GeneralSecurityException;
 import org.eclipse.jetty.alpn.server.ALPNServerConnectionFactory;
 import org.eclipse.jetty.http.UriCompliance;
@@ -91,27 +92,30 @@ public class SpringBootServerPortCustomizer implements WebServerFactoryCustomize
 				sslContextFactory.setIncludeProtocols("TLSv1.2", "TLSv1.3"); // , "TLSv1.3"
 //				sslContextFactory.setIncludeCipherSuites("TLS_AES_128_GCM_SHA256","TLS_AES_256_GCM_SHA384","TLS_CHACHA20_POLY1305_SHA256");
 //				sslContextFactory.setNeedClientAuth(false);
-				sslContextFactory.setKeyStorePath(getClass().getResource("/springboot.p12").toExternalForm());				
-				sslContextFactory.setCertAlias("springboot");
-				sslContextFactory.setKeyStorePassword("password");
+				URL keyStoreResource = getClass().getResource("/springboot.p12");
+				if (keyStoreResource != null) {
+					sslContextFactory.setKeyStorePath(keyStoreResource.toExternalForm());				
+					sslContextFactory.setCertAlias("springboot");
+					sslContextFactory.setKeyStorePassword("password");
 
-				// The ConnectionFactory for TLS.
-				SslConnectionFactory tls = new SslConnectionFactory(sslContextFactory, alpn.getProtocol());
-				// The ConnectionFactory for TLS.
-//				SslConnectionFactory tls = new SslConnectionFactory(sslContextFactory, http11.getProtocol());
+					// The ConnectionFactory for TLS.
+					SslConnectionFactory tls = new SslConnectionFactory(sslContextFactory, alpn.getProtocol());
 
-				// The ServerConnector instance.
-				ServerConnector connector = new ServerConnector(server, tls, alpn, h2, http11);
-//				ServerConnector connector = new ServerConnector(server, tls, http11);
-				connector.setPort(config.applicationConfig.embeddedServerSslPort);
-				server.addConnector(connector);
-				
-//				HttpConfiguration httpConfig3 = new HttpConfiguration();
-//				httpConfig.addCustomizer(new SecureRequestCustomizer());
+					// The ServerConnector instance.
+					ServerConnector connector = new ServerConnector(server, tls, alpn, h2, http11);
+					connector.setPort(config.applicationConfig.embeddedServerSslPort);
+					server.addConnector(connector);
+					
+//					HttpConfiguration httpConfig3 = new HttpConfiguration();
+//					httpConfig.addCustomizer(new SecureRequestCustomizer());
 
-				// Create and configure the HTTP/3 connector.
-//				HTTP3ServerConnector connector3 = new HTTP3ServerConnector(server, sslContextFactory, new HTTP3ServerConnectionFactory(httpConfig3));
-//				server.addConnector(connector3);
+					// Create and configure the HTTP/3 connector.
+//					HTTP3ServerConnector connector3 = new HTTP3ServerConnector(server, sslContextFactory, new HTTP3ServerConnectionFactory(httpConfig3));
+//					server.addConnector(connector3);
+				}
+				else {
+					log.error("keystore resource not found. No h2 connection will be available ... ");
+				}
 			}
 
 		};
