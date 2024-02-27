@@ -40,15 +40,16 @@ public class DeviceDriverCallbackEvents
             MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(event.udn));
             if (device != null)
             {
+                log.info("setting default values for device {}", event.udn);
                 RendererDeviceConfiguration config = rendererConfigService.getMediaRendererConfig(event.udn);
                 if (config.powerOnVolPercent != null)
                 {
-                    log.info(String.format("setting default volume for device %s to %d ", event.udn, config.powerOnVolPercent));
+                    log.info("  -> volume to {} ", config.powerOnVolPercent);
                     device.setVolume(config.powerOnVolPercent);
                 }
                 if (config.powerOnBalance != null)
                 {
-                    log.info("setting default balance for device {} to {}", event.udn, config.powerOnBalance);
+                    log.info("  -> trim balance to {} ", config.powerOnBalance);
                     device.setTrimBalance(config.powerOnBalance);
                 }
             }
