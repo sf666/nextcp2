@@ -629,7 +629,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         }
     }
 
-    public void setInput(String input)
+    public void setDeviceDriverInput(String input)
     {
         try
         {

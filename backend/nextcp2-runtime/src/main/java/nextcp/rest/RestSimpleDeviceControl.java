@@ -94,6 +94,6 @@ public class RestSimpleDeviceControl extends BaseRestService
         }
         log.info("select input to " + inp);
         MediaRendererDevice device = getMediaRendererByUdn(udn);
-        device.setInput(inp);
+        device.setDeviceDriverInput(inp);
     }
 }
