@@ -30,6 +30,8 @@ export class ConfigurationService {
     databaseFilename: '',
     embeddedServerPort: 0,
     embeddedServerSslPort: 0,
+    embeddedServerSslP12Keystore: '',
+    embeddedServerSslP12KeystorePassword: '',
     generateUpnpCode: false,
     generateUpnpCodePath: '',
     globalSearchDelay: 0,

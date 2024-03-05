@@ -2,7 +2,10 @@ package nextcp;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.alpn.server.ALPNServerConnectionFactory;
 import org.eclipse.jetty.http.UriCompliance;
 import org.eclipse.jetty.http2.server.HTTP2ServerConnectionFactory;
@@ -93,11 +96,28 @@ public class SpringBootServerPortCustomizer implements WebServerFactoryCustomize
 																			 // "TLSv1.3"
 				// sslContextFactory.setIncludeCipherSuites("TLS_AES_128_GCM_SHA256","TLS_AES_256_GCM_SHA384","TLS_CHACHA20_POLY1305_SHA256");
 				// sslContextFactory.setNeedClientAuth(false);
-				URL keyStoreResource = getClass().getResource("/springboot.p12");
-				if (keyStoreResource != null) {
-					sslContextFactory.setKeyStorePath(keyStoreResource.toExternalForm());
-					sslContextFactory.setCertAlias("springboot");
-					sslContextFactory.setKeyStorePassword("password");
+				
+				try {
+					if (!StringUtils.isAllBlank(config.applicationConfig.embeddedServerSslP12Keystore)) {
+						Path p = Paths.get(config.applicationConfig.embeddedServerSslP12Keystore); 
+						sslContextFactory.setKeyStorePath(p.toString());
+						sslContextFactory.setKeyStorePassword(config.applicationConfig.embeddedServerSslP12KeystorePassword);
+						log.info("setting keyStore path to : {}", config.applicationConfig.embeddedServerSslP12Keystore);  
+					}
+				} catch (Exception e) {
+					log.warn("cannot create keyStore from file located at : {}", config.applicationConfig.embeddedServerSslP12Keystore);  
+				}
+
+				if (StringUtils.isAllBlank(sslContextFactory.getKeyStorePath())) {
+					log.warn("using internal SSL certificate with hostname 'https://nextcp2'.");  
+					URL keyStoreResource = getClass().getResource("/springboot.p12");
+					if (keyStoreResource != null) {
+						sslContextFactory.setKeyStorePath(keyStoreResource.toExternalForm());
+						sslContextFactory.setKeyStorePassword("password");
+					}
+				}
+				
+				if (!StringUtils.isAllBlank(sslContextFactory.getKeyStorePath())) {
 
 					// The ConnectionFactory for TLS.
 					SslConnectionFactory tls = new SslConnectionFactory(sslContextFactory, alpn.getProtocol());
@@ -111,21 +131,26 @@ public class SpringBootServerPortCustomizer implements WebServerFactoryCustomize
 						log.error("SSL port not configured ... ");
 					}
 
-					// HttpConfiguration httpConfig3 = new HttpConfiguration();
-					// httpConfig.addCustomizer(new SecureRequestCustomizer());
-
-					// Create and configure the HTTP/3 connector.
-					// HTTP3ServerConnector connector3 = new
-					// HTTP3ServerConnector(server, sslContextFactory, new
-					// HTTP3ServerConnectionFactory(httpConfig3));
-					// server.addConnector(connector3);
 				} else {
-					log.error("keystore resource not found. No h2 connection will be available ... ");
+					log.error("keystore resource not found. SSL/h2 connection will be unavailable ... ");
 				}
+				
+				addH3Connection(server);
 			}
-
 		};
 
 		factory.addServerCustomizers(c);
+	}
+	
+	private void addH3Connection(Server server) {
+		// HttpConfiguration httpConfig3 = new HttpConfiguration();
+		// httpConfig.addCustomizer(new SecureRequestCustomizer());
+
+		// Create and configure the HTTP/3 connector.
+		// HTTP3ServerConnector connector3 = new
+		// HTTP3ServerConnector(server, sslContextFactory, new
+		// HTTP3ServerConnectionFactory(httpConfig3));
+		// server.addConnector(connector3);
+		
 	}
 }

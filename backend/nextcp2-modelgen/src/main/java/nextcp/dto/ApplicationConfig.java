@@ -18,6 +18,8 @@ public class ApplicationConfig
     public String libraryPath;
     public Integer embeddedServerPort;
     public Integer embeddedServerSslPort;
+    public String embeddedServerSslP12Keystore;
+    public String embeddedServerSslP12KeystorePassword;
     public Long sseEmitterTimeout;
     public String log4jConfigFile;
     public String loggingDateTimeFormat;
@@ -33,7 +35,7 @@ public class ApplicationConfig
     {
     }
 
-    public ApplicationConfig(String myPlaylistFolderName, Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Integer embeddedServerSslPort, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript, String upnpStreamClient, String upnpStreamServer)
+    public ApplicationConfig(String myPlaylistFolderName, Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Integer embeddedServerSslPort, String embeddedServerSslP12Keystore, String embeddedServerSslP12KeystorePassword, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript, String upnpStreamClient, String upnpStreamServer)
     {
         this.myPlaylistFolderName = myPlaylistFolderName;
         this.generateUpnpCode = generateUpnpCode;
@@ -41,6 +43,8 @@ public class ApplicationConfig
         this.libraryPath = libraryPath;
         this.embeddedServerPort = embeddedServerPort;
         this.embeddedServerSslPort = embeddedServerSslPort;
+        this.embeddedServerSslP12Keystore = embeddedServerSslP12Keystore;
+        this.embeddedServerSslP12KeystorePassword = embeddedServerSslP12KeystorePassword;
         this.sseEmitterTimeout = sseEmitterTimeout;
         this.log4jConfigFile = log4jConfigFile;
         this.loggingDateTimeFormat = loggingDateTimeFormat;
@@ -64,6 +68,8 @@ public class ApplicationConfig
         sb.append("libraryPath=").append(this.libraryPath).append(", ");
         sb.append("embeddedServerPort=").append(this.embeddedServerPort).append(", ");
         sb.append("embeddedServerSslPort=").append(this.embeddedServerSslPort).append(", ");
+        sb.append("embeddedServerSslP12Keystore=").append(this.embeddedServerSslP12Keystore).append(", ");
+        sb.append("embeddedServerSslP12KeystorePassword=").append(this.embeddedServerSslP12KeystorePassword).append(", ");
         sb.append("sseEmitterTimeout=").append(this.sseEmitterTimeout).append(", ");
         sb.append("log4jConfigFile=").append(this.log4jConfigFile).append(", ");
         sb.append("loggingDateTimeFormat=").append(this.loggingDateTimeFormat).append(", ");

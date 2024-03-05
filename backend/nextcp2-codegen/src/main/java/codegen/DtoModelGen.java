@@ -22,7 +22,7 @@ public class DtoModelGen {
 
 	public static void main(String[] args) throws Exception {
 		if (args.length != 1) {
-			System.out.println("call main[] with an argument: src-base directory of nextcp2-modelgen project.");
+			System.out.println("call main[] with an argument: src-base directory of nextcp2-modelgen project like /dev/nextcp2/backend/nextcp2-modelgen/src/main/java/nextcp/dto");
 		}
 		System.out.println("start generating DTO's");
 		System.out.println("using directory : " + args[0]);

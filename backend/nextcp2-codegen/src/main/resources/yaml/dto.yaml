@@ -27,6 +27,8 @@ ApplicationConfig:
    libraryPath: String
    embeddedServerPort: Integer
    embeddedServerSslPort: Integer
+   embeddedServerSslP12Keystore: String
+   embeddedServerSslP12KeystorePassword: String
    sseEmitterTimeout: Long
    log4jConfigFile: String
    loggingDateTimeFormat: String

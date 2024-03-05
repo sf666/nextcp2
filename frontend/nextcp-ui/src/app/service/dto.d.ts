@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2024-02-26 15:08:09.
+// Generated using typescript-generator version 3.2.1263 on 2024-03-05 10:21:35.
 
 export interface ApplicationConfig {
     myPlaylistFolderName: string;
@@ -9,6 +9,8 @@ export interface ApplicationConfig {
     libraryPath: string;
     embeddedServerPort: number;
     embeddedServerSslPort: number;
+    embeddedServerSslP12Keystore: string;
+    embeddedServerSslP12KeystorePassword: string;
     sseEmitterTimeout: number;
     log4jConfigFile: string;
     loggingDateTimeFormat: string;

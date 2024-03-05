@@ -251,10 +251,22 @@
       <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerPort" placeholder="undefined">
     </mat-form-field>
 
-    <div class="paraAppConf">NextCP/2 HTTPS listen port.</div>
+    <div class="paraAppConf">NextCP/2 secure listen port.</div>
     <mat-form-field appearance="outline" class="setting-dropdown">
       <mat-label>SSL server listening port</mat-label>
       <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerSslPort" placeholder="undefined">
+    </mat-form-field>
+
+    <div class="paraAppConf">Path to NextCP/2 keystore file format. File has to be in P12 format and is used for encrypting the secure connection.</div>
+    <mat-form-field appearance="outline" class="setting-dropdown">
+      <mat-label>P12 keystore file location</mat-label>
+      <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerSslP12Keystore" placeholder="undefined">
+    </mat-form-field>
+
+    <div class="paraAppConf">P12 keystore password.</div>
+    <mat-form-field appearance="outline" class="setting-dropdown">
+      <mat-label>P12 keystore password</mat-label>
+      <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerSslP12KeystorePassword" placeholder="undefined">
     </mat-form-field>
 
     <div class="paraAppConf">Full path to the restart script. Read access to this resource is needed.</div>
