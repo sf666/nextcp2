@@ -126,6 +126,7 @@ public class SpringBootServerPortCustomizer implements WebServerFactoryCustomize
 					ServerConnector connector = new ServerConnector(server, tls, alpn, h2, http11);
 					if (config.applicationConfig.embeddedServerSslPort != null) {
 						connector.setPort(config.applicationConfig.embeddedServerSslPort);
+						log.info("using port {} for secure ssl/h2 connections.", config.applicationConfig.embeddedServerSslPort);  
 						server.addConnector(connector);
 					} else {
 						log.error("SSL port not configured ... ");

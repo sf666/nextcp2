@@ -3,7 +3,7 @@ import { LayoutService } from './../../service/layout.service';
 import { InputFieldConfig } from './../../popup/input-field-dialog/input-field-dialog.d';
 import { InputFieldDialogComponent } from './../../popup/input-field-dialog/input-field-dialog.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { NavigationEnd, Router, RouterEvent, RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { MyPlaylistService } from './../my-playlists/my-playlist.service';
 import { PlaylistService } from './../../service/playlist.service';
 import { RendererService } from './../../service/renderer.service';
@@ -12,6 +12,7 @@ import { Component } from '@angular/core';
 import { ServerPlaylistDto } from 'src/app/service/dto';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatAnchor } from '@angular/material/button';
+import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
 
 @Component({
     selector: 'app-sidebar',
@@ -38,7 +39,7 @@ export class SidebarComponent {
 
   constructor(
     public deviceService: DeviceService,
-    public playlistService: PlaylistService,
+    public playlistService: ServerPlaylistService,
     private myPlaylistService: MyPlaylistService,
     private router: Router,
     public layoutService: LayoutService,

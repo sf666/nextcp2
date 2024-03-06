@@ -8,6 +8,7 @@ import { Component, Inject, ElementRef, OnInit, ViewContainerRef } from '@angula
 import { DefaultPlaylistService } from '../../defaut-playlists/default-playlist.service';
 import { TransportService } from 'src/app/service/transport.service';
 import { StarRatingComponent } from '../../../../view/star-rating/star-rating.component';
+import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
 
 @Component({
     selector: 'app-song-options',
@@ -25,7 +26,7 @@ export class SongOptionsComponent implements OnInit {
   private currentContainer: ContainerDto;
 
   constructor(
-    private playlistService: PlaylistService,
+    private serverPlaylistService: ServerPlaylistService,
     private downloadService: DownloadService,
     private transportService: TransportService,
     private defaultPlaylistService: DefaultPlaylistService,
@@ -77,7 +78,7 @@ export class SongOptionsComponent implements OnInit {
   }
 
   deleteFromPlaylist(): void {
-    this.playlistService.removeSongFromServerPlaylist(this.item.objectID, this.currentContainer.id);
+    this.serverPlaylistService.deleteObject(this.item.objectID);
     this.closeThisPopup({type: 'delete', data: this.item});
   }
 

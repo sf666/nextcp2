@@ -335,6 +335,10 @@ InputSourceChangeDto:
  # Client Request classes
  #
 
+ServerDeleteObjectRequest:
+   serverUdn : String
+   objectId : String
+
 ServerPlaylistEntry:
    serverUdn : String
    playlistObjectId : String

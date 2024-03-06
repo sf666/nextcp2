@@ -1,6 +1,5 @@
 package nextcp.upnp.device.mediaserver;
 
-import java.util.List;
 import org.jupnp.support.model.item.Item;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -45,7 +44,7 @@ public interface ExtendedApiMediaDevice
     
     public void addSongToPlaylist(String audiotraclId, String playlistName);
 
-    public void removeSongFromPlaylist(String audiotracId, String playlistName);
+    public void deleteObject(String objectId);
     
     public ServerPlaylists getServerPlaylists() throws JsonMappingException, JsonProcessingException;
 }

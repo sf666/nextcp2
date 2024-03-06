@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2024-03-05 10:21:35.
+// Generated using typescript-generator version 3.2.1263 on 2024-03-06 11:06:01.
 
 export interface ApplicationConfig {
     myPlaylistFolderName: string;
@@ -311,6 +311,11 @@ export interface SeekSecondsDto {
 
 export interface ServerConfigDto {
     serverDevices: ServerDeviceConfiguration[];
+}
+
+export interface ServerDeleteObjectRequest {
+    serverUdn: string;
+    objectId: string;
 }
 
 export interface ServerDeviceConfiguration {

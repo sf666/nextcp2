@@ -245,19 +245,18 @@
       <input matInput type="text" [(ngModel)]="configService.applicationConfig.databaseFilename" placeholder="undefined">
     </mat-form-field>
 
-    <div class="paraAppConf">NextCP/2 listen port.</div>
     <mat-form-field appearance="outline" class="setting-dropdown">
-      <mat-label>server listening port</mat-label>
+      <mat-label>unsecure server listening port</mat-label>
       <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerPort" placeholder="undefined">
     </mat-form-field>
 
-    <div class="paraAppConf">NextCP/2 secure listen port.</div>
+    <div class="paraAppConf">Secure listen port works only if P12 keystore path is configured.</div>
     <mat-form-field appearance="outline" class="setting-dropdown">
-      <mat-label>SSL server listening port</mat-label>
+      <mat-label>secure server listening port</mat-label>
       <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerSslPort" placeholder="undefined">
     </mat-form-field>
 
-    <div class="paraAppConf">Path to NextCP/2 keystore file format. File has to be in P12 format and is used for encrypting the secure connection.</div>
+    <div class="paraAppConf">Path to NextCP/2 keystore for using secure connections. File format has to be in P12 format.</div>
     <mat-form-field appearance="outline" class="setting-dropdown">
       <mat-label>P12 keystore file location</mat-label>
       <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerSslP12Keystore" placeholder="undefined">

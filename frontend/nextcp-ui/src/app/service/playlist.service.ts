@@ -23,12 +23,6 @@ export class PlaylistService implements OnInit {
     TransportState: 'unknown'
   }
 
-  // Default server based playlists
-  serverPl: ServerPlaylists = { mediaServerUdn:'', containerId:'', serverPlaylists: [] };
-  serverPlPlaylistIds: string[] = [];
-
-  selectedMediaServer: MediaServerDto;
-
   // Playlist items of selected media renderer device
   public playlistItems: MusicItemDto[] = [];
 
@@ -48,22 +42,11 @@ export class PlaylistService implements OnInit {
       }
     });
 
-    sseService.mediaServerPlaylistChanged$.subscribe(data => {
-      if (deviceService.isMediaServerSelected(data.mediaServerUdn)) {
-        this.serverPl = data;
-        this.serverPl.serverPlaylists?.forEach(element => {
-          this.serverPlPlaylistIds.push(element.playlistId);
-        });
-      }
-    });
-
     sseService.mediaRendererPlaylistStateChanged$.subscribe(data => {
       if (deviceService.isMediaRendererSelected(data.udn)) {
         this.playlistState = data
       }
     });
-
-    deviceService.mediaServerChanged$.subscribe(server => this.afterMediaServerChanged(server))
   }
 
   ngOnInit(): void {
@@ -80,10 +63,6 @@ export class PlaylistService implements OnInit {
     })
   }
 
-  private afterMediaServerChanged(server: MediaServerDto) {
-    this.selectedMediaServer = server;
-    this.updateServerAccessiblePlaylists();
-  }
 
   public updatePlaylistItems(): void {
     if (this.deviceService.selectedMediaRendererDevice.udn !== '') {
@@ -91,33 +70,6 @@ export class PlaylistService implements OnInit {
       this.getPlaylistState(this.deviceService.selectedMediaRendererDevice.udn);
     }
   }
-
-  public playlistIdExistsInServerPlaylists(id: string) : boolean {
-    return this.serverPlPlaylistIds.indexOf(id) > -1;
-  }
-
-  //
-  // Playlists located in the configured folder name
-  // 
-  public updateServerAccessiblePlaylists() {
-    const uri = '/getServerPlaylists';
-    this.httpService.post<ServerPlaylists>(this.baseUri, uri, this.selectedMediaServer.udn).subscribe(data => {
-      this.serverPl = data;
-      this.serverPl.serverPlaylists?.forEach(element => {
-        this.serverPlPlaylistIds.push(element.playlistId);
-      });
-    });
-  }
-
-  public createPlaylist(playlistName : string) : Observable<string>{
-    const createPL : CreateServerPlaylistVO = {
-      containerId : this.serverPl.containerId, 
-      mediaServerUdn : this.selectedMediaServer.udn, 
-      playlistName : playlistName + '.m3u8'};
-    const uri = '/createPlaylist';
-    return this.httpService.post<string>(this.baseUri, uri, createPL);
-  }
-
 
   //
   // Ui action endpoints
@@ -232,7 +184,7 @@ export class PlaylistService implements OnInit {
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }
 
-  public delete(id: string): void {
+  public deleteSongFromRendererPlaylist(id: string): void {
     const uri = '/delete';
     const req: GenericNumberRequest = {
       deviceUDN: this.getSelectedMediaRendererUdn(),
@@ -255,21 +207,5 @@ export class PlaylistService implements OnInit {
   public previous(): void {
     const uri = '/previous';
     this.httpService.post(this.baseUri, uri, this.getSelectedMediaRendererUdn()).subscribe();
-  }
-
-  //
-  // Filesystem Playlist actions
-  // ========================================================================
-
-  public addSongToServerPlaylist(songId: string, playlistId: string): void {
-    const uri = '/addToServerPlaylist';
-    const req: ServerPlaylistEntry = { serverUdn: this.selectedMediaServer.udn, songObjectId: songId, playlistObjectId: playlistId };
-    this.httpService.post(this.baseUri, uri, req).subscribe();
-  }
-
-  public removeSongFromServerPlaylist(songId: string, playlistId: string): void {
-    const uri = '/removeFromServerPlaylist';
-    const req: ServerPlaylistEntry = { serverUdn: this.selectedMediaServer.udn, songObjectId: songId, playlistObjectId: playlistId };
-    this.httpService.post(this.baseUri, uri, req).subscribe();
   }
 }

@@ -1,7 +1,7 @@
 import { PopupService } from './../../../util/popup.service';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
-import { PlaylistService } from './../../../service/playlist.service';
 import { Component, OnInit, Inject, ElementRef } from '@angular/core';
+import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
 
 @Component({
     selector: 'defaut-playlists',
@@ -19,7 +19,7 @@ export class DefautPlaylistsComponent implements OnInit {
     _matDialogRef: MatDialogRef<DefautPlaylistsComponent>,
     @Inject(MAT_DIALOG_DATA) data: { trigger: ElementRef, id: string },
     private popupService: PopupService,
-    public playlistService: PlaylistService
+    public serverPlaylistService: ServerPlaylistService
   ) {
     this.data = data;
     this.triggerElementRef = data.trigger;
@@ -27,7 +27,7 @@ export class DefautPlaylistsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const popupHeight = this.playlistService.serverPl.serverPlaylists.length * 20 + 120;
+    const popupHeight = this.serverPlaylistService.serverPl.serverPlaylists.length * 20 + 120;
     this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 250, popupHeight);
   }
 
@@ -36,7 +36,7 @@ export class DefautPlaylistsComponent implements OnInit {
   }
 
   addToPlaylist(playlistName: string) {
-    this.playlistService.addSongToServerPlaylist(this.data.id, playlistName);
+    this.serverPlaylistService.addSongToServerPlaylist(this.data.id, playlistName);
     this._matDialogRef.close();
     this.data.parentPanel.closeThisPopup();
   }

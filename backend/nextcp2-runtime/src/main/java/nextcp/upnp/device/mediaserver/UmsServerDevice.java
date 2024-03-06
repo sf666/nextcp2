@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.support.contentdirectory.DIDLParser;
 import org.jupnp.support.model.DIDLContent;
@@ -15,19 +14,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import nextcp.config.ServerConfig;
-import nextcp.db.service.BasicDbService;
 import nextcp.dto.Config;
 import nextcp.dto.MediaServerDto;
 import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.ServerPlaylists;
 import nextcp.dto.ToastrMessage;
 import nextcp.upnp.GenActionException;
-import nextcp.upnp.device.mediaserver.extended.DefaultPlaylistManager;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateObjectInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateObjectOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateReferenceInput;
@@ -45,7 +40,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 {
     private static final Logger log = LoggerFactory.getLogger(UmsServerDevice.class.getName());
     private OkHttpClient okClient = new OkHttpClient.Builder().build();
-    private ObjectMapper om = new ObjectMapper();
     private final String userAgent = String.format("nextcp/2.0");
     private final String userAgentType = "USER-AGENT";
 
@@ -58,11 +52,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     @Autowired
     private ApplicationEventPublisher publisher = null;
 
-    @Autowired
-    private BasicDbService db = null;
-
-    private DefaultPlaylistManager playlistManager = null;
-
     public UmsServerDevice(RemoteDevice device)
     {
         super(device);
@@ -71,7 +60,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     @PostConstruct
     private void init()
     {
-        playlistManager = new DefaultPlaylistManager(db, this);
     }
 
     @Override
@@ -435,22 +423,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		}
     }
 
-    @Override
-    public void removeSongFromPlaylist(String songObjectId, String playlistContainerId)
-    {
-    	DestroyObjectInput inp = new DestroyObjectInput();
-		inp.ObjectID = songObjectId;
-		try {
-			getContentDirectoryService().destroyReference(inp);
-		} catch (GenActionException e) {
-			e.printStackTrace();
-			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.description);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage());
-		}
-    }
-
 
     public MediaServerDto getAsDto()
     {
@@ -463,4 +435,19 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
     	ServerPlaylists spl = searchMyPlaylistsItems(config.applicationConfig.myPlaylistFolderName);
         return spl;
     }
+
+	@Override
+	public void deleteObject(String objectId) {
+    	DestroyObjectInput inp = new DestroyObjectInput();
+		inp.ObjectID = objectId;
+		try {
+			getContentDirectoryService().destroyReference(inp);
+		} catch (GenActionException e) {
+			e.printStackTrace();
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.description);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage());
+		}
+	}
 }

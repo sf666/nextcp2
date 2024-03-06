@@ -44,82 +44,8 @@ public class RestPlaylistService extends BaseRestService
     @Autowired
     private DeviceRegistry deviceRegistry = null;
 
-    // @Autowired
-    // private FilesystemIndexerService filesystemPlaylistService = null;
-
     @Autowired
     private ApplicationEventPublisher publisher = null;
-
-    //
-    // Media Server based playlists
-    // =======================================================================
-
-    /**
-     * Creates a server based playlist.
-     * 
-     * @param createPlaylistVo
-     */
-    @PostMapping("/createPlaylist")
-    public String createPlaylist(@RequestBody CreateServerPlaylistVO createPlaylistVo)
-    {
-        try
-        {	
-            Item pi = getExtendedMediaServerByUdn(createPlaylistVo.mediaServerUdn).createPlaylist(createPlaylistVo.containerId, createPlaylistVo.playlistName);
-        	return pi.getId(); 
-        }
-        catch (Exception e)
-        {
-            log.warn("createPlaylist", e);
-            return "";
-        }
-    }
-
-    /**
-     * 
-     * @param serverUdn
-     * @return
-     */
-    @PostMapping("/getServerPlaylists")
-    public ServerPlaylists getServerPlaylists(@RequestBody String serverUdn)
-    {
-        try
-        {
-            return getExtendedMediaServerByUdn(serverUdn).getServerPlaylists();
-        }
-        catch (Exception e)
-        {
-            log.warn("getServerPlaylists", e);
-            return new ServerPlaylists();
-        }
-    }
-
-    @PostMapping("/addToServerPlaylist")
-    public void addToServerPlaylist(@RequestBody ServerPlaylistEntry addRequest)
-    {
-        try
-        {
-            getExtendedMediaServerByUdn(addRequest.serverUdn).addSongToPlaylist(addRequest.songObjectId, addRequest.playlistObjectId);
-        }
-        catch (Exception e)
-        {
-            publisher.publishEvent(new ToastrMessage(null, "error", "edit playlist", "Adding song failed. Message : " + e.getMessage()));
-            log.warn("adding song to server playlist", e);
-        }
-    }
-
-    @PostMapping("/removeFromServerPlaylist")
-    public void removeFromServerPlaylist(@RequestBody ServerPlaylistEntry addRequest)
-    {
-        try
-        {
-            getExtendedMediaServerByUdn(addRequest.serverUdn).removeSongFromPlaylist(addRequest.songObjectId, addRequest.playlistObjectId);
-        }
-        catch (Exception e)
-        {
-            log.warn("removing song from server playlist", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "edit playlist", "Removing song failed. Message : " + e.getMessage()));
-        }
-    }
 
     //
     // UPnP playlist service

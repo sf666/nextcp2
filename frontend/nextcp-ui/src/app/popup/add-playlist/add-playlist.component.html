@@ -1,11 +1,16 @@
 <div class="popupFrame">
     <div class="popupHeader d-flex justify-content-between mx-4">
         <div class="d-flex d-flex justify-content-between w-100 px-4">
-            <div (click)="addPlaylistClick()" class="{{addPlaylistClass()}}">
-                add to playlist
-            </div>
-            <div (click)="newPlaylistClick()" class="{{createPlaylistClass()}}">
+            @if(musicItemToAddExists) {
+                <div (click)="addPlaylistClick()" [class]="playlistActiveClass(PlaylistModeEnum.Add)">
+                    add to playlist
+                </div>
+            }
+            <div (click)="newPlaylistClick()" [class]="playlistActiveClass(PlaylistModeEnum.Create)">
                 create playlist
+            </div>
+            <div (click)="deletePlaylistClick()" [class]="playlistActiveClass(PlaylistModeEnum.Delete)">
+                delete playlist
             </div>
         </div>
         <div>
@@ -14,7 +19,7 @@
     </div>
     <div class="popupDivider mt-2 mb-1">&nbsp;</div>
     <div class="popupBody">
-        @if (addPlaylist) {
+        @if (isPlaylistMode(PlaylistModeEnum.Add) || isPlaylistMode(PlaylistModeEnum.Delete)) {
         <div class="searchInput">
             <mat-form-field class="w100" appearance="outline" class="setting-dropdown">
                 <input matInput type="text" [(ngModel)]="playlistFilter" placeholder="search for playlist">
@@ -37,10 +42,17 @@
                     </div>
                 </div>
                 <div class="d-flex align-self-center">
-                    <button mat-stroked-button class="my-buttons light-font" (click)="addTo(playlist)">
-                        <mat-icon class="material-symbols-outlined thin">playlist_add</mat-icon>
-                        <span class="button button-text">add track</span>
-                    </button>
+                    @if(isPlaylistMode(PlaylistModeEnum.Add)) {
+                        <button mat-stroked-button class="my-buttons light-font" (click)="addTo(playlist)">
+                            <mat-icon class="material-symbols-outlined thin">playlist_add</mat-icon>
+                            <span class="button button-text">add track</span>
+                        </button>
+                    } @else {
+                        <button mat-stroked-button class="my-buttons light-font" (click)="deletePlaylist(playlist)">
+                            <mat-icon class="material-symbols-outlined thin">delete</mat-icon>
+                            <span class="button button-text">delete</span>
+                        </button>
+                    }
                 </div>
             </div>
             }
@@ -62,15 +74,23 @@
                     </div>
                 </div>
                 <div class="d-flex align-self-center">
-                    <button mat-stroked-button class="my-buttons" (click)="addTo(playlist)">
-                        <mat-icon class="material-symbols-outlined thin">playlist_add</mat-icon>
-                        <span class="button button-text">add track</span>
-                    </button>
+                    @if(isPlaylistMode(PlaylistModeEnum.Add)) {
+                        <button mat-stroked-button class="my-buttons" (click)="addTo(playlist)">
+                            <mat-icon class="material-symbols-outlined thin">playlist_add</mat-icon>
+                            <span class="button button-text">add track</span>
+                        </button>
+                    } @else {
+                        <button mat-stroked-button class="my-buttons light-font" (click)="deletePlaylist(playlist)">
+                            <mat-icon class="material-symbols-outlined thin">delete</mat-icon>
+                            <span class="button button-text">delete</span>
+                        </button>
+                    }
                 </div>
             </div>
             }
         </div>
-        } @else {
+        } @else if (isPlaylistMode(PlaylistModeEnum.Create)) {
+        <!-- create Playlist -->
         <div class="searchInput">
             <mat-form-field class="w100" appearance="outline" class="setting-dropdown">
                 <input matInput type="text" [(ngModel)]="newPlaylistName" placeholder="new playlist name">
