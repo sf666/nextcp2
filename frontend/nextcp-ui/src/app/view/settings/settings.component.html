@@ -222,91 +222,145 @@
 <div class="section head ">General Configuration</div>
 <div class="generalConfigOptions">
   <div class="section subhead d-flex flex-column">
-    <div class="paraAppConf">Enter the physical name of the folder where managed playlists are located on your media server.
-      Playlists will appear as directly accessible links inside the left sidebar. Sidebar has to be expanded. The media server must offer search
-      support for folder names.
+
+    <div class="d-flex flex-wrap-reverse">
+      <div class="paraInputField">
+        <mat-form-field appearance="outline" class="setting-dropdown">
+          <mat-label>MY PLAYLISTS - folder name</mat-label>
+          <input matInput type="text" [(ngModel)]="configService.applicationConfig.myPlaylistFolderName" placeholder="PlaylistsFolderName">
+        </mat-form-field>
+      </div>
+      <div class="paraAppConf">Physical folder name located on your media server containing playlists. Playlists will 
+        appear as directly accessible links inside the left sidebar.
+      </div>
     </div>
-    <mat-form-field appearance="outline" class="setting-dropdown">
-      <mat-label>MY PLAYLISTS - folder name</mat-label>
-      <input matInput type="text" [(ngModel)]="configService.applicationConfig.myPlaylistFolderName" placeholder="PlaylistsFolderName">
-    </mat-form-field>
 
-    <div class="paraAppConf">Physical name of the folder where device driver files are located. NextCP/2 need read access to this folder.
+    <div class="d-flex flex-wrap-reverse">
+      <div class="paraInputField">
+        <mat-form-field appearance="outline" class="setting-dropdown">
+          <mat-label>device driver library path</mat-label>
+          <input matInput type="text" [(ngModel)]="configService.applicationConfig.libraryPath" placeholder="undefined">
+        </mat-form-field>
+      </div>
+      <div class="paraAppConf">Path to the folder containing device driver JAR files. NextCP/2 need read access to this folder.
+      </div>
     </div>
-    <mat-form-field appearance="outline" class="setting-dropdown">
-      <mat-label>device driver library path</mat-label>
-      <input matInput type="text" [(ngModel)]="configService.applicationConfig.libraryPath" placeholder="undefined">
-    </mat-form-field>
 
-    <div class="paraAppConf">Physical name of the folder where NextCP/2 creates the database files. Read and write access is needed for this folder.
+    <div class="d-flex flex-wrap-reverse">
+      <div class="paraInputField">
+        <mat-form-field appearance="outline" class="setting-dropdown">
+          <mat-label>database path</mat-label>
+          <input matInput type="text" [(ngModel)]="configService.applicationConfig.databaseFilename" placeholder="undefined">
+        </mat-form-field>
+      </div>
+      <div class="paraAppConf">Path to the folder where NextCP/2 creates database files. Read and write access is needed for this folder.
+      </div>
     </div>
-    <mat-form-field appearance="outline" class="setting-dropdown">
-      <mat-label>database path</mat-label>
-      <input matInput type="text" [(ngModel)]="configService.applicationConfig.databaseFilename" placeholder="undefined">
-    </mat-form-field>
 
-    <mat-form-field appearance="outline" class="setting-dropdown">
-      <mat-label>unsecure server listening port</mat-label>
-      <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerPort" placeholder="undefined">
-    </mat-form-field>
+    <div class="d-flex flex-wrap-reverse">
+      <div class="paraInputField">
+        <mat-form-field appearance="outline" class="setting-dropdown">
+          <mat-label>unsecure server listening port</mat-label>
+          <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerPort" placeholder="undefined">
+        </mat-form-field>
+      </div>
+      <div class="paraAppConf">regular HTTP listen port.</div>
+    </div>
 
-    <div class="paraAppConf">Secure listen port works only if P12 keystore path is configured.</div>
-    <mat-form-field appearance="outline" class="setting-dropdown">
-      <mat-label>secure server listening port</mat-label>
-      <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerSslPort" placeholder="undefined">
-    </mat-form-field>
+    <div class="d-flex flex-wrap-reverse">
+      <div class="paraInputField">
+        <mat-form-field appearance="outline" class="setting-dropdown">
+          <mat-label>secure server listening port</mat-label>
+          <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerSslPort" placeholder="undefined">
+        </mat-form-field>
+      </div>
+      <div class="paraAppConf">Secure listen port works only if P12 keystore path is configured.</div>
+    </div>
 
-    <div class="paraAppConf">Path to NextCP/2 keystore for using secure connections. File format has to be in P12 format.</div>
-    <mat-form-field appearance="outline" class="setting-dropdown">
-      <mat-label>P12 keystore file location</mat-label>
-      <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerSslP12Keystore" placeholder="undefined">
-    </mat-form-field>
+    <div class="d-flex flex-wrap-reverse">
+      <div class="paraInputField">
+        <mat-form-field appearance="outline" class="setting-dropdown">
+          <mat-label>P12 keystore file location</mat-label>
+          <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerSslP12Keystore" placeholder="undefined">
+        </mat-form-field>
+      </div>
+      <div class="paraAppConf">Path to NextCP/2 keystore for using secure connections. File format has to be in P12 format.</div>
+    </div>
 
-    <div class="paraAppConf">P12 keystore password.</div>
-    <mat-form-field appearance="outline" class="setting-dropdown">
-      <mat-label>P12 keystore password</mat-label>
-      <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerSslP12KeystorePassword" placeholder="undefined">
-    </mat-form-field>
+    <div class="d-flex flex-wrap-reverse">
+      <div class="paraInputField">
+        <mat-form-field appearance="outline" class="setting-dropdown">
+          <mat-label>P12 keystore password</mat-label>
+          <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerSslP12KeystorePassword" placeholder="undefined">
+        </mat-form-field>
+      </div>
+      <div class="paraAppConf">P12 keystore password.</div>
+    </div>
 
-    <div class="paraAppConf">Full path to the restart script. Read access to this resource is needed.</div>
-    <mat-form-field appearance="outline" class="setting-dropdown">
-      <mat-label>path to restart script</mat-label>
-      <input matInput type="text" [(ngModel)]="configService.applicationConfig.pathToRestartScript" placeholder="undefined">
-    </mat-form-field>
+    <div class="d-flex flex-wrap-reverse">
+      <div class="paraInputField">
+        <mat-form-field appearance="outline" class="setting-dropdown">
+          <mat-label>path to restart script</mat-label>
+          <input matInput type="text" [(ngModel)]="configService.applicationConfig.pathToRestartScript" placeholder="undefined">
+        </mat-form-field>
+      </div>
+      <div class="paraAppConf">Full path to the restart script. Read access to this resource is needed.</div>
+    </div>
 
-    <div class="paraAppConf">Location of the log4j configuration file.</div>
-    <mat-form-field appearance="outline" class="setting-dropdown">
-      <mat-label>Log4j config file</mat-label>
-      <input matInput type="text" [(ngModel)]="configService.applicationConfig.log4jConfigFile" placeholder="undefined">
-    </mat-form-field>
+    <div class="d-flex flex-wrap-reverse">
+      <div class="paraInputField">
+        <mat-form-field appearance="outline" class="setting-dropdown">
+          <mat-label>Log4j config file</mat-label>
+          <input matInput type="text" [(ngModel)]="configService.applicationConfig.log4jConfigFile" placeholder="undefined">
+        </mat-form-field>
+      </div>
+      <div class="paraAppConf">Location of the log4j configuration file.</div>
+    </div>
 
-    <div class="paraAppConf">This is the log4j2 date format. The date is printed at the beginning of each log line.</div>
-    <mat-form-field appearance="outline" class="setting-dropdown">
-      <mat-label>Logging date format</mat-label>
-      <input matInput type="text" [(ngModel)]="configService.applicationConfig.loggingDateTimeFormat" placeholder="yyyy-MM-dd HH:mm:ss">
-    </mat-form-field>
+    <div class="d-flex flex-wrap-reverse">
+      <div class="paraInputField">
+        <mat-form-field appearance="outline" class="setting-dropdown">
+          <mat-label>Logging date format</mat-label>
+          <input matInput type="text" [(ngModel)]="configService.applicationConfig.loggingDateTimeFormat" placeholder="yyyy-MM-dd HH:mm:ss">
+        </mat-form-field>
+      </div>
+      <div class="paraAppConf">This is the log4j2 date format. The date is printed at the beginning of each log line.</div>
+    </div>
 
-    <div class="paraAppConf">Choose between different http stream client implementation.</div>
-    <mat-form-field appearance="outline" class="setting-dropdown">
-      <mat-label>UPnP stream client</mat-label>
-      <mat-select [(ngModel)]="configService.applicationConfig.upnpStreamClient">
-        <mat-option value="JDK">JDK</mat-option>
-        <mat-option value="APACHE">Apache</mat-option>
-        <mat-option value="">default</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="d-flex flex-wrap-reverse">
+      <div class="paraInputField">
+        <mat-form-field appearance="outline" class="setting-dropdown">
+          <mat-label>UPnP stream client</mat-label>
+          <mat-select [(ngModel)]="configService.applicationConfig.upnpStreamClient">
+            <mat-option value="JDK">JDK</mat-option>
+            <mat-option value="APACHE">Apache</mat-option>
+            <mat-option value="">default</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="paraAppConf">Choose between different http stream client implementation.</div>
+    </div>
 
-    <div class="paraAppConf">If checked, java code will be generated for services a device offers.</div>
-    <mat-form-field appearance="outline" class="setting-dropdown">
-      <mat-label>Generate UPnP code</mat-label>
-      <input matInput type="text" [(ngModel)]="configService.applicationConfig.generateUpnpCode" placeholder="">
-    </mat-form-field>
+    <div class="d-flex flex-wrap-reverse">
+      <div class="paraInputField">
+        <mat-form-field appearance="outline" class="setting-dropdown">
+          <mat-label>Generate UPnP code</mat-label>
+          <input matInput type="text" [(ngModel)]="configService.applicationConfig.generateUpnpCode" placeholder="">
+        </mat-form-field>
+      </div>
+      <div class="paraAppConf">If checked, java code will be generated for services a device offers.</div>
+    </div>
 
-    <div class="paraAppConf">This is the folder where generated UPnP code will be saved.</div>
-    <mat-form-field appearance="outline" class="setting-dropdown">
-      <mat-label>path for generated UPnP code</mat-label>
-      <input matInput type="text" [(ngModel)]="configService.applicationConfig.generateUpnpCodePath" placeholder="">
-    </mat-form-field>
+    <div class="d-flex flex-wrap-reverse">
+      <div class="paraInputField">
+        <mat-form-field appearance="outline" class="setting-dropdown">
+          <mat-label>path for generated UPnP code</mat-label>
+          <input matInput type="text" [(ngModel)]="configService.applicationConfig.generateUpnpCodePath" placeholder="">
+        </mat-form-field>
+      </div>
+      <div class="paraAppConf">This is the folder where generated UPnP code will be saved.</div>
+    </div>
+
     <div class="d-flex section ms-4">
       <button mat-stroked-button color="accent" (click)="saveGeneralConfig()">save</button>
     </div>
