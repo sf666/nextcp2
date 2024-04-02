@@ -591,6 +591,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
     @Override
     public void play()
     {
+    	device.checkServicesOnline();
         setPlaylistTransportState(TransportState.Playing);
 
         MusicItemDto song = getCurrentTrack();

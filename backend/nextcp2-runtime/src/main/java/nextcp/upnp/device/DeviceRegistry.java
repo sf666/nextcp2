@@ -79,9 +79,7 @@ public class DeviceRegistry
     public synchronized void removeMediaRendererDevice(RemoteDevice remoteDevice)
     {
     	log.info("device removed : {}", remoteFacade.getFriendlyName(remoteDevice));
-    	
-//        MediaRendererDevice mr_device = mediaRendererList.remove(remoteFacade.getUDN(remoteDevice));
-//        eventPublisher.publishEvent(new MediaRendererListChanged(getAvailableMediaRenderer()));
+    	mediaRendererList.get(remoteFacade.getUDN(remoteDevice)).setServicesOffline(true);
     }
 
     public Collection<MediaRendererDevice> getActiveMediaRenderer()

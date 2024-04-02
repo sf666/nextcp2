@@ -62,6 +62,7 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
     @Override
     public void play()
     {
+    	device.checkServicesOnline();
         PlayInput inp = new PlayInput();
         inp.InstanceID = 0L;
         inp.Speed = "1";

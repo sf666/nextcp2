@@ -702,11 +702,14 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
      * @param state
      */
     public void setServicesOffline(boolean state) {
-    	if (state == false && this.serviceOffline) {
-    		log.info("{} : trying to initialize services again ...", getFriendlyName());
-    	}
     	this.serviceOffline = state;
     }
+    
+	public void checkServicesOnline() {
+		if (serviceOffline) {
+			initDeviceServices();
+		}
+	}
 
 	public void setTrimBalance(Integer balance) {
         try
