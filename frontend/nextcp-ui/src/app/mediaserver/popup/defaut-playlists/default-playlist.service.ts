@@ -28,6 +28,17 @@ export class DefaultPlaylistService {
     return this.dialogRef;
   }
 
+  public openAddGlobalPlaylistDialogWithBackdrop(item: MusicItemDto) : MatDialogRef<any,any> {
+    this.dialogRef = this.dialog.open(AddPlaylistComponent, {
+      hasBackdrop: true,
+      height: '500px',
+      width: '600px',
+      data: { item: item},
+    });
+
+    return this.dialogRef;
+  }
+
   /**
    * Opens a dialog next to a parent element.
    * 

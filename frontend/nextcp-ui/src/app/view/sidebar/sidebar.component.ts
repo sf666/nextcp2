@@ -170,6 +170,6 @@ export class SidebarComponent {
   }
 
   public showPlaylistDialog() : void {
-    this.defaultPlaylistService.openAddGlobalPlaylistDialog(null);
+    this.defaultPlaylistService.openAddGlobalPlaylistDialogWithBackdrop(null);
   }
 }
