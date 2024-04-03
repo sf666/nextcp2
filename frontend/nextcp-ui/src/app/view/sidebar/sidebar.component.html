@@ -30,7 +30,14 @@
   </div>
 
     <div class="myPlaylistSection hide-element">
-      <div class="hide-element sub-label">MY PLAYLISTS</div>
+      <div class="sub-label d-flex justify-content-between">
+        <div class="align-self-center">
+          MY PLAYLISTS
+        </div>
+        <div class="align-self-center">
+            <mat-icon class="material-symbols-outlined" (click)="showPlaylistDialog()">pending</mat-icon>
+        </div>
+      </div>
       @for (item of playlistService.serverPl.serverPlaylists; track item.playlistId) {
         <a mat-button [routerLink]="'/myPlaylists'" class="hide-element playlist {{getPlaylistClass(item.playlistId)}}"
         (click)="browseToPlaylist(item)">{{item.playlistName}}</a>

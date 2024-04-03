@@ -13,6 +13,7 @@ import { ServerPlaylistDto } from 'src/app/service/dto';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatAnchor } from '@angular/material/button';
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
+import { DefaultPlaylistService } from 'src/app/mediaserver/popup/defaut-playlists/default-playlist.service';
 
 @Component({
     selector: 'app-sidebar',
@@ -43,7 +44,7 @@ export class SidebarComponent {
     private myPlaylistService: MyPlaylistService,
     private router: Router,
     public layoutService: LayoutService,
-    private dialog: MatDialog,
+    private defaultPlaylistService: DefaultPlaylistService,
     private configurationService: ConfigurationService,
     public rendererService: RendererService) {
     deviceService.mediaRendererChanged$.subscribe(data => this._mediaRendererUdn = data.udn);
@@ -166,5 +167,9 @@ export class SidebarComponent {
 
   public get myFolderConfigured() : boolean {
     return this.configurationService.applicationConfig.myPlaylistFolderName?.length > 0;
+  }
+
+  public showPlaylistDialog() : void {
+    this.defaultPlaylistService.openAddGlobalPlaylistDialog(null);
   }
 }

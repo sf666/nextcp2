@@ -50,7 +50,11 @@ export class AddPlaylistComponent {
     public dialogRef: MatDialogRef<AddPlaylistComponent>,
   ) {
     this.musicItemToAdd = data.item;
-    this.playlistMode = PlaylistMode.Add;
+    if (data.item) {
+      this.playlistMode = PlaylistMode.Add;
+    } else {
+      this.playlistMode = PlaylistMode.Create;
+    }
     let sr = dtoGeneratorService.generateEmptySearchRequestDto();    
     sr.searchRequest = '';
     sr.mediaServerUDN = deviceService.selectedMediaServerDevice.udn;
