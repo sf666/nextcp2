@@ -159,7 +159,9 @@ export class DtoGeneratorService {
       sampleFrequency: 0,
       durationDisp: '',
       durationInSeconds: 0,
-      contentFormat: ''
+      contentFormat: '',
+      size: 0,
+      isStreaming: true,
     }
   }
 

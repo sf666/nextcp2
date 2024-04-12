@@ -240,6 +240,8 @@ AudioFormat:
    durationDisp: String
    durationInSeconds: Long 
    contentFormat: String
+   size: Long
+   isStreaming: Boolean
 
 RadioStation:
    id: Long

@@ -450,6 +450,7 @@ public class DtoBuilder
     {
         for (Res res : item.getResources())
         {
+        	// TODO pick best "res" for streaming !!!
             AudioFormat format = extractAudioFormatFromResourceField(res);
             if (format != null)
             {
@@ -526,30 +527,37 @@ public class DtoBuilder
     AudioFormat extractAudioFormatFromResourceField(Res res)
     {
         AudioFormat af = null;
-        if (res.getBitrate() != null)
-        {
-            af = new AudioFormat();
-            af.bitrate = res.getBitrate();
-            af.bitsPerSample = res.getBitsPerSample();
-            af.nrAudioChannels = res.getNrAudioChannels();
-            af.sampleFrequency = res.getSampleFrequency();
-            af.durationDisp = res.getDuration();
-            if (res.getProtocolInfo() != null)
-            {
-                af.contentFormat = res.getProtocolInfo().getContentFormat();
-            }
-            try
-            {
-                if (!StringUtils.isBlank(af.durationDisp))
-                {
-                    String s = normalizeDuration(res.getDuration());
-                    af.durationInSeconds = dispParse.parse(s).getTime() / 1000;
-                }
-            }
-            catch (Exception e)
-            {
-                log.warn("cannot parse duration : " + e.getMessage());
-            }
+        if (res.getProtocolInfo().getContentFormat().startsWith("audio")) {
+	        af = new AudioFormat();
+	        af.bitrate = res.getBitrate();
+	        af.bitsPerSample = res.getBitsPerSample();
+	        af.nrAudioChannels = res.getNrAudioChannels();
+	        af.sampleFrequency = res.getSampleFrequency();
+	        af.durationDisp = res.getDuration();
+	        af.size = res.getSize();
+	        if (af.size != null) {
+	        	if (af.size <= 1 || af.size > Integer.MAX_VALUE) {
+	        		af.isStreaming = true;
+	        	} else {
+	        		af.isStreaming = false;
+	        	}
+	        }
+	        if (res.getProtocolInfo() != null)
+	        {
+	            af.contentFormat = res.getProtocolInfo().getContentFormat();
+	        }
+	        try
+	        {
+	            if (!StringUtils.isBlank(af.durationDisp))
+	            {
+	                String s = normalizeDuration(res.getDuration());
+	                af.durationInSeconds = dispParse.parse(s).getTime() / 1000;
+	            }
+	        }
+	        catch (Exception e)
+	        {
+	            log.warn("cannot parse duration : " + e.getMessage());
+	        }
         }
         return af;
     }

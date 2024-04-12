@@ -20,12 +20,14 @@ public class AudioFormat
     public String durationDisp;
     public Long durationInSeconds;
     public String contentFormat;
+    public Long size;
+    public Boolean isStreaming;
 
     public AudioFormat()
     {
     }
 
-    public AudioFormat(Long nrAudioChannels, Long sampleFrequency, Long bitsPerSample, Long bitrate, String filetype, String durationDisp, Long durationInSeconds, String contentFormat)
+    public AudioFormat(Long nrAudioChannels, Long sampleFrequency, Long bitsPerSample, Long bitrate, String filetype, String durationDisp, Long durationInSeconds, String contentFormat, Long size, Boolean isStreaming)
     {
         this.nrAudioChannels = nrAudioChannels;
         this.sampleFrequency = sampleFrequency;
@@ -35,6 +37,8 @@ public class AudioFormat
         this.durationDisp = durationDisp;
         this.durationInSeconds = durationInSeconds;
         this.contentFormat = contentFormat;
+        this.size = size;
+        this.isStreaming = isStreaming;
     }
     
     @Override
@@ -50,6 +54,8 @@ public class AudioFormat
         sb.append("durationDisp=").append(this.durationDisp).append(", ");
         sb.append("durationInSeconds=").append(this.durationInSeconds).append(", ");
         sb.append("contentFormat=").append(this.contentFormat).append(", ");
+        sb.append("size=").append(this.size).append(", ");
+        sb.append("isStreaming=").append(this.isStreaming).append(", ");
         sb.append("]");
         return sb.toString();
     }

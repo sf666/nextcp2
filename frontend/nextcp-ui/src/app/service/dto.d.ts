@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2024-03-06 11:06:01.
+// Generated using typescript-generator version 3.2.1263 on 2024-04-12 09:36:47.
 
 export interface ApplicationConfig {
     myPlaylistFolderName: string;
@@ -32,6 +32,8 @@ export interface AudioFormat {
     durationDisp: string;
     durationInSeconds: number;
     contentFormat: string;
+    size: number;
+    isStreaming: boolean;
 }
 
 export interface BrowseRequestDto {
