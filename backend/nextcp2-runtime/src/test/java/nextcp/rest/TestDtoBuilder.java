@@ -2,6 +2,7 @@ package nextcp.rest;
 
 import static org.junit.Assert.assertTrue;
 import org.junit.jupiter.api.Test;
+import org.jupnp.support.model.ProtocolInfo;
 import org.jupnp.support.model.Res;
 import nextcp.dto.AudioFormat;
 
@@ -39,6 +40,7 @@ public class TestDtoBuilder
     private Res buildResObject(String duration)
     {
         Res res = new Res();
+        res.setProtocolInfo(new ProtocolInfo("*:*:audio:*"));
         res.setBitsPerSample(2L);
         res.setBitrate(192 * 125L);
         res.setSampleFrequency(1140L);
