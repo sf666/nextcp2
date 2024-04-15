@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -16,7 +15,6 @@ import org.jupnp.support.model.DIDLObject;
 import org.jupnp.support.model.DIDLObject.Property;
 import org.jupnp.support.model.DescMeta;
 import org.jupnp.support.model.PersonWithRole;
-import org.jupnp.support.model.ProtocolInfo;
 import org.jupnp.support.model.Res;
 import org.jupnp.support.model.container.MusicAlbum;
 import org.jupnp.support.model.container.MusicArtist;
@@ -28,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Node;
-
 import nextcp.dto.AudioFormat;
 import nextcp.dto.ContainerDto;
 import nextcp.dto.MediaRendererDto;

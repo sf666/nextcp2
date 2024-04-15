@@ -2,16 +2,11 @@ package nextcp.upnp.device.mediarenderer.ohtransport;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-
 import nextcp.domainmodel.device.services.ITransport;
 import nextcp.dto.ToastrMessage;
 import nextcp.dto.TransportServiceStateDto;
-import nextcp.eventBridge.ToastrInfoService;
-import nextcp.rest.DtoBuilder;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
-import nextcp.upnp.device.mediarenderer.OpenHomeUtils;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.TransportService;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.ModeInfoOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SeekSecondAbsoluteInput;

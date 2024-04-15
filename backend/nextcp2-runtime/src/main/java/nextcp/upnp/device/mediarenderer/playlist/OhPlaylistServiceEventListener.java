@@ -15,8 +15,6 @@ import nextcp.upnp.modelGen.avopenhomeorg.playlist1.PlaylistServiceStateVariable
 
 public class OhPlaylistServiceEventListener extends PlaylistServiceEventListenerImpl
 {
-    private static final Logger log = LoggerFactory.getLogger(OhPlaylistServiceEventListener.class.getName());
-
     private OhPlaylistBridge playlist;
     private MediaRendererDevice device;
     private boolean shouldPublishTransportServiceState = false;

@@ -4,9 +4,6 @@ import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-
-import jakarta.annotation.PostConstruct;
-
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.support.model.DIDLContent;
 import org.jupnp.support.model.DIDLObject.Property.UPNP;
@@ -15,9 +12,8 @@ import org.jupnp.support.model.container.MusicAlbum;
 import org.jupnp.support.model.item.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import jakarta.annotation.PostConstruct;
 import nextcp.domainmodel.device.mediaserver.search.SearchSupport;
-import nextcp.dto.BrowseRequestDto;
 import nextcp.dto.ContainerDto;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MediaServerDto;

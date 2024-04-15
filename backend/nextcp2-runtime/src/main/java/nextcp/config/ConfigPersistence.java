@@ -1,15 +1,10 @@
 package nextcp.config;
 
 import java.util.Base64;
-
-import jakarta.annotation.PostConstruct;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-
+import jakarta.annotation.PostConstruct;
 import nextcp.db.service.BasicDbService;
 import nextcp.dto.Config;
 import nextcp.dto.MusicbrainzSupport;
@@ -22,8 +17,6 @@ import nextcp.musicbrainz.MusicBrainzConfig;
 @Service
 public class ConfigPersistence
 {
-    private static final Logger log = LoggerFactory.getLogger(ConfigPersistence.class.getName());
-
     private Config config = null;
 
     private ConfigDefaults configDefaults = new ConfigDefaults();

@@ -3,8 +3,6 @@ package nextcp.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-
-import nextcp.config.ConfigPersistence;
 import nextcp.dto.Config;
 import nextcp.dto.ToastrMessage;
 import nextcp.spotify.SpotifyService;

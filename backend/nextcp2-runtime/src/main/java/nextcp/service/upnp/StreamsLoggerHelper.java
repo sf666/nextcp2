@@ -16,20 +16,14 @@
  */
 package nextcp.service.upnp;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.xpath.XPathExpressionException;
 import org.apache.commons.lang.StringUtils;
-import org.jupnp.model.XMLUtil;
 import org.jupnp.model.message.StreamRequestMessage;
 import org.jupnp.model.message.StreamResponseMessage;
 import org.jupnp.model.message.UpnpMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
 /**
  * Uniformize logging for UPnP HTTP streams

@@ -31,7 +31,6 @@ import org.jupnp.binding.xml.UDA10ServiceDescriptorBinderImpl;
 import org.jupnp.model.ModelUtil;
 import org.jupnp.model.Namespace;
 import org.jupnp.model.message.UpnpHeaders;
-import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteDeviceIdentity;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.types.ServiceType;

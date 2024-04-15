@@ -1,19 +1,16 @@
 package nextcp.upnp.device.mediarenderer;
 
-import jakarta.annotation.PostConstruct;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-
+import jakarta.annotation.PostConstruct;
 import nextcp.devicedriver.DeviceDriverDiscoveryService;
 import nextcp.devicedriver.IDeviceDriverCallback;
 import nextcp.devicedriver.IDeviceDriverService;
 import nextcp.dto.DeviceDriverState;
 import nextcp.dto.DevicePowerChanged;
 import nextcp.dto.DeviceVolumeChanged;
-import nextcp.dto.InputSourceChangeDto;
 import nextcp.dto.InputSourceDto;
 
 /**

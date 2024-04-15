@@ -16,7 +16,6 @@
  */
 package nextcp.service.upnp;
 
-import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -37,6 +36,7 @@ import org.jupnp.util.Exceptions;
 import org.jupnp.util.io.IO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.sun.net.httpserver.HttpExchange;
 
 public class JdkHttpServerUpnpStream extends UpnpStream
 {
@@ -70,8 +70,9 @@ public class JdkHttpServerUpnpStream extends UpnpStream
 
             if (requestMessage.getOperation().getMethod().equals(UpnpRequest.Method.UNKNOWN))
             {
-                LOGGER.trace("Method not supported by UPnP stack: {}", getHttpExchange().getRequestMethod());
-                throw new RuntimeException("Method not supported: " + getHttpExchange().getRequestMethod());
+            	String method = getHttpExchange().getRequestMethod();
+                LOGGER.trace("Method not supported by UPnP stack: {}", method);
+                throw new RuntimeException("Method not supported: " + method);
             }
 
             // Protocol

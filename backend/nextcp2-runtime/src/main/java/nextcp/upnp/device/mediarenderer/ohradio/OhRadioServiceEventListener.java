@@ -2,16 +2,12 @@ package nextcp.upnp.device.mediarenderer.ohradio;
 
 import org.jupnp.model.gena.CancelReason;
 import org.jupnp.model.message.UpnpResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import nextcp.dto.TransportServiceStateDto;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.RadioServiceEventListenerImpl;
 
 public class OhRadioServiceEventListener extends RadioServiceEventListenerImpl
 {
-	private static final Logger log = LoggerFactory.getLogger(OhRadioServiceEventListener.class.getName());
-	
     private MediaRendererDevice device = null;
 
     private boolean shouldPublishTransportServiceState = false;

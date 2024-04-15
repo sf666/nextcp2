@@ -4,9 +4,7 @@ import org.jupnp.UpnpServiceConfiguration;
 import org.jupnp.UpnpServiceImpl;
 import org.jupnp.protocol.ProtocolFactory;
 import org.jupnp.registry.Registry;
-import org.jupnp.registry.RegistryImpl;
 import nextcp.config.RendererConfig;
-import nextcp.dto.Config;
 
 
 public class Nextcp2UpnpServiceImpl extends UpnpServiceImpl {

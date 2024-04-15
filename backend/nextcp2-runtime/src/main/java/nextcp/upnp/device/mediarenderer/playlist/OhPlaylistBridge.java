@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
 import nextcp.domainmodel.device.services.IPlaylistService;
-import nextcp.domainmodel.device.services.ITransport;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MusicBrainzId;
 import nextcp.dto.MusicItemDto;
