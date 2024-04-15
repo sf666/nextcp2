@@ -85,31 +85,35 @@ public class MediaServerDevice extends BaseDevice {
 	public ServerPlaylists searchMyPlaylistsItems(String myPlaylistFolder)
     {
 		ServerPlaylists serverPlaylists = new ServerPlaylists();
-		serverPlaylists.mediaServerUdn = getUdnAsString();
-    	serverPlaylists.serverPlaylists = new ArrayList<>();
-    	SearchRequestDto sr = new SearchRequestDto("0", 0L , 999L, getUdnAsString(), myPlaylistFolder, "");
-    	List<ContainerDto> playlistFolder = searchSupportDelegate.searchPlaylistItems(sr); 
-    	for (ContainerDto folder : playlistFolder) {
-			if (myPlaylistFolder.equalsIgnoreCase(folder.title)) {
-		        serverPlaylists.containerId = folder.id;
-				log.info("Found server based playlists located at folder id : {}", folder.id);
-		        BrowseInput browseInp = new BrowseInput();
-		        browseInp.ObjectID = folder.id;
-		        browseInp.StartingIndex = 0L;
-		        browseInp.RequestedCount = 999L;
-		        
-		        ContainerItemDto playlists = browseChildren(browseInp);
-		        for (ContainerDto pl : playlists.containerDto) {
-					if ("object.container.playlistContainer".equalsIgnoreCase(pl.objectClass)) {
-						// strip extension if delivered 
-						String title = pl.title.lastIndexOf(".") > -1 ? pl.title.substring(0, pl.title.lastIndexOf(".")) : pl.title;
-						ServerPlaylistDto dto = new ServerPlaylistDto(pl.albumartUri, title, pl.id, null, null);
-						serverPlaylists.serverPlaylists.add(dto);
-						log.info("Found server based playlist name : {}", dto);
+		try {
+			serverPlaylists.mediaServerUdn = getUdnAsString();
+	    	serverPlaylists.serverPlaylists = new ArrayList<>();
+	    	SearchRequestDto sr = new SearchRequestDto("0", 0L , 999L, getUdnAsString(), myPlaylistFolder, "");
+	    	List<ContainerDto> playlistFolder = searchSupportDelegate.searchPlaylistItems(sr); 
+	    	for (ContainerDto folder : playlistFolder) {
+				if (myPlaylistFolder.equalsIgnoreCase(folder.title)) {
+			        serverPlaylists.containerId = folder.id;
+					log.info("Found server based playlists located at folder id : {}", folder.id);
+			        BrowseInput browseInp = new BrowseInput();
+			        browseInp.ObjectID = folder.id;
+			        browseInp.StartingIndex = 0L;
+			        browseInp.RequestedCount = 999L;
+			        
+			        ContainerItemDto playlists = browseChildren(browseInp);
+			        for (ContainerDto pl : playlists.containerDto) {
+						if ("object.container.playlistContainer".equalsIgnoreCase(pl.objectClass)) {
+							// strip extension if delivered 
+							String title = pl.title.lastIndexOf(".") > -1 ? pl.title.substring(0, pl.title.lastIndexOf(".")) : pl.title;
+							ServerPlaylistDto dto = new ServerPlaylistDto(pl.albumartUri, title, pl.id, null, null);
+							serverPlaylists.serverPlaylists.add(dto);
+							log.info("Found server based playlist name : {}", dto);
+						}
 					}
 				}
-			}
-		}    	
+			}    	
+		} catch (Exception e) {
+			log.error("seaarch exception", e);
+		}
         return serverPlaylists;
     }
 
@@ -148,16 +152,21 @@ public class MediaServerDevice extends BaseDevice {
 	}
 
 	private BrowseOutput requestContent(BrowseInput inp) {
-		inp.BrowseFlag = "BrowseDirectChildren";
-		checkInp(inp);
-		BrowseOutput out = contentDirectoryService.browse(inp);
-		if (out != null && out.NumberReturned != null) {
-			log.info("Response Objects: " + out.NumberReturned);
-			if (log.isDebugEnabled()) {
-				log.debug("DIDL Object : " + out.Result);
+		try {
+			inp.BrowseFlag = "BrowseDirectChildren";
+			checkInp(inp);
+			BrowseOutput out = contentDirectoryService.browse(inp);
+			if (out != null && out.NumberReturned != null) {
+				log.info("Response Objects: " + out.NumberReturned);
+				if (log.isDebugEnabled()) {
+					log.debug("DIDL Object : " + out.Result);
+				}
 			}
+			return out;
+		} catch (Exception e) {
+			log.error("cannot browse to {}" , inp.ObjectID , e);
+			return new BrowseOutput();
 		}
-		return out;
 	}
 
 	private ContainerDto browseMetadataMeta(BrowseInput inp) {
