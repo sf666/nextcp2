@@ -524,7 +524,7 @@ public class DtoBuilder
     AudioFormat extractAudioFormatFromResourceField(Res res)
     {
         AudioFormat af = null;
-        if (res.getProtocolInfo().getContentFormat().startsWith("audio")) {
+        if (res.getProtocolInfo() != null && res.getProtocolInfo().getContentFormat().startsWith("audio")) {
 	        af = new AudioFormat();
 	        af.bitrate = res.getBitrate();
 	        af.bitsPerSample = res.getBitsPerSample();
