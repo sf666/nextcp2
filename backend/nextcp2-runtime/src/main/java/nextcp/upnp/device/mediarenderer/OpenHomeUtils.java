@@ -32,6 +32,7 @@ public class OpenHomeUtils
 
     private DtoBuilder dtoBuilder = null;
     private DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    private DocumentBuilder builder = null;
 
     public OpenHomeUtils(DtoBuilder dtoBuilder)
     {
