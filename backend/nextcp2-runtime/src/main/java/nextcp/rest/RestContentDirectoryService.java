@@ -75,7 +75,8 @@ public class RestContentDirectoryService extends BaseRestService {
 			inp.StartingIndex = browseRequest.start;
 			inp.RequestedCount = browseRequest.count;
 			inp.Filter = browseRequest.filter;
-			return device.browseChildren(inp);
+			ContainerItemDto resultContainer = device.browseChildren(inp); 
+			return resultContainer;
 		} catch (Exception e) {
 			log.error("cannot browse children : " + browseRequest.toString(), e);
 			publisher.publishEvent(new ToastrMessage(null, "error", "browse server", e.getMessage()));

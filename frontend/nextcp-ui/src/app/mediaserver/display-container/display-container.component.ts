@@ -130,7 +130,7 @@ export class DisplayContainerComponent implements OnInit {
       return true;
     }
     return false;
-  }
+  }   
 
   ngOnInit(): void {
     this.doUiChecks();
@@ -144,6 +144,7 @@ export class DisplayContainerComponent implements OnInit {
     this.checkOneTrackWithMusicBrainzId();
     this.checkAllTracksSameDisc();
     this.checkLikeStatus();
+    this.checkTilesView();
   }
 
   private fillGenres(): void {
@@ -254,6 +255,16 @@ export class DisplayContainerComponent implements OnInit {
   private hasSongId(item: MusicItemDto): boolean {
     return (item.songId?.musicBrainzIdTrackId?.length > 0) || (item.songId?.umsAudiotrackId != null);
   }
+
+  private checkTilesView() {
+    const streaming_exists = this.musicTracks?.filter(item => (item.audioFormat.isStreaming))?.length > 0;
+    if (streaming_exists) {
+      // we have streaming services. Display as list is not very nice.
+      this.listView = false;
+    } else {
+      this.listView = true;
+    }
+  } 
 
   private checkLikeStatus() {
     if (this.allTracksSameMusicBrainzReleaseId_) {
@@ -698,7 +709,13 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   getOtherItemHeadline(item: MusicItemDto): string {
-    if (item.objectClass?.startsWith("object.item.imageItem")) {
+    // object.item.audioItem
+    if (item.objectClass?.startsWith("object.item.audioItem")) {
+      if (item?.audioFormat?.isStreaming) {
+        return "RADIO";
+      }
+      return "IMAGE";
+    } else if (item.objectClass?.startsWith("object.item.imageItem")) {
       return "IMAGE";
     } else if (item.objectClass?.startsWith("object.item.videoItem")) {
       return "VIDEO";
