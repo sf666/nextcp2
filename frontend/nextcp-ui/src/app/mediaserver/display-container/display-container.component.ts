@@ -133,13 +133,13 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.checkAlbumAndLikeStatus();
+    this.doUiChecks();
     if (this.contentHandler?.contentDirectoryService) {
       this.contentHandler.contentDirectoryService.browseFinished$.subscribe(data => this.partialPageLoaded());
     }
   }
 
-  private checkAlbumAndLikeStatus(): void {
+  private doUiChecks(): void {
     this.checkAllTracksSameAlbum();
     this.checkOneTrackWithMusicBrainzId();
     this.checkAllTracksSameDisc();
@@ -568,7 +568,7 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   private browseFinished(data: ContainerItemDto) {
-    this.checkAlbumAndLikeStatus();
+    this.doUiChecks();
     this.browseFinish.emit(data);
   }
 

@@ -70,7 +70,7 @@ public class RestContentDirectoryService extends BaseRestService {
 			}
 			checkDeviceAvailability(browseRequest, device);
 			BrowseInput inp = new BrowseInput();
-			inp.ObjectID = browseRequest.objectID;
+			inp.ObjectID = browseRequest.objectID != null ? browseRequest.objectID : "0";
 			inp.SortCriteria = browseRequest.sortCriteria;
 			inp.StartingIndex = browseRequest.start;
 			inp.RequestedCount = browseRequest.count;

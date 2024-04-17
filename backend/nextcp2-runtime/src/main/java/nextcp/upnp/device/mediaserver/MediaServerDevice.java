@@ -131,8 +131,12 @@ public class MediaServerDevice extends BaseDevice {
 			result.parentFolderTitle = "";
 		}
 		result.currentContainer = curContainer;
-		addContainerObjects(result, didl);
-		addItemObjects(result.musicItemDto, didl);
+		if (didl != null) {
+			addContainerObjects(result, didl);
+			addItemObjects(result.musicItemDto, didl);
+		} else {
+			log.warn("DIDL is null");
+		}
 
 		return result;
 	}
@@ -205,6 +209,9 @@ public class MediaServerDevice extends BaseDevice {
 	}
 
 	private void addContainerObjects(ContainerItemDto result, DIDLContent didl) {
+		if (didl == null) {
+			return;
+		}
 		for (Container didlObject : didl.getContainers()) {
 			ContainerDto containerDto = getDtoBuilder().buildContainerDto(didlObject);
 			containerDto.mediaServerUDN = getUDN().getIdentifierString();
@@ -244,6 +251,9 @@ public class MediaServerDevice extends BaseDevice {
 	}
 
 	private void addItemObjects(List<MusicItemDto> result, DIDLContent didl) {
+		if (didl == null) {
+			return;
+		}
 		for (Item item : didl.getItems()) {
 			MusicItemDto itemDto = getDtoBuilder().buildItemDto(item, getUDN().getIdentifierString());
 			result.add(itemDto);
