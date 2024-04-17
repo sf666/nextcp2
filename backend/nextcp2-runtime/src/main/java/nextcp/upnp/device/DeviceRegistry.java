@@ -79,7 +79,12 @@ public class DeviceRegistry
     public synchronized void removeMediaRendererDevice(RemoteDevice remoteDevice)
     {
     	log.info("device removed : {}", remoteFacade.getFriendlyName(remoteDevice));
-    	mediaRendererList.get(remoteFacade.getUDN(remoteDevice)).setServicesOffline(true);
+    	MediaRendererDevice device = mediaRendererList.get(remoteFacade.getUDN(remoteDevice));
+    	if (device != null) {
+    		device.setServicesOffline(true);
+    	} else {
+    		log.debug("device not found in registry {}", remoteFacade.getFriendlyName(remoteDevice));
+    	}
     }
 
     public Collection<MediaRendererDevice> getActiveMediaRenderer()
