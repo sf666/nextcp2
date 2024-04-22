@@ -2,7 +2,7 @@ package nextcp.domainmodel.device.mediaserver.search;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import org.apache.commons.lang3.StringUtils;
 import org.jupnp.support.model.DIDLContent;
 import org.jupnp.support.model.container.Container;
 import org.jupnp.support.model.item.Item;
@@ -109,7 +109,11 @@ public class SearchSupport
     {
         SearchInput searchInput = new SearchInput();
         searchInput.ContainerID = "0";
-        searchInput.SearchCriteria = String.format("( upnp:class derivedfrom \"%s\" and dc:title contains \"%s\")", upnpClass, quickSearch);
+        if (!StringUtils.isAllBlank(quickSearch)) {
+        	searchInput.SearchCriteria = String.format("( upnp:class derivedfrom \"%s\" and dc:title contains \"%s\")", upnpClass, quickSearch);
+        } else {
+        	searchInput.SearchCriteria = String.format("( upnp:class derivedfrom \"%s\"  )", upnpClass);
+        }
         searchInput.StartingIndex = 0L;
         searchInput.Filter = "*";
         searchInput.RequestedCount = requestCount;
