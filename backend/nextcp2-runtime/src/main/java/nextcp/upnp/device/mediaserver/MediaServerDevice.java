@@ -123,9 +123,9 @@ public class MediaServerDevice extends BaseDevice {
 	}
 
 	private ContainerItemDto fillResultStructureExtracted(BrowseInput inp, DIDLContent didl, ContainerItemDto result) {
-		ContainerDto curContainer = browseMetadataMeta(inp);
+		ContainerDto curContainer = browseMetadataMeta(inp.ObjectID);
 		if (!"-1".equals(curContainer.parentID)) {
-			ContainerDto parentContainer = browseMetadataMeta(createGenericBrowseInput(curContainer.parentID));
+			ContainerDto parentContainer = browseMetadataMeta(curContainer.parentID);
 			result.parentFolderTitle = parentContainer.title;
 		} else {
 			result.parentFolderTitle = "";
@@ -169,12 +169,17 @@ public class MediaServerDevice extends BaseDevice {
 		}
 	}
 
-	private ContainerDto browseMetadataMeta(BrowseInput inp) {
+	private ContainerDto browseMetadataMeta(String objectId) {
+		BrowseInput metaInp = new BrowseInput();
+		metaInp.ObjectID = objectId;
+		metaInp.StartingIndex = 0L;
+		metaInp.RequestedCount = 0L;
+		metaInp.SortCriteria = "";
+		metaInp.BrowseFlag = "BrowseMetadata";
+		metaInp.Filter = "*";
 		ContainerDto result = new ContainerDto();
-		inp.BrowseFlag = "BrowseMetadata";
-		checkInp(inp);
 		try {
-			BrowseOutput out = contentDirectoryService.browse(inp);
+			BrowseOutput out = contentDirectoryService.browse(metaInp);
 			log.info("Response Objects: " + out.NumberReturned);
 			if (out.NumberReturned == 1) {
 				DIDLContent didl = generateDidlContent(out.Result);
@@ -266,15 +271,5 @@ public class MediaServerDevice extends BaseDevice {
 
 	public void rescanFile(File f) {
 		log.warn("scan file not implemented for this device : " + getFriendlyName());
-	}
-
-	private BrowseInput createGenericBrowseInput(String objectID) {
-		BrowseInput inp = new BrowseInput();
-		inp.ObjectID = objectID;
-		inp.SortCriteria = "";
-		inp.StartingIndex = 0L;
-		inp.RequestedCount = 1L;
-		inp.Filter = "*";
-		return inp;
 	}
 }
