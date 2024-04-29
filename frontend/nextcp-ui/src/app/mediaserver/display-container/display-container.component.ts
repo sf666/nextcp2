@@ -110,6 +110,9 @@ export class DisplayContainerComponent implements OnInit {
       }
     }
 
+    /* Loaded in directory content server after requests returns.
+
+
     if (this.contentHandler.contentDirectoryService.getPageTurnId()) {
       this.updateIntersec();
     } else {
@@ -117,6 +120,7 @@ export class DisplayContainerComponent implements OnInit {
         this.intersecObserver.disconnect();
       }
     }
+    */
   }
 
   /**
