@@ -122,7 +122,6 @@ export class MyPlaylistsComponent implements OnInit {
   }
 
   public backButtonPressed(event: any) {
-    // TODO : move to media library
     const currentParent =
       this.contentDirectoryService?.currentContainerList?.currentContainer
         ?.parentID;

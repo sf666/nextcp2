@@ -137,7 +137,7 @@ export class GlobalSearchService {
     console.debug("container selected : " + container.id);
     this.quickSearchPanelVisible = false;
     this.clearSearch();
-    this.containerClicked$.next(container);
+    this.router.navigateByUrl("/music-library/" + container.id);
   }
 
   //

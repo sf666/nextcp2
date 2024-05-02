@@ -9,7 +9,7 @@ import { LayoutService } from 'src/app/service/layout.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { CdsBrowsePathService } from 'src/app/util/cds-browse-path.service';
 import { PersistenceService } from 'src/app/service/persistence/persistence.service';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-music-library',
@@ -27,6 +27,7 @@ export class MusicLibraryComponent  implements AfterViewInit{
   @Input() objectId!: string;
 
   constructor(
+    private route: ActivatedRoute,
     public contentDirectoryService: ContentDirectoryService,
     public layoutService: LayoutService,
     private cdsBrowsePathService: CdsBrowsePathService,
@@ -43,7 +44,10 @@ export class MusicLibraryComponent  implements AfterViewInit{
     globalSearchService.showAllArtistClicked$.subscribe(searchReq => this.contentDirectoryService.searchAllArtists(searchReq));
     globalSearchService.showAllPlaylistClicked$.subscribe(searchReq => this.contentDirectoryService.searchAllPlaylist(searchReq));
 
-    //this.deviceService.mediaServerChanged$.subscribe(data => this.browseToRoot(data.udn))
+    route.params.subscribe(val => {
+      console.log(val.objectId);
+      this.initialBrowseToUid(val.objectId);
+    });
   }
 
   //
@@ -63,37 +67,23 @@ export class MusicLibraryComponent  implements AfterViewInit{
   ngAfterViewInit(): void {
     this.layoutService.setFramedView();
     if (this.objectId) {
-      let udn: string;
-      let oid: string;
-      udn = this.persistenceService.getCurrentMediaServerDevice();
-      oid = this.objectId;
-      if (!(udn?.length > 0)) {
-        udn = this.deviceService.selectedMediaServerDevice.udn;
-        oid = "0";
-      }
-  
-      this.browseToOid(this.objectId, udn, true, "").then(
-        (val) => {if (!val) this.browseToRoot(udn)},
-        (err) => console.error(err)
-      );
+      this.initialBrowseToUid(this.objectId);
     } else {
-      this.browseToLastKnownUdn();
+      this.initialBrowseToUid(this.persistenceService.getLastMediaServerPath());
     }
   }
 
-  private browseToLastKnownUdn() {
-    let oid: string;
+  private initialBrowseToUid(objectId: string) {
     let udn: string;
-    oid = this.persistenceService.getLastMediaServerPath();
     this.cdsBrowsePathService.restorePathToRoot();
     this.lastOidIsRestoredFromCache = true;
     udn = this.persistenceService.getCurrentMediaServerDevice();
     if (!(udn?.length > 0)) {
       udn = this.deviceService.selectedMediaServerDevice.udn;
-      oid = "0";
+      objectId = "0";
     }
 
-    this.browseToOid(oid, udn, true, "").then(
+    this.browseToOid(objectId, udn, true, "").then(
       (val) => {if (!val) this.browseToRoot(udn)},
       (err) => console.error(err)
     );
