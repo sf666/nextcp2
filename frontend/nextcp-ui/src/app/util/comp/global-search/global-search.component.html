@@ -1,0 +1,10 @@
+<div class="nav-search-container">
+    <span class="material-symbols-outlined thin md-light">search</span>
+    <input class="nav-search" [(ngModel)]="globalSearchService.quickSearchString" matInput placeholder="global search" #searchInput
+      (keyup)="keyUp($event)" (focus)="focus()" (blur)="blur()" >
+    <span class="material-symbols-outlined thin md-light" (click)="globalSearchService.clearSearch()">close</span>
+</div>
+
+@if (globalSearchService.quickSearchPanelVisible) {
+    <modal-search-result></modal-search-result>
+}

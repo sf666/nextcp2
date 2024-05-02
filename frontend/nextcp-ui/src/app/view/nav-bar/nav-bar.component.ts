@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
 import { MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { GlobalSearchComponent } from 'src/app/util/comp/global-search/global-search.component';
 
 
 @Component({
@@ -14,7 +15,7 @@ import { MatIcon } from '@angular/material/icon';
     templateUrl: './nav-bar.component.html',
     styleUrls: ['./nav-bar.component.scss'],
     standalone: true,
-    imports: [MatMiniFabButton, MatInput, MatIcon, FormsModule, ModalSearchResultComponent]
+    imports: [MatMiniFabButton, MatInput, MatIcon, FormsModule, ModalSearchResultComponent, GlobalSearchComponent]
 })
 
 export class NavBarComponent {
@@ -45,20 +46,6 @@ export class NavBarComponent {
   searchBackPressed(): void {
     //    this.contentDirectoryService.browseToRoot("", this.contentDirectoryService.currentContainerList.currentContainer.mediaServerUDN);
     void this.router.navigateByUrl('music-library');
-  }
-
-  keyUp(event: KeyboardEvent): void {
-    if (event.key === 'Escape') {
-      this.globalSearchService.clearSearch();
-    }
-  }
-
-  focus(): void {
-    // this.quickSearchString = this.quickSearchString;
-  }
-
-  blur(): void {
-    //this.globalSearchService.clearSearch();
   }
 
   isDisabled(): boolean {
