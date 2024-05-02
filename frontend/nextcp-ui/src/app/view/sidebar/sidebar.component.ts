@@ -66,7 +66,11 @@ export class SidebarComponent {
 
   private calActiveId(nav: any) {
     if (nav instanceof NavigationEnd) {
-      this.activeId = this.routerMap.get(nav.url);
+      let url = nav.url;
+      if (url.lastIndexOf("/") > 0) {
+        url = url.substring(0, url.lastIndexOf("/"));
+      }
+      this.activeId = this.routerMap.get(url);
       if (this.activeId == "0") {
         this.activeId = this.myPlaylistService.activePlaylistId;
       }

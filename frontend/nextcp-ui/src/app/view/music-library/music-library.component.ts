@@ -1,6 +1,6 @@
 import { ContainerDto, ContainerItemDto, MusicItemDto } from './../../service/dto.d';
 import { GlobalSearchService } from './../../service/search/global-search.service';
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { ScrollLoadHandler } from 'src/app/mediaserver/display-container/defs';
 import { ContentDirectoryService } from 'src/app/service/content-directory.service';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
@@ -9,11 +9,12 @@ import { LayoutService } from 'src/app/service/layout.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { CdsBrowsePathService } from 'src/app/util/cds-browse-path.service';
 import { PersistenceService } from 'src/app/service/persistence/persistence.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-music-library',
   standalone: true,
-  imports: [NavBarComponent, DisplayContainerComponent],
+  imports: [NavBarComponent, DisplayContainerComponent, RouterLink],
   providers: [ContentDirectoryService, CdsBrowsePathService, { provide: 'uniqueId', useValue: 'music-library_' }],
   templateUrl: './music-library.component.html',
   styleUrl: './music-library.component.scss'
@@ -23,7 +24,7 @@ export class MusicLibraryComponent  implements AfterViewInit{
   private lastOidIsRestoredFromCache: boolean;
 
   @ViewChild(DisplayContainerComponent) dispContainer: DisplayContainerComponent;
-
+  @Input() objectId!: string;
 
   constructor(
     public contentDirectoryService: ContentDirectoryService,
@@ -61,7 +62,23 @@ export class MusicLibraryComponent  implements AfterViewInit{
 
   ngAfterViewInit(): void {
     this.layoutService.setFramedView();
-    this.browseToLastKnownUdn();
+    if (this.objectId) {
+      let udn: string;
+      let oid: string;
+      udn = this.persistenceService.getCurrentMediaServerDevice();
+      oid = this.objectId;
+      if (!(udn?.length > 0)) {
+        udn = this.deviceService.selectedMediaServerDevice.udn;
+        oid = "0";
+      }
+  
+      this.browseToOid(this.objectId, udn, true, "").then(
+        (val) => {if (!val) this.browseToRoot(udn)},
+        (err) => console.error(err)
+      );
+    } else {
+      this.browseToLastKnownUdn();
+    }
   }
 
   private browseToLastKnownUdn() {
