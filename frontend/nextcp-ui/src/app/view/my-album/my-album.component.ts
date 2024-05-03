@@ -6,6 +6,7 @@ import { ContentDirectoryService } from './../../service/content-directory.servi
 import { Component, OnInit } from '@angular/core';
 import { DisplayContainerComponent } from '../../mediaserver/display-container/display-container.component';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'myAlbums',
@@ -20,6 +21,7 @@ export class MyAlbumComponent implements OnInit {
   constructor(
     public layoutService: LayoutService,
     private deviceService: DeviceService,
+    private router: Router,
     public contentDirectoryService: ContentDirectoryService) {
     console.log("constructor call : MyAlbumComponent");
     deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));
@@ -50,26 +52,16 @@ export class MyAlbumComponent implements OnInit {
   //
 
   getParentTitle(): string {
-    if (this.isMyMusicRoot()) {
-      return "";
-    }
-    return "back to my music";
+    return "back to music library";
   }
 
   public backButtonPressed(event: any) {
-    this.loadMyAlbums();
+    this.router.navigateByUrl('/music-library');
   }
 
 
   containerSelected(event: ContainerDto) {
     
-  }
-
-  //
-  // Util methods
-  //
-  isMyMusicRoot(): boolean {
-    return this.contentDirectoryService.currentContainerID.lastIndexOf("$DBID$MYMUSIC$", 0) === 0;
   }
 
   //
@@ -80,7 +72,7 @@ export class MyAlbumComponent implements OnInit {
   }
 
   backButtonDisabled() {
-    return this.isMyMusicRoot();
+    return false;
   }
 
   showTopHeader(): boolean {
