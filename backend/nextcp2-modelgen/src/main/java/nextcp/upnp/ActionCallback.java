@@ -97,9 +97,8 @@ public abstract class ActionCallback
             }
             else if (response.getOperation().isFailed())
             {
-            	log.error("UPnP error : {}" , response.getBodyString());
-                throw new GenActionException(GenActionException.ACTION_FAILED,
-                        String.format("%s : %s", remoteService.getDevice().getDisplayString(), response.getOperation().toString()));
+            	log.error("UPnP error for device {} : {}" , remoteService.getDevice().getDisplayString(), response.getBodyString());
+                throw new GenActionException(GenActionException.ACTION_FAILED, response.getBodyString());
             }
         }
 

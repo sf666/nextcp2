@@ -2,8 +2,17 @@ package nextcp.upnp.device.mediaserver;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.support.contentdirectory.DIDLParser;
 import org.jupnp.support.model.DIDLContent;
@@ -13,6 +22,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.annotation.PostConstruct;
@@ -36,418 +49,369 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMediaDevice
-{
-    private static final Logger log = LoggerFactory.getLogger(UmsServerDevice.class.getName());
-    private OkHttpClient okClient = new OkHttpClient.Builder().build();
-    private final String userAgent = String.format("nextcp/2.0");
-    private final String userAgentType = "USER-AGENT";
+public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMediaDevice {
 
-    @Autowired
-    private ServerConfig serverConfig = null;
+	private static final Logger log = LoggerFactory.getLogger(UmsServerDevice.class.getName());
+	private OkHttpClient okClient = new OkHttpClient.Builder().build();
+	private final String userAgent = String.format("nextcp/2.0");
+	private final String userAgentType = "USER-AGENT";
+	private DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	private DocumentBuilder builder = null;
+	private XPathFactory xpathfactory = XPathFactory.newInstance();
+	private XPath xpath = xpathfactory.newXPath();
+	private XPathExpression expr = null;
+	@Autowired
+	private ServerConfig serverConfig = null;
 
-    @Autowired
-    private Config config = null;    
-    
-    @Autowired
-    private ApplicationEventPublisher publisher = null;
+	@Autowired
+	private Config config = null;
 
-    public UmsServerDevice(RemoteDevice device)
-    {
-        super(device);
-    }
+	@Autowired
+	private ApplicationEventPublisher publisher = null;
 
-    @PostConstruct
-    private void init()
-    {
-    }
+	public UmsServerDevice(RemoteDevice device) {
+		super(device);
+		factory.setNamespaceAware(false);
+		try {
+			builder = factory.newDocumentBuilder();
+			expr = xpath.compile("//*/errorDescription/text()");
+		} catch (ParserConfigurationException | XPathExpressionException e) {
+			log.error("cannot build XML reader", e);
+		}
+	}
 
-    @Override
-    public void rescan()
-    {
-        try
-        {
-            String strResponse = executeCall(" ", "api/folderscanner/rescan");
-            // response can be analyzed
-        }
-        catch (Exception e)
-        {
-            log.debug("likealbum failed ...", e);
-        }
-    }
+	@PostConstruct
+	private void init() {
+	}
 
-    @Override
-    public void rescanFile(File f)
-    {
-        try
-        {
-            String strResponse = executeCall(f.getAbsolutePath(), "api/folderscanner/rescanFileOrFolder");
-            // response can be analyzed
-        }
-        catch (Exception e)
-        {
-            log.debug("likealbum failed ...", e);
-        }
-    }
+	@Override
+	public void rescan() {
+		try {
+			String strResponse = executeCall(" ", "api/folderscanner/rescan");
+			// response can be analyzed
+		} catch (Exception e) {
+			log.debug("likealbum failed ...", e);
+		}
+	}
 
-    @Override
-    public boolean isAlbumLiked(String musicBrainzReleaseId)
-    {
-        try
-        {
-            if (musicBrainzReleaseId == null)
-            {
-                return false;
-            }
-            String strResponse = executeCall(musicBrainzReleaseId, "api/like/isalbumliked");
-            return Boolean.valueOf(strResponse);
-        }
-        catch (Exception e)
-        {
-            log.debug("isalbumliked failed ...", e);
-            return false;
-        }
-    }
+	@Override
+	public void rescanFile(File f) {
+		try {
+			String strResponse = executeCall(f.getAbsolutePath(), "api/folderscanner/rescanFileOrFolder");
+			// response can be analyzed
+		} catch (Exception e) {
+			log.debug("likealbum failed ...", e);
+		}
+	}
 
-    @Override
-    public void likeAlbum(String musicBrainzReleaseId)
-    {
-        try
-        {
-            String strResponse = executeCall(musicBrainzReleaseId, "api/like/likealbum");
-            // response can be analyzed
-        }
-        catch (Exception e)
-        {
-            log.debug("likealbum failed ...", e);
-        }
-    }
+	@Override
+	public boolean isAlbumLiked(String musicBrainzReleaseId) {
+		try {
+			if (musicBrainzReleaseId == null) {
+				return false;
+			}
+			String strResponse = executeCall(musicBrainzReleaseId, "api/like/isalbumliked");
+			return Boolean.valueOf(strResponse);
+		} catch (Exception e) {
+			log.debug("isalbumliked failed ...", e);
+			return false;
+		}
+	}
 
-    @Override
-    public void dislikeAlbum(String musicBrainzReleaseId)
-    {
-        try
-        {
-            String strResponse = executeCall(musicBrainzReleaseId, "api/like/dislikealbum");
-            // response can be analyzed
-        }
-        catch (Exception e)
-        {
-            log.debug("dislikealbum failed ...", e);
-        }
-    }
+	@Override
+	public void likeAlbum(String musicBrainzReleaseId) {
+		try {
+			String strResponse = executeCall(musicBrainzReleaseId, "api/like/likealbum");
+			// response can be analyzed
+		} catch (Exception e) {
+			log.debug("likealbum failed ...", e);
+		}
+	}
 
-    @Override
-    public void likeSong(String musicBrainzTrackId)
-    {
-        try
-        {
-            String strResponse = executeCall(musicBrainzTrackId, "api/like/likesong");
-            // response can be analyzed
-        }
-        catch (Exception e)
-        {
-            log.debug("likesong failed ...", e);
-        }
-    }
+	@Override
+	public void dislikeAlbum(String musicBrainzReleaseId) {
+		try {
+			String strResponse = executeCall(musicBrainzReleaseId, "api/like/dislikealbum");
+			// response can be analyzed
+		} catch (Exception e) {
+			log.debug("dislikealbum failed ...", e);
+		}
+	}
 
-    @Override
-    public void dislikeSong(String musicBrainzTrackId)
-    {
-        try
-        {
-            String strResponse = executeCall(musicBrainzTrackId, "api/like/dislikesong");
-            // response can be analyzed
-        }
-        catch (Exception e)
-        {
-            log.debug("dislikesong failed ...", e);
-        }
-    }
+	@Override
+	public void likeSong(String musicBrainzTrackId) {
+		try {
+			String strResponse = executeCall(musicBrainzTrackId, "api/like/likesong");
+			// response can be analyzed
+		} catch (Exception e) {
+			log.debug("likesong failed ...", e);
+		}
+	}
 
-    @Override
-    public boolean isSongLiked(String musicBrainzTrackId)
-    {
-        try
-        {
-            String strResponse = executeCall(musicBrainzTrackId, "api/like/issongliked");
-            return Boolean.valueOf(strResponse);
-        }
-        catch (Exception e)
-        {
-            log.debug("issongliked failed ...", e);
-            return false;
-        }
-    }
+	@Override
+	public void dislikeSong(String musicBrainzTrackId) {
+		try {
+			String strResponse = executeCall(musicBrainzTrackId, "api/like/dislikesong");
+			// response can be analyzed
+		} catch (Exception e) {
+			log.debug("dislikesong failed ...", e);
+		}
+	}
 
-    private String getApiKey()
-    {
-        ServerDeviceConfiguration deviceConfig = serverConfig.getMediaServerConfig(getUdnAsString());
-        if (deviceConfig == null)
-        {
-            log.warn("no configuration for server device " + getFriendlyName());
-        }
-        else
-        {
-            String key = serverConfig.getMediaServerConfig(getUdnAsString()).apiKey;
-            return key != null ? key : "";
-        }
-        return "";
-    }
+	@Override
+	public boolean isSongLiked(String musicBrainzTrackId) {
+		try {
+			String strResponse = executeCall(musicBrainzTrackId, "api/like/issongliked");
+			return Boolean.valueOf(strResponse);
+		} catch (Exception e) {
+			log.debug("issongliked failed ...", e);
+			return false;
+		}
+	}
 
-    @Override
-    public void rateSong(Long audiotrackId, String oid, int stars)
-    {
-        try
-        {
-            Response response = executeCallWithResponse(String.format("%s/%s/%s", audiotrackId, stars, oid), "api/rating/setratingbyaudiotrackid");
-            String body = response.body().string();
-            int code = response.code();
-            toastDeviceResponse(body, code, true);
-        }
-        catch (Exception e)
-        {
-            log.error("rateSong failed ...", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "UMS server device" + getFriendlyName(), "File rating failed : " + e.getMessage()));
-        }
-    }
+	private String getApiKey() {
+		ServerDeviceConfiguration deviceConfig = serverConfig.getMediaServerConfig(getUdnAsString());
+		if (deviceConfig == null) {
+			log.warn("no configuration for server device " + getFriendlyName());
+		} else {
+			String key = serverConfig.getMediaServerConfig(getUdnAsString()).apiKey;
+			return key != null ? key : "";
+		}
+		return "";
+	}
 
-    @Override
-    public void rateSongByMusicBrainzID(String musicbrainzId, int stars)
-    {
-        try
-        {
-            Response response = executeCallWithResponse(String.format("%s/%s", musicbrainzId, stars), "api/rating/setrating");
-            String body = response.body().string();
-            int code = response.code();
-            toastDeviceResponse(body, code, true);
-        }
-        catch (Exception e)
-        {
-            log.debug("rateSong failed ...", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "UMS server device" + getFriendlyName(), "File rating failed : " + e.getMessage()));
-        }
-    }
+	@Override
+	public void rateSong(Long audiotrackId, String oid, int stars) {
+		try {
+			Response response = executeCallWithResponse(String.format("%s/%s/%s", audiotrackId, stars, oid),
+				"api/rating/setratingbyaudiotrackid");
+			String body = response.body().string();
+			int code = response.code();
+			toastDeviceResponse(body, code, true);
+		} catch (Exception e) {
+			log.error("rateSong failed ...", e);
+			publisher.publishEvent(
+				new ToastrMessage(null, "error", "UMS server device" + getFriendlyName(), "File rating failed : " + e.getMessage()));
+		}
+	}
 
-    private void toastDeviceResponse(String body, int code, boolean successToast)
-    {
-        switch (code)
-        {
-            case 200:
-                if (successToast)
-                {
-                    publisher.publishEvent(new ToastrMessage(null, "info", "UMS server device " + getFriendlyName(), body));
-                }
-                break;
-            case 401:
-                publisher.publishEvent(new ToastrMessage(null, "error", "nextcp/2 configuration error",
-                        "Wrong API key configured for device " + getFriendlyName() + ". Set correct secret for server : " + getUdnAsString()));
-                break;
-            case 404:
-                publisher.publishEvent(new ToastrMessage(null, "warn", "UMS server device " + getFriendlyName(), "Object not found. " + body));
-                break;
-            case 503:
-                publisher.publishEvent(new ToastrMessage(null, "error", "UMS server device " + getFriendlyName(), body));
-                break;
-            default:
-                publisher.publishEvent(new ToastrMessage(null, "warn", "UMS server device '" + getFriendlyName() + "'", body));
-        }
-    }
+	@Override
+	public void rateSongByMusicBrainzID(String musicbrainzId, int stars) {
+		try {
+			Response response = executeCallWithResponse(String.format("%s/%s", musicbrainzId, stars), "api/rating/setrating");
+			String body = response.body().string();
+			int code = response.code();
+			toastDeviceResponse(body, code, true);
+		} catch (Exception e) {
+			log.debug("rateSong failed ...", e);
+			publisher.publishEvent(
+				new ToastrMessage(null, "error", "UMS server device" + getFriendlyName(), "File rating failed : " + e.getMessage()));
+		}
+	}
 
-    @Override
-    public int getSongRating(Integer audiotrackId)
-    {
-        try
-        {
-            String strResponse = executeCall(Integer.toString(audiotrackId), "api/rating/getratingbyaudiotrackid");
-            return Integer.valueOf(strResponse);
-        }
-        catch (Exception e)
-        {
-            log.debug("getSongRating by audiotrackid failed ...", e);
-            return 0;
-        }
-    }
+	private void toastDeviceResponse(String body, int code, boolean successToast) {
+		switch (code) {
+			case 200:
+				if (successToast) {
+					publisher.publishEvent(new ToastrMessage(null, "info", "UMS server device " + getFriendlyName(), body));
+				}
+				break;
+			case 401:
+				publisher.publishEvent(new ToastrMessage(null, "error", "nextcp/2 configuration error",
+					"Wrong API key configured for device " + getFriendlyName() + ". Set correct secret for server : " + getUdnAsString()));
+				break;
+			case 404:
+				publisher
+					.publishEvent(new ToastrMessage(null, "warn", "UMS server device " + getFriendlyName(), "Object not found. " + body));
+				break;
+			case 503:
+				publisher.publishEvent(new ToastrMessage(null, "error", "UMS server device " + getFriendlyName(), body));
+				break;
+			default:
+				publisher.publishEvent(new ToastrMessage(null, "warn", "UMS server device '" + getFriendlyName() + "'", body));
+		}
+	}
 
-    @Override
-    public int getSongRatingByMusicBrainzID(String musicBrainzTrackId)
-    {
-        try
-        {
-            String strResponse = executeCall(musicBrainzTrackId, "api/rating/getrating");
-            return Integer.valueOf(strResponse);
-        }
-        catch (Exception e)
-        {
-            log.debug("getSongRating failed ...", e);
-            return 0;
-        }
-    }
+	@Override
+	public int getSongRating(Integer audiotrackId) {
+		try {
+			String strResponse = executeCall(Integer.toString(audiotrackId), "api/rating/getratingbyaudiotrackid");
+			return Integer.valueOf(strResponse);
+		} catch (Exception e) {
+			log.debug("getSongRating by audiotrackid failed ...", e);
+			return 0;
+		}
+	}
 
-    /**
-     * Execute a UMS call. Will send Toast error message to client in case of an error.
-     * 
-     * @param bodyString
-     * @param uri
-     * @return
-     * @throws IOException
-     */
-    private String executeCall(String bodyString, String uri) throws IOException
-    {
-        RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/text"));
-        String requestUrl = String.format("%s%s", getBaseUrl(), uri);
-        Request request = new Request.Builder().url(requestUrl).addHeader("api-key", getApiKey()).addHeader(userAgentType, userAgent).post(body).build();
-        Call call = okClient.newCall(request);
-        Response response = call.execute();
-        String respString = response.body().string();
-        toastDeviceResponse(respString, response.code(), false);
-        return respString;
-    }
+	@Override
+	public int getSongRatingByMusicBrainzID(String musicBrainzTrackId) {
+		try {
+			String strResponse = executeCall(musicBrainzTrackId, "api/rating/getrating");
+			return Integer.valueOf(strResponse);
+		} catch (Exception e) {
+			log.debug("getSongRating failed ...", e);
+			return 0;
+		}
+	}
 
-    private URL getBaseUrl()
-    {
-        if (getDevice().getDetails().getBaseURL() != null)
-        {
-            return getDevice().getDetails().getBaseURL();
-        }
-        else
-        {
-            try
-            {
-                return new URL(String.format("%s://%s:%d/", getDevice().getIdentity().getDescriptorURL().getProtocol(), getDevice().getIdentity().getDescriptorURL().getHost(),
-                        getDevice().getIdentity().getDescriptorURL().getPort()));
-            }
-            catch (MalformedURLException e)
-            {
-                log.error("cannot acquire base url ", e);
-                return null;
-            }
-        }
-    }
+	/**
+	 * Execute a UMS call. Will send Toast error message to client in case of an
+	 * error.
+	 * 
+	 * @param bodyString
+	 * @param uri
+	 * @return
+	 * @throws IOException
+	 */
+	private String executeCall(String bodyString, String uri) throws IOException {
+		RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/text"));
+		String requestUrl = String.format("%s%s", getBaseUrl(), uri);
+		Request request = new Request.Builder().url(requestUrl).addHeader("api-key", getApiKey()).addHeader(userAgentType, userAgent)
+			.post(body).build();
+		Call call = okClient.newCall(request);
+		Response response = call.execute();
+		String respString = response.body().string();
+		toastDeviceResponse(respString, response.code(), false);
+		return respString;
+	}
 
-    private Response executeCallWithResponse(String bodyString, String uri) throws IOException
-    {
-        RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/text"));
-        String requestUrl = String.format("%s%s", getBaseUrl(), uri);
-        Request request = new Request.Builder().url(requestUrl).addHeader("api-key", getApiKey()).addHeader(userAgentType, userAgent).post(body).build();
-        Call call = okClient.newCall(request);
-        Response response = call.execute();
-        return response;
-    }
+	private URL getBaseUrl() {
+		if (getDevice().getDetails().getBaseURL() != null) {
+			return getDevice().getDetails().getBaseURL();
+		} else {
+			try {
+				return new URL(String.format("%s://%s:%d/", getDevice().getIdentity().getDescriptorURL().getProtocol(),
+					getDevice().getIdentity().getDescriptorURL().getHost(), getDevice().getIdentity().getDescriptorURL().getPort()));
+			} catch (MalformedURLException e) {
+				log.error("cannot acquire base url ", e);
+				return null;
+			}
+		}
+	}
 
-    private String doGenericCall(String body, String api, boolean showOkMessage)
-    {
-        String respBody = "";
-        Response res = null;
-        try
-        {
-            res = executeCallWithResponse(body, api);
-            respBody = res.body().string();
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException("Execution failed.", e);
-        }
+	private Response executeCallWithResponse(String bodyString, String uri) throws IOException {
+		RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/text"));
+		String requestUrl = String.format("%s%s", getBaseUrl(), uri);
+		Request request = new Request.Builder().url(requestUrl).addHeader("api-key", getApiKey()).addHeader(userAgentType, userAgent)
+			.post(body).build();
+		Call call = okClient.newCall(request);
+		Response response = call.execute();
+		return response;
+	}
 
-        if (res.code() != 200)
-        {
-            toastDeviceResponse(respBody, res.code(), false);
-            log.warn("API error : " + res.code() + " : " + respBody);
-        }
-        if (showOkMessage)
-        {
-            toastDeviceResponse(respBody, res.code(), true);
-        }
-        return respBody;
-    }
+	private String doGenericCall(String body, String api, boolean showOkMessage) {
+		String respBody = "";
+		Response res = null;
+		try {
+			res = executeCallWithResponse(body, api);
+			respBody = res.body().string();
+		} catch (IOException e) {
+			throw new RuntimeException("Execution failed.", e);
+		}
 
-    @Override
-    public void backupMyMusic()
-    {
-        doGenericCall("", "api/like/backupLikedAlbums", true);
-    }
+		if (res.code() != 200) {
+			toastDeviceResponse(respBody, res.code(), false);
+			log.warn("API error : " + res.code() + " : " + respBody);
+		}
+		if (showOkMessage) {
+			toastDeviceResponse(respBody, res.code(), true);
+		}
+		return respBody;
+	}
 
-    @Override
-    public void restoreMyMusic()
-    {
-        doGenericCall("", "api/like/restoreLikedAlbums", true);
-        publisher.publishEvent(new ToastrMessage(null, "info", "UMS server " + getFriendlyName(), "My Music albums restored."));
-    }
+	@Override
+	public void backupMyMusic() {
+		doGenericCall("", "api/like/backupLikedAlbums", true);
+	}
 
-    @Override
-    public Item createPlaylist(String parentContainerId, String playlistName) throws Exception
-    {
-    	CreateObjectInput inp = new CreateObjectInput();
-    	inp.ContainerID = parentContainerId;
-    	PlaylistItem pi = new PlaylistItem();
-    	pi.setTitle(playlistName);
-    	pi.setParentID(parentContainerId);
-    	pi.setId("");
-    	DIDLParser parser = new DIDLParser();
-    	DIDLContent content = new DIDLContent();
-    	content.addItem(pi);
-    	String xml = parser.generate(content);
+	@Override
+	public void restoreMyMusic() {
+		doGenericCall("", "api/like/restoreLikedAlbums", true);
+		publisher.publishEvent(new ToastrMessage(null, "info", "UMS server " + getFriendlyName(), "My Music albums restored."));
+	}
+
+	@Override
+	public Item createPlaylist(String parentContainerId, String playlistName) throws Exception {
+		CreateObjectInput inp = new CreateObjectInput();
+		inp.ContainerID = parentContainerId;
+		PlaylistItem pi = new PlaylistItem();
+		pi.setTitle(playlistName);
+		pi.setParentID(parentContainerId);
+		pi.setId("");
+		DIDLParser parser = new DIDLParser();
+		DIDLContent content = new DIDLContent();
+		content.addItem(pi);
+		String xml = parser.generate(content);
 		inp.Elements = xml;
-		
+
 		try {
 			CreateObjectOutput out = getContentDirectoryService().createObject(inp);
 			log.debug("created object {} ", out.Result);
 			content = parser.parse(out.Result);
 			org.jupnp.support.model.item.Item newPL = content.getItems().get(0);
 			return newPL;
-			
-		} catch (GenActionException e) {
-			e.printStackTrace();
-			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.description);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage());
-		}
-    }
 
-    @Override
-    public void addSongToPlaylist(String audiotracId, String playlistContainerId)
-    {
-    	CreateReferenceInput inp = new CreateReferenceInput();
+		} catch (GenActionException e) {
+			String errorText = extractErrorText(e.description);
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
+		} catch (Exception e) {
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public void addSongToPlaylist(String audiotracId, String playlistContainerId) {
+		CreateReferenceInput inp = new CreateReferenceInput();
 		inp.ContainerID = playlistContainerId;
 		inp.ObjectID = audiotracId;
 		try {
 			CreateReferenceOutput out = getContentDirectoryService().createReference(inp);
-			log.debug("created object {} ", out.NewID);			
+			log.debug("created object {} ", out.NewID);
 		} catch (GenActionException e) {
-			e.printStackTrace();
-			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.description);
+			String errorText = extractErrorText(e.description);
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage());
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
 		}
-    }
+	}
 
+	private String extractErrorText(String description) {
+		InputSource is = new InputSource(new StringReader(description));
+		try {
+			Document doc = builder.parse(is);
+			Object result = expr.evaluate(doc, XPathConstants.NODESET);
+			NodeList nodes = (NodeList) result;
 
-    public MediaServerDto getAsDto()
-    {
-        return new MediaServerDto(getUDN().getIdentifierString(), getFriendlyName(), true);
-    }
+			for (int i = 0; i < nodes.getLength();) {
+			  return nodes.item(i).getNodeValue();
+			}			
+		} catch (SAXException | IOException | XPathExpressionException e) {
+			log.warn("cannot extract error message", e);
+		}
+		return "";
+	}
 
-    @Override
-    public ServerPlaylists getServerPlaylists() throws JsonMappingException, JsonProcessingException
-    {
-    	ServerPlaylists spl = searchMyPlaylistsItems(config.applicationConfig.myPlaylistFolderName);
-        return spl;
-    }
+	public MediaServerDto getAsDto() {
+		return new MediaServerDto(getUDN().getIdentifierString(), getFriendlyName(), true);
+	}
+
+	@Override
+	public ServerPlaylists getServerPlaylists() throws JsonMappingException, JsonProcessingException {
+		ServerPlaylists spl = searchMyPlaylistsItems(config.applicationConfig.myPlaylistFolderName);
+		return spl;
+	}
 
 	@Override
 	public void deleteObject(String objectId) {
-    	DestroyObjectInput inp = new DestroyObjectInput();
+		DestroyObjectInput inp = new DestroyObjectInput();
 		inp.ObjectID = objectId;
 		try {
 			getContentDirectoryService().destroyReference(inp);
 		} catch (GenActionException e) {
-			e.printStackTrace();
-			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.description);
+			String errorText = extractErrorText(e.description);
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage());
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
 		}
 	}
 }

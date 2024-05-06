@@ -40,4 +40,14 @@ public class BackendException extends RuntimeException
         this.errorCode = errorCode;
         this.description = description;
     }
+    
+    
+    @Override
+    public String getMessage() {
+		return description;
+    }
+    
+	public String getDescription() {
+		return description;
+	}
 }

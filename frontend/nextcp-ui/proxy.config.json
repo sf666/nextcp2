@@ -11,6 +11,10 @@
     "target": "http://localhost:8085",
     "secure": false
   },
+  "/SSE": {
+    "target": "http://localhost:8085",
+    "secure": false
+  },
   "/SSE/*": {
     "target": "http://localhost:8085",
     "secure": false

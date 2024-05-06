@@ -19,7 +19,7 @@ public class ToastrInfoService
     private SsePublisher ssePublisher = null;
 
     @EventListener
-    public void mediaRendererChanged(ToastrMessage event)
+    public void toastToClient(ToastrMessage event)
     {
         ssePublisher.sendObjectAsJson(TOASTR_INFO, event);
     }

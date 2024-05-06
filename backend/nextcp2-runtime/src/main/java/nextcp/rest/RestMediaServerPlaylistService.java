@@ -54,7 +54,8 @@ public class RestMediaServerPlaylistService {
         }
         catch (Exception e)
         {
-            publisher.publishEvent(new ToastrMessage(null, "error", "edit playlist", "Adding song failed. Message : " + e.getMessage()));
+        	String errorText = e.getMessage();
+            publisher.publishEvent(new ToastrMessage(null, "error", "add to playlist", errorText));
             log.warn("adding song to server playlist", e);
         }
     }
