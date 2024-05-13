@@ -155,6 +155,7 @@ export class GlobalSearchService {
       "-upnp:rating, +dc:title", this.currentContainerID, 0, 100));
       
     this.hideQuickSearchPanel();
+    this.router.navigateByUrl("/music-library");
   }
 
   showAllAlbum(): void {
@@ -164,7 +165,8 @@ export class GlobalSearchService {
       "-ums:likedAlbum, +dc:title", this.currentContainerID, 0, 100));
 
       this.hideQuickSearchPanel();
-  }
+      this.router.navigateByUrl("/music-library");
+    }
 
   showAllItemArtist(): void {
     this.showAllArtistClicked$.next(this.dtoGeneratorService.generateQuickSearchDto(
@@ -173,6 +175,7 @@ export class GlobalSearchService {
       "", this.currentContainerID, 0, 100));
 
     this.hideQuickSearchPanel();
+    this.router.navigateByUrl("/music-library");
   }
 
   showAllPlaylist(): void {
@@ -182,6 +185,7 @@ export class GlobalSearchService {
       "", this.currentContainerID, 0, 100));
 
       this.hideQuickSearchPanel();
-  }
+      this.router.navigateByUrl("/music-library");
+    }
 }
 
