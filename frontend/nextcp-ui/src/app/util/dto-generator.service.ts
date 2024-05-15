@@ -111,10 +111,9 @@ export class DtoGeneratorService {
 
   emptySongId(): MusicItemIdDto {
     return {
-      umsAudiotrackId: -1,
       acoustID: '',
       musicBrainzIdTrackId: '',
-      globalID: '',
+      objectID: '',
     }
   }
 

@@ -81,10 +81,10 @@ export class MediarendererComponent implements OnInit {
   }
 
   public get canBeAddedToPlaylist(): boolean {
-    return this.rendererService.trackInfo?.currentTrack?.songId?.umsAudiotrackId != null;
+    return this.rendererService.trackInfo?.currentTrack?.songId?.objectID != null;
   }
 
-  openAddPlaylistDialog(event: any, fileId: number): void {
+  openAddPlaylistDialog(event: any, fileId: string): void {
     this.defaultPlaylistService.openAddPlaylistDialog(event, fileId);
   }
 

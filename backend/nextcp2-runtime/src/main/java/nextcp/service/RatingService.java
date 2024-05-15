@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import nextcp.dto.Config;
 import nextcp.dto.MusicItemIdDto;
 import nextcp.dto.ToastrMessage;
+import nextcp.dto.UpdateStarRatingRequest;
 import nextcp.musicbrainz.MusicBrainzService;
 import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
 
@@ -39,21 +40,16 @@ public class RatingService
     @Autowired
     private MusicBrainzService musicBrainzService = null;
 
-    public void setRatingInStars(MusicItemIdDto ids, Integer rating, ExtendedApiMediaDevice device)
+    public void setRatingInStars(UpdateStarRatingRequest updateRequest, ExtendedApiMediaDevice device)
     {
-        if (rating == null)
-        {
-            rating = 0;
-        }
-        
         // Send rating to device
         if (device != null)
         {
-            device.rateSong(ids.umsAudiotrackId, ids.globalID, rating);
+            device.rateSong(updateRequest);
         }
         
         // send rating to musicBrainz
-        updateMusicBrainzBackend(ids.musicBrainzIdTrackId, rating);
+        updateMusicBrainzBackend(updateRequest.musicItemIdDto.musicBrainzIdTrackId, updateRequest.newRating);
     }
 
 
@@ -69,7 +65,8 @@ public class RatingService
         int num = 0;
         for (String uuid : ratings.keySet())
         {
-            device.rateSongByMusicBrainzID(uuid, ratings.get(uuid));
+        	// TODO : search for objectIDs by MusicBrainzId and then do UpdateObject
+            // device.rateSongByMusicBrainzID(uuid, ratings.get(uuid));
             num++;
         }
         this.publisher.publishEvent(new ToastrMessage("", "info", "musicbrainz.org import", num + " entries were imported"));

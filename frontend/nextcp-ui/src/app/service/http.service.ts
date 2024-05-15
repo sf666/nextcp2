@@ -68,7 +68,7 @@ export class HttpService {
       error: (err) => {
         this.genericResultService.displayHttpError(err, errorHeader == null ? "communication error" : errorHeader);
         console.log(err);
-        return ret.next(null);
+        return ret.error(err);
       }
     });
     return ret;

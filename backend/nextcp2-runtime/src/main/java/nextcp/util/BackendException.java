@@ -1,8 +1,18 @@
 package nextcp.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.messaging.support.ErrorMessage;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+
 public class BackendException extends RuntimeException
 {
-
+	private static final Logger log = LoggerFactory.getLogger(BackendException.class.getName());
+	
     /**
      * 
      */
@@ -27,6 +37,11 @@ public class BackendException extends RuntimeException
     public int errorCode = 0;
     public String description = "";
 
+    
+	public BackendException() {
+        super();
+	}
+    
     public BackendException(int errorCode, String description)
     {
         super();

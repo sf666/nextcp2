@@ -14,19 +14,17 @@ public class MusicItemIdDto
 
     public String acoustID;
     public String musicBrainzIdTrackId;
-    public Long umsAudiotrackId;
-    public String globalID;
+    public String objectID;
 
     public MusicItemIdDto()
     {
     }
 
-    public MusicItemIdDto(String acoustID, String musicBrainzIdTrackId, Long umsAudiotrackId, String globalID)
+    public MusicItemIdDto(String acoustID, String musicBrainzIdTrackId, String objectID)
     {
         this.acoustID = acoustID;
         this.musicBrainzIdTrackId = musicBrainzIdTrackId;
-        this.umsAudiotrackId = umsAudiotrackId;
-        this.globalID = globalID;
+        this.objectID = objectID;
     }
     
     @Override
@@ -36,8 +34,7 @@ public class MusicItemIdDto
         sb.append("MusicItemIdDto [");
         sb.append("acoustID=").append(this.acoustID).append(", ");
         sb.append("musicBrainzIdTrackId=").append(this.musicBrainzIdTrackId).append(", ");
-        sb.append("umsAudiotrackId=").append(this.umsAudiotrackId).append(", ");
-        sb.append("globalID=").append(this.globalID).append(", ");
+        sb.append("objectID=").append(this.objectID).append(", ");
         sb.append("]");
         return sb.toString();
     }

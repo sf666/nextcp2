@@ -58,10 +58,9 @@ export class SongOptionsComponent implements OnInit {
 
 
   public hasValidSongId(): boolean {
-    if (this.item?.songId.umsAudiotrackId > 0) {
+    if (this.item?.songId?.objectID) {
       return true;
     }
-    console.log("song has no ums audio track id : " + this.item);
     return false;
   }
 
@@ -71,7 +70,7 @@ export class SongOptionsComponent implements OnInit {
   }
 
   openAddToPlaylistDialog(event: Event): void {
-    if (this.item?.songId.umsAudiotrackId != null) {
+    if (this.item?.songId.objectID != null) {
       const dialogRef = this.defaultPlaylistService.openAddGlobalPlaylistDialog(this.item);
       this._matDialogRef.close();
     }

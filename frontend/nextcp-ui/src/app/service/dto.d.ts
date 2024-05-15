@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2024-04-12 09:36:47.
+// Generated using typescript-generator version 3.2.1263 on 2024-05-14 08:49:16.
 
 export interface ApplicationConfig {
     myPlaylistFolderName: string;
@@ -219,8 +219,7 @@ export interface MusicItemDto {
 export interface MusicItemIdDto {
     acoustID: string;
     musicBrainzIdTrackId: string;
-    umsAudiotrackId: number;
-    globalID: string;
+    objectID: string;
 }
 
 export interface MusicbrainzSupport {
@@ -417,6 +416,13 @@ export interface UiClientConfig {
 export interface UmsServerApiKey {
     serverUuid: string;
     serverApiKey: string;
+}
+
+export interface UpdateStarRatingRequest {
+    previousRating: number;
+    newRating: number;
+    mediaServerDevice: string;
+    musicItemIdDto: MusicItemIdDto;
 }
 
 export interface UpnpAvTransportState {

@@ -83,14 +83,19 @@ export class MusicLibraryComponent  implements AfterViewInit{
       objectId = "0";
     }
 
-    this.browseToOid(objectId, udn, true, "").then(
-      (val) => {if (!val) this.browseToRoot(udn)},
-      (err) => console.error(err)
-    );
+    let prom = this.browseToOid(objectId, udn, true, "");
+    if (prom) {
+      prom.then(
+        (val) => {if (!val) this.browseToRoot(udn)},
+        (err) => console.error(err)
+      );
+    }
   }
 
   private browseToOid(oid: string, udn: string, stepIn: boolean, sortCriteria?: string): Promise<boolean> {
-    return this.dispContainer.browseToOid(oid, udn, stepIn, sortCriteria);
+    if (this.dispContainer) {
+      return this.dispContainer.browseToOid(oid, udn, stepIn, sortCriteria);
+    }
   }
 
   public browseToRoot(udn: string, sortCriteria?: string): void {

@@ -66,7 +66,15 @@ export class GenericResultService {
       this.toastr.error(err.error.message, "invalid request");
     }
     else {
-      this.toastr.error(err.error.message, toastrMessage);
+      if (err.error?.message) {
+        this.toastr.error(err.error.message, toastrMessage);
+      } else if (err.error) {
+        this.toastr.error(err.error, toastrMessage);
+      } else if (err.message) {
+        this.toastr.error(err.message, toastrMessage);
+      } else {
+        this.toastr.error(err, toastrMessage);
+      }
     }
     return console.error(err);
   }

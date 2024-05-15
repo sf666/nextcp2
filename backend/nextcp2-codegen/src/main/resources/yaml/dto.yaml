@@ -249,12 +249,16 @@ RadioStation:
    resourceUrl: String
    artworkUrl: String
    
-   
+UpdateStarRatingRequest:
+   previousRating: Integer
+   newRating: Integer
+   mediaServerDevice: String
+   musicItemIdDto: MusicItemIdDto      
+
 MusicItemIdDto:
    acoustID: String
    musicBrainzIdTrackId: String
-   umsAudiotrackId: Long
-   globalID: String
+   objectID: String
 
 
 MusicItemDto:

@@ -257,7 +257,7 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   private hasSongId(item: MusicItemDto): boolean {
-    return (item.songId?.musicBrainzIdTrackId?.length > 0) || (item.songId?.umsAudiotrackId != null);
+    return (item.songId?.musicBrainzIdTrackId?.length > 0);
   }
 
   private checkTilesView() {

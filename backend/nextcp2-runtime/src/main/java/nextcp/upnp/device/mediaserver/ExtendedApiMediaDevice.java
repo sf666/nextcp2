@@ -4,6 +4,7 @@ import org.jupnp.support.model.item.Item;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import nextcp.dto.ServerPlaylists;
+import nextcp.dto.UpdateStarRatingRequest;
 
 /**
  * Devices with extended API support
@@ -24,13 +25,7 @@ public interface ExtendedApiMediaDevice
     
     public boolean isSongLiked(String musicBrainzTrackId);
     
-    public void rateSong(Long audiotrackId, String oid, int stars);
-
-    public void rateSongByMusicBrainzID(String musicbrainzId, int stars);
-
-    public int getSongRating(Integer audiotrackId);
-
-    public int getSongRatingByMusicBrainzID(String musicBrainzTrackId);
+    public void rateSong(UpdateStarRatingRequest updateRequest);
 
     // Backup Services
     

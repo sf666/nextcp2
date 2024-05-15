@@ -214,15 +214,16 @@ public class DtoBuilder
         itemDto.objectID = item.getId();
         itemDto.refId = item.getRefID();
         itemDto.mediaServerUDN = mediaServerUdn;
-
-        extractDescMetadata(itemDto, item);
-
+        	
         extractKnownProperties(itemDto, item);
         extractAudioFormat(item, itemDto);
 
         if (item instanceof AudioItem)
         {
+            itemDto.songId = new MusicItemIdDto();
+            itemDto.songId.objectID = item.getId();
             addAudioItem((AudioItem) item, itemDto);
+            extractDescMetadata(itemDto, item);
         }
 
         if (item instanceof MusicTrack)
@@ -314,8 +315,6 @@ public class DtoBuilder
         // Support for Mediaplayer Tags (https://petemanchester.github.io/MediaPlayer/)
         //
         MusicBrainzId mb = new MusicBrainzId();
-        MusicItemIdDto ids = new MusicItemIdDto();
-        itemDto.songId = ids;
         itemDto.musicBrainzId = mb;
 
         Optional<DescMeta<?>> descMetadata = item.getDescMetadata().stream().filter(n -> n.getType() != null && n.getType().equalsIgnoreCase("mpd-tags")).findFirst();
@@ -343,7 +342,7 @@ public class DtoBuilder
                         mb.WorkId = n.getTextContent();
                         break;
                     case "musicbrainzidtrackid":
-                        ids.musicBrainzIdTrackId = n.getTextContent();
+                    	itemDto.songId.musicBrainzIdTrackId = n.getTextContent();
                         break;
                     default:
                         log.warn("unknown mpd-tags attribute : " + n.getNodeName());
@@ -366,8 +365,8 @@ public class DtoBuilder
                 switch (nodeName)
                 {
                     case "musicbrainztrackid":
-                        ids.musicBrainzIdTrackId = getTextAndCheckForNull(n);
-                        log.debug("musicbrainztrackid : " + ids.musicBrainzIdTrackId);
+                        itemDto.songId.musicBrainzIdTrackId = getTextAndCheckForNull(n);
+                        log.debug("musicbrainztrackid : " + itemDto.songId.musicBrainzIdTrackId);
                         break;
                     case "musicbrainzreleaseid":
                         mb.ReleaseTrackId = getTextAndCheckForNull(n);
@@ -394,21 +393,6 @@ public class DtoBuilder
                         catch (Exception e)
                         {
                             log.debug("parsing rating information failed", e);
-                        }
-                        break;
-                    case "audiotrackid":
-                        try
-                        {
-                            String strFileId = n.getTextContent();
-                            if (NumberUtils.isParsable(strFileId))
-                            {
-                                ids.umsAudiotrackId = Long.parseLong(strFileId);
-                                log.debug("audiotrackId : " + strFileId);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            log.debug("parsing fileid failed", e);
                         }
                         break;
                     default:

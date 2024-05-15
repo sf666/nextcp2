@@ -21,8 +21,8 @@ public class RestDownloadService
     @Autowired
     private ApplicationEventPublisher publisher = null;
 
-    @GetMapping("/downloadFileByMBID/{mbid}")
-    public ResponseEntity<Resource> downloadFileByMBID(@PathVariable("mbid") String mbid)
+    @GetMapping("/downloadFileByMBID/{objectID}")
+    public ResponseEntity<Resource> downloadFileByMBID(@PathVariable("objectID") String mbid)
     {
         try
         {

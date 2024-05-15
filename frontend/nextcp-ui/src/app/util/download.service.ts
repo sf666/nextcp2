@@ -17,7 +17,7 @@ export class DownloadService {
 
     const a = document.createElement('a');
     a.download = "file";
-    a.href = "/DownloadService/downloadFileByMBID/" + song.songId.umsAudiotrackId;
+    a.href = "/DownloadService/downloadFileByMBID/" + song.songId.objectID;
     a.target = "_blank";
     a.style.display = 'none';
     

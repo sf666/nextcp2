@@ -43,11 +43,11 @@ export class DefaultPlaylistService {
    * Opens a dialog next to a parent element.
    * 
    * @param event
-   * @param trackId 
+   * @param objectID 
    * @param parent 
    * @returns 
    */
-  public openAddPlaylistDialogWithParent(event: any, trackId: number, parent: SongOptionsComponent) : MatDialogRef<any,any> {
+  public openAddPlaylistDialogWithParent(event: any, objectID: string, parent: SongOptionsComponent) : MatDialogRef<any,any> {
     let target : ElementRef;
 
     if (event.target ) {
@@ -57,14 +57,14 @@ export class DefaultPlaylistService {
     }
     this.dialogRef = this.dialog.open(DefautPlaylistsComponent, {
       hasBackdrop: false,
-      data: { trigger: target, id : trackId, parentPanel: parent},
+      data: { trigger: target, id : objectID, parentPanel: parent},
     });
 
     return this.dialogRef;
   }
 
-  public openAddPlaylistDialog(event: any, trackId: number) : MatDialogRef<any,any> {
-    return this.openAddPlaylistDialogWithParent(event, trackId, null);
+  public openAddPlaylistDialog(event: any, objectID: string) : MatDialogRef<any,any> {
+    return this.openAddPlaylistDialogWithParent(event, objectID, null);
   }
 
   public close(): void {

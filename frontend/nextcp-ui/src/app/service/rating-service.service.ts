@@ -1,9 +1,10 @@
 import { DeviceService } from './device.service';
 import { ContentDirectoryService } from './content-directory.service';
 import { Subject } from 'rxjs';
-import { MusicItemIdDto } from './dto.d';
+import { MusicItemIdDto, UpdateStarRatingRequest } from './dto.d';
 import { HttpService } from './http.service';
 import { Injectable } from '@angular/core';
+import { error } from 'console';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +17,17 @@ export class RatingServiceService {
     private httpService: HttpService,
     private deviceSerice: DeviceService) { }
 
-  public setStarRating(ids: MusicItemIdDto, stars: number): Subject<number> {
-    const uri = `/setStarRating/${stars}/${this.deviceSerice.selectedMediaServerDevice.udn}`;    
-    return this.httpService.post<number>(this.baseUri, uri, ids);
+  public setStarRating(ids: MusicItemIdDto, previousStars: number, stars: number) {
+    const uri = `/setStarRating`;
+    
+    const srr: UpdateStarRatingRequest = {      
+      previousRating : previousStars,
+      newRating : stars,
+      musicItemIdDto : ids,
+      mediaServerDevice : this.deviceSerice.selectedMediaServerDevice.udn,
+    }
+    
+    return this.httpService.post<void>(this.baseUri, uri, srr);
   }
 
   public syncRatingsFromMusicBrainzToBackend(): Subject<string> {

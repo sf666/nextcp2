@@ -32,15 +32,18 @@ import jakarta.annotation.PostConstruct;
 import nextcp.config.ServerConfig;
 import nextcp.dto.Config;
 import nextcp.dto.MediaServerDto;
+import nextcp.dto.MusicItemIdDto;
 import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.ServerPlaylists;
 import nextcp.dto.ToastrMessage;
+import nextcp.dto.UpdateStarRatingRequest;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateObjectInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateObjectOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateReferenceInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateReferenceOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.DestroyObjectInput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.UpdateObjectInput;
 import nextcp.util.BackendException;
 import okhttp3.Call;
 import okhttp3.MediaType;
@@ -181,31 +184,20 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	}
 
 	@Override
-	public void rateSong(Long audiotrackId, String oid, int stars) {
+	public void rateSong(UpdateStarRatingRequest updateRequest) {
+		UpdateObjectInput inp = new UpdateObjectInput();
+		inp.ObjectID = updateRequest.musicItemIdDto.objectID;
+		inp.CurrentTagValue = updateRequest.previousRating != null ? 
+			String.format("<upnp:rating>%d</upnp:rating>",updateRequest.previousRating) : null;
+		inp.NewTagValue = updateRequest.newRating != null ? 
+			String.format("<upnp:rating>%d</upnp:rating>",updateRequest.newRating) : null;
 		try {
-			Response response = executeCallWithResponse(String.format("%s/%s/%s", audiotrackId, stars, oid),
-				"api/rating/setratingbyaudiotrackid");
-			String body = response.body().string();
-			int code = response.code();
-			toastDeviceResponse(body, code, true);
+			getContentDirectoryService().updateObject(inp);
+		} catch (GenActionException e) {
+			String errorText = extractErrorText(e.description);
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
 		} catch (Exception e) {
-			log.error("rateSong failed ...", e);
-			publisher.publishEvent(
-				new ToastrMessage(null, "error", "UMS server device" + getFriendlyName(), "File rating failed : " + e.getMessage()));
-		}
-	}
-
-	@Override
-	public void rateSongByMusicBrainzID(String musicbrainzId, int stars) {
-		try {
-			Response response = executeCallWithResponse(String.format("%s/%s", musicbrainzId, stars), "api/rating/setrating");
-			String body = response.body().string();
-			int code = response.code();
-			toastDeviceResponse(body, code, true);
-		} catch (Exception e) {
-			log.debug("rateSong failed ...", e);
-			publisher.publishEvent(
-				new ToastrMessage(null, "error", "UMS server device" + getFriendlyName(), "File rating failed : " + e.getMessage()));
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
 		}
 	}
 
@@ -229,28 +221,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 				break;
 			default:
 				publisher.publishEvent(new ToastrMessage(null, "warn", "UMS server device '" + getFriendlyName() + "'", body));
-		}
-	}
-
-	@Override
-	public int getSongRating(Integer audiotrackId) {
-		try {
-			String strResponse = executeCall(Integer.toString(audiotrackId), "api/rating/getratingbyaudiotrackid");
-			return Integer.valueOf(strResponse);
-		} catch (Exception e) {
-			log.debug("getSongRating by audiotrackid failed ...", e);
-			return 0;
-		}
-	}
-
-	@Override
-	public int getSongRatingByMusicBrainzID(String musicBrainzTrackId) {
-		try {
-			String strResponse = executeCall(musicBrainzTrackId, "api/rating/getrating");
-			return Integer.valueOf(strResponse);
-		} catch (Exception e) {
-			log.debug("getSongRating failed ...", e);
-			return 0;
 		}
 	}
 
@@ -406,7 +376,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		DestroyObjectInput inp = new DestroyObjectInput();
 		inp.ObjectID = objectId;
 		try {
-			getContentDirectoryService().destroyReference(inp);
+			getContentDirectoryService().destroyObject(inp);
 		} catch (GenActionException e) {
 			String errorText = extractErrorText(e.description);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);

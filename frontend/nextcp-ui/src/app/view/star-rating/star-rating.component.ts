@@ -29,20 +29,17 @@ export class StarRatingComponent {
   }
 
   isVisible(): boolean {
-    if (this.currentSong?.songId?.umsAudiotrackId != null) {
+    if (this.currentSong?.objectID != null) {
       return true;
     }
     return false;
   }
 
   starSelected(num: number): void {
-    this.currentSong.rating = num;
-    if (this.currentSong?.songId?.umsAudiotrackId != null) {
-      this.currentSong.songId.globalID = this.currentSong.objectID;
-      this.ratingServiceService.setStarRating(this.currentSong.songId, num);
-    } else {
-      this.genericResultService.displayErrorMessage("current track has no identifier.", "add star rating");
-    }
+    this.ratingServiceService.setStarRating(this.currentSong.songId, this.currentSong.rating, num).subscribe({
+      next: () => this.currentSong.rating = num,
+      error: () => console.log("error"),
+    })
   }
 
   isActive(num: number): string  {
