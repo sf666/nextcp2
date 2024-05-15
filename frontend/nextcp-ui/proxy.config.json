@@ -1,13 +1,13 @@
 {
-  "/DeviceRegistry/*": {
+  "/DeviceRegistry": {
     "target": "http://localhost:8085",
     "secure": false
   },
-  "/ContentDirectoryService/*": {
+  "/ContentDirectoryService": {
     "target": "http://localhost:8085",
     "secure": false
   },
-  "/TransportService/*": {
+  "/TransportService": {
     "target": "http://localhost:8085",
     "secure": false
   },
@@ -15,43 +15,42 @@
     "target": "http://localhost:8085",
     "secure": false
   },
-  "/SSE/*": {
+  "/ConfigurationService": {
     "target": "http://localhost:8085",
     "secure": false
   },
-  "/ConfigurationService/*": {
+  "/RadioService": {
     "target": "http://localhost:8085",
     "secure": false
   },
-  "/RadioService/*": {
+  "/DeviceRendererService": {
     "target": "http://localhost:8085",
     "secure": false
   },
-  "/DeviceRendererService/*": {
+  "/PlaylistService": {
     "target": "http://localhost:8085",
     "secure": false
   },
-  "/PlaylistService/*": {
+  "/RatingService": {
     "target": "http://localhost:8085",
+    "changeOrigin": true,
     "secure": false
   },
-  "/RatingService/*": {
+  "/MyMusicService": {
     "target": "http://localhost:8085",
+    "changeOrigin": true,
+    "logLevel": "debug",
     "secure": false
-  },
-  "/MyMusicService/*": {
+  },  
+  "/SystemService": {
     "target": "http://localhost:8085",
     "secure": false
   },  
-  "/SystemService/*": {
-    "target": "http://localhost:8085",
-    "secure": false
-  },  
-  "/DownloadService/*": {
+  "/DownloadService": {
     "target": "http://localhost:8085",
     "secure": false
   },
-  "/MediaServerPlaylistService/*": {
+  "/MediaServerPlaylistService": {
     "target": "http://localhost:8085",
     "secure": false
   }  
