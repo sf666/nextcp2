@@ -71,10 +71,6 @@ export class DisplayContainerComponent implements OnInit {
   // 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private filteredBrowseToFunc: any;
-  private doFilteredSearchThrotteled = (): void => {
-    // this.contentDirectoryService.quickSearch(this.currentSearchText, "", this.deviceService.selectedMediaServerDevice.udn).subscribe(data => this.searchResultReceived(data));
-    this.contentHandler.contentDirectoryService.browseChildrenByContainer(this.currentContainer).subscribe(data => this.browseFinished(data));
-  };
 
   constructor(
     private myMusicService: MyMusicService,
@@ -88,7 +84,6 @@ export class DisplayContainerComponent implements OnInit {
     private configurationService: ConfigurationService,
     public trackQualityService: TrackQualityService) {
     console.log("constructor : DisplayContainerComponent");
-    this.filteredBrowseToFunc = debounce(this.getSearchDelay(), this.doFilteredSearchThrotteled);
     sseService.mediaRendererTrackInfoChanged$.subscribe(data => {
       if (data?.mediaRendererUdn && data?.currentTrack && deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
         this.currentUrl = data.currentTrack.streamingURL;
@@ -109,18 +104,6 @@ export class DisplayContainerComponent implements OnInit {
         }
       }
     }
-
-    /* Loaded in directory content server after requests returns.
-
-
-    if (this.contentHandler.contentDirectoryService.getPageTurnId()) {
-      this.updateIntersec();
-    } else {
-      if (this.intersecObserver) {
-        this.intersecObserver.disconnect();
-      }
-    }
-    */
   }
 
   /**
