@@ -17,8 +17,11 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class ContentDirectoryService {
+export class ContentDirectoryService {  
   baseUri = '/ContentDirectoryService';
+
+  private lastBrowseRequest: BrowseRequestDto;
+
   public currentContainerList: ContainerItemDto;
   public orderAlbumsByGenre = false;
 
@@ -144,11 +147,12 @@ export class ContentDirectoryService {
     this.setActivePage(browseRequestDto);
 
     const uri = '/browseChildren';
+    this.lastBrowseRequest = browseRequestDto;
     const sub = this.httpService.post<ContainerItemDto>(
       this.baseUri,
       uri,
       browseRequestDto,
-    );
+    );    
     if (additive) {
       sub.subscribe((data) => this.addContainer(data));
     } else {
@@ -403,8 +407,7 @@ export class ContentDirectoryService {
   private updateSearchResultContainer(searchResultContainer: ContainerDto[]) {
     let ci = this.dtoGeneratorService.generateEmptyContainerItemDto();
     ci.containerDto = searchResultContainer;
-    ci.currentContainer.parentID =
-      this.currentContainerList.currentContainer.id;
+    ci.currentContainer.parentID = this.lastBrowseRequest.objectID;
     ci.currentContainer.title =
       '[' +
       this.lastSearchType +
@@ -423,8 +426,7 @@ export class ContentDirectoryService {
     ci.musicItemDto = searchResultItems;
     ci.currentContainer.albumartUri =
       'data:image/gif;base64,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';
-    ci.currentContainer.parentID =
-      this.currentContainerList.currentContainer.id;
+    ci.currentContainer.parentID = this.lastBrowseRequest.objectID;
     ci.currentContainer.title =
       '[' +
       this.lastSearchType +
