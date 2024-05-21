@@ -384,6 +384,9 @@ public class DtoBuilder
                         itemDto.genre = n.getTextContent();
                         log.debug("genre : " + itemDto.genre);
                         break;
+                    case "audiotrackid":
+                        log.debug("ignoring audiotrackid");
+                        break;
                     case "rating":
                         try
                         {
