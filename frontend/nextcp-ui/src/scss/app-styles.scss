@@ -30,52 +30,6 @@
     outline: none;
 }
 
-//
-// Icons : See design guide at : https://developers.google.com/fonts/docs/material_icons
-// 
-.material-symbols-outlined .material-symbols-sharp {
-    &.md-18 {
-        font-size: 18px;
-    }
-
-    &.md-24 {
-        font-size: 24px;
-    }
-
-    &.md-36 {
-        font-size: 36px;
-    }
-
-    &.md-48 {
-        font-size: 48px;
-    }
-
-    &.utltra-thin {
-        font-variation-settings: 'wght'100, 'FILL'0, 'GRAD'-25, 'opsz'24;
-    }
-
-    &.thin {
-        font-variation-settings: 'wght'300, 'FILL'0, 'GRAD'-25, 'opsz'24;
-    }
-
-    &.bold {
-        font-variation-settings: 'wght'500, 'FILL'0, 'GRAD'-25, 'opsz'24;
-    }
-
-    &.extra-bold {
-        font-variation-settings: 'wght'700, 'FILL'0, 'GRAD'-25, 'opsz'24;
-    }
-
-    &.extra-bold {
-        font-variation-settings: 'wght'700, 'FILL'0, 'GRAD'-25, 'opsz'24;
-    }
-
-    &.md-light {
-        color: var(--glas-white-7);
-    }
-
-}
-
 /* Rules for sizing the icon. */
 .icons-size-xs {
     font-size: 18px;
