@@ -188,6 +188,7 @@ export class ContentDirectoryService {
    * @param data Gets called after a browse request returns ...
    */
   public updateContainer(data: ContainerItemDto): void {
+    console.log("updating container with : " + data.containerDto)
     if (data) {
       this.currentContainerList = data;
       this.updatePageTurnId(data);

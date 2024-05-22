@@ -135,6 +135,14 @@ export class MusicLibraryComponent  implements AfterViewInit{
     return this.contentDirectoryService.currentContainerList.parentFolderTitle;
   }
 
+  rootButtonPressed(event: any) {
+    const currentParent = this.contentDirectoryService?.currentContainerList?.currentContainer?.parentID;
+    if (currentParent) {
+      this.dispContainer.clearSearch();
+      this.browseToOid("0", this.deviceService.selectedMediaServerDevice.udn, false, "");
+    }
+  }
+
   public backButtonPressed(event: any) {
     const currentParent = this.contentDirectoryService?.currentContainerList?.currentContainer?.parentID;
     if (currentParent) {

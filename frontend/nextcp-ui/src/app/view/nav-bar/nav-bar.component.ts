@@ -30,6 +30,7 @@ export class NavBarComponent {
   @Output() executeSearch = new EventEmitter<string>();
   @Output() searchKeyUp = new EventEmitter<KeyboardEvent>();
   @Output() backButtonPressed = new EventEmitter<any>();
+  @Output() rootButtonPressed = new EventEmitter<any>();
 
   showBackButton = false;
 
@@ -40,19 +41,14 @@ export class NavBarComponent {
 
   }
 
-  gotoRoot(): void {
-    this.router
-    .routeReuseStrategy
-    .shouldReuseRoute = function () {
-        return false;
-  };    
-    this.router.navigateByUrl('/music-library/0',);
-  }
-
   gotoParent(): void {
     this.backButtonPressed.emit("");
   }
-       
+
+  gotoRoot(): void {
+    this.rootButtonPressed.emit("");
+  }
+
   /**
    * 
    */
