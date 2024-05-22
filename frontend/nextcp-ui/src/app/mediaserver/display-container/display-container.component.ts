@@ -728,7 +728,7 @@ export class DisplayContainerComponent implements OnInit {
     if (this.allMusicTracks.length > 0) {
       return "albumTile small";
     } else {
-      return "albumTitle";
+      return "albumTile";
     }
   }
 }
