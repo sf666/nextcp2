@@ -19,6 +19,10 @@ $grid-flex-sm-max-width : 9rem;
     flex-basis: $grid-flex-basis;
     min-width : $grid-flex-min-width;
     max-width : $grid-flex-max-width;
+    &.small {
+        max-width: calc($grid-flex-max-width/2);
+        flex     : 5 1 calc($grid-flex-basis/2);
+    } 
 }
 
 .albumTile {
@@ -33,6 +37,10 @@ $grid-flex-sm-max-width : 9rem;
     font-size     : 0.9rem;
     font-weight   : 500;
     letter-spacing: 0.08rem;
+    &.small {
+        max-width: calc($grid-flex-max-width/2);
+        flex     : 5 1 calc($grid-flex-basis/2);
+    }
 }
 
 

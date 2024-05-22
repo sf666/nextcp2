@@ -1,8 +1,8 @@
-@import "pantone";
 @import 'appTable';
 @import "card-layout";
 @import "buttons";
 @import "app-variables";
+@import "app-icons";
 
 // area right to the image
 .right-button {
@@ -121,8 +121,8 @@
 
     width        : 4rem;
     height       : 4rem;
-    margin-bottom: 0.5rem;
-    margin-top   : 0.5rem;
+    margin-bottom: 2px;
+    margin-top   : 2px;
 }
 
 .search-icon {

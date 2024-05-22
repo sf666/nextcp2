@@ -154,7 +154,7 @@ Main Content
       <div>
         <div id="head_browse_result_playlist_items_ID" tabindex="-1" class="albumLayout">
           @for (container of playlistList; track container.id) {
-            <div id="{{container.id}}" tabindex="-1" class="albumTile">
+            <div id="{{container.id}}" tabindex="-1" class="{{getAlbumTile()}}">
               <div class="albumImageContainer">
                 <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
                 <div class="overlay-child d-flex flex-column justify-content-center align-items-center">
@@ -185,7 +185,7 @@ Main Content
       <div>
         <div id="head_browse_result_album_ID" class="albumLayout">
           @for (container of albumList; track container.id) {
-            <div id="{{container.id}}" tabindex="-1" class="albumTile">
+            <div id="{{container.id}}" tabindex="-1" class="{{getAlbumTile()}}">
               <div class="albumImageContainer">
                 <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
                 <div class="overlay-child d-flex flex-column justify-content-center align-items-center" id="id_play_overlay_div_album">
@@ -199,7 +199,7 @@ Main Content
                 </div>
               </div>
               <div class="d-flex flex-column minWidth albumDesc">
-                <div class="albumTitle no-wrap">{{container.title}}</div>
+                <div class="{{getAlbumTitle()}} no-wrap">{{container.title}}</div>
                 <div class="albumSubheader no-wrap">{{container.artist}}</div>
                 <div class="albumYear no-wrap">{{container.media_date}}</div>
               </div>
@@ -357,14 +357,14 @@ Main Content
     <div>
       <div id="head_browse_result_playlist_container_ID" class="albumLayout">
         @for (container of containerList; track container.id) {
-          <div class="albumTile" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)">
+          <div class="{{getAlbumTile()}}" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)">
             <div class="albumImageContainer">
               <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
               <!-- <image-cropper src="{{container.albumartUri}}"></image-cropper> -->
             </div>
             <div class="d-flex flex-column albumDesc">
               <div class="playlistText">{{getOtherContainerHeadline(container)}}</div>
-              <div class="albumTitle">{{container.title}}</div>
+              <div class="{{getAlbumTitle()}}">{{container.title}}</div>
             </div>
           </div>
         }
@@ -379,13 +379,13 @@ Main Content
     <div>
       <div id="head_browse_other_items_ID" class="albumLayout">
         @for (item of items; track item.objectID) {
-          <div class="albumTile" id="{{item.objectID}}" tabindex="-1" (click)="transportService.playResource(item)">
+          <div class="{{getAlbumTitle()}}" id="{{item.objectID}}" tabindex="-1" (click)="transportService.playResource(item)">
             <div class="albumImageContainer">
               <img src="{{item.albumArtUrl}}" alt="{{item.title}}">
             </div>
             <div class="d-flex flex-column albumDesc">
               <div class="playlistText">{{getOtherItemHeadline(item)}}</div>
-              <div class="albumTitle">{{item.title}}</div>
+              <div class="{{getAlbumTitle()}}">{{item.title}}</div>
             </div>
           </div>
         }

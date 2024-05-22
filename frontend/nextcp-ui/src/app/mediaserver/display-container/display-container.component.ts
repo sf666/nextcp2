@@ -715,4 +715,20 @@ export class DisplayContainerComponent implements OnInit {
     }
     return "";
   }
+
+  getAlbumTitle() {
+    if (this.allMusicTracks.length > 0) {
+      return "albumTitle small";
+    } else {
+      return "albumTitle";
+    }
+  }
+
+  getAlbumTile() {
+    if (this.allMusicTracks.length > 0) {
+      return "albumTile small";
+    } else {
+      return "albumTitle";
+    }
+  }
 }
