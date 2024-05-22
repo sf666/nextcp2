@@ -3,7 +3,6 @@ import { TransportService } from '../../../service/transport.service';
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable no-restricted-syntax */
 import { ContentDirectoryService } from './../../../service/content-directory.service';
-import { ContainerDto, MusicItemDto } from './../../../service/dto.d';
 import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { QualityBadgeComponent } from '../../../util/comp/quality-badge/quality-badge.component';

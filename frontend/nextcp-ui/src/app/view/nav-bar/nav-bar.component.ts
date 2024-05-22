@@ -1,13 +1,14 @@
 import { GlobalSearchService } from './../../service/search/global-search.service';
-import { Router, NavigationStart, Event as NavigationEvent } from '@angular/router';
+import { Router, Event as NavigationEvent, RouterLink } from '@angular/router';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { ModalSearchResultComponent } from '../search/modal-search-result/modal-search-result.component';
 import { FormsModule } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
-import { MatMiniFabButton } from '@angular/material/button';
+import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { GlobalSearchComponent } from 'src/app/util/comp/global-search/global-search.component';
+import { ScrollLoadHandler } from 'src/app/mediaserver/display-container/defs';
 
 
 @Component({
@@ -15,12 +16,15 @@ import { GlobalSearchComponent } from 'src/app/util/comp/global-search/global-se
     templateUrl: './nav-bar.component.html',
     styleUrls: ['./nav-bar.component.scss'],
     standalone: true,
-    imports: [MatMiniFabButton, MatInput, MatIcon, FormsModule, ModalSearchResultComponent, GlobalSearchComponent]
+    imports: [MatMiniFabButton, MatInput, MatIcon, FormsModule, ModalSearchResultComponent, GlobalSearchComponent, 
+      MatButton, RouterLink]
 })
 
 export class NavBarComponent {
   @Input() parentTitle: string;
   @Input() backButtonDisabled: boolean = false;
+  @Input() contentHandler: ScrollLoadHandler;
+
 
   // Inform parent about actions
   @Output() executeSearch = new EventEmitter<string>();
@@ -36,19 +40,39 @@ export class NavBarComponent {
 
   }
 
+  gotoRoot(): void {
+    this.router
+    .routeReuseStrategy
+    .shouldReuseRoute = function () {
+        return false;
+  };    
+    this.router.navigateByUrl('/music-library/0',);
+  }
+
   gotoParent(): void {
     this.backButtonPressed.emit("");
   }
-
+       
   /**
    * 
    */
   searchBackPressed(): void {
-    //    this.contentDirectoryService.browseToRoot("", this.contentDirectoryService.currentContainerList.currentContainer.mediaServerUDN);
     void this.router.navigateByUrl('music-library');
   }
 
-  isDisabled(): boolean {
-    return this.backButtonDisabled;
+  showRootFolder() : boolean {
+    return true;
+  }
+
+  showParentFolder() : boolean {
+    if (!this.contentHandler?.contentDirectoryService?.currentContainerList?.currentContainer?.parentID ) {
+      return false;
+    } else {
+      if (this.contentHandler?.contentDirectoryService?.currentContainerList?.currentContainer?.parentID === "0" || 
+          this.contentHandler?.contentDirectoryService?.currentContainerList?.currentContainer?.parentID === "-1") {
+        return false;
+      }
+      return true;
+    }
   }
 }

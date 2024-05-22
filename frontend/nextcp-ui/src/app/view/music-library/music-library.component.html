@@ -2,6 +2,7 @@
   <nav-bar
     [parentTitle]="getParentTitle()"
     [backButtonDisabled]="backButtonDisabled()"
+    [contentHandler]="getContentHandler()"
     (backButtonPressed)="backButtonPressed($event)"
   ></nav-bar>
 }

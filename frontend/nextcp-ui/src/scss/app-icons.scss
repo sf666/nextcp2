@@ -1,7 +1,7 @@
 //
 // Icons : See design guide at : https://developers.google.com/fonts/docs/material_icons
 // 
-.material-symbols-outlined {
+.material-symbols-outlined .material-symbols-sharp {
     &.md-18 {
         font-size: 18px;
     }
@@ -18,7 +18,7 @@
         font-size: 48px;
     }
 
-    &.utltra-thin {
+    &.ultra-thin {
         font-variation-settings: 'wght'100, 'FILL'0, 'GRAD'-25, 'opsz'24;
     }
 
