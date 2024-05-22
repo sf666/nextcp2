@@ -379,7 +379,7 @@ Main Content
     <div>
       <div id="head_browse_other_items_ID" class="albumLayout">
         @for (item of items; track item.objectID) {
-          <div class="{{getAlbumTitle()}}" id="{{item.objectID}}" tabindex="-1" (click)="transportService.playResource(item)">
+          <div class="{{getAlbumTile()}}" id="{{item.objectID}}" tabindex="-1" (click)="transportService.playResource(item)">
             <div class="albumImageContainer">
               <img src="{{item.albumArtUrl}}" alt="{{item.title}}">
             </div>
