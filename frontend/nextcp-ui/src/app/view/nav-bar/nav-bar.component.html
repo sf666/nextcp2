@@ -5,11 +5,12 @@
       <ol class="breadcrumb">
         <li class="breadcrumb-item" (click)="gotoRoot()">
           <mat-icon class="material-symbols-sharp md-48 ultra-thin">home</mat-icon>
+          <span>Home</span>
         </li>
         @if(showParentFolder()) {
           <li class="breadcrumb-item" (click)="gotoParent()">
             <mat-icon class="material-symbols-sharp md-48 ultra-thin">drive_folder_upload</mat-icon>
-            <span>{{parentTitle}}</span>
+            <span class="ps-1">{{parentTitle}}</span>
           </li>
         }
       </ol>
