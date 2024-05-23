@@ -17,4 +17,15 @@ export class TimeDisplayService {
       date.getUTCSeconds().toString().padStart(2, '0') + 's ');
     return s;    
   }
+
+  public convertLongToDateStringShort(seconds : number) {
+    let date = new Date(Date.UTC(0, 0, 0, 0, 0, seconds));
+    let s = (date.getUTCHours() > 0 ?
+      date.getUTCHours().toString().padStart(2, '0') + ':' + 
+      date.getUTCMinutes().toString().padStart(2, '0') + ':' + 
+      date.getUTCSeconds().toString().padStart(2, '0') :
+      date.getUTCMinutes().toString().padStart(2, '0') + ':' +
+      date.getUTCSeconds().toString().padStart(2, '0'));
+    return s;    
+  }
 }

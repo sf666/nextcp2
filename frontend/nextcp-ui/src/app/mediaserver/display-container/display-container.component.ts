@@ -339,6 +339,20 @@ export class DisplayContainerComponent implements OnInit {
     return "";
   }
 
+  get totalPlaytimeShort(): string {
+    let completeTime: number;
+    completeTime = 0;
+    if (this.musicTracks.length > 0) {
+      this.musicTracks?.forEach(
+        el => completeTime = completeTime + (el.audioFormat?.durationInSeconds ? el.audioFormat.durationInSeconds : 0)
+      );
+    }
+    if (completeTime) {
+      return this.timeDisplayService.convertLongToDateStringShort(completeTime);
+    }
+    return "";
+  }
+
   public get currentContainer(): ContainerDto {
     if (this.contentHandler?.contentDirectoryService?.currentContainerList?.currentContainer) {
       return this.contentHandler.contentDirectoryService.currentContainerList.currentContainer;
@@ -638,13 +652,13 @@ export class DisplayContainerComponent implements OnInit {
     if (!this.allTracksSameAlbum()) {
       return "col-8 col-sm-7 col-md-5 col-lg-5 col-xl-3";
     } else {
-      return "col-11 col-sm-9 col-md-7 col-lg-6 col-xl-4";
+      return "col-11 col-sm-9 col-md-7 col-lg-6 col-xl-6";
     }
   }
 
   getDuration(item: MusicItemDto): string {
     if (item.audioFormat?.durationInSeconds) {
-      return this.timeDisplayService.convertLongToDateString(item.audioFormat.durationInSeconds);
+      return this.timeDisplayService.convertLongToDateStringShort(item.audioFormat.durationInSeconds);
     } else {
       return "";
     }

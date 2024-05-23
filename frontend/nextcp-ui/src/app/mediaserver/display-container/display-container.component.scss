@@ -160,6 +160,7 @@ img {
     font-weight   : 700;
     align-self    : flex-start;
     padding-bottom: 0.7rem;
+    color         : var(--snow-white);
 }
 
 .album {
@@ -289,6 +290,8 @@ input {
 // Liked view
 .material-symbols-outlined {
     &.liked {
+        font-size     : 1.8rem;
+        margin-bottom : 4px;
         vertical-align: text-bottom;
         color         : rgb(0, 255, 255);
         font-variation-settings:
@@ -299,6 +302,8 @@ input {
     }
 
     &.like-possible {
+        font-size     : 1.8rem;
+        margin-bottom : 4px;
         vertical-align: text-bottom;
         font-variation-settings:
             'FILL'0,
@@ -308,6 +313,9 @@ input {
     }
 }
 
+.trackNum {
+    min-width: 1.8rem;;
+}
 /*
 
 .scrollText {

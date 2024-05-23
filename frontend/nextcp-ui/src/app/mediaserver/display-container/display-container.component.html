@@ -227,10 +227,10 @@ Main Content
                     <div class="col-3 col-sm-2 col-md-2 col-lg-1">&nbsp;</div>
                   }
                   @if (allTracksSameAlbum()) {
-                    <div class="{{getTitleResponsiveClass()}}">
-                    #&nbsp;&nbsp;TITLE</div>
-                  }
-                  @if (!allTracksSameAlbum()) {
+                    <div class="d-flex {{getTitleResponsiveClass()}}">
+                      <div class="trackNum">#</div><div>TITLE</div>
+                    </div>
+                  } @else {
                     <div class="{{getTitleResponsiveClass()}}">TITLE</div>
                   }
                   <div class="col-2 d-none d-md-block">ARTIST</div>
@@ -273,9 +273,11 @@ Main Content
                       <div class="{{getTitleResponsiveClass()}} mb-2 mt-2 d-flex flex-column {{selectedRowClass(item)}}">
                         <div (click)="play(item)" class="no-wrap d-flex justify-content-between">
                           <div class="">@if (allTracksSameAlbum()) {
-                            <span>{{item.originalTrackNumber}}&nbsp;&nbsp;</span>
-                          }
-                        {{item.title}}</div>
+                            <div class="d-flex">
+                              <div class="trackNum">{{item.originalTrackNumber}}</div><div>{{item.title}}</div>
+                            </div>
+                          } @else {<div>{{item.title}}</div>}
+                        </div>
                         <div class="d-none d-md-block">
                           <quality-badge [item]="item"></quality-badge>
                         </div>
