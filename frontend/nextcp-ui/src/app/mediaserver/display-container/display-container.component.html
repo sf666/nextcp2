@@ -30,19 +30,21 @@
                           <span (click)="likeAlbum()" class="material-symbols-outlined like-possible">favorite</span>
                         }
                       </div>
-                      @if (currentContainer.artist) {
-                        <div class="regular">by <span class="highlight">{{currentContainer.artist}}</span>
-                      </div>
-                    }
                     @if (musicItemsCount > 0) {
-                      <div class="highlight">Soundtracks</div>
-                      <div class="d-flex regular">
-                        <div>{{musicItemsCount}} Tracks</div>
-                        @if (totalPlaytime.length > 0) {
-                          <div>&nbsp;-&nbsp;{{totalPlaytime}}</div>
-                        }    
-                      </div>
-                    }
+                        @if (isContainerAlbum()) {
+                          <div class="d-flex regular">
+                            <div>Album&nbsp;</div>
+                              @if (currentContainer.artist) {<div>by {{currentContainer.artist}}</div>}
+                            </div>
+                        } @else {
+                          <div class="highlight">Soundtracks</div> }
+                        <div class="d-flex regular">
+                          <div>{{musicItemsCount}} Tracks</div>
+                          @if (totalPlaytime.length > 0) {
+                            <div>&nbsp;-&nbsp;{{totalPlaytime}}</div>
+                          }
+                        </div>
+                        }
                   </div>
                   <div class="button-row">
                     <button mat-stroked-button class="my-buttons" (click)="toggleListView()">
@@ -147,7 +149,7 @@ Main Content
 ==========================================
 -->
 <div class="outer-container">
-  <div class="middle-spacer"></div>
+  <div class="left-spacer"></div>
   <div class="browseContentArea">
     <!--
     playlist elements on first position
@@ -400,9 +402,8 @@ Main Content
 </div>
 
 <!-- right outer container end -->
-<div class="middle-spacer">
+<div class="right-spacer">
   &nbsp;
 </div>
-
 </div>
 </div>

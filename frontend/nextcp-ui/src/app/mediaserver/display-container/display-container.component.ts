@@ -283,6 +283,10 @@ export class DisplayContainerComponent implements OnInit {
     return this.currentAlbumLiked;
   }
 
+  isContainerAlbum() : boolean {
+    return this.allTracksSameMusicBrainzReleaseId_;
+  }
+
   likePossible(): boolean {
     if (!this.allTracksSameMusicBrainzReleaseId_) {
       return false;
