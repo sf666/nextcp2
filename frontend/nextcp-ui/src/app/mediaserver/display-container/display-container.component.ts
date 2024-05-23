@@ -307,7 +307,7 @@ export class DisplayContainerComponent implements OnInit {
   // Statistics
   // ===============================================================================================
 
-  public get itemsCount(): number {
+  public get musicItemsCount(): number {
     if (this.musicTracks?.length) {
       return this.musicTracks.length;
     } else {

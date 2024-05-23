@@ -34,11 +34,14 @@
                         <div class="regular">by <span class="highlight">{{currentContainer.artist}}</span>
                       </div>
                     }
-                    @if (itemsCount > 0) {
-                      <div class="pt-3 regular"> {{containerType}} contains <span class="highlight">{{itemsCount}}</span> audio title</div>
-                    }
-                    @if (totalPlaytime.length > 0) {
-                      <div class="pt-1 regular">Total play time <span class="highlight">{{totalPlaytime}}</span></div>
+                    @if (musicItemsCount > 0) {
+                      <div class="highlight">Soundtracks</div>
+                      <div class="d-flex regular">
+                        <div>{{musicItemsCount}} Tracks</div>
+                        @if (totalPlaytime.length > 0) {
+                          <div>&nbsp;-&nbsp;{{totalPlaytime}}</div>
+                        }    
+                      </div>
                     }
                   </div>
                   <div class="button-row">
@@ -64,7 +67,7 @@
                 @if (currentContainer) {
                   <div id="template_containerTitle" class="d-flex flex-column infobox align-self-start">
                     <div class="title">{{currentContainer.title}}</div>
-                    @if (contentHandler?.contentDirectoryService?.currentContainerList?.totalMatches > 0 || itemsCount > 0) {
+                    @if (contentHandler?.contentDirectoryService?.currentContainerList?.totalMatches > 0 || musicItemsCount > 0) {
                       <div class="regular"><span
                       class="highlight pe-2">{{contentHandler.contentDirectoryService.currentContainerList.totalMatches}}</span> total elements
                     </div>
@@ -130,7 +133,7 @@
   @if (currentContainer) {
     <div id="template_containerTitle" class="d-flex flex-column infobox align-self-start">
       <div class="title">{{currentContainer.title}}</div>
-      @if (contentHandler?.contentDirectoryService?.currentContainerList?.totalMatches > 0 || itemsCount > 0) {
+      @if (contentHandler?.contentDirectoryService?.currentContainerList?.totalMatches > 0 || musicItemsCount > 0) {
         <div class="regular"><span
         class="highlight pe-2">{{contentHandler.contentDirectoryService.currentContainerList.totalMatches}}</span> total elements
       </div>
