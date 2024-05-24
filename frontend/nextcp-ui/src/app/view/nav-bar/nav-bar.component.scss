@@ -37,13 +37,13 @@
         right   : 0px;
         height  : var(--nav-height);
         z-index : 3;
-    
+
         display         : flex;
         flex-direction  : row;
         flex-wrap       : nowrap;
         font-weight     : 300;
         background-color: black;
-        width: calc(100% - var(--sidebar-width-mid));
+        width           : calc(100% - var(--sidebar-width-mid));
     }
 }
 
@@ -81,13 +81,21 @@
 }
 
 .material-symbols-sharp {
-    font-size: 24px;
+    font-size     : 24px;
     vertical-align: text-bottom;
     font-variation-settings:
-        'FILL'0,
+        'FILL' 0,
         'wght'300,
         'GRAD'-25,
-        'opsz'24
+        'opsz'24;
+
+    &.filled {
+        font-variation-settings:
+        'FILL' 1,
+        'wght'300,
+        'GRAD'-25,
+        'opsz'24;
+    }
 }
 
 .navFont {

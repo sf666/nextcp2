@@ -136,18 +136,5 @@ export class MyPlaylistsComponent implements OnInit {
 
   public backButtonDisabled(): boolean {
     return true;
-    /*
-    if (
-      this.contentDirectoryService?.currentContainerList?.currentContainer?.id
-    ) {
-      return (
-        this.contentDirectoryService.currentContainerList.currentContainer
-          .id === '0' ||
-        this.contentDirectoryService.currentContainerList.currentContainer
-          .id === ''
-      );
-    }
-    return false;
-    */
   }
 }

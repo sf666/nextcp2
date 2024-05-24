@@ -9,30 +9,61 @@ import { PlaylistService } from './../../service/playlist.service';
 import { TrackQualityService } from './../../util/track-quality.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { MyMusicService } from './../../service/my-music.service';
-import { MusicItemDto, ContainerDto, ContainerItemDto } from './../../service/dto.d';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  MusicItemDto,
+  ContainerDto,
+  ContainerItemDto,
+} from './../../service/dto.d';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  AfterViewChecked,
+} from '@angular/core';
 import { debounce } from 'src/app/global';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StarRatingComponent } from '../../view/star-rating/star-rating.component';
 import { QualityBadgeComponent } from '../../util/comp/quality-badge/quality-badge.component';
 import { MatOption } from '@angular/material/core';
-import { MatSelect } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
-import { MatFormField, MatLabel, MatPrefix, MatSuffix } from '@angular/material/form-field';
-import { MatIcon } from '@angular/material/icon';
-import { MatButton } from '@angular/material/button';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
+import { MatInput, MatInputModule } from '@angular/material/input';
+import {
+  MatFormField,
+  MatLabel,
+  MatPrefix,
+  MatSuffix,
+} from '@angular/material/form-field';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 import { DomChangedDirective } from '../../directive/watch-dom-tree.directive';
+import { BackgroundImageService } from 'src/app/util/background-image.service';
 
 @Component({
-    selector: 'mediaServer-display-container',
-    templateUrl: './display-container.component.html',
-    styleUrls: ['./display-container.component.scss'],
-    providers: [{ provide: 'uniqueId', useValue: 'default_display_container' }],
-    standalone: true,
-    imports: [DomChangedDirective, MatButton, MatIcon, MatFormField, MatLabel, MatPrefix, MatInput, FormsModule, MatSuffix, MatSelect, ReactiveFormsModule, MatOption, QualityBadgeComponent, StarRatingComponent]
+  selector: 'mediaServer-display-container',
+  templateUrl: './display-container.component.html',
+  styleUrls: ['./display-container.component.scss'],
+  providers: [{ provide: 'uniqueId', useValue: 'default_display_container' }],
+  standalone: true,
+  imports: [
+    DomChangedDirective,
+    MatButtonModule,
+    MatIconModule,
+    MatFormField,
+    MatLabel,
+    MatPrefix,
+    MatInputModule,
+    FormsModule,
+    MatSuffix,
+    MatSelectModule,
+    ReactiveFormsModule,
+    MatOption,
+    QualityBadgeComponent,
+    StarRatingComponent,
+  ],
 })
-export class DisplayContainerComponent implements OnInit {
-
+export class DisplayContainerComponent implements OnInit, AfterViewChecked {
   genresForm = new FormControl('');
 
   @Input() showTopHeader = true;
@@ -65,15 +96,16 @@ export class DisplayContainerComponent implements OnInit {
 
   // like member
   currentAlbumLiked = false;
-  private currentAlbumReleaseID = "";
+  private currentAlbumReleaseID = '';
 
   // Filter function for current displayed elements
-  // 
+  //
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private filteredBrowseToFunc: any;
 
   constructor(
     private myMusicService: MyMusicService,
+    private backgroundImageService: BackgroundImageService,
     private sseService: SseService,
     private deviceService: DeviceService,
     private timeDisplayService: TimeDisplayService,
@@ -82,13 +114,25 @@ export class DisplayContainerComponent implements OnInit {
     private dtoGeneratorService: DtoGeneratorService,
     private songOptionsServiceService: SongOptionsServiceService,
     private configurationService: ConfigurationService,
-    public trackQualityService: TrackQualityService) {
-    console.log("constructor : DisplayContainerComponent");
-    sseService.mediaRendererTrackInfoChanged$.subscribe(data => {
-      if (data?.mediaRendererUdn && data?.currentTrack && deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
+    public trackQualityService: TrackQualityService
+  ) {
+    console.log('constructor : DisplayContainerComponent');
+    sseService.mediaRendererTrackInfoChanged$.subscribe((data) => {
+      if (
+        data?.mediaRendererUdn &&
+        data?.currentTrack &&
+        deviceService.isMediaRendererSelected(data.mediaRendererUdn)
+      ) {
         this.currentUrl = data.currentTrack.streamingURL;
       }
     });
+  }
+
+  ngAfterViewChecked(): void {
+    console.log('uri : ' + this.currentContainer?.albumartUri);
+    this.backgroundImageService.setDisplayContainerHeaderImage(
+      this.currentContainer?.albumartUri
+    );
   }
 
   private partialPageLoaded() {
@@ -96,11 +140,19 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   domChange(event: any): void {
-    console.log("DOM changed event ... ");
+    console.log('DOM changed event ... ');
     if (this.contentHandler.cdsBrowsePathService) {
-      if (this.contentHandler.cdsBrowsePathService.scrollToID !== this.lastScrollToId) {
-        if (this.scrollIntoViewID(this.contentHandler.cdsBrowsePathService.scrollToID)) {
-          this.lastScrollToId = this.contentHandler.cdsBrowsePathService.scrollToID;
+      if (
+        this.contentHandler.cdsBrowsePathService.scrollToID !==
+        this.lastScrollToId
+      ) {
+        if (
+          this.scrollIntoViewID(
+            this.contentHandler.cdsBrowsePathService.scrollToID
+          )
+        ) {
+          this.lastScrollToId =
+            this.contentHandler.cdsBrowsePathService.scrollToID;
         }
       }
     }
@@ -113,16 +165,18 @@ export class DisplayContainerComponent implements OnInit {
     const targetElement = document.getElementById(elementID); // querySelector('#someElementId');
     if (targetElement) {
       targetElement.focus();
-      console.log("scrolled to element ID : " + elementID);
+      console.log('scrolled to element ID : ' + elementID);
       return true;
     }
     return false;
-  }   
+  }
 
   ngOnInit(): void {
     this.doUiChecks();
     if (this.contentHandler?.contentDirectoryService) {
-      this.contentHandler.contentDirectoryService.browseFinished$.subscribe(data => this.partialPageLoaded());
+      this.contentHandler.contentDirectoryService.browseFinished$.subscribe(
+        (data) => this.partialPageLoaded()
+      );
     }
   }
 
@@ -138,18 +192,18 @@ export class DisplayContainerComponent implements OnInit {
     this.genresList = new Set();
     this.musicTracks?.forEach((value) => {
       if (value?.genre) {
-        let aGenre = value.genre.split("/");
+        let aGenre = value.genre.split('/');
         aGenre?.forEach((gen) => {
           this.genresList.add(gen.trim());
-        })
+        });
       }
     });
     this.albumList?.forEach((value) => {
       if (value?.genre) {
-        let aGenre = value.genre.split("/");
+        let aGenre = value.genre.split('/');
         aGenre?.forEach((gen) => {
           this.genresList.add(gen.trim());
-        })
+        });
       }
     });
 
@@ -157,7 +211,12 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   getSearchDelay(): number {
-    const delay = this.configurationService.serverConfig?.applicationConfig?.globalSearchDelay != null ? this.configurationService.serverConfig.applicationConfig?.globalSearchDelay : 600;
+    const delay =
+      this.configurationService.serverConfig?.applicationConfig
+        ?.globalSearchDelay != null
+        ? this.configurationService.serverConfig.applicationConfig
+            ?.globalSearchDelay
+        : 600;
     return Math.max(300, delay);
   }
 
@@ -185,7 +244,6 @@ export class DisplayContainerComponent implements OnInit {
     return this.contentHandler.contentDirectoryService.containerList_;
   }
 
-
   //
   // Initial checks
   // ===============================================================================================
@@ -201,65 +259,86 @@ export class DisplayContainerComponent implements OnInit {
   private checkAllTracksSameDisc(): void {
     if (this.musicTracks?.length > 0) {
       const firstTrackDisc = this.musicTracks[0]?.numberOfThisDisc;
-      this.allTracksSameDisc_ = !this.musicTracks?.find(item => item.numberOfThisDisc !== firstTrackDisc);
+      this.allTracksSameDisc_ = !this.musicTracks?.find(
+        (item) => item.numberOfThisDisc !== firstTrackDisc
+      );
     }
-    console.log("allTracksSameDisc_ : " + this.allTracksSameDisc_);
+    console.log('allTracksSameDisc_ : ' + this.allTracksSameDisc_);
   }
 
   private checkAllTracksSameAlbum(): void {
     const numtrack = this.musicTracks?.length;
-    const numMbid = this.musicTracks?.filter(item => item.musicBrainzId?.ReleaseTrackId?.length > 0).length;
+    const numMbid = this.musicTracks?.filter(
+      (item) => item.musicBrainzId?.ReleaseTrackId?.length > 0
+    ).length;
 
-    console.log("number of tracs : " + numtrack);
-    console.log("number of tracs with mbid: " + numMbid);
+    console.log('number of tracs : ' + numtrack);
+    console.log('number of tracs with mbid: ' + numMbid);
 
     this.allTracksSameMusicBrainzReleaseId_ = false;
 
-    if ((numMbid > 0) && (numtrack == numMbid)) {
+    if (numMbid > 0 && numtrack == numMbid) {
       const firstTrackMbid = this.musicTracks[0]?.musicBrainzId?.ReleaseTrackId;
-      const numSameMbid = this.musicTracks.filter(item => item.musicBrainzId?.ReleaseTrackId === firstTrackMbid).length;
+      const numSameMbid = this.musicTracks.filter(
+        (item) => item.musicBrainzId?.ReleaseTrackId === firstTrackMbid
+      ).length;
       this.allTracksSameAlbum_ = numSameMbid == numMbid;
       this.allTracksSameMusicBrainzReleaseId_ = this.allTracksSameAlbum_;
-      console.log("number of tracs with same mbid like first track : " + numSameMbid);
+      console.log(
+        'number of tracs with same mbid like first track : ' + numSameMbid
+      );
     } else {
       if (this.musicTracks?.length > 0) {
         const firstTrackAlbum = this.musicTracks[0].album;
-        const albumsWithOtherNames = this.musicTracks.filter(item => item.album !== firstTrackAlbum).length;
+        const albumsWithOtherNames = this.musicTracks.filter(
+          (item) => item.album !== firstTrackAlbum
+        ).length;
         this.allTracksSameAlbum_ = albumsWithOtherNames == 0;
-        console.log("number of tracs with other album title : " + albumsWithOtherNames);
+        console.log(
+          'number of tracs with other album title : ' + albumsWithOtherNames
+        );
       }
     }
-    console.log("checkAllTracksSameAlbum : " + this.allTracksSameAlbum_);
-    console.log("checkAllTracksSameMusicbrainzReleaseId : " + this.allTracksSameMusicBrainzReleaseId_);
+    console.log('checkAllTracksSameAlbum : ' + this.allTracksSameAlbum_);
+    console.log(
+      'checkAllTracksSameMusicbrainzReleaseId : ' +
+        this.allTracksSameMusicBrainzReleaseId_
+    );
   }
 
   private checkOneTrackWithMusicBrainzId(): void {
-    const mbTrackExists = this.musicTracks?.filter(item => (this.hasSongId(item)))?.length > 0;
+    const mbTrackExists =
+      this.musicTracks?.filter((item) => this.hasSongId(item))?.length > 0;
     this.oneTrackWithMusicBrainzId_ = mbTrackExists;
-    console.log("checkOneTrackWithMusicBrainzId : " + this.oneTrackWithMusicBrainzId_);
+    console.log(
+      'checkOneTrackWithMusicBrainzId : ' + this.oneTrackWithMusicBrainzId_
+    );
   }
 
   private hasSongId(item: MusicItemDto): boolean {
-    return (item.songId?.musicBrainzIdTrackId?.length > 0);
+    return item.songId?.musicBrainzIdTrackId?.length > 0;
   }
 
   private checkTilesView() {
-    const streaming_exists = this.musicTracks?.filter(item => (item.audioFormat.isStreaming))?.length > 0;
+    const streaming_exists =
+      this.musicTracks?.filter((item) => item.audioFormat.isStreaming)?.length >
+      0;
     if (streaming_exists) {
       // we have streaming services. Display as list is not very nice.
       this.listView = false;
     } else {
       this.listView = true;
     }
-  } 
+  }
 
   private checkLikeStatus() {
     if (this.allTracksSameMusicBrainzReleaseId_) {
       if (this.musicTracks[0]?.musicBrainzId?.ReleaseTrackId) {
-        this.currentAlbumReleaseID = this.musicTracks[0].musicBrainzId.ReleaseTrackId;
-        this.myMusicService.isAlbumLiked(this.currentAlbumReleaseID).subscribe(
-          res => this.currentAlbumLiked = res
-        )
+        this.currentAlbumReleaseID =
+          this.musicTracks[0].musicBrainzId.ReleaseTrackId;
+        this.myMusicService
+          .isAlbumLiked(this.currentAlbumReleaseID)
+          .subscribe((res) => (this.currentAlbumLiked = res));
       }
     } else {
       this.currentAlbumLiked = false;
@@ -279,32 +358,52 @@ export class DisplayContainerComponent implements OnInit {
   // Like section
   // ==============================================================================
 
+  getFavoriteCssBtnClass(): string {
+    if (this.isLiked()) {
+      return "liked";
+    } else {
+      return "disliked";
+    }
+  }
+
+  getFavoriteCssIconClass(): string {
+    if (this.isLiked()) {
+      return "filled";
+    } else {
+      return "";
+    }
+  }
+
   isLiked(): boolean {
     return this.currentAlbumLiked;
   }
 
-  isContainerAlbum() : boolean {
+  isContainerAlbum(): boolean {
     return this.allTracksSameMusicBrainzReleaseId_;
   }
 
   likePossible(): boolean {
-    if (!this.allTracksSameMusicBrainzReleaseId_) {
-      return false;
-    }
-    if (this.currentAlbumReleaseID) {
-      if (!this.currentAlbumLiked) {
-        return true;
-      }
-    }
-    return false;
+    return this.allTracksSameMusicBrainzReleaseId_;
   }
 
   dislikeAlbum(): void {
-    this.myMusicService.deleteAlbumLike(this.currentAlbumReleaseID).subscribe(d => this.checkLikeStatus());
+    this.myMusicService
+      .deleteAlbumLike(this.currentAlbumReleaseID)
+      .subscribe((d) => this.checkLikeStatus());
   }
 
   likeAlbum(): void {
-    this.myMusicService.likeAlbum(this.currentAlbumReleaseID).subscribe(d => this.checkLikeStatus());
+    this.myMusicService
+      .likeAlbum(this.currentAlbumReleaseID)
+      .subscribe((d) => this.checkLikeStatus());
+  }
+
+  toggleLikeAlbum(): void {
+    if (this.isLiked()) {
+      this.dislikeAlbum();
+    } else {
+      this.likeAlbum();
+    }
   }
 
   //
@@ -320,12 +419,16 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   get containerType(): string {
-    if (this.currentContainer.objectClass === "object.container.playlistContainer") {
-      return "Playlist";
-    } else if (this.currentContainer.objectClass === "object.container.album.musicAlbum") {
-      return "Album";
+    if (
+      this.currentContainer.objectClass === 'object.container.playlistContainer'
+    ) {
+      return 'Playlist';
+    } else if (
+      this.currentContainer.objectClass === 'object.container.album.musicAlbum'
+    ) {
+      return 'Album';
     } else {
-      return "Folder";
+      return 'Folder';
     }
   }
 
@@ -334,13 +437,18 @@ export class DisplayContainerComponent implements OnInit {
     completeTime = 0;
     if (this.musicTracks.length > 0) {
       this.musicTracks?.forEach(
-        el => completeTime = completeTime + (el.audioFormat?.durationInSeconds ? el.audioFormat.durationInSeconds : 0)
+        (el) =>
+          (completeTime =
+            completeTime +
+            (el.audioFormat?.durationInSeconds
+              ? el.audioFormat.durationInSeconds
+              : 0))
       );
     }
     if (completeTime) {
       return this.timeDisplayService.convertLongToDateString(completeTime);
     }
-    return "";
+    return '';
   }
 
   get totalPlaytimeShort(): string {
@@ -348,18 +456,27 @@ export class DisplayContainerComponent implements OnInit {
     completeTime = 0;
     if (this.musicTracks.length > 0) {
       this.musicTracks?.forEach(
-        el => completeTime = completeTime + (el.audioFormat?.durationInSeconds ? el.audioFormat.durationInSeconds : 0)
+        (el) =>
+          (completeTime =
+            completeTime +
+            (el.audioFormat?.durationInSeconds
+              ? el.audioFormat.durationInSeconds
+              : 0))
       );
     }
     if (completeTime) {
       return this.timeDisplayService.convertLongToDateStringShort(completeTime);
     }
-    return "";
+    return '';
   }
 
   public get currentContainer(): ContainerDto {
-    if (this.contentHandler?.contentDirectoryService?.currentContainerList?.currentContainer) {
-      return this.contentHandler.contentDirectoryService.currentContainerList.currentContainer;
+    if (
+      this.contentHandler?.contentDirectoryService?.currentContainerList
+        ?.currentContainer
+    ) {
+      return this.contentHandler.contentDirectoryService.currentContainerList
+        .currentContainer;
     }
     return this.dtoGeneratorService.generateEmptyContainerDto();
   }
@@ -369,7 +486,7 @@ export class DisplayContainerComponent implements OnInit {
   // ===============================================================================================
   toggleListView(): void {
     this.listView = !this.listView;
-    console.log("list view is now : " + this.listView);
+    console.log('list view is now : ' + this.listView);
   }
 
   playPlaylist(container: ContainerDto): void {
@@ -395,7 +512,7 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   //
-  // Sorted container access to albums, playlists or other container 
+  // Sorted container access to albums, playlists or other container
   // ===============================================================================================
 
   get allMusicTracks() {
@@ -405,12 +522,14 @@ export class DisplayContainerComponent implements OnInit {
     if (filter) {
       let tracks: Array<MusicItemDto>;
       if (this.quickSearchString) {
-        tracks = this.musicTracks.filter(item => this.doFilterText(item.title, this.quickSearchString));
+        tracks = this.musicTracks.filter((item) =>
+          this.doFilterText(item.title, this.quickSearchString)
+        );
       } else {
         tracks = this.musicTracks;
       }
       if (this?.selectedGenres?.length > 0) {
-        tracks = tracks.filter(item => this.doFilterGenre(item));
+        tracks = tracks.filter((item) => this.doFilterGenre(item));
       }
       return tracks;
     } else {
@@ -421,34 +540,33 @@ export class DisplayContainerComponent implements OnInit {
   /**
    * Filter an album by genre
    * @param container album container
-   * @returns 
+   * @returns
    */
   private doFilterGenreByContainer(container: ContainerDto): boolean {
     let add = false;
-    this.selectedGenres?.forEach(genre => {
+    this.selectedGenres?.forEach((genre) => {
       if (this.doFilterText(container.genre, genre)) {
         add = true;
       }
-    })
+    });
     return add;
   }
 
   private doFilterGenre(item: MusicItemDto): boolean {
     let add = false;
-    this.selectedGenres?.forEach(genre => {
+    this.selectedGenres?.forEach((genre) => {
       if (this.doFilterText(item.genre, genre)) {
         add = true;
       }
-    })
+    });
     return add;
   }
-
 
   private doFilterText(title: string, filter?: string): boolean {
     if (!filter) {
       return true;
     }
-    if (!title && "NONE" == filter) {
+    if (!title && 'NONE' == filter) {
       return true;
     } else if (!title) {
       return false;
@@ -464,16 +582,18 @@ export class DisplayContainerComponent implements OnInit {
     if (filter) {
       let cont: Array<ContainerDto>;
       if (this.quickSearchString) {
-        cont = this.albums.filter(item => this.doFilterText(item.title, this.quickSearchString));
+        cont = this.albums.filter((item) =>
+          this.doFilterText(item.title, this.quickSearchString)
+        );
       } else {
         cont = this.albums;
       }
       if (this?.selectedGenres?.length > 0) {
-        cont = cont.filter(item => this.doFilterGenreByContainer(item));
+        cont = cont.filter((item) => this.doFilterGenreByContainer(item));
       }
       return cont;
     } else {
-      console.log("size : " + this.albums.length);
+      console.log('size : ' + this.albums.length);
       return this.albums;
     }
   }
@@ -485,7 +605,9 @@ export class DisplayContainerComponent implements OnInit {
   // playlist container
   public playlistFilter(filter?: string): ContainerDto[] {
     if (filter) {
-      return this.playlists.filter(item => this.doFilterText(item.title, filter));
+      return this.playlists.filter((item) =>
+        this.doFilterText(item.title, filter)
+      );
     } else {
       return this.playlists;
     }
@@ -498,7 +620,9 @@ export class DisplayContainerComponent implements OnInit {
 
   public containerFilter(filter?: string): ContainerDto[] {
     if (filter) {
-      return this.container.filter(item => this.doFilterText(item.title, filter));
+      return this.container.filter((item) =>
+        this.doFilterText(item.title, filter)
+      );
     } else {
       return this.container;
     }
@@ -510,7 +634,9 @@ export class DisplayContainerComponent implements OnInit {
 
   private getOtherItemsFilter(filter?: string): MusicItemDto[] {
     if (filter) {
-      return this.otherItems_.filter(item => this.doFilterText(item.title, filter));
+      return this.otherItems_.filter((item) =>
+        this.doFilterText(item.title, filter)
+      );
     } else {
       return this.otherItems_;
     }
@@ -520,8 +646,7 @@ export class DisplayContainerComponent implements OnInit {
     return this.listView;
   }
 
-  // Disc Label support 
-
+  // Disc Label support
 
   getDiscLabel(item: MusicItemDto): string {
     if (item.numberOfThisDisc !== this.lastDiscLabel) {
@@ -538,10 +663,15 @@ export class DisplayContainerComponent implements OnInit {
     return false;
   }
 
-  public browseToOid(oid: string, udn: string, stepIn: boolean, sortCriteria?: string): Promise<boolean> {
+  public browseToOid(
+    oid: string,
+    udn: string,
+    stepIn: boolean,
+    sortCriteria?: string
+  ): Promise<boolean> {
     this.clearSearch();
     if (!this.contentHandler) {
-      console.error("contentHandler not initialized.");
+      console.error('contentHandler not initialized.');
       return;
     }
 
@@ -557,17 +687,21 @@ export class DisplayContainerComponent implements OnInit {
         this.contentHandler.persistenceService.setCurrentObjectID(oid);
       }
       if (this.contentHandler.contentDirectoryService) {
-        this.contentHandler.contentDirectoryService.browseChildrenByOID(oid, udn, "").subscribe(data => {
-          this.browseFinished(data);
-          if (data?.currentContainer?.id) {
-            resolve(true);
-          } else {
-            resolve(false);
-          }
-        });
+        this.contentHandler.contentDirectoryService
+          .browseChildrenByOID(oid, udn, '')
+          .subscribe((data) => {
+            this.browseFinished(data);
+            if (data?.currentContainer?.id) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          });
       } else {
-        console.error("display-container.component: contentDirectoryService not set.");
-        reject("display-container.component: contentDirectoryService not set.");
+        console.error(
+          'display-container.component: contentDirectoryService not set.'
+        );
+        reject('display-container.component: contentDirectoryService not set.');
       }
     });
 
@@ -579,7 +713,7 @@ export class DisplayContainerComponent implements OnInit {
   // ===============================================================================================
 
   public browseTo(containerDto: ContainerDto): void {
-    this.browseToOid(containerDto.id, containerDto.mediaServerUDN, true, "");
+    this.browseToOid(containerDto.id, containerDto.mediaServerUDN, true, '');
     this.containerSelected.emit(containerDto);
   }
 
@@ -601,8 +735,12 @@ export class DisplayContainerComponent implements OnInit {
     return (
       rect.top >= 0 &&
       rect.left >= 0 &&
-      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /* or $(window).height() */
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth) /* or $(window).width() */
+      rect.bottom <=
+        (window.innerHeight ||
+          document.documentElement.clientHeight) /* or $(window).height() */ &&
+      rect.right <=
+        (window.innerWidth ||
+          document.documentElement.clientWidth) /* or $(window).width() */
     );
   }
 
@@ -615,14 +753,14 @@ export class DisplayContainerComponent implements OnInit {
       this.loadNextBrowsePage();
     } else {
       var options = {
-        threshold: 0.75 //root: document.documentElement,
+        threshold: 0.75, //root: document.documentElement,
       };
       if (element) {
         if (this.intersecObserver) {
           this.intersecObserver.disconnect();
         }
         this.intersecObserver = new IntersectionObserver((entries) => {
-          entries?.forEach(entry => {
+          entries?.forEach((entry) => {
             if (entry.isIntersecting || entry.intersectionRatio > 0) {
               this.loadNextBrowsePage();
             }
@@ -643,10 +781,10 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   public selectedRowClass(musicItemDto: MusicItemDto): string {
-    if (this.currentUrl && (musicItemDto?.streamingURL == this.currentUrl)) {
-      return "selectRow";
+    if (this.currentUrl && musicItemDto?.streamingURL == this.currentUrl) {
+      return 'selectRow';
     }
-    return "";
+    return '';
   }
 
   //
@@ -654,99 +792,107 @@ export class DisplayContainerComponent implements OnInit {
   // ===============================================================================================
   getTitleResponsiveClass(): string {
     if (!this.allTracksSameAlbum()) {
-      return "col-8 col-sm-7 col-md-5 col-lg-5 col-xl-3";
+      return 'col-8 col-sm-7 col-md-5 col-lg-5 col-xl-3';
     } else {
-      return "col-11 col-sm-9 col-md-7 col-lg-6 col-xl-6";
+      return 'col-11 col-sm-9 col-md-7 col-lg-6 col-xl-6';
     }
   }
 
   getDuration(item: MusicItemDto): string {
     if (item.audioFormat?.durationInSeconds) {
-      return this.timeDisplayService.convertLongToDateStringShort(item.audioFormat.durationInSeconds);
+      return this.timeDisplayService.convertLongToDateStringShort(
+        item.audioFormat.durationInSeconds
+      );
     } else {
-      return "";
+      return '';
     }
   }
 
   showSongPopup(event: MouseEvent, item: MusicItemDto): void {
-    this.songOptionsServiceService.openOptionsDialog(event, item, this.currentContainer).subscribe(result => {
-      // handle user action from dialog ...
-      if (result) {
-        if (result.type == 'add') {
-          console.log("added song to playlist : ");
-        } else if (result.type == 'delete') {
-          console.log("deleted song from playlist : ");
-          setTimeout(() => {
-            this.itemDeleted.emit(result.data);
-          }, 200);
-        } else if (result.type == 'download') {
-          console.log("download song : ");
-        } else if (result.type == 'next') {
-          console.log("play next song : ");
+    this.songOptionsServiceService
+      .openOptionsDialog(event, item, this.currentContainer)
+      .subscribe((result) => {
+        // handle user action from dialog ...
+        if (result) {
+          if (result.type == 'add') {
+            console.log('added song to playlist : ');
+          } else if (result.type == 'delete') {
+            console.log('deleted song from playlist : ');
+            setTimeout(() => {
+              this.itemDeleted.emit(result.data);
+            }, 200);
+          } else if (result.type == 'download') {
+            console.log('download song : ');
+          } else if (result.type == 'next') {
+            console.log('play next song : ');
+          }
         }
-      }
-    });
+      });
   }
 
   getOtherContainerHeadline(item: ContainerDto): string {
-    if (item.objectClass.startsWith("object.container.person")) {
-      return "ARTIST";
-    } else if (item.objectClass?.startsWith("object.container.playlistContainer")) {
-      return "PLAYLIST";
-    } else if (item.objectClass?.startsWith("object.container.album")) {
-      return "ALBUM";
-    } else if (item.objectClass?.startsWith("object.container.genre")) {
-      return "GENRE";
-    } else if (item.objectClass?.startsWith("object.container.channelGroup")) {
-      return "CHANNELS";
-    } else if (item.objectClass?.startsWith("object.container.epgContainer")) {
-      return "EPG";
-    } else if (item.objectClass?.startsWith("object.container.storageSystem")) {
-      return "DEVICE";
-    } else if (item.objectClass?.startsWith("object.container.storageVolume")) {
-      return "DISC";
-    } else if (item.objectClass?.startsWith("object.container.storageFolder")) {
-      return "";
-    } else if (item.objectClass?.startsWith("object.container.bookmarkFolder")) {
-      return "BOOKMARKS";
+    if (item.objectClass.startsWith('object.container.person')) {
+      return 'ARTIST';
+    } else if (
+      item.objectClass?.startsWith('object.container.playlistContainer')
+    ) {
+      return 'PLAYLIST';
+    } else if (item.objectClass?.startsWith('object.container.album')) {
+      return 'ALBUM';
+    } else if (item.objectClass?.startsWith('object.container.genre')) {
+      return 'GENRE';
+    } else if (item.objectClass?.startsWith('object.container.channelGroup')) {
+      return 'CHANNELS';
+    } else if (item.objectClass?.startsWith('object.container.epgContainer')) {
+      return 'EPG';
+    } else if (item.objectClass?.startsWith('object.container.storageSystem')) {
+      return 'DEVICE';
+    } else if (item.objectClass?.startsWith('object.container.storageVolume')) {
+      return 'DISC';
+    } else if (item.objectClass?.startsWith('object.container.storageFolder')) {
+      return '';
+    } else if (
+      item.objectClass?.startsWith('object.container.bookmarkFolder')
+    ) {
+      return 'BOOKMARKS';
     }
-    return "";
+    return '';
   }
 
   getOtherItemHeadline(item: MusicItemDto): string {
     // object.item.audioItem
-    if (item.objectClass?.startsWith("object.item.audioItem")) {
+    if (item.objectClass?.startsWith('object.item.audioItem')) {
       if (item?.audioFormat?.isStreaming) {
-        return "RADIO";
+        return 'RADIO';
       }
-      return "IMAGE";
-    } else if (item.objectClass?.startsWith("object.item.imageItem")) {
-      return "IMAGE";
-    } else if (item.objectClass?.startsWith("object.item.videoItem")) {
-      return "VIDEO";
-    } else if (item.objectClass?.startsWith("object.item.playlistItem")) {
-      return "PLAYLIST";
-    } else if (item.objectClass?.startsWith("object.item.textItem")) {
-      return "TEXT";
-    } else if (item.objectClass?.startsWith("object.item.bookmarkItem")) {
-      return "BOOKMARK";
+      return 'IMAGE';
+    } else if (item.objectClass?.startsWith('object.item.imageItem')) {
+      return 'IMAGE';
+    } else if (item.objectClass?.startsWith('object.item.videoItem')) {
+      return 'VIDEO';
+    } else if (item.objectClass?.startsWith('object.item.playlistItem')) {
+      return 'PLAYLIST';
+    } else if (item.objectClass?.startsWith('object.item.textItem')) {
+      return 'TEXT';
+    } else if (item.objectClass?.startsWith('object.item.bookmarkItem')) {
+      return 'BOOKMARK';
     }
-    return "";
+    return '';
   }
 
   getAlbumTitle() {
     if (this.allMusicTracks.length > 0) {
-      return "albumTitle small";
+      return 'albumTitle small';
     } else {
-      return "albumTitle";
+      return 'albumTitle';
     }
   }
 
   getAlbumTile() {
     if (this.allMusicTracks.length > 0) {
-      return "albumTile small";
+      return 'albumTile small';
     } else {
-      return "albumTile";
+      return 'albumTile';
     }
   }
 }

@@ -17,5 +17,11 @@ export class BackgroundImageService {
       document.getElementById('footer-background').style.backgroundImage = 'url("' + url + '")';
     }
   }
+
+  public setDisplayContainerHeaderImage(url: string): void {
+    if (Modernizr.backdropfilter && document.getElementById('header-background')) {
+      document.getElementById('header-background').style.backgroundImage = 'url("' + url + '")';
+    }
+  }
 }
 
