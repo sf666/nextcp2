@@ -83,7 +83,6 @@ export class MyPlaylistsComponent implements OnInit {
 
   getContentHandler(): ScrollLoadHandler {
     return {
-      cdsBrowsePathService: null,
       contentDirectoryService: this.contentDirectoryService,
       persistenceService: null,
     };

@@ -64,7 +64,7 @@ import { BackgroundImageService } from 'src/app/util/background-image.service';
     StarRatingComponent,
   ],
 })
-export class DisplayContainerComponent implements OnInit, AfterViewInit {
+export class DisplayContainerComponent implements OnInit {
   genresForm = new FormControl('');
 
   @Input() showTopHeader = true;
@@ -128,32 +128,15 @@ export class DisplayContainerComponent implements OnInit, AfterViewInit {
       }
     });
   }
-  ngAfterViewInit(): void {
-    console.log('after view init - uri : ' + this.currentContainer?.albumartUri);
-    this.backgroundImageService.setDisplayContainerHeaderImage(this.currentContainer?.albumartUri);
-  }
 
-  private partialPageLoaded() {
+  private cdsBrowseFinished() {
     this.fillGenres();
+    this.backgroundImageService.setDisplayContainerHeaderImage(this.currentContainer?.albumartUri);
   }
 
   domChange(event: any): void {
     console.log('DOM changed event ... ');
-    if (this.contentHandler.cdsBrowsePathService) {
-      if (
-        this.contentHandler.cdsBrowsePathService.scrollToID !==
-        this.lastScrollToId
-      ) {
-        if (
-          this.scrollIntoViewID(
-            this.contentHandler.cdsBrowsePathService.scrollToID
-          )
-        ) {
-          this.lastScrollToId =
-            this.contentHandler.cdsBrowsePathService.scrollToID;
-        }
-      }
-    }
+    // TODO implement ScrollTo OID
   }
 
   /**
@@ -173,7 +156,7 @@ export class DisplayContainerComponent implements OnInit, AfterViewInit {
     this.doUiChecks();
     if (this.contentHandler?.contentDirectoryService) {
       this.contentHandler.contentDirectoryService.browseFinished$.subscribe(
-        (data) => this.partialPageLoaded()
+        (data) => this.cdsBrowseFinished()
       );
     }
   }
@@ -674,13 +657,6 @@ export class DisplayContainerComponent implements OnInit, AfterViewInit {
     }
 
     const promise = new Promise<boolean>((resolve, reject) => {
-      if (this.contentHandler.cdsBrowsePathService) {
-        if (stepIn) {
-          this.contentHandler.cdsBrowsePathService.stepIn(oid);
-        } else {
-          this.contentHandler.cdsBrowsePathService.stepOut();
-        }
-      }
       if (this.contentHandler.persistenceService) {
         this.contentHandler.persistenceService.setCurrentObjectID(oid);
       }

@@ -68,7 +68,7 @@ export class MyAlbumComponent implements OnInit {
   // bindings
   //
   getContentHandler(): ScrollLoadHandler {
-    return { cdsBrowsePathService: null, contentDirectoryService: this.contentDirectoryService, persistenceService: null }
+    return {contentDirectoryService: this.contentDirectoryService, persistenceService: null }
   }
 
   backButtonDisabled() {

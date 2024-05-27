@@ -3,7 +3,6 @@ import { PersistenceService } from './../../service/persistence/persistence.serv
 import { CdsBrowsePathService } from './../../util/cds-browse-path.service';
 
 export interface ScrollLoadHandler {
-    cdsBrowsePathService : CdsBrowsePathService,
     persistenceService : PersistenceService,
     contentDirectoryService: ContentDirectoryService
 }

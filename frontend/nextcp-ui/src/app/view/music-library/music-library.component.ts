@@ -125,7 +125,7 @@ export class MusicLibraryComponent  implements AfterViewInit{
   }
 
   getContentHandler(): ScrollLoadHandler {
-    return { cdsBrowsePathService: this.cdsBrowsePathService, contentDirectoryService: this.contentDirectoryService, persistenceService: this.persistenceService }
+    return {contentDirectoryService: this.contentDirectoryService, persistenceService: this.persistenceService }
   }
 
   //
