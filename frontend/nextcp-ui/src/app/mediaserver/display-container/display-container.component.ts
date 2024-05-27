@@ -20,8 +20,6 @@ import {
   Input,
   Output,
   EventEmitter,
-  AfterViewChecked,
-  AfterViewInit,
 } from '@angular/core';
 import { debounce } from 'src/app/global';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
