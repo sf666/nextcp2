@@ -38,6 +38,7 @@ export class GlobalSearchService {
   public quickSearchResultList: SearchResultDto;
   public quickSearchQueryString: string;
   private quickSearchPanelVisible_: boolean;
+  private MIN_SEARCH_LEN = 2;
 
   private currentSearchText: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -84,14 +85,17 @@ export class GlobalSearchService {
   }
 
   set quickSearchPanelVisible(value: boolean) {
-    this.quickSearchPanelVisible_ = value;
+    if (value && this.quickSearchQueryString?.length > this.MIN_SEARCH_LEN) {
+      this.quickSearchPanelVisible_ = value;
+    }
     if (value == false) {
       this.clearSearch();
     }
-  }
+}
 
   public showQuickSearchPanel(): void {
     this.quickSearchPanelVisible_ = true;
+    this.executeSearchWithCurrentQuickSearchValue();
   }
 
   public hideQuickSearchPanel(): void {
@@ -104,7 +108,9 @@ export class GlobalSearchService {
 
   private doSearch(): void {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    this.doSearchFunc();
+    if (this.currentSearchText.length > this.MIN_SEARCH_LEN) {
+      this.doSearchFunc();
+    }
   }
 
   //
@@ -124,7 +130,7 @@ export class GlobalSearchService {
     if (this.quickSearchQueryString == '') {
       this.quickSearchPanelVisible_ = false;
     } else {
-      if (this.quickSearchQueryString && this.quickSearchQueryString?.length > 2) {
+      if (this.quickSearchQueryString && this.quickSearchQueryString?.length > this.MIN_SEARCH_LEN) {
         this.quickSearchPanelVisible_ = true;
         this.currentSearchText = this.quickSearchQueryString;
         this.doSearch();
@@ -170,66 +176,62 @@ export class GlobalSearchService {
   }
 
   showAllItem(): void {
-    this.showAllItemClicked$.next(
-      this.dtoGeneratorService.generateQuickSearchDto(
-        this.quickSearchQueryString,
-        this.deviceService.selectedMediaServerDevice.udn,
-        '-upnp:rating, +dc:title',
-        this.currentContainerID,
-        0,
-        100,
-      ),
+    const sr = this.dtoGeneratorService.generateQuickSearchDto(
+      this.quickSearchQueryString,
+      this.deviceService.selectedMediaServerDevice.udn,
+      '-upnp:rating, +dc:title',
+      this.currentContainerID,
+      0,
+      100,
     );
-
     this.hideQuickSearchPanel();
     this.router.navigateByUrl('/music-library');
+    console.log("show all item clicked ... ");
+    this.showAllItemClicked$.next(sr);
   }
 
   showAllAlbum(): void {
-    this.showAllAlbumClicked$.next(
-      this.dtoGeneratorService.generateQuickSearchDto(
-        this.quickSearchQueryString,
-        this.deviceService.selectedMediaServerDevice.udn,
-        '-ums:likedAlbum, +dc:title',
-        this.currentContainerID,
-        0,
-        100,
-      ),
+    const sr = this.dtoGeneratorService.generateQuickSearchDto(
+      this.quickSearchQueryString,
+      this.deviceService.selectedMediaServerDevice.udn,
+      '-ums:likedAlbum, +dc:title',
+      this.currentContainerID,
+      0,
+      100,
     );
-
     this.hideQuickSearchPanel();
     this.router.navigateByUrl('/music-library');
+    console.log("show all album clicked ... ");
+    this.showAllAlbumClicked$.next(sr);
   }
 
   showAllItemArtist(): void {
-    this.showAllArtistClicked$.next(
-      this.dtoGeneratorService.generateQuickSearchDto(
-        this.quickSearchQueryString,
-        this.deviceService.selectedMediaServerDevice.udn,
-        '',
-        this.currentContainerID,
-        0,
-        100,
-      ),
+    const sr = this.dtoGeneratorService.generateQuickSearchDto(
+      this.quickSearchQueryString,
+      this.deviceService.selectedMediaServerDevice.udn,
+      '',
+      this.currentContainerID,
+      0,
+      100,
     );
-
     this.hideQuickSearchPanel();
     this.router.navigateByUrl('/music-library');
+    console.log("show all artists clicked ... ");
+    this.showAllArtistClicked$.next(sr);
   }
 
   showAllPlaylist(): void {
-    this.showAllPlaylistClicked$.next(
-      this.dtoGeneratorService.generateQuickSearchDto(
-        this.quickSearchQueryString,
-        this.deviceService.selectedMediaServerDevice.udn,
-        '',
-        this.currentContainerID,
-        0,
-        100,
-      ),
+    const sr = this.dtoGeneratorService.generateQuickSearchDto(
+      this.quickSearchQueryString,
+      this.deviceService.selectedMediaServerDevice.udn,
+      '',
+      this.currentContainerID,
+      0,
+      100,
     );
-
     this.hideQuickSearchPanel();
     this.router.navigateByUrl('/music-library');
+    console.log("show all playlist clicked ... ");
+    this.showAllPlaylistClicked$.next(sr);
   }
 }

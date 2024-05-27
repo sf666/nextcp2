@@ -21,6 +21,7 @@ import {
   Output,
   EventEmitter,
   AfterViewChecked,
+  AfterViewInit,
 } from '@angular/core';
 import { debounce } from 'src/app/global';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -63,7 +64,7 @@ import { BackgroundImageService } from 'src/app/util/background-image.service';
     StarRatingComponent,
   ],
 })
-export class DisplayContainerComponent implements OnInit, AfterViewChecked {
+export class DisplayContainerComponent implements OnInit, AfterViewInit {
   genresForm = new FormControl('');
 
   @Input() showTopHeader = true;
@@ -127,12 +128,9 @@ export class DisplayContainerComponent implements OnInit, AfterViewChecked {
       }
     });
   }
-
-  ngAfterViewChecked(): void {
-    console.log('uri : ' + this.currentContainer?.albumartUri);
-    this.backgroundImageService.setDisplayContainerHeaderImage(
-      this.currentContainer?.albumartUri
-    );
+  ngAfterViewInit(): void {
+    console.log('after view init - uri : ' + this.currentContainer?.albumartUri);
+    this.backgroundImageService.setDisplayContainerHeaderImage(this.currentContainer?.albumartUri);
   }
 
   private partialPageLoaded() {

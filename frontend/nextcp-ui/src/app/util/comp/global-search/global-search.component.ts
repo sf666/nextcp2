@@ -30,7 +30,7 @@ export class GlobalSearchComponent {
   }
 
   focus(): void {
-    this.globalSearchService.executeSearchWithCurrentQuickSearchValue();
+    this.globalSearchService.quickSearchPanelVisible = true;;
   }
 
   blur(): void {

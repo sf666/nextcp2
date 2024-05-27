@@ -283,7 +283,8 @@ Main Content
                   }
                   <div class="{{getTitleResponsiveClass()}} mb-2 mt-2 d-flex flex-column {{selectedRowClass(item)}}">
                     <div (click)="play(item)" class="no-wrap d-flex justify-content-between">
-                      <div class="">@if (allTracksSameAlbum()) {
+                      <div class="">
+                        @if (allTracksSameAlbum()) {
                         <div class="d-flex">
                           <div class="trackNum">{{item.originalTrackNumber}}</div>
                           <div>{{item.title}}</div>
