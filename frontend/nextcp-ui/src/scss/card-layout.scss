@@ -6,6 +6,11 @@ $grid-flex-basis     : 0rem;
 $grid-flex-min-width : 11rem;
 $grid-flex-max-width : 20rem;
 
+$grid-flex-mid-basis     : 0rem;
+$grid-flex-mid-min-width : 9rem;
+$grid-flex-mid-max-width : 15rem;
+
+
 $grid-flex-sm-basis     : 6rem;
 $grid-flex-sm-min-width : 6rem;
 $grid-flex-sm-max-width : 9rem;
@@ -19,10 +24,6 @@ $grid-flex-sm-max-width : 9rem;
     flex-basis: $grid-flex-basis;
     min-width : $grid-flex-min-width;
     max-width : $grid-flex-max-width;
-    &.small {
-        max-width: calc($grid-flex-max-width/2);
-        flex     : 5 1 calc($grid-flex-basis/2);
-    } 
 }
 
 .albumTile {
@@ -38,8 +39,7 @@ $grid-flex-sm-max-width : 9rem;
     font-weight   : 500;
     letter-spacing: 0.08rem;
     &.small {
-        max-width: calc($grid-flex-max-width/2);
-        flex     : 5 1 calc($grid-flex-basis/2);
+        max-width : $grid-flex-mid-max-width;
     }
 }
 
@@ -67,59 +67,6 @@ $grid-flex-sm-max-width : 9rem;
     flex       : 1 1 auto;
 }
 
-// small devices card layout config
-@media only screen and (max-width: 576px) {
-
-    // Parent class for card layout / album laout look & feel
-    .albumLayout {
-        flex          : 1 1 0;
-        display       : flex;
-        flex-direction: column;
-        flex-wrap     : wrap;
-        min-width     : 0px;
-    }
-
-    .albumDesc {
-        margin-left: 1rem;
-        min-width  : 10rem;
-        width      : 100%;
-        align-self : center;
-    }
-
-    // parent overlay div. child element must 
-    .albumImageContainer {
-        display    : flex;
-        position   : relative;
-        margin-left: 1rem;
-
-        flex-basis: $grid-flex-sm-basis;
-        min-width : $grid-flex-sm-min-width;
-        max-width : $grid-flex-sm-max-width;
-        flex-grow : 1;
-
-        margin    : auto;
-        object-fit: contain;
-    }
-
-    .albumTile {
-        display       : flex;
-        flex-direction: row;
-
-        min-width: $grid-flex-sm-min-width;
-        max-width: none;
-        flex     : 5 1 $grid-flex-sm-basis;
-
-        padding      : 1rem;
-        color        : var(--snow-white);
-        margin-bottom: 0.5rem;
-
-        font-size     : 0.9rem;
-        font-weight   : 500;
-        letter-spacing: 0.08rem;
-    }
-}
-
-
 .albumImageContainer img {
     width       : 100%;
     height      : auto;
@@ -142,8 +89,56 @@ $grid-flex-sm-max-width : 9rem;
 .imgCardWidth {
     flex-basis: $imgCardWidth;
     max-width : $imgCardWidth;
+
+    &.small {
+        flex-basis: $imgCardWidthSmall;
+        max-width : $imgCardWidthSmall;
+    }
 }
 
 .imgCardHeight {
     max-height: $imgCardWidth;
+    &.small {
+        max-height: $imgCardWidthSmall;
+    }
+}
+
+//
+// small devices card layout config
+// =======================================================
+//
+@media only screen and (max-width: 576px) {
+
+    // Parent class for card layout / album laout look & feel
+    .albumLayout {
+        flex          : 1 1 0;
+        display       : flex;
+        flex-direction: column;
+        flex-wrap     : wrap;
+        min-width     : 0px;
+    }
+
+    .albumDesc {
+        margin-left: 1rem;
+        min-width  : 10rem;
+        width      : 100%;
+        align-self : center;
+    }
+
+    .albumTile {
+        display       : flex;
+        flex-direction: row;
+
+        min-width: $grid-flex-sm-min-width;
+        max-width: none;
+        flex     : 5 1 $grid-flex-sm-basis;
+
+        padding      : 1rem;
+        color        : var(--snow-white);
+        margin-bottom: 0.5rem;
+
+        font-size     : 0.9rem;
+        font-weight   : 500;
+        letter-spacing: 0.08rem;
+    }
 }

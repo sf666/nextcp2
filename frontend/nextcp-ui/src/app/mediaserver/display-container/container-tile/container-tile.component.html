@@ -1,0 +1,14 @@
+<div class="albumLayout">
+    @for (container of containerList; track container.id) {
+    <div class="albumTile {{getSmallCss()}}" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)">
+      <div class="albumImageContainer">
+        <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
+        <!-- <image-cropper src="{{container.albumartUri}}"></image-cropper> -->
+      </div>
+      <div class="d-flex flex-column albumDesc">
+        <div class="playlistText">{{getOtherContainerHeadline(container)}}</div>
+        <div class="albumTitle">{{container.title}}</div>
+      </div>
+    </div>
+    }
+  </div>

@@ -38,6 +38,7 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { DomChangedDirective } from '../../directive/watch-dom-tree.directive';
 import { BackgroundImageService } from 'src/app/util/background-image.service';
+import { ContainerTileComponent } from './container-tile/container-tile.component';
 
 @Component({
   selector: 'mediaServer-display-container',
@@ -60,6 +61,7 @@ import { BackgroundImageService } from 'src/app/util/background-image.service';
     MatOption,
     QualityBadgeComponent,
     StarRatingComponent,
+    ContainerTileComponent,
   ],
 })
 export class DisplayContainerComponent implements OnInit {

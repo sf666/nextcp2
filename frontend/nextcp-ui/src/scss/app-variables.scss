@@ -6,6 +6,7 @@
 $paddingLeftColumn             : 1rem;
 $fontNormal                    : 1.1rem;
 $cardWidth                     : 12rem;
+$cardWidthSmall                : 10rem;
 $cardBorderWidth               : 1px;
 
 $section-button-col            : $pantone-429-C;
@@ -15,6 +16,7 @@ $border-primary                : $blue-pantone-2;
 
 // added hover effect für bootstrap card images
 $imgCardWidth : calc(#{$cardWidth} - 2*#{$cardBorderWidth});
+$imgCardWidthSmall : calc(#{$cardWidthSmall} - 2*#{$cardBorderWidth});
 
 //
 // Root imports. Override Material Design components here.
