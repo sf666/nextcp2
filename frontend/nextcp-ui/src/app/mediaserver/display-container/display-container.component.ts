@@ -746,6 +746,10 @@ export class DisplayContainerComponent implements OnInit {
     }
   }
 
+  addPlaylist(container: ContainerDto): void {
+    this.playlistService.addContainerToPlaylist(container);
+  }
+
   playAlbum(container: ContainerDto): void {
     this.playlistService.addContainerToPlaylistAndPlay(container, false);
   }

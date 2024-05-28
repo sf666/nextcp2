@@ -152,30 +152,12 @@ Main Content
     =================================================================
     -->
       @if (playlistList?.length > 0) {
-      <div>
-        <div id="head_browse_result_playlist_items_ID" tabindex="-1" class="albumLayout">
-          @for (container of playlistList; track container.id) {
-          <div id="{{container.id}}" tabindex="-1" class="{{getAlbumTile()}}">
-            <div class="albumImageContainer">
-              <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
-              <div class="overlay-child d-flex flex-column justify-content-center align-items-center">
-                <div class="d-flex justify-content-center align-items-center">
-                  <span class="material-symbols-outlined md-36 m-3" (click)="browseTo(container)">drive_file_move</span>
-                  <span class="material-symbols-outlined md-36 m-3" (click)="playlistService.addContainerToPlaylist(container)">playlist_add</span>
-                </div>
-                <div class="d-flex justify-content-center align-items-center">
-                  <span class="material-symbols-outlined md-36 m-3" (click)="playPlaylist(container)">play_arrow</span>
-                  <span class="material-symbols-outlined md-36 m-3" (click)="shufflePlaylist(container)">shuffle</span>
-                </div>
-              </div>
-            </div>
-            <div class="d-flex flex-column albumDesc">
-              <div class="playlistText">PLAYLIST</div>
-              <div class="card-title">{{container.title}}</div>
-            </div>
-          </div>
-          }
-        </div>
+      <div id="head_browse_result_playlist_items_ID" tabindex="-1">
+        <container-tile [smallIcons]="this.allMusicTracks.length > 0" [container]="playlistList"
+          (browseClicked)="browseTo($event)" 
+          (playClicked)="playPlaylist($event)" 
+          (shuffleClicked)="shufflePlaylist($event)" 
+          (addPlaylistClicked)="addPlaylist($event)"></container-tile>
       </div>
       }
 
@@ -183,30 +165,11 @@ Main Content
       <!-- Template : Browse Result Album                                 -->
       <!-- ############################################################## -->
       @if (albumList?.length > 0) {
-      <div>
-        <div id="head_browse_result_album_ID" class="albumLayout">
-          @for (container of albumList; track container.id) {
-          <div id="{{container.id}}" tabindex="-1" class="{{getAlbumTile()}}">
-            <div class="albumImageContainer">
-              <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
-              <div class="overlay-child d-flex flex-column justify-content-center align-items-center" id="id_play_overlay_div_album">
-                <div class="d-flex justify-content-center align-items-center">
-                  <span class="material-symbols-outlined md-36 m-3" (click)="browseTo(container)">drive_file_move</span>
-                </div>
-                <div class="d-flex justify-content-center align-items-center">
-                  <span class="material-symbols-outlined md-36 m-3" (click)="playAlbum(container)">play_arrow</span>
-                  <span class="material-symbols-outlined md-36 m-3" (click)="playlistService.addContainerToPlaylist(container)">playlist_add</span>
-                </div>
-              </div>
-            </div>
-            <div class="d-flex flex-column minWidth albumDesc">
-              <div class="{{getAlbumTitle()}} no-wrap">{{container.title}}</div>
-              <div class="albumSubheader no-wrap">{{container.artist}}</div>
-              <div class="albumYear no-wrap">{{container.media_date}}</div>
-            </div>
-          </div>
-          }
-        </div>
+      <div id="head_browse_result_album_ID">
+        <container-tile [smallIcons]="this.allMusicTracks.length > 0" [container]="albumList"
+          (browseClicked)="browseTo($event)" 
+          (playClicked)="playAlbum($event)" 
+          (addPlaylistClicked)="addPlaylist($event)"></container-tile>
       </div>
       }
 
@@ -330,29 +293,6 @@ Main Content
           }
         </div>
         }
-        <ng-template #cardLayoutTiles>
-          <div id="head_browse_result_items_mixed_titles_ID" class="cardLayoutTiles">
-            @for (item of allMusicTracks; track item.objectID) {
-            <div id="{{item.objectID}}" class="imgCardWidth mb-5 ms-4">
-              <div class="albumImageContainer">
-                <img src="{{item.albumArtUrl}}" alt="{{item.title}}">
-                <div class="overlay-child d-flex flex-column justify-content-end">
-                  <div class="d-flex justify-content-around align-items-center pb-4">
-                    <span class="material-symbols-outlined md-36 m-3" (click)="transportService.playResource(item)">play_circle</span>
-                    <span class="material-symbols-outlined md-36 m-3" (click)="playlistService.addToPlaylist(item)">playlist_add</span>
-                    <span class="material-symbols-outlined md-36 m-3" (click)="showSongPopup($event, item)">more_vert</span>
-                  </div>
-                </div>
-              </div>
-              <div class="d-flex card-body">
-                <div class="d-flex minWidth">
-                  <div class="card-title no-wrap">{{item.title}}</div>
-                </div>
-              </div>
-            </div>
-            }
-          </div>
-        </ng-template>
       </div>
       }
 

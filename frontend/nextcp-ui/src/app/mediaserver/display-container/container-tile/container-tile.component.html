@@ -3,12 +3,31 @@
     <div class="albumTile {{getSmallCss()}}" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)">
       <div class="albumImageContainer">
         <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
+        <div class="overlay-child d-flex flex-column justify-content-center align-items-center" id="id_play_overlay_div_album">
+            <div class="d-flex justify-content-center align-items-center">
+              <span class="material-symbols-outlined md-36 m-3" (click)="browseTo(container)">drive_file_move</span>
+            </div>
+            <div class="d-flex justify-content-center align-items-center">
+              <span class="material-symbols-outlined md-36 m-3" (click)="playContainer(container)">play_arrow</span>
+              <span class="material-symbols-outlined md-36 m-3" (click)="addPlaylist(container)">playlist_add</span>
+            </div>
+          </div>
         <!-- <image-cropper src="{{container.albumartUri}}"></image-cropper> -->
       </div>
-      <div class="d-flex flex-column albumDesc">
-        <div class="playlistText">{{getOtherContainerHeadline(container)}}</div>
-        <div class="albumTitle">{{container.title}}</div>
-      </div>
+      @if(isAlbum(container)) {
+        <div class="d-flex flex-column minWidth albumDesc">
+          <div class="album no-wrap">{{container.title}}</div>
+          <div class="albumSubheader no-wrap">{{container.artist}}</div>
+          <div class="albumYear no-wrap">{{container.media_date}}</div>
+        </div>
+      } @else {
+        <div class="d-flex flex-column albumDesc">
+          <div class="playlistText">{{getOtherContainerHeadline(container)}}</div>
+          <div class="albumTitle">{{container.title}}</div>
+        </div>
+        }
     </div>
     }
   </div>
+
+

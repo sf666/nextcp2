@@ -7,12 +7,16 @@ import { EventEmitter } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './container-tile.component.html',
-  styleUrl: './container-tile.component.scss'
+  styleUrl: './container-tile.component.scss',
 })
 export class ContainerTileComponent {
-  @Input() container : ContainerDto[];
-  @Input() smallIcons : boolean;
+  @Input() container: ContainerDto[];
+  @Input() smallIcons: boolean = false;
+  @Input() showPlayOverlay: boolean = false;
   @Output() browseClicked = new EventEmitter<ContainerDto>();
+  @Output() playClicked = new EventEmitter<ContainerDto>();
+  @Output() shuffleClicked = new EventEmitter<ContainerDto>();
+  @Output() addPlaylistClicked = new EventEmitter<ContainerDto>();
 
   get containerList(): ContainerDto[] {
     return this.container;
@@ -22,12 +26,24 @@ export class ContainerTileComponent {
     this.browseClicked.emit(containerDto);
   }
 
+  public playContainer(containerDto: ContainerDto): void {
+    this.playClicked.emit(containerDto);
+  }
+
+  public addPlaylist(containerDto: ContainerDto): void {
+    this.addPlaylistClicked.emit(containerDto);
+  }
+
   getSmallCss() {
     if (this.smallIcons) {
       return ' small ';
     } else {
       return '';
     }
+  }
+
+  isAlbum(item: ContainerDto): boolean {
+    return item.objectClass?.startsWith('object.container.album');
   }
 
   getOtherContainerHeadline(item: ContainerDto): string {
@@ -58,5 +74,4 @@ export class ContainerTileComponent {
     }
     return '';
   }
-
 }
