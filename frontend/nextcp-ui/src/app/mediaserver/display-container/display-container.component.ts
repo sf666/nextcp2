@@ -126,6 +126,10 @@ export class DisplayContainerComponent {
     // TODO implement ScrollTo OID
   }
 
+  quickSearchChanged(newQuickSerchText: string) {
+    this.quickSearchString = newQuickSerchText;
+  }
+
   /**
    * @param elementID ATTENTION: elementID needs to have tabindex set to '-1': <div id="elementID" tabindex="-1">
    */
