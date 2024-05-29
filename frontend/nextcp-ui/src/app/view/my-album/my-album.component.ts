@@ -52,11 +52,11 @@ export class MyAlbumComponent implements OnInit {
   //
 
   getParentTitle(): string {
-    return "back to music library";
+    return this.contentDirectoryService.currentContainerList.parentFolderTitle;
   }
 
   public backButtonPressed(event: any) {
-    this.router.navigateByUrl('/music-library');
+    this.loadMyAlbums();
   }
 
 

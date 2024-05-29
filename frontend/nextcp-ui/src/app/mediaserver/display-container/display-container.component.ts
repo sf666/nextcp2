@@ -34,11 +34,12 @@ import {
   MatPrefix,
   MatSuffix,
 } from '@angular/material/form-field';
-import { MatIcon, MatIconModule } from '@angular/material/icon';
-import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { DomChangedDirective } from '../../directive/watch-dom-tree.directive';
 import { BackgroundImageService } from 'src/app/util/background-image.service';
 import { ContainerTileComponent } from './container-tile/container-tile.component';
+import { DisplayContainerHeaderComponent } from './display-container-header/display-container-header.component';
 
 @Component({
   selector: 'mediaServer-display-container',
@@ -54,7 +55,6 @@ import { ContainerTileComponent } from './container-tile/container-tile.componen
     MatLabel,
     MatPrefix,
     MatInputModule,
-    FormsModule,
     MatSuffix,
     MatSelectModule,
     ReactiveFormsModule,
@@ -62,10 +62,10 @@ import { ContainerTileComponent } from './container-tile/container-tile.componen
     QualityBadgeComponent,
     StarRatingComponent,
     ContainerTileComponent,
+    DisplayContainerHeaderComponent,
   ],
 })
 export class DisplayContainerComponent implements OnInit {
-  genresForm = new FormControl('');
 
   @Input() showTopHeader = true;
   @Input() extendedApi: boolean = true;
@@ -129,11 +129,6 @@ export class DisplayContainerComponent implements OnInit {
     });
   }
 
-  private cdsBrowseFinished() {
-    this.fillGenres();
-    this.backgroundImageService.setDisplayContainerHeaderImage(this.currentContainer?.albumartUri);
-  }
-
   domChange(event: any): void {
     console.log('DOM changed event ... ');
     // TODO implement ScrollTo OID
@@ -154,11 +149,6 @@ export class DisplayContainerComponent implements OnInit {
 
   ngOnInit(): void {
     this.doUiChecks();
-    if (this.contentHandler?.contentDirectoryService) {
-      this.contentHandler.contentDirectoryService.browseFinished$.subscribe(
-        (data) => this.cdsBrowseFinished()
-      );
-    }
   }
 
   private doUiChecks(): void {
@@ -167,28 +157,6 @@ export class DisplayContainerComponent implements OnInit {
     this.checkAllTracksSameDisc();
     this.checkLikeStatus();
     this.checkTilesView();
-  }
-
-  private fillGenres(): void {
-    this.genresList = new Set();
-    this.musicTracks?.forEach((value) => {
-      if (value?.genre) {
-        let aGenre = value.genre.split('/');
-        aGenre?.forEach((gen) => {
-          this.genresList.add(gen.trim());
-        });
-      }
-    });
-    this.albumList?.forEach((value) => {
-      if (value?.genre) {
-        let aGenre = value.genre.split('/');
-        aGenre?.forEach((gen) => {
-          this.genresList.add(gen.trim());
-        });
-      }
-    });
-
-    this.genresListSorted = [...this.genresList].sort();
   }
 
   getSearchDelay(): number {

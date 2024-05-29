@@ -1,13 +1,14 @@
 <div id="navbar" class="navbar">
   <div class="d-flex m-2">
     
-    @if(!backButtonDisabled) {
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb navFont">
-          <li class="breadcrumb-item" (click)="gotoRoot()">
+          @if(!backButtonDisabled) {
+            <li class="breadcrumb-item" (click)="gotoRoot()">
             <mat-icon class="material-symbols-sharp md-48 ultra-thin">home</mat-icon>
             <span>Home</span>
           </li>
+        }
           @if(showParentFolder()) {
             <li class="breadcrumb-item" (click)="gotoParent()">
               <mat-icon class="material-symbols-sharp md-48 ultra-thin">drive_folder_upload</mat-icon>
@@ -16,7 +17,6 @@
           }
         </ol>
       </nav>
-      }
   </div>
 
   <div class="flex-spacer"></div>
