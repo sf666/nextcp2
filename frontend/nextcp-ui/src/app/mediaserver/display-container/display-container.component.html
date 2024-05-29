@@ -37,10 +37,8 @@ Main Content
       @if (playlistList?.length > 0) {
       <div id="head_browse_result_playlist_items_ID" tabindex="-1">
         <container-tile [smallIcons]="this.allMusicTracks.length > 0" [container]="playlistList"
-          (browseClicked)="browseTo($event)" 
-          (playClicked)="playPlaylist($event)" 
-          (shuffleClicked)="shufflePlaylist($event)" 
-          (addPlaylistClicked)="addPlaylist($event)"></container-tile>
+          (browseClicked)="browseTo($event)">
+        </container-tile>
       </div>
       }
 
@@ -50,9 +48,8 @@ Main Content
       @if (albumList?.length > 0) {
       <div id="head_browse_result_album_ID">
         <container-tile [smallIcons]="this.allMusicTracks.length > 0" [container]="albumList"
-          (browseClicked)="browseTo($event)" 
-          (playClicked)="playAlbum($event)" 
-          (addPlaylistClicked)="addPlaylist($event)"></container-tile>
+          (browseClicked)="browseTo($event)">
+        </container-tile>
       </div>
       }
 
@@ -73,8 +70,11 @@ Main Content
       <!--                                -->
       @if (containerList?.length > 0) {
       <div id="head_browse_result_general_container_ID">
-        <container-tile [smallIcons]="this.allMusicTracks.length > 0" [container]="containerList"
-          (browseClicked)="browseTo($event)"></container-tile>
+        <container-tile 
+          [smallIcons]="this.allMusicTracks.length > 0" 
+          [container]="containerList"
+          (browseClicked)="browseTo($event)">
+        </container-tile>
       </div>
       }
 

@@ -14,9 +14,6 @@ export class ContainerTileComponent {
   @Input() smallIcons: boolean = false;
   @Input() showPlayOverlay: boolean = false;
   @Output() browseClicked = new EventEmitter<ContainerDto>();
-  @Output() playClicked = new EventEmitter<ContainerDto>();
-  @Output() shuffleClicked = new EventEmitter<ContainerDto>();
-  @Output() addPlaylistClicked = new EventEmitter<ContainerDto>();
 
   get containerList(): ContainerDto[] {
     return this.container;
@@ -24,14 +21,6 @@ export class ContainerTileComponent {
 
   public browseTo(containerDto: ContainerDto): void {
     this.browseClicked.emit(containerDto);
-  }
-
-  public playContainer(containerDto: ContainerDto): void {
-    this.playClicked.emit(containerDto);
-  }
-
-  public addPlaylist(containerDto: ContainerDto): void {
-    this.addPlaylistClicked.emit(containerDto);
   }
 
   getSmallCss() {
