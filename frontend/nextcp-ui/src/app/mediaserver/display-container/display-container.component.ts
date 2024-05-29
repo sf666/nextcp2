@@ -40,6 +40,7 @@ import { DomChangedDirective } from '../../directive/watch-dom-tree.directive';
 import { BackgroundImageService } from 'src/app/util/background-image.service';
 import { ContainerTileComponent } from './container-tile/container-tile.component';
 import { DisplayContainerHeaderComponent } from './display-container-header/display-container-header.component';
+import { ItemTileComponent } from './item-tile/item-tile.component';
 
 @Component({
   selector: 'mediaServer-display-container',
@@ -62,14 +63,16 @@ import { DisplayContainerHeaderComponent } from './display-container-header/disp
     QualityBadgeComponent,
     StarRatingComponent,
     ContainerTileComponent,
+    ItemTileComponent,
     DisplayContainerHeaderComponent,
   ],
 })
-export class DisplayContainerComponent implements OnInit {
+export class DisplayContainerComponent {
 
   @Input() showTopHeader = true;
   @Input() extendedApi: boolean = true;
   @Input() contentHandler: ScrollLoadHandler;
+
 
   // Inform parent about actions
   @Output() containerSelected = new EventEmitter<ContainerDto>();
@@ -89,7 +92,6 @@ export class DisplayContainerComponent implements OnInit {
 
   // some calculated constants
   private allTracksSameAlbum_: boolean;
-  private oneTrackWithMusicBrainzId_: boolean;
   private allTracksSameMusicBrainzReleaseId_: boolean;
   private allTracksSameDisc_: boolean;
 
@@ -108,7 +110,6 @@ export class DisplayContainerComponent implements OnInit {
     private myMusicService: MyMusicService,
     private backgroundImageService: BackgroundImageService,
     private sseService: SseService,
-    private deviceService: DeviceService,
     private timeDisplayService: TimeDisplayService,
     public playlistService: PlaylistService,
     public transportService: TransportService,
@@ -117,16 +118,7 @@ export class DisplayContainerComponent implements OnInit {
     private configurationService: ConfigurationService,
     public trackQualityService: TrackQualityService
   ) {
-    console.log('constructor : DisplayContainerComponent');
-    sseService.mediaRendererTrackInfoChanged$.subscribe((data) => {
-      if (
-        data?.mediaRendererUdn &&
-        data?.currentTrack &&
-        deviceService.isMediaRendererSelected(data.mediaRendererUdn)
-      ) {
-        this.currentUrl = data.currentTrack.streamingURL;
-      }
-    });
+
   }
 
   domChange(event: any): void {
@@ -145,18 +137,6 @@ export class DisplayContainerComponent implements OnInit {
       return true;
     }
     return false;
-  }
-
-  ngOnInit(): void {
-    this.doUiChecks();
-  }
-
-  private doUiChecks(): void {
-    this.checkAllTracksSameAlbum();
-    this.checkOneTrackWithMusicBrainzId();
-    this.checkAllTracksSameDisc();
-    this.checkLikeStatus();
-    this.checkTilesView();
   }
 
   getSearchDelay(): number {
@@ -197,72 +177,6 @@ export class DisplayContainerComponent implements OnInit {
   // Initial checks
   // ===============================================================================================
 
-  public allTracksSameDisc(): boolean {
-    return this.allTracksSameDisc_;
-  }
-
-  public allTracksSameAlbum(): boolean {
-    return this.allTracksSameAlbum_;
-  }
-
-  private checkAllTracksSameDisc(): void {
-    if (this.musicTracks?.length > 0) {
-      const firstTrackDisc = this.musicTracks[0]?.numberOfThisDisc;
-      this.allTracksSameDisc_ = !this.musicTracks?.find(
-        (item) => item.numberOfThisDisc !== firstTrackDisc
-      );
-    }
-    console.log('allTracksSameDisc_ : ' + this.allTracksSameDisc_);
-  }
-
-  private checkAllTracksSameAlbum(): void {
-    const numtrack = this.musicTracks?.length;
-    const numMbid = this.musicTracks?.filter(
-      (item) => item.musicBrainzId?.ReleaseTrackId?.length > 0
-    ).length;
-
-    console.log('number of tracs : ' + numtrack);
-    console.log('number of tracs with mbid: ' + numMbid);
-
-    this.allTracksSameMusicBrainzReleaseId_ = false;
-
-    if (numMbid > 0 && numtrack == numMbid) {
-      const firstTrackMbid = this.musicTracks[0]?.musicBrainzId?.ReleaseTrackId;
-      const numSameMbid = this.musicTracks.filter(
-        (item) => item.musicBrainzId?.ReleaseTrackId === firstTrackMbid
-      ).length;
-      this.allTracksSameAlbum_ = numSameMbid == numMbid;
-      this.allTracksSameMusicBrainzReleaseId_ = this.allTracksSameAlbum_;
-      console.log(
-        'number of tracs with same mbid like first track : ' + numSameMbid
-      );
-    } else {
-      if (this.musicTracks?.length > 0) {
-        const firstTrackAlbum = this.musicTracks[0].album;
-        const albumsWithOtherNames = this.musicTracks.filter(
-          (item) => item.album !== firstTrackAlbum
-        ).length;
-        this.allTracksSameAlbum_ = albumsWithOtherNames == 0;
-        console.log(
-          'number of tracs with other album title : ' + albumsWithOtherNames
-        );
-      }
-    }
-    console.log('checkAllTracksSameAlbum : ' + this.allTracksSameAlbum_);
-    console.log(
-      'checkAllTracksSameMusicbrainzReleaseId : ' +
-        this.allTracksSameMusicBrainzReleaseId_
-    );
-  }
-
-  private checkOneTrackWithMusicBrainzId(): void {
-    const mbTrackExists =
-      this.musicTracks?.filter((item) => this.hasSongId(item))?.length > 0;
-    this.oneTrackWithMusicBrainzId_ = mbTrackExists;
-    console.log(
-      'checkOneTrackWithMusicBrainzId : ' + this.oneTrackWithMusicBrainzId_
-    );
-  }
 
   private hasSongId(item: MusicItemDto): boolean {
     return item.songId?.musicBrainzIdTrackId?.length > 0;
@@ -467,6 +381,7 @@ export class DisplayContainerComponent implements OnInit {
   get allMusicTracks() {
     return this.filteredMusicTracks(true);
   }
+
   private filteredMusicTracks(filter?: boolean): MusicItemDto[] {
     if (filter) {
       let tracks: Array<MusicItemDto>;
@@ -660,7 +575,6 @@ export class DisplayContainerComponent implements OnInit {
   }
 
   private browseFinished(data: ContainerItemDto) {
-    this.doUiChecks();
     this.browseFinish.emit(data);
   }
 
@@ -686,124 +600,23 @@ export class DisplayContainerComponent implements OnInit {
     );
   }
 
-  private updateIntersec() {
-    let element: HTMLElement;
-    let id = this.contentHandler.contentDirectoryService.getPageTurnId();
-    element = document.getElementById(id);
-
-    if (this.isElementInViewport(element)) {
-      this.loadNextBrowsePage();
-    } else {
-      var options = {
-        threshold: 0.75, //root: document.documentElement,
-      };
-      if (element) {
-        if (this.intersecObserver) {
-          this.intersecObserver.disconnect();
-        }
-        this.intersecObserver = new IntersectionObserver((entries) => {
-          entries?.forEach((entry) => {
-            if (entry.isIntersecting || entry.intersectionRatio > 0) {
-              this.loadNextBrowsePage();
-            }
-          });
-        }, options);
-
-        this.intersecObserver.observe(element);
-      }
-    }
-  }
 
   addPlaylist(container: ContainerDto): void {
     this.playlistService.addContainerToPlaylist(container);
+  }
+
+  addItemToPlaylist(item: MusicItemDto): void {
+    this.playlistService.addToPlaylist(item);
   }
 
   playAlbum(container: ContainerDto): void {
     this.playlistService.addContainerToPlaylistAndPlay(container, false);
   }
 
-  play(musicItemDto: MusicItemDto): void {
+  playItem(musicItemDto: MusicItemDto): void {
     this.transportService.playResource(musicItemDto);
   }
 
-  public selectedRowClass(musicItemDto: MusicItemDto): string {
-    if (this.currentUrl && musicItemDto?.streamingURL == this.currentUrl) {
-      return 'selectRow';
-    }
-    return '';
-  }
-
-  //
-  // CSS support like responsive grid layout counting in respect to first image visible or not
-  // ===============================================================================================
-  getTitleResponsiveClass(): string {
-    if (!this.allTracksSameAlbum()) {
-      return 'col-8 col-sm-7 col-md-5 col-lg-5 col-xl-3';
-    } else {
-      return 'col-11 col-sm-9 col-md-7 col-lg-6 col-xl-6';
-    }
-  }
-
-  getDuration(item: MusicItemDto): string {
-    if (item.audioFormat?.durationInSeconds) {
-      return this.timeDisplayService.convertLongToDateStringShort(
-        item.audioFormat.durationInSeconds
-      );
-    } else {
-      return '';
-    }
-  }
-
-  showSongPopup(event: MouseEvent, item: MusicItemDto): void {
-    this.songOptionsServiceService
-      .openOptionsDialog(event, item, this.currentContainer)
-      .subscribe((result) => {
-        // handle user action from dialog ...
-        if (result) {
-          if (result.type == 'add') {
-            console.log('added song to playlist : ');
-          } else if (result.type == 'delete') {
-            console.log('deleted song from playlist : ');
-            setTimeout(() => {
-              this.itemDeleted.emit(result.data);
-            }, 200);
-          } else if (result.type == 'download') {
-            console.log('download song : ');
-          } else if (result.type == 'next') {
-            console.log('play next song : ');
-          }
-        }
-      });
-  }
-
-  getOtherContainerHeadline(item: ContainerDto): string {
-    if (item.objectClass.startsWith('object.container.person')) {
-      return 'ARTIST';
-    } else if (
-      item.objectClass?.startsWith('object.container.playlistContainer')
-    ) {
-      return 'PLAYLIST';
-    } else if (item.objectClass?.startsWith('object.container.album')) {
-      return 'ALBUM';
-    } else if (item.objectClass?.startsWith('object.container.genre')) {
-      return 'GENRE';
-    } else if (item.objectClass?.startsWith('object.container.channelGroup')) {
-      return 'CHANNELS';
-    } else if (item.objectClass?.startsWith('object.container.epgContainer')) {
-      return 'EPG';
-    } else if (item.objectClass?.startsWith('object.container.storageSystem')) {
-      return 'DEVICE';
-    } else if (item.objectClass?.startsWith('object.container.storageVolume')) {
-      return 'DISC';
-    } else if (item.objectClass?.startsWith('object.container.storageFolder')) {
-      return '';
-    } else if (
-      item.objectClass?.startsWith('object.container.bookmarkFolder')
-    ) {
-      return 'BOOKMARKS';
-    }
-    return '';
-  }
 
   getOtherItemHeadline(item: MusicItemDto): string {
     // object.item.audioItem

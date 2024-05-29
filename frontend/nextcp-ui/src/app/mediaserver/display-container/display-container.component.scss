@@ -13,6 +13,18 @@
     max-width      : 750px;
 }
 
+.outer-container {
+    display  : flex;
+    flex     : 1 5 auto;
+    position : relative;
+    max-width: 1700px;
+}
+
+.header-container {
+    display       : flex;
+    flex-direction: column;
+    flex          : 1 1 auto;
+}
 
 .myRow {
     align-content: center;
@@ -20,15 +32,6 @@
 
 // Container
 
-.img-small {
-    object-fit      : cover;
-    background-color: rgba(0, 0, 0, 0.5);
-
-    width        : 4rem;
-    height       : 4rem;
-    margin-bottom: 2px;
-    margin-top   : 2px;
-}
 
 .search-icon {
     color: rgba(255, 255, 255, 0.2);
@@ -69,11 +72,7 @@ img {
 }
 
 
-.albumSubtitle {
-    font-weight: 400;
-    margin-top : 1rem;
-    width      : 100%;
-}
+
 
 .browseContentArea {
     flex      : 30 1 0;
@@ -162,29 +161,6 @@ input {
     }
 }
 
-.selectRow {
-    color: aqua;
-}
-
-.itemDetails {
-    margin-bottom: 10rem;
-}
-
-.text-right {
-    text-align: end;
-}
-
-.disc-label {
-    margin-top   : 1rem;
-    font-weight  : 500;
-    margin-bottom: 0.5rem;
-}
-
-.row-alignment {
-    align-items: center;
-    overflow   : hidden;
-}
-
 .button {
     &.button-text {
         margin-left: 0.7rem;
@@ -228,11 +204,6 @@ input {
     max-width: 3rem;
 }
 
-
-.trackNum {
-    min-width: 1.8rem;
-    ;
-}
 
 /*
 

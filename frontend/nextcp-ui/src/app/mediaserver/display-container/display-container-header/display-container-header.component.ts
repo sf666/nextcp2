@@ -29,6 +29,8 @@ export class DisplayContainerHeaderComponent implements OnInit {
   @Output() toggleListViewClicked = new EventEmitter<any>();
   @Output() addToPlaylistClicked = new EventEmitter<any>();
   @Output() toggleLikeAlbumClicked = new EventEmitter<any>();
+  @Output() newQuickSearch = new EventEmitter<string>();
+  @Output() newSelectedGenres = new EventEmitter<Array<string>>();
 
   genresForm = new FormControl('');
 
@@ -66,6 +68,10 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   get albums(): ContainerDto[] {
     return this.contentDirectoryService.albumList_;
+  }
+
+  genresChanged(event: Event) {
+    console.log(event);
   }
 
   private fillGenres(): void {
@@ -115,10 +121,12 @@ export class DisplayContainerHeaderComponent implements OnInit {
     if (event.key === 'Escape') {
       this.clearSearch();
     }
+    this.newQuickSearch.emit(this.quickSearchString);
   }
 
   public clearSearch(): void {
     this.quickSearchString = '';
+    this.newQuickSearch.emit(this.quickSearchString);
   }
 
 

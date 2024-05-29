@@ -55,7 +55,7 @@ export class MusicLibraryComponent  implements AfterViewInit{
   //
   private musicItemClickedFromSearch(musicItem: MusicItemDto) {
     // Just play
-    this.dispContainer.play(musicItem);
+    this.dispContainer.playItem(musicItem);
   }
 
   private containerItemClickedFromSearch(container: ContainerDto) {
@@ -113,7 +113,6 @@ export class MusicLibraryComponent  implements AfterViewInit{
 
   itemDeleted(event: MusicItemDto) {    
     this.contentDirectoryService.deleteMusicTrack(event);
-//    this.contentDirectoryService.refreshCurrentContainer();
   }
 
   //
