@@ -137,7 +137,6 @@ export class MusicLibraryComponent  implements AfterViewInit{
   rootButtonPressed(event: any) {
     const currentParent = this.contentDirectoryService?.currentContainerList?.currentContainer?.parentID;
     if (currentParent) {
-      this.dispContainer.clearSearch();
       this.browseToOid("0", this.deviceService.selectedMediaServerDevice.udn, false, "");
     }
   }
@@ -145,7 +144,6 @@ export class MusicLibraryComponent  implements AfterViewInit{
   public backButtonPressed(event: any) {
     const currentParent = this.contentDirectoryService?.currentContainerList?.currentContainer?.parentID;
     if (currentParent) {
-      this.dispContainer.clearSearch();
       this.browseToOid(currentParent, this.deviceService.selectedMediaServerDevice.udn, false, "");
     }
   }

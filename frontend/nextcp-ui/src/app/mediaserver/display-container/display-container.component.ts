@@ -82,9 +82,6 @@ export class DisplayContainerComponent {
   private listView = true;
   private lastDiscLabel = '';
 
-  private lastScrollToId = '';
-  private intersecObserver: IntersectionObserver;
-
   quickSearchString: string;
   genresList: Set<String>;
   genresListSorted: Array<String>;
@@ -365,20 +362,6 @@ export class DisplayContainerComponent {
   }
 
   //
-  // Search support
-  // ===============================================================================================
-
-  keyUp(event: KeyboardEvent): void {
-    if (event.key === 'Escape') {
-      this.clearSearch();
-    }
-  }
-
-  public clearSearch(): void {
-    this.quickSearchString = '';
-  }
-
-  //
   // Sorted container access to albums, playlists or other container
   // ===============================================================================================
 
@@ -514,30 +497,12 @@ export class DisplayContainerComponent {
     return this.listView;
   }
 
-  // Disc Label support
-
-  getDiscLabel(item: MusicItemDto): string {
-    if (item.numberOfThisDisc !== this.lastDiscLabel) {
-      this.lastDiscLabel = item.numberOfThisDisc;
-      return `Disk ${item.numberOfThisDisc}`;
-    }
-    return '';
-  }
-
-  newDiscLabel(item: MusicItemDto): boolean {
-    if (item.numberOfThisDisc !== this.lastDiscLabel) {
-      return true;
-    }
-    return false;
-  }
-
   public browseToOid(
     oid: string,
     udn: string,
     stepIn: boolean,
     sortCriteria?: string
   ): Promise<boolean> {
-    this.clearSearch();
     if (!this.contentHandler) {
       console.error('contentHandler not initialized.');
       return;

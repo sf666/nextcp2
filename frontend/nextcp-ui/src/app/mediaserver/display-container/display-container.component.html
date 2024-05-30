@@ -37,7 +37,10 @@ Main Content
     -->
       @if (playlistList?.length > 0) {
       <div id="head_browse_result_playlist_items_ID" tabindex="-1">
-        <container-tile [smallIcons]="this.allMusicTracks.length > 0" [container]="playlistList"
+        <container-tile 
+          [smallIcons]="this.allMusicTracks.length > 0" 
+          [container]="playlistList"
+          [quickSearchString]="quickSearchString"
           (browseClicked)="browseTo($event)">
         </container-tile>
       </div>
@@ -48,7 +51,10 @@ Main Content
       <!-- ############################################################## -->
       @if (albumList?.length > 0) {
       <div id="head_browse_result_album_ID">
-        <container-tile [smallIcons]="this.allMusicTracks.length > 0" [container]="albumList"
+        <container-tile 
+          [smallIcons]="this.allMusicTracks.length > 0" 
+          [container]="albumList"
+          [quickSearchString]="quickSearchString"
           (browseClicked)="browseTo($event)">
         </container-tile>
       </div>
@@ -74,6 +80,7 @@ Main Content
         <container-tile 
           [smallIcons]="this.allMusicTracks.length > 0" 
           [container]="containerList"
+          [quickSearchString]="quickSearchString"
           (browseClicked)="browseTo($event)">
         </container-tile>
       </div>

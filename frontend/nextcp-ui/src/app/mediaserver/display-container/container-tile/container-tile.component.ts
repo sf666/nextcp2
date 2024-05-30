@@ -13,6 +13,9 @@ export class ContainerTileComponent {
   @Input() container: ContainerDto[];
   @Input() smallIcons: boolean = false;
   @Input() showPlayOverlay: boolean = false;
+  
+  @Input() quickSearchString: string;
+
   @Output() browseClicked = new EventEmitter<ContainerDto>();
 
   get containerList(): ContainerDto[] {

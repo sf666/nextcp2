@@ -102,27 +102,5 @@
         </div>
       </div>
     </div>
-    <div class="d-flex mt-4 ms-2 d-sm-none flex-column">
-      <div class="w-100">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>search content</mat-label>
-          <span matPrefix class="material-symbols-outlined thin md-light">search</span>
-          <input [(ngModel)]="quickSearchString" matInput placeholder="search content" #searchInput (keyup)="keyUp($event)">
-          <span matSuffix class="material-symbols-outlined thin md-light" (click)="clearSearch()">close</span>
-        </mat-form-field>
-      </div>
-      @if (hasGenres()) {
-      <div class="w-100">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Genre</mat-label>
-          <mat-select [formControl]="genresForm" multiple>
-            @for (genre of genresList; track genre) {
-            <mat-option [value]="genre">{{genre}}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-      </div>
-      }
-    </div>
   </div>
 </div>

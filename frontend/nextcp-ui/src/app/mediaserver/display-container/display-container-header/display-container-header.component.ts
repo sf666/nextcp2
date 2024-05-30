@@ -17,7 +17,15 @@ import { TimeDisplayService } from 'src/app/util/time-display.service';
 @Component({
   selector: 'display-container-header',
   standalone: true,
-  imports: [MatIconModule, MatButtonModule, MatInputModule, FormsModule, MatSelectModule, ReactiveFormsModule, MatOption],
+  imports: [
+    MatIconModule,
+    MatButtonModule,
+    MatInputModule,
+    FormsModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    MatOption,
+  ],
   templateUrl: './display-container-header.component.html',
   styleUrl: './display-container-header.component.scss',
 })
@@ -45,7 +53,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
   private allTracksSameMusicBrainzReleaseId_: boolean;
   private allTracksSameAlbum_: boolean;
 
-
   constructor(
     private dtoGeneratorService: DtoGeneratorService,
     private backgroundImageService: BackgroundImageService,
@@ -61,16 +68,19 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   private cdsBrowseFinished() {
+    this.clearSearch();
     this.fillGenres();
     this.checkAllTracksSameAlbum();
-    this.backgroundImageService.setDisplayContainerHeaderImage(this.currentContainer.albumartUri);
+    this.backgroundImageService.setDisplayContainerHeaderImage(
+      this.currentContainer.albumartUri
+    );
   }
 
   get albums(): ContainerDto[] {
     return this.contentDirectoryService.albumList_;
   }
 
-  genresChanged(event: Event) {
+  genresChanged(event: Event) {
     console.log(event);
   }
 
@@ -120,15 +130,15 @@ export class DisplayContainerHeaderComponent implements OnInit {
   keyUp(event: KeyboardEvent): void {
     if (event.key === 'Escape') {
       this.clearSearch();
+    } else {
+      this.newQuickSearch.emit(this.quickSearchString);
     }
-    this.newQuickSearch.emit(this.quickSearchString);
   }
 
   public clearSearch(): void {
     this.quickSearchString = '';
     this.newQuickSearch.emit(this.quickSearchString);
   }
-
 
   //
   // Like section
@@ -169,7 +179,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     return this.contentDirectoryService.musicTracks_;
   }
 
-  // Like support 
+  // Like support
   private checkAllTracksSameAlbum(): void {
     const numtrack = this.musicTracks?.length;
     const numMbid = this.musicTracks?.filter(
@@ -209,7 +219,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
         this.allTracksSameMusicBrainzReleaseId_
     );
   }
-
 
   //
   // Statistics
@@ -289,7 +298,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
   public addToPlaylist(): void {
     this.addToPlaylistClicked.emit(this.currentContainer);
   }
-  
 
   // Other
   public get currentContainer(): ContainerDto {
