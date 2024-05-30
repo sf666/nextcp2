@@ -90,20 +90,12 @@ Main Content
       <!-- Other items                    -->
       <!--                                -->
       @if (items?.length > 0) {
-      <div>
-        <div id="head_browse_other_items_ID" class="albumLayout">
-          @for (item of items; track item.objectID) {
-          <div class="{{getAlbumTile()}}" id="{{item.objectID}}" tabindex="-1" (click)="transportService.playResource(item)">
-            <div class="albumImageContainer">
-              <img src="{{item.albumArtUrl}}" alt="{{item.title}}">
-            </div>
-            <div class="d-flex flex-column albumDesc">
-              <div class="playlistText">{{getOtherItemHeadline(item)}}</div>
-              <div class="{{getAlbumTitle()}}">{{item.title}}</div>
-            </div>
-          </div>
-          }
-        </div>
+      <div id="head_browse_other_items_ID">
+        <other-item-tile
+          [otherItems]="otherItems_"
+          [quickSearchString]="quickSearchString"
+          (playItemClicked)="playItem($event)"
+        ></other-item-tile>
       </div>
       }
     </div>

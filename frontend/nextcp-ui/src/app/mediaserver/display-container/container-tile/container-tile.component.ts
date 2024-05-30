@@ -13,15 +13,36 @@ export class ContainerTileComponent {
   @Input() container: ContainerDto[];
   @Input() smallIcons: boolean = false;
   @Input() showPlayOverlay: boolean = false;
-  
   @Input() quickSearchString: string;
 
   @Output() browseClicked = new EventEmitter<ContainerDto>();
 
   get containerList(): ContainerDto[] {
-    return this.container;
+    return this.containerFilter(this.quickSearchString);
   }
 
+  public containerFilter(filter?: string): ContainerDto[] {
+    if (filter) {
+      return this.container.filter((item) =>
+        this.doFilterText(item.title, filter)
+      );
+    } else {
+      return this.container;
+    }
+  }
+
+  private doFilterText(title: string, filter?: string): boolean {
+    if (!filter) {
+      return true;
+    }
+    if (!title && 'NONE' == filter) {
+      return true;
+    } else if (!title) {
+      return false;
+    }
+    return title.toLowerCase().includes(filter.toLowerCase());
+  }
+ 
   public browseTo(containerDto: ContainerDto): void {
     this.browseClicked.emit(containerDto);
   }

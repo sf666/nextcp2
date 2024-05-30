@@ -1,0 +1,13 @@
+<div class="albumLayout">
+    @for (item of items; track item.objectID) {
+    <div class="albumTitle" id="{{item.objectID}}" tabindex="-1" (click)="playResource(item)">
+      <div class="albumImageContainer">
+        <img src="{{item.albumArtUrl}}" alt="{{item.title}}">
+      </div>
+      <div class="d-flex flex-column albumDesc">
+        <div class="playlistText">{{getOtherItemHeadline(item)}}</div>
+        <div class="albumTile">{{item.title}}</div>
+      </div>
+    </div>
+    }
+  </div>

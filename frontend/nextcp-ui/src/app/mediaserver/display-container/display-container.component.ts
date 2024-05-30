@@ -41,6 +41,7 @@ import { BackgroundImageService } from 'src/app/util/background-image.service';
 import { ContainerTileComponent } from './container-tile/container-tile.component';
 import { DisplayContainerHeaderComponent } from './display-container-header/display-container-header.component';
 import { ItemTileComponent } from './item-tile/item-tile.component';
+import { OtherItemTileComponent } from './other-item-tile/other-item-tile.component';
 
 @Component({
   selector: 'mediaServer-display-container',
@@ -64,6 +65,7 @@ import { ItemTileComponent } from './item-tile/item-tile.component';
     StarRatingComponent,
     ContainerTileComponent,
     ItemTileComponent,
+    OtherItemTileComponent,
     DisplayContainerHeaderComponent,
   ],
 })
