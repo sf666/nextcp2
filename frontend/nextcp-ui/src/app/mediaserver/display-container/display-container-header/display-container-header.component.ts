@@ -80,8 +80,8 @@ export class DisplayContainerHeaderComponent implements OnInit {
     return this.contentDirectoryService.albumList_;
   }
 
-  genresChanged(event: Event) {
-    console.log(event);
+  genresChanged() {
+    this.newSelectedGenres.emit(this.selectedGenres);
   }
 
   private fillGenres(): void {

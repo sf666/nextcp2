@@ -180,15 +180,6 @@ export class ItemTileComponent implements OnInit {
     return title.toLowerCase().includes(filter.toLowerCase());
   }
 
-  private doFilterGenreByContainer(container: ContainerDto): boolean {
-    let add = false;
-    this.selectedGenres?.forEach((genre) => {
-      if (this.doFilterText(container.genre, genre)) {
-        add = true;
-      }
-    });
-    return add;
-  }
 
   //
   // CSS support like responsive grid layout counting in respect to first image visible or not

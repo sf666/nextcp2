@@ -14,12 +14,47 @@ export class ContainerTileComponent {
   @Input() smallIcons: boolean = false;
   @Input() showPlayOverlay: boolean = false;
   @Input() quickSearchString: string;
+  @Input() selectedGenres: Array<string> = [];
 
   @Output() browseClicked = new EventEmitter<ContainerDto>();
 
   get containerList(): ContainerDto[] {
-    return this.containerFilter(this.quickSearchString);
+     return this.filteredContainer();
   }
+
+  private filteredContainer(filter?: boolean): ContainerDto[] {
+    if (filter) {
+      let tracks: Array<ContainerDto>;
+      if (this.quickSearchString) {
+        tracks = this.container.filter((item) =>
+          this.doFilterText(item.title, this.quickSearchString)
+        );
+      } else {
+        tracks = this.container;
+      }
+      if (this?.selectedGenres?.length > 0) {
+        tracks = tracks.filter((item) => this.doFilterGenreByContainer(item));
+      }
+      return tracks;
+    } else {
+      return this.container;
+    }
+  }
+
+  /**
+   * Filter an album by genre
+   * @param container album container
+   * @returns
+   */
+     private doFilterGenreByContainer(container: ContainerDto): boolean {
+      let add = false;
+      this.selectedGenres?.forEach((genre) => {
+        if (this.doFilterText(container.genre, genre)) {
+          add = true;
+        }
+      });
+      return add;
+    }
 
   public containerFilter(filter?: string): ContainerDto[] {
     if (filter) {

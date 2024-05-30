@@ -129,6 +129,10 @@ export class DisplayContainerComponent {
     this.quickSearchString = newQuickSerchText;
   }
 
+  selectedGenreChanged(newGenres : Array<string>) {
+    this.selectedGenres = newGenres;
+  }
+
   /**
    * @param elementID ATTENTION: elementID needs to have tabindex set to '-1': <div id="elementID" tabindex="-1">
    */
@@ -153,7 +157,7 @@ export class DisplayContainerComponent {
   }
 
   //
-  // Accessor
+  // Accessor. Delivers the buckets for the display components
   //
 
   get musicTracks(): MusicItemDto[] {
@@ -176,26 +180,6 @@ export class DisplayContainerComponent {
     return this.contentHandler.contentDirectoryService.containerList_;
   }
 
-  //
-  // Initial checks
-  // ===============================================================================================
-
-
-  private hasSongId(item: MusicItemDto): boolean {
-    return item.songId?.musicBrainzIdTrackId?.length > 0;
-  }
-
-  private checkTilesView() {
-    const streaming_exists =
-      this.musicTracks?.filter((item) => item.audioFormat.isStreaming)?.length >
-      0;
-    if (streaming_exists) {
-      // we have streaming services. Display as list is not very nice.
-      this.listView = false;
-    } else {
-      this.listView = true;
-    }
-  }
 
   private checkLikeStatus() {
     if (this.allTracksSameMusicBrainzReleaseId_) {
@@ -212,44 +196,12 @@ export class DisplayContainerComponent {
     }
   }
 
-  hasSongs(): boolean {
-    return this.musicTracks?.length > 0 ? true : false;
-  }
-
-  hasGenres(): boolean {
-    return this.genresList?.size > 0 ? true : false;
-  }
-
   //
   // Like section
   // ==============================================================================
 
-  getFavoriteCssBtnClass(): string {
-    if (this.isLiked()) {
-      return "liked";
-    } else {
-      return "disliked";
-    }
-  }
-
-  getFavoriteCssIconClass(): string {
-    if (this.isLiked()) {
-      return "filled";
-    } else {
-      return "";
-    }
-  }
-
   isLiked(): boolean {
     return this.currentAlbumLiked;
-  }
-
-  isContainerAlbum(): boolean {
-    return this.allTracksSameMusicBrainzReleaseId_;
-  }
-
-  likePossible(): boolean {
-    return this.allTracksSameMusicBrainzReleaseId_;
   }
 
   dislikeAlbum(): void {
@@ -272,84 +224,6 @@ export class DisplayContainerComponent {
     }
   }
 
-  //
-  // Statistics
-  // ===============================================================================================
-
-  public get musicItemsCount(): number {
-    if (this.musicTracks?.length) {
-      return this.musicTracks.length;
-    } else {
-      return 0;
-    }
-  }
-
-  get containerType(): string {
-    if (
-      this.currentContainer.objectClass === 'object.container.playlistContainer'
-    ) {
-      return 'Playlist';
-    } else if (
-      this.currentContainer.objectClass === 'object.container.album.musicAlbum'
-    ) {
-      return 'Album';
-    } else {
-      return 'Folder';
-    }
-  }
-
-  get totalPlaytime(): string {
-    let completeTime: number;
-    completeTime = 0;
-    if (this.musicTracks.length > 0) {
-      this.musicTracks?.forEach(
-        (el) =>
-          (completeTime =
-            completeTime +
-            (el.audioFormat?.durationInSeconds
-              ? el.audioFormat.durationInSeconds
-              : 0))
-      );
-    }
-    if (completeTime) {
-      return this.timeDisplayService.convertLongToDateString(completeTime);
-    }
-    return '';
-  }
-
-  get totalPlaytimeShort(): string {
-    let completeTime: number;
-    completeTime = 0;
-    if (this.musicTracks.length > 0) {
-      this.musicTracks?.forEach(
-        (el) =>
-          (completeTime =
-            completeTime +
-            (el.audioFormat?.durationInSeconds
-              ? el.audioFormat.durationInSeconds
-              : 0))
-      );
-    }
-    if (completeTime) {
-      return this.timeDisplayService.convertLongToDateStringShort(completeTime);
-    }
-    return '';
-  }
-
-  public get currentContainer(): ContainerDto {
-    if (
-      this.contentHandler?.contentDirectoryService?.currentContainerList
-        ?.currentContainer
-    ) {
-      return this.contentHandler.contentDirectoryService.currentContainerList
-        .currentContainer;
-    }
-    return this.dtoGeneratorService.generateEmptyContainerDto();
-  }
-
-  //
-  // Button actions
-  // ===============================================================================================
   toggleListView(): void {
     this.listView = !this.listView;
     console.log('list view is now : ' + this.listView);
@@ -368,131 +242,28 @@ export class DisplayContainerComponent {
   // ===============================================================================================
 
   get allMusicTracks() {
-    return this.filteredMusicTracks(true);
+    return this.musicTracks;
   }
 
-  private filteredMusicTracks(filter?: boolean): MusicItemDto[] {
-    if (filter) {
-      let tracks: Array<MusicItemDto>;
-      if (this.quickSearchString) {
-        tracks = this.musicTracks.filter((item) =>
-          this.doFilterText(item.title, this.quickSearchString)
-        );
-      } else {
-        tracks = this.musicTracks;
-      }
-      if (this?.selectedGenres?.length > 0) {
-        tracks = tracks.filter((item) => this.doFilterGenre(item));
-      }
-      return tracks;
-    } else {
-      return this.musicTracks;
-    }
-  }
 
-  /**
-   * Filter an album by genre
-   * @param container album container
-   * @returns
-   */
-  private doFilterGenreByContainer(container: ContainerDto): boolean {
-    let add = false;
-    this.selectedGenres?.forEach((genre) => {
-      if (this.doFilterText(container.genre, genre)) {
-        add = true;
-      }
-    });
-    return add;
-  }
 
-  private doFilterGenre(item: MusicItemDto): boolean {
-    let add = false;
-    this.selectedGenres?.forEach((genre) => {
-      if (this.doFilterText(item.genre, genre)) {
-        add = true;
-      }
-    });
-    return add;
-  }
 
-  private doFilterText(title: string, filter?: string): boolean {
-    if (!filter) {
-      return true;
-    }
-    if (!title && 'NONE' == filter) {
-      return true;
-    } else if (!title) {
-      return false;
-    }
-    return title.toLowerCase().includes(filter.toLowerCase());
-  }
 
   get albumList(): ContainerDto[] {
-    return this.filteredAlbumList(true);
-  }
-
-  private filteredAlbumList(filter: boolean): ContainerDto[] {
-    if (filter) {
-      let cont: Array<ContainerDto>;
-      if (this.quickSearchString) {
-        cont = this.albums.filter((item) =>
-          this.doFilterText(item.title, this.quickSearchString)
-        );
-      } else {
-        cont = this.albums;
-      }
-      if (this?.selectedGenres?.length > 0) {
-        cont = cont.filter((item) => this.doFilterGenreByContainer(item));
-      }
-      return cont;
-    } else {
-      console.log('size : ' + this.albums.length);
-      return this.albums;
-    }
+    return this.albums;
   }
 
   get playlistList(): ContainerDto[] {
-    return this.playlistFilter(this.quickSearchString);
-  }
-
-  // playlist container
-  public playlistFilter(filter?: string): ContainerDto[] {
-    if (filter) {
-      return this.playlists.filter((item) =>
-        this.doFilterText(item.title, filter)
-      );
-    } else {
-      return this.playlists;
-    }
+    return this.playlists;
   }
 
   // other container
   get containerList(): ContainerDto[] {
-    return this.containerFilter(this.quickSearchString);
-  }
-
-  public containerFilter(filter?: string): ContainerDto[] {
-    if (filter) {
-      return this.container.filter((item) =>
-        this.doFilterText(item.title, filter)
-      );
-    } else {
-      return this.container;
-    }
+    return this.container;
   }
 
   get items(): MusicItemDto[] {
-    return this.getOtherItemsFilter(this.quickSearchString);
-  }
-
-  private getOtherItemsFilter(filter?: string): MusicItemDto[] {
-    if (filter) {
-      return this.otherItems_.filter((item) =>
-        this.doFilterText(item.title, filter)
-      );
-    } else {
-      return this.otherItems_;
-    }
+    return this.otherItems_;
   }
 
   isListView(): boolean {
@@ -553,25 +324,6 @@ export class DisplayContainerComponent {
     this.contentHandler.contentDirectoryService.browseToNextPage().subscribe();
   }
 
-  private isElementInViewport(el: HTMLElement): boolean {
-    if (!el) {
-      return false;
-    }
-    var rect = el.getBoundingClientRect();
-
-    return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <=
-        (window.innerHeight ||
-          document.documentElement.clientHeight) /* or $(window).height() */ &&
-      rect.right <=
-        (window.innerWidth ||
-          document.documentElement.clientWidth) /* or $(window).width() */
-    );
-  }
-
-
   addPlaylist(container: ContainerDto): void {
     this.playlistService.addContainerToPlaylist(container);
   }
@@ -586,43 +338,5 @@ export class DisplayContainerComponent {
 
   playItem(musicItemDto: MusicItemDto): void {
     this.transportService.playResource(musicItemDto);
-  }
-
-
-  getOtherItemHeadline(item: MusicItemDto): string {
-    // object.item.audioItem
-    if (item.objectClass?.startsWith('object.item.audioItem')) {
-      if (item?.audioFormat?.isStreaming) {
-        return 'RADIO';
-      }
-      return 'IMAGE';
-    } else if (item.objectClass?.startsWith('object.item.imageItem')) {
-      return 'IMAGE';
-    } else if (item.objectClass?.startsWith('object.item.videoItem')) {
-      return 'VIDEO';
-    } else if (item.objectClass?.startsWith('object.item.playlistItem')) {
-      return 'PLAYLIST';
-    } else if (item.objectClass?.startsWith('object.item.textItem')) {
-      return 'TEXT';
-    } else if (item.objectClass?.startsWith('object.item.bookmarkItem')) {
-      return 'BOOKMARK';
-    }
-    return '';
-  }
-
-  getAlbumTitle() {
-    if (this.allMusicTracks.length > 0) {
-      return 'albumTitle small';
-    } else {
-      return 'albumTitle';
-    }
-  }
-
-  getAlbumTile() {
-    if (this.allMusicTracks.length > 0) {
-      return 'albumTile small';
-    } else {
-      return 'albumTile';
-    }
   }
 }
