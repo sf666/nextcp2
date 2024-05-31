@@ -19,8 +19,8 @@
       (toggleListViewClicked)="toggleListView()"
       (addToPlaylistClicked)="addPlaylist($event)"
       (toggleLikeAlbumClicked)="toggleLikeAlbum()"
-      (newQuickSearch)="quickSearchChanged($event)"
-      (newSelectedGenres)="selectedGenreChanged($event)"
+      (newQuickSearch)="displayFilterChanged($event)"
+      (newSelectedGenres)="displayFilterGenreChanged($event)"
     />
     </div>
   }
@@ -41,7 +41,7 @@ Main Content
         <container-tile 
           [smallIcons]="this.allMusicTracks.length > 0" 
           [container]="playlistList"
-          [quickSearchString]="quickSearchString"
+          [quickSearchString]="displayFilterString"
           [selectedGenres]="selectedGenres"
           (browseClicked)="browseTo($event)">
         </container-tile>
@@ -56,7 +56,7 @@ Main Content
         <container-tile 
           [smallIcons]="this.allMusicTracks.length > 0" 
           [container]="albumList"
-          [quickSearchString]="quickSearchString"
+          [quickSearchString]="displayFilterString"
           [selectedGenres]="selectedGenres"
           (browseClicked)="browseTo($event)">
         </container-tile>
@@ -67,7 +67,7 @@ Main Content
         <item-tile
           [isListView]="isListView()"
           [contentDirectoryService]="contentHandler.contentDirectoryService"
-          [quickSearchString]="quickSearchString"
+          [quickSearchString]="displayFilterString"
           [selectedGenres]="selectedGenres"
           [extendedApi]="extendedApi"
           (playItemClicked)="playItem($event)"
@@ -84,7 +84,7 @@ Main Content
           [smallIcons]="this.allMusicTracks.length > 0" 
           [container]="containerList"
           [selectedGenres]="selectedGenres"
-          [quickSearchString]="quickSearchString"
+          [quickSearchString]="displayFilterString"
           (browseClicked)="browseTo($event)">
         </container-tile>
       </div>
@@ -97,7 +97,7 @@ Main Content
       <div id="head_browse_other_items_ID">
         <other-item-tile
           [otherItems]="otherItems_"
-          [quickSearchString]="quickSearchString"
+          [quickSearchString]="displayFilterString"
           (playItemClicked)="playItem($event)"
         ></other-item-tile>
       </div>

@@ -84,7 +84,7 @@ export class DisplayContainerComponent {
   private listView = true;
   private lastDiscLabel = '';
 
-  quickSearchString: string;
+  displayFilterString: string;
   genresList: Set<String>;
   genresListSorted: Array<String>;
   selectedGenres: Array<string> = [];
@@ -125,11 +125,13 @@ export class DisplayContainerComponent {
     // TODO implement ScrollTo OID
   }
 
-  quickSearchChanged(newQuickSerchText: string) {
-    this.quickSearchString = newQuickSerchText;
+  // quick search callbacks
+
+  displayFilterChanged(newQuickSerchText: string) {
+    this.displayFilterString = newQuickSerchText;
   }
 
-  selectedGenreChanged(newGenres : Array<string>) {
+  displayFilterGenreChanged(newGenres : Array<string>) {
     this.selectedGenres = newGenres;
   }
 
