@@ -10,6 +10,7 @@ import {
   ContainerItemDto,
   MusicItemDto,
 } from 'src/app/service/dto';
+import { MyMusicService } from 'src/app/service/my-music.service';
 import { BackgroundImageService } from 'src/app/util/background-image.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
@@ -36,7 +37,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
   @Output() shuffleClicked = new EventEmitter<ContainerDto>();
   @Output() toggleListViewClicked = new EventEmitter<any>();
   @Output() addToPlaylistClicked = new EventEmitter<any>();
-  @Output() toggleLikeAlbumClicked = new EventEmitter<any>();
   @Output() newQuickSearch = new EventEmitter<string>();
   @Output() newSelectedGenres = new EventEmitter<Array<string>>();
 
@@ -52,8 +52,11 @@ export class DisplayContainerHeaderComponent implements OnInit {
   currentAlbumLiked = false;
   private allTracksSameMusicBrainzReleaseId_: boolean;
   private allTracksSameAlbum_: boolean;
+  private currentAlbumReleaseID = '';
+
 
   constructor(
+    private myMusicService: MyMusicService,
     private dtoGeneratorService: DtoGeneratorService,
     private backgroundImageService: BackgroundImageService,
     private timeDisplayService: TimeDisplayService
@@ -71,6 +74,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     this.clearSearch();
     this.fillGenres();
     this.checkAllTracksSameAlbum();
+    this.checkLikeStatus();
     this.backgroundImageService.setDisplayContainerHeaderImage(
       this.currentContainer.albumartUri
     );
@@ -106,6 +110,20 @@ export class DisplayContainerHeaderComponent implements OnInit {
     this.genresListSorted = [...this.genresList].sort();
   }
 
+  private checkLikeStatus() {
+    if (this.allTracksSameMusicBrainzReleaseId_) {
+      if (this.musicTracks[0]?.musicBrainzId?.ReleaseTrackId) {
+        this.currentAlbumReleaseID =
+          this.musicTracks[0].musicBrainzId.ReleaseTrackId;
+        this.myMusicService
+          .isAlbumLiked(this.currentAlbumReleaseID)
+          .subscribe((res) => (this.currentAlbumLiked = res));
+      }
+    } else {
+      this.currentAlbumLiked = false;
+      this.currentAlbumReleaseID = undefined;
+    }
+  }
   likePossible(): boolean {
     return this.allTracksSameMusicBrainzReleaseId_;
   }
@@ -164,12 +182,29 @@ export class DisplayContainerHeaderComponent implements OnInit {
     return this.currentAlbumLiked;
   }
 
-  toggleListView(): void {
-    this.toggleListViewClicked.emit();
+  dislikeAlbum(): void {
+    this.myMusicService
+      .deleteAlbumLike(this.currentAlbumReleaseID)
+      .subscribe((d) => this.checkLikeStatus());
+  }
+
+  likeAlbum(): void {
+    this.myMusicService
+      .likeAlbum(this.currentAlbumReleaseID)
+      .subscribe((d) => this.checkLikeStatus());
   }
 
   toggleLikeAlbum(): void {
-    this.toggleLikeAlbumClicked.emit();
+    if (this.isLiked()) {
+      this.dislikeAlbum();
+    } else {
+      this.likeAlbum();
+    }
+  }
+
+
+  toggleListView(): void {
+    this.toggleListViewClicked.emit();
   }
 
   //

@@ -12,13 +12,13 @@
     <div class="pe-2">
       <display-container-header
       [contentDirectoryService]="contentHandler.contentDirectoryService"
+
       (playClicked)="playPlaylist($event)"
       (shuffleClicked)="shufflePlaylist($event)"
       (playClicked)="playPlaylist($event)"
       (playClicked)="playPlaylist($event)"
       (toggleListViewClicked)="toggleListView()"
       (addToPlaylistClicked)="addPlaylist($event)"
-      (toggleLikeAlbumClicked)="toggleLikeAlbum()"
       (newQuickSearch)="displayFilterChanged($event)"
       (newSelectedGenres)="displayFilterGenreChanged($event)"
     />

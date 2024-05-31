@@ -182,49 +182,9 @@ export class DisplayContainerComponent {
     return this.contentHandler.contentDirectoryService.containerList_;
   }
 
-
-  private checkLikeStatus() {
-    if (this.allTracksSameMusicBrainzReleaseId_) {
-      if (this.musicTracks[0]?.musicBrainzId?.ReleaseTrackId) {
-        this.currentAlbumReleaseID =
-          this.musicTracks[0].musicBrainzId.ReleaseTrackId;
-        this.myMusicService
-          .isAlbumLiked(this.currentAlbumReleaseID)
-          .subscribe((res) => (this.currentAlbumLiked = res));
-      }
-    } else {
-      this.currentAlbumLiked = false;
-      this.currentAlbumReleaseID = undefined;
-    }
-  }
-
   //
   // Like section
   // ==============================================================================
-
-  isLiked(): boolean {
-    return this.currentAlbumLiked;
-  }
-
-  dislikeAlbum(): void {
-    this.myMusicService
-      .deleteAlbumLike(this.currentAlbumReleaseID)
-      .subscribe((d) => this.checkLikeStatus());
-  }
-
-  likeAlbum(): void {
-    this.myMusicService
-      .likeAlbum(this.currentAlbumReleaseID)
-      .subscribe((d) => this.checkLikeStatus());
-  }
-
-  toggleLikeAlbum(): void {
-    if (this.isLiked()) {
-      this.dislikeAlbum();
-    } else {
-      this.likeAlbum();
-    }
-  }
 
   toggleListView(): void {
     this.listView = !this.listView;
