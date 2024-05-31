@@ -83,7 +83,7 @@
               <span matSuffix class="material-symbols-outlined thin md-light me-2" (click)="clearSearch()">close</span>
             </mat-form-field>
             @if (hasGenres()) {
-            <div class="">
+            <div class="pe-2">
               <mat-form-field appearance="outline" class="">
                 <mat-label>Genre</mat-label>
                 <mat-select multiple (selectionChange)="genresChanged()" [(ngModel)]="selectedGenres">

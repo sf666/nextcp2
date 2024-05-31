@@ -72,6 +72,13 @@
     max-width: 1700px;
 }
 
+.infobox {
+    padding-left  : 2rem;
+    padding-top   : 1rem;
+    padding-bottom: 2 rem;
+    align-self    : center;
+}
+
 .header-container {
     display       : flex;
     flex-direction: column;
