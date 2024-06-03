@@ -91,7 +91,7 @@
             </div>
             @if (hasGenres()) {
             <div class="pe-2">
-              <mat-form-field appearance="outline" class="">
+              <mat-form-field subscriptSizing="dynamic" appearance="outline" class="">
                 <mat-label>Genre</mat-label>
                 <mat-select multiple (selectionChange)="genresChanged()" [(ngModel)]="selectedGenres">
                   <mat-option value="NONE">NONE</mat-option>
