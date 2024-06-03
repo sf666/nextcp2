@@ -4,7 +4,7 @@
 // ============================================
 $grid-flex-basis     : 0rem;
 $grid-flex-min-width : 11rem;
-$grid-flex-max-width : 20rem;
+$grid-flex-max-width : 19rem;
 
 $grid-flex-mid-basis     : 0rem;
 $grid-flex-mid-min-width : 9rem;
@@ -17,9 +17,9 @@ $grid-flex-sm-max-width : 9rem;
 
 
 .albumImageContainer {
-    display    : flex;
-    position   : relative;
-    margin-left: 1.5rem;
+    display         : flex;
+    position        : relative;
+    background-color: rgb(17, 17, 17);
 
     flex-basis: $grid-flex-basis;
     min-width : $grid-flex-min-width;
@@ -38,33 +38,39 @@ $grid-flex-sm-max-width : 9rem;
     font-size     : 0.9rem;
     font-weight   : 500;
     letter-spacing: 0.08rem;
+
     &.small {
-        max-width : $grid-flex-mid-max-width;
+        max-width: $grid-flex-mid-max-width;
     }
 }
 
 
 // IMG & Title !
 .albumTitle {
-    color        : var(--snow-white);
-    font-weight  : 400;
-    margin-bottom: 0.5rem;
+    color      : var(--glas-white-2);
+    font-weight: 600;
 }
 
 .albumLayout {
-    flex          : 1 1 0;
-    display       : flex;
-    flex-direction: row;
-    flex-wrap     : wrap;
-    min-width     : 0px;
+    flex     : 1 1 0;
+    display  : flex;
+    flex-wrap: wrap;
+    min-width: 0px;
 }
 
 .albumDesc {
-    margin-left: 1rem;
-    margin-top : 1rem;
-    min-width  : 10rem;
-    width      : 100%;
-    flex       : 1 1 auto;
+    display        : flex;
+    flex-direction : column;
+    justify-content: center;
+
+    padding-left    : 16px;
+    padding-top     : 8px;
+    padding-bottom  : 8px;
+    min-width       : 10rem;
+    width           : 100%;
+    min-height      : 4rem;
+    flex            : 1 1 auto;
+    background-color: rgb(30, 30, 30);
 }
 
 .albumImageContainer img {
@@ -98,6 +104,7 @@ $grid-flex-sm-max-width : 9rem;
 
 .imgCardHeight {
     max-height: $imgCardWidth;
+
     &.small {
         max-height: $imgCardWidthSmall;
     }

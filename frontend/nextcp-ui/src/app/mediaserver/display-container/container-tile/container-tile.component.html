@@ -24,7 +24,9 @@
     </div>
     } @else {
     <div class="d-flex flex-column albumDesc">
-      <div class="playlistText">{{getOtherContainerHeadline(container)}}</div>
+      @if(getOtherContainerHeadline(container)) {
+        <div class="playlistText">{{getOtherContainerHeadline(container)}}</div>
+      }
       <div class="albumTitle">{{container.title}}</div>
     </div>
     }
