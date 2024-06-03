@@ -12,6 +12,16 @@
     color         : var(--snow-white);
 }
 
+// area right to the image
+.right-section {
+    display        : flex;
+    flex-direction : column;
+    justify-content: space-between;
+    max-width      : 750px;
+    min-height  : calc($top-header-Height - $top-header-Vertical-Indent);
+    max-height  : calc($top-header-Height - $top-header-Vertical-Indent);
+}
+
 .plainText {
     font-size  : 1rem;
     font-weight: 300;
@@ -74,7 +84,6 @@
 
 .infobox {
     padding-left  : 2rem;
-    padding-top   : 1rem;
     padding-bottom: 2 rem;
     align-self    : center;
 }
