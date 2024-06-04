@@ -10,14 +10,20 @@ import nextcp.dto.ServerPlaylists;
 public class MediaServerSseEvents
 {
     public static final String DEVICE_MEDIASERVER_PLAYLIST_STATE = "DEVICE_MEDIASERVER_PLAYLIST_STATE";
+    public static final String DEVICE_MEDIASERVER_RECENT_PLAYLIST_STATE = "DEVICE_MEDIASERVER_RECENT_PLAYLIST_STATE";
 
     
     @Autowired
     private SsePublisher ssePublisher = null;
     
     @EventListener
-    public void mediaServerChanged(ServerPlaylists serverPlaylists)
+    public void mediaServerPlaylistChanged(ServerPlaylists serverPlaylists)
     {
         ssePublisher.sendObjectAsJson(DEVICE_MEDIASERVER_PLAYLIST_STATE, serverPlaylists);
+    }
+    
+    public void mediaServerRecentPlaylistChanged(ServerPlaylists serverPlaylists)
+    {
+        ssePublisher.sendObjectAsJson(DEVICE_MEDIASERVER_RECENT_PLAYLIST_STATE, serverPlaylists);
     }
 }

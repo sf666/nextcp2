@@ -30,6 +30,7 @@ export class SseService {
 
   // MediaServer state changes
   mediaServerPlaylistChanged$: Subject<ServerPlaylists> = new Subject();
+  mediaServerRecentPlaylistChanged$: Subject<ServerPlaylists> = new Subject();
 
   // Playlist Events [ playlist items removed or added. repeat / shuffle states ]
   mediaRendererPlaylistStateChanged$: Subject<PlaylistState> = new Subject();
@@ -64,6 +65,7 @@ export class SseService {
 
     eventSource.addEventListener('DEVICE_MEDIASERVER_CHANGED', m => { this.sendNotification(this.mediaServerListChanged$, m) }, false);
     eventSource.addEventListener('DEVICE_MEDIASERVER_PLAYLIST_STATE', m => { this.sendNotification(this.mediaServerPlaylistChanged$, m) }, false);
+    eventSource.addEventListener('DEVICE_MEDIASERVER_RECENT_PLAYLIST_STATE', m => { this.sendNotification(this.mediaServerRecentPlaylistChanged$, m) }, false);
 
     eventSource.addEventListener('TOASTR_INFO', m => { this.sendNotification(this.toasterMessageReceived$, m) }, false);
     eventSource.addEventListener('RENDERER_CONFIG_CHANGED', m => { this.sendNotification(this.rendererConfigChanged$, m) }, false);

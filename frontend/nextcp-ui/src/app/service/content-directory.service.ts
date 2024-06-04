@@ -414,7 +414,7 @@ export class ContentDirectoryService {
   private updateSearchResultContainer(searchResultContainer: ContainerDto[]) {
     let ci = this.dtoGeneratorService.generateEmptyContainerItemDto();
     ci.containerDto = searchResultContainer;
-    ci.currentContainer.parentID = this.lastBrowseRequest.objectID;
+    ci.currentContainer.parentID = this.lastBrowseRequest?.objectID !== undefined ? this.lastBrowseRequest.objectID : "0";
     ci.currentContainer.title =
       '[' +
       this.lastSearchType +

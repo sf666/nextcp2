@@ -11,13 +11,14 @@ import { Component, Inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormField } from '@angular/material/form-field';
-import { MatIcon } from '@angular/material/icon';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { PlaylistService } from 'src/app/service/playlist.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { FormsModule, NgModel } from '@angular/forms';
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
+import { PlaylistContainerComponent } from './playlist-container/playlist-container.component';
 
 export enum PlaylistMode {
   Add,
@@ -28,7 +29,7 @@ export enum PlaylistMode {
 @Component({
   selector: 'app-playlist-management',
   standalone: true,
-  imports: [MatFormField, MatButton, MatInput, MatIcon, FormsModule],
+  imports: [MatFormField, MatButton, MatInput, MatIconModule, FormsModule, PlaylistContainerComponent],
   templateUrl: './add-playlist.component.html',
   styleUrl: './add-playlist.component.scss',
 })
@@ -79,11 +80,26 @@ export class AddPlaylistComponent {
     this.dialogRef.close();
   }
 
+  getRecentPlaylists(): ServerPlaylistDto[] {
+    if (this.serverPlaylistService?.recentServerPl?.serverPlaylists?.length > 0) {
+      return this.serverPlaylistService.recentServerPl.serverPlaylists.filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter.toLowerCase()));
+    }
+    return [];
+  }
+
+  getRecentPlaylistsCount() : number {
+    return this.getRecentPlaylists()?.length
+  }
+
   getServerPlaylists(): ServerPlaylistDto[] {
-    if (this.serverPlaylistService.serverPl.serverPlaylists) {
+    if (this.serverPlaylistService?.serverPl?.serverPlaylists?.length > 0) {
       return this.serverPlaylistService.serverPl.serverPlaylists.filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter.toLowerCase()));
     }
     return [];
+  }
+
+  getServerPlaylistsCount(): number {
+    return this.getServerPlaylists()?.length;
   }
 
   getOtherPlaylists(): ServerPlaylistDto[] {
@@ -92,7 +108,11 @@ export class AddPlaylistComponent {
     }
     return [];
   }
-
+  
+  getOtherPlaylistsCount(): number {
+    return this.getOtherPlaylists()?.length;
+  }
+  
   addTo(serverPlaylist: ServerPlaylistDto) {
     this.serverPlaylistService.addSongToServerPlaylist(
       this.musicItemToAdd.objectID,

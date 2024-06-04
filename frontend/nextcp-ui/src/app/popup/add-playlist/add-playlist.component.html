@@ -20,75 +20,48 @@
     <div class="popupDivider mt-2 mb-1">&nbsp;</div>
     <div class="popupBody">
         @if (isPlaylistMode(PlaylistModeEnum.Add) || isPlaylistMode(PlaylistModeEnum.Delete)) {
-        <div class="searchInput">
-            <mat-form-field class="w100" appearance="outline" class="setting-dropdown">
-                <input matInput type="text" [(ngModel)]="playlistFilter" placeholder="search for playlist">
-            </mat-form-field>
-        </div>
-        <div class="headline">
-            my playlists
-        </div>
-        <div class="playlist-list">
-            @for (playlist of getServerPlaylists(); track playlist) {
-            <div class="d-flex justify-content-between">
-                <div class="playlist-item" (click)="addTo(playlist)">
-                    <img src="{{playlist.albumArtUrl}}" class="playlist-img">
-                    <div class="playlist-item-text">
-                        <div>{{playlist.playlistName}}</div>
-                        <div class="fineText">
-                            <div>Text 1</div>
-                            <div>Text 2</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex align-self-center">
-                    @if(isPlaylistMode(PlaylistModeEnum.Add)) {
-                        <button mat-stroked-button class="my-buttons light-font" (click)="addTo(playlist)">
-                            <mat-icon class="material-symbols-outlined thin">playlist_add</mat-icon>
-                            <span class="button button-text">add track</span>
-                        </button>
-                    } @else {
-                        <button mat-stroked-button class="my-buttons light-font" (click)="deletePlaylist(playlist)">
-                            <mat-icon class="material-symbols-outlined thin">delete</mat-icon>
-                            <span class="button button-text">delete</span>
-                        </button>
-                    }
-                </div>
+            <div class="searchInput">
+                <mat-form-field class="w100" appearance="outline" class="setting-dropdown">
+                    <input matInput type="text" [(ngModel)]="playlistFilter" placeholder="search for playlist">
+                </mat-form-field>
             </div>
+            @if (getRecentPlaylistsCount() > 0) {
+                <div class="headline">
+                    recently used
+                </div>
+                <playlist-container
+                    [playlists]="getRecentPlaylists()"
+                    [playlistMode]="playlistMode"
+                    (addClicked)="addTo($event)"
+                    (deleteClicked)="deletePlaylist($event)">
+                </playlist-container>
             }
-        </div>
-        <div class="mt-4 headline">
-            other playlists
-        </div>
-        <div class="playlist-list">
-            @for (playlist of getOtherPlaylists(); track playlist) {
-            <div class="d-flex justify-content-between">
-                <div class="playlist-item" (click)="addTo(playlist)">
-                    <img src="{{playlist.albumArtUrl}}" class="playlist-img">
-                    <div class="playlist-item-text">
-                        <div>{{playlist.playlistName}}</div>
-                        <div class="fineText">
-                            <div>Text 1</div>
-                            <div>Text 2</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex align-self-center">
-                    @if(isPlaylistMode(PlaylistModeEnum.Add)) {
-                        <button mat-stroked-button class="my-buttons" (click)="addTo(playlist)">
-                            <mat-icon class="material-symbols-outlined thin">playlist_add</mat-icon>
-                            <span class="button button-text">add track</span>
-                        </button>
-                    } @else {
-                        <button mat-stroked-button class="my-buttons light-font" (click)="deletePlaylist(playlist)">
-                            <mat-icon class="material-symbols-outlined thin">delete</mat-icon>
-                            <span class="button button-text">delete</span>
-                        </button>
-                    }
-                </div>
+
+            <div class="headline">
+                my playlists
             </div>
+            @if (getServerPlaylistsCount() > 0) {
+                <playlist-container
+                    [playlists]="getServerPlaylists()"
+                    [playlistMode]="playlistMode"
+                    (addClicked)="addTo($event)"
+                    (deleteClicked)="deletePlaylist($event)">
+                </playlist-container>
+            } @else {
+                <div>no playlists found on server</div>                
             }
-        </div>
+            <div class="mt-4 headline">
+                other playlists
+            </div>
+
+            @if (getOtherPlaylistsCount() > 0) {
+                <playlist-container
+                    [playlists]="getOtherPlaylists()"
+                    [playlistMode]="playlistMode"
+                    (addClicked)="addTo($event)"
+                    (deleteClicked)="deletePlaylist($event)">
+                </playlist-container>
+            }
         } @else if (isPlaylistMode(PlaylistModeEnum.Create)) {
         <!-- create Playlist -->
         <div class="searchInput">

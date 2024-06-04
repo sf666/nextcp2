@@ -17,6 +17,13 @@ import { DeviceService } from './device.service';
 export class ServerPlaylistService {
   baseUri = '/MediaServerPlaylistService';
 
+
+  recentServerPl : ServerPlaylists = {
+    mediaServerUdn: '',
+    containerId: '',
+    serverPlaylists: [],
+  };
+
   // Default server based playlists
   serverPl: ServerPlaylists = {
     mediaServerUdn: '',
@@ -41,6 +48,10 @@ export class ServerPlaylistService {
       }
     });
 
+    sseService.mediaServerRecentPlaylistChanged$.subscribe((data) => {
+      this.recentServerPl = data;
+    })
+
     deviceService.mediaServerChanged$.subscribe((server) =>
       this.afterMediaServerChanged(server),
     );
@@ -49,6 +60,7 @@ export class ServerPlaylistService {
   private afterMediaServerChanged(server: MediaServerDto) {
     this.selectedMediaServer = server;
     this.updateServerAccessiblePlaylists();
+    this.updateRecentServerAccessiblePlaylists();
   }
 
   //
@@ -63,6 +75,15 @@ export class ServerPlaylistService {
         this.serverPl.serverPlaylists?.forEach((element) => {
           this.serverPlPlaylistIds.push(element.playlistId);
         });
+      });
+  }
+
+  public updateRecentServerAccessiblePlaylists() {
+    const uri = '/getRecentServerPlaylists';
+    this.httpService
+      .post<ServerPlaylists>(this.baseUri, uri, this.selectedMediaServer.udn)
+      .subscribe((data) => {
+        this.recentServerPl = data;
       });
   }
 
