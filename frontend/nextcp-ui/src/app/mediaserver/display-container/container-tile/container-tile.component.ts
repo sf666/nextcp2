@@ -22,23 +22,19 @@ export class ContainerTileComponent {
      return this.filteredContainer();
   }
 
-  private filteredContainer(filter?: boolean): ContainerDto[] {
-    if (filter) {
-      let tracks: Array<ContainerDto>;
-      if (this.quickSearchString) {
-        tracks = this.container.filter((item) =>
-          this.doFilterText(item.title, this.quickSearchString)
-        );
-      } else {
-        tracks = this.container;
-      }
-      if (this?.selectedGenres?.length > 0) {
-        tracks = tracks.filter((item) => this.doFilterGenreByContainer(item));
-      }
-      return tracks;
+  private filteredContainer(): ContainerDto[] {
+    let tracks: Array<ContainerDto>;
+    if (this.quickSearchString) {
+      tracks = this.container.filter((item) =>
+        this.doFilterText(item.title, this.quickSearchString)
+      );
     } else {
-      return this.container;
+      tracks = this.container;
     }
+    if (this?.selectedGenres?.length > 0) {
+      tracks = tracks.filter((item) => this.doFilterGenreByContainer(item));
+    }
+    return tracks;
   }
 
   /**

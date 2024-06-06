@@ -49,12 +49,14 @@ export class ServerPlaylistService {
     });
 
     sseService.mediaServerRecentPlaylistChanged$.subscribe((data) => {
+      console.log("updating recently used playlists ... ");
       this.recentServerPl = data;
     })
 
-    deviceService.mediaServerChanged$.subscribe((server) =>
-      this.afterMediaServerChanged(server),
-    );
+    deviceService.mediaServerChanged$.subscribe((server) => {
+      console.log("updating current media server ... ");
+      this.afterMediaServerChanged(server);
+    })
   }
 
   private afterMediaServerChanged(server: MediaServerDto) {
