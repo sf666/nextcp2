@@ -16,6 +16,7 @@ import javax.xml.xpath.XPathFactory;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.support.contentdirectory.DIDLParser;
 import org.jupnp.support.model.DIDLContent;
+import org.jupnp.support.model.container.Container;
 import org.jupnp.support.model.item.Item;
 import org.jupnp.support.model.item.PlaylistItem;
 import org.slf4j.Logger;
@@ -37,6 +38,7 @@ import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.ServerPlaylists;
 import nextcp.dto.ToastrMessage;
 import nextcp.dto.UpdateStarRatingRequest;
+import nextcp.service.ToastEventPublisher;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateObjectInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateObjectOutput;
@@ -71,6 +73,11 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	@Autowired
 	private ApplicationEventPublisher publisher = null;
+
+	@Autowired
+	private ToastEventPublisher toast = null;
+	
+	
 
 	public UmsServerDevice(RemoteDevice device) {
 		super(device);
@@ -301,7 +308,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	}
 
 	@Override
-	public Item createPlaylist(String parentContainerId, String playlistName) throws Exception {
+	public Container createPlaylist(String parentContainerId, String playlistName) throws Exception {
 		CreateObjectInput inp = new CreateObjectInput();
 		inp.ContainerID = parentContainerId;
 		PlaylistItem pi = new PlaylistItem();
@@ -318,9 +325,8 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			CreateObjectOutput out = getContentDirectoryService().createObject(inp);
 			log.debug("created object {} ", out.Result);
 			content = parser.parse(out.Result);
-			org.jupnp.support.model.item.Item newPL = content.getItems().get(0);
+			Container newPL = content.getFirstContainer();
 			return newPL;
-
 		} catch (GenActionException e) {
 			String errorText = extractErrorText(e.description);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
