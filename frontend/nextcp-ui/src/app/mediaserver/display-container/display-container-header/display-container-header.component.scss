@@ -92,6 +92,10 @@
     flex          : 1 1 auto;
 }
 
+.app-input {
+    --mat-form-field-container-height : 56px;
+}
+
 // Buttons
 
 // Button Group

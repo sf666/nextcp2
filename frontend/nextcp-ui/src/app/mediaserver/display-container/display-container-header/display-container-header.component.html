@@ -85,7 +85,7 @@
           <!-- current content search box -->
           <div class="d-flex justify-content-between d-none mt-4 d-sm-flex">
             <div class="d-flex w-100">
-              <mat-form-field subscriptSizing="dynamic" appearance="outline" class="growingContainer me-2">
+              <mat-form-field subscriptSizing="dynamic" appearance="outline" class="app-input growingContainer me-2">
                 <mat-label>search in this page</mat-label>
                 <span matPrefix class="material-symbols-outlined thin md-light ms-2">search</span>
                 <input [(ngModel)]="quickSearchString" matInput placeholder="search content" #searchInput (keyup)="keyUp($event)">
@@ -94,7 +94,7 @@
             </div>
             @if (hasGenres()) {
             <div class="pe-2">
-              <mat-form-field subscriptSizing="dynamic" appearance="outline" class="">
+              <mat-form-field subscriptSizing="dynamic" appearance="outline" class="app-input">
                 <mat-label>Genre</mat-label>
                 <mat-select multiple (selectionChange)="genresChanged()" [(ngModel)]="selectedGenres">
                   <mat-option value="NONE">NONE</mat-option>

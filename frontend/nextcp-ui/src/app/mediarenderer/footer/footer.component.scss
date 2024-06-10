@@ -1,12 +1,5 @@
 // individual style for mat-slider component
 @use '@angular/material'as mat;
-$slider-theme: mat.define-dark-theme((color: (primary: mat.define-palette(mat.$cyan-palette),
-            accent: mat.define-palette(mat.$cyan-palette),
-            warn: mat.define-palette(mat.$cyan-palette),
-        ),
-    ));
-@include mat.slider-color($slider-theme);
-
 @import "app-variables";
 @import "pantone";
 
@@ -65,7 +58,7 @@ mat-slider {
     margin-bottom: 24px;
 }
 
-.button-group {
+.player-button-group {
     display        : flex;
     flex           : 3 1;
     align-self     : center;

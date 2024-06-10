@@ -10,11 +10,11 @@ $col-4    : $amber-pantone-6;
 $col-grey : $col-4;
 
 .mdc-button {
-    letter-spacing : 0.04rem;
-    font-weight    : 600;
+    letter-spacing : 0.07rem;
+    font-weight    : 500;
     align-items    : center;
     justify-content: flex-start;
-    width: 200px;
+    width          : 200px;
 }
 
 a {
@@ -44,7 +44,9 @@ a {
 }
 
 .margin-reactive {
-    margin-left: 1rem;
+    margin-left                       : 1rem;
+    --mdc-text-button-container-height: 36px;
+    --mdc-text-button-label-text-color: rgb(255, 255, 255);
 }
 
 @media only screen and (max-width: 900px) {

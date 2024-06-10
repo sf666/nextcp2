@@ -3,11 +3,11 @@
 // variables used by the application 
 // ===================================================================
 
-$paddingLeftColumn             : 1rem;
-$fontNormal                    : 1.1rem;
-$cardWidth                     : 12rem;
-$cardWidthSmall                : 10rem;
-$cardBorderWidth               : 1px;
+$paddingLeftColumn : 1rem;
+$fontNormal        : 1.1rem;
+$cardWidth         : 12rem;
+$cardWidthSmall    : 10rem;
+$cardBorderWidth   : 1px;
 
 $section-button-col            : $pantone-429-C;
 $section-button-col-back       : $pantone-433-C;
@@ -15,7 +15,7 @@ $section-button-col-back-hover : $pantone-309-C;
 $border-primary                : $blue-pantone-2;
 
 // added hover effect für bootstrap card images
-$imgCardWidth : calc(#{$cardWidth} - 2*#{$cardBorderWidth});
+$imgCardWidth      : calc(#{$cardWidth} - 2*#{$cardBorderWidth});
 $imgCardWidthSmall : calc(#{$cardWidthSmall} - 2*#{$cardBorderWidth});
 
 // display container top header 
@@ -25,7 +25,7 @@ $top-header-Vertical-Indent     : 120px;
 $top-header-Vertical-Indent-mid : 800px;
 
 //
-// Root imports. Override Material Design components here.
+// Root imports.
 //
 
 :root {
@@ -63,11 +63,4 @@ $top-header-Vertical-Indent-mid : 800px;
     --sidebar-width-mid: 220px;
     --sidebar-width-min: 55px;
     --nav-height       : 75px;
-
-    //
-    // Material Design overrides.
-    //
-
-    --mdc-dialog-container-color       : rgb(18, 18, 18);
-    --mat-select-panel-background-color: rgb(18, 18, 18);
 }

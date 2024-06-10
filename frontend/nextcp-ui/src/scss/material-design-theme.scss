@@ -3,8 +3,6 @@
 // Be sure that you only ever include this mixin once!
 @use '@angular/material' as mat;
 
-@include mat.core();
-
 // Read https://dev.to/nephiw/theming-material-design-mm3 in case of having trouble applying an individual color theme.
 // Merging maps :
 // https://stackoverflow.com/questions/43438305/how-to-change-font-color-of-primary-palette-in-angular-material2
@@ -13,26 +11,35 @@
 @import 'custom_variables';
 @import 'nextcp-palette';
 
-$custom-typography: mat.define-typography-config($font-family: 'HK Grotesk, Lato, Quicksand, sans-serif',
-);
+$my-theme: mat.define-theme((
+  color: (
+    theme-type: dark,
+    primary: mat.$violet-palette,
+  ),
+  typography: (
+    brand-family: 'HK Grotesk, Lato, Quicksand, sans-serif',    
+    bold-weight: 900
+  ),
+  density: (
+    scale: -1
+  )
+));
 
-$my-app-primary: mat.define-palette($md-primary); // In this case the 400 pallette is used as default, using sometimes 100 & 700
-$my-app-accent : mat.define-palette($md-accent, 400, 100, 900);
-$my-app-warn   : mat.define-palette($md-warn, 300, 100, 700);
+html {
 
+  @include mat.all-component-themes($my-theme);
 
-$my-app-theme: mat.define-dark-theme((color: (
-      primary: $my-app-primary,
-      accent: $my-app-accent,
-      warn: $my-app-warn,
-    ),
-    // Only include `typography` and `density` in the default dark theme.
-    typography: $custom-typography,
-    density: 0,
-  ));
+  // Emit theme-dependent styles for common features used across multiple components.
+//  @include mat.core-theme($my-theme);
 
-// Apply the dark theme by default
-@include mat.all-component-themes($my-app-theme);
+  // Emit styles for MatButton based on `$my-theme`. Because the configuration
+  // passed to `define-theme` omits typography, `button-theme` will not
+  // emit any typography styles.
+//  @include mat.button-theme($my-theme);
 
-// @include mat.core-theme($my-app-theme);
-// @include mat.button-theme($my-app-theme);
+  // Include the theme mixins for other components you use here.
+}
+
+:root {
+  --mdc-outlined-text-field-label-text-font : HK Grotesk, Lato, Quicksand, sans-serif;
+}
