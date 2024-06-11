@@ -1,13 +1,5 @@
 @import 'app-variables';
 @import "custom_variables";
-@import 'pantone';
-@import 'app-icons';
-
-$col-1    : $amber-pantone-3;
-$col-2    : $amber-pantone-4;
-$col-3    : $amber-pantone-5;
-$col-4    : $amber-pantone-6;
-$col-grey : $col-4;
 
 :host {
     --mdc-text-button-container-height: 36px;
@@ -15,7 +7,7 @@ $col-grey : $col-4;
 }
 
 .mdc-button {
-    letter-spacing : 0.07rem;
+    letter-spacing : 0.04rem;
     font-weight    : 500;
     align-items    : center;
     justify-content: flex-start;
