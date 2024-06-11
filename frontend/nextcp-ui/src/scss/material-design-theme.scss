@@ -11,23 +11,27 @@
 @import 'custom_variables';
 @import 'nextcp-palette';
 
+@include mat.core();
+
+
 $my-theme: mat.define-theme((
   color: (
     theme-type: dark,
-    primary: mat.$violet-palette,
+    primary: mat.$blue-palette,
+    tertiary: mat.$rose-palette,
   ),
   typography: (
-    brand-family: 'HK Grotesk, Lato, Quicksand, sans-serif',    
+    plain-family: "HK Grotesk, Lato, Quicksand, sans-serif",
+    brand-family: "HK Grotesk, Lato, Quicksand, sans-serif",
     bold-weight: 900
   ),
   density: (
-    scale: -1
+    scale: -2
   )
 ));
 
 html {
 
-  @include mat.all-component-themes($my-theme);
 
   // Emit theme-dependent styles for common features used across multiple components.
 //  @include mat.core-theme($my-theme);
@@ -41,7 +45,10 @@ html {
 }
 
 :root {
-  --mdc-outlined-text-field-label-text-font : HK Grotesk, Lato, Quicksand, sans-serif;
+//  --mdc-outlined-text-field-label-text-font : HK Grotesk, Lato, Quicksand, sans-serif;
+  @include mat.all-component-themes($my-theme);
+  @include mat.color-variants-backwards-compatibility($my-theme);
+  @include mat.typography-hierarchy($my-theme);  // typography styles could be included too  
 }
 
 .cdk-overlay-pane {
