@@ -1,3 +1,9 @@
+:host {
+    --mdc-switch-track-height : 20px;
+    --mat-switch-with-icon-handle-size : 20px;
+    --mdc-switch-track-width : 44px;    
+}
+
 input {
     &.section {
         width    : 100%;
