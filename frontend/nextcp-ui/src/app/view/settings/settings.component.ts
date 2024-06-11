@@ -5,34 +5,63 @@ import { SystemService } from './../../service/system.service';
 import { DeviceService } from './../../service/device.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { RatingServiceService } from './../../service/rating-service.service';
-import { UiClientConfig, MediaServerDto, RendererDeviceConfiguration, MediaRendererDto, ServerDeviceConfiguration } from './../../service/dto.d';
+import {
+  UiClientConfig,
+  MediaServerDto,
+  RendererDeviceConfiguration,
+  MediaRendererDto,
+  ServerDeviceConfiguration,
+} from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LayoutService } from 'src/app/service/layout.service';
-import { MatSlideToggle } from '@angular/material/slide-toggle';
-import { MatButton } from '@angular/material/button';
-import { MatInput } from '@angular/material/input';
-import { MatOption } from '@angular/material/core';
-import { FormsModule } from '@angular/forms';
-import { MatSelect } from '@angular/material/select';
-import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatOptionModule } from '@angular/material/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import {
+  MatFormFieldModule,
+  MatLabel,
+  MatSuffix,  
+} from '@angular/material/form-field';
 
 @Component({
-    selector: 'settings',
-    templateUrl: './settings.component.html',
-    styleUrls: ['./settings.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: true,
-    imports: [MatFormField, MatLabel, MatSelect, FormsModule, MatOption, MatInput, MatSuffix, MatButton, MatSlideToggle]
+  selector: 'settings',
+  templateUrl: './settings.component.html',
+  styleUrls: ['./settings.component.scss'],
+  standalone: true,
+  imports: [
+    MatFormFieldModule,
+    MatLabel,
+    MatSelectModule,
+    FormsModule,
+    MatOptionModule,
+    MatInputModule,
+    MatSuffix,
+    MatButtonModule,
+    MatSlideToggleModule,
+    ReactiveFormsModule
+  ],
 })
 export class SettingsComponent implements OnInit {
-
   code: string;
   public showOnlyActiveServer: boolean = true;
   public showOnlyActiveRenderer: boolean = true;
 
-  none_serverdevice: MediaServerDto = { 'udn': '', 'friendlyName': '', extendedApi: false };
-  none_renderdevice: MediaRendererDto = { 'udn': '', 'friendlyName': '', services: [], allSources: [], currentSource: null };
+  none_serverdevice: MediaServerDto = {
+    udn: '',
+    friendlyName: '',
+    extendedApi: false,
+  };
+  none_renderdevice: MediaRendererDto = {
+    udn: '',
+    friendlyName: '',
+    services: [],
+    allSources: [],
+    currentSource: null,
+  };
   newProfileName: string;
 
   constructor(
@@ -44,13 +73,13 @@ export class SettingsComponent implements OnInit {
     public systemService: SystemService,
     public myMusicService: MyMusicService,
     private layoutService: LayoutService,
-    public configService: ConfigurationService) {
-
+    public configService: ConfigurationService
+  ) {
     var currentLocation = window.location;
     if (this.protocolHandlerAvailable()) {
       const url = `http://${currentLocation.hostname}:${currentLocation.port}/SystemService/spotifyCallbackOAuth/%s`;
-      console.log("register protocolHandler : " + url);
-      navigator.registerProtocolHandler("web+nextcp", url);
+      console.log('register protocolHandler : ' + url);
+      navigator.registerProtocolHandler('web+nextcp', url);
     } else {
       console.log("browser doesn't support registration of protocolHandler");
     }
@@ -60,7 +89,9 @@ export class SettingsComponent implements OnInit {
     this.layoutService.setFramedViewWithoutNavbar();
   }
 
-  showAdvancedRendererSettings(rendererConfig: RendererDeviceConfiguration): boolean {
+  showAdvancedRendererSettings(
+    rendererConfig: RendererDeviceConfiguration
+  ): boolean {
     if (rendererConfig.deviceDriverType) {
       return true;
     } else {
@@ -68,10 +99,11 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-
   public getMediaRenderer(): RendererDeviceConfiguration[] {
     if (this.showOnlyActiveRenderer) {
-      return this.configService.getRendererDevicesConfig().filter(renderer => this.isRendererConfigActive(renderer));
+      return this.configService
+        .getRendererDevicesConfig()
+        .filter((renderer) => this.isRendererConfigActive(renderer));
     } else {
       return this.configService.getRendererDevicesConfig();
     }
@@ -80,7 +112,9 @@ export class SettingsComponent implements OnInit {
   public getMediaServer(): ServerDeviceConfiguration[] {
     if (this.configService?.getServerConfig()?.serverDevices) {
       if (this.showOnlyActiveServer) {
-        return this.configService.getServerConfig().serverDevices.filter(server => this.isServerConfigActive(server));
+        return this.configService
+          .getServerConfig()
+          .serverDevices.filter((server) => this.isServerConfigActive(server));
       } else {
         return this.configService.getServerConfig().serverDevices;
       }
@@ -120,7 +154,7 @@ export class SettingsComponent implements OnInit {
 
   sendSpotifyCode(): void {
     this.systemService.setSpotifyCode(this.code);
-    this.code = "";
+    this.code = '';
   }
 
   registerAppAtSpotify(): void {
@@ -145,11 +179,19 @@ export class SettingsComponent implements OnInit {
 
   selectConfig(config: UiClientConfig): void {
     this.configService.selectClientConfig(config.uuid);
-    if (!this.deviceService.getMediaRendererList().some(renderer => renderer.udn === config.defaultMediaRenderer.udn)) {
-      this.toastService.info("media renderer is not available", "ATTENTION");
+    if (
+      !this.deviceService
+        .getMediaRendererList()
+        .some((renderer) => renderer.udn === config.defaultMediaRenderer.udn)
+    ) {
+      this.toastService.info('media renderer is not available', 'ATTENTION');
     }
-    if (!this.deviceService.getMediaServerList().some(device => device.udn === config.defaultMediaServer.udn)) {
-      this.toastService.info("media server is not available", "ATTENTION");
+    if (
+      !this.deviceService
+        .getMediaServerList()
+        .some((device) => device.udn === config.defaultMediaServer.udn)
+    ) {
+      this.toastService.info('media server is not available', 'ATTENTION');
     }
   }
 
@@ -178,7 +220,9 @@ export class SettingsComponent implements OnInit {
   }
 
   rescan(): void {
-    this.contentDirectoryService.rescanContent(this.deviceService.selectedMediaServerDevice.udn);
+    this.contentDirectoryService.rescanContent(
+      this.deviceService.selectedMediaServerDevice.udn
+    );
   }
 
   extendedApiNotAvailable(): boolean {
@@ -199,8 +243,9 @@ export class SettingsComponent implements OnInit {
 
   renameProfile(): void {
     if (this.newProfileName) {
-      this.configService.getActiveClientConfig().clientName = this.newProfileName;
-      this.newProfileName = "";
+      this.configService.getActiveClientConfig().clientName =
+        this.newProfileName;
+      this.newProfileName = '';
     }
   }
 
@@ -209,9 +254,9 @@ export class SettingsComponent implements OnInit {
   }
 
   noRendererSelected(): void {
-    this.configService.clientConfig.defaultMediaRenderer = this.none_renderdevice;
+    this.configService.clientConfig.defaultMediaRenderer =
+      this.none_renderdevice;
   }
-
 
   public get currentMediaServer(): MediaServerDto {
     return this.deviceService.selectedMediaServerDevice;

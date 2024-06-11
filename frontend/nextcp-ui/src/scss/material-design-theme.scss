@@ -43,3 +43,7 @@ html {
 :root {
   --mdc-outlined-text-field-label-text-font : HK Grotesk, Lato, Quicksand, sans-serif;
 }
+
+.cdk-overlay-pane {
+  position: absolute;
+}
