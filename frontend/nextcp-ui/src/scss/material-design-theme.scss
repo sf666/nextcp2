@@ -7,10 +7,6 @@
 // Merging maps :
 // https://stackoverflow.com/questions/43438305/how-to-change-font-color-of-primary-palette-in-angular-material2
 
-@import 'pantone';
-@import 'custom_variables';
-@import 'nextcp-palette';
-
 @include mat.core();
 
 
@@ -49,8 +45,4 @@ html {
   @include mat.all-component-themes($my-theme);
   @include mat.color-variants-backwards-compatibility($my-theme);
   @include mat.typography-hierarchy($my-theme);  // typography styles could be included too  
-}
-
-.cdk-overlay-pane {
-  position: absolute;
 }

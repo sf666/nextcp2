@@ -52,7 +52,7 @@
 </div>
 
 <div class="section head">Server Configuration
-  <mat-slide-toggle class="ms-4" [(ngModel)]="showOnlyActiveServer">
+  <mat-slide-toggle color="accent" class="ms-4" [(ngModel)]="showOnlyActiveServer">
     show only online server
   </mat-slide-toggle>
 </div>
@@ -68,7 +68,7 @@
     <div class="media-device">
       <div class="d-flex header">
         <div class="no-wrap title">{{serverConfig.mediaServer.friendlyName}}</div>
-        <mat-slide-toggle class="ms-2" [(ngModel)]="serverConfig.enabled">
+        <mat-slide-toggle color="primary" class="ms-2" [(ngModel)]="serverConfig.enabled">
           Enable
         </mat-slide-toggle>
       </div>
@@ -112,7 +112,7 @@
 </div>
 
 <div class="section head">Renderer Configuration
-  <mat-slide-toggle class="ms-4" [(ngModel)]="showOnlyActiveRenderer">
+  <mat-slide-toggle color="accent" class="ms-4" [(ngModel)]="showOnlyActiveRenderer">
     show only online renderer
   </mat-slide-toggle>
 </div>
@@ -128,7 +128,7 @@
     <div class="media-container m-3">
       <div class="media-device">
         <div class="no-wrap title">{{rendererConfig.mediaRenderer.friendlyName}}
-          <mat-slide-toggle class="ms-2" [(ngModel)]="rendererConfig.active">
+          <mat-slide-toggle color="primary" class="ms-2" [(ngModel)]="rendererConfig.active">
             Enable
           </mat-slide-toggle>
         </div>
@@ -206,8 +206,8 @@
 }
 <div class="section subhead d-flex flex-column">
   <div class="d-flex flex-wrap">
-    <button mat-stroked-button class="ms-2 mb-2 my-buttons" (click)="rescan()" [disabled]="extendedApiNotAvailable()">rescan media library</button>
-    <button mat-stroked-button class="ms-2 mb-2 my-buttons" (click)="myMusicService.backupLikedAlbums()" [disabled]="extendedApiNotAvailable()">
+    <button mat-stroked-button color="" class="ms-2 mb-2 my-buttons" (click)="rescan()" [disabled]="extendedApiNotAvailable()">rescan media library</button>
+    <button mat-stroked-button color="warn" class="ms-2 mb-2 my-buttons" (click)="myMusicService.backupLikedAlbums()" [disabled]="extendedApiNotAvailable()">
       backup liked albums
     </button>
     <button mat-stroked-button class="ms-2 mb-2 my-buttons" (click)="myMusicService.restoreLikedAlbums()" [disabled]="extendedApiNotAvailable()">
