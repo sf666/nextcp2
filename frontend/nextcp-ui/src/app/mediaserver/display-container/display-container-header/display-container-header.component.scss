@@ -135,6 +135,12 @@
     }
 }
 
+.btn-play-shuffle {
+    background-color: rgb(0, 160, 160);
+    &:hover {
+        background-color: rgb(0, 190, 190);
+    }}
+
 .btn-play {
     background-color: rgb(0, 112, 239);
     width           : 48px;
