@@ -128,7 +128,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     return this.allTracksSameMusicBrainzReleaseId_;
   }
 
-  isContainerAlbum(): boolean {
+  get isContainerAlbum(): boolean {
     // TODO can/should also be identified by other means
     return this.allTracksSameMusicBrainzReleaseId_;
   }
