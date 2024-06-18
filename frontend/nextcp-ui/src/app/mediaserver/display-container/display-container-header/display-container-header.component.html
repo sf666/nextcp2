@@ -96,9 +96,9 @@
             <div class="pe-2">
               <mat-form-field subscriptSizing="dynamic" appearance="outline" class="app-input">
                 <mat-label>Genre</mat-label>
-                <mat-select multiple (selectionChange)="genresChanged()" [(ngModel)]="selectedGenres">
+                <mat-select multiple [(ngModel)]="selectedGenres">
                   <mat-option value="NONE">NONE</mat-option>
-                  @for (genre of genresListSorted; track genre) {
+                  @for (genre of genresListSorted(); track genre) {
                   <mat-option [value]="genre">{{genre}}</mat-option>
                   }
                 </mat-select>

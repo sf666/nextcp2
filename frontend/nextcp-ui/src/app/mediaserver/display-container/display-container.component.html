@@ -14,14 +14,14 @@
       [contentDirectoryService]="contentHandler.contentDirectoryService"
 
       [(listView)]="listView"
+      [(quickSearchString)]="displayFilterString"
+      [(selectedGenres)]="selectedGenres"
 
       (playClicked)="playPlaylist($event)"
       (shuffleClicked)="shufflePlaylist($event)"
       (playClicked)="playPlaylist($event)"
       (playClicked)="playPlaylist($event)"
       (addToPlaylistClicked)="addPlaylist($event)"
-      (newQuickSearch)="displayFilterChanged($event)"
-      (newSelectedGenres)="displayFilterGenreChanged($event)"
     />
     </div>
   }
@@ -43,7 +43,7 @@ Main Content
           [smallIcons]="this.allMusicTracks.length > 0" 
           [container]="playlistList"
           [quickSearchString]="displayFilterString()"
-          [selectedGenres]="selectedGenres"
+          [selectedGenres]="selectedGenres()"
           (browseClicked)="browseTo($event)">
         </container-tile>
       </div>
@@ -58,7 +58,7 @@ Main Content
           [smallIcons]="this.allMusicTracks.length > 0" 
           [container]="albumList"
           [quickSearchString]="displayFilterString()"
-          [selectedGenres]="selectedGenres"
+          [selectedGenres]="selectedGenres()"
           (browseClicked)="browseTo($event)">
         </container-tile>
       </div>
@@ -69,7 +69,7 @@ Main Content
           [isListView]="isListView()"
           [contentDirectoryService]="contentHandler.contentDirectoryService"
           [quickSearchString]="displayFilterString()"
-          [selectedGenres]="selectedGenres"
+          [selectedGenres]="selectedGenres()"
           [extendedApi]="extendedApi"
           (playItemClicked)="playItem($event)"
           (addItemToPlaylistClicked)="addItemToPlaylist($event)"
@@ -84,7 +84,7 @@ Main Content
         <container-tile 
           [smallIcons]="this.allMusicTracks.length > 0" 
           [container]="containerList"
-          [selectedGenres]="selectedGenres"
+          [selectedGenres]="selectedGenres()"
           [quickSearchString]="displayFilterString()"
           (browseClicked)="browseTo($event)">
         </container-tile>

@@ -1,24 +1,11 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  input,
-  model,
-  output,
-} from '@angular/core';
+import { Component, OnInit, input, model, output, signal } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatOption, MatSelectModule } from '@angular/material/select';
 import { ContentDirectoryService } from 'src/app/service/content-directory.service';
-import {
-  ContainerDto,
-  ContainerItemDto,
-  MusicItemDto,
-} from 'src/app/service/dto';
+import { ContainerDto, MusicItemDto } from 'src/app/service/dto';
 import { MyMusicService } from 'src/app/service/my-music.service';
 import { BackgroundImageService } from 'src/app/util/background-image.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
@@ -42,20 +29,19 @@ import { TimeDisplayService } from 'src/app/util/time-display.service';
 export class DisplayContainerHeaderComponent implements OnInit {
   contentDirectoryService = input.required<ContentDirectoryService>();
   listView = model<boolean>();
+  quickSearchString = model<string>();
+  selectedGenres = model<Array<string>>([]);
 
   playClicked = output<ContainerDto>();
   shuffleClicked = output<ContainerDto>();
   addToPlaylistClicked = output<ContainerDto>();
-  newQuickSearch = output<string>();
-  newSelectedGenres = output<Array<string>>();
 
+  genresListSorted = signal<Array<String>>([]);
+ 
   genresForm = new FormControl('');
 
   // search
-  quickSearchString: string;
   genresList: Set<String>;
-  genresListSorted: Array<String>;
-  selectedGenres: Array<string> = [];
 
   // like member
   currentAlbumLiked = false;
@@ -92,10 +78,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
     return this.contentDirectoryService().albumList_;
   }
 
-  genresChanged() {
-    this.newSelectedGenres.emit(this.selectedGenres);
-  }
-
   private fillGenres(): void {
     this.genresList = new Set();
     this.musicTracks?.forEach((value) => {
@@ -115,7 +97,9 @@ export class DisplayContainerHeaderComponent implements OnInit {
       }
     });
 
-    this.genresListSorted = [...this.genresList].sort();
+    console.log("sorting genres ... ");
+    const sortedList = [...this.genresList].sort();
+    this.genresListSorted.set(sortedList);
   }
 
   private checkLikeStatus() {
@@ -156,14 +140,11 @@ export class DisplayContainerHeaderComponent implements OnInit {
   keyUp(event: KeyboardEvent): void {
     if (event.key === 'Escape') {
       this.clearSearch();
-    } else {
-      this.newQuickSearch.emit(this.quickSearchString);
     }
   }
 
   public clearSearch(): void {
-    this.quickSearchString = '';
-    this.newQuickSearch.emit(this.quickSearchString);
+    this.quickSearchString.set('');
   }
 
   //

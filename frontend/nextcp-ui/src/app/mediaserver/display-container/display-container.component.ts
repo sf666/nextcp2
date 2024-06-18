@@ -83,11 +83,8 @@ export class DisplayContainerComponent {
   @Output() itemDeleted = new EventEmitter<MusicItemDto>();
 
   listView = signal<boolean>(true);
-
   displayFilterString = signal<string>("");
-  genresList: Set<String>;
-  genresListSorted: Array<String>;
-  selectedGenres: Array<string> = [];
+  selectedGenres = signal<Array<string>>([]);
 
   constructor(
     public playlistService: PlaylistService,
@@ -100,16 +97,6 @@ export class DisplayContainerComponent {
 
   domChange(event: any): void {
     console.log('DOM changed event ... ');
-  }
-
-  // quick search callbacks
-
-  displayFilterChanged(newQuickSerchText: string) {
-    this.displayFilterString.set(newQuickSerchText);
-  }
-
-  displayFilterGenreChanged(newGenres : Array<string>) {
-    this.selectedGenres = newGenres;
   }
 
   /**
