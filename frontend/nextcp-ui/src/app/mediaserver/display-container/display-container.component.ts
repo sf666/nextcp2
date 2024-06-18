@@ -82,7 +82,7 @@ export class DisplayContainerComponent {
   @Output() browseFinish = new EventEmitter<ContainerItemDto>();
   @Output() itemDeleted = new EventEmitter<MusicItemDto>();
 
-  listView = true;
+  listView = signal<boolean>(true);
 
   displayFilterString = signal<string>("");
   genresList: Set<String>;
@@ -163,11 +163,6 @@ export class DisplayContainerComponent {
   // Like section
   // ==============================================================================
 
-  toggleListView(): void {
-    this.listView = !this.listView;
-    console.log('list view is now : ' + this.listView);
-  }
-
   playPlaylist(container: ContainerDto): void {
     this.playlistService.addContainerToPlaylistAndPlay(container, false);
   }
@@ -183,10 +178,6 @@ export class DisplayContainerComponent {
   get allMusicTracks() {
     return this.musicTracks;
   }
-
-
-
-
 
   get albumList(): ContainerDto[] {
     return this.albums;
@@ -206,7 +197,7 @@ export class DisplayContainerComponent {
   }
 
   isListView(): boolean {
-    return this.listView;
+    return this.listView();
   }
 
   public browseToOid(
