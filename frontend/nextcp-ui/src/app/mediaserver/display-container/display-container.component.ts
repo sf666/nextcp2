@@ -20,6 +20,7 @@ import {
   Input,
   Output,
   EventEmitter,
+  signal,
 } from '@angular/core';
 import { debounce } from 'src/app/global';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -83,20 +84,14 @@ export class DisplayContainerComponent {
 
   listView = true;
 
-  displayFilterString: string;
+  displayFilterString = signal<string>("");
   genresList: Set<String>;
   genresListSorted: Array<String>;
   selectedGenres: Array<string> = [];
 
   constructor(
-    private myMusicService: MyMusicService,
-    private backgroundImageService: BackgroundImageService,
-    private sseService: SseService,
-    private timeDisplayService: TimeDisplayService,
     public playlistService: PlaylistService,
     public transportService: TransportService,
-    private dtoGeneratorService: DtoGeneratorService,
-    private songOptionsServiceService: SongOptionsServiceService,
     private configurationService: ConfigurationService,
     public trackQualityService: TrackQualityService
   ) {
@@ -105,13 +100,12 @@ export class DisplayContainerComponent {
 
   domChange(event: any): void {
     console.log('DOM changed event ... ');
-    // TODO implement ScrollTo OID
   }
 
   // quick search callbacks
 
   displayFilterChanged(newQuickSerchText: string) {
-    this.displayFilterString = newQuickSerchText;
+    this.displayFilterString.set(newQuickSerchText);
   }
 
   displayFilterGenreChanged(newGenres : Array<string>) {

@@ -42,7 +42,7 @@ Main Content
         <container-tile 
           [smallIcons]="this.allMusicTracks.length > 0" 
           [container]="playlistList"
-          [quickSearchString]="displayFilterString"
+          [quickSearchString]="displayFilterString()"
           [selectedGenres]="selectedGenres"
           (browseClicked)="browseTo($event)">
         </container-tile>
@@ -57,7 +57,7 @@ Main Content
         <container-tile 
           [smallIcons]="this.allMusicTracks.length > 0" 
           [container]="albumList"
-          [quickSearchString]="displayFilterString"
+          [quickSearchString]="displayFilterString()"
           [selectedGenres]="selectedGenres"
           (browseClicked)="browseTo($event)">
         </container-tile>
@@ -68,7 +68,7 @@ Main Content
         <item-tile
           [isListView]="isListView()"
           [contentDirectoryService]="contentHandler.contentDirectoryService"
-          [quickSearchString]="displayFilterString"
+          [quickSearchString]="displayFilterString()"
           [selectedGenres]="selectedGenres"
           [extendedApi]="extendedApi"
           (playItemClicked)="playItem($event)"
@@ -85,7 +85,7 @@ Main Content
           [smallIcons]="this.allMusicTracks.length > 0" 
           [container]="containerList"
           [selectedGenres]="selectedGenres"
-          [quickSearchString]="displayFilterString"
+          [quickSearchString]="displayFilterString()"
           (browseClicked)="browseTo($event)">
         </container-tile>
       </div>
@@ -98,7 +98,7 @@ Main Content
       <div id="head_browse_other_items_ID">
         <other-item-tile
           [otherItems]="otherItems_"
-          [quickSearchString]="displayFilterString"
+          [quickSearchString]="displayFilterString()"
           (playItemClicked)="playItem($event)"
         ></other-item-tile>
       </div>

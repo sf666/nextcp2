@@ -1,5 +1,5 @@
 <div class="albumLayout">
-  @for (container of containerList; track container.id) {
+  @for (container of (containerList()); track container.id) {
   <div class="albumTile {{getSmallCss()}}" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)">
     <div class="albumImageContainer">
       <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">

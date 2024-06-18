@@ -211,7 +211,9 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   toggleListView(): void {
-    this.listView.update((lv) => (lv = !lv));
+    if (this.listView()) {
+      this.listView.update((lv) => (lv = !lv));
+    }
   }
 
   //

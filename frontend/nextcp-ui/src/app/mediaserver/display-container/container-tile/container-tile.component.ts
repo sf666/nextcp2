@@ -1,4 +1,4 @@
-import { Component, Input, Output } from '@angular/core';
+import { Component, Input, Output, computed, input, output, signal } from '@angular/core';
 import { ContainerDto } from 'src/app/service/dto';
 import { EventEmitter } from '@angular/core';
 
@@ -10,26 +10,23 @@ import { EventEmitter } from '@angular/core';
   styleUrl: './container-tile.component.scss',
 })
 export class ContainerTileComponent {
-  @Input() container: ContainerDto[];
-  @Input() smallIcons: boolean = false;
-  @Input() showPlayOverlay: boolean = false;
-  @Input() quickSearchString: string;
-  @Input() selectedGenres: Array<string> = [];
+  container = input.required<ContainerDto[]>();
+  smallIcons = input<boolean>(false);
+  showPlayOverlay = input<boolean>(false);
+  quickSearchString = input<string>("");
+  selectedGenres = input<Array<string>>([]);
+  containerList = computed(() => this.filteredContainer());
 
-  @Output() browseClicked = new EventEmitter<ContainerDto>();
-
-  get containerList(): ContainerDto[] {
-     return this.filteredContainer();
-  }
+  browseClicked = output<ContainerDto>();
 
   private filteredContainer(): ContainerDto[] {
     let tracks: Array<ContainerDto>;
     if (this.quickSearchString) {
-      tracks = this.container.filter((item) =>
-        this.doFilterText(item.title, this.quickSearchString)
+      tracks = this.container().filter((item) =>
+        this.doFilterText(item.title, this.quickSearchString())
       );
     } else {
-      tracks = this.container;
+      tracks = this.container();
     }
     if (this?.selectedGenres?.length > 0) {
       tracks = tracks.filter((item) => this.doFilterGenreByContainer(item));
@@ -42,23 +39,23 @@ export class ContainerTileComponent {
    * @param container album container
    * @returns
    */
-     private doFilterGenreByContainer(container: ContainerDto): boolean {
-      let add = false;
-      this.selectedGenres?.forEach((genre) => {
-        if (this.doFilterText(container.genre, genre)) {
-          add = true;
-        }
-      });
-      return add;
-    }
+  private doFilterGenreByContainer(container: ContainerDto): boolean {
+    let add = false;
+    this.selectedGenres()?.forEach((genre) => {
+      if (this.doFilterText(container.genre, genre)) {
+        add = true;
+      }
+    });
+    return add;
+  }
 
   public containerFilter(filter?: string): ContainerDto[] {
     if (filter) {
-      return this.container.filter((item) =>
+      return this.container().filter((item) =>
         this.doFilterText(item.title, filter)
       );
     } else {
-      return this.container;
+      return this.container();
     }
   }
 
@@ -73,7 +70,7 @@ export class ContainerTileComponent {
     }
     return title.toLowerCase().includes(filter.toLowerCase());
   }
- 
+
   public browseTo(containerDto: ContainerDto): void {
     this.browseClicked.emit(containerDto);
   }
