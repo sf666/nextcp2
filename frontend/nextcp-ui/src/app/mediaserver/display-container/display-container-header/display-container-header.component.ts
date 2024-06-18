@@ -1,4 +1,12 @@
-import { Component, OnInit, input, model, output, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  input,
+  model,
+  output,
+  signal,
+  computed,
+} from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -37,11 +45,25 @@ export class DisplayContainerHeaderComponent implements OnInit {
   addToPlaylistClicked = output<ContainerDto>();
 
   genresListSorted = signal<Array<String>>([]);
- 
+
   genresForm = new FormControl('');
 
   // search
   genresList: Set<String>;
+
+  containerType = computed(() => {
+    if (
+      this.currentContainer.objectClass === 'object.container.playlistContainer'
+    ) {
+      return 'Playlist';
+    } else if (
+      this.currentContainer.objectClass === 'object.container.album.musicAlbum'
+    ) {
+      return 'Album';
+    } else {
+      return 'Folder';
+    }
+  });
 
   // like member
   currentAlbumLiked = false;
@@ -97,7 +119,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
       }
     });
 
-    console.log("sorting genres ... ");
+    console.log('sorting genres ... ');
     const sortedList = [...this.genresList].sort();
     this.genresListSorted.set(sortedList);
   }
@@ -254,20 +276,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
       return this.musicTracks.length;
     } else {
       return 0;
-    }
-  }
-
-  get containerType(): string {
-    if (
-      this.currentContainer.objectClass === 'object.container.playlistContainer'
-    ) {
-      return 'Playlist';
-    } else if (
-      this.currentContainer.objectClass === 'object.container.album.musicAlbum'
-    ) {
-      return 'Album';
-    } else {
-      return 'Folder';
     }
   }
 
