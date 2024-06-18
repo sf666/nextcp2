@@ -1,14 +1,8 @@
-import { DeviceService } from 'src/app/service/device.service';
-import { SseService } from './../../service/sse/sse.service';
-import { DtoGeneratorService } from './../../util/dto-generator.service';
 import { ConfigurationService } from './../../service/configuration.service';
 import { ScrollLoadHandler } from './defs.d';
-import { SongOptionsServiceService } from 'src/app/mediaserver/popup/song-options/song-options-service.service';
 import { TransportService } from 'src/app/service/transport.service';
 import { PlaylistService } from './../../service/playlist.service';
 import { TrackQualityService } from './../../util/track-quality.service';
-import { TimeDisplayService } from 'src/app/util/time-display.service';
-import { MyMusicService } from './../../service/my-music.service';
 import {
   MusicItemDto,
   ContainerDto,

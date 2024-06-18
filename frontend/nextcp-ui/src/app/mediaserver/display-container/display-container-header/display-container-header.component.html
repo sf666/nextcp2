@@ -64,7 +64,7 @@
                 <div class="d-flex regular">
                   <div>{{musicItemsCount}} Tracks</div>
                   @if (totalPlaytime.length > 0) {
-                  <div>&nbsp;-&nbsp;{{totalPlaytime}}</div>
+                  <div>&nbsp;-&nbsp;{{totalPlaytime()}}</div>
                   }
                 </div>
                 }
@@ -98,7 +98,7 @@
                 <mat-label>Genre</mat-label>
                 <mat-select multiple [(ngModel)]="selectedGenres">
                   <mat-option value="NONE">NONE</mat-option>
-                  @for (genre of genresListSorted(); track genre) {
+                  @for (genre of genresList(); track genre) {
                   <mat-option [value]="genre">{{genre}}</mat-option>
                   }
                 </mat-select>

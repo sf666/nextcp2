@@ -44,12 +44,10 @@ export class DisplayContainerHeaderComponent implements OnInit {
   shuffleClicked = output<ContainerDto>();
   addToPlaylistClicked = output<ContainerDto>();
 
-  genresListSorted = signal<Array<String>>([]);
+  genresList = signal<Array<String>>([]);
 
   genresForm = new FormControl('');
 
-  // search
-  genresList: Set<String>;
 
   containerType = computed(() => {
     if (
@@ -64,6 +62,9 @@ export class DisplayContainerHeaderComponent implements OnInit {
       return 'Folder';
     }
   });
+
+  likePossible = computed(() => {return this.allTracksSameMusicBrainzReleaseId_;});
+  totalPlaytime = computed(() => this.totalPlaytimeCalc());
 
   // like member
   currentAlbumLiked = false;
@@ -101,27 +102,29 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   private fillGenres(): void {
-    this.genresList = new Set();
+    console.log("filling genres. Items size is " + this.musicTracks?.length);
+    const mySet = new Set<String>();
     this.musicTracks?.forEach((value) => {
       if (value?.genre) {
+        console.log("reading genre music tracks : " + value.genre);
         let aGenre = value.genre.split('/');
         aGenre?.forEach((gen) => {
-          this.genresList.add(gen.trim());
+          mySet.add(gen.trim());
         });
       }
     });
     this.albums?.forEach((value) => {
       if (value?.genre) {
+        console.log("reading genre albums : " + value.genre);
         let aGenre = value.genre.split('/');
         aGenre?.forEach((gen) => {
-          this.genresList.add(gen.trim());
+          mySet.add(gen.trim());
         });
       }
     });
 
     console.log('sorting genres ... ');
-    const sortedList = [...this.genresList].sort();
-    this.genresListSorted.set(sortedList);
+    this.genresList.set(Array.from(mySet.values()).sort());
   }
 
   private checkLikeStatus() {
@@ -138,9 +141,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
       this.currentAlbumReleaseID = undefined;
     }
   }
-  likePossible(): boolean {
-    return this.allTracksSameMusicBrainzReleaseId_;
-  }
 
   get isContainerAlbum(): boolean {
     // TODO can/should also be identified by other means
@@ -152,7 +152,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   hasGenres(): boolean {
-    return this.genresList?.size > 0 ? true : false;
+    return this.genresList()?.length > 0 ? true : false;
   }
 
   //
@@ -279,7 +279,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     }
   }
 
-  get totalPlaytime(): string {
+  totalPlaytimeCalc(): string {
     let completeTime: number;
     completeTime = 0;
     if (this.musicTracks.length > 0) {
