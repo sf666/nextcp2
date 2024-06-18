@@ -2,112 +2,110 @@
 <div domTreeChange class="bg-default" (dom-changed)="domChange($event)">
   -->
 
-<div domTreeChange class="bg-default" (dom-changed)="domChange($event)">
-  <!--                                                                -->
-  <!-- Template : Browse Result General Container                     -->
-  <!-- ############################################################## -->
+<!--                                                                -->
+<!-- Template : Browse Result General Container                     -->
+<!-- ############################################################## -->
 
-  <!-- Top browsing element: Displays image and information about current container -->
-  @if (showTopHeader) {
-    <div class="">
-      <display-container-header
-      [contentDirectoryService]="contentHandler.contentDirectoryService"
+<!-- Top browsing element: Displays image and information about current container -->
+@if (showTopHeader) {
+  <div class="">
+    <display-container-header
+    [contentDirectoryService]="contentHandler.contentDirectoryService"
 
-      [(listView)]="listView"
-      [(quickSearchString)]="displayFilterString"
-      [(selectedGenres)]="selectedGenres"
+    [(listView)]="listView"
+    [(quickSearchString)]="displayFilterString"
+    [(selectedGenres)]="selectedGenres"
 
-      (playClicked)="playPlaylist($event)"
-      (shuffleClicked)="shufflePlaylist($event)"
-      (playClicked)="playPlaylist($event)"
-      (playClicked)="playPlaylist($event)"
-      (addToPlaylistClicked)="addPlaylist($event)"
-    />
-    </div>
-  }
+    (playClicked)="playPlaylist($event)"
+    (shuffleClicked)="shufflePlaylist($event)"
+    (playClicked)="playPlaylist($event)"
+    (playClicked)="playPlaylist($event)"
+    (addToPlaylistClicked)="addPlaylist($event)"
+  />
+  </div>
+}
 
 <!--
 Main Content
 ==========================================
 -->
-  <div class="outer-container">
-    <div class="left-spacer"></div>
-    <div class="browseContentArea">
-      <!--
-    playlist elements on first position
-    =================================================================
-    -->
-      @if (playlistList?.length > 0) {
-      <div id="head_browse_result_playlist_items_ID" tabindex="-1">
-        <container-tile 
-          [smallIcons]="this.allMusicTracks.length > 0" 
-          [container]="playlistList"
-          [quickSearchString]="displayFilterString()"
-          [selectedGenres]="selectedGenres()"
-          (browseClicked)="browseTo($event)">
-        </container-tile>
-      </div>
-      }
-
-      <!--                                                                -->
-      <!-- Template : Browse Result Album                                 -->
-      <!-- ############################################################## -->
-      @if (albumList?.length > 0) {
-      <div id="head_browse_result_album_ID">
-        <container-tile 
-          [smallIcons]="this.allMusicTracks.length > 0" 
-          [container]="albumList"
-          [quickSearchString]="displayFilterString()"
-          [selectedGenres]="selectedGenres()"
-          (browseClicked)="browseTo($event)">
-        </container-tile>
-      </div>
-      }
-
-      <div id="head_browse_result_items_ID">
-        <item-tile
-          [isListView]="isListView()"
-          [contentDirectoryService]="contentHandler.contentDirectoryService"
-          [quickSearchString]="displayFilterString()"
-          [selectedGenres]="selectedGenres()"
-          [extendedApi]="extendedApi"
-          (playItemClicked)="playItem($event)"
-          (addItemToPlaylistClicked)="addItemToPlaylist($event)"
-        >
-        </item-tile>
-      </div>
-      <!--                                -->
-      <!-- General container section      -->
-      <!--                                -->
-      @if (containerList?.length > 0) {
-      <div id="head_browse_result_general_container_ID">
-        <container-tile 
-          [smallIcons]="this.allMusicTracks.length > 0" 
-          [container]="containerList"
-          [selectedGenres]="selectedGenres()"
-          [quickSearchString]="displayFilterString()"
-          (browseClicked)="browseTo($event)">
-        </container-tile>
-      </div>
-      }
-
-      <!--                                -->
-      <!-- Other items                    -->
-      <!--                                -->
-      @if (items?.length > 0) {
-      <div id="head_browse_other_items_ID">
-        <other-item-tile
-          [otherItems]="otherItems_"
-          [quickSearchString]="displayFilterString()"
-          (playItemClicked)="playItem($event)"
-        ></other-item-tile>
-      </div>
-      }
+<div class="outer-container">
+  <div class="left-spacer"></div>
+  <div class="browseContentArea">
+    <!--
+  playlist elements on first position
+  =================================================================
+  -->
+    @if (playlistList?.length > 0) {
+    <div id="head_browse_result_playlist_items_ID" tabindex="-1">
+      <container-tile 
+        [smallIcons]="this.allMusicTracks.length > 0" 
+        [container]="playlistList"
+        [quickSearchString]="displayFilterString()"
+        [selectedGenres]="selectedGenres()"
+        (browseClicked)="browseTo($event)">
+      </container-tile>
     </div>
+    }
 
-    <!-- right outer container end -->
-    <div class="right-spacer">
-      &nbsp;
+    <!--                                                                -->
+    <!-- Template : Browse Result Album                                 -->
+    <!-- ############################################################## -->
+    @if (albumList?.length > 0) {
+    <div id="head_browse_result_album_ID">
+      <container-tile 
+        [smallIcons]="this.allMusicTracks.length > 0" 
+        [container]="albumList"
+        [quickSearchString]="displayFilterString()"
+        [selectedGenres]="selectedGenres()"
+        (browseClicked)="browseTo($event)">
+      </container-tile>
     </div>
+    }
+
+    <div id="head_browse_result_items_ID">
+      <item-tile
+        [isListView]="isListView()"
+        [contentDirectoryService]="contentHandler.contentDirectoryService"
+        [quickSearchString]="displayFilterString()"
+        [selectedGenres]="selectedGenres()"
+        [extendedApi]="extendedApi"
+        (playItemClicked)="playItem($event)"
+        (addItemToPlaylistClicked)="addItemToPlaylist($event)"
+      >
+      </item-tile>
+    </div>
+    <!--                                -->
+    <!-- General container section      -->
+    <!--                                -->
+    @if (containerList?.length > 0) {
+    <div id="head_browse_result_general_container_ID">
+      <container-tile 
+        [smallIcons]="this.allMusicTracks.length > 0" 
+        [container]="containerList"
+        [selectedGenres]="selectedGenres()"
+        [quickSearchString]="displayFilterString()"
+        (browseClicked)="browseTo($event)">
+      </container-tile>
+    </div>
+    }
+
+    <!--                                -->
+    <!-- Other items                    -->
+    <!--                                -->
+    @if (items?.length > 0) {
+    <div id="head_browse_other_items_ID">
+      <other-item-tile
+        [otherItems]="otherItems_"
+        [quickSearchString]="displayFilterString()"
+        (playItemClicked)="playItem($event)"
+      ></other-item-tile>
+    </div>
+    }
+  </div>
+
+  <!-- right outer container end -->
+  <div class="right-spacer">
+    &nbsp;
   </div>
 </div>

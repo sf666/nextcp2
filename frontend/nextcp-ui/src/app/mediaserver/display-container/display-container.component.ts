@@ -95,10 +95,6 @@ export class DisplayContainerComponent {
 
   }
 
-  domChange(event: any): void {
-    console.log('DOM changed event ... ');
-  }
-
   /**
    * @param elementID ATTENTION: elementID needs to have tabindex set to '-1': <div id="elementID" tabindex="-1">
    */
