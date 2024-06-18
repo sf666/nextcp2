@@ -1,10 +1,10 @@
-import { Component, Input, Output, computed, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, Output, computed, input, output, signal } from '@angular/core';
 import { ContainerDto } from 'src/app/service/dto';
-import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'container-tile',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   templateUrl: './container-tile.component.html',
   styleUrl: './container-tile.component.scss',

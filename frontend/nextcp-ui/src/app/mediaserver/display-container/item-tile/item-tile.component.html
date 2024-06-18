@@ -1,9 +1,9 @@
 <!--                                                                -->
 <!-- Browse Result Music Items                                      -->
 <!-- ############################################################## -->
-@if (allMusicTracks?.length > 0) {
+@if (musicTracks()?.length > 0) {
 <div id="top-div" tabindex="-1" class="itemDetails">
-    @if (isListView) {
+    @if (isListView()) {
     <div>
         <div id="head_browse_result_items_list_view_ID" class="item-table">
             <div class="item-thead">
@@ -24,7 +24,7 @@
                     <div class="col-2 d-none d-xl-block">
                         ALBUM</div>
                     }
-                    @if (extendedApi) {
+                    @if (extendedApi()) {
                     <div class="col-1 col-sm-2 d-none text-right d-sm-block">
                         RATING
                     </div>
@@ -36,7 +36,7 @@
             <!--                                  -->
             <!-- one item is displayed over a row -->
             <!--                                  -->
-            @for (item of allMusicTracks; track item.objectID) {
+            @for (item of musicTracks(); track item.objectID) {
             <div id="{{item.objectID}}">
                 @if (allTracksSameAlbum() && !allTracksSameDisc()) {
                 <div class="item-tbody">
@@ -79,7 +79,7 @@
                         @if (!allTracksSameAlbum()) {
                         <div (click)="playItem(item)" class="col-2 no-wrap d-none d-xl-block {{selectedRowClass(item)}}">{{item.album}}</div>
                         }
-                        @if (extendedApi) {
+                        @if (extendedApi()) {
                         <div class="col-1 col-sm-2 d-none d-sm-block ">
                             <star-rating [currentSong]="item"></star-rating>
                         </div>
@@ -96,7 +96,7 @@
     </div>
     } @else {
     <div id="head_browse_result_items_mixed_titles_ID" class="cardLayoutTiles">
-        @for (item of allMusicTracks; track item.objectID) {
+        @for (item of musicTracks(); track item.objectID) {
         <div id="{{item.objectID}}" class="imgCardWidth mb-5 ms-4">
             <div class="albumImageContainer">
                 <img src="{{item.albumArtUrl}}" alt="{{item.title}}">

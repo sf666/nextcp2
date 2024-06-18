@@ -15,6 +15,7 @@ import {
   Output,
   EventEmitter,
   signal,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { debounce } from 'src/app/global';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -44,6 +45,7 @@ import { OtherItemTileComponent } from './other-item-tile/other-item-tile.compon
   styleUrls: ['./display-container.component.scss'],
   providers: [{ provide: 'uniqueId', useValue: 'default_display_container' }],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     DomChangedDirective,
     MatButtonModule,

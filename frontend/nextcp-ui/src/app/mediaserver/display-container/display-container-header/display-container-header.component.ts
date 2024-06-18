@@ -6,6 +6,7 @@ import {
   output,
   signal,
   computed,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,6 +23,7 @@ import { TimeDisplayService } from 'src/app/util/time-display.service';
 @Component({
   selector: 'display-container-header',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatIconModule,
     MatButtonModule,
