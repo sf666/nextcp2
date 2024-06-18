@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  input,
+  model,
+  output,
+} from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -31,14 +40,14 @@ import { TimeDisplayService } from 'src/app/util/time-display.service';
   styleUrl: './display-container-header.component.scss',
 })
 export class DisplayContainerHeaderComponent implements OnInit {
-  @Input() contentDirectoryService: ContentDirectoryService;
+  contentDirectoryService = input.required<ContentDirectoryService>();
+  listView = model<boolean>();
 
-  @Output() playClicked = new EventEmitter<ContainerDto>();
-  @Output() shuffleClicked = new EventEmitter<ContainerDto>();
-  @Output() toggleListViewClicked = new EventEmitter<any>();
-  @Output() addToPlaylistClicked = new EventEmitter<any>();
-  @Output() newQuickSearch = new EventEmitter<string>();
-  @Output() newSelectedGenres = new EventEmitter<Array<string>>();
+  playClicked = output<ContainerDto>();
+  shuffleClicked = output<ContainerDto>();
+  addToPlaylistClicked = output<ContainerDto>();
+  newQuickSearch = output<string>();
+  newSelectedGenres = output<Array<string>>();
 
   genresForm = new FormControl('');
 
@@ -54,7 +63,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
   private allTracksSameAlbum_: boolean;
   private currentAlbumReleaseID = '';
 
-
   constructor(
     private myMusicService: MyMusicService,
     private dtoGeneratorService: DtoGeneratorService,
@@ -64,7 +72,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.contentDirectoryService) {
-      this.contentDirectoryService.browseFinished$.subscribe((data) =>
+      this.contentDirectoryService().browseFinished$.subscribe((data) =>
         this.cdsBrowseFinished()
       );
     }
@@ -81,7 +89,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   get albums(): ContainerDto[] {
-    return this.contentDirectoryService.albumList_;
+    return this.contentDirectoryService().albumList_;
   }
 
   genresChanged() {
@@ -202,16 +210,15 @@ export class DisplayContainerHeaderComponent implements OnInit {
     }
   }
 
-
   toggleListView(): void {
-    this.toggleListViewClicked.emit();
+    this.listView.update((lv) => (lv = !lv));
   }
 
   //
   // Accessor
   //
   get musicTracks(): MusicItemDto[] {
-    return this.contentDirectoryService.musicTracks_;
+    return this.contentDirectoryService().musicTracks_;
   }
 
   // Like support
@@ -336,8 +343,9 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   // Other
   public get currentContainer(): ContainerDto {
-    if (this.contentDirectoryService.currentContainerList?.currentContainer) {
-      return this.contentDirectoryService.currentContainerList.currentContainer;
+    if (this.contentDirectoryService().currentContainerList?.currentContainer) {
+      return this.contentDirectoryService().currentContainerList
+        .currentContainer;
     }
     return this.dtoGeneratorService.generateEmptyContainerDto();
   }

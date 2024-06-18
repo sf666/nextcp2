@@ -13,11 +13,12 @@
       <display-container-header
       [contentDirectoryService]="contentHandler.contentDirectoryService"
 
+      [(listView)]="listView"
+
       (playClicked)="playPlaylist($event)"
       (shuffleClicked)="shufflePlaylist($event)"
       (playClicked)="playPlaylist($event)"
       (playClicked)="playPlaylist($event)"
-      (toggleListViewClicked)="toggleListView()"
       (addToPlaylistClicked)="addPlaylist($event)"
       (newQuickSearch)="displayFilterChanged($event)"
       (newSelectedGenres)="displayFilterGenreChanged($event)"

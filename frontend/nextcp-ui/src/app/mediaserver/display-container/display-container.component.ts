@@ -81,29 +81,12 @@ export class DisplayContainerComponent {
   @Output() browseFinish = new EventEmitter<ContainerItemDto>();
   @Output() itemDeleted = new EventEmitter<MusicItemDto>();
 
-  private listView = true;
-  private lastDiscLabel = '';
+  listView = true;
 
   displayFilterString: string;
   genresList: Set<String>;
   genresListSorted: Array<String>;
   selectedGenres: Array<string> = [];
-
-  // some calculated constants
-  private allTracksSameAlbum_: boolean;
-  private allTracksSameMusicBrainzReleaseId_: boolean;
-  private allTracksSameDisc_: boolean;
-
-  private currentUrl = '';
-
-  // like member
-  currentAlbumLiked = false;
-  private currentAlbumReleaseID = '';
-
-  // Filter function for current displayed elements
-  //
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private filteredBrowseToFunc: any;
 
   constructor(
     private myMusicService: MyMusicService,

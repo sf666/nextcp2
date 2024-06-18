@@ -74,8 +74,8 @@
               @if (currentContainer) {
               <div id="template_containerTitle" class="d-flex flex-column infobox align-self-start">
                 <div class="title">{{currentContainer.title}}</div>
-                @if (contentDirectoryService.currentContainerList?.totalMatches > 0 || musicItemsCount > 0) {
-                <div class="regular"><span class="highlight pe-2">{{contentDirectoryService.currentContainerList.totalMatches}}</span> total elements
+                @if (contentDirectoryService().currentContainerList?.totalMatches > 0 || musicItemsCount > 0) {
+                <div class="regular"><span class="highlight pe-2">{{contentDirectoryService().currentContainerList.totalMatches}}</span> total elements
                 </div>
                 }
               </div>
