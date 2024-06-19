@@ -7,7 +7,7 @@
   @if (!deviceService.noMediaRendererSelected) {
     <div class="d-flex ms-3">
       <div class="regular me-2">Playlist of :</div>
-      <div class="highlight">{{deviceService.selectedMediaRendererDevice.friendlyName}}</div>       
+      <div class="highlight">{{deviceService.selectedMediaRendererDevice().friendlyName}}</div>       
     </div>
   }
   <div class="d-flex border-bottom border-secondary">

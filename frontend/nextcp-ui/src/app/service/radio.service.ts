@@ -22,14 +22,14 @@ export class RadioService {
 
     this.deviceService.mediaRendererChanged$.subscribe(data => this.deviceChanged(data), err => console.log(err), () => console.log("completed."));
 
-    if (this.deviceService.selectedMediaRendererDevice.udn !== '') {
-      this.updateRadioStations(this.deviceService.selectedMediaRendererDevice);
+    if (this.deviceService.selectedMediaRendererDevice().udn !== '') {
+      this.updateRadioStations(this.deviceService.selectedMediaRendererDevice());
     }
   }
 
   playOpenHomeStation(station: MusicItemDto): void {
     const req: PlayOpenHomeRadioDto = {
-      mediaRendererDto: this.deviceService.selectedMediaRendererDevice,
+      mediaRendererDto: this.deviceService.selectedMediaRendererDevice(),
       radioStation: station
     }
     const uri = "/playRadioStation";

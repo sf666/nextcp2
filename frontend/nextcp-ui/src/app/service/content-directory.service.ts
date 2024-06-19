@@ -20,6 +20,7 @@ import { Injectable } from '@angular/core';
 export class ContentDirectoryService {  
   baseUri = '/ContentDirectoryService';
 
+  // for parent navigation back to last CDS objectId
   private lastBrowseRequest: BrowseRequestDto;
 
   public currentContainerList: ContainerItemDto;
@@ -89,10 +90,10 @@ export class ContentDirectoryService {
     mediaServerUdn?: string,
   ): Subject<ContainerItemDto> {
     if (!mediaServerUdn) {
-      if (!this.deviceService.selectedMediaServerDevice.udn) {
+      if (!this.deviceService.selectedMediaServerDevice().udn) {
         this.toastService.error('select media server', 'MediaLibrary');
       } else {
-        mediaServerUdn = this.deviceService.selectedMediaServerDevice.udn;
+        mediaServerUdn = this.deviceService.selectedMediaServerDevice().udn;
       }
     }
     let browseRequestDto = this.createBrowseRequest(
@@ -178,7 +179,7 @@ export class ContentDirectoryService {
     let browseRequestDto = this.createBrowseRequest(
       this.currentContainerID,
       '',
-      this.deviceService.selectedMediaServerDevice.udn,
+      this.deviceService.selectedMediaServerDevice().udn,
       '',
     );
     this.page = 0;

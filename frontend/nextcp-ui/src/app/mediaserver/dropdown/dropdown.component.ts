@@ -1,6 +1,6 @@
 import { MediaServerDto } from './../../service/dto.d';
 import { DeviceService } from './../../service/device.service';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, input, output } from '@angular/core';
 import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgbDropdownButtonItem, NgbDropdownItem } from '@ng-bootstrap/ng-bootstrap';
 
 
@@ -9,17 +9,18 @@ import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgbDropdownButtonItem,
     templateUrl: './dropdown.component.html',
     styleUrls: ['./dropdown.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgbDropdownButtonItem, NgbDropdownItem]
 })
 export class ServerDropdownComponent {
 
-  @Input() displayButtonText: boolean = true;
-  @Output() selectedServer = new EventEmitter<MediaServerDto>();
+  displayButtonText = input<boolean>(true);
+  selectedServer = output<MediaServerDto>();
 
   constructor(private deviceService: DeviceService) { }
 
   public mediaServerList(): MediaServerDto[] {
-    return this.deviceService.getMediaServerList();
+    return this.deviceService.mediaServerList();
   }
 
   public setCurrentMediaServer(device: MediaServerDto) {
@@ -31,7 +32,7 @@ export class ServerDropdownComponent {
   }
   
   public get labelName(): string {
-    if (this.displayButtonText)
+    if (this.displayButtonText())
     {
       return this.currentMediaServer.friendlyName;
     }

@@ -27,7 +27,7 @@
     <mat-label>Default Media Renderer</mat-label>
     <mat-select [(ngModel)]="configService.clientConfig.defaultMediaRenderer" [compareWith]="compareUdn" placeholder="select server defined profile">
       <mat-option [value]="none_renderdevice" (click)="noRendererSelected()">NONE</mat-option>
-      @for (mr of deviceService.getMediaRendererList(); track mr) {
+      @for (mr of deviceService.mediaRendererList(); track mr) {
       <mat-option [value]="mr">
         {{mr.friendlyName}}</mat-option>
       }
@@ -38,7 +38,7 @@
     <mat-label>Default Media Server</mat-label>
     <mat-select [(ngModel)]="configService.clientConfig.defaultMediaServer" [compareWith]="compareUdn">
       <mat-option [value]="none_serverdevice" (click)="noServerSelected()">NONE</mat-option>
-      @for (mediaServer of deviceService.getMediaServerList(); track mediaServer) {
+      @for (mediaServer of deviceService.mediaServerList(); track mediaServer) {
       <mat-option [value]="mediaServer">
         {{mediaServer.friendlyName}}</mat-option>
       }

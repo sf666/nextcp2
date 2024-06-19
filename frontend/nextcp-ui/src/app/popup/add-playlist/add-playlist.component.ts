@@ -58,7 +58,7 @@ export class AddPlaylistComponent {
     }
     let sr = dtoGeneratorService.generateEmptySearchRequestDto();    
     sr.searchRequest = '';
-    sr.mediaServerUDN = deviceService.selectedMediaServerDevice.udn;
+    sr.mediaServerUDN = deviceService.selectedMediaServerDevice().udn;
     this.contentDirectoryService.searchAllPlaylist(sr).subscribe(data => this.updateAllPlaylists(data));
   }
 

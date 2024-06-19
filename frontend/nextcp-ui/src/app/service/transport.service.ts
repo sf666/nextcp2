@@ -29,7 +29,7 @@ export class TransportService {
   }
 
   get selectedMediaRenderer(): MediaRendererDto {
-    return this.deviceService.selectedMediaRendererDevice;
+    return this.deviceService.selectedMediaRendererDevice();
   }
 
   // 
@@ -58,8 +58,8 @@ export class TransportService {
 
   public seek(secondsAbsolute: number): void {
     const uri = '/seekSecondsAbsolute';
-    if (this.deviceService.selectedMediaRendererDevice?.udn) {
-      let seek: SeekSecondsDto = { rendererUDN: this.deviceService.selectedMediaRendererDevice.udn, seconds: secondsAbsolute };
+    if (this.deviceService.selectedMediaRendererDevice().udn) {
+      let seek: SeekSecondsDto = { rendererUDN: this.deviceService.selectedMediaRendererDevice().udn, seconds: secondsAbsolute };
       this.httpService.post(this.baseUri, uri, seek).subscribe();
     }
   }

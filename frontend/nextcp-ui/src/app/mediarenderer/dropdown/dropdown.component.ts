@@ -19,7 +19,7 @@ export class RendererDropdownComponent {
   constructor(private deviceService: DeviceService) { }
 
   public get mediaRendererList(): MediaRendererDto[] {
-    return this.deviceService.getMediaRendererList();
+    return this.deviceService.mediaRendererList();
   }
 
   public setCurrentMediaRenderer(device: MediaRendererDto) {
@@ -27,7 +27,7 @@ export class RendererDropdownComponent {
   }
 
   public get currentMediaRenderer(): MediaRendererDto {
-    return this.deviceService.selectedMediaRendererDevice;
+    return this.deviceService.selectedMediaRendererDevice();
   }
 
   public get labelName(): string {

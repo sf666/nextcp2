@@ -47,8 +47,6 @@ export class SidebarComponent {
     private defaultPlaylistService: DefaultPlaylistService,
     private configurationService: ConfigurationService,
     public rendererService: RendererService) {
-    deviceService.mediaRendererChanged$.subscribe(data => this._mediaRendererUdn = data.udn);
-    deviceService.mediaServerChanged$.subscribe(data => this._mediaServerUdn = data.udn);
 
     this.routerMap.set("/", "-1");                // default route is music-library
     this.routerMap.set("/music-library", "-1");
@@ -117,7 +115,7 @@ export class SidebarComponent {
   }
 
   get myPlaylistsAvailable(): boolean {    
-    return this.deviceService.selectedMediaServerDevice.extendedApi;
+    return this.deviceService.selectedMediaServerDevice().extendedApi;
   }
 
   public getTextClass(url: string): string {
@@ -133,40 +131,6 @@ export class SidebarComponent {
       return "active";
     }
     return "button-text";
-  }
-
-  /**
-   * Getter mediaServerUdn
-   * @return {string}
-   */
-  public get mediaServerUdn(): string {
-    return this._mediaServerUdn;
-  }
-
-  /**
-   * Getter mediaRendererUdn
-   * @return {string}
-   */
-  public get mediaRendererUdn(): string {
-    return this._mediaRendererUdn;
-  }
-
-  /**
-   * Setter mediaServerUdn
-   * @param {string} value
-   */
-  public set mediaServerUdn(value: string) {
-    this._mediaServerUdn = value;
-    this.deviceService.setMediaServerByUdn(value);
-  }
-
-  /**
-   * Setter mediaRendererUdn
-   * @param {string} value
-   */
-  public set mediaRendererUdn(value: string) {
-    this._mediaRendererUdn = value;
-    this.deviceService.setMediaRendererByUdn(value);
   }
 
   public get myFolderConfigured() : boolean {

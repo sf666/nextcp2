@@ -79,7 +79,7 @@ export class MusicLibraryComponent  implements AfterViewInit{
     this.lastOidIsRestoredFromCache = true;
     udn = this.persistenceService.getCurrentMediaServerDevice();
     if (!(udn?.length > 0)) {
-      udn = this.deviceService.selectedMediaServerDevice.udn;
+      udn = this.deviceService.selectedMediaServerDevice().udn;
       objectId = "0";
     }
 
@@ -137,14 +137,14 @@ export class MusicLibraryComponent  implements AfterViewInit{
   rootButtonPressed(event: any) {
     const currentParent = this.contentDirectoryService?.currentContainerList?.currentContainer?.parentID;
     if (currentParent) {
-      this.browseToOid("0", this.deviceService.selectedMediaServerDevice.udn, false, "");
+      this.browseToOid("0", this.deviceService.selectedMediaServerDevice().udn, false, "");
     }
   }
 
   public backButtonPressed(event: any) {
     const currentParent = this.contentDirectoryService?.currentContainerList?.currentContainer?.parentID;
     if (currentParent) {
-      this.browseToOid(currentParent, this.deviceService.selectedMediaServerDevice.udn, false, "");
+      this.browseToOid(currentParent, this.deviceService.selectedMediaServerDevice().udn, false, "");
     }
   }
 

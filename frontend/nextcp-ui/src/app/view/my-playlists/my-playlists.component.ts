@@ -35,16 +35,16 @@ export class MyPlaylistsComponent implements OnInit {
 
   ngOnInit(): void {
     this.layoutService.setFramedView();
-    if (this.deviceService.selectedMediaServerDevice.udn) {
+    if (this.deviceService.selectedMediaServerDevice().udn) {
       this.browseToMyPlaylist(
         this.myPlaylistService.activePlaylistId,
-        this.deviceService.selectedMediaServerDevice.udn,
+        this.deviceService.selectedMediaServerDevice().udn,
       );
     }
     this.myPlaylistService.activePlaylistId$.subscribe((id) =>
       this.browseToMyPlaylist(
         id,
-        this.deviceService.selectedMediaServerDevice.udn,
+        this.deviceService.selectedMediaServerDevice().udn,
       ),
     );
   }

@@ -38,8 +38,8 @@ export class MyAlbumComponent implements OnInit {
 
   private loadMyAlbums() {
     const oid = "$DBID$MYMUSIC$";
-    if (this.deviceService.selectedMediaServerDevice.udn) {
-      this.contentDirectoryService.browseChildren(oid, "", this.deviceService.selectedMediaServerDevice.udn).subscribe();
+    if (this.deviceService.selectedMediaServerDevice().udn) {
+      this.contentDirectoryService.browseChildren(oid, "", this.deviceService.selectedMediaServerDevice().udn).subscribe();
     }
   }
 

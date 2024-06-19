@@ -181,14 +181,14 @@ export class SettingsComponent implements OnInit {
     this.configService.selectClientConfig(config.uuid);
     if (
       !this.deviceService
-        .getMediaRendererList()
+        .mediaRendererList()
         .some((renderer) => renderer.udn === config.defaultMediaRenderer.udn)
     ) {
       this.toastService.info('media renderer is not available', 'ATTENTION');
     }
     if (
       !this.deviceService
-        .getMediaServerList()
+        .mediaServerList()
         .some((device) => device.udn === config.defaultMediaServer.udn)
     ) {
       this.toastService.info('media server is not available', 'ATTENTION');
@@ -221,13 +221,13 @@ export class SettingsComponent implements OnInit {
 
   rescan(): void {
     this.contentDirectoryService.rescanContent(
-      this.deviceService.selectedMediaServerDevice.udn
+      this.deviceService.selectedMediaServerDevice().udn
     );
   }
 
   extendedApiNotAvailable(): boolean {
-    if (this.deviceService?.selectedMediaServerDevice.udn) {
-      return !this.deviceService?.selectedMediaServerDevice?.extendedApi;
+    if (this.deviceService?.selectedMediaServerDevice().udn) {
+      return !this.deviceService?.selectedMediaServerDevice().extendedApi;
     }
     return true;
   }
@@ -259,6 +259,6 @@ export class SettingsComponent implements OnInit {
   }
 
   public get currentMediaServer(): MediaServerDto {
-    return this.deviceService.selectedMediaServerDevice;
+    return this.deviceService.selectedMediaServerDevice();
   }
 }

@@ -24,7 +24,7 @@ export class RatingServiceService {
       previousRating : previousStars,
       newRating : stars,
       musicItemIdDto : ids,
-      mediaServerDevice : this.deviceSerice.selectedMediaServerDevice.udn,
+      mediaServerDevice : this.deviceSerice.selectedMediaServerDevice().udn,
     }
     
     return this.httpService.post<void>(this.baseUri, uri, srr);
@@ -32,6 +32,6 @@ export class RatingServiceService {
 
   public syncRatingsFromMusicBrainzToBackend(): Subject<string> {
     const uri = "/syncRatingsFromMusicBrainzToBackend";
-    return this.httpService.post(this.baseUri, uri, this.deviceSerice.selectedMediaServerDevice.udn);
+    return this.httpService.post(this.baseUri, uri, this.deviceSerice.selectedMediaServerDevice().udn);
   }
 }

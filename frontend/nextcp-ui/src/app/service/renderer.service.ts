@@ -61,7 +61,7 @@ export class RendererService {
   }
 
   private updateTransportState(state: TransportServiceStateDto) {
-    if (state.udn == this.deviceService.selectedMediaRendererDevice.udn) {
+    if (state.udn == this.deviceService.selectedMediaRendererDevice().udn) {
       console.log("new transport state : " + state.transportState);
       this.transportServiceStateDto = state;
     }
@@ -168,7 +168,7 @@ export class RendererService {
 
     const uri = '/setStandby';
     let request: MediaRendererSwitchPower = {
-      rendererUDN: this.deviceService.selectedMediaRendererDevice.udn,
+      rendererUDN: this.deviceService.selectedMediaRendererDevice().udn,
       standby: !this.deviceDriverState.standby
     };
     this.httpService.post(this.baseUri, uri, request, "power switch");
@@ -178,10 +178,10 @@ export class RendererService {
    * Set's volume in percent 
    */
   public setVolume(vol: number) {
-    if (this.deviceService.selectedMediaRendererDevice.udn) {
+    if (this.deviceService.selectedMediaRendererDevice().udn) {
       const uri = '/setVolume';
       let request: MediaRendererSetVolume = {
-        rendererUDN: this.deviceService.selectedMediaRendererDevice.udn,
+        rendererUDN: this.deviceService.selectedMediaRendererDevice().udn,
         volume: vol
       };
       this.httpService.post(this.baseUri, uri, request, "volume control");
@@ -195,22 +195,22 @@ export class RendererService {
   // ================================================================================================================
   public pause() {
     const uri = '/pause';
-    this.httpService.post(this.baseUri, uri, this.deviceService.selectedMediaRendererDevice.udn, "pause");
+    this.httpService.post(this.baseUri, uri, this.deviceService.selectedMediaRendererDevice().udn, "pause");
   }
 
   public stop() {
     const uri = '/stop';
-    this.httpService.post(this.baseUri, uri, this.deviceService.selectedMediaRendererDevice.udn, "stop");
+    this.httpService.post(this.baseUri, uri, this.deviceService.selectedMediaRendererDevice().udn, "stop");
   }
 
   public play() {
     const uri = '/play';
-    this.httpService.post(this.baseUri, uri, this.deviceService.selectedMediaRendererDevice.udn, "play");
+    this.httpService.post(this.baseUri, uri, this.deviceService.selectedMediaRendererDevice().udn, "play");
   }
 
   public next() {
     const uri = '/next';
-    this.httpService.post(this.baseUri, uri, this.deviceService.selectedMediaRendererDevice.udn, "next");
+    this.httpService.post(this.baseUri, uri, this.deviceService.selectedMediaRendererDevice().udn, "next");
   }
   
   // Maintenance methods

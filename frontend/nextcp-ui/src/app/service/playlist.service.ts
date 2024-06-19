@@ -65,9 +65,9 @@ export class PlaylistService implements OnInit {
 
 
   public updatePlaylistItems(): void {
-    if (this.deviceService.selectedMediaRendererDevice.udn !== '') {
-      this.getPlaylistItems(this.deviceService.selectedMediaRendererDevice.udn);
-      this.getPlaylistState(this.deviceService.selectedMediaRendererDevice.udn);
+    if (this.deviceService.selectedMediaRendererDevice().udn !== '') {
+      this.getPlaylistItems(this.deviceService.selectedMediaRendererDevice().udn);
+      this.getPlaylistState(this.deviceService.selectedMediaRendererDevice().udn);
     }
   }
 
@@ -84,8 +84,8 @@ export class PlaylistService implements OnInit {
   }
 
   private getSelectedMediaRendererUdn(): string {
-    if (this.deviceService.selectedMediaRendererDevice.udn !== '') {
-      return this.deviceService.selectedMediaRendererDevice.udn;
+    if (this.deviceService.selectedMediaRendererDevice().udn !== '') {
+      return this.deviceService.selectedMediaRendererDevice().udn;
     }
     this.genericResultService.displayErrorMessage("output device not selected. Aborting ... ", "Output device error");
   }
@@ -124,7 +124,7 @@ export class PlaylistService implements OnInit {
   public addToPlaylist(musicItemDto: MusicItemDto): void {
     const uri = '/insert';
     const playRequestDto: PlayRequestDto = {
-      mediaRendererDto: this.deviceService.selectedMediaRendererDevice,
+      mediaRendererDto: this.deviceService.selectedMediaRendererDevice(),
       streamMetadata: musicItemDto.currentTrackMetadata,
       streamUrl: musicItemDto.streamingURL
     }

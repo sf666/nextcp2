@@ -49,7 +49,7 @@ export class GlobalSearchService {
       .quickSearch(
         this.currentSearchText,
         '',
-        this.deviceService.selectedMediaServerDevice.udn,
+        this.deviceService.selectedMediaServerDevice().udn,
       )
       .subscribe((data) => this.searchResultReceived(data));
   };
@@ -178,7 +178,7 @@ export class GlobalSearchService {
   showAllItem(): void {
     const sr = this.dtoGeneratorService.generateQuickSearchDto(
       this.quickSearchQueryString,
-      this.deviceService.selectedMediaServerDevice.udn,
+      this.deviceService.selectedMediaServerDevice().udn,
       '-upnp:rating, +dc:title',
       this.currentContainerID,
       0,
@@ -193,7 +193,7 @@ export class GlobalSearchService {
   showAllAlbum(): void {
     const sr = this.dtoGeneratorService.generateQuickSearchDto(
       this.quickSearchQueryString,
-      this.deviceService.selectedMediaServerDevice.udn,
+      this.deviceService.selectedMediaServerDevice().udn,
       '-ums:likedAlbum, +dc:title',
       this.currentContainerID,
       0,
@@ -208,7 +208,7 @@ export class GlobalSearchService {
   showAllItemArtist(): void {
     const sr = this.dtoGeneratorService.generateQuickSearchDto(
       this.quickSearchQueryString,
-      this.deviceService.selectedMediaServerDevice.udn,
+      this.deviceService.selectedMediaServerDevice().udn,
       '',
       this.currentContainerID,
       0,
@@ -223,7 +223,7 @@ export class GlobalSearchService {
   showAllPlaylist(): void {
     const sr = this.dtoGeneratorService.generateQuickSearchDto(
       this.quickSearchQueryString,
-      this.deviceService.selectedMediaServerDevice.udn,
+      this.deviceService.selectedMediaServerDevice().udn,
       '',
       this.currentContainerID,
       0,

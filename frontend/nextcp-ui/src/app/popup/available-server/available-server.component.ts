@@ -28,7 +28,7 @@ export class AvailableServerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const popupHeight = this.deviceService.getMediaServerList().length * 30 + 120;
+    const popupHeight = this.deviceService.mediaServerList().length * 30 + 120;
     this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 400, popupHeight);
   }
 
