@@ -52,7 +52,7 @@ export class MyAlbumComponent implements OnInit {
   //
 
   getParentTitle(): string {
-    return this.contentDirectoryService.currentContainerList.parentFolderTitle;
+    return this.contentDirectoryService.currentContainerList().parentFolderTitle;
   }
 
   public backButtonPressed(event: any) {
@@ -80,7 +80,7 @@ export class MyAlbumComponent implements OnInit {
   }
 
   currentContainer(): ContainerDto {
-    return this.contentDirectoryService.currentContainerList.currentContainer;
+    return this.contentDirectoryService.currentContainerList().currentContainer;
   }
 
   musicTracks(): MusicItemDto[] {
@@ -92,7 +92,7 @@ export class MyAlbumComponent implements OnInit {
   }
 
   albums(): ContainerDto[] {
-    return this.contentDirectoryService.currentContainerList.albumDto;
+    return this.contentDirectoryService.currentContainerList().albumDto;
   }
 
   playlists(): ContainerDto[] {

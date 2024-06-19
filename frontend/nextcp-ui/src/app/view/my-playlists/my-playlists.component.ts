@@ -93,7 +93,7 @@ export class MyPlaylistsComponent implements OnInit {
   }
 
   currentContainer(): ContainerDto {
-    return this.contentDirectoryService.currentContainerList.currentContainer;
+    return this.contentDirectoryService.currentContainerList().currentContainer;
   }
 
   musicTracks(): MusicItemDto[] {
@@ -105,7 +105,7 @@ export class MyPlaylistsComponent implements OnInit {
   }
 
   albums(): ContainerDto[] {
-    return this.contentDirectoryService.currentContainerList.albumDto;
+    return this.contentDirectoryService.currentContainerList().albumDto;
   }
 
   playlists(): ContainerDto[] {
@@ -122,7 +122,7 @@ export class MyPlaylistsComponent implements OnInit {
 
   public backButtonPressed(event: any) {
     const currentParent =
-      this.contentDirectoryService?.currentContainerList?.currentContainer
+      this.contentDirectoryService?.currentContainerList().currentContainer
         ?.parentID;
     if (currentParent) {
     }
@@ -130,7 +130,7 @@ export class MyPlaylistsComponent implements OnInit {
   }
 
   getParentTitle(): string {
-    return this.contentDirectoryService.currentContainerList.parentFolderTitle;
+    return this.contentDirectoryService.currentContainerList().parentFolderTitle;
   }
 
   public backButtonDisabled(): boolean {

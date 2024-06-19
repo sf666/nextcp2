@@ -65,7 +65,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     }
   });
 
-  likePossible = computed(() => {return this.allTracksSameMusicBrainzReleaseId_;});
+  likePossible = computed(() => { return this.allTracksSameMusicBrainzReleaseId_; });
   totalPlaytime = computed(() => this.totalPlaytimeCalc());
 
   // like member
@@ -79,7 +79,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     private dtoGeneratorService: DtoGeneratorService,
     private backgroundImageService: BackgroundImageService,
     private timeDisplayService: TimeDisplayService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (this.contentDirectoryService) {
@@ -265,7 +265,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     console.log('checkAllTracksSameAlbum : ' + this.allTracksSameAlbum_);
     console.log(
       'checkAllTracksSameMusicbrainzReleaseId : ' +
-        this.allTracksSameMusicBrainzReleaseId_
+      this.allTracksSameMusicBrainzReleaseId_
     );
   }
 
@@ -287,11 +287,11 @@ export class DisplayContainerHeaderComponent implements OnInit {
     if (this.musicTracks.length > 0) {
       this.musicTracks?.forEach(
         (el) =>
-          (completeTime =
-            completeTime +
-            (el.audioFormat?.durationInSeconds
-              ? el.audioFormat.durationInSeconds
-              : 0))
+        (completeTime =
+          completeTime +
+          (el.audioFormat?.durationInSeconds
+            ? el.audioFormat.durationInSeconds
+            : 0))
       );
     }
     if (completeTime) {
@@ -306,11 +306,11 @@ export class DisplayContainerHeaderComponent implements OnInit {
     if (this.musicTracks.length > 0) {
       this.musicTracks?.forEach(
         (el) =>
-          (completeTime =
-            completeTime +
-            (el.audioFormat?.durationInSeconds
-              ? el.audioFormat.durationInSeconds
-              : 0))
+        (completeTime =
+          completeTime +
+          (el.audioFormat?.durationInSeconds
+            ? el.audioFormat.durationInSeconds
+            : 0))
       );
     }
     if (completeTime) {
@@ -336,9 +336,8 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   // Other
   public get currentContainer(): ContainerDto {
-    if (this.contentDirectoryService().currentContainerList?.currentContainer) {
-      return this.contentDirectoryService().currentContainerList
-        .currentContainer;
+    if (this.contentDirectoryService().currentContainerList().currentContainer) {
+      return this.contentDirectoryService().currentContainerList().currentContainer;
     }
     return this.dtoGeneratorService.generateEmptyContainerDto();
   }

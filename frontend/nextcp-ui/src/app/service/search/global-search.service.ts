@@ -49,7 +49,7 @@ export class GlobalSearchService {
       .quickSearch(
         this.currentSearchText,
         '',
-        this.deviceService.selectedMediaServerDevice().udn,
+        this.deviceService.selectedMediaServerDevice().udn
       )
       .subscribe((data) => this.searchResultReceived(data));
   };
@@ -59,14 +59,14 @@ export class GlobalSearchService {
     private deviceService: DeviceService,
     private dtoGeneratorService: DtoGeneratorService,
     private router: Router,
-    private configurationService: ConfigurationService,
+    private configurationService: ConfigurationService
   ) {
     this.quickSearchResultList =
       this.dtoGeneratorService.generateEmptySearchResultDto();
     this.quickSearchPanelVisible_ = false;
     this.doSearchFunc = debounce(
       this.getSearchDelay(),
-      this.doSearchThrotteled,
+      this.doSearchThrotteled
     );
   }
 
@@ -91,7 +91,7 @@ export class GlobalSearchService {
     if (value == false) {
       this.clearSearch();
     }
-}
+  }
 
   public showQuickSearchPanel(): void {
     this.quickSearchPanelVisible_ = true;
@@ -130,7 +130,10 @@ export class GlobalSearchService {
     if (this.quickSearchQueryString == '') {
       this.quickSearchPanelVisible_ = false;
     } else {
-      if (this.quickSearchQueryString && this.quickSearchQueryString?.length > this.MIN_SEARCH_LEN) {
+      if (
+        this.quickSearchQueryString &&
+        this.quickSearchQueryString?.length > this.MIN_SEARCH_LEN
+      ) {
         this.quickSearchPanelVisible_ = true;
         this.currentSearchText = this.quickSearchQueryString;
         this.doSearch();
@@ -171,7 +174,7 @@ export class GlobalSearchService {
   //
 
   get currentContainerID(): string {
-    return this.contentDirectoryService.currentContainerList.currentContainer
+    return this.contentDirectoryService.currentContainerList().currentContainer
       .id;
   }
 
@@ -182,11 +185,11 @@ export class GlobalSearchService {
       '-upnp:rating, +dc:title',
       this.currentContainerID,
       0,
-      100,
+      100
     );
     this.hideQuickSearchPanel();
     this.router.navigateByUrl('/music-library');
-    console.log("show all item clicked ... ");
+    console.log('show all item clicked ... ');
     this.showAllItemClicked$.next(sr);
   }
 
@@ -197,11 +200,11 @@ export class GlobalSearchService {
       '-ums:likedAlbum, +dc:title',
       this.currentContainerID,
       0,
-      100,
+      100
     );
     this.hideQuickSearchPanel();
     this.router.navigateByUrl('/music-library');
-    console.log("show all album clicked ... ");
+    console.log('show all album clicked ... ');
     this.showAllAlbumClicked$.next(sr);
   }
 
@@ -212,11 +215,11 @@ export class GlobalSearchService {
       '',
       this.currentContainerID,
       0,
-      100,
+      100
     );
     this.hideQuickSearchPanel();
     this.router.navigateByUrl('/music-library');
-    console.log("show all artists clicked ... ");
+    console.log('show all artists clicked ... ');
     this.showAllArtistClicked$.next(sr);
   }
 
@@ -227,11 +230,11 @@ export class GlobalSearchService {
       '',
       this.currentContainerID,
       0,
-      100,
+      100
     );
     this.hideQuickSearchPanel();
     this.router.navigateByUrl('/music-library');
-    console.log("show all playlist clicked ... ");
+    console.log('show all playlist clicked ... ');
     this.showAllPlaylistClicked$.next(sr);
   }
 }

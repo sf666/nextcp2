@@ -118,6 +118,11 @@ export class SidebarComponent {
     return this.deviceService.selectedMediaServerDevice().extendedApi;
   }
 
+  get serverPlaylists() {
+    console.log("Server playists size : " + this.playlistService.serverPl().serverPlaylists.length);
+    return this.playlistService.serverPl().serverPlaylists;
+  }
+
   public getTextClass(url: string): string {
     let id = this.routerMap.get(url);
     if (id == this.activeId) {

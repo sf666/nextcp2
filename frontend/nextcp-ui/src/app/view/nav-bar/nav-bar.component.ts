@@ -1,5 +1,5 @@
 import { GlobalSearchService } from './../../service/search/global-search.service';
-import { Router, Event as NavigationEvent, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { ModalSearchResultComponent } from '../search/modal-search-result/modal-search-result.component';
@@ -61,11 +61,11 @@ export class NavBarComponent {
   }
 
   showParentFolder() : boolean {
-    if (!this.contentHandler?.contentDirectoryService?.currentContainerList?.currentContainer?.parentID ) {
+    if (!this.contentHandler?.contentDirectoryService?.currentContainerList().currentContainer?.parentID ) {
       return false;
     } else {
-      if (this.contentHandler?.contentDirectoryService?.currentContainerList?.currentContainer?.parentID === "0" || 
-          this.contentHandler?.contentDirectoryService?.currentContainerList?.currentContainer?.parentID === "-1") {
+      if (this.contentHandler?.contentDirectoryService?.currentContainerList().currentContainer?.parentID === "0" || 
+          this.contentHandler?.contentDirectoryService?.currentContainerList().currentContainer?.parentID === "-1") {
         return false;
       }
       return true;

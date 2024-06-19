@@ -30,7 +30,7 @@
                     recently used
                 </div>
                 <playlist-container
-                    [playlists]="getRecentPlaylists()"
+                    [playlists]="filteredRecentPlaylists()"
                     [playlistMode]="playlistMode"
                     (addClicked)="addTo($event)"
                     (deleteClicked)="deletePlaylist($event)">
@@ -42,7 +42,7 @@
             </div>
             @if (getServerPlaylistsCount() > 0) {
                 <playlist-container
-                    [playlists]="getServerPlaylists()"
+                    [playlists]="filteredServerPlaylists()"
                     [playlistMode]="playlistMode"
                     (addClicked)="addTo($event)"
                     (deleteClicked)="deletePlaylist($event)">
@@ -56,7 +56,7 @@
 
             @if (getOtherPlaylistsCount() > 0) {
                 <playlist-container
-                    [playlists]="getOtherPlaylists()"
+                    [playlists]="filteredOtherPlaylists()"
                     [playlistMode]="playlistMode"
                     (addClicked)="addTo($event)"
                     (deleteClicked)="deletePlaylist($event)">

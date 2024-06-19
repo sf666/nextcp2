@@ -37,8 +37,12 @@ export class ItemTileComponent implements OnInit {
   addItemToPlaylistClicked = output<MusicItemDto>();
 
   // some calculated constants
-  allTracksSameDisc = computed(() => this.checkAllTracksSameDisc(this.allMusicTracks()));
-  allTracksSameAlbum = computed(() => this.checkAllTracksSameAlbum(this.allMusicTracks()));
+  allTracksSameDisc = computed(() =>
+    this.checkAllTracksSameDisc(this.allMusicTracks())
+  );
+  allTracksSameAlbum = computed(() =>
+    this.checkAllTracksSameAlbum(this.allMusicTracks())
+  );
   musicTracks = computed(() => this.filteredMusicTracks(this.allMusicTracks()));
 
   allMusicTracks = signal<MusicItemDto[]>([]);
@@ -128,7 +132,7 @@ export class ItemTileComponent implements OnInit {
   }
 
   private filteredMusicTracks(data: MusicItemDto[]): MusicItemDto[] {
-    console.log("filteredMusicTracks");
+    console.log('filteredMusicTracks');
     let tracks: Array<MusicItemDto>;
     if (this.quickSearchString()) {
       tracks = data.filter((item) =>
@@ -208,8 +212,10 @@ export class ItemTileComponent implements OnInit {
       });
   }
   public get currentContainer(): ContainerDto {
-    if (this.contentDirectoryService().currentContainerList?.currentContainer) {
-      return this.contentDirectoryService().currentContainerList
+    if (
+      this.contentDirectoryService().currentContainerList().currentContainer
+    ) {
+      return this.contentDirectoryService().currentContainerList()
         .currentContainer;
     }
     return this.dtoGeneratorService.generateEmptyContainerDto();

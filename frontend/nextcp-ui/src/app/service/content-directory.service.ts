@@ -12,7 +12,7 @@ import {
   SearchResultDto,
   MusicItemDto,
 } from './dto.d';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +23,7 @@ export class ContentDirectoryService {
   // for parent navigation back to last CDS objectId
   private lastBrowseRequest: BrowseRequestDto;
 
-  public currentContainerList: ContainerItemDto;
+  currentContainerList = signal<ContainerItemDto>(this.dtoGeneratorService.generateEmptyContainerItemDto());
   public orderAlbumsByGenre = false;
 
   // result container split by types
@@ -59,8 +59,6 @@ export class ContentDirectoryService {
     private toastService: ToastService,
   ) {
     // Initialize empty result object
-    this.currentContainerList =
-      this.dtoGeneratorService.generateEmptyContainerItemDto();
     if (configService.applicationConfig.nextPageAfter) {
       this.TURN_PAGE_AFTER = configService.applicationConfig.nextPageAfter;
     }
@@ -75,7 +73,7 @@ export class ContentDirectoryService {
   //
 
   public minimTagsList(): ContainerDto[] {
-    return this.currentContainerList.minimServerSupportTags;
+    return this.currentContainerList().minimServerSupportTags;
   }
 
   /**
@@ -129,9 +127,9 @@ export class ContentDirectoryService {
     // At this time, we filter the content by posting a browse request and afterwards a manual filter (backend)
     return this.browseChildrenByRequest(
       this.createBrowseRequest(
-        this.currentContainerList.currentContainer.id,
+        this.currentContainerList().currentContainer.id,
         '',
-        this.currentContainerList.currentContainer.mediaServerUDN,
+        this.currentContainerList().currentContainer.mediaServerUDN,
         searchStr,
       ),
     );
@@ -193,7 +191,7 @@ export class ContentDirectoryService {
   public updateContainer(data: ContainerItemDto): void {
     console.log("CDS - updating container with : " + data);
     if (data) {
-      this.currentContainerList = data;
+      this.currentContainerList.set(data);
       this.updatePageTurnId(data);
       this.albumList_ = data.albumDto;
       this.containerList_ = data.containerDto?.filter(
@@ -226,7 +224,7 @@ export class ContentDirectoryService {
 
   public addContainer(data: ContainerItemDto): void {
     if (data) {
-      this.currentContainerList = data;
+      this.currentContainerList.set(data);
       const count =
         data.albumDto.length +
         data.containerDto.length +
@@ -321,7 +319,7 @@ export class ContentDirectoryService {
   }
 
   get currentContainerID(): string {
-    return this.currentContainerList.currentContainer.id;
+    return this.currentContainerList().currentContainer.id;
   }
   //
   // Search Section

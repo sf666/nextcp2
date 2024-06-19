@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { Injectable, computed, signal } from '@angular/core';
+import { Observable } from 'rxjs';
 import {
   CreateServerPlaylistVO,
   MediaServerDto,
@@ -18,39 +19,46 @@ export class ServerPlaylistService {
   baseUri = '/MediaServerPlaylistService';
 
 
-  recentServerPl : ServerPlaylists = {
+  recentServerPl = signal<ServerPlaylists>({
     mediaServerUdn: '',
     containerId: '',
     serverPlaylists: [],
-  };
+  });
 
   // Default server based playlists
-  serverPl: ServerPlaylists = {
+  serverPl = signal<ServerPlaylists>({
     mediaServerUdn: '',
     containerId: '',
     serverPlaylists: [],
-  };
-  serverPlPlaylistIds: string[] = [];
+  });
 
-  selectedMediaServer: MediaServerDto;
+  serverPlPlaylistIds = computed(() => {
+    const ids: string[] = [];
+    this.serverPl().serverPlaylists?.forEach((element) => {
+      ids.push(element.playlistId);
+    });
+    return ids;
+  });
+
+  selectedMediaServer = computed(() => { return this.deviceService.selectedMediaServerDevice() });
 
   constructor(
     private httpService: HttpService,
     private deviceService: DeviceService,
     sseService: SseService,
   ) {
+
+    toObservable(this.selectedMediaServer).subscribe(data => this.afterMediaServerChanged(data))
+
     sseService.mediaServerPlaylistChanged$.subscribe((data) => {
       if (deviceService.isMediaServerSelected(data.mediaServerUdn)) {
-        this.serverPl = data;
-        this.serverPl.serverPlaylists?.forEach((element) => {
-          this.serverPlPlaylistIds.push(element.playlistId);
-        });
+        this.serverPl.set(data);
       }
     });
 
     sseService.mediaServerRecentPlaylistChanged$.subscribe((data) => {
       console.log("updating recently used playlists ... ");
-      this.recentServerPl = data;
+      this.recentServerPl.set(data);
     })
 
     deviceService.mediaServerChanged$.subscribe((server) => {
@@ -60,7 +68,6 @@ export class ServerPlaylistService {
   }
 
   private afterMediaServerChanged(server: MediaServerDto) {
-    this.selectedMediaServer = server;
     this.updateServerAccessiblePlaylists();
     this.updateRecentServerAccessiblePlaylists();
   }
@@ -69,28 +76,33 @@ export class ServerPlaylistService {
   // Playlists located in the configured folder name
   //
   public updateServerAccessiblePlaylists() {
-    const uri = '/getServerPlaylists';
-    this.httpService
-      .post<ServerPlaylists>(this.baseUri, uri, this.selectedMediaServer.udn)
-      .subscribe((data) => {
-        this.serverPl = data;
-        this.serverPl.serverPlaylists?.forEach((element) => {
-          this.serverPlPlaylistIds.push(element.playlistId);
+    if (this.selectedMediaServer().udn) {
+      const uri = '/getServerPlaylists';
+      this.httpService
+        .post<ServerPlaylists>(this.baseUri, uri, this.selectedMediaServer().udn)
+        .subscribe((data) => {
+          this.serverPl.set(data);
         });
-      });
+    } else {
+      console.log("updateServerAccessiblePlaylists : skipping, no server selected ...");
+    }
   }
 
   public updateRecentServerAccessiblePlaylists() {
-    const uri = '/getRecentServerPlaylists';
-    this.httpService
-      .post<ServerPlaylists>(this.baseUri, uri, this.selectedMediaServer.udn)
-      .subscribe((data) => {
-        this.recentServerPl = data;
-      });
+    if (this.selectedMediaServer().udn) {
+      const uri = '/getRecentServerPlaylists';
+      this.httpService
+        .post<ServerPlaylists>(this.baseUri, uri, this.selectedMediaServer().udn)
+        .subscribe((data) => {
+          this.recentServerPl.set(data);
+        });
+    } else {
+      console.log("updateRecentServerAccessiblePlaylists : skipping, no server selected ...");
+    }
   }
 
   public playlistIdExistsInServerPlaylists(id: string): boolean {
-    return this.serverPlPlaylistIds.indexOf(id) > -1;
+    return this.serverPlPlaylistIds().indexOf(id) > -1;
   }
 
   //
@@ -99,8 +111,8 @@ export class ServerPlaylistService {
 
   public createPlaylist(playlistName: string): Observable<string> {
     const createPL: CreateServerPlaylistVO = {
-      containerId: this.serverPl.containerId,
-      mediaServerUdn: this.selectedMediaServer.udn,
+      containerId: this.serverPl().containerId,
+      mediaServerUdn: this.selectedMediaServer().udn,
       playlistName: playlistName + '.m3u8',
     };
     const uri = '/createPlaylist';
@@ -112,7 +124,7 @@ export class ServerPlaylistService {
   public addSongToServerPlaylist(songId: string, playlistId: string): Observable<any> {
     const uri = '/addToServerPlaylist'; // void return
     const req: ServerPlaylistEntry = {
-      serverUdn: this.selectedMediaServer.udn,
+      serverUdn: this.selectedMediaServer().udn,
       songObjectId: songId,
       playlistObjectId: playlistId,
     };
@@ -121,7 +133,7 @@ export class ServerPlaylistService {
     return ret;
   }
 
-  public deletePlaylistFile(objectId: string): Observable<any> {    
+  public deletePlaylistFile(objectId: string): Observable<any> {
     let ret = this.deleteObject(objectId);
     ret.subscribe(() => this.updateServerAccessiblePlaylists());
     return ret;
@@ -139,7 +151,7 @@ export class ServerPlaylistService {
   public deleteObject(objectId: string): Observable<any> {
     const uri = '/deleteObject';
     const req: ServerDeleteObjectRequest = {
-      serverUdn: this.selectedMediaServer.udn,
+      serverUdn: this.selectedMediaServer().udn,
       objectId: objectId,
     };
     let ret = this.httpService.post(this.baseUri, uri, req);

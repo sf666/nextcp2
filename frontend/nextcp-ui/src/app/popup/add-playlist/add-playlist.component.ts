@@ -7,7 +7,7 @@ import {
   SearchResultDto,
   ContainerDto,
 } from './../../service/dto.d';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, computed, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormField } from '@angular/material/form-field';
@@ -35,12 +35,27 @@ export enum PlaylistMode {
 })
 
 export class AddPlaylistComponent {
+  otherPlaylists = signal<ServerPlaylistDto[]>([]);
+  playlistFilter = signal<string>("");
+
+  filteredServerPlaylists = computed(() => {
+    return this.serverPlaylistService.serverPl().serverPlaylists.filter(
+      pl => pl.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase()))
+  });
+
+  filteredOtherPlaylists = computed(() => {
+    return this.otherPlaylists().filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase()));
+  });
+
+  filteredRecentPlaylists = computed(() => {
+    return this.serverPlaylistService.recentServerPl().serverPlaylists.filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase()));
+  });
+  
+
+  playlistMode: PlaylistMode;
+  newPlaylistName = '';
   PlaylistModeEnum: typeof PlaylistMode = PlaylistMode;
   private musicItemToAdd: MusicItemDto;
-  private otherPlaylists: ServerPlaylistDto[];
-  playlistFilter: string = "";
-  playlistMode : PlaylistMode;
-  newPlaylistName = '';
 
   constructor(
     @Inject(MAT_DIALOG_DATA) data: { item: MusicItemDto },
@@ -56,63 +71,42 @@ export class AddPlaylistComponent {
     } else {
       this.playlistMode = PlaylistMode.Create;
     }
-    let sr = dtoGeneratorService.generateEmptySearchRequestDto();    
+    let sr = dtoGeneratorService.generateEmptySearchRequestDto();
     sr.searchRequest = '';
     sr.mediaServerUDN = deviceService.selectedMediaServerDevice().udn;
     this.contentDirectoryService.searchAllPlaylist(sr).subscribe(data => this.updateAllPlaylists(data));
   }
 
-  private updateAllPlaylists(data : SearchResultDto) : void {
-    let newPl : ServerPlaylistDto[] = [];
+  private updateAllPlaylists(data: SearchResultDto): void {
+    let newPl: ServerPlaylistDto[] = [];
 
     let other = data.playlistItems.filter((spe) => !this.serverPlaylistService.playlistIdExistsInServerPlaylists(spe.id));
     other?.forEach(pl => {
       const entry = {} as ServerPlaylistDto;
       entry.albumArtUrl = pl.albumartUri,
-      entry.playlistId = pl.id,
-      entry.playlistName = pl.title,
-      newPl.push(entry);
+        entry.playlistId = pl.id,
+        entry.playlistName = pl.title,
+        newPl.push(entry);
     })
-    this.otherPlaylists = newPl;
+    this.otherPlaylists.set(newPl);
   }
 
   public cancel(): void {
     this.dialogRef.close();
   }
 
-  getRecentPlaylists(): ServerPlaylistDto[] {
-    if (this.serverPlaylistService?.recentServerPl?.serverPlaylists?.length > 0) {
-      return this.serverPlaylistService.recentServerPl.serverPlaylists.filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter.toLowerCase()));
-    }
-    return [];
-  }
-
-  getRecentPlaylistsCount() : number {
-    return this.getRecentPlaylists()?.length
-  }
-
-  getServerPlaylists(): ServerPlaylistDto[] {
-    if (this.serverPlaylistService?.serverPl?.serverPlaylists?.length > 0) {
-      return this.serverPlaylistService.serverPl.serverPlaylists.filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter.toLowerCase()));
-    }
-    return [];
+  getRecentPlaylistsCount(): number {
+    return this.filteredRecentPlaylists().length
   }
 
   getServerPlaylistsCount(): number {
-    return this.getServerPlaylists()?.length;
+    return this.serverPlaylistService.serverPl().serverPlaylists?.length;
   }
 
-  getOtherPlaylists(): ServerPlaylistDto[] {
-    if (this.otherPlaylists) {
-      return this.otherPlaylists.filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter.toLowerCase()));
-    }
-    return [];
-  }
-  
   getOtherPlaylistsCount(): number {
-    return this.getOtherPlaylists()?.length;
+    return this.otherPlaylists()?.length;
   }
-  
+
   addTo(serverPlaylist: ServerPlaylistDto) {
     this.serverPlaylistService.addSongToServerPlaylist(
       this.musicItemToAdd.objectID,
@@ -124,67 +118,67 @@ export class AddPlaylistComponent {
   deletePlaylist(serverPlaylist: ServerPlaylistDto) {
     this.serverPlaylistService.deleteObject(serverPlaylist.playlistId).subscribe({
       next: (data) => {
-        this.serverPlaylistService.serverPl.serverPlaylists = this.serverPlaylistService.serverPl.serverPlaylists.filter(
+        this.serverPlaylistService.serverPl().serverPlaylists = this.serverPlaylistService.serverPl().serverPlaylists.filter(
           pl => pl.playlistId !== serverPlaylist.playlistId);
       },
-      error: (data) => {console.error(data);}
-      
+      error: (data) => { console.error(data); }
+
     }
     );
   }
 
-  close() : void {
+  close(): void {
     this.dialogRef.close();
   }
 
-  addPlaylistClick() : void {
+  addPlaylistClick(): void {
     this.playlistMode = PlaylistMode.Add;
   }
 
-  newPlaylistClick() : void {
+  newPlaylistClick(): void {
     this.playlistMode = PlaylistMode.Create;
   }
 
-  deletePlaylistClick() : void {
+  deletePlaylistClick(): void {
     this.playlistMode = PlaylistMode.Delete;
   }
 
-  playlistActiveClass(mode: PlaylistMode) : string {
-    if (mode.valueOf() === this.playlistMode.valueOf() ) {
+  playlistActiveClass(mode: PlaylistMode): string {
+    if (mode.valueOf() === this.playlistMode.valueOf()) {
       return "active";
     } else {
       return "inactive";
     }
   }
 
-  isPlaylistMode(mode: PlaylistMode) : boolean {
-    if (mode.valueOf() === this.playlistMode.valueOf() ) {
+  isPlaylistMode(mode: PlaylistMode): boolean {
+    if (mode.valueOf() === this.playlistMode.valueOf()) {
       return true;
     } else {
       return false;
     }
   }
 
-  addDisabled() : boolean {
+  addDisabled(): boolean {
     return this.newPlaylistName.length == 0;
   }
 
-  createPlaylistClicked() : void {
+  createPlaylistClicked(): void {
     this.serverPlaylistService.createPlaylist(this.newPlaylistName).subscribe(newId => this.newPlaylistId(newId))
     this.close();
   }
 
-  cancelClicked() : void {
+  cancelClicked(): void {
     this.newPlaylistName = '',
-    this.close();
+      this.close();
   }
 
-  private newPlaylistId(newId : string) {
-    this.addTo({playlistId:newId, albumArtUrl:'', playlistName:'', numberOfElements: 0, totalPlaytime:''});
+  private newPlaylistId(newId: string) {
+    this.addTo({ playlistId: newId, albumArtUrl: '', playlistName: '', numberOfElements: 0, totalPlaytime: '' });
     this.serverPlaylistService.updateServerAccessiblePlaylists();
   }
 
-  get musicItemToAddExists() : boolean {
+  get musicItemToAddExists(): boolean {
     return this.musicItemToAdd?.objectID?.length > 0;
   }
 }
