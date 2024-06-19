@@ -60,11 +60,6 @@ export class ServerPlaylistService {
       console.log("updating recently used playlists ... ");
       this.recentServerPl.set(data);
     })
-
-    deviceService.mediaServerChanged$.subscribe((server) => {
-      console.log("updating current media server ... ");
-      this.afterMediaServerChanged(server);
-    })
   }
 
   private afterMediaServerChanged(server: MediaServerDto) {

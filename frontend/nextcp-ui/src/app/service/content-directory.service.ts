@@ -24,7 +24,6 @@ export class ContentDirectoryService {
   private lastBrowseRequest: BrowseRequestDto;
 
   currentContainerList = signal<ContainerItemDto>(this.dtoGeneratorService.generateEmptyContainerItemDto());
-  public orderAlbumsByGenre = false;
 
   // result container split by types
   public albumList_: ContainerDto[] = []; // not playlist container

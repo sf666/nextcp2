@@ -6,6 +6,7 @@ import { DeviceDriverState, MediaRendererSwitchPower, MediaRendererSetVolume, Me
 import { SseService } from './sse/sse.service';
 import { Injectable } from '@angular/core';
 import { GenericResultService } from './generic-result.service';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,7 @@ export class RendererService {
     private genericResultService: GenericResultService,
     private httpService: HttpService) {
 
-    this.deviceDriverState = { hasDeviceDriver: false, standby: true, volume: 0, balance:0, rendererUDN: '', input: dtoGeneratorService.emptyInputSourceDto() };
+    this.deviceDriverState = { hasDeviceDriver: false, standby: true, volume: 0, balance: 0, rendererUDN: '', input: dtoGeneratorService.emptyInputSourceDto() };
     this.trackInfo = this.dtoGeneratorService.emptyTrackInfo();
     this.trackTime = this.dtoGeneratorService.emptyTrackTime();
 
@@ -57,7 +58,7 @@ export class RendererService {
     });
 
     sseService.mediaRendererTransportStateChanged$.subscribe(data => this.updateTransportState(data));
-    this.deviceService.mediaRendererChanged$.subscribe(data => this.renderDeviceChanged(data));
+    toObservable(this.deviceService.selectedMediaRendererDevice).subscribe(data => this.renderDeviceChanged(data));
   }
 
   private updateTransportState(state: TransportServiceStateDto) {
@@ -74,31 +75,37 @@ export class RendererService {
   }
 
   private readTrackInfoState(device: MediaRendererDto) {
-    const uri = '/getCurrentSourceTrackInfo';
-    this.httpService.post<TrackInfoDto>(this.baseUri, uri, device).subscribe(data => {
-      if (data && this.deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
-        this.trackInfo = data
-      }
-    });
+    if (device?.udn.length > 0) {
+      const uri = '/getCurrentSourceTrackInfo';
+      this.httpService.post<TrackInfoDto>(this.baseUri, uri, device).subscribe(data => {
+        if (data && this.deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
+          this.trackInfo = data
+        }
+      });
+    }
   }
 
   private readTransportServiceState(device: MediaRendererDto) {
-    const uri = '/getDeviceTransportServiceState';
-    this.httpService.post<TransportServiceStateDto>(this.baseUri, uri, device).subscribe(data => {
-      if (this.deviceService.isMediaRendererSelected(data.udn)) {
-        this.transportServiceStateDto = data
-      }
-    });
+    if (device?.udn.length > 0) {
+      const uri = '/getDeviceTransportServiceState';
+      this.httpService.post<TransportServiceStateDto>(this.baseUri, uri, device).subscribe(data => {
+        if (this.deviceService.isMediaRendererSelected(data.udn)) {
+          this.transportServiceStateDto = data
+        }
+      });
+    }
   }
 
   private readDeviceDriverState(device: MediaRendererDto) {
-    const uri = '/getDeviceState';
-    this.httpService.post<DeviceDriverState>(this.baseUri, uri, device).subscribe(data => {
-      if (this.deviceService.isMediaRendererSelected(data.rendererUDN)) {
-        console.log("updated device driver state for " + data.rendererUDN + " to " + data.hasDeviceDriver);
-        this.deviceDriverState = data;
-      }
-    });
+    if (device?.udn.length > 0) {
+      const uri = '/getDeviceState';
+      this.httpService.post<DeviceDriverState>(this.baseUri, uri, device).subscribe(data => {
+        if (this.deviceService.isMediaRendererSelected(data.rendererUDN)) {
+          console.log("updated device driver state for " + data.rendererUDN + " to " + data.hasDeviceDriver);
+          this.deviceDriverState = data;
+        }
+      });
+    }
   }
 
   private updateRenderDeviceDriverState(data: DeviceDriverState) {
@@ -186,7 +193,7 @@ export class RendererService {
       };
       this.httpService.post(this.baseUri, uri, request, "volume control");
     } else {
-      this.genericResultService.displayGenericMessage("volume","Cannot change volume. No media renderer selected.");      
+      this.genericResultService.displayGenericMessage("volume", "Cannot change volume. No media renderer selected.");
     }
   }
 
@@ -212,13 +219,13 @@ export class RendererService {
     const uri = '/next';
     this.httpService.post(this.baseUri, uri, this.deviceService.selectedMediaRendererDevice().udn, "next");
   }
-  
+
   // Maintenance methods
-  public initServices(udn : string) {
+  public initServices(udn: string) {
     const uri = '/initServices';
     this.httpService.post(this.baseUri, uri, udn, "init services");
   }
-  
+
   //
   // Renderer : information about the current played song
   // ================================================================================================================

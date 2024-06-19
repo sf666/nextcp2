@@ -14,6 +14,7 @@ import { Component, ElementRef, Optional } from '@angular/core';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import { QualityBadgeComponent } from '../../util/comp/quality-badge/quality-badge.component';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'renderer-footer',
@@ -33,7 +34,7 @@ export class FooterComponent {
     public playlistService: PlaylistService,
     public songOptionsServiceService: SongOptionsServiceService,
     public rendererService: RendererService) {
-    deviceService.mediaRendererChanged$.subscribe(data => this.currentMediaRendererName = data.friendlyName);
+      toObservable(this.deviceService.selectedMediaRendererDevice).subscribe(data => this.currentMediaRendererName = data.friendlyName);
   }
 
   public rendererClicked(event: Event): void {

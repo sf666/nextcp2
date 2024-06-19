@@ -5,6 +5,7 @@ import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
 import { Injectable, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root'
@@ -57,7 +58,7 @@ export class PlaylistService implements OnInit {
 
 
     // subscribe to device changes
-    this.deviceService.mediaRendererChanged$.subscribe(data => {
+    toObservable(this.deviceService.selectedMediaRendererDevice).subscribe(data => {
       this.getPlaylistItems(data.udn);
       this.getPlaylistState(data.udn);
     })

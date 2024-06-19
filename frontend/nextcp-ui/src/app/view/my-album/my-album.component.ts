@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 import { DisplayContainerComponent } from '../../mediaserver/display-container/display-container.component';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { Router } from '@angular/router';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'myAlbums',
@@ -24,7 +25,7 @@ export class MyAlbumComponent implements OnInit {
     private router: Router,
     public contentDirectoryService: ContentDirectoryService) {
     console.log("constructor call : MyAlbumComponent");
-    deviceService.mediaServerChanged$.subscribe(data => this.mediaServerChanged(data));
+    toObservable(this.deviceService.selectedMediaServerDevice).subscribe(data => this.mediaServerChanged(data));
   }
 
   mediaServerChanged(data: MediaServerDto): void {

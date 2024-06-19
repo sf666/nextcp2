@@ -2,6 +2,7 @@ import { HttpService } from './http.service';
 import { MusicItemDto, MediaRendererDto, PlayOpenHomeRadioDto } from './dto.d';
 import { Injectable } from '@angular/core';
 import { DeviceService } from './device.service';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root'
@@ -16,11 +17,11 @@ export class RadioService {
 
   constructor(
     private httpService: HttpService,
-    private deviceService: DeviceService) {
+    public deviceService: DeviceService) {
 
     console.log("init RadioService ...");
 
-    this.deviceService.mediaRendererChanged$.subscribe(data => this.deviceChanged(data), err => console.log(err), () => console.log("completed."));
+    toObservable(this.deviceService.selectedMediaRendererDevice).subscribe(data => this.deviceChanged(data));
 
     if (this.deviceService.selectedMediaRendererDevice().udn !== '') {
       this.updateRadioStations(this.deviceService.selectedMediaRendererDevice());

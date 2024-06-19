@@ -10,20 +10,19 @@ import { Injectable, signal } from '@angular/core';
 })
 export class DeviceService {
 
-  baseUri = '/DeviceRegistry';
+  // member
+  // ============================================================
 
+  private baseUri = '/DeviceRegistry';
+  private defaultMediaRendererAlreadySelected = false;
+  private defaultMediaServerAlreadySelected = false;
+
+  // Signals 
+  // ============================================================
   public mediaServerList = signal<MediaServerDto[]>([]);
   public mediaRendererList = signal<MediaRendererDto[]>([]);
   public selectedMediaServerDevice = signal<MediaServerDto>({ udn: '', friendlyName: 'please select Media-Server', extendedApi: false });
   public selectedMediaRendererDevice = signal<MediaRendererDto>({ udn: '', friendlyName: 'please select Media-Renderer', services: [], allSources: [], currentSource: null });
-
-  private defaultMediaRendererAlreadySelected = false;
-  private defaultMediaServerAlreadySelected = false;
-
-  mediaRendererChanged$: Subject<MediaRendererDto> = new Subject();
-  mediaServerChanged$: Subject<MediaServerDto> = new Subject();
-  mediaRendererInitiated$: Subject<MediaRendererDto[]> = new Subject();
-  mediaServerInitiated$: Subject<MediaServerDto[]> = new Subject();
 
   constructor(
     // class services
@@ -174,7 +173,6 @@ export class DeviceService {
     this.httpService.get<MediaServerDto[]>(this.baseUri, uri).subscribe(data => {
       this.mediaServerList.set(data);
       this.applyDefaultServer();
-      this.mediaServerInitiated$.next(data);
     });
   }
 
@@ -184,10 +182,10 @@ export class DeviceService {
     this.httpService.get<MediaRendererDto[]>(this.baseUri, uri).subscribe(data => {
       this.mediaRendererList.set(data);
       this.applyDefaultRenderer();
-      this.mediaRendererInitiated$.next(data);
     });
   }
 
+  // for debugging
   private logMediaRendererDeviceServices(renderer: MediaRendererDto): void {
     if (renderer) {
       console.log("available services for device : " + renderer.friendlyName);

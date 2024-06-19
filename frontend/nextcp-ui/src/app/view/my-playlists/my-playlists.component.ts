@@ -5,9 +5,10 @@ import { ContainerDto, MusicItemDto } from './../../service/dto.d';
 import { DeviceService } from 'src/app/service/device.service';
 import { LayoutService } from './../../service/layout.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, computed } from '@angular/core';
 import { DisplayContainerComponent } from '../../mediaserver/display-container/display-container.component';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'my-playlists',
@@ -25,7 +26,7 @@ export class MyPlaylistsComponent implements OnInit {
     private myPlaylistService: MyPlaylistService,
     public contentDirectoryService: ContentDirectoryService,
   ) {
-    this.deviceService.mediaServerChanged$.subscribe((server) =>
+    toObservable(this.deviceService.selectedMediaServerDevice).subscribe((server) =>
       this.browseToMyPlaylist(
         this.myPlaylistService.activePlaylistId,
         server.udn,
