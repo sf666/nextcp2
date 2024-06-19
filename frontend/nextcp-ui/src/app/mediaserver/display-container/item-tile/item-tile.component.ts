@@ -1,10 +1,8 @@
 import { ContainerItemDto } from './../../../service/dto.d';
 import {
+  ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  Input,
   OnInit,
-  Output,
   computed,
   input,
   output,
@@ -23,6 +21,7 @@ import { QualityBadgeComponent } from 'src/app/util/comp/quality-badge/quality-b
 @Component({
   selector: 'item-tile',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [StarRatingComponent, QualityBadgeComponent],
   templateUrl: './item-tile.component.html',
   styleUrl: './item-tile.component.scss',
@@ -224,6 +223,8 @@ export class ItemTileComponent implements OnInit {
   }
 
   // Disc Label support
+  // Audio items must be already sorted.
+  // TODO : sort items in UI
 
   getDiscLabel(item: MusicItemDto): string {
     if (item.numberOfThisDisc !== this.lastDiscLabel) {
@@ -234,7 +235,6 @@ export class ItemTileComponent implements OnInit {
   }
 
   newDiscLabel(item: MusicItemDto): boolean {
-    console.log('Check disk label for item ' + item.title);
     if (item.numberOfThisDisc !== this.lastDiscLabel) {
       return true;
     }
