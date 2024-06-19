@@ -37,7 +37,12 @@ import { TimeDisplayService } from 'src/app/util/time-display.service';
   styleUrl: './display-container-header.component.scss',
 })
 export class DisplayContainerHeaderComponent implements OnInit {
+  //
+  // signals
+  /////////////////////////////////////
+
   contentDirectoryService = input.required<ContentDirectoryService>();
+
   listView = model<boolean>();
   quickSearchString = model<string>();
   selectedGenres = model<Array<string>>([]);
@@ -47,6 +52,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   addToPlaylistClicked = output<ContainerDto>();
 
   genresList = signal<Array<String>>([]);
+  currentAlbumLiked = signal<boolean>(false);
 
   genresForm = new FormControl('');
 
@@ -69,7 +75,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
   totalPlaytime = computed(() => this.totalPlaytimeCalc());
 
   // like member
-  currentAlbumLiked = false;
   private allTracksSameMusicBrainzReleaseId_: boolean;
   private allTracksSameAlbum_: boolean;
   private currentAlbumReleaseID = '';
@@ -94,13 +99,11 @@ export class DisplayContainerHeaderComponent implements OnInit {
     this.fillGenres();
     this.checkAllTracksSameAlbum();
     this.checkLikeStatus();
-    this.backgroundImageService.setDisplayContainerHeaderImage(
-      this.currentContainer.albumartUri
-    );
+    this.backgroundImageService.setDisplayContainerHeaderImage(this.currentContainer.albumartUri);
   }
 
   get albums(): ContainerDto[] {
-    return this.contentDirectoryService().albumList_;
+    return this.contentDirectoryService().albumList_();
   }
 
   private fillGenres(): void {
@@ -136,10 +139,15 @@ export class DisplayContainerHeaderComponent implements OnInit {
           this.musicTracks[0].musicBrainzId.ReleaseTrackId;
         this.myMusicService
           .isAlbumLiked(this.currentAlbumReleaseID)
-          .subscribe((res) => (this.currentAlbumLiked = res));
+          .subscribe(
+            (res) => {
+              console.log("current album liked : " + res);
+              (this.currentAlbumLiked.set(res));
+            }
+          );
       }
     } else {
-      this.currentAlbumLiked = false;
+      this.currentAlbumLiked.set(false);
       this.currentAlbumReleaseID = undefined;
     }
   }
@@ -192,7 +200,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   isLiked(): boolean {
-    return this.currentAlbumLiked;
+    return this.currentAlbumLiked();
   }
 
   dislikeAlbum(): void {
@@ -225,7 +233,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   // Accessor
   //
   get musicTracks(): MusicItemDto[] {
-    return this.contentDirectoryService().musicTracks_;
+    return this.contentDirectoryService().musicTracks_();
   }
 
   // Like support

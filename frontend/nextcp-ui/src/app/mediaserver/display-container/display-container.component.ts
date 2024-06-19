@@ -119,23 +119,23 @@ export class DisplayContainerComponent {
   //
 
   get musicTracks(): MusicItemDto[] {
-    return this.contentHandler.contentDirectoryService.musicTracks_;
+    return this.contentHandler.contentDirectoryService.musicTracks_();
   }
 
   get otherItems_() {
-    return this.contentHandler.contentDirectoryService.otherItems_;
+    return this.contentHandler.contentDirectoryService.otherItems_();
   }
 
   get albums(): ContainerDto[] {
-    return this.contentHandler.contentDirectoryService.albumList_;
+    return this.contentHandler.contentDirectoryService.albumList_();
   }
 
   get playlists(): ContainerDto[] {
-    return this.contentHandler.contentDirectoryService.playlistList_;
+    return this.contentHandler.contentDirectoryService.playlistList_();
   }
 
   get container(): ContainerDto[] {
-    return this.contentHandler.contentDirectoryService.containerList_;
+    return this.contentHandler.contentDirectoryService.containerList_();
   }
 
   //
@@ -164,15 +164,6 @@ export class DisplayContainerComponent {
 
   get playlistList(): ContainerDto[] {
     return this.playlists;
-  }
-
-  // other container
-  get containerList(): ContainerDto[] {
-    return this.container;
-  }
-
-  get items(): MusicItemDto[] {
-    return this.otherItems_;
   }
 
   isListView(): boolean {

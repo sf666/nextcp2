@@ -78,11 +78,11 @@ Main Content
     <!--                                -->
     <!-- General container section      -->
     <!--                                -->
-    @if (containerList?.length > 0) {
+    @if (container?.length > 0) {
     <div id="head_browse_result_general_container_ID">
       <container-tile 
         [smallIcons]="this.allMusicTracks.length > 0" 
-        [container]="containerList"
+        [container]="container"
         [selectedGenres]="selectedGenres()"
         [quickSearchString]="displayFilterString()"
         (browseClicked)="browseTo($event)">
@@ -93,7 +93,7 @@ Main Content
     <!--                                -->
     <!-- Other items                    -->
     <!--                                -->
-    @if (items?.length > 0) {
+    @if (otherItems_?.length > 0) {
     <div id="head_browse_other_items_ID">
       <other-item-tile
         [otherItems]="otherItems_"

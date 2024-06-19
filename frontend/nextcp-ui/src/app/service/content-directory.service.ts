@@ -17,22 +17,26 @@ import { Injectable, signal } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class ContentDirectoryService {  
+export class ContentDirectoryService {
   baseUri = '/ContentDirectoryService';
 
   // for parent navigation back to last CDS objectId
   private lastBrowseRequest: BrowseRequestDto;
 
+  //
+  // signals
+  // ==========================================================
+
   currentContainerList = signal<ContainerItemDto>(this.dtoGeneratorService.generateEmptyContainerItemDto());
 
   // result container split by types
-  public albumList_: ContainerDto[] = []; // not playlist container
-  public containerList_: ContainerDto[] = []; // not playlist container
-  public playlistList_: ContainerDto[] = []; // playlist container
+  albumList_ = signal<ContainerDto[]>([]);
+  containerList_ = signal<ContainerDto[]>([]);
+  playlistList_ = signal<ContainerDto[]>([]);
 
   // item treatment
-  public musicTracks_: MusicItemDto[] = [];
-  public otherItems_: MusicItemDto[] = [];
+  musicTracks_ = signal<MusicItemDto[]>([]);
+  otherItems_ = signal<MusicItemDto[]>([]);
 
   // notfiy other about content change
   browseFinished$: Subject<ContainerItemDto> = new Subject();
@@ -150,7 +154,7 @@ export class ContentDirectoryService {
       this.baseUri,
       uri,
       browseRequestDto,
-    );    
+    );
     if (additive) {
       console.log("browseChildrenByRequest - additive");
       sub.subscribe((data) => this.addContainer(data));
@@ -192,21 +196,21 @@ export class ContentDirectoryService {
     if (data) {
       this.currentContainerList.set(data);
       this.updatePageTurnId(data);
-      this.albumList_ = data.albumDto;
-      this.containerList_ = data.containerDto?.filter(
+      this.albumList_.set(data.albumDto);
+      this.containerList_.set(data.containerDto?.filter(
         (item) => item.objectClass !== 'object.container.playlistContainer',
-      );
-      this.playlistList_ = data.containerDto?.filter(
+      ));
+      this.playlistList_.set(data.containerDto?.filter(
         (item) => item.objectClass === 'object.container.playlistContainer',
-      );
-      this.musicTracks_ = data.musicItemDto?.filter(
+      ));
+      this.musicTracks_.set(data.musicItemDto?.filter(
         (item) =>
           item.objectClass.lastIndexOf('object.item.audioItem', 0) === 0,
-      );
-      this.otherItems_ = data.musicItemDto?.filter(
+      ));
+      this.otherItems_.set(data.musicItemDto?.filter(
         (item) =>
           item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0,
-      );
+      ));
       this.browseFinished$.next(data);
 
       const count =
@@ -221,6 +225,10 @@ export class ContentDirectoryService {
     }
   }
 
+  /**
+   * 
+   * @param data Adding new data to existing array.
+   */
   public addContainer(data: ContainerItemDto): void {
     if (data) {
       this.currentContainerList.set(data);
@@ -229,29 +237,24 @@ export class ContentDirectoryService {
         data.containerDto.length +
         data.musicItemDto.length;
       this.updatePageTurnId(data);
-      this.albumList_ = this.albumList_.concat(data.albumDto);
-      this.containerList_ = this.containerList_.concat(
-        data.containerDto.filter(
-          (item) => item.objectClass !== 'object.container.playlistContainer',
-        ),
-      );
-      this.playlistList_ = this.playlistList_.concat(
-        data.containerDto.filter(
-          (item) => item.objectClass === 'object.container.playlistContainer',
-        ),
-      );
-      this.musicTracks_ = this.musicTracks_.concat(
-        data.musicItemDto.filter(
-          (item) =>
-            item.objectClass.lastIndexOf('object.item.audioItem', 0) === 0,
-        ),
-      );
-      this.otherItems_ = this.otherItems_.concat(
-        data.musicItemDto.filter(
-          (item) =>
-            item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0,
-        ),
-      );
+
+      this.albumList_.update(v => { return [...v].concat(data.albumDto) });
+
+      this.containerList_.update(v => {
+        return v.concat(data.containerDto.filter((item) => item.objectClass !== 'object.container.playlistContainer'))
+      });
+
+      this.playlistList_.update(v => {
+        return v.concat(data.containerDto.filter((item) => item.objectClass === 'object.container.playlistContainer'))
+      });
+
+      this.musicTracks_.update(v => {
+        return v.concat(data.musicItemDto.filter((item) => item.objectClass.lastIndexOf('object.item.audioItem', 0) === 0))
+      });
+
+      this.otherItems_.update(v => {
+        return v.concat(data.musicItemDto.filter((item) => item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0))
+      });
 
       this.browseFinished$.next(data);
 
@@ -419,8 +422,8 @@ export class ContentDirectoryService {
       " search] for '" +
       this.lastSearchObject.searchRequest +
       "'";
-    ci.currentContainer.albumartUri ='/assets/images/search-icon.png';
-      ci.parentFolderTitle = 'back to music library';
+    ci.currentContainer.albumartUri = '/assets/images/search-icon.png';
+    ci.parentFolderTitle = 'back to music library';
     this.updateContainer(ci);
     this.searchFinished$.next(ci);
   }
@@ -443,8 +446,6 @@ export class ContentDirectoryService {
   }
 
   public deleteMusicTrack(item: MusicItemDto) {
-    this.musicTracks_ = this.musicTracks_.filter(
-      (listitem) => listitem.songId !== item.songId,
-    );
+    this.musicTracks_.update(v => v.filter((listitem) => listitem.songId !== item.songId));
   }
 }

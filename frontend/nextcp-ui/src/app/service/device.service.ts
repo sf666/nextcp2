@@ -17,7 +17,7 @@ export class DeviceService {
   private defaultMediaRendererAlreadySelected = false;
   private defaultMediaServerAlreadySelected = false;
 
-  // Signals 
+  // signals 
   // ============================================================
   public mediaServerList = signal<MediaServerDto[]>([]);
   public mediaRendererList = signal<MediaRendererDto[]>([]);

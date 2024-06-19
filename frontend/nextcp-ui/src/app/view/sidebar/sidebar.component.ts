@@ -117,7 +117,6 @@ export class SidebarComponent {
   }
 
   get serverPlaylists() {
-    console.log("Server playists size : " + this.playlistService.serverPl().serverPlaylists.length);
     return this.playlistService.serverPl().serverPlaylists;
   }
 

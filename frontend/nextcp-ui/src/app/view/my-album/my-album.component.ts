@@ -60,11 +60,6 @@ export class MyAlbumComponent implements OnInit {
     this.loadMyAlbums();
   }
 
-
-  containerSelected(event: ContainerDto) {
-    
-  }
-
   //
   // bindings
   //
@@ -85,11 +80,11 @@ export class MyAlbumComponent implements OnInit {
   }
 
   musicTracks(): MusicItemDto[] {
-    return this.contentDirectoryService.musicTracks_;
+    return this.contentDirectoryService.musicTracks_();
   }
 
   otherItems_(): MusicItemDto[] {
-    return this.contentDirectoryService.otherItems_;
+    return this.contentDirectoryService.otherItems_();
   }
 
   albums(): ContainerDto[] {
@@ -97,11 +92,11 @@ export class MyAlbumComponent implements OnInit {
   }
 
   playlists(): ContainerDto[] {
-    return this.contentDirectoryService.playlistList_;
+    return this.contentDirectoryService.playlistList_();
   }
 
   otherContainer(): ContainerDto[] {
-    return this.contentDirectoryService.containerList_;
+    return this.contentDirectoryService.containerList_();
   }
 
   scrollToID(): string {

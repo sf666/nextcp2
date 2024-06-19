@@ -26,7 +26,7 @@ import { QualityBadgeComponent } from 'src/app/util/comp/quality-badge/quality-b
   templateUrl: './item-tile.component.html',
   styleUrl: './item-tile.component.scss',
 })
-export class ItemTileComponent implements OnInit {
+export class ItemTileComponent {
   isListView = input<boolean>(false);
   contentDirectoryService = input.required<ContentDirectoryService>();
   quickSearchString = input<string>('');
@@ -45,7 +45,7 @@ export class ItemTileComponent implements OnInit {
   );
   musicTracks = computed(() => this.filteredMusicTracks(this.allMusicTracks()));
 
-  allMusicTracks = signal<MusicItemDto[]>([]);
+  allMusicTracks = computed(() => this.contentDirectoryService().musicTracks_());
 
   private currentUrl = '';
   private lastDiscLabel = '';
@@ -68,24 +68,12 @@ export class ItemTileComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    if (this.contentDirectoryService()) {
-      this.contentDirectoryService().browseFinished$.subscribe((data) =>
-        this.cdsBrowseFinished(data)
-      );
-    }
-  }
-
   playItem(item: MusicItemDto) {
     this.playItemClicked.emit(item);
   }
 
   addItemToPlaylist(item: MusicItemDto) {
     this.addItemToPlaylistClicked.emit(item);
-  }
-
-  private cdsBrowseFinished(data: ContainerItemDto) {
-    this.allMusicTracks.set(data.musicItemDto);
   }
 
   private checkAllTracksSameDisc(data: MusicItemDto[]): boolean {
