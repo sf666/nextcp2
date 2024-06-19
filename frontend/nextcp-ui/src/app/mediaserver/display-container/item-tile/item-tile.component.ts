@@ -153,7 +153,7 @@ export class ItemTileComponent implements OnInit {
     return add;
   }
 
-  private doFilterText(title: string, filter?: string): boolean {
+  private doFilterText(title: string, filter: string): boolean {
     if (!filter) {
       return true;
     }

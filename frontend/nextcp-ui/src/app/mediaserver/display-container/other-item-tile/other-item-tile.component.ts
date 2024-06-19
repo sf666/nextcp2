@@ -1,35 +1,37 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  output,
+} from '@angular/core';
 import { MusicItemDto } from 'src/app/service/dto';
 
 @Component({
   selector: 'other-item-tile',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   templateUrl: './other-item-tile.component.html',
-  styleUrl: './other-item-tile.component.scss'
+  styleUrl: './other-item-tile.component.scss',
 })
 export class OtherItemTileComponent {
+  otherItems = input<MusicItemDto[]>();
+  quickSearchString = input<string>('');
+  items = computed(() =>
+    this.getOtherItemsFilter(this.otherItems(), this.quickSearchString())
+  );
 
-  @Input() otherItems: MusicItemDto[];
-  @Input() quickSearchString: string;
+  playItemClicked = output<MusicItemDto>();
 
-  @Output() playItemClicked = new EventEmitter<MusicItemDto>();
-
-  get items(): MusicItemDto[] {
-    return this.getOtherItemsFilter(this.quickSearchString);
+  private getOtherItemsFilter(
+    data: MusicItemDto[],
+    filterStr: string
+  ): MusicItemDto[] {
+    return data.filter((item) => this.doFilterText(item.title, this.quickSearchString()));
   }
 
-  private getOtherItemsFilter(filter?: string): MusicItemDto[] {
-    if (filter) {
-      return this.otherItems.filter((item) =>
-        this.doFilterText(item.title, filter)
-      );
-    } else {
-      return this.otherItems;
-    }
-  }
-
-  private doFilterText(title: string, filter?: string): boolean {
+  private doFilterText(title: string, filter: string): boolean {
     if (!filter) {
       return true;
     }
@@ -65,5 +67,4 @@ export class OtherItemTileComponent {
     }
     return '';
   }
-
 }

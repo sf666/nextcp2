@@ -1,5 +1,5 @@
 <div class="albumLayout">
-    @for (item of items; track item.objectID) {
+    @for (item of items(); track item.objectID) {
     <div class="albumTile" id="{{item.objectID}}" tabindex="-1" (click)="playResource(item)">
       <div class="albumImageContainer">
         <img src="{{item.albumArtUrl}}" alt="{{item.title}}">
