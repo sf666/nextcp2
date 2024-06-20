@@ -1,4 +1,4 @@
-import { ContainerDto, SearchResultDto, ContainerItemDto, SearchRequestDto, MusicItemDto, AudioFormat, MusicBrainzId, TrackTimeDto, TrackInfoDto, SystemInformationDto, MusicItemIdDto, InputSourceDto } from './../service/dto.d';
+import { ContainerDto, SearchResultDto, ContainerItemDto, SearchRequestDto, MusicItemDto, AudioFormat, MusicBrainzId, TrackTimeDto, TrackInfoDto, SystemInformationDto, MusicItemIdDto, InputSourceDto, TransportServiceStateDto, DeviceDriverState, UpnpAvTransportState, MediaRendererDto } from './../service/dto.d';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -8,6 +8,90 @@ import { Injectable } from '@angular/core';
  * Utility class for generating DTOs.
  */
 export class DtoGeneratorService {
+
+  public emptyUpnpAvTransportState(): UpnpAvTransportState {
+    return {
+      AbsoluteCounterPosition: 0,
+      AbsoluteTimePosition: '',
+      AVTransportURI: '',
+      AVTransportURIMetaData: this.emptyMusicItemDto(),
+      CurrentMediaDuration: '',
+      CurrentPlayMode: '',
+      CurrentRecordQualityMode: '',
+      CurrentTrack: 0,
+      CurrentTrackDuration: '',
+      CurrentTrackMetaData: this.emptyMusicItemDto(),
+      CurrentTrackURI: '',
+      CurrentTransportActions: '',
+      mediaRenderer: this.emptyMediaRendererDto(),
+      NextAVTransportURI: '',
+      NextAVTransportURIMetaData: '',
+      NumberOfTracks: 0,
+      PlaybackStorageMedium: '',
+      PossiblePlaybackStorageMedia: '',
+      PossibleRecordQualityModes: '',
+      PossibleRecordStorageMedia: '',
+      RecordMediumWriteStatus: '',
+      RecordStorageMedium: '',
+      RelativeCounterPosition: 0,
+      RelativeTimePosition: '',
+      TransportPlaySpeed: '',
+      TransportState: '',
+      TransportStatus: '',
+    }
+  }
+
+  public emptyMediaRendererDto(): MediaRendererDto {
+    return {
+      allSources: [],
+      currentSource: this.emptyInputSourceDto(),
+      friendlyName: '',
+      services: [],
+      udn: '',
+    }
+  }
+
+  public emptyMusicItemDto(): MusicItemDto {
+    return {
+      album: '',
+      albumArtUrl: '',
+      artistName: '',
+      audioFormat: this.emptyAudioFormat(),
+      composer: '',
+      conductor: '',
+      creator: '',
+      currentTrackMetadata: '',
+      date: '',
+      genre: '',
+      mediaServerUDN: '',
+      musicBrainzId: this.emptyMusicBrainzId(),
+      numberOfThisDisc: '',
+      objectClass: '',
+      objectID: '',
+      originalTrackNumber: '',
+      parentId: '',
+      rating: 0,
+      refId: '',
+      songId: this.emptySongId(),
+      streamingURL: '',
+      title: '',
+    }
+  }
+
+  public generateEmptyTransportServiceStateDto(): TransportServiceStateDto {
+    return {
+      canPause: false,
+      canRepeat: false,
+      canSeek: false,
+      canShuffle: false,
+      canSkipNext: false,
+      canSkipPrevious: false,
+      repeat: false,
+      shuffle: false,
+      transportState: '',
+      udn: ''
+    }
+  }
 
   public generateEmptyContainerDto(): ContainerDto {
     return {
@@ -46,6 +130,7 @@ export class DtoGeneratorService {
       playlistItems: []
     }
   }
+
 
   public generateEmptyContainerItemDto(): ContainerItemDto {
     return {
@@ -180,6 +265,17 @@ export class DtoGeneratorService {
       ArtistId: '',
       ReleaseTrackId: '',
       WorkId: ''
+    }
+  }
+
+  emptyDeviceDriverState(): DeviceDriverState {
+    return {
+      hasDeviceDriver: false,
+      standby: true,
+      volume: 0,
+      balance: 0,
+      rendererUDN: '',
+      input: this.emptyInputSourceDto(),
     }
   }
 }

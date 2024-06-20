@@ -3,7 +3,7 @@ import { GenericResultService } from './generic-result.service';
 import { GenericBooleanRequest, GenericNumberRequest, MusicItemDto, PlayRequestDto, PlaylistState, ContainerDto, PlaylistAddContainerRequest, ServerPlaylistEntry, MediaServerDto, ServerPlaylistDto, ServerPlaylists, CreateServerPlaylistVO } from './dto.d';
 import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable, OnInit, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 
@@ -12,9 +12,9 @@ import { toObservable } from '@angular/core/rxjs-interop';
 })
 export class PlaylistService implements OnInit {
 
-  baseUri = '/PlaylistService';
+  private baseUri = '/PlaylistService';
 
-  public playlistState: PlaylistState = {
+  playlistState = signal<PlaylistState>({
     udn: '',
     Id: 0,
     ProtocolInfo: '',
@@ -22,7 +22,7 @@ export class PlaylistService implements OnInit {
     Shuffle: false,
     TracksMax: 255,
     TransportState: 'unknown'
-  }
+  });
 
   // Playlist items of selected media renderer device
   public playlistItems: MusicItemDto[] = [];
@@ -45,7 +45,7 @@ export class PlaylistService implements OnInit {
 
     sseService.mediaRendererPlaylistStateChanged$.subscribe(data => {
       if (deviceService.isMediaRendererSelected(data.udn)) {
-        this.playlistState = data
+        this.playlistState.set(data);
       }
     });
   }
@@ -77,11 +77,11 @@ export class PlaylistService implements OnInit {
   // ===========================================================================
 
   public toggleShuffle(): void {
-    this.setShuffle(!this.playlistState.Shuffle);
+    this.setShuffle(!this.playlistState().Shuffle);
   }
 
   public toggleRepeat(): void {
-    this.setRepeat(!this.playlistState.Repeat);
+    this.setRepeat(!this.playlistState().Repeat);
   }
 
   private getSelectedMediaRendererUdn(): string {
@@ -113,7 +113,7 @@ export class PlaylistService implements OnInit {
   public getPlaylistState(udn: string): void {
     const uri = '/getState';
     if (udn !== '') {
-      this.httpService.post<PlaylistState>(this.baseUri, uri, udn).subscribe(data => this.playlistState = data);
+      this.httpService.post<PlaylistState>(this.baseUri, uri, udn).subscribe(data => this.playlistState.set(data));
     }
   }
 

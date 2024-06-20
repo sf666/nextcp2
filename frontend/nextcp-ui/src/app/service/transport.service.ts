@@ -1,8 +1,9 @@
+import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { ToastService } from './toast/toast.service';
 import { HttpService } from './http.service';
 import { SseService } from './sse/sse.service';
 import { MusicItemDto, PlayRequestDto, MediaRendererDto, UpnpAvTransportState, RadioStation, PlayRadioDto, SeekSecondsDto } from './dto';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { DeviceService } from './device.service';
 
 @Injectable({
@@ -10,7 +11,7 @@ import { DeviceService } from './device.service';
 })
 export class TransportService {
 
-  upnpAvTransportState: UpnpAvTransportState;
+  upnpAvTransportState = signal<UpnpAvTransportState>(this.dtoGeneratorService.emptyUpnpAvTransportState());
   public lastPlayedMusicItem: MusicItemDto;
   baseUri = '/TransportService';
 
@@ -18,6 +19,7 @@ export class TransportService {
     private sse: SseService,
     private httpService: HttpService,
     private toastr: ToastService,
+    private dtoGeneratorService: DtoGeneratorService,
     private deviceService: DeviceService) {
 
     // Register to domain event (change of TransportState)
@@ -38,7 +40,7 @@ export class TransportService {
 
   private updateTransportState(upnpAvTransportState: UpnpAvTransportState) {
     if (this.deviceService.isMediaRendererSelected(upnpAvTransportState.mediaRenderer.udn)) {
-      this.upnpAvTransportState = upnpAvTransportState;
+      this.upnpAvTransportState.set(upnpAvTransportState);
     }
   }
 

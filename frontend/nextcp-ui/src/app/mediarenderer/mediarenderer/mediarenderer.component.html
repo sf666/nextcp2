@@ -14,22 +14,22 @@
           <div class="d-flex flex-column">
             <div class="title">{{getCurrentSongTitle()}}</div>
             <div class="d-flex flex-column">
-              @if (rendererService.trackInfo?.currentTrack?.artistName ) {
+              @if (rendererService.trackInfo().currentTrack?.artistName ) {
                 <div class="regularText align-self-start">
-                  by <span class="highlightText">{{rendererService.trackInfo?.currentTrack?.artistName}}</span>
+                  by <span class="highlightText">{{rendererService.trackInfo().currentTrack?.artistName}}</span>
                 </div>
               } @else {
                 <div>&nbsp;</div>
               }
-              @if (rendererService.trackInfo?.currentTrack?.album) {
+              @if (rendererService.trackInfo().currentTrack?.album) {
                 <div class="regularText align-self-start">
                   @if (!streaming()) {
                     <div>
-                      from the album <span class="highlightText">{{rendererService.trackInfo?.currentTrack?.album}}</span>
+                      from the album <span class="highlightText">{{rendererService.trackInfo().currentTrack?.album}}</span>
                     </div>
                   } @else {
                     <div>
-                      broadcasted by <span class="highlightText">{{rendererService.trackInfo?.currentTrack?.album}}</span>
+                      broadcasted by <span class="highlightText">{{rendererService.trackInfo().currentTrack?.album}}</span>
                     </div>
                   }
                 </div>
@@ -65,23 +65,23 @@
           </mat-form-field>
           <mat-form-field appearance="outline" class="p-2">
             <mat-label>codec name</mat-label>
-            <input matInput type="text" value="{{rendererService.trackInfo?.codecName}}" readonly="true">
+            <input matInput type="text" value="{{rendererService.trackInfo().codecName}}" readonly="true">
           </mat-form-field>
           <mat-form-field appearance="outline" class="p-2">
             <mat-label>lossless</mat-label>
-            <input matInput type="text" value="{{rendererService.trackInfo?.lossless}}" readonly="true">
+            <input matInput type="text" value="{{rendererService.trackInfo().lossless}}" readonly="true">
           </mat-form-field>
           <mat-form-field appearance="outline" class="p-2">
             <mat-label>sample rate [Hz]</mat-label>
-            <input matInput type="text" value="{{rendererService.trackInfo?.sampleRate}}" readonly="true">
+            <input matInput type="text" value="{{rendererService.trackInfo().sampleRate}}" readonly="true">
           </mat-form-field>
           <mat-form-field appearance="outline" class="p-2">
             <mat-label>bit depth [bit]</mat-label>
-            <input matInput type="text" value="{{rendererService.trackInfo?.bitDepth}}" readonly="true">
+            <input matInput type="text" value="{{rendererService.trackInfo().bitDepth}}" readonly="true">
           </mat-form-field>
           <mat-form-field appearance="outline" class="p-2">
             <mat-label>bitrate [bit/s]</mat-label>
-            <input matInput type="text" value="{{rendererService.trackInfo?.bitrate}}" readonly="true">
+            <input matInput type="text" value="{{rendererService.trackInfo().bitrate}}" readonly="true">
           </mat-form-field>
         </form>
       </div>

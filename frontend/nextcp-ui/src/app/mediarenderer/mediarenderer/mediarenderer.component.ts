@@ -4,7 +4,7 @@ import { LayoutService } from './../../service/layout.service';
 import { MusicItemDto } from './../../service/dto.d';
 import { BackgroundImageService } from './../../util/background-image.service';
 import { RendererService } from './../../service/renderer.service';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatInput } from '@angular/material/input';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
@@ -17,6 +17,7 @@ import { StarRatingComponent } from '../../view/star-rating/star-rating.componen
     templateUrl: './mediarenderer.component.html',
     styleUrls: ['./mediarenderer.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [StarRatingComponent, MatButton, MatListSubheaderCssMatStyler, FormsModule, MatFormField, MatLabel, MatInput]
 })
 
@@ -47,33 +48,19 @@ export class MediarendererComponent implements OnInit {
   }
 
   public getCurrentSongTitle(): string {
-    if (this.rendererService.trackInfoAvailable) {
-      return this.rendererService.trackInfo?.currentTrack?.title;
-    }
-    else {
-      return "no track info available";
-    }
+    return this.rendererService.getCurrentSongTitle();
   }
 
   public getCurrentTrack(): MusicItemDto {
-    if (this.rendererService.trackInfoAvailable) {
-      return this.rendererService.trackInfo?.currentTrack;
-    }
+    return this.rendererService.getCurrentTrack();
   }
 
   streaming(): boolean {
-    const streaming = this.rendererService?.trackTime?.streaming;
-    return streaming;
+    return this.rendererService.isStreaming();
   }
 
   public getImgSrc(): string {
-    if (this.rendererService.trackInfo?.currentTrack?.albumArtUrl) {
-      this.backgroundImageService.setBackgroundImageMainScreen(this.rendererService.trackInfo?.currentTrack?.albumArtUrl);
-      return this.rendererService.trackInfo?.currentTrack?.albumArtUrl;
-    }
-    else {
-      return "";
-    }
+    return this.rendererService.getImgSrc();
   }
 
   getStarSize(): string {
@@ -81,7 +68,7 @@ export class MediarendererComponent implements OnInit {
   }
 
   public get canBeAddedToPlaylist(): boolean {
-    return this.rendererService.trackInfo?.currentTrack?.songId?.objectID != null;
+    return this.rendererService.canCurrentTrackBeAddedToPlaylist();
   }
 
   openAddPlaylistDialog(event: any, fileId: string): void {

@@ -4,7 +4,7 @@ import { HttpService } from './http.service';
 import { DeviceService } from './device.service';
 import { DeviceDriverState, MediaRendererSwitchPower, MediaRendererSetVolume, MediaRendererDto, TrackInfoDto, TrackTimeDto, InputSourceDto, MusicItemDto, AudioFormat, InputSourceChangeDto, TransportServiceStateDto } from './dto.d';
 import { SseService } from './sse/sse.service';
-import { Injectable } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
 import { GenericResultService } from './generic-result.service';
 import { toObservable } from '@angular/core/rxjs-interop';
 
@@ -17,13 +17,24 @@ import { toObservable } from '@angular/core/rxjs-interop';
  */
 export class RendererService {
 
-  baseUri = '/DeviceRendererService';
+  private baseUri = '/DeviceRendererService';
 
-  public trackInfo: TrackInfoDto;
-  public trackTime: TrackTimeDto;
-  public transportServiceStateDto: TransportServiceStateDto;
-  public inputSourceList: InputSourceDto;
-  public deviceDriverState: DeviceDriverState;
+  trackInfo = signal<TrackInfoDto>(this.dtoGeneratorService.emptyTrackInfo());
+  trackTime = signal<TrackTimeDto>(this.dtoGeneratorService.emptyTrackTime());
+  transportServiceStateDto = signal<TransportServiceStateDto>(this.dtoGeneratorService.generateEmptyTransportServiceStateDto());
+  inputSourceList = signal<InputSourceDto>(this.dtoGeneratorService.emptyInputSourceDto());
+  deviceDriverState = signal<DeviceDriverState>(this.dtoGeneratorService.emptyDeviceDriverState());
+
+  trackInfoAvailable = computed(() => this.trackInfo().currentTrack?.title?.length > 0);
+  isPlaying = computed(() => this.transportServiceStateDto().transportState.toUpperCase() === 'PLAYING');
+  isShuffle = computed(() => this.transportServiceStateDto().shuffle);
+  isRepeat = computed(() => this.transportServiceStateDto().repeat);
+  canShuffle = computed(() => this.transportServiceStateDto().canShuffle);
+  canPause = computed(() => this.transportServiceStateDto().canPause);
+  canRepeat = computed(() => this.transportServiceStateDto().canRepeat);
+  canSeek = computed(() => this.transportServiceStateDto().canSeek);
+  canSkipNext = computed(() => this.transportServiceStateDto().canSkipNext);
+  canSkipPrevious = computed(() => this.transportServiceStateDto().canSkipPrevious);
 
   constructor(
     sseService: SseService,
@@ -33,27 +44,23 @@ export class RendererService {
     private genericResultService: GenericResultService,
     private httpService: HttpService) {
 
-    this.deviceDriverState = { hasDeviceDriver: false, standby: true, volume: 0, balance: 0, rendererUDN: '', input: dtoGeneratorService.emptyInputSourceDto() };
-    this.trackInfo = this.dtoGeneratorService.emptyTrackInfo();
-    this.trackTime = this.dtoGeneratorService.emptyTrackTime();
-
     sseService.mediaRendererDeviceDriverStateChanged$.subscribe(data => this.updateRenderDeviceDriverState(data));
 
     sseService.mediaRendererTrackInfoChanged$.subscribe(data => {
       if (deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
-        if (this.trackInfo.currentTrack?.albumArtUrl != data.currentTrack?.albumArtUrl) {
+        if (this.trackInfo().currentTrack?.albumArtUrl != data.currentTrack?.albumArtUrl) {
           // update background images
           console.log("updating background images");
           this.backgroundImageService.setFooterBackgroundImage(data.currentTrack?.albumArtUrl);
           this.backgroundImageService.setBackgroundImageMainScreen(data.currentTrack?.albumArtUrl);
         }
-        this.trackInfo = data;
+        this.trackInfo.set(data);
       }
     });
 
     sseService.mediaRendererPositionChanged$.subscribe(data => {
       if (deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
-        this.trackTime = data;
+        this.trackTime.set(data);
       }
     });
 
@@ -64,7 +71,7 @@ export class RendererService {
   private updateTransportState(state: TransportServiceStateDto) {
     if (state.udn == this.deviceService.selectedMediaRendererDevice().udn) {
       console.log("new transport state : " + state.transportState);
-      this.transportServiceStateDto = state;
+      this.transportServiceStateDto.set(state);
     }
   }
 
@@ -79,7 +86,7 @@ export class RendererService {
       const uri = '/getCurrentSourceTrackInfo';
       this.httpService.post<TrackInfoDto>(this.baseUri, uri, device).subscribe(data => {
         if (data && this.deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
-          this.trackInfo = data
+          this.trackInfo.set(data);
         }
       });
     }
@@ -90,7 +97,7 @@ export class RendererService {
       const uri = '/getDeviceTransportServiceState';
       this.httpService.post<TransportServiceStateDto>(this.baseUri, uri, device).subscribe(data => {
         if (this.deviceService.isMediaRendererSelected(data.udn)) {
-          this.transportServiceStateDto = data
+          this.transportServiceStateDto.set(data);
         }
       });
     }
@@ -102,7 +109,7 @@ export class RendererService {
       this.httpService.post<DeviceDriverState>(this.baseUri, uri, device).subscribe(data => {
         if (this.deviceService.isMediaRendererSelected(data.rendererUDN)) {
           console.log("updated device driver state for " + data.rendererUDN + " to " + data.hasDeviceDriver);
-          this.deviceDriverState = data;
+          this.deviceDriverState.set(data);
         }
       });
     }
@@ -110,57 +117,8 @@ export class RendererService {
 
   private updateRenderDeviceDriverState(data: DeviceDriverState) {
     if (this.deviceService.isMediaRendererSelected(data.rendererUDN)) {
-      this.deviceDriverState = data;
+      this.deviceDriverState.set(data);
     }
-  }
-
-  public get trackInfoAvailable(): boolean {
-    return this.trackInfo?.currentTrack?.title?.length > 0;
-  }
-
-  public isPlaying(): boolean {
-    const playing: boolean = this.transportServiceStateDto?.transportState.toUpperCase() === 'PLAYING';
-    return playing;
-  }
-
-  public isShuffle(): boolean {
-    const playing: boolean = this.transportServiceStateDto?.shuffle;
-    return playing;
-  }
-
-  public isRepeat(): boolean {
-    const playing: boolean = this.transportServiceStateDto?.repeat;
-    return playing;
-  }
-
-  public canShuffle(): boolean {
-    const playing: boolean = this.transportServiceStateDto?.canShuffle;
-    return playing;
-  }
-
-  public canPause(): boolean {
-    const playing: boolean = this.transportServiceStateDto?.canPause;
-    return playing;
-  }
-
-  public canRepeat(): boolean {
-    const playing: boolean = this.transportServiceStateDto?.canRepeat;
-    return playing;
-  }
-
-  public canSeek(): boolean {
-    const playing: boolean = this.transportServiceStateDto?.canSeek;
-    return playing;
-  }
-
-  public canSkipNext(): boolean {
-    const playing: boolean = this.transportServiceStateDto?.canSkipNext;
-    return playing;
-  }
-
-  public canSkipPrevious(): boolean {
-    const playing: boolean = this.transportServiceStateDto?.canSkipPrevious;
-    return playing;
   }
 
   //
@@ -171,12 +129,12 @@ export class RendererService {
    * power button pressed
    */
   public powerPressed() {
-    const newPowerState = !this.deviceDriverState.standby;
+    const newPowerState = !this.deviceDriverState().standby;
 
     const uri = '/setStandby';
     let request: MediaRendererSwitchPower = {
       rendererUDN: this.deviceService.selectedMediaRendererDevice().udn,
-      standby: !this.deviceDriverState.standby
+      standby: !this.deviceDriverState().standby
     };
     this.httpService.post(this.baseUri, uri, request, "power switch");
   }
@@ -232,21 +190,21 @@ export class RendererService {
 
   streaming() {
     let streaming: boolean;
-    streaming = this.trackTime?.streaming;
+    streaming = this.trackTime().streaming;
     return streaming;
   }
 
   getFinishTime(): string {
-    if (this.trackTime?.durationDisp) {
-      return this.trackTime.durationDisp;
+    if (this.trackTime().durationDisp) {
+      return this.trackTime().durationDisp;
     } else {
       return "00:00";
     }
   }
 
   public getImgSrc(): string {
-    if (this.trackInfo?.currentTrack?.albumArtUrl) {
-      return this.trackInfo?.currentTrack?.albumArtUrl;
+    if (this.trackInfo().currentTrack?.albumArtUrl) {
+      return this.trackInfo().currentTrack?.albumArtUrl;
     }
     else {
       return "";
@@ -277,24 +235,24 @@ export class RendererService {
   }
 
   public getBitrate(): number {
-    if (this.trackInfo?.currentTrack?.audioFormat?.bitrate) {
-      return this.trackInfo?.currentTrack?.audioFormat?.bitrate
+    if (this.trackInfo().currentTrack?.audioFormat?.bitrate) {
+      return this.trackInfo().currentTrack?.audioFormat?.bitrate
     } else {
       return 0;
     }
   }
 
   public getBitsPerSample(): number {
-    if (this.trackInfo?.currentTrack?.audioFormat?.bitsPerSample) {
-      return this.trackInfo?.currentTrack?.audioFormat?.bitsPerSample
+    if (this.trackInfo().currentTrack?.audioFormat?.bitsPerSample) {
+      return this.trackInfo().currentTrack?.audioFormat?.bitsPerSample
     } else {
       return 0;
     }
   }
 
   public getSampleFreq(): number {
-    if (this.trackInfo?.currentTrack?.audioFormat?.sampleFrequency) {
-      return this.trackInfo?.currentTrack?.audioFormat?.sampleFrequency
+    if (this.trackInfo().currentTrack?.audioFormat?.sampleFrequency) {
+      return this.trackInfo().currentTrack?.audioFormat?.sampleFrequency
     } else {
       return 0;
     }
@@ -302,7 +260,7 @@ export class RendererService {
 
   public getCurrentSongTitle(): string {
     if (this.trackInfoAvailable) {
-      return this.trackInfo?.currentTrack?.title;
+      return this.trackInfo().currentTrack?.title;
     }
     else {
       return "no track info available";
@@ -310,6 +268,24 @@ export class RendererService {
   }
 
   public getCurrentTrack(): MusicItemDto {
-    return this.trackInfo?.currentTrack;
+    return this.trackInfo().currentTrack;
   }
+
+  public canCurrentTrackBeAddedToPlaylist(): boolean {
+    return this.trackInfo().currentTrack?.songId?.objectID?.length > 0;
+  }
+
+  isStreaming(): boolean {
+    return this.trackTime().streaming;
+  }
+
+  public hasCurrentSongTitle(): boolean {
+    if (this.trackInfoAvailable) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
 }

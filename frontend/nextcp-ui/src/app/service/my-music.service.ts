@@ -12,7 +12,7 @@ import { Injectable } from '@angular/core';
 
 export class MyMusicService {
 
-  baseUri = '/MyMusicService';
+  private baseUri = '/MyMusicService';
 
   constructor(
     private httpService: HttpService,

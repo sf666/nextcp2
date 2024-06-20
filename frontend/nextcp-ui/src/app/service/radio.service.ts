@@ -1,6 +1,6 @@
 import { HttpService } from './http.service';
 import { MusicItemDto, MediaRendererDto, PlayOpenHomeRadioDto } from './dto.d';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { DeviceService } from './device.service';
 import { toObservable } from '@angular/core/rxjs-interop';
 
@@ -13,7 +13,7 @@ export class RadioService {
   private baseUri = '/RadioService';
 
   // OpenHome RadioService Stations
-  radioItems: MusicItemDto[];
+  radioItems = signal<MusicItemDto[]>([]);
 
   constructor(
     private httpService: HttpService,
@@ -46,7 +46,7 @@ export class RadioService {
     if (rendererDto.udn !== '') {
       console.log("updating radio stations ...");
       const uri = '/deviceRadioStations';
-      this.httpService.post<MusicItemDto[]>(this.baseUri, uri, rendererDto).subscribe(data => this.radioItems = data);
+      this.httpService.post<MusicItemDto[]>(this.baseUri, uri, rendererDto).subscribe(data => this.radioItems.set(data));
     }
   }
 }

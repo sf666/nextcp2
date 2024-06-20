@@ -43,7 +43,7 @@ export class PlaylistComponent implements OnInit {
 
   getActiveClass(item: MusicItemDto) : string{
     const id: number = +item.objectID;
-    if (id === this.playlistService.playlistState.Id) {
+    if (id === this.playlistService.playlistState().Id) {
       return "active";
     }
   }

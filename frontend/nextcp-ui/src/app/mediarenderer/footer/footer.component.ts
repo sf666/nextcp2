@@ -10,7 +10,7 @@ import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
 import { UpnpAvTransportState } from './../../service/dto.d';
 import { TransportService as TransportService } from '../../service/transport.service';
-import { Component, ElementRef, Optional } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Optional, signal } from '@angular/core';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import { QualityBadgeComponent } from '../../util/comp/quality-badge/quality-badge.component';
@@ -21,11 +21,12 @@ import { toObservable } from '@angular/core/rxjs-interop';
     templateUrl: './footer.component.html',
     styleUrls: ['./footer.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [QualityBadgeComponent, MatSlider, MatSliderThumb, MatProgressBar]
 })
 export class FooterComponent {
 
-  currentMediaRendererName: string;
+  currentMediaRendererName = signal<string>('');
 
   constructor(
     private dialog: MatDialog,
@@ -34,7 +35,7 @@ export class FooterComponent {
     public playlistService: PlaylistService,
     public songOptionsServiceService: SongOptionsServiceService,
     public rendererService: RendererService) {
-      toObservable(this.deviceService.selectedMediaRendererDevice).subscribe(data => this.currentMediaRendererName = data.friendlyName);
+      toObservable(this.deviceService.selectedMediaRendererDevice).subscribe(data => this.currentMediaRendererName.set(data.friendlyName));
   }
 
   public rendererClicked(event: Event): void {
@@ -70,11 +71,6 @@ export class FooterComponent {
     });
   }
 
-
-  public get avTransportState(): UpnpAvTransportState {
-    return this.transportService.upnpAvTransportState;
-  }
-
   public getImgSrc(): string {
     return this.rendererService.getImgSrc();
   }
@@ -88,7 +84,7 @@ export class FooterComponent {
   //
 
   hasDeviceDriver(): boolean {
-    return this.rendererService.deviceDriverState?.hasDeviceDriver;
+    return this.rendererService.deviceDriverState().hasDeviceDriver;
   }
 
   powerClicked(): void {
@@ -96,7 +92,7 @@ export class FooterComponent {
   }
 
   public getStandbyClass(): string {
-    if (this.rendererService.deviceDriverState.standby) {
+    if (this.rendererService.deviceDriverState().standby) {
       return "standbyOn";
     }
     else {
@@ -117,14 +113,14 @@ export class FooterComponent {
   }
 
   public get trackTimePercent(): number {
-    if (this.rendererService?.trackTime?.percent) {
-      return this.streaming() ? 0 : this.rendererService.trackTime.percent;
+    if (this.rendererService?.trackTime().percent) {
+      return this.streaming() ? 0 : this.rendererService.trackTime().percent;
     }
     return 0;
   }
 
   public trackTimePercentSeek(value : any) {
-    let timeAbs = Math.floor(this.rendererService.trackTime.duration * value/100);
+    let timeAbs = Math.floor(this.rendererService.trackTime().duration * value/100);
     this.transportService.seek(timeAbs);
   }
 
@@ -161,8 +157,8 @@ export class FooterComponent {
   }
 
   showSongPopup(event: MouseEvent): void {
-    if (this.rendererService.trackInfo?.currentTrack?.streamingURL) {
-      this.songOptionsServiceService.openOptionsDialog(event, this.rendererService.trackInfo.currentTrack, null);
+    if (this.rendererService.trackInfo().currentTrack?.streamingURL) {
+      this.songOptionsServiceService.openOptionsDialog(event, this.rendererService.trackInfo().currentTrack, null);
     }
   }
 
