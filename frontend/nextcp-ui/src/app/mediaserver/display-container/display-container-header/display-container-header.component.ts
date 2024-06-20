@@ -53,6 +53,10 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   genresList = signal<Array<String>>([]);
   currentAlbumLiked = signal<boolean>(false);
+  totalPlaytimeShort = computed(() => this.calcTotalPlaytimeShort(this.contentDirectoryService().musicTracks_()));
+  totalPlaytime = computed(() => this.calcTotalPlaytimeLong(this.contentDirectoryService().musicTracks_()));
+
+  likePossible = computed(() => { return this.allTracksSameMusicBrainzReleaseId_; });
 
   genresForm = new FormControl('');
 
@@ -70,9 +74,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
       return 'Folder';
     }
   });
-
-  likePossible = computed(() => { return this.allTracksSameMusicBrainzReleaseId_; });
-  totalPlaytime = computed(() => this.totalPlaytimeCalc());
 
   // like member
   private allTracksSameMusicBrainzReleaseId_: boolean;
@@ -289,30 +290,28 @@ export class DisplayContainerHeaderComponent implements OnInit {
     }
   }
 
-  totalPlaytimeCalc(): string {
-    let completeTime: number;
-    completeTime = 0;
-    if (this.musicTracks.length > 0) {
-      this.musicTracks?.forEach(
-        (el) =>
-        (completeTime =
-          completeTime +
-          (el.audioFormat?.durationInSeconds
-            ? el.audioFormat.durationInSeconds
-            : 0))
-      );
-    }
+  private calcTotalPlaytimeLong(tracks: MusicItemDto[]): string {
+    const completeTime = this.getTotalTimeString(tracks);
     if (completeTime) {
       return this.timeDisplayService.convertLongToDateString(completeTime);
     }
     return '';
   }
 
-  get totalPlaytimeShort(): string {
+  private calcTotalPlaytimeShort(tracks: MusicItemDto[]): string {
+    const completeTime = this.getTotalTimeString(tracks);
+    if (completeTime) {
+      return this.timeDisplayService.convertLongToDateStringShort(completeTime);
+    } else {
+      return '';
+    }
+  }
+
+  private getTotalTimeString(tracks: MusicItemDto[]): number {
     let completeTime: number;
-    completeTime = 0;
-    if (this.musicTracks.length > 0) {
-      this.musicTracks?.forEach(
+    if (tracks.length > 0) {
+      completeTime = 0;
+      tracks.forEach(
         (el) =>
         (completeTime =
           completeTime +
@@ -321,10 +320,8 @@ export class DisplayContainerHeaderComponent implements OnInit {
             : 0))
       );
     }
-    if (completeTime) {
-      return this.timeDisplayService.convertLongToDateStringShort(completeTime);
-    }
-    return '';
+    console.log("total playtime seconds : " + completeTime);
+    return completeTime;
   }
 
   //

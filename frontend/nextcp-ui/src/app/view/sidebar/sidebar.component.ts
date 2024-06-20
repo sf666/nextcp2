@@ -8,7 +8,7 @@ import { MyPlaylistService } from './../my-playlists/my-playlist.service';
 import { PlaylistService } from './../../service/playlist.service';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { ServerPlaylistDto } from 'src/app/service/dto';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatAnchor } from '@angular/material/button';
@@ -20,6 +20,7 @@ import { DefaultPlaylistService } from 'src/app/mediaserver/popup/defaut-playlis
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         MatButton,
         RouterLink,
@@ -34,7 +35,7 @@ export class SidebarComponent {
   // Dialogs
   createPlaylistDialogRef: MatDialogRef<InputFieldDialogComponent>;
 
-  private activeId: string;
+  activeId = signal<string>("");
 
   constructor(
     public deviceService: DeviceService,
@@ -66,9 +67,9 @@ export class SidebarComponent {
       if (url.lastIndexOf("/") > 0) {
         url = url.substring(0, url.lastIndexOf("/"));
       }
-      this.activeId = this.routerMap.get(url);
-      if (this.activeId == "0") {
-        this.activeId = this.myPlaylistService.activePlaylistId;
+      this.activeId.set(this.routerMap.get(url));
+      if (this.activeId() == "0") {
+        this.activeId.set(this.myPlaylistService.activePlaylistId);
       }
     }
   }
@@ -109,7 +110,7 @@ export class SidebarComponent {
   }
 
   private afterButtonClicked(itemId: string): void {
-    this.activeId = itemId;
+    this.activeId.set(itemId);
   }
 
   get myPlaylistsAvailable(): boolean {    
@@ -122,14 +123,14 @@ export class SidebarComponent {
 
   public getTextClass(url: string): string {
     let id = this.routerMap.get(url);
-    if (id == this.activeId) {
+    if (id == this.activeId()) {
       return "active";
     }
     return "button-text";
   }
 
   public getPlaylistClass(id: string) {
-    if (id == this.activeId) {
+    if (id == this.activeId()) {
       return "active";
     }
     return "button-text";
