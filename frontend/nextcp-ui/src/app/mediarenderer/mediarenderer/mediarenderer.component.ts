@@ -48,11 +48,11 @@ export class MediarendererComponent implements OnInit {
   }
 
   public getCurrentSongTitle(): string {
-    return this.rendererService.getCurrentSongTitle();
+    return this.rendererService.currentSongTitle();
   }
 
   public getCurrentTrack(): MusicItemDto {
-    return this.rendererService.getCurrentTrack();
+    return this.rendererService.currentTrack();
   }
 
   streaming(): boolean {
@@ -60,7 +60,7 @@ export class MediarendererComponent implements OnInit {
   }
 
   public getImgSrc(): string {
-    return this.rendererService.getImgSrc();
+    return this.rendererService.imgSrc();
   }
 
   getStarSize(): string {

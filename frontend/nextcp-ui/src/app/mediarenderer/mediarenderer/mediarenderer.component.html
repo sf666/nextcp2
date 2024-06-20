@@ -90,15 +90,15 @@
         <form>
           <mat-form-field appearance="outline" class="p-2">
             <mat-label>sample rate [Hz]</mat-label>
-            <input matInput type="text" value="{{rendererService.getSampleFreq()}}" placeholder="N/A" readonly="true">
+            <input matInput type="text" value="{{rendererService.sampleFreq()}}" placeholder="N/A" readonly="true">
           </mat-form-field>
           <mat-form-field appearance="outline" class="p-2">
             <mat-label>bit depth</mat-label>
-            <input matInput type="text" value="{{rendererService.getBitsPerSample()}}" readonly="true">
+            <input matInput type="text" value="{{rendererService.bitsPerSample()}}" readonly="true">
           </mat-form-field>
           <mat-form-field appearance="outline" class="p-2">
             <mat-label>bitrate [bit/s]</mat-label>
-            <input matInput type="text" value="{{rendererService.getBitrate()}}" readonly="true">
+            <input matInput type="text" value="{{rendererService.bitrate()}}" readonly="true">
           </mat-form-field>
           <mat-form-field appearance="outline" class="p-2">
             <mat-label>content format</mat-label>

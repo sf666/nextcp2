@@ -36,6 +36,48 @@ export class RendererService {
   canSkipNext = computed(() => this.transportServiceStateDto().canSkipNext);
   canSkipPrevious = computed(() => this.transportServiceStateDto().canSkipPrevious);
 
+  isStreaming = computed(() => this.trackTime().streaming);
+
+  currentTrack = computed(() => this.trackInfo().currentTrack);
+  canCurrentTrackBeAddedToPlaylist = computed(() => this.trackInfo().currentTrack?.songId?.objectID?.length > 0);
+  bitsPerSample = computed(() => this.trackInfo().currentTrack?.audioFormat?.bitsPerSample);
+  sampleFreq = computed(() => this.trackInfo().currentTrack?.audioFormat?.sampleFrequency);
+  currentSongTitle = computed(() => this.trackInfo().currentTrack?.title);
+  bitrate = computed(() => this.trackInfo().currentTrack?.audioFormat?.bitrate);
+  imgSrc = computed(() => this.trackInfo().currentTrack?.albumArtUrl);
+  isHifi = computed(() => {
+    let bps = this.bitsPerSample();
+    let sFreq = this.sampleFreq();
+    if (bps >= 16 && sFreq >= 44100) { // CD Quality
+      return true;
+    }
+    return false;
+  });
+
+  finishTime = computed(() => {
+    if (this.trackTime().durationDisp) {
+      return this.trackTime().durationDisp;
+    } else {
+      return "00:00";
+    }
+  });
+
+
+  hifiString = computed(() => {
+    let bps = this.bitsPerSample();
+    let sFreq = this.sampleFreq();
+    if (!this.isHifi) {
+      return "low";
+    } else if (bps == 16 && sFreq == 44100) {
+      return "CD"
+    } else if (bps > 16 && sFreq == 44100) {
+      return "HIFI"
+    } else if (bps >= 24 && sFreq > 44100) {
+      return "Hi-Res"
+    }
+  });
+
+
   constructor(
     sseService: SseService,
     private deviceService: DeviceService,
@@ -182,110 +224,6 @@ export class RendererService {
   public initServices(udn: string) {
     const uri = '/initServices';
     this.httpService.post(this.baseUri, uri, udn, "init services");
-  }
-
-  //
-  // Renderer : information about the current played song
-  // ================================================================================================================
-
-  streaming() {
-    let streaming: boolean;
-    streaming = this.trackTime().streaming;
-    return streaming;
-  }
-
-  getFinishTime(): string {
-    if (this.trackTime().durationDisp) {
-      return this.trackTime().durationDisp;
-    } else {
-      return "00:00";
-    }
-  }
-
-  public getImgSrc(): string {
-    if (this.trackInfo().currentTrack?.albumArtUrl) {
-      return this.trackInfo().currentTrack?.albumArtUrl;
-    }
-    else {
-      return "";
-    }
-  }
-
-  public isHifi(): boolean {
-    let bps = this.getBitsPerSample();
-    let sFreq = this.getSampleFreq();
-    if (bps >= 16 && sFreq >= 44100) { // CD Quality
-      return true;
-    }
-    return false;
-  }
-
-  public getHifiString(): string {
-    let bps = this.getBitsPerSample();
-    let sFreq = this.getSampleFreq();
-    if (!this.isHifi) {
-      return "low";
-    } else if (bps == 16 && sFreq == 44100) {
-      return "CD"
-    } else if (bps > 16 && sFreq == 44100) {
-      return "HIFI"
-    } else if (bps >= 24 && sFreq > 44100) {
-      return "Hi-Res"
-    }
-  }
-
-  public getBitrate(): number {
-    if (this.trackInfo().currentTrack?.audioFormat?.bitrate) {
-      return this.trackInfo().currentTrack?.audioFormat?.bitrate
-    } else {
-      return 0;
-    }
-  }
-
-  public getBitsPerSample(): number {
-    if (this.trackInfo().currentTrack?.audioFormat?.bitsPerSample) {
-      return this.trackInfo().currentTrack?.audioFormat?.bitsPerSample
-    } else {
-      return 0;
-    }
-  }
-
-  public getSampleFreq(): number {
-    if (this.trackInfo().currentTrack?.audioFormat?.sampleFrequency) {
-      return this.trackInfo().currentTrack?.audioFormat?.sampleFrequency
-    } else {
-      return 0;
-    }
-  }
-
-  public getCurrentSongTitle(): string {
-    if (this.trackInfoAvailable) {
-      return this.trackInfo().currentTrack?.title;
-    }
-    else {
-      return "no track info available";
-    }
-  }
-
-  public getCurrentTrack(): MusicItemDto {
-    return this.trackInfo().currentTrack;
-  }
-
-  public canCurrentTrackBeAddedToPlaylist(): boolean {
-    return this.trackInfo().currentTrack?.songId?.objectID?.length > 0;
-  }
-
-  isStreaming(): boolean {
-    return this.trackTime().streaming;
-  }
-
-  public hasCurrentSongTitle(): boolean {
-    if (this.trackInfoAvailable) {
-      return true;
-    }
-    else {
-      return false;
-    }
   }
 
 }

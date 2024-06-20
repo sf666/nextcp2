@@ -10,7 +10,7 @@ import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
 import { UpnpAvTransportState } from './../../service/dto.d';
 import { TransportService as TransportService } from '../../service/transport.service';
-import { ChangeDetectionStrategy, Component, ElementRef, Optional, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Optional, computed, signal } from '@angular/core';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import { QualityBadgeComponent } from '../../util/comp/quality-badge/quality-badge.component';
@@ -37,6 +37,14 @@ export class FooterComponent {
     public rendererService: RendererService) {
       toObservable(this.deviceService.selectedMediaRendererDevice).subscribe(data => this.currentMediaRendererName.set(data.friendlyName));
   }
+
+  trackTimePercent = computed(() => {
+    if (this.rendererService?.trackTime().percent) {
+      return this.streaming() ? 0 : this.rendererService.trackTime().percent;
+    }
+    return 0;
+  });
+
 
   public rendererClicked(event: Event): void {
     const target = new ElementRef(event.currentTarget);
@@ -72,11 +80,11 @@ export class FooterComponent {
   }
 
   public getImgSrc(): string {
-    return this.rendererService.getImgSrc();
+    return this.rendererService.imgSrc();
   }
 
   public getCurrentSongTitle(): string {
-    return this.rendererService.getCurrentSongTitle();
+    return this.rendererService.currentSongTitle();
   }
 
   //
@@ -105,31 +113,24 @@ export class FooterComponent {
   }
 
   streaming(): boolean {
-    return this.rendererService.streaming();
+    return this.rendererService.isStreaming();
   }
 
   getFinishTime(): string {
-    return this.rendererService.getFinishTime();
-  }
-
-  public get trackTimePercent(): number {
-    if (this.rendererService?.trackTime().percent) {
-      return this.streaming() ? 0 : this.rendererService.trackTime().percent;
-    }
-    return 0;
+    return this.rendererService.finishTime();
   }
 
   public trackTimePercentSeek(value : any) {
     let timeAbs = Math.floor(this.rendererService.trackTime().duration * value/100);
     this.transportService.seek(timeAbs);
   }
-
+ 
   //
   // styling of elements depending on state information
   // =========================================================================================================
 
   get infoSongClass(): string {
-    if (this.rendererService.trackInfoAvailable) {
+    if (this.rendererService.trackInfoAvailable()) {
       return ""
     } else {
       return "disabled";
@@ -172,23 +173,4 @@ export class FooterComponent {
     }
     return "";
   }
-
-  /*
-  INFO: Removed and moved to "Now Playing"
-
-  openInfoPopup(event: Event): void {
-    if (this.rendererService.trackInfoAvailable) {
-      let trackData: TrackDetailsData = {
-        albumartUri: this.getImgSrc(),
-        inputSource: this.currentInputSource(),
-        currentTrack: this.rendererService.getCurrentTrack()
-      }
-
-      this.dialog.open(TrackDetailsComponent, {
-        data: trackData,
-        hasBackdrop: true
-      });
-    }
-  }
-  */
 }
