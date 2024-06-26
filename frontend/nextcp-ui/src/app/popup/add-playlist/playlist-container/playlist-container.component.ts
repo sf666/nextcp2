@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, input, output } from '@angular/core';
 import { ServerPlaylistDto } from 'src/app/service/dto';
 import { PlaylistMode } from '../add-playlist.component';
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
   selector: 'playlist-container',
   standalone: true,
   imports: [MatIconModule, MatButtonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './playlist-container.component.html',
   styleUrl: './playlist-container.component.scss',
 })
@@ -23,7 +24,6 @@ export class PlaylistContainerComponent {
   PlaylistModeEnum: typeof PlaylistMode = PlaylistMode;
 
   constructor(public serverPlaylistService: ServerPlaylistService) {
-    console.log("Number of playlist entries : " + this.playlists()?.length);
   }
 
   isPlaylistMode(mode: PlaylistMode): boolean {

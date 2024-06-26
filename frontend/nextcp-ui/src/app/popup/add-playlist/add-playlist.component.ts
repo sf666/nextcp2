@@ -45,14 +45,11 @@ export class AddPlaylistComponent {
   playlistMode = signal<PlaylistMode>(PlaylistMode.Add);
 
   filteredServerPlaylists = computed(() => {
-    console.log("filtering server playlists ... ");
-
     return this.serverPlaylistService.serverPl().serverPlaylists.filter(
       pl => pl.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase()))
   });
 
   filteredOtherPlaylists = computed(() => {
-    console.log("filtering other playlists ... ");
     return this.otherPlaylists().filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase()))
   });
 
@@ -91,8 +88,6 @@ export class AddPlaylistComponent {
         entry.playlistName = pl.title,
         newPl.push(entry);
     })
-
-    console.log("other playlist size : " + newPl.length);
     this.otherPlaylists.set(newPl);
   }
 
@@ -101,17 +96,14 @@ export class AddPlaylistComponent {
   }
 
   getRecentPlaylistsCount(): number {
-    console.log("recent playlists count : " + this.filteredRecentPlaylists().length);
     return this.filteredRecentPlaylists().length;
   }
 
   getServerPlaylistsCount(): number {
-    console.log("server playlists count : " + this.serverPlaylistService.serverPl().serverPlaylists?.length);
     return this.serverPlaylistService.serverPl().serverPlaylists?.length;
   }
 
   getOtherPlaylistsCount(): number {
-    console.log("other playlists count : " + this.otherPlaylists()?.length);
     return this.otherPlaylists()?.length;
   }
 
