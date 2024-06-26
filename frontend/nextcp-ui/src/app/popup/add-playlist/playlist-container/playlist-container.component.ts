@@ -27,7 +27,7 @@ export class PlaylistContainerComponent {
   }
 
   isPlaylistMode(mode: PlaylistMode): boolean {
-    if (mode.valueOf() === this.playlistMode.valueOf()) {
+    if (mode.valueOf() === this.playlistMode().valueOf()) {
       return true;
     } else {
       return false;
