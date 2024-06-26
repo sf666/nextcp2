@@ -124,7 +124,7 @@ export class FooterComponent {
     let timeAbs = Math.floor(this.rendererService.trackTime().duration * value/100);
     this.transportService.seek(timeAbs);
   }
- 
+
   //
   // styling of elements depending on state information
   // =========================================================================================================

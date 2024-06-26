@@ -28,7 +28,7 @@ export class ServerDropdownComponent {
   }
   
   public get currentMediaServer(): MediaServerDto {
-    return this.deviceService.selectedMediaServerDevice;
+    return this.deviceService.selectedMediaServerDevice();
   }
   
   public get labelName(): string {

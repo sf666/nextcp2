@@ -1,11 +1,12 @@
 import { PopupService } from './../../../util/popup.service';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
-import { Component, OnInit, Inject, ElementRef } from '@angular/core';
+import { Component, OnInit, Inject, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
 
 @Component({
     selector: 'defaut-playlists',
     templateUrl: './defaut-playlists.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrls: ['./defaut-playlists.component.scss'],
     standalone: true
 })

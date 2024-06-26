@@ -1,5 +1,5 @@
 <div class="playlist-list">
-    @for (playlist of playlists; track playlist) {
+    @for (playlist of playlists(); track playlist.playlistId) {
     <div class="d-flex justify-content-between">
         <div class="playlist-item" (click)="addTo(playlist)">
             <img src="{{playlist.albumArtUrl}}" class="playlist-img">

@@ -4,7 +4,7 @@ import { PlaylistService } from './../../../../service/playlist.service';
 import { DownloadService } from './../../../../util/download.service';
 import { MusicItemDto, ContainerDto} from './../../../../service/dto.d';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, Inject, ElementRef, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, Inject, ElementRef, OnInit, ViewContainerRef, ChangeDetectionStrategy } from '@angular/core';
 import { DefaultPlaylistService } from '../../defaut-playlists/default-playlist.service';
 import { TransportService } from 'src/app/service/transport.service';
 import { StarRatingComponent } from '../../../../view/star-rating/star-rating.component';
@@ -15,6 +15,7 @@ import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
     templateUrl: './song-options.component.html',
     styleUrls: ['./song-options.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [StarRatingComponent]
 })
 export class SongOptionsComponent implements OnInit {

@@ -7,7 +7,7 @@ import {
   SearchResultDto,
   ContainerDto,
 } from './../../service/dto.d';
-import { Component, Inject, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, computed, model, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormField } from '@angular/material/form-field';
@@ -29,33 +29,36 @@ export enum PlaylistMode {
 @Component({
   selector: 'app-playlist-management',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatFormField, MatButton, MatInput, MatIconModule, FormsModule, PlaylistContainerComponent],
   templateUrl: './add-playlist.component.html',
   styleUrl: './add-playlist.component.scss',
 })
 
 export class AddPlaylistComponent {
+  PlaylistModeEnum: typeof PlaylistMode = PlaylistMode;
+
   otherPlaylists = signal<ServerPlaylistDto[]>([]);
-  playlistFilter = signal<string>("");
+  playlistFilter = model<string>('');
+  musicItemToAdd = signal<MusicItemDto>(this.dtoGeneratorService.emptyMusicItemDto());
+  newPlaylistName = model<string>('');
+  playlistMode = signal<PlaylistMode>(PlaylistMode.Add);
 
   filteredServerPlaylists = computed(() => {
+    console.log("filtering server playlists ... ");
+
     return this.serverPlaylistService.serverPl().serverPlaylists.filter(
       pl => pl.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase()))
   });
 
   filteredOtherPlaylists = computed(() => {
-    return this.otherPlaylists().filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase()));
+    console.log("filtering other playlists ... ");
+    return this.otherPlaylists().filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase()))
   });
 
   filteredRecentPlaylists = computed(() => {
     return this.serverPlaylistService.recentServerPl().serverPlaylists.filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase()));
   });
-  
-
-  playlistMode: PlaylistMode;
-  newPlaylistName = '';
-  PlaylistModeEnum: typeof PlaylistMode = PlaylistMode;
-  private musicItemToAdd: MusicItemDto;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) data: { item: MusicItemDto },
@@ -65,19 +68,19 @@ export class AddPlaylistComponent {
     private dtoGeneratorService: DtoGeneratorService,
     public dialogRef: MatDialogRef<AddPlaylistComponent>,
   ) {
-    this.musicItemToAdd = data.item;
+    this.musicItemToAdd.set(data.item);
     if (data.item) {
-      this.playlistMode = PlaylistMode.Add;
+      this.playlistMode.set(PlaylistMode.Add);
     } else {
-      this.playlistMode = PlaylistMode.Create;
+      this.playlistMode.set(PlaylistMode.Create);
     }
     let sr = dtoGeneratorService.generateEmptySearchRequestDto();
     sr.searchRequest = '';
     sr.mediaServerUDN = deviceService.selectedMediaServerDevice().udn;
-    this.contentDirectoryService.searchAllPlaylist(sr).subscribe(data => this.updateAllPlaylists(data));
+    this.contentDirectoryService.searchAllPlaylist(sr).subscribe(data => this.updateOtherPlaylists(data));
   }
 
-  private updateAllPlaylists(data: SearchResultDto): void {
+  private updateOtherPlaylists(data: SearchResultDto): void {
     let newPl: ServerPlaylistDto[] = [];
 
     let other = data.playlistItems.filter((spe) => !this.serverPlaylistService.playlistIdExistsInServerPlaylists(spe.id));
@@ -88,6 +91,8 @@ export class AddPlaylistComponent {
         entry.playlistName = pl.title,
         newPl.push(entry);
     })
+
+    console.log("other playlist size : " + newPl.length);
     this.otherPlaylists.set(newPl);
   }
 
@@ -96,20 +101,23 @@ export class AddPlaylistComponent {
   }
 
   getRecentPlaylistsCount(): number {
-    return this.filteredRecentPlaylists().length
+    console.log("recent playlists count : " + this.filteredRecentPlaylists().length);
+    return this.filteredRecentPlaylists().length;
   }
 
   getServerPlaylistsCount(): number {
+    console.log("server playlists count : " + this.serverPlaylistService.serverPl().serverPlaylists?.length);
     return this.serverPlaylistService.serverPl().serverPlaylists?.length;
   }
 
   getOtherPlaylistsCount(): number {
+    console.log("other playlists count : " + this.otherPlaylists()?.length);
     return this.otherPlaylists()?.length;
   }
 
   addTo(serverPlaylist: ServerPlaylistDto) {
     this.serverPlaylistService.addSongToServerPlaylist(
-      this.musicItemToAdd.objectID,
+      this.musicItemToAdd().objectID,
       serverPlaylist.playlistId,
     );
     this.close();
@@ -118,13 +126,13 @@ export class AddPlaylistComponent {
   deletePlaylist(serverPlaylist: ServerPlaylistDto) {
     this.serverPlaylistService.deleteObject(serverPlaylist.playlistId).subscribe({
       next: (data) => {
+        // TODO does update of signal member work?
         this.serverPlaylistService.serverPl().serverPlaylists = this.serverPlaylistService.serverPl().serverPlaylists.filter(
           pl => pl.playlistId !== serverPlaylist.playlistId);
       },
       error: (data) => { console.error(data); }
 
-    }
-    );
+    });
   }
 
   close(): void {
@@ -132,19 +140,19 @@ export class AddPlaylistComponent {
   }
 
   addPlaylistClick(): void {
-    this.playlistMode = PlaylistMode.Add;
+    this.playlistMode.set(PlaylistMode.Add);
   }
 
   newPlaylistClick(): void {
-    this.playlistMode = PlaylistMode.Create;
+    this.playlistMode.set(PlaylistMode.Create);
   }
 
   deletePlaylistClick(): void {
-    this.playlistMode = PlaylistMode.Delete;
+    this.playlistMode.set(PlaylistMode.Delete);
   }
 
   playlistActiveClass(mode: PlaylistMode): string {
-    if (mode.valueOf() === this.playlistMode.valueOf()) {
+    if (mode.valueOf() === this.playlistMode().valueOf()) {
       return "active";
     } else {
       return "inactive";
@@ -152,7 +160,7 @@ export class AddPlaylistComponent {
   }
 
   isPlaylistMode(mode: PlaylistMode): boolean {
-    if (mode.valueOf() === this.playlistMode.valueOf()) {
+    if (mode.valueOf() === this.playlistMode().valueOf()) {
       return true;
     } else {
       return false;
@@ -160,16 +168,16 @@ export class AddPlaylistComponent {
   }
 
   addDisabled(): boolean {
-    return this.newPlaylistName.length == 0;
+    return this.newPlaylistName().length == 0;
   }
 
   createPlaylistClicked(): void {
-    this.serverPlaylistService.createPlaylist(this.newPlaylistName).subscribe(newId => this.newPlaylistId(newId))
+    this.serverPlaylistService.createPlaylist(this.newPlaylistName()).subscribe(newId => this.newPlaylistId(newId))
     this.close();
   }
 
   cancelClicked(): void {
-    this.newPlaylistName = '',
+    this.newPlaylistName.set(''),
       this.close();
   }
 
@@ -179,6 +187,6 @@ export class AddPlaylistComponent {
   }
 
   get musicItemToAddExists(): boolean {
-    return this.musicItemToAdd?.objectID?.length > 0;
+    return this.musicItemToAdd()?.objectID?.length > 0;
   }
 }

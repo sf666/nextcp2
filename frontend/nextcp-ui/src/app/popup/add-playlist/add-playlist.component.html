@@ -19,7 +19,7 @@
     </div>
     <div class="popupDivider mt-2 mb-1">&nbsp;</div>
     <div class="popupBody">
-        @if (isPlaylistMode(PlaylistModeEnum.Add) || isPlaylistMode(PlaylistModeEnum.Delete)) {
+        @if (isPlaylistMode(PlaylistModeEnum.Add) || isPlaylistMode(PlaylistModeEnum.Delete)) {
             <div class="searchInput">
                 <mat-form-field class="w100" appearance="outline" class="setting-dropdown">
                     <input matInput type="text" [(ngModel)]="playlistFilter" placeholder="search for playlist">
@@ -31,7 +31,7 @@
                 </div>
                 <playlist-container
                     [playlists]="filteredRecentPlaylists()"
-                    [playlistMode]="playlistMode"
+                    [playlistMode]="playlistMode()"
                     (addClicked)="addTo($event)"
                     (deleteClicked)="deletePlaylist($event)">
                 </playlist-container>
@@ -43,7 +43,7 @@
             @if (getServerPlaylistsCount() > 0) {
                 <playlist-container
                     [playlists]="filteredServerPlaylists()"
-                    [playlistMode]="playlistMode"
+                    [playlistMode]="playlistMode()"
                     (addClicked)="addTo($event)"
                     (deleteClicked)="deletePlaylist($event)">
                 </playlist-container>
@@ -57,7 +57,7 @@
             @if (getOtherPlaylistsCount() > 0) {
                 <playlist-container
                     [playlists]="filteredOtherPlaylists()"
-                    [playlistMode]="playlistMode"
+                    [playlistMode]="playlistMode()"
                     (addClicked)="addTo($event)"
                     (deleteClicked)="deletePlaylist($event)">
                 </playlist-container>
