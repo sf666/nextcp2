@@ -1,5 +1,3 @@
-import { TrackDetailsData } from './../../popup/track-details/track-details-config.d';
-import { TrackDetailsComponent } from './../../popup/track-details/track-details.component';
 import { SongOptionsServiceService } from './../../mediaserver/popup/song-options/song-options-service.service';
 import { AvailableServerComponent } from './../../popup/available-server/available-server.component';
 import { VolumeControlComponent } from './../../popup/volume-control/volume-control.component';

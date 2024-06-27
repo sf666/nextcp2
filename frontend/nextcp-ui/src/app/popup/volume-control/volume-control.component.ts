@@ -12,7 +12,7 @@ import { MatIcon } from '@angular/material/icon';
     standalone: true,
     imports: [MatIcon, MatSlider, MatSliderThumb]
 })
-export class VolumeControlComponent implements OnInit {
+export class VolumeControlComponent {
 
   private readonly _matDialogRef: MatDialogRef<VolumeControlComponent>;
   private readonly triggerElementRef: ElementRef;
@@ -27,10 +27,6 @@ export class VolumeControlComponent implements OnInit {
   ) {
     this.triggerElementRef = data.trigger;
     this._matDialogRef = _matDialogRef;
-  }
-
-
-  ngOnInit(): void {
     this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 50, 482);
   }
 
