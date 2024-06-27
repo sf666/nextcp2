@@ -1,18 +1,21 @@
 import { DeviceService } from 'src/app/service/device.service';
 import { PopupService } from './../../util/popup.service';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
-import { Component, OnInit, Inject, ElementRef } from '@angular/core';
+import { Component, OnInit, Inject, ElementRef, computed } from '@angular/core';
 
 @Component({
-    selector: 'app-available-renderer',
-    templateUrl: './available-renderer.component.html',
-    styleUrls: ['./available-renderer.component.scss'],
-    standalone: true
+  selector: 'app-available-renderer',
+  templateUrl: './available-renderer.component.html',
+  styleUrls: ['./available-renderer.component.scss'],
+  standalone: true
 })
-export class AvailableRendererComponent implements OnInit {
+export class AvailableRendererComponent {
 
   private readonly _matDialogRef: MatDialogRef<AvailableRendererComponent>;
   private readonly triggerElementRef: ElementRef;
+
+  rendererCount = computed(() => this.deviceService.mediaRendererList().length);
+  popupHeight = computed(() => this.rendererCount() * 30 + 120);
 
   constructor(
     _matDialogRef: MatDialogRef<AvailableRendererComponent>,
@@ -22,19 +25,14 @@ export class AvailableRendererComponent implements OnInit {
   ) {
     this.triggerElementRef = data.trigger;
     this._matDialogRef = _matDialogRef;
+    this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 250, this.popupHeight());
   }
 
-  ngOnInit(): void {
-    const rendererCount = this.deviceService.mediaRendererList().length;
-    const popupHeight = rendererCount * 30 + 120;
-    this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 250, popupHeight);
-  }
-
-  close() : void {
+  close(): void {
     this._matDialogRef.close();
   }
 
-  selectRenderer(udn : string): void {
+  selectRenderer(udn: string): void {
     this.deviceService.setMediaRendererByUdn(udn);
     this.close();
   }

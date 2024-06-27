@@ -1,13 +1,11 @@
-@if (true) {
-  <div class="panel" (mouseleave)="close()">
-    <div class="dialogTitle">Media Renderer</div>
-    <div class="dialogItems d-flex flex-column flex-wrap mt-4 minWidth">
-      @for (device of deviceService.getEnabledMediaRendererList(); track device) {
-        <div class="no-wrap element-item {{getSelectedClass(device.udn)}}"
-          (click)="selectRenderer(device.udn)">
-          {{device.friendlyName}}
-        </div>
-      }
-    </div>
+<div class="panel" (mouseleave)="close()">
+  <div class="dialogTitle">Media Renderer</div>
+  <div class="dialogItems d-flex flex-column flex-wrap mt-4 minWidth">
+    @for (device of deviceService.enabledMediaRendererList(); track device) {
+      <div class="no-wrap element-item {{getSelectedClass(device.udn)}}"
+        (click)="selectRenderer(device.udn)">
+        {{device.friendlyName}}
+      </div>
+    }
   </div>
-}
+</div>

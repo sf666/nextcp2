@@ -2,7 +2,7 @@ import { PersistenceService } from './../../service/persistence/persistence.serv
 import { DeviceService } from 'src/app/service/device.service';
 import { PopupService } from './../../util/popup.service';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
-import { Component, OnInit, Inject, ElementRef } from '@angular/core';
+import { Component, OnInit, Inject, ElementRef, computed } from '@angular/core';
 
 @Component({
     selector: 'app-available-server',
@@ -11,10 +11,12 @@ import { Component, OnInit, Inject, ElementRef } from '@angular/core';
     standalone: true
 })
 
-export class AvailableServerComponent implements OnInit {
+export class AvailableServerComponent {
 
   private readonly _matDialogRef: MatDialogRef<AvailableServerComponent>;
   private readonly triggerElementRef: ElementRef;
+
+  popupHeight = computed(() => this.deviceService.mediaServerList().length * 30 + 120);
 
   constructor(
     _matDialogRef: MatDialogRef<AvailableServerComponent>,
@@ -25,11 +27,7 @@ export class AvailableServerComponent implements OnInit {
   ) {
     this.triggerElementRef = data.trigger;
     this._matDialogRef = _matDialogRef;
-  }
-
-  ngOnInit(): void {
-    const popupHeight = this.deviceService.mediaServerList().length * 30 + 120;
-    this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 400, popupHeight);
+    this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 400, this.popupHeight());
   }
 
   close(): void {

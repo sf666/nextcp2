@@ -3,26 +3,35 @@ import { Subject } from 'rxjs';
 import { ConfigurationService } from './configuration.service';
 import { SseService } from './sse/sse.service';
 import { MediaServerDto, MediaRendererDto, UiClientConfig, RendererDeviceConfiguration, InputSourceChangeDto, TransportServiceStateDto, InputSourceDto } from './dto.d';
-import { Injectable, signal } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DeviceService {
 
-  // member
-  // ============================================================
+  baseUri = '/DeviceRegistry';
 
-  private baseUri = '/DeviceRegistry';
-  private defaultMediaRendererAlreadySelected = false;
-  private defaultMediaServerAlreadySelected = false;
-
-  // signals 
-  // ============================================================
   public mediaServerList = signal<MediaServerDto[]>([]);
   public mediaRendererList = signal<MediaRendererDto[]>([]);
   public selectedMediaServerDevice = signal<MediaServerDto>({ udn: '', friendlyName: 'please select Media-Server', extendedApi: false });
   public selectedMediaRendererDevice = signal<MediaRendererDto>({ udn: '', friendlyName: 'please select Media-Renderer', services: [], allSources: [], currentSource: null });
+
+  private defaultMediaRendererAlreadySelected = false;
+  private defaultMediaServerAlreadySelected = false;
+
+  mediaRendererChanged$: Subject<MediaRendererDto> = new Subject();
+  mediaServerChanged$: Subject<MediaServerDto> = new Subject();
+  mediaRendererInitiated$: Subject<MediaRendererDto[]> = new Subject();
+  mediaServerInitiated$: Subject<MediaServerDto[]> = new Subject();
+
+
+  public enabledMediaRendererList = computed(() => {
+    return this.mediaRendererList().filter(renderer => {
+      const enabled = this.configService.isRenderDeviceUdnActive(renderer.udn);
+      return enabled;
+    });
+  });   
 
   constructor(
     // class services
@@ -130,13 +139,6 @@ export class DeviceService {
     }
   }
 
-  public getEnabledMediaRendererList(): MediaRendererDto[] {
-    return this.mediaRendererList().filter(renderer => {
-      const enabled = this.configService.isRenderDeviceUdnActive(renderer.udn);
-      return enabled;
-    });
-  }
-
 
   public get selectedMediaServerDeviceHasExtendedApi(): boolean {
     return this.selectedMediaServerDevice().extendedApi;
@@ -173,6 +175,7 @@ export class DeviceService {
     this.httpService.get<MediaServerDto[]>(this.baseUri, uri).subscribe(data => {
       this.mediaServerList.set(data);
       this.applyDefaultServer();
+      this.mediaServerInitiated$.next(data);
     });
   }
 
@@ -182,10 +185,10 @@ export class DeviceService {
     this.httpService.get<MediaRendererDto[]>(this.baseUri, uri).subscribe(data => {
       this.mediaRendererList.set(data);
       this.applyDefaultRenderer();
+      this.mediaRendererInitiated$.next(data);
     });
   }
 
-  // for debugging
   private logMediaRendererDeviceServices(renderer: MediaRendererDto): void {
     if (renderer) {
       console.log("available services for device : " + renderer.friendlyName);

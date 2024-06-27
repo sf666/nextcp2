@@ -1,11 +1,7 @@
 import { ConfigurationService } from './../../service/configuration.service';
 import { LayoutService } from './../../service/layout.service';
-import { InputFieldConfig } from './../../popup/input-field-dialog/input-field-dialog.d';
-import { InputFieldDialogComponent } from './../../popup/input-field-dialog/input-field-dialog.component';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { MyPlaylistService } from './../my-playlists/my-playlist.service';
-import { PlaylistService } from './../../service/playlist.service';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
@@ -31,9 +27,6 @@ import { DefaultPlaylistService } from 'src/app/mediaserver/popup/defaut-playlis
 export class SidebarComponent {
 
   public routerMap = new Map<string, string>();
-
-  // Dialogs
-  createPlaylistDialogRef: MatDialogRef<InputFieldDialogComponent>;
 
   activeId = signal<string>("");
 
