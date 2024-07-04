@@ -1,7 +1,7 @@
 import { GlobalSearchService } from './../../service/search/global-search.service';
 import { Router, RouterLink } from '@angular/router';
 import { ContentDirectoryService } from './../../service/content-directory.service';
-import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input, input, output } from '@angular/core';
 import { ModalSearchResultComponent } from '../search/modal-search-result/modal-search-result.component';
 import { FormsModule } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
@@ -21,16 +21,16 @@ import { ScrollLoadHandler } from 'src/app/mediaserver/display-container/defs';
 })
 
 export class NavBarComponent {
-  @Input() parentTitle: string;
-  @Input() backButtonDisabled: boolean = false;
-  @Input() contentHandler: ScrollLoadHandler;
+  parentTitle = input<string>();
+  backButtonDisabled = input<boolean>(false);
+  contentHandler = input.required<ScrollLoadHandler>();
 
 
   // Inform parent about actions
-  @Output() executeSearch = new EventEmitter<string>();
-  @Output() searchKeyUp = new EventEmitter<KeyboardEvent>();
-  @Output() backButtonPressed = new EventEmitter<any>();
-  @Output() rootButtonPressed = new EventEmitter<any>();
+  executeSearch = output<string>();
+  searchKeyUp = output<KeyboardEvent>();
+  backButtonPressed = output<any>();
+  rootButtonPressed = output<any>();
 
   showBackButton = false;
 
@@ -61,11 +61,11 @@ export class NavBarComponent {
   }
 
   showParentFolder() : boolean {
-    if (!this.contentHandler?.contentDirectoryService?.currentContainerList().currentContainer?.parentID ) {
+    if (!this.contentHandler().contentDirectoryService?.currentContainerList().currentContainer?.parentID ) {
       return false;
     } else {
-      if (this.contentHandler?.contentDirectoryService?.currentContainerList().currentContainer?.parentID === "0" || 
-          this.contentHandler?.contentDirectoryService?.currentContainerList().currentContainer?.parentID === "-1") {
+      if (this.contentHandler().contentDirectoryService?.currentContainerList().currentContainer?.parentID === "0" || 
+          this.contentHandler().contentDirectoryService?.currentContainerList().currentContainer?.parentID === "-1") {
         return false;
       }
       return true;
