@@ -26,7 +26,7 @@ import { DefaultPlaylistService } from 'src/app/mediaserver/popup/defaut-playlis
 })
 export class SidebarComponent {
 
-  public routerMap = new Map<string, string>();
+  private routerMap = new Map<string, string>();
 
   activeId = signal<string>("");
 
