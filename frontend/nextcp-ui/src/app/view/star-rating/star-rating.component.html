@@ -1,6 +1,6 @@
 @if (isVisible()) {
   <div class="d-flex justify-content-end icon-sm minWidth">
-    @for (num of starsAvail; track num) {
+    @for (num of starsAvail(); track num) {
       <span class="material-symbols-outlined md-18 star-class {{isActive(num)}}" (click)="starSelected(num)">{{getIconFor(num)}}</span>
     }
   </div>
