@@ -16,6 +16,8 @@ import {
   EventEmitter,
   signal,
   ChangeDetectionStrategy,
+  input,
+  output,
 } from '@angular/core';
 import { debounce } from 'src/app/global';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -68,15 +70,15 @@ import { OtherItemTileComponent } from './other-item-tile/other-item-tile.compon
 })
 export class DisplayContainerComponent {
 
-  @Input() showTopHeader = true;
-  @Input() extendedApi: boolean = true;
-  @Input() contentHandler: ScrollLoadHandler;
+  showTopHeader = input(true);
+  extendedApi = input (true);
+  contentHandler = input.required<ScrollLoadHandler>();
 
 
   // Inform parent about actions
-  @Output() containerSelected = new EventEmitter<ContainerDto>();
-  @Output() browseFinish = new EventEmitter<ContainerItemDto>();
-  @Output() itemDeleted = new EventEmitter<MusicItemDto>();
+  containerSelected = output<ContainerDto>();
+  browseFinish = output<ContainerItemDto>();
+  itemDeleted = output<MusicItemDto>();
 
   listView = signal<boolean>(true);
   displayFilterString = signal<string>("");
@@ -119,23 +121,23 @@ export class DisplayContainerComponent {
   //
 
   get musicTracks(): MusicItemDto[] {
-    return this.contentHandler.contentDirectoryService.musicTracks_();
+    return this.contentHandler().contentDirectoryService.musicTracks_();
   }
 
   get otherItems_() {
-    return this.contentHandler.contentDirectoryService.otherItems_();
+    return this.contentHandler().contentDirectoryService.otherItems_();
   }
 
   get albums(): ContainerDto[] {
-    return this.contentHandler.contentDirectoryService.albumList_();
+    return this.contentHandler().contentDirectoryService.albumList_();
   }
 
   get playlists(): ContainerDto[] {
-    return this.contentHandler.contentDirectoryService.playlistList_();
+    return this.contentHandler().contentDirectoryService.playlistList_();
   }
 
   get container(): ContainerDto[] {
-    return this.contentHandler.contentDirectoryService.containerList_();
+    return this.contentHandler().contentDirectoryService.containerList_();
   }
 
   //
@@ -182,11 +184,11 @@ export class DisplayContainerComponent {
     }
 
     const promise = new Promise<boolean>((resolve, reject) => {
-      if (this.contentHandler.persistenceService) {
-        this.contentHandler.persistenceService.setCurrentObjectID(oid);
+      if (this.contentHandler().persistenceService) {
+        this.contentHandler().persistenceService.setCurrentObjectID(oid);
       }
-      if (this.contentHandler.contentDirectoryService) {
-        this.contentHandler.contentDirectoryService
+      if (this.contentHandler().contentDirectoryService) {
+        this.contentHandler().contentDirectoryService
           .browseChildrenByOID(oid, udn, '')
           .subscribe((data) => {
             this.browseFinished(data);
@@ -221,7 +223,7 @@ export class DisplayContainerComponent {
   }
 
   public loadNextBrowsePage() {
-    this.contentHandler.contentDirectoryService.browseToNextPage().subscribe();
+    this.contentHandler().contentDirectoryService.browseToNextPage().subscribe();
   }
 
   addPlaylist(container: ContainerDto): void {

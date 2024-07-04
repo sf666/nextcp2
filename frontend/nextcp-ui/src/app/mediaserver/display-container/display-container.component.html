@@ -10,7 +10,7 @@
 @if (showTopHeader) {
   <div class="">
     <display-container-header
-    [contentDirectoryService]="contentHandler.contentDirectoryService"
+    [contentDirectoryService]="contentHandler().contentDirectoryService"
 
     [(listView)]="listView"
     [(quickSearchString)]="displayFilterString"
@@ -66,10 +66,10 @@ Main Content
     <div id="head_browse_result_items_ID">
       <item-tile
         [isListView]="isListView()"
-        [contentDirectoryService]="contentHandler.contentDirectoryService"
+        [contentDirectoryService]="contentHandler().contentDirectoryService"
         [quickSearchString]="displayFilterString()"
         [selectedGenres]="selectedGenres()"
-        [extendedApi]="extendedApi"
+        [extendedApi]="extendedApi()"
         (playItemClicked)="playItem($event)"
         (addItemToPlaylistClicked)="addItemToPlaylist($event)"
       >
