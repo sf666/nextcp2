@@ -102,7 +102,7 @@
         <button mat-stroked-button class="ms-2" color="warn" (click)="deleteServerConfig(serverConfig)">delete</button>
       </div>
     </div>
-    @if (showOnlyActiveServer && getMediaServer()?.length == 0) {
+    @if (getMediaServer()?.length == 0) {
     <div class="no-online">
       No media server online
     </div>
@@ -189,7 +189,7 @@
       </div>
     </div>
     }
-    @if (showOnlyActiveRenderer && getMediaRenderer()?.length == 0) {
+    @if (getMediaRenderer()?.length == 0) {
     <div class="no-online">
       No media renderer online
     </div>
@@ -393,7 +393,7 @@
       from your browsers URL bar into the input field below and
     </div>
     <div>
-      <input class="section input" [(ngModel)]="code">
+      <input class="section input" [(ngModel)]="spotifyCode">
     </div>
     <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="sendSpotifyCode()">send
       it</button>

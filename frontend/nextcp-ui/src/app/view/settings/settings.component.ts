@@ -13,7 +13,7 @@ import {
   ServerDeviceConfiguration,
 } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, model, signal } from '@angular/core';
 import { LayoutService } from 'src/app/service/layout.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
@@ -46,9 +46,9 @@ import {
   ],
 })
 export class SettingsComponent implements OnInit {
-  code: string;
-  public showOnlyActiveServer: boolean = true;
-  public showOnlyActiveRenderer: boolean = true;
+  spotifyCode = model<string>('');
+  showOnlyActiveServer = model<boolean>(true);
+  showOnlyActiveRenderer = model<boolean>(true);
 
   none_serverdevice: MediaServerDto = {
     udn: '',
@@ -153,8 +153,8 @@ export class SettingsComponent implements OnInit {
   }
 
   sendSpotifyCode(): void {
-    this.systemService.setSpotifyCode(this.code);
-    this.code = '';
+    this.systemService.setSpotifyCode(this.spotifyCode());
+    this.spotifyCode.set('');
   }
 
   registerAppAtSpotify(): void {
