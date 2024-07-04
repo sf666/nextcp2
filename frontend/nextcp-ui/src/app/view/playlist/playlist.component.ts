@@ -4,7 +4,7 @@ import { SseService } from './../../service/sse/sse.service';
 import { DeviceService } from './../../service/device.service';
 import { MusicItemDto } from './../../service/dto.d';
 import { PlaylistService } from '../../service/playlist.service';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { LayoutService } from 'src/app/service/layout.service';
 import { QualityBadgeComponent } from '../../util/comp/quality-badge/quality-badge.component';
 import { MatIcon } from '@angular/material/icon';
@@ -14,6 +14,7 @@ import { MatButton } from '@angular/material/button';
     selector: 'playlist',
     templateUrl: './playlist.component.html',
     styleUrls: ['./playlist.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [CdsBrowsePathService, { provide: 'uniqueId', useValue: 'cds_playlist' }],
     standalone: true,
     imports: [MatButton, MatIcon, QualityBadgeComponent]

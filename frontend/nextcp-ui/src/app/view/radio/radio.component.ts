@@ -4,12 +4,13 @@ import { RadioService } from './../../service/radio.service';
 import { TransportService } from '../../service/transport.service';
 import { RadioStation, MusicItemDto } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { LayoutService } from 'src/app/service/layout.service';
 
 @Component({
     selector: 'app-radio',
     templateUrl: './radio.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrls: ['./radio.component.scss'],
     standalone: true
 })

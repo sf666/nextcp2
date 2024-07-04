@@ -13,7 +13,7 @@ import {
   ServerDeviceConfiguration,
 } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
-import { Component, OnInit, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, model } from '@angular/core';
 import { LayoutService } from 'src/app/service/layout.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
@@ -32,6 +32,7 @@ import {
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatFormFieldModule,
     MatLabel,

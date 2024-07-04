@@ -4,13 +4,14 @@ import { TransportService } from '../../../service/transport.service';
 /* eslint-disable no-restricted-syntax */
 import { ContentDirectoryService } from './../../../service/content-directory.service';
 import { Router } from '@angular/router';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { QualityBadgeComponent } from '../../../util/comp/quality-badge/quality-badge.component';
 
 @Component({
     selector: 'modal-search-result',
     templateUrl: './modal-search-result.component.html',
     styleUrls: ['./modal-search-result.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [ContentDirectoryService],
     standalone: true,
     imports: [QualityBadgeComponent]
