@@ -118,6 +118,7 @@ export class RendererService {
   }
 
   private renderDeviceChanged(device: MediaRendererDto) {
+    console.log("renderDeviceChanged to : " + device.friendlyName);
     this.readDeviceDriverState(device);
     this.readTrackInfoState(device);
     this.readTransportServiceState(device)
@@ -140,6 +141,8 @@ export class RendererService {
       this.httpService.post<TransportServiceStateDto>(this.baseUri, uri, device).subscribe(data => {
         if (this.deviceService.isMediaRendererSelected(data.udn)) {
           this.transportServiceStateDto.set(data);
+          console.log("readTransportServiceState shuffle : " + data.shuffle);
+          console.log("readTransportServiceState : " + data);
         }
       });
     }

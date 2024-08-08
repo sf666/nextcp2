@@ -1,3 +1,4 @@
+import { RendererService } from './renderer.service';
 import { SseService } from './sse/sse.service';
 import { GenericResultService } from './generic-result.service';
 import { GenericBooleanRequest, GenericNumberRequest, MusicItemDto, PlayRequestDto, PlaylistState, ContainerDto, PlaylistAddContainerRequest, ServerPlaylistEntry, MediaServerDto, ServerPlaylistDto, ServerPlaylists, CreateServerPlaylistVO } from './dto.d';
@@ -30,6 +31,7 @@ export class PlaylistService implements OnInit {
   constructor(
     private httpService: HttpService,
     sseService: SseService,
+    private rendererService: RendererService,
     private genericResultService: GenericResultService,
     private deviceService: DeviceService) {
 
@@ -77,11 +79,11 @@ export class PlaylistService implements OnInit {
   // ===========================================================================
 
   public toggleShuffle(): void {
-    this.setShuffle(!this.playlistState().Shuffle);
+    this.setShuffle(!this.rendererService.isShuffle());
   }
 
   public toggleRepeat(): void {
-    this.setRepeat(!this.playlistState().Repeat);
+    this.setRepeat(!this.rendererService.isRepeat());
   }
 
   private getSelectedMediaRendererUdn(): string {
