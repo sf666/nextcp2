@@ -68,6 +68,7 @@
 		<module>nextcp2-runtime</module>
 		<module>nextcp2-assembly</module>
 		<module>nextcp2-codegen</module>
+		<module>nextcp2-player</module>
 	</modules>
 	<build>
 		<resources>
@@ -181,6 +182,11 @@
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>de.sf666</groupId>
+				<artifactId>nextcp2-player</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>de.sf666</groupId>
 				<artifactId>nextcp2-runtime</artifactId>

@@ -356,7 +356,7 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
     }
 
     protected NetworkAddressFactory createNetworkAddressFactory(int streamListenPort, int multicastResponsePort) {
-        return new NetworkAddressFactoryImpl(streamListenPort, multicastResponsePort);
+        return new Nextcp2NetworkAddressFactory(streamListenPort, multicastResponsePort);
     }
 
     protected DatagramProcessor createDatagramProcessor() {

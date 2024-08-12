@@ -36,6 +36,11 @@
 			<groupId>de.sf666</groupId>
 			<artifactId>nextcp2-modelgen</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>de.sf666</groupId>
+			<artifactId>nextcp2-player</artifactId>
+		</dependency>
+		
 		<!-- YAML code generator support -->
 		<dependency>
 			<groupId>org.yaml</groupId>
