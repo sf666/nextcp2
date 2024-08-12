@@ -29,6 +29,7 @@ public class RestMediaRendererService {
 
 	@PostConstruct
 	private void init() {
+		/*
 		renderer = new Nextcp2Renderer();
 		try {
 			if (!upnpService.upnpService().getRouter().isEnabled()) {
@@ -39,5 +40,6 @@ public class RestMediaRendererService {
 		}		
 		upnpService.upnpService().getRegistry().addDevice(renderer.getLocalDevice());
 		upnpService.upnpService().getProtocolFactory().createSendingNotificationAlive(renderer.getLocalDevice()).run();
+		*/
 	}
 }
