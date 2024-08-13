@@ -3,6 +3,7 @@ package nextcp2.upnp.localdevice;
 import java.net.URI;
 import org.jupnp.support.avtransport.impl.AVTransportStateMachine;
 import org.jupnp.support.avtransport.impl.state.AbstractState;
+import org.jupnp.support.avtransport.impl.state.Stopped;
 import org.jupnp.support.model.SeekMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ public class Nextcp2StateMachineDefinition implements AVTransportStateMachine{
 
 	@Override
 	public AbstractState<?> getCurrentState() {
+		log.error("please implement ...");
 		return null;
 	}
 

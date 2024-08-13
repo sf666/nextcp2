@@ -19,9 +19,6 @@ public class UpnpServiceFactory
 	private RendererConfig rendererConfigService;
     
     @Autowired
-    private DeviceRegistry deviceRegistry = null;
-
-    @Autowired
     private Config config = null;
 
     public UpnpServiceFactory()
@@ -34,7 +31,6 @@ public class UpnpServiceFactory
         // CodegenUpnpServiceConfiguration sc = new CodegenUpnpServiceConfiguration();
     	nextcp2DefaultUpnpServiceConfiguration = new Nextcp2DefaultUpnpServiceConfiguration(
     		config.applicationConfig.upnpStreamClient, config.applicationConfig.upnpStreamServer);
-    	nextcp2DefaultUpnpServiceConfiguration.setDeviceRegistry(deviceRegistry);
         upnpService = new Nextcp2UpnpServiceImpl(nextcp2DefaultUpnpServiceConfiguration, rendererConfigService);
         
         upnpService.startup();

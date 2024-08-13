@@ -7,64 +7,64 @@ import org.jupnp.support.lastchange.LastChange;
 import org.jupnp.support.model.Channel;
 import org.jupnp.support.renderingcontrol.AbstractAudioRenderingControl;
 import org.jupnp.support.renderingcontrol.RenderingControlException;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Nextcp2AudioRenderingControl extends AbstractAudioRenderingControl {
 
+	private static final Logger log = LoggerFactory.getLogger(Nextcp2AudioRenderingControl.class.getName());
+
 	public Nextcp2AudioRenderingControl() {
-		// TODO Auto-generated constructor stub
+		log.debug("constructor");
 	}
 
 	public Nextcp2AudioRenderingControl(LastChange lastChange) {
 		super(lastChange);
-		// TODO Auto-generated constructor stub
+		log.debug("constructor with lastChange");
 	}
 
 	public Nextcp2AudioRenderingControl(PropertyChangeSupport propertyChangeSupport) {
 		super(propertyChangeSupport);
-		// TODO Auto-generated constructor stub
+		log.debug("constructor with propertyChangeSupport");
 	}
 
 	public Nextcp2AudioRenderingControl(PropertyChangeSupport propertyChangeSupport, LastChange lastChange) {
 		super(propertyChangeSupport, lastChange);
-		// TODO Auto-generated constructor stub
+		log.debug("constructor with lastChange & propertyChangeSupport");
 	}
 
 	@Override
 	public UnsignedIntegerFourBytes[] getCurrentInstanceIds() {
-		// TODO Auto-generated method stub
-		return null;
+		return new UnsignedIntegerFourBytes[] {new UnsignedIntegerFourBytes(0)};
 	}
 
 	@Override
 	public boolean getMute(UnsignedIntegerFourBytes instanceId, String channelName) throws RenderingControlException {
-		// TODO Auto-generated method stub
+		log.debug("get mute");
 		return false;
 	}
 
 	@Override
 	public void setMute(UnsignedIntegerFourBytes instanceId, String channelName, boolean desiredMute) throws RenderingControlException {
-		// TODO Auto-generated method stub
-
+		log.debug("set mute");
 	}
 
 	@Override
 	public UnsignedIntegerTwoBytes getVolume(UnsignedIntegerFourBytes instanceId, String channelName) throws RenderingControlException {
-		// TODO Auto-generated method stub
-		return null;
+		log.debug("get vol");
+		return new UnsignedIntegerTwoBytes(0);
 	}
 
 	@Override
 	public void setVolume(UnsignedIntegerFourBytes instanceId, String channelName, UnsignedIntegerTwoBytes desiredVolume)
 		throws RenderingControlException {
-		// TODO Auto-generated method stub
-
+		log.debug("set vol");
 	}
 
 	@Override
 	protected Channel[] getCurrentChannels() {
-		// TODO Auto-generated method stub
-		return null;
+		log.debug("getCurrentChannels");
+		return new Channel[0];
 	}
 
 }

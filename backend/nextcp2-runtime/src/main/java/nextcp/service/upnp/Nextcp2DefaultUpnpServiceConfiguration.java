@@ -55,7 +55,6 @@ import org.jupnp.transport.spi.StreamServer;
 import org.jupnp.util.Exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import nextcp.upnp.device.DeviceRegistry;
 
 /**
  * Default configuration data of a typical UPnP stack.
@@ -118,8 +117,6 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
     
     final private Namespace namespace;
 
-    private DeviceRegistry deviceRegistry = null;
-    
     @SuppressWarnings("rawtypes")
     final private TransportConfiguration transportConfiguration;
 
@@ -465,8 +462,4 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
             return t;
         }
     }
-
-	public void setDeviceRegistry(DeviceRegistry deviceRegistry) {
-		this.deviceRegistry = deviceRegistry;
-	}
 }
