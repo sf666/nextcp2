@@ -13,7 +13,7 @@ import org.jupnp.support.model.TransportState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Nextcp2Player {
+public class Nextcp2Player implements IMediaPlayerCallback {
 
 	private static final Logger log = LoggerFactory.getLogger(Nextcp2Player.class.getName());
 
@@ -153,4 +153,19 @@ public class Nextcp2Player {
 		return actions;
 	}
 
+	//
+	// Callbacks from mediaPlayer backend
+	// 
+	
+	@Override
+	public void skipToNextSong() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void finished(String text) {
+		// TODO Auto-generated method stub
+		
+	}
 }

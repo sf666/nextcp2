@@ -22,6 +22,8 @@ import org.jupnp.support.model.TransportState;
 
 public class NextCp2MediaPlayers extends ConcurrentHashMap<UnsignedIntegerFourBytes, Nextcp2Player> {
 
+	private static final long serialVersionUID = 1L;
+
 	final private static Logger log = Logger.getLogger(NextCp2MediaPlayers.class.getName());
 
 	final protected LastChange avTransportLastChange;

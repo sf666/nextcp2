@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.annotation.PostConstruct;
+import nextcp.devicedriver.DeviceDriverDiscoveryService;
 import nextcp.service.upnp.UpnpServiceFactory;
 import nextcp2.upnp.localdevice.Nextcp2Renderer;
 
@@ -22,6 +23,9 @@ public class RestMediaRendererService {
 	
 	@Autowired
 	private UpnpServiceFactory upnpService = null;
+	
+	@Autowired
+	DeviceDriverDiscoveryService deviceDriverDiscoveryService = null;
 	
 	public RestMediaRendererService() {
 		log.debug("renderer service started ... " + renderer);
