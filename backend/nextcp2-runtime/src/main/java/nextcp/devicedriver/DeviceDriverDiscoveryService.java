@@ -5,10 +5,8 @@ import java.io.FileFilter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
 import org.apache.commons.lang.StringUtils;
@@ -18,9 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import jakarta.annotation.PostConstruct;
 import nextcp.dto.Config;
-import nextcp.mediaplayer.IMediaPlayer;
-import nextcp.mediaplayer.IMediaPlayerCallback;
-import nextcp.mediaplayer.IMediaPlayerFactory;
 
 @Component
 public class DeviceDriverDiscoveryService {
@@ -31,7 +26,6 @@ public class DeviceDriverDiscoveryService {
 	Config config = null;
 
 	private HashMap<String, IDeviceDriverFactory> availableDeviceDriver = new HashMap<>();
-	private List<IMediaPlayerFactory> availableMediaPlayer = new ArrayList<>();
 
 	public Set<DeviceCapabilityDto> getAvailableDeviceDriverTypes() {
 		Set<DeviceCapabilityDto> capabilities = new HashSet<>();
@@ -55,7 +49,6 @@ public class DeviceDriverDiscoveryService {
 			});
 
 			loadDeviceDriver(flist);
-			loadMediaPlayer(flist);
 		} catch (Exception e) {
 			log.error("ServiceLoader Error", e);
 		}
@@ -77,27 +70,6 @@ public class DeviceDriverDiscoveryService {
 			for (IDeviceDriverFactory factory : loader) {
 				availableDeviceDriver.put(factory.getDriverCapabilities().getDeviceType(), factory);
 				log.info(String.format("Found Driver for device of type : %s ", factory.getDriverCapabilities().getDeviceType()));
-			}
-		} else {
-			log.debug("no device driver available.");
-		}
-	}
-
-	private void loadMediaPlayer(File[] flist) throws MalformedURLException {
-		if (flist != null) {
-			URL[] urls = new URL[flist.length];
-
-			for (int i = 0; i < flist.length; i++) {
-				if (flist[i].getName().startsWith("mp-")) {
-					urls[i] = flist[i].toURI().toURL();
-				}
-			}
-
-			URLClassLoader ucl = new URLClassLoader(urls, this.getClass().getClassLoader());
-
-			ServiceLoader<IMediaPlayerFactory> loader = ServiceLoader.load(IMediaPlayerFactory.class, ucl);
-			for (IMediaPlayerFactory factory : loader) {
-				availableMediaPlayer.add(factory);
 			}
 		} else {
 			log.debug("no device driver available.");
@@ -127,13 +99,5 @@ public class DeviceDriverDiscoveryService {
 			log.error("getDeviceDriver", e);
 		}
 		return null;
-	}
-
-	public IMediaPlayer getMediaPlayerBackend(IMediaPlayerCallback callback) {
-		if (availableMediaPlayer.size() > 0) {
-			return availableMediaPlayer.get(0).createPlayer(callback);
-		} else {
-			return null;
-		}
 	}
 }

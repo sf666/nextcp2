@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import jakarta.annotation.PostConstruct;
 import nextcp.dto.Config;
+import nextcp2.upnp.localdevice.IMediaPlayerFactory;
 
 public class MediaPlayerDiscoveryService {
 	private static final Logger log = LoggerFactory.getLogger(MediaPlayerDiscoveryService.class.getName());
