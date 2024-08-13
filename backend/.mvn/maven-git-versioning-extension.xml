@@ -8,7 +8,7 @@
 
         <ref type="branch">
             <pattern>.+</pattern>
-            <version>${ref}-${commit.timestamp.datetime}</version>
+            <version>${ref}-SNAPSHOT</version>
         </ref>
 
 </refs>
