@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.annotation.PostConstruct;
 import nextcp.devicedriver.DeviceDriverDiscoveryService;
+import nextcp.mediaplayer.MediaPlayerDiscoveryService;
 import nextcp.service.upnp.UpnpServiceFactory;
+import nextcp2.upnp.localdevice.IMediaPlayerFactory;
 import nextcp2.upnp.localdevice.Nextcp2Renderer;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -25,7 +27,9 @@ public class RestMediaRendererService {
 	private UpnpServiceFactory upnpService = null;
 	
 	@Autowired
-	DeviceDriverDiscoveryService deviceDriverDiscoveryService = null;
+	MediaPlayerDiscoveryService mediaPlayerDiscoveryService = null;
+	
+	private IMediaPlayerFactory mpf = null;
 	
 	public RestMediaRendererService() {
 		log.debug("renderer service started ... " + renderer);
@@ -33,7 +37,8 @@ public class RestMediaRendererService {
 
 	@PostConstruct
 	private void init() {
-		renderer = new Nextcp2Renderer();
+		mpf = mediaPlayerDiscoveryService.getFirstFactory();
+		renderer = new Nextcp2Renderer(mpf);
 		try {
 			if (!upnpService.upnpService().getRouter().isEnabled()) {
 				upnpService.upnpService().getRouter().enable();

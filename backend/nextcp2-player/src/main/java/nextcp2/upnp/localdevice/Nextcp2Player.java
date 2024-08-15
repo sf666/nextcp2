@@ -12,6 +12,7 @@ import org.jupnp.support.model.TransportInfo;
 import org.jupnp.support.model.TransportState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import nextcp2.upnp.localdevice.LocalDeviceConfig.FileType;
 
 public class Nextcp2Player implements IMediaPlayerCallback {
 
@@ -24,11 +25,32 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	private volatile TransportInfo currentTransportInfo = new TransportInfo();
 	private PositionInfo currentPositionInfo = new PositionInfo();
 	private MediaInfo currentMediaInfo = new MediaInfo();
+	private MediaInfo nextMediaInfo = new MediaInfo();
 
-	public Nextcp2Player(UnsignedIntegerFourBytes instanceId, LastChange avTransportLastChange, LastChange renderingControlLastChange) {
+	private IMediaPlayer mediaPlayerBackend = null;
+
+	private LocalDeviceConfig testconfig = null;
+
+	// TODO implement play(... );
+
+	public Nextcp2Player(UnsignedIntegerFourBytes instanceId, LastChange avTransportLastChange, LastChange renderingControlLastChange,
+		IMediaPlayerFactory mpf) {
 		this.instanceId = instanceId;
 		this.avTransportLastChange = avTransportLastChange;
 		this.renderingControlLastChange = renderingControlLastChange;
+		this.testconfig = getLocalDeviceTestConfig();
+		if (mpf != null) {
+			mediaPlayerBackend = mpf.createPlayer(this);
+		}
+	}
+
+	private LocalDeviceConfig getLocalDeviceTestConfig() {
+		LocalDeviceConfig c = new LocalDeviceConfig();
+		c.fileType = FileType.ALBUM;
+		c.overwrite = false;
+		c.workdir = "/tmp";
+		c.script = "";
+		return c;
 	}
 
 	public UnsignedIntegerFourBytes getInstanceId() {
@@ -55,6 +77,7 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	}
 
 	public void positionChanged(long seconds) {
+		log.debug("position changed to " + seconds);
 		currentPositionInfo = new PositionInfo(1, currentMediaInfo.getMediaDuration(), currentMediaInfo.getCurrentURI(),
 			ModelUtil.toTimeString(seconds), ModelUtil.toTimeString(seconds));
 	}
@@ -90,10 +113,10 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	}
 
 	//
-	public void setURI(URI uri) {
+	public void setAVTransportURI(URI uri, String currentURIMetaData) {
 		log.debug("set uri : " + uri);
 		stop();
-		currentMediaInfo = new MediaInfo(uri.toString(), "");
+		currentMediaInfo = new MediaInfo(uri.toString(), currentURIMetaData);
 		currentPositionInfo = new PositionInfo(1, "", uri.toString());
 
 		getAvTransportLastChange().setEventedValue(getInstanceId(), new AVTransportVariable.AVTransportURI(uri),
@@ -110,6 +133,9 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	public void play() {
 		log.debug("play");
 		transportStateChanged(TransportState.PLAYING);
+		if (mediaPlayerBackend != null) {
+			mediaPlayerBackend.play(currentMediaInfo.getCurrentURI(), currentMediaInfo.getCurrentURI(), testconfig);
+		}
 	}
 
 	public void pause() {
@@ -130,7 +156,7 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	}
 
 	public void setNextAVTransportURI(String nextURI, String nextURIMetaData) {
-		log.warn("NOT_IMPLEMENTED");
+		nextMediaInfo = new MediaInfo(nextURI, nextURIMetaData);
 	}
 
 	public TransportAction[] getCurrentTransportActions() {
@@ -155,17 +181,19 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 
 	//
 	// Callbacks from mediaPlayer backend
-	// 
-	
+	//
+
 	@Override
 	public void skipToNextSong() {
-		// TODO Auto-generated method stub
-		
+		transportStateChanged(TransportState.TRANSITIONING);
+		log.debug("skip to next song ...");
+		currentMediaInfo = nextMediaInfo;
+		play();
 	}
 
 	@Override
 	public void finished(String text) {
-		// TODO Auto-generated method stub
-		
+		log.debug("finished.");
+		stop();
 	}
 }

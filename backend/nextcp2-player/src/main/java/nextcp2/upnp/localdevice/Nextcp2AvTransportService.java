@@ -75,7 +75,7 @@ public class Nextcp2AvTransportService extends AbstractAVTransportService {
 
         // TODO: DIDL fragment parsing and handling of currentURIMetaData
 
-        getInstance(instanceId).setURI(uri);
+        getInstance(instanceId).setAVTransportURI(uri, currentURIMetaData);
     }
 
     @Override
@@ -148,7 +148,7 @@ public class Nextcp2AvTransportService extends AbstractAVTransportService {
                                       String nextURIMetaData) throws AVTransportException {
         getInstance(instanceId).setNextAVTransportURI(nextURI, nextURIMetaData);
     }
-
+    
     @Override
     public void setPlayMode(UnsignedIntegerFourBytes instanceId, String newPlayMode) throws AVTransportException {
         // Not implemented

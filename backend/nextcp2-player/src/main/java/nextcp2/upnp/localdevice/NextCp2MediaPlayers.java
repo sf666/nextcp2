@@ -29,14 +29,14 @@ public class NextCp2MediaPlayers extends ConcurrentHashMap<UnsignedIntegerFourBy
 	final protected LastChange avTransportLastChange;
 	final protected LastChange renderingControlLastChange;
 
-	public NextCp2MediaPlayers(int numberOfPlayers, LastChange avTransportLastChange, LastChange renderingControlLastChange) {
+	public NextCp2MediaPlayers(int numberOfPlayers, LastChange avTransportLastChange, LastChange renderingControlLastChange, IMediaPlayerFactory mpf) {
 		super(numberOfPlayers);
 		this.avTransportLastChange = avTransportLastChange;
 		this.renderingControlLastChange = renderingControlLastChange;
 
 		for (int i = 0; i < numberOfPlayers; i++) {
 
-			Nextcp2Player player = new Nextcp2Player(new UnsignedIntegerFourBytes(i), avTransportLastChange, renderingControlLastChange) {
+			Nextcp2Player player = new Nextcp2Player(new UnsignedIntegerFourBytes(i), avTransportLastChange, renderingControlLastChange, mpf) {
 			};
 			put(player.getInstanceId(), player);
 		}

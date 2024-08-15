@@ -5,8 +5,10 @@ import java.io.FileFilter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
 import org.apache.commons.lang.StringUtils;
@@ -44,7 +46,7 @@ public class DeviceDriverDiscoveryService {
 			File[] flist = loc.listFiles(new FileFilter() {
 
 				public boolean accept(File file) {
-					return file.getPath().toLowerCase().endsWith(".jar");
+					return !file.getName().toLowerCase().startsWith("mp-") && file.getName().toLowerCase().endsWith(".jar");
 				}
 			});
 
@@ -56,15 +58,15 @@ public class DeviceDriverDiscoveryService {
 
 	private void loadDeviceDriver(File[] flist) throws MalformedURLException {
 		if (flist != null) {
-			URL[] urls = new URL[flist.length];
+			List<URL> urls = new ArrayList<>();
 
 			for (int i = 0; i < flist.length; i++) {
 				if (!flist[i].getName().startsWith("mp-")) {
-					urls[i] = flist[i].toURI().toURL();
+					urls.add(flist[i].toURI().toURL());
 				}
 			}
 
-			URLClassLoader ucl = new URLClassLoader(urls, this.getClass().getClassLoader());
+			URLClassLoader ucl = new URLClassLoader(urls.toArray(new URL[0]), this.getClass().getClassLoader());
 
 			ServiceLoader<IDeviceDriverFactory> loader = ServiceLoader.load(IDeviceDriverFactory.class, ucl);
 			for (IDeviceDriverFactory factory : loader) {

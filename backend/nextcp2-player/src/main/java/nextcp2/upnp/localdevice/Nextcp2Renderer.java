@@ -42,14 +42,14 @@ public class Nextcp2Renderer {
 		return device;
 	}
 
-	public Nextcp2Renderer() {
+	public Nextcp2Renderer(IMediaPlayerFactory mpf) {
 		AVTransportLastChangeParser parser = new AVTransportLastChangeParser();
 		avTransportLastChange = new LastChange(parser);
 		RenderingControlLastChangeParser rcParser = new RenderingControlLastChangeParser();
 		renderingControlLastChange = new LastChange(rcParser);
 
 		// The media player instances
-		mediaPlayers = new NextCp2MediaPlayers(1, avTransportLastChange, renderingControlLastChange);
+		mediaPlayers = new NextCp2MediaPlayers(1, avTransportLastChange, renderingControlLastChange, mpf);
 
 		LocalService<Nextcp2AudioRenderingControl> renderingControlService = binder.read(Nextcp2AudioRenderingControl.class);
 		renderingControl = new LastChangeAwareServiceManager<Nextcp2AudioRenderingControl>(renderingControlService,

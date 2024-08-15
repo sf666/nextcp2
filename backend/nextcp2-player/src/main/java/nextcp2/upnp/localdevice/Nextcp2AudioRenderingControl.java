@@ -35,6 +35,7 @@ public class Nextcp2AudioRenderingControl extends AbstractAudioRenderingControl 
 
 	@Override
 	public UnsignedIntegerFourBytes[] getCurrentInstanceIds() {
+		// TODO connect to Players
 		return new UnsignedIntegerFourBytes[] {new UnsignedIntegerFourBytes(0)};
 	}
 
@@ -48,13 +49,18 @@ public class Nextcp2AudioRenderingControl extends AbstractAudioRenderingControl 
 	public void setMute(UnsignedIntegerFourBytes instanceId, String channelName, boolean desiredMute) throws RenderingControlException {
 		log.debug("set mute");
 	}
-
+	
 	@Override
 	public UnsignedIntegerTwoBytes getVolume(UnsignedIntegerFourBytes instanceId, String channelName) throws RenderingControlException {
 		log.debug("get vol");
-		return new UnsignedIntegerTwoBytes(0);
+		return new UnsignedIntegerTwoBytes(12);
 	}
 
+	@Override
+	public Integer getVolumeDB(UnsignedIntegerFourBytes instanceId, String channelName) throws RenderingControlException {
+		return 0;
+	}
+	
 	@Override
 	public void setVolume(UnsignedIntegerFourBytes instanceId, String channelName, UnsignedIntegerTwoBytes desiredVolume)
 		throws RenderingControlException {
@@ -64,7 +70,9 @@ public class Nextcp2AudioRenderingControl extends AbstractAudioRenderingControl 
 	@Override
 	protected Channel[] getCurrentChannels() {
 		log.debug("getCurrentChannels");
-		return new Channel[0];
+		Channel[] master = new Channel[1];
+		master[0] = Channel.Master;
+		return master;
 	}
 
 }
