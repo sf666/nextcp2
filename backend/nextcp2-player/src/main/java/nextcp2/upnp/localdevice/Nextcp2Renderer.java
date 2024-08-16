@@ -49,7 +49,7 @@ public class Nextcp2Renderer {
 		renderingControlLastChange = new LastChange(rcParser);
 
 		// The media player instances
-		mediaPlayers = new NextCp2MediaPlayers(1, avTransportLastChange, renderingControlLastChange, mpf);
+		mediaPlayers = new NextCp2MediaPlayers(1, avTransportLastChange, renderingControlLastChange, mpf, this);
 
 		LocalService<Nextcp2AudioRenderingControl> renderingControlService = binder.read(Nextcp2AudioRenderingControl.class);
 		renderingControl = new LastChangeAwareServiceManager<Nextcp2AudioRenderingControl>(renderingControlService,
@@ -101,6 +101,12 @@ public class Nextcp2Renderer {
 		}
 	}
 
+	public void fireLastChange() {
+		if (this.avTransport != null) {
+			avTransport.fireLastChange();
+		}
+	}
+	
 	private Icon createDefaultDeviceIcon() {
 		// TODO Auto-generated method stub
 		return null;

@@ -29,18 +29,20 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	private MediaInfo currentMediaInfo = null;
 
 	private IMediaPlayer mediaPlayerBackend = null;
+	private Nextcp2Renderer rootDevice = null;
 
 	private LocalDeviceConfig testconfig = null;
 	private long trackNum = 0;
 
 	public Nextcp2Player(UnsignedIntegerFourBytes instanceId, LastChange avTransportLastChange, LastChange renderingControlLastChange,
-		IMediaPlayerFactory mpf) {
+		IMediaPlayerFactory mpf, Nextcp2Renderer rootDevice) {
+		this.rootDevice = rootDevice;
 		this.instanceId = instanceId;
 		this.avTransportLastChange = avTransportLastChange;
 		this.renderingControlLastChange = renderingControlLastChange;
 		this.testconfig = getLocalDeviceTestConfig();
 		this.currentMediaInfo = createMediaInfo("", "", "", "", "00:00:00");
-		transportStateChanged(TransportState.STOPPED);
+		this.currentTransportInfo = new TransportInfo(TransportState.STOPPED);
 		if (mpf != null) {
 			mediaPlayerBackend = mpf.createPlayer(this);
 		}
@@ -71,8 +73,8 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	public void durationChanged(long seconds) {
 		log.debug("Duration Changed event received: " + seconds);
 		String newValue = ModelUtil.toTimeString(seconds);
-		currentMediaInfo = new MediaInfo(currentMediaInfo.getCurrentURI(), currentMediaInfo.getCurrentURIMetaData(),
-			new UnsignedIntegerFourBytes(trackNum), newValue, org.jupnp.support.model.StorageMedium.NETWORK);
+		currentMediaInfo = createMediaInfo(currentMediaInfo.getCurrentURI(), currentMediaInfo.getCurrentURIMetaData(),
+			currentMediaInfo.getNextURI(), currentMediaInfo.getNextURIMetaData(), newValue);
 
 		getAvTransportLastChange().setEventedValue(getInstanceId(), new AVTransportVariable.CurrentTrackDuration(newValue),
 			new AVTransportVariable.CurrentMediaDuration(newValue));
@@ -88,10 +90,15 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	synchronized protected void transportStateChanged(TransportState newState) {
 		TransportState currentTransportState = currentTransportInfo.getCurrentTransportState();
 		log.debug("transportStateChanged -> Current state is: " + currentTransportState + ", changing to new state: " + newState);
-		currentTransportInfo = new TransportInfo(newState);
+		if (!currentTransportState.equals(newState)) {
+			currentTransportInfo = new TransportInfo(newState);
 
-		getAvTransportLastChange().setEventedValue(getInstanceId(), new AVTransportVariable.TransportState(newState),
-			new AVTransportVariable.CurrentTransportActions(getCurrentTransportActions()));
+			getAvTransportLastChange().setEventedValue(getInstanceId(), new AVTransportVariable.TransportState(newState),
+				new AVTransportVariable.CurrentTransportActions(getCurrentTransportActions()));
+			rootDevice.fireLastChange();
+		} else {
+			log.debug("State didn't change.");
+		}
 	}
 
 	// UPnP calls
@@ -116,15 +123,13 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 
 	//
 	public void setAVTransportURI(URI uri, String currentURIMetaData) {
-		log.debug("set uri : " + uri);
-		stop();
-		currentMediaInfo = new MediaInfo(uri.toString(), currentURIMetaData);
+		log.debug("setAVTransportURI : " + uri);
+		currentMediaInfo = createMediaInfo(uri.toString(), currentURIMetaData, "", "", "00:00:00");
 		currentPositionInfo = new PositionInfo(trackNum, currentURIMetaData, uri.toString());
 
 		getAvTransportLastChange().setEventedValue(getInstanceId(), new AVTransportVariable.AVTransportURI(uri),
 			new AVTransportVariable.CurrentTrackURI(uri));
-
-		transportStateChanged(TransportState.STOPPED);
+		rootDevice.fireLastChange();
 	}
 
 	public void stop() {
@@ -159,8 +164,10 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	}
 
 	public void setNextAVTransportURI(String nextURI, String nextURIMetaData) {
+		log.debug("setNextAVTransportURI to : " + nextURI);
 		currentMediaInfo = createMediaInfo(currentMediaInfo.getCurrentURI(), currentMediaInfo.getCurrentURIMetaData(), nextURI,
 			nextURIMetaData, currentMediaInfo.getMediaDuration());
+		rootDevice.fireLastChange();
 	}
 
 	public TransportAction[] getCurrentTransportActions() {
@@ -189,19 +196,15 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	//
 	@Override
 	public void skipToNextSong() {
-		transportStateChanged(TransportState.TRANSITIONING);
 		log.debug("skip to next song ...");
+//		transportStateChanged(TransportState.TRANSITIONING);
 		if (StringUtil.isBlank(currentMediaInfo.getNextURI())) {
+			log.info("no next title to skip to. Stopping ...");
 			stop();
 		} else {
-			trackNum++;
+			// trackNum++;
 			log.debug("moving to next uri ... ");
-			currentMediaInfo = createMediaInfo(currentMediaInfo.getNextURI(), currentMediaInfo.getNextURIMetaData(), "", "", "00:00:00");
-			currentPositionInfo = new PositionInfo(trackNum, currentMediaInfo.getNextURIMetaData(), currentMediaInfo.getCurrentURI());
-
-			URI uri = URI.create(currentMediaInfo.getCurrentURI());
-			getAvTransportLastChange().setEventedValue(getInstanceId(), new AVTransportVariable.AVTransportURI(uri),
-				new AVTransportVariable.CurrentTrackURI(uri));
+			setAVTransportURI(URI.create(currentMediaInfo.getNextURI()), currentMediaInfo.getNextURIMetaData());
 			play();
 		}
 	}
@@ -212,6 +215,6 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	}
 
 	private MediaInfo createMediaInfo(String curUri, String curMeta, String nextUri, String nextMeta, String duration) {
-		return new MediaInfo(curUri, curMeta, nextUri, nextMeta, new UnsignedIntegerFourBytes(trackNum), duration , StorageMedium.NONE);
+		return new MediaInfo(curUri, curMeta, nextUri, nextMeta, new UnsignedIntegerFourBytes(trackNum), duration, StorageMedium.NONE);
 	}
 }
