@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>de.sf666</groupId>
 		<artifactId>nextcp2-root</artifactId>
-		<version>3.0.1-SNAPSHOT</version>
+		<version>main-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>nextcp2</artifactId>
 	<name>spring boot assembly project</name>
 	<properties>
-		<exe.version>2.4.1.0</exe.version>
+		<exe.version>3.0.1.0</exe.version>
 	</properties>
 	<build>
 		<finalName>nextcp2</finalName>
@@ -131,6 +131,10 @@
 		<dependency>
 			<groupId>de.sf666</groupId>
 			<artifactId>nextcp2-codegen</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.sf666</groupId>
+			<artifactId>nextcp2-player</artifactId>
 		</dependency>
 	</dependencies>
 </project>

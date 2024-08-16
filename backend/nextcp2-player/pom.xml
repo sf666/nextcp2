@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>de.sf666</groupId>
 		<artifactId>nextcp2-root</artifactId>
-		<version>3.0.1-SNAPSHOT</version>
+		<version>main-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<packaging>jar</packaging>
 	<artifactId>nextcp2-player</artifactId>
 	<name>UPnP player</name>
-	
+
 	<dependencies>
 		<!-- UPnP support ... -->
 		<dependency>
@@ -30,6 +30,6 @@
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
-		</dependency>		
+		</dependency>
 	</dependencies>
 </project>

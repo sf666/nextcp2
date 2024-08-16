@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.sf666</groupId>
 	<artifactId>nextcp2-root</artifactId>
-	<version>3.0.1-SNAPSHOT</version>
+	<version>main-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Next Control Point 2</name>
 	<description>UPnP control point with nice web interface</description>
@@ -53,8 +53,8 @@
 	<properties>
 		<maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
 		<jupnp.version>2.7.1</jupnp.version>
-		<java.version>17</java.version>
-		<maven.compiler.release>17</maven.compiler.release>
+		<java.version>21</java.version>
+		<maven.compiler.release>21</maven.compiler.release>
 		<slf4j.version>2.0.5</slf4j.version>
 		<freemarker.version>2.3.32</freemarker.version>
 		<h2database.version>2.1.210</h2database.version>
@@ -232,6 +232,7 @@
 				<artifactId>nextcp2-assembly-spring-boot</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+
 			<!-- Database and OR mapper -->
 			<dependency>
 				<groupId>com.h2database</groupId>

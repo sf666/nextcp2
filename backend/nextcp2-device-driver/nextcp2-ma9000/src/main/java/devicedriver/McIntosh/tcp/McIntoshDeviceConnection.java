@@ -11,10 +11,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import devicedriver.McIntosh.Ma9000Binding;
 import devicedriver.McIntosh.control.BaseCommandStructure;
 import devicedriver.tcp.IDataReceivedCallback;

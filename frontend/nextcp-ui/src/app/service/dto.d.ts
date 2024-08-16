@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2024-08-15 08:43:27.
+// Generated using typescript-generator version 3.2.1263 on 2024-08-15 13:20:15.
 
 export interface ApplicationConfig {
     myPlaylistFolderName: string;

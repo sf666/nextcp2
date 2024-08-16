@@ -1,12 +1,14 @@
 package nextcp2.upnp.localdevice;
 
 import java.net.URI;
+import org.eclipse.jetty.util.StringUtil;
 import org.jupnp.model.ModelUtil;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
 import org.jupnp.support.avtransport.lastchange.AVTransportVariable;
 import org.jupnp.support.lastchange.LastChange;
 import org.jupnp.support.model.MediaInfo;
 import org.jupnp.support.model.PositionInfo;
+import org.jupnp.support.model.StorageMedium;
 import org.jupnp.support.model.TransportAction;
 import org.jupnp.support.model.TransportInfo;
 import org.jupnp.support.model.TransportState;
@@ -24,14 +26,12 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 
 	private volatile TransportInfo currentTransportInfo = new TransportInfo();
 	private PositionInfo currentPositionInfo = new PositionInfo();
-	private MediaInfo currentMediaInfo = new MediaInfo();
-	private MediaInfo nextMediaInfo = new MediaInfo();
+	private MediaInfo currentMediaInfo = null;
 
 	private IMediaPlayer mediaPlayerBackend = null;
 
 	private LocalDeviceConfig testconfig = null;
-
-	// TODO implement play(... );
+	private long trackNum = 0;
 
 	public Nextcp2Player(UnsignedIntegerFourBytes instanceId, LastChange avTransportLastChange, LastChange renderingControlLastChange,
 		IMediaPlayerFactory mpf) {
@@ -39,6 +39,8 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 		this.avTransportLastChange = avTransportLastChange;
 		this.renderingControlLastChange = renderingControlLastChange;
 		this.testconfig = getLocalDeviceTestConfig();
+		this.currentMediaInfo = createMediaInfo("", "", "", "", "00:00:00");
+		transportStateChanged(TransportState.STOPPED);
 		if (mpf != null) {
 			mediaPlayerBackend = mpf.createPlayer(this);
 		}
@@ -69,8 +71,8 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	public void durationChanged(long seconds) {
 		log.debug("Duration Changed event received: " + seconds);
 		String newValue = ModelUtil.toTimeString(seconds);
-		currentMediaInfo = new MediaInfo(currentMediaInfo.getCurrentURI(), "", new UnsignedIntegerFourBytes(1), newValue,
-			org.jupnp.support.model.StorageMedium.NETWORK);
+		currentMediaInfo = new MediaInfo(currentMediaInfo.getCurrentURI(), currentMediaInfo.getCurrentURIMetaData(),
+			new UnsignedIntegerFourBytes(trackNum), newValue, org.jupnp.support.model.StorageMedium.NETWORK);
 
 		getAvTransportLastChange().setEventedValue(getInstanceId(), new AVTransportVariable.CurrentTrackDuration(newValue),
 			new AVTransportVariable.CurrentMediaDuration(newValue));
@@ -78,7 +80,7 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 
 	public void positionChanged(long seconds) {
 		log.debug("position changed to " + seconds);
-		currentPositionInfo = new PositionInfo(1, currentMediaInfo.getMediaDuration(), currentMediaInfo.getCurrentURI(),
+		currentPositionInfo = new PositionInfo(trackNum, currentMediaInfo.getMediaDuration(), currentMediaInfo.getCurrentURI(),
 			ModelUtil.toTimeString(seconds), ModelUtil.toTimeString(seconds));
 	}
 
@@ -117,7 +119,7 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 		log.debug("set uri : " + uri);
 		stop();
 		currentMediaInfo = new MediaInfo(uri.toString(), currentURIMetaData);
-		currentPositionInfo = new PositionInfo(1, "", uri.toString());
+		currentPositionInfo = new PositionInfo(trackNum, currentURIMetaData, uri.toString());
 
 		getAvTransportLastChange().setEventedValue(getInstanceId(), new AVTransportVariable.AVTransportURI(uri),
 			new AVTransportVariable.CurrentTrackURI(uri));
@@ -128,13 +130,14 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	public void stop() {
 		log.debug("stop");
 		transportStateChanged(TransportState.STOPPED);
+		mediaPlayerBackend.stop();
 	}
 
 	public void play() {
 		log.debug("play");
 		transportStateChanged(TransportState.PLAYING);
 		if (mediaPlayerBackend != null) {
-			mediaPlayerBackend.play(currentMediaInfo.getCurrentURI(), currentMediaInfo.getCurrentURI(), testconfig);
+			mediaPlayerBackend.play(currentMediaInfo.getCurrentURI(), currentMediaInfo.getCurrentURIMetaData(), testconfig);
 		}
 	}
 
@@ -156,7 +159,8 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	}
 
 	public void setNextAVTransportURI(String nextURI, String nextURIMetaData) {
-		nextMediaInfo = new MediaInfo(nextURI, nextURIMetaData);
+		currentMediaInfo = createMediaInfo(currentMediaInfo.getCurrentURI(), currentMediaInfo.getCurrentURIMetaData(), nextURI,
+			nextURIMetaData, currentMediaInfo.getMediaDuration());
 	}
 
 	public TransportAction[] getCurrentTransportActions() {
@@ -168,32 +172,46 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 				actions = new TransportAction[] { TransportAction.Play };
 				break;
 			case PLAYING:
-				actions = new TransportAction[] { TransportAction.Stop, TransportAction.Pause, TransportAction.Seek };
+				actions = new TransportAction[] { TransportAction.Stop, TransportAction.Pause };
 				break;
 			case PAUSED_PLAYBACK:
-				actions = new TransportAction[] { TransportAction.Stop, TransportAction.Pause, TransportAction.Seek, TransportAction.Play };
+				actions = new TransportAction[] { TransportAction.Stop, TransportAction.Pause, TransportAction.Play };
 				break;
 			default:
-				actions = null;
+				actions = new TransportAction[] { TransportAction.Play };
 		}
+		log.debug("current transport actions : " + actions);
 		return actions;
 	}
 
 	//
 	// Callbacks from mediaPlayer backend
 	//
-
 	@Override
 	public void skipToNextSong() {
 		transportStateChanged(TransportState.TRANSITIONING);
 		log.debug("skip to next song ...");
-		currentMediaInfo = nextMediaInfo;
-		play();
+		if (StringUtil.isBlank(currentMediaInfo.getNextURI())) {
+			stop();
+		} else {
+			trackNum++;
+			log.debug("moving to next uri ... ");
+			currentMediaInfo = createMediaInfo(currentMediaInfo.getNextURI(), currentMediaInfo.getNextURIMetaData(), "", "", "00:00:00");
+			currentPositionInfo = new PositionInfo(trackNum, currentMediaInfo.getNextURIMetaData(), currentMediaInfo.getCurrentURI());
+
+			URI uri = URI.create(currentMediaInfo.getCurrentURI());
+			getAvTransportLastChange().setEventedValue(getInstanceId(), new AVTransportVariable.AVTransportURI(uri),
+				new AVTransportVariable.CurrentTrackURI(uri));
+			play();
+		}
 	}
 
 	@Override
-	public void finished(String text) {
-		log.debug("finished.");
-		stop();
+	public void stopped(String text) {
+		log.debug("finished : {}", text);
+	}
+
+	private MediaInfo createMediaInfo(String curUri, String curMeta, String nextUri, String nextMeta, String duration) {
+		return new MediaInfo(curUri, curMeta, nextUri, nextMeta, new UnsignedIntegerFourBytes(trackNum), duration , StorageMedium.NONE);
 	}
 }

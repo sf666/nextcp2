@@ -63,6 +63,7 @@ public class MediaPlayerDiscoveryService {
 			ServiceLoader<IMediaPlayerFactory> loader = ServiceLoader.load(IMediaPlayerFactory.class, ucl);
 			for (IMediaPlayerFactory factory : loader) {
 				availableMediaPlayer.add(factory);
+				log.info(String.format("Found media player factory backend : %s ", factory.getFactoryType()));
 			}
 		} else {
 			log.debug("no device driver available.");
