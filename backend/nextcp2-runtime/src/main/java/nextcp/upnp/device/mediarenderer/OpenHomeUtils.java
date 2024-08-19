@@ -103,6 +103,7 @@ public class OpenHomeUtils
 
     public List<MusicItemDto> convertToMediaItemDto(String xml, String rootNode)
     {
+    	log.info("radio station xml : " + xml);
         List<MusicItemDto> result = new ArrayList<>();
         try
         {
@@ -114,6 +115,8 @@ public class OpenHomeUtils
             InputSource is = new InputSource(new StringReader(xml));
             XPathExpression expr = xpath.compile("//" + rootNode + "/Entry");
             NodeList nodeList = (NodeList) expr.evaluate(is, XPathConstants.NODESET);
+            
+            log.debug("Number of radio stations : " + nodeList.getLength());
             for (int i = 0; i < nodeList.getLength(); i++)
             {
                 Node nNode = nodeList.item(i);
