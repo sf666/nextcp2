@@ -42,10 +42,13 @@ public class RestRadioService extends BaseRestService
     @PostMapping("/deviceRadioStations")
     public List<MusicItemDto> getRadioStation(@RequestBody MediaRendererDto mediaRenderer)
     {
+    	log.info("entering deviceRadioStations");
         MediaRendererDevice device = getMediaRendererByUdn(mediaRenderer.udn);
         if (device.hasRadioService())
         {
-            return device.getRadioServiceBridge().getRadioStations();
+        	List<MusicItemDto> radioStationList = device.getRadioServiceBridge().getRadioStations();
+        	log.info("radioStationList size {}", radioStationList.size());
+            return radioStationList;
         }
         log.debug("device has no openhome radio service");
         return new ArrayList<>();
