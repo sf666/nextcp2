@@ -79,6 +79,7 @@ public class OhRadioBridge implements IRadioService, ITransport
      */
     public List<MusicItemDto> getRadioStations()
     {
+    	log.info("Requesting radio stations ... ");
         byte[] ba = radioService.idArray().Array;
         String idList = ohUtil.convertUintByteArrayToStringList(ba);
         ReadListInput inp = new ReadListInput();

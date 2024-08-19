@@ -46,7 +46,10 @@ export class RadioService {
     if (rendererDto.udn !== '') {
       console.log("updating radio stations ...");
       const uri = '/deviceRadioStations';
-      this.httpService.post<MusicItemDto[]>(this.baseUri, uri, rendererDto).subscribe(data => this.radioItems.set(data));
+      this.httpService.post<MusicItemDto[]>(this.baseUri, uri, rendererDto).subscribe(data => {
+        console.log("radio stations size : " + data.length);
+        this.radioItems.set(data)
+      });
     }
   }
 }

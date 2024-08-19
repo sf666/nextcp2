@@ -1,4 +1,4 @@
-@if (radioService.radioItems?.length > 0) {
+@if (radioService.radioItems()?.length > 0) {
   <div class="mt-3">
     <div class="section head">Radio stations provided by {{deviceService.selectedMediaRendererDevice().friendlyName}}</div>
     <div class="albumLayout ps-3">
