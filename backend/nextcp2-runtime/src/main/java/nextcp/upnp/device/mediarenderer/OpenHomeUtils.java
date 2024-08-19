@@ -5,7 +5,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -14,14 +13,13 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-
 import nextcp.dto.InputSourceDto;
 import nextcp.dto.MusicItemDto;
 import nextcp.rest.DtoBuilder;
@@ -103,22 +101,25 @@ public class OpenHomeUtils
 
     public List<MusicItemDto> convertToMediaItemDto(String xml, String rootNode)
     {
-    	log.info("radio station xml : " + xml);
+    	log.info("radio station root node : " + rootNode);
+//    	log.info("radio station xml : " + xml);
         List<MusicItemDto> result = new ArrayList<>();
         try
         {
             XPath xpath = XPathFactory.newInstance().newXPath();
 
-            // String unescapedXml = StringEscapeUtils.unescapeXml(xml);
-            // log.debug("received : " + unescapedXml);
+            String unescapedXml = StringEscapeUtils.unescapeXml(xml);
+            log.debug("radio unescaped XML : " + unescapedXml);
 
             InputSource is = new InputSource(new StringReader(xml));
             XPathExpression expr = xpath.compile("//" + rootNode + "/Entry");
             NodeList nodeList = (NodeList) expr.evaluate(is, XPathConstants.NODESET);
             
-            log.debug("Number of radio stations : " + nodeList.getLength());
+            log.info("Number of radio stations : " + nodeList.getLength());
+            log.info("Number of radio stations : ");
             for (int i = 0; i < nodeList.getLength(); i++)
             {
+                log.info("Node {}", i);
                 Node nNode = nodeList.item(i);
                 if (nNode.getNodeType() == Node.ELEMENT_NODE)
                 {
@@ -132,6 +133,7 @@ public class OpenHomeUtils
                             dto.objectID = extractElementTextByTag(eElement, "Id");
                             dto.streamingURL = extractElementTextByTag(eElement, "Uri");
                             result.add(dto);
+                            log.info("added : {}", dto.toString());
                         }
                     }
                     catch (Exception e)
