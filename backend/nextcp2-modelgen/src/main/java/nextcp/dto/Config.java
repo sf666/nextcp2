@@ -18,12 +18,13 @@ public class Config
     public MusicbrainzSupport musicbrainzSupport;
     public String lastFmSessionKey;
     public SpotifyConfigDto spotifyConfig;
+    public MediaPlayerConfigDto mediaPlayerConfig;
 
     public Config()
     {
     }
 
-    public Config(ApplicationConfig applicationConfig, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, MusicbrainzSupport musicbrainzSupport, String lastFmSessionKey, SpotifyConfigDto spotifyConfig)
+    public Config(ApplicationConfig applicationConfig, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, MusicbrainzSupport musicbrainzSupport, String lastFmSessionKey, SpotifyConfigDto spotifyConfig, MediaPlayerConfigDto mediaPlayerConfig)
     {
         this.applicationConfig = applicationConfig;
         this.clientConfig = clientConfig;
@@ -31,6 +32,7 @@ public class Config
         this.musicbrainzSupport = musicbrainzSupport;
         this.lastFmSessionKey = lastFmSessionKey;
         this.spotifyConfig = spotifyConfig;
+        this.mediaPlayerConfig = mediaPlayerConfig;
     }
     
     @Override
@@ -44,6 +46,7 @@ public class Config
         sb.append("musicbrainzSupport=").append(this.musicbrainzSupport).append(", ");
         sb.append("lastFmSessionKey=").append(this.lastFmSessionKey).append(", ");
         sb.append("spotifyConfig=").append(this.spotifyConfig).append(", ");
+        sb.append("mediaPlayerConfig=").append(this.mediaPlayerConfig).append(", ");
         sb.append("]");
         return sb.toString();
     }

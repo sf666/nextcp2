@@ -24,7 +24,7 @@ import { MatSelectModule } from '@angular/material/select';
 import {
   MatFormFieldModule,
   MatLabel,
-  MatSuffix,  
+  MatSuffix,
 } from '@angular/material/form-field';
 
 @Component({

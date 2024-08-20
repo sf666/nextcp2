@@ -2,9 +2,6 @@ package nextcp.rest;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import jakarta.annotation.PostConstruct;
-
 import org.jupnp.model.types.UDN;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
+import jakarta.annotation.PostConstruct;
+import nextcp.config.MediaPlayerConfigService;
 import nextcp.config.RendererConfig;
 import nextcp.config.ServerConfig;
 import nextcp.devicedriver.DeviceCapabilityDto;
@@ -27,6 +25,7 @@ import nextcp.devicedriver.DeviceDriverDiscoveryService;
 import nextcp.dto.ApplicationConfig;
 import nextcp.dto.Config;
 import nextcp.dto.DeviceDriverCapability;
+import nextcp.dto.MediaPlayerConfigDto;
 import nextcp.dto.MusicbrainzSupport;
 import nextcp.dto.RendererConfigDto;
 import nextcp.dto.RendererDeviceConfiguration;
@@ -66,6 +65,9 @@ public class RestConfigurationService
     @Autowired
     private ServerConfig serverConfigService = null;
 
+    @Autowired
+    private MediaPlayerConfigService mediaPlayerConfigService = null;
+    
     @Autowired
     private DeviceDriverDiscoveryService deviceDriverDiscoveryService = null;
 
@@ -175,6 +177,34 @@ public class RestConfigurationService
         }
     }
 
+    @GetMapping("/getMediaPlayerConfig")
+    public MediaPlayerConfigDto getMediaPlayerConfig()
+    {
+        try
+        {
+            return mediaPlayerConfigService.produceCurrentLocalDeviceConfig().asDto();
+        }
+        catch (Exception e)
+        {
+            log.error("getMediaRendererConfig", e);
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "reading media renderer config failed : " + e.getMessage());
+        }
+    }
+    
+    @PostMapping("/saveMediaPlayerConfig")
+    public void saveMediaPlayerConfig(@RequestBody MediaPlayerConfigDto mediaPlayerConfig)
+    {
+        try
+        {
+        	mediaPlayerConfigService.updateConfig(mediaPlayerConfig);
+        }
+        catch (Exception e)
+        {
+            log.error("getMediaRendererConfig", e);
+        }
+    }
+
+    	
     @PostMapping("/saveApplicationConfig")
     public void saveApplicationConfig(@RequestBody ApplicationConfig rendererDevice)
     {

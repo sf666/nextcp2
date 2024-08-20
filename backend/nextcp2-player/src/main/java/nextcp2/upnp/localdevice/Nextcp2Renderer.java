@@ -37,12 +37,13 @@ public class Nextcp2Renderer {
 	final protected Map<UnsignedIntegerFourBytes, Nextcp2Player> mediaPlayers;
 
 	final protected LocalDevice device;
+	protected boolean startPlayScreening = false;
 
 	public LocalDevice getLocalDevice() {
 		return device;
 	}
 
-	public Nextcp2Renderer(IMediaPlayerFactory mpf) {
+	public Nextcp2Renderer(IMediaPlayerFactory mpf, ILocalDeviceConfigProducer configService) {
 		AVTransportLastChangeParser parser = new AVTransportLastChangeParser();
 		avTransportLastChange = new LastChange(parser);
 		RenderingControlLastChangeParser rcParser = new RenderingControlLastChangeParser();
@@ -80,11 +81,12 @@ public class Nextcp2Renderer {
 		connectionManagerService.setManager(connectionManager);
 
 		LocalService<Nextcp2AvTransportService> avTransportService = binder.read(Nextcp2AvTransportService.class);
-		avTransport = new LastChangeAwareServiceManager<Nextcp2AvTransportService>(avTransportService, new AVTransportLastChangeParser()) {
 
+		Nextcp2Renderer thisDevice = this;
+		avTransport = new LastChangeAwareServiceManager<Nextcp2AvTransportService>(avTransportService, new AVTransportLastChangeParser()) {
 			@Override
 			protected Nextcp2AvTransportService createServiceInstance() throws Exception {
-				return new Nextcp2AvTransportService(avTransportLastChange, mediaPlayers);
+				return new Nextcp2AvTransportService(avTransportLastChange, mediaPlayers, configService, thisDevice);
 			}
 		};
 		avTransportService.setManager(avTransport);
@@ -108,7 +110,19 @@ public class Nextcp2Renderer {
 	}
 	
 	private Icon createDefaultDeviceIcon() {
-		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public void startPlayScreening() {
+		this.startPlayScreening = true;
+	}
+	
+	public void stopPlayScreening() {
+		this.startPlayScreening = false;
+	}
+	
+	public boolean isPlayScreening() {
+		return this.startPlayScreening;
+	}
+	
 }

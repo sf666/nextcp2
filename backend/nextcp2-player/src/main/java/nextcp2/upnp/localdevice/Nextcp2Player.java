@@ -33,6 +33,8 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 
 	private LocalDeviceConfig testconfig = null;
 	private long trackNum = 0;
+	
+	private LocalDeviceConfig config = null;
 
 	public Nextcp2Player(UnsignedIntegerFourBytes instanceId, LastChange avTransportLastChange, LastChange renderingControlLastChange,
 		IMediaPlayerFactory mpf, Nextcp2Renderer rootDevice) {
@@ -138,11 +140,12 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 		mediaPlayerBackend.stop();
 	}
 
-	public void play() {
+	public void play(LocalDeviceConfig config) {
 		log.debug("play");
+		this.config = config;
 		transportStateChanged(TransportState.PLAYING);
 		if (mediaPlayerBackend != null) {
-			mediaPlayerBackend.play(currentMediaInfo.getCurrentURI(), currentMediaInfo.getCurrentURIMetaData(), testconfig);
+			mediaPlayerBackend.play(currentMediaInfo.getCurrentURI(), currentMediaInfo.getCurrentURIMetaData(), config);
 		}
 	}
 
@@ -205,7 +208,7 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 			// trackNum++;
 			log.debug("moving to next uri ... ");
 			setAVTransportURI(URI.create(currentMediaInfo.getNextURI()), currentMediaInfo.getNextURIMetaData());
-			play();
+			play(this.config);
 		}
 	}
 

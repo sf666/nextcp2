@@ -1,3 +1,4 @@
+import { MediaPlayerComponent } from './app/view/media-player/media-player.component';
 import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { environment } from './environments/environment';
 import { AppComponent } from './app/app.component';
@@ -57,6 +58,7 @@ const ROUTES: Routes = [
   { path: 'myPlaylists', component: MyPlaylistsComponent },
   { path: 'radio', component: RadioComponent },
   { path: 'playlist', component: PlaylistComponent },
+  { path: 'mediaPlayerConfig', component: MediaPlayerComponent },
   { path: '', redirectTo: '/music-library', pathMatch: 'full' },
 ];
 

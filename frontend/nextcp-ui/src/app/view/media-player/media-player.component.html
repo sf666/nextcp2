@@ -1,0 +1,62 @@
+<div class="section head ">Player Configuration</div>
+<div class="generalConfigOptions">
+    <div class="pb-4">
+        <mat-slide-toggle color="accent" class="ms-4" [ngModel]="playMonitoring" (ngModelChange)="updateMonitoringState($event);">
+            play monitoring
+        </mat-slide-toggle>
+    </div>
+    <div class="section subhead d-flex flex-column">
+        <div class="d-flex flex-wrap-reverse">
+            <div class="paraInputField">
+                <mat-form-field appearance="outline" class="setting-dropdown">
+                    <mat-label>working directory</mat-label>
+                    <input matInput type="text" [(ngModel)]="mediaPlayerConfigDto.workdir" placeholder="PlaylistsFolderName">
+                </mat-form-field>
+            </div>
+            <div class="paraAppConf">Physical folder name on the host machine to store temp data.
+            </div>
+        </div>
+
+        <div class="d-flex flex-wrap-reverse">
+            <div class="paraInputField">
+                <mat-form-field appearance="outline" class="setting-dropdown">
+                    <mat-label>file type</mat-label>
+                    <mat-select [(ngModel)]="mediaPlayerConfigDto.playType">
+                        <mat-option value="ALBUM">Album</mat-option>
+                        <mat-option value="SINGLE">Single</mat-option>
+                        <mat-option value="COMPILATION">Compilation</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="paraAppConf">Player logic type</div>
+        </div>
+
+
+        <div class="d-flex flex-wrap-reverse">
+            <div class="paraInputField">
+                <mat-form-field appearance="outline" class="setting-dropdown">
+                    <mat-label>Script</mat-label>
+                    <input matInput type="text" [(ngModel)]="mediaPlayerConfigDto.script" placeholder="Script">
+                </mat-form-field>
+            </div>
+            <div class="paraAppConf">Physical folder name on the host machine to store temp data.
+            </div>
+        </div>
+
+        <div class="d-flex flex-wrap-reverse">
+            <div class="paraInputField">
+                <mat-form-field appearance="outline" class="setting-dropdown">
+                    <mat-label>Overwrite</mat-label>
+                    <mat-select [(ngModel)]="mediaPlayerConfigDto.overwrite">
+                        <mat-option [value]="true">yes</mat-option>
+                        <mat-option [value]="false">no</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="paraAppConf">overwrite played types</div>
+        </div>
+    </div>
+    <div class="d-flex section ms-4">
+        <button mat-stroked-button color="primary" (click)="saveConfig()">save</button>
+    </div>
+</div>

@@ -10,6 +10,7 @@ import nextcp.dto.Config;
 import nextcp.dto.MusicbrainzSupport;
 import nextcp.lastfm.ILastFmConfig;
 import nextcp.musicbrainz.MusicBrainzConfig;
+import nextcp2.upnp.localdevice.ILocalDeviceConfigProducer;
 
 /**
  * After adding new configuration parameter, do not forget to "applyDefaults()".

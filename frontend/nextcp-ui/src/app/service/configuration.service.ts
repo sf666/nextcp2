@@ -2,10 +2,10 @@ import { UuidService } from './../util/uuid.service';
 import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { SseService } from './sse/sse.service';
-import { UiClientConfig, RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, ApplicationConfig, MusicbrainzSupport } from './dto.d';
+import { UiClientConfig, RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, ApplicationConfig, MusicbrainzSupport, MediaPlayerConfigDto } from './dto.d';
 import { GenericResultService } from './generic-result.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { isAssigned } from '../global';
 
 @Injectable({
@@ -25,7 +25,7 @@ export class ConfigurationService {
   serverConfig: Config;                       // global serverside configuration file (server state) (read only)
   private rendererConfig: RendererConfigDto;  // renderer configurations
   serverConfigDto: ServerConfigDto;           // List of server devices
-  
+
   applicationConfig: ApplicationConfig = {    // This is a DTO copy and can be used to update server configuration
     databaseFilename: '',
     embeddedServerPort: 0,
@@ -41,16 +41,18 @@ export class ConfigurationService {
     sseEmitterTimeout: 0,
     itemsPerPage: 100,
     nextPageAfter: 60,
-    pathToRestartScript:'',
-    myPlaylistFolderName:'',
-    upnpStreamClient:'',
-    upnpStreamServer:''
+    pathToRestartScript: '',
+    myPlaylistFolderName: '',
+    upnpStreamClient: '',
+    upnpStreamServer: ''
   }
 
   musicBrainzConfig: MusicbrainzSupport = {   // MusicBrainz username/password
     password: '',
     username: ''
   }
+
+
 
   private clientUUID = this.getStoredClientId();
 
@@ -83,11 +85,13 @@ export class ConfigurationService {
   baseUri = '/ConfigurationService';
 
 
-  constructor(private http: HttpClient, private genericResultService: GenericResultService, sseService: SseService, private httpService: HttpService, private uuidService: UuidService) {
+  constructor(private http: HttpClient, private genericResultService: GenericResultService, sseService: SseService,
+    private httpService: HttpService, private uuidService: UuidService) {
     this.getClientConfigFromServer();
     this.getDeviceDriverFromServer();
     this.getMediaRendererConfig();
     this.getMediaServerConfig();
+    this.getMediaPlayerConfig();
     sseService.configChanged$.subscribe(serverConfig => this.applyServerConfigurationFile(serverConfig));
     sseService.rendererConfigChanged$.subscribe(data => this.applyRendererServerRendererList(data));
     sseService.serverDevicesConfigChanged$.subscribe(data => this.applyMediaServerList(data));
@@ -114,6 +118,16 @@ export class ConfigurationService {
 
   public getServerConfig() {
     return this.serverConfigDto;
+  }
+
+  public getMediaPlayerConfig(): Subject<MediaPlayerConfigDto> {
+    const uri = '/getMediaPlayerConfig';
+    return this.httpService.get<MediaPlayerConfigDto>(this.baseUri, uri);
+  }
+
+  public saveMediaPlayerConfig(mediaPlayerConfig: MediaPlayerConfigDto): void {
+    const uri = '/saveMediaPlayerConfig';
+    this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaPlayerConfig, "Save media player config", "success").subscribe();
   }
 
   public saveMusicBrainzConfig(): void {
@@ -280,5 +294,4 @@ export class ConfigurationService {
   public spotifyAccountConnected(): boolean {
     return this.serverConfig?.spotifyConfig?.accountConnected ? true : false;
   }
-
 }

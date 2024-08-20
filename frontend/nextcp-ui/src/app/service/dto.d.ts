@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2024-08-15 13:20:15.
+// Generated using typescript-generator version 3.2.1263 on 2024-08-20 11:09:56.
 
 export interface ApplicationConfig {
     myPlaylistFolderName: string;
@@ -53,6 +53,7 @@ export interface Config {
     musicbrainzSupport: MusicbrainzSupport;
     lastFmSessionKey: string;
     spotifyConfig: SpotifyConfigDto;
+    mediaPlayerConfig: MediaPlayerConfigDto;
 }
 
 export interface ContainerDto {
@@ -151,6 +152,19 @@ export interface InputSourceDto {
     Name: string;
     Type: string;
     Visible: boolean;
+}
+
+export interface MediaPlayerConfig {
+    workdir: string;
+    script: string;
+    playType: string;
+}
+
+export interface MediaPlayerConfigDto {
+    workdir: string;
+    script: string;
+    playType: string;
+    overwrite: boolean;
 }
 
 export interface MediaRendererDto {

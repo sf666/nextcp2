@@ -1,14 +1,12 @@
 package nextcp.service;
 
 import java.util.Base64;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
-
 import nextcp.config.ConfigPersistence;
 import nextcp.dto.Config;
 import nextcp.dto.MusicbrainzSupport;

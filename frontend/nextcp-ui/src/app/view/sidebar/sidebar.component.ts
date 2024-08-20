@@ -1,3 +1,4 @@
+import { MediaPlayerService } from 'src/app/service/media-player/media-player.service';
 import { ConfigurationService } from './../../service/configuration.service';
 import { LayoutService } from './../../service/layout.service';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
@@ -30,6 +31,8 @@ export class SidebarComponent {
 
   activeId = signal<string>("");
 
+  mediaServerExists = signal<boolean>(false);
+
   constructor(
     public deviceService: DeviceService,
     public playlistService: ServerPlaylistService,
@@ -38,6 +41,7 @@ export class SidebarComponent {
     public layoutService: LayoutService,
     private defaultPlaylistService: DefaultPlaylistService,
     private configurationService: ConfigurationService,
+    private mediaPlayerService: MediaPlayerService,
     public rendererService: RendererService) {
 
     this.routerMap.set("/", "-1");                // default route is music-library
@@ -47,11 +51,14 @@ export class SidebarComponent {
     this.routerMap.set("/radio", "-4");
     this.routerMap.set("/myAlbums", "-5");
     this.routerMap.set("/settings", "-6");
+    this.routerMap.set("/mediaPlayerConfig", "-7");
     this.routerMap.set("/myPlaylists", "0");      // All positives ID's are playlists
 
     this.routerMap.set("/myTracks", "-999");      // not used yet
 
     router.events.subscribe(event => this.calActiveId(event));
+
+    this.checkMediaPlayerExists();
   }
 
   private calActiveId(nav: any) {
@@ -135,5 +142,12 @@ export class SidebarComponent {
 
   public showPlaylistDialog() : void {
     this.defaultPlaylistService.openAddGlobalPlaylistDialogWithBackdrop(null);
+  }
+
+  public checkMediaPlayerExists() {
+    this.mediaPlayerService.mediaPlayerExists().subscribe(status => {
+      console.log("mediaServerExists : " + status);
+      this.mediaServerExists.set(status);
+    });
   }
 }

@@ -19,6 +19,13 @@ Config:
    musicbrainzSupport: MusicbrainzSupport
    lastFmSessionKey: String
    spotifyConfig: SpotifyConfigDto
+   mediaPlayerConfig: MediaPlayerConfigDto
+
+MediaPlayerConfigDto:
+   workdir: String
+   script: String
+   playType: String
+   overwrite: Boolean
 
 ApplicationConfig:
    myPlaylistFolderName: String

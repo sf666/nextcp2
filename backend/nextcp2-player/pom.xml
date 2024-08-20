@@ -31,5 +31,10 @@
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>de.sf666</groupId>
+			<artifactId>nextcp2-modelgen</artifactId>
+		</dependency>
 	</dependencies>
 </project>
