@@ -1,7 +1,5 @@
 package nextcp2.upnp.localdevice;
 
-import nextcp.dto.MediaPlayerConfigDto;
-
 public class LocalDeviceConfig {
 
 	public enum FileType {
@@ -25,10 +23,6 @@ public class LocalDeviceConfig {
 		this.fileType = fileType;
 		this.overwrite = overwrite;
 		this.script = script;
-	}
-
-	public MediaPlayerConfigDto asDto() {
-		return new MediaPlayerConfigDto(workdir, script, fileType.toString(), overwrite);
 	}
 
 	@Override

@@ -16,17 +16,23 @@ public class MediaPlayerConfigDto
     public String script;
     public String playType;
     public Boolean overwrite;
+    public Boolean addToPlaylist;
+    public ContainerIdDto addToPlaylistId;
+    public ContainerIdDto addToFolderId;
 
     public MediaPlayerConfigDto()
     {
     }
 
-    public MediaPlayerConfigDto(String workdir, String script, String playType, Boolean overwrite)
+    public MediaPlayerConfigDto(String workdir, String script, String playType, Boolean overwrite, Boolean addToPlaylist, ContainerIdDto addToPlaylistId, ContainerIdDto addToFolderId)
     {
         this.workdir = workdir;
         this.script = script;
         this.playType = playType;
         this.overwrite = overwrite;
+        this.addToPlaylist = addToPlaylist;
+        this.addToPlaylistId = addToPlaylistId;
+        this.addToFolderId = addToFolderId;
     }
     
     @Override
@@ -38,6 +44,9 @@ public class MediaPlayerConfigDto
         sb.append("script=").append(this.script).append(", ");
         sb.append("playType=").append(this.playType).append(", ");
         sb.append("overwrite=").append(this.overwrite).append(", ");
+        sb.append("addToPlaylist=").append(this.addToPlaylist).append(", ");
+        sb.append("addToPlaylistId=").append(this.addToPlaylistId).append(", ");
+        sb.append("addToFolderId=").append(this.addToFolderId).append(", ");
         sb.append("]");
         return sb.toString();
     }

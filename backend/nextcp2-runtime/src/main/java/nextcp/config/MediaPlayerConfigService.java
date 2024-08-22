@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import nextcp.db.service.BasicDbService;
 import nextcp.db.service.KeyValuePair;
+import nextcp.dto.ContainerIdDto;
 import nextcp.dto.MediaPlayerConfigDto;
 import nextcp.eventBridge.SsePublisher;
 import nextcp2.upnp.localdevice.ILocalDeviceConfigProducer;
@@ -31,7 +32,12 @@ public class MediaPlayerConfigService implements ILocalDeviceConfigProducer {
 	private BasicDbService dbService = null;
 	private SsePublisher ssePublisher = null;
 	
-	private LocalDeviceConfig ldc = null;
+	private MediaPlayerConfigDto ldc = null;
+
+	
+	public MediaPlayerConfigDto getMediaPlayerConfigDto() {
+		return ldc;
+	}
 
 	@Autowired
 	public MediaPlayerConfigService(BasicDbService dbService, SsePublisher ssePublisher) {
@@ -50,11 +56,11 @@ public class MediaPlayerConfigService implements ILocalDeviceConfigProducer {
 		}
 	}
 
-	private LocalDeviceConfig readConfig() {
+	private MediaPlayerConfigDto readConfig() {
 		try {
 			String value = "";
 			value = dbService.selectJsonStoreValue(CONFIG_KEY_MEDIA_PLAYER);
-			LocalDeviceConfig renderer = readConfig(value);
+			MediaPlayerConfigDto renderer = readConfig(value);
 			return renderer;
 		} catch (Exception e) {
 			log.error("readConfig", e);
@@ -62,12 +68,12 @@ public class MediaPlayerConfigService implements ILocalDeviceConfigProducer {
 		}
 	}
 
-	private LocalDeviceConfig readConfig(String json) {
+	private MediaPlayerConfigDto readConfig(String json) {
 		if (StringUtils.isAllBlank(json)) {
 			return generateDefaultConfig();
 		}
 		try {
-			return om.readValue(json, LocalDeviceConfig.class);
+			return om.readValue(json, MediaPlayerConfigDto.class);
 		} catch (JsonParseException e) {
 			log.error("error in config file. JSON text could not be parsed.", e);
 		} catch (IOException e) {
@@ -77,26 +83,25 @@ public class MediaPlayerConfigService implements ILocalDeviceConfigProducer {
 	}
 
 	
-	private LocalDeviceConfig generateDefaultConfig() {
-		LocalDeviceConfig c = new LocalDeviceConfig();
-		c.fileType = FileType.ALBUM;
+	private MediaPlayerConfigDto generateDefaultConfig() {
+		MediaPlayerConfigDto c = new MediaPlayerConfigDto();
+		c.playType = "ALBUM";
 		c.overwrite = false;
 		c.script = "";
 		c.workdir = "";
+		c.addToFolderId = new ContainerIdDto("","");
+		c.addToPlaylist = false;
+		c.addToPlaylistId = new ContainerIdDto("","");
 		return c;
 	}
 	
 	public void updateConfig(MediaPlayerConfigDto configDto) {
-		ldc = new LocalDeviceConfig(
-			configDto.workdir,
-			FileType.valueOf(configDto.playType),
-			configDto.overwrite,
-			configDto.script);
+		ldc = configDto;
 		writeConfig();
 	}
 	
 	@Override
 	public LocalDeviceConfig produceCurrentLocalDeviceConfig() {
-		return ldc;
+		return new LocalDeviceConfig(ldc.workdir, FileType.valueOf(ldc.playType), ldc.overwrite, ldc.script);
 	}
 }

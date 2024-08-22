@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2024-08-20 11:09:56.
+// Generated using typescript-generator version 3.2.1263 on 2024-08-22 15:15:11.
 
 export interface ApplicationConfig {
     myPlaylistFolderName: string;
@@ -74,6 +74,11 @@ export interface ContainerDto {
     creator: string;
     media_date: string;
     genre: string;
+}
+
+export interface ContainerIdDto {
+    id: string;
+    title: string;
 }
 
 export interface ContainerItemDto {
@@ -165,6 +170,9 @@ export interface MediaPlayerConfigDto {
     script: string;
     playType: string;
     overwrite: boolean;
+    addToPlaylist: boolean;
+    addToPlaylistId: ContainerIdDto;
+    addToFolderId: ContainerIdDto;
 }
 
 export interface MediaRendererDto {

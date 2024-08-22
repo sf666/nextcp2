@@ -1,5 +1,6 @@
+import { MusicLibraryService } from './../../service/music-library/music-library.service';
 import { Event } from './../../../../node_modules/@types/ws/node_modules/undici-types/patch.d';
-import { MediaPlayerConfigDto } from './../../service/dto.d';
+import { MediaPlayerConfigDto, ContainerItemDto, ContainerIdDto } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
 import { ChangeDetectionStrategy, Component, model, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -36,12 +37,19 @@ export class MediaPlayerComponent {
 
   playMonitoring = signal<boolean>(false);
 
-  constructor(private configurationService: ConfigurationService, private mediaPlayerService: MediaPlayerService) {
+  constructor(
+    private configurationService: ConfigurationService, 
+    private mediaPlayerService: MediaPlayerService,
+    public musicLibraryService: MusicLibraryService,
+  ) {
     this.mediaPlayerConfigDto = {
       overwrite: false,
       playType: 'Album',
       script: '',
       workdir: '',
+      addToFolderId: {id:'', title:''},
+      addToPlaylist: false,
+      addToPlaylistId: {id:'', title:''},
     }
 
     this.configurationService.getMediaPlayerConfig().subscribe(data => {
@@ -58,10 +66,10 @@ export class MediaPlayerComponent {
   }
 
   private logConfigDto(): void {
-    console.log("received server config : " + 
-      "overwrite " + this.mediaPlayerConfigDto.overwrite + 
-      ". playtype : " + this.mediaPlayerConfigDto.playType + 
-      ". workdir : " + this.mediaPlayerConfigDto.workdir + 
+    console.log("received server config : " +
+      "overwrite " + this.mediaPlayerConfigDto.overwrite +
+      ". playtype : " + this.mediaPlayerConfigDto.playType +
+      ". workdir : " + this.mediaPlayerConfigDto.workdir +
       ". Script : " + this.mediaPlayerConfigDto.script);
   }
 
@@ -77,5 +85,30 @@ export class MediaPlayerComponent {
 
   getPlayStatus(): void {
     this.mediaPlayerService.isPlayScreening().subscribe(status => this.playMonitoring.set(status));
+  }
+
+  createFolder(): void {
+    this.mediaPlayerService.createFolder();
+  }
+
+  upload(): void {
+    this.mediaPlayerService.upload();
+  }
+
+  selectFolder() {
+    this.mediaPlayerConfigDto.addToFolderId = this.getCurrentContainerIdDto();
+    this.saveConfig();
+  }
+
+  selectPlaylist() {
+    this.mediaPlayerConfigDto.addToPlaylistId = this.getCurrentContainerIdDto();
+    this.saveConfig();
+  }
+
+  public getCurrentContainerIdDto(): ContainerIdDto {
+    return {
+      id: this.musicLibraryService.currentMediaLibraryFolder().currentContainer.id,
+      title: this.musicLibraryService.currentMediaLibraryFolder().currentContainer.title
+    }
   }
 }

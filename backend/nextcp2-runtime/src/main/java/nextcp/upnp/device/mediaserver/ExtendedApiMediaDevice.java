@@ -1,6 +1,8 @@
 package nextcp.upnp.device.mediaserver;
 
+import java.io.File;
 import org.jupnp.support.model.container.Container;
+import org.jupnp.support.model.item.Item;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import nextcp.dto.ServerPlaylists;
@@ -42,4 +44,11 @@ public interface ExtendedApiMediaDevice
     public void deleteObject(String objectId);
     
     public ServerPlaylists getServerPlaylists() throws JsonMappingException, JsonProcessingException;
+    
+    // Create Folder & Import Item
+    
+    public Container createFolder(String parentContainerId, String folderName) throws Exception;
+
+	public Item createItem(String parentContainerId, File file) throws Exception;
+    
 }

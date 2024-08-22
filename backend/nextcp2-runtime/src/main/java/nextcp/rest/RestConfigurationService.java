@@ -182,7 +182,7 @@ public class RestConfigurationService
     {
         try
         {
-            return mediaPlayerConfigService.produceCurrentLocalDeviceConfig().asDto();
+            return mediaPlayerConfigService.getMediaPlayerConfigDto();
         }
         catch (Exception e)
         {

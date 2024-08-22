@@ -10,6 +10,8 @@ import { DeviceService } from 'src/app/service/device.service';
 import { CdsBrowsePathService } from 'src/app/util/cds-browse-path.service';
 import { PersistenceService } from 'src/app/service/persistence/persistence.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Subject } from 'rxjs';
+import { MusicLibraryService } from 'src/app/service/music-library/music-library.service';
 
 @Component({
   selector: 'app-music-library',
@@ -19,7 +21,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
   templateUrl: './music-library.component.html',
   styleUrl: './music-library.component.scss'
 })
-export class MusicLibraryComponent  implements AfterViewInit{
+export class MusicLibraryComponent implements AfterViewInit {
 
   private lastOidIsRestoredFromCache: boolean;
 
@@ -33,21 +35,28 @@ export class MusicLibraryComponent  implements AfterViewInit{
     private cdsBrowsePathService: CdsBrowsePathService,
     private persistenceService: PersistenceService,
     private deviceService: DeviceService,
+    private musicLibraryService: MusicLibraryService,
     private globalSearchService: GlobalSearchService
   ) {
     console.log("constructor call : MusicLibraryComponent");
     globalSearchService.musicItemClicked$.subscribe(musicItem => this.musicItemClickedFromSearch(musicItem))
     globalSearchService.containerClicked$.subscribe(containerItem => this.containerItemClickedFromSearch(containerItem))
-    
+
     globalSearchService.showAllItemClicked$.subscribe(searchReq => this.contentDirectoryService.searchAllItems(searchReq));
     globalSearchService.showAllAlbumClicked$.subscribe(searchReq => this.contentDirectoryService.searchAllAlbum(searchReq));
     globalSearchService.showAllArtistClicked$.subscribe(searchReq => this.contentDirectoryService.searchAllArtists(searchReq));
     globalSearchService.showAllPlaylistClicked$.subscribe(searchReq => this.contentDirectoryService.searchAllPlaylist(searchReq));
 
+    this.getContentHandler().contentDirectoryService.browseFinished$.subscribe(data => this.browseFinished(data));
+
     route.params.subscribe(val => {
       console.log(val.objectId);
       this.initialBrowseToUid(val.objectId);
     });
+  }
+
+  private browseFinished(data : ContainerItemDto): void {
+    this.musicLibraryService.updateCurrentContainer(data);
   }
 
   //
@@ -86,7 +95,7 @@ export class MusicLibraryComponent  implements AfterViewInit{
     let prom = this.browseToOid(objectId, udn, true, "");
     if (prom) {
       prom.then(
-        (val) => {if (!val) this.browseToRoot(udn)},
+        (val) => { if (!val) this.browseToRoot(udn) },
         (err) => console.error(err)
       );
     }
@@ -111,7 +120,7 @@ export class MusicLibraryComponent  implements AfterViewInit{
     // no special activities yet ... 
   }
 
-  itemDeleted(event: MusicItemDto) {    
+  itemDeleted(event: MusicItemDto) {
     this.contentDirectoryService.deleteMusicTrack(event);
   }
 
@@ -124,7 +133,7 @@ export class MusicLibraryComponent  implements AfterViewInit{
   }
 
   getContentHandler(): ScrollLoadHandler {
-    return {contentDirectoryService: this.contentDirectoryService, persistenceService: this.persistenceService }
+    return { contentDirectoryService: this.contentDirectoryService, persistenceService: this.persistenceService }
   }
 
   //
@@ -151,7 +160,7 @@ export class MusicLibraryComponent  implements AfterViewInit{
   public backButtonDisabled(): boolean {
     if (this.contentDirectoryService?.currentContainerList().currentContainer?.id) {
       return this.contentDirectoryService.currentContainerList().currentContainer.id === '0' ||
-      this.contentDirectoryService.currentContainerList().currentContainer.id === '';
+        this.contentDirectoryService.currentContainerList().currentContainer.id === '';
     }
     return false;
   }

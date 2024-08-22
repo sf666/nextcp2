@@ -1,10 +1,21 @@
-<div class="section head ">Player Configuration</div>
-<div class="generalConfigOptions">
-    <div class="pb-4">
+<div class="section head d-flex pb-2">
+    <div class="d-flex align-items-center">Player Configuration</div>
+    <div class="d-flex align-items-center">
         <mat-slide-toggle color="accent" class="ms-4" [ngModel]="playMonitoring" (ngModelChange)="updateMonitoringState($event);">
             play monitoring
         </mat-slide-toggle>
     </div>
+</div>
+
+<div class="generalConfigOptions">
+    <div class="paraInputField">
+        <div class="pb-4">
+            <mat-slide-toggle color="accent" class="ms-4" [(ngModel)]="mediaPlayerConfigDto.addToPlaylist">
+                add played songs to playlist
+            </mat-slide-toggle>
+        </div>
+    </div>
+
     <div class="section subhead d-flex flex-column">
         <div class="d-flex flex-wrap-reverse">
             <div class="paraInputField">
@@ -55,8 +66,46 @@
             </div>
             <div class="paraAppConf">overwrite played types</div>
         </div>
+
+        <div class="d-flex flex-wrap-reverse">
+            <div class="paraInputField">
+                <mat-form-field appearance="outline" class="setting-dropdown">
+                    <mat-label>Playlist ID</mat-label>
+                    <input matInput type="text" [(ngModel)]="mediaPlayerConfigDto.addToPlaylistId.id">
+                </mat-form-field>
+            </div>
+            <div class="ps-2 pe-2">
+                <button mat-stroked-button color="primary" (click)="selectPlaylist()">selectCurrent</button>
+            </div>
+            <div class="paraAppConf">Add played files to this playlist.
+            </div>
+        </div>
+
+        <div class="d-flex flex-wrap-reverse">
+            <div class="paraInputField">
+                <mat-form-field appearance="outline" class="setting-dropdown">
+                    <mat-label>Folder ID</mat-label>
+                    <input matInput type="text" [(ngModel)]="mediaPlayerConfigDto.addToFolderId.id">
+                </mat-form-field>
+            </div>
+            <div class="ps-2 pe-2">
+                <button mat-stroked-button color="primary" (click)="selectFolder()">select current</button>
+            </div>
+            <div class="paraAppConf">Folder where to store played files
+            </div>
+        </div>
+
     </div>
-    <div class="d-flex section ms-4">
+
+    <div class="d-flex section ps-4">
         <button mat-stroked-button color="primary" (click)="saveConfig()">save</button>
     </div>
+<!--
+    <div class="d-flex section ps-4 pt-4">
+        <button mat-stroked-button color="primary" (click)="createFolder()">create</button>
+    </div>
+    <div class="d-flex section ps-4 pt-4">
+        <button mat-stroked-button color="primary" (click)="upload()">upload</button>
+    </div>
+-->
 </div>

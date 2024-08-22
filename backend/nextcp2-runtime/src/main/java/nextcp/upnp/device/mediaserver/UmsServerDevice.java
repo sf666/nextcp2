@@ -16,7 +16,11 @@ import javax.xml.xpath.XPathFactory;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.support.contentdirectory.DIDLParser;
 import org.jupnp.support.model.DIDLContent;
+import org.jupnp.support.model.DIDLObject.Class;
+import org.jupnp.support.model.Res;
 import org.jupnp.support.model.container.Container;
+import org.jupnp.support.model.container.StorageFolder;
+import org.jupnp.support.model.item.Item;
 import org.jupnp.support.model.item.PlaylistItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +51,7 @@ import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.UpdateObjec
 import nextcp.util.BackendException;
 import okhttp3.Call;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -74,8 +79,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	@Autowired
 	private ToastEventPublisher toast = null;
-	
-	
 
 	public UmsServerDevice(RemoteDevice device) {
 		super(device);
@@ -192,10 +195,10 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	public void rateSong(UpdateStarRatingRequest updateRequest) {
 		UpdateObjectInput inp = new UpdateObjectInput();
 		inp.ObjectID = updateRequest.musicItemIdDto.objectID;
-		inp.CurrentTagValue = updateRequest.previousRating != null ? 
-			String.format("<upnp:rating>%d</upnp:rating>",updateRequest.previousRating) : null;
-		inp.NewTagValue = updateRequest.newRating != null ? 
-			String.format("<upnp:rating>%d</upnp:rating>",updateRequest.newRating) : null;
+		inp.CurrentTagValue = updateRequest.previousRating != null ?
+			String.format("<upnp:rating>%d</upnp:rating>", updateRequest.previousRating) :
+			null;
+		inp.NewTagValue = updateRequest.newRating != null ? String.format("<upnp:rating>%d</upnp:rating>", updateRequest.newRating) : null;
 		try {
 			getContentDirectoryService().updateObject(inp);
 		} catch (GenActionException e) {
@@ -306,6 +309,34 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	}
 
 	@Override
+	public Container createFolder(String parentContainerId, String folderName) throws Exception {
+		CreateObjectInput inp = new CreateObjectInput();
+		inp.ContainerID = parentContainerId;
+		StorageFolder storageFolder = new StorageFolder();
+		storageFolder.setTitle(folderName);
+		storageFolder.setParentID(parentContainerId);
+		storageFolder.setId("");
+		DIDLParser parser = new DIDLParser();
+		DIDLContent content = new DIDLContent();
+		content.addContainer(storageFolder);
+		String xml = parser.generate(content);
+		inp.Elements = xml;
+
+		try {
+			CreateObjectOutput out = getContentDirectoryService().createObject(inp);
+			log.debug("created object {} ", out.Result);
+			content = parser.parse(out.Result);
+			Container newPL = content.getFirstContainer();
+			return newPL;
+		} catch (GenActionException e) {
+			String errorText = extractErrorText(e.description);
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
+		} catch (Exception e) {
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
+		}
+	}
+
+	@Override
 	public Container createPlaylist(String parentContainerId, String playlistName) throws Exception {
 		CreateObjectInput inp = new CreateObjectInput();
 		inp.ContainerID = parentContainerId;
@@ -357,8 +388,8 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			NodeList nodes = (NodeList) result;
 
 			for (int i = 0; i < nodes.getLength();) {
-			  return nodes.item(i).getNodeValue();
-			}			
+				return nodes.item(i).getNodeValue();
+			}
 		} catch (SAXException | IOException | XPathExpressionException e) {
 			log.warn("cannot extract error message", e);
 		}
@@ -386,6 +417,61 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public Item createItem(String parentContainerId, File file) throws Exception {
+		CreateObjectInput inp = new CreateObjectInput();
+		inp.ContainerID = parentContainerId;
+		Item item = new Item();
+		item.setClazz(new Class("object.item"));
+		item.setTitle(file.getName());
+		item.setParentID(parentContainerId);
+		item.setId("");
+		DIDLParser parser = new DIDLParser();
+		DIDLContent content = new DIDLContent();
+		content.addItem(item);
+		String xml = parser.generate(content);
+		inp.Elements = xml;
+
+		try {
+			CreateObjectOutput out = getContentDirectoryService().createObject(inp);
+			log.debug("created object {} ", out.Result);
+			content = parser.parse(out.Result);
+			log.debug("content count : " + content.getCount());
+			if (content.getItems().size() > 0) {
+				importFile(content, file);
+				return content.getItems().get(0);
+			}
+			return null;
+		} catch (GenActionException e) {
+			String errorText = extractErrorText(e.description);
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
+		} catch (Exception e) {
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
+		}
+	}
+
+	// Upload file ...
+	private void importFile(DIDLContent content, File file) {
+		for (Res resource : content.getItems().get(0).getResources()) {
+			if (resource.getProtocolInfo().getContentFormat().toLowerCase().startsWith("audio")) {
+				log.debug("import uri : " + resource.getImportUri());
+				RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("filename", file.getName(),
+					RequestBody.create(MediaType.parse("application/octet-stream"), file)).build();
+
+				Request request = new Request.Builder().url(resource.getImportUri().toString()).post(requestBody).build();
+
+				Call call = okClient.newCall(request);
+				try {
+					Response response = call.execute();
+					log.info("upload response code : " + response.code());
+				} catch (IOException e) {
+					log.error("importFile",e);
+				}
+				break;
+			}
 		}
 	}
 }

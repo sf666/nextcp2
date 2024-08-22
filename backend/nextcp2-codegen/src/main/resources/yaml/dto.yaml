@@ -26,6 +26,9 @@ MediaPlayerConfigDto:
    script: String
    playType: String
    overwrite: Boolean
+   addToPlaylist: Boolean
+   addToPlaylistId: ContainerIdDto
+   addToFolderId: ContainerIdDto
 
 ApplicationConfig:
    myPlaylistFolderName: String
@@ -213,6 +216,10 @@ ContainerItemDto:
    minimServerSupportTags: List<ContainerDto>
    totalMatches: Long
    
+
+ContainerIdDto:
+   id: String 
+   title: String
 
 ContainerDto:
    id: String 
