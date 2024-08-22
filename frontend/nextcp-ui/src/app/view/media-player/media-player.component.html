@@ -10,7 +10,7 @@
 <div class="generalConfigOptions">
     <div class="paraInputField">
         <div class="pb-4">
-            <mat-slide-toggle color="accent" class="ms-4" [(ngModel)]="mediaPlayerConfigDto.addToPlaylist">
+            <mat-slide-toggle color="accent" class="ms-4" [(ngModel)]="mediaPlayerConfigDto.addToPlaylist" (ngModelChange)="updatePlaylistRecording($event);">
                 add played songs to playlist
             </mat-slide-toggle>
         </div>
@@ -71,7 +71,7 @@
             <div class="paraInputField">
                 <mat-form-field appearance="outline" class="setting-dropdown">
                     <mat-label>Playlist ID</mat-label>
-                    <input matInput type="text" [(ngModel)]="mediaPlayerConfigDto.addToPlaylistId.id">
+                    <input matInput type="text" [(ngModel)]="mediaPlayerConfigDto.addToPlaylistId.title">
                 </mat-form-field>
             </div>
             <div class="ps-2 pe-2">
@@ -85,7 +85,7 @@
             <div class="paraInputField">
                 <mat-form-field appearance="outline" class="setting-dropdown">
                     <mat-label>Folder ID</mat-label>
-                    <input matInput type="text" [(ngModel)]="mediaPlayerConfigDto.addToFolderId.id">
+                    <input matInput type="text" [(ngModel)]="mediaPlayerConfigDto.addToFolderId.title">
                 </mat-form-field>
             </div>
             <div class="ps-2 pe-2">

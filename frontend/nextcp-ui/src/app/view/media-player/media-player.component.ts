@@ -73,6 +73,10 @@ export class MediaPlayerComponent {
       ". Script : " + this.mediaPlayerConfigDto.script);
   }
 
+  updatePlaylistRecording(event: Event): void {
+    this.saveConfig();
+  }
+
   updateMonitoringState(event: Event): void {
     console.log("monitoring set to " + event);
     if (event) {
