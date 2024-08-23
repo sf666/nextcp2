@@ -1,5 +1,6 @@
 package nextcp2.upnp.localdevice;
 
+import java.io.File;
 import java.util.Map;
 import org.jupnp.binding.LocalServiceBinder;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
@@ -20,9 +21,13 @@ import org.jupnp.support.avtransport.lastchange.AVTransportLastChangeParser;
 import org.jupnp.support.lastchange.LastChange;
 import org.jupnp.support.lastchange.LastChangeAwareServiceManager;
 import org.jupnp.support.renderingcontrol.lastchange.RenderingControlLastChangeParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Nextcp2Renderer {
 
+	private static final Logger log = LoggerFactory.getLogger(Nextcp2Renderer.class.getName());
+	
 	public static final long LAST_CHANGE_FIRING_INTERVAL_MILLISECONDS = 500;
 
 	final protected LocalServiceBinder binder = new AnnotationLocalServiceBinder();
@@ -37,13 +42,23 @@ public class Nextcp2Renderer {
 	final protected Map<UnsignedIntegerFourBytes, Nextcp2Player> mediaPlayers;
 
 	final protected LocalDevice device;
-	protected boolean startPlayScreening = false;
+	private ISongPlayedCallback callback;
+
+	private MediaPlayerConfigService configService = null;
+	
+	
+	protected MediaPlayerConfigService getConfigService() {
+		return configService;
+	}
 
 	public LocalDevice getLocalDevice() {
 		return device;
 	}
 
-	public Nextcp2Renderer(IMediaPlayerFactory mpf, ILocalDeviceConfigProducer configService) {
+	public Nextcp2Renderer(IMediaPlayerFactory mpf, MediaPlayerConfigService configService, ISongPlayedCallback callback) {
+		this.configService = configService;
+		this.callback = callback;
+		
 		AVTransportLastChangeParser parser = new AVTransportLastChangeParser();
 		avTransportLastChange = new LastChange(parser);
 		RenderingControlLastChangeParser rcParser = new RenderingControlLastChangeParser();
@@ -113,16 +128,7 @@ public class Nextcp2Renderer {
 		return null;
 	}
 
-	public void startPlayScreening() {
-		this.startPlayScreening = true;
+	protected void sendPlayedSong(File file) {
+		callback.songPlayed(file);
 	}
-	
-	public void stopPlayScreening() {
-		this.startPlayScreening = false;
-	}
-	
-	public boolean isPlayScreening() {
-		return this.startPlayScreening;
-	}
-	
 }

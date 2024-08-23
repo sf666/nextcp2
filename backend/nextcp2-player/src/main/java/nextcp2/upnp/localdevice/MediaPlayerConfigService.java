@@ -1,4 +1,4 @@
-package nextcp.config;
+package nextcp2.upnp.localdevice;
 
 import java.io.IOException;
 import org.apache.commons.lang3.StringUtils;
@@ -14,9 +14,6 @@ import nextcp.db.service.BasicDbService;
 import nextcp.db.service.KeyValuePair;
 import nextcp.dto.ContainerIdDto;
 import nextcp.dto.MediaPlayerConfigDto;
-import nextcp.eventBridge.SsePublisher;
-import nextcp2.upnp.localdevice.ILocalDeviceConfigProducer;
-import nextcp2.upnp.localdevice.LocalDeviceConfig;
 import nextcp2.upnp.localdevice.LocalDeviceConfig.FileType;
 
 @Service
@@ -26,30 +23,28 @@ public class MediaPlayerConfigService implements ILocalDeviceConfigProducer {
 	private static final String CONFIG_KEY_MEDIA_PLAYER = "MEDIAPLAYER_CONFIG";
 
 	private ObjectMapper om = new ObjectMapper();
-	// public static final String SERVER_CONFIG_QUEUENAME =
-	// "SERVER_DEVICES_CONFIG_CHANGED";
 
 	private BasicDbService dbService = null;
-	private SsePublisher ssePublisher = null;
 	
-	private MediaPlayerConfigDto ldc = null;
+	private MediaPlayerConfigDto mediaPlayerConfig = null;
+	private LocalDeviceConfig ldc = null;
 
 	
 	public MediaPlayerConfigDto getMediaPlayerConfigDto() {
-		return ldc;
+		return mediaPlayerConfig;
 	}
 
 	@Autowired
-	public MediaPlayerConfigService(BasicDbService dbService, SsePublisher ssePublisher) {
+	public MediaPlayerConfigService(BasicDbService dbService) {
 		this.dbService = dbService;
-		this.ssePublisher = ssePublisher;
-		ldc = readConfig();
+		mediaPlayerConfig = readConfig();
+		createCurrentLocalDeviceConfig();
 	}
 
 	public void writeConfig() {
 		try {
 			ObjectWriter writer = om.writer();
-			String value = writer.withDefaultPrettyPrinter().writeValueAsString(ldc);
+			String value = writer.withDefaultPrettyPrinter().writeValueAsString(mediaPlayerConfig);
 			dbService.updateJsonStoreValue(new KeyValuePair(CONFIG_KEY_MEDIA_PLAYER, value));
 		} catch (JsonProcessingException e) {
 			log.error("could not write config", e);
@@ -92,16 +87,23 @@ public class MediaPlayerConfigService implements ILocalDeviceConfigProducer {
 		c.addToFolderId = new ContainerIdDto("","");
 		c.addToPlaylist = false;
 		c.addToPlaylistId = new ContainerIdDto("","");
+		c.mediaServerUdn = "";
 		return c;
 	}
 	
 	public void updateConfig(MediaPlayerConfigDto configDto) {
-		ldc = configDto;
+		mediaPlayerConfig = configDto;
+		createCurrentLocalDeviceConfig();
 		writeConfig();
 	}
+
+	private void createCurrentLocalDeviceConfig() {
+		ldc = new LocalDeviceConfig(mediaPlayerConfig.workdir, FileType.valueOf(mediaPlayerConfig.playType), mediaPlayerConfig.overwrite, mediaPlayerConfig.script);
+	}
+	
 	
 	@Override
 	public LocalDeviceConfig produceCurrentLocalDeviceConfig() {
-		return new LocalDeviceConfig(ldc.workdir, FileType.valueOf(ldc.playType), ldc.overwrite, ldc.script);
+		return ldc;
 	}
 }

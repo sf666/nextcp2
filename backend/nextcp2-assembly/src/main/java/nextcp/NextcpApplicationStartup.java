@@ -20,7 +20,7 @@ import jakarta.annotation.PostConstruct;
 import nextcp.dto.Config;
 import nextcp.util.IApplicationRestartable;
 
-@SpringBootApplication(scanBasePackages = "nextcp, devicedriver, codegen")
+@SpringBootApplication(scanBasePackages = "nextcp, nextcp2, devicedriver, codegen")
 @EnableScheduling
 public class NextcpApplicationStartup implements IApplicationRestartable
 {
@@ -31,7 +31,6 @@ public class NextcpApplicationStartup implements IApplicationRestartable
 
     // @Autowired
     // private CommandLineRunner clr = null;
-
     private static ConfigurableApplicationContext context;
     private static String[] args;
 

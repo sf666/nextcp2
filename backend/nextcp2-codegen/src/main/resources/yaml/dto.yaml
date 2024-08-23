@@ -29,6 +29,7 @@ MediaPlayerConfigDto:
    addToPlaylist: Boolean
    addToPlaylistId: ContainerIdDto
    addToFolderId: ContainerIdDto
+   mediaServerUdn: String
 
 ApplicationConfig:
    myPlaylistFolderName: String

@@ -35,13 +35,17 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.annotation.PostConstruct;
 import nextcp.config.ServerConfig;
 import nextcp.dto.Config;
+import nextcp.dto.ContainerDto;
+import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MediaServerDto;
+import nextcp.dto.MusicItemDto;
 import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.ServerPlaylists;
 import nextcp.dto.ToastrMessage;
 import nextcp.dto.UpdateStarRatingRequest;
 import nextcp.service.ToastEventPublisher;
 import nextcp.upnp.GenActionException;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateObjectInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateObjectOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateReferenceInput;
@@ -308,8 +312,40 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		publisher.publishEvent(new ToastrMessage(null, "info", "UMS server " + getFriendlyName(), "My Music albums restored."));
 	}
 
+	private String browseChildrenSearchFolder(String objectId, String filter) {
+		BrowseInput inp = new BrowseInput();
+		inp.ObjectID = objectId;
+		inp.SortCriteria = "";
+		inp.StartingIndex = 0L;
+		inp.RequestedCount = 999L;
+		inp.Filter = filter;
+		ContainerItemDto resultContainer = browseChildren(inp);
+		for (ContainerDto folder : resultContainer.containerDto) {
+			if (folder.title.equalsIgnoreCase(filter)) {
+				return folder.id;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public String getOrCreateChildFolderId(String parentContainerId, String folderName) throws Exception {
+		String childId = this.browseChildrenSearchFolder(parentContainerId, folderName);
+		if (childId == null) {
+			Container c = createFolder(parentContainerId, folderName);
+			if (c != null) {
+				return c.getId();
+			}
+			throw new RuntimeException("cannot create directory");
+		} else {
+			log.info("folder already exists with id : " + childId);
+			return childId;
+		}
+	}
+
 	@Override
 	public Container createFolder(String parentContainerId, String folderName) throws Exception {
+		log.debug("creating folder parentId : {} / folder name : {} ... ", parentContainerId, folderName);
 		CreateObjectInput inp = new CreateObjectInput();
 		inp.ContainerID = parentContainerId;
 		StorageFolder storageFolder = new StorageFolder();
@@ -327,6 +363,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			log.debug("created object {} ", out.Result);
 			content = parser.parse(out.Result);
 			Container newPL = content.getFirstContainer();
+			log.info("new folder created with object id : " + newPL.getId());
 			return newPL;
 		} catch (GenActionException e) {
 			String errorText = extractErrorText(e.description);
@@ -420,6 +457,36 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		}
 	}
 
+	private String browseChildrenSearchItem(String objectId, String filter) {
+		BrowseInput inp = new BrowseInput();
+		inp.ObjectID = objectId;
+		inp.SortCriteria = "";
+		inp.StartingIndex = 0L;
+		inp.RequestedCount = 999L;
+		inp.Filter = filter;
+		ContainerItemDto resultContainer = browseChildren(inp);
+		for (MusicItemDto folder : resultContainer.musicItemDto) {
+			if (folder.title.equalsIgnoreCase(filter)) {
+				return folder.objectID;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public String getOrCreateItem(String parentContainerId, File file) throws Exception {
+		String itemId = browseChildrenSearchItem(parentContainerId, file.getName().toString());
+		if (itemId == null) {
+			Item item = createItem(parentContainerId, file);
+			if (item == null) {
+				throw new RuntimeException("item could no be created");
+			}
+			return item.getId();
+		} else {
+			return itemId;
+		}
+	}
+
 	@Override
 	public Item createItem(String parentContainerId, File file) throws Exception {
 		CreateObjectInput inp = new CreateObjectInput();
@@ -443,8 +510,10 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			if (content.getItems().size() > 0) {
 				importFile(content, file);
 				return content.getItems().get(0);
+			} else {
+				log.error("couldn't create item");
+				return null;
 			}
-			return null;
 		} catch (GenActionException e) {
 			String errorText = extractErrorText(e.description);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
@@ -455,11 +524,13 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	// Upload file ...
 	private void importFile(DIDLContent content, File file) {
+		log.debug("importing resource from {}", file.getName());
 		for (Res resource : content.getItems().get(0).getResources()) {
 			if (resource.getProtocolInfo().getContentFormat().toLowerCase().startsWith("audio")) {
-				log.debug("import uri : " + resource.getImportUri());
-				RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("filename", file.getName(),
-					RequestBody.create(MediaType.parse("application/octet-stream"), file)).build();
+				log.info("import uri : " + resource.getImportUri());
+				RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+					.addFormDataPart("filename", file.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), file))
+					.build();
 
 				Request request = new Request.Builder().url(resource.getImportUri().toString()).post(requestBody).build();
 
@@ -468,7 +539,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 					Response response = call.execute();
 					log.info("upload response code : " + response.code());
 				} catch (IOException e) {
-					log.error("importFile",e);
+					log.error("importFile", e);
 				}
 				break;
 			}

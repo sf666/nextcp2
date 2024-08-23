@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import jakarta.annotation.PostConstruct;
-import nextcp.config.MediaPlayerConfigService;
 import nextcp.config.RendererConfig;
 import nextcp.config.ServerConfig;
 import nextcp.devicedriver.DeviceCapabilityDto;
@@ -38,6 +37,7 @@ import nextcp.service.upnp.Nextcp2UpnpServiceImpl;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.util.IApplicationRestartable;
+import nextcp2.upnp.localdevice.MediaPlayerConfigService;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController

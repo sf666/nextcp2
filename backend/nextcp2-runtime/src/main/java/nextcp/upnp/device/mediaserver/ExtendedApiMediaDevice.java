@@ -50,5 +50,9 @@ public interface ExtendedApiMediaDevice
     public Container createFolder(String parentContainerId, String folderName) throws Exception;
 
 	public Item createItem(String parentContainerId, File file) throws Exception;
+	
+	public String getOrCreateChildFolderId(String parentContainerId, String folderName) throws Exception;
+	
+	public String getOrCreateItem(String parentContainerId, File file) throws Exception;
     
 }

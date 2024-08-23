@@ -1,3 +1,4 @@
+import { DeviceService } from './../../service/device.service';
 import { MusicLibraryService } from './../../service/music-library/music-library.service';
 import { Event } from './../../../../node_modules/@types/ws/node_modules/undici-types/patch.d';
 import { MediaPlayerConfigDto, ContainerItemDto, ContainerIdDto } from './../../service/dto.d';
@@ -40,6 +41,7 @@ export class MediaPlayerComponent {
   constructor(
     private configurationService: ConfigurationService, 
     private mediaPlayerService: MediaPlayerService,
+    private deviceService: DeviceService,
     public musicLibraryService: MusicLibraryService,
   ) {
     this.mediaPlayerConfigDto = {
@@ -49,7 +51,8 @@ export class MediaPlayerComponent {
       workdir: '',
       addToFolderId: {id:'', title:''},
       addToPlaylist: false,
-      addToPlaylistId: {id:'', title:''},
+      mediaServerUdn: '',
+      addToPlaylistId: {id:'', title:'',},
     }
 
     this.configurationService.getMediaPlayerConfig().subscribe(data => {
@@ -106,6 +109,11 @@ export class MediaPlayerComponent {
 
   selectPlaylist() {
     this.mediaPlayerConfigDto.addToPlaylistId = this.getCurrentContainerIdDto();
+    this.saveConfig();
+  }
+
+  selectMediaServer() {
+    this.mediaPlayerConfigDto.mediaServerUdn = this.deviceService.selectedMediaServerDevice().udn;
     this.saveConfig();
   }
 

@@ -9,7 +9,6 @@ import org.jupnp.support.avtransport.AVTransportErrorCode;
 import org.jupnp.support.avtransport.AVTransportException;
 import org.jupnp.support.avtransport.AbstractAVTransportService;
 import org.jupnp.support.lastchange.LastChange;
-import org.jupnp.support.lastchange.LastChangeAwareServiceManager;
 import org.jupnp.support.model.DeviceCapabilities;
 import org.jupnp.support.model.MediaInfo;
 import org.jupnp.support.model.PlayMode;
@@ -111,11 +110,7 @@ public class Nextcp2AvTransportService extends AbstractAVTransportService {
 
 	@Override
 	public void play(UnsignedIntegerFourBytes instanceId, String speed) throws AVTransportException {
-		if (rootDevice.isPlayScreening()) {
-			getInstance(instanceId).play(config.produceCurrentLocalDeviceConfig());
-		} else {
-			log.debug("monitoring disabled.");
-		}
+		getInstance(instanceId).play(config.produceCurrentLocalDeviceConfig());
 	}
 
 	@Override

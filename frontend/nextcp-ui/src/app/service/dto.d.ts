@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2024-08-22 15:15:11.
+// Generated using typescript-generator version 3.2.1263 on 2024-08-23 10:43:50.
 
 export interface ApplicationConfig {
     myPlaylistFolderName: string;
@@ -173,6 +173,7 @@ export interface MediaPlayerConfigDto {
     addToPlaylist: boolean;
     addToPlaylistId: ContainerIdDto;
     addToFolderId: ContainerIdDto;
+    mediaServerUdn: string;
 }
 
 export interface MediaRendererDto {

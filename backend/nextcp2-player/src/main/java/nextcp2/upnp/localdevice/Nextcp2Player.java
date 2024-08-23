@@ -1,5 +1,6 @@
 package nextcp2.upnp.localdevice;
 
+import java.io.File;
 import java.net.URI;
 import org.eclipse.jetty.util.StringUtil;
 import org.jupnp.model.ModelUtil;
@@ -14,7 +15,6 @@ import org.jupnp.support.model.TransportInfo;
 import org.jupnp.support.model.TransportState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import nextcp2.upnp.localdevice.LocalDeviceConfig.FileType;
 
 public class Nextcp2Player implements IMediaPlayerCallback {
 
@@ -31,7 +31,6 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	private IMediaPlayer mediaPlayerBackend = null;
 	private Nextcp2Renderer rootDevice = null;
 
-	private LocalDeviceConfig testconfig = null;
 	private long trackNum = 0;
 	
 	private LocalDeviceConfig config = null;
@@ -42,7 +41,6 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 		this.instanceId = instanceId;
 		this.avTransportLastChange = avTransportLastChange;
 		this.renderingControlLastChange = renderingControlLastChange;
-		this.testconfig = getLocalDeviceTestConfig();
 		this.currentMediaInfo = createMediaInfo("", "", "", "", "00:00:00");
 		this.currentTransportInfo = new TransportInfo(TransportState.STOPPED);
 		if (mpf != null) {
@@ -50,14 +48,6 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 		}
 	}
 
-	private LocalDeviceConfig getLocalDeviceTestConfig() {
-		LocalDeviceConfig c = new LocalDeviceConfig();
-		c.fileType = FileType.ALBUM;
-		c.overwrite = false;
-		c.workdir = "/tmp";
-		c.script = "";
-		return c;
-	}
 
 	public UnsignedIntegerFourBytes getInstanceId() {
 		return instanceId;
@@ -147,6 +137,7 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 		if (mediaPlayerBackend != null) {
 			mediaPlayerBackend.play(currentMediaInfo.getCurrentURI(), currentMediaInfo.getCurrentURIMetaData(), config);
 		}
+		rootDevice.fireLastChange();
 	}
 
 	public void pause() {
@@ -213,8 +204,8 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	}
 
 	@Override
-	public void stopped(String text) {
-		log.debug("finished : {}", text);
+	public void stopped(File text) {
+		rootDevice.sendPlayedSong(text);
 	}
 
 	private MediaInfo createMediaInfo(String curUri, String curMeta, String nextUri, String nextMeta, String duration) {

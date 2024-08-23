@@ -1,12 +1,15 @@
 package nextcp.rest;
 
 import java.io.File;
+import java.nio.file.Path;
 import org.apache.commons.lang.StringUtils;
 import org.jupnp.model.types.UDN;
+import org.jupnp.support.model.item.Item;
 import org.jupnp.transport.RouterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,19 +19,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import jakarta.annotation.PostConstruct;
-import nextcp.config.MediaPlayerConfigService;
+import nextcp.dto.MediaPlayerConfigDto;
+import nextcp.dto.ToastrMessage;
 import nextcp.mediaplayer.MediaPlayerDiscoveryService;
 import nextcp.service.upnp.UpnpServiceFactory;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
 import nextcp2.upnp.localdevice.IMediaPlayerFactory;
+import nextcp2.upnp.localdevice.ISongPlayedCallback;
+import nextcp2.upnp.localdevice.MediaPlayerConfigService;
 import nextcp2.upnp.localdevice.Nextcp2Renderer;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/MediaRendererService")
-public class RestMediaRendererService {
+public class RestMediaRendererService implements ISongPlayedCallback {
 
 	private static final Logger log = LoggerFactory.getLogger(RestMediaRendererService.class.getName());
 
@@ -39,7 +45,7 @@ public class RestMediaRendererService {
 
 	@Autowired
 	private DeviceRegistry deviceRegistry = null;
-	
+
 	@Autowired
 	MediaPlayerDiscoveryService mediaPlayerDiscoveryService = null;
 
@@ -47,6 +53,9 @@ public class RestMediaRendererService {
 	private MediaPlayerConfigService mediaPlayerConfigService = null;
 
 	private IMediaPlayerFactory mpf = null;
+	
+    @Autowired
+    private ApplicationEventPublisher publisher = null;
 
 	public RestMediaRendererService() {
 		log.debug("renderer service started ... " + renderer);
@@ -55,7 +64,7 @@ public class RestMediaRendererService {
 	@PostConstruct
 	private void init() {
 		mpf = mediaPlayerDiscoveryService.getFirstFactory();
-		renderer = new Nextcp2Renderer(mpf, mediaPlayerConfigService);
+		renderer = new Nextcp2Renderer(mpf, mediaPlayerConfigService, this);
 		try {
 			if (!upnpService.upnpService().getRouter().isEnabled()) {
 				upnpService.upnpService().getRouter().enable();
@@ -74,17 +83,15 @@ public class RestMediaRendererService {
 
 	@GetMapping("/startPlayScreening")
 	public void startPlayScreening() {
-		renderer.startPlayScreening();
 	}
 
 	@GetMapping("/stopPlayScreening")
 	public void stopPlayScreening() {
-		renderer.stopPlayScreening();
 	}
 
 	@GetMapping("/isPlayScreening")
 	public boolean isPlayScreening() {
-		return renderer.isPlayScreening();
+		return true;
 	}
 
 	// Test
@@ -107,7 +114,7 @@ public class RestMediaRendererService {
 			e.printStackTrace();
 		}
 	}
-	
+
 	protected ExtendedApiMediaDevice getExtendedMediaServerByUdn(String udn) {
 		if (udn == null || StringUtils.isBlank(udn)) {
 			throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "please provide output device (media-renderer).");
@@ -122,5 +129,39 @@ public class RestMediaRendererService {
 			return ((ExtendedApiMediaDevice) device);
 		}
 		throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "extended features not availbale : " + udn);
+	}
+
+	@Override
+	public void songPlayed(File theFile) {
+		MediaPlayerConfigDto mpc = mediaPlayerConfigService.getMediaPlayerConfigDto();
+		Path theFilePath = theFile.toPath();
+		if (!StringUtils.isBlank(mpc.addToFolderId.id)) {
+			ExtendedApiMediaDevice device = getExtendedMediaServerByUdn(mpc.mediaServerUdn);
+			try {
+				int startPathAt = new File(mpc.workdir).toPath().getNameCount();
+				String targetId = mpc.addToFolderId.id;
+				while (startPathAt < theFilePath.getNameCount() - 1) {
+					Path childName = theFilePath.getName(startPathAt++);
+					targetId = device.getOrCreateChildFolderId(targetId, childName.toString());
+				}
+				String itemId = device.getOrCreateItem(targetId, theFile);
+				log.info("File created or updated. Item ID is {}", itemId);
+	            publisher.publishEvent(new ToastrMessage(null, "info", "upload file", "added to media server library : " + theFile.getName()));
+			} catch (ResponseStatusException e) {
+	            publisher.publishEvent(new ToastrMessage(null, "error", "upload file", "media server not found"));
+			} catch (Exception e) {
+				log.warn("error while uploading file.", e);
+	            publisher.publishEvent(new ToastrMessage(null, "error", "upload file", e.getMessage()));
+			} finally {
+				if (theFile.exists()) {
+					if (!theFile.delete()) {
+			            publisher.publishEvent(new ToastrMessage(null, "error", "upload file", "cannot delete tmp file : " + theFile.getName()));
+						log.error("cannot delete tmp file : " + theFile.getName());
+					}
+				}
+			}
+		} else {
+			log.info("no folder defined");
+		}
 	}
 }
