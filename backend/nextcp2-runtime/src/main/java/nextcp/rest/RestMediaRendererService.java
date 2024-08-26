@@ -147,6 +147,10 @@ public class RestMediaRendererService implements ISongPlayedCallback {
 				String itemId = device.getOrCreateItem(targetId, theFile);
 				log.info("File created or updated. Item ID is {}", itemId);
 	            publisher.publishEvent(new ToastrMessage(null, "info", "upload file", "added to media server library : " + theFile.getName()));
+	            
+	            if (StringUtils.isBlank(mpc.addToPlaylistId.id)) {
+	            	device.addSongToPlaylist(mpc.addToPlaylistId.id, itemId);
+	            }
 			} catch (ResponseStatusException e) {
 	            publisher.publishEvent(new ToastrMessage(null, "error", "upload file", "media server not found"));
 			} catch (Exception e) {

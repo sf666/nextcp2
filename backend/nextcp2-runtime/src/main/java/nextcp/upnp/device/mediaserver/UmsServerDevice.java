@@ -402,10 +402,10 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	}
 
 	@Override
-	public void addSongToPlaylist(String audiotracId, String playlistContainerId) {
+	public void addSongToPlaylist(String songObjectId, String playlistContainerId) {
 		CreateReferenceInput inp = new CreateReferenceInput();
 		inp.ContainerID = playlistContainerId;
-		inp.ObjectID = audiotracId;
+		inp.ObjectID = songObjectId;
 		try {
 			CreateReferenceOutput out = getContentDirectoryService().createReference(inp);
 			log.debug("created object {} ", out.NewID);
