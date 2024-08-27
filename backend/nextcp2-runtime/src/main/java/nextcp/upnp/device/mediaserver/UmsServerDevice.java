@@ -534,7 +534,11 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		log.debug("importing resource from {}", file.getName());
 		for (Res resource : content.getItems().get(0).getResources()) {
 			if (resource.getProtocolInfo().getContentFormat().toLowerCase().startsWith("audio")) {
-				log.info("import uri : " + resource.getImportUri());
+				if (resource.getImportUri().toString().endsWith("null")) {
+					log.error("import uri ends with NULL");
+				} else {
+					log.info("import uri : " + resource.getImportUri());
+				}
 				RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
 					.addFormDataPart("filename", file.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), file))
 					.build();
