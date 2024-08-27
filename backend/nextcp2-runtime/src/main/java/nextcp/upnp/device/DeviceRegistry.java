@@ -120,8 +120,12 @@ public class DeviceRegistry
     public synchronized void removeMediaServerDevice(RemoteDevice remoteDevice)
     {
         MediaServerDevice device = mediaServerList.remove(remoteFacade.getUDN(remoteDevice));
-        inactiveMediaServerList.put(device.getUDN(), device);
-        eventPublisher.publishEvent(new MediaServerListChanged(getAvailableMediaServer()));
+        if (device != null) {
+            inactiveMediaServerList.put(device.getUDN(), device);
+            eventPublisher.publishEvent(new MediaServerListChanged(getAvailableMediaServer()));
+        } else {
+        	log.debug ("inknown device ... ");
+        }
     }
 
     public synchronized void updatedMediaRendererDevice(RemoteDevice remoteDevice)
