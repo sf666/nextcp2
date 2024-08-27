@@ -39,7 +39,7 @@ public interface ExtendedApiMediaDevice
     
     public Container createPlaylist(String parentContainerId, String playlistName) throws Exception;
     
-    public void addSongToPlaylist(String objectId, String playlistName);
+    public String addSongToPlaylist(String objectId, String playlistName);
 
     public void deleteObject(String objectId);
     

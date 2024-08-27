@@ -313,6 +313,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	}
 
 	private String browseChildrenSearchFolder(String objectId, String filter) {
+		log.debug("search folder with id {} with filter {} ...", objectId, filter);
 		BrowseInput inp = new BrowseInput();
 		inp.ObjectID = objectId;
 		inp.SortCriteria = "";
@@ -330,6 +331,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	@Override
 	public String getOrCreateChildFolderId(String parentContainerId, String folderName) throws Exception {
+		log.debug("creating folder with name {} in parentfolder with id {} ...", folderName, parentContainerId);
 		String childId = this.browseChildrenSearchFolder(parentContainerId, folderName);
 		if (childId == null) {
 			Container c = createFolder(parentContainerId, folderName);
@@ -375,6 +377,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	@Override
 	public Container createPlaylist(String parentContainerId, String playlistName) throws Exception {
+		log.info("adding playlist with name {} to folder with id {} ...", parentContainerId, playlistName);
 		CreateObjectInput inp = new CreateObjectInput();
 		inp.ContainerID = parentContainerId;
 		PlaylistItem pi = new PlaylistItem();
@@ -389,7 +392,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 		try {
 			CreateObjectOutput out = getContentDirectoryService().createObject(inp);
-			log.debug("created object {} ", out.Result);
+			log.debug("playlist created with object id {} ", out.Result);
 			content = parser.parse(out.Result);
 			Container newPL = content.getFirstContainer();
 			return newPL;
@@ -402,13 +405,15 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	}
 
 	@Override
-	public void addSongToPlaylist(String songObjectId, String playlistContainerId) {
+	public String addSongToPlaylist(String songObjectId, String playlistContainerId) {
+		log.info("adding song {} to playlist {} ...", songObjectId, playlistContainerId);
 		CreateReferenceInput inp = new CreateReferenceInput();
 		inp.ContainerID = playlistContainerId;
 		inp.ObjectID = songObjectId;
 		try {
 			CreateReferenceOutput out = getContentDirectoryService().createReference(inp);
-			log.debug("created object {} ", out.NewID);
+			log.debug("song added. returned object id : {} ", out.NewID);
+			return out.NewID;
 		} catch (GenActionException e) {
 			String errorText = extractErrorText(e.description);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
@@ -445,6 +450,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	@Override
 	public void deleteObject(String objectId) {
+		log.debug("deleting object with id {} ...", objectId);		
 		DestroyObjectInput inp = new DestroyObjectInput();
 		inp.ObjectID = objectId;
 		try {
@@ -458,6 +464,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	}
 
 	private String browseChildrenSearchItem(String objectId, String filter) {
+		log.debug("searching for items in folder id {} with filter {} ...", objectId, filter);		
 		BrowseInput inp = new BrowseInput();
 		inp.ObjectID = objectId;
 		inp.SortCriteria = "";
