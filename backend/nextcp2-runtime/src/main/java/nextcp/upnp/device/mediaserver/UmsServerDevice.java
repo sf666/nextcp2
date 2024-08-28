@@ -312,27 +312,33 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		publisher.publishEvent(new ToastrMessage(null, "info", "UMS server " + getFriendlyName(), "My Music albums restored."));
 	}
 
-	private String browseChildrenSearchFolder(String objectId, String filter) {
-		log.debug("search folder with id {} with filter {} ...", objectId, filter);
+	private String browseChildrenSearchFolder(long start, long end, String objectId, String foldername) {
+		log.debug("search folder with id {} with filter {} ...", objectId, foldername);
 		BrowseInput inp = new BrowseInput();
 		inp.ObjectID = objectId;
 		inp.SortCriteria = "";
-		inp.StartingIndex = 0L;
-		inp.RequestedCount = 999L;
-		inp.Filter = filter;
+		inp.StartingIndex = start;
+		inp.RequestedCount = end;
+		inp.Filter = "*";
 		ContainerItemDto resultContainer = browseChildren(inp);
 		for (ContainerDto folder : resultContainer.containerDto) {
-			if (folder.title.equalsIgnoreCase(filter)) {
+			if (folder.title.equalsIgnoreCase(foldername)) {
 				return folder.id;
 			}
 		}
+		if (resultContainer.totalMatches > end) {
+			long diff = end - start;
+			log.debug("extending search to items from {} to {}", diff + 1, 2 * diff + 1);
+			return browseChildrenSearchFolder(diff + 1, 2 * diff + 1, objectId, foldername);
+		}
+		log.debug("folder not found : " + foldername);
 		return null;
 	}
 
 	@Override
 	public String getOrCreateChildFolderId(String parentContainerId, String folderName) throws Exception {
 		log.debug("creating folder with name {} in parentfolder with id {} ...", folderName, parentContainerId);
-		String childId = this.browseChildrenSearchFolder(parentContainerId, folderName);
+		String childId = this.browseChildrenSearchFolder(0, 999, parentContainerId, folderName);
 		if (childId == null) {
 			Container c = createFolder(parentContainerId, folderName);
 			if (c != null) {
@@ -450,7 +456,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	@Override
 	public void deleteObject(String objectId) {
-		log.debug("deleting object with id {} ...", objectId);		
+		log.debug("deleting object with id {} ...", objectId);
 		DestroyObjectInput inp = new DestroyObjectInput();
 		inp.ObjectID = objectId;
 		try {
@@ -464,7 +470,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	}
 
 	private String browseChildrenSearchItem(String objectId, String filter) {
-		log.debug("searching for items in folder id {} with filter {} ...", objectId, filter);		
+		log.debug("searching for items in folder id {} with filter {} ...", objectId, filter);
 		BrowseInput inp = new BrowseInput();
 		inp.ObjectID = objectId;
 		inp.SortCriteria = "";
