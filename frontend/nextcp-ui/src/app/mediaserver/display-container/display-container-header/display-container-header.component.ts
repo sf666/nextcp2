@@ -24,6 +24,7 @@ import { BackgroundImageService } from 'src/app/util/background-image.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { DisplayHeaderOptionsComponent } from '../../popup/display-header-options/display-header-options.component';
+import { MediaPlayerService } from 'src/app/service/media-player/media-player.service';
 
 @Component({
   selector: 'display-container-header',
@@ -63,6 +64,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   totalPlaytime = computed(() => this.calcTotalPlaytimeLong(this.contentDirectoryService().musicTracks_()));
 
   likePossible = computed(() => { return this.allTracksSameMusicBrainzReleaseId_; });
+  mediaServerExists = signal<boolean>(false);
 
   genresForm = new FormControl('');
 
@@ -91,8 +93,11 @@ export class DisplayContainerHeaderComponent implements OnInit {
     private myMusicService: MyMusicService,
     private dtoGeneratorService: DtoGeneratorService,
     private backgroundImageService: BackgroundImageService,
-    private timeDisplayService: TimeDisplayService
-  ) { }
+    private timeDisplayService: TimeDisplayService,
+    private mediaPlayerService: MediaPlayerService
+  ) { 
+    this.checkMediaPlayerExists();
+  }
 
   ngOnInit(): void {
     if (this.contentDirectoryService) {
@@ -368,4 +373,10 @@ export class DisplayContainerHeaderComponent implements OnInit {
     }
     return this.dtoGeneratorService.generateEmptyContainerDto();
   }
+
+  public checkMediaPlayerExists() {
+    this.mediaPlayerService.mediaPlayerExists().subscribe(status => {
+      this.mediaServerExists.set(status);
+    });
+  }  
 }

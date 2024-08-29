@@ -23,17 +23,17 @@
       <span class="hide-element buttonText">My Albums</span>
     </a>
 
-    <a mat-button [routerLink]="'/settings'" (click)="buttonClicked('/settings')" class="margin-reactive  {{getTextClass('/settings')}}">
-      <mat-icon class="material-symbols-outlined thin">settings</mat-icon>
-      <span class="hide-element buttonText">App Settings</span>
-    </a>
-
     @if(mediaServerExists()) {
     <a mat-button [routerLink]="'/mediaPlayerConfig'" (click)="buttonClicked('/mediaPlayerConfig')" class="margin-reactive  {{getTextClass('/mediaPlayerConfig')}}">
       <mat-icon class="material-symbols-outlined thin">save</mat-icon>
       <span class="hide-element buttonText">MediaPlayer</span>
     </a>
     }
+
+    <a mat-button [routerLink]="'/settings'" (click)="buttonClicked('/settings')" class="margin-reactive  {{getTextClass('/settings')}}">
+      <mat-icon class="material-symbols-outlined thin">settings</mat-icon>
+      <span class="hide-element buttonText">App Settings</span>
+    </a>
   </div>
 
   <div class="myPlaylistSection hide-element">
