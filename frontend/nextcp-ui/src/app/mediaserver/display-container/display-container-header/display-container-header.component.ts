@@ -1,3 +1,4 @@
+import { ContainerDto } from './../../../service/dto.d';
 import {
   Component,
   OnInit,
@@ -7,18 +8,22 @@ import {
   signal,
   computed,
   ChangeDetectionStrategy,
+  ElementRef,
 } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatOption, MatSelectModule } from '@angular/material/select';
+import { Observable } from 'rxjs';
 import { ContentDirectoryService } from 'src/app/service/content-directory.service';
-import { ContainerDto, MusicItemDto } from 'src/app/service/dto';
+import { MusicItemDto } from 'src/app/service/dto';
 import { MyMusicService } from 'src/app/service/my-music.service';
 import { BackgroundImageService } from 'src/app/util/background-image.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
+import { DisplayHeaderOptionsComponent } from '../../popup/display-header-options/display-header-options.component';
 
 @Component({
   selector: 'display-container-header',
@@ -32,6 +37,7 @@ import { TimeDisplayService } from 'src/app/util/time-display.service';
     MatSelectModule,
     ReactiveFormsModule,
     MatOption,
+    MatDialogModule
   ],
   templateUrl: './display-container-header.component.html',
   styleUrl: './display-container-header.component.scss',
@@ -81,6 +87,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   private currentAlbumReleaseID = '';
 
   constructor(
+    private dialog: MatDialog,
     private myMusicService: MyMusicService,
     private dtoGeneratorService: DtoGeneratorService,
     private backgroundImageService: BackgroundImageService,
@@ -338,6 +345,21 @@ export class DisplayContainerHeaderComponent implements OnInit {
   public addToPlaylist(): void {
     this.addToPlaylistClicked.emit(this.currentContainer);
   }
+
+
+  public openOptionsDialog(event: MouseEvent): Observable<any> {
+    const target = new ElementRef(event.currentTarget);
+    const dialogRef = this.dialog.open(DisplayHeaderOptionsComponent, {
+      hasBackdrop: true,
+      data: { 
+        trigger: target, 
+        addToPlaylistOutput: this.addToPlaylistClicked, 
+        event: event, 
+        currentContainer: this.currentContainer,
+      },
+    });
+    return dialogRef.afterClosed();
+  }  
 
   // Other
   public get currentContainer(): ContainerDto {

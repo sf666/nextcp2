@@ -26,6 +26,18 @@ export class ConfigurationService {
   private rendererConfig: RendererConfigDto;  // renderer configurations
   serverConfigDto: ServerConfigDto;           // List of server devices
 
+  public mediaPlayerConfigDto = signal<MediaPlayerConfigDto>({
+    overwrite: false,
+    playType: 'Album',
+    script: '',
+    workdir: '',
+    addToFolderId: { id: '', title: '' },
+    addToPlaylist: false,
+    mediaServerUdn: '',
+    addToPlaylistId: { id: '', title: '', },
+  });
+
+
   applicationConfig: ApplicationConfig = {    // This is a DTO copy and can be used to update server configuration
     databaseFilename: '',
     embeddedServerPort: 0,
@@ -92,6 +104,7 @@ export class ConfigurationService {
     this.getMediaRendererConfig();
     this.getMediaServerConfig();
     this.getMediaPlayerConfig();
+    this.getCurrentMediaPlayerConfig();
     sseService.configChanged$.subscribe(serverConfig => this.applyServerConfigurationFile(serverConfig));
     sseService.rendererConfigChanged$.subscribe(data => this.applyRendererServerRendererList(data));
     sseService.serverDevicesConfigChanged$.subscribe(data => this.applyMediaServerList(data));
@@ -108,6 +121,12 @@ export class ConfigurationService {
     this.httpService.get(this.baseUri, uri).subscribe();
   }
 
+  private getCurrentMediaPlayerConfig(): void {
+    this.getMediaPlayerConfig().subscribe(data => {
+      this.mediaPlayerConfigDto.set(data);
+    });
+  }
+
   private getDeviceDriverFromServer() {
     const uri = '/availableDeviceDriver';
 
@@ -120,14 +139,16 @@ export class ConfigurationService {
     return this.serverConfigDto;
   }
 
-  public getMediaPlayerConfig(): Subject<MediaPlayerConfigDto> {
+  private getMediaPlayerConfig(): Subject<MediaPlayerConfigDto> {
     const uri = '/getMediaPlayerConfig';
     return this.httpService.get<MediaPlayerConfigDto>(this.baseUri, uri);
   }
 
   public saveMediaPlayerConfig(mediaPlayerConfig: MediaPlayerConfigDto): void {
     const uri = '/saveMediaPlayerConfig';
-    this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaPlayerConfig, "Save media player config", "success").subscribe();
+    this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaPlayerConfig, "Save media player config", "success").subscribe(() => {
+      this.getCurrentMediaPlayerConfig();
+    });
   }
 
   public saveMusicBrainzConfig(): void {

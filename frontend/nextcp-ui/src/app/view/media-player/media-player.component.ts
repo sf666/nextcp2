@@ -34,9 +34,10 @@ import { MediaPlayerService } from 'src/app/service/media-player/media-player.se
 
 export class MediaPlayerComponent {
 
-  mediaPlayerConfigDto: MediaPlayerConfigDto;
 
   playMonitoring = signal<boolean>(false);
+
+  mediaPlayerConfigDto : MediaPlayerConfigDto;
 
   constructor(
     private configurationService: ConfigurationService, 
@@ -44,22 +45,8 @@ export class MediaPlayerComponent {
     private deviceService: DeviceService,
     public musicLibraryService: MusicLibraryService,
   ) {
-    this.mediaPlayerConfigDto = {
-      overwrite: false,
-      playType: 'Album',
-      script: '',
-      workdir: '',
-      addToFolderId: {id:'', title:''},
-      addToPlaylist: false,
-      mediaServerUdn: '',
-      addToPlaylistId: {id:'', title:'',},
-    }
 
-    this.configurationService.getMediaPlayerConfig().subscribe(data => {
-      this.mediaPlayerConfigDto = data;
-      this.logConfigDto();
-    });
-
+    this.mediaPlayerConfigDto = this.configurationService.mediaPlayerConfigDto();
     this.getPlayStatus();
   }
 
