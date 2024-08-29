@@ -1,13 +1,4 @@
 <div class="panel">
-    <div class="dialogItems d-flex flex-column flex-wrap">
-        <div class="d-flex" (click)="addToPlaylist()">
-            <button class="popupButton" color="" mat-mini-fab>
-                <mat-icon class="material-symbols-sharp">playlist_add</mat-icon>
-            </button>
-            <div class="textNextToButton">add to playlist</div>
-        </div>
-    </div>
-
     @if(isFolder()) {
     <div class="dialogItems d-flex flex-column flex-wrap">
         <div class="d-flex" (click)="selectPlayerFolder()">
@@ -29,4 +20,12 @@
         </div>
     </div>
     }
+    <div class="dialogItems d-flex flex-column flex-wrap">
+        <div class="d-flex" (click)="addToPlaylist()">
+            <button class="popupButton" color="" mat-mini-fab>
+                <mat-icon class="material-symbols-sharp">playlist_add</mat-icon>
+            </button>
+            <div class="textNextToButton">add to playlist</div>
+        </div>
+    </div>
 </div>

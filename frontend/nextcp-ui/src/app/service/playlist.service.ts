@@ -1,11 +1,10 @@
 import { RendererService } from './renderer.service';
 import { SseService } from './sse/sse.service';
 import { GenericResultService } from './generic-result.service';
-import { GenericBooleanRequest, GenericNumberRequest, MusicItemDto, PlayRequestDto, PlaylistState, ContainerDto, PlaylistAddContainerRequest, ServerPlaylistEntry, MediaServerDto, ServerPlaylistDto, ServerPlaylists, CreateServerPlaylistVO } from './dto.d';
+import { GenericBooleanRequest, GenericNumberRequest, MusicItemDto, PlayRequestDto, PlaylistState, ContainerDto, PlaylistAddContainerRequest } from './dto.d';
 import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
 import { Injectable, OnInit, signal } from '@angular/core';
-import { Observable } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 
 @Injectable({
