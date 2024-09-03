@@ -479,10 +479,13 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		inp.RequestedCount = 999L;
 		inp.Filter = "*";
 		ContainerItemDto resultContainer = browseChildren(inp);
-		for (MusicItemDto folder : resultContainer.musicItemDto) {
-			if (folder.title.equalsIgnoreCase(title)) {
-				log.info("browseChildrenSearchItem : returning folderID {}", folder.objectID);
-				return folder.objectID;
+		log.debug("container music-items count : " + resultContainer.musicItemDto.size());
+		log.debug("container countainer count : " + resultContainer.containerDto.size());
+		for (MusicItemDto item : resultContainer.musicItemDto) {
+			log.debug("music item found named : {} ", item.title);
+			if (item.title.equalsIgnoreCase(title)) {
+				log.info("browseChildrenSearchItem : returning folderID {}", item.objectID);
+				return item.objectID;
 			}
 		}
 		log.info("no objects found in container {} for title {}", objectId, title);
@@ -521,6 +524,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		inp.Elements = xml;
 
 		try {
+			log.debug("creating object.item with title {} in container {}", file.getName(), parentContainerId);
 			CreateObjectOutput out = getContentDirectoryService().createObject(inp);
 			log.debug("created object {} ", out.Result);
 			content = parser.parse(out.Result);
