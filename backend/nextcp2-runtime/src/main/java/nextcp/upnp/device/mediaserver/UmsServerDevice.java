@@ -461,6 +461,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		inp.ObjectID = objectId;
 		try {
 			getContentDirectoryService().destroyObject(inp);
+			log.error("deleteObject : failed for id {} ", objectId);			
 		} catch (GenActionException e) {
 			String errorText = extractErrorText(e.description);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
@@ -480,6 +481,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		ContainerItemDto resultContainer = browseChildren(inp);
 		for (MusicItemDto folder : resultContainer.musicItemDto) {
 			if (folder.title.equalsIgnoreCase(title)) {
+				log.info("browseChildrenSearchItem : returning folderID {}", folder.objectID);
 				return folder.objectID;
 			}
 		}
@@ -493,10 +495,12 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		if (itemId == null) {
 			Item item = createItem(parentContainerId, file);
 			if (item == null) {
+				log.error("could not create item in parent container id {} with filename {}", parentContainerId, file.getName().toString());
 				throw new RuntimeException("item could no be created");
 			}
 			return item.getId();
 		} else {
+			log.info("getOrCreateItem : returning itemID {}", itemId);
 			return itemId;
 		}
 	}
