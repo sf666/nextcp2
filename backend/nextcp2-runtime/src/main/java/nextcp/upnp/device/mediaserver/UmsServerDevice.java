@@ -469,8 +469,8 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		}
 	}
 
-	private String browseChildrenSearchItem(String objectId, String filter) {
-		log.debug("searching for items in folder id {} with filter {} ...", objectId, filter);
+	private String browseChildrenSearchItem(String objectId, String title) {
+		log.debug("searching for items in folder id {} with title {} ...", objectId, title);
 		BrowseInput inp = new BrowseInput();
 		inp.ObjectID = objectId;
 		inp.SortCriteria = "";
@@ -479,10 +479,11 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		inp.Filter = "*";
 		ContainerItemDto resultContainer = browseChildren(inp);
 		for (MusicItemDto folder : resultContainer.musicItemDto) {
-			if (folder.title.equalsIgnoreCase(filter)) {
+			if (folder.title.equalsIgnoreCase(title)) {
 				return folder.objectID;
 			}
 		}
+		log.info("no objects found in container {} for title {}", objectId, title);
 		return null;
 	}
 
