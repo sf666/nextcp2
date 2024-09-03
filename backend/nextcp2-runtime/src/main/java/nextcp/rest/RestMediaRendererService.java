@@ -26,6 +26,7 @@ import nextcp.service.upnp.UpnpServiceFactory;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
+import nextcp.util.BackendException;
 import nextcp2.upnp.localdevice.IMediaPlayerFactory;
 import nextcp2.upnp.localdevice.ISongPlayedCallback;
 import nextcp2.upnp.localdevice.MediaPlayerConfigService;
@@ -158,8 +159,9 @@ public class RestMediaRendererService implements ISongPlayedCallback {
 		            	device.addSongToPlaylist(itemId, mpc.addToPlaylistId.id);
 			            publisher.publishEvent(new ToastrMessage(null, "info", "playlist", "song added to playlist : " + theFile.getName()));
 	            		log.debug("success : adding song with id {} to playlist with id {}", itemId, mpc.addToPlaylistId.id);
-	            	} catch (Exception e) {
+	            	} catch (BackendException e) {
 	            		log.debug("adding song to playlist failed.", e);
+	        			publisher.publishEvent(new ToastrMessage(null, "warn", "create item failed ", e.getDescription()));
 	            	}
 	            } else {
 	            	log.info("Supplied empty or NULL ids. File with id {} not being added to a playlist {}.", itemId, mpc.addToPlaylistId.id);

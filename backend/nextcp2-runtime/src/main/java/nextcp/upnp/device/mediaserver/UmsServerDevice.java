@@ -476,7 +476,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		inp.SortCriteria = "";
 		inp.StartingIndex = 0L;
 		inp.RequestedCount = 999L;
-		inp.Filter = filter;
+		inp.Filter = "*";
 		ContainerItemDto resultContainer = browseChildren(inp);
 		for (MusicItemDto folder : resultContainer.musicItemDto) {
 			if (folder.title.equalsIgnoreCase(filter)) {
