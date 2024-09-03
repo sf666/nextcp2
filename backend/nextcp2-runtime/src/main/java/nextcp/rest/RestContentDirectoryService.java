@@ -62,9 +62,9 @@ public class RestContentDirectoryService extends BaseRestService {
 				device = deviceRegistry.getInactiveMediaServerList().get(udn);
 				if (device != null) {
 					publisher.publishEvent(
-						new ToastrMessage(null, "error", "server", "media server '" + device.getFriendlyName() + "' is unavailable "));
+						new ToastrMessage(null, "error", "browse children", "media server '" + device.getFriendlyName() + "' is inactive. Please select a media server from the current active list!"));
 				} else {
-					publisher.publishEvent(new ToastrMessage(null, "error", "server", "media server is unavailable "));
+					publisher.publishEvent(new ToastrMessage(null, "error", "server", "media server is unknown "));
 				}
 				return new ContainerItemDto();
 			}
