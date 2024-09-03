@@ -139,7 +139,7 @@ export class RendererService {
     if (device?.udn.length > 0) {
       const uri = '/getDeviceTransportServiceState';
       this.httpService.post<TransportServiceStateDto>(this.baseUri, uri, device).subscribe(data => {
-        if (this.deviceService.isMediaRendererSelected(data.udn)) {
+        if (this.deviceService.isMediaRendererSelected(data?.udn)) {
           this.transportServiceStateDto.set(data);
           console.log("readTransportServiceState shuffle : " + data.shuffle);
           console.log("readTransportServiceState : " + data);
@@ -152,7 +152,7 @@ export class RendererService {
     if (device?.udn.length > 0) {
       const uri = '/getDeviceState';
       this.httpService.post<DeviceDriverState>(this.baseUri, uri, device).subscribe(data => {
-        if (this.deviceService.isMediaRendererSelected(data.rendererUDN)) {
+        if (this.deviceService.isMediaRendererSelected(data?.rendererUDN)) {
           console.log("updated device driver state for " + data.rendererUDN + " to " + data.hasDeviceDriver);
           this.deviceDriverState.set(data);
         }
@@ -161,7 +161,7 @@ export class RendererService {
   }
 
   private updateRenderDeviceDriverState(data: DeviceDriverState) {
-    if (this.deviceService.isMediaRendererSelected(data.rendererUDN)) {
+    if (this.deviceService.isMediaRendererSelected(data?.rendererUDN)) {
       this.deviceDriverState.set(data);
     }
   }
