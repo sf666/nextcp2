@@ -6,9 +6,9 @@
       <div class="search-show-all" (click)="globalSearchService.showAllItem()">show all</div>
     </div>
 
-    @if (globalSearchService.quickSearchResultList?.musicItems?.length > 0) {
+    @if (globalSearchService.quickSearchResultList().musicItems?.length > 0) {
       <div class="search-row">
-        @for (item of globalSearchService.quickSearchResultList?.musicItems; track item.objectID) {
+        @for (item of globalSearchService.quickSearchResultList().musicItems; track item.objectID) {
           <div
             class="search-row d-flex" (click)="globalSearchService.musicItemSelected(item)">
             <img src="{{item.albumArtUrl}}" class="cropImg searchImgHeight align-self-center" alt="">
@@ -32,9 +32,9 @@
       <div class="search-title">Album</div>
       <div class="search-show-all" (click)="globalSearchService.showAllAlbum()">show all</div>
     </div>
-    @if (globalSearchService.quickSearchResultList?.albumItems?.length > 0) {
+    @if (globalSearchService.quickSearchResultList().albumItems?.length > 0) {
       <div>
-        @for (item of globalSearchService.quickSearchResultList?.albumItems; track item.id) {
+        @for (item of globalSearchService.quickSearchResultList().albumItems; track item.id) {
           <div
             class="search-row d-flex" (click)="globalSearchService.containerSelected(item)">
             <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
@@ -55,9 +55,9 @@
       <div class="search-title">Playlist</div>
       <div class="search-show-all" (click)="globalSearchService.showAllPlaylist()">show all</div>
     </div>
-    @if (globalSearchService.quickSearchResultList?.playlistItems?.length > 0) {
+    @if (globalSearchService.quickSearchResultList().playlistItems?.length > 0) {
       <div>
-        @for (item of globalSearchService.quickSearchResultList?.playlistItems; track item.id) {
+        @for (item of globalSearchService.quickSearchResultList().playlistItems; track item.id) {
           <div
             class="search-row d-flex" (click)="globalSearchService.containerSelected(item)">
             <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
@@ -77,9 +77,9 @@
       <div class="search-title">Artist</div>
       <div class="search-show-all" (click)="globalSearchService.showAllItemArtist()">show all</div>
     </div>
-    @if (globalSearchService.quickSearchResultList?.artistItems?.length > 0) {
+    @if (globalSearchService.quickSearchResultList().artistItems?.length > 0) {
       <div class="search-row">
-        @for (item of globalSearchService.quickSearchResultList?.artistItems; track item.id) {
+        @for (item of globalSearchService.quickSearchResultList().artistItems; track item.id) {
           <div
             class="search-row d-flex" (click)="globalSearchService.containerSelected(item)">
             <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">

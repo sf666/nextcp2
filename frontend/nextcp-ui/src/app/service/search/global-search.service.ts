@@ -10,7 +10,7 @@ import {
   ContainerItemDto,
   SearchRequestDto,
 } from './../dto.d';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { debounce } from 'src/app/global';
 import { Subject } from 'rxjs';
 
@@ -35,7 +35,7 @@ export class GlobalSearchService {
   showAllPlaylistClicked$: Subject<SearchRequestDto> = new Subject();
 
   // QuickSearch Support (Global search)
-  public quickSearchResultList: SearchResultDto;
+  public quickSearchResultList = signal<SearchResultDto>(this.dtoGeneratorService.generateEmptySearchResultDto());
   public quickSearchQueryString: string;
   private quickSearchPanelVisible_: boolean;
   private MIN_SEARCH_LEN = 2;
@@ -61,8 +61,6 @@ export class GlobalSearchService {
     private router: Router,
     private configurationService: ConfigurationService
   ) {
-    this.quickSearchResultList =
-      this.dtoGeneratorService.generateEmptySearchResultDto();
     this.quickSearchPanelVisible_ = false;
     this.doSearchFunc = debounce(
       this.getSearchDelay(),
@@ -103,7 +101,7 @@ export class GlobalSearchService {
   }
 
   private searchResultReceived(data: SearchResultDto): void {
-    this.quickSearchResultList = data;
+    this.quickSearchResultList.set(data);
   }
 
   private doSearch(): void {
@@ -143,8 +141,7 @@ export class GlobalSearchService {
 
   clearSearch(): void {
     this.quickSearchString = '';
-    this.quickSearchResultList =
-      this.dtoGeneratorService.generateEmptySearchResultDto();
+    this.quickSearchResultList.set(this.dtoGeneratorService.generateEmptySearchResultDto());
     this.quickSearchPanelVisible_ = false;
   }
 
