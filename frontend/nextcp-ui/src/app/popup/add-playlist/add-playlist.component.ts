@@ -46,15 +46,33 @@ export class AddPlaylistComponent {
 
   filteredServerPlaylists = computed(() => {
     return this.serverPlaylistService.serverPl().serverPlaylists.filter(
-      pl => pl.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase()))
+      pl => {
+        if (this.playlistFilter().length > 0) {
+          return pl.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase());
+        } else {
+          return true;
+        }
+      })
   });
 
   filteredOtherPlaylists = computed(() => {
-    return this.otherPlaylists().filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase()))
+    if (this.playlistFilter().length > 0) {
+      return this.otherPlaylists().filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase()))
+    } else {
+      return true;
+    }
   });
 
   filteredRecentPlaylists = computed(() => {
-    return this.serverPlaylistService.recentServerPl().serverPlaylists.filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase()));
+    return this.serverPlaylistService.recentServerPl().serverPlaylists.filter(pl => {
+      console.log("Playlist name : " + pl.playlistName);
+      if (this.playlistFilter().length > 0) {
+        return pl.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase());
+      } else {
+        return true;
+      }
+    }
+    );
   });
 
   constructor(
@@ -179,6 +197,6 @@ export class AddPlaylistComponent {
   }
 
   get musicItemToAddExists(): boolean {
-    return this.musicItemToAdd()?.objectID?.length > 0;
+    return this.musicItemToAdd().objectID?.length > 0;
   }
 }
