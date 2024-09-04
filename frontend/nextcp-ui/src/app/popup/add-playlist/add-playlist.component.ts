@@ -59,7 +59,7 @@ export class AddPlaylistComponent {
     if (this.playlistFilter().length > 0) {
       return this.otherPlaylists().filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase()))
     } else {
-      return true;
+      return this.otherPlaylists();
     }
   });
 
