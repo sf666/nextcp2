@@ -56,7 +56,8 @@ export class ConfigurationService {
     pathToRestartScript: '',
     myPlaylistFolderName: '',
     upnpStreamClient: '',
-    upnpStreamServer: ''
+    upnpStreamServer: '',
+    upnpBindInterface: ''
   }
 
   musicBrainzConfig: MusicbrainzSupport = {   // MusicBrainz username/password

@@ -108,7 +108,7 @@ public class MediaServerDevice extends BaseDevice {
 				}
 			}    	
 		} catch (Exception e) {
-			log.error("seaarch exception", e);
+			log.error("search exception", e);
 		}
         return serverPlaylists;
     }

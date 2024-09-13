@@ -114,6 +114,7 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
 
 	private String streamClient;
 	private String streamServer;
+    private String upnpBindInterface;
     
     final private Namespace namespace;
 
@@ -128,22 +129,22 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
     }
 
     public Nextcp2DefaultUpnpServiceConfiguration(int streamListenPort) {
-        this(streamListenPort, NetworkAddressFactoryImpl.DEFAULT_MULTICAST_RESPONSE_LISTEN_PORT, true);
+        this(streamListenPort, NetworkAddressFactoryImpl.DEFAULT_MULTICAST_RESPONSE_LISTEN_PORT, true, null);
     }
 
     public Nextcp2DefaultUpnpServiceConfiguration(int streamListenPort, int multicastResponsePort) {
-        this(streamListenPort, multicastResponsePort, true);
+        this(streamListenPort, multicastResponsePort, true, null);
     }
 
     protected Nextcp2DefaultUpnpServiceConfiguration(boolean checkRuntime) {
-        this(NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT, NetworkAddressFactoryImpl.DEFAULT_MULTICAST_RESPONSE_LISTEN_PORT, checkRuntime);
+        this(NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT, NetworkAddressFactoryImpl.DEFAULT_MULTICAST_RESPONSE_LISTEN_PORT, checkRuntime, null);
     }
 
-    protected Nextcp2DefaultUpnpServiceConfiguration(int streamListenPort, int multicastResponsePort, boolean checkRuntime) {
+    protected Nextcp2DefaultUpnpServiceConfiguration(int streamListenPort, int multicastResponsePort, boolean checkRuntime, String bindInterface) {
         if (checkRuntime && ModelUtil.ANDROID_RUNTIME) {
             throw new Error("Unsupported runtime environment, use org.jupnp.android.AndroidUpnpServiceConfiguration");
         }
-
+        this.upnpBindInterface = bindInterface;
         this.streamListenPort = streamListenPort;
         this.multicastResponsePort = multicastResponsePort;
 
@@ -163,8 +164,8 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
         transportConfiguration = TransportConfigurationProvider.getDefaultTransportConfiguration();
     }
 
-    public Nextcp2DefaultUpnpServiceConfiguration(String upnpStreamClient, String upnpStreamServer) {
-        this(NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT);
+    public Nextcp2DefaultUpnpServiceConfiguration(String upnpStreamClient, String upnpStreamServer, String upnpBindInterface) {
+        this(NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT, NetworkAddressFactoryImpl.DEFAULT_MULTICAST_RESPONSE_LISTEN_PORT, true, upnpBindInterface);
     	this.streamClient = upnpStreamClient;
     	this.streamServer = upnpStreamServer;
 	}
@@ -353,7 +354,7 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
     }
 
     protected NetworkAddressFactory createNetworkAddressFactory(int streamListenPort, int multicastResponsePort) {
-        return new Nextcp2NetworkAddressFactory(streamListenPort, multicastResponsePort);
+        return new Nextcp2NetworkAddressFactory(streamListenPort, multicastResponsePort, upnpBindInterface);
     }
 
     protected DatagramProcessor createDatagramProcessor() {

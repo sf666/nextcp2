@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2024-08-23 10:43:50.
+// Generated using typescript-generator version 3.2.1263 on 2024-09-13 11:13:43.
 
 export interface ApplicationConfig {
     myPlaylistFolderName: string;
@@ -21,6 +21,7 @@ export interface ApplicationConfig {
     pathToRestartScript: string;
     upnpStreamClient: string;
     upnpStreamServer: string;
+    upnpBindInterface: string;
 }
 
 export interface AudioFormat {
