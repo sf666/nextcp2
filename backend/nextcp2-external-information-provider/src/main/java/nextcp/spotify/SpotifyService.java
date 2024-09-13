@@ -157,6 +157,7 @@ public class SpotifyService
             spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
             spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
             config.setUserAuthorizationNeeded(false);
+            log.info("spotify user authenticated ...");
             return authorizationCodeCredentials.getRefreshToken();
         }
         catch (ParseException | IOException e)
