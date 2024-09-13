@@ -25,7 +25,7 @@ export class PlaylistService implements OnInit {
   });
 
   // Playlist items of selected media renderer device
-  public playlistItems: MusicItemDto[] = [];
+  public playlistItems = signal<MusicItemDto[]>([]);
 
   constructor(
     private httpService: HttpService,
@@ -40,7 +40,7 @@ export class PlaylistService implements OnInit {
 
     sseService.mediaRendererPlaylistItemsChanged$.subscribe(data => {
       if (deviceService.isMediaRendererSelected(data.udn)) {
-        this.playlistItems = data.musicItemDto;
+        this.playlistItems.set(data.musicItemDto);
       }
     });
 
@@ -107,7 +107,7 @@ export class PlaylistService implements OnInit {
   public getPlaylistItems(udn: string): void {
     const uri = '/getPlaylistItems';
     if (udn !== '') {
-      this.httpService.post<MusicItemDto[]>(this.baseUri, uri, udn).subscribe(data => this.playlistItems = data);
+      this.httpService.post<MusicItemDto[]>(this.baseUri, uri, udn).subscribe(data => this.playlistItems.set(data));
     }
   }
 
