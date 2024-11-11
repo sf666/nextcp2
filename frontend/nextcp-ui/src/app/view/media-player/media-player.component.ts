@@ -61,6 +61,8 @@ export class MediaPlayerComponent {
       ". playtype : " + this.mediaPlayerConfigDto.playType +
       ". workdir : " + this.mediaPlayerConfigDto.workdir +
       ". Script : " + this.mediaPlayerConfigDto.script);
+    console.log("AlbumID " + this.mediaPlayerConfigDto.addToPlaylistId.id + " / " + this.mediaPlayerConfigDto.addToPlaylistId.title);
+    console.log("FolderID " + this.mediaPlayerConfigDto.addToFolderId.id + " / " + this.mediaPlayerConfigDto.addToFolderId.title);
   }
 
   updatePlaylistRecording(event: Event): void {
