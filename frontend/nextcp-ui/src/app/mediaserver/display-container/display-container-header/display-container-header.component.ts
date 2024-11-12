@@ -63,7 +63,10 @@ export class DisplayContainerHeaderComponent implements OnInit {
   totalPlaytimeShort = computed(() => this.calcTotalPlaytimeShort(this.contentDirectoryService().musicTracks_()));
   totalPlaytime = computed(() => this.calcTotalPlaytimeLong(this.contentDirectoryService().musicTracks_()));
 
-  likePossible = computed(() => { return this.allTracksSameMusicBrainzReleaseId_; });
+  likePossible = computed(() => { return this.allTracksSameMusicBrainzReleaseId_(); });
+  allTracksSameMusicBrainzReleaseId_ = signal<boolean>(false);
+  allTracksSameAlbum_ = signal<boolean>(false);
+  currentAlbumReleaseID = signal<string>('');
   mediaServerExists = signal<boolean>(false);
 
   genresForm = new FormControl('');
@@ -83,11 +86,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
     }
   });
 
-  // like member
-  private allTracksSameMusicBrainzReleaseId_: boolean;
-  private allTracksSameAlbum_: boolean;
-  private currentAlbumReleaseID = '';
-
   constructor(
     private dialog: MatDialog,
     private myMusicService: MyMusicService,
@@ -95,7 +93,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     private backgroundImageService: BackgroundImageService,
     private timeDisplayService: TimeDisplayService,
     private mediaPlayerService: MediaPlayerService
-  ) { 
+  ) {
     this.checkMediaPlayerExists();
   }
 
@@ -146,12 +144,11 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   private checkLikeStatus() {
-    if (this.allTracksSameMusicBrainzReleaseId_) {
+    if (this.allTracksSameMusicBrainzReleaseId_()) {
       if (this.musicTracks[0]?.musicBrainzId?.ReleaseTrackId) {
-        this.currentAlbumReleaseID =
-          this.musicTracks[0].musicBrainzId.ReleaseTrackId;
+        this.currentAlbumReleaseID.set(this.musicTracks[0].musicBrainzId.ReleaseTrackId);
         this.myMusicService
-          .isAlbumLiked(this.currentAlbumReleaseID)
+          .isAlbumLiked(this.currentAlbumReleaseID())
           .subscribe(
             (res) => {
               console.log("current album liked : " + res);
@@ -167,7 +164,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   get isContainerAlbum(): boolean {
     // TODO can/should also be identified by other means
-    return this.allTracksSameMusicBrainzReleaseId_;
+    return this.allTracksSameMusicBrainzReleaseId_();
   }
 
   hasSongs(): boolean {
@@ -218,13 +215,13 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   dislikeAlbum(): void {
     this.myMusicService
-      .deleteAlbumLike(this.currentAlbumReleaseID)
+      .deleteAlbumLike(this.currentAlbumReleaseID())
       .subscribe((d) => this.checkLikeStatus());
   }
 
   likeAlbum(): void {
     this.myMusicService
-      .likeAlbum(this.currentAlbumReleaseID)
+      .likeAlbum(this.currentAlbumReleaseID())
       .subscribe((d) => this.checkLikeStatus());
   }
 
@@ -259,15 +256,15 @@ export class DisplayContainerHeaderComponent implements OnInit {
     console.log('number of tracs : ' + numtrack);
     console.log('number of tracs with mbid: ' + numMbid);
 
-    this.allTracksSameMusicBrainzReleaseId_ = false;
+    this.allTracksSameMusicBrainzReleaseId_.set(false);
 
     if (numMbid > 0 && numtrack == numMbid) {
       const firstTrackMbid = this.musicTracks[0]?.musicBrainzId?.ReleaseTrackId;
       const numSameMbid = this.musicTracks.filter(
         (item) => item.musicBrainzId?.ReleaseTrackId === firstTrackMbid
       ).length;
-      this.allTracksSameAlbum_ = numSameMbid == numMbid;
-      this.allTracksSameMusicBrainzReleaseId_ = this.allTracksSameAlbum_;
+      this.allTracksSameAlbum_.set(numSameMbid == numMbid);
+      this.allTracksSameMusicBrainzReleaseId_.set(this.allTracksSameAlbum_());
       console.log(
         'number of tracs with same mbid like first track : ' + numSameMbid
       );
@@ -277,7 +274,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
         const albumsWithOtherNames = this.musicTracks.filter(
           (item) => item.album !== firstTrackAlbum
         ).length;
-        this.allTracksSameAlbum_ = albumsWithOtherNames == 0;
+        this.allTracksSameAlbum_.set(albumsWithOtherNames == 0);
         console.log(
           'number of tracs with other album title : ' + albumsWithOtherNames
         );
@@ -286,7 +283,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     console.log('checkAllTracksSameAlbum : ' + this.allTracksSameAlbum_);
     console.log(
       'checkAllTracksSameMusicbrainzReleaseId : ' +
-      this.allTracksSameMusicBrainzReleaseId_
+      this.allTracksSameMusicBrainzReleaseId_()
     );
   }
 
@@ -356,15 +353,15 @@ export class DisplayContainerHeaderComponent implements OnInit {
     const target = new ElementRef(event.currentTarget);
     const dialogRef = this.dialog.open(DisplayHeaderOptionsComponent, {
       hasBackdrop: true,
-      data: { 
-        trigger: target, 
-        addToPlaylistOutput: this.addToPlaylistClicked, 
-        event: event, 
+      data: {
+        trigger: target,
+        addToPlaylistOutput: this.addToPlaylistClicked,
+        event: event,
         currentContainer: this.currentContainer,
       },
     });
     return dialogRef.afterClosed();
-  }  
+  }
 
   // Other
   public get currentContainer(): ContainerDto {
@@ -378,5 +375,5 @@ export class DisplayContainerHeaderComponent implements OnInit {
     this.mediaPlayerService.mediaPlayerExists().subscribe(status => {
       this.mediaServerExists.set(status);
     });
-  }  
+  }
 }

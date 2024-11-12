@@ -17,8 +17,7 @@ export class MyMusicService {
   constructor(
     private httpService: HttpService,
     private deviceService: DeviceService,
-    private toastService: ToastService,
-    private genericResultService: GenericResultService) {
+    private toastService: ToastService) {
   }
 
   public likeAlbum(mbReleaseID: string): Subject<any> {
@@ -28,6 +27,7 @@ export class MyMusicService {
     }
     const uri = '/likeAlbum/' + this.deviceService.selectedMediaServerDevice().udn;
     if (mbReleaseID !== '') {
+      console.log("like musicbrainz album : " + mbReleaseID);
       return this.httpService.post(this.baseUri, uri, mbReleaseID);
     }
   }
