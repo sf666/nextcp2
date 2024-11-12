@@ -197,6 +197,6 @@ export class AddPlaylistComponent {
   }
 
   get musicItemToAddExists(): boolean {
-    return this.musicItemToAdd().objectID?.length > 0;
+    return this.musicItemToAdd()?.objectID?.length > 0;
   }
 }
