@@ -108,6 +108,7 @@ public class RestMediaRendererService implements ISongPlayedCallback {
 
 	@PostMapping("/upload")
 	public void upload(@RequestBody String serverUdn) {
+		// NOT USED. Only for debugging ... 
 		ExtendedApiMediaDevice device = getExtendedMediaServerByUdn(serverUdn);
 		try {
 			device.createItem("196", new File("/Volumes/Data/music/Alternative/Rhye/Blood/01 - Waste.flac"));
@@ -148,24 +149,28 @@ public class RestMediaRendererService implements ISongPlayedCallback {
 				String itemId = device.getOrCreateItem(targetId, theFile);
 				if (itemId == null) {
 					log.error("getOrCreateItem returned with NULL");
+		            publisher.publishEvent(new ToastrMessage(null, "warn", "upload file", "adding file failed : " + theFile.getName()));
 				} else {
 					log.info("File created or updated. Item ID is {}", itemId);
+		            publisher.publishEvent(new ToastrMessage(null, "info", "upload file", "added to media server library : " + theFile.getName()));
 				}
-	            publisher.publishEvent(new ToastrMessage(null, "info", "upload file", "added to media server library : " + theFile.getName()));
 	            
-	            if (itemId != null && !StringUtils.isBlank(mpc.addToPlaylistId.id)) {
-	            	log.info("Adding song with id {} to playlist with id {} ", itemId, mpc.addToPlaylistId.id);
-	            	try {
-		            	device.addSongToPlaylist(itemId, mpc.addToPlaylistId.id);
-			            publisher.publishEvent(new ToastrMessage(null, "info", "playlist", "song added to playlist : " + theFile.getName()));
-	            		log.debug("success : adding song with id {} to playlist with id {}", itemId, mpc.addToPlaylistId.id);
-	            	} catch (BackendException e) {
-	            		log.debug("adding song to playlist failed.", e);
-	        			publisher.publishEvent(new ToastrMessage(null, "warn", "create item failed ", e.getDescription()));
-	            	}
-	            } else {
-	            	log.info("Supplied empty or NULL ids. File with id {} not being added to a playlist {}.", itemId, mpc.addToPlaylistId.id);
-	            }
+				if (mpc.addToPlaylist) {
+					log.debug ("adding song to playist ... ");
+		            if (itemId != null && !StringUtils.isBlank(mpc.addToPlaylistId.id)) {
+		            	log.info("Adding song with id {} to playlist with id {} ", itemId, mpc.addToPlaylistId.id);
+		            	try {
+			            	device.addSongToPlaylist(itemId, mpc.addToPlaylistId.id);
+				            publisher.publishEvent(new ToastrMessage(null, "info", "playlist", "song added to playlist : " + theFile.getName()));
+		            		log.debug("success : adding song with id {} to playlist with id {}", itemId, mpc.addToPlaylistId.id);
+		            	} catch (BackendException e) {
+		            		log.debug("adding song to playlist failed.", e);
+		        			publisher.publishEvent(new ToastrMessage(null, "warn", "create item failed ", e.getDescription()));
+		            	}
+		            } else {
+		            	log.info("Supplied empty or NULL ids. File with id {} not being added to a playlist {}.", itemId, mpc.addToPlaylistId.id);
+		            }
+				}
 			} catch (ResponseStatusException e) {
 	            publisher.publishEvent(new ToastrMessage(null, "error", "upload file", "media server not found"));
 			} catch (Exception e) {
