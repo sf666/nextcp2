@@ -9,7 +9,7 @@
     top     : 0px;
     right   : 0px;
     height  : var(--nav-height);
-    z-index : 3;
+    z-index : 11;                        // material design button component have z-index of 10. So lets go +1
 
     display         : flex;
     flex-direction  : row;
