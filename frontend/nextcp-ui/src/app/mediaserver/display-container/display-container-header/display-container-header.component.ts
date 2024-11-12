@@ -146,6 +146,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   private checkLikeStatus() {
     if (this.allTracksSameMusicBrainzReleaseId_()) {
       if (this.musicTracks[0]?.musicBrainzId?.ReleaseTrackId) {
+        console.log("set current album release id to : " + this.musicTracks[0]?.musicBrainzId?.ReleaseTrackId);
         this.currentAlbumReleaseID.set(this.musicTracks[0].musicBrainzId.ReleaseTrackId);
         this.myMusicService
           .isAlbumLiked(this.currentAlbumReleaseID())
@@ -158,7 +159,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
       }
     } else {
       this.currentAlbumLiked.set(false);
-      this.currentAlbumReleaseID = undefined;
+      this.currentAlbumReleaseID.set('');
     }
   }
 
