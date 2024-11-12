@@ -15,20 +15,20 @@ export class ContainerTileComponent {
   showPlayOverlay = input<boolean>(false);
   quickSearchString = input<string>("");
   selectedGenres = input<Array<string>>([]);
-  containerList = computed(() => this.filteredContainer());
+  containerList = computed(() => this.filteredContainer(this.container()));
 
   browseClicked = output<ContainerDto>();
 
-  private filteredContainer(): ContainerDto[] {
+  private filteredContainer(container : ContainerDto[]): ContainerDto[] {
     let tracks: Array<ContainerDto>;
-    if (this.quickSearchString) {
-      tracks = this.container().filter((item) =>
+    if (this.quickSearchString()) {
+      tracks = container.filter((item) =>
         this.doFilterText(item.title, this.quickSearchString())
       );
     } else {
-      tracks = this.container();
+      tracks = container;
     }
-    if (this?.selectedGenres?.length > 0) {
+    if (this?.selectedGenres()?.length > 0) {
       tracks = tracks.filter((item) => this.doFilterGenreByContainer(item));
     }
     return tracks;
