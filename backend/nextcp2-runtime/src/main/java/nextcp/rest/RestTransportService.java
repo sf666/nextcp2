@@ -43,6 +43,7 @@ public class RestTransportService extends BaseRestService
     @PostMapping("/playResource")
     public void playResource(@RequestBody PlayRequestDto playRequest)
     {
+    	log.debug ("playResource called ... ");
         MediaRendererDevice device = checkPlayInput(playRequest);
         if (device.getProductService() != null)
         {

@@ -63,7 +63,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   totalPlaytimeShort = computed(() => this.calcTotalPlaytimeShort(this.contentDirectoryService().musicTracks_()));
   totalPlaytime = computed(() => this.calcTotalPlaytimeLong(this.contentDirectoryService().musicTracks_()));
 
-  likePossible = computed(() => { return this.allTracksSameMusicBrainzReleaseId_(); });
+  likePossible = computed(() => this.allTracksSameMusicBrainzReleaseId_());
   allTracksSameMusicBrainzReleaseId_ = signal<boolean>(false);
   allTracksSameAlbum_ = signal<boolean>(false);
   currentAlbumReleaseID = signal<string>('');
@@ -106,6 +106,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   private cdsBrowseFinished() {
+    console.log("cdsBrowseFinished ... ");
     this.clearSearch();
     this.fillGenres();
     this.checkAllTracksSameAlbum();
@@ -270,6 +271,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
         'number of tracs with same mbid like first track : ' + numSameMbid
       );
     } else {
+      this.allTracksSameMusicBrainzReleaseId_.set(false);
       if (this.musicTracks?.length > 0) {
         const firstTrackAlbum = this.musicTracks[0].album;
         const albumsWithOtherNames = this.musicTracks.filter(
