@@ -464,7 +464,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
         }
         else if (nextSongIdx < currentSongIdx)
         {
-            log.info("reached end of playlist. ststart from beginning ... ");
+            log.info("reached end of playlist. Start from beginning ... ");
         }
 
         currentSongIdx = nextSongIdx;
@@ -680,13 +680,20 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
         {
             MusicItemDto dto = item.get();
             int idxSong = playlistItems.indexOf(dto);
-            boolean removed = playbackItems.remove(Integer.valueOf(idxSong));
-            if (!removed)
-            {
-                log.warn("playbackIndex couldn't be found for index " + idxSong + " : " + dto);
-                return false;
-            }
-            playbackItems.addFirst(idxSong);
+        	if (state.Shuffle) {
+                boolean removed = playbackItems.remove(Integer.valueOf(idxSong));
+                if (!removed)
+                {
+                    log.warn("playbackIndex couldn't be found for index " + idxSong + " : " + dto);
+                    return false;
+                }
+                playbackItems.addFirst(idxSong);
+        	} else {
+        		for (int i = 0 ; i < idxSong; i++) {
+        			log.info("linear play mode. moving to index : " + idxSong);
+        			moveToNextTrack();
+        		}
+        	}
             play();
             return true;
         }

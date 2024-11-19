@@ -281,7 +281,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
         );
       }
     }
-    console.log('checkAllTracksSameAlbum : ' + this.allTracksSameAlbum_);
+    console.log('checkAllTracksSameAlbum : ' + this.allTracksSameAlbum_());
     console.log(
       'checkAllTracksSameMusicbrainzReleaseId : ' +
       this.allTracksSameMusicBrainzReleaseId_()
