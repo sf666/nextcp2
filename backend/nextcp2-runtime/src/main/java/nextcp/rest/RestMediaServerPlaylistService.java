@@ -56,29 +56,38 @@ public class RestMediaServerPlaylistService {
 	@PostMapping("/addToServerPlaylist")
 	public void addToServerPlaylist(@RequestBody ServerPlaylistEntry addRequest) {
 		try {
+			log.info("adding song id {} to playlist with id {}", addRequest.songObjectId, addRequest.playlistObjectId);
 			getExtendedMediaServerByUdn(addRequest.serverUdn).addSongToPlaylist(addRequest.songObjectId, addRequest.playlistObjectId);
-			addPlaylistToRecent(addRequest.serverUdn, addRequest.playlistObjectId);
 			toast.publishSuccessMessage(null, "playlist", "sond added to playlist");
 		} catch (Exception e) {
 			String errorText = e.getMessage();
 			toast.publishErrorMessage(null, "playlist", errorText);
 			log.warn("adding song to server playlist", e);
+		} finally {
+			addPlaylistToRecent(addRequest.serverUdn, addRequest.playlistObjectId);
 		}
 	}
 
 	private void addPlaylistToRecent(String udn, String objectId) {
-		if (!getRecentObjectIds(udn).contains(objectId)) {
-			getRecentObjectIds(udn).addFirst(objectId);
-			if (getRecentObjectIds(udn).size() > 3) {
-				getRecentObjectIds(udn).removeLast();
+		try {
+			if (!getRecentObjectIds(udn).contains(objectId)) {
+				getRecentObjectIds(udn).addFirst(objectId);
+				if (getRecentObjectIds(udn).size() > 3) {
+					String removed = getRecentObjectIds(udn).removeLast();
+					log.debug("removing last object from recent playlists with ID : ", removed);
+				}
+				mediaServerSseEvents.mediaServerRecentPlaylistChanged(getRecentServerPlaylists(udn));
+			} else {
+				log.debug("objectId {} already in recent playlists ... ");
 			}
-			mediaServerSseEvents.mediaServerRecentPlaylistChanged(getRecentServerPlaylists(udn));			
+		} catch (Exception e) {
+			log.error("cannot add playlistid {} to current playlists on server with udn {}", objectId, udn);
 		}
 	}
 
 	private void removePlaylistFromRecent(String udn, String objectId) {
 		getRecentObjectIds(udn).remove(objectId);
-		mediaServerSseEvents.mediaServerRecentPlaylistChanged(getRecentServerPlaylists(udn));		
+		mediaServerSseEvents.mediaServerRecentPlaylistChanged(getRecentServerPlaylists(udn));
 	}
 
 	private LinkedList<String> getRecentObjectIds(String udn) {
@@ -161,7 +170,7 @@ public class RestMediaServerPlaylistService {
 		try {
 			getExtendedMediaServerByUdn(deleteRequest.serverUdn).deleteObject(deleteRequest.objectId);
 			toast.publishSuccessMessage(null, "playlist", "removed");
-			removePlaylistFromRecent(deleteRequest.serverUdn, deleteRequest.objectId);			
+			removePlaylistFromRecent(deleteRequest.serverUdn, deleteRequest.objectId);
 		} catch (Exception e) {
 			log.warn("removing song from server playlist", e);
 			toast.publishErrorMessage(null, "playlist", "Removing song failed. Message : " + e.getMessage());
