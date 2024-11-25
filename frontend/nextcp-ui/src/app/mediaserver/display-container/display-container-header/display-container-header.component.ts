@@ -112,6 +112,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     this.checkAllTracksSameAlbum();
     this.checkLikeStatus();
     this.backgroundImageService.setDisplayContainerHeaderImage(this.currentContainer.albumartUri);
+    console.log("like possible : " + this.likePossible());
   }
 
   get albums(): ContainerDto[] {

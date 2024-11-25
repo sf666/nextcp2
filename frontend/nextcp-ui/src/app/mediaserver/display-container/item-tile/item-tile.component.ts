@@ -47,8 +47,8 @@ export class ItemTileComponent {
 
   allMusicTracks = computed(() => this.contentDirectoryService().musicTracks_());
 
-  private currentUrl = '';
-  private lastDiscLabel = '';
+  currentUrl = signal<string>('');
+  lastDiscLabel = signal<string>('');
 
   constructor(
     private songOptionsServiceService: SongOptionsServiceService,
@@ -63,7 +63,7 @@ export class ItemTileComponent {
         data?.currentTrack &&
         deviceService.isMediaRendererSelected(data.mediaRendererUdn)
       ) {
-        this.currentUrl = data.currentTrack.streamingURL;
+        this.currentUrl.set(data.currentTrack.streamingURL);
       }
     });
   }
@@ -210,7 +210,7 @@ export class ItemTileComponent {
   }
 
   public selectedRowClass(musicItemDto: MusicItemDto): string {
-    if (this.currentUrl && musicItemDto?.streamingURL == this.currentUrl) {
+    if (musicItemDto?.streamingURL == this.currentUrl()) {
       return 'selectRow';
     }
     return '';
@@ -221,15 +221,15 @@ export class ItemTileComponent {
   // TODO : sort items in UI
 
   getDiscLabel(item: MusicItemDto): string {
-    if (item.numberOfThisDisc !== this.lastDiscLabel) {
-      this.lastDiscLabel = item.numberOfThisDisc;
+    if (item.numberOfThisDisc !== this.lastDiscLabel()) {
+      this.lastDiscLabel.set(item.numberOfThisDisc);
       return `Disk ${item.numberOfThisDisc}`;
     }
     return '';
   }
 
   newDiscLabel(item: MusicItemDto): boolean {
-    if (item.numberOfThisDisc !== this.lastDiscLabel) {
+    if (item.numberOfThisDisc !== this.lastDiscLabel()) {
       return true;
     }
     return false;
