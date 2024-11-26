@@ -6,7 +6,6 @@ import { AvailableRendererComponent } from './../../popup/available-renderer/ava
 import { PlaylistService } from './../../service/playlist.service';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
-import { UpnpAvTransportState } from './../../service/dto.d';
 import { TransportService as TransportService } from '../../service/transport.service';
 import { ChangeDetectionStrategy, Component, ElementRef, Optional, computed, signal } from '@angular/core';
 import { MatProgressBar } from '@angular/material/progress-bar';

@@ -49,7 +49,7 @@ export class MusicLibraryComponent implements AfterViewInit {
     this.getContentHandler().contentDirectoryService.browseFinished$.subscribe(data => this.browseFinished(data));
 
     route.params.subscribe(val => {
-      console.log(val.objectId);
+      console.log("initialBrowseToUid : " + val.objectId);
       this.initialBrowseToUid(val.objectId);
     });
   }

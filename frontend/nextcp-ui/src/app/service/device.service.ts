@@ -188,19 +188,4 @@ export class DeviceService {
       this.mediaRendererInitiated$.next(data);
     });
   }
-
-  private logMediaRendererDeviceServices(renderer: MediaRendererDto): void {
-    if (renderer) {
-      console.log("available services for device : " + renderer.friendlyName);
-      renderer.services?.forEach(service => console.log(service.namespace + " " + service.serviceName + " " + service.version))
-    }
-  }
-
-  private logMediaRendererServices(rendererList: MediaRendererDto[]): void {
-    if (rendererList) {
-      rendererList?.forEach(renderer => {
-        this.logMediaRendererDeviceServices(renderer);
-      });
-    }
-  }
 }
