@@ -13,6 +13,7 @@
 .playlist-img {
     object-fit      : cover;
     background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
 
     width        : 4rem;
     height       : 4rem;
@@ -24,7 +25,7 @@
 .playlist-item-text {
     display        : flex;
     flex-direction : column;
-    justify-content: space-between;
+    justify-content: center;
 
     margin-left  : 1rem;
     margin-top   : 8px;

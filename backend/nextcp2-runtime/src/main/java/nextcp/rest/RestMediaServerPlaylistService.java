@@ -61,6 +61,7 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 			log.info("adding song id {} to playlist with id {}", addRequest.songObjectId, addRequest.playlistObjectId);
 			getExtendedMediaServerByUdn(addRequest.serverUdn).addSongToPlaylist(addRequest.songObjectId, addRequest.playlistObjectId);
 			toast.publishSuccessMessage(null, "playlist", "sond added to playlist");
+			mediaServerSseEvents.mediaServerRecentPlaylistChanged(getRecentServerPlaylists(addRequest.serverUdn));
 		} catch (Exception e) {
 			String errorText = e.getMessage();
 			toast.publishErrorMessage(null, "playlist", errorText);
@@ -136,7 +137,7 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 				if ("object.container.playlistContainer".equalsIgnoreCase(pl.objectClass)) {
 					// strip extension if delivered 
 					String title = pl.title.lastIndexOf(".") > -1 ? pl.title.substring(0, pl.title.lastIndexOf(".")) : pl.title;
-					ServerPlaylistDto dto = new ServerPlaylistDto(pl.albumartUri, title, pl.id, null, null);
+					ServerPlaylistDto dto = new ServerPlaylistDto(pl.albumartUri, title, pl.id, playlists.totalMatches, null);
 					all.serverPlaylists.add(dto);
 					log.info("Found server based playlist name : {}", dto);
 				}

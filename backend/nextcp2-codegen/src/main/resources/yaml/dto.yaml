@@ -98,7 +98,7 @@ ServerPlaylistDto:
    albumArtUrl: String
    playlistName:  String
    playlistId: String
-   numberOfElements: Integer
+   numberOfElements: Long
    totalPlaytime: String
    
 UiClientConfig:

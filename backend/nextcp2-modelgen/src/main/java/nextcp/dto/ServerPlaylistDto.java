@@ -15,14 +15,14 @@ public class ServerPlaylistDto
     public String albumArtUrl;
     public String playlistName;
     public String playlistId;
-    public Integer numberOfElements;
+    public Long numberOfElements;
     public String totalPlaytime;
 
     public ServerPlaylistDto()
     {
     }
 
-    public ServerPlaylistDto(String albumArtUrl, String playlistName, String playlistId, Integer numberOfElements, String totalPlaytime)
+    public ServerPlaylistDto(String albumArtUrl, String playlistName, String playlistId, Long numberOfElements, String totalPlaytime)
     {
         this.albumArtUrl = albumArtUrl;
         this.playlistName = playlistName;
