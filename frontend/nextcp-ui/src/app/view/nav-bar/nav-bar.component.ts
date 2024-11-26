@@ -44,9 +44,6 @@ export class NavBarComponent {
     }
   });
 
-
-  showBackButton = false;
-
   constructor(
     private router: Router,
     public globalSearchService: GlobalSearchService,
@@ -60,16 +57,5 @@ export class NavBarComponent {
 
   gotoRoot(): void {
     this.rootButtonPressed.emit("");
-  }
-
-  /**
-   * 
-   */
-  searchBackPressed(): void {
-    void this.router.navigateByUrl('music-library');
-  }
-
-  showRootFolder() : boolean {
-    return true;
   }
 }
