@@ -1,7 +1,7 @@
 import { GlobalSearchService } from './../../service/search/global-search.service';
 import { Router, RouterLink } from '@angular/router';
 import { ContentDirectoryService } from './../../service/content-directory.service';
-import { Component, Output, EventEmitter, Input, input, output } from '@angular/core';
+import { Component, Output, EventEmitter, Input, input, output, computed } from '@angular/core';
 import { ModalSearchResultComponent } from '../search/modal-search-result/modal-search-result.component';
 import { FormsModule } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
@@ -32,6 +32,19 @@ export class NavBarComponent {
   backButtonPressed = output<any>();
   rootButtonPressed = output<any>();
 
+  showParentFolder = computed(() =>  {
+    if (!this.contentHandler().contentDirectoryService?.currentContainerList().currentContainer?.parentID ) {
+      return false;
+    } else {
+      if (this.contentHandler().contentDirectoryService?.currentContainerList().currentContainer?.parentID === "0" || 
+          this.contentHandler().contentDirectoryService?.currentContainerList().currentContainer?.parentID === "-1") {
+        return false;
+      }
+      return true;
+    }
+  });
+
+
   showBackButton = false;
 
   constructor(
@@ -58,17 +71,5 @@ export class NavBarComponent {
 
   showRootFolder() : boolean {
     return true;
-  }
-
-  showParentFolder() : boolean {
-    if (!this.contentHandler().contentDirectoryService?.currentContainerList().currentContainer?.parentID ) {
-      return false;
-    } else {
-      if (this.contentHandler().contentDirectoryService?.currentContainerList().currentContainer?.parentID === "0" || 
-          this.contentHandler().contentDirectoryService?.currentContainerList().currentContainer?.parentID === "-1") {
-        return false;
-      }
-      return true;
-    }
   }
 }
