@@ -9,14 +9,13 @@ import { LayoutService } from 'src/app/service/layout.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { CdsBrowsePathService } from 'src/app/util/cds-browse-path.service';
 import { PersistenceService } from 'src/app/service/persistence/persistence.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Subject } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 import { MusicLibraryService } from 'src/app/service/music-library/music-library.service';
 
 @Component({
   selector: 'app-music-library',
   standalone: true,
-  imports: [NavBarComponent, DisplayContainerComponent, RouterLink],
+  imports: [NavBarComponent, DisplayContainerComponent],
   providers: [ContentDirectoryService, CdsBrowsePathService, { provide: 'uniqueId', useValue: 'music-library_' }],
   templateUrl: './music-library.component.html',
   styleUrl: './music-library.component.scss'
