@@ -12,7 +12,7 @@
           <div
             class="search-row d-flex" (click)="globalSearchService.musicItemSelected(item)">
             <img src="{{item.albumArtUrl}}" class="cropImg searchImgHeight align-self-center" alt="">
-            <div class="ms-3 d-flex flex-column justify-content-between min-width">
+            <div class="row-text">
               <div class="d-flex">
                 <div class="title">{{item.title}}</div>
                 <quality-badge [item]="item"></quality-badge>
@@ -38,7 +38,7 @@
           <div
             class="search-row d-flex" (click)="globalSearchService.containerSelected(item)">
             <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
-            <div class="ms-3 d-flex flex-column justify-content-between min-width">
+            <div class="row-text">
               <div class="title">{{item.title}}</div>
               <div class="artist">from {{item.artist}}</div>
             </div>
@@ -61,7 +61,7 @@
           <div
             class="search-row d-flex" (click)="globalSearchService.containerSelected(item)">
             <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
-            <div class="ms-3 d-flex flex-column justify-content-between min-width">
+            <div class="row-text">
               <div class="title">{{item.title}}</div>
             </div>
           </div>
@@ -83,7 +83,7 @@
           <div
             class="search-row d-flex" (click)="globalSearchService.containerSelected(item)">
             <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
-            <div class="ms-3 d-flex flex-column justify-content-between min-width">
+            <div class="row-text">
               <div class="title">{{item.title}}</div>
               <div class="artist">Artist</div>
             </div>

@@ -23,12 +23,12 @@
 }
 
 .searchBoxWidth {
-    width           : 450px;
+    width: 450px;
 }
 
 @media (max-width:450px) {
     .searchBoxWidth {
-        width           : 310px;
+        width: 310px;
     }
 }
 
@@ -53,16 +53,16 @@
 }
 
 img {
-    height    : 62px;
-    width     : 62px;
-    object-fit: cover;
+    height       : 62px;
+    width        : 62px;
+    object-fit   : cover;
     border-radius: 4px;
 }
 
 .title {
     @extend .no-wrap;
-    font-size  : 0.9rem;
-    font-weight: 500;
+    font-size     : 0.9rem;
+    font-weight   : 500;
 }
 
 .artist {
@@ -70,6 +70,7 @@ img {
     font-size  : 0.9rem;
     font-weight: 300;
     color      : rgba(229, 238, 255, .6);
+    padding-top: 1rem;
 }
 
 .no-match {
@@ -95,9 +96,18 @@ img {
     padding-bottom: 16px;
 }
 
+.row-text {
+    display        : flex;
+    padding-left   : 1.5rem;
+    justify-content: center;
+    flex-direction : column;
+    min-width      : 0;
+    min-height     : 0;
+}
+
 .searchImgHeight {
-    max-width: 4rem;
+    max-width : 4rem;
     max-height: 4rem;
-    width: 4rem;
-    height: 4rem;
+    width     : 4rem;
+    height    : 4rem;
 }
