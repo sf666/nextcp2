@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import nextcp.dto.ContainerDto;
+import nextcp.dto.ContainerItemDto;
 import nextcp.dto.CreateServerPlaylistVO;
 import nextcp.dto.ServerDeleteObjectRequest;
 import nextcp.dto.ServerPlaylistDto;
@@ -30,7 +32,7 @@ import nextcp.upnp.device.mediaserver.MediaServerDevice;
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/MediaServerPlaylistService")
-public class RestMediaServerPlaylistService {
+public class RestMediaServerPlaylistService extends BaseRestService {
 
 	private static final Logger log = LoggerFactory.getLogger(RestMediaServerPlaylistService.class.getName());
 
@@ -72,6 +74,7 @@ public class RestMediaServerPlaylistService {
 		try {
 			if (!getRecentObjectIds(udn).contains(objectId)) {
 				getRecentObjectIds(udn).addFirst(objectId);
+				log.debug("recent playlists : added objectId {} to server with udn {}", objectId, udn);
 				if (getRecentObjectIds(udn).size() > 3) {
 					String removed = getRecentObjectIds(udn).removeLast();
 					log.debug("removing last object from recent playlists with ID : ", removed);
@@ -122,10 +125,22 @@ public class RestMediaServerPlaylistService {
 	@PostMapping("/getRecentServerPlaylists")
 	public ServerPlaylists getRecentServerPlaylists(@RequestBody String serverUdn) {
 		try {
-			ServerPlaylists all = getExtendedMediaServerByUdn(serverUdn).getServerPlaylists();
-			// TODO search fpr objectID to hable playlists outside of managed
-			// folder
+			ServerPlaylists all = new ServerPlaylists();
+			all.mediaServerUdn = serverUdn;
+			all.containerId = "-1";
+			all.serverPlaylists = new ArrayList<>();
 			LinkedList<String> recent = getRecentObjectIds(serverUdn);
+			for (String id : recent) {
+		        ContainerItemDto playlists = getMediaServerByUdn(serverUdn).browseChildren(id, 0L);
+		        ContainerDto pl = playlists.currentContainer;
+				if ("object.container.playlistContainer".equalsIgnoreCase(pl.objectClass)) {
+					// strip extension if delivered 
+					String title = pl.title.lastIndexOf(".") > -1 ? pl.title.substring(0, pl.title.lastIndexOf(".")) : pl.title;
+					ServerPlaylistDto dto = new ServerPlaylistDto(pl.albumartUri, title, pl.id, null, null);
+					all.serverPlaylists.add(dto);
+					log.info("Found server based playlist name : {}", dto);
+				}
+			}
 
 			List<ServerPlaylistDto> recentDto = all.serverPlaylists.stream().filter(dto -> recent.contains(dto.playlistId)).toList();
 			all.serverPlaylists.clear();

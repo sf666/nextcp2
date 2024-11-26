@@ -113,6 +113,12 @@ public class MediaServerDevice extends BaseDevice {
         return serverPlaylists;
     }
 
+	/**
+	 * Browse children with given BrowseInput
+	 * 
+	 * @param inp
+	 * @return
+	 */
 	public ContainerItemDto browseChildren(BrowseInput inp) {
 		BrowseOutput out = requestContent(inp);
 		DIDLContent didl = generateDidlContent(out);
@@ -120,6 +126,24 @@ public class MediaServerDevice extends BaseDevice {
 		result.totalMatches = out.TotalMatches;
 
 		return fillResultStructureExtracted(inp, didl, result);
+	}
+	
+	/**
+	 * Browse children with objectId & count
+	 *  
+	 * @param objectId
+	 * @param count
+	 * @return
+	 */
+	public ContainerItemDto browseChildren(String objectId, long count) {
+		BrowseInput inp = new BrowseInput();
+		inp.ObjectID = objectId;
+		inp.SortCriteria = "";
+		inp.StartingIndex = 0L;
+		inp.RequestedCount = count;
+		inp.Filter = "*";
+		ContainerItemDto resultContainer = browseChildren(inp); 
+		return resultContainer;
 	}
 
 	private ContainerItemDto fillResultStructureExtracted(BrowseInput inp, DIDLContent didl, ContainerItemDto result) {
