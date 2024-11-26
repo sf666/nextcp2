@@ -58,6 +58,6 @@ export class PlaylistComponent implements OnInit {
   }
 
   get hasPlaylistItems(): boolean {
-    return this.playlistService.playlistItems?.length > 0;
+    return this.playlistService.playlistItems().length > 0;
   }
 }

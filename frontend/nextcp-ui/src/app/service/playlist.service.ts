@@ -40,6 +40,7 @@ export class PlaylistService implements OnInit {
 
     sseService.mediaRendererPlaylistItemsChanged$.subscribe(data => {
       if (deviceService.isMediaRendererSelected(data.udn)) {
+        console.log("playlist-service mediaRendererPlaylistItemsChanged. Item count : " + data.musicItemDto.length);
         this.playlistItems.set(data.musicItemDto);
       }
     });
@@ -107,7 +108,10 @@ export class PlaylistService implements OnInit {
   public getPlaylistItems(udn: string): void {
     const uri = '/getPlaylistItems';
     if (udn !== '') {
-      this.httpService.post<MusicItemDto[]>(this.baseUri, uri, udn).subscribe(data => this.playlistItems.set(data));
+      this.httpService.post<MusicItemDto[]>(this.baseUri, uri, udn).subscribe(data => {
+        this.playlistItems.set(data);
+        console.log("playlist-service getPlaylistItems. Item count : " + data.length);
+      });
     }
   }
 
