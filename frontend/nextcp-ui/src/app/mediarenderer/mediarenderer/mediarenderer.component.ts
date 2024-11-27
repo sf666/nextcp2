@@ -4,7 +4,7 @@ import { LayoutService } from './../../service/layout.service';
 import { MusicItemDto } from './../../service/dto.d';
 import { BackgroundImageService } from './../../util/background-image.service';
 import { RendererService } from './../../service/renderer.service';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { MatInput } from '@angular/material/input';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
@@ -23,7 +23,7 @@ import { StarRatingComponent } from '../../view/star-rating/star-rating.componen
 
 export class MediarendererComponent implements OnInit {
 
-  public showDetail: boolean;
+  showDetail = signal<boolean>(false);
 
   constructor(
     private defaultPlaylistService: DefaultPlaylistService,
@@ -31,7 +31,6 @@ export class MediarendererComponent implements OnInit {
     private layoutService: LayoutService,
     private backgroundImageService: BackgroundImageService,
     public rendererService: RendererService) {
-    this.showDetail = false;
   }
 
   ngOnInit(): void {
@@ -76,6 +75,6 @@ export class MediarendererComponent implements OnInit {
   }
 
   detailsClicked(): void {
-    this.showDetail = !this.showDetail;
+    this.showDetail.set(!this.showDetail());
   }
 }
