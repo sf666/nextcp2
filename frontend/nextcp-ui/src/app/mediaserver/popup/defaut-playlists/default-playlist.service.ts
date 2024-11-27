@@ -19,7 +19,7 @@ export class DefaultPlaylistService {
 
   public openAddGlobalPlaylistDialog(item: MusicItemDto) : MatDialogRef<any,any> {
     this.dialogRef = this.dialog.open(AddPlaylistComponent, {
-      hasBackdrop: false,
+      hasBackdrop: true,
       height: '500px',
       width: '600px',
       data: { item: item},

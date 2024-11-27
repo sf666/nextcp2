@@ -70,8 +70,10 @@ export class MediarendererComponent implements OnInit {
     return this.rendererService.canCurrentTrackBeAddedToPlaylist();
   }
 
-  openAddPlaylistDialog(event: any, fileId: string): void {
-    this.defaultPlaylistService.openAddPlaylistDialog(event, fileId);
+  openAddPlaylistDialog(): void {
+    if (this.getCurrentTrack().objectID != null) {
+      const dialogRef = this.defaultPlaylistService.openAddGlobalPlaylistDialog(this.getCurrentTrack());
+    }    
   }
 
   detailsClicked(): void {
