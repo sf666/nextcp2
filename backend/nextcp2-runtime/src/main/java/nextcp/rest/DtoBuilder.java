@@ -496,9 +496,6 @@ public class DtoBuilder
         c.addItem(item);
         try
         {
-            // add some missing data
-            item.setId("-1");
-            item.setParentID("-1");
             return didlParser.generate(c, false);
         }
         catch (Exception e)
