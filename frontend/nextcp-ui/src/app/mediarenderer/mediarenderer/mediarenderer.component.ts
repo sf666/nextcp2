@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { MatListSubheaderCssMatStyler } from '@angular/material/list';
 import { MatButton } from '@angular/material/button';
 import { StarRatingComponent } from '../../view/star-rating/star-rating.component';
+import { MusicLibraryService } from 'src/app/service/music-library/music-library.service';
 
 @Component({
     selector: 'app-mediarenderer',
@@ -29,6 +30,7 @@ export class MediarendererComponent implements OnInit {
     private defaultPlaylistService: DefaultPlaylistService,
     public deviceService: DeviceService,
     private layoutService: LayoutService,
+    public musicLibraryService: MusicLibraryService,
     private backgroundImageService: BackgroundImageService,
     public rendererService: RendererService) {
   }
@@ -72,7 +74,7 @@ export class MediarendererComponent implements OnInit {
 
   openAddPlaylistDialog(): void {
     if (this.getCurrentTrack().objectID != null) {
-      const dialogRef = this.defaultPlaylistService.openAddGlobalPlaylistDialog(this.getCurrentTrack());
+      const dialogRef = this.defaultPlaylistService.openAddGlobalPlaylistDialogWithBackdrop(this.getCurrentTrack(), this.musicLibraryService.currentContainer());
     }    
   }
 

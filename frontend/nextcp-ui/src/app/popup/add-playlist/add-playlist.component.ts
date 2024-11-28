@@ -2,8 +2,6 @@ import { ContentDirectoryService } from 'src/app/service/content-directory.servi
 import {
   MusicItemDto,
   ServerPlaylistDto,
-  ServerPlaylists,
-  SearchRequestDto,
   SearchResultDto,
   ContainerDto,
 } from './../../service/dto.d';
@@ -13,7 +11,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormField } from '@angular/material/form-field';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
-import { PlaylistService } from 'src/app/service/playlist.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { FormsModule, NgModel } from '@angular/forms';
@@ -37,6 +34,7 @@ export enum PlaylistMode {
 
 export class AddPlaylistComponent {
   PlaylistModeEnum: typeof PlaylistMode = PlaylistMode;
+  addToContainer: ContainerDto;
 
   otherPlaylists = signal<ServerPlaylistDto[]>([]);
   playlistFilter = model<string>('');
@@ -76,7 +74,7 @@ export class AddPlaylistComponent {
   });
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) data: { item: MusicItemDto },
+    @Inject(MAT_DIALOG_DATA) data: { item: MusicItemDto, container: ContainerDto },
     public serverPlaylistService: ServerPlaylistService,
     deviceService: DeviceService,
     private contentDirectoryService: ContentDirectoryService,
@@ -84,6 +82,7 @@ export class AddPlaylistComponent {
     public dialogRef: MatDialogRef<AddPlaylistComponent>,
   ) {
     this.musicItemToAdd.set(data.item);
+    this.addToContainer = data.container;
     if (data.item) {
       this.playlistMode.set(PlaylistMode.Add);
     } else {
@@ -182,7 +181,7 @@ export class AddPlaylistComponent {
   }
 
   createPlaylistClicked(): void {
-    this.serverPlaylistService.createPlaylist(this.newPlaylistName()).subscribe(newId => this.newPlaylistId(newId))
+    this.serverPlaylistService.createPlaylist(this.newPlaylistName(), this.addToContainer.id).subscribe(newId => this.newPlaylistId(newId))
     this.close();
   }
 

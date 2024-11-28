@@ -111,7 +111,7 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 	@PostMapping("/getServerPlaylists")
 	public ServerPlaylists getServerPlaylists(@RequestBody String serverUdn) {
 		try {
-			return getExtendedMediaServerByUdn(serverUdn).getServerPlaylists();
+			return getMediaServerByUdn(serverUdn).getServerPlaylists();
 		} catch (Exception e) {
 			log.warn("getServerPlaylists", e);
 			return new ServerPlaylists();

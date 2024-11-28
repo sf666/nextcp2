@@ -64,6 +64,7 @@
             }
         } @else if (isPlaylistMode(PlaylistModeEnum.Create)) {
         <!-- create Playlist -->
+        <div class="fineText mb-3">Playlist will be created in folder : {{addToContainer.title}}</div>
         <div class="searchInput">
             <mat-form-field class="w100" appearance="outline" class="setting-dropdown">
                 <input matInput type="text" [(ngModel)]="newPlaylistName" placeholder="new playlist name">

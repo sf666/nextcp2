@@ -38,7 +38,7 @@ export class ContentDirectoryService {
   musicTracks_ = signal<MusicItemDto[]>([]);
   otherItems_ = signal<MusicItemDto[]>([]);
 
-  // notfiy other about content change
+  // notify other about content change
   browseFinished$: Subject<ContainerItemDto> = new Subject();
   searchFinished$: Subject<ContainerItemDto> = new Subject();
 

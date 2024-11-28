@@ -76,9 +76,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	private ServerConfig serverConfig = null;
 
 	@Autowired
-	private Config config = null;
-
-	@Autowired
 	private ApplicationEventPublisher publisher = null;
 
 	@Autowired
@@ -446,12 +443,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	public MediaServerDto getAsDto() {
 		return new MediaServerDto(getUDN().getIdentifierString(), getFriendlyName(), true);
-	}
-
-	@Override
-	public ServerPlaylists getServerPlaylists() throws JsonMappingException, JsonProcessingException {
-		ServerPlaylists spl = searchMyPlaylistsItems(config.applicationConfig.myPlaylistFolderName);
-		return spl;
 	}
 
 	@Override

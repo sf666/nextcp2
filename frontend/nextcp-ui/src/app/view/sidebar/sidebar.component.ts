@@ -11,6 +11,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatAnchor } from '@angular/material/button';
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
 import { DefaultPlaylistService } from 'src/app/mediaserver/popup/defaut-playlists/default-playlist.service';
+import { MusicLibraryService } from 'src/app/service/music-library/music-library.service';
 
 @Component({
     selector: 'app-sidebar',
@@ -38,6 +39,7 @@ export class SidebarComponent {
     public playlistService: ServerPlaylistService,
     private myPlaylistService: MyPlaylistService,
     private router: Router,
+    public musicLibraryService: MusicLibraryService,
     public layoutService: LayoutService,
     private defaultPlaylistService: DefaultPlaylistService,
     private configurationService: ConfigurationService,
@@ -141,7 +143,7 @@ export class SidebarComponent {
   }
 
   public showPlaylistDialog() : void {
-    this.defaultPlaylistService.openAddGlobalPlaylistDialogWithBackdrop(null);
+    this.defaultPlaylistService.openAddGlobalPlaylistDialogWithBackdrop(null, this.musicLibraryService.currentContainer());
   }
 
   public checkMediaPlayerExists() {

@@ -1,5 +1,5 @@
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
-import { ContainerItemDto } from './../dto.d';
+import { ContainerDto, ContainerItemDto } from './../dto.d';
 import { Injectable, signal } from '@angular/core';
 
 @Injectable({
@@ -13,5 +13,13 @@ export class MusicLibraryService {
 
   public updateCurrentContainer(container: ContainerItemDto) {
     this.currentMediaLibraryFolder.set(container);
+  }
+
+  public currentContainerId() : string {
+    return this.currentMediaLibraryFolder().currentContainer.id;    
+  }
+
+  public currentContainer() : ContainerDto {
+    return this.currentMediaLibraryFolder().currentContainer;
   }
 }

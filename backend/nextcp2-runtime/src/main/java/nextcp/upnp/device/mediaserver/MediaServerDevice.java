@@ -12,8 +12,12 @@ import org.jupnp.support.model.container.MusicAlbum;
 import org.jupnp.support.model.item.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.annotation.PostConstruct;
 import nextcp.domainmodel.device.mediaserver.search.SearchSupport;
+import nextcp.dto.Config;
 import nextcp.dto.ContainerDto;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MediaServerDto;
@@ -43,6 +47,9 @@ public class MediaServerDevice extends BaseDevice {
 	public MediaServerDevice(RemoteDevice device) {
 		super(device);
 	}
+
+	@Autowired
+	private Config config = null;
 
 	@PostConstruct
 	private void init() {
@@ -78,33 +85,25 @@ public class MediaServerDevice extends BaseDevice {
 		return searchSupportDelegate.searchAllPlaylist(searchReques);
 	}
 
-	public ServerPlaylists searchMyPlaylistsItems(String myPlaylistFolder) {
+	/**
+	 * Read playlist from given folder
+	 * @param folderId
+	 * @return
+	 */
+	public ServerPlaylists searchMyPlaylistsItems(String folderId) {
 		ServerPlaylists serverPlaylists = new ServerPlaylists();
 		try {
 			serverPlaylists.mediaServerUdn = getUdnAsString();
 			serverPlaylists.serverPlaylists = new ArrayList<>();
-			SearchRequestDto sr = new SearchRequestDto("0", 0L, 999L, getUdnAsString(), myPlaylistFolder, "");
-			List<ContainerDto> playlistFolder = searchSupportDelegate.searchPlaylistItems(sr);
-			for (ContainerDto folder : playlistFolder) {
-				if (myPlaylistFolder.equalsIgnoreCase(folder.title)) {
-					serverPlaylists.containerId = folder.id;
-					log.info("Found server based playlists located at folder id : {}", folder.id);
-					BrowseInput browseInp = new BrowseInput();
-					browseInp.ObjectID = folder.id;
-					browseInp.StartingIndex = 0L;
-					browseInp.RequestedCount = 999L;
-
-					ContainerItemDto playlists = browseChildren(browseInp);
-					for (ContainerDto pl : playlists.containerDto) {
-						if ("object.container.playlistContainer".equalsIgnoreCase(pl.objectClass)) {
-							// strip extension if delivered
-							ContainerItemDto playlistChilds = browseChildren(pl.id, 0);
-							String title = pl.title.lastIndexOf(".") > -1 ? pl.title.substring(0, pl.title.lastIndexOf(".")) : pl.title;
-							ServerPlaylistDto dto = new ServerPlaylistDto(pl.albumartUri, title, pl.id, playlistChilds.totalMatches, null);
-							serverPlaylists.serverPlaylists.add(dto);
-							log.info("Found server based playlist name : {}", dto);
-						}
-					}
+			ContainerItemDto playlistFolder = browseChildren(folderId, 999);
+			for (ContainerDto pl : playlistFolder.containerDto) {
+				if ("object.container.playlistContainer".equalsIgnoreCase(pl.objectClass)) {
+					// strip extension if delivered
+					ContainerItemDto playlistChilds = browseChildren(pl.id, 0);
+					String title = pl.title.lastIndexOf(".") > -1 ? pl.title.substring(0, pl.title.lastIndexOf(".")) : pl.title;
+					ServerPlaylistDto dto = new ServerPlaylistDto(pl.albumartUri, title, pl.id, playlistChilds.totalMatches, null);
+					serverPlaylists.serverPlaylists.add(dto);
+					log.info("Found server based playlist name : {}", dto);
 				}
 			}
 		} catch (Exception e) {
@@ -144,6 +143,11 @@ public class MediaServerDevice extends BaseDevice {
 		inp.Filter = "*";
 		ContainerItemDto resultContainer = browseChildren(inp);
 		return resultContainer;
+	}
+
+	public ServerPlaylists getServerPlaylists() throws JsonMappingException, JsonProcessingException {
+		ServerPlaylists spl = searchMyPlaylistsItems(config.applicationConfig.myPlaylistFolderName);
+		return spl;
 	}
 
 	private ContainerItemDto fillResultStructureExtracted(BrowseInput inp, DIDLContent didl, ContainerItemDto result) {

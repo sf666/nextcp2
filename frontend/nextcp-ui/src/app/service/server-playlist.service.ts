@@ -104,9 +104,9 @@ export class ServerPlaylistService {
   // Filesystem Playlist actions (MediaServer actions)
   // ========================================================================
 
-  public createPlaylist(playlistName: string): Observable<string> {
+  public createPlaylist(playlistName: string, containerId: string): Observable<string> {
     const createPL: CreateServerPlaylistVO = {
-      containerId: this.serverPl().containerId,
+      containerId: containerId,
       mediaServerUdn: this.selectedMediaServer().udn,
       playlistName: playlistName + '.m3u8',
     };

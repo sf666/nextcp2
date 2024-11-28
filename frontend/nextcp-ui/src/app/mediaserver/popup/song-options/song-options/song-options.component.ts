@@ -9,6 +9,7 @@ import { DefaultPlaylistService } from '../../defaut-playlists/default-playlist.
 import { TransportService } from 'src/app/service/transport.service';
 import { StarRatingComponent } from '../../../../view/star-rating/star-rating.component';
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
+import { MusicLibraryService } from 'src/app/service/music-library/music-library.service';
 
 @Component({
     selector: 'app-song-options',
@@ -31,6 +32,7 @@ export class SongOptionsComponent implements OnInit {
     private downloadService: DownloadService,
     private transportService: TransportService,
     private defaultPlaylistService: DefaultPlaylistService,
+    public musicLibraryService: MusicLibraryService,
     private popupService: PopupService,
     _matDialogRef: MatDialogRef<SongOptionsComponent>,
     @Inject(MAT_DIALOG_DATA) data: { 
@@ -72,7 +74,7 @@ export class SongOptionsComponent implements OnInit {
 
   openAddToPlaylistDialog(event: Event): void {
     if (this.item?.songId.objectID != null) {
-      const dialogRef = this.defaultPlaylistService.openAddGlobalPlaylistDialog(this.item);
+      const dialogRef = this.defaultPlaylistService.openAddGlobalPlaylistDialogWithBackdrop(this.item, this.musicLibraryService.currentContainer());
       this._matDialogRef.close();
     }
   }

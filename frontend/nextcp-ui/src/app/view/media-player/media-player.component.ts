@@ -26,7 +26,6 @@ import { MediaPlayerService } from 'src/app/service/media-player/media-player.se
     FormsModule,
     MatOptionModule,
     MatInputModule,
-    MatSuffix,
     MatButtonModule,
     MatSlideToggleModule,
     ReactiveFormsModule]

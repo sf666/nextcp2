@@ -10,32 +10,16 @@ import {
 } from './../../service/dto.d';
 import {
   Component,
-  OnInit,
-  Input,
-  Output,
-  EventEmitter,
   signal,
   ChangeDetectionStrategy,
   input,
   output,
 } from '@angular/core';
-import { debounce } from 'src/app/global';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { StarRatingComponent } from '../../view/star-rating/star-rating.component';
-import { QualityBadgeComponent } from '../../util/comp/quality-badge/quality-badge.component';
-import { MatOption } from '@angular/material/core';
-import { MatSelect, MatSelectModule } from '@angular/material/select';
-import { MatInput, MatInputModule } from '@angular/material/input';
-import {
-  MatFormField,
-  MatLabel,
-  MatPrefix,
-  MatSuffix,
-} from '@angular/material/form-field';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { DomChangedDirective } from '../../directive/watch-dom-tree.directive';
-import { BackgroundImageService } from 'src/app/util/background-image.service';
 import { ContainerTileComponent } from './container-tile/container-tile.component';
 import { DisplayContainerHeaderComponent } from './display-container-header/display-container-header.component';
 import { ItemTileComponent } from './item-tile/item-tile.component';
@@ -49,19 +33,11 @@ import { OtherItemTileComponent } from './other-item-tile/other-item-tile.compon
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    DomChangedDirective,
     MatButtonModule,
     MatIconModule,
-    MatFormField,
-    MatLabel,
-    MatPrefix,
     MatInputModule,
-    MatSuffix,
     MatSelectModule,
     ReactiveFormsModule,
-    MatOption,
-    QualityBadgeComponent,
-    StarRatingComponent,
     ContainerTileComponent,
     ItemTileComponent,
     OtherItemTileComponent,
