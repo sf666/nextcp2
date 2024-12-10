@@ -1,11 +1,22 @@
 <div class="panel">
     @if(isFolder()) {
+    @if(mediaPlayerService.mediaServerExists()) {
     <div class="dialogItems d-flex flex-column flex-wrap">
         <div class="d-flex" (click)="selectPlayerFolder()">
             <button class="popupButton" color="" mat-mini-fab>
                 <mat-icon class="material-symbols-sharp">save</mat-icon>
             </button>
             <div class="textNextToButton">select player folder</div>
+        </div>
+    </div>
+    }
+
+    <div class="dialogItems d-flex flex-column flex-wrap">
+        <div class="d-flex" (click)="selectPlayerFolderSidebar()">
+            <button class="popupButton" color="" mat-mini-fab>
+                <mat-icon class="material-symbols-sharp">post_add</mat-icon>
+            </button>
+            <div class="textNextToButton">set playlist sidebar</div>
         </div>
     </div>
     }

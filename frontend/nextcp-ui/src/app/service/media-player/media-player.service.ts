@@ -2,7 +2,7 @@ import { DeviceService } from './../device.service';
 import { Subject } from 'rxjs';
 import { HttpService } from './../http.service';
 import { HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -10,12 +10,19 @@ import { Injectable } from '@angular/core';
 export class MediaPlayerService {
   baseUri = 'MediaRendererService';
 
+  public mediaServerExists = signal<boolean>(false);
+
   constructor(
     private deviceService: DeviceService,
     private httpService: HttpService
-  ) { }
+  ) {
+    this.mediaPlayerExistsRequest().subscribe(status => {
+      console.log("mediaServerExists : " + status);
+      this.mediaServerExists.set(status);
+    });
+  }
 
-  public mediaPlayerExists(): Subject<boolean> {
+  public mediaPlayerExistsRequest(): Subject<boolean> {
     const uri = '/mediaPlayerExists';
     return this.httpService.get<boolean>(this.baseUri, uri);
   }

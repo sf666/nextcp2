@@ -32,8 +32,6 @@ export class SidebarComponent {
 
   activeId = signal<string>("");
 
-  mediaServerExists = signal<boolean>(false);
-
   constructor(
     public deviceService: DeviceService,
     public playlistService: ServerPlaylistService,
@@ -43,7 +41,7 @@ export class SidebarComponent {
     public layoutService: LayoutService,
     private defaultPlaylistService: DefaultPlaylistService,
     private configurationService: ConfigurationService,
-    private mediaPlayerService: MediaPlayerService,
+    public mediaPlayerService: MediaPlayerService,
     public rendererService: RendererService) {
 
     this.routerMap.set("/", "-1");                // default route is music-library
@@ -59,8 +57,6 @@ export class SidebarComponent {
     this.routerMap.set("/myTracks", "-999");      // not used yet
 
     router.events.subscribe(event => this.calActiveId(event));
-
-    this.checkMediaPlayerExists();
   }
 
   private calActiveId(nav: any) {
@@ -144,12 +140,5 @@ export class SidebarComponent {
 
   public showPlaylistDialog() : void {
     this.defaultPlaylistService.openAddGlobalPlaylistDialogWithBackdrop(null, this.musicLibraryService.currentContainer());
-  }
-
-  public checkMediaPlayerExists() {
-    this.mediaPlayerService.mediaPlayerExists().subscribe(status => {
-      console.log("mediaServerExists : " + status);
-      this.mediaServerExists.set(status);
-    });
   }
 }

@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { ConfigurationService } from 'src/app/service/configuration.service';
 import { ContainerDto, ContainerIdDto, MediaPlayerConfigDto } from 'src/app/service/dto';
+import { MediaPlayerService } from 'src/app/service/media-player/media-player.service';
 import { PopupService } from 'src/app/util/popup.service';
 
 @Component({
@@ -26,6 +27,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   private mediaPlayerConfigDto: MediaPlayerConfigDto;
 
   constructor(
+    public mediaPlayerService: MediaPlayerService,
     private configurationService: ConfigurationService,
     private popupService: PopupService,
     _matDialogRef: MatDialogRef<DisplayHeaderOptionsComponent>,
@@ -45,7 +47,15 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 250, 150);
+    if (this.isFolder()) {
+      this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 250, 180);
+    } else if (this.isPlaylist()) {
+      // Playlist 
+      this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 250, 150);
+    } else {
+      console.log("ERROR: unknown type");
+      this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 250, 150);
+    }
   }
 
   addToPlaylist(): void {
@@ -55,13 +65,19 @@ export class DisplayHeaderOptionsComponent implements OnInit {
 
   selectPlayerFolder(): void {
     this.mediaPlayerConfigDto.addToFolderId = this.getCurrentContainerIdDto();
-    this.saveConfig();
+    this.configurationService.saveMediaPlayerConfig(this.mediaPlayerConfigDto);
+    this.close();
+  }
+
+  selectPlayerFolderSidebar(): void {
+    this.configurationService.applicationConfig.myPlaylistFolderName = this.getCurrentContainerIdDto().id;
+    this.configurationService.saveApplicationConfig();
     this.close();
   }
 
   selectPlayerPlaylist(): void {
     this.mediaPlayerConfigDto.addToPlaylistId = this.getCurrentContainerIdDto();
-    this.saveConfig();
+    this.configurationService.saveMediaPlayerConfig(this.mediaPlayerConfigDto);
     this.close();
   }
 
@@ -70,6 +86,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   }
 
   isFolder(): boolean {
+    console.log('is folder : ' + this.currentContainer.objectClass.startsWith('object.container.storageFolder'));
     return this.currentContainer.objectClass.startsWith('object.container.storageFolder');
   }
 
@@ -79,10 +96,6 @@ export class DisplayHeaderOptionsComponent implements OnInit {
       title: this.currentContainer.title
     }
   }  
-
-  private saveConfig() {
-    this.configurationService.saveMediaPlayerConfig(this.mediaPlayerConfigDto);
-  }
 
   private close() : void {
     this._matDialogRef.close(); // no return result ...   

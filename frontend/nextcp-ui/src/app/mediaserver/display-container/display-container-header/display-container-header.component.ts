@@ -24,7 +24,6 @@ import { BackgroundImageService } from 'src/app/util/background-image.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { DisplayHeaderOptionsComponent } from '../../popup/display-header-options/display-header-options.component';
-import { MediaPlayerService } from 'src/app/service/media-player/media-player.service';
 
 @Component({
   selector: 'display-container-header',
@@ -92,9 +91,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     private dtoGeneratorService: DtoGeneratorService,
     private backgroundImageService: BackgroundImageService,
     private timeDisplayService: TimeDisplayService,
-    private mediaPlayerService: MediaPlayerService
   ) {
-    this.checkMediaPlayerExists();
   }
 
   ngOnInit(): void {
@@ -373,11 +370,5 @@ export class DisplayContainerHeaderComponent implements OnInit {
       return this.contentDirectoryService().currentContainerList().currentContainer;
     }
     return this.dtoGeneratorService.generateEmptyContainerDto();
-  }
-
-  public checkMediaPlayerExists() {
-    this.mediaPlayerService.mediaPlayerExists().subscribe(status => {
-      this.mediaServerExists.set(status);
-    });
   }
 }

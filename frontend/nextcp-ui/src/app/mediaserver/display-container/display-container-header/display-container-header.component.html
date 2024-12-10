@@ -51,16 +51,16 @@
               <div class="d-flex flex-column">
                 <div class="title">{{currentContainer.title}}</div>
                 @if (musicItemsCount > 0) {
-                  @if (isContainerAlbum) {
-                    <div class="d-flex regular">
-                      <div>Album&nbsp;</div>
-                    @if (currentContainer.artist) {
-                      <div>by {{currentContainer.artist}}</div>
-                    }
-                    </div>
-                  } @else {
-                    <div class="highlight">Soundtracks</div> 
+                @if (isContainerAlbum) {
+                <div class="d-flex regular">
+                  <div>Album&nbsp;</div>
+                  @if (currentContainer.artist) {
+                  <div>by {{currentContainer.artist}}</div>
                   }
+                </div>
+                } @else {
+                <div class="highlight">Soundtracks</div>
+                }
                 <div class="d-flex regular">
                   <div>{{musicItemsCount}} Tracks</div>
                   @if (totalPlaytime().length > 0) {
@@ -71,17 +71,17 @@
               </div>
             </div>
             } @else {
-              @if (currentContainer) {
-              <div id="template_containerTitle" class="d-flex flex-column infobox align-self-start">
-                <div class="title">{{currentContainer.title}}</div>
-                @if (contentDirectoryService().currentContainerList().totalMatches > 0 || musicItemsCount > 0) {
-                <div class="regular"><span class="highlight pe-2">{{contentDirectoryService().currentContainerList().totalMatches}}</span> total elements
-                </div>
-                }
+            @if (currentContainer) {
+            <div id="template_containerTitle" class="d-flex flex-column infobox align-self-start">
+              <div class="title">{{currentContainer.title}}</div>
+              @if (contentDirectoryService().currentContainerList().totalMatches > 0 || musicItemsCount > 0) {
+              <div class="regular"><span class="highlight pe-2">{{contentDirectoryService().currentContainerList().totalMatches}}</span> total elements
               </div>
               }
+            </div>
             }
-          </div>  
+            }
+          </div>
           <!-- current content search box -->
           <div class="d-flex justify-content-between d-none mt-4 d-sm-flex">
             <div class="d-flex w-100">
@@ -92,6 +92,13 @@
                 <span matSuffix class="material-symbols-outlined thin md-light me-2" (click)="clearSearch()">close</span>
               </mat-form-field>
             </div>
+            @if(!hasSongs()) {
+            <div class="button-container mt-2" (click)="openOptionsDialog($event)">
+              <button color="" mat-mini-fab>
+                <mat-icon class="material-symbols-sharp">more_vert</mat-icon>
+              </button>
+            </div>
+            }
             @if (hasGenres()) {
             <div class="pe-2">
               <mat-form-field subscriptSizing="dynamic" appearance="outline" class="app-input">
@@ -106,11 +113,11 @@
             </div>
             }
             @if(!hasSongs() && mediaServerExists()){
-              <div class="button-container align-self-center" (click)="openOptionsDialog($event)">
-                <button color="" mat-mini-fab>
-                  <mat-icon class="material-symbols-sharp">more_vert</mat-icon>
-                </button>
-              </div>
+            <div class="button-container align-self-center" (click)="openOptionsDialog($event)">
+              <button color="" mat-mini-fab>
+                <mat-icon class="material-symbols-sharp">more_vert</mat-icon>
+              </button>
+            </div>
             }
           </div>
         </div>
