@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ConfigurationService } from 'src/app/service/configuration.service';
 import { ContainerDto, ContainerIdDto, MediaPlayerConfigDto } from 'src/app/service/dto';
 import { MediaPlayerService } from 'src/app/service/media-player/media-player.service';
+import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
 import { PopupService } from 'src/app/util/popup.service';
 
 @Component({
@@ -28,6 +29,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
 
   constructor(
     public mediaPlayerService: MediaPlayerService,
+    public serverPlaylistService: ServerPlaylistService,
     private configurationService: ConfigurationService,
     private popupService: PopupService,
     _matDialogRef: MatDialogRef<DisplayHeaderOptionsComponent>,
@@ -72,6 +74,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   selectPlayerFolderSidebar(): void {
     this.configurationService.applicationConfig.myPlaylistFolderName = this.getCurrentContainerIdDto().id;
     this.configurationService.saveApplicationConfig();
+    this.serverPlaylistService.updateServerAccessiblePlaylists();
     this.close();
   }
 
