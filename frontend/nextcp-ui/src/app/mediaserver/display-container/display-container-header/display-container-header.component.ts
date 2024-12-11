@@ -9,13 +9,14 @@ import {
   computed,
   ChangeDetectionStrategy,
   ElementRef,
+  ViewChild,
 } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatOption, MatSelectModule } from '@angular/material/select';
+import { MatOption, MatSelect, MatSelectModule } from '@angular/material/select';
 import { Observable } from 'rxjs';
 import { ContentDirectoryService } from 'src/app/service/content-directory.service';
 import { MusicItemDto } from 'src/app/service/dto';
@@ -24,6 +25,7 @@ import { BackgroundImageService } from 'src/app/util/background-image.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { DisplayHeaderOptionsComponent } from '../../popup/display-header-options/display-header-options.component';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'display-container-header',
@@ -33,6 +35,7 @@ import { DisplayHeaderOptionsComponent } from '../../popup/display-header-option
     MatIconModule,
     MatButtonModule,
     MatInputModule,
+    MatDivider,
     FormsModule,
     MatSelectModule,
     ReactiveFormsModule,
@@ -42,7 +45,11 @@ import { DisplayHeaderOptionsComponent } from '../../popup/display-header-option
   templateUrl: './display-container-header.component.html',
   styleUrl: './display-container-header.component.scss',
 })
+
 export class DisplayContainerHeaderComponent implements OnInit {
+
+  @ViewChild('genresSelect') genresSelectbox : MatSelect;
+
   //
   // signals
   /////////////////////////////////////
@@ -104,7 +111,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   private cdsBrowseFinished() {
     console.log("cdsBrowseFinished ... ");
-    this.clearSearch();
+    this.clearSearch();    
     this.fillGenres();
     this.checkAllTracksSameAlbum();
     this.checkLikeStatus();
@@ -187,6 +194,11 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   public clearSearch(): void {
     this.quickSearchString.set('');
+  }
+
+  public clearGenres(event): void {
+    this.genresSelectbox.options.forEach((item: MatOption) => item.deselect());
+    event.stopPropagation();
   }
 
   //

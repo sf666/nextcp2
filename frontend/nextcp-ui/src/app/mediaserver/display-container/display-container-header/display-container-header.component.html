@@ -92,24 +92,27 @@
                 <span matSuffix class="material-symbols-outlined thin md-light me-2" (click)="clearSearch()">close</span>
               </mat-form-field>
             </div>
-            @if(!hasSongs()) {
-            <div class="button-container mt-2" (click)="openOptionsDialog($event)">
-              <button color="" mat-mini-fab>
-                <mat-icon class="material-symbols-sharp">more_vert</mat-icon>
-              </button>
-            </div>
-            }
             @if (hasGenres()) {
             <div class="pe-2">
               <mat-form-field subscriptSizing="dynamic" appearance="outline" class="app-input">
                 <mat-label>Genre</mat-label>
-                <mat-select multiple [(ngModel)]="selectedGenres">
+                <mat-select #genresSelect multiple [(ngModel)]="selectedGenres">
                   <mat-option value="NONE">NONE</mat-option>
                   @for (genre of genresList(); track genre) {
                   <mat-option [value]="genre">{{genre}}</mat-option>
                   }
                 </mat-select>
+                <div matSuffix>
+                  <mat-icon class="material-symbols-outlined thin md-light me-2" (click)="clearGenres($event)">close</mat-icon>
+                </div>
               </mat-form-field>
+            </div>
+            }
+            @if(!hasSongs()) {
+            <div class="button-container mt-2" (click)="openOptionsDialog($event)">
+              <button color="" mat-mini-fab>
+                <mat-icon class="material-symbols-sharp">more_vert</mat-icon>
+              </button>
             </div>
             }
             @if(!hasSongs() && mediaServerExists()){
