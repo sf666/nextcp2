@@ -191,7 +191,7 @@
     }
     @if (getMediaRenderer()?.length == 0) {
     <div class="no-online">
-       no renderer online
+      no renderer online
     </div>
     }
   </div>
@@ -230,8 +230,13 @@
           <input matInput type="text" [(ngModel)]="configService.applicationConfig.myPlaylistFolderName" placeholder="PlaylistsFolderName">
         </mat-form-field>
       </div>
-      <div class="paraAppConf">Object ID of the folder containing MY PLAYLISTS. Those playlists will 
-        directly selectable inside the sidebar on the left.
+      <div class="paraAppConf">Object ID of the folder containing MY PLAYLISTS. Those playlists will
+        directly selectable inside the sidebar on the left. There is no need to edit this value by hand. 
+        In the "music library" view, click the context menu button
+        <button color="" mat-mini-fab>
+          <mat-icon class="material-symbols-sharp">more_vert</mat-icon>
+        </button> 
+        and select "set playlist sidebar" to set this value.
       </div>
     </div>
 
@@ -337,7 +342,7 @@
       <div class="paraAppConf">Leave empty for binding to all interfaces. Changes require restart.</div>
     </div>
 
-    
+
     <div class="d-flex flex-wrap-reverse">
       <div class="paraInputField">
         <mat-form-field appearance="outline" class="setting-dropdown">
@@ -382,36 +387,36 @@
 
 <div class="section subhead subsect">Spotify</div>
 <div class="d-flex section flex-wrap subhead flex-column">
-@if (configService.spotifyAccountConnected()) {
+  @if (configService.spotifyAccountConnected()) {
   <div class="para">
     <span class="material-symbols-outlined" style="color: aqua;">how_to_reg</span>
     <span class=""> Your Spotify account is connected.</span>
   </div>
-} @else {
+  } @else {
+  <div class="para">
+    Click this button. A new window will open. Login and approve access to nextCP/2 :
+  </div>
+  <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="registerAppAtSpotify()">nextCP/2
+    Spotify access
+  </button>
+  @if (!protocolHandlerAvailable()) {
+  <div>
     <div class="para">
-      Click this button. A new window will open. Login and approve access to nextCP/2 :
+      After granting access you wil be redirected to a localhost URL (error page). Copy spotify access code
+      from your browsers URL bar into the input field below and
     </div>
-    <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="registerAppAtSpotify()">nextCP/2
-      Spotify access
-    </button>
-    @if (!protocolHandlerAvailable()) {
     <div>
-      <div class="para">
-        After granting access you wil be redirected to a localhost URL (error page). Copy spotify access code
-        from your browsers URL bar into the input field below and
-      </div>
-      <div>
-        <input class="section input" [(ngModel)]="spotifyCode">
-      </div>
-      <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="sendSpotifyCode()">send
-        it</button>
-      <div class="para">
-        Hint: To copy the access code, click in your browsers URL bar and copy everything after
-        'http://localhost:65525/?code='
-      </div>
+      <input class="section input" [(ngModel)]="spotifyCode">
     </div>
-    }
-}
+    <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="sendSpotifyCode()">send
+      it</button>
+    <div class="para">
+      Hint: To copy the access code, click in your browsers URL bar and copy everything after
+      'http://localhost:65525/?code='
+    </div>
+  </div>
+  }
+  }
 </div>
 
 <div class="section subhead subsect">MusicBrainz</div>

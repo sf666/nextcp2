@@ -17,6 +17,7 @@ import { ChangeDetectionStrategy, Component, OnInit, model } from '@angular/core
 import { LayoutService } from 'src/app/service/layout.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatOptionModule } from '@angular/material/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -39,6 +40,7 @@ import {
     MatSelectModule,
     FormsModule,
     MatOptionModule,
+    MatIconModule,
     MatInputModule,
     MatSuffix,
     MatButtonModule,
