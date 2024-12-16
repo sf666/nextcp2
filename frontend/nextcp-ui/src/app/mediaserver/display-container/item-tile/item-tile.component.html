@@ -61,7 +61,7 @@
                                 <div class="d-flex">
                                     @if (allTracksSameAlbum()) {
                                     <div class="d-flex">
-                                        <div class="trackNum">{{item.originalTrackNumber}}</div>
+                                        <div class="trackNum">@if(item.originalTrackNumber != 'null'){{{item.originalTrackNumber}}}</div>
                                         <div>{{item.title}}</div>
                                     </div>
                                     } @else {<div>{{item.title}}</div>}
