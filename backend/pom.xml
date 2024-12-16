@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.sf666</groupId>
 	<artifactId>nextcp2-root</artifactId>
-	<version>main-SNAPSHOT</version>
+	<version>3.1</version>
 	<packaging>pom</packaging>
 	<name>Next Control Point 2</name>
 	<description>UPnP control point with nice web interface</description>
