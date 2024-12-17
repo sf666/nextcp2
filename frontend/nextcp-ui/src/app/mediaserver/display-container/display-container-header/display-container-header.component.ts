@@ -284,13 +284,16 @@ export class DisplayContainerHeaderComponent implements OnInit {
       this.allTracksSameMusicBrainzReleaseId_.set(false);
       if (this.musicTracks?.length > 0) {
         const firstTrackAlbum = this.musicTracks[0].album;
-        const albumsWithOtherNames = this.musicTracks.filter(
-          (item) => item.album !== firstTrackAlbum
-        ).length;
-        this.allTracksSameAlbum_.set(albumsWithOtherNames == 0);
-        console.log(
-          'number of tracs with other album title : ' + albumsWithOtherNames
-        );
+        if (firstTrackAlbum != null) {
+          const albumsWithOtherNames = this.musicTracks.filter(
+            (item) => item.album !== firstTrackAlbum
+          ).length;
+          this.allTracksSameAlbum_.set(albumsWithOtherNames == 0);
+          console.log('number of tracks with other album title : ' + albumsWithOtherNames);  
+        } else {
+          this.allTracksSameAlbum_.set(false);
+          console.log('music track have no album information');  
+        }
       }
     }
     console.log('checkAllTracksSameAlbum : ' + this.allTracksSameAlbum_());

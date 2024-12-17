@@ -82,39 +82,40 @@ export class ItemTileComponent {
       const sameDisc = !data?.find(
         (item) => item.numberOfThisDisc !== firstTrackDisc
       );
-      console.log('allTracksSameDisc : ' + sameDisc);
+      console.log('[item-tile] allTracksSameDisc : ' + sameDisc);
       return sameDisc;
     }
   }
 
   private checkAllTracksSameAlbum(data: MusicItemDto[]): boolean {
-    const numtrack = this.musicTracks?.length;
-    const numMbid = this.musicTracks()?.filter(
+    const numtrack = this.musicTracks().length;
+    const numMbid = this.musicTracks().filter(
       (item) => item.musicBrainzId?.ReleaseTrackId?.length > 0
     ).length;
 
-    console.log('number of tracs : ' + numtrack);
-    console.log('number of tracs with mbid: ' + numMbid);
+    console.log('[item-tile] number of tracs : ' + numtrack);
+    console.log('[item-tile] number of tracs with mbid: ' + numMbid);
 
     if (numMbid > 0 && numtrack == numMbid) {
       const firstTrackMbid = data[0]?.musicBrainzId?.ReleaseTrackId;
       const numSameMbid = data.filter(
         (item) => item.musicBrainzId?.ReleaseTrackId === firstTrackMbid
       ).length;
-      console.log(
-        'number of tracs with same mbid like first track : ' + numSameMbid
-      );
+      console.log('[item-tile] number of tracs with same mbid like first track : ' + numSameMbid);
       return numSameMbid == numMbid;
     } else {
       if (data.length > 0) {
         const firstTrackAlbum = data[0].album;
-        const albumsWithOtherNames = data.filter(
-          (item) => item.album !== firstTrackAlbum
-        ).length;
-        console.log(
-          'number of tracs with other album title : ' + albumsWithOtherNames
-        );
-        return albumsWithOtherNames == 0;
+        if (firstTrackAlbum != null) {
+          const albumsWithOtherNames = data.filter(
+            (item) => item.album !== firstTrackAlbum
+          ).length;
+          console.log('[item-tile] number of tracs with other album title : ' + albumsWithOtherNames);
+          return albumsWithOtherNames == 0;
+        } else {
+          console.log('[item-tile] no album information available');
+          return false;
+        }
       }
     }
   }
