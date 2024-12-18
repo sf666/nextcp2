@@ -17,7 +17,7 @@ export class RatingServiceService {
     private httpService: HttpService,
     private deviceSerice: DeviceService) { }
 
-  public setStarRating(ids: MusicItemIdDto, previousStars: number, stars: number) {
+  public setStarRating(ids: MusicItemIdDto, previousStars: number, stars: number): Subject<void>{
     const uri = `/setStarRating`;
     
     const srr: UpdateStarRatingRequest = {      

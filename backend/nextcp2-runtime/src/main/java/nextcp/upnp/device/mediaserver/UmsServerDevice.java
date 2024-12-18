@@ -198,9 +198,9 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		UpdateObjectInput inp = new UpdateObjectInput();
 		inp.ObjectID = updateRequest.musicItemIdDto.objectID;
 		inp.CurrentTagValue = updateRequest.previousAlbumArtUri != null ?
-			String.format("<upnp:albumArtURI>%d</upnp:albumArtURI>", updateRequest.previousAlbumArtUri) : null;
+			String.format("<upnp:albumArtURI>%s</upnp:albumArtURI>", updateRequest.previousAlbumArtUri) : null;
 		inp.NewTagValue = updateRequest.previousAlbumArtUri != null ?
-			String.format("<upnp:albumArtURI>%d</upnp:albumArtURI>", updateRequest.newAlbumArtUri) : null;
+			String.format("<upnp:albumArtURI>%s</upnp:albumArtURI>", updateRequest.newAlbumArtUri) : null;
 		try {
 			getContentDirectoryService().updateObject(inp);
 		} catch (GenActionException e) {

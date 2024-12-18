@@ -19,28 +19,30 @@
 
   <div class="dialogItems d-flex flex-column flex-wrap">
     @if (hasValidSongId()) {
-      <div class="d-flex justify-content-between playlist-item" (click)="openAddToPlaylistDialog($event)">
-        <div class="d-flex justify-content-between" style="align-self: center;">
-          Add to playlist
-        </div>
+    <div class="d-flex justify-content-between playlist-item" (click)="openAddToPlaylistDialog($event)">
+      <div class="d-flex justify-content-between" style="align-self: center;">
+        Add to playlist
       </div>
+    </div>
     }
     @if (isParentPlaylist) {
-      <div class="playlist-item" (mouseover)="closeAllDialogs()" (click)="deleteFromPlaylist()">
-        Delete from playlist
-      </div>
+    <div class="playlist-item" (mouseover)="closeAllDialogs()" (click)="deleteFromPlaylist()">
+      Delete from playlist
+    </div>
     }
 
     @if (hasValidSongId()) {
-      <div class="divider mb-1 mt-1">&nbsp;</div>
-    }
-
+    <div class="divider mb-1 mt-1">&nbsp;</div>
     <div class="playlist-item" (mouseenter)="closeAllDialogs()" (click)="actionPlayNext()">
       Play next
     </div>
     <div class="playlist-item" (mouseover)="closeAllDialogs()" (click)="download()">
       Download
     </div>
+    <div class="playlist-item" (mouseover)="closeAllDialogs()" (click)="updateAlbumArt()">
+      Update Album Art
+    </div>
+    }
   </div>
   <div class="spaces">&nbsp;</div>
 </div>

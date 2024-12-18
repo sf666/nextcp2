@@ -1,15 +1,16 @@
+import { CdsUpdateService } from './../../../../service/cds-update.service';
 import { SongOptionsEvent } from './../song-options-event.d';
 import { PopupService } from './../../../../util/popup.service';
-import { PlaylistService } from './../../../../service/playlist.service';
 import { DownloadService } from './../../../../util/download.service';
-import { MusicItemDto, ContainerDto} from './../../../../service/dto.d';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, Inject, ElementRef, OnInit, ViewContainerRef, ChangeDetectionStrategy } from '@angular/core';
+import { MusicItemDto, ContainerDto, MusicItemIdDto } from './../../../../service/dto.d';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { Component, Inject, ElementRef, OnInit, ViewContainerRef, ChangeDetectionStrategy, inject } from '@angular/core';
 import { DefaultPlaylistService } from '../../defaut-playlists/default-playlist.service';
 import { TransportService } from 'src/app/service/transport.service';
 import { StarRatingComponent } from '../../../../view/star-rating/star-rating.component';
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
 import { MusicLibraryService } from 'src/app/service/music-library/music-library.service';
+import { InputPopupComponent, InputPopupData } from 'src/app/util/comp/input-popup/input-popup/input-popup.component';
 
 @Component({
     selector: 'app-song-options',
@@ -26,6 +27,9 @@ export class SongOptionsComponent implements OnInit {
   private readonly triggerElementRef: ElementRef;
   private playlistDialogOpen: boolean;
   private currentContainer: ContainerDto;
+
+  readonly inputDialog = inject(MatDialog);
+  readonly cdsUpdateService = inject(CdsUpdateService);
 
   constructor(
     private serverPlaylistService: ServerPlaylistService,
@@ -56,7 +60,7 @@ export class SongOptionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 250, 300);
+    this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 250, 350);
   }
 
 
@@ -109,4 +113,36 @@ export class SongOptionsComponent implements OnInit {
   get isParentPlaylist(): boolean {
     return this.currentContainer.objectClass === "object.container.playlistContainer";
   }
+
+  public updateAlbumArt(): void {
+    const inputTextData : InputPopupData = {
+      cancelText: 'cancel',
+      inputText: '',
+      inputTextExplanation: 'Enter full album art URL',
+      labelInputText: '',
+      okText: 'update',
+      title: 'Update album art',
+    }
+    const dialogRef = this.inputDialog.open(InputPopupComponent, {
+      width: '480px',
+      maxWidth: '640px',
+      data: inputTextData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        console.log('new URL : ' + result);
+
+        const mid : MusicItemIdDto = {
+          acoustID:'',
+          musicBrainzIdTrackId:'',
+          objectID: this.item.objectID
+        }
+
+        this.cdsUpdateService.setNewAlbumArtUri(mid, this.item.albumArtUrl, result);
+        this._matDialogRef.close();
+      }
+    });
+  }
+
 }
