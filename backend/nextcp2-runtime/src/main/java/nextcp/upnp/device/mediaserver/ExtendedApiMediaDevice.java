@@ -6,6 +6,7 @@ import org.jupnp.support.model.item.Item;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import nextcp.dto.ServerPlaylists;
+import nextcp.dto.UpdateAlbumArtUriRequest;
 import nextcp.dto.UpdateStarRatingRequest;
 
 /**
@@ -29,6 +30,8 @@ public interface ExtendedApiMediaDevice
     
     public void rateSong(UpdateStarRatingRequest updateRequest);
 
+    public void updateAlbumArtURI(UpdateAlbumArtUriRequest updateRequest);
+    
     // Backup Services
     
     public void backupMyMusic();

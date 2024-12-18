@@ -42,6 +42,7 @@ import nextcp.dto.MusicItemDto;
 import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.ServerPlaylists;
 import nextcp.dto.ToastrMessage;
+import nextcp.dto.UpdateAlbumArtUriRequest;
 import nextcp.dto.UpdateStarRatingRequest;
 import nextcp.service.ToastEventPublisher;
 import nextcp.upnp.GenActionException;
@@ -190,6 +191,24 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			return key != null ? key : "";
 		}
 		return "";
+	}
+
+	@Override
+	public void updateAlbumArtURI(UpdateAlbumArtUriRequest updateRequest) {
+		UpdateObjectInput inp = new UpdateObjectInput();
+		inp.ObjectID = updateRequest.musicItemIdDto.objectID;
+		inp.CurrentTagValue = updateRequest.previousAlbumArtUri != null ?
+			String.format("<upnp:albumArtURI>%d</upnp:albumArtURI>", updateRequest.previousAlbumArtUri) : null;
+		inp.NewTagValue = updateRequest.previousAlbumArtUri != null ?
+			String.format("<upnp:albumArtURI>%d</upnp:albumArtURI>", updateRequest.newAlbumArtUri) : null;
+		try {
+			getContentDirectoryService().updateObject(inp);
+		} catch (GenActionException e) {
+			String errorText = extractErrorText(e.description);
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
+		} catch (Exception e) {
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
+		}
 	}
 
 	@Override
@@ -452,7 +471,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		inp.ObjectID = objectId;
 		try {
 			getContentDirectoryService().destroyObject(inp);
-			log.error("deleteObject : failed for id {} ", objectId);			
+			log.error("deleteObject : failed for id {} ", objectId);
 		} catch (GenActionException e) {
 			String errorText = extractErrorText(e.description);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);

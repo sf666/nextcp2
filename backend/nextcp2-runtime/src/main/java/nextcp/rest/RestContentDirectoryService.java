@@ -18,7 +18,9 @@ import nextcp.dto.ContainerItemDto;
 import nextcp.dto.SearchRequestDto;
 import nextcp.dto.SearchResultDto;
 import nextcp.dto.ToastrMessage;
+import nextcp.dto.UpdateAlbumArtUriRequest;
 import nextcp.upnp.device.DeviceRegistry;
+import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseInput;
 
@@ -173,5 +175,16 @@ public class RestContentDirectoryService extends BaseRestService {
 			publisher.publishEvent(new ToastrMessage(null, "error", "search all artists", e.getMessage()));
 		}
 		return new SearchResultDto();
+	}
+
+	@PostMapping("/updateAlbumArtUri")
+	public void updateAlbumArtUri(@RequestBody UpdateAlbumArtUriRequest updateRequest) {
+		try {
+			ExtendedApiMediaDevice device = getExtendedMediaServerByUdn(updateRequest.mediaServerDevice);
+			device.updateAlbumArtURI(updateRequest);
+		} catch (Exception e) {
+			log.error("updateAlbumArtUri failed : {}", updateRequest, e);
+			publisher.publishEvent(new ToastrMessage(null, "error", "update album cover failed", e.getMessage()));
+		}
 	}
 }

@@ -271,6 +271,12 @@ UpdateStarRatingRequest:
    mediaServerDevice: String
    musicItemIdDto: MusicItemIdDto      
 
+UpdateAlbumArtUriRequest:
+   previousAlbumArtUri: String
+   newAlbumArtUri: String
+   mediaServerDevice: String
+   musicItemIdDto: MusicItemIdDto      
+
 MusicItemIdDto:
    acoustID: String
    musicBrainzIdTrackId: String

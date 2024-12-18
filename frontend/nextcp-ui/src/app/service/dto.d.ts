@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2024-12-16 13:25:57.
+// Generated using typescript-generator version 3.2.1263 on 2024-12-18 10:34:11.
 
 export interface ApplicationConfig {
     myPlaylistFolderName: string;
@@ -440,6 +440,13 @@ export interface UiClientConfig {
 export interface UmsServerApiKey {
     serverUuid: string;
     serverApiKey: string;
+}
+
+export interface UpdateAlbumArtUriRequest {
+    previousAlbumArtUri: string;
+    newAlbumArtUri: string;
+    mediaServerDevice: string;
+    musicItemIdDto: MusicItemIdDto;
 }
 
 export interface UpdateStarRatingRequest {
