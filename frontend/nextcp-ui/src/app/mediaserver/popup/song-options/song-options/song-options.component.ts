@@ -118,7 +118,7 @@ export class SongOptionsComponent implements OnInit {
     const inputTextData : InputPopupData = {
       cancelText: 'cancel',
       inputText: '',
-      inputTextExplanation: 'Enter full album art URL',
+      inputTextExplanation: 'Enter full album art URL. Reload parent container after update.',
       labelInputText: '',
       okText: 'update',
       title: 'Update album art',
