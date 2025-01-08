@@ -52,7 +52,7 @@
 	</distributionManagement>
 	<properties>
 		<maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
-		<jupnp.version>2.7.1</jupnp.version>
+		<jupnp.version>3.0.2</jupnp.version>
 		<maven.compiler.release>21</maven.compiler.release>
 		<slf4j.version>2.0.5</slf4j.version>
 		<freemarker.version>2.3.32</freemarker.version>
@@ -311,6 +311,23 @@
 				<groupId>de.sf666</groupId>
 				<artifactId>musicbrainz</artifactId>
 				<version>1.2</version>
+			</dependency>
+
+			<!-- Jetty 12-->
+			<dependency>
+				<groupId>org.eclipse.jetty.ee10</groupId>
+				<artifactId>jetty-ee10-servlet</artifactId>
+				<version>12.0.16</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty.http2</groupId>
+				<artifactId>jetty-http2-server</artifactId>
+				<version>12.0.16</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-client</artifactId>
+				<version>12.0.16</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

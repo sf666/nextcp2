@@ -14,28 +14,26 @@
 
 package nextcp.service.upnp;
 
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import org.jupnp.DefaultUpnpServiceConfiguration;
 import org.jupnp.UpnpServiceConfiguration;
 import org.jupnp.binding.xml.DeviceDescriptorBinder;
+import org.jupnp.binding.xml.RecoveringUDA10DeviceDescriptorBinderImpl;
+import org.jupnp.binding.xml.RecoveringUDA10ServiceDescriptorBinderImpl;
 import org.jupnp.binding.xml.ServiceDescriptorBinder;
-import org.jupnp.binding.xml.UDA10DeviceDescriptorBinderImpl;
-import org.jupnp.binding.xml.UDA10ServiceDescriptorBinderImpl;
-import org.jupnp.model.ModelUtil;
 import org.jupnp.model.Namespace;
 import org.jupnp.model.message.UpnpHeaders;
+import org.jupnp.model.message.header.UpnpHeader;
 import org.jupnp.model.meta.RemoteDeviceIdentity;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.types.ServiceType;
-import org.jupnp.transport.TransportConfiguration;
-import org.jupnp.transport.TransportConfigurationProvider;
 import org.jupnp.transport.impl.DatagramIOConfigurationImpl;
 import org.jupnp.transport.impl.DatagramIOImpl;
 import org.jupnp.transport.impl.DatagramProcessorImpl;
@@ -44,6 +42,7 @@ import org.jupnp.transport.impl.MulticastReceiverConfigurationImpl;
 import org.jupnp.transport.impl.MulticastReceiverImpl;
 import org.jupnp.transport.impl.NetworkAddressFactoryImpl;
 import org.jupnp.transport.impl.SOAPActionProcessorImpl;
+import org.jupnp.transport.impl.jetty.StreamClientConfigurationImpl;
 import org.jupnp.transport.spi.DatagramIO;
 import org.jupnp.transport.spi.DatagramProcessor;
 import org.jupnp.transport.spi.GENAEventProcessor;
@@ -86,315 +85,340 @@ import org.slf4j.LoggerFactory;
  */
 public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
-    private Logger log = LoggerFactory.getLogger(Nextcp2DefaultUpnpServiceConfiguration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Nextcp2DefaultUpnpServiceConfiguration.class);
+	private static final List<String> LOG_LEVEL_MEDIASERVER = List.of("org.jupnp");
+	private static final List<String> LOG_LEVEL_BASIC = List.of("net.pms.network.mediaserver.jupnp.transport.impl.UmsDatagramProcessor", "org.jupnp.protocol");
+	private static final List<String> LOG_LEVEL_FULL = List.of("org.jupnp.binding", "org.jupnp.model", "org.jupnp.registry", "org.jupnp.transport");
 
-    // set a fairly large core threadpool size, expecting that core timeout policy will
-    // allow the pool to reduce in size after inactivity. note that ThreadPoolExecutor
-    // only adds threads beyond its core size once the backlog is full, so a low value 
-    // core size is a poor choice when there are lots of long-running + idle jobs.
-    // a brief intro to the issue:
-    // http://www.bigsoft.co.uk/blog/2009/11/27/rules-of-a-threadpoolexecutor-pool-size
-    final private static int CORE_THREAD_POOL_SIZE = 50;
-    final private static int THREAD_POOL_SIZE = 400;
-    final private static int THREAD_QUEUE_SIZE = 1000;
-    final private static boolean THREAD_POOL_CORE_TIMEOUT = false;
+	private static final int CORE_THREAD_POOL_SIZE = 16;
+	private static final int THREAD_POOL_SIZE = 200;
+	private static final int THREAD_QUEUE_SIZE = 1000;
+	private static final boolean THREAD_POOL_CORE_TIMEOUT = true;
+	private static final String STREAM_CLIENT_THREAD_NAME = "jupnp-stream-client";
+	private static final String STREAM_SERVER_THREAD_NAME = "jupnp-stream-server";
+	private static final String REGISTRY_MAINTAINER_THREAD_NAME = "jupnp-registry-maintainer";
+	private static final String MULTICAST_RECEIVER_THREAD_NAME = "jupnp-multicast-receiver";
+	private static final String DATAGRAM_IO_THREAD_NAME = "jupnp-datagram-io";
+	private static final String SYNC_PROTOCOL_THREAD_NAME = "jupnp-sync-protocol";
+	private static final String ASYNC_PROTOCOL_THREAD_NAME = "jupnp-async-protocol";
+	private static final String REMOTE_LISTENER_THREAD_NAME = "jupnp-remote-listener";
+	private static final String REGISTRY_LISTENER_THREAD_NAME = "jupnp-registry-listener";
 
-    final private int streamListenPort;
-    final private int multicastResponsePort;
+	private final DatagramProcessor datagramProcessor;
+	private final SOAPActionProcessor soapActionProcessor;
+	private final GENAEventProcessor genaEventProcessor;
+	private final DeviceDescriptorBinder deviceDescriptorBinderUDA10;
+	private final ServiceDescriptorBinder serviceDescriptorBinderUDA10;
+	private final Namespace namespace;
+	private final UpnpHeaders headers = new UpnpHeaders();
+	private final String upnpBindInterface;
 
-    final private ExecutorService defaultExecutorService;
+	private boolean useThreadPool = false;
+	private boolean multicastReceiverThreadPool = true;
+	private boolean datagramIOThreadPool = true;
+	private boolean streamClientThreadPool = true;
+	private boolean streamServerThreadPool = true;
+	private boolean syncProtocolThreadPool = true;
+	private boolean asyncProtocolThreadPool = true;
+	private boolean remoteListenerThreadPool = true;
+	private boolean registryListenerThreadPool = true;
+	private boolean registryMaintainerThreadPool = true;
+	private ExecutorService multicastReceiverExecutorService;
+	private ExecutorService datagramIOExecutorService;
+	private ExecutorService streamClientExecutorService;
+	private ExecutorService streamServerExecutorService;
+	private ExecutorService syncProtocolExecutorService;
+	private ExecutorService asyncProtocolExecutorService;
+	private ExecutorService remoteListenerExecutorService;
+	private ExecutorService registryListenerExecutorService;
+	private ExecutorService registryMaintainerExecutorService;
 
-    final private DatagramProcessor datagramProcessor;
-    final private SOAPActionProcessor soapActionProcessor;
-    final private GENAEventProcessor genaEventProcessor;
-
-    final private DeviceDescriptorBinder deviceDescriptorBinderUDA10;
-    final private ServiceDescriptorBinder serviceDescriptorBinderUDA10;
-	final private ExecutorService streamClientExecutorService;
-
-	private String streamClient;
-	private String streamServer;
-    private String upnpBindInterface;
-    
-    final private Namespace namespace;
-
-    @SuppressWarnings("rawtypes")
-    final private TransportConfiguration transportConfiguration;
-
-    /**
-     * Defaults to port '0', ephemeral.
-     */
-    public Nextcp2DefaultUpnpServiceConfiguration() {
-        this(NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT);
-    }
-
-    public Nextcp2DefaultUpnpServiceConfiguration(int streamListenPort) {
-        this(streamListenPort, NetworkAddressFactoryImpl.DEFAULT_MULTICAST_RESPONSE_LISTEN_PORT, true, null);
-    }
-
-    public Nextcp2DefaultUpnpServiceConfiguration(int streamListenPort, int multicastResponsePort) {
-        this(streamListenPort, multicastResponsePort, true, null);
-    }
-
-    protected Nextcp2DefaultUpnpServiceConfiguration(boolean checkRuntime) {
-        this(NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT, NetworkAddressFactoryImpl.DEFAULT_MULTICAST_RESPONSE_LISTEN_PORT, checkRuntime, null);
-    }
-
-    protected Nextcp2DefaultUpnpServiceConfiguration(int streamListenPort, int multicastResponsePort, boolean checkRuntime, String bindInterface) {
-        if (checkRuntime && ModelUtil.ANDROID_RUNTIME) {
-            throw new Error("Unsupported runtime environment, use org.jupnp.android.AndroidUpnpServiceConfiguration");
-        }
-        this.upnpBindInterface = bindInterface;
-        this.streamListenPort = streamListenPort;
-        this.multicastResponsePort = multicastResponsePort;
-
-        defaultExecutorService = createDefaultExecutorService("default");
-		streamClientExecutorService = createDefaultExecutorService("stream-client");
-
-
-        datagramProcessor = createDatagramProcessor();
-        soapActionProcessor = createSOAPActionProcessor();
-        genaEventProcessor = createGENAEventProcessor();
-
-        deviceDescriptorBinderUDA10 = createDeviceDescriptorBinderUDA10();
-        serviceDescriptorBinderUDA10 = createServiceDescriptorBinderUDA10();
-
-        namespace = createNamespace();
-
-        transportConfiguration = TransportConfigurationProvider.getDefaultTransportConfiguration();
-    }
-
-    public Nextcp2DefaultUpnpServiceConfiguration(String upnpStreamClient, String upnpStreamServer, String upnpBindInterface) {
-        this(NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT, NetworkAddressFactoryImpl.DEFAULT_MULTICAST_RESPONSE_LISTEN_PORT, true, upnpBindInterface);
-    	this.streamClient = upnpStreamClient;
-    	this.streamServer = upnpStreamServer;
+	public Nextcp2DefaultUpnpServiceConfiguration(String upnpBindInterface) {
+		this.upnpBindInterface = upnpBindInterface;
+		datagramProcessor = new DatagramProcessorImpl();
+		soapActionProcessor = new SOAPActionProcessorImpl();
+		genaEventProcessor = new GENAEventProcessorImpl();
+		deviceDescriptorBinderUDA10 = new RecoveringUDA10DeviceDescriptorBinderImpl();
+		serviceDescriptorBinderUDA10 = new RecoveringUDA10ServiceDescriptorBinderImpl();
+		namespace = new Namespace();
+		headers.add(UpnpHeader.Type.USER_AGENT.getHttpName(), "nextcp2/GENERIC UPnP/1.0 DLNADOC/1.50 (" + System.getProperty("os.name").replace(" ", "_") + ")");		
+		createExecutorServices();		
 	}
 
+	private void createExecutorServices() {
+		if (useThreadPool) {
+			if (multicastReceiverThreadPool) {
+				LOGGER.trace("Creating multicast receiver executor service");
+				multicastReceiverExecutorService = createDefaultExecutorService(MULTICAST_RECEIVER_THREAD_NAME);
+			} else {
+				LOGGER.trace("Skipping multicast receiver executor service creation.");
+			}
+			if (datagramIOThreadPool) {
+				LOGGER.debug("Creating datagram IO executor service");
+				datagramIOExecutorService = createDefaultExecutorService(DATAGRAM_IO_THREAD_NAME);
+			} else {
+				LOGGER.trace("Skipping datagram IO executor service creation.");
+			}
+			if (streamClientThreadPool) {
+				LOGGER.debug("Creating stream client executor service");
+				streamClientExecutorService = createDefaultExecutorService(STREAM_CLIENT_THREAD_NAME);
+			} else {
+				LOGGER.trace("Skipping stream client executor service creation.");
+			}
+			if (streamServerThreadPool) {
+				LOGGER.debug("Creating stream server executor service");
+				streamServerExecutorService = createDefaultExecutorService(STREAM_SERVER_THREAD_NAME);
+			} else {
+				LOGGER.trace("Skipping stream server executor service creation.");
+			}
+			if (syncProtocolThreadPool) {
+				LOGGER.debug("Creating sync protocol executor service");
+				syncProtocolExecutorService = createDefaultExecutorService(SYNC_PROTOCOL_THREAD_NAME);
+			} else {
+				LOGGER.trace("Skipping sync protocol executor service creation.");
+			}
+			if (asyncProtocolThreadPool) {
+				LOGGER.debug("Creating async protocol executor service");
+				asyncProtocolExecutorService = createDefaultExecutorService(ASYNC_PROTOCOL_THREAD_NAME);
+			} else {
+				LOGGER.debug("Skipping async protocol executor service creation.");
+			}
+			if (remoteListenerThreadPool) {
+				LOGGER.debug("Creating remote listener executor service");
+				remoteListenerExecutorService = createDefaultExecutorService(REMOTE_LISTENER_THREAD_NAME);
+			} else {
+				LOGGER.debug("Skipping remote listener executor service creation.");
+			}
+			if (registryListenerThreadPool) {
+				LOGGER.debug("Creating registry listener executor service");
+				registryListenerExecutorService = createDefaultExecutorService(REGISTRY_LISTENER_THREAD_NAME);
+			} else {
+				LOGGER.debug("Skipping registry listener executor service creation.");
+			}
+			if (registryMaintainerThreadPool) {
+				LOGGER.debug("Creating registry maintainer executor service");
+				registryMaintainerExecutorService = createDefaultExecutorService(REGISTRY_MAINTAINER_THREAD_NAME);
+			} else {
+				LOGGER.debug("Skipping registry maintainer executor service creation.");
+			}
+		} else {
+			LOGGER.debug("Skipping thread pooled executor services creation.");
+		}
+	}
+
+	protected void shutdownExecutorServices() {
+		if (multicastReceiverExecutorService != null) {
+			LOGGER.trace("Shutting down multicast receiver executor service");
+			multicastReceiverExecutorService.shutdownNow();
+		}
+		if (datagramIOExecutorService != null) {
+			LOGGER.trace("Shutting down datagram IO executor service");
+			datagramIOExecutorService.shutdownNow();
+		}
+		if (streamServerExecutorService != null) {
+			LOGGER.trace("Shutting down stream server executor service");
+			streamServerExecutorService.shutdownNow();
+		}
+		if (syncProtocolExecutorService != null) {
+			LOGGER.trace("Shutting down sync protocol executor service");
+			syncProtocolExecutorService.shutdownNow();
+		}
+		if (registryListenerExecutorService != null) {
+			LOGGER.trace("Shutting down registry listener executor service");
+			registryListenerExecutorService.shutdownNow();
+		}
+		if (registryMaintainerExecutorService != null) {
+			LOGGER.trace("Shutting down registry maintainer executor service");
+			registryMaintainerExecutorService.shutdownNow();
+		}
+		if (streamClientExecutorService != null) {
+			LOGGER.trace("Shutting down stream client executor service");
+			streamClientExecutorService.shutdownNow();
+		}
+		if (asyncProtocolExecutorService != null) {
+			LOGGER.trace("Shutting down async protocol executor service");
+			asyncProtocolExecutorService.shutdownNow();
+		}
+		if (remoteListenerExecutorService != null) {
+			LOGGER.trace("Shutting down remote listener executor service");
+			remoteListenerExecutorService.shutdownNow();
+		}
+	}
+
+	private ExecutorService createDefaultExecutorService(String name) {
+		return new JUPnPExecutor(name);
+	}
+
+
 	@Override
-    public DatagramProcessor getDatagramProcessor() {
-        return datagramProcessor;
-    }
+	public int getRegistryMaintenanceIntervalMillis() {
+		return 15000;
+	}
 
-    @Override
-    public SOAPActionProcessor getSoapActionProcessor() {
-        return soapActionProcessor;
-    }
-
-    @Override
-    public GENAEventProcessor getGenaEventProcessor() {
-        return genaEventProcessor;
-    }
 
 	@Override
 	public StreamClient createStreamClient() {
-		if ("apache".equalsIgnoreCase(streamClient)) {
-			log.info("using apache stream client configuration ... ");
-			return new ApacheStreamClient(new ApacheStreamClientConfiguration(getStreamClientExecutorService()));
-		} else if ("jdk".equalsIgnoreCase(streamClient)) {
-			log.info("using JDK stream client configuration ... ");
-			return new JdkStreamClients(
-				new JdkStreamClientConfiguration(
-						getStreamClientExecutorService()
-				)
-		);
+		ExecutorService executorService = getStreamClientExecutorService();
+		return JettyTransportConfiguration.INSTANCE.createStreamClient(executorService, new StreamClientConfigurationImpl(executorService));
+	}
+
+	@Override
+	public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
+		return JettyTransportConfiguration.INSTANCE.createStreamServer(networkAddressFactory.getStreamListenPort());
+	}
+
+
+	@Override
+	public ExecutorService getMulticastReceiverExecutor() {
+		if (useThreadPool && multicastReceiverThreadPool) {
+			return multicastReceiverExecutorService;
 		} else {
-			log.info("no or unknown stream client set. Available clients are APACHE and JDK. Using default APACHE stream client ... ");
-			return new ApacheStreamClient(new ApacheStreamClientConfiguration(getStreamClientExecutorService()));
+			return Executors.newCachedThreadPool(new SimpleThreadFactory(MULTICAST_RECEIVER_THREAD_NAME, true));
+		}
+	}
+
+	@Override
+	public ExecutorService getDatagramIOExecutor() {
+		if (useThreadPool && datagramIOThreadPool) {
+			return datagramIOExecutorService;
+		} else {
+			return Executors.newCachedThreadPool(new SimpleThreadFactory(DATAGRAM_IO_THREAD_NAME, true));
+		}
+	}
+
+	@Override
+	public ExecutorService getAsyncProtocolExecutor() {
+		if (useThreadPool && asyncProtocolThreadPool) {
+			return asyncProtocolExecutorService;
+		} else {
+			return Executors.newCachedThreadPool(new SimpleThreadFactory(ASYNC_PROTOCOL_THREAD_NAME, true));
+		}
+	}
+
+	@Override
+	public ExecutorService getSyncProtocolExecutorService() {
+		if (useThreadPool && syncProtocolThreadPool) {
+			return syncProtocolExecutorService;
+		} else {
+			return Executors.newCachedThreadPool(new SimpleThreadFactory(SYNC_PROTOCOL_THREAD_NAME, true));
 		}
 	}
 
 	public ExecutorService getStreamClientExecutorService() {
-		return streamClientExecutorService;
-	}
-	
-	private ExecutorService createDefaultExecutorService(String name) {
-		return new JUPnPExecutor(name);
-	}
-    
-    @Override
-    @SuppressWarnings("rawtypes")
-    public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
-		if ("upnp".equalsIgnoreCase(streamServer)) {
-			log.info("UPnP stream server is not compatible with current libraries. Using JDK stream server instead.");
-			return new JdkHttpServerStreamServer(new Nextcp2StreamServerConfiguration());
-//			return transportConfiguration.createStreamServer(networkAddressFactory.getStreamListenPort());
-		} else if ("jdk".equalsIgnoreCase(streamServer)) {
-			log.info("using JDK stream server configuration ... ");
-			return new JdkHttpServerStreamServer(new Nextcp2StreamServerConfiguration());
+		if (useThreadPool && streamClientThreadPool) {
+			return streamClientExecutorService;
+		} else {
+			return Executors.newCachedThreadPool(new SimpleThreadFactory(STREAM_CLIENT_THREAD_NAME, true));
 		}
-		else {
-			log.info("no or unknown stream server set. Available clients are UPNP and JDK. Using default UPnP stream server ... ");
-			return new JdkHttpServerStreamServer(new Nextcp2StreamServerConfiguration());
+	}
+
+	@Override
+	public ExecutorService getStreamServerExecutorService() {
+		if (useThreadPool && streamServerThreadPool) {
+			return streamServerExecutorService;
+		} else {
+			return Executors.newCachedThreadPool(new SimpleThreadFactory(STREAM_SERVER_THREAD_NAME, true));
 		}
-    }
+	}
 
-    @Override
-    public MulticastReceiver createMulticastReceiver(NetworkAddressFactory networkAddressFactory) {
-        return new MulticastReceiverImpl(
-                new MulticastReceiverConfigurationImpl(
-                        networkAddressFactory.getMulticastGroup(),
-                        networkAddressFactory.getMulticastPort()
-                )
-        );
-    }
+	@Override
+	public Executor getRegistryMaintainerExecutor() {
+		if (useThreadPool && registryMaintainerThreadPool) {
+			return registryMaintainerExecutorService;
+		} else {
+			return Executors.newCachedThreadPool(new SimpleThreadFactory(REGISTRY_MAINTAINER_THREAD_NAME, true));
+		}
+	}
 
-    @Override
-    public DatagramIO createDatagramIO(NetworkAddressFactory networkAddressFactory) {
-        return new DatagramIOImpl(new DatagramIOConfigurationImpl());
-    }
+	@Override
+	public Executor getRegistryListenerExecutor() {
+		if (useThreadPool && registryListenerThreadPool) {
+			return registryListenerExecutorService;
+		} else {
+			return Executors.newCachedThreadPool(new SimpleThreadFactory(REGISTRY_LISTENER_THREAD_NAME, true));
+		}
+	}
 
-    @Override
-    public ExecutorService getMulticastReceiverExecutor() {
-        return getDefaultExecutorService();
-    }
+	@Override
+	public Executor getRemoteListenerExecutor() {
+		if (useThreadPool && remoteListenerThreadPool) {
+			return remoteListenerExecutorService;
+		} else {
+			return Executors.newCachedThreadPool(new SimpleThreadFactory(REMOTE_LISTENER_THREAD_NAME, true));
+		}
+	}
 
-    @Override
-    public ExecutorService getDatagramIOExecutor() {
-        return getDefaultExecutorService();
-    }
+	@Override
+	public void shutdown() {
+		LOGGER.trace("Shutting down executor services");
+		shutdownExecutorServices();
+		// create the executor again ready for reuse in case the runtime is started up again.
+		createExecutorServices();
+	}
 
-    @Override
-    public ExecutorService getStreamServerExecutorService() {
-        return getDefaultExecutorService();
-    }
+	@Override
+	public DatagramProcessor getDatagramProcessor() {
+		return datagramProcessor;
+	}
 
-    @Override
-    public DeviceDescriptorBinder getDeviceDescriptorBinderUDA10() {
-        return deviceDescriptorBinderUDA10;
-    }
+	@Override
+	public SOAPActionProcessor getSoapActionProcessor() {
+		return soapActionProcessor;
+	}
 
-    @Override
-    public ServiceDescriptorBinder getServiceDescriptorBinderUDA10() {
-        return serviceDescriptorBinderUDA10;
-    }
+	@Override
+	public GENAEventProcessor getGenaEventProcessor() {
+		return genaEventProcessor;
+	}
 
-    @Override
-    public ServiceType[] getExclusiveServiceTypes() {
-        return new ServiceType[0];
-    }
+	@Override
+	public DeviceDescriptorBinder getDeviceDescriptorBinderUDA10() {
+		return deviceDescriptorBinderUDA10;
+	}
 
-    /**
-     * @return Defaults to <code>false</code>.
-     */
-    @Override
-    public boolean isReceivedSubscriptionTimeoutIgnored() {
-        return false;
-    }
+	@Override
+	public ServiceDescriptorBinder getServiceDescriptorBinderUDA10() {
+		return serviceDescriptorBinderUDA10;
+	}
 
-    @Override
-    public UpnpHeaders getDescriptorRetrievalHeaders(RemoteDeviceIdentity identity) {
-        return null;
-    }
+	@Override
+	public ServiceType[] getExclusiveServiceTypes() {
+		return new ServiceType[0];
+	}
 
-    @Override
-    public UpnpHeaders getEventSubscriptionHeaders(RemoteService service) {
-        return null;
-    }
+	/**
+	 * @return Defaults to <code>false</code>.
+	 */
+	@Override
+	public boolean isReceivedSubscriptionTimeoutIgnored() {
+		return false;
+	}
 
-    /**
-     * @return Defaults to 1000 milliseconds.
-     */
-    @Override
-    public int getRegistryMaintenanceIntervalMillis() {
-        return 1000;
-    }
+	@Override
+	public Integer getRemoteDeviceMaxAgeSeconds() {
+		return null;
+	}
 
-    /**
-     * @return Defaults to zero, disabling ALIVE flooding.
-     */
-    @Override
-    public int getAliveIntervalMillis() {
-        return 0;
-    }
+	@Override
+	public UpnpHeaders getEventSubscriptionHeaders(RemoteService service) {
+		return null;
+	}
 
-    @Override
-    public Integer getRemoteDeviceMaxAgeSeconds() {
-        return null;
-    }
-
-    @Override
-    public ExecutorService getAsyncProtocolExecutor() {
-        return getDefaultExecutorService();
-    }
-
-    @Override
-    public ExecutorService getSyncProtocolExecutorService() {
-        return getDefaultExecutorService();
-    }
-
-    @Override
-    public Namespace getNamespace() {
-        return namespace;
-    }
-
-    @Override
-    public Executor getRegistryMaintainerExecutor() {
-        return getDefaultExecutorService();
-    }
-
-    @Override
-    public Executor getRegistryListenerExecutor() {
-        return getDefaultExecutorService();
-    }
-
-    @Override
-    public Executor getRemoteListenerExecutor() {
-        return getDefaultExecutorService();
-    }
-
-    @Override
-    public NetworkAddressFactory createNetworkAddressFactory() {
-        return createNetworkAddressFactory(streamListenPort, multicastResponsePort);
-    }
-
-    @Override
-    public void shutdown() {
-        log.trace("Shutting down default executor service");
-        getDefaultExecutorService().shutdownNow();
-    }
-
-    protected NetworkAddressFactory createNetworkAddressFactory(int streamListenPort, int multicastResponsePort) {
-        return new Nextcp2NetworkAddressFactory(streamListenPort, multicastResponsePort, upnpBindInterface);
-    }
-
-    protected DatagramProcessor createDatagramProcessor() {
-        return new DatagramProcessorImpl();
-    }
-
-    protected SOAPActionProcessor createSOAPActionProcessor() {
-        return new SOAPActionProcessorImpl();
-    }
-
-    protected GENAEventProcessor createGENAEventProcessor() {
-        return new GENAEventProcessorImpl();
-    }
-
-    protected DeviceDescriptorBinder createDeviceDescriptorBinderUDA10() {
-        return new UDA10DeviceDescriptorBinderImpl();
-    }
-
-    protected ServiceDescriptorBinder createServiceDescriptorBinderUDA10() {
-        return new UDA10ServiceDescriptorBinderImpl();
-    }
-
-    protected Namespace createNamespace() {
-        return new Namespace();
-    }
-
-    protected ExecutorService getDefaultExecutorService() {
-        return defaultExecutorService;
-    }
+	@Override
+	public Namespace getNamespace() {
+		return namespace;
+	}
 
 	public static class JUPnPExecutor extends ThreadPoolExecutor {
 
 		public JUPnPExecutor(String name) {
-			this(new SimpleThreadFactory("jupnp-" + name),
+			this(new SimpleThreadFactory(name),
 					new ThreadPoolExecutor.DiscardPolicy() {
 				// The pool is bounded and rejections will happen during shutdown
 				@Override
 				public void rejectedExecution(Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
 					// Log and discard
-					LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class).warn("Thread pool rejected execution of " + runnable.getClass());
+					LOGGER.warn("Thread pool rejected execution of " + runnable.getClass());
 					super.rejectedExecution(runnable, threadPoolExecutor);
 				}
 			}
@@ -405,7 +429,7 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
 			// This is the same as Executors.newCachedThreadPool
 			super(CORE_THREAD_POOL_SIZE,
 					THREAD_POOL_SIZE,
-					20L,
+					10L,
 					TimeUnit.SECONDS,
 					new ArrayBlockingQueue<>(THREAD_QUEUE_SIZE),
 					threadFactory,
@@ -430,37 +454,44 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
 					return;
 				}
 				// Log only
-				LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class).warn("Thread terminated " + runnable + " abruptly with exception: " + throwable);
-				LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class).error("Root cause: " + cause, cause);
+				LOGGER.warn("Thread terminated " + runnable + " abruptly with exception: " + throwable);
+				LOGGER.warn("Root cause: " + cause);
 			}
 		}
 	}
 
-    // Executors.DefaultThreadFactory is package visibility (...no touching, you unworthy JDK user!)
-    public static class JUPnPThreadFactory implements ThreadFactory {
+	@Override
+	public NetworkAddressFactory createNetworkAddressFactory() {
+		return new Nextcp2NetworkAddressFactory(
+			NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT,
+			NetworkAddressFactoryImpl.DEFAULT_MULTICAST_RESPONSE_LISTEN_PORT,
+			upnpBindInterface);
+	}
 
-        protected final ThreadGroup group;
-        protected final AtomicInteger threadNumber = new AtomicInteger(1);
-        protected final String namePrefix = "jupnp-";
+	@Override
+	public MulticastReceiver createMulticastReceiver(NetworkAddressFactory networkAddressFactory) {
+		return new MulticastReceiverImpl(
+			new MulticastReceiverConfigurationImpl(
+					networkAddressFactory.getMulticastGroup(),
+					networkAddressFactory.getMulticastPort()
+			)
+	);
+	}
 
-        public JUPnPThreadFactory() {
-            SecurityManager s = System.getSecurityManager();
-            group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
-        }
+	@Override
+	public DatagramIO createDatagramIO(NetworkAddressFactory networkAddressFactory) {
+		return new DatagramIOImpl(new DatagramIOConfigurationImpl());
+	}
 
-        @Override
-        public Thread newThread(Runnable r) {
-            Thread t = new Thread(
-                    group, r,
-                    namePrefix + threadNumber.getAndIncrement(),
-                    0
-            );
-            if (t.isDaemon())
-                t.setDaemon(false);
-            if (t.getPriority() != Thread.NORM_PRIORITY)
-                t.setPriority(Thread.NORM_PRIORITY);
+	@Override
+	public int getAliveIntervalMillis() {
+		return 5000;
+	}
 
-            return t;
-        }
-    }
+	@Override
+	public UpnpHeaders getDescriptorRetrievalHeaders(RemoteDeviceIdentity identity) {
+		return headers;
+	}
+
+
 }

@@ -40,7 +40,7 @@
 			<groupId>de.sf666</groupId>
 			<artifactId>nextcp2-player</artifactId>
 		</dependency>
-		
+
 		<!-- YAML code generator support -->
 		<dependency>
 			<groupId>org.yaml</groupId>
@@ -75,7 +75,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<!-- using spring boot with embedded jetty -->
+		<!-- using spring boot with jetty -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jetty</artifactId>
@@ -83,6 +83,15 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty.ee10</groupId>
+			<artifactId>jetty-ee10-servlet</artifactId>
 		</dependency>
 		<!-- UPnP -->
 		<dependency>
