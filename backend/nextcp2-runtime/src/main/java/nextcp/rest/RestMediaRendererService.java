@@ -65,6 +65,10 @@ public class RestMediaRendererService implements ISongPlayedCallback {
 	@PostConstruct
 	private void init() {
 		mpf = mediaPlayerDiscoveryService.getFirstFactory();
+		if (mpf == null) {
+			log.debug("Player not initialized. No factory found.");
+			return;
+		}
 		renderer = new Nextcp2Renderer(mpf, mediaPlayerConfigService, this);
 		try {
 			if (!upnpService.upnpService().getRouter().isEnabled()) {
