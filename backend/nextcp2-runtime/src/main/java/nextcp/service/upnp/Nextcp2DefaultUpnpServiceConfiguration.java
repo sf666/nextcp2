@@ -477,7 +477,8 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
 	@Override
 	public NetworkAddressFactory createNetworkAddressFactory() {
 		return new Nextcp2NetworkAddressFactory(
-			config.applicationConfig.embeddedServerPort,
+			// TODO make port configurable ... 
+			5003,
 			NetworkAddressFactoryImpl.DEFAULT_MULTICAST_RESPONSE_LISTEN_PORT,
 			upnpBindInterface);
 	}
