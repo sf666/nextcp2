@@ -55,8 +55,6 @@ export class ConfigurationService {
     nextPageAfter: 60,
     pathToRestartScript: '',
     myPlaylistFolderName: '',
-    upnpStreamClient: '',
-    upnpStreamServer: '',
     upnpBindInterface: ''
   }
 
