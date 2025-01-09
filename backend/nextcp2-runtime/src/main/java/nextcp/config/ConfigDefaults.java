@@ -65,16 +65,6 @@ public class ConfigDefaults
             log.info("adding new configuration value 'nextPageAfter = 60'");
             config.applicationConfig.nextPageAfter = Long.valueOf(60);
         }
-        if (config.applicationConfig.upnpStreamClient == null)
-        {
-            log.info("adding new configuration value 'upnpStreamClient = JDK'");
-            config.applicationConfig.upnpStreamClient = "JDK";
-        }
-        if (config.applicationConfig.upnpStreamServer == null)
-        {
-            log.info("adding new configuration value 'upnpStreamServer = JDK'");
-            config.applicationConfig.upnpStreamClient = "JDK";
-        }
     }
 
 }
