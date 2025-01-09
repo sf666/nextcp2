@@ -1,11 +1,13 @@
 package nextcp.service.upnp;
 
+import java.util.concurrent.TimeUnit;
 import org.jupnp.model.message.header.STAllHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import jakarta.annotation.PostConstruct;
 import nextcp.config.RendererConfig;
@@ -44,5 +46,10 @@ public class UpnpServiceFactory
     public Nextcp2UpnpServiceImpl upnpService()
     {
         return upnpService;
-    }   
+    }
+    
+    @Scheduled(fixedRate = 120,timeUnit = TimeUnit.SECONDS)
+    public void scanForDevices() {
+        upnpService.getControlPoint().search(new STAllHeader());
+    }
 }

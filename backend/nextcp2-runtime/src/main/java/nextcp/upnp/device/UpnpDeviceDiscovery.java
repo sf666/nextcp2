@@ -107,9 +107,16 @@ public class UpnpDeviceDiscovery implements RegistryListener
     {
     	if (device.getType().getType().equals(MEDIA_RENDERE_TYPE) && device.getType().getNamespace().equalsIgnoreCase("schemas-upnp-org"))
         {
-            log.info(String.format("remoteDeviceUpdated : %s ", device.toString()));
+            log.info(String.format("remote media renderer device updated : %s ", device.toString()));
             deviceRegistry.updatedMediaRendererDevice(device);
-        }    	
+        } else if (device.getType().getType().equals(MEDIA_SERVER_TYPE)) {
+            log.info(String.format("remote media renderer device updated : %s ", device.toString()));
+            if (isUmsServer(device)) {
+                deviceRegistry.addMediaServerDevice(device, MediaServerType.UMS);
+            } else {
+                deviceRegistry.addMediaServerDevice(device, MediaServerType.DEFAULT);
+            }
+        }     	
     }
 
     @Override

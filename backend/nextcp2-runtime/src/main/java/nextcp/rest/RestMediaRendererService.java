@@ -22,6 +22,8 @@ import jakarta.annotation.PostConstruct;
 import nextcp.dto.MediaPlayerConfigDto;
 import nextcp.dto.ToastrMessage;
 import nextcp.mediaplayer.MediaPlayerDiscoveryService;
+import nextcp.service.upnp.Nextcp2RegistryImpl;
+import nextcp.service.upnp.Nextcp2UpnpServiceImpl;
 import nextcp.service.upnp.UpnpServiceFactory;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
@@ -44,6 +46,9 @@ public class RestMediaRendererService implements ISongPlayedCallback {
 	@Autowired
 	private UpnpServiceFactory upnpService = null;
 
+    @Autowired
+    private Nextcp2UpnpServiceImpl upnp = null;
+    
 	@Autowired
 	private DeviceRegistry deviceRegistry = null;
 
@@ -77,7 +82,8 @@ public class RestMediaRendererService implements ISongPlayedCallback {
 		} catch (RouterException e) {
 			log.error("router error ... ", e);
 		}
-		upnpService.upnpService().getRegistry().addDevice(renderer.getLocalDevice());
+		
+		upnp.getRegistry().addDevice(renderer.getLocalDevice());
 		upnpService.upnpService().getProtocolFactory().createSendingNotificationAlive(renderer.getLocalDevice()).run();
 	}
 
