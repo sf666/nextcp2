@@ -124,8 +124,9 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
 			default ->
 				throw new RuntimeException("Unknown HTTP method: " + upnpRequest.getHttpMethodName());
 		}
-
-		// FIXME: what about HTTP2 ?
+		
+		request.agent("nextcp/2 3.01");
+		
 		if (requestMessage.getOperation().getHttpMinorVersion() == 0) {
 			request.version(HttpVersion.HTTP_1_0);
 		} else {
