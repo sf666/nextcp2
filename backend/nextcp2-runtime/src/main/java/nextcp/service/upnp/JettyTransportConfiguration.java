@@ -22,6 +22,10 @@ import org.jupnp.transport.impl.jetty.StreamClientConfigurationImpl;
 import org.jupnp.transport.spi.StreamClient;
 import org.jupnp.transport.spi.StreamClientConfiguration;
 import org.jupnp.transport.spi.StreamServer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 /**
  * Implementation of {@link TransportConfiguration} for Jetty Servlet EE10 HTTP
@@ -30,10 +34,17 @@ import org.jupnp.transport.spi.StreamServer;
  * @author Victor Toni - initial contribution
  * @author Surf@ceS - adapt to Jetty Servlet EE10
  */
+@Component
 public class JettyTransportConfiguration implements TransportConfiguration {
 
-	public static final TransportConfiguration INSTANCE = new JettyTransportConfiguration();
-
+	@Autowired
+	private JettyServletContainer sc = null;
+	
+	public JettyTransportConfiguration() {
+		
+	}
+	
+	
 	@Override
 	public StreamClient createStreamClient(final ExecutorService executorService,
 			final StreamClientConfiguration configuration) {
@@ -47,6 +58,6 @@ public class JettyTransportConfiguration implements TransportConfiguration {
 	@Override
 	public StreamServer createStreamServer(final int listenerPort) {
 		return new JakartaServletStreamServerImpl(
-				new JakartaServletStreamServerConfigurationImpl(JettyServletContainer.INSTANCE, listenerPort));
+				new JakartaServletStreamServerConfigurationImpl(sc, listenerPort));
 	}
 }

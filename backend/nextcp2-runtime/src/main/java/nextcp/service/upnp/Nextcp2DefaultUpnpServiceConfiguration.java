@@ -54,6 +54,12 @@ import org.jupnp.transport.spi.StreamServer;
 import org.jupnp.util.Exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import nextcp.dto.Config;
 
 /**
  * Default configuration data of a typical UPnP stack.
@@ -133,8 +139,14 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
 	private ExecutorService registryListenerExecutorService;
 	private ExecutorService registryMaintainerExecutorService;
 
-	public Nextcp2DefaultUpnpServiceConfiguration(String upnpBindInterface) {
-		this.upnpBindInterface = upnpBindInterface;
+	@Autowired
+	private JettyTransportConfiguration tc;
+	
+	@Autowired
+	private Config config = null;
+	
+	public Nextcp2DefaultUpnpServiceConfiguration(Nextcp2UpnpUserConfig userConf) {
+		this.upnpBindInterface = userConf.getUpnpBindAddress();
 		datagramProcessor = new DatagramProcessorImpl();
 		soapActionProcessor = new SOAPActionProcessorImpl();
 		genaEventProcessor = new GENAEventProcessorImpl();
@@ -144,6 +156,8 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
 		headers.add(UpnpHeader.Type.USER_AGENT.getHttpName(), "nextcp2/GENERIC UPnP/1.0 DLNADOC/1.50 (" + System.getProperty("os.name").replace(" ", "_") + ")");		
 		createExecutorServices();		
 	}
+
+	
 
 	private void createExecutorServices() {
 		if (useThreadPool) {
@@ -259,12 +273,12 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
 	@Override
 	public StreamClient createStreamClient() {
 		ExecutorService executorService = getStreamClientExecutorService();
-		return JettyTransportConfiguration.INSTANCE.createStreamClient(executorService, new StreamClientConfigurationImpl(executorService));
+		return tc.createStreamClient(executorService, new StreamClientConfigurationImpl(executorService));
 	}
 
 	@Override
 	public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
-		return JettyTransportConfiguration.INSTANCE.createStreamServer(networkAddressFactory.getStreamListenPort());
+		return tc.createStreamServer(networkAddressFactory.getStreamListenPort());
 	}
 
 
@@ -463,7 +477,7 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
 	@Override
 	public NetworkAddressFactory createNetworkAddressFactory() {
 		return new Nextcp2NetworkAddressFactory(
-			NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT,
+			config.applicationConfig.embeddedServerPort,
 			NetworkAddressFactoryImpl.DEFAULT_MULTICAST_RESPONSE_LISTEN_PORT,
 			upnpBindInterface);
 	}

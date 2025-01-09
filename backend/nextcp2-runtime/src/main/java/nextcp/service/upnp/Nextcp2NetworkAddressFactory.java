@@ -17,7 +17,7 @@ public class Nextcp2NetworkAddressFactory extends NetworkAddressFactoryImpl {
 	private String bindNetworkInterface = null;
 
 	public Nextcp2NetworkAddressFactory(int streamListenPort, int multicastResponsePort) throws InitializationException {
-		super(streamListenPort, multicastResponsePort);
+		this(streamListenPort, multicastResponsePort, null);
 	}
 
 	public Nextcp2NetworkAddressFactory(int streamListenPort, int multicastResponsePort, String bindInterface)
@@ -50,7 +50,7 @@ public class Nextcp2NetworkAddressFactory extends NetworkAddressFactoryImpl {
 						}
 					}
 					synchronized (networkInterfaces) {
-						log.trace("Discovered usable network interface: {}", iface.getDisplayName());
+						log.info("Binding to network interface: {}", iface.getDisplayName());
 						networkInterfaces.add(iface);
 					}
 				} else {

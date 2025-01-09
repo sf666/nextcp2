@@ -2,17 +2,21 @@ package nextcp.service.upnp;
 
 import org.jupnp.model.message.header.STAllHeader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import jakarta.annotation.PostConstruct;
 import nextcp.config.RendererConfig;
 import nextcp.dto.Config;
 
-@Component
+@Configuration
 public class UpnpServiceFactory
 {
     private Nextcp2UpnpServiceImpl upnpService = null;
+    
+    @Autowired
     private Nextcp2DefaultUpnpServiceConfiguration nextcp2DefaultUpnpServiceConfiguration = null;
 
     @Autowired
@@ -29,8 +33,6 @@ public class UpnpServiceFactory
     public void init() {
         // UpnpService upnpService = new UpnpServiceImpl(new DefaultUpnpServiceConfiguration());
         // CodegenUpnpServiceConfiguration sc = new CodegenUpnpServiceConfiguration();
-    	nextcp2DefaultUpnpServiceConfiguration = new Nextcp2DefaultUpnpServiceConfiguration(
-    		config.applicationConfig.upnpBindInterface);
         upnpService = new Nextcp2UpnpServiceImpl(nextcp2DefaultUpnpServiceConfiguration, rendererConfigService);
         
         upnpService.startup();
@@ -42,6 +44,5 @@ public class UpnpServiceFactory
     public Nextcp2UpnpServiceImpl upnpService()
     {
         return upnpService;
-    }
-
+    }   
 }

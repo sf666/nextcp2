@@ -16,7 +16,6 @@
  */
 package nextcp.service.upnp;
 
-import jakarta.servlet.Servlet;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
@@ -25,8 +24,11 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.jupnp.transport.spi.ServletContainerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import jakarta.servlet.Servlet;
 
 /**
  * A singleton wrapper of a EE10 <code>org.eclipse.jetty.server.Server</code>.
@@ -44,16 +46,15 @@ import org.slf4j.LoggerFactory;
  * @author Victor Toni - refactoring for JUPnP
  * @author Surf@ceS - adapt to v12 ee10 servlet
  */
-public class JettyServletContainer implements JakartaServletContainerAdapter {
+@Component
+public class JettyServletContainer
+	implements JakartaServletContainerAdapter {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(JettyServletContainer.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(JettyServletContainer.class.getName());
 
-	// Singleton
-	public static final JettyServletContainer INSTANCE = new JettyServletContainer();
+    protected Server server;
 
-	protected Server server;
-
-	private JettyServletContainer() {
+	public JettyServletContainer() {
 		resetServer();
 	}
 
@@ -64,21 +65,21 @@ public class JettyServletContainer implements JakartaServletContainerAdapter {
 
 	@Override
 	public synchronized int addConnector(String host, int port) throws IOException {
-		ServerConnector connector = new ServerConnector(server);
-		connector.setHost(host);
-		connector.setPort(port);
-		server.addConnector(connector);
-		return port;
+        ServerConnector connector = new ServerConnector(server);
+        connector.setHost(host);
+        connector.setPort(port);
+        server.addConnector(connector);
+        return port;
 	}
 
 	@Override
-	public synchronized void registerServlet(String contextPath, Servlet servlet) {
+	public synchronized void registerServlet(String contextPath, Servlet servlet) {		
 		if (server.getHandler() == null) {
 			ContextHandlerCollection contextHandlers = new ContextHandlerCollection();
 			server.setHandler(contextHandlers);
 		}
 		if (server.getHandler() instanceof ContextHandlerCollection contextHandlers) {
-			LOGGER.info("Registering UPnP servlet under context path: {}", contextPath);
+			log.info("Registering UPnP servlet under context path: {}", contextPath);
 			ServletContextHandler servletHandler = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
 			if (contextPath != null && !contextPath.isEmpty()) {
 				servletHandler.setContextPath(contextPath);
@@ -88,18 +89,18 @@ public class JettyServletContainer implements JakartaServletContainerAdapter {
 			servletHandler.addServlet(s, "/dev/*");
 			contextHandlers.addHandler(servletHandler);
 		} else {
-			LOGGER.trace("Server handler is not a ContextHandlerCollection");
+			log.trace("Server handler is not a ContextHandlerCollection");
 		}
 	}
 
 	@Override
 	public synchronized void startIfNotRunning() {
 		if (!server.isStarted() && !server.isStarting()) {
-			LOGGER.info("Starting Jetty server {}", Server.getVersion());
+			log.info("Starting Jetty server {}", Server.getVersion());
 			try {
 				server.start();
 			} catch (Exception e) {
-				LOGGER.error("Couldn't start Jetty server", e);
+				log.error("Couldn't start Jetty server", e);
 				throw new RuntimeException(e);
 			}
 		}
@@ -108,11 +109,11 @@ public class JettyServletContainer implements JakartaServletContainerAdapter {
 	@Override
 	public synchronized void stopIfRunning() {
 		if (!server.isStopped() && !server.isStopping()) {
-			LOGGER.info("Stopping Jetty server...");
+			log.info("Stopping Jetty server...");
 			try {
 				server.stop();
 			} catch (Exception e) {
-				LOGGER.error("Couldn't stop Jetty server", e);
+				log.error("Couldn't stop Jetty server", e);
 				throw new RuntimeException(e);
 			} finally {
 				resetServer();
