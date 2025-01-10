@@ -198,9 +198,11 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		UpdateObjectInput inp = new UpdateObjectInput();
 		inp.ObjectID = updateRequest.musicItemIdDto.objectID;
 		inp.CurrentTagValue = updateRequest.previousAlbumArtUri != null ?
-			String.format("<upnp:albumArtURI>%s</upnp:albumArtURI>", updateRequest.previousAlbumArtUri) : null;
+			String.format("<upnp:albumArtURI>%s</upnp:albumArtURI>", updateRequest.previousAlbumArtUri) :
+			null;
 		inp.NewTagValue = updateRequest.previousAlbumArtUri != null ?
-			String.format("<upnp:albumArtURI>%s</upnp:albumArtURI>", updateRequest.newAlbumArtUri) : null;
+			String.format("<upnp:albumArtURI>%s</upnp:albumArtURI>", updateRequest.newAlbumArtUri) :
+			null;
 		try {
 			getContentDirectoryService().updateObject(inp);
 		} catch (GenActionException e) {
@@ -329,7 +331,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	}
 
 	private String browseChildrenSearchFolder(long start, long end, String objectId, String foldername) {
-		log.debug("search folder with id {} with filter {} ...", objectId, foldername);
+		log.debug("search folder having id {} and title {} ...", objectId, foldername);
 		BrowseInput inp = new BrowseInput();
 		inp.ObjectID = objectId;
 		inp.SortCriteria = "";
@@ -338,22 +340,26 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		inp.Filter = "*";
 		ContainerItemDto resultContainer = browseChildren(inp);
 		for (ContainerDto folder : resultContainer.containerDto) {
+			log.debug("Found folder named : {}", folder.title);
 			if (folder.title.equalsIgnoreCase(foldername)) {
+				log.debug("Found folder id : {}", folder.id);
 				return folder.id;
 			}
 		}
-		if (resultContainer.totalMatches > end) {
+		if (resultContainer.totalMatches != null && resultContainer.totalMatches > end) {
 			long diff = end - start;
 			log.debug("extending search to items from {} to {}", diff + 1, 2 * diff + 1);
 			return browseChildrenSearchFolder(diff + 1, 2 * diff + 1, objectId, foldername);
+		} else {
+			log.warn("CDS didn't fill totalMatches attribute.");
 		}
-		log.debug("folder not found : " + foldername);
+		log.debug("folder not found : {}", foldername);
 		return null;
 	}
 
 	@Override
 	public String getOrCreateChildFolderId(String parentContainerId, String folderName) throws Exception {
-		log.debug("creating folder with name {} in parentfolder with id {} ...", folderName, parentContainerId);
+		log.debug("getting or creating folder with name {} in parentfolder having id {} ...", folderName, parentContainerId);
 		String childId = this.browseChildrenSearchFolder(0, 999, parentContainerId, folderName);
 		if (childId == null) {
 			Container c = createFolder(parentContainerId, folderName);
