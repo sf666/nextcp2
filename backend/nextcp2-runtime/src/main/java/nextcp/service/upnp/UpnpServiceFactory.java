@@ -24,9 +24,6 @@ public class UpnpServiceFactory
     @Autowired
 	private RendererConfig rendererConfigService;
     
-    @Autowired
-    private Config config = null;
-
     public UpnpServiceFactory()
     {
     }
@@ -38,7 +35,6 @@ public class UpnpServiceFactory
         upnpService = new Nextcp2UpnpServiceImpl(nextcp2DefaultUpnpServiceConfiguration, rendererConfigService);
         
         upnpService.startup();
-        upnpService.getControlPoint().search(new STAllHeader());
     }
     
     @Bean
@@ -48,7 +44,7 @@ public class UpnpServiceFactory
         return upnpService;
     }
     
-    @Scheduled(fixedRate = 120,timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedRate = 10,timeUnit = TimeUnit.MINUTES)
     public void scanForDevices() {
         upnpService.getControlPoint().search(new STAllHeader());
     }

@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.SystemConfiguration;
 import org.apache.commons.io.FilenameUtils;
@@ -12,12 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import nextcp.db.DatabaseConfig;
 import nextcp.dto.ApplicationConfig;
 import nextcp.dto.Config;
@@ -37,7 +36,7 @@ public class FileConfigPersistence
 
     private String configurationFilename = null;
     private Config config = null;
-    private ObjectMapper om = new ObjectMapper();
+    private ObjectMapper om = null;
     private ConfigDefaults configDefaults = new ConfigDefaults();
 
     public FileConfigPersistence()
@@ -45,7 +44,7 @@ public class FileConfigPersistence
         try
         {
             // Ignore member stored in database JSON Key-Value db.
-            om.addMixIn(Config.class, IgnoreConfigPropertyMixin.class);
+        	om = JsonMapper.builder().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).build();
 
             findConfig();
             readConfig();
@@ -98,7 +97,7 @@ public class FileConfigPersistence
             }
             catch (Exception e)
             {
-                log.warn("supplied config file is broken. Generating default config ...");
+                log.warn("supplied config file is broken. Generating default config ...", e);
                 config = getDefaultConfig();
             }
             configDefaults.applyDefaults(config);

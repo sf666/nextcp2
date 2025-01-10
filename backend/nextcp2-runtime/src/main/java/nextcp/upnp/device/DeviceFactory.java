@@ -21,28 +21,33 @@ public class DeviceFactory
     @Scope(value = "prototype")
     public MediaRendererDevice mediaRendererDeviceFactory(RemoteDevice name, boolean enabledByUser)
     {
-        // if ("LUMIN".equalsIgnoreCase(name.getDetails().getModelDetails().getModelDescription()))
-        // {
-        // return new LuminDevice(name);
-        // }
         log.info("created new media renderer device : {} - {}", name.getDetails().getFriendlyName(), name.getIdentity().getUdn().toString());
         return new MediaRendererDevice(name, enabledByUser);
     }
 
+	private MediaServerType getServerType(RemoteDevice device) {
+		String manufacturer = device.getDetails().getManufacturerDetails().getManufacturer();
+		if ("Universal Media Server".equalsIgnoreCase(manufacturer)) {
+			return MediaServerType.UMS;
+		}
+		return MediaServerType.DEFAULT;
+	}
+
     @Bean
     @Scope(value = "prototype")
-    public MediaServerDevice mediaServerDeviceFactory(RemoteDevice name, MediaServerType serverType)
+    public MediaServerDevice mediaServerDeviceFactory(RemoteDevice name)
     {
-        switch (serverType)
+    	
+        switch (getServerType(name))
         {
             case UMS:
-                log.info("Created new UmsServerDevice : {}", name);
+                log.info("Created new UmsServerDevice : {}", name.getDetails().getFriendlyName());
                 return new UmsServerDevice(name);
             case DEFAULT:
-                log.info("Created new ServerDevice : {}", name);
+                log.info("Created new ServerDevice : {}", name.getDetails().getFriendlyName());
                 return new MediaServerDevice(name);
             default:
-                log.info("Unkown media server type : {}", serverType.toString());
+                log.warn("Unkown media server type : {}", name.getDetails().getFriendlyName());
                 throw new RuntimeException("Unknown server type.");
         }
     }

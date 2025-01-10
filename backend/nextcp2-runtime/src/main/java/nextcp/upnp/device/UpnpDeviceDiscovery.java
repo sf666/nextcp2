@@ -6,6 +6,7 @@ import org.jupnp.UpnpService;
 import org.jupnp.model.message.header.STAllHeader;
 import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.RemoteDevice;
+import org.jupnp.model.meta.RemoteService;
 import org.jupnp.registry.Registry;
 import org.jupnp.registry.RegistryListener;
 import org.slf4j.Logger;
@@ -19,146 +20,121 @@ import org.springframework.stereotype.Component;
  * Control Point: Device Discovery.
  */
 @Component
-public class UpnpDeviceDiscovery implements RegistryListener
-{
-    public final static String MEDIA_SERVER_TYPE = "MediaServer";
-    public final static String MEDIA_RENDERE_TYPE = "MediaRenderer";
-    public final static String JMINIM_MONITOR_TYPE = "Monitor";
+public class UpnpDeviceDiscovery implements RegistryListener {
 
-    private static final Logger log = LoggerFactory.getLogger(UpnpDeviceDiscovery.class.getName());
+	public final static String MEDIA_SERVER_TYPE = "MediaServer";
+	public final static String MEDIA_RENDERE_TYPE = "MediaRenderer";
+	public final static String MEDIA_RENDERE_OPENHOME = "Source";
+	public final static String JMINIM_MONITOR_TYPE = "Monitor";
 
-    @Autowired
-    private UpnpService upnpService = null;
+	private static final Logger log = LoggerFactory.getLogger(UpnpDeviceDiscovery.class.getName());
 
-    @Autowired
-    private DeviceRegistry deviceRegistry = null;
+	@Autowired
+	private UpnpService upnpService = null;
 
-    @Autowired
-    private DeviceFactory deviceFactory = null;
+	@Autowired
+	private DeviceRegistry deviceRegistry = null;
 
-    @PostConstruct
-    private void init()
-    {
-        upnpService.getRegistry().addListener(this);
+	@Autowired
+	private DeviceFactory deviceFactory = null;
 
-        // Broadcast a search message for all devices
-        upnpService.getControlPoint().search(new STAllHeader());
-    }
+	@PostConstruct
+	private void init() {
+		upnpService.getRegistry().addListener(this);
 
-    @EventListener
-    public void onApplicationStartedEvent(ContextRefreshedEvent event)
-    {
-        log.info("Starting device discovery service ... ");
-    }
+		// Broadcast a search message for all devices
+		upnpService.getControlPoint().search(new STAllHeader());
+	}
 
-    @Override
-    public void remoteDeviceAdded(Registry registry, RemoteDevice device)
-    {
-        log.info(String.format("remoteDeviceAdded of type '%s'. Device [%s] ", device.getType(), device.toString()));
-        if (isUmsServer(device))
-        {
-            deviceRegistry.addMediaServerDevice(device, MediaServerType.UMS);
-        }
-        else if (device.getType().getType().equals(MEDIA_SERVER_TYPE) && device.getType().getNamespace().equalsIgnoreCase("schemas-upnp-org"))
-        {
-            deviceRegistry.addMediaServerDevice(device, MediaServerType.DEFAULT);
-        }
-        else if (device.getType().getType().equals(MEDIA_RENDERE_TYPE) && device.getType().getNamespace().equalsIgnoreCase("schemas-upnp-org"))
-        {
-            deviceRegistry.addMediaRendererDevice(device);
-        }
-        else if (device.getType().getType().equals(JMINIM_MONITOR_TYPE) && device.getType().getNamespace().equalsIgnoreCase("jminim-org"))
-        {
-            deviceRegistry.addMediaServerExtDevice(deviceFactory.mediaServerJMinim(device));
-        }
-    }
+	@EventListener
+	public void onApplicationStartedEvent(ContextRefreshedEvent event) {
+		log.info("Starting device discovery service ... ");
+	}
 
-    private boolean isUmsServer(RemoteDevice device)
-    {
-        if (device.getType().getType().equals(MEDIA_SERVER_TYPE))
-        {
-            String manufacturer = device.getDetails().getManufacturerDetails().getManufacturer();
-            if ("Universal Media Server".equalsIgnoreCase(manufacturer))
-            {
-                return true;
-            }
-            if ("ums".equalsIgnoreCase(manufacturer))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+	@Override
+	public void remoteDeviceAdded(Registry registry, RemoteDevice device) {
+		log.info("remoteDeviceAdded of type {}. Device {} ", device.getType().toString(), device.getDetails().getFriendlyName());
+		if (device.getType().getType().equals(MEDIA_SERVER_TYPE)) {
+			deviceRegistry.addMediaServerDevice(device);
+		} else if (isMediaRenderer(device)) {
+			deviceRegistry.addMediaRendererDevice(device);
+		} else if (device.getType().getType().equals(JMINIM_MONITOR_TYPE) &&
+			device.getType().getNamespace().equalsIgnoreCase("jminim-org")) {
+			deviceRegistry.addMediaServerExtDevice(deviceFactory.mediaServerJMinim(device));
+		}
+	}
 
-    @Override
-    public void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice device)
-    {
-        log.info(String.format("remoteDeviceDiscoveryStarted"));
-    }
+	@Override
+	public void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice device) {
+		log.info("remoteDeviceDiscoveryStarted : {} ",
+			device.getDetails() != null ? device.getDetails().getFriendlyName() : device.toString());
+	}
 
-    @Override
-    public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex)
-    {
-        log.info(String.format("remoteDeviceDiscoveryFailed"));
-    }
+	@Override
+	public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex) {
+		log.info("remoteDeviceDiscoveryFailed : {}",
+			device.getDetails() != null ? device.getDetails().getFriendlyName() : device.toString());
+	}
 
-    @Override
-    public void remoteDeviceUpdated(Registry registry, RemoteDevice device)
-    {
-    	if (device.getType().getType().equals(MEDIA_RENDERE_TYPE) && device.getType().getNamespace().equalsIgnoreCase("schemas-upnp-org"))
-        {
-            log.info(String.format("remote media renderer device updated : %s ", device.toString()));
-            deviceRegistry.updatedMediaRendererDevice(device);
-        } else if (device.getType().getType().equals(MEDIA_SERVER_TYPE)) {
-            log.info(String.format("remote media renderer device updated : %s ", device.toString()));
-            if (isUmsServer(device)) {
-                deviceRegistry.addMediaServerDevice(device, MediaServerType.UMS);
-            } else {
-                deviceRegistry.addMediaServerDevice(device, MediaServerType.DEFAULT);
-            }
-        }     	
-    }
+	@Override
+	public void remoteDeviceUpdated(Registry registry, RemoteDevice device) {
+		log.debug("remote media renderer device updated : {} ", device.getDetails().getFriendlyName());
 
-    @Override
-    public void remoteDeviceRemoved(Registry registry, RemoteDevice device)
-    {
-        log.info(String.format(String.format("remoteDeviceRemoved : %s", device.toString())));
+		if (isMediaRenderer(device)) {
+			deviceRegistry.updatedMediaRendererDevice(device);
+		} else if (device.getType().getType().equals(MEDIA_SERVER_TYPE)) {
+			deviceRegistry.updatedMediaServerDevice(device);
+		} else {
+			log.info("ignoring device : " + device.getDetails() != null ? device.getDetails().getFriendlyName() : device.toString());
+		}
+	}
 
-        if (device.getType().getType().equals(MEDIA_SERVER_TYPE) && device.getType().getNamespace().equalsIgnoreCase("schemas-upnp-org"))
-        {
-            deviceRegistry.removeMediaServerDevice(device);
-        }
-        else if (device.getType().getType().equals(MEDIA_RENDERE_TYPE) && device.getType().getNamespace().equalsIgnoreCase("schemas-upnp-org"))
-        {
-            deviceRegistry.removeMediaRendererDevice(device);
-        }
-        else if (device.getType().getType().equals(JMINIM_MONITOR_TYPE) && device.getType().getNamespace().equalsIgnoreCase("jminim-org"))
-        {
-            deviceRegistry.removeMediaServerExtDevice(device);
-        }
-    }
+	@Override
+	public void remoteDeviceRemoved(Registry registry, RemoteDevice device) {
+		log.info("remoteDeviceRemoved : {}", device.getDetails().getFriendlyName());
 
-    @Override
-    public void localDeviceAdded(Registry registry, LocalDevice device)
-    {
-        log.info(String.format("localDeviceAdded"));
-    }
+		if (device.getType().getType().equals(MEDIA_SERVER_TYPE)) {
+			deviceRegistry.removeMediaServerDevice(device);
+		} else if (isMediaRenderer(device)) {
+			deviceRegistry.removeMediaRendererDevice(device);
+		} else if (device.getType().getType().equals(JMINIM_MONITOR_TYPE) &&
+			device.getType().getNamespace().equalsIgnoreCase("jminim-org")) {
+			deviceRegistry.removeMediaServerExtDevice(device);
+		}
+	}
 
-    @Override
-    public void localDeviceRemoved(Registry registry, LocalDevice device)
-    {
-        log.info(String.format("localDeviceRemoved"));
-    }
+	private boolean isMediaRenderer(RemoteDevice device) {
+		if (device.getType().getType().equals(MEDIA_RENDERE_TYPE)) {
+			log.debug("identified upnp renderer");
+			return true;
+		} else {
+			for (RemoteService service : device.getServices()) {
+				if ("av-openhome-org".equals(service.getServiceType().getNamespace())) {
+					log.debug("identified open home renderer");
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
-    @Override
-    public void beforeShutdown(Registry registry)
-    {
-        log.info(String.format("beforeShutdown"));
-    }
+	@Override
+	public void localDeviceAdded(Registry registry, LocalDevice device) {
+		log.info("localDeviceAdded : {} ", device.getDetails() != null ? device.getDetails().getFriendlyName() : device.toString());
+	}
 
-    @Override
-    public void afterShutdown()
-    {
-        log.info(String.format("afterShutdown"));
-    }
+	@Override
+	public void localDeviceRemoved(Registry registry, LocalDevice device) {
+		log.info("localDeviceRemoved : {} ", device.getDetails() != null ? device.getDetails().getFriendlyName() : device.toString());
+	}
+
+	@Override
+	public void beforeShutdown(Registry registry) {
+		log.info("beforeShutdown");
+	}
+
+	@Override
+	public void afterShutdown() {
+		log.info("afterShutdown");
+	}
 }

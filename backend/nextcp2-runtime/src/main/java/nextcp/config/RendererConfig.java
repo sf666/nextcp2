@@ -97,7 +97,7 @@ public class RendererConfig {
 
 	public boolean isMediaRendererActive(String udn) {
 		if (udn == null) {
-			return true;
+			return false;
 		}
 
 		Optional<RendererDeviceConfiguration> configEntry = config.rendererDevices.stream()
