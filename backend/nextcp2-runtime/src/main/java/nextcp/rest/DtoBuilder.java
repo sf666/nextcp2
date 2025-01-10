@@ -492,6 +492,9 @@ public class DtoBuilder
 
     public String generateMetadataFromItem(AudioItem item)
     {
+    	if (StringUtils.isBlank(item.getId())) {
+    		return "";
+    	}
         DIDLContent c = new DIDLContent();
         c.addItem(item);
         try
