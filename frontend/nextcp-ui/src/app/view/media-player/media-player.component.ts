@@ -1,7 +1,6 @@
 import { DeviceService } from './../../service/device.service';
 import { MusicLibraryService } from './../../service/music-library/music-library.service';
-import { Event } from './../../../../node_modules/@types/ws/node_modules/undici-types/patch.d';
-import { MediaPlayerConfigDto, ContainerItemDto, ContainerIdDto } from './../../service/dto.d';
+import { MediaPlayerConfigDto, ContainerIdDto } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
 import { ChangeDetectionStrategy, Component, model, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
