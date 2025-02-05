@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-01-09 12:46:39.
+// Generated using typescript-generator version 3.2.1263 on 2025-02-05 16:12:23.
 
 export interface ApplicationConfig {
     myPlaylistFolderName: string;
@@ -346,7 +346,6 @@ export interface ServerDeviceConfiguration {
     displayString: string;
     enabled: boolean;
     mediaServer: MediaServerDto;
-    apiKey: string;
 }
 
 export interface ServerPlaylistDto {
