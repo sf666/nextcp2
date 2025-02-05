@@ -29,8 +29,21 @@ public class X_GetFeatureList extends ActionCallback
 
     }
 
-    public void executeAction()
+    public X_GetFeatureListOutput executeAction()
     {
-        ActionInvocation<?> invocation = execute();
+        invocation = execute();
+
+        X_GetFeatureListOutput result = new X_GetFeatureListOutput();
+
+  		if (invocation.getOutput("FeatureList").getValue() != null)
+  		{
+	        result.FeatureList = invocation.getOutput("FeatureList").getValue().toString();
+  		}
+  		else
+  		{
+	        result.FeatureList = "";
+  		}
+
+        return result;
     }
 }

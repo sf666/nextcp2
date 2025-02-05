@@ -1,4 +1,4 @@
-package nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1;
+package nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1;
 
 import java.util.Map;
 import java.util.List;
@@ -25,23 +25,23 @@ import nextcp.upnp.ISubscriptionEventListener;
  *  
  * Generated UPnP subscription service class.  
  */
-public class X_MS_MediaReceiverRegistrarServiceSubscription extends RemoteGENASubscription
+public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscription
 {
-    private static final Logger log = LoggerFactory.getLogger(X_MS_MediaReceiverRegistrarServiceSubscription.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(UmsExtendedServicesServiceSubscription.class.getName());
 
-    private List<IX_MS_MediaReceiverRegistrarServiceEventListener> eventListener = new CopyOnWriteArrayList<>();
+    private List<IUmsExtendedServicesServiceEventListener> eventListener = new CopyOnWriteArrayList<>();
         
-    protected X_MS_MediaReceiverRegistrarServiceSubscription(RemoteService service, int requestedDurationSeconds)
+    protected UmsExtendedServicesServiceSubscription(RemoteService service, int requestedDurationSeconds)
     {
         super(service, requestedDurationSeconds);
     }
 
-    public void addSubscriptionEventListener(IX_MS_MediaReceiverRegistrarServiceEventListener listener)
+    public void addSubscriptionEventListener(IUmsExtendedServicesServiceEventListener listener)
     {
         eventListener.add(listener);
     }
     
-    public boolean removeSubscriptionEventListener(IX_MS_MediaReceiverRegistrarServiceEventListener listener)
+    public boolean removeSubscriptionEventListener(IUmsExtendedServicesServiceEventListener listener)
     {
         return eventListener.remove(listener);
     }
@@ -108,17 +108,17 @@ public class X_MS_MediaReceiverRegistrarServiceSubscription extends RemoteGENASu
             {
                 switch (key)
                 {
-                    case "ValidationSucceededUpdateID":
-                        validationSucceededUpdateIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                    case "AnonymousDevicesWrite":
+                        anonymousDevicesWriteChange((Boolean) stateVar.getValue());
                         break;
-                    case "ValidationRevokedUpdateID":
-                        validationRevokedUpdateIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                    case "AudioLikesVisibleRoot":
+                        audioLikesVisibleRootChange((Boolean) stateVar.getValue());
                         break;
-                    case "AuthorizationGrantedUpdateID":
-                        authorizationGrantedUpdateIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                    case "UpnpCdsWrite":
+                        upnpCdsWriteChange((Boolean) stateVar.getValue());
                         break;
-                    case "AuthorizationDeniedUpdateID":
-                        authorizationDeniedUpdateIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                    case "AudioUpdateRatingTag":
+                        audioUpdateRatingTagChange((Boolean) stateVar.getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -140,35 +140,35 @@ public class X_MS_MediaReceiverRegistrarServiceSubscription extends RemoteGENASu
         }
     }
 
-    private void validationSucceededUpdateIDChange(Long value)
+    private void anonymousDevicesWriteChange(Boolean value)
     {
-        for (IX_MS_MediaReceiverRegistrarServiceEventListener listener : eventListener)
+        for (IUmsExtendedServicesServiceEventListener listener : eventListener)
         {
-            listener.validationSucceededUpdateIDChange(value);
+            listener.anonymousDevicesWriteChange(value);
         }
     }    
 
-    private void validationRevokedUpdateIDChange(Long value)
+    private void audioLikesVisibleRootChange(Boolean value)
     {
-        for (IX_MS_MediaReceiverRegistrarServiceEventListener listener : eventListener)
+        for (IUmsExtendedServicesServiceEventListener listener : eventListener)
         {
-            listener.validationRevokedUpdateIDChange(value);
+            listener.audioLikesVisibleRootChange(value);
         }
     }    
 
-    private void authorizationGrantedUpdateIDChange(Long value)
+    private void upnpCdsWriteChange(Boolean value)
     {
-        for (IX_MS_MediaReceiverRegistrarServiceEventListener listener : eventListener)
+        for (IUmsExtendedServicesServiceEventListener listener : eventListener)
         {
-            listener.authorizationGrantedUpdateIDChange(value);
+            listener.upnpCdsWriteChange(value);
         }
     }    
 
-    private void authorizationDeniedUpdateIDChange(Long value)
+    private void audioUpdateRatingTagChange(Boolean value)
     {
-        for (IX_MS_MediaReceiverRegistrarServiceEventListener listener : eventListener)
+        for (IUmsExtendedServicesServiceEventListener listener : eventListener)
         {
-            listener.authorizationDeniedUpdateIDChange(value);
+            listener.audioUpdateRatingTagChange(value);
         }
     }    
 }

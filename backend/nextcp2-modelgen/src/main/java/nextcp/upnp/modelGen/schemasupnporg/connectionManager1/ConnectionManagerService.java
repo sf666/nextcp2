@@ -29,7 +29,7 @@ import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.actions.GetCurrent
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchroniously.  
+ * Generated UPnP Service class for calling Actions synchronously.  
  */
 public class ConnectionManagerService
 {

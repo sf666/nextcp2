@@ -1,4 +1,4 @@
-package nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1;
+package nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1;
 
 import org.jupnp.model.UnsupportedDataException;
 import org.jupnp.model.gena.CancelReason;
@@ -18,14 +18,14 @@ import org.slf4j.LoggerFactory;
  *  
  * Generated UPnP EventListener Implementation.  
  */
-public class X_MS_MediaReceiverRegistrarServiceEventListenerImpl implements IX_MS_MediaReceiverRegistrarServiceEventListener 
+public class UmsExtendedServicesServiceEventListenerImpl implements IUmsExtendedServicesServiceEventListener 
 {
-    private static Logger log = LoggerFactory.getLogger(X_MS_MediaReceiverRegistrarServiceEventListenerImpl.class.getName());
-    private X_MS_MediaReceiverRegistrarServiceStateVariable stateVariable = new X_MS_MediaReceiverRegistrarServiceStateVariable();
+    private static Logger log = LoggerFactory.getLogger(UmsExtendedServicesServiceEventListenerImpl.class.getName());
+    private UmsExtendedServicesServiceStateVariable stateVariable = new UmsExtendedServicesServiceStateVariable();
     private RemoteDevice device = null;
     
     
-	public X_MS_MediaReceiverRegistrarServiceEventListenerImpl(RemoteDevice device) {
+	public UmsExtendedServicesServiceEventListenerImpl(RemoteDevice device) {
 		this.device = device;
 	}
     
@@ -38,7 +38,7 @@ public class X_MS_MediaReceiverRegistrarServiceEventListenerImpl implements IX_M
      * 
      * @return state variable
      */
-    public X_MS_MediaReceiverRegistrarServiceStateVariable getStateVariable()
+    public UmsExtendedServicesServiceStateVariable getStateVariable()
     {
         return stateVariable;
     }
@@ -125,39 +125,39 @@ public class X_MS_MediaReceiverRegistrarServiceEventListenerImpl implements IX_M
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void validationSucceededUpdateIDChange(Long value)
+    public void anonymousDevicesWriteChange(Boolean value)
     {
-        stateVariable.ValidationSucceededUpdateID = value;
+        stateVariable.AnonymousDevicesWrite = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "ValidationSucceededUpdateID", value));
+            log.debug(String.format("StateVariable : %s: %s", "AnonymousDevicesWrite", value));
         }
     }
     
-    public void validationRevokedUpdateIDChange(Long value)
+    public void audioLikesVisibleRootChange(Boolean value)
     {
-        stateVariable.ValidationRevokedUpdateID = value;
+        stateVariable.AudioLikesVisibleRoot = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "ValidationRevokedUpdateID", value));
+            log.debug(String.format("StateVariable : %s: %s", "AudioLikesVisibleRoot", value));
         }
     }
     
-    public void authorizationGrantedUpdateIDChange(Long value)
+    public void upnpCdsWriteChange(Boolean value)
     {
-        stateVariable.AuthorizationGrantedUpdateID = value;
+        stateVariable.UpnpCdsWrite = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "AuthorizationGrantedUpdateID", value));
+            log.debug(String.format("StateVariable : %s: %s", "UpnpCdsWrite", value));
         }
     }
     
-    public void authorizationDeniedUpdateIDChange(Long value)
+    public void audioUpdateRatingTagChange(Boolean value)
     {
-        stateVariable.AuthorizationDeniedUpdateID = value;
+        stateVariable.AudioUpdateRatingTag = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "AuthorizationDeniedUpdateID", value));
+            log.debug(String.format("StateVariable : %s: %s", "AudioUpdateRatingTag", value));
         }
     }
     

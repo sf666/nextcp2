@@ -297,7 +297,7 @@ public class MediaServerDevice extends BaseDevice {
 		log.warn("rescan not implemented for this device : " + getFriendlyName());
 	}
 
-	public void rescanFile(File f) {
+	public void rescanFile(String objectId) {
 		log.warn("scan file not implemented for this device : " + getFriendlyName());
 	}
 }

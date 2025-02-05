@@ -19,13 +19,14 @@ import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseOutpu
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSearchCapabilities;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSearchCapabilitiesOutput;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.DestroyObject;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.DestroyObjectInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.UpdateObject;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.UpdateObjectInput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.DestroyObject;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.DestroyObjectInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSortCapabilities;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSortCapabilitiesOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.X_GetFeatureList;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.X_GetFeatureListOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateReference;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateReferenceOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateReferenceInput;
@@ -47,7 +48,7 @@ import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSystemUp
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchroniously.  
+ * Generated UPnP Service class for calling Actions synchronously.  
  */
 public class ContentDirectoryService
 {
@@ -135,16 +136,16 @@ public class ContentDirectoryService
         return res;        
     }
 
-    public void destroyObject(DestroyObjectInput inp)
-    {
-        DestroyObject destroyObject = new DestroyObject(contentDirectoryService, inp, upnpService.getControlPoint());
-        destroyObject.executeAction();
-    }
-
     public void updateObject(UpdateObjectInput inp)
     {
         UpdateObject updateObject = new UpdateObject(contentDirectoryService, inp, upnpService.getControlPoint());
         updateObject.executeAction();
+    }
+
+    public void destroyObject(DestroyObjectInput inp)
+    {
+        DestroyObject destroyObject = new DestroyObject(contentDirectoryService, inp, upnpService.getControlPoint());
+        destroyObject.executeAction();
     }
 
     public GetSortCapabilitiesOutput getSortCapabilities()
@@ -154,10 +155,11 @@ public class ContentDirectoryService
         return res;        
     }
 
-    public void x_GetFeatureList()
+    public X_GetFeatureListOutput x_GetFeatureList()
     {
         X_GetFeatureList x_GetFeatureList = new X_GetFeatureList(contentDirectoryService,  upnpService.getControlPoint());
-        x_GetFeatureList.executeAction();
+        X_GetFeatureListOutput res = x_GetFeatureList.executeAction();
+        return res;        
     }
 
     public CreateReferenceOutput createReference(CreateReferenceInput inp)

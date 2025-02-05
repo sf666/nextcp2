@@ -14,9 +14,17 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
 
+import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.GetAuthorizationGrantedUpdateID;
+import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.GetAuthorizationGrantedUpdateIDOutput;
 import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.IsValidated;
 import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.IsValidatedOutput;
 import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.IsValidatedInput;
+import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.GetValidationSucceededUpdateID;
+import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.GetValidationSucceededUpdateIDOutput;
+import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.GetAuthorizationDeniedUpdateID;
+import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.GetAuthorizationDeniedUpdateIDOutput;
+import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.GetValidationRevokedUpdateID;
+import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.GetValidationRevokedUpdateIDOutput;
 import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.IsAuthorized;
 import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.IsAuthorizedOutput;
 import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.IsAuthorizedInput;
@@ -31,7 +39,7 @@ import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.R
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchroniously.  
+ * Generated UPnP Service class for calling Actions synchronously.  
  */
 public class X_MS_MediaReceiverRegistrarService
 {
@@ -105,10 +113,38 @@ public class X_MS_MediaReceiverRegistrarService
 
 
 
+    public GetAuthorizationGrantedUpdateIDOutput getAuthorizationGrantedUpdateID()
+    {
+        GetAuthorizationGrantedUpdateID getAuthorizationGrantedUpdateID = new GetAuthorizationGrantedUpdateID(x_MS_MediaReceiverRegistrarService,  upnpService.getControlPoint());
+        GetAuthorizationGrantedUpdateIDOutput res = getAuthorizationGrantedUpdateID.executeAction();
+        return res;        
+    }
+
     public IsValidatedOutput isValidated(IsValidatedInput inp)
     {
         IsValidated isValidated = new IsValidated(x_MS_MediaReceiverRegistrarService, inp, upnpService.getControlPoint());
         IsValidatedOutput res = isValidated.executeAction();
+        return res;        
+    }
+
+    public GetValidationSucceededUpdateIDOutput getValidationSucceededUpdateID()
+    {
+        GetValidationSucceededUpdateID getValidationSucceededUpdateID = new GetValidationSucceededUpdateID(x_MS_MediaReceiverRegistrarService,  upnpService.getControlPoint());
+        GetValidationSucceededUpdateIDOutput res = getValidationSucceededUpdateID.executeAction();
+        return res;        
+    }
+
+    public GetAuthorizationDeniedUpdateIDOutput getAuthorizationDeniedUpdateID()
+    {
+        GetAuthorizationDeniedUpdateID getAuthorizationDeniedUpdateID = new GetAuthorizationDeniedUpdateID(x_MS_MediaReceiverRegistrarService,  upnpService.getControlPoint());
+        GetAuthorizationDeniedUpdateIDOutput res = getAuthorizationDeniedUpdateID.executeAction();
+        return res;        
+    }
+
+    public GetValidationRevokedUpdateIDOutput getValidationRevokedUpdateID()
+    {
+        GetValidationRevokedUpdateID getValidationRevokedUpdateID = new GetValidationRevokedUpdateID(x_MS_MediaReceiverRegistrarService,  upnpService.getControlPoint());
+        GetValidationRevokedUpdateIDOutput res = getValidationRevokedUpdateID.executeAction();
         return res;        
     }
 
