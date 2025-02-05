@@ -54,6 +54,7 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumL
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMediaStoreFolderInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAnonymousDevicesWriteInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWriteInput;
 import nextcp.util.BackendException;
 import okhttp3.Call;
 import okhttp3.MediaType;
@@ -110,14 +111,14 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		log.info("upnp cds write : {} ", umsServiceEventListener.getStateVariable().UpnpCdsWrite);
 		
 		if (umsServiceEventListener.getStateVariable().UpnpCdsWrite != null && !umsServiceEventListener.getStateVariable().UpnpCdsWrite) {
-			log.info("activating UPnP create object ability ...");
-			SetAnonymousDevicesWriteInput inp = new SetAnonymousDevicesWriteInput();
-			inp.AnonymousDevicesWrite = Boolean.TRUE;
-			umsServices.setAnonymousDevicesWrite(inp);
+			log.info("UMS server -> activating UPnP create object ability ...");
+			SetUpnpCdsWriteInput inp = new SetUpnpCdsWriteInput();
+			inp.UpnpCdsWrite = Boolean.TRUE;
+			umsServices.setUpnpCdsWrite(inp);
 		}
 		
 		if (umsServiceEventListener.getStateVariable().AnonymousDevicesWrite != null && !umsServiceEventListener.getStateVariable().AnonymousDevicesWrite) {
-			log.info("activating UPnP create object ability for all UPnP devices ...");
+			log.info("UMS server -> activating UPnP create object ability for all UPnP devices ...");
 			SetAnonymousDevicesWriteInput inp = new SetAnonymousDevicesWriteInput();
 			inp.AnonymousDevicesWrite = Boolean.TRUE;
 			umsServices.setAnonymousDevicesWrite(inp);
