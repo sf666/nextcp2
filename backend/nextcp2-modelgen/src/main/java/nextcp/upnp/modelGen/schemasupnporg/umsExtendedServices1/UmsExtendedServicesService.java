@@ -21,10 +21,10 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.BackupAu
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMediaStore;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.DislikeAlbum;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.DislikeAlbumInput;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWrite;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWriteInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMediaStoreFolder;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMediaStoreFolderInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWrite;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWriteInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioUpdateRatingTag;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioUpdateRatingTagInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLiked;
@@ -42,7 +42,7 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudio
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchronously.  
+ * Generated UPnP Service class for calling Actions synchroniously.  
  */
 public class UmsExtendedServicesService
 {
@@ -146,16 +146,16 @@ public class UmsExtendedServicesService
         dislikeAlbum.executeAction();
     }
 
-    public void setUpnpCdsWrite(SetUpnpCdsWriteInput inp)
-    {
-        SetUpnpCdsWrite setUpnpCdsWrite = new SetUpnpCdsWrite(umsExtendedServicesService, inp, upnpService.getControlPoint());
-        setUpnpCdsWrite.executeAction();
-    }
-
     public void rescanMediaStoreFolder(RescanMediaStoreFolderInput inp)
     {
         RescanMediaStoreFolder rescanMediaStoreFolder = new RescanMediaStoreFolder(umsExtendedServicesService, inp, upnpService.getControlPoint());
         rescanMediaStoreFolder.executeAction();
+    }
+
+    public void setUpnpCdsWrite(SetUpnpCdsWriteInput inp)
+    {
+        SetUpnpCdsWrite setUpnpCdsWrite = new SetUpnpCdsWrite(umsExtendedServicesService, inp, upnpService.getControlPoint());
+        setUpnpCdsWrite.executeAction();
     }
 
     public void setAudioUpdateRatingTag(SetAudioUpdateRatingTagInput inp)

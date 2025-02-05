@@ -9,6 +9,6 @@ package nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions;
 public class RescanMediaStoreFolderInput
 {
 
-    public String ObjectId = null;
+    public String ObjectID = null;
 
 }

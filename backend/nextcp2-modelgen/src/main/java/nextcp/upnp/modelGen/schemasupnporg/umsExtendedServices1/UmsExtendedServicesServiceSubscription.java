@@ -111,14 +111,14 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
                     case "AnonymousDevicesWrite":
                         anonymousDevicesWriteChange((Boolean) stateVar.getValue());
                         break;
+                    case "AudioUpdateRating":
+                        audioUpdateRatingChange((Boolean) stateVar.getValue());
+                        break;
                     case "AudioLikesVisibleRoot":
                         audioLikesVisibleRootChange((Boolean) stateVar.getValue());
                         break;
                     case "UpnpCdsWrite":
                         upnpCdsWriteChange((Boolean) stateVar.getValue());
-                        break;
-                    case "AudioUpdateRatingTag":
-                        audioUpdateRatingTagChange((Boolean) stateVar.getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -148,6 +148,14 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
         }
     }    
 
+    private void audioUpdateRatingChange(Boolean value)
+    {
+        for (IUmsExtendedServicesServiceEventListener listener : eventListener)
+        {
+            listener.audioUpdateRatingChange(value);
+        }
+    }    
+
     private void audioLikesVisibleRootChange(Boolean value)
     {
         for (IUmsExtendedServicesServiceEventListener listener : eventListener)
@@ -161,14 +169,6 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
         for (IUmsExtendedServicesServiceEventListener listener : eventListener)
         {
             listener.upnpCdsWriteChange(value);
-        }
-    }    
-
-    private void audioUpdateRatingTagChange(Boolean value)
-    {
-        for (IUmsExtendedServicesServiceEventListener listener : eventListener)
-        {
-            listener.audioUpdateRatingTagChange(value);
         }
     }    
 }

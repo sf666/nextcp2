@@ -27,7 +27,7 @@ public class SetAudioUpdateRatingTag extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SetAudioUpdateRatingTag"), new NextcpClientInfo()), cp);
 
-        getActionInvocation().setInput("newAudioUpdateRatingTag", input.newAudioUpdateRatingTag);
+        getActionInvocation().setInput("AudioUpdateRating", input.AudioUpdateRating);
     }
 
     public void executeAction()

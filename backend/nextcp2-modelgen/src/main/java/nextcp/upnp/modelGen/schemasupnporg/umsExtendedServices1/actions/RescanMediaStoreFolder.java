@@ -27,7 +27,7 @@ public class RescanMediaStoreFolder extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("RescanMediaStoreFolder"), new NextcpClientInfo()), cp);
 
-        getActionInvocation().setInput("ObjectId", input.ObjectId);
+        getActionInvocation().setInput("ObjectID", input.ObjectID);
     }
 
     public void executeAction()

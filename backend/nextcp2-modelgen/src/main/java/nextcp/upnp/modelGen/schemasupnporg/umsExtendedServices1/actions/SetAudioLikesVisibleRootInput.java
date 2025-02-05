@@ -9,6 +9,6 @@ package nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions;
 public class SetAudioLikesVisibleRootInput
 {
 
-    public Boolean newAudioLikesVisibleRoot = null;
+    public Boolean AudioLikesVisibleRoot = null;
 
 }

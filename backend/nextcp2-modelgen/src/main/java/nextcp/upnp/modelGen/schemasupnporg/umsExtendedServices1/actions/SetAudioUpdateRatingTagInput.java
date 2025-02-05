@@ -9,6 +9,6 @@ package nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions;
 public class SetAudioUpdateRatingTagInput
 {
 
-    public Boolean newAudioUpdateRatingTag = null;
+    public Boolean AudioUpdateRating = null;
 
 }

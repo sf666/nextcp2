@@ -9,6 +9,6 @@ package nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions;
 public class SetUpnpCdsWriteInput
 {
 
-    public Boolean newUpnpCdsWrite = null;
+    public Boolean UpnpCdsWrite = null;
 
 }

@@ -9,6 +9,6 @@ package nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions;
 public class SetAnonymousDevicesWriteInput
 {
 
-    public Boolean newAnonymousDevicesWrite = null;
+    public Boolean AnonymousDevicesWrite = null;
 
 }

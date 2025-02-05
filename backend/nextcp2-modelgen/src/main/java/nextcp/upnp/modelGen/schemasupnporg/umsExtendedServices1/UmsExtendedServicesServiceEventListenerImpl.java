@@ -134,6 +134,15 @@ public class UmsExtendedServicesServiceEventListenerImpl implements IUmsExtended
         }
     }
     
+    public void audioUpdateRatingChange(Boolean value)
+    {
+        stateVariable.AudioUpdateRating = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "AudioUpdateRating", value));
+        }
+    }
+    
     public void audioLikesVisibleRootChange(Boolean value)
     {
         stateVariable.AudioLikesVisibleRoot = value;
@@ -149,15 +158,6 @@ public class UmsExtendedServicesServiceEventListenerImpl implements IUmsExtended
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "UpnpCdsWrite", value));
-        }
-    }
-    
-    public void audioUpdateRatingTagChange(Boolean value)
-    {
-        stateVariable.AudioUpdateRatingTag = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "AudioUpdateRatingTag", value));
         }
     }
     

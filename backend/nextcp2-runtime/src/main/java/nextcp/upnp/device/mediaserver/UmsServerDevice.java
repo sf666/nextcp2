@@ -34,11 +34,11 @@ import nextcp.dto.ContainerDto;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MediaServerDto;
 import nextcp.dto.MusicItemDto;
-import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.UpdateAlbumArtUriRequest;
 import nextcp.dto.UpdateStarRatingRequest;
 import nextcp.service.ToastEventPublisher;
 import nextcp.upnp.GenActionException;
+import nextcp.upnp.device.mediaserver.ums.UmsExtendedServicesServiceEventListener;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateObjectInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateObjectOutput;
@@ -47,11 +47,13 @@ import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateRefer
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.DestroyObjectInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.UpdateObjectInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.UmsExtendedServicesService;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.UmsExtendedServicesServiceEventListenerImpl;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.DislikeAlbumInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedOutput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMediaStoreFolderInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAnonymousDevicesWriteInput;
 import nextcp.util.BackendException;
 import okhttp3.Call;
 import okhttp3.MediaType;
@@ -72,6 +74,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	private XPathExpression expr = null;
 	
 	private UmsExtendedServicesService umsServices = null;
+	private UmsExtendedServicesServiceEventListenerImpl umsServiceEventListener= null;
 	
 	@Autowired
 	private ServerConfig serverConfig = null;
@@ -96,6 +99,29 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	@PostConstruct
 	private void init() {
 		umsServices = new UmsExtendedServicesService(getUpnpService(), getDevice());
+		umsServiceEventListener = new UmsExtendedServicesServiceEventListener(getDevice(), this);
+		umsServices.addSubscriptionEventListener(umsServiceEventListener);
+	}
+
+	private void configureServer() {
+		log.info("anonwrite : {} ", umsServiceEventListener.getStateVariable().AnonymousDevicesWrite);
+		log.info("like in root  : {} ", umsServiceEventListener.getStateVariable().AudioLikesVisibleRoot);
+		log.info("update rating : {} ", umsServiceEventListener.getStateVariable().AudioUpdateRating);
+		log.info("upnp cds write : {} ", umsServiceEventListener.getStateVariable().UpnpCdsWrite);
+		
+		if (umsServiceEventListener.getStateVariable().UpnpCdsWrite != null && !umsServiceEventListener.getStateVariable().UpnpCdsWrite) {
+			log.info("activating UPnP create object ability ...");
+			SetAnonymousDevicesWriteInput inp = new SetAnonymousDevicesWriteInput();
+			inp.AnonymousDevicesWrite = Boolean.TRUE;
+			umsServices.setAnonymousDevicesWrite(inp);
+		}
+		
+		if (umsServiceEventListener.getStateVariable().AnonymousDevicesWrite != null && !umsServiceEventListener.getStateVariable().AnonymousDevicesWrite) {
+			log.info("activating UPnP create object ability for all UPnP devices ...");
+			SetAnonymousDevicesWriteInput inp = new SetAnonymousDevicesWriteInput();
+			inp.AnonymousDevicesWrite = Boolean.TRUE;
+			umsServices.setAnonymousDevicesWrite(inp);
+		}
 	}
 
 	@Override
@@ -106,7 +132,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	@Override
 	public void rescanFile(String objectId) {
 		RescanMediaStoreFolderInput inp = new RescanMediaStoreFolderInput();
-		inp.ObjectId = objectId;
+		inp.ObjectID = objectId;
 		umsServices.rescanMediaStoreFolder(inp);
 	}
 
@@ -457,5 +483,9 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 				break;
 			}
 		}
+	}
+
+	public void newUmsConfig() {
+		configureServer();
 	}
 }

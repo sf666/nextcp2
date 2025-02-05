@@ -27,7 +27,7 @@ public class SetAnonymousDevicesWrite extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SetAnonymousDevicesWrite"), new NextcpClientInfo()), cp);
 
-        getActionInvocation().setInput("newAnonymousDevicesWrite", input.newAnonymousDevicesWrite);
+        getActionInvocation().setInput("AnonymousDevicesWrite", input.AnonymousDevicesWrite);
     }
 
     public void executeAction()
