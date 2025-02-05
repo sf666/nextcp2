@@ -16,19 +16,17 @@ public class ServerDeviceConfiguration
     public String displayString;
     public Boolean enabled;
     public MediaServerDto mediaServer;
-    public String apiKey;
 
     public ServerDeviceConfiguration()
     {
     }
 
-    public ServerDeviceConfiguration(String ip, String displayString, Boolean enabled, MediaServerDto mediaServer, String apiKey)
+    public ServerDeviceConfiguration(String ip, String displayString, Boolean enabled, MediaServerDto mediaServer)
     {
         this.ip = ip;
         this.displayString = displayString;
         this.enabled = enabled;
         this.mediaServer = mediaServer;
-        this.apiKey = apiKey;
     }
     
     @Override
@@ -40,7 +38,6 @@ public class ServerDeviceConfiguration
         sb.append("displayString=").append(this.displayString).append(", ");
         sb.append("enabled=").append(this.enabled).append(", ");
         sb.append("mediaServer=").append(this.mediaServer).append(", ");
-        sb.append("apiKey=").append(this.apiKey).append(", ");
         sb.append("]");
         return sb.toString();
     }

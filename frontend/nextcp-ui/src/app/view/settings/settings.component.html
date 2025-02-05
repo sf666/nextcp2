@@ -92,10 +92,7 @@
         <input matInput type="text" value="{{serverConfig.mediaServer.udn}}" readonly="true">
       </mat-form-field>
       @if (serverConfig.mediaServer.extendedApi) {
-      <mat-form-field appearance="outline">
-        <mat-label>UMS API key</mat-label>
-        <input matInput type="text" [(ngModel)]="serverConfig.apiKey" placeholder="must match with 'api_key' in UMS.conf">
-      </mat-form-field>
+        <!-- show UMS configuration -->
       }
       <div class="d-flex mt-4">
         <button mat-stroked-button class="ms-2" color="primary" (click)="saveServerConfig(serverConfig)">save</button>
