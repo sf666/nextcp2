@@ -15,6 +15,10 @@
 			<artifactId>nextcp2-db</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>de.sf666</groupId>
+			<artifactId>nextcp2-modelgen</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>jakarta.annotation</groupId>
 			<artifactId>jakarta.annotation-api</artifactId>
 		</dependency>

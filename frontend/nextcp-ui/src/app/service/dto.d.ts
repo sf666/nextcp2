@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-02-05 16:12:23.
+// Generated using typescript-generator version 3.2.1263 on 2025-02-10 11:53:48.
 
 export interface ApplicationConfig {
     myPlaylistFolderName: string;
@@ -20,6 +20,19 @@ export interface ApplicationConfig {
     nextPageAfter: number;
     pathToRestartScript: string;
     upnpBindInterface: string;
+    audioAddictToken: string;
+    audioAddictPreferEuropeanServer: boolean;
+}
+
+export interface AudioAddictChannelDto {
+    tracklistServerId: number;
+    id: number;
+    key: string;
+    name: string;
+    streamUrl: string;
+    descLong: string;
+    descShort: string;
+    albumArt: string;
 }
 
 export interface AudioFormat {
@@ -279,6 +292,17 @@ export interface PlaylistState {
     TransportState: string;
     ProtocolInfo: string;
     Id: number;
+}
+
+export interface RadioNetwork {
+    network: string;
+    displayName: string;
+    quality: RadioNetworkQuality[];
+}
+
+export interface RadioNetworkQuality {
+    key: string;
+    displayName: string;
 }
 
 export interface RadioStation {

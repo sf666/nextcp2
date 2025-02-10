@@ -61,5 +61,9 @@
   "/MediaServerPlaylistService": {
     "target": "http://localhost:8085",
     "secure": false
+  },
+  "/RadioNetworksService": {
+    "target": "http://localhost:8085",
+    "secure": false
   }  
 }

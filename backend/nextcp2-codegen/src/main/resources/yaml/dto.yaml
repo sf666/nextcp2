@@ -1,13 +1,31 @@
+#
+# Radio Networks
+#
+
+RadioNetworkQuality:
+   key: String
+   displayName: String
+   
+RadioNetwork:
+   network: String
+   displayName: String
+   quality: List<RadioNetworkQuality>
+
+AudioAddictChannelDto:
+   tracklistServerId: Integer
+   id: Integer
+   key: String
+   name: String
+   streamUrl: String
+   descLong: String
+   descShort: String
+   albumArt: String
+        
 GenericResult:
    success: Boolean
    message: String
    headerMessage: String
-   
-# DeviceDriverCapability
-DeviceDriverCapability:
-   deviceType: String
-   deviceDescription: String
-
+ 
 #
 # config
 #
@@ -49,6 +67,8 @@ ApplicationConfig:
    nextPageAfter: Long
    pathToRestartScript: String
    upnpBindInterface: String
+   audioAddictToken: String
+   audioAddictPreferEuropeanServer: Boolean
 
 UmsServerApiKey:
    serverUuid: String
@@ -409,8 +429,7 @@ SearchResultDto:
    albumItems: List<ContainerDto>
    artistItems: List<ContainerDto>
    playlistItems: List<ContainerDto>
-   
-   
+
 PlayRequestDto:
    mediaRendererDto: MediaRendererDto
    streamUrl: String
@@ -440,8 +459,10 @@ ToastrMessage:
    
 SystemInformationDto:
    buildNumber: String
-   
+
+#   
 # Event classes
+#
 FileChangedEventDto:
    type: String
    path: String  
@@ -455,4 +476,9 @@ DevicePowerChanged:
    isPowerOn : Boolean
 
    
+# DeviceDriverCapability
+DeviceDriverCapability:
+   deviceType: String
+   deviceDescription: String
+
    
