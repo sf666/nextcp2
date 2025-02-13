@@ -55,7 +55,9 @@ export class ConfigurationService {
     nextPageAfter: 60,
     pathToRestartScript: '',
     myPlaylistFolderName: '',
-    upnpBindInterface: ''
+    upnpBindInterface: '',
+    audioAddictPreferEuropeanServer: true,
+    audioAddictToken: ''
   }
 
   musicBrainzConfig: MusicbrainzSupport = {   // MusicBrainz username/password

@@ -10,31 +10,39 @@ import nextcp.dto.RadioNetworkQuality;
 public enum Networks {
 
 	CLASSIC_RADIO(	"Classical Radio", 	"http://listen.classicalradio.com",		"classicalradio", 
-		new StreamListQuality[]{StreamListQuality.AAC_64, StreamListQuality.AAC_128, StreamListQuality.MP3_320}),
+		new StreamListQuality[]{StreamListQuality.AAC_64, StreamListQuality.AAC_128, StreamListQuality.MP3_320},
+		"https://play-lh.googleusercontent.com/qW74pVFmQrtsjnHsPnKNr3bI9mMuTj1pIQm50NlWCuzm9dGQGYlZHG0YKgcokDkUidM"),
 	RADIO_TUNES(	"Radio Tunes", 		"http://listen.radiotunes.com",			"radiotunes",
-		new StreamListQuality[]{StreamListQuality.AAC_64, StreamListQuality.AAC_128, StreamListQuality.MP3_320}),
+		new StreamListQuality[]{StreamListQuality.AAC_64, StreamListQuality.AAC_128, StreamListQuality.MP3_320},
+		"https://cdn.audioaddict.com/radiotunes.com/assets/logo-opengraph-919eb9235fe962984e6ae26245aab6d693a5cf67cd2f6c6185bfcedaa7c5908b.png"),
 	ROCK_RADIO(		"Rock Radio", 		"http://listen.rockradio.com",			"rockradio",
-		new StreamListQuality[]{StreamListQuality.AAC_64, StreamListQuality.AAC_128, StreamListQuality.MP3_320}),
+		new StreamListQuality[]{StreamListQuality.AAC_64, StreamListQuality.AAC_128, StreamListQuality.MP3_320},
+		"https://play-lh.googleusercontent.com/GB5h6krjJRyABrCSnDHg4qz6-6CJg2W3-8HLqczsebzBX3WtY5INePZPl46ssQBIyoY"),
 	JAZZ_RADIO(		"Jazz Radio", 		"http://listen.jazzradio.com",			"jazzradio",
-		new StreamListQuality[]{StreamListQuality.AAC_64, StreamListQuality.AAC_128, StreamListQuality.MP3_320}),
+		new StreamListQuality[]{StreamListQuality.AAC_64, StreamListQuality.AAC_128, StreamListQuality.MP3_320},
+		"https://play-lh.googleusercontent.com/Waca0ZFN4T4CBt8aPyfUdtn-ZaEbBoCVtD0jtt3QFn_Pv1eAFio2M4Pk9pIbKrRZ5is"),
 	ZEN_RADIO(		"Zen Radio", 		"http://listen.zenradio.com",			"zenradio",
-		new StreamListQuality[]{StreamListQuality.AAC_64, StreamListQuality.AAC_128, StreamListQuality.MP3_320}),
+		new StreamListQuality[]{StreamListQuality.AAC_64, StreamListQuality.AAC_128, StreamListQuality.MP3_320},
+		"https://www.zenradio.com/assets/logo-opengraph-3b9fe3d5c4716aebbd04d43d459d266b7f978dcbf9dcdbb8f6896b6665d3d418.png"),
 	DI_FM(			"DI.fm", 			"http://listen.di.fm",					"di",
-		new StreamListQuality[]{StreamListQuality.AAC_64, StreamListQuality.AAC_128, StreamListQuality.MP3_320});
+		new StreamListQuality[]{StreamListQuality.AAC_64, StreamListQuality.AAC_128, StreamListQuality.MP3_320},
+		"https://cdn.audioaddict.com/di.fm/assets/logo-opengraph-62075c0e0f3327c590c93e269c2ed71a9a70caae992c8dd9bcd190b2505f3bc1.png");
 
 	
 	public String displayName = "";
 	public String listenUrl = "";
 	public String shortName = "";
+	public String albumArt = "";	
 	public StreamListQuality[] streamList;
 	
 	private static List<RadioNetworkQuality> streamListAsDto = null;
 
-	Networks(String displayName, String listenUrl, String shortName, StreamListQuality[] streamList) {
+	Networks(String displayName, String listenUrl, String shortName, StreamListQuality[] streamList, String albumArt) {
 		this.displayName = displayName;
 		this.listenUrl = listenUrl;
 		this.shortName = shortName;
 		this.streamList = streamList;
+		this.albumArt = albumArt;
 	} 
 	
 	public synchronized List<RadioNetworkQuality> getStreamListQualityDto() {

@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
  * Utility class for generating DTOs.
  */
 export class DtoGeneratorService {
-
+  
   public emptyUpnpAvTransportState(): UpnpAvTransportState {
     return {
       AbsoluteCounterPosition: 0,

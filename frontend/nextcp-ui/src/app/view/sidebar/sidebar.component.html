@@ -13,9 +13,15 @@
       <mat-icon class="material-symbols-outlined thin">surround_sound</mat-icon>
       <span class="buttonText hide-element">Now Listening</span>
     </a>
+
     <a mat-button [routerLink]="'/radio'" (click)="buttonClicked('/radio')" class="margin-reactive  {{getTextClass('/radio')}}">
       <mat-icon class="material-symbols-outlined thin">radio</mat-icon>
       <span class="hide-element buttonText">Radio</span>
+    </a>
+
+    <a mat-button [routerLink]="'/networks'" (click)="buttonClicked('/networks')" class="margin-reactive  {{getTextClass('/networks')}}">
+      <mat-icon class="material-symbols-outlined thin">radio</mat-icon>
+      <span class="hide-element buttonText">Radio Networks</span>
     </a>
 
     <a mat-button [routerLink]="'/myAlbums'" (click)="myAlbumClicked()" class="margin-reactive {{getTextClass('/myAlbums')}}">

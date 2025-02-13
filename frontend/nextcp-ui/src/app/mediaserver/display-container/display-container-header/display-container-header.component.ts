@@ -25,7 +25,6 @@ import { BackgroundImageService } from 'src/app/util/background-image.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { DisplayHeaderOptionsComponent } from '../../popup/display-header-options/display-header-options.component';
-import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'display-container-header',
@@ -35,7 +34,6 @@ import { MatDivider } from '@angular/material/divider';
     MatIconModule,
     MatButtonModule,
     MatInputModule,
-    MatDivider,
     FormsModule,
     MatSelectModule,
     ReactiveFormsModule,

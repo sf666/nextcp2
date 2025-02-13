@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
+import nextcp.audioaddict.AudioAddictServiceConfig;
 import nextcp.db.service.BasicDbService;
 import nextcp.dto.Config;
 import nextcp.dto.MusicbrainzSupport;
@@ -105,6 +106,14 @@ public class ConfigPersistence
         return config;
     }
 
+	@Bean
+	public AudioAddictServiceConfig createAudioAddictConfig() {
+		AudioAddictServiceConfig aac = new AudioAddictServiceConfig();
+		aac.preferEuropeanServer = config.applicationConfig.audioAddictPreferEuropeanServer;
+		aac.token = config.applicationConfig.audioAddictToken;
+		return new AudioAddictServiceConfig();
+	}
+	
     /**
      * Saves config values in all backends
      */

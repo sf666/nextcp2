@@ -15,16 +15,18 @@ public class RadioNetwork
     public String network;
     public String displayName;
     public List<RadioNetworkQuality> quality;
+    public String albumArt;
 
     public RadioNetwork()
     {
     }
 
-    public RadioNetwork(String network, String displayName, List<RadioNetworkQuality> quality)
+    public RadioNetwork(String network, String displayName, List<RadioNetworkQuality> quality, String albumArt)
     {
         this.network = network;
         this.displayName = displayName;
         this.quality = quality;
+        this.albumArt = albumArt;
     }
     
     @Override
@@ -35,6 +37,7 @@ public class RadioNetwork
         sb.append("network=").append(this.network).append(", ");
         sb.append("displayName=").append(this.displayName).append(", ");
         sb.append("quality=").append(this.quality).append(", ");
+        sb.append("albumArt=").append(this.albumArt).append(", ");
         sb.append("]");
         return sb.toString();
     }

@@ -10,7 +10,9 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import nextcp.audioaddict.mapper.ChannelFilter;
 import nextcp.audioaddict.mapper.ChannelJson;
 import nextcp.audioaddict.mapper.Root;
@@ -42,6 +44,8 @@ public class Network {
 		this.config = config;
 		this.network = network;
 		this.quality = quality;
+		
+    	om = JsonMapper.builder().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).build();
 
 		networkBatchRoot = readNetworkBatch();
 	}

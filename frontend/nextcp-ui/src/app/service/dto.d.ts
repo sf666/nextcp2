@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-02-10 11:53:48.
+// Generated using typescript-generator version 3.2.1263 on 2025-02-13 08:54:58.
 
 export interface ApplicationConfig {
     myPlaylistFolderName: string;
@@ -298,6 +298,7 @@ export interface RadioNetwork {
     network: string;
     displayName: string;
     quality: RadioNetworkQuality[];
+    albumArt: string;
 }
 
 export interface RadioNetworkQuality {

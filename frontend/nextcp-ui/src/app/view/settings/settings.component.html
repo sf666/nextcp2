@@ -360,6 +360,30 @@
       <div class="paraAppConf">This is the folder where generated UPnP code will be saved.</div>
     </div>
 
+    <!-- Audio Addict Network -->
+    <div class="d-flex flex-wrap-reverse">
+      <div class="paraInputField">
+        <mat-form-field appearance="outline" class="setting-dropdown">
+          <mat-label>enter token</mat-label>
+          <input matInput type="text" [(ngModel)]="configService.applicationConfig.audioAddictToken" placeholder="">
+        </mat-form-field>
+      </div>
+      <div class="paraAppConf">Put your Classical Radio, Radio Tunes, Rock Radio, Jazz Radio, Zen Radio or DI.fm network token here.</div>
+    </div>
+
+    <div class="d-flex flex-wrap-reverse">
+      <div class="paraInputField">
+        <mat-form-field appearance="outline" class="setting-dropdown">
+          <mat-label>Audio Addict Network Token</mat-label>
+          <mat-select [(ngModel)]="configService.clientConfig" [compareWith]="compareProfile">
+            <mat-option disableOptionCentering value="true">true</mat-option>
+            <mat-option disableOptionCentering value="false">false</mat-option>
+          </mat-select>      
+        </mat-form-field>
+      </div>
+      <div class="paraAppConf">Prefer European stream server.</div>
+    </div>
+    
     <div class="d-flex section ms-4">
       <button mat-stroked-button color="primary" (click)="saveGeneralConfig()">save</button>
     </div>
@@ -376,36 +400,36 @@
     <span class=""> Your Spotify account is connected.</span>
   </div>
   } @else {
-  <div class="para">
-    Click this button. A new window will open. Login and approve access to nextCP/2 :
-  </div>
-  <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="registerAppAtSpotify()">nextCP/2
-    Spotify access
-  </button>
-  @if (!protocolHandlerAvailable()) {
-  <div>
     <div class="para">
-      After granting access you wil be redirected to a localhost URL (error page). Copy spotify access code
-      from your browsers URL bar into the input field below and
+      Click this button. A new window will open. Login and approve access to nextCP/2 :
     </div>
+    <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="registerAppAtSpotify()">nextCP/2
+      Spotify access
+    </button>
+    @if (!protocolHandlerAvailable()) {
     <div>
-      <input class="section input" [(ngModel)]="spotifyCode">
+      <div class="para">
+        After granting access you wil be redirected to a localhost URL (error page). Copy spotify access code
+        from your browsers URL bar into the input field below and
+      </div>
+      <div>
+        <input class="section input" [(ngModel)]="spotifyCode">
+      </div>
+      <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="sendSpotifyCode()">send
+        it</button>
+      <div class="para">
+        Hint: To copy the access code, click in your browsers URL bar and copy everything after
+        'http://localhost:65525/?code='
+      </div>
     </div>
-    <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="sendSpotifyCode()">send
-      it</button>
-    <div class="para">
-      Hint: To copy the access code, click in your browsers URL bar and copy everything after
-      'http://localhost:65525/?code='
-    </div>
-  </div>
-  }
+    }
   }
 </div>
 
 <div class="section subhead subsect">MusicBrainz</div>
 <div class="d-flex section flex-wrap subhead flex-column">
   <div class="para">
-    Star-rating will update musicbrainz.org site if song has musicbrainzID metadata set. Password will be encoded after a successfull save action.
+    Star-rating will update musicbrainz.org site if song has musicbrainzID metadata set. Password will be encoded after a successful save action.
   </div>
 </div>
 <div class="d-flex flex-wrap">

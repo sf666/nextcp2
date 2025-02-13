@@ -65,6 +65,11 @@ public class ConfigDefaults
             log.info("adding new configuration value 'nextPageAfter = 60'");
             config.applicationConfig.nextPageAfter = Long.valueOf(60);
         }
+        if (config.applicationConfig.audioAddictPreferEuropeanServer == null)
+        {
+            log.info("adding new configuration value 'audioAddictPreferEuropeanServer = true'");
+            config.applicationConfig.audioAddictPreferEuropeanServer = true;
+        }
     }
 
 }

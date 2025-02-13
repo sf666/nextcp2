@@ -2,18 +2,23 @@ package nextcp.rest;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import nextcp.audioaddict.AudioAddictServiceConfig;
+import nextcp.audioaddict.AudioAddictService;
 import nextcp.audioaddict.Networks;
+import nextcp.audioaddict.StreamListQuality;
+import nextcp.dto.AudioAddictChannelDto;
 import nextcp.dto.Config;
 import nextcp.dto.RadioNetwork;
+import nextcp.dto.ToastrMessage;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
@@ -23,6 +28,12 @@ public class RestRadioNetworks {
 	private static final Logger log = LoggerFactory.getLogger(RestRadioNetworks.class.getName());
 	private List<RadioNetwork> networks = new ArrayList<>();
 
+    @Autowired
+    private ApplicationEventPublisher publisher = null;
+    
+    @Autowired
+    private AudioAddictService audioAddictService = null;
+    
 	@Autowired
     private Config config = null;
 
@@ -32,22 +43,28 @@ public class RestRadioNetworks {
 
 	private void updateNetworks() {
 		for (Networks net : Networks.values()) {
-			networks.add(new RadioNetwork(net.name(), net.displayName, net.getStreamListQualityDto()));
+			networks.add(new RadioNetwork(net.name(), net.displayName, net.getStreamListQualityDto(), net.albumArt));
 		}
 		log.info("Rest service : {} available networks.", networks.size());
 	}
 
-	@GetMapping(name = "getNetworks")
+    @GetMapping("/getNetworks")
 	public List<RadioNetwork> getNetworks() {
+		if (StringUtils.isAllBlank(config.applicationConfig.audioAddictToken)) {
+            publisher.publishEvent(new ToastrMessage(null, "warn", "Audio Addict Radio Network", "No radio network token set."));			
+		}
 		return networks;
 	}
-	
-	@Bean
-	public AudioAddictServiceConfig createAudioAddictConfig() {
-		AudioAddictServiceConfig aac = new AudioAddictServiceConfig();
-		aac.preferEuropeanServer = config.applicationConfig.audioAddictPreferEuropeanServer;
-		aac.token = config.applicationConfig.audioAddictToken;
-		return new AudioAddictServiceConfig();
+
+    @GetMapping("/getNetworkChannels/{networkAsString}")
+	public List<AudioAddictChannelDto> getNetworkChannels(@PathVariable("networkAsString") String networkAsString) {
+		if (StringUtils.isAllBlank(networkAsString)) {
+            publisher.publishEvent(new ToastrMessage(null, "error", "Network", "Select radio network."));
+		}
+		Networks network = Networks.valueOf(networkAsString);
+		
+		// TODO make quality configurable
+		return audioAddictService.getChannelFor(network, StreamListQuality.MP3_320);
 	}
 	
 }

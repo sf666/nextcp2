@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import nextcp.dto.AudioAddictChannelDto;
 
@@ -15,6 +16,7 @@ public class AudioAddictService {
 	
 	private ConcurrentHashMap<Networks, Network> networkSettings = new ConcurrentHashMap<>();
 
+	@Autowired
 	public AudioAddictService(AudioAddictServiceConfig config) {
 		this.config = config;
 	}
@@ -27,7 +29,6 @@ public class AudioAddictService {
 			network = new Network(platform, quality, config);
 			networkSettings.put(platform, network);
 		}
-		network.setQuality(quality);
 		return network.getChannel();
 	}
 }

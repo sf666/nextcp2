@@ -10,6 +10,7 @@ RadioNetwork:
    network: String
    displayName: String
    quality: List<RadioNetworkQuality>
+   albumArt: String
 
 AudioAddictChannelDto:
    tracklistServerId: Integer
