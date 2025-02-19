@@ -49,6 +49,7 @@ import {
   ],
 })
 export class SettingsComponent implements OnInit {
+
   spotifyCode = model<string>('');
   showOnlyActiveServer = model<boolean>(true);
   showOnlyActiveRenderer = model<boolean>(true);
@@ -178,6 +179,10 @@ export class SettingsComponent implements OnInit {
 
   saveMusicBrainzConfig(): void {
     this.configService.saveMusicBrainzConfig();
+  }
+
+  saveAudioAddict() {
+    this.configService.saveAudioAddictConfig();
   }
 
   selectConfig(config: UiClientConfig): void {

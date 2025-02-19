@@ -1,8 +1,9 @@
+import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { UuidService } from './../util/uuid.service';
 import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { SseService } from './sse/sse.service';
-import { UiClientConfig, RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, ApplicationConfig, MusicbrainzSupport, MediaPlayerConfigDto } from './dto.d';
+import { UiClientConfig, RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, ApplicationConfig, MusicbrainzSupport, MediaPlayerConfigDto, AudioAddictConfig } from './dto.d';
 import { GenericResultService } from './generic-result.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
@@ -37,6 +38,7 @@ export class ConfigurationService {
     addToPlaylistId: { id: '', title: '', },
   });
 
+  public audioAddictConfig = signal<AudioAddictConfig>(this.dtoGeneratorService.emptyAudioAddictDto());
 
   applicationConfig: ApplicationConfig = {    // This is a DTO copy and can be used to update server configuration
     databaseFilename: '',
@@ -56,16 +58,12 @@ export class ConfigurationService {
     pathToRestartScript: '',
     myPlaylistFolderName: '',
     upnpBindInterface: '',
-    audioAddictPreferEuropeanServer: true,
-    audioAddictToken: ''
   }
 
   musicBrainzConfig: MusicbrainzSupport = {   // MusicBrainz username/password
     password: '',
     username: ''
   }
-
-
 
   private clientUUID = this.getStoredClientId();
 
@@ -98,18 +96,23 @@ export class ConfigurationService {
   baseUri = '/ConfigurationService';
 
 
-  constructor(private http: HttpClient, private genericResultService: GenericResultService, sseService: SseService,
-    private httpService: HttpService, private uuidService: UuidService) {
-    this.getClientConfigFromServer();
-    this.getDeviceDriverFromServer();
-    this.getMediaRendererConfig();
-    this.getMediaServerConfig();
-    this.getMediaPlayerConfig();
-    this.getCurrentMediaPlayerConfig();
-    sseService.configChanged$.subscribe(serverConfig => this.applyServerConfigurationFile(serverConfig));
-    sseService.rendererConfigChanged$.subscribe(data => this.applyRendererServerRendererList(data));
-    sseService.serverDevicesConfigChanged$.subscribe(data => this.applyMediaServerList(data));
-    console.log("ConfigurationService constructor call");
+  constructor(
+    private http: HttpClient, 
+    private genericResultService: GenericResultService, 
+    sseService: SseService,
+    public dtoGeneratorService: DtoGeneratorService,
+    private httpService: HttpService, 
+    private uuidService: UuidService) {
+      this.getClientConfigFromServer();
+      this.getDeviceDriverFromServer();
+      this.getMediaRendererConfig();
+      this.getMediaServerConfig();
+      this.getMediaPlayerConfig();
+      this.getCurrentMediaPlayerConfig();
+      sseService.configChanged$.subscribe(serverConfig => this.applyServerConfigurationFile(serverConfig));
+      sseService.rendererConfigChanged$.subscribe(data => this.applyRendererServerRendererList(data));
+      sseService.serverDevicesConfigChanged$.subscribe(data => this.applyMediaServerList(data));
+      console.log("ConfigurationService constructor call");
   }
 
   public createNewUiClientConfig(newUUID: string): UiClientConfig {
@@ -152,9 +155,14 @@ export class ConfigurationService {
     });
   }
 
+  public saveAudioAddictConfig(): void {
+    const uri = '/saveAudioAddictConfig';
+    this.httpService.postWithSuccessMessage(this.baseUri, uri, this.audioAddictConfig(), "Save audio addict config", "success").subscribe();
+  }
+
   public saveMusicBrainzConfig(): void {
     const uri = '/saveMusicBrainzConfig';
-    this.httpService.postWithSuccessMessage(this.baseUri, uri, this.musicBrainzConfig, "Save application config", "success").subscribe();
+    this.httpService.postWithSuccessMessage(this.baseUri, uri, this.musicBrainzConfig, "Save MusicBrainz config", "success").subscribe();
   }
 
   public saveApplicationConfig(): void {
@@ -225,6 +233,7 @@ export class ConfigurationService {
     this.serverConfig = serverConfig;
     this.applicationConfig = Object.assign({}, serverConfig.applicationConfig);
     this.musicBrainzConfig = Object.assign({}, serverConfig.musicbrainzSupport);
+    this.audioAddictConfig.set(serverConfig.audioAddictConfig);
     this.updateUiClientConfig();
   }
 

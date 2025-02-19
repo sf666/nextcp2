@@ -92,7 +92,7 @@
         <input matInput type="text" value="{{serverConfig.mediaServer.udn}}" readonly="true">
       </mat-form-field>
       @if (serverConfig.mediaServer.extendedApi) {
-        <!-- show UMS configuration -->
+      <!-- show UMS configuration -->
       }
       <div class="d-flex mt-4">
         <button mat-stroked-button class="ms-2" color="primary" (click)="saveServerConfig(serverConfig)">save</button>
@@ -228,12 +228,12 @@
         </mat-form-field>
       </div>
       <div class="paraAppConf">Object ID of the folder containing MY PLAYLISTS. Those playlists will
-        directly selectable inside the sidebar on the left. There is no need to edit this value by hand. 
+        directly selectable inside the sidebar on the left. There is no need to edit this value by hand.
         In the "music library" view, click the context menu button
         <button color="" mat-mini-fab>
           <mat-icon class="material-symbols-sharp">more_vert</mat-icon>
-        </button> 
-        and select "set playlist sidebar". NOTE: If the servers database is recreated or reindexed, the ObjectID 
+        </button>
+        and select "set playlist sidebar". NOTE: If the servers database is recreated or reindexed, the ObjectID
         of the playlist folder may change and has to be applied again.
       </div>
     </div>
@@ -360,38 +360,64 @@
       <div class="paraAppConf">This is the folder where generated UPnP code will be saved.</div>
     </div>
 
-    <!-- Audio Addict Network -->
-    <div class="d-flex flex-wrap-reverse">
-      <div class="paraInputField">
-        <mat-form-field appearance="outline" class="setting-dropdown">
-          <mat-label>enter token</mat-label>
-          <input matInput type="text" [(ngModel)]="configService.applicationConfig.audioAddictToken" placeholder="">
-        </mat-form-field>
-      </div>
-      <div class="paraAppConf">Put your Classical Radio, Radio Tunes, Rock Radio, Jazz Radio, Zen Radio or DI.fm network token here.</div>
-    </div>
-
-    <div class="d-flex flex-wrap-reverse">
-      <div class="paraInputField">
-        <mat-form-field appearance="outline" class="setting-dropdown">
-          <mat-label>Audio Addict Network Token</mat-label>
-          <mat-select [(ngModel)]="configService.clientConfig" [compareWith]="compareProfile">
-            <mat-option disableOptionCentering value="true">true</mat-option>
-            <mat-option disableOptionCentering value="false">false</mat-option>
-          </mat-select>      
-        </mat-form-field>
-      </div>
-      <div class="paraAppConf">Prefer European stream server.</div>
-    </div>
-    
     <div class="d-flex section ms-4">
       <button mat-stroked-button color="primary" (click)="saveGeneralConfig()">save</button>
     </div>
   </div>
 </div>
 
-<div class="section head ">Accounts</div>
+<div class="section subhead subsect">Audio Addict Radio Network</div>
+<div class="section subhead d-flex flex-column">
+  <div class="d-flex flex-wrap-reverse">
+    <div class="paraInputField">
+      <mat-form-field appearance="outline" class="setting-dropdown">
+        <mat-label>enter token</mat-label>
+        <input matInput type="text" [(ngModel)]="configService.audioAddictConfig().token" placeholder="">
+      </mat-form-field>
+    </div>
+    <div class="paraAppConf">Put your Classical Radio, Radio Tunes, Rock Radio, Jazz Radio, Zen Radio or DI.fm network token here for full channel access.</div>
+  </div>
 
+  <div class="d-flex flex-wrap-reverse">
+    <div class="paraInputField">
+      <mat-form-field appearance="outline" class="setting-dropdown">
+        <mat-label>enter username</mat-label>
+        <input matInput type="text" [(ngModel)]="configService.audioAddictConfig().user" placeholder="username">
+      </mat-form-field>
+    </div>
+    <div class="paraAppConf">Username & Password is needed for favorites access.</div>
+  </div>
+
+  <div class="d-flex flex-wrap-reverse">
+    <div class="paraInputField">
+      <mat-form-field appearance="outline" class="setting-dropdown">
+        <mat-label>enter password</mat-label>
+        <input matInput type="text" [(ngModel)]="configService.audioAddictConfig().pass" placeholder="password">
+      </mat-form-field>
+    </div>
+    <div class="paraAppConf">Password will be encoded after a successful save action.</div>
+  </div>
+
+  <div class="d-flex flex-wrap-reverse">
+    <div class="paraInputField">
+      <mat-form-field appearance="outline" class="setting-dropdown">
+        <mat-label>Audio Addict Network Token</mat-label>
+        <mat-select [(ngModel)]="configService.audioAddictConfig().preferEuropeanServer">
+          <mat-option disableOptionCentering value="true">true</mat-option>
+          <mat-option disableOptionCentering value="false">false</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="paraAppConf">Prefer European stream server.</div>
+  </div>
+
+  <div class="d-flex section ms-4">
+    <button mat-stroked-button color="primary" (click)="saveAudioAddict()">save</button>
+  </div>
+</div>
+
+
+<div class="section head ">Accounts</div>
 <div class="section subhead subsect">Spotify</div>
 <div class="d-flex section flex-wrap subhead flex-column">
   @if (configService.spotifyAccountConnected()) {
@@ -400,29 +426,29 @@
     <span class=""> Your Spotify account is connected.</span>
   </div>
   } @else {
+  <div class="para">
+    Click this button. A new window will open. Login and approve access to nextCP/2 :
+  </div>
+  <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="registerAppAtSpotify()">nextCP/2
+    Spotify access
+  </button>
+  @if (!protocolHandlerAvailable()) {
+  <div>
     <div class="para">
-      Click this button. A new window will open. Login and approve access to nextCP/2 :
+      After granting access you wil be redirected to a localhost URL (error page). Copy spotify access code
+      from your browsers URL bar into the input field below and
     </div>
-    <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="registerAppAtSpotify()">nextCP/2
-      Spotify access
-    </button>
-    @if (!protocolHandlerAvailable()) {
     <div>
-      <div class="para">
-        After granting access you wil be redirected to a localhost URL (error page). Copy spotify access code
-        from your browsers URL bar into the input field below and
-      </div>
-      <div>
-        <input class="section input" [(ngModel)]="spotifyCode">
-      </div>
-      <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="sendSpotifyCode()">send
-        it</button>
-      <div class="para">
-        Hint: To copy the access code, click in your browsers URL bar and copy everything after
-        'http://localhost:65525/?code='
-      </div>
+      <input class="section input" [(ngModel)]="spotifyCode">
     </div>
-    }
+    <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="sendSpotifyCode()">send
+      it</button>
+    <div class="para">
+      Hint: To copy the access code, click in your browsers URL bar and copy everything after
+      'http://localhost:65525/?code='
+    </div>
+  </div>
+  }
   }
 </div>
 

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -39,22 +40,54 @@ public class Network {
 	private Root networkBatchRoot = null;
 	private List<AudioAddictChannelDto> channels = null;
 	private StreamListQuality quality = null;
+	private List<String> filters = null;
+	private HashMap<String, List<Integer>> channelsFilterMap = new HashMap<>();
 
 	public Network(Networks network, StreamListQuality quality, AudioAddictServiceConfig config) {
 		this.config = config;
 		this.network = network;
 		this.quality = quality;
-		
-    	om = JsonMapper.builder().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).build();
+
+		om = JsonMapper.builder().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).build();
 
 		networkBatchRoot = readNetworkBatch();
 	}
 
 	public List<AudioAddictChannelDto> getChannel() {
+		checkChannelAvailable();
+		return channels;
+	}
+
+	public List<AudioAddictChannelDto> getFilteredChannels(String filterName) {
+		checkChannelAvailable();
+		if (channelsFilterMap.get(filterName) == null) {
+			getFilters();
+		}
+		return channels;
+	}
+
+	private void checkChannelAvailable() {
 		if (channels == null) {
 			updateChannels();
 		}
-		return channels;
+	}
+
+	public List<String> getFilters() {
+		checkChannelAvailable();
+		if (filters == null) {
+			filters = new ArrayList<>();
+			for (ChannelFilter filter : networkBatchRoot.channel_filters) {
+				this.filters.add(filter.name);
+				List<Integer> filterChannelId = new ArrayList<>();
+				for (nextcp.audioaddict.mapper.Channel c : filter.channels) {
+					filterChannelId.add(c.id);
+					LOGGER.debug("added channel id {} to filterlist {} ", c.id, filter.name);
+				}
+				channelsFilterMap.put(filter.name, filterChannelId);
+			}
+		}
+		LOGGER.debug("returning {} filter for network {} ", filters.size(), network.displayName);
+		return filters;
 	}
 
 	private void updateChannels() {

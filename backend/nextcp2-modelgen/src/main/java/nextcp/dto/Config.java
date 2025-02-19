@@ -1,7 +1,6 @@
 package nextcp.dto;
 
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -19,12 +18,13 @@ public class Config
     public String lastFmSessionKey;
     public SpotifyConfigDto spotifyConfig;
     public MediaPlayerConfigDto mediaPlayerConfig;
+    public AudioAddictConfig audioAddictConfig;
 
     public Config()
     {
     }
 
-    public Config(ApplicationConfig applicationConfig, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, MusicbrainzSupport musicbrainzSupport, String lastFmSessionKey, SpotifyConfigDto spotifyConfig, MediaPlayerConfigDto mediaPlayerConfig)
+    public Config(ApplicationConfig applicationConfig, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, MusicbrainzSupport musicbrainzSupport, String lastFmSessionKey, SpotifyConfigDto spotifyConfig, MediaPlayerConfigDto mediaPlayerConfig, AudioAddictConfig audioAddictConfig)
     {
         this.applicationConfig = applicationConfig;
         this.clientConfig = clientConfig;
@@ -33,6 +33,7 @@ public class Config
         this.lastFmSessionKey = lastFmSessionKey;
         this.spotifyConfig = spotifyConfig;
         this.mediaPlayerConfig = mediaPlayerConfig;
+        this.audioAddictConfig = audioAddictConfig;
     }
     
     @Override
@@ -47,6 +48,7 @@ public class Config
         sb.append("lastFmSessionKey=").append(this.lastFmSessionKey).append(", ");
         sb.append("spotifyConfig=").append(this.spotifyConfig).append(", ");
         sb.append("mediaPlayerConfig=").append(this.mediaPlayerConfig).append(", ");
+        sb.append("audioAddictConfig=").append(this.audioAddictConfig).append(", ");
         sb.append("]");
         return sb.toString();
     }

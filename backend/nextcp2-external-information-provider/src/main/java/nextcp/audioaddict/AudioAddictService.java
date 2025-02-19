@@ -21,7 +21,16 @@ public class AudioAddictService {
 		this.config = config;
 	}
 
+	public void updateConfig(AudioAddictServiceConfig config) {
+		this.config = config;
+	}
+	
 	public List<AudioAddictChannelDto> getChannelFor(Networks platform, StreamListQuality quality) {
+		Network network = getNetwork(platform, quality);
+		return network.getChannel();
+	}
+
+	private Network getNetwork(Networks platform, StreamListQuality quality) {
 		Network network = networkSettings.get(platform);
 		
 		if (network == null) {
@@ -29,6 +38,11 @@ public class AudioAddictService {
 			network = new Network(platform, quality, config);
 			networkSettings.put(platform, network);
 		}
-		return network.getChannel();
+		return network;
+	}
+	
+	public List<AudioAddictChannelDto> getFilteredChannels(Networks platform, StreamListQuality quality, String filter) {
+		Network network = getNetwork(platform, quality);
+		return network.getFilteredChannels(filter);
 	}
 }

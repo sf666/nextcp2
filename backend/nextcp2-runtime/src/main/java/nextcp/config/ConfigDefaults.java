@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import nextcp.dto.AudioAddictConfig;
 import nextcp.dto.Config;
 import nextcp.dto.MusicbrainzSupport;
 import nextcp.dto.SpotifyConfigDto;
@@ -65,10 +65,11 @@ public class ConfigDefaults
             log.info("adding new configuration value 'nextPageAfter = 60'");
             config.applicationConfig.nextPageAfter = Long.valueOf(60);
         }
-        if (config.applicationConfig.audioAddictPreferEuropeanServer == null)
+        if (config.audioAddictConfig == null)
         {
+        	config.audioAddictConfig = new AudioAddictConfig();
             log.info("adding new configuration value 'audioAddictPreferEuropeanServer = true'");
-            config.applicationConfig.audioAddictPreferEuropeanServer = true;
+            config.audioAddictConfig.preferEuropeanServer = true;
         }
     }
 

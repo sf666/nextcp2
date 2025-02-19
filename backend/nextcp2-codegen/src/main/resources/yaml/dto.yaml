@@ -39,6 +39,7 @@ Config:
    lastFmSessionKey: String
    spotifyConfig: SpotifyConfigDto
    mediaPlayerConfig: MediaPlayerConfigDto
+   audioAddictConfig: AudioAddictConfig
 
 MediaPlayerConfigDto:
    workdir: String
@@ -50,6 +51,12 @@ MediaPlayerConfigDto:
    addToFolderId: ContainerIdDto
    mediaServerUdn: String
 
+AudioAddictConfig:
+   token: String
+   preferEuropeanServer: Boolean
+   user: String
+   pass: String
+   
 ApplicationConfig:
    myPlaylistFolderName: String
    generateUpnpCode: Boolean
@@ -68,8 +75,6 @@ ApplicationConfig:
    nextPageAfter: Long
    pathToRestartScript: String
    upnpBindInterface: String
-   audioAddictToken: String
-   audioAddictPreferEuropeanServer: Boolean
 
 UmsServerApiKey:
    serverUuid: String

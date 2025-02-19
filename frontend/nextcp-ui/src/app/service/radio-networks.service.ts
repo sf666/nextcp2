@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpService } from './http.service';
-import { AudioAddictChannelDto, RadioNetwork } from './dto';
+import { RadioNetwork } from './dto';
 
 @Injectable({
   providedIn: 'root'
