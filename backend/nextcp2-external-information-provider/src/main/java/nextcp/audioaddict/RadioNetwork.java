@@ -136,6 +136,7 @@ public class RadioNetwork {
 
 		String url = String.format("%s/public3/favorites.pls?%s",network.listenUrl, config.token);
 		String body = responseBody(url);
+		LOGGER.info("response my favorites : " + body);
         Matcher m = favChannelShort.matcher(body);
         Set<String> favList = new HashSet<>(); 
         while (m.find())
