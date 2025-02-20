@@ -45,7 +45,7 @@ public class RadioNetwork {
 	private ObjectMapper om = null;
 	
 	
-    private static final Pattern favChannelShort = Pattern.compile(".*/(.*)\\?", Pattern.DOTALL);
+    private static final Pattern favChannelShort = Pattern.compile(".*/(.*)\\?");
 	
 
 	private Root networkBatchRoot = null;
@@ -116,13 +116,9 @@ public class RadioNetwork {
 					filterChannelId.add(c.id);
 					LOGGER.debug("added channel id {} to filterlist {} ", c.id, filter.name);
 				}
-				if (!channelsFilterMap.keySet().contains(filter.name)) {
-					channelsFilterMap.put(filter.name, filterChannelId);
-					if ("all".equalsIgnoreCase(filter.name)) {					
-						favList = getFavorites(filter);
-					}
-				} else {
-					LOGGER.warn("Filter already exists : " + filter.name);
+				channelsFilterMap.put(filter.name, filterChannelId);
+				if ("all".equalsIgnoreCase(filter.name)) {					
+					favList = getFavorites(filter);
 				}
 			}
 			if (favList != null) {
