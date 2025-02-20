@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import nextcp.audioaddict.AudioAddictService;
-import nextcp.audioaddict.Networks;
-import nextcp.audioaddict.StreamListQuality;
+import nextcp.audioaddict.Platform;
 import nextcp.dto.AudioAddictChannelDto;
 import nextcp.dto.Config;
 import nextcp.dto.RadioNetwork;
@@ -44,7 +43,7 @@ public class RestRadioNetworks {
 	}
 
 	private void updateNetworks() {
-		for (Networks net : Networks.values()) {
+		for (Platform net : Platform.values()) {
 			networks.add(new RadioNetwork(net.name(), net.displayName, net.getStreamListQualityDto(), net.albumArt));
 		}
 		log.info("Rest service : {} available networks.", networks.size());
@@ -64,10 +63,10 @@ public class RestRadioNetworks {
 			publisher.publishEvent(new ToastrMessage(null, "error", "Network", "Select radio network."));
 			return null;
 		}
-		Networks network = Networks.valueOf(networkAsString);
+		Platform network = Platform.valueOf(networkAsString);
 
 		// TODO make quality configurable
-		return audioAddictService.getChannelFor(network, StreamListQuality.MP3_320);
+		return audioAddictService.getChannelFor(network);
 	}
 
 	@PostMapping("/getFilteredChannels/{networkAsString}")
@@ -78,10 +77,20 @@ public class RestRadioNetworks {
 			return null;
 		}
 
-		Networks network = Networks.valueOf(networkAsString);
+		Platform network = Platform.valueOf(networkAsString);
 
-		// TODO make quality configurable
-		return audioAddictService.getFilteredChannels(network, StreamListQuality.MP3_320, filter);
+		return audioAddictService.getFilteredChannels(network, filter);
+	}
+
+	@GetMapping("/getNetworkFilter/{networkAsString}")
+	public List<String> getNetworkFilter(@PathVariable("networkAsString") String networkAsString) {
+		if (StringUtils.isAllBlank(networkAsString)) {
+			publisher.publishEvent(new ToastrMessage(null, "error", "Network", "Select radio network."));
+			return null;
+		}
+		Platform network = Platform.valueOf(networkAsString);
+
+		return audioAddictService.getFiltersForNetwork(network);
 	}
 
 }

@@ -14,7 +14,7 @@ public class AudioAddictService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AudioAddictService.class.getName());
 	private AudioAddictServiceConfig config = null;
 	
-	private ConcurrentHashMap<Networks, Network> networkSettings = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<Platform, RadioNetwork> networkSettings = new ConcurrentHashMap<>();
 
 	@Autowired
 	public AudioAddictService(AudioAddictServiceConfig config) {
@@ -23,26 +23,34 @@ public class AudioAddictService {
 
 	public void updateConfig(AudioAddictServiceConfig config) {
 		this.config = config;
+		for (Platform nw : networkSettings.keySet()) {
+			networkSettings.get(nw).updateConfig(config);
+		}
 	}
 	
-	public List<AudioAddictChannelDto> getChannelFor(Networks platform, StreamListQuality quality) {
-		Network network = getNetwork(platform, quality);
+	public List<AudioAddictChannelDto> getChannelFor(Platform platform) {
+		RadioNetwork network = getNetwork(platform);
 		return network.getChannel();
 	}
 
-	private Network getNetwork(Networks platform, StreamListQuality quality) {
-		Network network = networkSettings.get(platform);
+	private RadioNetwork getNetwork(Platform platform) {
+		RadioNetwork network = networkSettings.get(platform);
 		
 		if (network == null) {
 			LOGGER.debug("initialize network : " + platform.displayName);
-			network = new Network(platform, quality, config);
+			network = new RadioNetwork(platform, config);
 			networkSettings.put(platform, network);
 		}
 		return network;
 	}
 	
-	public List<AudioAddictChannelDto> getFilteredChannels(Networks platform, StreamListQuality quality, String filter) {
-		Network network = getNetwork(platform, quality);
+	public List<AudioAddictChannelDto> getFilteredChannels(Platform platform, String filter) {
+		RadioNetwork network = getNetwork(platform);
 		return network.getFilteredChannels(filter);
+	}
+	
+	public List<String> getFiltersForNetwork(Platform platform) {
+		RadioNetwork network = getNetwork(platform);
+		return network.getFilters();
 	}
 }

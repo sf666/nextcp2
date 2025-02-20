@@ -7,7 +7,7 @@ import nextcp.dto.RadioNetworkQuality;
 /**
  * Audio Addict Networks 
  */
-public enum Networks {
+public enum Platform {
 
 	CLASSIC_RADIO(	"Classical Radio", 	"http://listen.classicalradio.com",		"classicalradio", 
 		new StreamListQuality[]{StreamListQuality.AAC_64, StreamListQuality.AAC_128, StreamListQuality.MP3_320},
@@ -37,7 +37,7 @@ public enum Networks {
 	
 	private static List<RadioNetworkQuality> streamListAsDto = null;
 
-	Networks(String displayName, String listenUrl, String shortName, StreamListQuality[] streamList, String albumArt) {
+	Platform(String displayName, String listenUrl, String shortName, StreamListQuality[] streamList, String albumArt) {
 		this.displayName = displayName;
 		this.listenUrl = listenUrl;
 		this.shortName = shortName;
