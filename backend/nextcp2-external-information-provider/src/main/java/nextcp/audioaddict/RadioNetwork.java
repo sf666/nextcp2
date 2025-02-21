@@ -142,11 +142,12 @@ public class RadioNetwork {
         while (m.find())
         {
             String fav = m.group(1);
-            LOGGER.debug("favorite channel : {}" , fav);
+            fav = fav.substring(network.shortName.length() + 1); // added "shortname_"
+            LOGGER.info("favorite channel : {}" , fav);
             favList.add(fav);
         }
         
-        int prefixLength = "radio_".length();
+        int prefixLength = network.favPrefix.length();
 		for (nextcp.audioaddict.mapper.Channel c : filter.channels) {
 			String mappedChannelName = c.ad_dfp_unit_id.substring(prefixLength);
 			if (favList.contains(mappedChannelName)) {
