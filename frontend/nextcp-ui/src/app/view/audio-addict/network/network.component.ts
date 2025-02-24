@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AudioAddictChannelDto, RadioNetwork } from 'src/app/service/dto';
 import { HttpService } from 'src/app/service/http.service';
 import { RadioNetworksService } from 'src/app/service/radio-networks.service';
+import { TransportService } from 'src/app/service/transport.service';
 
 @Component({
   selector: 'app-network',
@@ -46,6 +47,7 @@ export class NetworkComponent implements OnInit {
     private route: ActivatedRoute,
     private httpService: HttpService,
     public radioNetworksService: RadioNetworksService,
+    private transportService: TransportService,
   ) {
     toObservable(this.filter).subscribe(newFilter => this.filterSelected(newFilter))
   }
@@ -80,6 +82,7 @@ export class NetworkComponent implements OnInit {
 
   selectChannel(channel: AudioAddictChannelDto) {
     console.log("select channel : " + channel.name);
+    this.transportService.playUrl(channel.streamUrl);
   }
 }
 
