@@ -76,21 +76,6 @@ export class TransportService {
     this._playResource(uri, musicItemDto);
   }
 
-  public playUrl(url : string) : void {
-    const uri = '/playResource';
-    if (this.selectedMediaRenderer?.udn?.length > 0) {
-      const playReq: PlayRequestDto = {
-        mediaRendererDto: this.selectedMediaRenderer,
-        streamMetadata: '',
-        streamUrl: url
-      }
-
-      this.httpService.post(this.baseUri, uri, playReq).subscribe();
-    } else {
-      this.toastr.error("select media renderer before playing songs", "media renderer");
-    }
-  }
-
   private _playResource(uri: string, musicItemDto: MusicItemDto) {
     if (this.selectedMediaRenderer?.udn?.length > 0) {
       const playReq: PlayRequestDto = {

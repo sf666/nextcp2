@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ActivatedRoute } from '@angular/router';
-import { AudioAddictChannelDto, RadioNetwork } from 'src/app/service/dto';
+import { AudioAddictChannelDto, RadioNetwork, RadioStation } from 'src/app/service/dto';
 import { HttpService } from 'src/app/service/http.service';
 import { RadioNetworksService } from 'src/app/service/radio-networks.service';
 import { TransportService } from 'src/app/service/transport.service';
@@ -81,8 +81,15 @@ export class NetworkComponent implements OnInit {
   }
 
   selectChannel(channel: AudioAddictChannelDto) {
-    console.log("select channel : " + channel.name);
-    this.transportService.playUrl(channel.streamUrl);
+    console.log("playing channel : " + channel.name);
+
+    const radio : RadioStation = {
+      artworkUrl : channel.albumArt,
+      id : channel.id,
+      resourceUrl : channel.streamUrl,
+      stationName : channel.name
+    }
+    this.transportService.playRadio(radio);
   }
 }
 
