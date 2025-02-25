@@ -30,136 +30,115 @@ import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/TransportService")
-public class RestTransportService extends BaseRestService
-{
-    private static final Logger log = LoggerFactory.getLogger(RestTransportService.class.getName());
+public class RestTransportService extends BaseRestService {
 
-    @Autowired
-    private DtoBuilder dtoBuilder = null;
+	private static final Logger log = LoggerFactory.getLogger(RestTransportService.class.getName());
 
-    @Autowired
-    private ApplicationEventPublisher publisher = null;
+	@Autowired
+	private DtoBuilder dtoBuilder = null;
 
-    @PostMapping("/playResource")
-    public void playResource(@RequestBody PlayRequestDto playRequest)
-    {
-    	log.debug ("playResource called ... ");
-        MediaRendererDevice device = checkPlayInput(playRequest);
-        if (device.getProductService() != null)
-        {
-            if (device.getProductService().getCurrentInputSource().Type.equalsIgnoreCase("playlist"))
-            {
-                log.info("Try to find current song in playlist ... ");
-                if (device.getPlaylistServiceBridge().seekId(playRequest.streamUrl))
-                {
-                    log.debug("playing streamURL from playlist ... ");
-                    return;
-                }
-            }
-        }
-        log.debug("try playing on AVTransport ... ");
-        device.getAvTransportBridge().play(playRequest.streamUrl, playRequest.streamMetadata);
-    }
+	@Autowired
+	private ApplicationEventPublisher publisher = null;
 
-    @PostMapping("/seekSecondsAbsolute")
-    public void playResourceNext(@RequestBody SeekSecondsDto secondsAbsolute)
-    {
-        try
-        {
-            MediaRendererDevice device = getMediaRendererByUdn(secondsAbsolute.rendererUDN);
-            device.getTransportServiceBridge().seek(secondsAbsolute.seconds);
-        }
-        catch (Exception e)
-        {
-            publisher.publishEvent(new ToastrMessage(null, "error", "play next", e.getMessage()));
-        }
-    }
+	@PostMapping("/playResource")
+	public void playResource(@RequestBody PlayRequestDto playRequest) {
+		log.debug("playResource called ... ");
+		MediaRendererDevice device = checkPlayInput(playRequest);
+		if (device.getProductService() != null) {
+			if (device.getProductService().getCurrentInputSource().Type.equalsIgnoreCase("playlist")) {
+				log.info("Try to find current song in playlist ... ");
+				if (device.getPlaylistServiceBridge().seekId(playRequest.streamUrl)) {
+					log.debug("playing streamURL from playlist ... ");
+					return;
+				}
+			}
+		}
+		log.debug("try playing on AVTransport ... ");
+		device.getAvTransportBridge().play(playRequest.streamUrl, playRequest.streamMetadata);
+	}
 
-    @PostMapping("/playResourceNext")
-    public void playResourceNext(@RequestBody PlayRequestDto playRequest)
-    {
-        try
-        {
-            MediaRendererDevice device = checkPlayInput(playRequest);
-            device.getAvTransportBridge().playNext(playRequest.streamUrl, playRequest.streamMetadata);
-            publisher.publishEvent(new ToastrMessage(null, "success", "play", "song will be played next."));
-        }
-        catch (Exception e)
-        {
-            publisher.publishEvent(new ToastrMessage(null, "error", "play next", e.getMessage()));
-        }
-    }
+	@PostMapping("/seekSecondsAbsolute")
+	public void playResourceNext(@RequestBody SeekSecondsDto secondsAbsolute) {
+		try {
+			MediaRendererDevice device = getMediaRendererByUdn(secondsAbsolute.rendererUDN);
+			device.getTransportServiceBridge().seek(secondsAbsolute.seconds);
+		} catch (Exception e) {
+			publisher.publishEvent(new ToastrMessage(null, "error", "play next", e.getMessage()));
+		}
+	}
 
-    @PostMapping("/pause")
-    public void pause(@RequestBody String rendererUdn)
-    {
-        MediaRendererDevice device = getMediaRendererByUdn(rendererUdn);
-        device.getTransportServiceBridge().pause();
-    }
+	@PostMapping("/playResourceNext")
+	public void playResourceNext(@RequestBody PlayRequestDto playRequest) {
+		try {
+			MediaRendererDevice device = checkPlayInput(playRequest);
+			device.getAvTransportBridge().playNext(playRequest.streamUrl, playRequest.streamMetadata);
+			publisher.publishEvent(new ToastrMessage(null, "success", "play", "song will be played next."));
+		} catch (Exception e) {
+			publisher.publishEvent(new ToastrMessage(null, "error", "play next", e.getMessage()));
+		}
+	}
 
-    @PostMapping("/play")
-    public void play(@RequestBody String rendererUdn)
-    {
-        MediaRendererDevice device = getMediaRendererByUdn(rendererUdn);
-        if (device == null)
-        {
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "play failed. Select an available media renderer.");
-        }
-        device.getTransportServiceBridge().play();
-    }
+	@PostMapping("/pause")
+	public void pause(@RequestBody String rendererUdn) {
+		MediaRendererDevice device = getMediaRendererByUdn(rendererUdn);
+		device.getTransportServiceBridge().pause();
+	}
 
-    @PostMapping("/playOnlineResource")
-    public void playOnlineResource(@RequestBody PlayRadioDto playRequest)
-    {
-        MediaRendererDevice device = getMediaRendererByUdn(playRequest.mediaRendererDto.udn);
-        MusicTrack music = new MusicTrack();
-        try
-        {
-            music.addProperty(new ALBUM_ART_URI(new URI(playRequest.radioStation.artworkUrl)));
-            device.getAvTransportBridge().play(playRequest.radioStation.resourceUrl, dtoBuilder.generateMetadataFromItem(music));
-        }
-        catch (URISyntaxException e)
-        {
-            log.error("playOnlineResource", e);
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "playing radios failed: " + e.getMessage());
-        }
-    }
+	@PostMapping("/play")
+	public void play(@RequestBody String rendererUdn) {
+		MediaRendererDevice device = getMediaRendererByUdn(rendererUdn);
+		if (device == null) {
+			throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "play failed. Select an available media renderer.");
+		}
+		device.getTransportServiceBridge().play();
+	}
 
-    /**
-     * Acquire current AvTransportState
-     * 
-     * @param renderer
-     * @return
-     */
-    @PostMapping("/MediaRendererAvTransportState")
-    public void getMediaRendererAvTransportState(@RequestBody MediaRendererDto renderer)
-    {
-        MediaRendererDevice device = getMediaRendererByUdn(renderer.udn);
-        if (device == null)
-        {
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Tranport state cannot be retrieved: Select an available media renderer.");
-        }
-        device.getAvTransportEventPublisher().publishAllAvEvents();
-    }
+	@PostMapping("/playOnlineResource")
+	public void playOnlineResource(@RequestBody PlayRadioDto playRequest) {
+		MediaRendererDevice device = getMediaRendererByUdn(playRequest.mediaRendererDto.udn);
+		MusicTrack music = new MusicTrack();
+		try {
+			music.addProperty(new ALBUM_ART_URI(new URI(playRequest.radioStation.artworkUrl)));
+			music.setId("" + playRequest.radioStation.id);
+			music.setParentID("0");
+			music.setTitle(playRequest.radioStation.stationName);
+			device.getAvTransportBridge().play(playRequest.radioStation.resourceUrl, dtoBuilder.generateMetadataFromItem(music));
+		} catch (URISyntaxException e) {
+			log.error("playOnlineResource", e);
+			throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "playing radios failed: " + e.getMessage());
+		}
+	}
 
-    
-    private MediaRendererDevice checkPlayInput(PlayRequestDto playRequest)
-    {
-        if (playRequest.mediaRendererDto == null)
-        {
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Playing failed. Media renderer is not set.");
-        }
+	/**
+	 * Acquire current AvTransportState
+	 * 
+	 * @param renderer
+	 * @return
+	 */
+	@PostMapping("/MediaRendererAvTransportState")
+	public void getMediaRendererAvTransportState(@RequestBody MediaRendererDto renderer) {
+		MediaRendererDevice device = getMediaRendererByUdn(renderer.udn);
+		if (device == null) {
+			throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED,
+				"Tranport state cannot be retrieved: Select an available media renderer.");
+		}
+		device.getAvTransportEventPublisher().publishAllAvEvents();
+	}
 
-        MediaRendererDevice device = getMediaRendererByUdn(playRequest.mediaRendererDto.udn);
-        if (device == null)
-        {
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED,
-                    "playing failed. Select an available media renderer. Unavailable : " + playRequest.mediaRendererDto.udn);
-        }
-        if (device.getTransportServiceBridge() == null)
-        {
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "playing failed. No AvTransport service available. UDN : " + playRequest.mediaRendererDto.udn);
-        }
-        return device;
-    }
+	private MediaRendererDevice checkPlayInput(PlayRequestDto playRequest) {
+		if (playRequest.mediaRendererDto == null) {
+			throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Playing failed. Media renderer is not set.");
+		}
+
+		MediaRendererDevice device = getMediaRendererByUdn(playRequest.mediaRendererDto.udn);
+		if (device == null) {
+			throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED,
+				"playing failed. Select an available media renderer. Unavailable : " + playRequest.mediaRendererDto.udn);
+		}
+		if (device.getTransportServiceBridge() == null) {
+			throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED,
+				"playing failed. No AvTransport service available. UDN : " + playRequest.mediaRendererDto.udn);
+		}
+		return device;
+	}
 }
