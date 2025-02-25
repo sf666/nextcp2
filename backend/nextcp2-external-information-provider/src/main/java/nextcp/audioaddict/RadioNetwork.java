@@ -43,10 +43,8 @@ public class RadioNetwork {
 	private OkHttpClient okClientBatch = new OkHttpClient.Builder().addInterceptor(new BasicAuthInterceptor("ephemeron", "dayeiph0ne@pp"))
 		.build();
 	private ObjectMapper om = null;
-	
-	
-    private static final Pattern favChannelShort = Pattern.compile(".*/(.*)\\?");
-	
+
+	private static final Pattern favChannelShort = Pattern.compile(".*/(.*)\\?");
 
 	private Root networkBatchRoot = null;
 	private List<AudioAddictChannelDto> channels = null;
@@ -88,7 +86,7 @@ public class RadioNetwork {
 		if (channelsFilterMap.get(filterName) == null) {
 			getFilters();
 		}
-		
+
 		List<AudioAddictChannelDto> filtered = new ArrayList<>();
 		for (AudioAddictChannelDto audioAddictChannelDto : channels) {
 			if (channelsFilterMap.get(filterName).contains(audioAddictChannelDto.id)) {
@@ -117,7 +115,7 @@ public class RadioNetwork {
 					LOGGER.debug("added channel id {} to filterlist {} ", c.id, filter.name);
 				}
 				channelsFilterMap.put(filter.name, filterChannelId);
-				if ("all".equalsIgnoreCase(filter.name)) {					
+				if ("all".equalsIgnoreCase(filter.name)) {
 					favList = getFavorites(filter);
 				}
 			}
@@ -134,20 +132,20 @@ public class RadioNetwork {
 	private List<Integer> getFavorites(ChannelFilter filter) {
 		List<Integer> filterChannelId = new ArrayList<>();
 
-		String url = String.format("%s/public3/favorites.pls?%s",network.listenUrl, config.token);
+		String url = String.format("%s/public3/favorites.pls?%s", network.listenUrl, config.token);
 		String body = responseBody(url);
 		LOGGER.info("response my favorites : " + body);
-        Matcher m = favChannelShort.matcher(body);
-        Set<String> favList = new HashSet<>(); 
-        while (m.find())
-        {
-            String fav = m.group(1);
-            fav = fav.substring(network.shortName.length() + 1); // added "shortname_"
-            LOGGER.info("favorite channel : {}" , fav);
-            favList.add(fav);
-        }
-        
-        int prefixLength = network.favPrefix.length();
+		Matcher m = favChannelShort.matcher(body);
+		Set<String> favList = new HashSet<>();
+		while (m.find()) {
+			String fav = m.group(1);
+			fav = fav.substring(network.shortName.length() + 1); // added
+																 // "shortname_"
+			LOGGER.info("favorite channel : {}", fav);
+			favList.add(fav);
+		}
+
+		int prefixLength = network.favPrefix.length();
 		for (nextcp.audioaddict.mapper.Channel c : filter.channels) {
 			String mappedChannelName = c.ad_dfp_unit_id.substring(prefixLength);
 			if (favList.contains(mappedChannelName)) {
@@ -161,7 +159,6 @@ public class RadioNetwork {
 		return null;
 	}
 
-	
 	private void updateChannels() {
 		Channel[] channelUrls = getChannels();
 		channels = new ArrayList<>();
@@ -237,7 +234,7 @@ public class RadioNetwork {
 		Channel[] channels = new Channel[channelsJson.length];
 		int i = 0;
 		for (ChannelJson channelJson : channelsJson) {
-			String url = getBestUrlFromPlaylist(channelJson);
+			String url = String.format("%s?%s", getBestUrlFromPlaylist(channelJson), config.token);
 			channels[i] = new Channel(channelJson.getId(), channelJson.getKey(), channelJson.getName(), url);
 			i++;
 		}

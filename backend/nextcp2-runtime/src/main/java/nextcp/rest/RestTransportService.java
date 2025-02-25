@@ -2,8 +2,8 @@ package nextcp.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import org.jupnp.support.model.DIDLObject.Property.UPNP.ALBUM_ART_URI;
+import org.jupnp.support.model.Res;
 import org.jupnp.support.model.item.MusicTrack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.PlayRadioDto;
 import nextcp.dto.PlayRequestDto;
@@ -99,6 +98,11 @@ public class RestTransportService extends BaseRestService {
 		MusicTrack music = new MusicTrack();
 		try {
 			music.addProperty(new ALBUM_ART_URI(new URI(playRequest.radioStation.artworkUrl)));
+			Res res = new Res();
+			res.setValue(playRequest.radioStation.resourceUrl);
+			org.jupnp.support.model.ProtocolInfo pi = new org.jupnp.support.model.ProtocolInfo("http-get:*:audio/mpeg:DLNA.ORG_OP=01");
+			res.setProtocolInfo(pi);
+			music.addResource(res);
 			music.setId("" + playRequest.radioStation.id);
 			music.setParentID("0");
 			music.setTitle(playRequest.radioStation.stationName);

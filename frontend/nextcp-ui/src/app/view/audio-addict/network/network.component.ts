@@ -84,7 +84,7 @@ export class NetworkComponent implements OnInit {
     console.log("playing channel : " + channel.name);
 
     const radio : RadioStation = {
-      artworkUrl : channel.albumArt,
+      artworkUrl : 'http:' + channel.albumArt,
       id : channel.id,
       resourceUrl : channel.streamUrl,
       stationName : channel.name
