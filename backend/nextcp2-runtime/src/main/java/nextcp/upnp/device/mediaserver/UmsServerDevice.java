@@ -260,7 +260,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	@Override
 	public String getOrCreateChildFolderId(String parentContainerId, String folderName) throws Exception {
 		log.debug("getting or creating folder with name {} in parentfolder having id {} ...", folderName, parentContainerId);
-		String childId = this.browseChildrenSearchFolder(0, 999, parentContainerId, folderName);
+		String childId = this.browseChildrenSearchFolder(0, 200, parentContainerId, folderName);
 		if (childId == null) {
 			Container c = createFolder(parentContainerId, folderName);
 			if (c != null) {
