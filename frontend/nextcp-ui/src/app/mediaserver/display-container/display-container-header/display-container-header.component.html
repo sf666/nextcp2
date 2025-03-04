@@ -20,7 +20,7 @@
             </button>
           </div>
           <div class="button-container">
-            <button class="{{getFavoriteCssBtnClass()}}" (click)="toggleLikeAlbum()" mat-mini-fab [disabled]="!likePossible">
+            <button class="{{getFavoriteCssBtnClass()}}" (click)="toggleLikeAlbum()" mat-mini-fab [disabled]="!likePossible()">
               <mat-icon class="material-symbols-sharp {{getFavoriteCssIconClass()}}">favorite</mat-icon>
             </button>
           </div>

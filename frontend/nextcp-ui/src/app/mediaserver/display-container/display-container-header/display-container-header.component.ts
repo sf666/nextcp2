@@ -230,9 +230,13 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   likeAlbum(): void {
-    this.myMusicService
+    if (this.currentAlbumReleaseID().length > 0) {
+      this.myMusicService
       .likeAlbum(this.currentAlbumReleaseID())
       .subscribe((d) => this.checkLikeStatus());
+    } else {
+      console.log("cannot like. Album has no release ID");
+    }
   }
 
   toggleLikeAlbum(): void {
