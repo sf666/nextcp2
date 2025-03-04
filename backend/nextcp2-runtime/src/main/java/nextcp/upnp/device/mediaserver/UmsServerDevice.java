@@ -229,7 +229,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	}
 
 	private String browseChildrenSearchFolder(long start, long end, String objectId, String foldername) {
-		log.debug("search folder having id {} and title {} ...", objectId, foldername);
+		log.debug("browseChildrenSearchFolder", "search folder having id {} and title {} ...", objectId, foldername);
 		BrowseInput inp = new BrowseInput();
 		inp.ObjectID = objectId;
 		inp.SortCriteria = "";
@@ -237,21 +237,23 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		inp.RequestedCount = end;
 		inp.Filter = "*";
 		ContainerItemDto resultContainer = browseChildren(inp);
+		log.info("browseChildrenSearchFolder", "Reported total matches : {} ", resultContainer.totalMatches);
+		log.info("browseChildrenSearchFolder", "result container size : {} ", resultContainer.containerDto.size());
 		for (ContainerDto folder : resultContainer.containerDto) {
-			log.debug("Found folder named : {}", folder.title);
+			log.debug("browseChildrenSearchFolder", "Found folder named : {}", folder.title);
 			if (folder.title.equalsIgnoreCase(foldername)) {
-				log.debug("Found folder id : {}", folder.id);
+				log.debug("browseChildrenSearchFolder", "Found folder id : {}", folder.id);
 				return folder.id;
 			}
 		}
 		if (resultContainer.totalMatches != null && resultContainer.totalMatches > end) {
 			long diff = end - start;
-			log.debug("extending search to items from {} to {}", diff + 1, 2 * diff + 1);
+			log.debug("browseChildrenSearchFolder", "extending search to items from {} to {}", diff + 1, 2 * diff + 1);
 			return browseChildrenSearchFolder(diff + 1, 2 * diff + 1, objectId, foldername);
 		} else {
-			log.warn("CDS didn't fill totalMatches attribute.");
+			log.warn("browseChildrenSearchFolder", "CDS didn't fill totalMatches attribute.");
 		}
-		log.debug("folder not found : {}", foldername);
+		log.debug("browseChildrenSearchFolder", "folder not found : {}", foldername);
 		return null;
 	}
 
@@ -469,7 +471,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 					log.info("import uri : " + resource.getImportUri());
 				}
 				RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-					.addFormDataPart("filename", file.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), file))
+					.addFormDataPart("filename", file.getName(), RequestBody.create(file, MediaType.parse("application/octet-stream")))
 					.build();
 
 				Request request = new Request.Builder().url(resource.getImportUri().toString()).post(requestBody).build();
