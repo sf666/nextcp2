@@ -73,10 +73,10 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	private XPathFactory xpathfactory = XPathFactory.newInstance();
 	private XPath xpath = xpathfactory.newXPath();
 	private XPathExpression expr = null;
-	
+
 	private UmsExtendedServicesService umsServices = null;
-	private UmsExtendedServicesServiceEventListenerImpl umsServiceEventListener= null;
-	
+	private UmsExtendedServicesServiceEventListenerImpl umsServiceEventListener = null;
+
 	@Autowired
 	private ServerConfig serverConfig = null;
 
@@ -109,15 +109,16 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		log.info("like in root  : {} ", umsServiceEventListener.getStateVariable().AudioLikesVisibleRoot);
 		log.info("update rating : {} ", umsServiceEventListener.getStateVariable().AudioUpdateRating);
 		log.info("upnp cds write : {} ", umsServiceEventListener.getStateVariable().UpnpCdsWrite);
-		
+
 		if (umsServiceEventListener.getStateVariable().UpnpCdsWrite != null && !umsServiceEventListener.getStateVariable().UpnpCdsWrite) {
 			log.info("UMS server -> activating UPnP create object ability ...");
 			SetUpnpCdsWriteInput inp = new SetUpnpCdsWriteInput();
 			inp.UpnpCdsWrite = Boolean.TRUE;
 			umsServices.setUpnpCdsWrite(inp);
 		}
-		
-		if (umsServiceEventListener.getStateVariable().AnonymousDevicesWrite != null && !umsServiceEventListener.getStateVariable().AnonymousDevicesWrite) {
+
+		if (umsServiceEventListener.getStateVariable().AnonymousDevicesWrite != null &&
+			!umsServiceEventListener.getStateVariable().AnonymousDevicesWrite) {
 			log.info("UMS server -> activating UPnP create object ability for all UPnP devices ...");
 			SetAnonymousDevicesWriteInput inp = new SetAnonymousDevicesWriteInput();
 			inp.AnonymousDevicesWrite = Boolean.TRUE;
@@ -178,7 +179,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		return false;
 	}
 
-
 	@Override
 	public void updateAlbumArtURI(UpdateAlbumArtUriRequest updateRequest) {
 		UpdateObjectInput inp = new UpdateObjectInput();
@@ -217,7 +217,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		}
 	}
 
-
 	@Override
 	public void backupMyMusic() {
 		umsServices.backupAudioLikes();
@@ -229,7 +228,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	}
 
 	private String browseChildrenSearchFolder(long start, long end, String objectId, String foldername) {
-		log.debug("browseChildrenSearchFolder", "search folder having id {} and title {} ...", objectId, foldername);
+		log.debug("search folder having id {} and title {} ...", objectId, foldername);
 		BrowseInput inp = new BrowseInput();
 		inp.ObjectID = objectId;
 		inp.SortCriteria = "";
@@ -237,23 +236,23 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		inp.RequestedCount = end;
 		inp.Filter = "*";
 		ContainerItemDto resultContainer = browseChildren(inp);
-		log.info("browseChildrenSearchFolder", "Reported total matches : {} ", resultContainer.totalMatches);
-		log.info("browseChildrenSearchFolder", "result container size : {} ", resultContainer.containerDto.size());
+		log.info("Reported total matches : {} ", resultContainer.totalMatches);
+		log.info("result container size : {} ", resultContainer.containerDto.size());
 		for (ContainerDto folder : resultContainer.containerDto) {
-			log.debug("browseChildrenSearchFolder", "Found folder named : {}", folder.title);
+			log.debug("Found folder named : {}", folder.title);
 			if (folder.title.equalsIgnoreCase(foldername)) {
-				log.debug("browseChildrenSearchFolder", "Found folder id : {}", folder.id);
+				log.debug("Found folder id : {}", folder.id);
 				return folder.id;
 			}
 		}
 		if (resultContainer.totalMatches != null && resultContainer.totalMatches > end) {
 			long diff = end - start;
-			log.debug("browseChildrenSearchFolder", "extending search to items from {} to {}", diff + 1, 2 * diff + 1);
-			return browseChildrenSearchFolder(diff + 1, 2 * diff + 1, objectId, foldername);
+			log.debug("extending search to items from {} to {}", end + 1, end + diff + 1);
+			return browseChildrenSearchFolder(end + 1, end + diff + 1, objectId, foldername);
 		} else {
-			log.warn("browseChildrenSearchFolder", "CDS didn't fill totalMatches attribute.");
+			log.warn("CDS didn't fill totalMatches attribute.");
 		}
-		log.debug("browseChildrenSearchFolder", "folder not found : {}", foldername);
+		log.debug("folder not found : {}", foldername);
 		return null;
 	}
 
