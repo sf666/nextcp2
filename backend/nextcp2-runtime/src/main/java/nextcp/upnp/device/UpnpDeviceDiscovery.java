@@ -91,7 +91,7 @@ public class UpnpDeviceDiscovery implements RegistryListener {
 
 	@Override
 	public void remoteDeviceRemoved(Registry registry, RemoteDevice device) {
-		log.info("remoteDeviceRemoved : {}", device.getDetails().getFriendlyName());
+		log.debug("remoteDeviceRemoved : {}", device.getDetails().getFriendlyName());
 
 		if (device.getType().getType().equals(MEDIA_SERVER_TYPE)) {
 			deviceRegistry.removeMediaServerDevice(device);
