@@ -69,6 +69,7 @@ export class ItemTileComponent {
   }
 
   playItem(item: MusicItemDto) {
+    console.log("playitem clicked : " + item.title);
     this.playItemClicked.emit(item);
   }
 

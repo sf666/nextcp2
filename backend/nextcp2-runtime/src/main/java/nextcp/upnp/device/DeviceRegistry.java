@@ -102,7 +102,7 @@ public class DeviceRegistry {
 		MediaServerDevice oldDevice = mediaServerList.put(remoteFacade.getUDN(remoteDevice), device);
 		inactiveMediaServerList.remove(remoteDevice.getIdentity().getUdn());
 		if (oldDevice != null) {
-			log.info("removed old media server device : {} ", oldDevice.getAsDto());
+			log.debug("removed old media server device : {} ", oldDevice.getAsDto());
 		}
 		eventPublisher.publishEvent(new MediaServerListChanged(getAvailableMediaServer()));
 	}
@@ -130,7 +130,7 @@ public class DeviceRegistry {
 	public synchronized void updatedMediaServerDevice(RemoteDevice remoteDevice) {
 		MediaServerDevice device = mediaServerList.get(remoteFacade.getUDN(remoteDevice));
 		if (device == null) {
-			log.info("Updated server device unknown yet. Adding ... ");
+			log.debug("Updated server device unknown yet. Adding ... ");
 			addMediaServerDevice(remoteDevice);
 		}
 	}

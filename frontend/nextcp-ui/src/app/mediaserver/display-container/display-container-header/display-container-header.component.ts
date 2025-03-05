@@ -355,14 +355,17 @@ export class DisplayContainerHeaderComponent implements OnInit {
   // Button actions
   // ===============================================================================================
   public playContainer(): void {
+    console.log("play container clicked ... ");
     this.playClicked.emit(this.currentContainer);
   }
 
   public shuffleContainer(): void {
+    console.log("shuffle container clicked ... ");
     this.shuffleClicked.emit(this.currentContainer);
   }
 
   public addToPlaylist(): void {
+    console.log("add to playlist clicked ... ");
     this.addToPlaylistClicked.emit(this.currentContainer);
   }
 
