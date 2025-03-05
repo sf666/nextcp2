@@ -66,7 +66,7 @@ public class DeviceRegistry {
 		rendererConfigService.addMediaRendererDeviceConfig(device);
 		MediaRendererDevice oldDevice = mediaRendererList.put(remoteFacade.getUDN(remoteDevice), device);
 		if (oldDevice != null) {
-			log.info("removed old media renderer device : {} ", oldDevice.getAsDto());
+			log.debug("replaced old media renderer device : {} ", oldDevice.getAsDto());
 		}
 		eventPublisher.publishEvent(new MediaRendererListChanged(getAvailableMediaRenderer()));
 	}

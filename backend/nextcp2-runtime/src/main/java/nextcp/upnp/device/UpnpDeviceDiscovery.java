@@ -53,7 +53,7 @@ public class UpnpDeviceDiscovery implements RegistryListener {
 
 	@Override
 	public void remoteDeviceAdded(Registry registry, RemoteDevice device) {
-		log.info("remoteDeviceAdded of type {}. Device {} ", device.getType().toString(), device.getDetails().getFriendlyName());
+		log.debug("remoteDeviceAdded of type {}. Device {} ", device.getType().toString(), device.getDetails().getFriendlyName());
 		if (device.getType().getType().equals(MEDIA_SERVER_TYPE)) {
 			deviceRegistry.addMediaServerDevice(device);
 		} else if (isMediaRenderer(device)) {
