@@ -11,6 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
@@ -33,32 +35,47 @@ public class RadioNetwork {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RadioNetwork.class.getName());
 
-	private AudioAddictServiceConfig config = null;
-	private Platform network = null;
-
 	private final static String EUROPE_SERVER = "http://prem2";
 	private final static String FAV = "Favorites";
 
-	private OkHttpClient okClient = null;
-	private OkHttpClient okClientBatch = new OkHttpClient.Builder().addInterceptor(new BasicAuthInterceptor("ephemeron", "dayeiph0ne@pp"))
-		.build();
-	private ObjectMapper om = null;
-
+	private final static ExecutorService executorService = Executors.newSingleThreadExecutor();
 	private static final Pattern favChannelShort = Pattern.compile(".*/(.*)\\?");
 
-	private Root networkBatchRoot = null;
+	private volatile Root networkBatchRoot = null;
+	private volatile OkHttpClient okClientBatch = new OkHttpClient.Builder()
+		.addInterceptor(new BasicAuthInterceptor("ephemeron", "dayeiph0ne@pp")).build();
+	
+	private ObjectMapper om = null;
+	private OkHttpClient okClient = null;	
 	private List<AudioAddictChannelDto> channels = null;
 	private StreamListQuality quality = StreamListQuality.MP3_320;
 	private LinkedList<String> filters = null;
 	private LinkedHashMap<String, List<Integer>> channelsFilterMap = new LinkedHashMap<>();
+	private AudioAddictServiceConfig config = null;
+	private Platform network = null;
 
 	public RadioNetwork(Platform network, AudioAddictServiceConfig config) {
 		this.config = config;
 		this.network = network;
 
 		om = JsonMapper.builder().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).build();
-		initHttpClient(config);
-		networkBatchRoot = readNetworkBatch();
+		initRoot();
+	}
+
+	private void initRoot() {
+		Runnable r = new Runnable() {
+
+			@Override
+			public void run() {
+				LOGGER.info("init http client for network {} ...", network.name());
+				initHttpClient(config);
+				LOGGER.info("reading batch update for network {} ...", network.name());
+				networkBatchRoot = readNetworkBatch();
+				LOGGER.info("reading filters of network {} ... ", network.name());
+				getFilters();
+			}
+		};
+		executorService.execute(r);
 	}
 
 	private void initHttpClient(AudioAddictServiceConfig config) {
@@ -72,8 +89,7 @@ public class RadioNetwork {
 
 	public void updateConfig(AudioAddictServiceConfig config) {
 		this.config = config;
-		initHttpClient(config);
-		networkBatchRoot = readNetworkBatch();
+		initRoot();
 	}
 
 	public List<AudioAddictChannelDto> getChannel() {
@@ -199,10 +215,12 @@ public class RadioNetwork {
 		LOGGER.debug(batchResponse);
 		try {
 			Root root = om.readValue(batchResponse, Root.class);
+			LOGGER.info("network {} initialized.", network.name());
 			return root;
 		} catch (JsonProcessingException e) {
-			LOGGER.error("OR exception read batch channel list", e);
+			LOGGER.error("OR exception read batch channel list for network", network.name(), e);
 		}
+		LOGGER.warn("initializing network {} failed.", network.name());
 		return null;
 	}
 

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.annotation.PostConstruct;
 import nextcp.audioaddict.AudioAddictService;
 import nextcp.audioaddict.Platform;
 import nextcp.dto.AudioAddictChannelDto;
@@ -39,7 +40,12 @@ public class RestRadioNetworks {
 	private Config config = null;
 
 	public RestRadioNetworks() {
+	}
+	
+	@PostConstruct
+	private void init() {
 		updateNetworks();
+		log.debug("audio {} " , audioAddictService);
 	}
 
 	private void updateNetworks() {
