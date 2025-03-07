@@ -35,7 +35,7 @@
     "glob-to-regexp": "^0.4.1",
     "lodash": "^4.17.20",
     "modernizr": "^3.11.4",
-    "ngx-device-detector": "7",
+    "ngx-device-detector": "^9.0.0",
     "ngx-infinite-scroll": "17",
     "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
