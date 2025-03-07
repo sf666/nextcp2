@@ -27,7 +27,7 @@
     "@angular/router": "^18.0.2",
     "@babel/core": "^7.21.0",
     "@babel/preset-env": "^7.20.2",
-    "@ng-bootstrap/ng-bootstrap": "^16.0.0",
+    "@ng-bootstrap/ng-bootstrap": "^18.0.0",
     "@popperjs/core": "^2.11.8",
     "@types/streamsaver": "^2.0.0",
     "body-scroll-lock": "^4.0.0-beta.0",
