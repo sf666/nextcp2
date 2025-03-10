@@ -74,6 +74,7 @@ const RAW_RUNTIME_STATE =
           ["karma-jasmine-html-reporter", "virtual:20c3642c1b5c15340dd7fa000b9620bed9349ad72ff5944b875133aef7eb718e00d0d0dc4b1de58cedaf5cf5cd9860979fce2d2691ed068c2e0c087e45b3c051#npm:2.1.0"],\
           ["lodash", "npm:4.17.21"],\
           ["modernizr", "npm:3.13.1"],\
+          ["ngx-bootstrap", "virtual:20c3642c1b5c15340dd7fa000b9620bed9349ad72ff5944b875133aef7eb718e00d0d0dc4b1de58cedaf5cf5cd9860979fce2d2691ed068c2e0c087e45b3c051#npm:19.0.2"],\
           ["ngx-device-detector", "virtual:20c3642c1b5c15340dd7fa000b9620bed9349ad72ff5944b875133aef7eb718e00d0d0dc4b1de58cedaf5cf5cd9860979fce2d2691ed068c2e0c087e45b3c051#npm:9.0.0"],\
           ["ngx-toastr", "virtual:20c3642c1b5c15340dd7fa000b9620bed9349ad72ff5944b875133aef7eb718e00d0d0dc4b1de58cedaf5cf5cd9860979fce2d2691ed068c2e0c087e45b3c051#npm:19.0.0"],\
           ["rxjs", "npm:7.8.2"],\
@@ -11669,6 +11670,7 @@ const RAW_RUNTIME_STATE =
           ["karma-jasmine-html-reporter", "virtual:20c3642c1b5c15340dd7fa000b9620bed9349ad72ff5944b875133aef7eb718e00d0d0dc4b1de58cedaf5cf5cd9860979fce2d2691ed068c2e0c087e45b3c051#npm:2.1.0"],\
           ["lodash", "npm:4.17.21"],\
           ["modernizr", "npm:3.13.1"],\
+          ["ngx-bootstrap", "virtual:20c3642c1b5c15340dd7fa000b9620bed9349ad72ff5944b875133aef7eb718e00d0d0dc4b1de58cedaf5cf5cd9860979fce2d2691ed068c2e0c087e45b3c051#npm:19.0.2"],\
           ["ngx-device-detector", "virtual:20c3642c1b5c15340dd7fa000b9620bed9349ad72ff5944b875133aef7eb718e00d0d0dc4b1de58cedaf5cf5cd9860979fce2d2691ed068c2e0c087e45b3c051#npm:9.0.0"],\
           ["ngx-toastr", "virtual:20c3642c1b5c15340dd7fa000b9620bed9349ad72ff5944b875133aef7eb718e00d0d0dc4b1de58cedaf5cf5cd9860979fce2d2691ed068c2e0c087e45b3c051#npm:19.0.0"],\
           ["rxjs", "npm:7.8.2"],\
@@ -11680,6 +11682,45 @@ const RAW_RUNTIME_STATE =
           ["zone.js", "npm:0.15.0"]\
         ],\
         "linkType": "SOFT"\
+      }]\
+    ]],\
+    ["ngx-bootstrap", [\
+      ["npm:19.0.2", {\
+        "packageLocation": "../../../../../../Users/igor/.yarn/berry/cache/ngx-bootstrap-npm-19.0.2-06b0da0ca4-10c0.zip/node_modules/ngx-bootstrap/",\
+        "packageDependencies": [\
+          ["ngx-bootstrap", "npm:19.0.2"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:20c3642c1b5c15340dd7fa000b9620bed9349ad72ff5944b875133aef7eb718e00d0d0dc4b1de58cedaf5cf5cd9860979fce2d2691ed068c2e0c087e45b3c051#npm:19.0.2", {\
+        "packageLocation": "./.yarn/__virtual__/ngx-bootstrap-virtual-c1b11fd980/7/Users/igor/.yarn/berry/cache/ngx-bootstrap-npm-19.0.2-06b0da0ca4-10c0.zip/node_modules/ngx-bootstrap/",\
+        "packageDependencies": [\
+          ["ngx-bootstrap", "virtual:20c3642c1b5c15340dd7fa000b9620bed9349ad72ff5944b875133aef7eb718e00d0d0dc4b1de58cedaf5cf5cd9860979fce2d2691ed068c2e0c087e45b3c051#npm:19.0.2"],\
+          ["@angular/animations", "virtual:20c3642c1b5c15340dd7fa000b9620bed9349ad72ff5944b875133aef7eb718e00d0d0dc4b1de58cedaf5cf5cd9860979fce2d2691ed068c2e0c087e45b3c051#npm:19.2.1"],\
+          ["@angular/common", "virtual:20c3642c1b5c15340dd7fa000b9620bed9349ad72ff5944b875133aef7eb718e00d0d0dc4b1de58cedaf5cf5cd9860979fce2d2691ed068c2e0c087e45b3c051#npm:19.2.1"],\
+          ["@angular/core", "virtual:20c3642c1b5c15340dd7fa000b9620bed9349ad72ff5944b875133aef7eb718e00d0d0dc4b1de58cedaf5cf5cd9860979fce2d2691ed068c2e0c087e45b3c051#npm:19.2.1"],\
+          ["@angular/forms", "virtual:20c3642c1b5c15340dd7fa000b9620bed9349ad72ff5944b875133aef7eb718e00d0d0dc4b1de58cedaf5cf5cd9860979fce2d2691ed068c2e0c087e45b3c051#npm:19.2.1"],\
+          ["@types/angular__animations", null],\
+          ["@types/angular__common", null],\
+          ["@types/angular__core", null],\
+          ["@types/angular__forms", null],\
+          ["@types/rxjs", null],\
+          ["rxjs", "npm:7.8.2"],\
+          ["tslib", "npm:2.8.1"]\
+        ],\
+        "packagePeers": [\
+          "@angular/animations",\
+          "@angular/common",\
+          "@angular/core",\
+          "@angular/forms",\
+          "@types/angular__animations",\
+          "@types/angular__common",\
+          "@types/angular__core",\
+          "@types/angular__forms",\
+          "@types/rxjs",\
+          "rxjs"\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["ngx-device-detector", [\
