@@ -99,9 +99,13 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	@PostConstruct
 	private void init() {
-		umsServices = new UmsExtendedServicesService(getUpnpService(), getDevice());
-		umsServiceEventListener = new UmsExtendedServicesServiceEventListener(getDevice(), this);
-		umsServices.addSubscriptionEventListener(umsServiceEventListener);
+		try {
+			umsServices = new UmsExtendedServicesService(getUpnpService(), getDevice());
+			umsServiceEventListener = new UmsExtendedServicesServiceEventListener(getDevice(), this);
+			umsServices.addSubscriptionEventListener(umsServiceEventListener);
+		} catch (Exception e) {
+			log.info("This UMS version has no UPnP extended UMS services.");
+		}
 	}
 
 	private void configureServer() {
