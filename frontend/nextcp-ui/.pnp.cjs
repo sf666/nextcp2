@@ -67,6 +67,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-plugin-prefer-arrow", "virtual:20c3642c1b5c15340dd7fa000b9620bed9349ad72ff5944b875133aef7eb718e00d0d0dc4b1de58cedaf5cf5cd9860979fce2d2691ed068c2e0c087e45b3c051#npm:1.2.3"],\
           ["glob-to-regexp", "npm:0.4.1"],\
           ["jasmine-core", "npm:5.6.0"],\
+          ["jsonc-parser", "npm:3.3.1"],\
           ["karma", "npm:6.4.4"],\
           ["karma-chrome-launcher", "npm:3.2.0"],\
           ["karma-coverage", "npm:2.2.1"],\
@@ -11663,6 +11664,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-plugin-prefer-arrow", "virtual:20c3642c1b5c15340dd7fa000b9620bed9349ad72ff5944b875133aef7eb718e00d0d0dc4b1de58cedaf5cf5cd9860979fce2d2691ed068c2e0c087e45b3c051#npm:1.2.3"],\
           ["glob-to-regexp", "npm:0.4.1"],\
           ["jasmine-core", "npm:5.6.0"],\
+          ["jsonc-parser", "npm:3.3.1"],\
           ["karma", "npm:6.4.4"],\
           ["karma-chrome-launcher", "npm:3.2.0"],\
           ["karma-coverage", "npm:2.2.1"],\
