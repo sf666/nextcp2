@@ -19,10 +19,10 @@ import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseOutpu
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSearchCapabilities;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSearchCapabilitiesOutput;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.UpdateObject;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.UpdateObjectInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.DestroyObject;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.DestroyObjectInput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.UpdateObject;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.UpdateObjectInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSortCapabilities;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSortCapabilitiesOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.X_GetFeatureList;
@@ -101,12 +101,17 @@ public class ContentDirectoryService
 
     public void addSubscriptionEventListener(IContentDirectoryServiceEventListener listener)
     {
-        subscription.addSubscriptionEventListener(listener);
+    	if (subscription != null) {
+            subscription.addSubscriptionEventListener(listener);
+    	}
     }
     
     public boolean removeSubscriptionEventListener(IContentDirectoryServiceEventListener listener)
     {
-        return subscription.removeSubscriptionEventListener(listener);
+    	if (subscription != null) {
+    		return subscription.removeSubscriptionEventListener(listener);
+    	}
+    	return false;
     }    
 
     public RemoteService getContentDirectoryService()
@@ -136,16 +141,16 @@ public class ContentDirectoryService
         return res;        
     }
 
-    public void updateObject(UpdateObjectInput inp)
-    {
-        UpdateObject updateObject = new UpdateObject(contentDirectoryService, inp, upnpService.getControlPoint());
-        updateObject.executeAction();
-    }
-
     public void destroyObject(DestroyObjectInput inp)
     {
         DestroyObject destroyObject = new DestroyObject(contentDirectoryService, inp, upnpService.getControlPoint());
         destroyObject.executeAction();
+    }
+
+    public void updateObject(UpdateObjectInput inp)
+    {
+        UpdateObject updateObject = new UpdateObject(contentDirectoryService, inp, upnpService.getControlPoint());
+        updateObject.executeAction();
     }
 
     public GetSortCapabilitiesOutput getSortCapabilities()
