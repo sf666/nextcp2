@@ -254,10 +254,6 @@ public class MediaServerDevice extends BaseDevice {
 					containerDto.title = containerDto.title.substring(3);
 					result.minimServerSupportTags.add(containerDto);
 				}
-			} else if (didlObject.getTitle().startsWith("#--")) {
-				// Maybe the renderer in misconfigred in UMS.
-				// ignore Transcode folder.
-				log.debug("Ignore #--Transcode--# folder ... maybe UMS renderer is misconfigured");
 			} else {
 				if (didlObject instanceof MusicAlbum) {
 					result.albumDto.add(containerDto);
