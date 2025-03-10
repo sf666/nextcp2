@@ -53,6 +53,7 @@ public class RadioNetwork {
 	private LinkedHashMap<String, List<Integer>> channelsFilterMap = new LinkedHashMap<>();
 	private AudioAddictServiceConfig config = null;
 	private Platform network = null;
+	private boolean userPassProvided = false;;
 
 	public RadioNetwork(Platform network, AudioAddictServiceConfig config) {
 		this.config = config;
@@ -67,11 +68,11 @@ public class RadioNetwork {
 
 			@Override
 			public void run() {
-				LOGGER.info("init http client for network {} ...", network.name());
+				LOGGER.info("{} : init http client for network ...", network.name());
 				initHttpClient(config);
-				LOGGER.info("reading batch update for network {} ...", network.name());
+				LOGGER.info("{} : reading batch update for network ...", network.name());
 				networkBatchRoot = readNetworkBatch();
-				LOGGER.info("reading filters of network {} ... ", network.name());
+				LOGGER.info("{} : reading filters of network ... ", network.name());
 				getFilters();
 			}
 		};
@@ -80,9 +81,11 @@ public class RadioNetwork {
 
 	private void initHttpClient(AudioAddictServiceConfig config) {
 		if (StringUtils.isAllBlank(config.pass) && StringUtils.isAllBlank(config.user)) {
+			userPassProvided = false;
 			okClient = new OkHttpClient.Builder().build();
 		} else {
-			LOGGER.info("channel 'favorites' enabled.");
+			userPassProvided = true;
+			LOGGER.info("{} : channel 'favorites' enabled.", this.network.displayName);
 			okClient = new OkHttpClient.Builder().addInterceptor(new BasicAuthInterceptor(config.user, config.pass)).build();
 		}
 	}
@@ -128,17 +131,21 @@ public class RadioNetwork {
 				List<Integer> filterChannelId = new ArrayList<>();
 				for (nextcp.audioaddict.mapper.Channel c : filter.channels) {
 					filterChannelId.add(c.id);
-					LOGGER.debug("added channel id {} to filterlist {} ", c.id, filter.name);
+					LOGGER.debug("{} : added channel id {} to filterlist {} ", this.network.displayName, c.id, filter.name);
 				}
 				channelsFilterMap.put(filter.name, filterChannelId);
-				if ("all".equalsIgnoreCase(filter.name)) {
+				if ("all".equalsIgnoreCase(filter.name) && this.userPassProvided) {
 					favList = getFavorites(filter);
+				} else {
+					LOGGER.info("{} : User/Pass not provided. Favorites filter is unavailable.", this.network.displayName);
 				}
 			}
 			if (favList != null) {
-				LOGGER.info("added favorites filter with {} entries", favList.size());
+				LOGGER.info("{} : added favorites filter with {} entries", this.network.displayName , favList.size());
 				channelsFilterMap.putFirst(FAV, favList);
 				filters.addFirst(FAV);
+			} else {
+				LOGGER.info("{} : no favorites filter available.", this.network.displayName);
 			}
 		}
 		LOGGER.debug("returning {} filter for network {} ", filters.size(), network.displayName);
@@ -155,8 +162,7 @@ public class RadioNetwork {
 		Set<String> favList = new HashSet<>();
 		while (m.find()) {
 			String fav = m.group(1);
-			fav = fav.substring(network.shortName.length() + 1); // added
-																 // "shortname_"
+			fav = fav.substring(network.shortName.length() + 1);
 			LOGGER.info("favorite channel : {}", fav);
 			favList.add(fav);
 		}
@@ -166,7 +172,7 @@ public class RadioNetwork {
 			String mappedChannelName = c.ad_dfp_unit_id.substring(prefixLength);
 			if (favList.contains(mappedChannelName)) {
 				filterChannelId.add(c.id);
-				LOGGER.debug("added channel favorite channel id {} ", c.id);
+				LOGGER.debug("{} : added channel favorite channel id {} ",this.network.displayName, c.id);
 			}
 		}
 		if (filterChannelId.size() > 0) {
@@ -188,14 +194,14 @@ public class RadioNetwork {
 			if (s.isPresent()) {
 				dto.streamUrl = s.get().url();
 			} else {
-				LOGGER.warn("URL not present for channel {} ", c.name);
+				LOGGER.warn("{} : URL not present for channel {} ", this.network.displayName, c.name);
 			}
 			dto.albumArt = c.asset_url;
 			dto.descLong = c.description_long;
 			dto.descShort = c.description_short;
 			channels.add(dto);
 		}
-		LOGGER.info("updates {} channels for network {}.", channels.size(), network.displayName);
+		LOGGER.info("{} : updates {} channels.", this.network.displayName, channels.size());
 	}
 
 	private ChannelFilter getChannelByName(String filterName) {
@@ -210,17 +216,17 @@ public class RadioNetwork {
 
 	private Root readNetworkBatch() {
 		String url = String.format("http://api.audioaddict.com/v1/%s/mobile/batch_update?stream_set_key=", network.shortName);
-		LOGGER.debug("using batch url : {}", url);
+		LOGGER.debug("{} : using batch url : {}", this.network.displayName, url);
 		String batchResponse = responseBodyBatch(url);
 		LOGGER.debug(batchResponse);
 		try {
 			Root root = om.readValue(batchResponse, Root.class);
-			LOGGER.info("network {} initialized.", network.name());
+			LOGGER.info("this.network.displayName : network initialized.", network.name());
 			return root;
 		} catch (JsonProcessingException e) {
-			LOGGER.error("OR exception read batch channel list for network", network.name(), e);
+			LOGGER.error("{} : OR exception read batch channel exception", network.name(), e);
 		}
-		LOGGER.warn("initializing network {} failed.", network.name());
+		LOGGER.warn("{} : initializing network failed.", network.name());
 		return null;
 	}
 
@@ -299,7 +305,7 @@ public class RadioNetwork {
 		try (Response response = call.execute()) {
 			String resp = response.body().string();
 			if (response.code() != 200) {
-				LOGGER.warn("retuned code is {}. Body : ", response.code(), resp);
+				LOGGER.warn("{} : retuned code is {}. Body : ", this.network.displayName, response.code(), resp);
 				return "";
 			}
 
@@ -317,7 +323,7 @@ public class RadioNetwork {
 		try (Response response = call.execute()) {
 			String resp = response.body().string();
 			if (response.code() != 200) {
-				LOGGER.warn("retuned code is {}. Body : ", response.code(), resp);
+				LOGGER.warn("{} : retuned code is {}. Body : ", this.network.displayName, response.code(), resp);
 				return "";
 			}
 
