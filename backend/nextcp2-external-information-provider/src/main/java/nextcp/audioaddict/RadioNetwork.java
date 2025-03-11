@@ -137,7 +137,7 @@ public class RadioNetwork {
 				if ("all".equalsIgnoreCase(filter.name) && this.userPassProvided) {
 					favList = getFavorites(filter);
 				} else {
-					LOGGER.info("{} : User/Pass not provided. Favorites filter is unavailable.", this.network.displayName);
+					LOGGER.trace("{} - getFilter : User/Pass not provided. Favorites filter is unavailable.", this.network.displayName);
 				}
 			}
 			if (favList != null) {
@@ -157,7 +157,7 @@ public class RadioNetwork {
 
 		String url = String.format("%s/public3/favorites.pls?%s", network.listenUrl, config.token);
 		String body = responseBody(url);
-		LOGGER.info("response my favorites : " + body);
+		LOGGER.debug("response to my favorites request : " + body);
 		Matcher m = favChannelShort.matcher(body);
 		Set<String> favList = new HashSet<>();
 		while (m.find()) {
@@ -221,7 +221,7 @@ public class RadioNetwork {
 		LOGGER.debug(batchResponse);
 		try {
 			Root root = om.readValue(batchResponse, Root.class);
-			LOGGER.info("this.network.displayName : network initialized.", network.name());
+			LOGGER.info("{} : network initialized.", this.network.displayName);
 			return root;
 		} catch (JsonProcessingException e) {
 			LOGGER.error("{} : OR exception read batch channel exception", network.name(), e);
