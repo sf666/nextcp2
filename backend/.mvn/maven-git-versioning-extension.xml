@@ -4,11 +4,17 @@
         <ref type="tag">
             <pattern>v([0-9].*)</pattern>
             <version>${version.release}</version>
+            <properties>
+                <project.build.outputTimestamp>${commit.timestamp}</project.build.outputTimestamp>
+            </properties>
         </ref>
 
         <ref type="branch">
             <pattern>.+</pattern>
             <version>${ref}-SNAPSHOT</version>
+            <properties>
+                <project.build.outputTimestamp>${commit.timestamp}</project.build.outputTimestamp>
+            </properties>
         </ref>
 
 </refs>
