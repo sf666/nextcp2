@@ -20,9 +20,9 @@ public class AudioAddictService {
 
 	@PostConstruct
 	private void init() {
-		for (Platform network : Platform.values()) {
-			getNetwork(network);
-		}
+//		for (Platform network : Platform.values()) {
+//			getNetwork(network);
+//		}
 	}
 
 	@Autowired
