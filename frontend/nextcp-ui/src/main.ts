@@ -49,6 +49,7 @@ import { RadioComponent } from './app/view/radio/radio.component';
 import { PlaylistComponent } from './app/view/playlist/playlist.component';
 import { NetworksComponent } from './app/view/audio-addict/networks/networks.component';
 import { NetworkComponent } from './app/view/audio-addict/network/network.component';
+import { UmsComponent } from './app/view/audio-addict/ums/ums.component';
 
 const ROUTES: Routes = [
   { path: 'music-library/:objectId', component: MusicLibraryComponent },
@@ -62,6 +63,7 @@ const ROUTES: Routes = [
   { path: 'playlist', component: PlaylistComponent },
   { path: 'mediaPlayerConfig', component: MediaPlayerComponent },
   { path: 'networks', component: NetworksComponent},
+  { path: 'audioaddict', component: UmsComponent},
   { path: 'getNetworkChannels/:network', component: NetworkComponent},
   { path: '', redirectTo: '/music-library', pathMatch: 'full' },
 ];

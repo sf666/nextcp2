@@ -1,12 +1,9 @@
-// individual style for mat-slider component
-@use '@angular/material'as mat;
-@import "app-variables";
-@import "pantone";
+@use "custom_variables" as cv;
 
-$col-1: $amber-pantone-3;
-$col-2: $amber-pantone-4;
-$col-3: $amber-pantone-5;
-$col-4: $amber-pantone-6;
+$col-1: cv.$amber-pantone-3;
+$col-2: cv.$amber-pantone-4;
+$col-3: cv.$amber-pantone-5;
+$col-4: cv.$amber-pantone-6;
 
 $col-grey: $col-4;
 
@@ -71,7 +68,7 @@ mat-slider {
     margin-left: 1rem;
 
     &.active {
-        color: $blue-pantone-2;
+        color: cv.$blue-pantone-2;
     }
 
     &.disabled {
@@ -160,11 +157,11 @@ img {
 }
 
 .standbyOn {
-    color: $pantone-Bright-Red-C;
+    color: cv.$pantone-Bright-Red-C;
 }
 
 .standbyOff {
-    color: $pantone-802-C;
+    color: cv.$pantone-802-C;
 }
 
 .spacer {

@@ -1,23 +1,22 @@
-import { ScrollLoadHandler } from './../../mediaserver/display-container/defs.d';
-import { DeviceService } from 'src/app/service/device.service';
-import { LayoutService } from './../../service/layout.service';
-import { ContainerDto, MusicItemDto, MediaServerDto } from './../../service/dto.d';
-import { ContentDirectoryService } from './../../service/content-directory.service';
-import { Component, OnInit } from '@angular/core';
-import { DisplayContainerComponent } from '../../mediaserver/display-container/display-container.component';
-import { NavBarComponent } from '../nav-bar/nav-bar.component';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { ScrollLoadHandler } from 'src/app/mediaserver/display-container/defs';
+import { DisplayContainerComponent } from 'src/app/mediaserver/display-container/display-container.component';
+import { ContentDirectoryService } from 'src/app/service/content-directory.service';
+import { DeviceService } from 'src/app/service/device.service';
+import { ContainerDto, MediaServerDto, MusicItemDto } from 'src/app/service/dto';
+import { LayoutService } from 'src/app/service/layout.service';
+import { NavBarComponent } from '../../nav-bar/nav-bar.component';
 
 @Component({
-    selector: 'myAlbums',
-    templateUrl: './my-album.component.html',
-    styleUrls: ['./my-album.component.scss'],
-    providers: [ContentDirectoryService],
-    standalone: true,
-    imports: [NavBarComponent, DisplayContainerComponent]
+  selector: 'audioaddict',
+  templateUrl: './ums.component.html',
+  styleUrl: './ums.component.scss',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NavBarComponent, DisplayContainerComponent]
 })
-export class MyAlbumComponent implements OnInit {
-
+export class UmsComponent {
   constructor(
     public layoutService: LayoutService,
     private deviceService: DeviceService,
@@ -27,23 +26,14 @@ export class MyAlbumComponent implements OnInit {
   }
 
   mediaServerChanged(data: MediaServerDto): void {
-    this.loadMyAlbums();
+    this.loadRadioNetwork();
   }
 
-  ngOnInit(): void {
-    this.layoutService.setFramedView();
-    this.loadMyAlbums();
-  }
-
-  private loadMyAlbums() {
-    const oid = "$DBID$MYMUSIC$";
+  loadRadioNetwork() {
+    const oid = "$DBID$AUDIOADDICT$";
     if (this.deviceService.selectedMediaServerDevice().udn) {
       this.contentDirectoryService.browseChildren(oid, "", this.deviceService.selectedMediaServerDevice().udn).subscribe();
     }
-  }
-
-  hasExtendedApi(): boolean {
-    return this.deviceService.selectedMediaServerDeviceHasExtendedApi;
   }
 
   //
@@ -55,14 +45,14 @@ export class MyAlbumComponent implements OnInit {
   }
 
   public backButtonPressed(event: any) {
-    this.loadMyAlbums();
+    this.loadRadioNetwork();
   }
 
   //
   // bindings
   //
   getContentHandler(): ScrollLoadHandler {
-    return {contentDirectoryService: this.contentDirectoryService, persistenceService: null }
+    return { contentDirectoryService: this.contentDirectoryService, persistenceService: null }
   }
 
   backButtonDisabled() {
@@ -101,3 +91,4 @@ export class MyAlbumComponent implements OnInit {
     return "";
   }
 }
+

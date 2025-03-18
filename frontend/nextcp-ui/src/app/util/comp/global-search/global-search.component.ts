@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatMiniFabButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { GlobalSearchService } from 'src/app/service/search/global-search.service';
 import { ModalSearchResultComponent } from 'src/app/view/search/modal-search-result/modal-search-result.component';
@@ -10,9 +8,7 @@ import { ModalSearchResultComponent } from 'src/app/view/search/modal-search-res
   selector: 'global-search',
   standalone: true,
   imports: [
-    MatMiniFabButton,
     MatInput,
-    MatIcon,
     FormsModule,
     ModalSearchResultComponent,
   ],

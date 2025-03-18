@@ -1,8 +1,8 @@
-@import 'appTable';
-@import "card-layout";
-@import "buttons";
-@import "app-variables";
-@import "app-icons";
+@use 'appTable';
+@use "card-layout";
+@use "buttons";
+@use "app-variables" as av;
+@use "app-icons";
 
 .title {
     font-size     : 2rem;
@@ -18,8 +18,8 @@
     flex-direction : column;
     justify-content: space-between;
     max-width      : 750px;
-    min-height  : calc($top-header-Height - $top-header-Vertical-Indent);
-    max-height  : calc($top-header-Height - $top-header-Vertical-Indent);
+    min-height  : calc(av.$top-header-Height - av.$top-header-Vertical-Indent);
+    max-height  : calc(av.$top-header-Height - av.$top-header-Vertical-Indent);
 }
 
 .plainText {
@@ -45,8 +45,8 @@
 
 .top-img-container {
     display   : flex;
-    max-height: $top-header-Height;
-    min-height: $top-header-Height;
+    max-height: av.$top-header-Height;
+    min-height: av.$top-header-Height;
 }
 
 .img-top {
@@ -54,10 +54,10 @@
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter : drop-shadow(4px 4px 10px black);
 
-    min-width   : calc($top-header-Height - $top-header-Vertical-Indent);
-    min-height  : calc($top-header-Height - $top-header-Vertical-Indent);
-    max-width   : calc($top-header-Height - $top-header-Vertical-Indent);
-    max-height  : calc($top-header-Height - $top-header-Vertical-Indent);
+    min-width   : calc(av.$top-header-Height - av.$top-header-Vertical-Indent);
+    min-height  : calc(av.$top-header-Height - av.$top-header-Vertical-Indent);
+    max-width   : calc(av.$top-header-Height - av.$top-header-Vertical-Indent);
+    max-height  : calc(av.$top-header-Height - av.$top-header-Vertical-Indent);
     margin-left : 32px;
     margin-right: 32px;
 }
@@ -101,7 +101,7 @@
 // Button Group
 .button-row {
     position : absolute;
-    top      : calc($top-header-Height - 41px);
+    top      : calc(av.$top-header-Height - 41px);
     left     : 32px;
     display  : table-cell;
     max-width: 400px;
@@ -162,8 +162,8 @@
 .bg-img-header::before {
     content                          : "";
     position                         : absolute;
-    max-height                       : $top-header-Height;
-    min-height                       : $top-header-Height;
+    max-height                       : av.$top-header-Height;
+    min-height                       : av.$top-header-Height;
     width                            : 100%;
     height                           : 100%;
     background-color                 : rgba(0, 0, 0, .5);
@@ -179,8 +179,8 @@
     display   : block;
     position  : absolute;
     top       : 0px;
-    max-height: $top-header-Height;
-    min-height: $top-header-Height;
+    max-height: av.$top-header-Height;
+    min-height: av.$top-header-Height;
     width     : 100%;
 
     background-repeat: calc(var(--vh, 1vh) * 100);
@@ -220,10 +220,10 @@
         object-fit      : cover;
         background-color: rgba(0, 0, 0, 0.5);
 
-        min-width   : calc($top-header-Height-mid - $top-header-Vertical-Indent-mid);
-        min-height  : calc($top-header-Height-mid - $top-header-Vertical-Indent-mid);
-        max-width   : calc($top-header-Height-mid - $top-header-Vertical-Indent-mid);
-        max-height  : calc($top-header-Height-mid - $top-header-Vertical-Indent-mid);
+        min-width   : calc(av.$top-header-Height-mid - av.$top-header-Vertical-Indent-mid);
+        min-height  : calc(av.$top-header-Height-mid - av.$top-header-Vertical-Indent-mid);
+        max-width   : calc(av.$top-header-Height-mid - av.$top-header-Vertical-Indent-mid);
+        max-height  : calc(av.$top-header-Height-mid - av.$top-header-Vertical-Indent-mid);
         margin-left : 32px;
         margin-right: 32px;
     }
@@ -237,8 +237,8 @@
 
     .top-img-container {
         align-self: center;
-        max-height: $top-header-Height-mid;
-        min-height: $top-header-Height-mid;
+        max-height: av.$top-header-Height-mid;
+        min-height: av.$top-header-Height-mid;
     }
 }
 

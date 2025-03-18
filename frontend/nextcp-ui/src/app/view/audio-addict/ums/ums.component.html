@@ -1,0 +1,17 @@
+@if (layoutService.headerVisible) {
+    <nav-bar
+      [parentTitle]="getParentTitle()"
+      [backButtonDisabled]="backButtonDisabled()"
+      [contentHandler]="getContentHandler()"
+      (backButtonPressed)="backButtonPressed($event)"
+    ></nav-bar>
+  }
+  
+  
+  <!-- display music library -->
+  
+  <mediaServer-display-container
+    [showTopHeader]="showTopHeader()"
+    [contentHandler]="getContentHandler()"
+  />
+  

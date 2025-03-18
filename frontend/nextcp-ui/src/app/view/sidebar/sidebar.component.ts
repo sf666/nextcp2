@@ -52,12 +52,14 @@ export class SidebarComponent {
     this.routerMap.set("/myAlbums", "-5");
     this.routerMap.set("/settings", "-6");
     this.routerMap.set("/mediaPlayerConfig", "-7");
-    this.routerMap.set("/networks", "-8");
-    this.routerMap.set("/getNetworkChannels", "-8");
+    this.routerMap.set("/audioaddict", "-8");
     this.routerMap.set("/myPlaylists", "0");      // All positives ID's are playlists
 
     this.routerMap.set("/myTracks", "-999");      // not used yet
-
+/*
+    this.routerMap.set("/networks", "-8");
+    this.routerMap.set("/getNetworkChannels", "-8");
+*/
     router.events.subscribe(event => this.calActiveId(event));
   }
 

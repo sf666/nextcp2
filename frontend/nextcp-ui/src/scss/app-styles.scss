@@ -1,5 +1,7 @@
-@import "../assets/fonts/azeret_mono/azeret_mono.scss";
-@import "../assets/fonts/HKGrotesk/HKGrotesk-font.scss";
+@use "../assets/fonts/azeret_mono/azeret_mono.scss";
+@use "../assets/fonts/HKGrotesk/HKGrotesk-font.scss";
+@use "pantone" as p;
+@use "app-variables" as v;
 
 @media (min-width:320px) {
     /* smartphones, iPhone, portrait 480x320 phones */
@@ -64,7 +66,7 @@
     height          : 100%;
     width           : 100%;
     opacity         : 0;
-    background-color: rgba($color: $pantone-Neutral-Black-C, $alpha: 0.95);
+    background-color: rgba($color: p.$pantone-Neutral-Black-C, $alpha: 0.95);
     text-align      : center;
     transition      : .3s ease;
     opacity         : 0;
@@ -140,11 +142,11 @@
 
         padding-top   : 1.2rem;
         padding-bottom: 0.2rem;
-        padding-left  : $paddingLeftColumn;
+        padding-left  : v.$paddingLeftColumn;
 
         margin-bottom: 0.8rem;
 
-        border-bottom: 1px solid $border-primary;
+        border-bottom: 1px solid v.$border-primary;
     }
 
     &.subhead {
@@ -152,13 +154,13 @@
 
         padding-top   : 0.8rem;
         padding-bottom: 0.2rem;
-        padding-left  : $paddingLeftColumn + 1rem;
+        padding-left  : v.$paddingLeftColumn + 1rem;
 
         margin-bottom: 0.8rem;
     }
 
     &.label {
-        font-size: $fontNormal;
+        font-size: v.$fontNormal;
 
         padding-top   : 0.6rem !important;
         padding-bottom: 0.6rem !important;
@@ -169,45 +171,45 @@
     // 2 cols, label and display value (all in all 4 cols)
     &.item-2-label {
         display  : inline-block;
-        font-size: $fontNormal;
+        font-size: v.$fontNormal;
         width    : 20%;
     }
 
     &.item-2-disp {
         display  : inline-block;
-        font-size: $fontNormal;
+        font-size: v.$fontNormal;
         width    : 30%;
     }
 
     &.item-label {
         display     : inline-block;
-        font-size   : $fontNormal;
+        font-size   : v.$fontNormal;
         width       : 30%;
-        padding-left: $paddingLeftColumn;
+        padding-left: v.$paddingLeftColumn;
     }
 
     &.item-disp {
         display      : inline-block;
-        font-size    : $fontNormal;
+        font-size    : v.$fontNormal;
         width        : 70%;
         padding-right: 20rem;
     }
 
     &.padding {
-        padding-left: $paddingLeftColumn;
+        padding-left: v.$paddingLeftColumn;
     }
 }
 
 .section-button {
-    color: $section-button-col;
+    color:  v.$section-button-col;
 
     &.sec-border {
         border-radius   : 1rem;
-        border          : 2px solid $section-button-col;
-        background-color: $section-button-col-back;
+        border          : 2px solid  v.$section-button-col;
+        background-color:  v.$section-button-col-back;
 
         &:hover {
-            background-color: $section-button-col-back-hover;
+            background-color:  v.$section-button-col-back-hover;
             transition      : all 200ms ease-in-out;
         }
 
@@ -215,7 +217,7 @@
 
     &.text {
         font-size    : 1rem;
-        color        : $section-button-col;
+        color        :  v.$section-button-col;
         margin-left  : 0.3rem;
         margin-right : 0.7rem;
         margin-top   : 0.3rem;
@@ -226,8 +228,8 @@
 
 // Alignment for text columns
 .contentDirectoryObject {
-    padding-left: $paddingLeftColumn;
-    font-size   : $fontNormal;
+    padding-left: v.$paddingLeftColumn;
+    font-size   : v.$fontNormal;
     height      : 2rem;
 }
 

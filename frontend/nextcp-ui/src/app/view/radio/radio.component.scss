@@ -1,5 +1,5 @@
-@import "pantone";
-@import "card-layout";
+@use "pantone" as p;
+@use "card-layout";
 
 // "play-button" overlay symbol
 .play-overlay-button {
@@ -16,7 +16,7 @@
     height          : 100%;
     width           : 100%;
     opacity         : 0;
-    background-color: rgba($color: $pantone-Neutral-Black-C, $alpha: 0.95);
+    background-color: rgba($color: p.$pantone-Neutral-Black-C, $alpha: 0.95);
     text-align      : center;
     transition      : .3s ease;
     opacity         : 0;
