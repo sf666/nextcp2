@@ -9,14 +9,14 @@ import { LayoutService } from 'src/app/service/layout.service';
 import { NavBarComponent } from '../../nav-bar/nav-bar.component';
 
 @Component({
-  selector: 'audioaddict',
-  templateUrl: './ums.component.html',
-  styleUrl: './ums.component.scss',
+  selector: 'ums-audioaddict',
+  templateUrl: './ums-audioaddict.component.html',
+  styleUrl: './ums-audioaddict.component.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NavBarComponent, DisplayContainerComponent]
 })
-export class UmsComponent {
+export class UmsAudioaddictComponent {
   constructor(
     public layoutService: LayoutService,
     private deviceService: DeviceService,

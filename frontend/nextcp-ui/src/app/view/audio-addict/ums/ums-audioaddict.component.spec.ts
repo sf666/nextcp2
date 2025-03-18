@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UmsComponent } from './ums.component';
+import { UmsAudioaddictComponent } from './ums-audioaddict.component';
 
 describe('UmsComponent', () => {
-  let component: UmsComponent;
-  let fixture: ComponentFixture<UmsComponent>;
+  let component: UmsAudioaddictComponent;
+  let fixture: ComponentFixture<UmsAudioaddictComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UmsComponent]
+      imports: [UmsAudioaddictComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(UmsComponent);
+    fixture = TestBed.createComponent(UmsAudioaddictComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
