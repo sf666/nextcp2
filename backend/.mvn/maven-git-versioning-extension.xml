@@ -13,7 +13,8 @@
             <pattern>.+</pattern>
             <version>${ref}-SNAPSHOT</version>
             <properties>
-                <project.build.outputTimestamp>${commit.timestamp}</project.build.outputTimestamp>
+		<commit>${commit.short}</commit>
+                <outputTimestamp>${commit.timestamp}</outputTimestamp>
             </properties>
         </ref>
 

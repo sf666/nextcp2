@@ -125,7 +125,9 @@ export class DtoGeneratorService {
 
   public generateSystemInformationDto(): SystemInformationDto {
     return {
-      buildNumber: 'unknown'
+      buildNumber: 'unknown',
+      name:'',
+      time:''
     }
   }
 

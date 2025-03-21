@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-02-19 16:50:15.
+// Generated using typescript-generator version 3.2.1263 on 2025-03-21 10:00:33.
 
 export interface ApplicationConfig {
     myPlaylistFolderName: string;
@@ -408,6 +408,8 @@ export interface SpotifyConfigDto {
 
 export interface SystemInformationDto {
     buildNumber: string;
+    name: string;
+    time: string;
 }
 
 export interface ToastrMessage {

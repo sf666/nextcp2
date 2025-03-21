@@ -144,9 +144,16 @@ export class SettingsComponent implements OnInit {
   }
 
   get buildNumber(): string {
-    const bn = this.systemService.buildVersion;
-    return bn;
+    return this.systemService.build.buildNumber;
   }
+
+  get buildName(): string {
+    return this.systemService.build.name;
+  }
+  get buildTime(): string {
+    return this.systemService.build.time;
+  }
+
 
   activateLastFM(): void {
     this.systemService.registerNextcp2AtLastFM();

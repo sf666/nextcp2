@@ -465,6 +465,8 @@ ToastrMessage:
    
 SystemInformationDto:
    buildNumber: String
+   name: String
+   time: String
 
 #   
 # Event classes
@@ -487,4 +489,3 @@ DeviceDriverCapability:
    deviceType: String
    deviceDescription: String
 
-   

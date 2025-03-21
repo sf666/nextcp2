@@ -20,8 +20,7 @@ import nextcp.util.CurrentVersion;
 public class SystemService
 {
     private static final Logger log = LoggerFactory.getLogger(SystemService.class.getName());
-
-    private SystemInformationDto systemInformation = new SystemInformationDto();
+    private CurrentVersion cw = new CurrentVersion();
 
     @Autowired
     private Config config = null;
@@ -31,13 +30,11 @@ public class SystemService
 
     public SystemService()
     {
-        CurrentVersion cw = new CurrentVersion();
-        systemInformation.buildNumber = cw.CURRENT_VERSION;
     }
 
     public SystemInformationDto getSystemInformation()
     {
-        return systemInformation;
+        return cw.getVersion();
     }
 
     public void restartNextcp()

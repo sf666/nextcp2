@@ -497,6 +497,14 @@
       <mat-label>build number</mat-label>
       <input matInput type="text" [ngModel]="buildNumber" placeholder="undefined" readonly="true">
     </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>build name</mat-label>
+      <input matInput type="text" [ngModel]="buildName" placeholder="undefined" readonly="true">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>build time</mat-label>
+      <input matInput type="text" [ngModel]="buildTime" placeholder="undefined" readonly="true">
+    </mat-form-field>
     <button mat-stroked-button class="settings maxButton" (click)="systemService.restart()">
       restart nextcp/2
     </button>

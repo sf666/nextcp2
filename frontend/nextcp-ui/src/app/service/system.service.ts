@@ -2,7 +2,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { DtoGeneratorService } from './../util/dto-generator.service';
 import { SystemInformationDto } from './dto.d';
 import { HttpService } from './http.service';
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable, OnInit, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -10,18 +10,17 @@ import { Injectable, OnInit } from '@angular/core';
 export class SystemService {
 
   private baseUri = '/SystemService';
-  private systemInformationDto: SystemInformationDto;
+  private systemInformationDto = signal<SystemInformationDto>(this.dtoGeneratorService.generateSystemInformationDto());
 
   constructor(
     private httpService: HttpService,
     private http: HttpClient,
     private dtoGeneratorService: DtoGeneratorService) {
-    this.systemInformationDto = this.dtoGeneratorService.generateSystemInformationDto();
     this.httpService.get<SystemInformationDto>(this.baseUri, "/getSystemInformation").subscribe(version => this.updateBuildVersion(version));
   }
 
   private updateBuildVersion(data: SystemInformationDto) {
-    this.systemInformationDto = data;
+    this.systemInformationDto.set(data);
   }
 
   public registerNextcp2AtLastFM(): void {
@@ -70,7 +69,7 @@ export class SystemService {
     frame.setAttribute("src", url);
   }
 
-  public get buildVersion(): string {
-    return this.systemInformationDto.buildNumber;
+  public get build(): SystemInformationDto {
+    return this.systemInformationDto();
   }
 }
