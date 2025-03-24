@@ -73,6 +73,7 @@ export class MusicLibraryComponent implements AfterViewInit {
 
 
   ngAfterViewInit(): void {
+    console.log("Music Library : After view init ...");
     this.layoutService.setFramedView();
     if (this.objectId) {
       this.initialBrowseToUid(this.objectId);
@@ -86,9 +87,14 @@ export class MusicLibraryComponent implements AfterViewInit {
     this.cdsBrowsePathService.restorePathToRoot();
     this.lastOidIsRestoredFromCache = true;
     udn = this.persistenceService.getCurrentMediaServerDevice();
+    console.log("Music Library - initial : persistent UDN : " + udn);
     if (!(udn?.length > 0)) {
       udn = this.deviceService.selectedMediaServerDevice().udn;
+      console.log("Music Library - initial : selected media server : " + udn);
       objectId = "0";
+      if (!(udn?.length > 0)) {
+        console.log("Music Library - initial : no UDN found. Do not browse to root ");
+      }
     }
 
     let prom = this.browseToOid(objectId, udn, true, "");

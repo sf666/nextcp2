@@ -1,5 +1,3 @@
-@import 'pantone';
-
 .search-container {
     display      : flex;
     flex-flow    : column nowrap;
@@ -12,7 +10,7 @@
     height          : calc(var(--vh, 1vh) * 100 - 185px);
     top             : 70px;
     right           : 16px;
-    background-color: #242528; // $pantone-Neutral-Black-C , #242528
+    background-color: #242528;
     z-index         : 70;
 
     overflow  : hidden;

@@ -158,7 +158,7 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	}
 
 	public void setNextAVTransportURI(String nextURI, String nextURIMetaData) {
-		log.debug("setNextAVTransportURI to : " + nextURI);
+		log.info("setNextAVTransportURI to : " + nextURI);
 		currentMediaInfo = createMediaInfo(currentMediaInfo.getCurrentURI(), currentMediaInfo.getCurrentURIMetaData(), nextURI,
 			nextURIMetaData, currentMediaInfo.getMediaDuration());
 		rootDevice.fireLastChange();

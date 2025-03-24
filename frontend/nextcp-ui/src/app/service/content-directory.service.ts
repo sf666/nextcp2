@@ -146,6 +146,11 @@ export class ContentDirectoryService {
       this.page = 0;
     }
 
+    if (browseRequestDto.mediaServerUDN?.length < 1) {
+      console.log("UDN not set. Stop browsing.");
+      return;
+    }
+
     this.setActivePage(browseRequestDto);
 
     const uri = '/browseChildren';

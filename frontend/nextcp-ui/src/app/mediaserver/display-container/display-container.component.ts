@@ -158,6 +158,10 @@ export class DisplayContainerComponent {
       console.error('contentHandler not initialized.');
       return;
     }
+    if (udn?.length < 1) {
+      console.error('display-container : UDN not set');
+      return
+    }
 
     const promise = new Promise<boolean>((resolve, reject) => {
       if (this.contentHandler().persistenceService) {
