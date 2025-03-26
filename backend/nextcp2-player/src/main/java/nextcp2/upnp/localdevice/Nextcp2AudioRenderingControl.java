@@ -41,18 +41,18 @@ public class Nextcp2AudioRenderingControl extends AbstractAudioRenderingControl 
 
 	@Override
 	public boolean getMute(UnsignedIntegerFourBytes instanceId, String channelName) throws RenderingControlException {
-		log.debug("get mute");
+		log.debug("get mute : false");
 		return false;
 	}
 
 	@Override
 	public void setMute(UnsignedIntegerFourBytes instanceId, String channelName, boolean desiredMute) throws RenderingControlException {
-		log.debug("set mute");
+		log.debug("set mute : " + Boolean.toString(desiredMute));
 	}
 	
 	@Override
 	public UnsignedIntegerTwoBytes getVolume(UnsignedIntegerFourBytes instanceId, String channelName) throws RenderingControlException {
-		log.debug("get vol");
+		log.debug("get vol : 12");
 		return new UnsignedIntegerTwoBytes(12);
 	}
 
@@ -69,9 +69,9 @@ public class Nextcp2AudioRenderingControl extends AbstractAudioRenderingControl 
 
 	@Override
 	protected Channel[] getCurrentChannels() {
-		log.debug("getCurrentChannels");
 		Channel[] master = new Channel[1];
 		master[0] = Channel.Master;
+		log.debug("getCurrentChannels : " + Channel.Master);
 		return master;
 	}
 
