@@ -1,6 +1,5 @@
 package nextcp.upnp.device.mediaserver;
 
-import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +86,7 @@ public class MediaServerDevice extends BaseDevice {
 
 	/**
 	 * Read playlist from given folder
+	 * 
 	 * @param folderId
 	 * @return
 	 */
@@ -185,7 +185,7 @@ public class MediaServerDevice extends BaseDevice {
 			checkInp(inp);
 			BrowseOutput out = contentDirectoryService.browse(inp);
 			if (out != null && out.NumberReturned != null) {
-				log.info("Response Objects: " + out.NumberReturned);
+				log.info("[requestContent] Response Objects : {}", out.NumberReturned);
 				if (log.isDebugEnabled()) {
 					log.debug("DIDL Object : " + out.Result);
 				}
@@ -208,7 +208,7 @@ public class MediaServerDevice extends BaseDevice {
 		ContainerDto result = new ContainerDto();
 		try {
 			BrowseOutput out = contentDirectoryService.browse(metaInp);
-			log.info("Response Objects: " + out.NumberReturned);
+			log.info("[browseMetadataMeta] Response Objects : {}", out.NumberReturned);
 			if (out.NumberReturned == 1) {
 				DIDLContent didl = generateDidlContent(out.Result);
 				if (didl != null) {
