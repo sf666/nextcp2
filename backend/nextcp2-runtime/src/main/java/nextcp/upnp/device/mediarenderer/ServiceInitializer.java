@@ -42,7 +42,7 @@ public class ServiceInitializer
     static final String OH_Radio = "Radio";
     static final String OH_Product = "Product";
     static final String OH_Transport = "Transport";
-    
+    static final String OH_OAuth = "OAuth";
 
     void initializeServices(UpnpService upnpService, RemoteDevice device, MediaRendererDevice renderer, List<MediaRendererServicesDto> services)
     {
@@ -111,6 +111,10 @@ public class ServiceInitializer
                 else if (service.getServiceType().getType().equalsIgnoreCase(OH_Transport))
                 {
                     renderer.oh_transportService = new TransportService(upnpService, device);
+                }
+                else if (service.getServiceType().getType().equalsIgnoreCase(OH_OAuth))
+                {
+                	log.debug("OAuth not implemented");
                 }
                 else
                 {

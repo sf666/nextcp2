@@ -111,7 +111,7 @@ public class OhPlaylistBridge implements IPlaylistService
             playlistUrls.add(musicItemDto.streamingURL);
         }
         for (MusicItemDto musicItemDto : musicList) {
-			log.debug("[convertIdArrayToMusicItemList] {} " + musicItemDto.title);
+			log.debug("[convertIdArrayToMusicItemList] {} " , musicItemDto.title);
 		}
         return musicList;
     }
