@@ -70,8 +70,7 @@ public class OhInfoServiceEventListener extends InfoServiceEventListenerImpl
                 dto.currentTrack.album = dto.metatext;
             }
         } else {
-        	log.debug("metatext not processed.");
-            log.warn(String.format("[%s] metatext not processed." , device.getFriendlyName()));
+            log.debug(String.format("[%s] metatext not processed." , device.getFriendlyName()));
         }
         
         if (log.isInfoEnabled()) {

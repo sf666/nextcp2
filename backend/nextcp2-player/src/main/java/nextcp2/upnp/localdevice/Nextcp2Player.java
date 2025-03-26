@@ -99,17 +99,17 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	// requests
 
 	synchronized public TransportInfo getCurrentTransportInfo() {
-		log.debug("getCurrentTransportInfo " + currentTransportInfo);
+		log.debug("[getCurrentTransportInfo] current transport state : " + currentTransportInfo.getCurrentTransportState().getValue());
 		return currentTransportInfo;
 	}
 
 	synchronized public PositionInfo getCurrentPositionInfo() {
-		log.debug("getCurrentPositionInfo " + currentPositionInfo);
+		log.debug("[getCurrentPositionInfo] absolute time : " + currentPositionInfo.getAbsTime());
 		return currentPositionInfo;
 	}
 
 	synchronized public MediaInfo getCurrentMediaInfo() {
-		log.debug("getCurrentMediaInfo " + currentMediaInfo);
+		log.debug("[getCurrentMediaInfo] current URI : " + currentMediaInfo.getCurrentURI());
 		return currentMediaInfo;
 	}
 
@@ -181,7 +181,11 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 			default:
 				actions = new TransportAction[] { TransportAction.Play };
 		}
-		log.debug("current transport actions : " + actions);
+		if (log.isDebugEnabled()) {
+			for (TransportAction transportAction : actions) {
+				log.debug("current transport action : " + transportAction);
+			}
+		}
 		return actions;
 	}
 
@@ -190,14 +194,14 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	//
 	@Override
 	public void skipToNextSong() {
-		log.debug("skip to next song ...");
+		log.info("skip to next song ...");
 //		transportStateChanged(TransportState.TRANSITIONING);
 		if (StringUtil.isBlank(currentMediaInfo.getNextURI())) {
 			log.info("no next title to skip to. Stopping ...");
 			stop();
 		} else {
 			// trackNum++;
-			log.debug("moving to next uri ... ");
+			log.info("moving to next uri ... ");
 			setAVTransportURI(URI.create(currentMediaInfo.getNextURI()), currentMediaInfo.getNextURIMetaData());
 			play(this.config);
 		}
