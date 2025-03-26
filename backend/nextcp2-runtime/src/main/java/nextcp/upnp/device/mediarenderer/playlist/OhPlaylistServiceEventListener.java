@@ -5,7 +5,6 @@ import org.jupnp.model.gena.CancelReason;
 import org.jupnp.model.message.UpnpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.PlaylistState;
 import nextcp.dto.RendererPlaylist;
@@ -15,6 +14,8 @@ import nextcp.upnp.modelGen.avopenhomeorg.playlist1.PlaylistServiceStateVariable
 
 public class OhPlaylistServiceEventListener extends PlaylistServiceEventListenerImpl
 {
+	private static final Logger log = LoggerFactory.getLogger(OhPlaylistServiceEventListener.class.getName());
+	
     private OhPlaylistBridge playlist;
     private MediaRendererDevice device;
     private boolean shouldPublishTransportServiceState = false;
@@ -31,6 +32,7 @@ public class OhPlaylistServiceEventListener extends PlaylistServiceEventListener
     {
         if (!shouldPublishTransportServiceState)
         {
+        	log.debug("[eventProcessed] : publishing transport state is disabeld.");
             return;
         }
 
@@ -45,6 +47,7 @@ public class OhPlaylistServiceEventListener extends PlaylistServiceEventListener
         dto.TracksMax = state.TracksMax;
         dto.TransportState = state.TransportState;
         
+    	log.debug("[eventProcessed] : publishing playlist state : {} ", dto.toString());
         device.getEventPublisher().publishEvent(dto);
     }
     
@@ -52,6 +55,7 @@ public class OhPlaylistServiceEventListener extends PlaylistServiceEventListener
     public void idArrayChange(byte[] value)
     {
         super.idArrayChange(value);
+        log.debug("idArrayChange : {} " , value);
         PlaylistChangedEvent event = new PlaylistChangedEvent();
         List<MusicItemDto> playlistItems = playlist.convertIdArrayToMusicItemList(value);
         event.rendererPlaylist = new RendererPlaylist(device.getUDN().getIdentifierString(), playlistItems);
@@ -62,6 +66,7 @@ public class OhPlaylistServiceEventListener extends PlaylistServiceEventListener
     public void idChange(Long value)
     {
         super.idChange(value);
+        log.debug("idChanged : not processing.");
 //        ReadOutput out = playlist.read(value);
 //        log.debug("idArrayChange Event Metadata : " + out.Metadata);
     }
