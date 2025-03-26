@@ -43,6 +43,7 @@ public class ServiceInitializer
     static final String OH_Product = "Product";
     static final String OH_Transport = "Transport";
     static final String OH_OAuth = "OAuth";
+    static final String OH_Receiver = "Receiver";
 
     void initializeServices(UpnpService upnpService, RemoteDevice device, MediaRendererDevice renderer, List<MediaRendererServicesDto> services)
     {
@@ -116,11 +117,14 @@ public class ServiceInitializer
                 {
                 	log.debug("OAuth not implemented");
                 }
+                else if (service.getServiceType().getType().equalsIgnoreCase(OH_Receiver))
+                {
+                	log.debug("Receiver not implemented");
+                }
                 else
                 {
                     log.warn("Device has unknown openhome services : " + service.getServiceType().getType());
                 }
-
             }
             else
             {
@@ -197,6 +201,14 @@ public class ServiceInitializer
                 {
                     renderer.oh_transportService.renewService(upnpService, device);
                 }
+                else if (service.getServiceType().getType().equalsIgnoreCase(OH_OAuth))
+                {
+                	log.debug("OAuth not implemented");
+                }
+                else if (service.getServiceType().getType().equalsIgnoreCase(OH_Receiver))
+                {
+                	log.debug("Receiver not implemented");
+                }                
                 else
                 {
                     log.warn("Device has unknown openhome services : " + service.getServiceType().getType());
@@ -208,5 +220,4 @@ public class ServiceInitializer
             }
         }
     }
-
 }
