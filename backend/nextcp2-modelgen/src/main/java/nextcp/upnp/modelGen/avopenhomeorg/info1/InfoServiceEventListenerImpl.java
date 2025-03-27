@@ -188,12 +188,21 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
-    public void codecNameChange(String value)
+    public void metatextChange(String value)
     {
-        stateVariable.CodecName = value;
+        stateVariable.Metatext = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "CodecName", value));
+            log.debug(String.format("StateVariable : %s: %s", "Metatext", value));
+        }
+    }
+    
+    public void uriChange(String value)
+    {
+        stateVariable.Uri = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Uri", value));
         }
     }
     
@@ -206,12 +215,12 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
-    public void metatextChange(String value)
+    public void codecNameChange(String value)
     {
-        stateVariable.Metatext = value;
+        stateVariable.CodecName = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "Metatext", value));
+            log.debug(String.format("StateVariable : %s: %s", "CodecName", value));
         }
     }
     
@@ -221,15 +230,6 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "Lossless", value));
-        }
-    }
-    
-    public void uriChange(String value)
-    {
-        stateVariable.Uri = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Uri", value));
         }
     }
     

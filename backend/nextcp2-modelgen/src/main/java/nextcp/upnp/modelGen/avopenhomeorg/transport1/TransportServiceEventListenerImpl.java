@@ -170,21 +170,21 @@ public class TransportServiceEventListenerImpl implements ITransportServiceEvent
         }
     }
     
-    public void canShuffleChange(Boolean value)
-    {
-        stateVariable.CanShuffle = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "CanShuffle", value));
-        }
-    }
-    
     public void canSkipNextChange(Boolean value)
     {
         stateVariable.CanSkipNext = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "CanSkipNext", value));
+        }
+    }
+    
+    public void canShuffleChange(Boolean value)
+    {
+        stateVariable.CanShuffle = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "CanShuffle", value));
         }
     }
     

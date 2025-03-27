@@ -24,9 +24,9 @@ public interface IPlaylistServiceEventListener extends ISubscriptionEventListene
     
     public void metadataChange(String value);
     
-    public void repeatChange(Boolean value);
-    
     public void indexChange(Long value);
+    
+    public void repeatChange(Boolean value);
     
     public void idArrayChange(byte[] value);
     

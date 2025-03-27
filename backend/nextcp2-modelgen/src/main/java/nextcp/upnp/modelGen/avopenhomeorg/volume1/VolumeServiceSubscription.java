@@ -69,7 +69,7 @@ public class VolumeServiceSubscription extends RemoteGENASubscription
     @Override
     public void ended(CancelReason reason, UpnpResponse responseStatus)
     {
-        log.warn("ended");
+        log.debug("ended");
         for (ISubscriptionEventListener listener : eventListener)
         {
             listener.ended(reason, responseStatus);
@@ -132,14 +132,14 @@ public class VolumeServiceSubscription extends RemoteGENASubscription
                     case "Mute":
                         muteChange((Boolean) stateVar.getValue());
                         break;
-                    case "Balance":
-                        balanceChange((Integer) stateVar.getValue());
-                        break;
                     case "VolumeUnity":
                         volumeUnityChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "Fade":
                         fadeChange((Integer) stateVar.getValue());
+                        break;
+                    case "Balance":
+                        balanceChange((Integer) stateVar.getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -225,14 +225,6 @@ public class VolumeServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void balanceChange(Integer value)
-    {
-        for (IVolumeServiceEventListener listener : eventListener)
-        {
-            listener.balanceChange(value);
-        }
-    }    
-
     private void volumeUnityChange(Long value)
     {
         for (IVolumeServiceEventListener listener : eventListener)
@@ -246,6 +238,14 @@ public class VolumeServiceSubscription extends RemoteGENASubscription
         for (IVolumeServiceEventListener listener : eventListener)
         {
             listener.fadeChange(value);
+        }
+    }    
+
+    private void balanceChange(Integer value)
+    {
+        for (IVolumeServiceEventListener listener : eventListener)
+        {
+            listener.balanceChange(value);
         }
     }    
 }

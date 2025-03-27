@@ -26,8 +26,6 @@ import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetMQASupport;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetMQASupportOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetScreensaver;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetScreensaverOutput;
-import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetQPlayEnable;
-import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetQPlayEnableOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetPublicDNS;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetPublicDNSInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetSpotifyNormalization;
@@ -79,8 +77,6 @@ import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetCustomCode;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetCustomCodeOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetDeemphasis;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetDeemphasisInput;
-import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetQPlaySupport;
-import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetQPlaySupportOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetRAATEnable;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetRAATEnableInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetPlexSupport;
@@ -101,6 +97,8 @@ import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetDetailsEx;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetDetailsExOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetQobuzQuality;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetQobuzQualityInput;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.ClearAppDisplayMessage;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.ClearAppDisplayMessageInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetPlexCode;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetPlexCodeOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.LogoutPlex;
@@ -166,6 +164,8 @@ import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetFPBrightness;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetFPBrightnessOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetVolumeControl;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetVolumeControlOutput;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetKKBOXEnable;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetKKBOXEnableOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetPlaybackClockSource;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetPlaybackClockSourceInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetMQAMode;
@@ -182,8 +182,8 @@ import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetResamplingMode;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetResamplingModeOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetRAATEnable;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetRAATEnableOutput;
-import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetQPlayEnable;
-import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetQPlayEnableInput;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetKKBOXSupport;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetKKBOXSupportOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetTuneInDetails;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetTuneInDetailsOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetUSBSPDIFMode;
@@ -191,8 +191,12 @@ import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetUSBSPDIFModeOutput
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetAboutString;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetAboutStringOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetAboutStringInput;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetKKBOXEnable;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetKKBOXEnableInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetInvertPhase;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetInvertPhaseInput;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetAppDisplayMessage;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetAppDisplayMessageOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetResamplingModeDetails;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetResamplingModeDetailsOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetResamplingModeDetailsInput;
@@ -220,7 +224,7 @@ import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetMagicPlayOutput;
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchroniously.  
+ * Generated UPnP Service class for calling Actions synchronously.  
  */
 public class MagicAudioService
 {
@@ -273,12 +277,17 @@ public class MagicAudioService
 
     public void addSubscriptionEventListener(IMagicAudioServiceEventListener listener)
     {
-        subscription.addSubscriptionEventListener(listener);
+    	if (subscription != null) {
+            subscription.addSubscriptionEventListener(listener);
+    	}
     }
     
     public boolean removeSubscriptionEventListener(IMagicAudioServiceEventListener listener)
     {
-        return subscription.removeSubscriptionEventListener(listener);
+    	if (subscription != null) {
+    		return subscription.removeSubscriptionEventListener(listener);
+    	}
+    	return false;
     }    
 
     public RemoteService getMagicAudioService()
@@ -331,13 +340,6 @@ public class MagicAudioService
     {
         GetScreensaver getScreensaver = new GetScreensaver(magicAudioService,  upnpService.getControlPoint());
         GetScreensaverOutput res = getScreensaver.executeAction();
-        return res;        
-    }
-
-    public GetQPlayEnableOutput getQPlayEnable()
-    {
-        GetQPlayEnable getQPlayEnable = new GetQPlayEnable(magicAudioService,  upnpService.getControlPoint());
-        GetQPlayEnableOutput res = getQPlayEnable.executeAction();
         return res;        
     }
 
@@ -505,13 +507,6 @@ public class MagicAudioService
         setDeemphasis.executeAction();
     }
 
-    public GetQPlaySupportOutput getQPlaySupport()
-    {
-        GetQPlaySupport getQPlaySupport = new GetQPlaySupport(magicAudioService,  upnpService.getControlPoint());
-        GetQPlaySupportOutput res = getQPlaySupport.executeAction();
-        return res;        
-    }
-
     public void setRAATEnable(SetRAATEnableInput inp)
     {
         SetRAATEnable setRAATEnable = new SetRAATEnable(magicAudioService, inp, upnpService.getControlPoint());
@@ -574,6 +569,12 @@ public class MagicAudioService
     {
         SetQobuzQuality setQobuzQuality = new SetQobuzQuality(magicAudioService, inp, upnpService.getControlPoint());
         setQobuzQuality.executeAction();
+    }
+
+    public void clearAppDisplayMessage(ClearAppDisplayMessageInput inp)
+    {
+        ClearAppDisplayMessage clearAppDisplayMessage = new ClearAppDisplayMessage(magicAudioService, inp, upnpService.getControlPoint());
+        clearAppDisplayMessage.executeAction();
     }
 
     public GetPlexCodeOutput getPlexCode()
@@ -793,6 +794,13 @@ public class MagicAudioService
         return res;        
     }
 
+    public GetKKBOXEnableOutput getKKBOXEnable()
+    {
+        GetKKBOXEnable getKKBOXEnable = new GetKKBOXEnable(magicAudioService,  upnpService.getControlPoint());
+        GetKKBOXEnableOutput res = getKKBOXEnable.executeAction();
+        return res;        
+    }
+
     public void setPlaybackClockSource(SetPlaybackClockSourceInput inp)
     {
         SetPlaybackClockSource setPlaybackClockSource = new SetPlaybackClockSource(magicAudioService, inp, upnpService.getControlPoint());
@@ -846,10 +854,11 @@ public class MagicAudioService
         return res;        
     }
 
-    public void setQPlayEnable(SetQPlayEnableInput inp)
+    public GetKKBOXSupportOutput getKKBOXSupport()
     {
-        SetQPlayEnable setQPlayEnable = new SetQPlayEnable(magicAudioService, inp, upnpService.getControlPoint());
-        setQPlayEnable.executeAction();
+        GetKKBOXSupport getKKBOXSupport = new GetKKBOXSupport(magicAudioService,  upnpService.getControlPoint());
+        GetKKBOXSupportOutput res = getKKBOXSupport.executeAction();
+        return res;        
     }
 
     public GetTuneInDetailsOutput getTuneInDetails()
@@ -873,10 +882,23 @@ public class MagicAudioService
         return res;        
     }
 
+    public void setKKBOXEnable(SetKKBOXEnableInput inp)
+    {
+        SetKKBOXEnable setKKBOXEnable = new SetKKBOXEnable(magicAudioService, inp, upnpService.getControlPoint());
+        setKKBOXEnable.executeAction();
+    }
+
     public void setInvertPhase(SetInvertPhaseInput inp)
     {
         SetInvertPhase setInvertPhase = new SetInvertPhase(magicAudioService, inp, upnpService.getControlPoint());
         setInvertPhase.executeAction();
+    }
+
+    public GetAppDisplayMessageOutput getAppDisplayMessage()
+    {
+        GetAppDisplayMessage getAppDisplayMessage = new GetAppDisplayMessage(magicAudioService,  upnpService.getControlPoint());
+        GetAppDisplayMessageOutput res = getAppDisplayMessage.executeAction();
+        return res;        
     }
 
     public GetResamplingModeDetailsOutput getResamplingModeDetails(GetResamplingModeDetailsInput inp)

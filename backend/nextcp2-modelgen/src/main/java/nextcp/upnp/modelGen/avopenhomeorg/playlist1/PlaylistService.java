@@ -14,11 +14,11 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
 
-import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SetShuffle;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SetShuffleInput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.IdArrayChanged;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.IdArrayChangedOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.IdArrayChangedInput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SetShuffle;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SetShuffleInput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.Pause;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.TracksMax;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.TracksMaxOutput;
@@ -40,19 +40,19 @@ import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekSecondAbsoluteIn
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.Read;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ReadOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ReadInput;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.DeleteId;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.DeleteIdInput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekIndex;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekIndexInput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.DeleteId;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.DeleteIdInput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.Play;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekId;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SeekIdInput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ReadList;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ReadListOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ReadListInput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.Next;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SetRepeat;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SetRepeatInput;
-import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.Next;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ProtocolInfo;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ProtocolInfoOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.Previous;
@@ -68,7 +68,7 @@ import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.IdOutput;
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchroniously.  
+ * Generated UPnP Service class for calling Actions synchronously.  
  */
 public class PlaylistService
 {
@@ -121,12 +121,17 @@ public class PlaylistService
 
     public void addSubscriptionEventListener(IPlaylistServiceEventListener listener)
     {
-        subscription.addSubscriptionEventListener(listener);
+    	if (subscription != null) {
+            subscription.addSubscriptionEventListener(listener);
+    	}
     }
     
     public boolean removeSubscriptionEventListener(IPlaylistServiceEventListener listener)
     {
-        return subscription.removeSubscriptionEventListener(listener);
+    	if (subscription != null) {
+    		return subscription.removeSubscriptionEventListener(listener);
+    	}
+    	return false;
     }    
 
     public RemoteService getPlaylistService()
@@ -142,17 +147,17 @@ public class PlaylistService
 
 
 
-    public void setShuffle(SetShuffleInput inp)
-    {
-        SetShuffle setShuffle = new SetShuffle(playlistService, inp, upnpService.getControlPoint());
-        setShuffle.executeAction();
-    }
-
     public IdArrayChangedOutput idArrayChanged(IdArrayChangedInput inp)
     {
         IdArrayChanged idArrayChanged = new IdArrayChanged(playlistService, inp, upnpService.getControlPoint());
         IdArrayChangedOutput res = idArrayChanged.executeAction();
         return res;        
+    }
+
+    public void setShuffle(SetShuffleInput inp)
+    {
+        SetShuffle setShuffle = new SetShuffle(playlistService, inp, upnpService.getControlPoint());
+        setShuffle.executeAction();
     }
 
     public void pause()
@@ -228,16 +233,16 @@ public class PlaylistService
         return res;        
     }
 
-    public void deleteId(DeleteIdInput inp)
-    {
-        DeleteId deleteId = new DeleteId(playlistService, inp, upnpService.getControlPoint());
-        deleteId.executeAction();
-    }
-
     public void seekIndex(SeekIndexInput inp)
     {
         SeekIndex seekIndex = new SeekIndex(playlistService, inp, upnpService.getControlPoint());
         seekIndex.executeAction();
+    }
+
+    public void deleteId(DeleteIdInput inp)
+    {
+        DeleteId deleteId = new DeleteId(playlistService, inp, upnpService.getControlPoint());
+        deleteId.executeAction();
     }
 
     public void play()
@@ -259,16 +264,16 @@ public class PlaylistService
         return res;        
     }
 
-    public void setRepeat(SetRepeatInput inp)
-    {
-        SetRepeat setRepeat = new SetRepeat(playlistService, inp, upnpService.getControlPoint());
-        setRepeat.executeAction();
-    }
-
     public void next()
     {
         Next next = new Next(playlistService,  upnpService.getControlPoint());
         next.executeAction();
+    }
+
+    public void setRepeat(SetRepeatInput inp)
+    {
+        SetRepeat setRepeat = new SetRepeat(playlistService, inp, upnpService.getControlPoint());
+        setRepeat.executeAction();
     }
 
     public ProtocolInfoOutput protocolInfo()

@@ -32,7 +32,7 @@ import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.TransportStateOutput
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchroniously.  
+ * Generated UPnP Service class for calling Actions synchronously.  
  */
 public class ReceiverService
 {
@@ -85,12 +85,17 @@ public class ReceiverService
 
     public void addSubscriptionEventListener(IReceiverServiceEventListener listener)
     {
-        subscription.addSubscriptionEventListener(listener);
+    	if (subscription != null) {
+            subscription.addSubscriptionEventListener(listener);
+    	}
     }
     
     public boolean removeSubscriptionEventListener(IReceiverServiceEventListener listener)
     {
-        return subscription.removeSubscriptionEventListener(listener);
+    	if (subscription != null) {
+    		return subscription.removeSubscriptionEventListener(listener);
+    	}
+    	return false;
     }    
 
     public RemoteService getReceiverService()

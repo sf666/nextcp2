@@ -69,7 +69,7 @@ public class ProductServiceSubscription extends RemoteGENASubscription
     @Override
     public void ended(CancelReason reason, UpnpResponse responseStatus)
     {
-        log.warn("ended");
+        log.debug("ended");
         for (ISubscriptionEventListener listener : eventListener)
         {
             listener.ended(reason, responseStatus);
@@ -111,23 +111,23 @@ public class ProductServiceSubscription extends RemoteGENASubscription
                     case "ManufacturerUrl":
                         manufacturerUrlChange((String) stateVar.getValue());
                         break;
-                    case "ProductInfo":
-                        productInfoChange((String) stateVar.getValue());
-                        break;
                     case "ModelImageUri":
                         modelImageUriChange((String) stateVar.getValue());
+                        break;
+                    case "ProductInfo":
+                        productInfoChange((String) stateVar.getValue());
                         break;
                     case "ModelInfo":
                         modelInfoChange((String) stateVar.getValue());
                         break;
-                    case "ModelName":
-                        modelNameChange((String) stateVar.getValue());
+                    case "SourceVisible":
+                        sourceVisibleChange((Boolean) stateVar.getValue());
                         break;
                     case "ManufacturerInfo":
                         manufacturerInfoChange((String) stateVar.getValue());
                         break;
-                    case "SourceVisible":
-                        sourceVisibleChange((Boolean) stateVar.getValue());
+                    case "ModelName":
+                        modelNameChange((String) stateVar.getValue());
                         break;
                     case "ManufacturerName":
                         manufacturerNameChange((String) stateVar.getValue());
@@ -147,11 +147,11 @@ public class ProductServiceSubscription extends RemoteGENASubscription
                     case "SourceName":
                         sourceNameChange((String) stateVar.getValue());
                         break;
-                    case "SourceXml":
-                        sourceXmlChange((String) stateVar.getValue());
-                        break;
                     case "ProductRoom":
                         productRoomChange((String) stateVar.getValue());
+                        break;
+                    case "SourceXml":
+                        sourceXmlChange((String) stateVar.getValue());
                         break;
                     case "Standby":
                         standbyChange((Boolean) stateVar.getValue());
@@ -202,19 +202,19 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void productInfoChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.productInfoChange(value);
-        }
-    }    
-
     private void modelImageUriChange(String value)
     {
         for (IProductServiceEventListener listener : eventListener)
         {
             listener.modelImageUriChange(value);
+        }
+    }    
+
+    private void productInfoChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.productInfoChange(value);
         }
     }    
 
@@ -226,11 +226,11 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void modelNameChange(String value)
+    private void sourceVisibleChange(Boolean value)
     {
         for (IProductServiceEventListener listener : eventListener)
         {
-            listener.modelNameChange(value);
+            listener.sourceVisibleChange(value);
         }
     }    
 
@@ -242,11 +242,11 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void sourceVisibleChange(Boolean value)
+    private void modelNameChange(String value)
     {
         for (IProductServiceEventListener listener : eventListener)
         {
-            listener.sourceVisibleChange(value);
+            listener.modelNameChange(value);
         }
     }    
 
@@ -298,19 +298,19 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void sourceXmlChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.sourceXmlChange(value);
-        }
-    }    
-
     private void productRoomChange(String value)
     {
         for (IProductServiceEventListener listener : eventListener)
         {
             listener.productRoomChange(value);
+        }
+    }    
+
+    private void sourceXmlChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.sourceXmlChange(value);
         }
     }    
 

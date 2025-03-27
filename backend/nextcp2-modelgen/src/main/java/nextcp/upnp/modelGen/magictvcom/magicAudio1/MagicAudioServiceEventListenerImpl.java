@@ -170,6 +170,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         }
     }
     
+    public void appDisplayMessageIdChange(Long value)
+    {
+        stateVariable.AppDisplayMessageId = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "AppDisplayMessageId", value));
+        }
+    }
+    
     public void firmwareDownloadProgressChange(Integer value)
     {
         stateVariable.FirmwareDownloadProgress = value;
@@ -404,6 +413,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         }
     }
     
+    public void kKBOXSupportChange(Boolean value)
+    {
+        stateVariable.KKBOXSupport = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "KKBOXSupport", value));
+        }
+    }
+    
     public void firmwareCommandChange(String value)
     {
         stateVariable.FirmwareCommand = value;
@@ -485,15 +503,6 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         }
     }
     
-    public void qPlayEnableChange(Boolean value)
-    {
-        stateVariable.QPlayEnable = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "QPlayEnable", value));
-        }
-    }
-    
     public void outputInvertPhaseChange(Boolean value)
     {
         stateVariable.OutputInvertPhase = value;
@@ -536,6 +545,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "PlexCode", value));
+        }
+    }
+    
+    public void appDisplayMessageTagChange(Long value)
+    {
+        stateVariable.AppDisplayMessageTag = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "AppDisplayMessageTag", value));
         }
     }
     
@@ -626,15 +644,6 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "OutputClockSource", value));
-        }
-    }
-    
-    public void qPlaySupportChange(Boolean value)
-    {
-        stateVariable.QPlaySupport = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "QPlaySupport", value));
         }
     }
     
@@ -743,6 +752,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "SourceName", value));
+        }
+    }
+    
+    public void kKBOXEnableChange(Boolean value)
+    {
+        stateVariable.KKBOXEnable = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "KKBOXEnable", value));
         }
     }
     
@@ -869,6 +887,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "TidalConnectSupport", value));
+        }
+    }
+    
+    public void appDisplayMessageStringChange(String value)
+    {
+        stateVariable.AppDisplayMessageString = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "AppDisplayMessageString", value));
         }
     }
     

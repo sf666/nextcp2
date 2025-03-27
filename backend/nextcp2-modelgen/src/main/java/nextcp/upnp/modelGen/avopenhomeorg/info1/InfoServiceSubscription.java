@@ -69,7 +69,7 @@ public class InfoServiceSubscription extends RemoteGENASubscription
     @Override
     public void ended(CancelReason reason, UpnpResponse responseStatus)
     {
-        log.warn("ended");
+        log.debug("ended");
         for (ISubscriptionEventListener listener : eventListener)
         {
             listener.ended(reason, responseStatus);
@@ -129,20 +129,20 @@ public class InfoServiceSubscription extends RemoteGENASubscription
                     case "TrackCount":
                         trackCountChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
-                    case "CodecName":
-                        codecNameChange((String) stateVar.getValue());
+                    case "Metatext":
+                        metatextChange((String) stateVar.getValue());
+                        break;
+                    case "Uri":
+                        uriChange((String) stateVar.getValue());
                         break;
                     case "BitDepth":
                         bitDepthChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
-                    case "Metatext":
-                        metatextChange((String) stateVar.getValue());
+                    case "CodecName":
+                        codecNameChange((String) stateVar.getValue());
                         break;
                     case "Lossless":
                         losslessChange((Boolean) stateVar.getValue());
-                        break;
-                    case "Uri":
-                        uriChange((String) stateVar.getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -220,11 +220,19 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void codecNameChange(String value)
+    private void metatextChange(String value)
     {
         for (IInfoServiceEventListener listener : eventListener)
         {
-            listener.codecNameChange(value);
+            listener.metatextChange(value);
+        }
+    }    
+
+    private void uriChange(String value)
+    {
+        for (IInfoServiceEventListener listener : eventListener)
+        {
+            listener.uriChange(value);
         }
     }    
 
@@ -236,11 +244,11 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void metatextChange(String value)
+    private void codecNameChange(String value)
     {
         for (IInfoServiceEventListener listener : eventListener)
         {
-            listener.metatextChange(value);
+            listener.codecNameChange(value);
         }
     }    
 
@@ -249,14 +257,6 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         for (IInfoServiceEventListener listener : eventListener)
         {
             listener.losslessChange(value);
-        }
-    }    
-
-    private void uriChange(String value)
-    {
-        for (IInfoServiceEventListener listener : eventListener)
-        {
-            listener.uriChange(value);
         }
     }    
 }

@@ -23,12 +23,12 @@ import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SetShuffleInput;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Pause;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Shuffle;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.ShuffleOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Stop;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.PlayAs;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.PlayAsInput;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Stop;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SkipNext;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Repeat;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.RepeatOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SkipNext;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.TransportState;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.TransportStateOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SeekSecondAbsolute;
@@ -51,7 +51,7 @@ import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SkipPrevious;
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchroniously.  
+ * Generated UPnP Service class for calling Actions synchronously.  
  */
 public class TransportService
 {
@@ -104,12 +104,17 @@ public class TransportService
 
     public void addSubscriptionEventListener(ITransportServiceEventListener listener)
     {
-        subscription.addSubscriptionEventListener(listener);
+    	if (subscription != null) {
+            subscription.addSubscriptionEventListener(listener);
+    	}
     }
     
     public boolean removeSubscriptionEventListener(ITransportServiceEventListener listener)
     {
-        return subscription.removeSubscriptionEventListener(listener);
+    	if (subscription != null) {
+    		return subscription.removeSubscriptionEventListener(listener);
+    	}
+    	return false;
     }    
 
     public RemoteService getTransportService()
@@ -158,16 +163,22 @@ public class TransportService
         return res;        
     }
 
+    public void stop()
+    {
+        Stop stop = new Stop(transportService,  upnpService.getControlPoint());
+        stop.executeAction();
+    }
+
     public void playAs(PlayAsInput inp)
     {
         PlayAs playAs = new PlayAs(transportService, inp, upnpService.getControlPoint());
         playAs.executeAction();
     }
 
-    public void stop()
+    public void skipNext()
     {
-        Stop stop = new Stop(transportService,  upnpService.getControlPoint());
-        stop.executeAction();
+        SkipNext skipNext = new SkipNext(transportService,  upnpService.getControlPoint());
+        skipNext.executeAction();
     }
 
     public RepeatOutput repeat()
@@ -175,12 +186,6 @@ public class TransportService
         Repeat repeat = new Repeat(transportService,  upnpService.getControlPoint());
         RepeatOutput res = repeat.executeAction();
         return res;        
-    }
-
-    public void skipNext()
-    {
-        SkipNext skipNext = new SkipNext(transportService,  upnpService.getControlPoint());
-        skipNext.executeAction();
     }
 
     public TransportStateOutput transportState()

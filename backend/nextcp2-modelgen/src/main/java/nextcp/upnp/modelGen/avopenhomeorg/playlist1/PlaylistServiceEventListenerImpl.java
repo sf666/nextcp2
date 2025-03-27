@@ -179,21 +179,21 @@ public class PlaylistServiceEventListenerImpl implements IPlaylistServiceEventLi
         }
     }
     
-    public void repeatChange(Boolean value)
-    {
-        stateVariable.Repeat = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Repeat", value));
-        }
-    }
-    
     public void indexChange(Long value)
     {
         stateVariable.Index = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "Index", value));
+        }
+    }
+    
+    public void repeatChange(Boolean value)
+    {
+        stateVariable.Repeat = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Repeat", value));
         }
     }
     

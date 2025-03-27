@@ -1,4 +1,4 @@
-package nextcp.upnp.modelGen.dialmultiscreenorg.dial1;
+package nextcp.upnp.modelGen.bubblesoftappscom.main1;
 
 import java.util.Map;
 import java.util.List;
@@ -25,23 +25,23 @@ import nextcp.upnp.ISubscriptionEventListener;
  *  
  * Generated UPnP subscription service class.  
  */
-public class dialServiceSubscription extends RemoteGENASubscription
+public class MainServiceSubscription extends RemoteGENASubscription
 {
-    private static final Logger log = LoggerFactory.getLogger(dialServiceSubscription.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(MainServiceSubscription.class.getName());
 
-    private List<IdialServiceEventListener> eventListener = new CopyOnWriteArrayList<>();
+    private List<IMainServiceEventListener> eventListener = new CopyOnWriteArrayList<>();
         
-    protected dialServiceSubscription(RemoteService service, int requestedDurationSeconds)
+    protected MainServiceSubscription(RemoteService service, int requestedDurationSeconds)
     {
         super(service, requestedDurationSeconds);
     }
 
-    public void addSubscriptionEventListener(IdialServiceEventListener listener)
+    public void addSubscriptionEventListener(IMainServiceEventListener listener)
     {
         eventListener.add(listener);
     }
     
-    public boolean removeSubscriptionEventListener(IdialServiceEventListener listener)
+    public boolean removeSubscriptionEventListener(IMainServiceEventListener listener)
     {
         return eventListener.remove(listener);
     }
@@ -69,7 +69,7 @@ public class dialServiceSubscription extends RemoteGENASubscription
     @Override
     public void ended(CancelReason reason, UpnpResponse responseStatus)
     {
-        log.warn("ended");
+        log.debug("ended");
         for (ISubscriptionEventListener listener : eventListener)
         {
             listener.ended(reason, responseStatus);
@@ -108,6 +108,12 @@ public class dialServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
+                    case "VersionInfo":
+                        versionInfoChange((String) stateVar.getValue());
+                        break;
+                    case "BaseLanURL":
+                        baseLanURLChange((String) stateVar.getValue());
+                        break;
                     default:
                         log.warn("unknown state variable : " + key);
                 }
@@ -127,4 +133,20 @@ public class dialServiceSubscription extends RemoteGENASubscription
             listener.eventProcessed();
         }
     }
+
+    private void versionInfoChange(String value)
+    {
+        for (IMainServiceEventListener listener : eventListener)
+        {
+            listener.versionInfoChange(value);
+        }
+    }    
+
+    private void baseLanURLChange(String value)
+    {
+        for (IMainServiceEventListener listener : eventListener)
+        {
+            listener.baseLanURLChange(value);
+        }
+    }    
 }

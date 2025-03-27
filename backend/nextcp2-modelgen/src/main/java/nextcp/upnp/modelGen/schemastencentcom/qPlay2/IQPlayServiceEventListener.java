@@ -1,4 +1,4 @@
-package nextcp.upnp.modelGen.dialmultiscreenorg.dial1;
+package nextcp.upnp.modelGen.schemastencentcom.qPlay2;
 
 import nextcp.upnp.ISubscriptionEventListener;
 
@@ -10,6 +10,6 @@ import nextcp.upnp.ISubscriptionEventListener;
  *  
  * Event Listener Interface.  
  */
-public interface IdialServiceEventListener extends ISubscriptionEventListener 
+public interface IQPlayServiceEventListener extends ISubscriptionEventListener 
 {
 }

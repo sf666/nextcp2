@@ -14,6 +14,7 @@ public class MagicAudioServiceStateVariable
     public String NewBitDepth = null;
     public String Brightness = null;
     public Long Port = null;
+    public Long AppDisplayMessageId = null;
     public Integer FirmwareDownloadProgress = null;
     public Boolean DefaultRadioSupport = null;
     public String BitDepth = null;
@@ -40,6 +41,7 @@ public class MagicAudioServiceStateVariable
     public Boolean LeedhVolumeSupport = null;
     public Long MQASampleRate = null;
     public Integer AnalogBalance = null;
+    public Boolean KKBOXSupport = null;
     public String FirmwareCommand = null;
     public String USFilterDSD = null;
     public Long OutputBitDepth = null;
@@ -49,12 +51,12 @@ public class MagicAudioServiceStateVariable
     public String MagicAudioVer = null;
     public String VolumeControl = null;
     public String RAATVer = null;
-    public Boolean QPlayEnable = null;
     public Boolean OutputInvertPhase = null;
     public Boolean NetworkLED = null;
     public String ServiceId = null;
     public Boolean PublicDNS = null;
     public String PlexCode = null;
+    public Long AppDisplayMessageTag = null;
     public String ResamplingTag = null;
     public String MQAMode = null;
     public Boolean NetworkLEDControl = null;
@@ -65,7 +67,6 @@ public class MagicAudioServiceStateVariable
     public Long MQACreatorId = null;
     public Boolean SongcastMode = null;
     public String OutputClockSource = null;
-    public Boolean QPlaySupport = null;
     public byte[] TidalRefreshToken = null;
     public Boolean SpotifyNormalization = null;
     public Boolean RAATEnable = null;
@@ -78,6 +79,7 @@ public class MagicAudioServiceStateVariable
     public Boolean MQASupport = null;
     public String AnalogOutLvl = null;
     public String SourceName = null;
+    public Boolean KKBOXEnable = null;
     public Boolean TidalConnectEnable = null;
     public Long OutputSampleRate = null;
     public String SamplingRate = null;
@@ -92,6 +94,7 @@ public class MagicAudioServiceStateVariable
     public Boolean VolumeControlSupport = null;
     public Boolean Deemphasis = null;
     public Boolean TidalConnectSupport = null;
+    public String AppDisplayMessageString = null;
     public String TidalQuality = null;
     public Boolean LeedhVolumeEnable = null;
     public String MQAAuthenticity = null;

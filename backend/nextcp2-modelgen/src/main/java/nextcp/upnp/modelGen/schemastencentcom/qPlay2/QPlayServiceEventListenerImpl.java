@@ -1,4 +1,4 @@
-package nextcp.upnp.modelGen.dialmultiscreenorg.dial1;
+package nextcp.upnp.modelGen.schemastencentcom.qPlay2;
 
 import org.jupnp.model.UnsupportedDataException;
 import org.jupnp.model.gena.CancelReason;
@@ -18,13 +18,13 @@ import org.slf4j.LoggerFactory;
  *  
  * Generated UPnP EventListener Implementation.  
  */
-public class dialServiceEventListenerImpl implements IdialServiceEventListener 
+public class QPlayServiceEventListenerImpl implements IQPlayServiceEventListener 
 {
-    private static Logger log = LoggerFactory.getLogger(dialServiceEventListenerImpl.class.getName());
+    private static Logger log = LoggerFactory.getLogger(QPlayServiceEventListenerImpl.class.getName());
     private RemoteDevice device = null;
     
     
-	public dialServiceEventListenerImpl(RemoteDevice device) {
+	public QPlayServiceEventListenerImpl(RemoteDevice device) {
 		this.device = device;
 	}
     
@@ -32,7 +32,6 @@ public class dialServiceEventListenerImpl implements IdialServiceEventListener
         return device.getDetails().getFriendlyName();
 	}
     
-
     //
     // Generic event callbacks
     // =============================================================================================================================================================================

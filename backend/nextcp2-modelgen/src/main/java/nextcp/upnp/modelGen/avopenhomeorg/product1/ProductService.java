@@ -22,19 +22,19 @@ import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Product;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.ProductOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceXml;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceXmlOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexByName;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexByNameInput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndex;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexInput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexByName;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexByNameInput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Standby;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.StandbyOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Source;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceInput;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetStandby;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetStandbyInput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceIndex;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceIndexOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetStandby;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetStandbyInput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Model;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.ModelOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Manufacturer;
@@ -49,7 +49,7 @@ import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceXmlChangeCountO
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchroniously.  
+ * Generated UPnP Service class for calling Actions synchronously.  
  */
 public class ProductService
 {
@@ -102,12 +102,17 @@ public class ProductService
 
     public void addSubscriptionEventListener(IProductServiceEventListener listener)
     {
-        subscription.addSubscriptionEventListener(listener);
+    	if (subscription != null) {
+            subscription.addSubscriptionEventListener(listener);
+    	}
     }
     
     public boolean removeSubscriptionEventListener(IProductServiceEventListener listener)
     {
-        return subscription.removeSubscriptionEventListener(listener);
+    	if (subscription != null) {
+    		return subscription.removeSubscriptionEventListener(listener);
+    	}
+    	return false;
     }    
 
     public RemoteService getProductService()
@@ -151,16 +156,16 @@ public class ProductService
         return res;        
     }
 
-    public void setSourceIndexByName(SetSourceIndexByNameInput inp)
-    {
-        SetSourceIndexByName setSourceIndexByName = new SetSourceIndexByName(productService, inp, upnpService.getControlPoint());
-        setSourceIndexByName.executeAction();
-    }
-
     public void setSourceIndex(SetSourceIndexInput inp)
     {
         SetSourceIndex setSourceIndex = new SetSourceIndex(productService, inp, upnpService.getControlPoint());
         setSourceIndex.executeAction();
+    }
+
+    public void setSourceIndexByName(SetSourceIndexByNameInput inp)
+    {
+        SetSourceIndexByName setSourceIndexByName = new SetSourceIndexByName(productService, inp, upnpService.getControlPoint());
+        setSourceIndexByName.executeAction();
     }
 
     public StandbyOutput standby()
@@ -177,17 +182,17 @@ public class ProductService
         return res;        
     }
 
-    public void setStandby(SetStandbyInput inp)
-    {
-        SetStandby setStandby = new SetStandby(productService, inp, upnpService.getControlPoint());
-        setStandby.executeAction();
-    }
-
     public SourceIndexOutput sourceIndex()
     {
         SourceIndex sourceIndex = new SourceIndex(productService,  upnpService.getControlPoint());
         SourceIndexOutput res = sourceIndex.executeAction();
         return res;        
+    }
+
+    public void setStandby(SetStandbyInput inp)
+    {
+        SetStandby setStandby = new SetStandby(productService, inp, upnpService.getControlPoint());
+        setStandby.executeAction();
     }
 
     public ModelOutput model()

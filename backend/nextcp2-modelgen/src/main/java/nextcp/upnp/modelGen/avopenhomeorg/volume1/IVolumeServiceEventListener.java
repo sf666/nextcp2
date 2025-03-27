@@ -28,10 +28,10 @@ public interface IVolumeServiceEventListener extends ISubscriptionEventListener
     
     public void muteChange(Boolean value);
     
-    public void balanceChange(Integer value);
-    
     public void volumeUnityChange(Long value);
     
     public void fadeChange(Integer value);
+    
+    public void balanceChange(Integer value);
     
 }

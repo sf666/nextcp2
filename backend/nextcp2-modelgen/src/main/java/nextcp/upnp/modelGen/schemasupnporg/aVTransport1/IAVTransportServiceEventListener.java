@@ -20,19 +20,19 @@ public interface IAVTransportServiceEventListener extends ISubscriptionEventList
     
     public void relativeCounterPositionChange(Integer value);
     
-    public void transportStatusChange(String value);
-    
     public void aVTransportURIMetaDataChange(String value);
+    
+    public void transportStatusChange(String value);
     
     public void transportStateChange(String value);
     
     public void currentTrackChange(Long value);
     
-    public void playbackStorageMediumChange(String value);
-    
     public void possibleRecordQualityModesChange(String value);
     
     public void nextAVTransportURIMetaDataChange(String value);
+    
+    public void playbackStorageMediumChange(String value);
     
     public void numberOfTracksChange(Long value);
     

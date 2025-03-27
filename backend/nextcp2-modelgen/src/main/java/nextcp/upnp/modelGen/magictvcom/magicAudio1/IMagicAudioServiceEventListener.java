@@ -22,6 +22,8 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     
     public void portChange(Long value);
     
+    public void appDisplayMessageIdChange(Long value);
+    
     public void firmwareDownloadProgressChange(Integer value);
     
     public void defaultRadioSupportChange(Boolean value);
@@ -74,6 +76,8 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     
     public void analogBalanceChange(Integer value);
     
+    public void kKBOXSupportChange(Boolean value);
+    
     public void firmwareCommandChange(String value);
     
     public void uSFilterDSDChange(String value);
@@ -92,8 +96,6 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     
     public void rAATVerChange(String value);
     
-    public void qPlayEnableChange(Boolean value);
-    
     public void outputInvertPhaseChange(Boolean value);
     
     public void networkLEDChange(Boolean value);
@@ -103,6 +105,8 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     public void publicDNSChange(Boolean value);
     
     public void plexCodeChange(String value);
+    
+    public void appDisplayMessageTagChange(Long value);
     
     public void resamplingTagChange(String value);
     
@@ -123,8 +127,6 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     public void songcastModeChange(Boolean value);
     
     public void outputClockSourceChange(String value);
-    
-    public void qPlaySupportChange(Boolean value);
     
     public void tidalRefreshTokenChange(byte[] value);
     
@@ -149,6 +151,8 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     public void analogOutLvlChange(String value);
     
     public void sourceNameChange(String value);
+    
+    public void kKBOXEnableChange(Boolean value);
     
     public void tidalConnectEnableChange(Boolean value);
     
@@ -177,6 +181,8 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     public void deemphasisChange(Boolean value);
     
     public void tidalConnectSupportChange(Boolean value);
+    
+    public void appDisplayMessageStringChange(String value);
     
     public void tidalQualityChange(String value);
     

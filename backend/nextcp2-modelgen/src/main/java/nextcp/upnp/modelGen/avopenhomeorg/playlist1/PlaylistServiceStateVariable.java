@@ -15,8 +15,8 @@ public class PlaylistServiceStateVariable
     public Boolean Shuffle = null;
     public String TrackList = null;
     public String Metadata = null;
-    public Boolean Repeat = null;
     public Long Index = null;
+    public Boolean Repeat = null;
     public byte[] IdArray = null;
     public String TransportState = null;
     public Long Absolute = null;

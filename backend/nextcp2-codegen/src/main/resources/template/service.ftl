@@ -35,7 +35,7 @@ public class ${className}
 
     private UpnpService upnpService = null;
 
-    private ${stateVariableClassName} ${stateVariableClassName?uncap_first} = new ${stateVariableClassName}();
+//    private ${stateVariableClassName} ${stateVariableClassName?uncap_first} = new ${stateVariableClassName}();
     
     private ${className}Subscription subscription = null;
     

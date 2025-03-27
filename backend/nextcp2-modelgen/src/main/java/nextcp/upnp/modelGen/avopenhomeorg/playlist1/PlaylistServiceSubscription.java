@@ -69,7 +69,7 @@ public class PlaylistServiceSubscription extends RemoteGENASubscription
     @Override
     public void ended(CancelReason reason, UpnpResponse responseStatus)
     {
-        log.warn("ended");
+        log.debug("ended");
         for (ISubscriptionEventListener listener : eventListener)
         {
             listener.ended(reason, responseStatus);
@@ -126,11 +126,11 @@ public class PlaylistServiceSubscription extends RemoteGENASubscription
                     case "Metadata":
                         metadataChange((String) stateVar.getValue());
                         break;
-                    case "Repeat":
-                        repeatChange((Boolean) stateVar.getValue());
-                        break;
                     case "Index":
                         indexChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "Repeat":
+                        repeatChange((Boolean) stateVar.getValue());
                         break;
                     case "IdArray":
                         idArrayChange((byte[]) stateVar.getValue());
@@ -224,19 +224,19 @@ public class PlaylistServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void repeatChange(Boolean value)
-    {
-        for (IPlaylistServiceEventListener listener : eventListener)
-        {
-            listener.repeatChange(value);
-        }
-    }    
-
     private void indexChange(Long value)
     {
         for (IPlaylistServiceEventListener listener : eventListener)
         {
             listener.indexChange(value);
+        }
+    }    
+
+    private void repeatChange(Boolean value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.repeatChange(value);
         }
     }    
 

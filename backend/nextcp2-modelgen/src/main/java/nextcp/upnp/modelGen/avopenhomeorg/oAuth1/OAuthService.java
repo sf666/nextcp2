@@ -17,14 +17,14 @@ import nextcp.upnp.ISubscriptionEventListener;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.GetJobUpdateId;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.GetJobUpdateIdOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.GetJobUpdateIdInput;
-import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.GetUpdateId;
-import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.GetUpdateIdOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.ClearLonglivedLivedToken;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.ClearLonglivedLivedTokenInput;
-import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.ClearAllTokens;
-import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.ClearAllTokensInput;
+import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.GetUpdateId;
+import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.GetUpdateIdOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.GetServiceStatus;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.GetServiceStatusOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.ClearAllTokens;
+import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.ClearAllTokensInput;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.ClearToken;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.ClearTokenInput;
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.SetToken;
@@ -52,7 +52,7 @@ import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.GetJobStatusOutput;
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchroniously.  
+ * Generated UPnP Service class for calling Actions synchronously.  
  */
 public class OAuthService
 {
@@ -105,12 +105,17 @@ public class OAuthService
 
     public void addSubscriptionEventListener(IOAuthServiceEventListener listener)
     {
-        subscription.addSubscriptionEventListener(listener);
+    	if (subscription != null) {
+            subscription.addSubscriptionEventListener(listener);
+    	}
     }
     
     public boolean removeSubscriptionEventListener(IOAuthServiceEventListener listener)
     {
-        return subscription.removeSubscriptionEventListener(listener);
+    	if (subscription != null) {
+    		return subscription.removeSubscriptionEventListener(listener);
+    	}
+    	return false;
     }    
 
     public RemoteService getOAuthService()
@@ -133,6 +138,12 @@ public class OAuthService
         return res;        
     }
 
+    public void clearLonglivedLivedToken(ClearLonglivedLivedTokenInput inp)
+    {
+        ClearLonglivedLivedToken clearLonglivedLivedToken = new ClearLonglivedLivedToken(oAuthService, inp, upnpService.getControlPoint());
+        clearLonglivedLivedToken.executeAction();
+    }
+
     public GetUpdateIdOutput getUpdateId()
     {
         GetUpdateId getUpdateId = new GetUpdateId(oAuthService,  upnpService.getControlPoint());
@@ -140,23 +151,17 @@ public class OAuthService
         return res;        
     }
 
-    public void clearLonglivedLivedToken(ClearLonglivedLivedTokenInput inp)
+    public GetServiceStatusOutput getServiceStatus()
     {
-        ClearLonglivedLivedToken clearLonglivedLivedToken = new ClearLonglivedLivedToken(oAuthService, inp, upnpService.getControlPoint());
-        clearLonglivedLivedToken.executeAction();
+        GetServiceStatus getServiceStatus = new GetServiceStatus(oAuthService,  upnpService.getControlPoint());
+        GetServiceStatusOutput res = getServiceStatus.executeAction();
+        return res;        
     }
 
     public void clearAllTokens(ClearAllTokensInput inp)
     {
         ClearAllTokens clearAllTokens = new ClearAllTokens(oAuthService, inp, upnpService.getControlPoint());
         clearAllTokens.executeAction();
-    }
-
-    public GetServiceStatusOutput getServiceStatus()
-    {
-        GetServiceStatus getServiceStatus = new GetServiceStatus(oAuthService,  upnpService.getControlPoint());
-        GetServiceStatusOutput res = getServiceStatus.executeAction();
-        return res;        
     }
 
     public void clearToken(ClearTokenInput inp)

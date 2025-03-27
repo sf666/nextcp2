@@ -69,7 +69,7 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
     @Override
     public void ended(CancelReason reason, UpnpResponse responseStatus)
     {
-        log.warn("ended");
+        log.debug("ended");
         for (ISubscriptionEventListener listener : eventListener)
         {
             listener.ended(reason, responseStatus);
@@ -122,6 +122,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         break;
                     case "Port":
                         portChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "AppDisplayMessageId":
+                        appDisplayMessageIdChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "FirmwareDownloadProgress":
                         firmwareDownloadProgressChange((Integer) stateVar.getValue());
@@ -201,6 +204,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     case "AnalogBalance":
                         analogBalanceChange((Integer) stateVar.getValue());
                         break;
+                    case "KKBOXSupport":
+                        kKBOXSupportChange((Boolean) stateVar.getValue());
+                        break;
                     case "FirmwareCommand":
                         firmwareCommandChange((String) stateVar.getValue());
                         break;
@@ -228,9 +234,6 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     case "RAATVer":
                         rAATVerChange((String) stateVar.getValue());
                         break;
-                    case "QPlayEnable":
-                        qPlayEnableChange((Boolean) stateVar.getValue());
-                        break;
                     case "OutputInvertPhase":
                         outputInvertPhaseChange((Boolean) stateVar.getValue());
                         break;
@@ -245,6 +248,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         break;
                     case "PlexCode":
                         plexCodeChange((String) stateVar.getValue());
+                        break;
+                    case "AppDisplayMessageTag":
+                        appDisplayMessageTagChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "ResamplingTag":
                         resamplingTagChange((String) stateVar.getValue());
@@ -275,9 +281,6 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         break;
                     case "OutputClockSource":
                         outputClockSourceChange((String) stateVar.getValue());
-                        break;
-                    case "QPlaySupport":
-                        qPlaySupportChange((Boolean) stateVar.getValue());
                         break;
                     case "TidalRefreshToken":
                         tidalRefreshTokenChange((byte[]) stateVar.getValue());
@@ -314,6 +317,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         break;
                     case "SourceName":
                         sourceNameChange((String) stateVar.getValue());
+                        break;
+                    case "KKBOXEnable":
+                        kKBOXEnableChange((Boolean) stateVar.getValue());
                         break;
                     case "TidalConnectEnable":
                         tidalConnectEnableChange((Boolean) stateVar.getValue());
@@ -356,6 +362,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         break;
                     case "TidalConnectSupport":
                         tidalConnectSupportChange((Boolean) stateVar.getValue());
+                        break;
+                    case "AppDisplayMessageString":
+                        appDisplayMessageStringChange((String) stateVar.getValue());
                         break;
                     case "TidalQuality":
                         tidalQualityChange((String) stateVar.getValue());
@@ -423,6 +432,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.portChange(value);
+        }
+    }    
+
+    private void appDisplayMessageIdChange(Long value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.appDisplayMessageIdChange(value);
         }
     }    
 
@@ -634,6 +651,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void kKBOXSupportChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.kKBOXSupportChange(value);
+        }
+    }    
+
     private void firmwareCommandChange(String value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
@@ -706,14 +731,6 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void qPlayEnableChange(Boolean value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.qPlayEnableChange(value);
-        }
-    }    
-
     private void outputInvertPhaseChange(Boolean value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
@@ -751,6 +768,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.plexCodeChange(value);
+        }
+    }    
+
+    private void appDisplayMessageTagChange(Long value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.appDisplayMessageTagChange(value);
         }
     }    
 
@@ -831,14 +856,6 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.outputClockSourceChange(value);
-        }
-    }    
-
-    private void qPlaySupportChange(Boolean value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.qPlaySupportChange(value);
         }
     }    
 
@@ -935,6 +952,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.sourceNameChange(value);
+        }
+    }    
+
+    private void kKBOXEnableChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.kKBOXEnableChange(value);
         }
     }    
 
@@ -1047,6 +1072,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.tidalConnectSupportChange(value);
+        }
+    }    
+
+    private void appDisplayMessageStringChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.appDisplayMessageStringChange(value);
         }
     }    
 

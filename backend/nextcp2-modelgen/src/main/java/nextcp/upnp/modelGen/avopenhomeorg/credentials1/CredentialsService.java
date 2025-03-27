@@ -43,7 +43,7 @@ import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.ClearInput;
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchroniously.  
+ * Generated UPnP Service class for calling Actions synchronously.  
  */
 public class CredentialsService
 {
@@ -96,12 +96,17 @@ public class CredentialsService
 
     public void addSubscriptionEventListener(ICredentialsServiceEventListener listener)
     {
-        subscription.addSubscriptionEventListener(listener);
+    	if (subscription != null) {
+            subscription.addSubscriptionEventListener(listener);
+    	}
     }
     
     public boolean removeSubscriptionEventListener(ICredentialsServiceEventListener listener)
     {
-        return subscription.removeSubscriptionEventListener(listener);
+    	if (subscription != null) {
+    		return subscription.removeSubscriptionEventListener(listener);
+    	}
+    	return false;
     }    
 
     public RemoteService getCredentialsService()
