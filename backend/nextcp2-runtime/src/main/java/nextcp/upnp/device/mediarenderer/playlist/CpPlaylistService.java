@@ -631,6 +631,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 
 	@Override
 	public void insertAndPlayContainer(ContainerItemDto items) {
+		reset();
 		log.info("inserting container {} to current playlist. Container has {} entries.", items.currentContainer.title,
 			items.musicItemDto.size());
 		insertContainer(items);

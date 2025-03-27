@@ -18,7 +18,7 @@ public class OhPlaylistServiceEventListener extends PlaylistServiceEventListener
 	
     private OhPlaylistBridge playlist;
     private MediaRendererDevice device;
-    private boolean shouldPublishTransportServiceState = false;
+    private boolean shouldPublishTransportServiceState = true;
     
     public OhPlaylistServiceEventListener(OhPlaylistBridge playlist, MediaRendererDevice mediaRendererDevice)
     {
@@ -67,8 +67,6 @@ public class OhPlaylistServiceEventListener extends PlaylistServiceEventListener
     {
         super.idChange(value);
         log.debug("idChanged : not processing.");
-//        ReadOutput out = playlist.read(value);
-//        log.debug("idArrayChange Event Metadata : " + out.Metadata);
     }
     
     public boolean isShouldPublishTransportServiceState()
