@@ -326,35 +326,39 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
     @Override
     public void insertContainer(ContainerItemDto items)
     {
-    	log.info("[insertContainer] enter ... ");
-    	isInsertingContainerInPlaylist = true;
-        int sumInsert = 0;
-        Long lastid = getLastSongId();
+    	try {
+        	log.info("[insertContainer] enter ... ");
+        	isInsertingContainerInPlaylist = true;
+            int sumInsert = 0;
+            Long lastid = getLastSongId();
 
-        for (MusicItemDto music : items.musicItemDto)
-        {
-            InsertInput insertInput = new InsertInput();
-            insertInput.Metadata = music.currentTrackMetadata;
-            insertInput.Uri = music.streamingURL;
-            insertInput.AfterId = lastid;
-
-            // Workaround for some rare situations where a media player is reporting negative IDs.
-            long insertPos = insert(insertInput);
-            if (insertPos < 0) {
-            	log.warn("device gave negative insert position {}. Assuming 0.", insertPos);
-            }
-            lastid = Math.max(0, insertPos);
-        	log.info("[insertContainer] adding uri {}. Received lastid {} ", music.streamingURL, lastid);
-            sumInsert++;
-            if (sumInsert % 10 == 0)
+            for (MusicItemDto music : items.musicItemDto)
             {
-                waitSomeTime(20);
+                InsertInput insertInput = new InsertInput();
+                insertInput.Metadata = music.currentTrackMetadata;
+                insertInput.Uri = music.streamingURL;
+                insertInput.AfterId = lastid;
+
+                // Workaround for some rare situations where a media player is reporting negative IDs.
+                long insertPos = insert(insertInput);
+                if (insertPos < 0) {
+                	log.warn("device gave negative insert position {}. Assuming 0.", insertPos);
+                }
+                lastid = Math.max(0, insertPos);
+            	log.info("[insertContainer] adding uri {}. Received lastid {} ", music.streamingURL, lastid);
+                sumInsert++;
+                if (sumInsert % 10 == 0)
+                {
+                    waitSomeTime(20);
+                }
             }
-        }
-    	log.info("[insertContainer] added {} items", sumInsert);
-    	IdArrayOutput id = playlistService.idArray();
-    	log.info("Playlist items according to device state : {}", id.Array != null ? id.Array.length / 4 : "NULL");
-    	isInsertingContainerInPlaylist = false;
+        	log.info("[insertContainer] added {} items", sumInsert);
+        	IdArrayOutput id = playlistService.idArray();
+        	log.info("Playlist items according to device state : {}", id.Array != null ? id.Array.length / 4 : "NULL");
+        	isInsertingContainerInPlaylist = false;    		
+    	} catch (Exception e) {
+    		log.error("insertContainer", e);
+    	}
     }
 
     private void waitSomeTime(int millis)
