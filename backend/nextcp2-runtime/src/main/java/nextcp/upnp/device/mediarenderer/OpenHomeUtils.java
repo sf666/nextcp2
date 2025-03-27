@@ -58,7 +58,7 @@ public class OpenHomeUtils
     public LinkedList<Long> convertUintByteArrayToLong(byte[] byteArray)
     {
         LinkedList<Long> playlistIds = new LinkedList<>();
-        if (byteArray != null)
+        if (byteArray != null && byteArray.length > 0)
         {
             ByteBuffer bb = ByteBuffer.wrap(byteArray);
             while (bb.hasRemaining())

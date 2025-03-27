@@ -53,6 +53,8 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
     private LinkedList<Long> playlistIds = new LinkedList<>();
     private CopyOnWriteArrayList<String> playlistUrls = new CopyOnWriteArrayList<>();
     private MediaRendererDevice device = null;
+    
+    private boolean isInsertingContainerInPlaylist = false;
 
     public OhPlaylistBridge(PlaylistService playlistService, DtoBuilder dtoBuilder, MediaRendererDevice device)
     {
@@ -269,12 +271,14 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
     @Override
     public void play()
     {
+    	log.info("start playing playlist at position : {} ", playlistService.id().Value);
         playlistService.play();        
     }
 
     @Override
     public void next()
     {
+    	log.info("next ... ");
         playlistService.next();
     }
 
@@ -289,6 +293,7 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
     @Override
     public void previous()
     {
+    	log.info("previous ... ");
         playlistService.previous();
     }
 
@@ -297,7 +302,6 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
         MusicItemDto dto = new MusicItemDto();
         dto.musicBrainzId = new MusicBrainzId();
         dto.objectID = extractValue("Id", node);
-        dto.streamingURL = extractValue("Uri", node);
         dto.streamingURL = extractValue("Uri", node);
         dto.currentTrackMetadata = extractValue("Metadata", node);
 
@@ -323,16 +327,9 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
     public void insertContainer(ContainerItemDto items)
     {
     	log.info("[insertContainer] enter ... ");
+    	isInsertingContainerInPlaylist = true;
         int sumInsert = 0;
-        Long lastid = null;
-        if (playlistIds.isEmpty())
-        {
-            lastid = 0L;
-        }
-        else
-        {
-            lastid = getLastSongId();
-        }
+        Long lastid = getLastSongId();
 
         for (MusicItemDto music : items.musicItemDto)
         {
@@ -357,6 +354,7 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
     	log.info("[insertContainer] added {} items", sumInsert);
     	IdArrayOutput id = playlistService.idArray();
     	log.info("Playlist items according to device state : {}", id.Array.length / 4);
+    	isInsertingContainerInPlaylist = false;
     }
 
     private void waitSomeTime(int millis)
@@ -373,6 +371,10 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
 
     public Long getLastSongId()
     {
+        if (playlistIds.isEmpty())
+        {
+            return 0L;
+        }
         return playlistIds.getLast();
     }
 
@@ -415,6 +417,9 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
     @Override
     public void idArrayChange(byte[] value) {
     	super.idArrayChange(value);
-    	convertIdArrayToMusicItemList(value);
+    	if (!isInsertingContainerInPlaylist) {
+        	log.info("idArrayChanged ... rebuilding playlist ...");
+        	convertIdArrayToMusicItemList(value);
+    	}
     }
 }
