@@ -24,6 +24,8 @@ import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediarenderer.OpenHomeUtils;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.PlaylistService;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.DeleteIdInput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.IdArrayOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.IdOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.InsertInput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ReadInput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.ReadListInput;
@@ -109,21 +111,19 @@ public class OhPlaylistBridge implements IPlaylistService
         for (MusicItemDto musicItemDto : musicList)
         {
             playlistUrls.add(musicItemDto.streamingURL);
-        }
-        for (MusicItemDto musicItemDto : musicList) {
 			log.debug("[convertIdArrayToMusicItemList] {} " , musicItemDto.title);
-		}
+        }
         return musicList;
     }
 
     public long insert(InsertInput inp)
     {
-        if (!playlistUrls.contains(inp.Uri))
+        if (playlistUrls.contains(inp.Uri))
         {
-            return playlistService.insert(inp).NewId;
+        	log.debug("{} is already in playlist.");
         }
 
-        return 0;
+        return playlistService.insert(inp).NewId;
     }
 
     @Override
@@ -241,7 +241,13 @@ public class OhPlaylistBridge implements IPlaylistService
     @Override
     public void deleteAll()
     {
-        playlistService.deleteAll();
+    	IdOutput id = playlistService.id();
+    	if (id.Value != 0) {
+    		log.info("[deleteAll] deleting device playlist ...");
+            playlistService.deleteAll();
+    	} else {
+    		log.info("[deleteAll] device has already empty playlist.");
+    	}
     }
 
     @Override
@@ -314,6 +320,7 @@ public class OhPlaylistBridge implements IPlaylistService
     @Override
     public void insertContainer(ContainerItemDto items)
     {
+    	log.info("[insertContainer] enter ... ");
         int sumInsert = 0;
         Long lastid = null;
         if (playlistIds.isEmpty())
@@ -333,13 +340,21 @@ public class OhPlaylistBridge implements IPlaylistService
             insertInput.AfterId = lastid;
 
             // Workaround for some rare situations where a media player is reporting negative IDs.
-            lastid = Math.max(0, insert(insertInput));
+            long insertPos = insert(insertInput);
+            if (insertPos < 0) {
+            	log.warn("device gave negative insert position {}. Assuming 0.", insertPos);
+            }
+            lastid = Math.max(0, insertPos);
+        	log.info("[insertContainer] adding uri {}. Received lastid {} ", music.streamingURL, lastid);
             sumInsert++;
             if (sumInsert % 10 == 0)
             {
                 waitSomeTime(20);
             }
         }
+    	log.info("[insertContainer] added {} items", sumInsert);
+    	IdArrayOutput id = playlistService.idArray();
+    	log.info("Playlist items according to device state : {}", id.Array.length / 4);
     }
 
     private void waitSomeTime(int millis)
