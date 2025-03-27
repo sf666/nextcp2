@@ -23,6 +23,7 @@ import nextcp.rest.DtoBuilder;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediarenderer.OpenHomeUtils;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.PlaylistService;
+import nextcp.upnp.modelGen.avopenhomeorg.playlist1.PlaylistServiceEventListenerImpl;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.DeleteIdInput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.IdArrayOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.IdOutput;
@@ -39,9 +40,9 @@ import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SetRepeatInput;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.SetShuffleInput;
 
 /**
- * Devices with Open Home playlist support
+ * Devices with Open Home playlist support.
  */
-public class OhPlaylistBridge implements IPlaylistService
+public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implements IPlaylistService
 {
     private static final Logger log = LoggerFactory.getLogger(OhPlaylistBridge.class.getName());
 
@@ -55,6 +56,7 @@ public class OhPlaylistBridge implements IPlaylistService
 
     public OhPlaylistBridge(PlaylistService playlistService, DtoBuilder dtoBuilder, MediaRendererDevice device)
     {
+    	super(device.getDevice());
         this.playlistService = playlistService;
         this.device = device;
         ohUtil = new OpenHomeUtils(dtoBuilder);
@@ -408,5 +410,11 @@ public class OhPlaylistBridge implements IPlaylistService
         dto.udn = device.getUdnAsString();
 
         return dto;
+    }
+    
+    @Override
+    public void idArrayChange(byte[] value) {
+    	super.idArrayChange(value);
+    	convertIdArrayToMusicItemList(value);
     }
 }
