@@ -250,7 +250,7 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
     		log.info("[deleteAll] deleting device playlist ...");
             playlistService.deleteAll();
     	} else {
-    		log.info("[deleteAll] device has already empty playlist.");
+    		log.info("[deleteAll] device has already an empty playlist.");
     	}
     }
 
