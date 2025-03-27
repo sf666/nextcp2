@@ -353,7 +353,7 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
         }
     	log.info("[insertContainer] added {} items", sumInsert);
     	IdArrayOutput id = playlistService.idArray();
-    	log.info("Playlist items according to device state : {}", id.Array.length / 4);
+    	log.info("Playlist items according to device state : {}", id.Array != null ? id.Array.length / 4 : "NULL");
     	isInsertingContainerInPlaylist = false;
     }
 
