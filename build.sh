@@ -8,7 +8,7 @@ if [ ! -d backend/nextcp2-runtime/src/main/resources/static ]; then
 fi
 
 cd frontend/nextcp-ui/
-npm install
+yarn install
 ./ng build
 cd ../../backend/
 
