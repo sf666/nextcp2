@@ -318,7 +318,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   private calcTotalPlaytimeLong(tracks: MusicItemDto[]): string {
-    const completeTime = this.getTotalTimeString(tracks);
+    const completeTime = this.getTotalTimeSeconds(tracks);
     if (completeTime) {
       return this.timeDisplayService.convertLongToDateString(completeTime);
     }
@@ -326,7 +326,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   private calcTotalPlaytimeShort(tracks: MusicItemDto[]): string {
-    const completeTime = this.getTotalTimeString(tracks);
+    const completeTime = this.getTotalTimeSeconds(tracks);
     if (completeTime) {
       return this.timeDisplayService.convertLongToDateStringShort(completeTime);
     } else {
@@ -334,7 +334,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     }
   }
 
-  private getTotalTimeString(tracks: MusicItemDto[]): number {
+  private getTotalTimeSeconds(tracks: MusicItemDto[]): number {
     let completeTime: number;
     if (tracks.length > 0) {
       completeTime = 0;

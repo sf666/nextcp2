@@ -8,24 +8,30 @@ export class TimeDisplayService {
   constructor() { }
 
   public convertLongToDateString(seconds : number) {
-    let date = new Date(Date.UTC(0, 0, 0, 0, 0, seconds));
-    let s = (date.getUTCHours() > 0 ?
-      date.getUTCHours().toString().padStart(2, '0') + 'h  ' + 
-      date.getUTCMinutes().toString().padStart(2, '0') + 'm ' + 
-      date.getUTCSeconds().toString().padStart(2, '0') + 's ' :
-      date.getUTCMinutes().toString().padStart(2, '0') + 'm ' +
-      date.getUTCSeconds().toString().padStart(2, '0') + 's ');
-    return s;    
+    const hours = Math.floor(seconds / 3600)
+    const minutes = Math.floor((seconds % 3600) / 60)
+    const remainingSeconds = seconds % 60
+
+    let s = (hours > 0 ?
+      hours.toString().padStart(2, '0') + 'h ' + 
+      minutes.toString().padStart(2, '0') + 'm ' + 
+      remainingSeconds.toString().padStart(2, '0') + 's ' :
+      minutes.toString().padStart(2, '0') + 'm ' +
+      remainingSeconds.toString().padStart(2, '0') + 's ');
+    return s;
   }
 
   public convertLongToDateStringShort(seconds : number) {
-    let date = new Date(Date.UTC(0, 0, 0, 0, 0, seconds));
-    let s = (date.getUTCHours() > 0 ?
-      date.getUTCHours().toString().padStart(2, '0') + ':' + 
-      date.getUTCMinutes().toString().padStart(2, '0') + ':' + 
-      date.getUTCSeconds().toString().padStart(2, '0') :
-      date.getUTCMinutes().toString().padStart(2, '0') + ':' +
-      date.getUTCSeconds().toString().padStart(2, '0'));
-    return s;    
+    const hours = Math.floor(seconds / 3600)
+    const minutes = Math.floor((seconds % 3600) / 60)
+    const remainingSeconds = seconds % 60
+
+    let s = (hours > 0 ?
+      hours.toString().padStart(2, '0') + ':' + 
+      minutes.toString().padStart(2, '0') + ':' + 
+      remainingSeconds.toString().padStart(2, '0') :
+      hours.toString().padStart(2, '0') + ':' +
+      remainingSeconds.toString().padStart(2, '0'));
+    return s;
   }
 }
