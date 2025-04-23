@@ -30,7 +30,7 @@ export class TimeDisplayService {
       hours.toString().padStart(2, '0') + ':' + 
       minutes.toString().padStart(2, '0') + ':' + 
       remainingSeconds.toString().padStart(2, '0') :
-      hours.toString().padStart(2, '0') + ':' +
+      minutes.toString().padStart(2, '0') + ':' +
       remainingSeconds.toString().padStart(2, '0'));
     return s;
   }
