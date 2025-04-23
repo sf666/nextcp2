@@ -48,7 +48,7 @@ export class ItemTileComponent {
   allMusicTracks = computed(() => this.contentDirectoryService().musicTracks_());
 
   currentUrl = signal<string>('');
-  lastDiscLabel = signal<string>('');
+  lastDiscLabel = '';
 
   constructor(
     private songOptionsServiceService: SongOptionsServiceService,
@@ -223,15 +223,15 @@ export class ItemTileComponent {
   // TODO : sort items in UI
 
   getDiscLabel(item: MusicItemDto): string {
-    if (item.numberOfThisDisc !== this.lastDiscLabel()) {
-      this.lastDiscLabel.set(item.numberOfThisDisc);
+    if (item.numberOfThisDisc !== this.lastDiscLabel) {
+      this.lastDiscLabel = item.numberOfThisDisc;
       return `Disk ${item.numberOfThisDisc}`;
     }
     return '';
   }
 
   newDiscLabel(item: MusicItemDto): boolean {
-    if (item.numberOfThisDisc !== this.lastDiscLabel()) {
+    if (item.numberOfThisDisc !== this.lastDiscLabel) {
       return true;
     }
     return false;
