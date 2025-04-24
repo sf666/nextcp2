@@ -27,6 +27,7 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	private volatile TransportInfo currentTransportInfo = new TransportInfo();
 	private PositionInfo currentPositionInfo = new PositionInfo();
 	private MediaInfo currentMediaInfo = null;
+	private MediaInfo nextMediaInfo = null;
 
 	private IMediaPlayer mediaPlayerBackend = null;
 	private Nextcp2Renderer rootDevice = null;
@@ -159,7 +160,7 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 
 	public void setNextAVTransportURI(String nextURI, String nextURIMetaData) {
 		log.info("setNextAVTransportURI to : " + nextURI);
-		currentMediaInfo = createMediaInfo(currentMediaInfo.getCurrentURI(), currentMediaInfo.getCurrentURIMetaData(), nextURI,
+		nextMediaInfo = createMediaInfo(currentMediaInfo.getCurrentURI(), currentMediaInfo.getCurrentURIMetaData(), nextURI,
 			nextURIMetaData, currentMediaInfo.getMediaDuration());
 		rootDevice.fireLastChange();
 	}
@@ -195,7 +196,8 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	@Override
 	public void skipToNextSong() {
 		log.info("skip to next song ...");
-//		transportStateChanged(TransportState.TRANSITIONING);
+		transportStateChanged(TransportState.TRANSITIONING);
+		rootDevice.fireLastChange();
 		if (StringUtil.isBlank(currentMediaInfo.getNextURI())) {
 			log.info("no next title to skip to. Stopping ...");
 			stop();
@@ -203,6 +205,7 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 			// trackNum++;
 			log.info("moving to next uri ... ");
 			setAVTransportURI(URI.create(currentMediaInfo.getNextURI()), currentMediaInfo.getNextURIMetaData());
+			currentMediaInfo = nextMediaInfo;
 			play(this.config);
 		}
 	}
