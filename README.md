@@ -1,6 +1,6 @@
 # nextCP/2
 
-nextCP/2 is a Java and Typescript web-based UPnP control point.
+nextCP/2 is a web-based UPnP control point written in Java and Typescript.
 
 Screenshots and basic usage is shown in [GitHub Pages](https://sf666.github.io/).
 
@@ -13,7 +13,7 @@ Screenshots and basic usage is shown in [GitHub Pages](https://sf666.github.io/)
 java [-Xms256m -Xmx512m] -jar [-DconfigFile=path_to_config_file] nextcp2.jar
 ```
 
-If no config file is given or found, a config-file will be generated next to the JAR file on the first startup. In this case the application might complain about incorrect or missing (default) configuration. In this case adopt the config to your system by navigating to `App setting' and restart the application.
+If no config file is given or found, a config-file will be generated next to the JAR file on the first startup. In this case the application might complain about incorrect or missing (default) configuration items. In this case adopt the config to your system by navigating to `App setting' and restart the application.
 
 ## system requirements
 
