@@ -24,7 +24,7 @@ If no config file is given or found, a config-file will be generated next to the
 
 ## browser requirements
 
-- Web browser needs support for server-sent-events
+- Web browser needs support for server-sent-events. Current Chromium based browser should work.
 
 ## Install maven dependencies
 
@@ -33,7 +33,6 @@ Call `./build_dependencies.sh` script for installing dependent libraries from so
 For manual installation clone the following repositories :
 
 ```bash
-git clone https://bitbucket.org/ijabz/jaudiotagger.git
 git clone https://github.com/sf666/musicbrainz.git
 ```
 
@@ -92,7 +91,7 @@ Current implemented features:
 - volume control
 - input source control
 
-After a successful build, the device driver (tested with McIntosh MA9000 amplifier) is located here: `backend/nextcp2-device-driver/nextcp2-ma9000/target/`.
+After a successful build, the device driver (tested with McIntosh MA9000 and MA12000 amplifier) is located here: `backend/nextcp2-device-driver/nextcp2-ma9000/target/`.
 
 # running the application
 
