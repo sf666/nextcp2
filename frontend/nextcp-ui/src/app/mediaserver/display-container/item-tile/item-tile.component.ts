@@ -1,8 +1,6 @@
-import { ContainerItemDto } from './../../../service/dto.d';
 import {
   ChangeDetectionStrategy,
   Component,
-  OnInit,
   computed,
   input,
   output,
@@ -35,6 +33,7 @@ export class ItemTileComponent {
 
   playItemClicked = output<MusicItemDto>();
   addItemToPlaylistClicked = output<MusicItemDto>();
+  addItemToPlaylistNextClicked = output<MusicItemDto>();
 
   // some calculated constants
   allTracksSameDisc = computed(() =>
@@ -75,6 +74,10 @@ export class ItemTileComponent {
 
   addItemToPlaylist(item: MusicItemDto) {
     this.addItemToPlaylistClicked.emit(item);
+  }
+
+  addItemToPlaylistNext(item: MusicItemDto) {
+    this.addItemToPlaylistNextClicked.emit(item);
   }
 
   private checkAllTracksSameDisc(data: MusicItemDto[]): boolean {
@@ -187,16 +190,20 @@ export class ItemTileComponent {
         // handle user action from dialog ...
         if (result) {
           if (result.type == 'add') {
-            console.log('added song to playlist : ');
+            console.log('added song to playlist : ' + item); // check item
           } else if (result.type == 'delete') {
             console.log('deleted song from playlist : ');
             setTimeout(() => {
-              this.contentDirectoryService().deleteMusicTrack(item);
+              this.contentDirectoryService().deleteMusicTrack(result.data);
             }, 200);
           } else if (result.type == 'download') {
-            console.log('download song : ');
+            console.log('download song : ' + result.data.title);
           } else if (result.type == 'next') {
-            console.log('play next song : ');
+            console.log('play next song : ' + result.data.title);
+            this.addItemToPlaylistNext(item);
+          } else if (result.type == 'last') {
+            console.log('add playlist at last position : ' + result.data.title);
+            this.addItemToPlaylist(item);
           }
         }
       });

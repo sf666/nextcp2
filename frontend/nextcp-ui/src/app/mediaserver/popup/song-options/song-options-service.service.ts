@@ -15,6 +15,10 @@ export class SongOptionsServiceService {
   public openOptionsDialog(event: MouseEvent, item: MusicItemDto, currentContainer: ContainerDto): Observable<any> {
     const target = new ElementRef(event.currentTarget);
     const dialogRef = this.dialog.open(SongOptionsComponent, {
+      height: '480px',
+      minHeight: '480px',
+      minWidth: '300px',
+      width: '300px',
       hasBackdrop: true,
       data: { trigger: target, item: item, event: event, currentContainer: currentContainer },
     });

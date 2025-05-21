@@ -1,12 +1,18 @@
 img {
-    margin-left  : 0.5rem;
-    margin-top   : 0.5rem;
-    width        : 4rem;
+    width        : 64px;
+    min-width    : 64px;
+    height       : 64px;
+    min-height   : 64px;
     border-radius: 4px;
+    margin-left  : 8px;
+}
+
+.albumAndTitle {
+    align-self: center;
 }
 
 .title {
-    padding-top   : 1rem;
+    padding-top   : 4px;
     padding-left  : 0.8rem;
     font-size     : 1rem;
     letter-spacing: 1px;
@@ -32,6 +38,15 @@ img {
 }
 
 
+.playlist-item-header {
+    font-size     : 1rem;
+    color         : var(--primary-color-reduced);
+    font-weight   : 500;
+    padding-left  : 1rem;
+    padding-top   : 8px;
+    padding-bottom: 8px;
+}
+
 .playlist-item {
     padding-top         : 8px;
     padding-bottom      : 8px;
@@ -51,7 +66,7 @@ img {
 }
 
 .starRating {
-    display: flex;
+    display   : flex;
     align-self: center;
     margin-top: 8px;
 }

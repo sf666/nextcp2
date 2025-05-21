@@ -138,6 +138,17 @@ export class PlaylistService implements OnInit {
     this.httpService.post(this.baseUri, uri, playRequestDto).subscribe();
   }
 
+  public addToPlaylistNext(musicItemDto: MusicItemDto): void {
+    const uri = '/insertNext';
+    const playRequestDto: PlayRequestDto = {
+      mediaRendererDto: this.deviceService.selectedMediaRendererDevice(),
+      streamMetadata: musicItemDto.currentTrackMetadata,
+      streamUrl: musicItemDto.streamingURL
+    }
+
+    this.httpService.post(this.baseUri, uri, playRequestDto).subscribe();
+  }
+
   public addContainerToPlaylist(containerDto: ContainerDto): void {
     const uri = '/insertContainer';
     const playlistAddContainerRequest: PlaylistAddContainerRequest = {

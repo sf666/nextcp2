@@ -1,6 +1,6 @@
-<div class="d-flex flex-column">
+<div class="d-flex flex-column justify-content-center">
   <!-- (mouseleave)="close()" -->
-  <div class="d-flex" (mouseenter)="closeAllDialogs()">
+  <div class="d-flex mt-3" (mouseenter)="closeAllDialogs()">
     <div class="top-image">
       <img src="{{selectedMusicItem.albumArtUrl}}">
     </div>
@@ -19,6 +19,9 @@
 
   <div class="dialogItems d-flex flex-column flex-wrap">
     @if (hasValidSongId()) {
+    <div class="d-flex justify-content-between playlist-item-header">
+      Server side playlist actions
+    </div>
     <div class="d-flex justify-content-between playlist-item" (click)="openAddToPlaylistDialog($event)">
       <div class="d-flex justify-content-between" style="align-self: center;">
         Add to playlist
@@ -27,14 +30,24 @@
     }
     @if (isParentPlaylist) {
     <div class="playlist-item" (mouseover)="closeAllDialogs()" (click)="deleteFromPlaylist()">
-      Delete from playlist
+      Delete from this playlist
     </div>
     }
 
     @if (hasValidSongId()) {
     <div class="divider mb-1 mt-1">&nbsp;</div>
+    <div class="d-flex justify-content-between playlist-item-header">
+      Player playlist actions
+    </div>
     <div class="playlist-item" (mouseenter)="closeAllDialogs()" (click)="actionPlayNext()">
       Play next
+    </div>
+    <div class="playlist-item" (mouseenter)="closeAllDialogs()" (click)="actionPlayLast()">
+      Add at last position
+    </div>
+    <div class="divider mb-1 mt-1">&nbsp;</div>
+    <div class="d-flex justify-content-between playlist-item-header">
+      Other server actions
     </div>
     <div class="playlist-item" (mouseover)="closeAllDialogs()" (click)="download()">
       Download

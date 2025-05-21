@@ -214,6 +214,10 @@ export class DisplayContainerComponent {
     this.playlistService.addToPlaylist(item);
   }
 
+  addItemToPlaylistNext(item: MusicItemDto): void {
+    this.playlistService.addToPlaylistNext(item);
+  }
+
   playAlbum(container: ContainerDto): void {
     this.playlistService.addContainerToPlaylistAndPlay(container, false);
   }

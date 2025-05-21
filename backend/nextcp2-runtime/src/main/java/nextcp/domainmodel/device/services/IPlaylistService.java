@@ -48,7 +48,7 @@ public interface IPlaylistService
 
     void seekSecondAbsolute(long sec);
 
-    long insert(InsertInput inp);
+    long insertLast(InsertInput inp);
 
     PlaylistState getState();
 
@@ -57,5 +57,7 @@ public interface IPlaylistService
     void insertContainer(ContainerItemDto items);
 
     void insertAndPlayContainer(ContainerItemDto items);
+
+	void insertNext(InsertInput inp);
 
 }

@@ -55,12 +55,12 @@ export class SongOptionsComponent implements OnInit {
     this.playlistDialogOpen = false;
 
     _matDialogRef.afterClosed().subscribe(_res => {
-//      this.closeAllDialogs();
+      this.closeAllDialogs();
     });
   }
 
   ngOnInit(): void {
-    this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 250, 350);
+    this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 300, 480);
   }
 
 
@@ -104,6 +104,11 @@ export class SongOptionsComponent implements OnInit {
   actionPlayNext(): void {
     this.transportService.playResourceNext(this.item);
     this.closeThisPopup({type: 'next', data: this.item});
+  }
+
+  actionPlayLast(): void {
+    this.transportService.playResourceNext(this.item);
+    this.closeThisPopup({type: 'last', data: this.item});
   }
 
   get selectedMusicItem(): MusicItemDto {

@@ -619,7 +619,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 	}
 
 	@Override
-	public long insert(InsertInput inp) {
+	public long insertLast(InsertInput inp) {
 		MusicItemDto song = getDtoBuilder().extractXmlAsMusicItem(inp.Metadata);
 		song.streamingURL = inp.Uri;
 		song.currentTrackMetadata = inp.Metadata;
@@ -642,5 +642,9 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 		}
 		play();
 	}
-
+	
+	@Override
+	public void insertNext(InsertInput inp) {
+		log.warn("not implemented yet ... ");
+	}
 }

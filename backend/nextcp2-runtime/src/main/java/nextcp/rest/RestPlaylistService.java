@@ -102,7 +102,7 @@ public class RestPlaylistService extends BaseRestService
             inp.AfterId = 0L;
             inp.Metadata = req.streamMetadata;
             inp.Uri = req.streamUrl;
-            device.getPlaylistServiceBridge().insert(inp);
+            device.getPlaylistServiceBridge().insertLast(inp);
         }
         catch (Exception e)
         {

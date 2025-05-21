@@ -213,7 +213,7 @@ public class PlaylistService
         return res;        
     }
 
-    public InsertOutput insert(InsertInput inp)
+    public InsertOutput insertLast(InsertInput inp)
     {
         Insert insert = new Insert(playlistService, inp, upnpService.getControlPoint());
         InsertOutput res = insert.executeAction();
