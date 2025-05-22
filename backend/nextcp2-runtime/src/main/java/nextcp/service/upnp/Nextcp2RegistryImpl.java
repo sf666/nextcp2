@@ -16,6 +16,7 @@ public class Nextcp2RegistryImpl extends RegistryImpl {
 	
 
 	public Nextcp2RegistryImpl() {
+		log.info("[Nextcp2RegistryImpl] constructor ...");
 	}
 
 	public Nextcp2RegistryImpl(UpnpService upnpService, RendererConfig rendererConfigService) {
