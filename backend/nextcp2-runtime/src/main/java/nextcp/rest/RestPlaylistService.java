@@ -110,6 +110,26 @@ public class RestPlaylistService extends BaseRestService
             publisher.publishEvent(new ToastrMessage(null, "error", "insert ", req.streamUrl + "failed. Message" + e.getMessage()));
         }
     }
+    
+    @PostMapping("/insertNext")
+    public void insertNext(@RequestBody PlayRequestDto req)
+    {
+        try
+        {
+            MediaRendererDevice device = getMediaRendererByUdn(req.mediaRendererDto.udn);
+            checkDevice(device);
+            InsertInput inp = new InsertInput();
+            inp.AfterId = 0L;
+            inp.Metadata = req.streamMetadata;
+            inp.Uri = req.streamUrl;
+            device.getPlaylistServiceBridge().insertNext(inp);
+        }
+        catch (Exception e)
+        {
+            log.warn("seekId", e);
+            publisher.publishEvent(new ToastrMessage(null, "error", "insert ", req.streamUrl + "failed. Message" + e.getMessage()));
+        }
+    }
 
     @PostMapping("/insertContainer")
     public void insert(@RequestBody PlaylistAddContainerRequest req)
