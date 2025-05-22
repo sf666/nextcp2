@@ -111,11 +111,12 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
 	private final GENAEventProcessor genaEventProcessor;
 	private final DeviceDescriptorBinder deviceDescriptorBinderUDA10;
 	private final ServiceDescriptorBinder serviceDescriptorBinderUDA10;
+	
 	private final Namespace namespace;
 	private final UpnpHeaders headers = new UpnpHeaders();
 	private final String upnpBindInterface;
 
-	private boolean useThreadPool = false;
+	private boolean useThreadPool = true;
 	private boolean multicastReceiverThreadPool = true;
 	private boolean datagramIOThreadPool = true;
 	private boolean streamClientThreadPool = true;
@@ -125,6 +126,7 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
 	private boolean remoteListenerThreadPool = true;
 	private boolean registryListenerThreadPool = true;
 	private boolean registryMaintainerThreadPool = true;
+	
 	private ExecutorService multicastReceiverExecutorService;
 	private ExecutorService datagramIOExecutorService;
 	private ExecutorService streamClientExecutorService;
