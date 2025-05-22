@@ -14,12 +14,12 @@ public class InfoServiceStateVariable
     public Long SampleRate = null;
     public String Metadata = null;
     public Long Duration = null;
-    public Long BitRate = null;
     public Long TrackCount = null;
-    public String Metatext = null;
+    public Long BitRate = null;
     public String Uri = null;
     public Long BitDepth = null;
-    public String CodecName = null;
     public Boolean Lossless = null;
+    public String CodecName = null;
+    public String Metatext = null;
 
 }

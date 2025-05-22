@@ -644,7 +644,13 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 	}
 	
 	@Override
-	public void insertNext(InsertInput inp) {
-		log.warn("not implemented yet ... ");
+	synchronized public void insertNext(InsertInput inp) {
+		MusicItemDto song = getDtoBuilder().extractXmlAsMusicItem(inp.Metadata);
+		song.streamingURL = inp.Uri;
+		song.currentTrackMetadata = inp.Metadata;
+		int nextsongIndex = currentSongIdx +1;
+		log.info("adding at song at next position {} : {}", nextsongIndex, song.title);
+		playlistItems.add(song);
+		playbackItems.add(nextsongIndex, playlistItems.indexOf(song));
 	}
 }

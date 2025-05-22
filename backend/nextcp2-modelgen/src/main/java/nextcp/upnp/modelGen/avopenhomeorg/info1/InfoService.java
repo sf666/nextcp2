@@ -40,7 +40,7 @@ public class InfoService
 
     private UpnpService upnpService = null;
 
-    private InfoServiceStateVariable infoServiceStateVariable = new InfoServiceStateVariable();
+//    private InfoServiceStateVariable infoServiceStateVariable = new InfoServiceStateVariable();
     
     private InfoServiceSubscription subscription = null;
     

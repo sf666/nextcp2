@@ -125,21 +125,21 @@ public class X_MS_MediaReceiverRegistrarServiceEventListenerImpl implements IX_M
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void validationSucceededUpdateIDChange(Long value)
-    {
-        stateVariable.ValidationSucceededUpdateID = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "ValidationSucceededUpdateID", value));
-        }
-    }
-    
     public void validationRevokedUpdateIDChange(Long value)
     {
         stateVariable.ValidationRevokedUpdateID = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "ValidationRevokedUpdateID", value));
+        }
+    }
+    
+    public void validationSucceededUpdateIDChange(Long value)
+    {
+        stateVariable.ValidationSucceededUpdateID = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "ValidationSucceededUpdateID", value));
         }
     }
     

@@ -5,7 +5,9 @@ import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.types.ServiceType;
 import org.jupnp.protocol.ProtocolCreationException;
+import org.jupnp.protocol.sync.SendingRenewal;
 import org.jupnp.protocol.sync.SendingSubscribe;
+import org.jupnp.protocol.sync.SendingUnsubscribe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +36,7 @@ import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.VolumeDec;
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchroniously.  
+ * Generated UPnP Service class for calling Actions synchronously.  
  */
 public class VolumeService
 {
@@ -44,7 +46,7 @@ public class VolumeService
 
     private UpnpService upnpService = null;
 
-    private VolumeServiceStateVariable volumeServiceStateVariable = new VolumeServiceStateVariable();
+//    private VolumeServiceStateVariable volumeServiceStateVariable = new VolumeServiceStateVariable();
     
     private VolumeServiceSubscription subscription = null;
     
@@ -72,21 +74,45 @@ public class VolumeService
 	        log.warn(String.format("initialized service 'Volume' failed for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
 	    }
     }
-    
+
+    public void unsubscribeService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingUnsubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingUnsubscribe(subscription);
+        protocol.run();
+    }
+
+    public void renewService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingRenewal protocol = upnpService.getControlPoint().getProtocolFactory().createSendingRenewal(subscription);
+        protocol.run();
+    }
+
     public void addSubscriptionEventListener(IVolumeServiceEventListener listener)
     {
-        subscription.addSubscriptionEventListener(listener);
+    	if (subscription != null) {
+            subscription.addSubscriptionEventListener(listener);
+    	}
     }
     
     public boolean removeSubscriptionEventListener(IVolumeServiceEventListener listener)
     {
-        return subscription.removeSubscriptionEventListener(listener);
+    	if (subscription != null) {
+    		return subscription.removeSubscriptionEventListener(listener);
+    	}
+    	return false;
     }    
 
     public RemoteService getVolumeService()
     {
         return volumeService;
     }    
+
+
+//
+// Actions
+// =========================================================================
+//
+
 
 
     public void volumeInc()

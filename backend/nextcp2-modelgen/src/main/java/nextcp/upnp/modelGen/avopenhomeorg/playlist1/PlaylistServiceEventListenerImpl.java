@@ -125,24 +125,6 @@ public class PlaylistServiceEventListenerImpl implements IPlaylistServiceEventLi
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void idArrayChangedChange(Boolean value)
-    {
-        stateVariable.IdArrayChanged = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "IdArrayChanged", value));
-        }
-    }
-    
-    public void relativeChange(Integer value)
-    {
-        stateVariable.Relative = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Relative", value));
-        }
-    }
-    
     public void tracksMaxChange(Long value)
     {
         stateVariable.TracksMax = value;
@@ -158,33 +140,6 @@ public class PlaylistServiceEventListenerImpl implements IPlaylistServiceEventLi
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "Shuffle", value));
-        }
-    }
-    
-    public void trackListChange(String value)
-    {
-        stateVariable.TrackList = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "TrackList", value));
-        }
-    }
-    
-    public void metadataChange(String value)
-    {
-        stateVariable.Metadata = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Metadata", value));
-        }
-    }
-    
-    public void indexChange(Long value)
-    {
-        stateVariable.Index = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Index", value));
         }
     }
     
@@ -212,42 +167,6 @@ public class PlaylistServiceEventListenerImpl implements IPlaylistServiceEventLi
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "TransportState", value));
-        }
-    }
-    
-    public void absoluteChange(Long value)
-    {
-        stateVariable.Absolute = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Absolute", value));
-        }
-    }
-    
-    public void uriChange(String value)
-    {
-        stateVariable.Uri = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Uri", value));
-        }
-    }
-    
-    public void idListChange(String value)
-    {
-        stateVariable.IdList = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "IdList", value));
-        }
-    }
-    
-    public void idArrayTokenChange(Long value)
-    {
-        stateVariable.IdArrayToken = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "IdArrayToken", value));
         }
     }
     

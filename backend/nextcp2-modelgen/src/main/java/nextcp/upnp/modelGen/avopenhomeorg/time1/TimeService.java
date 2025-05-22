@@ -34,7 +34,7 @@ public class TimeService
 
     private UpnpService upnpService = null;
 
-    private TimeServiceStateVariable timeServiceStateVariable = new TimeServiceStateVariable();
+//    private TimeServiceStateVariable timeServiceStateVariable = new TimeServiceStateVariable();
     
     private TimeServiceSubscription subscription = null;
     

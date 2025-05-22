@@ -108,26 +108,8 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "MinVolumeDB":
-                        minVolumeDBChange((Integer) stateVar.getValue());
-                        break;
-                    case "Volume":
-                        volumeChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "MaxVolumeDB":
-                        maxVolumeDBChange((Integer) stateVar.getValue());
-                        break;
                     case "LastChange":
                         lastChangeChange((String) stateVar.getValue());
-                        break;
-                    case "PresetNameList":
-                        presetNameListChange((String) stateVar.getValue());
-                        break;
-                    case "Mute":
-                        muteChange((Boolean) stateVar.getValue());
-                        break;
-                    case "VolumeDB":
-                        volumeDBChange((Integer) stateVar.getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -149,59 +131,11 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
         }
     }
 
-    private void minVolumeDBChange(Integer value)
-    {
-        for (IRenderingControlServiceEventListener listener : eventListener)
-        {
-            listener.minVolumeDBChange(value);
-        }
-    }    
-
-    private void volumeChange(Long value)
-    {
-        for (IRenderingControlServiceEventListener listener : eventListener)
-        {
-            listener.volumeChange(value);
-        }
-    }    
-
-    private void maxVolumeDBChange(Integer value)
-    {
-        for (IRenderingControlServiceEventListener listener : eventListener)
-        {
-            listener.maxVolumeDBChange(value);
-        }
-    }    
-
     private void lastChangeChange(String value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
             listener.lastChangeChange(value);
-        }
-    }    
-
-    private void presetNameListChange(String value)
-    {
-        for (IRenderingControlServiceEventListener listener : eventListener)
-        {
-            listener.presetNameListChange(value);
-        }
-    }    
-
-    private void muteChange(Boolean value)
-    {
-        for (IRenderingControlServiceEventListener listener : eventListener)
-        {
-            listener.muteChange(value);
-        }
-    }    
-
-    private void volumeDBChange(Integer value)
-    {
-        for (IRenderingControlServiceEventListener listener : eventListener)
-        {
-            listener.volumeDBChange(value);
         }
     }    
 }

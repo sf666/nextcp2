@@ -58,7 +58,7 @@ public class ContentDirectoryService
 
     private UpnpService upnpService = null;
 
-    private ContentDirectoryServiceStateVariable contentDirectoryServiceStateVariable = new ContentDirectoryServiceStateVariable();
+//    private ContentDirectoryServiceStateVariable contentDirectoryServiceStateVariable = new ContentDirectoryServiceStateVariable();
     
     private ContentDirectoryServiceSubscription subscription = null;
     

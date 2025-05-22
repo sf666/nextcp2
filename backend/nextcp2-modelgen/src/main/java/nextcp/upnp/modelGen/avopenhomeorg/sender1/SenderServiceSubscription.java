@@ -69,7 +69,7 @@ public class SenderServiceSubscription extends RemoteGENASubscription
     @Override
     public void ended(CancelReason reason, UpnpResponse responseStatus)
     {
-        log.warn("ended");
+        log.debug("ended");
         for (ISubscriptionEventListener listener : eventListener)
         {
             listener.ended(reason, responseStatus);

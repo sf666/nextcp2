@@ -30,10 +30,10 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudio
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLiked;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedOutput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedInput;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbum;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioLikesVisibleRoot;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioLikesVisibleRootInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbum;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumInput;
 
 
 /**
@@ -42,7 +42,7 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudio
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchroniously.  
+ * Generated UPnP Service class for calling Actions synchronously.  
  */
 public class UmsExtendedServicesService
 {
@@ -52,7 +52,7 @@ public class UmsExtendedServicesService
 
     private UpnpService upnpService = null;
 
-    private UmsExtendedServicesServiceStateVariable umsExtendedServicesServiceStateVariable = new UmsExtendedServicesServiceStateVariable();
+//    private UmsExtendedServicesServiceStateVariable umsExtendedServicesServiceStateVariable = new UmsExtendedServicesServiceStateVariable();
     
     private UmsExtendedServicesServiceSubscription subscription = null;
     
@@ -95,12 +95,17 @@ public class UmsExtendedServicesService
 
     public void addSubscriptionEventListener(IUmsExtendedServicesServiceEventListener listener)
     {
-        subscription.addSubscriptionEventListener(listener);
+    	if (subscription != null) {
+            subscription.addSubscriptionEventListener(listener);
+    	}
     }
     
     public boolean removeSubscriptionEventListener(IUmsExtendedServicesServiceEventListener listener)
     {
-        return subscription.removeSubscriptionEventListener(listener);
+    	if (subscription != null) {
+    		return subscription.removeSubscriptionEventListener(listener);
+    	}
+    	return false;
     }    
 
     public RemoteService getUmsExtendedServicesService()
@@ -171,15 +176,15 @@ public class UmsExtendedServicesService
         return res;        
     }
 
-    public void likeAlbum(LikeAlbumInput inp)
-    {
-        LikeAlbum likeAlbum = new LikeAlbum(umsExtendedServicesService, inp, upnpService.getControlPoint());
-        likeAlbum.executeAction();
-    }
-
     public void setAudioLikesVisibleRoot(SetAudioLikesVisibleRootInput inp)
     {
         SetAudioLikesVisibleRoot setAudioLikesVisibleRoot = new SetAudioLikesVisibleRoot(umsExtendedServicesService, inp, upnpService.getControlPoint());
         setAudioLikesVisibleRoot.executeAction();
+    }
+
+    public void likeAlbum(LikeAlbumInput inp)
+    {
+        LikeAlbum likeAlbum = new LikeAlbum(umsExtendedServicesService, inp, upnpService.getControlPoint());
+        likeAlbum.executeAction();
     }
 }

@@ -170,15 +170,6 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
-    public void bitRateChange(Long value)
-    {
-        stateVariable.BitRate = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "BitRate", value));
-        }
-    }
-    
     public void trackCountChange(Long value)
     {
         stateVariable.TrackCount = value;
@@ -188,12 +179,12 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
-    public void metatextChange(String value)
+    public void bitRateChange(Long value)
     {
-        stateVariable.Metatext = value;
+        stateVariable.BitRate = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "Metatext", value));
+            log.debug(String.format("StateVariable : %s: %s", "BitRate", value));
         }
     }
     
@@ -215,6 +206,15 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
+    public void losslessChange(Boolean value)
+    {
+        stateVariable.Lossless = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Lossless", value));
+        }
+    }
+    
     public void codecNameChange(String value)
     {
         stateVariable.CodecName = value;
@@ -224,12 +224,12 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
-    public void losslessChange(Boolean value)
+    public void metatextChange(String value)
     {
-        stateVariable.Lossless = value;
+        stateVariable.Metatext = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "Lossless", value));
+            log.debug(String.format("StateVariable : %s: %s", "Metatext", value));
         }
     }
     

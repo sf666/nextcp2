@@ -120,14 +120,19 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
         return musicList;
     }
 
-    public long insertLast(InsertInput inp)
+    public long insertLastInternal(InsertInput inp)
     {
         if (playlistUrls.contains(inp.Uri))
         {
         	log.debug("{} is already in playlist.");
         }
+        return playlistService.insert(inp).NewId;
+    }
 
-        return playlistService.insertLast(inp).NewId;
+    public long insertLast(InsertInput inp)
+    {
+        inp.AfterId = getLastSongId();
+        return insertLastInternal(inp);
     }
 
     @Override
@@ -340,7 +345,7 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
                 insertInput.AfterId = lastid;
 
                 // Workaround for some rare situations where a media player is reporting negative IDs.
-                long insertPos = insertLast(insertInput);
+                long insertPos = insertLastInternal(insertInput);
                 if (insertPos < 0) {
                 	log.warn("device gave negative insert position {}. Assuming 0.", insertPos);
                 }
@@ -429,6 +434,15 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
 
 	@Override
 	public void insertNext(InsertInput inp) {
-		log.warn("not implemented yet ... ");
+        if (playlistUrls.contains(inp.Uri))
+        {
+        	log.debug("{} is already in playlist.");
+        }
+        inp.AfterId = getStateVariable().Id;
+        if (inp.AfterId == null) {
+        	log.warn("current state variable ID is NULL ! Adding at first position.");
+        	inp.AfterId = 0L;
+        }
+        playlistService.insert(inp);
 	}
 }

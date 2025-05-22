@@ -36,7 +36,7 @@ public class GetGreenVideoGain extends ActionCallback
 
         GetGreenVideoGainOutput result = new GetGreenVideoGainOutput();
 
-        result.CurrentGreenVideoGain = ((UnsignedIntegerTwoBytes) invocation.getOutput("CurrentGreenVideoGain").getValue()).getValue();
+        result.CurrentGreenVideoGain = ((UnsignedIntegerFourBytes) invocation.getOutput("CurrentGreenVideoGain").getValue()).getValue();
 
         return result;
     }

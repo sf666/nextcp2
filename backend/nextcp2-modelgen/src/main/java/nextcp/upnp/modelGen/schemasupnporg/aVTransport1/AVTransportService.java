@@ -16,6 +16,8 @@ import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.Pause;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.PauseInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.SetRecordQualityMode;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.SetRecordQualityModeInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.Stop;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.StopInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetPositionInfo;
@@ -40,11 +42,11 @@ import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetTransportInfo
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetTransportInfoInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.Previous;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.PreviousInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.SetAVTransportURI;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.SetAVTransportURIInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetTransportSettings;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetTransportSettingsOutput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetTransportSettingsInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.SetAVTransportURI;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.SetAVTransportURIInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetCurrentTransportActions;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetCurrentTransportActionsOutput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetCurrentTransportActionsInput;
@@ -68,7 +70,7 @@ public class AVTransportService
 
     private UpnpService upnpService = null;
 
-    private AVTransportServiceStateVariable aVTransportServiceStateVariable = new AVTransportServiceStateVariable();
+//    private AVTransportServiceStateVariable aVTransportServiceStateVariable = new AVTransportServiceStateVariable();
     
     private AVTransportServiceSubscription subscription = null;
     
@@ -143,6 +145,12 @@ public class AVTransportService
         pause.executeAction();
     }
 
+    public void setRecordQualityMode(SetRecordQualityModeInput inp)
+    {
+        SetRecordQualityMode setRecordQualityMode = new SetRecordQualityMode(aVTransportService, inp, upnpService.getControlPoint());
+        setRecordQualityMode.executeAction();
+    }
+
     public void stop(StopInput inp)
     {
         Stop stop = new Stop(aVTransportService, inp, upnpService.getControlPoint());
@@ -207,17 +215,17 @@ public class AVTransportService
         previous.executeAction();
     }
 
+    public void setAVTransportURI(SetAVTransportURIInput inp)
+    {
+        SetAVTransportURI setAVTransportURI = new SetAVTransportURI(aVTransportService, inp, upnpService.getControlPoint());
+        setAVTransportURI.executeAction();
+    }
+
     public GetTransportSettingsOutput getTransportSettings(GetTransportSettingsInput inp)
     {
         GetTransportSettings getTransportSettings = new GetTransportSettings(aVTransportService, inp, upnpService.getControlPoint());
         GetTransportSettingsOutput res = getTransportSettings.executeAction();
         return res;        
-    }
-
-    public void setAVTransportURI(SetAVTransportURIInput inp)
-    {
-        SetAVTransportURI setAVTransportURI = new SetAVTransportURI(aVTransportService, inp, upnpService.getControlPoint());
-        setAVTransportURI.executeAction();
     }
 
     public GetCurrentTransportActionsOutput getCurrentTransportActions(GetCurrentTransportActionsInput inp)

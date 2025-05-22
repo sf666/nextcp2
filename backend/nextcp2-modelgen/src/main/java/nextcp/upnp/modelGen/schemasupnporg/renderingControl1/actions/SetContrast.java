@@ -28,7 +28,7 @@ public class SetContrast extends ActionCallback
         super(new ActionInvocation(service.getAction("SetContrast"), new NextcpClientInfo()), cp);
 
         getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("DesiredContrast", new UnsignedIntegerTwoBytes(input.DesiredContrast));
+        getActionInvocation().setInput("DesiredContrast", new UnsignedIntegerFourBytes(input.DesiredContrast));
     }
 
     public void executeAction()

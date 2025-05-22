@@ -28,7 +28,7 @@ public class SetGreenVideoBlackLevel extends ActionCallback
         super(new ActionInvocation(service.getAction("SetGreenVideoBlackLevel"), new NextcpClientInfo()), cp);
 
         getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("DesiredGreenVideoBlackLevel", new UnsignedIntegerTwoBytes(input.DesiredGreenVideoBlackLevel));
+        getActionInvocation().setInput("DesiredGreenVideoBlackLevel", new UnsignedIntegerFourBytes(input.DesiredGreenVideoBlackLevel));
     }
 
     public void executeAction()

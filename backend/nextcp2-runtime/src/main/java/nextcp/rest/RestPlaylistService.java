@@ -99,7 +99,6 @@ public class RestPlaylistService extends BaseRestService
             MediaRendererDevice device = getMediaRendererByUdn(req.mediaRendererDto.udn);
             checkDevice(device);
             InsertInput inp = new InsertInput();
-            inp.AfterId = 0L;
             inp.Metadata = req.streamMetadata;
             inp.Uri = req.streamUrl;
             device.getPlaylistServiceBridge().insertLast(inp);

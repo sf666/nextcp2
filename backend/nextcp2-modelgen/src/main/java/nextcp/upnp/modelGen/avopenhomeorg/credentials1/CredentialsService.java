@@ -53,7 +53,7 @@ public class CredentialsService
 
     private UpnpService upnpService = null;
 
-    private CredentialsServiceStateVariable credentialsServiceStateVariable = new CredentialsServiceStateVariable();
+//    private CredentialsServiceStateVariable credentialsServiceStateVariable = new CredentialsServiceStateVariable();
     
     private CredentialsServiceSubscription subscription = null;
     

@@ -39,7 +39,7 @@ public class ConnectionManagerService
 
     private UpnpService upnpService = null;
 
-    private ConnectionManagerServiceStateVariable connectionManagerServiceStateVariable = new ConnectionManagerServiceStateVariable();
+//    private ConnectionManagerServiceStateVariable connectionManagerServiceStateVariable = new ConnectionManagerServiceStateVariable();
     
     private ConnectionManagerServiceSubscription subscription = null;
     

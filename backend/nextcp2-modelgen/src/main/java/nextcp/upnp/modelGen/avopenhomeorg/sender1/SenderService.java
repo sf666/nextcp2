@@ -5,7 +5,9 @@ import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.types.ServiceType;
 import org.jupnp.protocol.ProtocolCreationException;
+import org.jupnp.protocol.sync.SendingRenewal;
 import org.jupnp.protocol.sync.SendingSubscribe;
+import org.jupnp.protocol.sync.SendingUnsubscribe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +32,7 @@ import nextcp.upnp.modelGen.avopenhomeorg.sender1.actions.AudioOutput;
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchroniously.  
+ * Generated UPnP Service class for calling Actions synchronously.  
  */
 public class SenderService
 {
@@ -40,7 +42,7 @@ public class SenderService
 
     private UpnpService upnpService = null;
 
-    private SenderServiceStateVariable senderServiceStateVariable = new SenderServiceStateVariable();
+//    private SenderServiceStateVariable senderServiceStateVariable = new SenderServiceStateVariable();
     
     private SenderServiceSubscription subscription = null;
     
@@ -68,21 +70,45 @@ public class SenderService
 	        log.warn(String.format("initialized service 'Sender' failed for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
 	    }
     }
-    
+
+    public void unsubscribeService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingUnsubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingUnsubscribe(subscription);
+        protocol.run();
+    }
+
+    public void renewService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingRenewal protocol = upnpService.getControlPoint().getProtocolFactory().createSendingRenewal(subscription);
+        protocol.run();
+    }
+
     public void addSubscriptionEventListener(ISenderServiceEventListener listener)
     {
-        subscription.addSubscriptionEventListener(listener);
+    	if (subscription != null) {
+            subscription.addSubscriptionEventListener(listener);
+    	}
     }
     
     public boolean removeSubscriptionEventListener(ISenderServiceEventListener listener)
     {
-        return subscription.removeSubscriptionEventListener(listener);
+    	if (subscription != null) {
+    		return subscription.removeSubscriptionEventListener(listener);
+    	}
+    	return false;
     }    
 
     public RemoteService getSenderService()
     {
         return senderService;
     }    
+
+
+//
+// Actions
+// =========================================================================
+//
+
 
 
     public StatusOutput status()

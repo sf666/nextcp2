@@ -5,7 +5,9 @@ import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.types.ServiceType;
 import org.jupnp.protocol.ProtocolCreationException;
+import org.jupnp.protocol.sync.SendingRenewal;
 import org.jupnp.protocol.sync.SendingSubscribe;
+import org.jupnp.protocol.sync.SendingUnsubscribe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +51,7 @@ import nextcp.upnp.modelGen.avopenhomeorg.product2.actions.SourceXmlChangeCountO
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchroniously.  
+ * Generated UPnP Service class for calling Actions synchronously.  
  */
 public class ProductService
 {
@@ -59,7 +61,7 @@ public class ProductService
 
     private UpnpService upnpService = null;
 
-    private ProductServiceStateVariable productServiceStateVariable = new ProductServiceStateVariable();
+//    private ProductServiceStateVariable productServiceStateVariable = new ProductServiceStateVariable();
     
     private ProductServiceSubscription subscription = null;
     
@@ -87,21 +89,45 @@ public class ProductService
 	        log.warn(String.format("initialized service 'Product' failed for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
 	    }
     }
-    
+
+    public void unsubscribeService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingUnsubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingUnsubscribe(subscription);
+        protocol.run();
+    }
+
+    public void renewService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingRenewal protocol = upnpService.getControlPoint().getProtocolFactory().createSendingRenewal(subscription);
+        protocol.run();
+    }
+
     public void addSubscriptionEventListener(IProductServiceEventListener listener)
     {
-        subscription.addSubscriptionEventListener(listener);
+    	if (subscription != null) {
+            subscription.addSubscriptionEventListener(listener);
+    	}
     }
     
     public boolean removeSubscriptionEventListener(IProductServiceEventListener listener)
     {
-        return subscription.removeSubscriptionEventListener(listener);
+    	if (subscription != null) {
+    		return subscription.removeSubscriptionEventListener(listener);
+    	}
+    	return false;
     }    
 
     public RemoteService getProductService()
     {
         return productService;
     }    
+
+
+//
+// Actions
+// =========================================================================
+//
+
 
 
     public SourceCountOutput sourceCount()
