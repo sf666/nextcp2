@@ -438,7 +438,8 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
         {
         	log.debug("{} is already in playlist.");
         }
-        inp.AfterId = getStateVariable().Id;
+        
+        inp.AfterId = playlistService.id().Value;
         if (inp.AfterId == null) {
         	log.warn("current state variable ID is NULL ! Adding at first position.");
         	inp.AfterId = 0L;
