@@ -97,13 +97,14 @@ public class DeviceRegistry {
 	// Media Server
 	//
 	public synchronized void addMediaServerDevice(RemoteDevice remoteDevice) {
-		if (mediaServerList.get(remoteFacade.getUDN(remoteDevice)) == null) {
-			MediaServerDevice device = deviceFactory.mediaServerDeviceFactory(remoteDevice);
-			serverConfigService.addMediaServerDeviceConfig(remoteDevice, device);
-			eventPublisher.publishEvent(new MediaServerListChanged(getAvailableMediaServer()));
-		} else {
-			log.warn("device already known : {}", remoteFacade.getUDN(remoteDevice));
+		MediaServerDevice device = deviceFactory.mediaServerDeviceFactory(remoteDevice);
+		serverConfigService.addMediaServerDeviceConfig(remoteDevice, device);
+		MediaServerDevice oldDevice = mediaServerList.put(remoteFacade.getUDN(remoteDevice), device);
+		inactiveMediaServerList.remove(remoteDevice.getIdentity().getUdn());
+		if (oldDevice != null) {
+			log.debug("removed old media server device : {} ", oldDevice.getAsDto());
 		}
+		eventPublisher.publishEvent(new MediaServerListChanged(getAvailableMediaServer()));
 	}
 
 	public synchronized void removeMediaServerDevice(RemoteDevice remoteDevice) {
