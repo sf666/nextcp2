@@ -55,7 +55,7 @@ import nextcp.upnp.modelGen.avopenhomeorg.transport1.TransportService;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.VolumeService;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.AVTransportService;
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.ConnectionManagerService;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.RenderingControlService;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.RenderingControlService;
 import nextcp.util.BackendException;
 
 /**

@@ -8,9 +8,9 @@ import nextcp.devicedriver.IDeviceDriverCallback;
 import nextcp.domainmodel.device.services.IProductService;
 import nextcp.dto.DeviceDriverState;
 import nextcp.dto.InputSourceDto;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.RenderingControlService;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.RenderingControlServiceEventListenerImpl;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.SetVolumeInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.RenderingControlService;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.RenderingControlServiceEventListenerImpl;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.SetVolumeInput;
 
 /**
  * This class bridges rendering control actions like standby or volume control to an external device, so standby/volume can be controlled

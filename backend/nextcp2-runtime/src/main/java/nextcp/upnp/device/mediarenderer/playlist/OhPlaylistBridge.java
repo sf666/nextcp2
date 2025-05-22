@@ -126,7 +126,7 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
         {
         	log.debug("{} is already in playlist.");
         }
-        return playlistService.insert(inp).NewId;
+        return playlistService.insertLast(inp).NewId;
     }
 
     public long insertLast(InsertInput inp)
@@ -443,6 +443,6 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
         	log.warn("current state variable ID is NULL ! Adding at first position.");
         	inp.AfterId = 0L;
         }
-        playlistService.insert(inp);
+        playlistService.insertLast(inp);
 	}
 }

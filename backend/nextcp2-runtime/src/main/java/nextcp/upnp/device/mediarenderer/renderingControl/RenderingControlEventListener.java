@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.devicedriver.IDeviceDriverCallback;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediarenderer.UpnpDeviceDriver;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.RenderingControlServiceEventListenerImpl;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.RenderingControlServiceEventListenerImpl;
 
 public class RenderingControlEventListener extends RenderingControlServiceEventListenerImpl
 {

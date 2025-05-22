@@ -5,6 +5,7 @@ import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.types.ServiceType;
 import org.jupnp.protocol.ProtocolCreationException;
+import org.jupnp.protocol.sync.SendingRenewal;
 import org.jupnp.protocol.sync.SendingSubscribe;
 
 import org.slf4j.Logger;
@@ -67,6 +68,13 @@ public class RenderingControlService
 	        log.warn(String.format("initialized service 'RenderingControl' failed for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
 	    }
     }
+
+    public void renewService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingRenewal protocol = upnpService.getControlPoint().getProtocolFactory().createSendingRenewal(subscription);
+        protocol.run();
+    }
+
     
     public void addSubscriptionEventListener(IRenderingControlServiceEventListener listener)
     {
