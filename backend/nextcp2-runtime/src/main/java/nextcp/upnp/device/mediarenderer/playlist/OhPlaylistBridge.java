@@ -126,13 +126,16 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
         {
         	log.debug("{} is already in playlist.");
         }
-        return playlistService.insertLast(inp).NewId;
+        long id = playlistService.insertLast(inp).NewId; 
+        return id; 
     }
 
     public long insertLast(InsertInput inp)
     {
         inp.AfterId = getLastSongId();
-        return insertLastInternal(inp);
+        long id = insertLastInternal(inp);
+        log.info("[insertLast] inserting after {}. New id {} ", inp.AfterId, id);
+        return id;
     }
 
     @Override
