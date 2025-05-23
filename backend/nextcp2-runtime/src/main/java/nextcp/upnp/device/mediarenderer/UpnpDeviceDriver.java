@@ -198,5 +198,14 @@ public class UpnpDeviceDriver extends RenderingControlServiceEventListenerImpl i
             physicalDeviceDriver.setTrimBalance(balance);
         }
 	}
+	
+	@Override
+	public void stop() {
+        log.debug("stop() ... ");
+	}
 
+	@Override
+	public void start() {
+        log.debug("start() ... ");
+	}
 }

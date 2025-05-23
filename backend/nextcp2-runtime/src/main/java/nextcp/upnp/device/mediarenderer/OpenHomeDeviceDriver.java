@@ -209,4 +209,14 @@ public class OpenHomeDeviceDriver extends ProductServiceEventListenerImpl implem
         }
 	}
 
+	@Override
+	public void stop() {
+        log.debug("stop() ... ");
+	}
+
+	@Override
+	public void start() {
+        log.debug("start() ... ");
+	}
+
 }
