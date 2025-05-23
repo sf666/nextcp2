@@ -5,6 +5,14 @@ import nextcp.dto.InputSourceDto;
 
 public interface IDeviceDriverService
 {
+	//
+	// Lifecycle events
+	//
+	
+	public void start();
+	
+	public void stop();
+	
     //
     // Methods for controlling external device
     // ====================================================================================

@@ -25,13 +25,15 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
 	private IDeviceDriverCallback callback = null;
 
 	private InputManager inputManager = new InputManager();
-
+	private SocketAddress hostAddress = null;
+	
 	public Ma9000Binding(SocketAddress hostAddress, IDeviceDriverCallback callback, String rendererUdn) throws IOException {
 		if (hostAddress == null) {
 			throw new RuntimeException("hostAddress shall not be null");
 		}
+		this.hostAddress = hostAddress;
 
-		log.info("Initializing MA 9000 driver. connecting to : " + hostAddress.toString());
+		log.info("Initializing MA 9000 driver. connecting to : {}", hostAddress.toString());
 		this.callback = callback;
 
 		state.rendererUDN = rendererUdn;
@@ -40,13 +42,33 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
 		state.hasDeviceDriver = true;
 		state.input = new InputSourceDto();
 		state.balance = 0;
+		
+		start();
+	}
 
+	@Override
+	public void start() {
+		log.info("starting physical device ...");
+		if (device != null) {
+			device.close();
+		}
 		device = new McIntoshDeviceConnection(this, hostAddress, null);
+		
 		device.open();
 
 		checkPowerState();
+		
 	}
 
+	@Override
+	public void stop() {
+		if (device != null) {
+			log.info("stopping physical device ...");
+			device.close();
+		}
+	}
+	
+	
 	private void checkPowerState() {
 		device.send(Commands.POWER_STATUS);
 	}

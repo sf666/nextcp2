@@ -155,4 +155,14 @@ public class DeviceDriver implements IDeviceDriverCallback, IDeviceDriver
         physicalDeviceDriver.setTrimBalance(balance);
 	}
 
+	@Override
+	public void stop() {
+		physicalDeviceDriver.stop();
+	}
+
+	@Override
+	public void start() {
+		physicalDeviceDriver.start();
+	}
+
 }

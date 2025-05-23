@@ -66,7 +66,7 @@ public class OhPlaylistServiceEventListener extends PlaylistServiceEventListener
     public void idChange(Long value)
     {
         super.idChange(value);
-        log.debug("idChanged : not processing.");
+        log.debug("idChanged  changed to {}", value);
     }
     
     public boolean isShouldPublishTransportServiceState()

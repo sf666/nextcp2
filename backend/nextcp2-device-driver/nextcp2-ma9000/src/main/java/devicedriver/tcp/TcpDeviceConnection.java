@@ -46,7 +46,7 @@ public class TcpDeviceConnection
 
     public void open()
     {
-        closeIfOpen();
+        close();
         try
         {
             socketToDevice = SocketChannel.open(address);
@@ -100,7 +100,7 @@ public class TcpDeviceConnection
                 }
                 catch (IOException e)
                 {
-                    closeIfOpen();
+                    close();
                     e.printStackTrace();
                 }
             }
@@ -150,7 +150,7 @@ public class TcpDeviceConnection
         }
     }
 
-    private void closeIfOpen()
+    public void close()
     {
         if (socketToDevice != null)
         {

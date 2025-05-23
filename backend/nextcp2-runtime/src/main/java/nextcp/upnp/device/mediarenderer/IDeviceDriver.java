@@ -5,7 +5,10 @@ import nextcp.dto.InputSourceDto;
 
 public interface IDeviceDriver
 {
-
+	void stop();
+	
+	void start();
+	
     DeviceDriverState getDeviceDriverState();
 
     void setVolume(int vol);

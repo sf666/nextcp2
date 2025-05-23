@@ -82,7 +82,11 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     @Autowired
     private ApplicationEventPublisher eventPublisher = null;
 
+    // Logical driver = (Open home or Upnp)
     private IDeviceDriver deviceDriver = null;
+    
+    // Physical driver is for controlling AV receiver
+    private IDeviceDriver physicalDriver = null;
 
     private List<MediaRendererServicesDto> services = new ArrayList<>();
 
@@ -447,7 +451,6 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     {
         updateRendererConfig();
         IDeviceDriver dd = null;
-        IDeviceDriver physicalDriver = null;
 
         if (rendererConfig != null && !StringUtils.isBlank(rendererConfig.deviceDriverType))
         {
@@ -707,6 +710,13 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
      */
     public void setServicesOffline(boolean state) {
     	this.serviceOffline = state;
+    }
+    
+    // called when device was removed from registry
+    public void removed() {
+    	setServicesEnded(true);
+    	setServicesOffline(true);
+    	physicalDriver.stop();
     }
     
 	public void checkServicesOnline() {
