@@ -709,10 +709,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
      * @param state
      */
     public void setServicesOffline(boolean state) {
-<<<<<<< HEAD
-    	log.warn("{} : setting services offline : {}", getFriendlyName(), state);
-=======
->>>>>>> parent of 7bb5bdec (Device services ... LUMIN fix (WIP))
+    	log.warn("{} : setting services offline to : {}", getFriendlyName(), state);
     	this.serviceOffline = state;
     }
     
