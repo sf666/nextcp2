@@ -69,13 +69,16 @@ public class AvTransportEventListener extends AVTransportServiceEventListenerImp
 
         if (StringUtils.isBlank(value))
         {
+            log.warn("{} : lastChangeChange is blank ... ignoring.", device.getFriendlyName());
             return;
         }
 
         if (log.isDebugEnabled())
         {
-            log.debug("Last Change : " + StringEscapeUtils.unescapeXml(value));
+            log.debug("{} : Last Change value > {}", device.getFriendlyName(), StringEscapeUtils.unescapeXml(value));
         }
+        
+        log.info("{} : lastChangeChange received.", device.getFriendlyName());
 
         // AvTransport doesn't use "regular" upnp eventing, because of virtual instanceID's support.
         // All state changes are send in the lastChange attribute.
