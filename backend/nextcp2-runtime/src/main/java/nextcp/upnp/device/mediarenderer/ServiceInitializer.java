@@ -47,7 +47,7 @@ public class ServiceInitializer
 
     void initializeServices(UpnpService upnpService, RemoteDevice device, MediaRendererDevice renderer, List<MediaRendererServicesDto> services)
     {
-        log.info("[initializeServices] : adding services for device {} ", renderer.getFriendlyName());
+        log.info("[initializeServices] : adding services for device " + renderer.getFriendlyName());
         for (RemoteService service : device.getServices())
         {
             MediaRendererServicesDto serviceDto = new MediaRendererServicesDto(service.getServiceType().getNamespace(), service.getServiceType().toFriendlyString(),

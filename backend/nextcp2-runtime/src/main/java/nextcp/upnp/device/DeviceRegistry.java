@@ -61,16 +61,12 @@ public class DeviceRegistry {
 	// Media Renderer
 	//
 	public synchronized void addMediaRendererDevice(RemoteDevice remoteDevice) {
-		MediaRendererDevice device = mediaRendererList.get(remoteFacade.getUDN(remoteDevice));
-		if (device == null) {
-			log.info("{} : Creating device ...", remoteFacade.getFriendlyName(remoteDevice));
-			device = deviceFactory.mediaRendererDeviceFactory(remoteDevice,
-				rendererConfigService.isMediaRendererActive(remoteFacade.getUdnAsString(remoteDevice)));
-			rendererConfigService.addMediaRendererDeviceConfig(device);
-			mediaRendererList.put(remoteFacade.getUDN(remoteDevice), device);
-		} else {
-			log.info("{} : device already known. Setting device to active ...", remoteFacade.getFriendlyName(remoteDevice));
-			device.added();
+		MediaRendererDevice device = deviceFactory.mediaRendererDeviceFactory(remoteDevice,
+			rendererConfigService.isMediaRendererActive(remoteFacade.getUdnAsString(remoteDevice)));
+		rendererConfigService.addMediaRendererDeviceConfig(device);
+		MediaRendererDevice oldDevice = mediaRendererList.put(remoteFacade.getUDN(remoteDevice), device);
+		if (oldDevice != null) {
+			log.debug("replaced old media renderer device : {} ", oldDevice.getAsDto());
 		}
 		eventPublisher.publishEvent(new MediaRendererListChanged(getAvailableMediaRenderer()));
 	}
@@ -79,8 +75,7 @@ public class DeviceRegistry {
 		log.info("device removed : {}", remoteFacade.getFriendlyName(remoteDevice));
 		MediaRendererDevice device = mediaRendererList.get(remoteFacade.getUDN(remoteDevice));
 		if (device != null) {
-			log.debug("{} : removed. Setting device offline ... ", remoteFacade.getFriendlyName(remoteDevice));
-			device.removed();
+			device.setServicesOffline(true);
 		} else {
 			log.debug("device not found in registry {}", remoteFacade.getFriendlyName(remoteDevice));
 		}
@@ -88,7 +83,7 @@ public class DeviceRegistry {
 
 	public Collection<MediaRendererDevice> getActiveMediaRenderer() {
 		return Collections.unmodifiableCollection(mediaRendererList.values().stream()
-			.filter(r -> r.isDeviceOffline() && rendererConfigService.isMediaRendererActive(r.getUdnAsString())).collect(Collectors.toList()));
+			.filter(r -> rendererConfigService.isMediaRendererActive(r.getUdnAsString())).collect(Collectors.toList()));
 	}
 
 	public Collection<MediaRendererDevice> getAvailableMediaRenderer() {

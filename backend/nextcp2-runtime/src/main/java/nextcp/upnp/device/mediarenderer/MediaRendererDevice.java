@@ -90,7 +90,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
     private List<MediaRendererServicesDto> services = new ArrayList<>();
 
-    private AtomicBoolean deviceOffline = new AtomicBoolean(false);
+    private AtomicBoolean servicesEnded = new AtomicBoolean(false);
     
     // private IDeviceDriverService
     private ServiceInitializer serviceInitializer = new ServiceInitializer();
@@ -147,14 +147,13 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     @PostConstruct
     public void initServices()
     {
-    	log.info("{} : initServices ... ", getFriendlyName());
     	if (!deviceIsEnabledByUser) {
     		log.debug("{} is disabled by user. No services will be created ... ", getFriendlyName());
     		return;
     	}
     	
     	setServicesOffline(false);
-    	deviceOffline.set(false);
+    	servicesEnded.set(false);
         initDeviceServices();
 
         if (hasUpnpAvTransport())
@@ -284,7 +283,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
     public void setServicesEnded(boolean value) {
     	log.debug("serviceEnded : " + value);
-    	this.deviceOffline.set(value);;
+    	this.servicesEnded.set(value);;
     }
     
     public void updateDeviceDriver()
@@ -293,19 +292,19 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     }
 
     public void deviceUpdated() {
-    	// initServices();
+    	initServices();
     }
     
     
-//    public void renewServices() {
-//    	try {
-//        	log.trace("{}: renewing services ...", getFriendlyName());
-//        	serviceInitializer.renewServices(getUpnpService(), getDevice(), this, services);
-//    	} catch (Exception e) {
-//    		log.warn("renew service failed. Setting ");
-//    		setServicesOffline(true);
-//    	}
-//    }
+    public void renewServices() {
+    	try {
+        	log.trace("{}: renewing services ...", getFriendlyName());
+        	serviceInitializer.renewServices(getUpnpService(), getDevice(), this, services);
+    	} catch (Exception e) {
+    		log.warn("renew service failed. Setting ");
+    		setServicesOffline(true);
+    	}
+    }
     
     private void initDeviceServices()
     {
@@ -594,7 +593,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     }
 
     private boolean tickWaitPeriodPassed(long counter) {
-    	return counter % 2 == 0;
+    	return counter % 5 == 0;
     }
     
     
@@ -710,23 +709,18 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
      * @param state
      */
     public void setServicesOffline(boolean state) {
+<<<<<<< HEAD
     	log.warn("{} : setting services offline : {}", getFriendlyName(), state);
+=======
+>>>>>>> parent of 7bb5bdec (Device services ... LUMIN fix (WIP))
     	this.serviceOffline = state;
     }
     
     // called when device was removed from registry
     public void removed() {
-    	log.warn("{} : device removed.", getFriendlyName());
-    	deviceOffline.set(true);;
-    }
-
-    public void added() {
-    	log.warn("{} : device added.", getFriendlyName());
-    	deviceOffline.set(false);;
-    }
-    
-    public boolean isDeviceOffline() {
-    	return deviceOffline.get();
+    	setServicesEnded(true);
+    	setServicesOffline(true);
+    	physicalDriver.stop();
     }
     
 	public void checkServicesOnline() {
