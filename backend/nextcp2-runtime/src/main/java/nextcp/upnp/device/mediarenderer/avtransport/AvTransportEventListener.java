@@ -39,6 +39,7 @@ public class AvTransportEventListener extends AVTransportServiceEventListenerImp
 	public AvTransportEventListener(MediaRendererDevice device) {
 		super(device.getDevice());
 		this.device = device;
+		log.info("{} : Initializing AvTransportEventListener", getDevice().getFriendlyName());
 	}
 
 	public AvTransportState getCurrentAvTransportState() {
