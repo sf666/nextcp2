@@ -132,7 +132,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 	}
 
 	private boolean hasNextUriSupport() {
-		log.debug("nextAVTransportUri : " + device.getAvTransportEventListener().getCurrentAvTransportState().NextAVTransportURI);
+		log.debug("{} : check nextAVTransportUri support : {}", device.getFriendlyName(), device.getAvTransportEventListener().getCurrentAvTransportState().NextAVTransportURI);
 		return !"NOT_IMPLEMENTED".equalsIgnoreCase(device.getAvTransportEventListener().getCurrentAvTransportState().NextAVTransportURI);
 	}
 
