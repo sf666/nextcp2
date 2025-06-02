@@ -133,7 +133,6 @@ public class ServiceInitializer
         }
     }
 
-    // Send a renew service request to device.
     void renewServices(UpnpService upnpService, RemoteDevice device, MediaRendererDevice renderer, List<MediaRendererServicesDto> services)
     {
         log.info("[renewServices] : for device " + renderer.getFriendlyName());

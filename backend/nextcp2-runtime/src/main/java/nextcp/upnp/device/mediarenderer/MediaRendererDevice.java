@@ -297,15 +297,15 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     }
     
     
-    public void renewServices() {
-    	try {
-        	log.trace("{}: renewing services ...", getFriendlyName());
-        	serviceInitializer.renewServices(getUpnpService(), getDevice(), this, services);
-    	} catch (Exception e) {
-    		log.warn("renew service failed. Setting ");
-    		setServicesOffline(true);
-    	}
-    }
+//    public void renewServices() {
+//    	try {
+//        	log.trace("{}: renewing services ...", getFriendlyName());
+//        	serviceInitializer.renewServices(getUpnpService(), getDevice(), this, services);
+//    	} catch (Exception e) {
+//    		log.warn("renew service failed. Setting ");
+//    		setServicesOffline(true);
+//    	}
+//    }
     
     private void initDeviceServices()
     {
@@ -604,7 +604,6 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         {
             if (transportBridge == null)
             {
-            	log.warn("{} : transportBridge is NULL.");
                 return false;
             }
             TransportServiceStateDto state = transportBridge.getCurrentTransportServiceState();
