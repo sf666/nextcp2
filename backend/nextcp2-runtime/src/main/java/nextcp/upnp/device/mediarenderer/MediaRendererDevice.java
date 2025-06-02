@@ -282,7 +282,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     }
 
     public void setServicesEnded(boolean value) {
-    	log.debug("serviceEnded : " + value);
+    	log.debug("{} : serviceEnded : {}", getFriendlyName(), value);
     	this.servicesEnded.set(value);;
     }
     
