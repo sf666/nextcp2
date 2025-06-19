@@ -2,24 +2,31 @@
 title: Music Library
 order: 2
 ---
-import React, { useState } from 'react';
 
 import { Image } from 'astro:assets';
 
 import imgB1 from './img/browser_1.png';
 import imgB2 from './img/browser_2.png';
 import imgB3 from './img/browser_3.png';
+import { h } from '@astrojs/starlight/expressive-code/hast';
 
 
 The music library is the main entry point to your music collection. It allows you to browse your music collection by artists, albums, genres, playlists and more.
 The library is built on top of the UPnP media server capabilities and provides a user-friendly interface to navigate through your music collection.
 
-<div class="mx-auto flex max-w-sm items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-slate-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
-  <img class="size-12 shrink-0" src="/img/logo.svg" alt="ChitChat Logo" />
-  <div>
-    <div class="text-xl font-medium text-black dark:text-white">ChitChat</div>
-    <p class="text-gray-500 dark:text-gray-400">You have a new message!</p>
-  </div>
+
+<div id="default-carousel" class="relative w-full h-full" data-carousel="slide">
+    <div style={"height: 650px"} class="relative overflow-hidden rounded-lg md:h-96">
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+            <Image src={imgB1} class="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="" />
+        </div>
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+            <Image src={imgB2} class="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="" />
+        </div>
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+            <Image src={imgB3} class="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="" />
+        </div>
+    </div>
 </div>
 
 While navigating through the media server folders, the displayed layout will change in regard to the content. Folders are subtitled by their name, playlists, images and radio

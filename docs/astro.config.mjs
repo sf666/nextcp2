@@ -16,7 +16,7 @@ export default defineConfig({
 			{
 				tag: 'script',
 				attrs: {
-					src: '',
+					src: 'https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js',
 					crossorigin: "anonymous",
 				},
 			},
