@@ -1,0 +1,54 @@
+---
+title: Music Library
+order: 2
+---
+import React, { useState } from 'react';
+
+import { Image } from 'astro:assets';
+
+import imgB1 from './img/browser_1.png';
+import imgB2 from './img/browser_2.png';
+import imgB3 from './img/browser_3.png';
+
+
+The music library is the main entry point to your music collection. It allows you to browse your music collection by artists, albums, genres, playlists and more.
+The library is built on top of the UPnP media server capabilities and provides a user-friendly interface to navigate through your music collection.
+
+
+While navigating through the media server folders, the displayed layout will change in regard to the content. Folders are subtitled by their name, playlists, images and radio
+stations are additionally highlighted.
+
+Enter text in `search content` box to filter displayed items and containers.
+
+
+# Album View
+
+While browsing into an container that consists only of tracks of the same album the view switches to a track based display. Controls functions:
+- Press <b>switch view</b> switches to a tiles based view. Pressing this button again will cycle back to a track based view.
+- Press <b>play</b> will clear the current renderer playlist, add all tracks and start playback.
+- Press <b>shuffle</b> will clear the current renderer playlist, add all tracks and start shuffle playback.
+- Press <b>add tracks</b> will add all tracks to the current renderer playlist.
+
+Clicking on a title will play the selected track, <b>not</b> adding this item to the current playlist.
+
+In case an album is identified by MusicBrainz-ReleaseId, the like/dislike feature (heart symbol) is activated.
+Liked album can then be quick accessed by clicking on <code>My Albums</code> in the side bar.
+
+      Songs can be rated 1 to 5 by clicking on the desired star symbol. The rating can be send to <a href="https://www.musicbrainz.org">musicBrainz.org</a> if the account is
+      configured in <code>app settings</code>. For UMS server: the rating information will be stored in the file itself if the audio file format is supported and
+      <code>audio_update_rating_tag = true</code> property is set in <code>UMS.conf</code>.
+
+      Clicking on the three dots will open song options dialog. Here you can add or remove songs to or from playlists,
+      or add songs to a renderer playlist.
+
+## Multi Disc Support
+
+      Copy all audio files of your multi disc release in one folder. Songs will be sorted by disk and then by track ID, if songs are
+      tagged with correct <b>numberOfThisDisc</b> ID3 comments.
+
+
+##  Playlist view
+
+      Browsing into server based playlists switches the display to a track view with small album covers. Clicking on <b>switch view</b> will change the display to an full sized
+      album view.
+

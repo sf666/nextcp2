@@ -1,0 +1,16 @@
+services:
+  ums:
+    container_name: ums
+    network_mode: host
+    restart: unless-stopped
+#    user: '1000:1000'          # specify UID:GID if needed
+    volumes:
+#     - /PATH_TO/YOU/MEDIA:/media/
+      - ums_profile:/profile
+    environment:
+      JAVA_TOOL_OPTIONS: '-Xms2048m -Xmx4096m -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -Xbootclasspath/a:/ums/web/react-client -Dums.profile.path=/profile -Dfile.encoding=UTF-8 -Djava.net.preferIPv4Stack=true -Djna.nosys=true'
+    image: ik6666/ums:latest
+
+volumes:
+  ums_profile:
+    external: true
