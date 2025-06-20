@@ -2,20 +2,31 @@
 title: Music Library
 order: 2
 ---
+import React from 'react';
 
 import { Image } from 'astro:assets';
 
 import imgB1 from './img/browser_1.png';
 import imgB2 from './img/browser_2.png';
 import imgB3 from './img/browser_3.png';
-import { h } from '@astrojs/starlight/expressive-code/hast';
 
+import imgA1 from './img/album_view_01.png';
+import imgA2 from './img/album_view_02.png';
 
-The music library is the main entry point to your music collection. It allows you to browse your music collection by artists, albums, genres, playlists and more.
-The library is built on top of the UPnP media server capabilities and provides a user-friendly interface to navigate through your music collection.
+import imgMD from './img/multiDiskSupport.png';
+import imgPV from './img/playlistView.png';
+import imgSO from './img/song_options.png';
 
+import search from './img/search.png';
 
-<div id="default-carousel" class="relative w-full h-full" data-carousel="slide">
+The Music Library is the main entry point to your music collection.
+
+While navigating through the folders, the displayed layout will change in regard to the displayed content. Folders are subtitled by their name, playlists, images and radio
+stations are additionally highlighted.
+
+Displayed content can be filtered by text entering in `search in this page` box.
+
+<div id="carousel-album" class="relative w-full h-full" data-carousel="slide">
     <div style={"height: 650px"} class="relative overflow-hidden rounded-lg md:h-96">
         <div class="hidden duration-700 ease-in-out" data-carousel-item>
             <Image src={imgB1} class="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="" />
@@ -29,40 +40,97 @@ The library is built on top of the UPnP media server capabilities and provides a
     </div>
 </div>
 
-While navigating through the media server folders, the displayed layout will change in regard to the content. Folders are subtitled by their name, playlists, images and radio
-stations are additionally highlighted.
+## Control buttons
 
-Enter text in `search content` box to filter displayed items and containers.
-
-
-# Album View
-
-While browsing into an container that consists only of tracks of the same album the view switches to a track based display. Controls functions:
+Controls functions:
 - Press <b>switch view</b> switches to a tiles based view. Pressing this button again will cycle back to a track based view.
 - Press <b>play</b> will clear the current renderer playlist, add all tracks and start playback.
 - Press <b>shuffle</b> will clear the current renderer playlist, add all tracks and start shuffle playback.
 - Press <b>add tracks</b> will add all tracks to the current renderer playlist.
+
+
+## View templates
+
+### Album View
+
+While browsing into an container that consists only of tracks of the same album the view switches to a track based display. 
 
 Clicking on a title will play the selected track, <b>not</b> adding this item to the current playlist.
 
 In case an album is identified by MusicBrainz-ReleaseId, the like/dislike feature (heart symbol) is activated.
 Liked album can then be quick accessed by clicking on <code>My Albums</code> in the side bar.
 
-      Songs can be rated 1 to 5 by clicking on the desired star symbol. The rating can be send to <a href="https://www.musicbrainz.org">musicBrainz.org</a> if the account is
-      configured in <code>app settings</code>. For UMS server: the rating information will be stored in the file itself if the audio file format is supported and
-      <code>audio_update_rating_tag = true</code> property is set in <code>UMS.conf</code>.
+Songs can be rated 1 to 5 by clicking on the desired star symbol. The rating can be send to <a href="https://www.musicbrainz.org">musicBrainz.org</a> if a user account is
+configured in <code>app settings</code>. UMS server has the ability to store the rating information in the file itself if the audio file format is supported and
+<code>audio_update_rating_tag = true</code> property is set in <code>UMS.conf</code>.
 
-      Clicking on the three dots will open song options dialog. Here you can add or remove songs to or from playlists,
-      or add songs to a renderer playlist.
+<Image src={imgA1} alt="" />
 
-## Multi Disc Support
+### Multi Disc Support
 
-      Copy all audio files of your multi disc release in one folder. Songs will be sorted by disk and then by track ID, if songs are
-      tagged with correct <b>numberOfThisDisc</b> ID3 comments.
+Copy all audio files of your multi disc release in one folder. Songs will be sorted by disk and then by track ID, if songs are
+tagged with correct <b>numberOfThisDisc</b> ID3 comments.
+
+<Image src={imgMD} alt="" />
 
 
-##  Playlist view
+### Song Options
 
-      Browsing into server based playlists switches the display to a track view with small album covers. Clicking on <b>switch view</b> will change the display to an full sized
-      album view.
+Clicking on the three dots will open song options dialog. Here you can add or remove songs to or from playlists,
+or add songs to a renderer playlist.
+
+<Image src={imgSO} class="size-64 shrink-0" alt="" />
+
+export const Bullets = ({children, title}) => (
+  <div>
+    <h6 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{title}</h6>
+    <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+      {children}
+    </ul>
+  </div>
+);
+
+<Bullets title="Server side playlist actions">
+    <li>Add to playlist</li>
+    <li>Delete from this playlist</li>
+</Bullets>
+
+Both actions will be executed on the server side, so the changes will be reflected in the playlist file itself. The playlist has to be a `m3u`
+or `m3u8` file.
+
+Removing songs can only be done, if the current view displays a playlist file.
+
+<Bullets title="Player playlist actions">
+    <li>Play next</li>
+    <li>Add at last position</li>
+</Bullets>
+
+In case the current Media Player is in playlist mode, `Play next` will add the song to the playback queue at next position, 
+`Add at last position` will add the song to the current renderer playlist at last position. Otherwise, the selected song will be played next, no matter
+which action is selected.
+
+<Bullets title="Other server actions">
+    <li>Download</li>
+    <li>Update Album Art</li>
+</Bullets>
+
+You can `download` a resource, or `Update Album Art` on the server side.
+
+###  Playlist view
+
+Browsing into server based playlists switches the display to a track view with small album covers. Clicking on <b>switch view</b> will change the display to an full sized
+album view.
+
+<Image src={imgPV} alt="" />
+
+
+## UPnP Search
+
+If the selected media server supports UPnP search, entering text into the <b>global search</b> box initiates a server side search request.
+
+Known media server with compatible UPnP search capabilities are <a href="https://minimserver.com/">Minimserver</a>
+and <a href="https://www.universalmediaserver.com/">Universal Media Server (since 10.6.0)</a>.
+Text will be matched against tracks, albums, playlists and artists. Artist covers are looked up from Spotify, if account is connected.
+
+<Image src={search} alt="" />
 
