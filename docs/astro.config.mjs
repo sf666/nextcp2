@@ -14,17 +14,25 @@ export default defineConfig({
 		title: 'NextCP/2 Documentation',
 		head: [
 			{
-				tag: 'script',
+				tag: 'link',
 				attrs: {
-					src: 'https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js',
+					href: 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200',
+					rel: "stylesheet",
 					crossorigin: "anonymous",
 				},
 			},
 			{
 				tag: 'link',
 				attrs: {
-					href: '', // https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.css
+					href: 'https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200',
 					rel: "stylesheet",
+					crossorigin: "anonymous",
+				},
+			},
+			{
+				tag: 'script',
+				attrs: {
+					src: 'https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js',
 					crossorigin: "anonymous",
 				},
 			},
@@ -32,8 +40,23 @@ export default defineConfig({
 		customCss: ['./src/styles/global.css'],
 		social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/sf666/nextcp2' }],
 		sidebar: [
-			{ label: 'Installation', autogenerate: { directory: '/quick_install' }, },
-			{ label: 'User Interface', autogenerate: { directory: '/user_interface' }, },
+			{ label: 'Overview', items: [ 
+				'overview/overview',
+				'overview/issue',
+			]},
+			{ label: 'Installation', items: [ 'quick_install/quick_install',]},
+			{ label: 'User Interface', items: [ 
+				'user_interface/music_library',
+				'user_interface/player_queue',
+				'user_interface/now_listening',
+				'user_interface/radio',
+				'user_interface/my_albums',
+				'user_interface/app_settings',
+			]},
+			{ label: 'Integration', items: [ 
+				'integration/rest_api',
+				'integration/openhab',
+			]},
 		],
 	}), react(),],
 });

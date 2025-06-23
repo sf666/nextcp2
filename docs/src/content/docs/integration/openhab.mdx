@@ -1,0 +1,100 @@
+---
+title: OpenHAB Integration / Alexa Integration
+order: 2
+---
+
+export const Bullets = ({children, title}) => (
+  <div>
+    <h6 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{title}</h6>
+    <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+      {children}
+    </ul>
+  </div>
+);
+
+OpenHAB is a vendor and technology agnostic open source automation software for your home. It allows you to integrate a wide range of devices and technologies, including NextCP/2 media.
+
+NextCP/2 can be integrated into OpenHAB to control media playback, volume, and other features through a unified interface. 
+This integration allows you to use voice commands via Amazon Alexa to control your NextCP/2 instance.
+
+
+## Installation
+The easiest way to install OpenHAB is by using a <a href="https://hub.docker.com/r/openhab/openhab/">docker image</a>. After installation go to 
+<span class="font-monospace">Settings -> Add-on Store -> Bindings</span> and add the <span class="font-monospace">http binding</span>. Then
+continue with the configuration of the <a href="https://www.openhab.org/docs/ecosystem/alexa/">Amazon Alexa Smart Home Skill</a>.
+
+## Thing Configuration
+
+<Bullets title="Configuration steps">
+    <li>Go to `Settings -> Things` and add a thing by pressing the plus sign.</li>
+    <li>Click on `http binding`</li>
+    <li>Click on `HTTP URL Thing`</li>
+    <li>Set label to 'NextCP2', location to 'server'</li>
+    <li>'base-url' must point to your NextCP/2 installation : `http://192.168.1.5:8085/SimpleDeviceControl`. Change host and port according to your configuration.</li>
+</Bullets>
+
+## Power (ON/OFF) Channel Configuration
+ Go to NextCP/2 window and identify the device you want to control in the "App Settings" and copy the DEVICE_UUID. Go back to OpenHAB window.
+<Bullets title="Configuration steps">
+    <li>Click on the new added thing and click on `channels`.</li>
+    <li>Click on `add channel`.</li>
+    <li>Select `Switch-Channel`.</li>
+    <li>Configure the channel by adding a label like "Amplifier Power".</li>
+    <li>Enter for "command url extension" `/standby/DEVICE_UUID/%2$s`</li>
+    <li>Enter for "status url extension" `/standby/DEVICE_UUID`</li>
+    <li>Enter for "ON value" `false`</li>
+    <li>Enter for "OFF value" `true`</li>
+    <li>SAVE</li>
+    <li>In the channel overview. Identify the new created channel "Amplifier Power" and click on "Add link to item"</li>
+    <li>Click on "create new item". Choose an identifying name that will be used in Alexa later like "Amplifier". Click on "link".</li>
+</Bullets>
+
+## Radio player configuration
+Go to NextCP/2 window and identify the device you want to control in the "App Settings" and remember the DEVICE_UUID. 
+Then identify the Radio station by clicking on "Radio" <a href="https://www.urlencoder.org/">url encode</a> the radio label and remember it.
+It is sufficient to copy only the first parts of the radio station label, that uniquely identifies the radio station. Go back to OpenHAB window.
+
+<Bullets title="Configuration steps">
+    <li>Click on the new added thing and click on `channels`.</li>
+    <li>Click on `add channel`.</li>
+    <li>Select `Switch-Channel`.</li>
+    <li>Configure the channel by adding a label like "Amplifier Power".</li>
+    <li>Enter for "command url extension" `/standby/DEVICE_UUID/%2$s`</li>
+    <li>Enter for "status url extension" `/standby/DEVICE_UUID`</li>
+    <li>Enter for "ON value" `false`</li>
+    <li>Enter for "OFF value" `true`</li>
+    <li>SAVE</li>
+    <li>In the channel overview. Identify the new created channel "Amplifier Power" and click on "Add link to item"</li>
+    <li>Click on "create new item". Choose an identifying name that will be used in Alexa later like "Amplifier". Click on "link".</li>
+</Bullets>
+
+
+## Item / Alexa integration
+<Bullets title="Configuration steps">
+    <li>Click on `Settings -> Items`</li>
+    <li>Select the create Power ON/OFF item.</li>
+    <li>Click "Add Metadata"</li>
+    <li>Select "Amazon Alexa"</li>
+</Bullets>
+
+## Rules
+Rules can be used to further customization. Let's say if OpenHAB receives the POWER ON command for the amplifier (i.e. from Alexa), it should also 
+play radio energy.
+
+<Bullets title="Configuration steps">
+    <li>Click on `Settings -> Rules`</li>
+    <li>Give a label</li>
+    <li>For "When" click "Add Trigger"</li>
+    <li>select the "Amplifier Power" item</li>
+    <li>For "COMMAND" enter "ON"</li>
+    <li>Press save</li>
+    <li>For "Then" click "Add Action"</li>
+    <li>select the "Play Radio Energy" item</li>
+    <li>For "COMMAND" enter "PLAY"</li>
+    <li>Press save</li>
+</Bullets>
+
+## Test it
+ Now, the Amplifier should be visible in Alexa-App. You should be able to say "Alexa, power on Amplifier". 
+As a result, your device should power on and Radio Energy should be played.
+

@@ -1,0 +1,21 @@
+---
+title: REST API
+order: 1
+---
+
+export const Bullets = ({children, title}) => (
+  <div>
+    <h6 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{title}</h6>
+    <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+      {children}
+    </ul>
+  </div>
+);
+
+NextCP/2 offers a "simple device control" REST API, which can be used to voice control the following features:
+<Bullets title="API Features">
+    <li>power on/off device</li>
+    <li>play/pause radio station offered by UPnP device</li>
+    <li>select input source for UPnP device</li>
+</Bullets>
+

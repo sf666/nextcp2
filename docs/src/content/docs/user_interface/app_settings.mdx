@@ -1,0 +1,132 @@
+---
+title: App Settings
+order: 8
+---
+
+import { Image } from 'astro:assets';
+import appSettings1 from './img/settings_1.png';
+import appSettings2 from './img/settings_2.png';
+import appSettings3 from './img/settings_3.png';
+import appSettings4 from './img/settings_4.png';
+
+
+<Image src={appSettings1} alt="" class="" />
+
+## Client profiles
+Save and select a profile for default media server and media renderer. These defaults are browser specific saved. Repetitive access to the app with the same browser will
+result in loading the same defaults. A message informs if a default device is not online.
+
+## Server Configuration
+Card view of discovered media server. Server may be offline, if not yet found. Disabled server will not show up for selection in some popups or lists.
+
+<Image src={appSettings2} alt="" class="" />
+
+## Renderer configuration
+Card display of discovered media renderer. Renderer may be offline, if not yet found. Disabled renderer will not show up for selection in some popups or lists.
+
+If the media renderer is attached to a physical receiver / AV-device with remote control capability (in example by a RS232 or TCP/IP port),
+select a compatible device driver and enter a device driver configuration string. Device driver for McIntosh devices is available for download.
+It is recommended to set the media renderer volume to 100% if a device driver is selected. The device
+driver notices a device power on state and will apply a default volume on the physical device after powering up.
+
+If a streaming device is attached to an amplifier, a device device driver can be selected for controlling the amplifier power and volume state instead of the streamer
+volume and power state. A default volume percentage can be applied to the external amplifier on power up. The streaming device volume can be set to 100% on power up, if
+<code>UPnP max volume</code> is enabled.
+
+<Image src={appSettings3} alt="" class="" />
+
+export const Bullets = ({children, title}) => (
+  <div>
+    <h6 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{title}</h6>
+    <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+      {children}
+    </ul>
+  </div>
+);
+
+## Active Media Server
+
+Here are additional UMS server actions available, if the active media server is an instance of UMS.
+
+<div class="relative overflow-x-auto">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">Button</th>
+                <th scope="col" class="px-6 py-3">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">rescan media library</td>
+                <td class="px-6 py-4">Rescans UMS media library. Attention: This can be resource consuming on large media libraries!</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">backup liked albums</td>
+                <td class="px-6 py-4">Backs up UMS liked albums in a separate backup file on the UMS server. In case the UMS media library is deleted, liked albums can
+    be restored afterwards.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">restore liked albums </td>
+                <td class="px-6 py-4">Restored liked albums from a backup file, if exists.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">import rating from musicBrainz.org</td>
+                <td class="px-6 py-4">Restores star rating from configured musicbrainz.org account below.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+## General Settings
+
+<div class="relative overflow-x-auto">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">Property</th>
+                <th scope="col" class="px-6 py-3">description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">device driver library path</td>
+                <td class="px-6 py-4">Where to look for amplifier device drivers. Currently McIntosh amplifier like MA9000, MA12000 and other should work.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">database path</td>
+                <td class="px-6 py-4">Where to store internal settings.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">server listening port</td>
+                <td class="px-6 py-4">This is the port you connect to with your browser.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Log4j config file</td>
+                <td class="px-6 py-4">Where to look for a log4j2 config file.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Logging date format</td>
+                <td class="px-6 py-4">To adjust logging date format.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Generate UPnP code</td>
+                <td class="px-6 py-4">If enabled, <code>cling</code> UPnP access wrapper are generated for discovered UPnP services.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<Image src={appSettings4} alt="" class="" />
+
+## Accounts
+### Spotify
+Connect to Spotify account for discovering artists album art. If browser is connected to localhost, one step connection linking is available. Otherwise the
+<code>authCode</code> has to be copies manually in the code block.
+
+### Last FM
+Account can be connected, but API is not used yet.
+
+## System Information
+Build information are displayed here.
+

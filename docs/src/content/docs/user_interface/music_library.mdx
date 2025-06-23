@@ -16,6 +16,7 @@ import imgA2 from './img/album_view_02.png';
 import imgMD from './img/multiDiskSupport.png';
 import imgPV from './img/playlistView.png';
 import imgSO from './img/song_options.png';
+import imgButtonBar from './img/music_library_button_bar.png';
 
 import search from './img/search.png';
 
@@ -42,12 +43,43 @@ Displayed content can be filtered by text entering in `search in this page` box.
 
 ## Control buttons
 
-Controls functions:
-- Press <b>switch view</b> switches to a tiles based view. Pressing this button again will cycle back to a track based view.
-- Press <b>play</b> will clear the current renderer playlist, add all tracks and start playback.
-- Press <b>shuffle</b> will clear the current renderer playlist, add all tracks and start shuffle playback.
-- Press <b>add tracks</b> will add all tracks to the current renderer playlist.
+<Image src={imgButtonBar} alt="" class="size-64 shrink-0" />
 
+
+
+
+<div class="relative overflow-x-auto">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">Button</th>
+                <th scope="col" class="px-6 py-3">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">PLAY</td>
+                <td class="px-6 py-4">Will clear the current renderer playlist, adds all tracks and start playback.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">SHUFFLE</td>
+                <td class="px-6 py-4">Clears the current renderer playlist, adds all tracks and start random playback.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">LIKE</td>
+                <td class="px-6 py-4">Likes an album. All tracks must belong to the same musicbrainz release id.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">SWITCH VIEW</td>
+                <td class="px-6 py-4">Switches to a tiles based view. Pressing this button again will cycle back to a track based view.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">OPTIONS</td>
+                <td class="px-6 py-4">Will clear the current renderer playlist, add all tracks and start playback.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 ## View templates
 

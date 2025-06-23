@@ -1,0 +1,36 @@
+---
+title: Issues, Feedback & Compatibility
+order: 1
+---
+export const Bullets = ({children, title}) => (
+  <div>
+    <h6 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{title}</h6>
+    <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+      {children}
+    </ul>
+  </div>
+);
+
+There might be some usage issues. Feel free to leave a <a href="https://github.com/sf666/nextcp2/issues">ticket</a>.
+
+## Compatibility
+### Browser
+This software is tested with the current Chrome browser on desktop and mobile devices, but should also work with
+other chromium based browsers like Safari.
+
+### Media Server / Content Delivery Server (CDS)
+By now, only <a href="https://www.universalmediaserver.com/">universal media server</a> supports all features and is the recommended media server.
+
+
+<Bullets title="This software has also been tested with">
+    <li>Serviio : <a href="https://serviio.org/">https://serviio.org/</a></li>
+    <li>Minimserver : <a href="https://minimserver.com/">https://minimserver.com/</a></li>
+</Bullets>
+
+
+### Media Renderer / Player
+<Bullets title="This software has been tested with">
+    <li>MediaPlayer : <a href="https://github.com/PeteManchester/MediaPlayer">https://github.com/PeteManchester/MediaPlayer</a></li>
+    <li>Lumin Streamer (U1 Mini)</li>
+    <li>Naim Streamer (MuSo-Qb)</li>
+</Bullets>
