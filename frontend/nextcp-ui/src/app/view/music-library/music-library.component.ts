@@ -78,7 +78,10 @@ export class MusicLibraryComponent implements AfterViewInit {
     if (this.objectId) {
       this.initialBrowseToUid(this.objectId);
     } else {
-      this.initialBrowseToUid(this.persistenceService.getLastMediaServerPath());
+      console.log("Last persistent UDN : " + this.persistenceService.getLastMediaServerPath());
+      if (this.persistenceService.getLastMediaServerPath() !== undefined || this.persistenceService.getLastMediaServerPath() !== '') {
+        this.initialBrowseToUid(this.persistenceService.getLastMediaServerPath());
+      }
     }
   }
 

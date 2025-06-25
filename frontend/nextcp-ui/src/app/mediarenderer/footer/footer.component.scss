@@ -1,4 +1,5 @@
 @use "custom_variables" as cv;
+@use "tailwindcss";
 
 $col-1: cv.$amber-pantone-3;
 $col-2: cv.$amber-pantone-4;
@@ -251,27 +252,14 @@ img {
     Footer sections
     ==============================================================
 **/
-.left-footer {
-    flex      : 4 1 26rem;
-    min-height: 0;
-    min-width : 200px;
-}
 
 .middle-div {
-    flex           : 6 1 16rem;
-    display        : flex;
     height         : 100%;
     align-self     : top;
     justify-content: space-around;
 }
 
-.footer-spacer {
-    display: flex;
-    flex   : 1 1 0;
-}
-
 .right-footer {
-    flex           : 2 1 8rem;
     align-self     : center;
     justify-content: space-evenly;
 }
