@@ -1,132 +1,128 @@
 <!--                                                                -->
 <!-- display component header                                       -->
 <!-- ############################################################## -->
-<div class="flex relative">
-  <div class="flex relative grow shrink header-container">
-    <div class="flex justify-center items-center">
-      <div class="bg-img-header" id="header-background"></div>
-      <!-- Header Button group -->
-      @if(hasSongs()) {
-      <div class="button-row">
-        <div class="button-flex-container">
-          <div class="button-container" (click)="playContainer()">
-            <button class="btn-play" mat-mini-fab>
-              <mat-icon class="material-symbols-sharp filled">play_arrow</mat-icon>
-            </button>
+<div id="outer" class="flex relative grow shrink justify-items-center">
+  <div class="bg-img-header items-center" id="header-background"></div>
+  <!-- Header Button group -->
+  @if(hasSongs()) {
+  <div id="headButtonRow" class="button-row">
+    <div class="button-flex-container">
+      <div class="button-container" (click)="playContainer()">
+        <button class="btn-play" mat-mini-fab>
+          <mat-icon class="material-symbols-sharp filled">play_arrow</mat-icon>
+        </button>
+      </div>
+      <div class="button-container" (click)="shuffleContainer()">
+        <button class="btn-play-shuffle" mat-mini-fab>
+          <mat-icon class="material-symbols-sharp">shuffle</mat-icon>
+        </button>
+      </div>
+      <div class="button-container">
+        <button class="{{getFavoriteCssBtnClass()}}" (click)="toggleLikeAlbum()" mat-mini-fab [disabled]="!likePossible()">
+          <mat-icon class="material-symbols-sharp {{getFavoriteCssIconClass()}}">favorite</mat-icon>
+        </button>
+      </div>
+      <div class="button-container" (click)="toggleListView()">
+        <button color="" mat-mini-fab>
+          <mat-icon class="material-symbols-sharp">dashboard_customize</mat-icon>
+        </button>
+      </div>
+      <div class="button-container" (click)="openOptionsDialog($event)">
+        <button color="" mat-mini-fab>
+          <mat-icon class="material-symbols-sharp">more_vert</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+
+  <div id="middle_wrapper" class="flex items-center grow shrink">
+    <div id="topImgContainer" class="flex top-img-container items-center">
+      <img src="{{currentContainer.albumartUri}}" class="img-top">
+    </div>
+    <div class="flex flex-col grow shrink" id="ID_SCROLL_TO_ELEMENT_STEP_IN" tabindex="-1">
+      <div class="flex right-section">
+        <div>
+          @if (hasSongs()) {
+          <div>
+            <div class="flex flex-col">
+              <div class="title">{{currentContainer.title}}</div>
+              @if (musicItemsCount > 0) {
+              @if (isContainerAlbum) {
+              <div class="flex regular">
+                <div>Album&nbsp;</div>
+                @if (currentContainer.artist) {
+                <div>by {{currentContainer.artist}}</div>
+                }
+              </div>
+              } @else {
+              <div class="highlight">Soundtracks</div>
+              }
+              <div class="flex regular">
+                <div>{{musicItemsCount}} Tracks</div>
+                @if (totalPlaytime().length > 0) {
+                <div>&nbsp;-&nbsp;{{totalPlaytime()}}</div>
+                }
+              </div>
+              }
+            </div>
           </div>
-          <div class="button-container" (click)="shuffleContainer()">
-            <button class="btn-play-shuffle" mat-mini-fab>
-              <mat-icon class="material-symbols-sharp">shuffle</mat-icon>
-            </button>
+          } @else {
+          @if (currentContainer) {
+          <div id="template_containerTitle" class="flex flex-col infobox align-self-start">
+            <div class="title">{{currentContainer.title}}</div>
+            @if (contentDirectoryService().currentContainerList().totalMatches > 0 || musicItemsCount > 0) {
+            <div class="regular"><span class="highlight pe-2">{{contentDirectoryService().currentContainerList().totalMatches}}</span> total elements
+            </div>
+            }
           </div>
-          <div class="button-container">
-            <button class="{{getFavoriteCssBtnClass()}}" (click)="toggleLikeAlbum()" mat-mini-fab [disabled]="!likePossible()">
-              <mat-icon class="material-symbols-sharp {{getFavoriteCssIconClass()}}">favorite</mat-icon>
-            </button>
+          }
+          }
+        </div>
+        <!-- current content search box -->
+        <div class="flex justify-content-between d-none mt-4 d-sm-flex">
+          <div class="flex w-100">
+            <mat-form-field subscriptSizing="dynamic" appearance="outline" class="app-input growingContainer me-2">
+              <mat-label>search in this page</mat-label>
+              <span matPrefix class="material-symbols-outlined thin md-light ms-2">search</span>
+              <input [(ngModel)]="quickSearchString" matInput placeholder="search content" #searchInput (keyup)="keyUp($event)">
+              <span matSuffix class="material-symbols-outlined thin md-light me-2" (click)="clearSearch()">close</span>
+            </mat-form-field>
           </div>
-          <div class="button-container" (click)="toggleListView()">
-            <button color="" mat-mini-fab>
-              <mat-icon class="material-symbols-sharp">dashboard_customize</mat-icon>
-            </button>
+          @if (hasGenres()) {
+          <div class="pe-2">
+            <mat-form-field subscriptSizing="dynamic" appearance="outline" class="app-input">
+              <mat-label>Genre</mat-label>
+              <mat-select #genresSelect multiple [(ngModel)]="selectedGenres">
+                <mat-option value="NONE">NONE</mat-option>
+                @for (genre of genresList(); track genre) {
+                <mat-option [value]="genre">{{genre}}</mat-option>
+                }
+              </mat-select>
+              <div matSuffix>
+                <mat-icon class="material-symbols-outlined thin md-light me-2" (click)="clearGenres($event)">close</mat-icon>
+              </div>
+            </mat-form-field>
           </div>
-          <div class="button-container" (click)="openOptionsDialog($event)">
+          }
+          @if(!hasSongs()) {
+          <div class="button-container mt-2" (click)="openOptionsDialog($event)">
             <button color="" mat-mini-fab>
               <mat-icon class="material-symbols-sharp">more_vert</mat-icon>
             </button>
           </div>
+          }
+          @if(!hasSongs() && mediaServerExists()){
+          <div class="button-container align-self-center" (click)="openOptionsDialog($event)">
+            <button color="" mat-mini-fab>
+              <mat-icon class="material-symbols-sharp">more_vert</mat-icon>
+            </button>
+          </div>
+          }
         </div>
       </div>
-      }
-
-      <div class="top-img-container">
-        <div class="flex align-self-center">
-          <img src="{{currentContainer.albumartUri}}" class="img-top">
-        </div>
-      </div>
-      <div class="flex flex-col w-100" id="ID_SCROLL_TO_ELEMENT_STEP_IN" tabindex="-1">
-        <div class="right-section">
-          <div>
-            @if (hasSongs()) {
-            <div>
-              <div class="flex flex-col">
-                <div class="title">{{currentContainer.title}}</div>
-                @if (musicItemsCount > 0) {
-                @if (isContainerAlbum) {
-                <div class="flex regular">
-                  <div>Album&nbsp;</div>
-                  @if (currentContainer.artist) {
-                  <div>by {{currentContainer.artist}}</div>
-                  }
-                </div>
-                } @else {
-                <div class="highlight">Soundtracks</div>
-                }
-                <div class="flex regular">
-                  <div>{{musicItemsCount}} Tracks</div>
-                  @if (totalPlaytime().length > 0) {
-                  <div>&nbsp;-&nbsp;{{totalPlaytime()}}</div>
-                  }
-                </div>
-                }
-              </div>
-            </div>
-            } @else {
-            @if (currentContainer) {
-            <div id="template_containerTitle" class="flex flex-col infobox align-self-start">
-              <div class="title">{{currentContainer.title}}</div>
-              @if (contentDirectoryService().currentContainerList().totalMatches > 0 || musicItemsCount > 0) {
-              <div class="regular"><span class="highlight pe-2">{{contentDirectoryService().currentContainerList().totalMatches}}</span> total elements
-              </div>
-              }
-            </div>
-            }
-            }
-          </div>
-          <!-- current content search box -->
-          <div class="flex justify-content-between d-none mt-4 d-sm-flex">
-            <div class="flex w-100">
-              <mat-form-field subscriptSizing="dynamic" appearance="outline" class="app-input growingContainer me-2">
-                <mat-label>search in this page</mat-label>
-                <span matPrefix class="material-symbols-outlined thin md-light ms-2">search</span>
-                <input [(ngModel)]="quickSearchString" matInput placeholder="search content" #searchInput (keyup)="keyUp($event)">
-                <span matSuffix class="material-symbols-outlined thin md-light me-2" (click)="clearSearch()">close</span>
-              </mat-form-field>
-            </div>
-            @if (hasGenres()) {
-            <div class="pe-2">
-              <mat-form-field subscriptSizing="dynamic" appearance="outline" class="app-input">
-                <mat-label>Genre</mat-label>
-                <mat-select #genresSelect multiple [(ngModel)]="selectedGenres">
-                  <mat-option value="NONE">NONE</mat-option>
-                  @for (genre of genresList(); track genre) {
-                  <mat-option [value]="genre">{{genre}}</mat-option>
-                  }
-                </mat-select>
-                <div matSuffix>
-                  <mat-icon class="material-symbols-outlined thin md-light me-2" (click)="clearGenres($event)">close</mat-icon>
-                </div>
-              </mat-form-field>
-            </div>
-            }
-            @if(!hasSongs()) {
-            <div class="button-container mt-2" (click)="openOptionsDialog($event)">
-              <button color="" mat-mini-fab>
-                <mat-icon class="material-symbols-sharp">more_vert</mat-icon>
-              </button>
-            </div>
-            }
-            @if(!hasSongs() && mediaServerExists()){
-            <div class="button-container align-self-center" (click)="openOptionsDialog($event)">
-              <button color="" mat-mini-fab>
-                <mat-icon class="material-symbols-sharp">more_vert</mat-icon>
-              </button>
-            </div>
-            }
-          </div>
-        </div>
-        <div class="flex">
-          <div class="middle-spacer"></div>
-        </div>
+      <div class="flex">
+        <div class="middle-spacer"></div>
       </div>
     </div>
   </div>

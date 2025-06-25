@@ -15,7 +15,6 @@
 
 // area right to the image
 .right-section {
-    display        : flex;
     flex-direction : column;
     justify-content: space-between;
     max-width      : 750px;
@@ -45,7 +44,6 @@
 }
 
 .top-img-container {
-    display   : flex;
     max-height: av.$top-header-Height;
     min-height: av.$top-header-Height;
 }
@@ -75,22 +73,8 @@
     flex   : 1 1 0;
 }
 
-
-.outer-container {
-    display  : flex;
-    flex     : 1 5 auto;
-    position : relative;
-    max-width: 1700px;
-}
-
 .infobox {
     align-self    : center;
-}
-
-.header-container {
-    display       : flex;
-    flex-direction: column;
-    flex          : 1 1 auto;
 }
 
 .app-input {
@@ -229,13 +213,6 @@
         margin-right: 32px;
     }
 
-    .header-container {
-        flex          : 1 1 auto;
-        display       : flex;
-        flex-direction: row;
-        padding-right : 8px;
-    }
-
     .top-img-container {
         align-self: center;
         max-height: av.$top-header-Height-mid;
@@ -252,13 +229,6 @@
         max-height: 6rem;
         min-width : 6rem;
         min-height: 6rem;
-    }
-
-    .header-container {
-        flex          : 1 1 auto;
-        flex-direction: column;
-        display       : flex;
-        padding-right : 8px;
     }
 
     .top-img-container {
