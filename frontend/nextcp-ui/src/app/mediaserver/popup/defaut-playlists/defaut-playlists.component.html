@@ -3,7 +3,7 @@
 @if (serverPlaylistService.serverPl().serverPlaylists) {
   <div class="panel" (mouseleave)="close()">
     <div class="dialogTitle">PLAYLISTS</div>
-    <div class="dialogItems d-flex flex-column flex-wrap mt-4">
+    <div class="dialogItems flex flex-col flex-wrap mt-4">
       @for (playlist of serverPlaylistService.serverPl().serverPlaylists; track playlist.playlistId) {
         <div class="playlist-item"
           (click)="addToPlaylist(playlist.playlistName)">

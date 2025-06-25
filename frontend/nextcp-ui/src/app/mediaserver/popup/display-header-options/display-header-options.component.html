@@ -1,8 +1,8 @@
 <div class="panel">
     @if(isFolder()) {
     @if(mediaPlayerService.mediaServerExists()) {
-    <div class="dialogItems d-flex flex-column flex-wrap">
-        <div class="d-flex" (click)="selectPlayerFolder()">
+    <div class="dialogItems flex flex-col flex-wrap">
+        <div class="flex" (click)="selectPlayerFolder()">
             <button class="popupButton" color="" mat-mini-fab>
                 <mat-icon class="material-symbols-sharp">save</mat-icon>
             </button>
@@ -11,8 +11,8 @@
     </div>
     }
 
-    <div class="dialogItems d-flex flex-column flex-wrap">
-        <div class="d-flex" (click)="selectPlayerFolderSidebar()">
+    <div class="dialogItems flex flex-col flex-wrap">
+        <div class="flex" (click)="selectPlayerFolderSidebar()">
             <button class="popupButton" color="" mat-mini-fab>
                 <mat-icon class="material-symbols-sharp">post_add</mat-icon>
             </button>
@@ -22,17 +22,17 @@
     }
 
     @if(isPlaylist()) {
-    <div class="dialogItems d-flex flex-column flex-wrap">
-        <div class="d-flex" (click)="selectPlayerPlaylist()">
+    <div class="dialogItems flex flex-col flex-wrap">
+        <div class="flex" (click)="selectPlayerPlaylist()">
             <button class="popupButton" color="" mat-mini-fab>
                 <mat-icon class="material-symbols-sharp">save</mat-icon>
             </button>
             <div class="textNextToButton">select player playlist</div>
-        </div>
+        </div> 
     </div>
     }
-    <div class="dialogItems d-flex flex-column flex-wrap">
-        <div class="d-flex" (click)="addToPlaylist()">
+    <div class="dialogItems flex flex-col flex-wrap">
+        <div class="flex" (click)="addToPlaylist()">
             <button class="popupButton" color="" mat-mini-fab>
                 <mat-icon class="material-symbols-sharp">playlist_add</mat-icon>
             </button>

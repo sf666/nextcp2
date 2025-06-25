@@ -1,13 +1,13 @@
 <div class="playlist-list">
     @for (playlist of playlists(); track playlist.playlistId) {
-    <div class="d-flex justify-content-between">
+    <div class="flex justify-content-between">
         <div class="playlist-item" (click)="addTo(playlist)">
             <img src="{{playlist.albumArtUrl}}" class="playlist-img">
             <div class="playlist-item-text">
                 <div>{{playlist.playlistName}}</div>
                 <div class="fineText">
                     @if(playlist.numberOfElements){
-                    <div class="d-flex">
+                    <div class="flex">
                         <div class="pe-2 pt-2">{{playlist.numberOfElements}}</div>
                         <div class="pt-2"> music tracks</div>
                     </div>
@@ -15,7 +15,7 @@
                 </div>
             </div>
         </div>
-        <div class="d-flex align-self-center">
+        <div class="flex align-self-center">
             @if(isPlaylistMode(PlaylistModeEnum.Add)) {
             <button mat-stroked-button class="my-buttons light-font" (click)="addTo(playlist)">
                 <mat-icon class="material-symbols-outlined thin">playlist_add</mat-icon>

@@ -12,7 +12,7 @@
                     <div class="col-3 col-sm-2 col-md-2 col-lg-1">&nbsp;</div>
                     }
                     @if (allTracksSameAlbum()) {
-                    <div class="d-flex {{getTitleResponsiveClass()}}">
+                    <div class="flex {{getTitleResponsiveClass()}}">
                         <div class="trackNum">#</div>
                         <div>TITLE</div>
                     </div>
@@ -56,11 +56,11 @@
                             <img class="img-small" src="{{item.albumArtUrl}}">
                         </div>
                         }
-                        <div class="{{getTitleResponsiveClass()}} mb-2 mt-2 d-flex flex-column {{selectedRowClass(item)}}">
-                            <div (click)="playItem(item)" class="no-wrap d-flex justify-content-between">
-                                <div class="d-flex">
+                        <div class="{{getTitleResponsiveClass()}} mb-2 mt-2 flex flex-col {{selectedRowClass(item)}}">
+                            <div (click)="playItem(item)" class="no-wrap flex justify-content-between">
+                                <div class="flex">
                                     @if (allTracksSameAlbum()) {
-                                    <div class="d-flex">
+                                    <div class="flex">
                                         <div class="trackNum">@if(item.originalTrackNumber != 'null'){{{item.originalTrackNumber}}}</div>
                                         <div>{{item.title}}</div>
                                     </div>
@@ -100,16 +100,16 @@
         <div id="{{item.objectID}}" class="imgCardWidth mb-5 ms-4">
             <div class="albumImageContainer">
                 <img src="{{item.albumArtUrl}}" alt="{{item.title}}">
-                <div class="overlay-child d-flex flex-column justify-content-end">
-                    <div class="d-flex justify-content-around align-items-center pb-4">
+                <div class="overlay-child flex flex-col justify-content-end">
+                    <div class="flex justify-content-around align-items-center pb-4">
                         <span class="material-symbols-outlined md-36 m-3" (click)="playItem(item)">play_circle</span>
                         <span class="material-symbols-outlined md-36 m-3" (click)="addItemToPlaylist(item)">playlist_add</span>
                         <span class="material-symbols-outlined md-36 m-3" (click)="showSongPopup($event, item)">more_vert</span>
                     </div>
                 </div>
             </div>
-            <div class="d-flex card-body"> <!-- card-body & card-title from bootstrap -->
-                <div class="d-flex minWidth">
+            <div class="flex card-body"> <!-- card-body & card-title from bootstrap -->
+                <div class="flex minWidth">
                     <div class="card-title no-wrap">{{item.title}}</div>
                 </div>
             </div>

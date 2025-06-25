@@ -1,11 +1,11 @@
-<div class="d-flex flex-column justify-content-center">
+<div class="flex flex-col justify-content-center">
   <!-- (mouseleave)="close()" -->
-  <div class="d-flex mt-3" (mouseenter)="closeAllDialogs()">
+  <div class="flex mt-3" (mouseenter)="closeAllDialogs()">
     <div class="top-image">
       <img src="{{selectedMusicItem.albumArtUrl}}">
     </div>
 
-    <div class="d-flex flex-column minWidth albumAndTitle">
+    <div class="flex flex-col minWidth albumAndTitle">
       <div class="title no-wrap">{{selectedMusicItem.title}}</div>
       <div class="artist no-wrap">{{selectedMusicItem.artistName}}</div>
     </div>
@@ -17,13 +17,13 @@
   </div>
   <div class="divider mt-2 mb-1">&nbsp;</div>
 
-  <div class="dialogItems d-flex flex-column flex-wrap">
+  <div class="dialogItems flex flex-col flex-wrap">
     @if (hasValidSongId()) {
-    <div class="d-flex justify-content-between playlist-item-header">
+    <div class="flex justify-content-between playlist-item-header">
       Server side playlist actions
     </div>
-    <div class="d-flex justify-content-between playlist-item" (click)="openAddToPlaylistDialog($event)">
-      <div class="d-flex justify-content-between" style="align-self: center;">
+    <div class="flex justify-content-between playlist-item" (click)="openAddToPlaylistDialog($event)">
+      <div class="flex justify-content-between" style="align-self: center;">
         Add to playlist
       </div>
     </div>
@@ -36,7 +36,7 @@
 
     @if (hasValidSongId()) {
     <div class="divider mb-1 mt-1">&nbsp;</div>
-    <div class="d-flex justify-content-between playlist-item-header">
+    <div class="flex justify-content-between playlist-item-header">
       Player playlist actions
     </div>
     <div class="playlist-item" (mouseenter)="closeAllDialogs()" (click)="actionPlayNext()">
@@ -46,7 +46,7 @@
       Add at last position
     </div>
     <div class="divider mb-1 mt-1">&nbsp;</div>
-    <div class="d-flex justify-content-between playlist-item-header">
+    <div class="flex justify-content-between playlist-item-header">
       Other server actions
     </div>
     <div class="playlist-item" (mouseover)="closeAllDialogs()" (click)="download()">

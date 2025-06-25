@@ -1,6 +1,6 @@
-<div class="d-flex flex-column">
-  <div class="d-flex">
-    <div class="ms-4 mt-4 d-flex flex-column">
+<div class="flex flex-col">
+  <div class="flex">
+    <div class="ms-4 mt-4 flex flex-col">
       <div class="mb-3 max-image-width">
         @if (rendererService.trackInfoAvailable) {
           <img src="{{getImgSrc()}}">
@@ -10,10 +10,10 @@
     </div>
     @if (hasCurrentSongTitle()) {
       <div>
-        <div class="d-flex flex-column ms-5 mt-5">
-          <div class="d-flex flex-column">
+        <div class="flex flex-col ms-5 mt-5">
+          <div class="flex flex-col">
             <div class="title">{{getCurrentSongTitle()}}</div>
-            <div class="d-flex flex-column">
+            <div class="flex flex-col">
               @if (rendererService.trackInfo().currentTrack?.artistName ) {
                 <div class="regularText align-self-start">
                   by <span class="highlightText">{{rendererService.trackInfo().currentTrack?.artistName}}</span>
@@ -38,7 +38,7 @@
               }
             </div>
           </div>
-          <div class="d-flex buttons-container">
+          <div class="flex buttons-container">
             @if (canBeAddedToPlaylist) {
               <button mat-flat-button class="mr-buttons" (click)="openAddPlaylistDialog()">
                 <span class="material-symbols-outlined">playlist_add</span>
@@ -57,7 +57,7 @@
   @if (rendererService.trackInfoAvailable) {
     <div>
       <div mat-subheader class="p-2">audio information provided by player {{deviceService.selectedMediaRendererDevice().friendlyName}}</div>
-      <div class="inputSource d-flex">
+      <div class="inputSource flex">
         <form>
           <mat-form-field appearance="outline" class="p-2">
             <mat-label>input source</mat-label>

@@ -1,6 +1,6 @@
 <div class="popupFrame">
-    <div class="popupHeader d-flex justify-content-between mx-4">
-        <div class="d-flex d-flex justify-content-between w-100 px-4">
+    <div class="popupHeader flex justify-content-between mx-4">
+        <div class="flex flex justify-content-between w-100 px-4">
             @if(musicItemToAddExists) {
                 <div (click)="addPlaylistClick()" [class]="playlistActiveClass(PlaylistModeEnum.Add)">
                     add to playlist
@@ -70,7 +70,7 @@
                 <input matInput type="text" [(ngModel)]="newPlaylistName" placeholder="new playlist name">
             </mat-form-field>
         </div>
-        <div class="d-flex mx-4">
+        <div class="flex mx-4">
             <button mat-stroked-button class="mv-4 my-buttons m-4" (click)="cancelClicked()">
                 <mat-icon class="material-symbols-outlined thin">close</mat-icon>
                 <span class="button button-text">cancel</span>

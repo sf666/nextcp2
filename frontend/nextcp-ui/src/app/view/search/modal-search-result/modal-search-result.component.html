@@ -1,7 +1,7 @@
 <div class="search-container searchBoxWidth ps-3 pe-3">
 
   <div class="section-box">
-    <div class="d-flex justify-content-between mb-3">
+    <div class="flex justify-content-between mb-3">
       <div class="search-title">Title</div>
       <div class="search-show-all" (click)="globalSearchService.showAllItem()">show all</div>
     </div>
@@ -10,10 +10,10 @@
       <div class="search-row">
         @for (item of globalSearchService.quickSearchResultList().musicItems; track item.objectID) {
           <div
-            class="search-row d-flex" (click)="globalSearchService.musicItemSelected(item)">
+            class="search-row flex" (click)="globalSearchService.musicItemSelected(item)">
             <img src="{{item.albumArtUrl}}" class="cropImg searchImgHeight align-self-center" alt="">
             <div class="row-text">
-              <div class="d-flex">
+              <div class="flex">
                 <div class="title">{{item.title}}</div>
                 <quality-badge [item]="item"></quality-badge>
               </div>
@@ -28,7 +28,7 @@
   </div>
 
   <div class="section-box">
-    <div class="d-flex justify-content-between mb-3">
+    <div class="flex justify-content-between mb-3">
       <div class="search-title">Album</div>
       <div class="search-show-all" (click)="globalSearchService.showAllAlbum()">show all</div>
     </div>
@@ -36,7 +36,7 @@
       <div>
         @for (item of globalSearchService.quickSearchResultList().albumItems; track item.id) {
           <div
-            class="search-row d-flex" (click)="globalSearchService.containerSelected(item)">
+            class="search-row flex" (click)="globalSearchService.containerSelected(item)">
             <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
             <div class="row-text">
               <div class="title">{{item.title}}</div>
@@ -51,7 +51,7 @@
   </div>
 
   <div class="section-box">
-    <div class="d-flex justify-content-between mb-3">
+    <div class="flex justify-content-between mb-3">
       <div class="search-title">Playlist</div>
       <div class="search-show-all" (click)="globalSearchService.showAllPlaylist()">show all</div>
     </div>
@@ -59,7 +59,7 @@
       <div>
         @for (item of globalSearchService.quickSearchResultList().playlistItems; track item.id) {
           <div
-            class="search-row d-flex" (click)="globalSearchService.containerSelected(item)">
+            class="search-row flex" (click)="globalSearchService.containerSelected(item)">
             <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
             <div class="row-text">
               <div class="title">{{item.title}}</div>
@@ -73,7 +73,7 @@
   </div>
 
   <div class="section-box">
-    <div class="d-flex justify-content-between mb-3">
+    <div class="flex justify-content-between mb-3">
       <div class="search-title">Artist</div>
       <div class="search-show-all" (click)="globalSearchService.showAllItemArtist()">show all</div>
     </div>
@@ -81,7 +81,7 @@
       <div class="search-row">
         @for (item of globalSearchService.quickSearchResultList().artistItems; track item.id) {
           <div
-            class="search-row d-flex" (click)="globalSearchService.containerSelected(item)">
+            class="search-row flex" (click)="globalSearchService.containerSelected(item)">
             <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
             <div class="row-text">
               <div class="title">{{item.title}}</div>

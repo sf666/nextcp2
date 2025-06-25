@@ -1,6 +1,6 @@
-<div class="section head d-flex pb-2">
-    <div class="d-flex align-items-center">Player Configuration</div>
-    <div class="d-flex align-items-center">
+<div class="section head flex pb-2">
+    <div class="flex align-items-center">Player Configuration</div>
+    <div class="flex align-items-center">
         <mat-slide-toggle color="accent" class="ms-4" [ngModel]="playMonitoring" (ngModelChange)="updateMonitoringState($event);">
             play monitoring
         </mat-slide-toggle>
@@ -16,8 +16,8 @@
         </div>
     </div>
 
-    <div class="section subhead d-flex flex-column">
-        <div class="d-flex flex-wrap-reverse">
+    <div class="section subhead flex flex-col">
+        <div class="flex flex-wrap-reverse">
             <div class="paraInputField">
                 <mat-form-field appearance="outline" class="setting-dropdown">
                     <mat-label>media server UDN</mat-label>
@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        <div class="d-flex flex-wrap-reverse">
+        <div class="flex flex-wrap-reverse">
             <div class="paraInputField">
                 <mat-form-field appearance="outline" class="setting-dropdown">
                     <mat-label>working directory</mat-label>
@@ -42,7 +42,7 @@
             </div>
         </div>
 
-        <div class="d-flex flex-wrap-reverse">
+        <div class="flex flex-wrap-reverse">
             <div class="paraInputField">
                 <mat-form-field appearance="outline" class="setting-dropdown">
                     <mat-label>file type</mat-label>
@@ -57,7 +57,7 @@
         </div>
 
 
-        <div class="d-flex flex-wrap-reverse">
+        <div class="flex flex-wrap-reverse">
             <div class="paraInputField">
                 <mat-form-field appearance="outline" class="setting-dropdown">
                     <mat-label>Script</mat-label>
@@ -68,7 +68,7 @@
             </div>
         </div>
 
-        <div class="d-flex flex-wrap-reverse">
+        <div class="flex flex-wrap-reverse">
             <div class="paraInputField">
                 <mat-form-field appearance="outline" class="setting-dropdown">
                     <mat-label>Overwrite</mat-label>
@@ -81,7 +81,7 @@
             <div class="paraAppConf">overwrite played types</div>
         </div>
 
-        <div class="d-flex flex-wrap-reverse">
+        <div class="flex flex-wrap-reverse">
             <div class="paraInputField">
                 <mat-form-field appearance="outline" class="setting-dropdown">
                     <mat-label>Playlist ID</mat-label>
@@ -95,7 +95,7 @@
             </div>
         </div>
 
-        <div class="d-flex flex-wrap-reverse">
+        <div class="flex flex-wrap-reverse">
             <div class="paraInputField">
                 <mat-form-field appearance="outline" class="setting-dropdown">
                     <mat-label>Folder ID</mat-label>
@@ -111,14 +111,14 @@
 
     </div>
 
-    <div class="d-flex section ps-4">
+    <div class="flex section ps-4">
         <button mat-stroked-button color="primary" (click)="saveConfig()">save</button>
     </div>
 <!--
-    <div class="d-flex section ps-4 pt-4">
+    <div class="flex section ps-4 pt-4">
         <button mat-stroked-button color="primary" (click)="createFolder()">create</button>
     </div>
-    <div class="d-flex section ps-4 pt-4">
+    <div class="flex section ps-4 pt-4">
         <button mat-stroked-button color="primary" (click)="upload()">upload</button>
     </div>
 -->

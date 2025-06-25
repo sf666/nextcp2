@@ -6,11 +6,11 @@
         <div class="albumTile">
           <div class="albumImageContainer">
             <img src="{{item.albumArtUrl}}" class="imgContainer" alt="{{item.title}}">
-            <div class="overlay-child d-flex justify-content-center align-items-center">
+            <div class="overlay-child flex justify-content-center align-items-center">
               <span class="material-symbols-outlined md-48" (click)="playOh(item)">play_arrow</span>
             </div>
           </div>
-          <div class="d-flex flex-column albumDesc">
+          <div class="flex flex-col albumDesc">
             <div class="highlightFolderText">RADIO</div>
             <div class="card-title">{{item.title}}</div>
           </div>
@@ -27,11 +27,11 @@
         <div class="albumTile">
           <div class="albumImageContainer">
             <img src="{{item.artworkUrl}}" class="imgContainer" alt="{{item.stationName}}">
-            <div class="overlay-child d-flex justify-content-center align-items-center">
+            <div class="overlay-child flex justify-content-center align-items-center">
               <span class="material-symbols-outlined md-48" (click)="play(item)">play_arrow</span>
             </div>
           </div>
-          <div class="d-flex flex-column albumDesc">
+          <div class="flex flex-col albumDesc">
             <div class="highlightFolderText">RADIO</div>
             <div class="card-title">{{item.stationName}}</div>
           </div>
