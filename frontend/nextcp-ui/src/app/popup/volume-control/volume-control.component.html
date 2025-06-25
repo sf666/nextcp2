@@ -1,4 +1,4 @@
-<div class="popup-container flex flex-col justify-content-between align-self-center">
+<div class="popup-container flex flex-col justify-between align-self-center">
     <mat-icon class="material-symbols-outlined align-self-center">volume_up</mat-icon>
     <mat-slider vertical class="align-self-center sidebar-slider" min="0" max="90" step="1"
         value="0"><input matSliderThumb (valueChange)="volChanged($event)" [value]="rendererService.deviceDriverState().volume"></mat-slider>

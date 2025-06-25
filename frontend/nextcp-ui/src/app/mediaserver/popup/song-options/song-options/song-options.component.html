@@ -19,11 +19,11 @@
 
   <div class="dialogItems flex flex-col flex-wrap">
     @if (hasValidSongId()) {
-    <div class="flex justify-content-between playlist-item-header">
+    <div class="flex justify-between playlist-item-header">
       Server side playlist actions
     </div>
-    <div class="flex justify-content-between playlist-item" (click)="openAddToPlaylistDialog($event)">
-      <div class="flex justify-content-between" style="align-self: center;">
+    <div class="flex justify-between playlist-item" (click)="openAddToPlaylistDialog($event)">
+      <div class="flex justify-between" style="align-self: center;">
         Add to playlist
       </div>
     </div>
@@ -36,7 +36,7 @@
 
     @if (hasValidSongId()) {
     <div class="divider mb-1 mt-1">&nbsp;</div>
-    <div class="flex justify-content-between playlist-item-header">
+    <div class="flex justify-between playlist-item-header">
       Player playlist actions
     </div>
     <div class="playlist-item" (mouseenter)="closeAllDialogs()" (click)="actionPlayNext()">
@@ -46,7 +46,7 @@
       Add at last position
     </div>
     <div class="divider mb-1 mt-1">&nbsp;</div>
-    <div class="flex justify-content-between playlist-item-header">
+    <div class="flex justify-between playlist-item-header">
       Other server actions
     </div>
     <div class="playlist-item" (mouseover)="closeAllDialogs()" (click)="download()">
