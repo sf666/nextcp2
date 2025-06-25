@@ -1,25 +1,29 @@
 //@import 'material-design-theme';
-@use 'm3-theme' as *;
+@use 'm3-theme'as *;
 
 /* You can add global styles to this file, and also import other style files */
 
 /*
     ngx-toast : regular style toast
  */
- @use 'ngx-toastr/toastr' as *;
+@use 'ngx-toastr/toastr'as *;
 
 // cool table look and feel
 // @import 'appTable';
 
-@use 'app-variables' as *;
-@use 'app-styles' as *;
-@use "app-icons" as *;
+@use 'app-variables'as *;
+@use 'app-styles'as *;
+@use "app-icons"as *;
+
+// @use "tailwind"as *;
+
 
 html {
     min-height: -webkit-fill-available;
 }
 
 body {
+    font-family     : 'HK Grotesk';
     color           : #d0d0ce;
     margin          : 0;
     height          : 100%;

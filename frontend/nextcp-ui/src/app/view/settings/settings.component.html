@@ -1,128 +1,132 @@
-<div class="d-flex flex-column section mt-3">
-  <div class="section head">Client Profiles</div>
-  <div class="para">Select a client profile to associate with this browser. Repeated calls with this browser will select renderer and server by default.
-    Profiles should be renamed to some meaningful name like 'livingroom' or 'kitchen' for easy to remember and switchable setup. Renaming will be done after
-    clicking the pen symbol.
-  </div>
-  <div class="d-flex flex-wrap ms-3 me-1">
-    <mat-form-field appearance="outline" class="setting-dropdown">
-      <mat-label>select profile or create new one</mat-label>
-      <mat-select [(ngModel)]="configService.clientConfig" [compareWith]="compareProfile">
-        <mat-option (click)="configService.addNewClientConfig()" disableOptionCentering>CREATE PROFILE</mat-option>
-        @for (clientConfig of configService?.serverConfig?.clientConfig; track clientConfig) {
-        <mat-option [value]="clientConfig" (click)="selectConfig(clientConfig)">
-          {{clientConfig.clientName}}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+<div class="m-3">
+  <div class="d-flex flex-column">
+    <h1 class="mt-4 text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-gray-900 dark:text-white">Client Profiles</h1>
+    <p class="me-3 text-sm lg:text-lg font-light text-gray-600 dark:text-gray-400">
+      Select a client profile to associate with this browser. Repeated calls with this browser will select renderer and server by default.
+      Profiles should be renamed to some meaningful name like 'livingroom' or 'kitchen' for easy to remember and switchable setup. Renaming will be done after
+      clicking the pen symbol.</p>
+    
+    <div class="mt-6 grid grid-cols-2 gap-4">
+      <mat-form-field appearance="outline" class="setting-dropdown">
+        <mat-label>select profile or create new one</mat-label>
+        <mat-select [(ngModel)]="configService.clientConfig" [compareWith]="compareProfile">
+          <mat-option (click)="configService.addNewClientConfig()" disableOptionCentering>CREATE PROFILE</mat-option>
+          @for (clientConfig of configService?.serverConfig?.clientConfig; track clientConfig) {
+          <mat-option [value]="clientConfig" (click)="selectConfig(clientConfig)">
+            {{clientConfig.clientName}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="ms-3 me-1 setting-dropdown">
-      <mat-label>rename profile to</mat-label>
-      <input matInput class="align-self-center" type="text" [(ngModel)]="newProfileName">
-      <span matSuffix class="material-symbols-outlined icon-middle md-18 me-2" (click)="renameProfile()">edit</span>
-    </mat-form-field>
-  </div>
+      <mat-form-field appearance="outline" class="setting-dropdown">
+        <mat-label>rename profile to</mat-label>
+        <input matInput class="align-self-center" type="text" [(ngModel)]="newProfileName">
+        <span matSuffix class="material-symbols-outlined icon-middle md-18 me-2" (click)="renameProfile()">edit</span>
+      </mat-form-field>
 
-  <mat-form-field appearance="outline" class="ms-3 me-1 setting-dropdown">
-    <mat-label>Default Media Renderer</mat-label>
-    <mat-select [(ngModel)]="configService.clientConfig.defaultMediaRenderer" [compareWith]="compareUdn" placeholder="select server defined profile">
-      <mat-option [value]="none_renderdevice" (click)="noRendererSelected()">NONE</mat-option>
-      @for (mr of deviceService.mediaRendererList(); track mr) {
-      <mat-option [value]="mr">
-        {{mr.friendlyName}}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
+      <mat-form-field appearance="outline" class="setting-dropdown">
+        <mat-label>Default Media Renderer</mat-label>
+        <mat-select [(ngModel)]="configService.clientConfig.defaultMediaRenderer" [compareWith]="compareUdn" placeholder="select server defined profile">
+          <mat-option [value]="none_renderdevice" (click)="noRendererSelected()">NONE</mat-option>
+          @for (mr of deviceService.mediaRendererList(); track mr) {
+          <mat-option [value]="mr">
+            {{mr.friendlyName}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
 
-  <mat-form-field appearance="outline" class="ms-3 me-1 setting-dropdown">
-    <mat-label>Default Media Server</mat-label>
-    <mat-select [(ngModel)]="configService.clientConfig.defaultMediaServer" [compareWith]="compareUdn">
-      <mat-option [value]="none_serverdevice" (click)="noServerSelected()">NONE</mat-option>
-      @for (mediaServer of deviceService.mediaServerList(); track mediaServer) {
-      <mat-option [value]="mediaServer">
-        {{mediaServer.friendlyName}}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
+      <mat-form-field appearance="outline" class="setting-dropdown">
+        <mat-label>Default Media Server</mat-label>
+        <mat-select [(ngModel)]="configService.clientConfig.defaultMediaServer" [compareWith]="compareUdn">
+          <mat-option [value]="none_serverdevice" (click)="noServerSelected()">NONE</mat-option>
+          @for (mediaServer of deviceService.mediaServerList(); track mediaServer) {
+          <mat-option [value]="mediaServer">
+            {{mediaServer.friendlyName}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
 
   <div class="d-flex section ms-4">
-    <button mat-stroked-button color="primary" (click)="saveClientConfig()">save</button>
-    <button mat-stroked-button color="warn" class="ms-2" (click)="deleteClientConfig()">delete</button>
-  </div>
-</div>
-
-<div class="section head">Server Configuration
-  <mat-slide-toggle color="accent" class="ms-4" [(ngModel)]="showOnlyActiveServer">
-    show only online server
-  </mat-slide-toggle>
-</div>
-<div class="para">Server discovered in the past may be offline. Disabled server will not show up for selection in some popups or lists.
-</div>
-<div class="para">Important: If an Universal Media Server (UMS) is found, enter the API key from UMS.conf, for unlocking
-  all features. Otherwise most audio convenience functions will not work!
-</div>
-
-<div class="d-flex flex-row flex-wrap ms-4">
-  @for (serverConfig of getMediaServer(); track serverConfig) {
-  <div class="media-container m-3">
-    <div class="media-device">
-      <div class="d-flex header">
-        <div class="no-wrap title">{{serverConfig.mediaServer.friendlyName}}</div>
-        <mat-slide-toggle color="primary" class="ms-2" [(ngModel)]="serverConfig.enabled">
-          Enable
-        </mat-slide-toggle>
-      </div>
-      <div class="d-flex">
-        <mat-form-field appearance="outline" class="me-2">
-          <mat-label>Status</mat-label>
-          @if (isServerConfigActive(serverConfig)) {
-          <input class="online" matInput type="text" value="ONLINE" readonly="true">
-          }
-          @if (!isServerConfigActive(serverConfig)) {
-          <input class="offline" matInput type="text" value="OFFLINE" readonly="true">
-          }
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>IP</mat-label>
-          <input matInput type="text" value="{{serverConfig.ip}}" readonly="true">
-        </mat-form-field>
-      </div>
-      <mat-form-field appearance="outline">
-        <mat-label>UDN</mat-label>
-        <input matInput type="text" value="{{serverConfig.mediaServer.udn}}" readonly="true">
-      </mat-form-field>
-      @if (serverConfig.mediaServer.extendedApi) {
-      <!-- show UMS configuration -->
-      }
-      <div class="d-flex mt-4">
-        <button mat-stroked-button class="ms-2" color="primary" (click)="saveServerConfig(serverConfig)">save</button>
-        <button mat-stroked-button class="ms-2" color="warn" (click)="deleteServerConfig(serverConfig)">delete</button>
-      </div>
+      <button mat-stroked-button color="primary" (click)="saveClientConfig()">save</button>
+      <button mat-stroked-button color="warn" class="ms-2" (click)="deleteClientConfig()">delete</button>
     </div>
-    @if (getMediaServer()?.length == 0) {
-    <div class="no-online">
-      No media server online
+  </div>
+
+  <div class="mt-6 mt-8 flex flex-row mt-4">
+    <h1 class="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-gray-900 dark:text-white">Server Configuration</h1>
+    <mat-slide-toggle color="accent" class="ms-4 self-center" [(ngModel)]="showOnlyActiveServer">
+      show only online server
+    </mat-slide-toggle>
+  </div>
+
+  <p class="mb-6 text-sm lg:text-lg font-light text-gray-600 dark:text-gray-400">
+  Server discovered in the past may be offline. Disabled server will not show up for selection in some popups or lists.</p>
+    
+  <div class="flex flex-wrap gap-4">
+    @for (serverConfig of getMediaServer(); track serverConfig) {
+    <div class="media-container">
+      <div class="media-device">
+        <div class="d-flex header">
+          <div class="no-wrap title">{{serverConfig.mediaServer.friendlyName}}</div>
+          <mat-slide-toggle color="primary" class="ms-2" [(ngModel)]="serverConfig.enabled">
+            Enable
+          </mat-slide-toggle>
+        </div>
+        <div class="d-flex">
+          <mat-form-field appearance="outline" class="me-2">
+            <mat-label>Status</mat-label>
+            @if (isServerConfigActive(serverConfig)) {
+            <input class="online" matInput type="text" value="ONLINE" readonly="true">
+            }
+            @if (!isServerConfigActive(serverConfig)) {
+            <input class="offline" matInput type="text" value="OFFLINE" readonly="true">
+            }
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>IP</mat-label>
+            <input matInput type="text" value="{{serverConfig.ip}}" readonly="true">
+          </mat-form-field>
+        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>UDN</mat-label>
+          <input matInput type="text" value="{{serverConfig.mediaServer.udn}}" readonly="true">
+        </mat-form-field>
+        @if (serverConfig.mediaServer.extendedApi) {
+        <!-- show UMS configuration -->
+        }
+        <div class="d-flex mt-4">
+          <button mat-stroked-button class="ms-2" color="primary" (click)="saveServerConfig(serverConfig)">save</button>
+          <button mat-stroked-button class="ms-2" color="warn" (click)="deleteServerConfig(serverConfig)">delete</button>
+        </div>
+      </div>
+      @if (getMediaServer()?.length == 0) {
+      <div class="no-online">
+        No media server online
+      </div>
+      }
     </div>
     }
   </div>
-  }
-</div>
 
-<div class="section head">Renderer Configuration
-  <mat-slide-toggle color="accent" class="ms-4" [(ngModel)]="showOnlyActiveRenderer">
-    show only online renderer
-  </mat-slide-toggle>
-</div>
-<div class="para">Renderer may be offline. Disabled renderer will not show up for selection in some popups or lists.
-</div>
-<div class="para">If a streaming device is attached to an amplifier, a device device driver can be selected for controlling the amplifier power and volume state
+  <div class="mt-6 mt-8 flex flex-row mt-4">
+      <h1 class="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-gray-900 dark:text-white">Renderer Configuration</h1>
+      <mat-slide-toggle color="accent" class="ms-4 w-40 self-center grow-3" [(ngModel)]="showOnlyActiveRenderer">
+        show only online renderer
+      </mat-slide-toggle>
+  </div>
+
+  <p class="mt-4 text-sm lg:text-lg font-light text-gray-600 dark:text-gray-400">
+  Renderer may be offline. Disabled renderer will not show up for selection in some popups or lists.</p>
+
+  <p class="mt-2 text-sm lg:text-lg font-light text-gray-600 dark:text-gray-400">
+  If a streaming device is attached to an amplifier, a device device driver can be selected for controlling the amplifier power and volume state
   instead of the streamer volume and power state. A default volume percentage can be applied to the external amplifier on power up. The streaming device volume can be
-  set to 100% on power up, if 'UPnP max volume' is enabled.
-</div>
-<div>
-  <div class="d-flex flex-row flex-wrap ms-4">
+  set to 100% on power up, if 'UPnP max volume' is enabled.</p>
+
+  <div class="flex flex-wrap gap-4 mt-8">
     @for (rendererConfig of getMediaRenderer(); track rendererConfig) {
-    <div class="media-container m-3">
+    <div class="media-container">
       <div class="media-device">
         <div class="no-wrap title">{{rendererConfig.mediaRenderer.friendlyName}}
           <mat-slide-toggle color="primary" class="ms-2" [(ngModel)]="rendererConfig.active">
@@ -192,321 +196,167 @@
     </div>
     }
   </div>
-  <!-- -->
-</div>
 
+  <h1 class="mt-8 text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-gray-900 dark:text-white">Server Actions</h1>
 
-<div class="section head ">server actions for : {{currentMediaServer.friendlyName}}</div>
-@if (extendedApiNotAvailable()) {
-<div class="section subhead subsect">Selected media server has no extended API. Advanced actions are only available
-  for <i>Universal Media Server</i>.</div>
-}
-<div class="section subhead d-flex flex-column">
-  <div class="d-flex flex-wrap">
-    <button mat-stroked-button color="" class="ms-2 mb-2 my-buttons" (click)="rescan()" [disabled]="extendedApiNotAvailable()">rescan media library</button>
-    <button mat-stroked-button color="warn" class="ms-2 mb-2 my-buttons" (click)="myMusicService.backupLikedAlbums()" [disabled]="extendedApiNotAvailable()">
-      backup liked albums
-    </button>
-    <button mat-stroked-button class="ms-2 mb-2 my-buttons" (click)="myMusicService.restoreLikedAlbums()" [disabled]="extendedApiNotAvailable()">
-      restore liked albums
-    </button>
-    <button mat-stroked-button class="ms-2 my-buttons" [disabled]="extendedApiNotAvailable()" (click)="ratingServiceService.syncRatingsFromMusicBrainzToBackend()">import rating
-      from musicBrainz.org</button>
-  </div>
-</div>
-
-
-<div class="section head ">General Configuration</div>
-<div class="generalConfigOptions">
-  <div class="section subhead d-flex flex-column">
-
-    <div class="d-flex flex-wrap-reverse">
-      <div class="paraInputField">
-        <mat-form-field appearance="outline" class="setting-dropdown">
-          <mat-label>MY PLAYLISTS - ObjectID</mat-label>
-          <input matInput type="text" [(ngModel)]="configService.applicationConfig.myPlaylistFolderName" placeholder="PlaylistsFolderName">
-        </mat-form-field>
-      </div>
-      <div class="paraAppConf">Object ID of the folder containing MY PLAYLISTS. Those playlists will
-        directly selectable inside the sidebar on the left. There is no need to edit this value by hand.
-        In the "music library" view, click the context menu button
-        <button color="" mat-mini-fab>
-          <mat-icon class="material-symbols-sharp">more_vert</mat-icon>
-        </button>
-        and select "set playlist sidebar". NOTE: If the servers database is recreated or reindexed, the ObjectID
-        of the playlist folder may change and has to be applied again.
-      </div>
-    </div>
-
-    <div class="d-flex flex-wrap-reverse">
-      <div class="paraInputField">
-        <mat-form-field appearance="outline" class="setting-dropdown">
-          <mat-label>device driver library path</mat-label>
-          <input matInput type="text" [(ngModel)]="configService.applicationConfig.libraryPath" placeholder="undefined">
-        </mat-form-field>
-      </div>
-      <div class="paraAppConf">Path to the folder containing device driver JAR files. NextCP/2 need read access to this folder.
-      </div>
-    </div>
-
-    <div class="d-flex flex-wrap-reverse">
-      <div class="paraInputField">
-        <mat-form-field appearance="outline" class="setting-dropdown">
-          <mat-label>database path</mat-label>
-          <input matInput type="text" [(ngModel)]="configService.applicationConfig.databaseFilename" placeholder="undefined">
-        </mat-form-field>
-      </div>
-      <div class="paraAppConf">Path to the folder where NextCP/2 creates database files. Read and write access is needed for this folder.
-      </div>
-    </div>
-
-    <div class="d-flex flex-wrap-reverse">
-      <div class="paraInputField">
-        <mat-form-field appearance="outline" class="setting-dropdown">
-          <mat-label>unsecure server listening port</mat-label>
-          <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerPort" placeholder="undefined">
-        </mat-form-field>
-      </div>
-      <div class="paraAppConf">regular HTTP listen port.</div>
-    </div>
-
-    <div class="d-flex flex-wrap-reverse">
-      <div class="paraInputField">
-        <mat-form-field appearance="outline" class="setting-dropdown">
-          <mat-label>secure server listening port</mat-label>
-          <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerSslPort" placeholder="undefined">
-        </mat-form-field>
-      </div>
-      <div class="paraAppConf">Secure listen port works only if P12 keystore path is configured.</div>
-    </div>
-
-    <div class="d-flex flex-wrap-reverse">
-      <div class="paraInputField">
-        <mat-form-field appearance="outline" class="setting-dropdown">
-          <mat-label>P12 keystore file location</mat-label>
-          <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerSslP12Keystore" placeholder="undefined">
-        </mat-form-field>
-      </div>
-      <div class="paraAppConf">Path to NextCP/2 keystore for using secure connections. File format has to be in P12 format.</div>
-    </div>
-
-    <div class="d-flex flex-wrap-reverse">
-      <div class="paraInputField">
-        <mat-form-field appearance="outline" class="setting-dropdown">
-          <mat-label>P12 keystore password</mat-label>
-          <input matInput type="text" [(ngModel)]="configService.applicationConfig.embeddedServerSslP12KeystorePassword" placeholder="undefined">
-        </mat-form-field>
-      </div>
-      <div class="paraAppConf">P12 keystore password.</div>
-    </div>
-
-    <div class="d-flex flex-wrap-reverse">
-      <div class="paraInputField">
-        <mat-form-field appearance="outline" class="setting-dropdown">
-          <mat-label>path to restart script</mat-label>
-          <input matInput type="text" [(ngModel)]="configService.applicationConfig.pathToRestartScript" placeholder="undefined">
-        </mat-form-field>
-      </div>
-      <div class="paraAppConf">Full path to the restart script. Read access to this resource is needed.</div>
-    </div>
-
-    <div class="d-flex flex-wrap-reverse">
-      <div class="paraInputField">
-        <mat-form-field appearance="outline" class="setting-dropdown">
-          <mat-label>Log4j config file</mat-label>
-          <input matInput type="text" [(ngModel)]="configService.applicationConfig.log4jConfigFile" placeholder="undefined">
-        </mat-form-field>
-      </div>
-      <div class="paraAppConf">Location of the log4j configuration file.</div>
-    </div>
-
-    <div class="d-flex flex-wrap-reverse">
-      <div class="paraInputField">
-        <mat-form-field appearance="outline" class="setting-dropdown">
-          <mat-label>Logging date format</mat-label>
-          <input matInput type="text" [(ngModel)]="configService.applicationConfig.loggingDateTimeFormat" placeholder="yyyy-MM-dd HH:mm:ss">
-        </mat-form-field>
-      </div>
-      <div class="paraAppConf">This is the log4j2 date format. The date is printed at the beginning of each log line.</div>
-    </div>
-
-    <div class="d-flex flex-wrap-reverse">
-      <div class="paraInputField">
-        <mat-form-field appearance="outline" class="setting-dropdown">
-          <mat-label>bind interface stream server</mat-label>
-          <input matInput type="text" [(ngModel)]="configService.applicationConfig.upnpBindInterface" placeholder="put interface name">
-        </mat-form-field>
-      </div>
-      <div class="paraAppConf">Leave empty for binding to all interfaces. Changes require restart.</div>
-    </div>
-
-    <div class="d-flex flex-wrap-reverse">
-      <div class="paraInputField">
-        <mat-form-field appearance="outline" class="setting-dropdown">
-          <mat-label>Generate UPnP code</mat-label>
-          <input matInput type="text" [(ngModel)]="configService.applicationConfig.generateUpnpCode" placeholder="">
-        </mat-form-field>
-      </div>
-      <div class="paraAppConf">If checked, java code will be generated for services a device offers.</div>
-    </div>
-
-    <div class="d-flex flex-wrap-reverse">
-      <div class="paraInputField">
-        <mat-form-field appearance="outline" class="setting-dropdown">
-          <mat-label>path for generated UPnP code</mat-label>
-          <input matInput type="text" [(ngModel)]="configService.applicationConfig.generateUpnpCodePath" placeholder="">
-        </mat-form-field>
-      </div>
-      <div class="paraAppConf">This is the folder where generated UPnP code will be saved.</div>
-    </div>
-
-    <div class="d-flex section ms-4">
-      <button mat-stroked-button color="primary" (click)="saveGeneralConfig()">save</button>
-    </div>
-  </div>
-</div>
-
-<div class="section subhead subsect">Audio Addict Radio Network</div>
-<div class="section subhead d-flex flex-column">
-  <div class="d-flex flex-wrap-reverse">
-    <div class="paraInputField">
-      <mat-form-field appearance="outline" class="setting-dropdown">
-        <mat-label>enter token</mat-label>
-        <input matInput type="text" [(ngModel)]="configService.audioAddictConfig().token" placeholder="">
-      </mat-form-field>
-    </div>
-    <div class="paraAppConf">Put your Classical Radio, Radio Tunes, Rock Radio, Jazz Radio, Zen Radio or DI.fm network token here for full channel access.</div>
-  </div>
-
-  <div class="d-flex flex-wrap-reverse">
-    <div class="paraInputField">
-      <mat-form-field appearance="outline" class="setting-dropdown">
-        <mat-label>enter username</mat-label>
-        <input matInput type="text" [(ngModel)]="configService.audioAddictConfig().user" placeholder="username">
-      </mat-form-field>
-    </div>
-    <div class="paraAppConf">Username & Password is needed for favorites access.</div>
-  </div>
-
-  <div class="d-flex flex-wrap-reverse">
-    <div class="paraInputField">
-      <mat-form-field appearance="outline" class="setting-dropdown">
-        <mat-label>enter password</mat-label>
-        <input matInput type="text" [(ngModel)]="configService.audioAddictConfig().pass" placeholder="password">
-      </mat-form-field>
-    </div>
-    <div class="paraAppConf">Password will be encoded after a successful save action.</div>
-  </div>
-
-  <div class="d-flex flex-wrap-reverse">
-    <div class="paraInputField">
-      <mat-form-field appearance="outline" class="setting-dropdown">
-        <mat-label>Audio Addict Network Token</mat-label>
-        <mat-select [(ngModel)]="configService.audioAddictConfig().preferEuropeanServer">
-          <mat-option disableOptionCentering value="true">true</mat-option>
-          <mat-option disableOptionCentering value="false">false</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="paraAppConf">Prefer European stream server.</div>
-  </div>
-
-  <div class="d-flex section ms-4">
-    <button mat-stroked-button color="primary" (click)="saveAudioAddict()">save</button>
-  </div>
-</div>
-
-
-<div class="section head ">Accounts</div>
-<div class="section subhead subsect">Spotify</div>
-<div class="d-flex section flex-wrap subhead flex-column">
-  @if (configService.spotifyAccountConnected()) {
-  <div class="para">
-    <span class="material-symbols-outlined" style="color: aqua;">how_to_reg</span>
-    <span class=""> Your Spotify account is connected.</span>
-  </div>
+  @if(currentMediaServer.udn === undefined || currentMediaServer.udn === '') {
+  <div class="p-4 m-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+    {{currentMediaServer.friendlyName}}
+  </div>    
   } @else {
-  <div class="para">
-    Click this button. A new window will open. Login and approve access to nextCP/2 :
-  </div>
-  <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="registerAppAtSpotify()">nextCP/2
-    Spotify access
-  </button>
-  @if (!protocolHandlerAvailable()) {
-  <div>
-    <div class="para">
-      After granting access you wil be redirected to a localhost URL (error page). Copy spotify access code
-      from your browsers URL bar into the input field below and
-    </div>
-    <div>
-      <input class="section input" [(ngModel)]="spotifyCode">
-    </div>
-    <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="sendSpotifyCode()">send
-      it</button>
-    <div class="para">
-      Hint: To copy the access code, click in your browsers URL bar and copy everything after
-      'http://localhost:65525/?code='
-    </div>
-  </div>
+    @if (extendedApiNotAvailable()) {
+      <div class="p-4 m-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+        Selected media server has no extended API. Advanced actions are only available
+        for <i>Universal Media Server</i>.
+      </div>    
+    }
   }
-  }
-</div>
 
-<div class="section subhead subsect">MusicBrainz</div>
-<div class="d-flex section flex-wrap subhead flex-column">
-  <div class="para">
+  <div class="section subhead d-flex flex-column">
+    <div class="d-flex flex-wrap">
+      <button mat-stroked-button color="" class="ms-2 mb-2 my-buttons" (click)="rescan()" [disabled]="extendedApiNotAvailable()">rescan media library</button>
+      <button mat-stroked-button color="warn" class="ms-2 mb-2 my-buttons" (click)="myMusicService.backupLikedAlbums()" [disabled]="extendedApiNotAvailable()">
+        backup liked albums
+      </button>
+      <button mat-stroked-button class="ms-2 mb-2 my-buttons" (click)="myMusicService.restoreLikedAlbums()" [disabled]="extendedApiNotAvailable()">
+        restore liked albums
+      </button>
+      <button mat-stroked-button class="ms-2 my-buttons" [disabled]="extendedApiNotAvailable()" (click)="ratingServiceService.syncRatingsFromMusicBrainzToBackend()">import rating
+        from musicBrainz.org</button>
+    </div>
+  </div>
+
+
+  <h1 class="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-gray-900 dark:text-white">General Configuration</h1>
+  <form class="max-w-2xl m-8">
+    <div class="grid grid-cols-2 gap-4">
+      <div class="relative z-0 w-full mb-5 group">
+        <input [(ngModel)]="configService.applicationConfig.myPlaylistFolderName" type="text" name="MY_PLAYLISTID" id="MY_PLAYLISTID" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+        <label for="MY_PLAYLISTID" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">MY PLAYLIST - ObjectID</label>
+      </div>
+      <div class="relative z-0 w-full mb-5 group">
+        <input [(ngModel)]="configService.applicationConfig.libraryPath" type="text" name="FORM_DDLP" id="FORM_DDLP" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+        <label for="FORM_DDLP" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">device driver library path</label>
+      </div>
+      <div class="relative z-0 w-full mb-5 group">
+        <input [(ngModel)]="configService.applicationConfig.databaseFilename" type="text" name="FORM_DBP" id="FORM_DBP" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+        <label for="FORM_DBP" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">database path</label>
+      </div>
+      <div class="relative z-0 w-full mb-5 group">
+        <input [(ngModel)]="configService.applicationConfig.embeddedServerPort" type="text" name="FORM_EMSP" id="FORM_EMSP" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+        <label for="FORM_EMSP" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">unsecure server listening port</label>
+      </div>
+      <div class="relative z-0 w-full mb-5 group">
+        <input [(ngModel)]="configService.applicationConfig.embeddedServerSslPort" type="text" name="FORM_EMSSP" id="FORM_EMSSP" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+        <label for="FORM_EMSSP" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">secure server listening port</label>
+      </div>
+      <div class="relative z-0 w-full mb-5 group">
+        <input [(ngModel)]="configService.applicationConfig.embeddedServerSslP12Keystore" type="text" name="FORM_EMSSP12" id="FORM_EMSSP12" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+        <label for="FORM_EMSSP12" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">P12 keystore file location</label>
+      </div>
+      <div class="relative z-0 w-full mb-5 group">
+        <input [(ngModel)]="configService.applicationConfig.embeddedServerSslP12KeystorePassword" type="text" name="FORM_EMSSP12P" id="FORM_EMSSP12P" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+        <label for="FORM_EMSSP12P" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">P12 keystore password</label>
+      </div>
+      <div class="relative z-0 w-full mb-5 group">
+        <input [(ngModel)]="configService.applicationConfig.pathToRestartScript" type="text" name="FORM_RESSCRIPT" id="FORM_RESSCRIPT" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+        <label for="FORM_RESSCRIPT" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">path to restart script</label>
+      </div>
+      <div class="relative z-0 w-full mb-5 group">
+        <input [(ngModel)]="configService.applicationConfig.log4jConfigFile" type="text" name="FORM_LOG4jcf" id="FORM_LOG4jcf" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+        <label for="FORM_LOG4jcf" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Log4j config file</label>
+      </div>
+      <div class="relative z-0 w-full mb-5 group">
+        <input [(ngModel)]="configService.applicationConfig.loggingDateTimeFormat" type="text" name="FORM_LOG4jformat" id="FORM_LOG4jformat" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+        <label for="FORM_LOG4jformat" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Logging date format</label>
+      </div>
+      <div class="relative z-0 w-full mb-5 group">
+        <input [(ngModel)]="configService.applicationConfig.upnpBindInterface" type="text" name="FORM_upnp_bin" id="FORM_upnp_bin" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+        <label for="FORM_upnp_bin" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">bind interface stream server</label>
+      </div>
+      <div class="relative z-0 w-full mb-5 group">
+        <input [(ngModel)]="configService.applicationConfig.generateUpnpCode" type="text" name="FORM_upnp_gencode" id="FORM_upnp_gencode" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+        <label for="FORM_upnp_gencode" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Generate UPnP code</label>
+      </div>
+    </div>
+    <button mat-stroked-button color="primary" (click)="saveGeneralConfig()">save</button>
+  </form>
+
+  <h1 class="mt-8 text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-gray-900 dark:text-white">Audio Addict Radio Network</h1>
+  <form class="max-w-2xl m-8 mt-8">
+    <div class="grid grid-cols-2 gap-4">
+      <div class="relative z-0 w-full mb-5 group">
+        <input [(ngModel)]="configService.audioAddictConfig().token" type="text" name="FORM_AA_token" id="FORM_AA_token" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+        <label for="FORM_AA_token" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">network token</label>
+      </div>
+      <div class="relative z-0 w-full mb-5 group">
+        <input [(ngModel)]="configService.audioAddictConfig().user" type="text" name="FORM_AA_user" id="FORM_AA_user" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+        <label for="FORM_AA_user" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">username</label>
+      </div>
+      <div class="relative z-0 w-full mb-5 group">
+        <input [(ngModel)]="configService.audioAddictConfig().pass" type="text" name="FORM_AA_pass" id="FORM_AA_pass" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+        <label for="FORM_AA_pass" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">password</label>
+      </div>
+      <div class="relative z-0 w-full mb-5 group">
+        <input [(ngModel)]="configService.audioAddictConfig().preferEuropeanServer" type="text" name="FORM_AA_euro" id="FORM_AA_euro" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+        <label for="FORM_AA_euro" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">prefer european stream server</label>
+      </div>
+    </div>
+    <button mat-stroked-button color="primary" (click)="saveAudioAddict()">save</button>
+  </form>
+
+
+  <h1 class="mt-8 text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-gray-900 dark:text-white">External Accounts</h1>
+  <h2 class="mt-4 text-base md:text-lg lg:text-xl font-medium tracking-tight text-gray-700 dark:text-gray-400">Spotify</h2>
+    @if (configService.spotifyAccountConnected()) {
+    <p class="mt-2">
+      <span class="material-symbols-outlined" style="color: aqua;">how_to_reg</span>
+      <span class=""> Your Spotify account is connected.</span>
+    </p>
+    } @else {
+    <p class="mt-2">
+      Click this button. A new window will open. Login and approve access to nextCP/2 :
+    </p>
+    <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="registerAppAtSpotify()">nextCP/2 Spotify access</button>
+  }
+
+
+  <h2 class="mt-4 text-base md:text-lg lg:text-xl font-medium tracking-tight text-gray-700 dark:text-gray-400">MusicBrainz</h2>
+  <p class="mt-2 max-w-2xl">
     Star-rating will update musicbrainz.org site if song has musicbrainzID metadata set. Password will be encoded after a successful save action.
-  </div>
-</div>
-<div class="d-flex flex-wrap">
-  <div class="d-flex section flex-wrap subhead flex-wrap">
-    <mat-form-field class="me-2" appearance="outline">
-      <mat-label>Username</mat-label>
-      <input matInput type="text" placeholder="for www.musicbrainz.org" [(ngModel)]="configService.musicBrainzConfig.username">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Password</mat-label>
-      <input matInput type="text" placeholder="for www.musicbrainz.org" [(ngModel)]="configService.musicBrainzConfig.password">
-    </mat-form-field>
-    <div class="d-flex section ms-4">
-      <button mat-stroked-button color="primary" (click)="saveMusicBrainzConfig()">save</button>
+  </p>
+
+  <form class="max-w-md m-8 mt-8">
+    <div class="relative z-0 w-full mb-5 group">
+      <input [(ngModel)]="configService.musicBrainzConfig.username" type="text" name="FORM_MB_user" id="FORM_MB_user" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+      <label for="FORM_MB_user" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Username</label>
     </div>
-  </div>
-</div>
+    <div class="relative z-0 w-full mb-5 group">
+      <input [(ngModel)]="configService.musicBrainzConfig.password" type="text" name="FORM_MB_pass" id="FORM_MB_pass" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+      <label for="FORM_MB_pass" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Password</label>
+    </div>
+    <button mat-stroked-button color="primary" (click)="saveMusicBrainzConfig()">save</button>
+  </form>
 
-<div class="section subhead subsect">Last FM</div>
-<div class="d-flex section flex-wrap subhead flex-column">
-  <div class="para">
-    1. Click this button. A new window will open. Login and approve access to nextCP/2 :
-  </div>
-  <button mat-stroked-button class="settings maxButton" (click)="activateLastFM()">
-    nextCP/2 LastFM access
-  </button>
-  <div class="para">
-    2. After step 1 is done, click this button to connect nextCP/2 to LastFM :
-  </div>
-  <button mat-stroked-button class="settings maxButton" (click)="generateSession()">
-    generate LastFM session
-  </button>
-</div>
+  <h2 class="mt-4 text-base md:text-lg lg:text-xl font-medium tracking-tight text-gray-700 dark:text-gray-400">Last FM</h2>
+  <p class="mt-2">1. Click this button. A new window will open. Login and approve access to nextCP/2 :</p>
+  <button mat-stroked-button class="settings maxButton" (click)="activateLastFM()">nextCP/2 LastFM access</button>
+  <p class="mt-2 max-w-md">2. After step 1 is done, click this button to connect nextCP/2 to LastFM :</p>
+  <button mat-stroked-button class="settings maxButton" (click)="generateSession()">generate LastFM session</button>
 
-<div class="section head ">System Information</div>
-<div class="generalConfigOptions">
-  <div class="section subhead d-flex flex-column setting-dropdown">
-    <mat-form-field appearance="outline">
-      <mat-label>build version</mat-label>
-      <input matInput type="text" [ngModel]="buildName" placeholder="undefined" readonly="true">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>build number</mat-label>
-      <input matInput type="text" [ngModel]="buildNumber" placeholder="undefined" readonly="true">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>build time</mat-label>
-      <input matInput type="text" [ngModel]="buildTime" placeholder="undefined" readonly="true">
-    </mat-form-field>
-    <button mat-stroked-button class="settings maxButton" (click)="systemService.restart()">
-      restart nextcp/2
-    </button>
-  </div>
+  <h1 class="mt-8 text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-gray-900 dark:text-white">System Information</h1>
+  <form class="max-w-xs m-8 mt-8">
+    <div class="relative z-0 w-full mb-5 group">
+      <input [ngModel]="buildName" type="text" name="FORM_SYS_buildname" id="FORM_SYS_buildname" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " disabled readonly />
+      <label for="FORM_SYS_buildname" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">build name</label>
+    </div>
+    <div class="relative z-0 w-full mb-5 group">
+      <input [ngModel]="buildNumber" type="text" name="FORM_SYS_buildnum" id="FORM_SYS_buildnum" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " disabled readonly />
+      <label for="FORM_SYS_buildnum" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">build version</label>
+    </div>
+    <div class="relative z-0 w-full mb-5 group">
+      <input [ngModel]="buildTime" type="text" name="FORM_SYS_buildtime" id="FORM_SYS_buildtime" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " disabled readonly />
+      <label for="FORM_SYS_buildtime" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">build time</label>
+    </div>
+  </form>
 </div>

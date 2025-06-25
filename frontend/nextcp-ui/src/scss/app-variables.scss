@@ -14,10 +14,6 @@ $section-button-col-back       : $pantone-433-C;
 $section-button-col-back-hover : $pantone-309-C;
 $border-primary                : $blue-pantone-2;
 
-// added hover effect für bootstrap card images
-$imgCardWidth      : calc(#{$cardWidth} - 2*#{$cardBorderWidth});
-$imgCardWidthSmall : calc(#{$cardWidthSmall} - 2*#{$cardBorderWidth});
-
 // display container top header 
 $top-header-Height              : 310px;
 $top-header-Height-mid          : 210px;
@@ -29,6 +25,8 @@ $top-header-Vertical-Indent-mid : 800px;
 //
 
 :root {
+    --font-family     : 'HK Grotesk';
+    
     --snow-white             : rgb(255, 255, 250);
     --glas-white-1           : rgba(255, 255, 255, 0.9);
     --glas-white-2           : rgba(255, 255, 255, 0.8);

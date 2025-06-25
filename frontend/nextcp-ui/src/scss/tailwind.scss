@@ -1,0 +1,8 @@
+
+@use "tailwindcss";
+
+@theme {
+  --font-display: "HK Grotesk", "sans-serif";
+}
+
+@custom-variant dark (&:where(.dark, .dark *));

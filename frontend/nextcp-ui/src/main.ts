@@ -3,7 +3,6 @@ import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { environment } from './environments/environment';
 import { AppComponent } from './app/app.component';
 import { ToastrModule } from 'ngx-toastr';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -102,7 +101,6 @@ bootstrapApplication(AppComponent, {
       BrowserModule,
       FormsModule,
       ReactiveFormsModule,
-      NgbModule,
       ToastrModule.forRoot({
         timeOut: 3000,
         countDuplicates: true,

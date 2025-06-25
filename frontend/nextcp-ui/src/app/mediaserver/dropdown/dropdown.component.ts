@@ -1,7 +1,6 @@
 import { MediaServerDto } from './../../service/dto.d';
 import { DeviceService } from './../../service/device.service';
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, input, output } from '@angular/core';
-import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgbDropdownButtonItem, NgbDropdownItem } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -10,7 +9,7 @@ import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgbDropdownButtonItem,
     styleUrls: ['./dropdown.component.scss'],
     standalone: true,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgbDropdownButtonItem, NgbDropdownItem]
+    imports: []
 })
 export class ServerDropdownComponent {
 

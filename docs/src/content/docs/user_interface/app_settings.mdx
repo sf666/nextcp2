@@ -44,7 +44,7 @@ export const Bullets = ({children, title}) => (
   </div>
 );
 
-## Active Media Server
+## Server Actions
 
 Here are additional UMS server actions available, if the active media server is an instance of UMS.
 
@@ -78,7 +78,7 @@ Here are additional UMS server actions available, if the active media server is 
     </table>
 </div>
 
-## General Settings
+## General Configuration
 
 <div class="relative overflow-x-auto">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -90,6 +90,10 @@ Here are additional UMS server actions available, if the active media server is 
         </thead>
         <tbody>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">MY PLAYLIST - Object ID</td>
+                <td class="px-6 py-4">Object ID of the folder containing MY PLAYLISTS. Those playlists will directly selectable inside the sidebar on the left. There is no need to edit this value by hand. In the "music library" view, click the context menu button and select "set playlist sidebar". <span class="text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">NOTE: If the servers database is recreated or reindexed, the ObjectID of the playlist folder may change and has to be set again.</span></td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">device driver library path</td>
                 <td class="px-6 py-4">Where to look for amplifier device drivers. Currently McIntosh amplifier like MA9000, MA12000 and other should work.</td>
             </tr>
@@ -98,8 +102,24 @@ Here are additional UMS server actions available, if the active media server is 
                 <td class="px-6 py-4">Where to store internal settings.</td>
             </tr>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">server listening port</td>
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">unsecure server listening port</td>
                 <td class="px-6 py-4">This is the port you connect to with your browser.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">secure server listening port</td>
+                <td class="px-6 py-4">This is the the https listening port. Secure listen port works only if P12 keystore path is configured.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">P12 keyfile file location</td>
+                <td class="px-6 py-4">Path to NextCP/2 keystore for using secure connections. File format has to be in P12 format.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">P12 keyfile password</td>
+                <td class="px-6 py-4">P12 keystore password.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">path to restart script</td>
+                <td class="px-6 py-4">Full path to the restart script. Read access to this resource is needed.<span class="text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">NOTE: This feature is experimental and may not work.</span></td>
             </tr>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Log4j config file</td>
@@ -107,11 +127,19 @@ Here are additional UMS server actions available, if the active media server is 
             </tr>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Logging date format</td>
-                <td class="px-6 py-4">To adjust logging date format.</td>
+                <td class="px-6 py-4">To adjust logging date format. Use the Log4j2 syntax.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">bind interface stream server</td>
+                <td class="px-6 py-4">Leave empty for binding to all interfaces. Changes require restart. <span class="text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">NOTE: If NextCP/2 is running inside a docker container, select the host interface here!</span></td>
             </tr>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Generate UPnP code</td>
-                <td class="px-6 py-4">If enabled, <code>cling</code> UPnP access wrapper are generated for discovered UPnP services.</td>
+                <td class="px-6 py-4">If set ti TRUE, <code>JUPnP</code> UPnP access wrapper are generated for discovered UPnP services.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">path for generated UPnP code</td>
+                <td class="px-6 py-4">This is the folder where generated UPnP code will be saved to.</td>
             </tr>
         </tbody>
     </table>

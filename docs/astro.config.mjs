@@ -7,6 +7,7 @@ import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
+	base: '/nextcp2/',
 	vite: {
 		plugins: [tailwindcss()],
 	},
