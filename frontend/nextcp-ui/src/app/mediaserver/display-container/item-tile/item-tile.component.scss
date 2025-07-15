@@ -1,5 +1,9 @@
-@use 'appTable';
 @use "card-layout";
+@use "tailwindcss";
+
+.defaultFont {
+    font-family     : 'HK Grotesk';
+}
 
 .selectRow {
     color: aqua;
@@ -36,7 +40,6 @@
 
 .trackNum {
     min-width: 1.8rem;
-    ;
 }
 
 .albumSubtitle {
@@ -44,3 +47,4 @@
     margin-top : 1rem;
     width      : 100%;
 }
+

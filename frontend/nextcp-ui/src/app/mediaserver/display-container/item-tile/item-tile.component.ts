@@ -165,12 +165,15 @@ export class ItemTileComponent {
   //
   // CSS support like responsive grid layout counting in respect to first image visible or not
   // ===============================================================================================
-  getTitleResponsiveClass(): string {
+  getColNumber() : number {
+    let num = 5;
+    if (this.extendedApi()) {
+      num = num + 1;
+    } 
     if (!this.allTracksSameAlbum()) {
-      return 'col-8 col-sm-7 col-md-5 col-lg-5 col-xl-3';
-    } else {
-      return 'col-11 col-sm-9 col-md-7 col-lg-6 col-xl-6';
-    }
+      num = num + 1;
+    } 
+    return num;
   }
 
   getDuration(item: MusicItemDto): string {

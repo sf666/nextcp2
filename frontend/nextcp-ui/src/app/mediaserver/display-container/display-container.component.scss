@@ -1,9 +1,4 @@
-.outer-container {
-    display  : flex;
-    flex     : 1 5 auto;
-    position : relative;
-    max-width: 1700px;
-}
+@use "tailwindcss";
 
 .title {
     font-size     : 2rem;
@@ -11,12 +6,6 @@
     align-self    : flex-start;
     padding-bottom: 0.7rem;
     color         : var(--snow-white);
-}
-
-.browseContentArea {
-    flex      : 30 1 0;
-    max-width : 1400px;
-    margin-top: 32px;
 }
 
 .left-spacer {
