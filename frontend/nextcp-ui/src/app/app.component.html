@@ -17,18 +17,17 @@
     }
 
     @if (layoutService.sidebarVisible) {
-    <app-sidebar></app-sidebar>
+      <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-52 h-screen transition-transform -translate-x-full md:translate-x-0" aria-label="Sidebar">
+        <app-sidebar></app-sidebar>
+      </aside>
     }
 
-    <div id="mainContent" class="mainContent">
+    <div id="mainContent" class="mainContent md:ml-52">
       @if (layoutService.headerVisible) {
-      <div class="topPosition">&nbsp;</div>
+        <div class="topPosition">&nbsp;</div>
       }
       <router-outlet></router-outlet>
       <div class="footer-block">&nbsp;</div>
-      <!--
-    <div id="mobileDeviceEmptyBlock" *ngIf="layoutService.isMobileDevice()" class="footer-block">&nbsp;</div>
-    -->
     </div>
 
     @if (layoutService.footerVisible) {

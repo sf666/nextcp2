@@ -3,7 +3,6 @@ import { Router} from '@angular/router';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { Component, input, output, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatIcon } from '@angular/material/icon';
 import { GlobalSearchComponent } from 'src/app/util/comp/global-search/global-search.component';
 import { ScrollLoadHandler } from 'src/app/mediaserver/display-container/defs';
 
@@ -13,7 +12,7 @@ import { ScrollLoadHandler } from 'src/app/mediaserver/display-container/defs';
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.scss'],
   standalone: true,
-  imports: [MatIcon, FormsModule, GlobalSearchComponent]
+  imports: [FormsModule, GlobalSearchComponent]
 })
 
 export class NavBarComponent {
