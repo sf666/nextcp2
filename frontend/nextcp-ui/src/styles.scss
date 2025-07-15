@@ -6,16 +6,19 @@
 /*
     ngx-toast : regular style toast
  */
-@use 'ngx-toastr/toastr'as *;
+@use 'ngx-toastr/toastr' as *;
 
 // cool table look and feel
 // @import 'appTable';
 
-@use 'app-variables'as *;
-@use 'app-styles'as *;
-@use "app-icons"as *;
+@use 'app-variables' as *;
+@use 'app-styles' as *;
+@use "app-icons" as *;
 
 // @use "tailwind"as *;
+@use "flowbite/src/themes/default" as *;
+@plugin "flowbite/plugin";
+@source "../node_modules/flowbite";
 
 
 html {

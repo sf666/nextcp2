@@ -17,12 +17,12 @@
     }
 
     @if (layoutService.sidebarVisible) {
-      <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-52 h-screen transition-transform -translate-x-full md:translate-x-0" aria-label="Sidebar">
+      <aside flowbiteSidebar id="default-sidebar" class="fixed top-0 left-0 z-1 md:translate-x-0 w-52 h-screen transition-transform -translate-x-full" aria-label="Sidebar">
         <app-sidebar></app-sidebar>
       </aside>
     }
 
-    <div id="mainContent" class="mainContent ml-52 md:ml-52">
+    <div id="mainContent" class="mainContent ml-0 md:ml-52">
       @if (layoutService.headerVisible) {
         <div class="topPosition">&nbsp;</div>
       }

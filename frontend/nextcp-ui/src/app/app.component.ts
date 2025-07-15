@@ -1,6 +1,6 @@
 import { SpinnerService } from './service/spinner.service';
 import { LayoutService } from './service/layout.service';
-import { ChangeDetectionStrategy, Component, HostListener } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as _ from "lodash";
@@ -9,7 +9,7 @@ import { FooterComponent } from './mediarenderer/footer/footer.component';
 import { SidebarComponent } from './view/sidebar/sidebar.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { RouterOutlet } from '@angular/router';
-
+import { initFlowbite } from 'flowbite';
 
 @Component({
     selector: 'app-root',
@@ -19,8 +19,12 @@ import { RouterOutlet } from '@angular/router';
     standalone: true,
     imports: [RouterOutlet, MatProgressSpinner, SidebarComponent, FooterComponent, AsyncPipe]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'nextCP/2';
+
+  ngOnInit(): void {
+    initFlowbite();
+  }
 
   constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer, public layoutService: LayoutService, public spinnerService: SpinnerService) {
     // SVG icon set was removed. This is for future documentation, how to register icon sets

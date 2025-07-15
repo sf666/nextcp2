@@ -1,9 +1,6 @@
 @use "tailwindcss";
 
 .navbar-base {
-    position: fixed;
-    top     : 0px;
-    right   : 0px;
     height  : var(--nav-height);
     z-index : 11;                        // material design button component have z-index of 10. So lets go +1
 
@@ -16,7 +13,6 @@
 
 .navbar {
     @extend .navbar-base;
-    width: calc(100% - var(--sidebar-width));
 }
 
 .headFont {

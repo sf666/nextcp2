@@ -1,41 +1,42 @@
-<div class="h-full overflow-y-auto bg-gray-50 dark:bg-gray-800">  <div class="app-label-text">nextCP/2</div>
+<div flowbiteSidebarContent class="h-full overflow-y-auto bg-gray-50 dark:bg-zinc-900"> 
+  <div class="app-label-text">nextCP/2</div>
   <div class="flex flex-col">
-    <button mat-button [routerLink]="'/music-library'" class="margin-reactive {{getTextClass('/music-library')}}" (click)="musicLibraryClicked()">
+    <button flowbiteSidebarItem mat-button [routerLink]="'/music-library'" class="margin-reactive {{getTextClass('/music-library')}}" (click)="musicLibraryClicked()">
       <mat-icon class="material-symbols-outlined thin">library_music</mat-icon>
       <span class="hide-element buttonText">Music Library</span>
     </button>
-    <a mat-button [routerLink]="'/playlist'" (click)="buttonClicked('/playlist')" class="margin-reactive {{getTextClass('/playlist')}}">
+    <a mat-button flowbiteSidebarItem [routerLink]="'/playlist'" (click)="buttonClicked('/playlist')" class="margin-reactive {{getTextClass('/playlist')}}">
       <mat-icon class="material-symbols-outlined thin">queue_music</mat-icon>
       <span class="hide-element buttonText">Player Queue</span>
     </a>
-    <a mat-button [routerLink]="'/player'" (click)="buttonClicked('/player')" class="margin-reactive {{getTextClass('/player')}}">
+    <a mat-button flowbiteSidebarItem [routerLink]="'/player'" (click)="buttonClicked('/player')" class="margin-reactive {{getTextClass('/player')}}">
       <mat-icon class="material-symbols-outlined thin">surround_sound</mat-icon>
       <span class="buttonText hide-element">Now Listening</span>
     </a>
 
-    <a mat-button [routerLink]="'/radio'" (click)="buttonClicked('/radio')" class="margin-reactive  {{getTextClass('/radio')}}">
+    <a mat-button flowbiteSidebarItem [routerLink]="'/radio'" (click)="buttonClicked('/radio')" class="margin-reactive  {{getTextClass('/radio')}}">
       <mat-icon class="material-symbols-outlined thin">radio</mat-icon>
       <span class="hide-element buttonText">Radio</span>
     </a>
 
-    <a mat-button [routerLink]="'/ums-audioaddict'" (click)="buttonClicked('/audioaddict')" class="margin-reactive  {{getTextClass('/audioaddict')}}">
+    <a mat-button flowbiteSidebarItem [routerLink]="'/ums-audioaddict'" (click)="buttonClicked('/audioaddict')" class="margin-reactive  {{getTextClass('/audioaddict')}}">
       <mat-icon class="material-symbols-outlined thin">radio</mat-icon>
       <span class="hide-element buttonText">Radio Networks</span>
     </a>
 
-    <a mat-button [routerLink]="'/myAlbums'" (click)="myAlbumClicked()" class="margin-reactive {{getTextClass('/myAlbums')}}">
+    <a mat-button flowbiteSidebarItem [routerLink]="'/myAlbums'" (click)="myAlbumClicked()" class="margin-reactive {{getTextClass('/myAlbums')}}">
       <mat-icon class="material-symbols-outlined thin">album</mat-icon>
       <span class="hide-element buttonText">My Albums</span>
     </a>
 
     @if(mediaPlayerService.mediaServerExists()) {
-    <a mat-button [routerLink]="'/mediaPlayerConfig'" (click)="buttonClicked('/mediaPlayerConfig')" class="margin-reactive  {{getTextClass('/mediaPlayerConfig')}}">
+    <a mat-button flowbiteSidebarItem [routerLink]="'/mediaPlayerConfig'" (click)="buttonClicked('/mediaPlayerConfig')" class="margin-reactive  {{getTextClass('/mediaPlayerConfig')}}">
       <mat-icon class="material-symbols-outlined thin">save</mat-icon>
       <span class="hide-element buttonText">MediaPlayer</span>
     </a>
     }
 
-    <a mat-button [routerLink]="'/settings'" (click)="buttonClicked('/settings')" class="margin-reactive  {{getTextClass('/settings')}}">
+    <a mat-button flowbiteSidebarItem [routerLink]="'/settings'" (click)="buttonClicked('/settings')" class="margin-reactive  {{getTextClass('/settings')}}">
       <mat-icon class="material-symbols-outlined thin">settings</mat-icon>
       <span class="hide-element buttonText">App Settings</span>
     </a>
@@ -49,7 +50,7 @@
       </div>
     </div>
     @for (item of serverPlaylists; track item.playlistId) {
-    <a mat-button [routerLink]="'/myPlaylists'" class="hide-element playlist {{getPlaylistClass(item.playlistId)}}" (click)="browseToPlaylist(item)">{{item.playlistName}}</a>
+    <a mat-button flowbiteSidebarItem [routerLink]="'/myPlaylists'" class="hide-element playlist {{getPlaylistClass(item.playlistId)}}" (click)="browseToPlaylist(item)">{{item.playlistName}}</a>
     }
     @if (myPlaylistsAvailable && playlistService.serverPl().serverPlaylists?.length == 0) {
     <div>Playlist folder contains no playlists.</div>
