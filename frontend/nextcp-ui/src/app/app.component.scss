@@ -1,3 +1,5 @@
+@use "tailwindcss";
+
 .topPosition {
     min-height: var(--nav-height);
 }
@@ -8,36 +10,14 @@
     overflow-x          : hidden;
     letter-spacing      : 0.07rem;
     flex                : 1;
-    //    height        : calc(var(--vh, 1vh) * 100 - var(--nav-height));
     height              : calc(var(--vh, 1vh) * 100);
     scrollbar-width     : none
 }
 
 .mainContent {
     @extend .mainContent-base;
-    width: calc(100% - var(--sidebar-width));
-    left : var(--sidebar-width);
 }
 
-@media only screen and (max-width: 900px) {
-    .mainContent {
-        @extend .mainContent-base;
-        left : var(--sidebar-width-min);
-        width: calc(100% - var(--sidebar-width-min));
-    }
-}
-
-@media only screen and (max-width: 1200px) and (min-width: 900px) {
-    .mainContent {
-        position      : fixed;
-        overflow-y    : scroll;
-        letter-spacing: 0.07rem;
-        height        : calc(var(--vh, 1vh) * 100);
-        flex          : 1;
-        left          : var(--sidebar-width-mid);
-        width         : calc(100% - var(--sidebar-width-mid));
-    }
-}
 
 .app-root {
     background-color: rgba(0, 0, 0, 1);
