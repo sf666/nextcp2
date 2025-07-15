@@ -1,3 +1,5 @@
+@use "tailwindcss";
+
 :host {
     --mdc-text-button-container-height: 36px;
     --mdc-text-button-label-text-color: rgb(255, 255, 255);
@@ -39,18 +41,6 @@ a {
 
 .margin-reactive {
     margin-left                       : 1rem;
-}
-
-@media only screen and (max-width: 900px) {
-    .margin-reactive {
-        margin-left: 0px;
-    }
-}
-
-@media only screen and (max-width: 900px) {
-    .hide-element {
-        visibility: hidden;
-    }
 }
 
 .buttonText {
@@ -121,35 +111,6 @@ a {
     width: var(--sidebar-width);
 }
 
-@media only screen and (max-width: 1200px) and (min-width: 900px) {
-    .sidebar {
-        position: fixed;
-        top     : 0;
-        left    : 0;
-        height  : calc(var(--vh, 1vh) * 100 - var(--footer-height));
-
-        display       : flex;
-        flex-direction: column;
-        flex-shrink   : 0;
-        background    : #242428;
-        transition    : 50ms ease-in;
-        overflow-y    : auto;
-        overflow-x    : hidden;
-        letter-spacing: 0.04rem;
-        font-weight   : 300;
-        width         : var(--sidebar-width-mid);
-        max-width     : var(--sidebar-width-mid);
-    }
-}
-
-@media only screen and (max-width: 900px) {
-    .sidebar {
-        @extend.sidebar-base;
-        width    : var(--sidebar-width-min);
-        max-width: var(--sidebar-width-min);
-    }
-}
-
 
 .sub-label {
     color      : var(--glas-white-4);
@@ -175,3 +136,4 @@ a {
     display       : flex;
     flex-direction: column;
 }
+
