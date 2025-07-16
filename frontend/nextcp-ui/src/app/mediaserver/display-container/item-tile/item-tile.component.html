@@ -9,7 +9,7 @@
         @if (allTracksSameAlbum()) {
             <div class="w-8 text-right">#</div>
             <div class="w-64 ms-3 grow-3">TITLE</div>
-            <div class="w-64 ms-3 grow-2">ARTIST</div>
+            <div class="w-48 ms-3 grow-2">ARTIST</div>
             @if (extendedApi()) {<div class="w-24 ms-3 text-center">RATING</div>}
             <div class="w-16 ms-3 text-right">LG</div>
             <div class="w-4 ms-6">&nbsp;</div>
@@ -17,7 +17,7 @@
             <div class="w-16 ms-3">&nbsp;</div>
             <div class="w-64 ms-3 grow-3">TITLE</div>
             <div class="w-64 ms-3 grow-2">ALBUM</div>
-            <div class="w-32 ms-3 grow-2">ARTIST</div>
+            <div class="w-48 ms-3 grow-2">ARTIST</div>
             @if (extendedApi()) {<div class="w-24 ms-3 text-center">RATING</div>}
             <div class="w-16 ms-3 text-right">LG</div>
             <div class="w-4 ms-6">&nbsp;</div>
@@ -44,7 +44,7 @@
             }
 
             <!--  COL 2 TITLE                  -->
-            <div id="{{item.objectID}}" class="flex ms-3 w-64 grow-3 justify-between {{selectedRowClass(item)}}">
+            <div id="{{item.objectID}}" class="flex ms-3 me-2 w-64 grow-3 justify-between {{selectedRowClass(item)}}">
                 <div class="content-center">{{item.title}}</div>
                 <quality-badge class="content-center" [item]="item"></quality-badge>
             </div>
@@ -55,7 +55,7 @@
             }
             
             <!--  COL 4 ARTIST                 -->
-            <div id="OPT_ARTIST_{{item.objectID}}" (click)="playItem(item)" class="w-32 ms-3 grow-2 content-center {{selectedRowClass(item)}}"> {{item.artistName}}</div>
+            <div id="OPT_ARTIST_{{item.objectID}}" (click)="playItem(item)" class="w-48 ms-3 grow-2 content-center {{selectedRowClass(item)}}"> {{item.artistName}}</div>
 
             <!--  COL 5 optional RATING        -->
             @if (extendedApi()) {
