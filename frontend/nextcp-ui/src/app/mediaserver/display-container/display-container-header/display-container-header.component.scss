@@ -5,6 +5,11 @@
 @use "app-icons";
 @use "tailwindcss";
 
+:root {
+    --mat-select-enabled-trigger-text-color : blue;
+    color:var(--mat-select-enabled-trigger-text-color);
+}
+
 .title {
     font-size     : 2rem;
     font-weight   : 700;

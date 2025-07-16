@@ -80,8 +80,8 @@
           }
         </div>
         <!-- current content search box -->
-        <div class="flex justify-between grow shrink mt-4">
-          <div>   
+        <div class="flex grow shrink mt-4">
+          <div class="flex me-3">
             <label for="search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">search in this page</label>
             <div class="relative flex w-64">
                 <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -95,18 +95,17 @@
 
           @if (hasGenres()) {
           <div class="pe-2">
-            <mat-form-field subscriptSizing="dynamic" appearance="outline" class="app-input">
-              <mat-label>Genre</mat-label>
-              <mat-select #genresSelect multiple [(ngModel)]="selectedGenres">
+            <div class="relative flex w-72">
+              <mat-select #genresSelect multiple [(ngModel)]="selectedGenres" id="searchGenres" placeholder="search genres" style="--mat-select-placeholder-text-color:var(--color-gray-400); --mat-select-enabled-arrow-color:var(--color-gray-400)" class="block w-96 p-4 pe-10 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 focus:ring-gray-500 focus:border-gray-500 dark:bg-zinc-700/40 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-zinc-500">
                 <mat-option value="NONE">NONE</mat-option>
                 @for (genre of genresList(); track genre) {
-                <mat-option [value]="genre">{{genre}}</mat-option>
+                  <mat-option [value]="genre">{{genre}}</mat-option>
                 }
               </mat-select>
-              <div matSuffix>
+              <div class="absolute inset-y-0 end-0 flex items-center ps-3 pointer-events-none">
                 <mat-icon class="material-symbols-outlined thin md-light me-2" (click)="clearGenres($event)">close</mat-icon>
               </div>
-            </mat-form-field>
+            </div>
           </div>
           }
           @if(!hasSongs()) {
