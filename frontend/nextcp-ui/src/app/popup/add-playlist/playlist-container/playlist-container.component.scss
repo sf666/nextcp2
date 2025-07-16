@@ -1,5 +1,6 @@
-@import "buttons";
-@import "./app-popup";
+@use "buttons";
+@use "./app-popup";
+@use "tailwindcss";
 
 .playlist-list {
     display       : flex;
