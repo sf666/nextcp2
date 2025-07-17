@@ -20,11 +20,8 @@
     <div class="popupDivider mt-2 mb-1">&nbsp;</div>
     <div class="popupBody">
         @if (isPlaylistMode(PlaylistModeEnum.Add) || isPlaylistMode(PlaylistModeEnum.Delete)) {
-            <div class="searchInput">
-                <mat-form-field class="w100" appearance="outline" class="setting-dropdown">
-                    <input matInput type="text" [(ngModel)]="playlistFilter" placeholder="search for playlist">
-                </mat-form-field>
-            </div>
+            <input [(ngModel)]="playlistFilter" type="text" class="font-light mb-4 self-center block w-4/5 p-4 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 focus:ring-gray-500 focus:border-gray-500 dark:bg-zinc-700/40 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-zinc-500" placeholder="search for playlist"/>
+
             @if (getRecentPlaylistsCount() > 0) {
                 <div class="headline">
                     recently used
@@ -64,13 +61,13 @@
             }
         } @else if (isPlaylistMode(PlaylistModeEnum.Create)) {
         <!-- create Playlist -->
-        <div class="fineText mb-3">Playlist will be created in folder : {{addToContainer.title}}</div>
-        <div class="searchInput">
-            <mat-form-field class="w100" appearance="outline" class="setting-dropdown">
-                <input matInput type="text" [(ngModel)]="newPlaylistName" placeholder="new playlist name">
-            </mat-form-field>
+        <div class="flex flex-col mb-12 mt-8">
+            <div class="text-sm text-zinc-500 ">Playlist will be created in folder</div>
+            <div class="text-sm text-zinc-300 mt-4">{{addToContainer.title}}</div>
         </div>
-        <div class="flex mx-4">
+
+        <input [(ngModel)]="newPlaylistName" type="text" class="font-light self-center block w-4/5 p-4 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 focus:ring-gray-500 focus:border-gray-500 dark:bg-zinc-700/40 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-zinc-500" placeholder="playlist name"/>
+        <div class="flex mt-8 mb-4 mx-4 self-center justify-around">
             <button mat-stroked-button class="mv-4 my-buttons m-4" (click)="cancelClicked()">
                 <mat-icon class="material-symbols-outlined thin">close</mat-icon>
                 <span class="button button-text">cancel</span>
