@@ -1,4 +1,4 @@
-@use "custom_variables" as cv;
+@use "custom_variables"as cv;
 @use "tailwindcss";
 
 $col-1: cv.$amber-pantone-3;
@@ -216,11 +216,6 @@ img {
     margin-bottom: 4px;
 }
 
-.minWidth {
-    min-width : 0;
-    min-height: 0;
-}
-
 .no-wrap {
     white-space  : nowrap;
     overflow     : hidden;
@@ -253,23 +248,11 @@ img {
     ==============================================================
 **/
 
-.middle-div {
-    height         : 100%;
-    align-self     : top;
-    justify-content: space-around;
-}
-
-.right-footer {
-    align-self     : center;
-    justify-content: space-evenly;
-}
-
 .mySlider {
-    max-width : 150px;
     height    : 48px;
-    width     : 100%;
     align-self: center;
     opacity   : 0;
+    flex      : 1 1 auto;
 }
 
 .progressbar {

@@ -1,11 +1,11 @@
 <div class="flex flex-row flex-nowrap justify-between footer">
   <!-- left footer section -->
-  <div class="flex left-footer grow">
+  <div class="flex left-footer grow-6">
     @if (rendererService.trackInfoAvailable) {
       <img src="{{getImgSrc()}}">
     }
 
-    <div class="flex flex-col minWidth albumAndTitle">
+    <div class="flex flex-col grow albumAndTitle">
       <div class="title no-wrap">{{getCurrentSongTitle()}}</div>
       <div class="flex flex-col no-wrap">
         @if (rendererService.trackInfo().currentTrack?.artistName ) {
@@ -30,8 +30,8 @@
   </div>
 
   <!-- Middle footer section -->
-  <div class="middle-div max-w-md grow">
-    <div class="flex flex-col middle-div">
+  <div class="flex grow-3 justify-center h-full">
+    <div class="flex grow flex-col justify-around">
       <div class="player-button-group">
         <span class="material-symbols-outlined icon-button {{shuffleClass}}" (click)="playlistService.toggleShuffle()">shuffle</span>
         <span class="material-symbols-outlined icon-button" (click)="playlistService.previous()">skip_previous</span>
@@ -44,7 +44,7 @@
         <span class="material-symbols-outlined icon-button" (click)="rendererService.next()">skip_next</span>
         <span class="material-symbols-outlined icon-button {{repeatClass}}" (click)="playlistService.toggleRepeat()">repeat</span>
       </div>
-      <div class="timeProgessContainer mflex">
+      <div class="timeProgessContainer flex">
         <div class="timeText">{{rendererService.trackTime().secondsDisp}}</div>
         <div class="timeSliderBox">
           @if (!streaming()) {
@@ -52,7 +52,7 @@
               <input matSliderThumb (valueChange)="trackTimePercentSeek($event)" [value]="trackTimePercent()">
             </mat-slider>
           }
-          <mat-progress-bar class="absolute time-progressbar align-self-center" mode="determinate" [value]="trackTimePercent()">
+          <mat-progress-bar class="absolute time-progressbar self-center" mode="determinate" [value]="trackTimePercent()">
           </mat-progress-bar>
         </div>
         @if (!streaming()) {
@@ -64,19 +64,23 @@
   </div>
 
   <!-- right footer section -->
-  <div class="flex m-2 ps-2 right-footer me-4 flex-none">
-    <span class="material-symbols-outlined icon-main" (click)="serverClicked($event)">dns</span>
-    <span class="material-symbols-outlined icon-main" (click)="rendererClicked($event)">speaker</span>
-    @if (hasDeviceDriver()) {
-      <span class="material-symbols-outlined {{getStandbyClass()}} icon-main" (click)="powerClicked()">power_settings_new</span>
-    }
-    <span class="material-symbols-outlined icon-main">volume_up</span>
-    <div class="flex overlayBox" style="width: 120px;">
-        <mat-slider class="absolute hidden mySlider" min="0" max="90" step="1" value="0">
-          <input matSliderThumb (valueChange)="volChanged($event)" [value]="rendererService.deviceDriverState().volume">
-        </mat-slider>
-      <mat-progress-bar class="absolute progressbar" mode="determinate" [value]="rendererService.deviceDriverState().volume">
-      </mat-progress-bar>
+  <div class="flex grow-2 h-full self-center me-4">
+    <div class="flex ">
+      <span class="material-symbols-outlined icon-main" (click)="serverClicked($event)">dns</span>
+      <span class="material-symbols-outlined icon-main" (click)="rendererClicked($event)">speaker</span>
+      @if (hasDeviceDriver()) {
+        <span class="material-symbols-outlined {{getStandbyClass()}} icon-main" (click)="powerClicked()">power_settings_new</span>
+      }
+    </div>
+    <div class="flex grow">
+      <span class="material-symbols-outlined icon-main">volume_up</span>
+      <div class="flex grow overlayBox">
+          <mat-slider class="absolute flex hidden mySlider grow" style="width: 100%;" min="0" max="90" step="1" value="0">
+            <input class="flex grow" matSliderThumb (valueChange)="volChanged($event)" [value]="rendererService.deviceDriverState().volume">
+          </mat-slider>
+        <mat-progress-bar class="absolute flex progressbar grow" mode="determinate" [value]="rendererService.deviceDriverState().volume">
+        </mat-progress-bar>
+      </div>
     </div>
   </div>
 </div>
