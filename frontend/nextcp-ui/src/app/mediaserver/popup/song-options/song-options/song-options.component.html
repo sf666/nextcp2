@@ -1,58 +1,53 @@
 <div class="flex flex-col justify-center">
   <!-- (mouseleave)="close()" -->
   <div class="flex mt-3" (mouseenter)="closeAllDialogs()">
-    <div class="top-image">
+    <div class="align-middle self-center">
       <img src="{{selectedMusicItem.albumArtUrl}}">
     </div>
 
-    <div class="flex flex-col minWidth albumAndTitle">
-      <div class="title no-wrap">{{selectedMusicItem.title}}</div>
-      <div class="artist no-wrap">{{selectedMusicItem.artistName}}</div>
+    <div class="flex flex-col self-center justify-around albumAndTitle">
+      <div class="title text-base no-wrap ml-4">{{selectedMusicItem.title}}</div>
+      <div class="artist mt-1 text-xs no-wrap ml-4">{{selectedMusicItem.artistName}}</div>
+      <star-rating class="ml-4 mt-2" [currentSong]="selectedMusicItem"></star-rating>
     </div>
   </div>
 
-  <div class="divider mt-2 mb-1">&nbsp;</div>
-  <div class="starRating">
-    <star-rating [currentSong]="selectedMusicItem"></star-rating>
-  </div>
-  <div class="divider mt-2 mb-1">&nbsp;</div>
+  <div class="divider mb-3">&nbsp;</div>
 
   <div class="dialogItems flex flex-col flex-wrap">
     @if (hasValidSongId()) {
-    <div class="flex justify-between playlist-item-header">
-      Server side playlist actions
+    <div class="ml-2 mb-1 flex text-sm justify-between playlist-item-header ml-2">
+      <div>Server side playlist actions</div>
     </div>
-    <div class="flex justify-between playlist-item" (click)="openAddToPlaylistDialog($event)">
-      <div class="flex justify-between" style="align-self: center;">
-        Add to playlist
-      </div>
+    <div class="ml-4 text-sm flex justify-between playlist-item" (click)="openAddToPlaylistDialog($event)">
+      <div>Add to playlist</div>
     </div>
     }
     @if (isParentPlaylist) {
-    <div class="playlist-item" (mouseover)="closeAllDialogs()" (click)="deleteFromPlaylist()">
+    <div class="ml-4 mt-1 playlist-item" (mouseover)="closeAllDialogs()" (click)="deleteFromPlaylist()">
       Delete from this playlist
     </div>
     }
 
     @if (hasValidSongId()) {
-    <div class="divider mb-1 mt-1">&nbsp;</div>
-    <div class="flex justify-between playlist-item-header">
+    <div class="divider mb-3 mt-1">&nbsp;</div>
+    <div class="ml-2 mb-1 flex justify-between playlist-item-header">
       Player playlist actions
     </div>
-    <div class="playlist-item" (mouseenter)="closeAllDialogs()" (click)="actionPlayNext()">
+    <div class="ml-4 mb-1 playlist-item" (mouseenter)="closeAllDialogs()" (click)="actionPlayNext()">
       Play next
     </div>
-    <div class="playlist-item" (mouseenter)="closeAllDialogs()" (click)="actionPlayLast()">
+    <div class="ml-4 mb-1 playlist-item" (mouseenter)="closeAllDialogs()" (click)="actionPlayLast()">
       Add at last position
     </div>
-    <div class="divider mb-1 mt-1">&nbsp;</div>
-    <div class="flex justify-between playlist-item-header">
+    <div class="divider mb-3 mt-1">&nbsp;</div>
+    <div class="ml-2 mb-1 flex justify-between playlist-item-header">
       Other server actions
     </div>
-    <div class="playlist-item" (mouseover)="closeAllDialogs()" (click)="download()">
+    <div class="ml-4 mb-1 playlist-item" (mouseover)="closeAllDialogs()" (click)="download()">
       Download
     </div>
-    <div class="playlist-item" (mouseover)="closeAllDialogs()" (click)="updateAlbumArt()">
+    <div class="ml-4 playlist-item" (mouseover)="closeAllDialogs()" (click)="updateAlbumArt()">
       Update Album Art
     </div>
     }

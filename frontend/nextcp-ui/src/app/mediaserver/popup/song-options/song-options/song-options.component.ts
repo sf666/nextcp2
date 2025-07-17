@@ -60,7 +60,7 @@ export class SongOptionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 300, 480);
+    this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 300, 380);
   }
 
 
