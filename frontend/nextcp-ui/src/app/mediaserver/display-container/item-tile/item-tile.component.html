@@ -5,7 +5,7 @@
 <div id="Browse_Result_Music_Items" tabindex="-1" class="defaultFont font-semibold max-w-6xl">
     @if (isListView()) {
     <div id="head_browse_result_items_list_view_ID" class="flex flex-col">
-        <div class="flex row col-greyed text-xs mb-3 mt-2">
+        <div class="flex row col-greyed text-xs pb-3 mt-2">
         @if (allTracksSameAlbum()) {
             <div class="w-8 text-right">#</div>
             <div class="w-64 ms-3 grow-3">TITLE</div>
@@ -28,12 +28,11 @@
         <!-- one item is displayed over a row -->
         <!--                                  -->
         @for (item of musicTracks(); track item.objectID) {
-        <div class="flex text-sm tracking-widest font-semibold mb-1">
-           <!--   OPTINAL DISK LABEL          -->
             @if (allTracksSameAlbum() && !allTracksSameDisc()) {
-                @if (newDiscLabel(item)) {<div class="disc-label">{{getDiscLabel(item)}}</div>}
+                @if (newDiscLabel(item)) {<div class="font-bold text-zinc-500 mb-2 pt-3">{{getDiscLabel(item)}}</div>}
             }
 
+        <div class="flex text-sm tracking-widest font-semibold mb-1">
             <!--  COL 1 TRACK NUM OR IMAGE     -->
             @if (!allTracksSameAlbum()) {
             <div id="col_1_img_{{item.objectID}}" class="w-16 ms-3 {{selectedRowClass(item)}}" >
