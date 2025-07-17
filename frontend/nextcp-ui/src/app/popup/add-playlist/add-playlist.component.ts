@@ -8,9 +8,7 @@ import {
 import { ChangeDetectionStrategy, Component, Inject, computed, model, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatFormField } from '@angular/material/form-field';
-import { MatIcon, MatIconModule } from '@angular/material/icon';
-import { MatInput } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { FormsModule, NgModel } from '@angular/forms';
@@ -27,7 +25,7 @@ export enum PlaylistMode {
   selector: 'app-playlist-management',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatFormField, MatButton, MatInput, MatIconModule, FormsModule, PlaylistContainerComponent],
+  imports: [MatButton, MatIconModule, FormsModule, PlaylistContainerComponent],
   templateUrl: './add-playlist.component.html',
   styleUrl: './add-playlist.component.scss',
 })
