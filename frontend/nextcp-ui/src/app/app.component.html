@@ -1,6 +1,4 @@
 <div class="dark">
-  <router-outlet></router-outlet>
-
   <div class="app-root">
 
     @if (showBlur()) {
@@ -27,7 +25,6 @@
         <div class="topPosition">&nbsp;</div>
       }
       <router-outlet></router-outlet>
-      <div class="footer-block">&nbsp;</div>
     </div>
 
     @if (layoutService.footerVisible) {
