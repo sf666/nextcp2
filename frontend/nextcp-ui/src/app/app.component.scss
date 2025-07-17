@@ -4,7 +4,7 @@
     min-height: var(--nav-height);
 }
 
-.mainContent-base {
+.mainContent {
     position            : fixed;
     overflow-y          : scroll;
     overflow-x          : hidden;
@@ -12,10 +12,6 @@
     flex                : 1;
     height              : calc(var(--vh, 1vh) * 100);
     scrollbar-width     : none    
-}
-
-.mainContent {
-    @extend .mainContent-base;
 }
 
 
