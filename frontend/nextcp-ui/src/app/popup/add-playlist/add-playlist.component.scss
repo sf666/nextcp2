@@ -1,6 +1,42 @@
 @use "buttons";
-@use "./app-popup";
 @use "tailwindcss";
+
+.popupHeader {
+    display      : flex;
+    align-self   : center;
+    color        : aqua;
+    font-size    : larger;
+    border-bottom: #999999;
+    margin       : 1rem;
+}
+
+.popupFrame {
+    width         : 600px;
+    font-weight   : 600;
+    font-size     : 1rem;
+    text-align    : left;
+    letter-spacing: 0.05rem;
+}
+
+.popupBody {
+    display        : flex;
+    flex-direction : column;
+    justify-content: center;
+    margin         : 1rem;
+    padding-left   : 1.5rem;
+    padding-right  : 1.5rem;
+    overflow-x     : hidden;
+    overflow-y     : auto;
+}
+
+.popupElement {
+    margin: 8px;
+}
+
+.popupDivider {
+    font-size    : 1px;
+    border-bottom: 1px solid var(--grey-5);
+}
 
 .playlist-list {
     display       : flex;

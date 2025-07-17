@@ -26,7 +26,7 @@
                 <div class="headline">
                     recently used
                 </div>
-                <playlist-container
+                <playlist-container class="ml-4"
                     [playlists]="filteredRecentPlaylists()"
                     [playlistMode]="playlistMode()"
                     (addClicked)="addTo($event)"
@@ -38,7 +38,7 @@
                 my playlists
             </div>
             @if (getServerPlaylistsCount() > 0) {
-                <playlist-container
+                <playlist-container class="ml-4"
                     [playlists]="filteredServerPlaylists()"
                     [playlistMode]="playlistMode()"
                     (addClicked)="addTo($event)"
@@ -52,7 +52,7 @@
             </div>
 
             @if (getOtherPlaylistsCount() > 0) {
-                <playlist-container
+                <playlist-container class="ml-4"
                     [playlists]="filteredOtherPlaylists()"
                     [playlistMode]="playlistMode()"
                     (addClicked)="addTo($event)"
