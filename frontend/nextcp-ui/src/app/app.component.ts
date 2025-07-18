@@ -41,6 +41,14 @@ export class AppComponent implements OnInit {
     }
   }
 
+  get headerVisibleClass() : string {
+    if (this.layoutService.headerVisible) {
+      return "mainContent";
+    } else {
+      return "mainContentNoHeader";
+    }
+  }
+
   /*
   // Mobile Devices URL bar / view height fix.
   @HostListener('window:resize', ['$event'])

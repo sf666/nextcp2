@@ -12,6 +12,12 @@
     scrollbar-width: none
 }
 
+.mainContentNoHeader {
+    overflow-y     : scroll;
+    overflow-x     : hidden;
+    letter-spacing : 0.07rem;
+    scrollbar-width: none
+}
 
 .app-root {
     background-color: rgba(0, 0, 0, 1);

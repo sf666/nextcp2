@@ -15,20 +15,12 @@
     }
 
     @if (layoutService.sidebarVisible) {
-      <aside flowbiteSidebar id="default-sidebar" class="fixed top-0 left-0 z-1 md:translate-x-0 w-52 h-screen transition-transform -translate-x-full" aria-label="Sidebar">
-        <app-sidebar></app-sidebar>
-      </aside>
+    <aside flowbiteSidebar id="default-sidebar" class="fixed top-0 left-0 z-1 md:translate-x-0 w-52 h-screen transition-transform -translate-x-full" aria-label="Sidebar">
+      <app-sidebar></app-sidebar>
+    </aside>
     }
 
-    <div id="mainContent" class="mainContent flex grow ml-0 md:ml-52 w-full">
-      @if (layoutService.headerVisible) {
-        <div class="topPosition">&nbsp;</div>
-      }
-      <!--
-      <div class="w-full border-4 border-solid">
-        TEST
-      </div>
-      -->
+    <div id="mainContent" class="mainContent {{headerVisibleClass}} flex grow ml-0 md:ml-52 w-full">
       <router-outlet class="mb-32"></router-outlet>
     </div>
 
