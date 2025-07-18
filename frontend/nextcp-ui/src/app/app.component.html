@@ -20,11 +20,16 @@
       </aside>
     }
 
-    <div id="mainContent" class="mainContent ml-0 md:ml-52 w-full">
+    <div id="mainContent" class="mainContent flex grow ml-0 md:ml-52 w-full">
       @if (layoutService.headerVisible) {
         <div class="topPosition">&nbsp;</div>
       }
-      <router-outlet></router-outlet>
+      <!--
+      <div class="w-full border-4 border-solid">
+        TEST
+      </div>
+      -->
+      <router-outlet class="mb-32"></router-outlet>
     </div>
 
     @if (layoutService.footerVisible) {
