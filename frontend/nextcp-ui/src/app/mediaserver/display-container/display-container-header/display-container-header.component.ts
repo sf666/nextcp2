@@ -117,6 +117,10 @@ export class DisplayContainerHeaderComponent implements OnInit {
     console.log("like possible : " + this.likePossible());
   }
 
+  public get bgHeaderUrl() {
+    return this.currentContainer.albumartUri;
+  }
+
   get albums(): ContainerDto[] {
     return this.contentDirectoryService().albumList_();
   }

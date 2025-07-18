@@ -9,46 +9,44 @@
       <star-rating [size]="getStarSize()" [currentSong]="getCurrentTrack()"></star-rating>
     </div>
     @if (hasCurrentSongTitle()) {
-      <div>
-        <div class="flex flex-col ms-5 mt-5">
+      <div class="flex flex-col ms-5 mt-5 mb-24">
+        <div class="flex flex-col">
+          <div class="title">{{getCurrentSongTitle()}}</div>
           <div class="flex flex-col">
-            <div class="title">{{getCurrentSongTitle()}}</div>
-            <div class="flex flex-col">
-              @if (rendererService.trackInfo().currentTrack?.artistName ) {
-                <div class="regularText align-self-start">
-                  by <span class="highlightText">{{rendererService.trackInfo().currentTrack?.artistName}}</span>
-                </div>
-              } @else {
-                <div>&nbsp;</div>
-              }
-              @if (rendererService.trackInfo().currentTrack?.album) {
-                <div class="regularText align-self-start">
-                  @if (!streaming()) {
-                    <div>
-                      from the album <span class="highlightText">{{rendererService.trackInfo().currentTrack?.album}}</span>
-                    </div>
-                  } @else {
-                    <div>
-                      broadcasted by <span class="highlightText">{{rendererService.trackInfo().currentTrack?.album}}</span>
-                    </div>
-                  }
-                </div>
-              } @else {
-                <div>&nbsp;</div>
-              }
-            </div>
-          </div>
-          <div class="flex buttons-container">
-            @if (canBeAddedToPlaylist) {
-              <button mat-flat-button class="mr-buttons" (click)="openAddPlaylistDialog()">
-                <span class="material-symbols-outlined">playlist_add</span>
-                <span> Playlists</span>
-              </button>
+            @if (rendererService.trackInfo().currentTrack?.artistName ) {
+              <div class="regularText align-self-start">
+                by <span class="highlightText">{{rendererService.trackInfo().currentTrack?.artistName}}</span>
+              </div>
+            } @else {
+              <div>&nbsp;</div>
+            }
+            @if (rendererService.trackInfo().currentTrack?.album) {
+              <div class="regularText align-self-start">
+                @if (!streaming()) {
+                  <div>
+                    from the album <span class="highlightText">{{rendererService.trackInfo().currentTrack?.album}}</span>
+                  </div>
+                } @else {
+                  <div>
+                    broadcasted by <span class="highlightText">{{rendererService.trackInfo().currentTrack?.album}}</span>
+                  </div>
+                }
+              </div>
+            } @else {
+              <div>&nbsp;</div>
             }
           </div>
         </div>
+        <div class="flex buttons-container">
+          @if (canBeAddedToPlaylist) {
+            <button mat-flat-button class="mr-buttons" (click)="openAddPlaylistDialog()">
+              <span class="material-symbols-outlined">playlist_add</span>
+              <span> Playlists</span>
+            </button>
+          }
+        </div>
       </div>
-    } @else {
+      } @else {
       <div class="regularText infotext">song info not available</div>
     }
   </div>

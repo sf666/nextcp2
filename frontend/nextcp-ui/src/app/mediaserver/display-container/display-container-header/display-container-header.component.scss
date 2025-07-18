@@ -6,8 +6,6 @@
 @use "tailwindcss";
 
 :root {
-    --mat-select-enabled-trigger-text-color : blue;
-    color:var(--mat-select-enabled-trigger-text-color);
 }
 
 .title {
@@ -168,7 +166,6 @@
 .bg-img-header {
     display   : block;
     position  : absolute;
-    top       : 0px;
     max-height: av.$top-header-Height;
     min-height: av.$top-header-Height;
     width     : 100%;
