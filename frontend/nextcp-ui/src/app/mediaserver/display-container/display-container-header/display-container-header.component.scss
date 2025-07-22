@@ -159,8 +159,8 @@
     -moz-backdrop-filter             : blur(64px) saturate(120%) brightness(80%);
     backdrop-filter                  : blur(64px) saturate(120%) brightness(80%);
     pointer-events                   : none;
-    z-index                          : -2;
-    //        background-position    : 0 -500px;
+    z-index                          : -1;
+    // background-position    : 0 -500px;
 }
 
 .bg-img-header {
@@ -169,13 +169,14 @@
     max-height: av.$top-header-Height;
     min-height: av.$top-header-Height;
     width     : 100%;
+    top       : 0px;
 
     background-repeat: calc(var(--vh, 1vh) * 100);
     background-size  : cover;
 
     height             : 100%;
     background-repeat  : calc(var(--vh, 1vh) * 100);
-    z-index            : -1;
+    z-index            : 0;
     background-position: 0 -500px;
 }
 
