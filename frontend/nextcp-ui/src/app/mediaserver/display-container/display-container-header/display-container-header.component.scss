@@ -52,7 +52,6 @@
 }
 
 .img-top {
-    object-fit      : cover;
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter : drop-shadow(4px 4px 10px black);
 
@@ -172,7 +171,6 @@
     top       : 0px;
 
     background-repeat: calc(var(--vh, 1vh) * 100);
-    background-size  : cover;
 
     height             : 100%;
     background-repeat  : calc(var(--vh, 1vh) * 100);
