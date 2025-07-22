@@ -5,7 +5,7 @@
   <div class="bg-img-header items-center" id="header-background"></div>
   <!-- Header Button group -->
   @if(hasSongs()) {
-  <div id="headButtonRow" class="button-row">
+  <div id="headButtonRow" class="button-row ">
     <div class="button-flex-container">
       <div class="button-container" (click)="playContainer()">
         <button class="btn-play" mat-mini-fab>
@@ -41,7 +41,7 @@
       <img src="{{currentContainer.albumartUri}}" class="img-top">
     </div>
     <div class="flex flex-col grow shrink" id="ID_SCROLL_TO_ELEMENT_STEP_IN" tabindex="-1">
-      <div class="flex right-section">
+      <div class="flex right-section flex-wrap">
         <div>
           @if (hasSongs()) {
           <div>
@@ -80,8 +80,8 @@
           }
         </div>
         <!-- current content search box -->
-        <div class="flex mt-4">
-          <div class="flex me-3">
+        <div class="flex flex-wrap grow">
+          <div class="flex me-3" style="height: 56px;">
             <label for="search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">search in this page</label>
             <div class="relative flex w-64">
                 <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -89,22 +89,20 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                     </svg>
                 </div>
-                <input [(ngModel)]="quickSearchString" (keyup)="keyUp($event)" type="search" id="search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 focus:ring-gray-500 focus:border-gray-500 dark:bg-zinc-700/40 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-zinc-500" placeholder="search in this page"/>
+                <input [(ngModel)]="quickSearchString" (keyup)="keyUp($event)" type="search" id="search" class="block w-full p-2 ps-10 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 focus:ring-gray-500 focus:border-gray-500 dark:bg-zinc-700/40 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-zinc-500" placeholder="search in this page"/>
             </div>
           </div>
 
           @if (hasGenres()) {
-          <div class="pe-2">
-            <div class="relative flex w-72">
-              <mat-select #genresSelect multiple [(ngModel)]="selectedGenres" id="searchGenres" placeholder="search genres" style="--mat-select-placeholder-text-color:var(--color-gray-400); --mat-select-enabled-arrow-color:var(--color-gray-400)" class="block w-96 p-4 pe-10 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 focus:ring-gray-500 focus:border-gray-500 dark:bg-zinc-700/40 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-zinc-500">
-                <mat-option value="NONE">NONE</mat-option>
-                @for (genre of genresList(); track genre) {
-                  <mat-option [value]="genre">{{genre}}</mat-option>
-                }
-              </mat-select>
-              <div class="absolute inset-y-0 end-0 flex items-center ps-3" (click)="clearGenres($event)">
-                <mat-icon class="material-symbols-outlined thin md-light me-2">close</mat-icon>
-              </div>
+          <div class="relative flex w-64" style="height: 56px;">
+            <mat-select #genresSelect multiple [(ngModel)]="selectedGenres" id="searchGenres" placeholder="search genres" style="--mat-select-placeholder-text-color:var(--color-gray-400); --mat-select-enabled-arrow-color:var(--color-gray-400)" class="block w-48 grow p-4 pe-10 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 focus:ring-gray-500 focus:border-gray-500 dark:bg-zinc-700/40 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-zinc-500">
+              <mat-option value="NONE">NONE</mat-option>
+              @for (genre of genresList(); track genre) {
+                <mat-option [value]="genre">{{genre}}</mat-option>
+              }
+            </mat-select>
+            <div class="absolute inset-y-0 end-0 flex items-center ps-3" (click)="clearGenres($event)">
+              <mat-icon class="material-symbols-outlined thin md-light me-2">close</mat-icon>
             </div>
           </div>
           }

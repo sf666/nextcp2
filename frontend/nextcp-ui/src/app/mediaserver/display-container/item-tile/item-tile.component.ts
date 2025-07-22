@@ -92,8 +92,8 @@ export class ItemTileComponent {
   }
 
   private checkAllTracksSameAlbum(data: MusicItemDto[]): boolean {
-    const numtrack = this.musicTracks().length;
-    const numMbid = this.musicTracks().filter(
+    const numtrack = this.allMusicTracks().length;
+    const numMbid = this.allMusicTracks().filter(
       (item) => item.musicBrainzId?.ReleaseTrackId?.length > 0
     ).length;
 

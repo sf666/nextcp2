@@ -8,8 +8,8 @@
 
 <!-- Top browsing element: Displays image and information about current container -->
 @if (showTopHeader) {
-  <div class="">
-    <display-container-header
+  <div class="flex">
+    <display-container-header class="flex grow"
     [contentDirectoryService]="contentHandler().contentDirectoryService"
 
     [(listView)]="listView"
@@ -27,7 +27,7 @@
 Main Content
 ==========================================
 -->
-<div class="flex grow ms-3 mt-8">
+<div id="display-container-main-content" class="flex grow ms-3 mt-8">
   <div class="flex flex-col grow mb-24">
     <!--
   playlist elements on first position
@@ -61,7 +61,7 @@ Main Content
     }
 
     <div id="head_browse_result_items_ID">
-      <item-tile
+      <item-tile class="flex grow"
         [isListView]="isListView()"
         [contentDirectoryService]="contentHandler().contentDirectoryService"
         [quickSearchString]="displayFilterString()"

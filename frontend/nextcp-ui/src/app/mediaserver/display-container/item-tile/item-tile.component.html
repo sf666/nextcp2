@@ -2,23 +2,23 @@
 <!-- Browse Result Music Items                                      -->
 <!-- ############################################################## -->
 @if (musicTracks()?.length > 0) {
-<div id="Browse_Result_Music_Items" tabindex="-1" class="defaultFont font-semibold max-w-7xl">
+<div id="Browse_Result_Music_Items" tabindex="-1" class="flex grow defaultFont font-semibold">
     @if (isListView()) {
-    <div id="head_browse_result_items_list_view_ID" class="flex flex-col">
-        <div class="flex row col-greyed text-xs pb-3 mt-2">
+    <div id="head_browse_result_items_list_view_ID" class="flex grow flex-col">
+        <div class="flex grow row col-greyed text-xs pb-3 mt-2">
         @if (allTracksSameAlbum()) {
             <div class="w-8 text-right">#</div>
-            <div class="w-64 ms-3 grow-3">TITLE</div>
-            <div class="w-48 ms-3 grow-2">ARTIST</div>
-            @if (extendedApi()) {<div class="w-24 ms-3 text-center">RATING</div>}
+            <div class="w-16 ms-3 grow-3">TITLE</div>
+            <div class="w-16 ms-3 grow-2 hidden md:block">ARTIST</div>
+            @if (extendedApi()) {<div class="w-24 ms-3 text-center hidden lg:block">RATING</div>}
             <div class="w-16 ms-3 text-right">LG</div>
             <div class="w-4 ms-6">&nbsp;</div>
         } @else {
             <div class="w-16 ms-3">&nbsp;</div>
-            <div class="w-64 ms-3 grow-3">TITLE</div>
-            <div class="w-64 ms-3 grow-2">ALBUM</div>
-            <div class="w-48 ms-3 grow-2">ARTIST</div>
-            @if (extendedApi()) {<div class="w-24 ms-3 text-center">RATING</div>}
+            <div class="w-16 ms-3 grow-3">TITLE</div>
+            <div class="w-16 ms-3 grow-2">ALBUM</div>
+            <div class="w-16 ms-3 grow-2 hidden md:block">ARTIST</div>
+            @if (extendedApi()) {<div class="w-24 ms-3 text-center hidden lg:block">RATING</div>}
             <div class="w-16 ms-3 text-right">LG</div>
             <div class="w-4 ms-6">&nbsp;</div>
         }
@@ -32,7 +32,7 @@
                 @if (newDiscLabel(item)) {<div class="font-bold text-zinc-500 mb-2 pt-3">{{getDiscLabel(item)}}</div>}
             }
 
-        <div class="flex text-sm tracking-widest font-semibold mb-1">
+        <div class="flex grow text-sm tracking-widest font-semibold mb-1">
             <!--  COL 1 TRACK NUM OR IMAGE     -->
             @if (!allTracksSameAlbum()) {
             <div id="col_1_img_{{item.objectID}}" class="w-16 ms-3 {{selectedRowClass(item)}}" >
@@ -43,22 +43,22 @@
             }
 
             <!--  COL 2 TITLE                  -->
-            <div id="{{item.objectID}}" class="flex ms-3 me-2 w-64 grow-3 justify-between {{selectedRowClass(item)}}">
+            <div id="{{item.objectID}}" class="flex ms-3 me-2 w-16 grow-3 justify-between {{selectedRowClass(item)}}">
                 <div class="content-center">{{item.title}}</div>
                 <quality-badge class="content-center" [item]="item"></quality-badge>
             </div>
 
             <!--  COL 3 optional ALBUM         -->
             @if (!allTracksSameAlbum()) {
-                <div id="OPT_ALBUM_{{item.objectID}}" (click)="playItem(item)" class="w-64 ms-3 grow-2 content-center">{{item.album}}</div>
+                <div id="OPT_ALBUM_{{item.objectID}}" (click)="playItem(item)" class="w-16 ms-3 grow-2 content-center">{{item.album}}</div>
             }
             
             <!--  COL 4 ARTIST                 -->
-            <div id="OPT_ARTIST_{{item.objectID}}" (click)="playItem(item)" class="w-48 ms-3 grow-2 content-center {{selectedRowClass(item)}}"> {{item.artistName}}</div>
+            <div id="OPT_ARTIST_{{item.objectID}}" (click)="playItem(item)" class="hidden md:block w-16 ms-3 grow-2 content-center {{selectedRowClass(item)}}"> {{item.artistName}}</div>
 
             <!--  COL 5 optional RATING        -->
             @if (extendedApi()) {
-                <div id="OPT_RATING_{{item.objectID}}" class="w-24 ms-3 content-center"><star-rating [currentSong]="item"></star-rating></div>
+                <div id="OPT_RATING_{{item.objectID}}" class="hidden lg:block w-24 ms-3 content-center"><star-rating [currentSong]="item"></star-rating></div>
             }
 
             <!--  COL 6 TIME (LG)              -->
