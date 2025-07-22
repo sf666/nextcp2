@@ -7,8 +7,9 @@
 <!-- ############################################################## -->
 
 <!-- Top browsing element: Displays image and information about current container -->
+<div id="display-container-component-top-id" class="flex flex-col w-full">
 @if (showTopHeader) {
-  <div class="flex">
+  <div class="flex w-full">
     <display-container-header class="flex grow"
     [contentDirectoryService]="contentHandler().contentDirectoryService"
 
@@ -34,8 +35,8 @@ Main Content
   =================================================================
   -->
     @if (playlistList?.length > 0) {
-    <div id="head_browse_result_playlist_items_ID" tabindex="-1">
-      <container-tile 
+    <div id="head_browse_result_playlist_items_ID" class="flex w-full" tabindex="-1">
+      <container-tile class="flex grow"
         [smallIcons]="this.allMusicTracks.length > 0" 
         [container]="playlistList"
         [quickSearchString]="displayFilterString()"
@@ -49,8 +50,8 @@ Main Content
     <!-- Template : Browse Result Album                                 -->
     <!-- ############################################################## -->
     @if (albumList?.length > 0) {
-    <div id="head_browse_result_album_ID">
-      <container-tile 
+    <div id="head_browse_result_album_ID" class="flex w-full">
+      <container-tile class="flex grow"
         [smallIcons]="this.allMusicTracks.length > 0" 
         [container]="albumList"
         [quickSearchString]="displayFilterString()"
@@ -60,8 +61,8 @@ Main Content
     </div>
     }
 
-    <div id="head_browse_result_items_ID">
-      <item-tile class="flex grow"
+    <div id="head_browse_result_items_ID" class="flex grow">
+      <item-tile class="flex w-full"
         [isListView]="isListView()"
         [contentDirectoryService]="contentHandler().contentDirectoryService"
         [quickSearchString]="displayFilterString()"
@@ -76,9 +77,10 @@ Main Content
     <!--                                -->
     <!-- General container section      -->
     <!--                                -->
+
     @if (container?.length > 0) {
-    <div id="head_browse_result_general_container_ID">
-      <container-tile 
+    <div id="head_browse_result_general_container_ID" class="flex grow">
+      <container-tile class="flex grow"
         [smallIcons]="this.allMusicTracks.length > 0" 
         [container]="container"
         [selectedGenres]="selectedGenres()"
@@ -88,12 +90,14 @@ Main Content
     </div>
     }
 
+    
     <!--                                -->
     <!-- Other items                    -->
     <!--                                -->
+
     @if (otherItems_?.length > 0) {
-    <div id="head_browse_other_items_ID">
-      <other-item-tile
+    <div id="head_browse_other_items_ID" class="flex grow">
+      <other-item-tile class="flex grow"
         [otherItems]="otherItems_"
         [quickSearchString]="displayFilterString()"
         (playItemClicked)="playItem($event)"
@@ -101,4 +105,5 @@ Main Content
     </div>
     }
   </div>
+</div>
 </div>

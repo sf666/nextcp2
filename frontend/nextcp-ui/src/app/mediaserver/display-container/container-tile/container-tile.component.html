@@ -3,18 +3,6 @@
   <div class="albumTile {{getSmallCss()}}" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)">
     <div class="albumImageContainer">
       <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
-      <!--
-      <div class="overlay-child flex flex-col justify-center items-center" id="id_play_overlay_div_album" (click)="browseTo(container)">
-        <div class="flex justify-center items-center">
-          <span class="material-symbols-outlined md-36 m-3" (click)="browseTo(container)">drive_file_move</span>
-        </div>
-        <div class="flex justify-center items-center">
-          <span class="material-symbols-outlined md-36 m-3" (click)="playContainer(container)">play_arrow</span>
-          <span class="material-symbols-outlined md-36 m-3" (click)="addPlaylist(container)">playlist_add</span>
-        </div>
-      </div>
-      -->
-      <!-- <image-cropper src="{{container.albumartUri}}"></image-cropper> -->
     </div>
     @if(isAlbum(container)) {
     <div class="flex flex-col albumDesc">

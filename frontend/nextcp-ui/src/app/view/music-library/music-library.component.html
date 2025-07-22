@@ -1,20 +1,24 @@
-@if (layoutService.headerVisible) {
-  <nav-bar
-    [parentTitle]="getParentTitle()"
-    [backButtonDisabled]="backButtonDisabled()"
-    [contentHandler]="getContentHandler()"
-    (backButtonPressed)="backButtonPressed($event)"
-    (rootButtonPressed)="rootButtonPressed($event)"
-  ></nav-bar>
-}
+<div id="music-library-component-id" class="flex flex-col grow w-full">
+  @if (layoutService.headerVisible) {
+    <nav-bar class="absolute w-full"
+      [parentTitle]="getParentTitle()"
+      [backButtonDisabled]="backButtonDisabled()"
+      [contentHandler]="getContentHandler()"
+      (backButtonPressed)="backButtonPressed($event)"
+      (rootButtonPressed)="rootButtonPressed($event)"
+    ></nav-bar>
+  }
 
 
-<!-- display music library -->
+  <!-- display music library -->
+   <div class="flex w-full">
+    <mediaServer-display-container class="flex grow flex-col w-full"
+      [showTopHeader]="showTopHeader()"
+      [contentHandler]="getContentHandler()"
 
-<mediaServer-display-container
-  [showTopHeader]="showTopHeader()"
-  [contentHandler]="getContentHandler()"
+      (containerSelected)="containerSelected($event)"
+      (itemDeleted)="itemDeleted($event)"
+      />
+  </div>
 
-  (containerSelected)="containerSelected($event)"
-  (itemDeleted)="itemDeleted($event)"
-/>
+</div>

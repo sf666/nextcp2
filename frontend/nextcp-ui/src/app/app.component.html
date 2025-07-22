@@ -20,8 +20,8 @@
     </aside>
     }
 
-    <div id="mainContent" class="mainContent {{headerVisibleClass}} flex grow ml-0 md:ml-52 w-full">
-      <router-outlet class="mb-32"></router-outlet>
+    <div id="mainContent" class="mainContent {{headerVisibleClass}} flex flex-col grow ml-0 md:ml-52 w-full">
+        <router-outlet class="absolute flex grow left-0 w-full"></router-outlet>
     </div>
 
     @if (layoutService.footerVisible) {
