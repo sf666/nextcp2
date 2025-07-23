@@ -2,7 +2,7 @@
 <!-- Browse Result Music Items                                      -->
 <!-- ############################################################## -->
 @if (musicTracks()?.length > 0) {
-<div id="Browse_Result_Music_Items" tabindex="-1" class="flex grow defaultFont font-semibold">
+<div id="Browse_Result_Music_Items" tabindex="-1" class="flex grow defaultFont font-semibold pe-4">
     @if (isListView()) {
     <div id="head_browse_result_items_list_view_ID" class="flex grow flex-col">
         <div class="flex grow row col-greyed text-xs pb-3 mt-2 h-full w-full">
@@ -10,7 +10,7 @@
             <div class="w-8 text-right">#</div>
             <div class="w-16 ms-3 grow-3">TITLE</div>
             <div class="w-16 ms-3 grow-2 hidden md:block">ARTIST</div>
-            @if (extendedApi()) {<div class="w-24 ms-3 text-center hidden lg:block">RATING</div>}
+            @if (extendedApi()) {<div class="w-24 text-center hidden lg:block">RATING</div>}
             <div class="w-16 ms-3 text-right">LG</div>
             <div class="w-4 ms-6">&nbsp;</div>
         } @else {
@@ -18,7 +18,7 @@
             <div class="w-16 ms-3 grow-3">TITLE</div>
             <div class="w-16 ms-3 grow-2">ALBUM</div>
             <div class="w-16 ms-3 grow-2 hidden md:block">ARTIST</div>
-            @if (extendedApi()) {<div class="w-24 ms-3 text-center hidden lg:block">RATING</div>}
+            @if (extendedApi()) {<div class="w-24 text-center hidden lg:block">RATING</div>}
             <div class="w-16 ms-3 text-right">LG</div>
             <div class="w-4 ms-6">&nbsp;</div>
         }
@@ -43,7 +43,7 @@
             }
 
             <!--  COL 2 TITLE                  -->
-            <div id="{{item.objectID}}" class="flex ms-3 me-2 w-16 grow-3 justify-between {{selectedRowClass(item)}}">
+            <div id="{{item.objectID}}" class="flex ms-3 w-16 grow-3 justify-between {{selectedRowClass(item)}}">
                 <div class="content-center">{{item.title}}</div>
                 <quality-badge class="content-center" [item]="item"></quality-badge>
             </div>
@@ -54,18 +54,18 @@
             }
             
             <!--  COL 4 ARTIST                 -->
-            <div id="OPT_ARTIST_{{item.objectID}}" (click)="playItem(item)" class="hidden md:block w-16 ms-3 grow-2 content-center {{selectedRowClass(item)}}"> {{item.artistName}}</div>
+            <div id="OPT_ARTIST_{{item.objectID}}" (click)="playItem(item)" class="hidden ms-3 md:block w-16 ms-3 grow-2 content-center {{selectedRowClass(item)}}"> {{item.artistName}}</div>
 
             <!--  COL 5 optional RATING        -->
             @if (extendedApi()) {
-                <div id="OPT_RATING_{{item.objectID}}" class="hidden lg:block w-24 ms-3 content-center"><star-rating [currentSong]="item"></star-rating></div>
+                <div id="OPT_RATING_{{item.objectID}}" class="hidden lg:block w-24 content-center"><star-rating [currentSong]="item"></star-rating></div>
             }
 
             <!--  COL 6 TIME (LG)              -->
-            <div id="OPT_TIME_{{item.objectID}}" class="w-16 ms-3 text-right content-center">{{getDuration(item)}}</div>
+            <div id="OPT_TIME_{{item.objectID}}" class="w-16 ms-3 text-right">{{getDuration(item)}}</div>
 
             <!--  COL 7 song OPTION            -->
-            <div id="OPT_OPTIONS_{{item.objectID}}" class="w-4 ms-6 col-greyed content-center" (click)="showSongPopup($event, item)">&#x22EE;</div>
+            <div id="OPT_OPTIONS_{{item.objectID}}" class="w-4 ms-6 col-greyed content-center font-bold" (click)="showSongPopup($event, item)">&#x22EE;</div>
         </div>
         }
     </div>
