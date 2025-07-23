@@ -18,9 +18,6 @@
 
 // area right to the image
 .right-section {
-    flex-direction : column;
-    justify-content: space-between;
-    max-width      : 750px;
     min-height  : calc(av.$top-header-Height - av.$top-header-Vertical-Indent);
     max-height  : calc(av.$top-header-Height - av.$top-header-Vertical-Indent);
 }
