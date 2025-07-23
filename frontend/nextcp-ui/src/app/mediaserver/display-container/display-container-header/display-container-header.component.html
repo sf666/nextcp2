@@ -40,9 +40,9 @@
     <div id="topImgContainer" class="flex top-img-container items-center">
       <img src="{{currentContainer.albumartUri}}" class="img-top">
     </div>
-    <div class="flex flex-col grow shrink" id="ID_SCROLL_TO_ELEMENT_STEP_IN" tabindex="-1">
+    <div class="z-1 flex flex-col grow shrink" id="ID_SCROLL_TO_ELEMENT_STEP_IN" tabindex="-1">
       <div class="flex right-section flex-wrap">
-        <div>
+        <div class="flex mb-4 me-4">
           @if (hasSongs()) {
           <div>
             <div class="flex flex-col">
@@ -50,7 +50,7 @@
               @if (musicItemsCount > 0) {
               @if (isContainerAlbum) {
               <div class="flex regular">
-                <div>Album&nbsp;</div>
+                <div class="font-medium">Album</div>
                 @if (currentContainer.artist) {
                 <div>by {{currentContainer.artist}}</div>
                 }
@@ -94,7 +94,7 @@
           </div>
 
           @if (hasGenres()) {
-          <div class="relative flex w-64" style="height: 56px;">
+          <div class="relative flex w-64 hidden xl:block" style="height: 56px;">
             <mat-select #genresSelect multiple [(ngModel)]="selectedGenres" id="searchGenres" placeholder="search genres" style="--mat-select-placeholder-text-color:var(--color-gray-400); --mat-select-enabled-arrow-color:var(--color-gray-400)" class="block w-48 grow p-4 pe-10 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 focus:ring-gray-500 focus:border-gray-500 dark:bg-zinc-700/40 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-zinc-500">
               <mat-option value="NONE">NONE</mat-option>
               @for (genre of genresList(); track genre) {
