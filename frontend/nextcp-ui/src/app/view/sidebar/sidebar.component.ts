@@ -52,7 +52,7 @@ export class SidebarComponent {
     this.routerMap.set("/myAlbums", "-5");
     this.routerMap.set("/settings", "-6");
     this.routerMap.set("/mediaPlayerConfig", "-7");
-    this.routerMap.set("/audioaddict", "-8");
+    this.routerMap.set("/ums-audioaddict", "-8");
     this.routerMap.set("/myPlaylists", "0");      // All positives ID's are playlists
 
     this.routerMap.set("/myTracks", "-999");      // not used yet
@@ -69,7 +69,8 @@ export class SidebarComponent {
       if (url.lastIndexOf("/") > 0) {
         url = url.substring(0, url.lastIndexOf("/"));
       }
-      this.activeId.set(this.routerMap.get(url));
+      var targetId = this.routerMap.get(url);
+      this.activeId.set(targetId);
       if (this.activeId() == "0") {
         this.activeId.set(this.myPlaylistService.activePlaylistId);
       }
