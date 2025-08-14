@@ -1,7 +1,7 @@
 <div class="m-3">
   <div class="flex flex-col">
-    <h1 class="mt-4 text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-gray-900 dark:text-white">Client Profiles</h1>
-    <p class="me-3 text-sm lg:text-lg font-light text-gray-600 dark:text-gray-400">
+    <h1 class="mt-4 text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-white">Client Profiles</h1>
+    <p class="me-3 text-sm lg:text-lg font-light text-gray-400">
       Select a client profile to associate with this browser. Repeated calls with this browser will select renderer and server by default.
       Profiles should be renamed to some meaningful name like 'livingroom' or 'kitchen' for easy to remember and switchable setup. Renaming will be done after
       clicking the pen symbol.</p>
@@ -54,13 +54,13 @@
   </div>
 
   <div class="mt-6 mt-8 flex flex-row mt-4">
-    <h1 class="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-gray-900 dark:text-white">Server Configuration</h1>
+    <h1 class="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-white">Server Configuration</h1>
     <mat-slide-toggle color="accent" class="ms-4 self-center" [(ngModel)]="showOnlyActiveServer">
       show only online server
     </mat-slide-toggle>
   </div>
 
-  <p class="mb-6 text-sm lg:text-lg font-light text-gray-600 dark:text-gray-400">
+  <p class="mb-6 text-sm lg:text-lg font-light text-gray-400">
   Server discovered in the past may be offline. Disabled server will not show up for selection in some popups or lists.</p>
     
   <div class="flex flex-wrap gap-4">
@@ -110,16 +110,16 @@
   </div>
 
   <div class="mt-6 mt-8 flex flex-row mt-4">
-      <h1 class="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-gray-900 dark:text-white">Renderer Configuration</h1>
+      <h1 class="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-white">Renderer Configuration</h1>
       <mat-slide-toggle color="accent" class="ms-4 w-40 self-center grow-3" [(ngModel)]="showOnlyActiveRenderer">
         show only online renderer
       </mat-slide-toggle>
   </div>
 
-  <p class="mt-4 text-sm lg:text-lg font-light text-gray-600 dark:text-gray-400">
+  <p class="mt-4 text-sm lg:text-lg font-light text-gray-400">
   Renderer may be offline. Disabled renderer will not show up for selection in some popups or lists.</p>
 
-  <p class="mt-2 text-sm lg:text-lg font-light text-gray-600 dark:text-gray-400">
+  <p class="mt-2 text-sm lg:text-lg font-light text-gray-400">
   If a streaming device is attached to an amplifier, a device device driver can be selected for controlling the amplifier power and volume state
   instead of the streamer volume and power state. A default volume percentage can be applied to the external amplifier on power up. The streaming device volume can be
   set to 100% on power up, if 'UPnP max volume' is enabled.</p>
@@ -197,15 +197,15 @@
     }
   </div>
 
-  <h1 class="mt-8 text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-gray-900 dark:text-white">Server Actions</h1>
+  <h1 class="mt-8 text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-white">Server Actions</h1>
 
   @if(currentMediaServer.udn === undefined || currentMediaServer.udn === '') {
-  <div class="p-4 m-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+  <div class="p-4 m-4 text-sm rounded-lg bg-gray-800 text-red-400" role="alert">
     {{currentMediaServer.friendlyName}}
   </div>    
   } @else {
     @if (extendedApiNotAvailable()) {
-      <div class="p-4 m-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+      <div class="p-4 m-4 text-sm rounded-lg bg-gray-800 text-red-400" role="alert">
         Selected media server has no extended API. Advanced actions are only available
         for <i>Universal Media Server</i>.
       </div>    
@@ -227,87 +227,87 @@
   </div>
 
 
-  <h1 class="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-gray-900 dark:text-white">General Configuration</h1>
+  <h1 class="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-white">General Configuration</h1>
   <form class="max-w-2xl m-8">
     <div class="grid grid-cols-2 gap-4">
       <div class="relative z-0 w-full mb-5 group">
-        <input [(ngModel)]="configService.applicationConfig.myPlaylistFolderName" type="text" name="MY_PLAYLISTID" id="MY_PLAYLISTID" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-        <label for="MY_PLAYLISTID" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">MY PLAYLIST - ObjectID</label>
+        <input [(ngModel)]="configService.applicationConfig.myPlaylistFolderName" type="text" name="MY_PLAYLISTID" id="MY_PLAYLISTID" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " />
+        <label for="MY_PLAYLISTID" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">MY PLAYLIST - ObjectID</label>
       </div>
       <div class="relative z-0 w-full mb-5 group">
-        <input [(ngModel)]="configService.applicationConfig.libraryPath" type="text" name="FORM_DDLP" id="FORM_DDLP" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-        <label for="FORM_DDLP" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">device driver library path</label>
+        <input [(ngModel)]="configService.applicationConfig.libraryPath" type="text" name="FORM_DDLP" id="FORM_DDLP" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " />
+        <label for="FORM_DDLP" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">device driver library path</label>
       </div>
       <div class="relative z-0 w-full mb-5 group">
-        <input [(ngModel)]="configService.applicationConfig.databaseFilename" type="text" name="FORM_DBP" id="FORM_DBP" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-        <label for="FORM_DBP" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">database path</label>
+        <input [(ngModel)]="configService.applicationConfig.databaseFilename" type="text" name="FORM_DBP" id="FORM_DBP" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " />
+        <label for="FORM_DBP" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">database path</label>
       </div>
       <div class="relative z-0 w-full mb-5 group">
-        <input [(ngModel)]="configService.applicationConfig.embeddedServerPort" type="text" name="FORM_EMSP" id="FORM_EMSP" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-        <label for="FORM_EMSP" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">unsecure server listening port</label>
+        <input [(ngModel)]="configService.applicationConfig.embeddedServerPort" type="text" name="FORM_EMSP" id="FORM_EMSP" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " />
+        <label for="FORM_EMSP" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">unsecure server listening port</label>
       </div>
       <div class="relative z-0 w-full mb-5 group">
-        <input [(ngModel)]="configService.applicationConfig.embeddedServerSslPort" type="text" name="FORM_EMSSP" id="FORM_EMSSP" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-        <label for="FORM_EMSSP" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">secure server listening port</label>
+        <input [(ngModel)]="configService.applicationConfig.embeddedServerSslPort" type="text" name="FORM_EMSSP" id="FORM_EMSSP" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " />
+        <label for="FORM_EMSSP" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">secure server listening port</label>
       </div>
       <div class="relative z-0 w-full mb-5 group">
-        <input [(ngModel)]="configService.applicationConfig.embeddedServerSslP12Keystore" type="text" name="FORM_EMSSP12" id="FORM_EMSSP12" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-        <label for="FORM_EMSSP12" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">P12 keystore file location</label>
+        <input [(ngModel)]="configService.applicationConfig.embeddedServerSslP12Keystore" type="text" name="FORM_EMSSP12" id="FORM_EMSSP12" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " />
+        <label for="FORM_EMSSP12" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">P12 keystore file location</label>
       </div>
       <div class="relative z-0 w-full mb-5 group">
-        <input [(ngModel)]="configService.applicationConfig.embeddedServerSslP12KeystorePassword" type="text" name="FORM_EMSSP12P" id="FORM_EMSSP12P" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-        <label for="FORM_EMSSP12P" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">P12 keystore password</label>
+        <input [(ngModel)]="configService.applicationConfig.embeddedServerSslP12KeystorePassword" type="text" name="FORM_EMSSP12P" id="FORM_EMSSP12P" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " />
+        <label for="FORM_EMSSP12P" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">P12 keystore password</label>
       </div>
       <div class="relative z-0 w-full mb-5 group">
-        <input [(ngModel)]="configService.applicationConfig.pathToRestartScript" type="text" name="FORM_RESSCRIPT" id="FORM_RESSCRIPT" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-        <label for="FORM_RESSCRIPT" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">path to restart script</label>
+        <input [(ngModel)]="configService.applicationConfig.pathToRestartScript" type="text" name="FORM_RESSCRIPT" id="FORM_RESSCRIPT" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " />
+        <label for="FORM_RESSCRIPT" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">path to restart script</label>
       </div>
       <div class="relative z-0 w-full mb-5 group">
-        <input [(ngModel)]="configService.applicationConfig.log4jConfigFile" type="text" name="FORM_LOG4jcf" id="FORM_LOG4jcf" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-        <label for="FORM_LOG4jcf" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Log4j config file</label>
+        <input [(ngModel)]="configService.applicationConfig.log4jConfigFile" type="text" name="FORM_LOG4jcf" id="FORM_LOG4jcf" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " />
+        <label for="FORM_LOG4jcf" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Log4j config file</label>
       </div>
       <div class="relative z-0 w-full mb-5 group">
-        <input [(ngModel)]="configService.applicationConfig.loggingDateTimeFormat" type="text" name="FORM_LOG4jformat" id="FORM_LOG4jformat" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-        <label for="FORM_LOG4jformat" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Logging date format</label>
+        <input [(ngModel)]="configService.applicationConfig.loggingDateTimeFormat" type="text" name="FORM_LOG4jformat" id="FORM_LOG4jformat" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " />
+        <label for="FORM_LOG4jformat" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Logging date format</label>
       </div>
       <div class="relative z-0 w-full mb-5 group">
-        <input [(ngModel)]="configService.applicationConfig.upnpBindInterface" type="text" name="FORM_upnp_bin" id="FORM_upnp_bin" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-        <label for="FORM_upnp_bin" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">bind interface stream server</label>
+        <input [(ngModel)]="configService.applicationConfig.upnpBindInterface" type="text" name="FORM_upnp_bin" id="FORM_upnp_bin" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " />
+        <label for="FORM_upnp_bin" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">bind interface stream server</label>
       </div>
       <div class="relative z-0 w-full mb-5 group">
-        <input [(ngModel)]="configService.applicationConfig.generateUpnpCode" type="text" name="FORM_upnp_gencode" id="FORM_upnp_gencode" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-        <label for="FORM_upnp_gencode" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Generate UPnP code</label>
+        <input [(ngModel)]="configService.applicationConfig.generateUpnpCode" type="text" name="FORM_upnp_gencode" id="FORM_upnp_gencode" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " />
+        <label for="FORM_upnp_gencode" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Generate UPnP code</label>
       </div>
     </div>
     <button mat-stroked-button color="primary" (click)="saveGeneralConfig()">save</button>
   </form>
 
-  <h1 class="mt-8 text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-gray-900 dark:text-white">Audio Addict Radio Network</h1>
+  <h1 class="mt-8 text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-white">Audio Addict Radio Network</h1>
   <form class="max-w-2xl m-8 mt-8">
     <div class="grid grid-cols-2 gap-4">
       <div class="relative z-0 w-full mb-5 group">
-        <input [(ngModel)]="configService.audioAddictConfig().token" type="text" name="FORM_AA_token" id="FORM_AA_token" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-        <label for="FORM_AA_token" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">network token</label>
+        <input [(ngModel)]="configService.audioAddictConfig().token" type="text" name="FORM_AA_token" id="FORM_AA_token" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " />
+        <label for="FORM_AA_token" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">network token</label>
       </div>
       <div class="relative z-0 w-full mb-5 group">
-        <input [(ngModel)]="configService.audioAddictConfig().user" type="text" name="FORM_AA_user" id="FORM_AA_user" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-        <label for="FORM_AA_user" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">username</label>
+        <input [(ngModel)]="configService.audioAddictConfig().user" type="text" name="FORM_AA_user" id="FORM_AA_user" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " />
+        <label for="FORM_AA_user" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">username</label>
       </div>
       <div class="relative z-0 w-full mb-5 group">
-        <input [(ngModel)]="configService.audioAddictConfig().pass" type="text" name="FORM_AA_pass" id="FORM_AA_pass" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-        <label for="FORM_AA_pass" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">password</label>
+        <input [(ngModel)]="configService.audioAddictConfig().pass" type="text" name="FORM_AA_pass" id="FORM_AA_pass" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " />
+        <label for="FORM_AA_pass" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">password</label>
       </div>
       <div class="relative z-0 w-full mb-5 group">
-        <input [(ngModel)]="configService.audioAddictConfig().preferEuropeanServer" type="text" name="FORM_AA_euro" id="FORM_AA_euro" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-        <label for="FORM_AA_euro" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">prefer european stream server</label>
+        <input [(ngModel)]="configService.audioAddictConfig().preferEuropeanServer" type="text" name="FORM_AA_euro" id="FORM_AA_euro" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " />
+        <label for="FORM_AA_euro" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">prefer european stream server</label>
       </div>
     </div>
     <button mat-stroked-button color="primary" (click)="saveAudioAddict()">save</button>
   </form>
 
 
-  <h1 class="mt-8 text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-gray-900 dark:text-white">External Accounts</h1>
-  <h2 class="mt-4 text-base md:text-lg lg:text-xl font-medium tracking-tight text-gray-700 dark:text-gray-400">Spotify</h2>
+  <h1 class="mt-8 text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-white">External Accounts</h1>
+  <h2 class="mt-4 text-base md:text-lg lg:text-xl font-medium tracking-tight text-gray-400">Spotify</h2>
     @if (configService.spotifyAccountConnected()) {
     <p class="mt-2">
       <span class="material-symbols-outlined" style="color: aqua;">how_to_reg</span>
@@ -321,42 +321,42 @@
   }
 
 
-  <h2 class="mt-4 text-base md:text-lg lg:text-xl font-medium tracking-tight text-gray-700 dark:text-gray-400">MusicBrainz</h2>
+  <h2 class="mt-4 text-base md:text-lg lg:text-xl font-medium tracking-tight text-gray-400">MusicBrainz</h2>
   <p class="mt-2 max-w-2xl">
     Star-rating will update musicbrainz.org site if song has musicbrainzID metadata set. Password will be encoded after a successful save action.
   </p>
 
   <form class="max-w-md m-8 mt-8">
     <div class="relative z-0 w-full mb-5 group">
-      <input [(ngModel)]="configService.musicBrainzConfig.username" type="text" name="FORM_MB_user" id="FORM_MB_user" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-      <label for="FORM_MB_user" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Username</label>
+      <input [(ngModel)]="configService.musicBrainzConfig.username" type="text" name="FORM_MB_user" id="FORM_MB_user" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " />
+      <label for="FORM_MB_user" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Username</label>
     </div>
     <div class="relative z-0 w-full mb-5 group">
-      <input [(ngModel)]="configService.musicBrainzConfig.password" type="text" name="FORM_MB_pass" id="FORM_MB_pass" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-      <label for="FORM_MB_pass" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Password</label>
+      <input [(ngModel)]="configService.musicBrainzConfig.password" type="text" name="FORM_MB_pass" id="FORM_MB_pass" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " />
+      <label for="FORM_MB_pass" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Password</label>
     </div>
     <button mat-stroked-button color="primary" (click)="saveMusicBrainzConfig()">save</button>
   </form>
 
-  <h2 class="mt-4 text-base md:text-lg lg:text-xl font-medium tracking-tight text-gray-700 dark:text-gray-400">Last FM</h2>
+  <h2 class="mt-4 text-base md:text-lg lg:text-xl font-medium tracking-tight text-gray-400">Last FM</h2>
   <p class="mt-2">1. Click this button. A new window will open. Login and approve access to nextCP/2 :</p>
   <button mat-stroked-button class="settings maxButton" (click)="activateLastFM()">nextCP/2 LastFM access</button>
   <p class="mt-2 max-w-md">2. After step 1 is done, click this button to connect nextCP/2 to LastFM :</p>
   <button mat-stroked-button class="settings maxButton" (click)="generateSession()">generate LastFM session</button>
 
-  <h1 class="mt-8 text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-gray-900 dark:text-white">System Information</h1>
+  <h1 class="mt-8 text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-white">System Information</h1>
   <form class="max-w-xs m-8 mt-8">
     <div class="relative z-0 w-full mb-5 group">
-      <input [ngModel]="buildName" type="text" name="FORM_SYS_buildname" id="FORM_SYS_buildname" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " disabled readonly />
-      <label for="FORM_SYS_buildname" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">build name</label>
+      <input [ngModel]="buildName" type="text" name="FORM_SYS_buildname" id="FORM_SYS_buildname" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " disabled readonly />
+      <label for="FORM_SYS_buildname" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">build name</label>
     </div>
     <div class="relative z-0 w-full mb-5 group">
-      <input [ngModel]="buildNumber" type="text" name="FORM_SYS_buildnum" id="FORM_SYS_buildnum" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " disabled readonly />
-      <label for="FORM_SYS_buildnum" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">build version</label>
+      <input [ngModel]="buildNumber" type="text" name="FORM_SYS_buildnum" id="FORM_SYS_buildnum" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " disabled readonly />
+      <label for="FORM_SYS_buildnum" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">build version</label>
     </div>
     <div class="relative z-0 w-full mb-5 group">
-      <input [ngModel]="buildTime" type="text" name="FORM_SYS_buildtime" id="FORM_SYS_buildtime" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " disabled readonly />
-      <label for="FORM_SYS_buildtime" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">build time</label>
+      <input [ngModel]="buildTime" type="text" name="FORM_SYS_buildtime" id="FORM_SYS_buildtime" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer" placeholder=" " disabled readonly />
+      <label for="FORM_SYS_buildtime" class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">build time</label>
     </div>
   </form>
 </div>

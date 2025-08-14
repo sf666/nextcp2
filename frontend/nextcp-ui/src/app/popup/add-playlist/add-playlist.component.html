@@ -20,7 +20,7 @@
     <div class="popupDivider mt-2 mb-1">&nbsp;</div>
     <div class="popupBody">
         @if (isPlaylistMode(PlaylistModeEnum.Add) || isPlaylistMode(PlaylistModeEnum.Delete)) {
-            <input [(ngModel)]="playlistFilter" type="text" class="font-light mb-4 self-center block w-4/5 p-4 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 focus:ring-gray-500 focus:border-gray-500 dark:bg-zinc-700/40 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-zinc-500" placeholder="search for playlist"/>
+            <input [(ngModel)]="playlistFilter" type="text" class="font-light mb-4 self-center block w-4/5 p-4 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 bg-zinc-700/40 border-zinc-600 placeholder-zinc-400 text-white focus:ring-gray-500 focus:border-zinc-500" placeholder="search for playlist"/>
 
             @if (getRecentPlaylistsCount() > 0) {
                 <div class="headline">
@@ -66,7 +66,7 @@
             <div class="text-sm text-zinc-300 mt-4">{{addToContainer.title}}</div>
         </div>
 
-        <input [(ngModel)]="newPlaylistName" type="text" class="font-light self-center block w-4/5 p-4 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 focus:ring-gray-500 focus:border-gray-500 dark:bg-zinc-700/40 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-zinc-500" placeholder="playlist name"/>
+        <input [(ngModel)]="newPlaylistName" type="text" class="font-light self-center block w-4/5 p-4 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 bg-zinc-700/40 border-zinc-600 placeholder-zinc-400 text-white focus:ring-gray-500 focus:border-zinc-500" placeholder="playlist name"/>
         <div class="flex mt-8 mb-4 mx-4 self-center justify-around">
             <button mat-stroked-button class="mv-4 my-buttons m-4" (click)="cancelClicked()">
                 <mat-icon class="material-symbols-outlined thin">close</mat-icon>
