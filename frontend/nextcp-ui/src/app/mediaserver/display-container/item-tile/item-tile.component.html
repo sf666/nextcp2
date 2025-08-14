@@ -43,7 +43,7 @@
             }
 
             <!--  COL 2 TITLE                  -->
-            <div id="{{item.objectID}}" class="flex ms-3 w-16 grow-3 justify-between {{selectedRowClass(item)}}">
+            <div id="{{item.objectID}}" (click)="playItem(item)" class="flex ms-3 w-16 grow-3 justify-between {{selectedRowClass(item)}}" >
                 <div class="content-center">{{item.title}}</div>
                 <quality-badge class="content-center" [item]="item"></quality-badge>
             </div>
