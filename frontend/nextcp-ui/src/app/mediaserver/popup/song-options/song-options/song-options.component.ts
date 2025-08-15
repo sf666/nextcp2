@@ -79,7 +79,9 @@ export class SongOptionsComponent implements OnInit {
   openAddToPlaylistDialog(event: Event): void {
     if (this.item?.songId.objectID != null) {
       const dialogRef = this.defaultPlaylistService.openAddGlobalPlaylistDialogWithBackdrop(this.item, this.musicLibraryService.currentContainer());
-      this._matDialogRef.close();
+      dialogRef.afterClosed().subscribe( () => {
+        this._matDialogRef.close();
+      });
     }
   }
 
