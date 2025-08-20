@@ -15,12 +15,17 @@ public class AudioAddictService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AudioAddictService.class.getName());
 	private AudioAddictServiceConfig config = null;
 
-	private AudioAddictServiceConfig conf = new AudioAddictServiceConfig();
-
 	private ConcurrentHashMap<Platform, RadioNetwork> networkSettings = new ConcurrentHashMap<>();
 
 	@PostConstruct
 	private void init() {
+		if (config.enabled) {
+			LOGGER.info("starting internal audio addict network ...");
+			startNetworks();
+		}
+	}
+	
+	public void startNetworks() {
 		for (Platform network : Platform.values()) {
 			getNetwork(network);
 		}
@@ -52,7 +57,7 @@ public class AudioAddictService {
 		RadioNetwork network = networkSettings.get(platform);
 
 		if (network == null) {
-			network = new RadioNetwork(platform, conf);
+			network = new RadioNetwork(platform, config);
 			networkSettings.put(platform, network);
 			network.start();
 		}

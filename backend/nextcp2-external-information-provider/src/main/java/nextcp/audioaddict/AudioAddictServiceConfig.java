@@ -6,7 +6,7 @@ package nextcp.audioaddict;
  * Token is mandatory and needed for channel access and listening to music
  */
 public class AudioAddictServiceConfig {
-
+	public boolean enabled = false;
 	public String user = "";
 	public String pass = "";
 	public boolean preferEuropeanServer = true;
