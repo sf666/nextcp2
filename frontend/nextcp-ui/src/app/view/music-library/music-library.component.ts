@@ -1,6 +1,6 @@
 import { ContainerDto, ContainerItemDto, MusicItemDto } from './../../service/dto.d';
 import { GlobalSearchService } from './../../service/search/global-search.service';
-import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, signal, ViewChild } from '@angular/core';
 import { ScrollLoadHandler } from 'src/app/mediaserver/display-container/defs';
 import { ContentDirectoryService } from 'src/app/service/content-directory.service';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
@@ -11,6 +11,7 @@ import { CdsBrowsePathService } from 'src/app/util/cds-browse-path.service';
 import { PersistenceService } from 'src/app/service/persistence/persistence.service';
 import { ActivatedRoute } from '@angular/router';
 import { MusicLibraryService } from 'src/app/service/music-library/music-library.service';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-music-library',
@@ -24,14 +25,14 @@ export class MusicLibraryComponent implements AfterViewInit {
 
   @ViewChild(DisplayContainerComponent) dispContainer: DisplayContainerComponent;
   @Input() objectId!: string;
-
+  
   constructor(
     private route: ActivatedRoute,
     public contentDirectoryService: ContentDirectoryService,
     public layoutService: LayoutService,
     private cdsBrowsePathService: CdsBrowsePathService,
     private persistenceService: PersistenceService,
-    private deviceService: DeviceService,
+    public deviceService: DeviceService,
     private musicLibraryService: MusicLibraryService,
     private globalSearchService: GlobalSearchService
   ) {
@@ -45,14 +46,17 @@ export class MusicLibraryComponent implements AfterViewInit {
     globalSearchService.showAllPlaylistClicked$.subscribe(searchReq => this.contentDirectoryService.searchAllPlaylist(searchReq));
 
     this.getContentHandler().contentDirectoryService.browseFinished$.subscribe(data => this.browseFinished(data));
+  }
 
+  ngAfterViewInit(): void {
+    this.layoutService.setFramedView();
     // for first call of application wait till we know the devices ...
-    deviceService.mediaServerInitiated$.subscribe(() => {
-      let udn = deviceService.selectedMediaServerDevice().udn;
-      route.params.subscribe(val => {
-        console.log("route parameter given at constructor time : " + val.objectId);
+    this.deviceService.mediaServerInitiated$.subscribe(() => {
+      let udn = this.deviceService.selectedMediaServerDevice().udn;
+      this.route.params.subscribe(val => {
         if (val.objectId) {
-          this.browseToUidAfterViewInit(udn, this.objectId);
+          console.log("route parameter given at constructor time. Navigating to : " + val.objectId);
+          this.browseToUid(udn, this.objectId);
         } else {
           if (udn?.length > 0) {
             this.initViewData(udn);
@@ -62,13 +66,11 @@ export class MusicLibraryComponent implements AfterViewInit {
         }
       });
     });
-  }
 
-  ngAfterViewInit(): void {
-    this.layoutService.setFramedView();
-    let udn = this.deviceService.selectedMediaServerDevice().udn;
-    this.initViewData(udn);
-
+    toObservable(this.deviceService.selectedMediaServerDevice).subscribe(() => {
+      let udn = this.deviceService.selectedMediaServerDevice().udn;
+      this.initViewData(udn);
+    });
   }
 
   private browseFinished(data: ContainerItemDto): void {
@@ -93,19 +95,19 @@ export class MusicLibraryComponent implements AfterViewInit {
     this.layoutService.setFramedView();
     if (this.objectId) {
       console.log("browse to injected OID : " + this.objectId);
-      this.browseToUidAfterViewInit(udn, this.objectId);
+      this.browseToUid(udn, this.objectId);
     } else {
       if (this.persistenceService.getLastObjectId() !== undefined && this.persistenceService.getLastObjectId() !== '') {
         console.log("browse to last persistent object ID : " + this.persistenceService.getLastObjectId());
-        this.browseToUidAfterViewInit(udn, this.persistenceService.getLastObjectId());
+        this.browseToUid(udn, this.persistenceService.getLastObjectId());
       } else {
         console.log("browse to object ID : 0");
-        this.browseToUidAfterViewInit(udn, "0");
+        this.browseToUid(udn, "0");
       }
     }
   }
 
-  private browseToUidAfterViewInit(udn: string, objectId: string) {
+  private browseToUid(udn: string, objectId: string) {
     this.cdsBrowsePathService.restorePathToRoot();
     if (!(udn?.length > 0)) {
       console.log("last media server device not found ... ");
@@ -186,5 +188,15 @@ export class MusicLibraryComponent implements AfterViewInit {
         this.contentDirectoryService.currentContainerList().currentContainer.id === '';
     }
     return false;
+  }
+
+ selectServer(udn: string): void {
+    this.persistenceService.setCurrentObjectID("0");
+    this.deviceService.setMediaServerByUdn(udn);
+    this.browseToOid("0", udn, false, "");
+  }
+
+  mediaServerSelected(): boolean {
+    return this.deviceService.selectedMediaServerDevice()?.udn?.length > 0;
   }
 }

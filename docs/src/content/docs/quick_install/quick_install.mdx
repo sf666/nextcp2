@@ -6,20 +6,16 @@ description: Quick install guide
 Download current <a href="https://github.com/sf666/nextcp2/releases">release</a> into a folder of your choice. Make sure to use JDK 17 or later. Start the application by calling
 
 <code>java -jar nextcp2-release.jar</code>. For Windows user an exe file is provided for download (experimental). For Linux/Unix systems
-with systemd service manager installed a service template <a href="https://github.com/sf666/nextcp2/tree/main/startup-services/systemd">
-  can be downloaded here
+with systemd service manager installed a service template <a href="https://github.com/sf666/nextcp2/tree/main/startup-services/systemd"> can be downloaded here
 </a> for starting nextcp/2 as a service.
 
-      After launching the application navigate with your browser to <code>http://server-ip-address:8085</code>. If the application is started on the local machine
-      browse to <code>http://127.0.0.1:8085</code>. If port 8085 is already in use, edit the file <code>nextcp2config.json</code> located next to your jar file and
-      change property <code>embeddedServerPort</code> to an available port. Further configuration can be done within the application itself.
+After launching the application navigate with your browser to <code>http://server-ip-address:8085</code>. If the application is started on the local machine
+browse to <code>http://127.0.0.1:8085</code>. If port 8085 is already in use, edit the file <code>nextcp2config.json</code> located next to your jar file and
+change property <code>embeddedServerPort</code> to an available port. Further configuration can be done within the application itself.
 
-      After first startup it is recommended to configure a default client configuration which means choosing a default media server and a default media renderer by
-      navigating to <code>App Settings</code>. Create <code>NEW PROFILE</code> and rename it to a meaningful name, select server and renderer, then press the save button.
-
-      In case of using the recommended <a href="https://www.universalmediaserver.com/">Universal Media Server (UMS)</a> as media server, unlock API features by editing UMS
-      configuration file <code>UMS.conf</code> and add
-      <ul>
-        <li><code>audio_update_rating_tag = true</code> // If rating should be saved within the audio file (metadata section). Default is false.</li>
-        <li><code>audio_likes_visible_root = true</code> // If "My Albums" should be located in the root folder next to the library folder. Default is false</li>
-      </ul>
+In case of using the recommended <a href="https://www.universalmediaserver.com/">Universal Media Server (UMS)</a> as media server, unlock API features by editing UMS
+configuration file <code>UMS.conf</code> and add
+<ul>
+  <li><code>audio_update_rating_tag = true</code> // If rating should be saved within the audio file (metadata section). Default is false.</li>
+  <li><code>audio_likes_visible_root = true</code> // If "My Albums" should be located in the root folder next to the library folder. Default is false</li>
+</ul>

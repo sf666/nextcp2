@@ -63,9 +63,9 @@
     @if (myPlaylistsAvailable && myFolderConfigured && playlistService.serverPl().serverPlaylists?.length == 0) {
     <div>Playlist folder contains no playlists.</div>
     }
-    @if (!myPlaylistsAvailable) {
+    @if (myMediaServerAvailable && !myPlaylistsAvailable) {
     <div>Media Server doesn't support playlist management.</div>
-    } @else if (!myFolderConfigured) {
+    } @else if (myMediaServerAvailable && !myFolderConfigured) {
     <div>No playlist folder configured in settings.</div>
     }
   </div>

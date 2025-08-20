@@ -14,17 +14,17 @@ import { DefaultPlaylistService } from 'src/app/mediaserver/popup/defaut-playlis
 import { MusicLibraryService } from 'src/app/service/music-library/music-library.service';
 
 @Component({
-    selector: 'app-sidebar',
-    templateUrl: './sidebar.component.html',
-    styleUrls: ['./sidebar.component.scss'],
-    standalone: true,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        MatButton,
-        RouterLink,
-        MatIcon,
-        MatAnchor,
-    ],
+  selector: 'app-sidebar',
+  templateUrl: './sidebar.component.html',
+  styleUrls: ['./sidebar.component.scss'],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    MatButton,
+    RouterLink,
+    MatIcon,
+    MatAnchor,
+  ],
 })
 export class SidebarComponent {
 
@@ -56,10 +56,10 @@ export class SidebarComponent {
     this.routerMap.set("/myPlaylists", "0");      // All positives ID's are playlists
 
     this.routerMap.set("/myTracks", "-999");      // not used yet
-/*
-    this.routerMap.set("/networks", "-8");
-    this.routerMap.set("/getNetworkChannels", "-8");
-*/
+    /*
+        this.routerMap.set("/networks", "-8");
+        this.routerMap.set("/getNetworkChannels", "-8");
+    */
     router.events.subscribe(event => this.calActiveId(event));
   }
 
@@ -116,7 +116,7 @@ export class SidebarComponent {
     this.activeId.set(itemId);
   }
 
-  get myPlaylistsAvailable(): boolean {    
+  get myPlaylistsAvailable(): boolean {
     return this.deviceService.selectedMediaServerDevice().extendedApi;
   }
 
@@ -139,11 +139,15 @@ export class SidebarComponent {
     return "button-text";
   }
 
-  public get myFolderConfigured() : boolean {
+  public get myFolderConfigured(): boolean {
     return this.configurationService.applicationConfig.myPlaylistFolderName?.length > 0;
   }
 
-  public showPlaylistDialog() : void {
+  public showPlaylistDialog(): void {
     this.defaultPlaylistService.openAddGlobalPlaylistDialogWithBackdrop(null, this.musicLibraryService.currentContainer());
+  }
+
+  get myMediaServerAvailable(): boolean {
+    return this.deviceService.selectedMediaServerDevice().udn?.length > 0;
   }
 }

@@ -64,8 +64,6 @@ export class ConfigurationService {
     username: ''
   }
 
-  private clientUUID = this.getStoredClientId();
-
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
@@ -209,21 +207,6 @@ export class ConfigurationService {
     this.applicationConfig = Object.assign({}, serverConfig.applicationConfig);
     this.musicBrainzConfig = Object.assign({}, serverConfig.musicbrainzSupport);
     this.audioAddictConfig.set(serverConfig.audioAddictConfig);
-  }
-
-
-  // Use this function to acquire a client global userID
-  public getStoredClientId(): string {
-    let cid: string = localStorage.getItem("clientID");
-    if (cid) {
-      console.log("looked up from local storage an UUID of : " + cid);
-      return cid;
-    } else {
-      cid = this.uuidService.getUnique5();
-      localStorage.setItem("clientID", cid);
-      console.log("created new client UUID of : " + cid);
-      return cid;
-    }
   }
 
   public getRendererDevicesConfig(): RendererDeviceConfiguration[] {

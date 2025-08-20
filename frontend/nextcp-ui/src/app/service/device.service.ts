@@ -18,11 +18,6 @@ export class DeviceService {
   public selectedMediaServerDevice = signal<MediaServerDto>({ udn: '', friendlyName: 'please select Media-Server', extendedApi: false });
   public selectedMediaRendererDevice = signal<MediaRendererDto>({ udn: '', friendlyName: 'please select Media-Renderer', services: [], allSources: [], currentSource: null });
 
-  private defaultMediaRendererAlreadySelected = false;
-  private defaultMediaServerAlreadySelected = false;
-
-  mediaRendererChanged$: Subject<MediaRendererDto> = new Subject();
-  mediaServerChanged$: Subject<MediaServerDto> = new Subject();
   mediaRendererInitiated$: Subject<MediaRendererDto[]> = new Subject();
   mediaServerInitiated$: Subject<MediaServerDto[]> = new Subject();
 
@@ -140,6 +135,7 @@ export class DeviceService {
   }
 
   public setMediaServerByUdn(udn: string): boolean {
+    this.persistenceService.setNewMediaServerDevice(udn);
     const serverDevice = this.mediaServerList().filter(e => e.udn === udn);
     if (serverDevice?.length > 0) {
       console.log("media server was found. Setting to " + serverDevice[0].friendlyName);
