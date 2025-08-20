@@ -106,7 +106,15 @@ tagged with correct <b>numberOfThisDisc</b> ID3 comments.
 <Image src={imgMD} alt="" />
 
 
-### Song Options
+
+###  Playlist view
+
+Browsing into server based playlists switches the display to a track view with small album covers. Clicking on <b>switch view</b> will change the display to an full sized
+album view.
+
+<Image src={imgPV} alt="" />
+
+## Song Options
 
 Clicking on the three dots will open song options dialog. Here you can add or remove songs to or from playlists,
 or add songs to a renderer playlist.
@@ -122,7 +130,7 @@ export const Bullets = ({children, title}) => (
   </div>
 );
 
-<Bullets title="Server side playlist actions">
+<Bullets class="mt-8" title="Server side playlist actions">
     <li>Add to playlist</li>
     <li>Delete from this playlist</li>
 </Bullets>
@@ -147,13 +155,6 @@ which action is selected.
 </Bullets>
 
 You can `download` a resource, or `Update Album Art` on the server side.
-
-###  Playlist view
-
-Browsing into server based playlists switches the display to a track view with small album covers. Clicking on <b>switch view</b> will change the display to an full sized
-album view.
-
-<Image src={imgPV} alt="" />
 
 
 ## UPnP Search

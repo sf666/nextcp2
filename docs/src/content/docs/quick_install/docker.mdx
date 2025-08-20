@@ -1,0 +1,120 @@
+---
+title: Docker
+description: Quick install guide
+---
+
+
+import { Image } from 'astro:assets';
+import imgUms1 from './img/ums_1_extended.png';
+import imgUms2 from './img/ums_2_interface.png';
+import imgNextcp2 from './img/nextcp2_1_interface.png';
+
+## Docker installation 
+
+The fastest way installing nextcp/2 is using Docker container. This guide assumes you have a working Docker installation on your system. If not, please refer to the official Docker documentation for installation instructions.
+
+The following example uses Docker Compose to set up nextcp/2 and a fork of Universal Media Server (UMS) in a single command. It is recommended to use UMS as media server, but you can also use any other DLNA compatible media server with less functions.
+
+Create a `docker-compose.yml` file in your project directory and add the following content:
+
+```yaml
+services:
+  ums:
+    container_name: ums
+    network_mode: host
+    restart: unless-stopped
+#    user: '1009:1003'
+    volumes:
+      - [MEDIA_VOLUME]:/media/music
+      - ums_public:/profile
+    environment:
+      JAVA_TOOL_OPTIONS: '-Xms2048m -Xmx4096m -XX:+UseShenandoahGC -Xbootclasspath/a:/ums/web/react-client -Dums.profile.path=/profile -Dfile.encoding=UTF-8'
+    image: ik6666/ums:latest
+
+
+  nextcp2:
+    container_name: nextcp2
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - next_data:/nextcp2_data
+    environment:
+      JAVA_TOOL_OPTIONS: '-Xms1024m -Xmx2048m -XX:+UseShenandoahGC'
+    image: ik6666/nextcp2:latest
+
+volumes:
+  ums_public:
+    external: true
+  next_data:
+    external: true
+```
+
+Replace `[MEDIA_VOLUME]` with the path to your media files on the host system. This will mount the media directory into the UMS container. If your media files are located in `/path/to/your/music`, replace `[MEDIA_VOLUME]` with `/path/to/your/music`.
+Make sure to uncomment and adjust the `user` property in the `ums` service if you want to run the container with a specific user ID and group ID. The example uses `1009:1003`, which you can change according to your system's user and group IDs.
+
+Create the external volumes `ums_public` and `next_data` if they do not exist yet. You can do this by running the following commands:
+
+```bash
+docker volume create ums_public
+docker volume create next_data
+```
+
+Check if the volumes were created successfully:
+
+```bash
+docker volume ls
+``` 
+
+The docker volumes are used to persist data across container restarts. The `ums_public` volume is used by UMS to store its configuration and cache, while the `next_data` volume is used by nextcp/2 to store its data.
+If you want to use a different volume name, make sure to update the `docker-compose.yml` file accordingly.
+
+To start the containers, run the following command in the directory where your `docker-compose.yml` file is located:
+
+```bash
+docker-compose up -d
+```
+
+To stop the containers, run:
+
+```bash
+docker-compose down
+```
+
+If you don't want to use UMS as media server, you can replace or delete the `ums` service in the `docker-compose.yml` file.
+
+## Initial Application Setup
+### UMS Configuration
+
+Due to some issues with docker container interfaces, we need to adjust the UPnP network settings. After starting the containers, you can access the UMS web interface at `http://localhost:9001` (or the IP address of your Docker host).
+In the UMS web interface, go to the `Settings` tab and then to the `server configuration` section and click on the first tab (general configuration).
+
+Make sure the `display extended configuration` checkbox is checked. This will enable the extended configuration options in UMS.
+<Image src={imgUms1} alt="" class="" />
+
+Then click on `network configuration`. Use dropdown `enforce network interface` to select the docker host interface. This will ensure that UMS uses the correct network interface for UPnP discovery. Do not use
+any other interface! In the following example we have chosen `enp0s31f6` as the host interface.
+
+<Image src={imgUms2} alt="" class="" />
+
+Save the configuration.
+
+### NextCP/2 Configuration
+
+After starting the containers, you can access the NextCP/2 web interface at `http://localhost:8085` (or the IP address of your Docker host). 
+In the NextCP/2 web interface, go to the `App Settings` tab and then scroll to the `General Configuration` section.
+
+Enter in the `bind interface stream server` field the same interface name you have used in UMS configuration, e.g. `enp0s31f6`.
+
+<Image src={imgNextcp2} alt="" class="" />
+
+Save the configuration.
+
+### Get started
+
+Restart the application:
+```bash
+docker-compose down
+docker-compose up -d
+```
+
+Now you can start using NextCP/2 with UMS as media server. Got to the `App Settings` tab and create a new profile by clicking on `NEW PROFILE` and <a href="/nextcp2/user_interface/app_settings">continue configuration</a>.

@@ -45,7 +45,10 @@ export default defineConfig({
 				'overview/overview',
 				'overview/issue',
 			]},
-			{ label: 'Installation', items: [ 'quick_install/quick_install',]},
+			{ label: 'Installation', items: [ 
+				'quick_install/quick_install',
+				'quick_install/docker',
+			]},
 			{ label: 'User Interface', items: [ 
 				'user_interface/music_library',
 				'user_interface/player_queue',
