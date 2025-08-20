@@ -22,8 +22,6 @@ import { MusicLibraryService } from 'src/app/service/music-library/music-library
 })
 export class MusicLibraryComponent implements AfterViewInit {
 
-  private lastOidIsRestoredFromCache: boolean;
-
   @ViewChild(DisplayContainerComponent) dispContainer: DisplayContainerComponent;
   @Input() objectId!: string;
 
@@ -48,13 +46,32 @@ export class MusicLibraryComponent implements AfterViewInit {
 
     this.getContentHandler().contentDirectoryService.browseFinished$.subscribe(data => this.browseFinished(data));
 
-    route.params.subscribe(val => {
-      console.log("initialBrowseToUid : " + val.objectId);
-      this.initialBrowseToUid(val.objectId);
+    // for first call of application wait till we know the devices ...
+    deviceService.mediaServerInitiated$.subscribe(() => {
+      let udn = deviceService.selectedMediaServerDevice().udn;
+      route.params.subscribe(val => {
+        console.log("route parameter given at constructor time : " + val.objectId);
+        if (val.objectId) {
+          this.browseToUidAfterViewInit(udn, this.objectId);
+        } else {
+          if (udn?.length > 0) {
+            this.initViewData(udn);
+          } else {
+            console.log("no media server device selected.");
+          }
+        }
+      });
     });
   }
 
-  private browseFinished(data : ContainerItemDto): void {
+  ngAfterViewInit(): void {
+    this.layoutService.setFramedView();
+    let udn = this.deviceService.selectedMediaServerDevice().udn;
+    this.initViewData(udn);
+
+  }
+
+  private browseFinished(data: ContainerItemDto): void {
     this.musicLibraryService.updateCurrentContainer(data);
   }
 
@@ -71,41 +88,39 @@ export class MusicLibraryComponent implements AfterViewInit {
     this.contentDirectoryService.browseChildrenByContainer(container);
   }
 
-
-  ngAfterViewInit(): void {
-    console.log("Music Library : After view init ...");
+  private initViewData(udn: string): void {
+    console.log("Music Library : initViewData ...");
     this.layoutService.setFramedView();
     if (this.objectId) {
-      this.initialBrowseToUid(this.objectId);
+      console.log("browse to injected OID : " + this.objectId);
+      this.browseToUidAfterViewInit(udn, this.objectId);
     } else {
-      console.log("Last persistent UDN : " + this.persistenceService.getLastMediaServerPath());
-      if (this.persistenceService.getLastMediaServerPath() !== undefined || this.persistenceService.getLastMediaServerPath() !== '') {
-        this.initialBrowseToUid(this.persistenceService.getLastMediaServerPath());
+      if (this.persistenceService.getLastObjectId() !== undefined && this.persistenceService.getLastObjectId() !== '') {
+        console.log("browse to last persistent object ID : " + this.persistenceService.getLastObjectId());
+        this.browseToUidAfterViewInit(udn, this.persistenceService.getLastObjectId());
+      } else {
+        console.log("browse to object ID : 0");
+        this.browseToUidAfterViewInit(udn, "0");
       }
     }
   }
 
-  private initialBrowseToUid(objectId: string) {
-    let udn: string;
+  private browseToUidAfterViewInit(udn: string, objectId: string) {
     this.cdsBrowsePathService.restorePathToRoot();
-    this.lastOidIsRestoredFromCache = true;
-    udn = this.persistenceService.getCurrentMediaServerDevice();
-    console.log("Music Library - initial : persistent UDN : " + udn);
     if (!(udn?.length > 0)) {
+      console.log("last media server device not found ... ");
       udn = this.deviceService.selectedMediaServerDevice().udn;
       console.log("Music Library - initial : selected media server : " + udn);
       objectId = "0";
-      if (!(udn?.length > 0)) {
-        console.log("Music Library - initial : no UDN found. Do not browse to root ");
+    } else {
+      console.log();
+      let prom = this.browseToOid(objectId, udn, true, "");
+      if (prom) {
+        prom.then(
+          (val) => { if (!val) this.browseToRoot(udn) },
+          (err) => console.error(err)
+        );
       }
-    }
-
-    let prom = this.browseToOid(objectId, udn, true, "");
-    if (prom) {
-      prom.then(
-        (val) => { if (!val) this.browseToRoot(udn) },
-        (err) => console.error(err)
-      );
     }
   }
 

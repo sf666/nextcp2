@@ -4,6 +4,7 @@ import { ConfigurationService } from './configuration.service';
 import { SseService } from './sse/sse.service';
 import { MediaServerDto, MediaRendererDto, UiClientConfig, RendererDeviceConfiguration, InputSourceChangeDto, TransportServiceStateDto, InputSourceDto } from './dto.d';
 import { Injectable, computed, signal } from '@angular/core';
+import { PersistenceService } from './persistence/persistence.service';
 
 @Injectable({
   providedIn: 'root',
@@ -39,6 +40,7 @@ export class DeviceService {
 
     // instance services
     private httpService: HttpService,
+    private persistenceService: PersistenceService,
     private configService: ConfigurationService) {
 
     // Initialize MediaRenderer & MediaServer ...
@@ -159,10 +161,15 @@ export class DeviceService {
     }
   }
 
-  public setMediaServerByUdn(udn: string): void {
+  public setMediaServerByUdn(udn: string): boolean {
     const serverDevice = this.mediaServerList().filter(e => e.udn === udn);
     if (serverDevice?.length > 0) {
+      console.log("media server was found. Setting to " + serverDevice[0].friendlyName);
       this.selectedMediaServerDevice.set(serverDevice[0]);
+      return true;
+    } else {
+      console.log("udn not yet available : " + udn);
+      return false;
     }
   }
 
@@ -174,9 +181,17 @@ export class DeviceService {
     const uri = '/mediaServer';
     this.httpService.get<MediaServerDto[]>(this.baseUri, uri).subscribe(data => {
       this.mediaServerList.set(data);
-      this.applyDefaultServer();
+      if (!this.setLastPersistentServerDevice()) {
+        console.log("last persistent media server not set or not found. Apply default server.");
+        this.applyDefaultServer();
+      }
       this.mediaServerInitiated$.next(data);
     });
+  }
+
+  private setLastPersistentServerDevice(): boolean {
+    let udn = this.persistenceService.getCurrentMediaServerDevice();
+    return this.setMediaServerByUdn(udn);
   }
 
   private initAllMediaRenderer() {
