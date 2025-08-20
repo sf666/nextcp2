@@ -33,7 +33,6 @@ GenericResult:
 
 Config:
    applicationConfig: ApplicationConfig
-   clientConfig: List<UiClientConfig>
    radioStation: List<RadioStation>
    musicbrainzSupport: MusicbrainzSupport
    lastFmSessionKey: String
@@ -124,12 +123,6 @@ ServerPlaylistDto:
    numberOfElements: Long
    totalPlaytime: String
    
-UiClientConfig:
-   uuid: String
-   clientName: String
-   defaultMediaServer: MediaServerDto
-   defaultMediaRenderer: MediaRendererDto
-
 
 RendererDeviceConfiguration:
    mediaRenderer: MediaRendererDto

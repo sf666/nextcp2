@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-03-21 10:00:33.
+// Generated using typescript-generator version 3.2.1263 on 2025-08-20 13:37:54.
 
 export interface ApplicationConfig {
     myPlaylistFolderName: string;
@@ -65,7 +65,6 @@ export interface BrowseRequestDto {
 
 export interface Config {
     applicationConfig: ApplicationConfig;
-    clientConfig: UiClientConfig[];
     radioStation: RadioStation[];
     musicbrainzSupport: MusicbrainzSupport;
     lastFmSessionKey: string;
@@ -458,13 +457,6 @@ export interface TransportServiceStateDto {
     canPause: boolean;
     repeat: boolean;
     shuffle: boolean;
-}
-
-export interface UiClientConfig {
-    uuid: string;
-    clientName: string;
-    defaultMediaServer: MediaServerDto;
-    defaultMediaRenderer: MediaRendererDto;
 }
 
 export interface UmsServerApiKey {

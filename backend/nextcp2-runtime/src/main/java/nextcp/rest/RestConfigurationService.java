@@ -34,7 +34,6 @@ import nextcp.dto.RendererDeviceConfiguration;
 import nextcp.dto.ServerConfigDto;
 import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.ToastrMessage;
-import nextcp.dto.UiClientConfig;
 import nextcp.service.ConfigService;
 import nextcp.service.upnp.Nextcp2UpnpServiceImpl;
 import nextcp.upnp.device.DeviceRegistry;
@@ -134,41 +133,6 @@ public class RestConfigurationService
         catch (Exception e)
         {
             log.error("saveMusicBrainzConfig", e);
-        }
-    }
-
-    @PostMapping("/saveClientProfile")
-    public void saveClientConfig(@RequestBody UiClientConfig clientProfile)
-    {
-        try
-        {
-            configService.addClientProfile(clientProfile);
-        }
-        catch (Exception e)
-        {
-            log.error("saveClientConfig", e);
-        }
-    }
-
-    @PostMapping("/deleteClientProfile")
-    public void deleteClientProfile(@RequestBody UiClientConfig clientProfile)
-    {
-        try
-        {
-            if (configService.deleteClientProfile(clientProfile))
-            {
-                publisher.publishEvent(new ToastrMessage(null, "info", "client profile", "profile deleted : " + clientProfile.clientName));
-            }
-            else 
-            {
-                publisher.publishEvent(new ToastrMessage(null, "error", "client profile", "profile not found : " + clientProfile.clientName));
-            }
-            log.debug("Client config removed : " + clientProfile);
-        }
-        catch (Exception e)
-        {
-            log.error("deleteClientProfile", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "client profile", "profile not deleted because of : " + clientProfile.clientName));
         }
     }
 

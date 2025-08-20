@@ -12,8 +12,6 @@ import nextcp.config.ConfigPersistence;
 import nextcp.dto.AudioAddictConfig;
 import nextcp.dto.Config;
 import nextcp.dto.MusicbrainzSupport;
-import nextcp.dto.ToastrMessage;
-import nextcp.dto.UiClientConfig;
 import nextcp.eventBridge.SsePublisher;
 import nextcp.spotify.ISpotifyConfig;
 
@@ -52,39 +50,6 @@ public class ConfigService
         return config.musicbrainzSupport.password.equals(newPassword);
     }
 
-    public void addClientProfile(UiClientConfig clientConfig)
-    {
-        deleteProfileInternal(clientConfig);
-        config.clientConfig.add(clientConfig);
-        writeAndSendConfig();
-        log.debug("Client profile added or updated : " + clientConfig);
-        publisher.publishEvent(new ToastrMessage(null, "info", "client profile", "profile added or updated : " + clientConfig.clientName));
-    }
-
-    public boolean deleteClientProfile(UiClientConfig clientConfig)
-    {
-        deleteProfileInternal(clientConfig);
-        writeAndSendConfig();
-        return true;
-    }
-
-    /**
-     * @param clientConfig
-     *            Profile to delete
-     * @return return TRUE if profile is deleted else FALSE
-     */
-    private boolean deleteProfileInternal(UiClientConfig clientConfig)
-    {
-        if (config.clientConfig != null && config.clientConfig.size() > 0)
-        {
-            if (!config.clientConfig.removeIf(e -> e.uuid.contentEquals(clientConfig.uuid)))
-            {
-                log.debug("Client config not found : " + clientConfig);
-                return false;
-            }
-        }
-        return false;
-    }
 
     public void writeAndSendConfig()
     {

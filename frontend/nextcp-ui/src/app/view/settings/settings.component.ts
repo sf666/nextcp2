@@ -6,7 +6,6 @@ import { DeviceService } from './../../service/device.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { RatingServiceService } from './../../service/rating-service.service';
 import {
-  UiClientConfig,
   MediaServerDto,
   RendererDeviceConfiguration,
   MediaRendererDto,
@@ -42,7 +41,6 @@ import {
     MatOptionModule,
     MatIconModule,
     MatInputModule,
-    MatSuffix,
     MatButtonModule,
     MatSlideToggleModule,
     ReactiveFormsModule
@@ -172,14 +170,6 @@ export class SettingsComponent implements OnInit {
     this.systemService.registerNextcp2AtSpotify();
   }
 
-  saveClientConfig(): void {
-    this.configService.saveClientProfile();
-  }
-
-  deleteClientConfig(): void {
-    this.configService.deleteClientProfile();
-  }
-
   saveGeneralConfig(): void {
     this.configService.saveApplicationConfig();
   }
@@ -190,24 +180,6 @@ export class SettingsComponent implements OnInit {
 
   saveAudioAddict() {
     this.configService.saveAudioAddictConfig();
-  }
-
-  selectConfig(config: UiClientConfig): void {
-    this.configService.selectClientConfig(config.uuid);
-    if (
-      !this.deviceService
-        .mediaRendererList()
-        .some((renderer) => renderer.udn === config.defaultMediaRenderer.udn)
-    ) {
-      this.toastService.info('media renderer is not available', 'ATTENTION');
-    }
-    if (
-      !this.deviceService
-        .mediaServerList()
-        .some((device) => device.udn === config.defaultMediaServer.udn)
-    ) {
-      this.toastService.info('media server is not available', 'ATTENTION');
-    }
   }
 
   saveRendererConfig(rendererConfig: RendererDeviceConfiguration): void {
@@ -254,23 +226,6 @@ export class SettingsComponent implements OnInit {
 
   compareProfile(o1: any, o2: any): boolean {
     return o1.uuid === o2.uuid;
-  }
-
-  renameProfile(): void {
-    if (this.newProfileName) {
-      this.configService.getActiveClientConfig().clientName =
-        this.newProfileName;
-      this.newProfileName = '';
-    }
-  }
-
-  noServerSelected(): void {
-    this.configService.clientConfig.defaultMediaServer = this.none_serverdevice;
-  }
-
-  noRendererSelected(): void {
-    this.configService.clientConfig.defaultMediaRenderer =
-      this.none_renderdevice;
   }
 
   public get currentMediaServer(): MediaServerDto {

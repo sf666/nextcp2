@@ -167,7 +167,6 @@ public class FileConfigPersistence
 
         createDefaultLog(c.applicationConfig.log4jConfigFile);
 
-        c.clientConfig = new ArrayList<>();
         c.radioStation = new ArrayList<>();
         c.musicbrainzSupport = new MusicbrainzSupport("", "");
         c.spotifyConfig = new SpotifyConfigDto();

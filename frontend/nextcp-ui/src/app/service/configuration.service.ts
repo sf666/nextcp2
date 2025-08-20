@@ -3,7 +3,7 @@ import { UuidService } from './../util/uuid.service';
 import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { SseService } from './sse/sse.service';
-import { UiClientConfig, RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, ApplicationConfig, MusicbrainzSupport, MediaPlayerConfigDto, AudioAddictConfig } from './dto.d';
+import { RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, ApplicationConfig, MusicbrainzSupport, MediaPlayerConfigDto, AudioAddictConfig } from './dto.d';
 import { GenericResultService } from './generic-result.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
@@ -17,7 +17,6 @@ export class ConfigurationService {
 
   // Observer
   // ===============================================================================
-  clientConfigChanged$: Subject<UiClientConfig> = new Subject();
   rendererConfigChanged$: Subject<RendererDeviceConfiguration[]> = new Subject();
 
   // Configs
@@ -75,26 +74,7 @@ export class ConfigurationService {
 
   public deviceDriverList: DeviceDriverCapability[];
 
-  // configuration for this client
-  public clientConfig: UiClientConfig = {
-    clientName: "",
-    uuid: "",
-    defaultMediaRenderer: {
-      friendlyName: "",
-      udn: "",
-      services: [],
-      allSources: [],
-      currentSource: null
-    },
-    defaultMediaServer: {
-      friendlyName: "",
-      udn: "",
-      extendedApi: false
-    }
-  };
-
   baseUri = '/ConfigurationService';
-
 
   constructor(
     private http: HttpClient, 
@@ -113,10 +93,6 @@ export class ConfigurationService {
       sseService.rendererConfigChanged$.subscribe(data => this.applyRendererServerRendererList(data));
       sseService.serverDevicesConfigChanged$.subscribe(data => this.applyMediaServerList(data));
       console.log("ConfigurationService constructor call");
-  }
-
-  public createNewUiClientConfig(newUUID: string): UiClientConfig {
-    return { clientName: 'NewProfile', uuid: newUUID, defaultMediaRenderer: { friendlyName: '', udn: '', services: [], allSources: [], currentSource: null }, defaultMediaServer: { friendlyName: '', udn: '', extendedApi: false } };
   }
 
   public restart(): void {
@@ -226,7 +202,6 @@ export class ConfigurationService {
     this.rendererConfig.rendererDevices = this.rendererConfig?.rendererDevices.sort((n1, n2) => {
       return n1.displayString.localeCompare(n2.displayString);
     });
-    this.updateUiClientConfig();
   }
 
   private applyServerConfigurationFile(serverConfig: Config) {
@@ -234,15 +209,8 @@ export class ConfigurationService {
     this.applicationConfig = Object.assign({}, serverConfig.applicationConfig);
     this.musicBrainzConfig = Object.assign({}, serverConfig.musicbrainzSupport);
     this.audioAddictConfig.set(serverConfig.audioAddictConfig);
-    this.updateUiClientConfig();
   }
 
-  private updateUiClientConfig() {
-    if (isAssigned(this.getClientConfigFromServerFile(this.clientUUID))) {
-      this.clientConfig = this.getClientConfigFromServerFile(this.clientUUID);
-      this.clientConfigChanged$.next(this.clientConfig);
-    }
-  }
 
   // Use this function to acquire a client global userID
   public getStoredClientId(): string {
@@ -271,55 +239,6 @@ export class ConfigurationService {
       return false;
     }
     return configEntry[0].active;
-  }
-
-  public selectClientConfig(uuid: string): void {
-    this.clientConfig = this.getClientConfigFromServerFile(uuid);
-    localStorage.setItem("clientID", uuid);
-    this.clientUUID = uuid;
-    console.log("selecting client config : " + this.clientConfig.clientName + " with uuid of : " + this.clientConfig.uuid + " in local storage.");
-    this.clientConfigChanged$.next(this.clientConfig);
-  }
-
-  /**
-   * @param uuid find config entry with supplies uuid.
-   */
-  public getClientConfigFromServerFile(uuid: string): UiClientConfig {
-    return this.serverConfig.clientConfig.find(conf => conf.uuid === uuid);
-  }
-
-  public getActiveClientConfig(): UiClientConfig {
-    return this.clientConfig;
-  }
-
-  public addNewClientConfig(): void {
-    const newUUID = this.uuidService.getUnique5();
-    const newProfile = this.createNewUiClientConfig(newUUID);
-    this.serverConfig.clientConfig.push(newProfile);
-    this.selectClientConfig(newUUID);
-  }
-
-  public saveClientProfile(): void {
-    const uri = '/saveClientProfile';
-    this.http.post(this.baseUri + uri, this.clientConfig).subscribe(data => {
-      this.genericResultService.displayGenericMessage("configuration", "client configuration saved.");
-    }, err => {
-      this.genericResultService.displayHttpError(err, "cannot save client configuration");
-    });
-  }
-
-  public deleteClientProfile(): void {
-    const uri = '/deleteClientProfile';
-    this.http.post(this.baseUri + uri, this.clientConfig).subscribe(data => {
-      this.genericResultService.displayGenericMessage("configuration", "client configuration saved.");
-    }, err => {
-      this.genericResultService.displayHttpError(err, "cannot save client configuration");
-    });
-  }
-
-  public existClientConfig(uuid: string): boolean {
-    const element: UiClientConfig = this.getClientConfigFromServerFile(uuid);
-    return isAssigned(element);
   }
 
   public spotifyAccountConnected(): boolean {

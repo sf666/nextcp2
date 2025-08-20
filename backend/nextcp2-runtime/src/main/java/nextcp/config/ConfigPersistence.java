@@ -51,7 +51,6 @@ public class ConfigPersistence {
 	}
 
 	private void readDatabaseProperties() {
-		config.clientConfig = databaseConfigPersistence.readClientConfigDatabaseProperties();
 	}
 
 	public void updateMusicBrainzInjectionBean(MusicbrainzSupport mbConfig) {

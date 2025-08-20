@@ -25,12 +25,6 @@ public class ConfigDefaults
         {
             config.spotifyConfig.clientId = "07c3ea9a85b045b09f0dea60b83fb949";
         }
-        if (config.clientConfig == null)
-        {
-            log.info("adding new configuration value 'clientConfig'. List is empty.");
-            config.clientConfig = new ArrayList<>();
-        }
-
         if (config.radioStation == null)
         {
             log.info("adding new configuration value 'radioStation'. List is empty.");

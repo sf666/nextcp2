@@ -13,10 +13,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import nextcp.db.service.BasicDbService;
 import nextcp.db.service.KeyValuePair;
 import nextcp.dto.Config;
-import nextcp.dto.UiClientConfig;
 
 /**
- * Properties saved in database
+ * Properties saved in database.
+ * 
+ * Not used at the moment, because we deleted client config persistence in the database.
+ * 
+ * Remove class if it has no use any more ... 
  */
 public class DatabaseConfigPersistence
 {
@@ -38,35 +41,35 @@ public class DatabaseConfigPersistence
 
     public void writeDatabaseConfig()
     {
-        try
-        {
-            String cc_json = om.writeValueAsString(config.clientConfig);
-            db.updateJsonStoreValue(new KeyValuePair(UI_DEFAULT_CLIENT_CONFIG_VALUE, cc_json));
-        }
-        catch (Exception e)
-        {
-            log.error("couldn't write CLIENT_CONFIG to database : ", e);
-        }
+//        try
+//        {
+//            String cc_json = om.writeValueAsString(config.clientConfig);
+//            db.updateJsonStoreValue(new KeyValuePair(UI_DEFAULT_CLIENT_CONFIG_VALUE, cc_json));
+//        }
+//        catch (Exception e)
+//        {
+//            log.error("couldn't write CLIENT_CONFIG to database : ", e);
+//        }
     }
 
-    public List<UiClientConfig> readClientConfigDatabaseProperties()
-    {
-        String cc_json = db.selectJsonStoreValue(UI_DEFAULT_CLIENT_CONFIG_VALUE);
-        if (!StringUtils.isAllBlank(cc_json))
-        {
-            try
-            {
-                return om.readValue(cc_json, new TypeReference<List<UiClientConfig>>()
-                {
-                });
-            }
-            catch (Exception e)
-            {
-                log.warn("client config list : initializing empty array list", e);
-            }
-        }
-        log.debug("no client configuration available yet ...");
-        return new ArrayList<>();
-    }
+//    public List<UiClientConfig> readClientConfigDatabaseProperties()
+//    {
+//        String cc_json = db.selectJsonStoreValue(UI_DEFAULT_CLIENT_CONFIG_VALUE);
+//        if (!StringUtils.isAllBlank(cc_json))
+//        {
+//            try
+//            {
+//                return om.readValue(cc_json, new TypeReference<List<UiClientConfig>>()
+//                {
+//                });
+//            }
+//            catch (Exception e)
+//            {
+//                log.warn("client config list : initializing empty array list", e);
+//            }
+//        }
+//        log.debug("no client configuration available yet ...");
+//        return new ArrayList<>();
+//    }
 
 }

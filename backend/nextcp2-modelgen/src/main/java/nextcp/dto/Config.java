@@ -13,7 +13,6 @@ public class Config
 {
 
     public ApplicationConfig applicationConfig;
-    public List<UiClientConfig> clientConfig;
     public List<RadioStation> radioStation;
     public MusicbrainzSupport musicbrainzSupport;
     public String lastFmSessionKey;
@@ -25,10 +24,9 @@ public class Config
     {
     }
 
-    public Config(ApplicationConfig applicationConfig, List<UiClientConfig> clientConfig, List<RadioStation> radioStation, MusicbrainzSupport musicbrainzSupport, String lastFmSessionKey, SpotifyConfigDto spotifyConfig, MediaPlayerConfigDto mediaPlayerConfig, AudioAddictConfig audioAddictConfig)
+    public Config(ApplicationConfig applicationConfig, List<RadioStation> radioStation, MusicbrainzSupport musicbrainzSupport, String lastFmSessionKey, SpotifyConfigDto spotifyConfig, MediaPlayerConfigDto mediaPlayerConfig, AudioAddictConfig audioAddictConfig)
     {
         this.applicationConfig = applicationConfig;
-        this.clientConfig = clientConfig;
         this.radioStation = radioStation;
         this.musicbrainzSupport = musicbrainzSupport;
         this.lastFmSessionKey = lastFmSessionKey;
@@ -43,7 +41,6 @@ public class Config
         StringBuilder sb = new StringBuilder();
         sb.append("Config [");
         sb.append("applicationConfig=").append(this.applicationConfig).append(", ");
-        sb.append("clientConfig=").append(this.clientConfig).append(", ");
         sb.append("radioStation=").append(this.radioStation).append(", ");
         sb.append("musicbrainzSupport=").append(this.musicbrainzSupport).append(", ");
         sb.append("lastFmSessionKey=").append(this.lastFmSessionKey).append(", ");

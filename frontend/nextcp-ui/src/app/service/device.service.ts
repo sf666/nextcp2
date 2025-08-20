@@ -2,7 +2,7 @@ import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { ConfigurationService } from './configuration.service';
 import { SseService } from './sse/sse.service';
-import { MediaServerDto, MediaRendererDto, UiClientConfig, RendererDeviceConfiguration, InputSourceChangeDto, TransportServiceStateDto, InputSourceDto } from './dto.d';
+import { MediaServerDto, MediaRendererDto, InputSourceChangeDto,  InputSourceDto } from './dto.d';
 import { Injectable, computed, signal } from '@angular/core';
 import { PersistenceService } from './persistence/persistence.service';
 
@@ -48,7 +48,6 @@ export class DeviceService {
     this.initAllMediaRenderer();
 
     // push notification: We are interested in added and removed devices
-    configService.clientConfigChanged$.subscribe(data => this.clientConfigChanged(data));
     sse.mediaRendererListChanged$.subscribe(data => this.mediarendererListChanged(data));
     sse.mediaServerListChanged$.subscribe(data => this.mediaserverListChanged(data));
 
@@ -116,9 +115,6 @@ export class DeviceService {
     this.selectLastPersistentRendererDevice();
     console.log("renderer list updated.");
     // this.logMediaRendererServices(data);
-  }
-
-  private clientConfigChanged(data: UiClientConfig): void {
   }
 
   public get selectedMediaServerDeviceHasExtendedApi(): boolean {
