@@ -179,13 +179,36 @@ public class FileConfigPersistence
         String basePath = FilenameUtils.getFullPath(log4jConfigFile2);
         String logfile = FilenameUtils.concat(basePath, "nextcp2.log");
 
-        String data = "<Configuration status=\"info\">\n" + "    <Appenders>\n" + "        <Console name=\"Console\" target=\"SYSTEM_OUT\">\n"
-                + "            <PatternLayout pattern=\"%d{HH:mm:ss} [%t] %-5level %logger{36} - %msg%n\" />\n" + "        </Console>\n" + "\n"
-                + String.format("        <File name=\"logfile\" fileName=\"%s\">\n", logfile) + "                <PatternLayout>\n"
-                + "                        <Pattern>%d %p %c{5.5.~.~} [%t] %m%n</Pattern>\n" + "                </PatternLayout>\n" + "        </File>\n"
-                + "        <Async name=\"Async\">\n" + "                <AppenderRef ref=\"logfile\"/>\n" + "        </Async>\n" + "    </Appenders>\n" + "\n" + "    <Loggers>\n"
-                + "        <Root level=\"warn\">\n" + "                <AppenderRef ref=\"Async\" />\n" + "                <AppenderRef ref=\"Console\" />\n" + "        </Root>\n"
-                + "    </Loggers>\n" + "</Configuration>\n" + "";
+        String data = "<Configuration status=\"info\">\n" + "    <Appenders>\n" + "        <Console name=\"Console\" target=\"SYSTEM_OUT\">\n" +
+                "            <PatternLayout pattern=\"%d{HH:mm:ss} [%t] %-5level %logger{36} - %msg%n\" />\n" + "        </Console>\n" + "\n" +
+                "        <RollingFile\n" + 
+                "                name=\"rollingFile\"\n" + 
+                String.format("                fileName=\"%s\"\n", logfile) + 
+                String.format("                filePattern=\"%s", logfile) +".%i.gz\"\n" + 
+                "                ignoreExceptions=\"false\">\n" + 
+                "                <PatternLayout>\n" + 
+                "                        <Pattern>%d %p %c{5.5.~.~} [%t] %m%n</Pattern>\n" + 
+                "                </PatternLayout>\n" + 
+                "                <Policies>\n" + 
+                "                        <SizeBasedTriggeringPolicy size=\"200 MB\" />\n" + 
+                "                </Policies>\n" + 
+                "                <DefaultRolloverStrategy max=\"5\">\n" + 
+                "                        <Delete basePath=\"${LOG_DIR}\" maxDepth=\"2\">\n" + 
+                "                                <IfFileName glob=\"*/next*.gz\" />\n" + 
+                "                                <IfLastModified age=\"P30D\" />\n" + 
+                "                        </Delete>\n" + 
+                "                </DefaultRolloverStrategy>\n" + 
+                "        </RollingFile>\n" + 
+                "    </Appenders>\n" +
+                "\n" +
+                "    <Loggers>\n" + 
+                "        <Root level=\"info\">\n" + 
+                "                <AppenderRef ref=\"Console\" />\n" + 
+                "                <AppenderRef ref=\"rollingFile\" />\n" + 
+                "        </Root>\n" + 
+                "\n" + 
+                "    </Loggers>" +
+                "</Configuration>\n" + "";
         try
         {
             FileOpsNio.writeFile(log4jConfigFile2, data.getBytes());
