@@ -108,39 +108,18 @@ export class DeviceService {
 
   private mediaserverListChanged(data: MediaServerDto[]): void {
     this.mediaServerList.set(data);
-    this.applyDefaultServer();
+    this.selectLastPersistentServerDevice();
   }
 
   private mediarendererListChanged(data: MediaRendererDto[]): void {
     this.mediaRendererList.set(data);
-    this.applyDefaultRenderer();
+    this.selectLastPersistentRendererDevice();
     console.log("renderer list updated.");
     // this.logMediaRendererServices(data);
   }
 
   private clientConfigChanged(data: UiClientConfig): void {
-    this.applyDefaultRenderer();
-    this.applyDefaultServer();
   }
-
-  private applyDefaultServer() {
-    const defServer = this.mediaServerList().filter(e => e.udn === this.configService.clientConfig.defaultMediaServer.udn).find(e => true);
-    if (!this.defaultMediaServerAlreadySelected && defServer) {
-      console.log("selecting default media server to " + defServer.friendlyName);
-      this.defaultMediaServerAlreadySelected = true;
-      this.selectedMediaServerDevice.set(defServer);
-    }
-  }
-
-  private applyDefaultRenderer() {
-    const defRenderer = this.mediaRendererList().filter(e => e.udn === this.configService.clientConfig.defaultMediaRenderer.udn).find(e => true);;
-    if (!this.defaultMediaRendererAlreadySelected && defRenderer) {
-      console.log("selecting default media renderer : " + this.configService.clientConfig.defaultMediaRenderer.friendlyName);
-      this.defaultMediaRendererAlreadySelected = true;
-      this.selectedMediaRendererDevice.set(defRenderer);
-    }
-  }
-
 
   public get selectedMediaServerDeviceHasExtendedApi(): boolean {
     return this.selectedMediaServerDevice().extendedApi;
@@ -154,11 +133,14 @@ export class DeviceService {
     this.selectedMediaRendererDevice.set(device);
   }
 
-  public setMediaRendererByUdn(udn: string): void {
+  public setMediaRendererByUdn(udn: string): boolean {
+    this.persistenceService.setNewMediaRendererDevice(udn);
     const renderer = this.mediaRendererList().filter(e => e.udn === udn);
     if (renderer?.length > 0) {
       this.selectedMediaRendererDevice.set(renderer[0]);
+      return true;
     }
+    return false;
   }
 
   public setMediaServerByUdn(udn: string): boolean {
@@ -181,17 +163,27 @@ export class DeviceService {
     const uri = '/mediaServer';
     this.httpService.get<MediaServerDto[]>(this.baseUri, uri).subscribe(data => {
       this.mediaServerList.set(data);
-      if (!this.setLastPersistentServerDevice()) {
-        console.log("last persistent media server not set or not found. Apply default server.");
-        this.applyDefaultServer();
-      }
+      this.selectLastPersistentServerDevice();
       this.mediaServerInitiated$.next(data);
     });
   }
 
-  private setLastPersistentServerDevice(): boolean {
+  private selectLastPersistentRendererDevice(): boolean {
+    let udn = this.persistenceService.getCurrentMediaRendererDevice();
+    let b = this.setMediaRendererByUdn(udn);
+    if (!b) {
+      console.log("last persistence media renderer device not available yet.");
+    }
+    return b;
+  }
+
+  private selectLastPersistentServerDevice(): boolean {
     let udn = this.persistenceService.getCurrentMediaServerDevice();
-    return this.setMediaServerByUdn(udn);
+    let b = this.setMediaServerByUdn(udn);
+    if (!b) {
+      console.log("last persistence media server device not available yet.");
+    }
+    return b;
   }
 
   private initAllMediaRenderer() {
@@ -199,7 +191,7 @@ export class DeviceService {
 
     this.httpService.get<MediaRendererDto[]>(this.baseUri, uri).subscribe(data => {
       this.mediaRendererList.set(data);
-      this.applyDefaultRenderer();
+      this.selectLastPersistentRendererDevice();
       this.mediaRendererInitiated$.next(data);
     });
   }
