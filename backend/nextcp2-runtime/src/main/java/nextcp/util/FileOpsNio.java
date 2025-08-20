@@ -203,7 +203,7 @@ public class FileOpsNio
     }
 
     /**
-     * Schreibt ein byte[] in eine Date
+     * Schreibt ein byte[] in eine Datei
      * 
      * @param filename
      *            Filename

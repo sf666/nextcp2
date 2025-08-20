@@ -100,7 +100,6 @@ public class ConfigPersistence {
 	public AudioAddictServiceConfig createAudioAddictConfig() {
 		AudioAddictServiceConfig aac = new AudioAddictServiceConfig();
 		aac.preferEuropeanServer = config.audioAddictConfig.preferEuropeanServer;
-		aac.token = config.audioAddictConfig.token;
 		aac.user = config.audioAddictConfig.user;
 		
 		if (!StringUtils.isAllBlank(config.audioAddictConfig.pass)) {

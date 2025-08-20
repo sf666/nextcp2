@@ -5,7 +5,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
 import nextcp.dto.AudioAddictChannelDto;
@@ -16,19 +15,26 @@ public class AudioAddictService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AudioAddictService.class.getName());
 	private AudioAddictServiceConfig config = null;
 
+	private AudioAddictServiceConfig conf = new AudioAddictServiceConfig();
+
 	private ConcurrentHashMap<Platform, RadioNetwork> networkSettings = new ConcurrentHashMap<>();
 
 	@PostConstruct
 	private void init() {
-//		for (Platform network : Platform.values()) {
-//			getNetwork(network);
-//		}
+		for (Platform network : Platform.values()) {
+			getNetwork(network);
+		}
 	}
 
 	@Autowired
 	public AudioAddictService(AudioAddictServiceConfig config) {
 		this.config = config;
 	}
+	
+	public RadioNetwork getRadioNetwork(Platform platform) {
+		return networkSettings.get(platform);
+	}
+
 
 	public void updateConfig(AudioAddictServiceConfig config) {
 		this.config = config;
@@ -42,12 +48,13 @@ public class AudioAddictService {
 		return network.getChannel();
 	}
 
-	private RadioNetwork getNetwork(Platform platform) {
+	private synchronized RadioNetwork getNetwork(Platform platform) {
 		RadioNetwork network = networkSettings.get(platform);
 
 		if (network == null) {
-			network = new RadioNetwork(platform, config);
+			network = new RadioNetwork(platform, conf);
 			networkSettings.put(platform, network);
+			network.start();
 		}
 		return network;
 	}
@@ -61,4 +68,5 @@ public class AudioAddictService {
 		RadioNetwork network = getNetwork(platform);
 		return network.getFilters();
 	}
+
 }

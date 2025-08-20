@@ -1,7 +1,10 @@
 package nextcp.audioaddict.mapper;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class SimilarChannel {
 
 	public int id;
-	public int similar_channel_id;
+	@JsonProperty("similar_channel_id")
+	public int similarChannelId;
 }

@@ -44,14 +44,20 @@ public class RestRadioNetworks {
 	
 	@PostConstruct
 	private void init() {
-		updateNetworks();
+		// updateNetworks();
 		log.debug("audio {} " , audioAddictService);
 	}
 
 	private void updateNetworks() {
-		for (Platform net : Platform.values()) {
-			networks.add(new RadioNetwork(net.name(), net.displayName, net.getStreamListQualityDto(), net.albumArt));
+		
+		boolean authenticated = false;
+		for (Platform network : Platform.values()) {
+			authenticated = audioAddictService.getRadioNetwork(network).isAuthenticated();
+			if (!authenticated) {
+				log.warn("not authenticated for network : " + network.displayName);
+			}
 		}
+
 		log.info("Rest service : {} available networks.", networks.size());
 	}
 

@@ -3,16 +3,23 @@ package nextcp.audioaddict.mapper;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Root {
 
-	public ArrayList<ChannelFilter> channel_filters;
+	@JsonProperty("channel_filters")
+	public ArrayList<ChannelFilter> channelFilters;
 	public ArrayList<Asset> assets;
-	public ArrayList<Object> stream_sets;
+	@JsonProperty("stream_sets")
+	public ArrayList<Object> streamSets;
 	public ArrayList<Event> events;
-	public Map<String,TrackHistoryItem> track_history;
+	@JsonProperty("track_history")
+	public Map<String, TrackHistoryItem> trackHistory;
 	public Object notification;
-	public String ad_network;
-	public ArrayList<Object> ad_networks;
-	public Date cached_at;
+	@JsonProperty("ad_network")
+	public String adNetwork;
+	@JsonProperty("ad_networks")
+	public ArrayList<Object> adNetworks;
+	@JsonProperty("cached_at")
+	public Date cachedAt;
 }

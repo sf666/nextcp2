@@ -1,9 +1,12 @@
 package nextcp.audioaddict.mapper;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Artist {
 
 	public int id;
 	public String name;
-	public String asset_url;
+	@JsonProperty("asset_url")
+	public String assetUrl;
 	public Images images;
 }

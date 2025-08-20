@@ -1,20 +1,28 @@
 package nextcp.audioaddict.mapper;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class TrackHistoryItem {
 
-	public int network_id;
-	public int channel_id;
+	@JsonProperty("network_id")
+	public int networkId;
+	@JsonProperty("channel_id")
+	public int channelId;
 	public String artist;
-	public String display_artist;
+	@JsonProperty("display_artist")
+	public String displayArtist;
 	public String title;
-	public String display_title;
+	@JsonProperty("display_title")
+	public String displayTitle;
 	public String track;
 	public int length;
 	public int duration;
 	public int started;
 	public String type;
-	public int track_id;
+	@JsonProperty("track_id")
+	public int trackId;
 	public Object release;
-	public String art_url;
+	@JsonProperty("art_url")
+	public String artUrl;
 	public Images images;
 }

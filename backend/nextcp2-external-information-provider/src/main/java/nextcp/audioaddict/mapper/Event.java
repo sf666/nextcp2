@@ -1,21 +1,30 @@
 package nextcp.audioaddict.mapper;
 
 import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Event {
 
 	public int id;
-	public Date start_at;
+	@JsonProperty("start_at")
+	public Date startAt;
 	public int duration;
 	public String name;
-	public Date end_at;
-	public String artists_tagline;
-	public String description_html;
+	@JsonProperty("end_at")
+	public Date endAt;
+	@JsonProperty("artists_tagline")
+	public String artistsTagline;
+	@JsonProperty("description_html")
+	public String descriptionHtml;
 	public Show show;
-	public int event_id;
-	public int channel_id;
-	public String start_date;
-	public String end_date;
+	@JsonProperty("event_id")
+	public int eventId;
+	@JsonProperty("channel_id")
+	public int channelId;
+	@JsonProperty("start_date")
+	public String startDate;
+	@JsonProperty("end_date")
+	public String endDate;
 	public String title;
 	public String description;
 	public String url;

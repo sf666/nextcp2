@@ -19,7 +19,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.0</version>
+		<version>3.5.4</version>
 	</parent>
 	<scm>
 		<connection>scm:git:https://github.com/sf666/nextcp2.git</connection>
@@ -142,6 +142,10 @@
 		<dependency>
 			<groupId>org.eclipse.jetty.http2</groupId>
 			<artifactId>jetty-http2-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-client</artifactId>
 		</dependency>
 
 		<!-- Logging -->
@@ -330,7 +334,7 @@
 			<dependency>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-client</artifactId>
-				<version>12.0.16</version>
+				<version>12.0.24</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
