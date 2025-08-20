@@ -188,7 +188,9 @@ export class PlaylistService implements OnInit {
 
   public deleteAll(): void {
     const uri = '/deleteAll';
-    this.httpService.post(this.baseUri, uri, this.getSelectedMediaRendererUdn()).subscribe();
+    this.httpService.post(this.baseUri, uri, this.getSelectedMediaRendererUdn()).subscribe(() => {
+      this.updatePlaylistItems();
+    });
   }
 
   public setRepeat(repeat: boolean): void {
