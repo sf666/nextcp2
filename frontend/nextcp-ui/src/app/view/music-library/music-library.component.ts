@@ -201,7 +201,6 @@ export class MusicLibraryComponent implements AfterViewInit {
   }
 
   mediaServerSelected(): boolean {
-    return false;
     return this.deviceService.selectedMediaServerDevice()?.udn?.length > 0;
   }
 }
