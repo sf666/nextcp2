@@ -56,6 +56,7 @@ export class DtoGeneratorService {
       friendlyName: '',
       services: [],
       udn: '',
+      img: '',
     }
   }
 

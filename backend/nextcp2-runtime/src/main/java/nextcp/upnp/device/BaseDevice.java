@@ -1,7 +1,9 @@
 package nextcp.upnp.device;
 
+import java.net.URL;
 import org.apache.commons.lang.StringUtils;
 import org.jupnp.UpnpService;
+import org.jupnp.model.meta.Icon;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.types.UDN;
 import org.jupnp.support.model.DIDLContent;
@@ -13,86 +15,100 @@ import nextcp.rest.DtoBuilder;
 import nextcp.service.upnp.RemoteDeviceFacade;
 import nextcp.util.DidlContent;
 
-public class BaseDevice
-{
-    private static final Logger log = LoggerFactory.getLogger(BaseDevice.class.getName());
+public class BaseDevice {
 
-    private RemoteDevice device;
-    private RemoteDeviceFacade deviceFacade = new RemoteDeviceFacade();
-    
-    private DidlContent didlContent = new DidlContent();
+	private static final Logger log = LoggerFactory.getLogger(BaseDevice.class.getName());
 
-    @Autowired
-    private UpnpService upnpService;
+	private RemoteDevice device;
+	private RemoteDeviceFacade deviceFacade = new RemoteDeviceFacade();
 
-    @Autowired
-    private ApplicationEventPublisher eventPublisher = null;
+	private DidlContent didlContent = new DidlContent();
 
-    @Autowired
-    private DtoBuilder dtoBuilder = null;
+	private Icon biggestIcon = null;
 
-    public BaseDevice(RemoteDevice device)
-    {
-        this.device = device;
-    }
+	@Autowired
+	private UpnpService upnpService;
 
-    public UpnpService getUpnpService()
-    {
-        return upnpService;
-    }
+	@Autowired
+	private ApplicationEventPublisher eventPublisher = null;
 
-    public RemoteDevice getDevice()
-    {
-        return device;
-    }
+	@Autowired
+	private DtoBuilder dtoBuilder = null;
 
-    public DtoBuilder getDtoBuilder()
-    {
-        return dtoBuilder;
-    }
+	public BaseDevice(RemoteDevice device) {
+		this.device = device;
+	}
 
-    public ApplicationEventPublisher getEventPublisher()
-    {
-        return eventPublisher;
-    }
+	public UpnpService getUpnpService() {
+		return upnpService;
+	}
 
-    protected String getDefault(String in, String defaultValue)
-    {
-        if (StringUtils.isBlank(in))
-        {
-            return defaultValue;
-        }
-        return in;
-    }
+	public RemoteDevice getDevice() {
+		return device;
+	}
 
-    protected Long getDefault(Long in, Long defaultValue)
-    {
-        if (in == null)
-        {
-            return defaultValue;
-        }
-        return in;
-    }
+	public DtoBuilder getDtoBuilder() {
+		return dtoBuilder;
+	}
 
-    public UDN getUDN()
-    {
-        return deviceFacade.getUDN(device);
-    }
+	public ApplicationEventPublisher getEventPublisher() {
+		return eventPublisher;
+	}
 
-    public String getUdnAsString()
-    {
-        return deviceFacade.getUdnAsString(device);
-    }
+	protected String getDefault(String in, String defaultValue) {
+		if (StringUtils.isBlank(in)) {
+			return defaultValue;
+		}
+		return in;
+	}
 
-    public String getFriendlyName()
-    {
-        return deviceFacade.getFriendlyName(device);
-    }
+	protected Long getDefault(Long in, Long defaultValue) {
+		if (in == null) {
+			return defaultValue;
+		}
+		return in;
+	}
 
-    protected DIDLContent generateDidlContent(String didlContentXml) throws Exception
-    {
-        log.debug(didlContentXml);
-        return didlContent.generateDidlContent(didlContentXml);
-    }
+	public UDN getUDN() {
+		return deviceFacade.getUDN(device);
+	}
 
+	public String getUdnAsString() {
+		return deviceFacade.getUdnAsString(device);
+	}
+
+	public String getFriendlyName() {
+		return deviceFacade.getFriendlyName(device);
+	}
+
+	protected DIDLContent generateDidlContent(String didlContentXml) throws Exception {
+		log.debug(didlContentXml);
+		return didlContent.generateDidlContent(didlContentXml);
+	}
+
+	public Icon getBiggestIcon() {
+		if (biggestIcon == null) {
+			for (Icon i : getDevice().findIcons()) {
+				if (biggestIcon == null) {
+					biggestIcon = i;
+				} else {
+					if (biggestIcon.getWidth() < i.getWidth()) {
+						biggestIcon = i;
+					}
+				}
+			}
+		}
+		return biggestIcon;
+	}
+
+	public String getBiggestIconUrl() {
+		Icon i = getBiggestIcon();
+		String iconUri = "";
+		if (i != null) {
+			URL desc = getDevice().getIdentity().getDescriptorURL();
+			iconUri = String.format("%s://%s:%s%s", desc.getProtocol(), desc.getHost(), desc.getPort(), 
+				i.getUri().toString());
+		}
+		return iconUri;
+	}
 }

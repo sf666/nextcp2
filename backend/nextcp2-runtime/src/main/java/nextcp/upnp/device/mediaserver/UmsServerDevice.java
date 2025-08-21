@@ -370,7 +370,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	}
 
 	public MediaServerDto getAsDto() {
-		return new MediaServerDto(getUDN().getIdentifierString(), getFriendlyName(), true);
+		return new MediaServerDto(getBiggestIconUrl(), getUDN().getIdentifierString(), getFriendlyName(), true);
 	}
 
 	@Override

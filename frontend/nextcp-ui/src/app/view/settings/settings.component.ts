@@ -53,11 +53,13 @@ export class SettingsComponent implements OnInit {
   showOnlyActiveRenderer = model<boolean>(true);
 
   none_serverdevice: MediaServerDto = {
+    img: '',
     udn: '',
     friendlyName: '',
     extendedApi: false,
   };
   none_renderdevice: MediaRendererDto = {
+    img: '',
     udn: '',
     friendlyName: '',
     services: [],

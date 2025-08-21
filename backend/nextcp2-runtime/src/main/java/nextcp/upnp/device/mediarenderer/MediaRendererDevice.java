@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.apache.commons.lang.StringUtils;
+import org.jupnp.model.meta.Icon;
 import org.jupnp.model.meta.RemoteDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -517,9 +518,9 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     {
         if (productService != null)
         {
-            return new MediaRendererDto(getUDN().getIdentifierString(), getFriendlyName(), services, productService.getCurrentInputSource(), productService.getSourceList());
+            return new MediaRendererDto(getBiggestIconUrl(), getUDN().getIdentifierString(), getFriendlyName(), services, productService.getCurrentInputSource(), productService.getSourceList());
         }
-        return new MediaRendererDto(getUDN().getIdentifierString(), getFriendlyName(), services, null, null);
+        return new MediaRendererDto(getBiggestIconUrl(), getUDN().getIdentifierString(), getFriendlyName(), services, null, null);
     }
 
     //

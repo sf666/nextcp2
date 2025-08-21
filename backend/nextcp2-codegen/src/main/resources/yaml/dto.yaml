@@ -207,6 +207,7 @@ DeviceDriverState:
    input: InputSourceDto
 
 MediaServerDto:
+   img: String
    udn: String
    friendlyName: String
    extendedApi: Boolean

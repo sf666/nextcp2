@@ -17,7 +17,8 @@
         @for (device of deviceService.mediaServerList(); track device) {
           <div class="mt-8">
             <button (click)="selectServer(device.udn)" class="ml-4 rounded-md ring-2 py-2 px-4 ring-slate-600 hover:bg-slate-600">
-              <span class="text-slate-200">{{device.friendlyName}}</span>
+              <img class="h-6 w-6 absolute" src="{{device.img}}" alt="{{device.friendlyName}}">
+              <span class="ml-10 text-slate-200">{{device.friendlyName}}</span>
             </button>
           </div>
         }

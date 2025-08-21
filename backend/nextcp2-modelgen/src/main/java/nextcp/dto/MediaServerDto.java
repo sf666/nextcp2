@@ -12,6 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class MediaServerDto
 {
 
+    public String img;
     public String udn;
     public String friendlyName;
     public Boolean extendedApi;
@@ -20,8 +21,9 @@ public class MediaServerDto
     {
     }
 
-    public MediaServerDto(String udn, String friendlyName, Boolean extendedApi)
+    public MediaServerDto(String img, String udn, String friendlyName, Boolean extendedApi)
     {
+        this.img = img;
         this.udn = udn;
         this.friendlyName = friendlyName;
         this.extendedApi = extendedApi;
@@ -32,6 +34,7 @@ public class MediaServerDto
     {
         StringBuilder sb = new StringBuilder();
         sb.append("MediaServerDto [");
+        sb.append("img=").append(this.img).append(", ");
         sb.append("udn=").append(this.udn).append(", ");
         sb.append("friendlyName=").append(this.friendlyName).append(", ");
         sb.append("extendedApi=").append(this.extendedApi).append(", ");
