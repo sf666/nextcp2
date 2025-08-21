@@ -4,6 +4,12 @@ order: 1
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+
+import imgLike from './img/like_album.png';
+import imgPlaylist from './img/playlist_support.png';
+import imgPlaylistDialog from './img/playlist_dialog.png';
+
 
 This control point put's it focus on providing the best user experience for audio enthusiasts. Controlling other content is also supported but with less UI
 awareness.
@@ -13,12 +19,11 @@ supports all additional features and is therefore the recommended media server.
 
 ### Why is the fork needed
 
-The current (version 14 and later) implementation of Universal Media Server (UMS) is focused on video users (TV's) and lacks several features that are essential for a modern media server experience. The fork aims to address these shortcomings by introducing enhancements and new functionalities that cater to the needs of audiophile users.
+The current implementation of Universal Media Server (UMS), starting from version 14, is primarily optimized for video playback on TVs. However, it lacks several key features necessary for a modern and versatile media server experience. This fork aims to address these limitations by introducing enhancements and new functionalities tailored to the needs of audiophile users.
 
-One significant benefit over the original implementation is a correct renderer identification in a 3 box setup which is widely used by users focused on listening to audio files.
-This means you can use nextCP/2 but also your favorite control point app like `BubbleUPnP` or `LINN App` to control your UPnP streaming device.
+One major improvement over the original implementation is accurate renderer identification in a three-box setup—a configuration widely used by users who prioritize high-quality audio playback. With this enhancement, you can control your UPnP streaming device not only via nextCP/2 but also through your preferred control point applications, such as BubbleUPnP or the LINN App.
 
-In faviour of the 3-box setup, the "authorization" implementation of UMS had to be disabled.
+To support the three-box setup, the original UMS "authorization" feature has been disabled.
 
 ### Additional features supported by UMS fork
 
@@ -26,24 +31,34 @@ In faviour of the 3-box setup, the "authorization" implementation of UMS had to 
 
 #### Like Music Albums
 
-Music albums can be liked / disliked in case the music files are tagged with a musicBrainz release ID. You can i.e. use <a href="https://picard.musicbrainz.org/">Picard</a> to tag your files accordingly.
+Music albums can be liked or disliked if the audio files are tagged with a MusicBrainz Release ID. You can use tools such as <a href="https://picard.musicbrainz.org/">Picard</a> to apply the appropriate tags.
 
-Liked music albums can be directly accessed by "My Albums" sidebar link.
+Liked music albums are indicated by a pink heart icon in the button bar. You can quickly access any liked album through the My Albums link in the sidebar.
+
+<Image src={imgLike} alt="like album" class="" />
 
 #### Star Rating Support
 
-All kind of resources can be rated with stars.
+Many types of resources can be rated using a star system, with ratings ranging from 1 to 5 stars.
 
-You can export star ratings of you audio files to musicBrainz.org (account required)
+##### Audio Resources Rating
+Star rating information is stored in the audio file’s metadata and can be utilized by other tools.
 
-Save star rating into song files metadata section
+Additionally, audio files tagged with a MusicBrainz Track ID can export this rating information to your personal MusicBrainz account. To enable this feature, you must provide your username and password.
 
 #### Server Side Playlist support
-Extended server side playlist support with editing support.
-create playlist
-direct access to playlist from sidebar
-adding songs to playlist
-removing songs from playlist
-update album art of radio stations
 
+Clicking the <span class="material-symbols-outlined">pending</span> icon in the sidebar opens a dialog where you can create or delete playlists stored on the server’s file system.
+New playlists are created in the currently displayed folder.
 
+Clicking the &#x22EE; button displays additional song options.
+
+<Image src={imgPlaylist} alt="like album" class="" />
+
+When you create a new playlist or add songs to an existing one, a dialog will appear allowing you to select the desired playlist.
+
+<Image src={imgPlaylistDialog} alt="like album" class="" />
+
+#### Other Server Side Actions
+
+Album art updates and resource downloads can be initiated from the options dialog.
