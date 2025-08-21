@@ -2,10 +2,11 @@
   <div class="dialogTitle">Media Renderer</div>
   <div class="dialogItems flex flex-col flex-wrap mt-4 minWidth">
     @for (device of deviceService.enabledMediaRendererList(); track device) {
-      <div class="no-wrap element-item {{getSelectedClass(device.udn)}}"
-        (click)="selectRenderer(device.udn)">
-        {{device.friendlyName}}
-      </div>
+        <div class="flex no-wrap element-item {{getSelectedClass(device.udn)}}"
+          (click)="selectRenderer(device.udn)">
+          <img class="h-6 w-6" src="{{device.img}}" alt="{{device.friendlyName}}">
+          <div class="ml-4">{{device.friendlyName}}</div>
+        </div>
     }
   </div>
 </div>

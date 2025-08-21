@@ -3,9 +3,10 @@
     <div class="dialogTitle">Media Server</div>
     <div class="dialogItems flex flex-col flex-wrap mt-4 minWidth">
       @for (device of deviceService.mediaServerList(); track device) {
-        <div class="no-wrap element-item {{getSelectedClass(device.udn)}}"
+        <div class="flex no-wrap element-item {{getSelectedClass(device.udn)}}"
           (click)="selectServer(device.udn)">
-          {{device.friendlyName}}
+          <img class="h-6 w-6" src="{{device.img}}" alt="{{device.friendlyName}}">
+          <div class="ml-4">{{device.friendlyName}}</div>
         </div>
       }
     </div>
