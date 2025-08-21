@@ -5,28 +5,28 @@
   }
 
   @if(!mediaServerSelected()) {
-    <div class="flex w-full">
-      <button id="dropdownMediaServer" data-dropdown-toggle="dropdownUsers" data-dropdown-placement="bottom"
-        class="text-white bg-gray-800 font-medium rounded-lg text-large px-5 py-2.5 text-center inline-flex items-center"
-        type="button">select media server <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
-        </svg>
-      </button>
-
-      <!-- Dropdown menu -->
-      <div id="dropdownUsers" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700">
-        <ul class="h-48 py-2 overflow-y-auto text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMediaServer">
+      <div id="server-slection" class="flex flex-col ml-4 pt-8">
+        <div class="text-lg font-bold mb-2">Select Media Server</div>
+        <div class="text-sm mb-2">Media server selection can be changed later by clicking the 
+            <span class="material-symbols-outlined icon-main">dns</span> button.            
+        </div>
+        <div class="text-sm">
+            Select a media renderer by clicking the 
+            <span class="material-symbols-outlined icon-main">speaker</span> button.
+        </div>
         @for (device of deviceService.mediaServerList(); track device) {
-          <li>
-            <a href="#" (click)="selectServer(device.udn)" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-              <img class="w-6 h-6 me-2 rounded-full" src="" alt="">
-              {{device.friendlyName}}
-            </a>
-          </li>
+          <div class="mt-8">
+            <button (click)="selectServer(device.udn)" class="ml-4 rounded-md ring-2 py-2 px-4 ring-slate-600 hover:bg-slate-600">
+              <span class="text-slate-200">{{device.friendlyName}}</span>
+            </button>
+          </div>
         }
-        </ul>
+        @if(deviceService.mediaServerList().length == 0) {
+          <div class="p-4 mb-4 text-sm mt-8 rounded-lg bg-gray-800 text-red-400" role="alert">
+            No media server have been discovered on the network.
+          </div>          
+        }
       </div>
-    </div>
   }
 
   <!-- display music library -->

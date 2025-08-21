@@ -212,6 +212,7 @@ MediaServerDto:
    extendedApi: Boolean
 
 MediaRendererDto:
+   img: String
    udn: String
    friendlyName: String
    services: List<MediaRendererServicesDto>

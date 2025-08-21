@@ -183,6 +183,10 @@ export class MusicLibraryComponent implements AfterViewInit {
   }
 
   public backButtonDisabled(): boolean {
+    if (this.deviceService.selectedMediaServerDevice().udn?.length == 0) {
+      return true;
+    }
+
     if (this.contentDirectoryService?.currentContainerList().currentContainer?.id) {
       return this.contentDirectoryService.currentContainerList().currentContainer.id === '0' ||
         this.contentDirectoryService.currentContainerList().currentContainer.id === '';
@@ -197,6 +201,7 @@ export class MusicLibraryComponent implements AfterViewInit {
   }
 
   mediaServerSelected(): boolean {
+    return false;
     return this.deviceService.selectedMediaServerDevice()?.udn?.length > 0;
   }
 }
