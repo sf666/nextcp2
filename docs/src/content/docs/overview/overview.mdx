@@ -3,19 +3,47 @@ title: What is NextCP?
 order: 1
 ---
 
+import { Aside } from '@astrojs/starlight/components';
+
 This control point put's it focus on providing the best user experience for audio enthusiasts. Controlling other content is also supported but with less UI
 awareness.
 
-Please keep in mind, that only the <a href="https://github.com/ik666/UniversalMediaServer">Universal Media Server (UMS) fork</a> supports all additional features and is therefore the recommended media server.
+Please keep in mind, that only the <a href="https://github.com/ik666/UniversalMediaServer">Universal Media Server (UMS) fork</a>
+supports all additional features and is therefore the recommended media server.
 
-### Additional features supported by UMS
+### Why is the fork needed
 
-- Like / Dislike music albums. Liked music albums can be directly accessed by "My Albums" sidebar link.
-- star rating support for audio files
-  - export star rating to musicBrainz.org (account required)
-  - save star rating into song files metadata section
-- Extended server side playlist support with editing support.
-  - create playlist
-  - direct access to playlist from sidebar
-  - adding songs to playlist
-  - removing songs from playlist
+The current (version 14 and later) implementation of Universal Media Server (UMS) is focused on video users (TV's) and lacks several features that are essential for a modern media server experience. The fork aims to address these shortcomings by introducing enhancements and new functionalities that cater to the needs of audiophile users.
+
+One significant benefit over the original implementation is a correct renderer identification in a 3 box setup which is widely used by users focused on listening to audio files.
+This means you can use nextCP/2 but also your favorite control point app like `BubbleUPnP` or `LINN App` to control your UPnP streaming device.
+
+In faviour of the 3-box setup, the "authorization" implementation of UMS had to be disabled.
+
+### Additional features supported by UMS fork
+
+<Aside type="tip">The features listed below are supported on the server side. This means you don't have to copy your files between your media library and you client machine or mount a network drive. The UMS fork handles all the actions initiated by nextCP/2 on the server side!</Aside>
+
+#### Like Music Albums
+
+Music albums can be liked / disliked in case the music files are tagged with a musicBrainz release ID. You can i.e. use <a href="https://picard.musicbrainz.org/">Picard</a> to tag your files accordingly.
+
+Liked music albums can be directly accessed by "My Albums" sidebar link.
+
+#### Star Rating Support
+
+All kind of resources can be rated with stars.
+
+You can export star ratings of you audio files to musicBrainz.org (account required)
+
+Save star rating into song files metadata section
+
+#### Server Side Playlist support
+Extended server side playlist support with editing support.
+create playlist
+direct access to playlist from sidebar
+adding songs to playlist
+removing songs from playlist
+update album art of radio stations
+
+
