@@ -67,10 +67,14 @@ export class MusicLibraryComponent implements AfterViewInit {
       });
     });
 
-    toObservable(this.deviceService.selectedMediaServerDevice).subscribe(() => {
-      let udn = this.deviceService.selectedMediaServerDevice().udn;
-      this.initViewData(udn);
-    });
+    try {
+      toObservable(this.deviceService.selectedMediaServerDevice).subscribe(() => {
+        let udn = this.deviceService.selectedMediaServerDevice().udn;
+        this.initViewData(udn);
+      });
+    } catch (error) {
+      console.error('Caught an error:', error);
+    }
   }
 
   private browseFinished(data: ContainerItemDto): void {
