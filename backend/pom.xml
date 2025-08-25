@@ -317,7 +317,7 @@
 			<dependency>
 				<groupId>de.sf666</groupId>
 				<artifactId>musicbrainz</artifactId>
-				<version>1.3</version>
+				<version>1.4</version>
 			</dependency>
 
 			<!-- Jetty 12-->

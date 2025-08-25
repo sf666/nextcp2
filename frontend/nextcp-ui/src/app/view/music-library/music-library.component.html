@@ -7,7 +7,7 @@
   @if(!mediaServerSelected()) {
       <div id="server-slection" class="flex flex-col ml-4 pt-8">
         <div class="text-lg font-bold mb-2">Select Media Server</div>
-        <div class="text-sm mb-2">Media server selection can be changed later by clicking the 
+        <div class="text-sm mb-2">You can change the media server selection later by clicking the
             <span class="material-symbols-outlined icon-main">dns</span> button.            
         </div>
         <div class="text-sm">
@@ -24,7 +24,7 @@
         }
         @if(deviceService.mediaServerList().length == 0) {
           <div class="p-4 mb-4 text-sm mt-8 rounded-lg bg-gray-800 text-red-400" role="alert">
-            No media server have been discovered on the network.
+            No media servers have been discovered on the network.
           </div>          
         }
       </div>

@@ -8,7 +8,7 @@
     </div>
 
     <p class="mb-6 text-sm lg:text-lg font-light text-gray-400">
-      Server discovered in the past may be offline. Disabled server will not show up for selection in some popups or lists.</p>
+      Servers previously discovered may be offline. Disabled servers will not appear in certain pop-ups or selection lists.</p>
 
     <div class="flex flex-wrap gap-4">
       @for (serverConfig of getMediaServer(); track serverConfig) {
@@ -64,12 +64,12 @@
     </div>
 
     <p class="mt-4 text-sm lg:text-lg font-light text-gray-400">
-      Renderer may be offline. Disabled renderer will not show up for selection in some popups or lists.</p>
+      Renderers may be offline. Disabled renderers will not appear in certain pop-ups or selection lists.</p>
 
     <p class="mt-2 text-sm lg:text-lg font-light text-gray-400">
-      If a streaming device is attached to an amplifier, a device device driver can be selected for controlling the amplifier power and volume state
-      instead of the streamer volume and power state. A default volume percentage can be applied to the external amplifier on power up. The streaming device volume can be
-      set to 100% on power up, if 'UPnP max volume' is enabled.</p>
+      If a streaming device is connected to an amplifier, a device driver can be selected to control the amplifier’s power and volume
+      instead of the streamer’s. A default volume level can be applied to the amplifier when powered on. If UPnP Max Volume is enabled,
+      the streaming device’s volume can be set to 100% at startup.</p>
 
     <div class="flex flex-wrap gap-4 mt-8">
       @for (rendererConfig of getMediaRenderer(); track rendererConfig) {
@@ -153,8 +153,7 @@
     } @else {
     @if (extendedApiNotAvailable()) {
     <div class="p-4 m-4 text-sm rounded-lg bg-gray-800 text-red-400" role="alert">
-      Selected media server has no extended API. Advanced actions are only available
-      for <i>Universal Media Server</i>.
+      Advanced actions are available only when using <i>Universal Media Server</i>.
     </div>
     }
     }
@@ -354,9 +353,9 @@
     </form>
 
     <h2 class="mt-4 text-base md:text-lg lg:text-xl font-medium tracking-tight text-gray-400">Last FM</h2>
-    <p class="mt-2">1. Click this button. A new window will open. Login and approve access to nextCP/2 :</p>
+    <p class="mt-2">1. Click this button to open a new window. Log in and approve access for nextCP/2 :</p>
     <button mat-stroked-button class="settings maxButton" (click)="activateLastFM()">nextCP/2 LastFM access</button>
-    <p class="mt-2 max-w-md">2. After step 1 is done, click this button to connect nextCP/2 to LastFM :</p>
+    <p class="mt-2 max-w-md">2. After completing Step 1, click this button to connect nextCP/2 to LastFM :</p>
     <button mat-stroked-button class="settings maxButton" (click)="generateSession()">generate LastFM session</button>
 
     <h1 class="mt-8 text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-white">System Information</h1>

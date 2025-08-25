@@ -86,6 +86,7 @@ public class RatingService
         }
         catch (Exception e)
         {
+        	log.warn("cannot update", e);
             this.publisher.publishEvent(new ToastrMessage("", "error", "MusicBrainz Rating", "couldn't save : " + e.getMessage()));
         }
     }
