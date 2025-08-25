@@ -1,4 +1,5 @@
 <div class="flex flex-col">
+  @if(deviceService.isAnyMediaRendererSelected()) {
   <div class="flex">
     <div class="ms-4 mt-4 flex flex-col">
       <div class="mb-3 max-image-width">
@@ -105,6 +106,9 @@
         </form>
       </div>
     </div>
+  }
+} @else {
+  <div class="ml-8 text-sm">Select a media renderer by clicking the <span class="material-symbols-outlined icon-main">speaker</span> button.</div>
   }
 </div>
 
