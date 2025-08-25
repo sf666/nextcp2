@@ -46,6 +46,15 @@ export class MusicLibraryComponent implements AfterViewInit {
     globalSearchService.showAllPlaylistClicked$.subscribe(searchReq => this.contentDirectoryService.searchAllPlaylist(searchReq));
 
     this.getContentHandler().contentDirectoryService.browseFinished$.subscribe(data => this.browseFinished(data));
+    try {
+      toObservable(this.deviceService.selectedMediaServerDevice).subscribe(() => {
+        let udn = this.deviceService.selectedMediaServerDevice().udn;
+        this.initViewData(udn);
+      });
+    } catch (error) {
+      console.error('Caught an error:', error);
+    }
+
   }
 
   ngAfterViewInit(): void {
@@ -66,14 +75,9 @@ export class MusicLibraryComponent implements AfterViewInit {
         }
       });
     });
-
-    try {
-      toObservable(this.deviceService.selectedMediaServerDevice).subscribe(() => {
-        let udn = this.deviceService.selectedMediaServerDevice().udn;
-        this.initViewData(udn);
-      });
-    } catch (error) {
-      console.error('Caught an error:', error);
+    let udn = this.deviceService.selectedMediaServerDevice().udn;
+    if (udn) {
+      this.initViewData(udn);
     }
   }
 

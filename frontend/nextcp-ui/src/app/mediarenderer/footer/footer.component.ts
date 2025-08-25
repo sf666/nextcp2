@@ -61,7 +61,7 @@ export class FooterComponent {
       panelClass: 'popup'
     });
     dialogRef.afterClosed().subscribe(_res => {
-      console.log(_res);
+      console.log("server dialog closed");
     });
   }
 

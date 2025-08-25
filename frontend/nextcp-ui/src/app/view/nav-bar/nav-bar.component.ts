@@ -17,7 +17,7 @@ import { ScrollLoadHandler } from 'src/app/mediaserver/display-container/defs';
 
 export class NavBarComponent {
   parentTitle = input<string>();
-  backButtonDisabled = input<boolean>(false);
+  backButtonDisabled = input<boolean>(true);
   contentHandler = input.required<ScrollLoadHandler>();
 
 
