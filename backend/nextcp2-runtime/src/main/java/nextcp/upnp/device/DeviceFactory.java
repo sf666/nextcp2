@@ -1,6 +1,7 @@
 package nextcp.upnp.device;
 
 import org.jupnp.model.meta.RemoteDevice;
+import org.jupnp.model.types.ServiceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +29,13 @@ public class DeviceFactory
 	private MediaServerType getServerType(RemoteDevice device) {
 		String manufacturer = device.getDetails().getManufacturerDetails().getManufacturer();
 		if ("Universal Media Server".equalsIgnoreCase(manufacturer)) {
-			return MediaServerType.UMS;
+			log.debug("UMS media server found.");
+			if (device.findService(new ServiceType("schemas-upnp-org", "UmsExtendedServices")) != null) {
+				log.debug("UmsExtendedServices found. Activating UMS extended API.");
+				return MediaServerType.UMS;
+			} else {
+				log.debug("UmsExtendedServices not found. Using default media server implementaion.");				
+			}
 		}
 		return MediaServerType.DEFAULT;
 	}

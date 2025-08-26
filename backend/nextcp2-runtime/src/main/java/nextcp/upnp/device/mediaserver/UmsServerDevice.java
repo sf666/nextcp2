@@ -101,8 +101,12 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	private void init() {
 		try {
 			umsServices = new UmsExtendedServicesService(getUpnpService(), getDevice());
-			umsServiceEventListener = new UmsExtendedServicesServiceEventListener(getDevice(), this);
-			umsServices.addSubscriptionEventListener(umsServiceEventListener);
+			if (umsServices.getUmsExtendedServicesService() != null) {
+				umsServiceEventListener = new UmsExtendedServicesServiceEventListener(getDevice(), this);
+				umsServices.addSubscriptionEventListener(umsServiceEventListener);
+			} else {
+				log.warn("This UMS version has no UPnP extended UMS services. Please use the fork from https://github.com/ik666/UniversalMediaServer or you can try a current version of UMS.");
+			}
 		} catch (Exception e) {
 			log.info("This UMS version has no UPnP extended UMS services.");
 		}

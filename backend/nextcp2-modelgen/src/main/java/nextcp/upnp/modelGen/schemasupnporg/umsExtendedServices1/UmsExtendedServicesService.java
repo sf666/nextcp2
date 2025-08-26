@@ -77,7 +77,7 @@ public class UmsExtendedServicesService
 	    }
 	    else
 	    {
-	        log.warn(String.format("initialized service 'UmsExtendedServices' failed for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	        log.warn(String.format("'UmsExtendedServices' not available on device %s [%s]. Please use a current version of UMS or the UMS fork from https://github.com/ik666/UniversalMediaServer", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
 	    }
     }
 
