@@ -54,11 +54,15 @@ export class MyPlaylistsComponent implements OnInit {
    * Browses to special MyMusic Folder. TODO: URL should be retrieved from media server (i.e. UMS)
    */
   public browseToMyPlaylist(playlistId: string, mediaServerUdn: string) {
-    this.contentDirectoryService.browseChildren(
-      playlistId + '',
-      '',
-      mediaServerUdn,
-    );
+    if (mediaServerUdn.length > 0) {
+      this.contentDirectoryService.browseChildren(
+        playlistId + '',
+        '',
+        mediaServerUdn,
+      );
+    } else {
+        console.log("initial media server -> not selected yet.");
+    }
   }
 
   //
