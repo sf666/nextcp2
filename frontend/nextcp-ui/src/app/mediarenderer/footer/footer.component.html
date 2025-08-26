@@ -1,6 +1,6 @@
 <div class="flex flex-row flex-nowrap justify-between footer">
   <!-- left footer section -->
-  <div class="flex left-footer grow-3">
+  <div class="flex min-w-4xs grow-3">
     @if (rendererService.trackInfoAvailable) {
       <img src="{{getImgSrc()}}">
     }
@@ -30,7 +30,7 @@
   </div>
 
   <!-- Middle footer section -->
-  <div class="flex grow-3 justify-center h-full">
+  <div class="flex grow-3 min-w-3xs justify-center ml-4 h-full">
     <div class="flex grow max-w-md flex-col justify-around">
       <div class="player-button-group">
         <span class="material-symbols-outlined icon-button {{shuffleClass}}" (click)="playlistService.toggleShuffle()">shuffle</span>
@@ -64,7 +64,7 @@
   </div>
 
   <!-- right footer section -->
-  <div class="flex grow-3 justify-end me-4">
+  <div class="flex grow-3 min-w-4xs justify-end mx-4">
     <div class="flex grow max-w-xs h-full self-center me-4">
       <div class="flex">
         <span class="material-symbols-outlined icon-main" (click)="serverClicked($event)">dns</span>
