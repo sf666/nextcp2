@@ -66,7 +66,6 @@ export class SettingsComponent implements OnInit {
     allSources: [],
     currentSource: null,
   };
-  newProfileName: string;
 
   constructor(
     public ratingServiceService: RatingServiceService,

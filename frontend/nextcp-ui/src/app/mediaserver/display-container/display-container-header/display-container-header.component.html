@@ -68,54 +68,56 @@
             </div>
           </div>
           } @else {
-          @if (currentContainer) {
-          <div id="template_containerTitle" class="flex flex-col infobox self-start">
-            <div class="title">{{currentContainer.title}}</div>
-            @if (contentDirectoryService().currentContainerList().totalMatches > 0 || musicItemsCount > 0) {
-            <div class="regular"><span class="highlight pe-2">{{contentDirectoryService().currentContainerList().totalMatches}}</span> total elements
+            @if (currentContainer?.id?.length > 0) {
+            <div id="template_containerTitle" class="flex flex-col infobox self-start">
+              <div class="title">{{currentContainer.title}}</div>
+              @if (contentDirectoryService().currentContainerList().totalMatches > 0 || musicItemsCount > 0) {
+              <div class="regular"><span class="highlight pe-2">{{contentDirectoryService().currentContainerList().totalMatches}}</span> total elements
+              </div>
+              }
             </div>
             }
-          </div>
-          }
           }
         </div>
         <!-- current content search box -->
-        <div class="flex flex-wrap grow justify-end">
-          <div class="flex content-center">
-            <div class="flex me-3 self-end" style="height: 56px;">
-              <label for="search" class="mb-2 text-sm font-medium sr-only text-white">search in this page</label>
-              <div class="relative flex w-64">
-                  <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                      <svg class="w-4 h-4 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                      </svg>
-                  </div>
-                  <input [(ngModel)]="quickSearchString" (keyup)="keyUp($event)" type="search" id="search" class="block w-full p-2 ps-10 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 bg-zinc-700/40 border-zinc-600 placeholder-zinc-400 text-white focus:ring-gray-500 focus:border-zinc-500" placeholder="search in this page"/>
+        @if (currentContainer.id?.length > 0) {
+          <div class="flex flex-wrap grow justify-end">
+            <div class="flex content-center me-3">
+              <div class="flex me-3 self-end" style="height: 56px;">
+                <label for="search" class="mb-2 text-sm font-medium sr-only text-white">search in this page</label>
+                <div class="relative flex w-64">
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                        </svg>
+                    </div>
+                    <input [(ngModel)]="quickSearchString" (keyup)="keyUp($event)" type="search" id="search" class="block w-full p-2 ps-10 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 bg-zinc-700/40 border-zinc-600 placeholder-zinc-400 text-white focus:ring-gray-500 focus:border-zinc-500" placeholder="search in this page"/>
+                </div>
               </div>
-            </div>
 
-            @if (hasGenres()) {
-            <div class="relative flex w-64 hidden lg:block me-3 self-end" style="height: 56px;">
-              <mat-select #genresSelect multiple [(ngModel)]="selectedGenres" id="searchGenres" placeholder="search genres" style="--mat-select-placeholder-text-color:var(--color-gray-400); --mat-select-enabled-arrow-color:var(--color-gray-400)" class="block w-48 grow p-4 pe-10 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 bg-zinc-700/40 border-zinc-600 placeholder-zinc-400 text-white focus:ring-gray-500 focus:border-zinc-500">
-                <mat-option value="NONE">NONE</mat-option>
-                @for (genre of genresList(); track genre) {
-                  <mat-option [value]="genre">{{genre}}</mat-option>
-                }
-              </mat-select>
-              <div class="absolute inset-y-0 end-0 flex items-center ps-3" (click)="clearGenres($event)">
-                <mat-icon class="material-symbols-outlined thin md-light me-2">close</mat-icon>
+              @if (hasGenres()) {
+              <div class="relative flex w-64 hidden lg:block me-3 self-end" style="height: 56px;">
+                <mat-select #genresSelect multiple [(ngModel)]="selectedGenres" id="searchGenres" placeholder="search genres" style="--mat-select-placeholder-text-color:var(--color-gray-400); --mat-select-enabled-arrow-color:var(--color-gray-400)" class="block w-48 grow p-4 pe-10 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 bg-zinc-700/40 border-zinc-600 placeholder-zinc-400 text-white focus:ring-gray-500 focus:border-zinc-500">
+                  <mat-option value="NONE">NONE</mat-option>
+                  @for (genre of genresList(); track genre) {
+                    <mat-option [value]="genre">{{genre}}</mat-option>
+                  }
+                </mat-select>
+                <div class="absolute inset-y-0 end-0 flex items-center ps-3" (click)="clearGenres($event)">
+                  <mat-icon class="material-symbols-outlined thin md-light me-2">close</mat-icon>
+                </div>
               </div>
+              }
+              @if(!hasSongs()) {
+              <div class="button-container self-end" (click)="openOptionsDialog($event)">
+                <button type="button" class="text-white focus:outline-none focus:ring-4 font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 bg-gray-800 hover:bg-gray-700 focus:ring-gray-700 border-gray-700">
+                  <mat-icon class="material-symbols-sharp">more_vert</mat-icon>
+                </button>
+              </div>
+              }
             </div>
-            }
-            @if(!hasSongs()) {
-            <div class="button-container self-end" (click)="openOptionsDialog($event)">
-              <button type="button" class="text-white focus:outline-none focus:ring-4 font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 bg-gray-800 hover:bg-gray-700 focus:ring-gray-700 border-gray-700">
-                <mat-icon class="material-symbols-sharp">more_vert</mat-icon>
-              </button>
-            </div>
-            }
           </div>
-        </div>
+        }
       </div>
       <div class="flex">
         <div class="middle-spacer"></div>

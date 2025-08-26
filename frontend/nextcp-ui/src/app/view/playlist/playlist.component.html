@@ -1,27 +1,27 @@
 <div class="playlistMainScreen mb-32" id="Player_Queue">
-  @if (deviceService.noMediaRendererSelected) {
+  @if (!deviceService.mediaRendererSelected) {
     <div class="regular ms-3 mt-3">
       No player
     </div>
   }
-  @if (!deviceService.noMediaRendererSelected) {
+  @if (deviceService.mediaRendererSelected) {
     <div class="flex ms-3">
       <div class="regular me-2">Playlist of :</div>
       <div class="highlight">{{deviceService.selectedMediaRendererDevice().friendlyName}}</div>       
     </div>
   }
   <div class="flex border-bottom border-secondary">
-    <button mat-stroked-button color="primary" class="mv-4 my-buttons m-4" [disabled]="deviceService.noMediaRendererSelected" (click)="play()">
+    <button mat-stroked-button color="primary" class="mv-4 my-buttons m-4" [disabled]="!deviceService.mediaRendererSelected" (click)="play()">
       <mat-icon class="material-symbols-outlined thin">play_arrow</mat-icon>
       <span class="button button-text">play</span>
     </button>
-    <button mat-stroked-button color="warn" class="mv-4 my-buttons m-4" [disabled]="deviceService.noMediaRendererSelected" (click)="delete()">
+    <button mat-stroked-button color="warn" class="mv-4 my-buttons m-4" [disabled]="!deviceService.mediaRendererSelected" (click)="delete()">
       <mat-icon class="material-symbols-outlined thin">delete</mat-icon>
       <span class="button button-text">delete</span>
     </button>
   </div>
 
-  @if (deviceService.isAnyMediaRendererSelected()) {
+  @if (deviceService.mediaRendererSelected()) {
     <div>
       @if (hasPlaylistItems) {
         <div>

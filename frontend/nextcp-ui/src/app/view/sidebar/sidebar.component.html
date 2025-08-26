@@ -51,12 +51,14 @@
   </div>
 
   <div class="myPlaylistSection hide-element">
-    <div class="sub-label flex justify-between">
-      <div class="align-self-center"> MY PLAYLISTS</div>
-      <div class="align-self-center me-2">
-        <mat-icon class="material-symbols-outlined" (click)="showPlaylistDialog()">pending</mat-icon>
+    @if(deviceService.mediaServerSelected()){
+      <div class="sub-label flex justify-between">
+        <div class="align-self-center"> MY PLAYLISTS</div>
+        <div class="align-self-center me-2">
+          <mat-icon class="material-symbols-outlined" (click)="showPlaylistDialog()">pending</mat-icon>
+        </div>
       </div>
-    </div>
+    }
     @for (item of serverPlaylists; track item.playlistId) {
     <a mat-button flowbiteSidebarItem [routerLink]="'/myPlaylists'" class="hide-element playlist {{getPlaylistClass(item.playlistId)}}" (click)="browseToPlaylist(item)">{{item.playlistName}}</a>
     }

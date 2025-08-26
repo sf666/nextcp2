@@ -18,6 +18,14 @@ export class DeviceService {
   public selectedMediaServerDevice = signal<MediaServerDto>({ udn: '', img: '', friendlyName: 'please select Media-Server', extendedApi: false });
   public selectedMediaRendererDevice = signal<MediaRendererDto>({ udn: '', img: '', friendlyName: 'please select Media-Renderer', services: [], allSources: [], currentSource: null });
 
+  public mediaRendererSelected = computed (() => {
+    return this.selectedMediaRendererDevice().udn.length > 0;
+  });
+
+  public mediaServerSelected = computed (() => {
+    return this.selectedMediaServerDevice().udn.length > 0;
+  });
+
   mediaRendererInitiated$: Subject<MediaRendererDto[]> = new Subject();
   mediaServerInitiated$: Subject<MediaServerDto[]> = new Subject();
 
@@ -81,10 +89,6 @@ export class DeviceService {
     return udn === this.selectedMediaRendererDevice().udn;
   }
 
-  get noMediaRendererSelected() : boolean {
-    return this.selectedMediaRendererDevice().udn === '';
-  }
-
   public isMediaServerSelected(udn: string): boolean {
     return udn === this.selectedMediaServerDevice().udn;
   }
@@ -94,10 +98,6 @@ export class DeviceService {
       return true;
     }
     return false;
-  }
-
-  public isAnyMediaRendererSelected(): boolean {
-    return this.selectedMediaRendererDevice().udn?.length > 0;
   }
 
   private mediaserverListChanged(data: MediaServerDto[]): void {
