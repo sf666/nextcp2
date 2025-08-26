@@ -48,10 +48,15 @@ public class RestPlaylistService extends BaseRestService
     @PostMapping("/getState")
     public PlaylistState getState(@RequestBody String rendererUdn)
     {
-        log.debug("/getState called");
-        MediaRendererDevice device = getMediaRendererByUdn(rendererUdn);
-        checkDevice(device);
-        return device.getPlaylistServiceBridge().getState();
+    	try {
+            log.debug("/getState called");
+            MediaRendererDevice device = getMediaRendererByUdn(rendererUdn);
+            checkDevice(device);
+            return device.getPlaylistServiceBridge().getState();
+    	} catch (Exception e) {
+    		log.error("getState", e);
+    		return null;
+    	}
     }
 
     @PostMapping("/getPlaylistItems")

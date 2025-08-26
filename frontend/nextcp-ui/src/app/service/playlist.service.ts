@@ -118,7 +118,13 @@ export class PlaylistService implements OnInit {
   public getPlaylistState(udn: string): void {
     const uri = '/getState';
     if (udn !== '') {
-      this.httpService.post<PlaylistState>(this.baseUri, uri, udn).subscribe(data => this.playlistState.set(data));
+      this.httpService.post<PlaylistState>(this.baseUri, uri, udn).subscribe(data => {
+        if (data) {
+          this.playlistState.set(data);
+        } else {
+          console.log("no playlist state received for media renderer.");
+        }
+        });
     }
   }
 

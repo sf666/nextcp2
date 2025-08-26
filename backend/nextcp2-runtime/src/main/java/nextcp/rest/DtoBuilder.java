@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.jupnp.support.contentdirectory.DIDLParser;
 import org.jupnp.support.model.DIDLContent;
@@ -115,7 +115,7 @@ public class DtoBuilder
                 xml = xml.replace("<item>", "<item>\n<upnp:class>" + "object.item.audioItem.musicTrack" + "</upnp:class>");
             }
             DIDLContent didlMeta = generateDidlContent(xml);
-            MusicItemDto itemDto = buildItemDto(didlMeta.getItems().get(0), "");
+            MusicItemDto itemDto = buildItemDto(didlMeta.getItems().get(0), "");   
             return itemDto;
         }
         catch (Exception e)
@@ -230,6 +230,11 @@ public class DtoBuilder
         {
             addMusicTrack((MusicTrack) item, itemDto);
         }
+        if (StringUtils.isAllBlank(itemDto.albumArtUrl)) {
+        	log.debug("no track selected. Giving default img src-path");
+        	itemDto.albumArtUrl = "/assets/images/folder-bg.png";
+        }
+        
         return itemDto;
     }
 

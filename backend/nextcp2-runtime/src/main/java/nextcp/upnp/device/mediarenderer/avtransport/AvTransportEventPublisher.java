@@ -1,5 +1,6 @@
 package nextcp.upnp.device.mediarenderer.avtransport;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
@@ -80,7 +81,7 @@ public class AvTransportEventPublisher extends BaseAvTransportChangeEventImpl
         dto.metatext = transportState.CurrentTrackMetaData;
         dto.uri = transportState.CurrentTrackURI;
         dto.currentTrack = device.getDtoBuilder().extractXmlAsMusicItem(transportState.CurrentTrackMetaData);
-
+        
         return dto;
     }
     
