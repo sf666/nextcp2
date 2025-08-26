@@ -1,3 +1,4 @@
+import { ConfigurationService } from 'src/app/service/configuration.service';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { Injectable, computed, signal } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -44,11 +45,16 @@ export class ServerPlaylistService {
 
   constructor(
     private httpService: HttpService,
+    private configurationService: ConfigurationService,
     private deviceService: DeviceService,
     sseService: SseService,
   ) {
+    // reconstruct sidebar after potential playlist folder change 
+    configurationService.applicationConfigChanged$.subscribe((appConfig) => {
+      this.afterMediaServerChanged();
+    });
 
-    toObservable(this.selectedMediaServer).subscribe(data => this.afterMediaServerChanged(data))
+    toObservable(this.selectedMediaServer).subscribe(data => this.afterMediaServerChanged())
 
     sseService.mediaServerPlaylistChanged$.subscribe((data) => {
       if (deviceService.isMediaServerSelected(data.mediaServerUdn)) {
@@ -62,7 +68,7 @@ export class ServerPlaylistService {
     })
   }
 
-  private afterMediaServerChanged(server: MediaServerDto) {
+  private afterMediaServerChanged() {
     this.updateServerAccessiblePlaylists();
     this.updateRecentServerAccessiblePlaylists();
   }

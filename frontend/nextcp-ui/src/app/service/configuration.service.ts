@@ -18,6 +18,7 @@ export class ConfigurationService {
   // Observer
   // ===============================================================================
   rendererConfigChanged$: Subject<RendererDeviceConfiguration[]> = new Subject();
+  applicationConfigChanged$: Subject<ApplicationConfig> = new Subject();
 
   // Configs
   // ===============================================================================
@@ -141,7 +142,8 @@ export class ConfigurationService {
 
   public saveApplicationConfig(): void {
     const uri = '/saveApplicationConfig';
-    this.httpService.postWithSuccessMessage(this.baseUri, uri, this.applicationConfig, "Save application config", "success").subscribe();
+    this.httpService.postWithSuccessMessage(this.baseUri, uri, this.applicationConfig, "Save application config", "success")
+      .subscribe(() => {this.applicationConfigChanged$.next(this.applicationConfig)});
   }
 
   public saveMediaRendererConfig(mediaRendererConfig: RendererDeviceConfiguration): void {
