@@ -181,7 +181,7 @@ export class DtoGeneratorService {
   emptyMusicItem(): MusicItemDto {
     return {
       album: '',
-      albumArtUrl: '',
+      albumArtUrl: '/assets/images/folder-bg.png',
       artistName: '',
       audioFormat: this.emptyAudioFormat(),
       creator: '',
