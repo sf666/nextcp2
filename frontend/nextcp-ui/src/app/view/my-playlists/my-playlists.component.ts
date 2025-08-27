@@ -22,6 +22,8 @@ import { toObservable } from '@angular/core/rxjs-interop';
  * Sidebar "my playlist" items.
  */
 export class MyPlaylistsComponent implements OnInit {
+  private rootPlaylistId = '';
+
   constructor(
     public layoutService: LayoutService,
     private deviceService: DeviceService,
@@ -58,20 +60,21 @@ export class MyPlaylistsComponent implements OnInit {
    */
   public browseToMyPlaylist(playlistId: string, mediaServerUdn: string) {
     if (mediaServerUdn.length > 0) {
+      this.rootPlaylistId = playlistId;
       this.contentDirectoryService.browseChildren(
         playlistId + '',
         '',
         mediaServerUdn,
       );
     } else {
-        console.log("initial media server -> not selected yet.");
+      console.log("initial media server -> not selected yet.");
     }
   }
 
   //
   // Event
   //
-  containerSelected(event: ContainerDto) {}
+  containerSelected(event: ContainerDto) { }
 
   itemDeleted(event: MusicItemDto) {
     this.contentDirectoryService.refreshCurrentContainer();
@@ -128,13 +131,19 @@ export class MyPlaylistsComponent implements OnInit {
     return '';
   }
 
+  public homeButtonPressed(event: any) {
+    this.browseToMyPlaylist(
+      this.myPlaylistService.activePlaylistId,
+      this.deviceService.selectedMediaServerDevice().udn,
+    );
+  }
+
   public backButtonPressed(event: any) {
-    const currentParent =
-      this.contentDirectoryService?.currentContainerList().currentContainer
-        ?.parentID;
-    if (currentParent) {
-    }
-    this.router.navigateByUrl('/music-library/' + currentParent);
+    this.contentDirectoryService.browseToParent("");
+  }
+
+  backButtonVisible(): boolean {
+    return this.rootPlaylistId != this.contentDirectoryService.currentContainerList().currentContainer.id;
   }
 
   getParentTitle(): string {
