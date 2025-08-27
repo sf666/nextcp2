@@ -102,8 +102,8 @@ public class BaseDevice {
 	}
 
 	public String getBiggestIconUrl() {
+		String iconUri = "/assets/images/upnp-streamer.png";
 		Icon i = getBiggestIcon();
-		String iconUri = "";
 		if (i != null) {
 			URL desc = getDevice().getIdentity().getDescriptorURL();
 			iconUri = String.format("%s://%s:%s%s", desc.getProtocol(), desc.getHost(), desc.getPort(), 
