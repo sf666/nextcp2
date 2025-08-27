@@ -197,7 +197,7 @@ export class ContentDirectoryService {
    * @param data Gets called after a browse request returns ...
    */
   public updateContainer(data: ContainerItemDto): void {
-    console.log("CDS - updating container with : " + data);
+    console.log("CDS - updating container with " + data.musicItemDto.length + " items.");
     if (data) {
       this.currentContainerList.set(data);
       this.updatePageTurnId(data);
@@ -227,6 +227,8 @@ export class ContentDirectoryService {
       } else {
         console.log('CDS - updateContainer : loaded last page.');
       }
+    } else {
+      console.log("no search result was provided.");
     }
   }
 
@@ -368,10 +370,17 @@ export class ContentDirectoryService {
     const uri = '/searchAllItems';
     this.lastSearchObject = quickSearchDto;
     this.lastSearchType = 'songs';
+    console.log("performing search for all matching items ...");
     this.httpService
       .post<SearchResultDto>(this.baseUri, uri, quickSearchDto)
-      .subscribe((data) => {
-        this.updateSearchResultItem(data.musicItems);
+      .subscribe({
+        next: (data) => {
+          console.log("received " + data.musicItems.length + " items. Updating search result ...");
+          this.updateSearchResultItem(data.musicItems);
+        },
+        error: (error: any) => {
+          console.error('searchAllItems error : ', error);
+        }
       });
   }
 
@@ -446,6 +455,7 @@ export class ContentDirectoryService {
       "'";
     ci.currentContainer.childCount = searchResultItems.length;
     ci.parentFolderTitle = 'back to music library';
+    console.log("updating current container with search result ...");
     this.updateContainer(ci);
     this.searchFinished$.next(ci);
   }

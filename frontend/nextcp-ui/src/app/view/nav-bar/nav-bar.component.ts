@@ -28,13 +28,11 @@ export class NavBarComponent {
   rootButtonPressed = output<any>();
 
   showParentFolder = computed(() => {
+    console.log("[parent folder button] computing displaying parent folder text ... ");
     if (!this.contentHandler().contentDirectoryService?.currentContainerList().currentContainer?.parentID) {
+      console.log("[parent folder button] returning false : No parent ID.");
       return false;
     } else {
-      if (this.contentHandler().contentDirectoryService?.currentContainerList().currentContainer?.parentID === "0" ||
-        this.contentHandler().contentDirectoryService?.currentContainerList().currentContainer?.parentID === "-1") {
-        return false;
-      }
       return true;
     }
   });
