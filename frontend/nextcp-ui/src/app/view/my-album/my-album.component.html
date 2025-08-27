@@ -1,9 +1,10 @@
 @if (layoutService.headerVisible) {
   <nav-bar
     [parentTitle]="getParentTitle()"
-    [backButtonDisabled]="backButtonDisabled()"
+    [backButtonVisible]="false"
+    [homeButtonVisible]="true"
     [contentHandler]="getContentHandler()"
-    (backButtonPressed)="backButtonPressed($event)"
+    (homeButtonPressed)="homeButtonPressed($event)"
   ></nav-bar>
 }
 

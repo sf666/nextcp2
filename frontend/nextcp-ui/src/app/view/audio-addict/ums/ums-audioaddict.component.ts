@@ -55,10 +55,6 @@ export class UmsAudioaddictComponent {
     return { contentDirectoryService: this.contentDirectoryService, persistenceService: null }
   }
 
-  backButtonDisabled() {
-    return false;
-  }
-
   showTopHeader(): boolean {
     return true;
   }

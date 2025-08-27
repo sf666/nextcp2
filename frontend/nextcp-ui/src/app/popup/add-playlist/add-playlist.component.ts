@@ -133,7 +133,6 @@ export class AddPlaylistComponent {
   deletePlaylist(serverPlaylist: ServerPlaylistDto) {
     this.serverPlaylistService.deleteObject(serverPlaylist.playlistId).subscribe({
       next: (data) => {
-        // TODO does update of signal member work?
         this.serverPlaylistService.serverPl().serverPlaylists = this.serverPlaylistService.serverPl().serverPlaylists.filter(
           pl => pl.playlistId !== serverPlaylist.playlistId);
       },

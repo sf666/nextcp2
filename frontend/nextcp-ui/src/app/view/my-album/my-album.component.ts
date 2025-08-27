@@ -54,7 +54,7 @@ export class MyAlbumComponent implements OnInit {
     return this.contentDirectoryService.currentContainerList().parentFolderTitle;
   }
 
-  public backButtonPressed(event: any) {
+  public homeButtonPressed(event: any) {
     this.loadMyAlbums();
   }
 
@@ -63,10 +63,6 @@ export class MyAlbumComponent implements OnInit {
   //
   getContentHandler(): ScrollLoadHandler {
     return {contentDirectoryService: this.contentDirectoryService, persistenceService: null }
-  }
-
-  backButtonDisabled() {
-    return false;
   }
 
   showTopHeader(): boolean {

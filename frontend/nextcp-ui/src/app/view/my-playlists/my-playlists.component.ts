@@ -18,6 +18,9 @@ import { toObservable } from '@angular/core/rxjs-interop';
   standalone: true,
   imports: [DisplayContainerComponent, NavBarComponent],
 })
+/**
+ * Sidebar "my playlist" items.
+ */
 export class MyPlaylistsComponent implements OnInit {
   constructor(
     public layoutService: LayoutService,
@@ -136,9 +139,5 @@ export class MyPlaylistsComponent implements OnInit {
 
   getParentTitle(): string {
     return this.contentDirectoryService.currentContainerList().parentFolderTitle;
-  }
-
-  public backButtonDisabled(): boolean {
-    return true;
   }
 }

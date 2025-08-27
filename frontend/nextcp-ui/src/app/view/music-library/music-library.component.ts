@@ -176,12 +176,9 @@ export class MusicLibraryComponent implements AfterViewInit {
     return this.contentDirectoryService.currentContainerList().parentFolderTitle;
   }
 
-  rootButtonPressed(event: any) {
+  homeButtonPressed(event: any) {
     this.globalSearchService.clearSearch();
-    const currentParent = this.contentDirectoryService?.currentContainerList().currentContainer?.parentID;
-    if (currentParent) {
-      this.browseToOid("0", this.deviceService.selectedMediaServerDevice().udn, false, "");
-    }
+    this.browseToOid("0", this.deviceService.selectedMediaServerDevice().udn, false, "");
   }
 
   public backButtonPressed(event: any) {
@@ -192,16 +189,11 @@ export class MusicLibraryComponent implements AfterViewInit {
     }
   }
 
-  public backButtonDisabled(): boolean {
-    if (this.deviceService.selectedMediaServerDevice().udn?.length == 0) {
-      return true;
-    }
-
-    if (this.contentDirectoryService?.currentContainerList().currentContainer?.id) {
-      return this.contentDirectoryService.currentContainerList().currentContainer.id === '0' ||
-        this.contentDirectoryService.currentContainerList().currentContainer.id === '';
-    }
-    return false;
+  public backButtonVisible(): boolean {
+    let atRoot = this.contentDirectoryService.currentContainerList().currentContainer.parentID === '0' || 
+      this.contentDirectoryService.currentContainerList().currentContainer.parentID === '-1';
+      console.log(atRoot + " - parent ID : " + this.contentDirectoryService.currentContainerList().currentContainer.parentID);
+    return !atRoot;
   }
 
  selectServer(udn: string): void {

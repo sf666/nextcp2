@@ -17,7 +17,8 @@ import { ScrollLoadHandler } from 'src/app/mediaserver/display-container/defs';
 
 export class NavBarComponent {
   parentTitle = input<string>();
-  backButtonDisabled = input<boolean>(true);
+  homeButtonVisible = input<boolean>(false);
+  backButtonVisible = input<boolean>(false);
   contentHandler = input.required<ScrollLoadHandler>();
 
 
@@ -25,17 +26,7 @@ export class NavBarComponent {
   executeSearch = output<string>();
   searchKeyUp = output<KeyboardEvent>();
   backButtonPressed = output<any>();
-  rootButtonPressed = output<any>();
-
-  showParentFolder = computed(() => {
-    console.log("[parent folder button] computing displaying parent folder text ... ");
-    if (!this.contentHandler().contentDirectoryService?.currentContainerList().currentContainer?.parentID) {
-      console.log("[parent folder button] returning false : No parent ID.");
-      return false;
-    } else {
-      return true;
-    }
-  });
+  homeButtonPressed = output<any>();
 
   constructor(
     private router: Router,
@@ -49,6 +40,6 @@ export class NavBarComponent {
   }
 
   gotoRoot(): void {
-    this.rootButtonPressed.emit("");
+    this.homeButtonPressed.emit("");
   }
 }

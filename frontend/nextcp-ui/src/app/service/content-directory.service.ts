@@ -12,7 +12,7 @@ import {
   SearchResultDto,
   MusicItemDto,
 } from './dto.d';
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +28,9 @@ export class ContentDirectoryService {
   // ==========================================================
 
   currentContainerList = signal<ContainerItemDto>(this.dtoGeneratorService.generateEmptyContainerItemDto());
+  isCurrentContainerRoot = computed(() => {
+    return this.currentContainerList().currentContainer.id === '0';
+  });
 
   // result container split by types
   albumList_ = signal<ContainerDto[]>([]);
