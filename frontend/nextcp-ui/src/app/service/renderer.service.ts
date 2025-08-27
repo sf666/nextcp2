@@ -44,7 +44,13 @@ export class RendererService {
   sampleFreq = computed(() => this.trackInfo().currentTrack?.audioFormat?.sampleFrequency);
   currentSongTitle = computed(() => this.trackInfo().currentTrack?.title);
   bitrate = computed(() => this.trackInfo().currentTrack?.audioFormat?.bitrate);
-  imgSrc = computed(() => this.trackInfo().currentTrack?.albumArtUrl);
+  imgSrc = computed(() => {
+    if (this.trackInfo().currentTrack?.albumArtUrl) {
+      return this.trackInfo().currentTrack?.albumArtUrl;
+    } else {
+      return '/assets/images/folder-bg.png';
+    }
+  });
   isHifi = computed(() => {
     let bps = this.bitsPerSample();
     let sFreq = this.sampleFreq();
