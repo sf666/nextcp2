@@ -190,10 +190,15 @@ export class MusicLibraryComponent implements AfterViewInit {
   }
 
   public backButtonVisible(): boolean {
-    let atRoot = this.contentDirectoryService.currentContainerList().currentContainer.parentID === '0' || 
-      this.contentDirectoryService.currentContainerList().currentContainer.parentID === '-1';
-      console.log(atRoot + " - parent ID : " + this.contentDirectoryService.currentContainerList().currentContainer.parentID);
-    return !atRoot;
+    if (this.contentDirectoryService.currentContainerList().currentContainer.id.length == 0) {
+      return false;
+    }
+
+    if(this.contentDirectoryService.isCurrentContainerRootOrHasParentRoot()) {
+      return false;
+    }
+
+    return true;
   }
 
  selectServer(udn: string): void {

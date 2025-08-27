@@ -28,9 +28,15 @@ export class ContentDirectoryService {
   // ==========================================================
 
   currentContainerList = signal<ContainerItemDto>(this.dtoGeneratorService.generateEmptyContainerItemDto());
+  
   isCurrentContainerRoot = computed(() => {
     return this.currentContainerList().currentContainer.id === '0' || 
-      this.currentContainerList().currentContainer.id === '-1';
+      this.currentContainerList().currentContainer.parentID === '-1' || 
+      this.currentContainerList().currentContainer.id.length == 0;
+  });
+
+  isCurrentContainerRootOrHasParentRoot = computed(() => {
+    return this.isCurrentContainerRoot() || this.currentContainerList().currentContainer.parentID === '0';
   });
 
   // result container split by types

@@ -143,6 +143,10 @@ export class MyPlaylistsComponent implements OnInit {
   }
 
   backButtonVisible(): boolean {
+    if (this.rootPlaylistId === '' ||
+      this.contentDirectoryService.currentContainerList().currentContainer.id.length == 0) {
+      return false;
+    }
     return this.rootPlaylistId != this.contentDirectoryService.currentContainerList().currentContainer.id;
   }
 
