@@ -25,7 +25,7 @@ export class RendererService {
   inputSourceList = signal<InputSourceDto>(this.dtoGeneratorService.emptyInputSourceDto());
   deviceDriverState = signal<DeviceDriverState>(this.dtoGeneratorService.emptyDeviceDriverState());
 
-  trackInfoAvailable = computed(() => this.trackInfo().currentTrack?.title?.length > 0);
+  trackInfoAvailable = computed(() => this.trackInfo().currentTrack?.objectID?.length > 0);
   isPlaying = computed(() => this.transportServiceStateDto().transportState.toUpperCase() === 'PLAYING');
   isShuffle = computed(() => this.transportServiceStateDto().shuffle);
   isRepeat = computed(() => this.transportServiceStateDto().repeat);

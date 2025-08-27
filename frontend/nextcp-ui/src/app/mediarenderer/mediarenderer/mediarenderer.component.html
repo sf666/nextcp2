@@ -1,14 +1,14 @@
-<div class="flex flex-col">
+<div class="flex flex-col mb-32">
   @if(deviceService.mediaRendererSelected()) {
   <div class="flex">
-    <div class="ms-4 mt-4 flex flex-col">
-      <div class="mb-3 max-image-width">
-        @if (rendererService.trackInfoAvailable) {
-          <img src="{{getImgSrc()}}">
-        }
+    @if (rendererService.trackInfoAvailable) {
+      <div class="ms-4 mt-4 flex flex-col">
+        <div class="mb-3 max-image-width">
+            <img src="{{getImgSrc()}}">
+        </div>
+        <star-rating [size]="getStarSize()" [currentSong]="getCurrentTrack()"></star-rating>
       </div>
-      <star-rating [size]="getStarSize()" [currentSong]="getCurrentTrack()"></star-rating>
-    </div>
+    }
     @if (hasCurrentSongTitle()) {
       <div class="flex flex-col ms-5 mt-5 mb-24">
         <div class="flex flex-col">
