@@ -1,9 +1,7 @@
 <div class="flex flex-row flex-nowrap justify-between footer">
   <!-- left footer section -->
   <div class="flex min-w-4xs grow-3">
-    @if (rendererService.trackInfoAvailable) {
-      <img src="{{getImgSrc()}}">
-    }
+    <img src="{{rendererService.imgSrc()}}">
 
     <div class="flex flex-col grow albumAndTitle">
       <div class="title no-wrap">{{getCurrentSongTitle()}}</div>

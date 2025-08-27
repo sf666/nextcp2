@@ -76,10 +76,6 @@ export class FooterComponent {
     });
   }
 
-  public getImgSrc(): string {
-    return this.rendererService.imgSrc();
-  }
-
   public getCurrentSongTitle(): string {
     return this.rendererService.currentSongTitle();
   }
