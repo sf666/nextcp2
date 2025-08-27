@@ -17,6 +17,8 @@ import { NavBarComponent } from '../../nav-bar/nav-bar.component';
   imports: [NavBarComponent, DisplayContainerComponent]
 })
 export class UmsAudioaddictComponent {
+  private rootID = '';
+
   constructor(
     public layoutService: LayoutService,
     private deviceService: DeviceService,
@@ -32,7 +34,10 @@ export class UmsAudioaddictComponent {
   loadRadioNetwork() {
     const oid = "$DBID$AUDIOADDICT$";
     if (this.deviceService.selectedMediaServerDevice().udn) {
-      this.contentDirectoryService.browseChildren(oid, "", this.deviceService.selectedMediaServerDevice().udn).subscribe();
+      this.contentDirectoryService.browseChildren(oid, "", this.deviceService.selectedMediaServerDevice().udn).subscribe((data) => {
+        console.log("root id of UMS audioaddict network node is " + data?.currentContainer?.id);
+        this.rootID = data.currentContainer.id;
+      });
     }
   }
 
@@ -44,13 +49,22 @@ export class UmsAudioaddictComponent {
     return this.contentDirectoryService.currentContainerList().parentFolderTitle;
   }
 
-  public backButtonPressed(event: any) {
+  public homeButtonPressed(event: any) {
     this.loadRadioNetwork();
+  }
+
+  public backButtonPressed(event: any) {
+    this.contentDirectoryService.browseToParent('');;
   }
 
   //
   // bindings
   //
+  backButtonVisible(): boolean {
+    console.log(this.contentDirectoryService.currentContainerList().currentContainer.id);
+    return this.contentDirectoryService.currentContainerList().currentContainer.id !== this.rootID;
+  }
+
   getContentHandler(): ScrollLoadHandler {
     return { contentDirectoryService: this.contentDirectoryService, persistenceService: null }
   }

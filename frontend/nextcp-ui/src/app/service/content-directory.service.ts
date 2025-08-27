@@ -29,7 +29,8 @@ export class ContentDirectoryService {
 
   currentContainerList = signal<ContainerItemDto>(this.dtoGeneratorService.generateEmptyContainerItemDto());
   isCurrentContainerRoot = computed(() => {
-    return this.currentContainerList().currentContainer.id === '0';
+    return this.currentContainerList().currentContainer.id === '0' || 
+      this.currentContainerList().currentContainer.id === '-1';
   });
 
   // result container split by types
@@ -80,6 +81,15 @@ export class ContentDirectoryService {
 
   public minimTagsList(): ContainerDto[] {
     return this.currentContainerList().minimServerSupportTags;
+  }
+
+  public browseToParent(
+    sortCriteria: string,
+    mediaServerUdn?: string,
+  ): Subject<ContainerItemDto> {    
+    if (!this.isCurrentContainerRoot()) {
+      return this.browseChildren(this.currentContainerList().currentContainer.parentID, sortCriteria, mediaServerUdn);
+    }
   }
 
   /**
