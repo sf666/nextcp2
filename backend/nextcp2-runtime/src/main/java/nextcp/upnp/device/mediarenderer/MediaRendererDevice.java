@@ -3,8 +3,7 @@ package nextcp.upnp.device.mediarenderer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import org.apache.commons.lang.StringUtils;
-import org.jupnp.model.meta.Icon;
+import org.apache.commons.lang3.StringUtils;
 import org.jupnp.model.meta.RemoteDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -556,6 +555,9 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     {
         TrackInfoDto ti = infoService.getTrackinfo();
         ti.mediaRendererUdn = getUDN().getIdentifierString();
+        if (org.apache.commons.lang3.StringUtils.isAllBlank(ti.currentTrack.albumArtUrl)) {
+        	ti.currentTrack.albumArtUrl = "/assets/images/folder-bg.png";
+        }
         return ti;
     }
 
