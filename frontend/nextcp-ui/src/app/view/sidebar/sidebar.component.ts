@@ -12,6 +12,7 @@ import { MatButton, MatAnchor } from '@angular/material/button';
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
 import { DefaultPlaylistService } from 'src/app/mediaserver/popup/defaut-playlists/default-playlist.service';
 import { MusicLibraryService } from 'src/app/service/music-library/music-library.service';
+import { A11yModule } from "@angular/cdk/a11y";
 
 @Component({
   selector: 'app-sidebar',
@@ -24,7 +25,8 @@ import { MusicLibraryService } from 'src/app/service/music-library/music-library
     RouterLink,
     MatIcon,
     MatAnchor,
-  ],
+    A11yModule
+],
 })
 export class SidebarComponent {
 
@@ -34,7 +36,7 @@ export class SidebarComponent {
 
   constructor(
     public deviceService: DeviceService,
-    public playlistService: ServerPlaylistService,
+    public serverPlaylistService: ServerPlaylistService,
     private myPlaylistService: MyPlaylistService,
     private router: Router,
     public musicLibraryService: MusicLibraryService,
@@ -116,12 +118,8 @@ export class SidebarComponent {
     this.activeId.set(itemId);
   }
 
-  get myPlaylistsAvailable(): boolean {
-    return this.deviceService.selectedMediaServerDevice().extendedApi;
-  }
-
   get serverPlaylists() {
-    return this.playlistService.serverPl().serverPlaylists;
+    return this.serverPlaylistService.serverPl().serverPlaylists;
   }
 
   public getTextClass(url: string): string {

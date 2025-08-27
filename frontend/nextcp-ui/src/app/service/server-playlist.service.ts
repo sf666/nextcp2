@@ -19,6 +19,7 @@ import { DeviceService } from './device.service';
 export class ServerPlaylistService {
   baseUri = '/MediaServerPlaylistService';
 
+  playlistLoading = signal<boolean>(true);
 
   recentServerPl = signal<ServerPlaylists>({
     mediaServerUdn: '',
@@ -78,11 +79,13 @@ export class ServerPlaylistService {
   //
   public updateServerAccessiblePlaylists() {
     if (this.selectedMediaServer().udn) {
+      this.playlistLoading.set(true);
       const uri = '/getServerPlaylists';
       this.httpService
         .post<ServerPlaylists>(this.baseUri, uri, this.selectedMediaServer().udn)
         .subscribe((data) => {
           this.serverPl.set(data);
+          this.playlistLoading.set(false);
         });
     } else {
       console.log("updateServerAccessiblePlaylists : skipping, no server selected ...");
