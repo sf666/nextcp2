@@ -64,7 +64,7 @@
     }
     @if (myFolderConfigured) {
       @if(serverPlaylistService.playlistLoading()) {
-        <div>Playlist is loading ...</div>
+        <div>loading playlist ...</div>
       } @else if(serverPlaylistService.serverPl().serverPlaylists?.length == 0) {
       <div>Playlist folder contains no playlists.</div>
       }
