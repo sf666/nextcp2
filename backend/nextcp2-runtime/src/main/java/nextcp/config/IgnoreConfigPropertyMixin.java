@@ -10,6 +10,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public abstract class IgnoreConfigPropertyMixin
 {
     // This part will be saven in database JSON Key-Value store.
-//    @JsonIgnore
-//    List<UiClientConfig> clientConfig;
+    @JsonIgnore
+    public String img;
 }

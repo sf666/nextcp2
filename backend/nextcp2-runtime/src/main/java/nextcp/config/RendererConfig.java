@@ -45,6 +45,7 @@ public class RendererConfig {
 		this.dbService = dbService;
 		this.ssePublisher = ssePublisher;
 		om.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
+		om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		config = readConfig();
 	}
 

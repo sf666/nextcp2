@@ -68,7 +68,7 @@
             </div>
           </div>
           } @else {
-            @if (currentContainer?.id?.length > 0) {
+            @if (currentContainer.title?.length > 0) {
             <div id="template_containerTitle" class="flex flex-col infobox self-start">
               <div class="title">{{currentContainer.title}}</div>
               @if (contentDirectoryService().currentContainerList().totalMatches > 0 || musicItemsCount > 0) {

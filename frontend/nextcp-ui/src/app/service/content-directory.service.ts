@@ -61,8 +61,8 @@ export class ContentDirectoryService {
   private turn_page_id: string;
 
   // search
-  lastSearchObject: SearchRequestDto;
-  lastSearchType = '';
+  lastSearchObject = signal<SearchRequestDto>(this.dtoGeneratorService.generateEmptySearchRequestDto());
+  lastSearchType = signal<string>('');
 
   constructor(
     public configService: ConfigurationService,
@@ -387,8 +387,8 @@ export class ContentDirectoryService {
   public searchAllItems(quickSearchDto: SearchRequestDto): void {
     console.log("CDS - searchAllItems");
     const uri = '/searchAllItems';
-    this.lastSearchObject = quickSearchDto;
-    this.lastSearchType = 'songs';
+    this.lastSearchObject.set(quickSearchDto);
+    this.lastSearchType.set('songs');
     console.log("performing search for all matching items ...");
     this.httpService
       .post<SearchResultDto>(this.baseUri, uri, quickSearchDto)
@@ -408,8 +408,8 @@ export class ContentDirectoryService {
   ): Observable<SearchResultDto> {
     console.log("CDS - searchAllPlaylist");
     const uri = '/searchAllPlaylist';
-    this.lastSearchObject = quickSearchDto;
-    this.lastSearchType = 'playlists';
+    this.lastSearchObject.set(quickSearchDto);
+    this.lastSearchType.set('playlists');
     let result = this.httpService.post<SearchResultDto>(
       this.baseUri,
       uri,
@@ -424,8 +424,8 @@ export class ContentDirectoryService {
   public searchAllAlbum(quickSearchDto: SearchRequestDto): void {
     console.log("CDS - searchAllAlbum");
     const uri = '/searchAllAlbum';
-    this.lastSearchObject = quickSearchDto;
-    this.lastSearchType = 'album';
+    this.lastSearchObject.set(quickSearchDto);
+    this.lastSearchType.set('album');
     this.httpService
       .post<SearchResultDto>(this.baseUri, uri, quickSearchDto)
       .subscribe((data) => {
@@ -436,8 +436,8 @@ export class ContentDirectoryService {
   public searchAllArtists(quickSearchDto: SearchRequestDto): void {
     console.log("CDS - searchAllArtists");
     const uri = '/searchAllArtists';
-    this.lastSearchObject = quickSearchDto;
-    this.lastSearchType = 'artists';
+    this.lastSearchObject.set(quickSearchDto);
+    this.lastSearchType.set('artists');
     this.httpService
       .post<SearchResultDto>(this.baseUri, uri, quickSearchDto)
       .subscribe((data) => {
@@ -449,12 +449,8 @@ export class ContentDirectoryService {
     let ci = this.dtoGeneratorService.generateEmptyContainerItemDto();
     ci.containerDto = searchResultContainer;
     ci.currentContainer.parentID = this.lastBrowseRequest?.objectID !== undefined ? this.lastBrowseRequest.objectID : "0";
-    ci.currentContainer.title =
-      '[' +
-      this.lastSearchType +
-      " search] for '" +
-      this.lastSearchObject.searchRequest +
-      "'";
+    ci.currentContainer.title = this.lastSearchType() + " matching '" +
+      this.lastSearchObject().searchRequest + "'";
     ci.currentContainer.albumartUri = '/assets/images/search-icon.png';
     ci.parentFolderTitle = 'back to music library';
     this.updateContainer(ci);
@@ -467,10 +463,9 @@ export class ContentDirectoryService {
     ci.currentContainer.albumartUri = '/assets/images/search-icon.png';
     ci.currentContainer.parentID = this.lastBrowseRequest.objectID;
     ci.currentContainer.title =
-      '[' +
-      this.lastSearchType +
-      " search] for '" +
-      this.lastSearchObject.searchRequest +
+      this.lastSearchType() +
+      " matching '" +
+      this.lastSearchObject().searchRequest +
       "'";
     ci.currentContainer.childCount = searchResultItems.length;
     ci.parentFolderTitle = 'back to music library';
