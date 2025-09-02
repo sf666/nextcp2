@@ -161,7 +161,7 @@ export class ServerPlaylistService {
       objectId: objectId,
     };
     let ret = this.httpService.post(this.baseUri, uri, req);
-    ret.subscribe();
+    ret.subscribe(() => this.afterMediaServerChanged());
     return ret;
   }
 }
