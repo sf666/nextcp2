@@ -16,21 +16,22 @@
             <button class="popupButton" color="" mat-mini-fab>
                 <mat-icon class="material-symbols-sharp">post_add</mat-icon>
             </button>
-            <div class="textNextToButton">set playlist sidebar</div>
+            <div class="textNextToButton">set MY PLAYLISTS</div>
         </div>
     </div>
     }
 
-    @if(isPlaylist()) {
-    <div class="dialogItems flex flex-col flex-wrap">
-        <div class="flex" (click)="selectPlayerPlaylist()">
-            <button class="popupButton" color="" mat-mini-fab>
-                <mat-icon class="material-symbols-sharp">save</mat-icon>
-            </button>
-            <div class="textNextToButton">select player playlist</div>
-        </div> 
-    </div>
+    @if(mediaPlayerService.mediaServerExists() && isPlaylist()) {
+        <div class="dialogItems flex flex-col flex-wrap">
+            <div class="flex" (click)="selectPlayerPlaylist()">
+                <button class="popupButton" color="" mat-mini-fab>
+                    <mat-icon class="material-symbols-sharp">save</mat-icon>
+                </button>
+                <div class="textNextToButton">select player playlist</div>
+            </div> 
+        </div>
     }
+
     <div class="dialogItems flex flex-col flex-wrap">
         <div class="flex" (click)="addToPlaylist()">
             <button class="popupButton" color="" mat-mini-fab>
