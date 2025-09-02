@@ -51,8 +51,10 @@ export class ServerPlaylistService {
     sseService: SseService,
   ) {
     // reconstruct sidebar after potential playlist folder change 
-    configurationService.applicationConfigChanged$.subscribe((appConfig) => {
-      this.afterMediaServerChanged();
+    configurationService.serverConfigurationChanged$.subscribe(mediaServerConfig => {
+      if (mediaServerConfig.mediaServer.udn === this.selectedMediaServer().udn) {
+        this.afterMediaServerChanged();
+      }
     });
 
     toObservable(this.selectedMediaServer).subscribe(data => this.afterMediaServerChanged())
@@ -78,7 +80,7 @@ export class ServerPlaylistService {
   // Playlists located in the configured folder name
   //
   public updateServerAccessiblePlaylists() {
-    if (this.selectedMediaServer().udn) {
+    if (this.selectedMediaServer().udn.length > 0) {
       this.playlistLoading.set(true);
       const uri = '/getServerPlaylists';
       this.httpService

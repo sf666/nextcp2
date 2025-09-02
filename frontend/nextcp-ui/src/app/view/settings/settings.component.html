@@ -39,6 +39,14 @@
               <mat-label>UDN</mat-label>
               <input matInput type="text" value="{{serverConfig.mediaServer.udn}}" readonly="true">
             </mat-form-field>
+            <div class="relative z-0 w-full mb-5 group">
+              <input [(ngModel)]="serverConfig.playistObjectId" type="text" name="MY_PLAYLISTID" id="MY_PLAYLISTID"
+                class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
+                placeholder=" " />
+              <label for="MY_PLAYLISTID"
+                class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">MY
+                PLAYLIST - ObjectID</label>
+            </div>
             @if (serverConfig.mediaServer.extendedApi) {
                 <!-- show UMS configuration -->
             }
@@ -176,14 +184,6 @@
     <h1 class="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-white">General Configuration</h1>
     <form class="max-w-2xl m-8">
       <div class="grid grid-cols-2 gap-4">
-        <div class="relative z-0 w-full mb-5 group">
-          <input [(ngModel)]="configService.applicationConfig.myPlaylistFolderName" type="text" name="MY_PLAYLISTID" id="MY_PLAYLISTID"
-            class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
-            placeholder=" " />
-          <label for="MY_PLAYLISTID"
-            class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">MY
-            PLAYLIST - ObjectID</label>
-        </div>
         <div class="relative z-0 w-full mb-5 group">
           <input [(ngModel)]="configService.applicationConfig.libraryPath" type="text" name="FORM_DDLP" id="FORM_DDLP"
             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"

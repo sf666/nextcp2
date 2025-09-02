@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.annotation.PostConstruct;
+import nextcp.config.ServerConfig;
 import nextcp.domainmodel.device.mediaserver.search.SearchSupport;
 import nextcp.dto.Config;
 import nextcp.dto.ContainerDto;
@@ -23,6 +24,7 @@ import nextcp.dto.MediaServerDto;
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.SearchRequestDto;
 import nextcp.dto.SearchResultDto;
+import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.ServerPlaylistDto;
 import nextcp.dto.ServerPlaylists;
 import nextcp.upnp.GenActionException;
@@ -43,12 +45,12 @@ public class MediaServerDevice extends BaseDevice {
 
 	private SearchSupport searchSupportDelegate = null;
 
+    @Autowired
+    private ServerConfig serverConfigService = null;
+	
 	public MediaServerDevice(RemoteDevice device) {
 		super(device);
 	}
-
-	@Autowired
-	private Config config = null;
 
 	@PostConstruct
 	private void init() {
@@ -144,9 +146,10 @@ public class MediaServerDevice extends BaseDevice {
 		ContainerItemDto resultContainer = browseChildren(inp);
 		return resultContainer;
 	}
-
+	
 	public ServerPlaylists getServerPlaylists() throws JsonMappingException, JsonProcessingException {
-		ServerPlaylists spl = searchMyPlaylistsItems(config.applicationConfig.myPlaylistFolderName);
+		ServerDeviceConfiguration sc = serverConfigService.getMediaServerConfig(getUdnAsString());
+		ServerPlaylists spl = searchMyPlaylistsItems(sc.playistObjectId);
 		return spl;
 	}
 

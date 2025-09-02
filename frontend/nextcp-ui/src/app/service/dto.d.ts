@@ -1,9 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-08-21 10:45:37.
+// Generated using typescript-generator version 3.2.1263 on 2025-09-02 07:57:01.
 
 export interface ApplicationConfig {
-    myPlaylistFolderName: string;
     generateUpnpCode: boolean;
     generateUpnpCodePath: string;
     libraryPath: string;
@@ -378,6 +377,7 @@ export interface ServerDeviceConfiguration {
     displayString: string;
     enabled: boolean;
     mediaServer: MediaServerDto;
+    playistObjectId: string;
 }
 
 export interface ServerPlaylistDto {

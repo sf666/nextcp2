@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { ConfigurationService } from 'src/app/service/configuration.service';
+import { DeviceService } from 'src/app/service/device.service';
 import { ContainerDto, ContainerIdDto, MediaPlayerConfigDto } from 'src/app/service/dto';
 import { MediaPlayerService } from 'src/app/service/media-player/media-player.service';
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
@@ -31,6 +32,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
     public mediaPlayerService: MediaPlayerService,
     public serverPlaylistService: ServerPlaylistService,
     private configurationService: ConfigurationService,
+    private deviceService: DeviceService,
     private popupService: PopupService,
     _matDialogRef: MatDialogRef<DisplayHeaderOptionsComponent>,
     @Inject(MAT_DIALOG_DATA) data: {
@@ -72,8 +74,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   }
 
   selectPlayerFolderSidebar(): void {
-    this.configurationService.applicationConfig.myPlaylistFolderName = this.getCurrentContainerIdDto().id;
-    this.configurationService.saveApplicationConfig();
+    this.configurationService.updateServerPlaylistId(this.deviceService.selectedMediaServerDevice().udn, this.getCurrentContainerIdDto().id);;
     this.serverPlaylistService.updateServerAccessiblePlaylists();
     this.close();
   }

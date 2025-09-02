@@ -138,7 +138,12 @@ export class SidebarComponent {
   }
 
   public get myFolderConfigured(): boolean {
-    return this.configurationService.applicationConfig.myPlaylistFolderName?.length > 0;
+    if (this.deviceService.selectedMediaServerDevice().udn.length > 0) {
+      var sc = this.configurationService.getSelectedServerConfig(this.deviceService.selectedMediaServerDevice().udn)
+      return sc?.playistObjectId?.length > 0;
+    } else {
+      return false;
+    }
   }
 
   public showPlaylistDialog(): void {

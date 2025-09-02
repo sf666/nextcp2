@@ -1,4 +1,4 @@
-import { ContainerDto, SearchResultDto, ContainerItemDto, SearchRequestDto, MusicItemDto, AudioFormat, MusicBrainzId, TrackTimeDto, TrackInfoDto, SystemInformationDto, MusicItemIdDto, InputSourceDto, TransportServiceStateDto, DeviceDriverState, UpnpAvTransportState, MediaRendererDto, AudioAddictConfig } from './../service/dto.d';
+import { ContainerDto, SearchResultDto, ContainerItemDto, SearchRequestDto, MusicItemDto, AudioFormat, MusicBrainzId, TrackTimeDto, TrackInfoDto, SystemInformationDto, MusicItemIdDto, InputSourceDto, TransportServiceStateDto, DeviceDriverState, UpnpAvTransportState, MediaRendererDto, AudioAddictConfig, ServerConfigDto, RendererConfigDto } from './../service/dto.d';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -14,6 +14,18 @@ export class DtoGeneratorService {
       preferEuropeanServer: true,
       token:'',
       user:''
+    }
+  }
+
+  public emptyRendererConfigDto(): RendererConfigDto {
+    return {
+      rendererDevices: []
+    }
+  }
+
+  public emptyServerConfigDto() : ServerConfigDto {
+    return {
+      serverDevices:[]
     }
   }
   

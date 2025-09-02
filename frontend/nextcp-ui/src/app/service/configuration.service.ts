@@ -1,3 +1,4 @@
+import { DeviceService } from 'src/app/service/device.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { UuidService } from './../util/uuid.service';
 import { HttpService } from './http.service';
@@ -8,6 +9,7 @@ import { GenericResultService } from './generic-result.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { isAssigned } from '../global';
+import { ServerPlaylistService } from './server-playlist.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,13 +21,15 @@ export class ConfigurationService {
   // ===============================================================================
   rendererConfigChanged$: Subject<RendererDeviceConfiguration[]> = new Subject();
   applicationConfigChanged$: Subject<ApplicationConfig> = new Subject();
+  
+  serverConfigurationChanged$: Subject<ServerDeviceConfiguration> = new Subject();
 
   // Configs
   // ===============================================================================
 
-  serverConfig: Config;                       // global serverside configuration file (server state) (read only)
-  private rendererConfig: RendererConfigDto;  // renderer configurations
-  serverConfigDto: ServerConfigDto;           // List of server devices
+  serverConfig: Config;                       // global server side configuration file (server state) (read only)
+  rendererConfig = signal<RendererConfigDto>(this.dtoGeneratorService.emptyRendererConfigDto());  // renderer configurations
+  serverConfigDto = signal<ServerConfigDto>(this.dtoGeneratorService.emptyServerConfigDto());  // List of server devices
 
   public mediaPlayerConfigDto = signal<MediaPlayerConfigDto>({
     overwrite: false,
@@ -56,7 +60,6 @@ export class ConfigurationService {
     itemsPerPage: 100,
     nextPageAfter: 60,
     pathToRestartScript: '',
-    myPlaylistFolderName: '',
     upnpBindInterface: '',
   }
 
@@ -114,8 +117,29 @@ export class ConfigurationService {
     });
   }
 
+  public findServerConfig(udn: string): ServerDeviceConfiguration {
+    return this.serverConfigDto().serverDevices.find(d => d.mediaServer.udn === udn);
+  }
+
+  public getSelectedServerConfig(udn: string): ServerDeviceConfiguration {
+    return this.serverConfigDto().serverDevices.find(d => d.mediaServer.udn === udn);
+  }
+
+  public updateServerPlaylistId(udn: string, playlistId: string) {
+    if (!udn) {
+      return "";
+    }
+    var sc = this.findServerConfig(udn);
+    if (sc) {
+      sc.playistObjectId = playlistId;
+      this.saveMediaServerConfig(sc);
+    } else {
+      console.log("[updateServerPlaylistId] : no server udn given.");
+    }
+  }
+
   public getServerConfig() {
-    return this.serverConfigDto;
+    return this.serverConfigDto();
   }
 
   private getMediaPlayerConfig(): Subject<MediaPlayerConfigDto> {
@@ -158,7 +182,9 @@ export class ConfigurationService {
 
   public saveMediaServerConfig(mediaServerConfig: ServerDeviceConfiguration): void {
     const uri = '/saveMediaServerConfig';
-    this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaServerConfig, "Save mediaserver config", "success").subscribe();
+    this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaServerConfig, "Save mediaserver config", "success").subscribe(
+      () => this.serverConfigurationChanged$.next(mediaServerConfig)
+    );
   }
 
   public deleteMediaServerConfig(mediaServerConfig: ServerDeviceConfiguration): void {
@@ -169,14 +195,14 @@ export class ConfigurationService {
   public getMediaRendererConfig(): void {
     const uri = '/getMediaRendererConfig';
     this.httpService.get<RendererConfigDto>(this.baseUri, uri).subscribe(data => {
-      this.rendererConfig = data;
+      this.rendererConfig.set(data);
     });
   }
 
   public getMediaServerConfig(): void {
     const uri = '/getMediaServerConfig';
     this.httpService.get<ServerConfigDto>(this.baseUri, uri).subscribe(data =>
-      this.serverConfigDto = data);
+      this.serverConfigDto.set(data));
   }
 
   private getClientConfigFromServer() {
@@ -189,17 +215,17 @@ export class ConfigurationService {
   }
 
   private applyMediaServerList(data: ServerConfigDto) {
-    this.serverConfigDto = data;
+    this.serverConfigDto.set(data);
 
-    this.serverConfigDto.serverDevices = this.serverConfigDto?.serverDevices.sort((n1, n2) => {
+    this.serverConfigDto().serverDevices = this.serverConfigDto().serverDevices.sort((n1, n2) => {
       return n1.displayString.localeCompare(n2.displayString);
     });
   }
 
   private applyRendererServerRendererList(data: RendererConfigDto) {
-    this.rendererConfig = data;
+    this.rendererConfig.set(data);
 
-    this.rendererConfig.rendererDevices = this.rendererConfig?.rendererDevices.sort((n1, n2) => {
+    this.rendererConfig().rendererDevices = this.rendererConfig().rendererDevices.sort((n1, n2) => {
       return n1.displayString.localeCompare(n2.displayString);
     });
   }
@@ -212,14 +238,11 @@ export class ConfigurationService {
   }
 
   public getRendererDevicesConfig(): RendererDeviceConfiguration[] {
-    if (this.rendererConfig) {
-      return this.rendererConfig?.rendererDevices;
-    }
-    return [];
+    return this.rendererConfig().rendererDevices;
   }
 
   public isRenderDeviceUdnActive(deviceUdn: string): boolean {
-    const configEntry = this.rendererConfig.rendererDevices.filter(conf => conf.mediaRenderer.udn == deviceUdn);
+    const configEntry = this.rendererConfig().rendererDevices.filter(conf => conf.mediaRenderer.udn == deviceUdn);
     if (!configEntry || configEntry.length == 0) {
       return false;
     }
