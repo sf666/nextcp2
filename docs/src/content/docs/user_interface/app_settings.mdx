@@ -2,20 +2,23 @@
 title: App Settings
 order: 8
 ---
-
-import { Image } from 'astro:assets';
-import appSettings1 from './img/settings_1.png';
-import appSettings2 from './img/settings_2.png';
-import appSettings3 from './img/settings_3.png';
-import appSettings4 from './img/settings_4.png';
-
-
-<Image src={appSettings1} alt="" class="" />
-
+<main>
+<article>
 ## Server Configuration
-Card view of discovered media server. Server may be offline, if not yet found. Disabled server will not show up for selection in some popups or lists.
+Displays a card view of the detected media server.
 
-<Image src={appSettings2} alt="" class="" />
+<Bullets title="Enable/Disable Servers">
+    <li>Servers that are disabled will not be available for selection in certain pop-ups or lists.</li>
+    <li>If a server has not yet been discovered on the network, it may appear as offline.</li>
+</Bullets>
+
+
+<Bullets title="MY PLAYLIST - ObjectID">
+    <li>Enter the media server ObjectID of a folder containing playlists.</li>
+    <li>Typically configured automatically by the UI.</li>
+    <li>Once set, the playlists from that folder will appear in the sidebar.</li>
+</Bullets>
+<span class="text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">NOTE: If the servers database is recreated or reindexed, the ObjectID of the playlist folder may change and has to be set again.</span>
 
 ## Renderer configuration
 Card display of discovered media renderer. Renderer may be offline, if not yet found. Disabled renderer will not show up for selection in some popups or lists.
@@ -29,13 +32,12 @@ If a streaming device is attached to an amplifier, a device device driver can be
 volume and power state. A default volume percentage can be applied to the external amplifier on power up. The streaming device volume can be set to 100% on power up, if
 <code>UPnP max volume</code> is enabled.
 
-<Image src={appSettings3} alt="" class="" />
 
 export const Bullets = ({children, title}) => (
   <div>
     <h6 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{title}</h6>
-    <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
-      {children}
+    <ul class="space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+        {children}
     </ul>
   </div>
 );
@@ -85,10 +87,6 @@ Here are additional UMS server actions available, if the active media server is 
             </tr>
         </thead>
         <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">MY PLAYLIST - Object ID</td>
-                <td class="px-6 py-4">Object ID of the folder containing MY PLAYLISTS. Those playlists will directly selectable inside the sidebar on the left. There is no need to edit this value by hand. In the "music library" view, click the context menu button and select "set playlist sidebar". <span class="text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">NOTE: If the servers database is recreated or reindexed, the ObjectID of the playlist folder may change and has to be set again.</span></td>
-            </tr>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">device driver library path</td>
                 <td class="px-6 py-4">Where to look for amplifier device drivers. Currently McIntosh amplifier like MA9000, MA12000 and other should work.</td>
@@ -141,8 +139,6 @@ Here are additional UMS server actions available, if the active media server is 
     </table>
 </div>
 
-<Image src={appSettings4} alt="" class="" />
-
 ## Accounts
 ### Spotify
 Connect to Spotify account for discovering artists album art. If browser is connected to localhost, one step connection linking is available. Otherwise the
@@ -154,3 +150,6 @@ Account can be connected, but API is not used yet.
 ## System Information
 Build information are displayed here.
 
+</article>
+
+</main>
