@@ -2,36 +2,84 @@
 title: App Settings
 order: 8
 ---
-<main>
-<article>
 ## Server Configuration
 Displays a card view of the detected media server.
 
-<Bullets title="Enable/Disable Servers">
-    <li>Servers that are disabled will not be available for selection in certain pop-ups or lists.</li>
-    <li>If a server has not yet been discovered on the network, it may appear as offline.</li>
-</Bullets>
+<div class="relative overflow-x-auto">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">field</th>
+                <th scope="col" class="px-6 py-3">purpose</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Enable</td>
+                <td class="px-6 py-4">Disabled Renderers will not be available for selection in certain pop-ups or lists.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Status</td>
+                <td class="px-6 py-4">Previously discovered servers may appear as `OFFLINE` if not yet discovered on the network. Active server are `ONLINE`. This attribute is read only.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">IP</td>
+                <td class="px-6 py-4">IP address of the device. This attribute is read only.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">UDN</td>
+                <td class="px-6 py-4">Unique Device Name, identifies the device on the network. This attribute is read only.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">MY PLAYLIST - ObjectID</td>
+                <td class="px-6 py-4">Enter the media server ObjectID of a folder containing playlists. Typically configured automatically by the UI.
+                    Once set, the playlists from that folder will appear in the sidebar.
+                    <span class="text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">NOTE: If the servers database is recreated or reindexed, the ObjectID of the playlist folder may change and has to be set again.</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-
-<Bullets title="MY PLAYLIST - ObjectID">
-    <li>Enter the media server ObjectID of a folder containing playlists.</li>
-    <li>Typically configured automatically by the UI.</li>
-    <li>Once set, the playlists from that folder will appear in the sidebar.</li>
-</Bullets>
-<span class="text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">NOTE: If the servers database is recreated or reindexed, the ObjectID of the playlist folder may change and has to be set again.</span>
 
 ## Renderer configuration
-Card display of discovered media renderer. Renderer may be offline, if not yet found. Disabled renderer will not show up for selection in some popups or lists.
+Displays a card view of the detected media renderer. Offline Renderers: May appear as offline if not yet discovered. Disabled Renderers: Will not be available for selection in certain pop-ups or lists.
 
-If the media renderer is attached to a physical receiver / AV-device with remote control capability (in example by a RS232 or TCP/IP port),
-select a compatible device driver and enter a device driver configuration string. Device driver for McIntosh devices is available for download.
-It is recommended to set the media renderer volume to 100% if a device driver is selected. The device
-driver notices a device power on state and will apply a default volume on the physical device after powering up.
+##### device driver
+If the media renderer is connected to a physical receiver or AV device with remote control capability (e.g., via RS232 or TCP/IP), a device driver can be used to control volume and balance directly.
+A Device driver for McIntosh devices is available for download.
 
-If a streaming device is attached to an amplifier, a device device driver can be selected for controlling the amplifier power and volume state instead of the streamer
-volume and power state. A default volume percentage can be applied to the external amplifier on power up. The streaming device volume can be set to 100% on power up, if
-<code>UPnP max volume</code> is enabled.
-
+<div class="relative overflow-x-auto">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">field</th>
+                <th scope="col" class="px-6 py-3">purpose</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">amplifier type</td>
+                <td class="px-6 py-4">Select the device driver i.e. `MA9000` for McIntosh amplifiers.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">amplifier driver connection</td>
+                <td class="px-6 py-4">Enter the driver connection string. For `MA9000` driver i.e. `192.168.112.37:12345`.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">amplifier on power default volume</td>
+                <td class="px-6 py-4">Restores the amplifier volume to a predefined level when powered on, i.e. `10`.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">amplifier default balance</td>
+                <td class="px-6 py-4">Restores the amplifier balance to a predefined level when powered on, i.e. `-3`.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">UPnP/streamer max volume</td>
+                <td class="px-6 py-4">If checked, restores the UPnP/streamer to max volume (100%) when powered on.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 export const Bullets = ({children, title}) => (
   <div>
@@ -140,16 +188,12 @@ Here are additional UMS server actions available, if the active media server is 
 </div>
 
 ## Accounts
-### Spotify
-Connect to Spotify account for discovering artists album art. If browser is connected to localhost, one step connection linking is available. Otherwise the
-<code>authCode</code> has to be copies manually in the code block.
+##### Spotify
+Connect your Spotify account to enable discovery of artist album art. If the browser is connected to localhost, a one-step connection linking process is available.
+If the browser is not connected to localhost, the <code>authCode</code> must be copied manually into the provided code block.
 
-### Last FM
+##### Last FM
 Account can be connected, but API is not used yet.
 
 ## System Information
 Build information are displayed here.
-
-</article>
-
-</main>
