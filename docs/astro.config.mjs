@@ -7,6 +7,15 @@ import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
+	image: {
+		// Example: Enable the Sharp-based image service with a custom config
+		service: {
+			entrypoint: 'astro/assets/services/sharp',
+			config: {
+				limitInputPixels: false,
+			},
+		},
+	},	
 	base: '/nextcp2/',
 	vite: {
 		plugins: [tailwindcss()],

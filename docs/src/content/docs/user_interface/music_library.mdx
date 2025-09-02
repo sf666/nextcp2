@@ -18,14 +18,12 @@ import imgPV from './img/playlistView.png';
 import imgSO from './img/song_options.png';
 import imgButtonBar from './img/music_library_button_bar.png';
 
+import imgMyPlaylist from './img/playlist_sidebar.gif';
+import imgMyPlaylistCreateAdd from './img/playlist_create_add.gif';
+
 import search from './img/search.png';
 
 The Music Library is the main entry point to your music collection.
-
-While navigating through the folders, the displayed layout will change in regard to the displayed content. Folders are subtitled by their name, playlists, images and radio
-stations are additionally highlighted.
-
-Displayed content can be filtered by text entering in `search in this page` box.
 
 <div id="carousel-album" class="relative w-full h-full" data-carousel="slide">
     <div style={"height: 650px"} class="relative overflow-hidden rounded-lg md:h-96">
@@ -41,12 +39,15 @@ Displayed content can be filtered by text entering in `search in this page` box.
     </div>
 </div>
 
+
+While navigating through the folders, the displayed layout will change in regard to the displayed content. Folders are subtitled by their name, playlists, images and radio
+stations are additionally highlighted.
+
+Displayed content can be filtered by text entering in `search in this page` box.
+
 ## Control buttons
 
 <Image src={imgButtonBar} alt="" class="size-64 shrink-0" />
-
-
-
 
 <div class="relative overflow-x-auto">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -81,6 +82,40 @@ Displayed content can be filtered by text entering in `search in this page` box.
     </table>
 </div>
 
+## Server Side Playlist
+
+### Configure MY PLAYLIST sidebar
+
+To configure the quick access playlist sidebar, navigate to the folder containing your playlists, then click on the three dots 
+in the header and select `set MY PLAYLIST`. The sidebar will be refreshed and the playlists are directly accessible.
+
+<Image src={imgMyPlaylist} alt="set my playlist video" />
+
+### Create s Server Side Playlist
+
+To create a server-side playlist, first navigate to the folder where you want the playlist to reside. 
+Next, click the three-dot menu located next to **MY PLAYLISTS**. A dialog box will appear where you can enter the name for your new playlist and confirm your choice.
+
+<div class="flex items-center p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
+  <svg class="shrink-0 inline w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+  </svg>
+  <span class="sr-only">Info</span>
+  <div class="ps-6">
+    If you create the playlist inside the configured **MY PLAYLISTS** folder, it will automatically appear in the Quick Access sidebar.
+  </div>
+</div>
+
+
+### Add songs to Server Side Playlist
+
+To add a song to a server side playlist, navigate to the desired song, click on the three dots to open the song options dialog, then select `Add to playlist` and select the desired playlist.
+
+<Image src={imgMyPlaylistCreateAdd} alt="create playlist and add song" />
+
+### Delete Server Side Playlist
+
+click the three-dot menu located next to **MY PLAYLISTS**. A dialog box will appear. Click on **Delete Playlist**, locate your playlist and click **delete**.
 
 
 ## View templates
