@@ -27,10 +27,12 @@
       <span class="hide-element buttonText">Radio</span>
     </a>
 
-    <a mat-button flowbiteSidebarItem [routerLink]="'/ums-audioaddict'" (click)="buttonClicked('/ums-audioaddict')" class="margin-reactive  {{getTextClass('/ums-audioaddict')}}">
-      <mat-icon class="material-symbols-outlined thin">radio</mat-icon>
-      <span class="hide-element buttonText">Radio Networks</span>
-    </a>
+    @if(deviceService.selectedMediaServerDevice().extendedApi) {
+      <a mat-button flowbiteSidebarItem [routerLink]="'/ums-audioaddict'" (click)="buttonClicked('/ums-audioaddict')" class="margin-reactive  {{getTextClass('/ums-audioaddict')}}">
+        <mat-icon class="material-symbols-outlined thin">radio</mat-icon>
+        <span class="hide-element buttonText">Radio Networks</span>
+      </a>
+    }
 
     <a mat-button flowbiteSidebarItem [routerLink]="'/myAlbums'" (click)="myAlbumClicked()" class="margin-reactive {{getTextClass('/myAlbums')}}">
       <mat-icon class="material-symbols-outlined thin">album</mat-icon>
