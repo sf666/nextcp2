@@ -132,9 +132,12 @@ export class AddPlaylistComponent {
 
   deletePlaylist(serverPlaylist: ServerPlaylistDto) {
     this.serverPlaylistService.deleteObject(serverPlaylist.playlistId).subscribe({
-      next: () => {
+      next: (data) => {
+        this.serverPlaylistService.serverPl().serverPlaylists = this.serverPlaylistService.serverPl().serverPlaylists.filter(
+          pl => pl.playlistId !== serverPlaylist.playlistId);
       },
       error: (data) => { console.error(data); }
+
     });
   }
 
