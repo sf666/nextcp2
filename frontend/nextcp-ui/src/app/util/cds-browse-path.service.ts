@@ -1,43 +1,50 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, signal } from '@angular/core';
 import Stack from 'ts-data.stack';
 
-@Injectable({
-  providedIn: 'root'
-})
+const baseId = 'ID_SCROLL_TO_ELEMENT_STEP_IN';
 
+@Injectable()
 export class CdsBrowsePathService {
+  stack = new Stack<string>();
 
-  private scrollId: string;
+  scrollId = signal<string>(baseId);
 
-  constructor(@Inject('uniqueId') private uniqueId_: string) {
-    this.scrollId = 'ID_SCROLL_TO_ELEMENT_STEP_IN';
+  constructor() {
   }
 
-  public stepIn(path: string): void {
-    this.scrollId = 'ID_SCROLL_TO_ELEMENT_STEP_IN';
-  }
-
-  private addPathToString(path: string) {
+  public stepIn(objectId: string): void {
+    this.scrollId.set(baseId);
+    this.stack.push(objectId);
   }
 
   public stepOut(): void {
+    if (this.stack.isEmpty) {
+      console.log("[ERROR] stack is already empty.");
+    }
+    var previous = this.stack.pop();
+    if (previous?.length > 0) {
+      this.scrollId.set(previous);
+    } else {
+      console.log("[ERROR] cannot step out");
+      this.scrollId.set(baseId);
+    }
   }
 
   public peekCurrentPathID(): string {
-    return "DEPRECATED";
+    return this.stack.peek();
   }
 
-  public clearPath(): void {
+  public clear(): void {
+    while(!this.stack.isEmpty) {
+      this.stack.pop();
+    }
   }
 
   get scrollToID(): string {
-    return this.scrollId;
+    return this.scrollId();
   }
 
   public persistPathToRoot(): void {
-  }
-
-  public restorePathToRoot(): void {
   }
 
   /**
@@ -46,7 +53,8 @@ export class CdsBrowsePathService {
   public scrollIntoViewID(elementID: string): void {
     const targetElement = document.getElementById(elementID); // querySelector('#someElementId');
     if (targetElement) {
-      this.scrollId = '';
+      this.scrollId.set(baseId);
+      console.log("scroll to ID : " + elementID);
       targetElement.focus();
     }
   }
