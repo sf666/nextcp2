@@ -7,7 +7,6 @@ import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { DisplayContainerComponent } from 'src/app/mediaserver/display-container/display-container.component';
 import { LayoutService } from 'src/app/service/layout.service';
 import { DeviceService } from 'src/app/service/device.service';
-import { CdsBrowsePathService } from 'src/app/util/cds-browse-path.service';
 import { PersistenceService } from 'src/app/service/persistence/persistence.service';
 import { ActivatedRoute } from '@angular/router';
 import { MusicLibraryService } from 'src/app/service/music-library/music-library.service';
@@ -17,7 +16,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
   selector: 'app-music-library',
   standalone: true,
   imports: [NavBarComponent, DisplayContainerComponent],
-  providers: [ContentDirectoryService, CdsBrowsePathService, { provide: 'uniqueId', useValue: 'music-library_' }],
+  providers: [{ provide: ContentDirectoryService, useClass: ContentDirectoryService },], // non singleton injections
   templateUrl: './music-library.component.html',
   styleUrl: './music-library.component.scss'
 })
@@ -30,7 +29,6 @@ export class MusicLibraryComponent implements AfterViewInit {
     private route: ActivatedRoute,
     public contentDirectoryService: ContentDirectoryService,
     public layoutService: LayoutService,
-    private cdsBrowsePathService: CdsBrowsePathService,
     private persistenceService: PersistenceService,
     public deviceService: DeviceService,
     private musicLibraryService: MusicLibraryService,
@@ -54,7 +52,6 @@ export class MusicLibraryComponent implements AfterViewInit {
     } catch (error) {
       console.error('Caught an error:', error);
     }
-
   }
 
   ngAfterViewInit(): void {

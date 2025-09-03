@@ -1,7 +1,5 @@
 import { ToastService } from './toast/toast.service';
 import { DeviceService } from 'src/app/service/device.service';
-import { GenericResultService } from './generic-result.service';
-import { ContentDirectoryService } from './content-directory.service';
 import { Subject } from 'rxjs';
 import { HttpService } from './http.service';
 import { Injectable } from '@angular/core';

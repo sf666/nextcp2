@@ -49,6 +49,7 @@ import { PlaylistComponent } from './app/view/playlist/playlist.component';
 import { NetworksComponent } from './app/view/audio-addict/networks/networks.component';
 import { NetworkComponent } from './app/view/audio-addict/network/network.component';
 import { UmsAudioaddictComponent } from './app/view/audio-addict/ums/ums-audioaddict.component';
+import { ContentDirectoryService } from './app/service/content-directory.service';
 
 const ROUTES: Routes = [
   { path: 'music-library/:objectId', component: MusicLibraryComponent },
@@ -73,6 +74,7 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
   providers: [
+    { provide: ContentDirectoryService, useClass: ContentDirectoryService },
     provideRouter(
       ROUTES,
       withComponentInputBinding(),

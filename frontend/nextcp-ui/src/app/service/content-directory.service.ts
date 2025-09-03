@@ -14,9 +14,7 @@ import {
 } from './dto.d';
 import { computed, Injectable, signal } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ContentDirectoryService {
   baseUri = '/ContentDirectoryService';
 
@@ -64,6 +62,8 @@ export class ContentDirectoryService {
   lastSearchObject = signal<SearchRequestDto>(this.dtoGeneratorService.generateEmptySearchRequestDto());
   lastSearchType = signal<string>('');
 
+  private id = "id_" + Math.random().toString(16).slice(2);
+
   constructor(
     public configService: ConfigurationService,
     private httpService: HttpService,
@@ -71,6 +71,7 @@ export class ContentDirectoryService {
     private deviceService: DeviceService,
     private toastService: ToastService,
   ) {
+    console.log("[ContentDirectoryService-" + this.id +"] : constructor call");
     // Initialize empty result object
     if (configService.applicationConfig.nextPageAfter) {
       this.TURN_PAGE_AFTER = configService.applicationConfig.nextPageAfter;
@@ -166,7 +167,7 @@ export class ContentDirectoryService {
     }
 
     if (browseRequestDto.mediaServerUDN?.length < 1) {
-      console.log("UDN not set. Stop browsing.");
+      console.log(this.id + "UDN not set. Stop browsing.");
       return;
     }
 
@@ -180,10 +181,10 @@ export class ContentDirectoryService {
       browseRequestDto,
     );
     if (additive) {
-      console.log("browseChildrenByRequest - additive");
+      console.log(this.id + " : browseChildrenByRequest - additive");
       sub.subscribe((data) => this.addContainer(data));
     } else {
-      console.log("browseChildrenByRequest - single");
+      console.log(this.id + " : browseChildrenByRequest - single");
       sub.subscribe((data) => this.updateContainer(data));
     }
     return sub;
@@ -216,7 +217,7 @@ export class ContentDirectoryService {
    * @param data Gets called after a browse request returns ...
    */
   public updateContainer(data: ContainerItemDto): void {
-    console.log("CDS - updating container with " + data.musicItemDto.length + " items.");
+    console.log("CDS " + this.id + " : updating container with " + data.musicItemDto.length + " items.");
     if (data) {
       this.currentContainerList.set(data);
       this.updatePageTurnId(data);
@@ -244,10 +245,10 @@ export class ContentDirectoryService {
       if (count >= this.MAX_REQUEST_ITEMS) {
         this.browseToNextPage();
       } else {
-        console.log('CDS - updateContainer : loaded last page.');
+        console.log('CDS ' + this.id + ' : updateContainer loaded last page.');
       }
     } else {
-      console.log("no search result was provided.");
+      console.log('CDS ' + this.id + " : no search result was provided.");
     }
   }
 
@@ -287,7 +288,7 @@ export class ContentDirectoryService {
       if (count >= this.MAX_REQUEST_ITEMS) {
         this.browseToNextPage();
       } else {
-        console.log('addContainer: loaded last page.');
+        console.log(this.id + ' : addContainer loaded last page.');
       }
     }
   }
@@ -372,6 +373,7 @@ export class ContentDirectoryService {
     quickSearchDto: SearchRequestDto,
   ): Subject<SearchResultDto> {
     const uri = '/quickSearch';
+    console.log(this.id + " : do quick search");
     return this.httpService.post<SearchResultDto>(
       this.baseUri,
       uri,
@@ -385,11 +387,11 @@ export class ContentDirectoryService {
   }
 
   public searchAllItems(quickSearchDto: SearchRequestDto): void {
-    console.log("CDS - searchAllItems");
+    console.log("CDS " + this.id + " : searchAllItems");
     const uri = '/searchAllItems';
     this.lastSearchObject.set(quickSearchDto);
     this.lastSearchType.set('songs');
-    console.log("performing search for all matching items ...");
+    console.log(this.id + "performing search for all matching items ...");
     this.httpService
       .post<SearchResultDto>(this.baseUri, uri, quickSearchDto)
       .subscribe({
@@ -398,7 +400,7 @@ export class ContentDirectoryService {
           this.updateSearchResultItem(data.musicItems);
         },
         error: (error: any) => {
-          console.error('searchAllItems error : ', error);
+          console.error(this.id + 'searchAllItems error : ', error);
         }
       });
   }
@@ -406,7 +408,7 @@ export class ContentDirectoryService {
   public searchAllPlaylist(
     quickSearchDto: SearchRequestDto,
   ): Observable<SearchResultDto> {
-    console.log("CDS - searchAllPlaylist");
+    console.log("CDS " + this.id + " : searchAllPlaylist");
     const uri = '/searchAllPlaylist';
     this.lastSearchObject.set(quickSearchDto);
     this.lastSearchType.set('playlists');
@@ -422,7 +424,7 @@ export class ContentDirectoryService {
   }
 
   public searchAllAlbum(quickSearchDto: SearchRequestDto): void {
-    console.log("CDS - searchAllAlbum");
+    console.log("CDS " + this.id + " : searchAllAlbum");
     const uri = '/searchAllAlbum';
     this.lastSearchObject.set(quickSearchDto);
     this.lastSearchType.set('album');
@@ -434,7 +436,7 @@ export class ContentDirectoryService {
   }
 
   public searchAllArtists(quickSearchDto: SearchRequestDto): void {
-    console.log("CDS - searchAllArtists");
+    console.log("CDS " + this.id + " : searchAllArtists");
     const uri = '/searchAllArtists';
     this.lastSearchObject.set(quickSearchDto);
     this.lastSearchType.set('artists');
@@ -451,6 +453,7 @@ export class ContentDirectoryService {
     ci.currentContainer.parentID = this.lastBrowseRequest?.objectID !== undefined ? this.lastBrowseRequest.objectID : "0";
     ci.currentContainer.title = this.lastSearchType() + " matching '" +
       this.lastSearchObject().searchRequest + "'";
+    ci.currentContainer.id = 'search_result';
     ci.currentContainer.albumartUri = '/assets/images/search-icon.png';
     ci.parentFolderTitle = 'back to music library';
     this.updateContainer(ci);
@@ -462,6 +465,7 @@ export class ContentDirectoryService {
     ci.musicItemDto = searchResultItems;
     ci.currentContainer.albumartUri = '/assets/images/search-icon.png';
     ci.currentContainer.parentID = this.lastBrowseRequest.objectID;
+    ci.currentContainer.id = 'search_result';
     ci.currentContainer.title =
       this.lastSearchType() +
       " matching '" +
@@ -469,7 +473,7 @@ export class ContentDirectoryService {
       "'";
     ci.currentContainer.childCount = searchResultItems.length;
     ci.parentFolderTitle = 'back to music library';
-    console.log("updating current container with search result ...");
+    console.log(this.id + " : updating current container with search result ...");
     this.updateContainer(ci);
     this.searchFinished$.next(ci);
   }

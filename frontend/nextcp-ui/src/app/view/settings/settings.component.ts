@@ -24,7 +24,6 @@ import { MatSelectModule } from '@angular/material/select';
 import {
   MatFormFieldModule,
   MatLabel,
-  MatSuffix,
 } from '@angular/material/form-field';
 
 @Component({
@@ -33,6 +32,7 @@ import {
   styleUrls: ['./settings.component.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [{ provide: ContentDirectoryService, useClass: ContentDirectoryService },], // non singleton injections
   imports: [
     MatFormFieldModule,
     MatLabel,

@@ -7,7 +7,6 @@ import {
   SearchResultDto,
   ContainerDto,
   MusicItemDto,
-  ContainerItemDto,
   SearchRequestDto,
 } from './../dto.d';
 import { Injectable, signal } from '@angular/core';

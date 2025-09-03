@@ -3,7 +3,6 @@ import { TransportService } from '../../../service/transport.service';
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable no-restricted-syntax */
 import { ContentDirectoryService } from './../../../service/content-directory.service';
-import { Router } from '@angular/router';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { QualityBadgeComponent } from '../../../util/comp/quality-badge/quality-badge.component';
 
@@ -12,7 +11,10 @@ import { QualityBadgeComponent } from '../../../util/comp/quality-badge/quality-
     templateUrl: './modal-search-result.component.html',
     styleUrls: ['./modal-search-result.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [ContentDirectoryService],
+    // non singleton injections for global search service    
+    providers: [
+      { provide: ContentDirectoryService, useClass: ContentDirectoryService },
+    ], 
     standalone: true,
     imports: [QualityBadgeComponent]
 })
@@ -23,8 +25,10 @@ import { QualityBadgeComponent } from '../../../util/comp/quality-badge/quality-
 export class ModalSearchResultComponent{
 
   constructor(
-    public globalSearchService: GlobalSearchService,
-    private transportService: TransportService,
-    private router: Router) {
+    private gss: GlobalSearchService,
+  ) {}
+
+  get globalSearchService() : GlobalSearchService {
+    return this.gss;
   }
 }
