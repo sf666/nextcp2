@@ -116,7 +116,6 @@ export class MusicLibraryComponent implements AfterViewInit {
   }
 
   private browseToUid(udn: string, objectId: string) {
-    this.cdsBrowsePathService.restorePathToRoot();
     if (!(udn?.length > 0)) {
       console.log("last media server device not found ... ");
       udn = this.deviceService.selectedMediaServerDevice().udn;
@@ -142,7 +141,6 @@ export class MusicLibraryComponent implements AfterViewInit {
 
   public browseToRoot(udn: string, sortCriteria?: string): void {
     console.log("browsing to root folder ... ")
-    this.cdsBrowsePathService.clearPath();
     this.browseToOid("0", udn, true, sortCriteria);
   }
 
