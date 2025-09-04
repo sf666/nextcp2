@@ -10,6 +10,7 @@ export class CdsBrowsePathService {
   scrollId = signal<string>(baseId);
 
   constructor() {
+    console.log("[CdsBrowsePathService] constructor call");
   }
 
   public stepIn(objectId: string): void {
@@ -19,7 +20,7 @@ export class CdsBrowsePathService {
 
   public stepOut(): void {
     if (this.stack.isEmpty) {
-      console.log("[ERROR] stack is already empty.");
+      this.scrollId.set(baseId);
     }
     var previous = this.stack.pop();
     if (previous?.length > 0) {
@@ -50,12 +51,20 @@ export class CdsBrowsePathService {
   /**
    * @param elementID ATTENTION: elementID needs to have tabindex set to '-1': <div id="elementID" tabindex="-1">
    */
-  public scrollIntoViewID(elementID: string): void {
+  public scrollIntoViewID(elementID?: string): void {
+    console.error("do not use");
+    return;
+
+    if (!elementID) {
+      elementID = this.scrollId();
+    }
+    console.log("scroll to ID : " + elementID);
     const targetElement = document.getElementById(elementID); // querySelector('#someElementId');
     if (targetElement) {
       this.scrollId.set(baseId);
-      console.log("scroll to ID : " + elementID);
       targetElement.focus();
+    } else {
+      console.log("scroll id not found : " + elementID);
     }
   }
 }

@@ -217,7 +217,7 @@ export class ContentDirectoryService {
    * @param data Gets called after a browse request returns ...
    */
   public updateContainer(data: ContainerItemDto): void {
-    console.log("CDS " + this.id + " : updating container with " + data.musicItemDto.length + " items.");
+//    console.log("CDS " + this.id + " : updating container with " + data.musicItemDto.length + " items.");
     if (data) {
       this.currentContainerList.set(data);
       this.updatePageTurnId(data);

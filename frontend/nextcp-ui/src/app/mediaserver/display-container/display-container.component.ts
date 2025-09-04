@@ -14,6 +14,7 @@ import {
   ChangeDetectionStrategy,
   input,
   output,
+  afterRenderEffect,
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
@@ -24,12 +25,13 @@ import { ContainerTileComponent } from './container-tile/container-tile.componen
 import { DisplayContainerHeaderComponent } from './display-container-header/display-container-header.component';
 import { ItemTileComponent } from './item-tile/item-tile.component';
 import { OtherItemTileComponent } from './other-item-tile/other-item-tile.component';
+import { CdsBrowsePathService } from 'src/app/util/cds-browse-path.service';
 
 @Component({
   selector: 'mediaServer-display-container',
   templateUrl: './display-container.component.html',
   styleUrls: ['./display-container.component.scss'],
-  providers: [{ provide: 'uniqueId', useValue: 'default_display_container' }],
+  providers: [{ provide: CdsBrowsePathService, useClass: CdsBrowsePathService },], // non singleton injections
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
@@ -64,9 +66,17 @@ export class DisplayContainerComponent {
     public playlistService: PlaylistService,
     public transportService: TransportService,
     private configurationService: ConfigurationService,
+    private cdsBrowsePathService: CdsBrowsePathService,
     public trackQualityService: TrackQualityService
   ) {
-
+      afterRenderEffect({
+      read: (writeResult) => {
+        const targetElement = document.getElementById(this.cdsBrowsePathService.scrollId()); // querySelector('#someElementId');
+        if (targetElement) {
+          targetElement.focus();
+        }
+      },
+    });    
   }
 
   /**
@@ -173,6 +183,11 @@ export class DisplayContainerComponent {
           .subscribe((data) => {
             this.browseFinished(data);
             if (data?.currentContainer?.id) {
+              if (stepIn) {
+                this.cdsBrowsePathService.stepIn(oid);
+              } else {
+                this.cdsBrowsePathService.stepOut();
+              }
               resolve(true);
             } else {
               resolve(false);

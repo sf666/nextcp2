@@ -5,6 +5,9 @@ import { Injectable, signal } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * Global service to inform views about current selected media library folder. 
+ */
 export class MusicLibraryService {
 
   constructor(public dtoGeneratorService: DtoGeneratorService) { }
