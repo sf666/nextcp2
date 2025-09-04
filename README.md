@@ -1,8 +1,8 @@
 # nextCP/2
 
-nextCP/2 is a web-based UPnP control point written in Java and Typescript.
+NextCP/2 is a web-based UPnP control point written in Java and Typescript.
 
-Screenshots and basic usage is shown in [GitHub Pages](https://sf666.github.io/).
+Documentation is available at [GitHub Pages](https://sf666.github.io/nextcp2).
 
 ## installation
 
