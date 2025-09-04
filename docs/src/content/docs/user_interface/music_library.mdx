@@ -21,9 +21,9 @@ import imgButtonBar from './img/music_library_button_bar.png';
 import imgMyPlaylist from './img/playlist_sidebar.gif';
 import imgMyPlaylistCreateAdd from './img/playlist_create_add.gif';
 
-import search from './img/search.png';
+import search from './img/search.gif';
 
-The Music Library is the main entry point to your music collection.
+The **Music Library** serves as the main entry point to your entire music collection, providing a central place to browse, search, and play your audio content.
 
 <div id="carousel-album" class="relative w-full h-full" data-carousel="slide">
     <div style={"height: 650px"} class="relative overflow-hidden rounded-lg md:h-96">
@@ -40,10 +40,10 @@ The Music Library is the main entry point to your music collection.
 </div>
 
 
-While navigating through the folders, the displayed layout will change in regard to the displayed content. Folders are subtitled by their name, playlists, images and radio
-stations are additionally highlighted.
+As you navigate through folders, the layout adapts based on the type of content being displayed. **Folders** are labeled with their names. **Playlists, images, and radio stations** are additionally highlighted for easier recognition.  
 
-Displayed content can be filtered by text entering in `search in this page` box.
+You can also filter the displayed content by entering text into the **Search in this page** box.
+
 
 ## Control buttons
 
@@ -82,19 +82,18 @@ Displayed content can be filtered by text entering in `search in this page` box.
     </table>
 </div>
 
-## Server Side Playlist
+## Server Side Playlists
 
 ### Configure MY PLAYLIST sidebar
 
-To configure the quick access playlist sidebar, navigate to the folder containing your playlists, then click on the three dots 
-in the header and select `set MY PLAYLIST`. The sidebar will be refreshed and the playlists are directly accessible.
-
 <Image src={imgMyPlaylist} alt="set my playlist video" />
 
-### Create s Server Side Playlist
+To configure the quick access **MY PLAYLISTS** section, navigate to the folder containing your playlists, then click on the three dots in the header and select **set MY PLAYLIST**. The sidebar will be refreshed and the playlists are directly accessible.
 
-To create a server-side playlist, first navigate to the folder where you want the playlist to reside. 
-Next, click the three-dot menu located next to **MY PLAYLISTS**. A dialog box will appear where you can enter the name for your new playlist and confirm your choice.
+
+### Create Server Side Playlist
+
+To create a server-side playlist, first navigate to the folder where you want the playlist to reside. Next, click the three-dot menu located next to **MY PLAYLISTS**. A dialog box will appear where you can enter the name for your new playlist and confirm your choice.
 
 <div class="flex items-center p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
   <svg class="shrink-0 inline w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -109,54 +108,51 @@ Next, click the three-dot menu located next to **MY PLAYLISTS**. A dialog box wi
 
 ### Add songs to Server Side Playlist
 
-To add a song to a server side playlist, navigate to the desired song, click on the three dots to open the song options dialog, then select `Add to playlist` and select the desired playlist.
-
-<Image src={imgMyPlaylistCreateAdd} alt="create playlist and add song" />
+To add a song to a server side playlist, navigate to the desired song, click on the three dots to open the song options dialog, then select **Add to playlist** and select the desired playlist.
 
 ### Delete Server Side Playlist
 
-click the three-dot menu located next to **MY PLAYLISTS**. A dialog box will appear. Click on **Delete Playlist**, locate your playlist and click **delete**.
+Click the three-dot menu next to **MY PLAYLISTS** to open the options dialog. Select **Delete Playlist**, locate the playlist you want to remove, and click **Delete** to confirm.
 
+### Example usage
+
+<Image src={imgMyPlaylistCreateAdd} alt="create playlist and add song" />
+
+In the animation below, you can see how to create a new playlist. Because we are working inside the folder that feeds the **MY FAVORITE** sidebar, the new playlist will automatically appear there. After creating it, we’ll add and remove a few songs and finally delete the created playlist.
 
 ## View templates
 
 ### Album View
 
-While browsing into an container that consists only of tracks of the same album the view switches to a track based display. 
-
-Clicking on a title will play the selected track, <b>not</b> adding this item to the current playlist.
-
-In case an album is identified by MusicBrainz-ReleaseId, the like/dislike feature (heart symbol) is activated.
-Liked album can then be quick accessed by clicking on <code>My Albums</code> in the side bar.
-
-Songs can be rated 1 to 5 by clicking on the desired star symbol. The rating can be send to <a href="https://www.musicbrainz.org">musicBrainz.org</a> if a user account is
-configured in <code>app settings</code>. UMS server has the ability to store the rating information in the file itself if the audio file format is supported and
-<code>audio_update_rating_tag = true</code> property is set in <code>UMS.conf</code>.
-
 <Image src={imgA1} alt="" />
+
+When browsing a container that contains only tracks from the same album, the interface switches to a track-based display.  
+
+Clicking on a track title will immediately play that track rather than adding it to the current playlist.  
+
+If the album is identified by a **MusicBrainz Release ID**, the like/dislike feature (heart icon) becomes available. Albums you mark as liked can then be quickly accessed from the **My Albums** section in the sidebar.
+
+Songs can be rated from **1 to 5 stars** by clicking on the desired star icon. If a MusicBrainz user account is configured in the **App Settings**, your ratings can be submitted directly to [MusicBrainz.org](https://www.musicbrainz.org).
 
 ### Multi Disc Support
 
-Copy all audio files of your multi disc release in one folder. Songs will be sorted by disk and then by track ID, if songs are
-tagged with correct <b>numberOfThisDisc</b> ID3 comments.
-
 <Image src={imgMD} alt="" />
 
+To manage a multi-disc release, copy all audio files into a single folder. If the tracks are tagged with the correct **numberOfThisDisc** ID3 metadata, the songs will be automatically sorted first by disc number and then by track ID.
 
 
 ###  Playlist view
 
-Browsing into server based playlists switches the display to a track view with small album covers. Clicking on <b>switch view</b> will change the display to an full sized
-album view.
-
 <Image src={imgPV} alt="" />
+
+When browsing server-based playlists, the display automatically switches to a track view with small album covers. Clicking **Switch View** will change the display to a full-sized album view.
 
 ## Song Options
 
-Clicking on the three dots will open song options dialog. Here you can add or remove songs to or from playlists,
-or add songs to a renderer playlist.
-
 <Image src={imgSO} class="size-64 shrink-0" alt="" />
+
+Clicking the three-dot menu next to a song opens the **Song Options** dialog. Where you can choose between server side actions and media player actions.
+
 
 export const Bullets = ({children, title}) => (
   <div>
@@ -172,8 +168,7 @@ export const Bullets = ({children, title}) => (
     <li>Delete from this playlist</li>
 </Bullets>
 
-Both actions will be executed on the server side, so the changes will be reflected in the playlist file itself. The playlist has to be a `m3u`
-or `m3u8` file.
+Both actions will be executed on the server side, so the changes will be reflected in the playlist file itself. The playlist has to be a `m3u` or `m3u8` file.
 
 Removing songs can only be done, if the current view displays a playlist file.
 
@@ -182,9 +177,8 @@ Removing songs can only be done, if the current view displays a playlist file.
     <li>Add at last position</li>
 </Bullets>
 
-In case the current Media Player is in playlist mode, `Play next` will add the song to the playback queue at next position, 
-`Add at last position` will add the song to the current renderer playlist at last position. Otherwise, the selected song will be played next, no matter
-which action is selected.
+When the current media player is in **playlist mode**, selecting **Play Next** will add the song to the playback queue in the next position, while **Add at Last Position** will place the song at the end of the current renderer playlist. If the media player is **not in playlist mode**, the selected song will play immediately, regardless of which action is chosen.
+
 
 <Bullets title="Other server actions">
     <li>Download</li>
@@ -196,11 +190,10 @@ You can `download` a resource, or `Update Album Art` on the server side.
 
 ## UPnP Search
 
-If the selected media server supports UPnP search, entering text into the <b>global search</b> box initiates a server side search request.
-
-Known media server with compatible UPnP search capabilities are <a href="https://minimserver.com/">Minimserver</a>
-and <a href="https://www.universalmediaserver.com/">Universal Media Server (since 10.6.0)</a>.
-Text will be matched against tracks, albums, playlists and artists. Artist covers are looked up from Spotify, if account is connected.
-
 <Image src={search} alt="" />
 
+If the selected media server supports UPnP search, entering text into the **Global Search** box will initiate a server-side search request.  
+
+Known media servers with compatible UPnP search capabilities include [MinimServer](https://minimserver.com/) and [Universal Media Server (since 10.6.0)](https://www.universalmediaserver.com/). The search text is matched against tracks, albums, playlists, and artists. Artist covers are retrieved from Spotify if a connected account is available.
+
+Clicking on a song item will play that song immediately. Clicking on any other item will navigate into that content.
