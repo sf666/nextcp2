@@ -1,3 +1,4 @@
+import { CdsBrowsePathService } from 'src/app/util/cds-browse-path.service';
 import { ContainerDto } from './../../../service/dto.d';
 import {
   Component,
@@ -95,6 +96,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     private myMusicService: MyMusicService,
     private dtoGeneratorService: DtoGeneratorService,
     private backgroundImageService: BackgroundImageService,
+    private cdsBrowsePathService: CdsBrowsePathService,
     private timeDisplayService: TimeDisplayService,
   ) {
   }
@@ -115,6 +117,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     this.checkLikeStatus();
     this.backgroundImageService.setDisplayContainerHeaderImage(this.currentContainer.albumartUri);
     console.log("like possible : " + this.likePossible());
+    this.cdsBrowsePathService.scrollIntoViewID();
   }
 
   public get bgHeaderUrl() {

@@ -1,5 +1,6 @@
 import { Inject, Injectable, signal } from '@angular/core';
 import Stack from 'ts-data.stack';
+import { PersistenceService } from '../service/persistence/persistence.service';
 
 const baseId = 'ID_SCROLL_TO_ELEMENT_STEP_IN';
 
@@ -9,25 +10,36 @@ export class CdsBrowsePathService {
 
   scrollId = signal<string>(baseId);
 
-  constructor() {
+  constructor(
+    private persistenceService: PersistenceService
+  ) {
     console.log("[CdsBrowsePathService] constructor call");
+    var lastFocusId = this.persistenceService.getLastFocusId();
+    if (lastFocusId) {
+      this.scrollId.set(lastFocusId);
+    }
+  }
+
+  setScrollId(id: string) : void {
+    this.persistenceService.setLastFocusID(id);
+    this.scrollId.set(id);
   }
 
   public stepIn(objectId: string): void {
-    this.scrollId.set(baseId);
+    this.setScrollId(baseId);
     this.stack.push(objectId);
   }
 
   public stepOut(): void {
     if (this.stack.isEmpty) {
-      this.scrollId.set(baseId);
+      this.setScrollId(baseId);
     }
     var previous = this.stack.pop();
     if (previous?.length > 0) {
-      this.scrollId.set(previous);
+      this.setScrollId(previous);
     } else {
       console.log("[ERROR] cannot step out");
-      this.scrollId.set(baseId);
+      this.setScrollId(baseId);
     }
   }
 
@@ -52,19 +64,15 @@ export class CdsBrowsePathService {
    * @param elementID ATTENTION: elementID needs to have tabindex set to '-1': <div id="elementID" tabindex="-1">
    */
   public scrollIntoViewID(elementID?: string): void {
-    console.error("do not use");
-    return;
-
     if (!elementID) {
       elementID = this.scrollId();
     }
-    console.log("scroll to ID : " + elementID);
+    console.log("[scroll] to ID : " + elementID);
     const targetElement = document.getElementById(elementID); // querySelector('#someElementId');
     if (targetElement) {
-      this.scrollId.set(baseId);
       targetElement.focus();
     } else {
-      console.log("scroll id not found : " + elementID);
+      console.log("[scroll] id not found : " + elementID);
     }
   }
 }

@@ -44,7 +44,7 @@ export class PersistenceService {
     return lastRendererUdn === udn;
   }
 
-  // Last object ID
+  // Last object ID reload last navigated page
   public setCurrentObjectID(oid : string) : void {
     localStorage.setItem('lastMediaServerPath', oid);    
   }
@@ -52,4 +52,14 @@ export class PersistenceService {
   public getLastObjectId(): string {
     return localStorage.getItem('lastMediaServerPath');
   }
+
+  // Last focused item
+  public setLastFocusID(oid : string) : void {
+    localStorage.setItem('lastFocusId', oid);    
+  }
+
+  public getLastFocusId(): string {
+    return localStorage.getItem('lastFocusId');
+  }
+
 }
