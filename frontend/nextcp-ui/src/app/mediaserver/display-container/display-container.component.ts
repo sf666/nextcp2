@@ -73,7 +73,10 @@ export class DisplayContainerComponent {
       read: (writeResult) => {
         const targetElement = document.getElementById(this.cdsBrowsePathService.scrollId()); // querySelector('#someElementId');
         if (targetElement) {
+          console.log("[scrolling] to element ID : " + this.cdsBrowsePathService.scrollId());
           targetElement.focus();
+        } else {
+          console.log("[scrolling] target element not found for ID : " + this.cdsBrowsePathService.scrollId());
         }
       },
     });    
