@@ -35,8 +35,14 @@ public class GetMQASupport extends ActionCallback
 
         GetMQASupportOutput result = new GetMQASupportOutput();
 
-        BooleanDatatype data_Value = new BooleanDatatype();
-        result.Value = data_Value.valueOf(invocation.getOutput("Value").getValue().toString());
+  		if (invocation.getOutput("Value").getValue() != null)
+  		{
+	        result.Value = invocation.getOutput("Value").getValue().toString();
+  		}
+  		else
+  		{
+	        result.Value = "";
+  		}
 
         return result;
     }

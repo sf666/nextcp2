@@ -34,7 +34,7 @@ import nextcp.upnp.modelGen.schemasupnporg.connectionManager2.actions.GetCurrent
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchroniously.  
+ * Generated UPnP Service class for calling Actions synchronously.  
  */
 public class ConnectionManagerService
 {
@@ -44,7 +44,7 @@ public class ConnectionManagerService
 
     private UpnpService upnpService = null;
 
-    private ConnectionManagerServiceStateVariable connectionManagerServiceStateVariable = new ConnectionManagerServiceStateVariable();
+//    private ConnectionManagerServiceStateVariable connectionManagerServiceStateVariable = new ConnectionManagerServiceStateVariable();
     
     private ConnectionManagerServiceSubscription subscription = null;
     
@@ -87,12 +87,17 @@ public class ConnectionManagerService
 
     public void addSubscriptionEventListener(IConnectionManagerServiceEventListener listener)
     {
-        subscription.addSubscriptionEventListener(listener);
+    	if (subscription != null) {
+            subscription.addSubscriptionEventListener(listener);
+    	}
     }
     
     public boolean removeSubscriptionEventListener(IConnectionManagerServiceEventListener listener)
     {
-        return subscription.removeSubscriptionEventListener(listener);
+    	if (subscription != null) {
+    		return subscription.removeSubscriptionEventListener(listener);
+    	}
+    	return false;
     }    
 
     public RemoteService getConnectionManagerService()

@@ -16,16 +16,16 @@ import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Modes;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.ModesOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.StreamId;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.StreamIdOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SetShuffle;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SetShuffleInput;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.StreamId;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.StreamIdOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Pause;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Shuffle;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.ShuffleOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Stop;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.PlayAs;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.PlayAsInput;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Stop;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SkipNext;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Repeat;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.RepeatOutput;
@@ -61,7 +61,7 @@ public class TransportService
 
     private UpnpService upnpService = null;
 
-    private TransportServiceStateVariable transportServiceStateVariable = new TransportServiceStateVariable();
+//    private TransportServiceStateVariable transportServiceStateVariable = new TransportServiceStateVariable();
     
     private TransportServiceSubscription subscription = null;
     
@@ -137,17 +137,17 @@ public class TransportService
         return res;        
     }
 
+    public void setShuffle(SetShuffleInput inp)
+    {
+        SetShuffle setShuffle = new SetShuffle(transportService, inp, upnpService.getControlPoint());
+        setShuffle.executeAction();
+    }
+
     public StreamIdOutput streamId()
     {
         StreamId streamId = new StreamId(transportService,  upnpService.getControlPoint());
         StreamIdOutput res = streamId.executeAction();
         return res;        
-    }
-
-    public void setShuffle(SetShuffleInput inp)
-    {
-        SetShuffle setShuffle = new SetShuffle(transportService, inp, upnpService.getControlPoint());
-        setShuffle.executeAction();
     }
 
     public void pause()
@@ -163,16 +163,16 @@ public class TransportService
         return res;        
     }
 
-    public void stop()
-    {
-        Stop stop = new Stop(transportService,  upnpService.getControlPoint());
-        stop.executeAction();
-    }
-
     public void playAs(PlayAsInput inp)
     {
         PlayAs playAs = new PlayAs(transportService, inp, upnpService.getControlPoint());
         playAs.executeAction();
+    }
+
+    public void stop()
+    {
+        Stop stop = new Stop(transportService,  upnpService.getControlPoint());
+        stop.executeAction();
     }
 
     public void skipNext()

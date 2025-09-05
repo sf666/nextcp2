@@ -24,6 +24,10 @@ import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetVolumeControlSuppo
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetVolumeControlSupportOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetMQASupport;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetMQASupportOutput;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetAmazonMusicSupport;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetAmazonMusicSupportOutput;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetQobuzConnectEnable;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetQobuzConnectEnableInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetScreensaver;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetScreensaverOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetPublicDNS;
@@ -38,6 +42,8 @@ import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetUltraSonicFilterDS
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetUltraSonicFilterDSDInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetUltraSonicFilterDSD;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetUltraSonicFilterDSDOutput;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetQobuzConnectEnable;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetQobuzConnectEnableOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.Firmware;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.FirmwareOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.FirmwareInput;
@@ -45,6 +51,8 @@ import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetPublicDNS;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetPublicDNSOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetOauth;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetOauthInput;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetAmazonMusicEnable;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetAmazonMusicEnableOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetSpotifyEnable;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetSpotifyEnableInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetTidalConnectEnable;
@@ -60,6 +68,8 @@ import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetMagicPlayInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetLeedhVolumeEnable;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetLeedhVolumeEnableInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetTuneInLogin;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetAmazonMusicEnable;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetAmazonMusicEnableInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetTuneInDetails;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetTuneInDetailsInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetAnalogBalance;
@@ -150,6 +160,8 @@ import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetExternalClockSuppo
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetExternalClockSupportOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetDefaultRadioEnable;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetDefaultRadioEnableOutput;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetQobuzConnectSupport;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetQobuzConnectSupportOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetInputLabelSupport;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetInputLabelSupportOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetQobuzQuality;
@@ -234,7 +246,7 @@ public class MagicAudioService
 
     private UpnpService upnpService = null;
 
-    private MagicAudioServiceStateVariable magicAudioServiceStateVariable = new MagicAudioServiceStateVariable();
+//    private MagicAudioServiceStateVariable magicAudioServiceStateVariable = new MagicAudioServiceStateVariable();
     
     private MagicAudioServiceSubscription subscription = null;
     
@@ -336,6 +348,19 @@ public class MagicAudioService
         return res;        
     }
 
+    public GetAmazonMusicSupportOutput getAmazonMusicSupport()
+    {
+        GetAmazonMusicSupport getAmazonMusicSupport = new GetAmazonMusicSupport(magicAudioService,  upnpService.getControlPoint());
+        GetAmazonMusicSupportOutput res = getAmazonMusicSupport.executeAction();
+        return res;        
+    }
+
+    public void setQobuzConnectEnable(SetQobuzConnectEnableInput inp)
+    {
+        SetQobuzConnectEnable setQobuzConnectEnable = new SetQobuzConnectEnable(magicAudioService, inp, upnpService.getControlPoint());
+        setQobuzConnectEnable.executeAction();
+    }
+
     public GetScreensaverOutput getScreensaver()
     {
         GetScreensaver getScreensaver = new GetScreensaver(magicAudioService,  upnpService.getControlPoint());
@@ -382,6 +407,13 @@ public class MagicAudioService
         return res;        
     }
 
+    public GetQobuzConnectEnableOutput getQobuzConnectEnable()
+    {
+        GetQobuzConnectEnable getQobuzConnectEnable = new GetQobuzConnectEnable(magicAudioService,  upnpService.getControlPoint());
+        GetQobuzConnectEnableOutput res = getQobuzConnectEnable.executeAction();
+        return res;        
+    }
+
     public FirmwareOutput firmware(FirmwareInput inp)
     {
         Firmware firmware = new Firmware(magicAudioService, inp, upnpService.getControlPoint());
@@ -400,6 +432,13 @@ public class MagicAudioService
     {
         SetOauth setOauth = new SetOauth(magicAudioService, inp, upnpService.getControlPoint());
         setOauth.executeAction();
+    }
+
+    public GetAmazonMusicEnableOutput getAmazonMusicEnable()
+    {
+        GetAmazonMusicEnable getAmazonMusicEnable = new GetAmazonMusicEnable(magicAudioService,  upnpService.getControlPoint());
+        GetAmazonMusicEnableOutput res = getAmazonMusicEnable.executeAction();
+        return res;        
     }
 
     public void setSpotifyEnable(SetSpotifyEnableInput inp)
@@ -451,6 +490,12 @@ public class MagicAudioService
     {
         SetTuneInLogin setTuneInLogin = new SetTuneInLogin(magicAudioService,  upnpService.getControlPoint());
         setTuneInLogin.executeAction();
+    }
+
+    public void setAmazonMusicEnable(SetAmazonMusicEnableInput inp)
+    {
+        SetAmazonMusicEnable setAmazonMusicEnable = new SetAmazonMusicEnable(magicAudioService, inp, upnpService.getControlPoint());
+        setAmazonMusicEnable.executeAction();
     }
 
     public void setTuneInDetails(SetTuneInDetailsInput inp)
@@ -744,6 +789,13 @@ public class MagicAudioService
     {
         GetDefaultRadioEnable getDefaultRadioEnable = new GetDefaultRadioEnable(magicAudioService,  upnpService.getControlPoint());
         GetDefaultRadioEnableOutput res = getDefaultRadioEnable.executeAction();
+        return res;        
+    }
+
+    public GetQobuzConnectSupportOutput getQobuzConnectSupport()
+    {
+        GetQobuzConnectSupport getQobuzConnectSupport = new GetQobuzConnectSupport(magicAudioService,  upnpService.getControlPoint());
+        GetQobuzConnectSupportOutput res = getQobuzConnectSupport.executeAction();
         return res;        
     }
 

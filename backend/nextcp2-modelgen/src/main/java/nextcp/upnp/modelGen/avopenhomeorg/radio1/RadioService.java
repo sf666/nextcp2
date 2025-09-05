@@ -34,14 +34,14 @@ import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.Play;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.ReadList;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.ReadListOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.ReadListInput;
-import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.ProtocolInfo;
-import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.ProtocolInfoOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.SeekSecondRelative;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.SeekSecondRelativeInput;
-import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.ChannelsMax;
-import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.ChannelsMaxOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.ProtocolInfo;
+import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.ProtocolInfoOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.SetChannel;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.SetChannelInput;
+import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.ChannelsMax;
+import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.ChannelsMaxOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.Id;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.IdOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.actions.SetId;
@@ -199,6 +199,12 @@ public class RadioService
         return res;        
     }
 
+    public void seekSecondRelative(SeekSecondRelativeInput inp)
+    {
+        SeekSecondRelative seekSecondRelative = new SeekSecondRelative(radioService, inp, upnpService.getControlPoint());
+        seekSecondRelative.executeAction();
+    }
+
     public ProtocolInfoOutput protocolInfo()
     {
         ProtocolInfo protocolInfo = new ProtocolInfo(radioService,  upnpService.getControlPoint());
@@ -206,10 +212,10 @@ public class RadioService
         return res;        
     }
 
-    public void seekSecondRelative(SeekSecondRelativeInput inp)
+    public void setChannel(SetChannelInput inp)
     {
-        SeekSecondRelative seekSecondRelative = new SeekSecondRelative(radioService, inp, upnpService.getControlPoint());
-        seekSecondRelative.executeAction();
+        SetChannel setChannel = new SetChannel(radioService, inp, upnpService.getControlPoint());
+        setChannel.executeAction();
     }
 
     public ChannelsMaxOutput channelsMax()
@@ -217,12 +223,6 @@ public class RadioService
         ChannelsMax channelsMax = new ChannelsMax(radioService,  upnpService.getControlPoint());
         ChannelsMaxOutput res = channelsMax.executeAction();
         return res;        
-    }
-
-    public void setChannel(SetChannelInput inp)
-    {
-        SetChannel setChannel = new SetChannel(radioService, inp, upnpService.getControlPoint());
-        setChannel.executeAction();
     }
 
     public IdOutput id()

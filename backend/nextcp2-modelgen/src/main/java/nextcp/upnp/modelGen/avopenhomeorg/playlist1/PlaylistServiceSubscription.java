@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ISubscriptionEventListener;
 
 /**
+ * Last Change : 05.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -108,20 +109,47 @@ public class PlaylistServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
+                    case "Relative":
+                        relativeChange((Integer) stateVar.getValue());
+                        break;
+                    case "IdArrayChanged":
+                        idArrayChangedChange((Boolean) stateVar.getValue());
+                        break;
                     case "TracksMax":
                         tracksMaxChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "Shuffle":
                         shuffleChange((Boolean) stateVar.getValue());
                         break;
+                    case "TrackList":
+                        trackListChange((String) stateVar.getValue());
+                        break;
+                    case "Metadata":
+                        metadataChange((String) stateVar.getValue());
+                        break;
                     case "Repeat":
                         repeatChange((Boolean) stateVar.getValue());
+                        break;
+                    case "Index":
+                        indexChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "IdArray":
                         idArrayChange((byte[]) stateVar.getValue());
                         break;
                     case "TransportState":
                         transportStateChange((String) stateVar.getValue());
+                        break;
+                    case "Absolute":
+                        absoluteChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "Uri":
+                        uriChange((String) stateVar.getValue());
+                        break;
+                    case "IdList":
+                        idListChange((String) stateVar.getValue());
+                        break;
+                    case "IdArrayToken":
+                        idArrayTokenChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "ProtocolInfo":
                         protocolInfoChange((String) stateVar.getValue());
@@ -149,6 +177,22 @@ public class PlaylistServiceSubscription extends RemoteGENASubscription
         }
     }
 
+    private void relativeChange(Integer value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.relativeChange(value);
+        }
+    }    
+
+    private void idArrayChangedChange(Boolean value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.idArrayChangedChange(value);
+        }
+    }    
+
     private void tracksMaxChange(Long value)
     {
         for (IPlaylistServiceEventListener listener : eventListener)
@@ -165,11 +209,35 @@ public class PlaylistServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void trackListChange(String value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.trackListChange(value);
+        }
+    }    
+
+    private void metadataChange(String value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.metadataChange(value);
+        }
+    }    
+
     private void repeatChange(Boolean value)
     {
         for (IPlaylistServiceEventListener listener : eventListener)
         {
             listener.repeatChange(value);
+        }
+    }    
+
+    private void indexChange(Long value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.indexChange(value);
         }
     }    
 
@@ -186,6 +254,38 @@ public class PlaylistServiceSubscription extends RemoteGENASubscription
         for (IPlaylistServiceEventListener listener : eventListener)
         {
             listener.transportStateChange(value);
+        }
+    }    
+
+    private void absoluteChange(Long value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.absoluteChange(value);
+        }
+    }    
+
+    private void uriChange(String value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.uriChange(value);
+        }
+    }    
+
+    private void idListChange(String value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.idListChange(value);
+        }
+    }    
+
+    private void idArrayTokenChange(Long value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.idArrayTokenChange(value);
         }
     }    
 

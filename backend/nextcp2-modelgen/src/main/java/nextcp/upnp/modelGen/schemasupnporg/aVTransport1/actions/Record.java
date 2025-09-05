@@ -1,4 +1,4 @@
-package nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions;
+package nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions;
 
 import org.jupnp.controlpoint.ControlPoint;
 import org.jupnp.model.action.ActionInvocation;
@@ -18,18 +18,16 @@ import nextcp.upnp.NextcpClientInfo;
  * Template: action.ftl
  *  
  */
-public class SetVolume extends ActionCallback
+public class Record extends ActionCallback
 {
-    private static Logger log = LoggerFactory.getLogger(SetVolume.class.getName());
+    private static Logger log = LoggerFactory.getLogger(Record.class.getName());
     private ActionInvocation<?> invocation;
 
-    public SetVolume(Service service, SetVolumeInput input, ControlPoint cp)
+    public Record(Service service, RecordInput input, ControlPoint cp)
     {
-        super(new ActionInvocation(service.getAction("SetVolume"), new NextcpClientInfo()), cp);
+        super(new ActionInvocation(service.getAction("Record"), new NextcpClientInfo()), cp);
 
         getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("Channel", input.Channel);
-        getActionInvocation().setInput("DesiredVolume", new UnsignedIntegerTwoBytes(input.DesiredVolume));
     }
 
     public void executeAction()

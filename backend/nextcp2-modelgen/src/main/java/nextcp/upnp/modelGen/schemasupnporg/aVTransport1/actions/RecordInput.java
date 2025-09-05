@@ -1,4 +1,4 @@
-package nextcp.upnp.modelGen.avopenhomeorg.transport1.actions;
+package nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -6,9 +6,9 @@ package nextcp.upnp.modelGen.avopenhomeorg.transport1.actions;
  * Template: actionParam.ftl
  *  
  */
-public class SetRepeatInput
+public class RecordInput
 {
 
-    public String Repeat = null;
+    public Long InstanceID = null;
 
 }

@@ -35,8 +35,14 @@ public class Repeat extends ActionCallback
 
         RepeatOutput result = new RepeatOutput();
 
-        BooleanDatatype data_Repeat = new BooleanDatatype();
-        result.Repeat = data_Repeat.valueOf(invocation.getOutput("Repeat").getValue().toString());
+  		if (invocation.getOutput("Repeat").getValue() != null)
+  		{
+	        result.Repeat = invocation.getOutput("Repeat").getValue().toString();
+  		}
+  		else
+  		{
+	        result.Repeat = "";
+  		}
 
         return result;
     }

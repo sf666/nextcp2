@@ -125,6 +125,24 @@ public class RadioServiceEventListenerImpl implements IRadioServiceEventListener
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
+    public void relativeChange(Integer value)
+    {
+        stateVariable.Relative = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Relative", value));
+        }
+    }
+    
+    public void idArrayChangedChange(Boolean value)
+    {
+        stateVariable.IdArrayChanged = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "IdArrayChanged", value));
+        }
+    }
+    
     public void metadataChange(String value)
     {
         stateVariable.Metadata = value;
@@ -152,12 +170,39 @@ public class RadioServiceEventListenerImpl implements IRadioServiceEventListener
         }
     }
     
+    public void absoluteChange(Long value)
+    {
+        stateVariable.Absolute = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Absolute", value));
+        }
+    }
+    
     public void uriChange(String value)
     {
         stateVariable.Uri = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "Uri", value));
+        }
+    }
+    
+    public void idListChange(String value)
+    {
+        stateVariable.IdList = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "IdList", value));
+        }
+    }
+    
+    public void idArrayTokenChange(Long value)
+    {
+        stateVariable.IdArrayToken = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "IdArrayToken", value));
         }
     }
     
@@ -185,6 +230,15 @@ public class RadioServiceEventListenerImpl implements IRadioServiceEventListener
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "Id", value));
+        }
+    }
+    
+    public void channelListChange(String value)
+    {
+        stateVariable.ChannelList = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "ChannelList", value));
         }
     }
     

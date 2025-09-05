@@ -19,12 +19,12 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAnony
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAnonymousDevicesWriteInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.BackupAudioLikes;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMediaStore;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWrite;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWriteInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.DislikeAlbum;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.DislikeAlbumInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMediaStoreFolder;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMediaStoreFolderInput;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWrite;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWriteInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioUpdateRatingTag;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioUpdateRatingTagInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLiked;
@@ -77,7 +77,7 @@ public class UmsExtendedServicesService
 	    }
 	    else
 	    {
-	        log.warn(String.format("'UmsExtendedServices' not available on device %s [%s]. Please use a current version of UMS or the UMS fork from https://github.com/ik666/UniversalMediaServer", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
+	        log.warn(String.format("initialized service 'UmsExtendedServices' failed for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
 	    }
     }
 
@@ -145,6 +145,12 @@ public class UmsExtendedServicesService
         rescanMediaStore.executeAction();
     }
 
+    public void setUpnpCdsWrite(SetUpnpCdsWriteInput inp)
+    {
+        SetUpnpCdsWrite setUpnpCdsWrite = new SetUpnpCdsWrite(umsExtendedServicesService, inp, upnpService.getControlPoint());
+        setUpnpCdsWrite.executeAction();
+    }
+
     public void dislikeAlbum(DislikeAlbumInput inp)
     {
         DislikeAlbum dislikeAlbum = new DislikeAlbum(umsExtendedServicesService, inp, upnpService.getControlPoint());
@@ -155,12 +161,6 @@ public class UmsExtendedServicesService
     {
         RescanMediaStoreFolder rescanMediaStoreFolder = new RescanMediaStoreFolder(umsExtendedServicesService, inp, upnpService.getControlPoint());
         rescanMediaStoreFolder.executeAction();
-    }
-
-    public void setUpnpCdsWrite(SetUpnpCdsWriteInput inp)
-    {
-        SetUpnpCdsWrite setUpnpCdsWrite = new SetUpnpCdsWrite(umsExtendedServicesService, inp, upnpService.getControlPoint());
-        setUpnpCdsWrite.executeAction();
     }
 
     public void setAudioUpdateRatingTag(SetAudioUpdateRatingTagInput inp)

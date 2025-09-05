@@ -7,6 +7,7 @@ import org.jupnp.model.types.ServiceType;
 import org.jupnp.protocol.ProtocolCreationException;
 import org.jupnp.protocol.sync.SendingRenewal;
 import org.jupnp.protocol.sync.SendingSubscribe;
+import org.jupnp.protocol.sync.SendingUnsubscribe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,7 @@ import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.SetMuteInpu
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchroniously.  
+ * Generated UPnP Service class for calling Actions synchronously.  
  */
 public class RenderingControlService
 {
@@ -40,7 +41,7 @@ public class RenderingControlService
 
     private UpnpService upnpService = null;
 
-    private RenderingControlServiceStateVariable renderingControlServiceStateVariable = new RenderingControlServiceStateVariable();
+//    private RenderingControlServiceStateVariable renderingControlServiceStateVariable = new RenderingControlServiceStateVariable();
     
     private RenderingControlServiceSubscription subscription = null;
     
@@ -69,27 +70,44 @@ public class RenderingControlService
 	    }
     }
 
+    public void unsubscribeService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingUnsubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingUnsubscribe(subscription);
+        protocol.run();
+    }
+
     public void renewService(UpnpService upnpService, RemoteDevice device)
     {
         SendingRenewal protocol = upnpService.getControlPoint().getProtocolFactory().createSendingRenewal(subscription);
         protocol.run();
     }
 
-    
     public void addSubscriptionEventListener(IRenderingControlServiceEventListener listener)
     {
-        subscription.addSubscriptionEventListener(listener);
+    	if (subscription != null) {
+            subscription.addSubscriptionEventListener(listener);
+    	}
     }
     
     public boolean removeSubscriptionEventListener(IRenderingControlServiceEventListener listener)
     {
-        return subscription.removeSubscriptionEventListener(listener);
+    	if (subscription != null) {
+    		return subscription.removeSubscriptionEventListener(listener);
+    	}
+    	return false;
     }    
 
     public RemoteService getRenderingControlService()
     {
         return renderingControlService;
     }    
+
+
+//
+// Actions
+// =========================================================================
+//
+
 
 
     public void selectPreset(SelectPresetInput inp)

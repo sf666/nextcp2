@@ -305,6 +305,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         }
     }
     
+    public void qobuzConnectEnableChange(Boolean value)
+    {
+        stateVariable.QobuzConnectEnable = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "QobuzConnectEnable", value));
+        }
+    }
+    
     public void tidalClientIdChange(byte[] value)
     {
         stateVariable.TidalClientId = value;
@@ -473,6 +482,15 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "PlexEnable", value));
+        }
+    }
+    
+    public void amazonMusicSupportChange(Boolean value)
+    {
+        stateVariable.AmazonMusicSupport = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "AmazonMusicSupport", value));
         }
     }
     
@@ -728,7 +746,7 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         }
     }
     
-    public void mQASupportChange(Boolean value)
+    public void mQASupportChange(String value)
     {
         stateVariable.MQASupport = value;
         if (log.isDebugEnabled())
@@ -755,12 +773,30 @@ public class MagicAudioServiceEventListenerImpl implements IMagicAudioServiceEve
         }
     }
     
+    public void amazonMusicEnableChange(Boolean value)
+    {
+        stateVariable.AmazonMusicEnable = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "AmazonMusicEnable", value));
+        }
+    }
+    
     public void kKBOXEnableChange(Boolean value)
     {
         stateVariable.KKBOXEnable = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "KKBOXEnable", value));
+        }
+    }
+    
+    public void qobuzConnectSupportChange(Boolean value)
+    {
+        stateVariable.QobuzConnectSupport = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "QobuzConnectSupport", value));
         }
     }
     

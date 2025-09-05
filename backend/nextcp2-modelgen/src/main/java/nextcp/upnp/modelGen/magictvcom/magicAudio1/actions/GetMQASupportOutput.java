@@ -9,6 +9,6 @@ package nextcp.upnp.modelGen.magictvcom.magicAudio1.actions;
 public class GetMQASupportOutput
 {
 
-    public Boolean Value = null;
+    public String Value = null;
 
 }

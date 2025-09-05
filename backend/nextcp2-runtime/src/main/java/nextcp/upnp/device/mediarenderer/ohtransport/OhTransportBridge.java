@@ -98,7 +98,7 @@ public class OhTransportBridge implements ITransport
         dto.canSkipPrevious = mod.CanSkipPrevious;
         
         dto.transportState = transportService.transportState().State;
-        dto.repeat = transportService.repeat().Repeat;
+        dto.repeat = Boolean.valueOf(transportService.repeat().Repeat);
         dto.shuffle = transportService.shuffle().Shuffle;
         
         StreamInfoOutput si = transportService.streamInfo();

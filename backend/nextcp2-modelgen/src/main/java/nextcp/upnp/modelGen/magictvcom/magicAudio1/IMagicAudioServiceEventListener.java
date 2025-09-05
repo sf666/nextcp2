@@ -52,6 +52,8 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     
     public void plexFriendlyNameChange(String value);
     
+    public void qobuzConnectEnableChange(Boolean value);
+    
     public void tidalClientIdChange(byte[] value);
     
     public void resamplingModeChange(String value);
@@ -89,6 +91,8 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     public void analogBalanceSupportChange(Boolean value);
     
     public void plexEnableChange(Boolean value);
+    
+    public void amazonMusicSupportChange(Boolean value);
     
     public void magicAudioVerChange(String value);
     
@@ -146,13 +150,17 @@ public interface IMagicAudioServiceEventListener extends ISubscriptionEventListe
     
     public void firmwareResultChange(String value);
     
-    public void mQASupportChange(Boolean value);
+    public void mQASupportChange(String value);
     
     public void analogOutLvlChange(String value);
     
     public void sourceNameChange(String value);
     
+    public void amazonMusicEnableChange(Boolean value);
+    
     public void kKBOXEnableChange(Boolean value);
+    
+    public void qobuzConnectSupportChange(Boolean value);
     
     public void tidalConnectEnableChange(Boolean value);
     

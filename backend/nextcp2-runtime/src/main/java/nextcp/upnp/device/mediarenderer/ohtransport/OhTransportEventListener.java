@@ -42,7 +42,7 @@ public class OhTransportEventListener extends TransportServiceEventListenerImpl
         dto.canShuffle = getStateVariable().CanShuffle;
         dto.canSkipNext = getStateVariable().CanSkipNext;
         dto.canSkipPrevious = getStateVariable().CanSkipPrevious;
-        dto.repeat = getStateVariable().Repeat;
+        dto.repeat = Boolean.valueOf(getStateVariable().Repeat);
         dto.shuffle = getStateVariable().Shuffle;
         dto.transportState = getStateVariable().TransportState;
 

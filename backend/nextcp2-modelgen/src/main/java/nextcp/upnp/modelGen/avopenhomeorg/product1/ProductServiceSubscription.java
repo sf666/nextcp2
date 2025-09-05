@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ISubscriptionEventListener;
 
 /**
+ * Last Change : 05.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -120,8 +121,8 @@ public class ProductServiceSubscription extends RemoteGENASubscription
                     case "ModelInfo":
                         modelInfoChange((String) stateVar.getValue());
                         break;
-                    case "SourceVisible":
-                        sourceVisibleChange((Boolean) stateVar.getValue());
+                    case "ManufacturerName":
+                        manufacturerNameChange((String) stateVar.getValue());
                         break;
                     case "ManufacturerInfo":
                         manufacturerInfoChange((String) stateVar.getValue());
@@ -129,8 +130,8 @@ public class ProductServiceSubscription extends RemoteGENASubscription
                     case "ModelName":
                         modelNameChange((String) stateVar.getValue());
                         break;
-                    case "ManufacturerName":
-                        manufacturerNameChange((String) stateVar.getValue());
+                    case "SourceVisible":
+                        sourceVisibleChange((Boolean) stateVar.getValue());
                         break;
                     case "ProductName":
                         productNameChange((String) stateVar.getValue());
@@ -156,11 +157,11 @@ public class ProductServiceSubscription extends RemoteGENASubscription
                     case "Standby":
                         standbyChange((Boolean) stateVar.getValue());
                         break;
-                    case "ProductUrl":
-                        productUrlChange((String) stateVar.getValue());
-                        break;
                     case "ManufacturerImageUri":
                         manufacturerImageUriChange((String) stateVar.getValue());
+                        break;
+                    case "ProductUrl":
+                        productUrlChange((String) stateVar.getValue());
                         break;
                     case "ModelUrl":
                         modelUrlChange((String) stateVar.getValue());
@@ -226,11 +227,11 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void sourceVisibleChange(Boolean value)
+    private void manufacturerNameChange(String value)
     {
         for (IProductServiceEventListener listener : eventListener)
         {
-            listener.sourceVisibleChange(value);
+            listener.manufacturerNameChange(value);
         }
     }    
 
@@ -250,11 +251,11 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void manufacturerNameChange(String value)
+    private void sourceVisibleChange(Boolean value)
     {
         for (IProductServiceEventListener listener : eventListener)
         {
-            listener.manufacturerNameChange(value);
+            listener.sourceVisibleChange(value);
         }
     }    
 
@@ -322,19 +323,19 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void productUrlChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.productUrlChange(value);
-        }
-    }    
-
     private void manufacturerImageUriChange(String value)
     {
         for (IProductServiceEventListener listener : eventListener)
         {
             listener.manufacturerImageUriChange(value);
+        }
+    }    
+
+    private void productUrlChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.productUrlChange(value);
         }
     }    
 

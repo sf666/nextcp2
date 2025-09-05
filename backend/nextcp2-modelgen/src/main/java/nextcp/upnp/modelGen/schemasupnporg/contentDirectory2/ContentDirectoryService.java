@@ -40,7 +40,7 @@ import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.GetFeatureL
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchroniously.  
+ * Generated UPnP Service class for calling Actions synchronously.  
  */
 public class ContentDirectoryService
 {
@@ -50,7 +50,7 @@ public class ContentDirectoryService
 
     private UpnpService upnpService = null;
 
-    private ContentDirectoryServiceStateVariable contentDirectoryServiceStateVariable = new ContentDirectoryServiceStateVariable();
+//    private ContentDirectoryServiceStateVariable contentDirectoryServiceStateVariable = new ContentDirectoryServiceStateVariable();
     
     private ContentDirectoryServiceSubscription subscription = null;
     
@@ -93,12 +93,17 @@ public class ContentDirectoryService
 
     public void addSubscriptionEventListener(IContentDirectoryServiceEventListener listener)
     {
-        subscription.addSubscriptionEventListener(listener);
+    	if (subscription != null) {
+            subscription.addSubscriptionEventListener(listener);
+    	}
     }
     
     public boolean removeSubscriptionEventListener(IContentDirectoryServiceEventListener listener)
     {
-        return subscription.removeSubscriptionEventListener(listener);
+    	if (subscription != null) {
+    		return subscription.removeSubscriptionEventListener(listener);
+    	}
+    	return false;
     }    
 
     public RemoteService getContentDirectoryService()

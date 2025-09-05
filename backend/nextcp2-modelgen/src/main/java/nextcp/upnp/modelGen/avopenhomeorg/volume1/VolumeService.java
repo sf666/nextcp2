@@ -21,20 +21,22 @@ import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.BalanceDec;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.FadeDec;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.BalanceInc;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.VolumeInc;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Volume;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.VolumeOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.VolumeLimit;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.VolumeLimitOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Characteristics;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.CharacteristicsOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetVolume;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetVolumeInput;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Volume;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.VolumeOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetFade;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetFadeInput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Balance;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.BalanceOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetMute;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetMuteInput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Fade;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.FadeOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetMute;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetMuteInput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Mute;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.MuteOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.VolumeDec;
@@ -56,7 +58,7 @@ public class VolumeService
 
     private UpnpService upnpService = null;
 
-    private VolumeServiceStateVariable volumeServiceStateVariable = new VolumeServiceStateVariable();
+//    private VolumeServiceStateVariable volumeServiceStateVariable = new VolumeServiceStateVariable();
     
     private VolumeServiceSubscription subscription = null;
     
@@ -161,10 +163,10 @@ public class VolumeService
         volumeInc.executeAction();
     }
 
-    public VolumeOutput volume()
+    public VolumeLimitOutput volumeLimit()
     {
-        Volume volume = new Volume(volumeService,  upnpService.getControlPoint());
-        VolumeOutput res = volume.executeAction();
+        VolumeLimit volumeLimit = new VolumeLimit(volumeService,  upnpService.getControlPoint());
+        VolumeLimitOutput res = volumeLimit.executeAction();
         return res;        
     }
 
@@ -181,6 +183,13 @@ public class VolumeService
         setVolume.executeAction();
     }
 
+    public VolumeOutput volume()
+    {
+        Volume volume = new Volume(volumeService,  upnpService.getControlPoint());
+        VolumeOutput res = volume.executeAction();
+        return res;        
+    }
+
     public void setFade(SetFadeInput inp)
     {
         SetFade setFade = new SetFade(volumeService, inp, upnpService.getControlPoint());
@@ -194,17 +203,17 @@ public class VolumeService
         return res;        
     }
 
-    public void setMute(SetMuteInput inp)
-    {
-        SetMute setMute = new SetMute(volumeService, inp, upnpService.getControlPoint());
-        setMute.executeAction();
-    }
-
     public FadeOutput fade()
     {
         Fade fade = new Fade(volumeService,  upnpService.getControlPoint());
         FadeOutput res = fade.executeAction();
         return res;        
+    }
+
+    public void setMute(SetMuteInput inp)
+    {
+        SetMute setMute = new SetMute(volumeService, inp, upnpService.getControlPoint());
+        setMute.executeAction();
     }
 
     public MuteOutput mute()

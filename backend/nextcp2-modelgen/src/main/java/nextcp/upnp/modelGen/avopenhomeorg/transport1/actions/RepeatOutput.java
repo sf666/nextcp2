@@ -9,6 +9,6 @@ package nextcp.upnp.modelGen.avopenhomeorg.transport1.actions;
 public class RepeatOutput
 {
 
-    public Boolean Repeat = null;
+    public String Repeat = null;
 
 }

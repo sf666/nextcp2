@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ISubscriptionEventListener;
 
 /**
+ * Last Change : 05.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -168,6 +169,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     case "PlexFriendlyName":
                         plexFriendlyNameChange((String) stateVar.getValue());
                         break;
+                    case "QobuzConnectEnable":
+                        qobuzConnectEnableChange((Boolean) stateVar.getValue());
+                        break;
                     case "TidalClientId":
                         tidalClientIdChange((byte[]) stateVar.getValue());
                         break;
@@ -224,6 +228,9 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         break;
                     case "PlexEnable":
                         plexEnableChange((Boolean) stateVar.getValue());
+                        break;
+                    case "AmazonMusicSupport":
+                        amazonMusicSupportChange((Boolean) stateVar.getValue());
                         break;
                     case "MagicAudioVer":
                         magicAudioVerChange((String) stateVar.getValue());
@@ -310,7 +317,7 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         firmwareResultChange((String) stateVar.getValue());
                         break;
                     case "MQASupport":
-                        mQASupportChange((Boolean) stateVar.getValue());
+                        mQASupportChange((String) stateVar.getValue());
                         break;
                     case "AnalogOutLvl":
                         analogOutLvlChange((String) stateVar.getValue());
@@ -318,8 +325,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     case "SourceName":
                         sourceNameChange((String) stateVar.getValue());
                         break;
+                    case "AmazonMusicEnable":
+                        amazonMusicEnableChange((Boolean) stateVar.getValue());
+                        break;
                     case "KKBOXEnable":
                         kKBOXEnableChange((Boolean) stateVar.getValue());
+                        break;
+                    case "QobuzConnectSupport":
+                        qobuzConnectSupportChange((Boolean) stateVar.getValue());
                         break;
                     case "TidalConnectEnable":
                         tidalConnectEnableChange((Boolean) stateVar.getValue());
@@ -555,6 +568,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void qobuzConnectEnableChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.qobuzConnectEnableChange(value);
+        }
+    }    
+
     private void tidalClientIdChange(byte[] value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
@@ -704,6 +725,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.plexEnableChange(value);
+        }
+    }    
+
+    private void amazonMusicSupportChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.amazonMusicSupportChange(value);
         }
     }    
 
@@ -931,7 +960,7 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void mQASupportChange(Boolean value)
+    private void mQASupportChange(String value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
@@ -955,11 +984,27 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void amazonMusicEnableChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.amazonMusicEnableChange(value);
+        }
+    }    
+
     private void kKBOXEnableChange(Boolean value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.kKBOXEnableChange(value);
+        }
+    }    
+
+    private void qobuzConnectSupportChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.qobuzConnectSupportChange(value);
         }
     }    
 

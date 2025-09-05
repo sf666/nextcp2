@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ISubscriptionEventListener;
 
 /**
+ * Last Change : 05.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -118,16 +119,16 @@ public class TransportServiceSubscription extends RemoteGENASubscription
                         shuffleChange((Boolean) stateVar.getValue());
                         break;
                     case "Repeat":
-                        repeatChange((Boolean) stateVar.getValue());
-                        break;
-                    case "TransportState":
-                        transportStateChange((String) stateVar.getValue());
+                        repeatChange((String) stateVar.getValue());
                         break;
                     case "CanSkipNext":
                         canSkipNextChange((Boolean) stateVar.getValue());
                         break;
                     case "CanShuffle":
                         canShuffleChange((Boolean) stateVar.getValue());
+                        break;
+                    case "TransportState":
+                        transportStateChange((String) stateVar.getValue());
                         break;
                     case "CanRepeat":
                         canRepeatChange((Boolean) stateVar.getValue());
@@ -185,19 +186,11 @@ public class TransportServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void repeatChange(Boolean value)
+    private void repeatChange(String value)
     {
         for (ITransportServiceEventListener listener : eventListener)
         {
             listener.repeatChange(value);
-        }
-    }    
-
-    private void transportStateChange(String value)
-    {
-        for (ITransportServiceEventListener listener : eventListener)
-        {
-            listener.transportStateChange(value);
         }
     }    
 
@@ -214,6 +207,14 @@ public class TransportServiceSubscription extends RemoteGENASubscription
         for (ITransportServiceEventListener listener : eventListener)
         {
             listener.canShuffleChange(value);
+        }
+    }    
+
+    private void transportStateChange(String value)
+    {
+        for (ITransportServiceEventListener listener : eventListener)
+        {
+            listener.transportStateChange(value);
         }
     }    
 

@@ -16,8 +16,6 @@ import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.Pause;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.PauseInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.SetRecordQualityMode;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.SetRecordQualityModeInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.Stop;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.StopInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetPositionInfo;
@@ -47,11 +45,11 @@ import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.SetAVTransportUR
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetTransportSettings;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetTransportSettingsOutput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetTransportSettingsInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.Seek;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.SeekInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetCurrentTransportActions;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetCurrentTransportActionsOutput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.GetCurrentTransportActionsInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.Seek;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions.SeekInput;
 
 
 /**
@@ -145,12 +143,6 @@ public class AVTransportService
         pause.executeAction();
     }
 
-    public void setRecordQualityMode(SetRecordQualityModeInput inp)
-    {
-        SetRecordQualityMode setRecordQualityMode = new SetRecordQualityMode(aVTransportService, inp, upnpService.getControlPoint());
-        setRecordQualityMode.executeAction();
-    }
-
     public void stop(StopInput inp)
     {
         Stop stop = new Stop(aVTransportService, inp, upnpService.getControlPoint());
@@ -228,16 +220,16 @@ public class AVTransportService
         return res;        
     }
 
+    public void seek(SeekInput inp)
+    {
+        Seek seek = new Seek(aVTransportService, inp, upnpService.getControlPoint());
+        seek.executeAction();
+    }
+
     public GetCurrentTransportActionsOutput getCurrentTransportActions(GetCurrentTransportActionsInput inp)
     {
         GetCurrentTransportActions getCurrentTransportActions = new GetCurrentTransportActions(aVTransportService, inp, upnpService.getControlPoint());
         GetCurrentTransportActionsOutput res = getCurrentTransportActions.executeAction();
         return res;        
-    }
-
-    public void seek(SeekInput inp)
-    {
-        Seek seek = new Seek(aVTransportService, inp, upnpService.getControlPoint());
-        seek.executeAction();
     }
 }

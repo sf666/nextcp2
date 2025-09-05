@@ -161,12 +161,12 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
         }
     }
     
-    public void sourceVisibleChange(Boolean value)
+    public void manufacturerNameChange(String value)
     {
-        stateVariable.SourceVisible = value;
+        stateVariable.ManufacturerName = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "SourceVisible", value));
+            log.debug(String.format("StateVariable : %s: %s", "ManufacturerName", value));
         }
     }
     
@@ -188,12 +188,12 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
         }
     }
     
-    public void manufacturerNameChange(String value)
+    public void sourceVisibleChange(Boolean value)
     {
-        stateVariable.ManufacturerName = value;
+        stateVariable.SourceVisible = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "ManufacturerName", value));
+            log.debug(String.format("StateVariable : %s: %s", "SourceVisible", value));
         }
     }
     
@@ -269,21 +269,21 @@ public class ProductServiceEventListenerImpl implements IProductServiceEventList
         }
     }
     
-    public void productUrlChange(String value)
-    {
-        stateVariable.ProductUrl = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "ProductUrl", value));
-        }
-    }
-    
     public void manufacturerImageUriChange(String value)
     {
         stateVariable.ManufacturerImageUri = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "ManufacturerImageUri", value));
+        }
+    }
+    
+    public void productUrlChange(String value)
+    {
+        stateVariable.ProductUrl = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "ProductUrl", value));
         }
     }
     

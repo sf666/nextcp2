@@ -29,6 +29,7 @@ public class MagicAudioServiceStateVariable
     public Boolean InvertPhase = null;
     public String CustomCode = null;
     public String PlexFriendlyName = null;
+    public Boolean QobuzConnectEnable = null;
     public byte[] TidalClientId = null;
     public String ResamplingMode = null;
     public String PublicKey = null;
@@ -48,6 +49,7 @@ public class MagicAudioServiceStateVariable
     public Boolean AutoPlay = null;
     public Boolean AnalogBalanceSupport = null;
     public Boolean PlexEnable = null;
+    public Boolean AmazonMusicSupport = null;
     public String MagicAudioVer = null;
     public String VolumeControl = null;
     public String RAATVer = null;
@@ -76,10 +78,12 @@ public class MagicAudioServiceStateVariable
     public String DSDtoPCM_type = null;
     public byte[] TidalAccessToken = null;
     public String FirmwareResult = null;
-    public Boolean MQASupport = null;
+    public String MQASupport = null;
     public String AnalogOutLvl = null;
     public String SourceName = null;
+    public Boolean AmazonMusicEnable = null;
     public Boolean KKBOXEnable = null;
+    public Boolean QobuzConnectSupport = null;
     public Boolean TidalConnectEnable = null;
     public Long OutputSampleRate = null;
     public String SamplingRate = null;
