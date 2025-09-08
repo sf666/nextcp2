@@ -164,7 +164,6 @@ export class SettingsComponent implements OnInit {
 
   sendSpotifyCode(): void {
     this.systemService.setSpotifyCode(this.spotifyCode());
-    this.spotifyCode.set('');
   }
 
   registerAppAtSpotify(): void {
