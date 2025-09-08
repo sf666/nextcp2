@@ -334,21 +334,23 @@
         Click this button. A new window will open. Login and approve access to nextCP/2 :
       </p>
       <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="registerAppAtSpotify()">nextCP/2 Spotify access</button>
-
-      @if(!protocolHandlerAvailable()) {
-        <p>
-            After granting access you wil be redirected to a localhost URL (error page). Copy spotify access code
-            from your browsers URL bar into the input field below and
-        </p>
+      <p>
+          After granting access you wil be redirected to a localhost URL (error page). Copy spotify access code
+          from your browsers URL bar into the input field below and
+      </p>
+      <div>
+          <input class="section input" [(ngModel)]="spotifyCode">
+      </div>
+      <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="sendSpotifyCode()">send it</button>
+      <div class="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+        <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+        </svg>
+        <span class="sr-only">Info</span>
         <div>
-            <input class="section input" [(ngModel)]="spotifyCode">
+          <span class="font-medium">Hint!</span> To copy the access code, click in your browsers URL bar and copy everything after 'http://localhost:65525/?code='
         </div>
-        <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="sendSpotifyCode()">send it</button>
-        <p>
-            Hint: To copy the access code, click in your browsers URL bar and copy everything after
-            'http://localhost:65525/?code='
-        </p>
-      }
+      </div>      
     }
 
     <h2 class="mt-4 text-base md:text-lg lg:text-xl font-medium tracking-tight text-gray-400">MusicBrainz</h2>
