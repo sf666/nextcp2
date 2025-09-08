@@ -12,10 +12,10 @@ public class TransportServiceStateVariable
     public String Modes = null;
     public Long StreamId = null;
     public Boolean Shuffle = null;
-    public String Repeat = null;
+    public Boolean Repeat = null;
+    public String TransportState = null;
     public Boolean CanSkipNext = null;
     public Boolean CanShuffle = null;
-    public String TransportState = null;
     public Boolean CanRepeat = null;
     public Boolean CanPause = null;
     public Boolean CanSeek = null;

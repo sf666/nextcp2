@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ISubscriptionEventListener;
 
 /**
- * Last Change : 05.09.2025
+ * Last Change : 08.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -114,6 +114,13 @@ public class ${className}Subscription extends RemoteGENASubscription
                     case "${stateVar.name}":
 <#if unsignedInteger?seq_contains(stateVar.upnpType)>                    
                         ${stateVar.name?uncap_first}Change(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+<#elseif "Boolean" == "${stateVar.type}">
+                    	try {
+                    		${stateVar.name?uncap_first}Change((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[${stateVar.name?uncap_first}] unexpected value : " + stateVar.getValue());
+                    		${stateVar.name?uncap_first}Change(Boolean.valueOf(stateVar.getValue().toString()));
+						}
 <#else>
                         ${stateVar.name?uncap_first}Change((${stateVar.type}) stateVar.getValue());
 </#if>

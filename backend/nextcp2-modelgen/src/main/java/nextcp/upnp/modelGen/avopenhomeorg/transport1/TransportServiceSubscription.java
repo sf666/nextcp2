@@ -119,10 +119,15 @@ public class TransportServiceSubscription extends RemoteGENASubscription
                         shuffleChange((Boolean) stateVar.getValue());
                         break;
                     case "Repeat":
-                        repeatChange((String) stateVar.getValue());
+                        repeatChange((Boolean) stateVar.getValue());
                         break;
                     case "CanSkipNext":
-                        canSkipNextChange((Boolean) stateVar.getValue());
+                    	try {
+                    		canSkipNextChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[canSkipNextChange] unexpected value : " + stateVar.getValue());
+                    		canSkipNextChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "CanShuffle":
                         canShuffleChange((Boolean) stateVar.getValue());
@@ -186,7 +191,7 @@ public class TransportServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void repeatChange(String value)
+    private void repeatChange(Boolean value)
     {
         for (ITransportServiceEventListener listener : eventListener)
         {

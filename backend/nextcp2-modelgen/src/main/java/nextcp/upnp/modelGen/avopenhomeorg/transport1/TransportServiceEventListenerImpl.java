@@ -152,12 +152,21 @@ public class TransportServiceEventListenerImpl implements ITransportServiceEvent
         }
     }
     
-    public void repeatChange(String value)
+    public void repeatChange(Boolean value)
     {
         stateVariable.Repeat = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "Repeat", value));
+        }
+    }
+    
+    public void transportStateChange(String value)
+    {
+        stateVariable.TransportState = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "TransportState", value));
         }
     }
     
@@ -176,15 +185,6 @@ public class TransportServiceEventListenerImpl implements ITransportServiceEvent
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "CanShuffle", value));
-        }
-    }
-    
-    public void transportStateChange(String value)
-    {
-        stateVariable.TransportState = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "TransportState", value));
         }
     }
     
