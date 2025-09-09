@@ -10,7 +10,7 @@
     "test": "ng test"
   },
   "engines": {
-    "node": "^22.0.0"
+    "node": "^24.0.0"
   },
   "private": true,
   "dependencies": {
@@ -62,7 +62,7 @@
     "@types/jasmine": "~5.1.7",
     "@types/jasminewd2": "~2.0.3",
     "@types/lodash": "^4.14.191",
-    "@types/node": "^22.0.0",
+    "@types/node": "^24.0.0",
     "@types/uuid": "^10.0.0",
     "esbuild": "^0.25.1",
     "eslint": "^9.22.0",
