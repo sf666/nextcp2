@@ -1,5 +1,5 @@
 import { MediaPlayerComponent } from './app/view/media-player/media-player.component';
-import { enableProdMode, importProvidersFrom } from '@angular/core';
+import { enableProdMode, importProvidersFrom, provideExperimentalZonelessChangeDetection } from '@angular/core';
 import { environment } from './environments/environment';
 import { AppComponent } from './app/app.component';
 import { ToastrModule } from 'ngx-toastr';
@@ -122,5 +122,6 @@ bootstrapApplication(AppComponent, {
     },
     provideAnimations(),
     provideHttpClient(withInterceptorsFromDi()),
+    provideExperimentalZonelessChangeDetection(),
   ],
 }).catch((err) => console.error(err));
