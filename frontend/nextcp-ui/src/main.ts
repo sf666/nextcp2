@@ -4,7 +4,6 @@ import { environment } from './environments/environment';
 import { AppComponent } from './app/app.component';
 import { ToastrModule } from 'ngx-toastr';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -120,7 +119,6 @@ bootstrapApplication(AppComponent, {
       useClass: CustomHttpInterceptor,
       multi: true,
     },
-    provideAnimations(),
     provideHttpClient(withInterceptorsFromDi()),
     provideZonelessChangeDetection(),
   ],

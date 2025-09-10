@@ -17,7 +17,7 @@ export class MediaPlayerService {
     private httpService: HttpService
   ) {
     this.mediaPlayerExistsRequest().subscribe(status => {
-      console.log("mediaServerExists : " + status);
+      console.log("mediaPlayerExists : " + status);
       this.mediaServerExists.set(status);
     });
   }
