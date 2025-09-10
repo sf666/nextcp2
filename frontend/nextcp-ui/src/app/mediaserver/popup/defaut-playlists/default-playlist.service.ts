@@ -21,7 +21,7 @@ export class DefaultPlaylistService {
     this.dialogRef = this.dialog.open(AddPlaylistComponent, {
       hasBackdrop: false,
       height: '500px',
-      width: '600px',
+      width: '700px',
       data: { item: item, container: folder },
     });
 
@@ -32,7 +32,7 @@ export class DefaultPlaylistService {
     this.dialogRef = this.dialog.open(AddPlaylistComponent, {
       hasBackdrop: true,
       height: '500px',
-      width: '600px',
+      width: '700px',
       data: { item: item, container: folder },
     });
 
