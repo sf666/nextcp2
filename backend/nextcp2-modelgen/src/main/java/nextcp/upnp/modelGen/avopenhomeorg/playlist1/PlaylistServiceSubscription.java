@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ISubscriptionEventListener;
 
 /**
- * Last Change : 05.09.2025
+ * Last Change : 08.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -113,13 +113,23 @@ public class PlaylistServiceSubscription extends RemoteGENASubscription
                         relativeChange((Integer) stateVar.getValue());
                         break;
                     case "IdArrayChanged":
-                        idArrayChangedChange((Boolean) stateVar.getValue());
+                    	try {
+                    		idArrayChangedChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[idArrayChanged] unexpected value : " + stateVar.getValue());
+                    		idArrayChangedChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "TracksMax":
                         tracksMaxChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "Shuffle":
-                        shuffleChange((Boolean) stateVar.getValue());
+                    	try {
+                    		shuffleChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[shuffle] unexpected value : " + stateVar.getValue());
+                    		shuffleChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "TrackList":
                         trackListChange((String) stateVar.getValue());
@@ -128,7 +138,12 @@ public class PlaylistServiceSubscription extends RemoteGENASubscription
                         metadataChange((String) stateVar.getValue());
                         break;
                     case "Repeat":
-                        repeatChange((Boolean) stateVar.getValue());
+                    	try {
+                    		repeatChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[repeat] unexpected value : " + stateVar.getValue());
+                    		repeatChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "Index":
                         indexChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());

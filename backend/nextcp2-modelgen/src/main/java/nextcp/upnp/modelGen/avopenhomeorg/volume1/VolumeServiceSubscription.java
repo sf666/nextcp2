@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ISubscriptionEventListener;
 
 /**
- * Last Change : 05.09.2025
+ * Last Change : 08.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -131,7 +131,12 @@ public class VolumeServiceSubscription extends RemoteGENASubscription
                         volumeMaxChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "Mute":
-                        muteChange((Boolean) stateVar.getValue());
+                    	try {
+                    		muteChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[mute] unexpected value : " + stateVar.getValue());
+                    		muteChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "Balance":
                         balanceChange((Integer) stateVar.getValue());

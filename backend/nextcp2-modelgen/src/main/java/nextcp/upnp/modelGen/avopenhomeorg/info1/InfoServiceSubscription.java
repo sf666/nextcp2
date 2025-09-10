@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ISubscriptionEventListener;
 
 /**
- * Last Change : 05.09.2025
+ * Last Change : 08.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -137,7 +137,12 @@ public class InfoServiceSubscription extends RemoteGENASubscription
                         bitDepthChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "Lossless":
-                        losslessChange((Boolean) stateVar.getValue());
+                    	try {
+                    		losslessChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[lossless] unexpected value : " + stateVar.getValue());
+                    		losslessChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "CodecName":
                         codecNameChange((String) stateVar.getValue());

@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ISubscriptionEventListener;
 
 /**
- * Last Change : 05.09.2025
+ * Last Change : 08.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -131,7 +131,12 @@ public class ProductServiceSubscription extends RemoteGENASubscription
                         modelNameChange((String) stateVar.getValue());
                         break;
                     case "SourceVisible":
-                        sourceVisibleChange((Boolean) stateVar.getValue());
+                    	try {
+                    		sourceVisibleChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[sourceVisible] unexpected value : " + stateVar.getValue());
+                    		sourceVisibleChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "ProductName":
                         productNameChange((String) stateVar.getValue());
@@ -155,7 +160,12 @@ public class ProductServiceSubscription extends RemoteGENASubscription
                         sourceXmlChange((String) stateVar.getValue());
                         break;
                     case "Standby":
-                        standbyChange((Boolean) stateVar.getValue());
+                    	try {
+                    		standbyChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[standby] unexpected value : " + stateVar.getValue());
+                    		standbyChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "ManufacturerImageUri":
                         manufacturerImageUriChange((String) stateVar.getValue());

@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ISubscriptionEventListener;
 
 /**
- * Last Change : 05.09.2025
+ * Last Change : 08.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -116,36 +116,66 @@ public class TransportServiceSubscription extends RemoteGENASubscription
                         streamIdChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "Shuffle":
-                        shuffleChange((Boolean) stateVar.getValue());
+                    	try {
+                    		shuffleChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[shuffle] unexpected value : " + stateVar.getValue());
+                    		shuffleChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "Repeat":
-                        repeatChange((Boolean) stateVar.getValue());
+                        repeatChange((String) stateVar.getValue());
                         break;
                     case "CanSkipNext":
                     	try {
                     		canSkipNextChange((Boolean) stateVar.getValue());
                     	} catch (Exception e) {
-                    		log.warn("[canSkipNextChange] unexpected value : " + stateVar.getValue());
+                    		log.warn("[canSkipNext] unexpected value : " + stateVar.getValue());
                     		canSkipNextChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
                         break;
                     case "CanShuffle":
-                        canShuffleChange((Boolean) stateVar.getValue());
+                    	try {
+                    		canShuffleChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[canShuffle] unexpected value : " + stateVar.getValue());
+                    		canShuffleChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "TransportState":
                         transportStateChange((String) stateVar.getValue());
                         break;
                     case "CanRepeat":
-                        canRepeatChange((Boolean) stateVar.getValue());
+                    	try {
+                    		canRepeatChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[canRepeat] unexpected value : " + stateVar.getValue());
+                    		canRepeatChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "CanPause":
-                        canPauseChange((Boolean) stateVar.getValue());
+                    	try {
+                    		canPauseChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[canPause] unexpected value : " + stateVar.getValue());
+                    		canPauseChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "CanSeek":
-                        canSeekChange((Boolean) stateVar.getValue());
+                    	try {
+                    		canSeekChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[canSeek] unexpected value : " + stateVar.getValue());
+                    		canSeekChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "CanSkipPrevious":
-                        canSkipPreviousChange((Boolean) stateVar.getValue());
+                    	try {
+                    		canSkipPreviousChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[canSkipPrevious] unexpected value : " + stateVar.getValue());
+                    		canSkipPreviousChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -191,7 +221,7 @@ public class TransportServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void repeatChange(Boolean value)
+    private void repeatChange(String value)
     {
         for (ITransportServiceEventListener listener : eventListener)
         {

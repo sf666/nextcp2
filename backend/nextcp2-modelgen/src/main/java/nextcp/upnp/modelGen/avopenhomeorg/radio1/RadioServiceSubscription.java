@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ISubscriptionEventListener;
 
 /**
- * Last Change : 05.09.2025
+ * Last Change : 08.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -113,7 +113,12 @@ public class RadioServiceSubscription extends RemoteGENASubscription
                         relativeChange((Integer) stateVar.getValue());
                         break;
                     case "IdArrayChanged":
-                        idArrayChangedChange((Boolean) stateVar.getValue());
+                    	try {
+                    		idArrayChangedChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[idArrayChanged] unexpected value : " + stateVar.getValue());
+                    		idArrayChangedChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "Metadata":
                         metadataChange((String) stateVar.getValue());

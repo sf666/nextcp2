@@ -18,13 +18,13 @@ public interface ITransportServiceEventListener extends ISubscriptionEventListen
     
     public void shuffleChange(Boolean value);
     
-    public void repeatChange(Boolean value);
-    
-    public void transportStateChange(String value);
+    public void repeatChange(String value);
     
     public void canSkipNextChange(Boolean value);
     
     public void canShuffleChange(Boolean value);
+    
+    public void transportStateChange(String value);
     
     public void canRepeatChange(Boolean value);
     

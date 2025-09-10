@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ISubscriptionEventListener;
 
 /**
- * Last Change : 05.09.2025
+ * Last Change : 08.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -110,10 +110,20 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                 switch (key)
                 {
                     case "InputLabelSupport":
-                        inputLabelSupportChange((Boolean) stateVar.getValue());
+                    	try {
+                    		inputLabelSupportChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[inputLabelSupport] unexpected value : " + stateVar.getValue());
+                    		inputLabelSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "SpotifyEnable":
-                        spotifyEnableChange((Boolean) stateVar.getValue());
+                    	try {
+                    		spotifyEnableChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[spotifyEnable] unexpected value : " + stateVar.getValue());
+                    		spotifyEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "NewBitDepth":
                         newBitDepthChange((String) stateVar.getValue());
@@ -131,7 +141,12 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         firmwareDownloadProgressChange((Integer) stateVar.getValue());
                         break;
                     case "DefaultRadioSupport":
-                        defaultRadioSupportChange((Boolean) stateVar.getValue());
+                    	try {
+                    		defaultRadioSupportChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[defaultRadioSupport] unexpected value : " + stateVar.getValue());
+                    		defaultRadioSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "BitDepth":
                         bitDepthChange((String) stateVar.getValue());
@@ -140,7 +155,12 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         aboutStringChange((String) stateVar.getValue());
                         break;
                     case "ServerEnabled":
-                        serverEnabledChange((Boolean) stateVar.getValue());
+                    	try {
+                    		serverEnabledChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[serverEnabled] unexpected value : " + stateVar.getValue());
+                    		serverEnabledChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "SpotifyVer":
                         spotifyVerChange((String) stateVar.getValue());
@@ -152,7 +172,12 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         langIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "USBSPDIFMode":
-                        uSBSPDIFModeChange((Boolean) stateVar.getValue());
+                    	try {
+                    		uSBSPDIFModeChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[uSBSPDIFMode] unexpected value : " + stateVar.getValue());
+                    		uSBSPDIFModeChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "TidalAccessExpiry":
                         tidalAccessExpiryChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
@@ -161,7 +186,12 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         maxVolumeChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "InvertPhase":
-                        invertPhaseChange((Boolean) stateVar.getValue());
+                    	try {
+                    		invertPhaseChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[invertPhase] unexpected value : " + stateVar.getValue());
+                    		invertPhaseChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "CustomCode":
                         customCodeChange((String) stateVar.getValue());
@@ -170,7 +200,12 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         plexFriendlyNameChange((String) stateVar.getValue());
                         break;
                     case "QobuzConnectEnable":
-                        qobuzConnectEnableChange((Boolean) stateVar.getValue());
+                    	try {
+                    		qobuzConnectEnableChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[qobuzConnectEnable] unexpected value : " + stateVar.getValue());
+                    		qobuzConnectEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "TidalClientId":
                         tidalClientIdChange((byte[]) stateVar.getValue());
@@ -188,19 +223,39 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         newSamplingRateChange((String) stateVar.getValue());
                         break;
                     case "OutputDeemphasis":
-                        outputDeemphasisChange((Boolean) stateVar.getValue());
+                    	try {
+                    		outputDeemphasisChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[outputDeemphasis] unexpected value : " + stateVar.getValue());
+                    		outputDeemphasisChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "PlexSupport":
-                        plexSupportChange((Boolean) stateVar.getValue());
+                    	try {
+                    		plexSupportChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[plexSupport] unexpected value : " + stateVar.getValue());
+                    		plexSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "QobuzQuality":
                         qobuzQualityChange((String) stateVar.getValue());
                         break;
                     case "MagicPlay":
-                        magicPlayChange((Boolean) stateVar.getValue());
+                    	try {
+                    		magicPlayChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[magicPlay] unexpected value : " + stateVar.getValue());
+                    		magicPlayChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "LeedhVolumeSupport":
-                        leedhVolumeSupportChange((Boolean) stateVar.getValue());
+                    	try {
+                    		leedhVolumeSupportChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[leedhVolumeSupport] unexpected value : " + stateVar.getValue());
+                    		leedhVolumeSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "MQASampleRate":
                         mQASampleRateChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
@@ -209,7 +264,12 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         analogBalanceChange((Integer) stateVar.getValue());
                         break;
                     case "KKBOXSupport":
-                        kKBOXSupportChange((Boolean) stateVar.getValue());
+                    	try {
+                    		kKBOXSupportChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[kKBOXSupport] unexpected value : " + stateVar.getValue());
+                    		kKBOXSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "FirmwareCommand":
                         firmwareCommandChange((String) stateVar.getValue());
@@ -221,16 +281,36 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         outputBitDepthChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "AutoPlay":
-                        autoPlayChange((Boolean) stateVar.getValue());
+                    	try {
+                    		autoPlayChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[autoPlay] unexpected value : " + stateVar.getValue());
+                    		autoPlayChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "AnalogBalanceSupport":
-                        analogBalanceSupportChange((Boolean) stateVar.getValue());
+                    	try {
+                    		analogBalanceSupportChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[analogBalanceSupport] unexpected value : " + stateVar.getValue());
+                    		analogBalanceSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "PlexEnable":
-                        plexEnableChange((Boolean) stateVar.getValue());
+                    	try {
+                    		plexEnableChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[plexEnable] unexpected value : " + stateVar.getValue());
+                    		plexEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "AmazonMusicSupport":
-                        amazonMusicSupportChange((Boolean) stateVar.getValue());
+                    	try {
+                    		amazonMusicSupportChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[amazonMusicSupport] unexpected value : " + stateVar.getValue());
+                    		amazonMusicSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "MagicAudioVer":
                         magicAudioVerChange((String) stateVar.getValue());
@@ -242,16 +322,31 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         rAATVerChange((String) stateVar.getValue());
                         break;
                     case "OutputInvertPhase":
-                        outputInvertPhaseChange((Boolean) stateVar.getValue());
+                    	try {
+                    		outputInvertPhaseChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[outputInvertPhase] unexpected value : " + stateVar.getValue());
+                    		outputInvertPhaseChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "NetworkLED":
-                        networkLEDChange((Boolean) stateVar.getValue());
+                    	try {
+                    		networkLEDChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[networkLED] unexpected value : " + stateVar.getValue());
+                    		networkLEDChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "ServiceId":
                         serviceIdChange((String) stateVar.getValue());
                         break;
                     case "PublicDNS":
-                        publicDNSChange((Boolean) stateVar.getValue());
+                    	try {
+                    		publicDNSChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[publicDNS] unexpected value : " + stateVar.getValue());
+                    		publicDNSChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "PlexCode":
                         plexCodeChange((String) stateVar.getValue());
@@ -266,7 +361,12 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         mQAModeChange((String) stateVar.getValue());
                         break;
                     case "NetworkLEDControl":
-                        networkLEDControlChange((Boolean) stateVar.getValue());
+                    	try {
+                    		networkLEDControlChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[networkLEDControl] unexpected value : " + stateVar.getValue());
+                    		networkLEDControlChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "ScreensaverTimeout":
                         screensaverTimeoutChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
@@ -284,7 +384,12 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         mQACreatorIdChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "SongcastMode":
-                        songcastModeChange((Boolean) stateVar.getValue());
+                    	try {
+                    		songcastModeChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[songcastMode] unexpected value : " + stateVar.getValue());
+                    		songcastModeChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "OutputClockSource":
                         outputClockSourceChange((String) stateVar.getValue());
@@ -293,10 +398,20 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         tidalRefreshTokenChange((byte[]) stateVar.getValue());
                         break;
                     case "SpotifyNormalization":
-                        spotifyNormalizationChange((Boolean) stateVar.getValue());
+                    	try {
+                    		spotifyNormalizationChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[spotifyNormalization] unexpected value : " + stateVar.getValue());
+                    		spotifyNormalizationChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "RAATEnable":
-                        rAATEnableChange((Boolean) stateVar.getValue());
+                    	try {
+                    		rAATEnableChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[rAATEnable] unexpected value : " + stateVar.getValue());
+                    		rAATEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "PlaybackClockSource":
                         playbackClockSourceChange((String) stateVar.getValue());
@@ -305,7 +420,12 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         dAEnableChange((String) stateVar.getValue());
                         break;
                     case "DefaultRadioEnable":
-                        defaultRadioEnableChange((Boolean) stateVar.getValue());
+                    	try {
+                    		defaultRadioEnableChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[defaultRadioEnable] unexpected value : " + stateVar.getValue());
+                    		defaultRadioEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "DSDtoPCM_type":
                         dSDtoPCM_typeChange((String) stateVar.getValue());
@@ -326,16 +446,36 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         sourceNameChange((String) stateVar.getValue());
                         break;
                     case "AmazonMusicEnable":
-                        amazonMusicEnableChange((Boolean) stateVar.getValue());
+                    	try {
+                    		amazonMusicEnableChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[amazonMusicEnable] unexpected value : " + stateVar.getValue());
+                    		amazonMusicEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "KKBOXEnable":
-                        kKBOXEnableChange((Boolean) stateVar.getValue());
+                    	try {
+                    		kKBOXEnableChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[kKBOXEnable] unexpected value : " + stateVar.getValue());
+                    		kKBOXEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "QobuzConnectSupport":
-                        qobuzConnectSupportChange((Boolean) stateVar.getValue());
+                    	try {
+                    		qobuzConnectSupportChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[qobuzConnectSupport] unexpected value : " + stateVar.getValue());
+                    		qobuzConnectSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "TidalConnectEnable":
-                        tidalConnectEnableChange((Boolean) stateVar.getValue());
+                    	try {
+                    		tidalConnectEnableChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[tidalConnectEnable] unexpected value : " + stateVar.getValue());
+                    		tidalConnectEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "OutputSampleRate":
                         outputSampleRateChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
@@ -347,7 +487,12 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         mQAProvenanceChange((String) stateVar.getValue());
                         break;
                     case "SongcastSupport":
-                        songcastSupportChange((Boolean) stateVar.getValue());
+                    	try {
+                    		songcastSupportChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[songcastSupport] unexpected value : " + stateVar.getValue());
+                    		songcastSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "SourceIndex":
                         sourceIndexChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
@@ -368,13 +513,28 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         plexEmailChange((String) stateVar.getValue());
                         break;
                     case "VolumeControlSupport":
-                        volumeControlSupportChange((Boolean) stateVar.getValue());
+                    	try {
+                    		volumeControlSupportChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[volumeControlSupport] unexpected value : " + stateVar.getValue());
+                    		volumeControlSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "Deemphasis":
-                        deemphasisChange((Boolean) stateVar.getValue());
+                    	try {
+                    		deemphasisChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[deemphasis] unexpected value : " + stateVar.getValue());
+                    		deemphasisChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "TidalConnectSupport":
-                        tidalConnectSupportChange((Boolean) stateVar.getValue());
+                    	try {
+                    		tidalConnectSupportChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[tidalConnectSupport] unexpected value : " + stateVar.getValue());
+                    		tidalConnectSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "AppDisplayMessageString":
                         appDisplayMessageStringChange((String) stateVar.getValue());
@@ -383,7 +543,12 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         tidalQualityChange((String) stateVar.getValue());
                         break;
                     case "LeedhVolumeEnable":
-                        leedhVolumeEnableChange((Boolean) stateVar.getValue());
+                    	try {
+                    		leedhVolumeEnableChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[leedhVolumeEnable] unexpected value : " + stateVar.getValue());
+                    		leedhVolumeEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "MQAAuthenticity":
                         mQAAuthenticityChange((String) stateVar.getValue());

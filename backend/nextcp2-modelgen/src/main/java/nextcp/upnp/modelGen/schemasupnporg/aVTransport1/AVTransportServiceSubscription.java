@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ISubscriptionEventListener;
 
 /**
- * Last Change : 05.09.2025
+ * Last Change : 08.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -121,11 +121,11 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
                     case "RelativeCounterPosition":
                         relativeCounterPositionChange((Integer) stateVar.getValue());
                         break;
-                    case "TransportStatus":
-                        transportStatusChange((String) stateVar.getValue());
-                        break;
                     case "AVTransportURIMetaData":
                         aVTransportURIMetaDataChange((String) stateVar.getValue());
+                        break;
+                    case "TransportStatus":
+                        transportStatusChange((String) stateVar.getValue());
                         break;
                     case "TransportState":
                         transportStateChange((String) stateVar.getValue());
@@ -133,14 +133,14 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
                     case "CurrentTrack":
                         currentTrackChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
-                    case "PlaybackStorageMedium":
-                        playbackStorageMediumChange((String) stateVar.getValue());
-                        break;
                     case "PossibleRecordQualityModes":
                         possibleRecordQualityModesChange((String) stateVar.getValue());
                         break;
                     case "NextAVTransportURIMetaData":
                         nextAVTransportURIMetaDataChange((String) stateVar.getValue());
+                        break;
+                    case "PlaybackStorageMedium":
+                        playbackStorageMediumChange((String) stateVar.getValue());
                         break;
                     case "NumberOfTracks":
                         numberOfTracksChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
@@ -242,19 +242,19 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void transportStatusChange(String value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.transportStatusChange(value);
-        }
-    }    
-
     private void aVTransportURIMetaDataChange(String value)
     {
         for (IAVTransportServiceEventListener listener : eventListener)
         {
             listener.aVTransportURIMetaDataChange(value);
+        }
+    }    
+
+    private void transportStatusChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.transportStatusChange(value);
         }
     }    
 
@@ -274,14 +274,6 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void playbackStorageMediumChange(String value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.playbackStorageMediumChange(value);
-        }
-    }    
-
     private void possibleRecordQualityModesChange(String value)
     {
         for (IAVTransportServiceEventListener listener : eventListener)
@@ -295,6 +287,14 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
         for (IAVTransportServiceEventListener listener : eventListener)
         {
             listener.nextAVTransportURIMetaDataChange(value);
+        }
+    }    
+
+    private void playbackStorageMediumChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.playbackStorageMediumChange(value);
         }
     }    
 
