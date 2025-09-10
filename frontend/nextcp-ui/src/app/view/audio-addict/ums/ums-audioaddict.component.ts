@@ -18,7 +18,7 @@ import { NavBarComponent } from '../../nav-bar/nav-bar.component';
 })
 export class UmsAudioaddictComponent {
   private rootID = '';
-  hasAudioAddictService = signal<boolean>(false);
+  hasAudioAddictService = signal<boolean>(true);
 
   constructor(
     public layoutService: LayoutService,
