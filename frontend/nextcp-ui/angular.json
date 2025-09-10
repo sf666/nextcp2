@@ -25,7 +25,8 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": {
-              "base": "../../backend/nextcp2-runtime/src/main/resources/static"
+              "base": "../../backend/nextcp2-runtime/src/main/resources/static",
+              "browser": ""
             },
             "index": "src/index.html",
             "polyfills": [
