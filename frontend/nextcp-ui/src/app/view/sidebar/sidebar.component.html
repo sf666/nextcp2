@@ -13,40 +13,40 @@
       <mat-icon class="material-symbols-outlined thin ">library_music</mat-icon>
       <span class="buttonText">Music Library</span>
     </button>
-    <button type="button" [routerLink]="'/playlist'" (click)="buttonClicked('/playlist')" class="mx-2 inline-flex items-center text-left ps-6 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/playlist')}}">
+    <button type="button" [routerLink]="'/playlist'" (click)="buttonClicked('/playlist')" class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/playlist')}}">
       <mat-icon class="material-symbols-outlined thin">queue_music</mat-icon>
       <span class="buttonText">Player Queue</span>
     </button>
-    <button type="button" [routerLink]="'/player'" (click)="buttonClicked('/player')" class="mx-2 inline-flex items-center text-left ps-6 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/player')}}">
+    <button type="button" [routerLink]="'/player'" (click)="buttonClicked('/player')" class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/player')}}">
       <mat-icon class="material-symbols-outlined thin">surround_sound</mat-icon>
       <span class="buttonText hide-element">Now Listening</span>
     </button>
 
-    <button type="button" [routerLink]="'/radio'" (click)="buttonClicked('/radio')" class="mx-2 inline-flex items-center text-left ps-6 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/radio')}}">
+    <button type="button" [routerLink]="'/radio'" (click)="buttonClicked('/radio')" class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/radio')}}">
       <mat-icon class="material-symbols-outlined thin">radio</mat-icon>
       <span class="buttonText">Radio</span>
     </button>
 
     @if(deviceService.selectedMediaServerDevice().extendedApi) {
-      <button type="button" [routerLink]="'/ums-audioaddict'" (click)="buttonClicked('/ums-audioaddict')" class="mx-2 inline-flex items-center text-left ps-6 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/ums-audioaddict')}}">
+      <button type="button" [routerLink]="'/ums-audioaddict'" (click)="buttonClicked('/ums-audioaddict')" class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/ums-audioaddict')}}">
         <mat-icon class="material-symbols-outlined thin">radio</mat-icon>
         <span class="buttonText">Radio Networks</span>
       </button>
     }
 
-    <button type="button" [routerLink]="'/myAlbums'" (click)="myAlbumClicked()" class="mx-2 inline-flex items-center text-left ps-6 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/myAlbums')}}">
+    <button type="button" [routerLink]="'/myAlbums'" (click)="myAlbumClicked()" class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/myAlbums')}}">
       <mat-icon class="material-symbols-outlined thin">album</mat-icon>
       <span class="buttonText">My Albums</span>
     </button>
 
     @if(mediaPlayerService.mediaServerExists()) {
-      <button type="button" [routerLink]="'/mediaPlayerConfig'" (click)="buttonClicked('/mediaPlayerConfig')" class="mx-2 inline-flex items-center text-left ps-6 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/mediaPlayerConfig')}}">
+      <button type="button" [routerLink]="'/mediaPlayerConfig'" (click)="buttonClicked('/mediaPlayerConfig')" class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/mediaPlayerConfig')}}">
         <mat-icon class="material-symbols-outlined thin">save</mat-icon>
         <span class="buttonText">MediaPlayer</span>
       </button>
     }
 
-    <button type="button" [routerLink]="'/settings'" (click)="buttonClicked('/settings')" class="mx-2 inline-flex items-center text-left ps-6 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/settings')}}">
+    <button type="button" [routerLink]="'/settings'" (click)="buttonClicked('/settings')" class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/settings')}}">
       <mat-icon class="material-symbols-outlined thin">settings</mat-icon>
       <span class="buttonText">App Settings</span>
     </button>
@@ -62,7 +62,7 @@
         }
       </div>
     @for (item of serverPlaylists; track item.playlistId) {
-    <button type="button" [routerLink]="'/myPlaylists'" class="text-left ps-6 mx-2 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getPlaylistClass(item.playlistId)}}" (click)="browseToPlaylist(item)">{{item.playlistName}}</button>
+    <button type="button" [routerLink]="'/myPlaylists'" class="text-left ps-4 mx-2 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getPlaylistClass(item.playlistId)}}" (click)="browseToPlaylist(item)">{{item.playlistName}}</button>
     }
     @if(deviceService.mediaServerSelected()) {
       @if (myFolderConfigured) {
