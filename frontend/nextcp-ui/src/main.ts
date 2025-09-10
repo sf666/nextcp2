@@ -20,6 +20,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSliderModule } from '@angular/material/slider';
 import { CustomHttpInterceptor } from './app/service/http-interceptor';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import {
   HTTP_INTERCEPTORS,
   withInterceptorsFromDi,
@@ -121,5 +122,6 @@ bootstrapApplication(AppComponent, {
     },
     provideHttpClient(withInterceptorsFromDi()),
     provideZonelessChangeDetection(),
+    provideAnimations(),
   ],
 }).catch((err) => console.error(err));

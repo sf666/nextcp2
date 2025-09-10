@@ -11,7 +11,7 @@ button {
     font-weight    : 500;
     align-items    : center;
     justify-content: flex-start;
-    width          : 200px;
+    width          : auto;
 }
 
 a {
@@ -114,8 +114,6 @@ a {
 .myPlaylistSection {
     display       : flex;
     flex-direction: column;
-    margin-left   : 0.5rem;
-    margin-bottom : 100px;
 }
 
 .myRouterLinkSection {
