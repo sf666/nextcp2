@@ -97,10 +97,12 @@ public class FileConfigPersistence
             }
             catch (Exception e)
             {
-                log.warn("supplied config file is broken. Generating default config ...", e);
+                log.warn("[FileConfigPersistence] Supplied config file is broken. Generating default config ...", e);
                 config = getDefaultConfig();
             }
             configDefaults.applyDefaults(config);
+            log.info("[FileConfigPersistence] Dump ... ");
+            log.info(config.toString());
         }
         else
         {
