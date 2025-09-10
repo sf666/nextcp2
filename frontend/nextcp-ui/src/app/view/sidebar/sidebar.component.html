@@ -67,12 +67,12 @@
     @if(deviceService.mediaServerSelected()) {
       @if (myFolderConfigured) {
         @if(serverPlaylistService.playlistLoading()) {
-          <div>loading playlist ...</div>
+          <div class="px-4 text-sm font-medium text-stone-400">loading playlist ...</div>
         } @else if(serverPlaylistService.serverPl().serverPlaylists?.length == 0) {
-        <div>Playlist folder contains no playlists.</div>
+        <div class="px-4 text-sm font-medium text-stone-400">Playlist folder contains no playlists.</div>
         }
       } @else {
-        <div>No playlist folder configured in settings for selected media server.</div>
+        <div class="px-4 text-sm font-medium text-stone-400">No playlist folder configured in settings for selected media server.</div>
       }
     } 
   </div>
