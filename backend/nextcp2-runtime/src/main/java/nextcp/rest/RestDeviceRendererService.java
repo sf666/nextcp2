@@ -80,51 +80,76 @@ public class RestDeviceRendererService
     @PostMapping("/getDeviceState")
     public DeviceDriverState getDeviceState(@RequestBody MediaRendererDto dto)
     {
-        MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(dto.udn));
-        checkDevice(device, "get device state");
-        if (device.hasDeviceDriver())
-        {
-            log.info(String.format("Getting device state for device %s : %s", dto.friendlyName, device.getDeviceDriverState()));
-            DeviceDriverState dd = device.getDeviceDriverState();
-            return dd;
-        }
-        else
-        {
-            log.info(String.format("device %s has no active device driver service", dto.friendlyName));
-            return new DeviceDriverState(false, dto.udn, null, null, 0, null);
-        }
+    	try {
+            MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(dto.udn));
+            checkDevice(device, "get device state");
+            if (device.hasDeviceDriver())
+            {
+                log.info(String.format("Getting device state for device %s : %s", dto.friendlyName, device.getDeviceDriverState()));
+                DeviceDriverState dd = device.getDeviceDriverState();
+                return dd;
+            }
+            else
+            {
+                log.info(String.format("device %s has no active device driver service", dto.friendlyName));
+                return new DeviceDriverState(false, dto.udn, null, null, 0, null);
+            }
+    	} catch (Exception e) {
+    		log.error("getDeviceState", e);
+    		return new DeviceDriverState();
+    	}
     }
 
     @PostMapping("/getDeviceTransportServiceState")
     public TransportServiceStateDto getDeviceTransportServiceState(@RequestBody MediaRendererDto dto)
     {
-        MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(dto.udn));
-        checkDevice(device, "get Device Transport Service State");
-        return device.getTransportServiceBridge().getCurrentTransportServiceState();
+    	try {
+            MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(dto.udn));
+            checkDevice(device, "get Device Transport Service State");
+            return device.getTransportServiceBridge().getCurrentTransportServiceState();
+    	} catch (Exception e) {
+    		log.error("getDeviceTransportServiceState", e);
+    		return new TransportServiceStateDto();
+    	}
     }
 
     @PostMapping("/getDeviceInputSourceList")
     public LinkedList<InputSourceDto> getDeviceInputSourceList(@RequestBody MediaRendererDto dto)
     {
-        MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(dto.udn));
-        checkDevice(device, "get device input sources");
-        return device.getProductService().getSourceList();
+    	try {
+            MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(dto.udn));
+            checkDevice(device, "get device input sources");
+            return device.getProductService().getSourceList();
+    	} catch (Exception e) {
+    		log.error("getDeviceInputSourceList", e);
+    		return new LinkedList();
+    	}
     }
 
     @PostMapping("/getCurrentSourceTrackInfo")
     public TrackInfoDto getDeviceCurrentSourceInfo(@RequestBody MediaRendererDto dto)
     {
-        MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(dto.udn));
-        checkDevice(device, "get device current source info");
-        return device.getTrackInfo();
+    	try {
+            MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(dto.udn));
+            checkDevice(device, "get device current source info");
+            return device.getTrackInfo();
+    	} catch (Exception e) {
+    		log.error("TrackInfoDto", e);
+    		return new TrackInfoDto();
+    	}
     }
 
     @PostMapping("/getDeviceInputSource")
     public InputSourceDto getDeviceInputSource(@RequestBody MediaRendererDto dto)
     {
-        MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(dto.udn));
-        checkDevice(device, "get device input sources");
-        return device.getProductService().getCurrentInputSource();
+    	try {
+            MediaRendererDevice device = deviceRegistry.getMediaRendererByUDN(new UDN(dto.udn));
+            checkDevice(device, "get device input sources");
+            return device.getProductService().getCurrentInputSource();
+    	} catch (Exception e) {
+    		log.error("getDeviceInputSource", e);
+    		return new InputSourceDto();
+    	}
     }
 
     //
