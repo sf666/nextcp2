@@ -3,30 +3,6 @@
 @use "pantone" as p;
 @use "app-variables" as v;
 
-@media (min-width:320px) {
-    /* smartphones, iPhone, portrait 480x320 phones */
-}
-
-@media (min-width:481px) {
-    /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
-}
-
-@media (min-width:641px) {
-    /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
-}
-
-@media (min-width:961px) {
-    /* tablet, landscape iPad, lo-res laptops ands desktops */
-}
-
-@media (min-width:1025px) {
-    /* big landscape tablets, laptops, and desktops */
-}
-
-@media (min-width:1281px) {
-    /* hi-res laptops and desktops */
-}
-
 // Disable focus frame
 *:focus {
     outline: none;
@@ -74,13 +50,6 @@
     &:hover {
         opacity: 0.7;
     }
-}
-
-.cardLayoutTiles {
-    display       : flex;
-    flex-wrap     : wrap;
-    padding-top   : 3rem;
-    padding-bottom: 6rem;
 }
 
 
@@ -286,23 +255,6 @@ input {
     }
 }
 
-// Global buttons definitios
-.buttons {
-    line-height     : 1rem;
-    height          : 2rem;
-    background-color: var(--bg-grey-8);
-    text-align      : left;
-    min-width       : 8rem;
-
-    &:first-child {
-        margin-left: 0;
-    }
-}
-
-button:focus {
-    outline: none;
-}
-
 .col-greyed {
     color: rgba(229, 238, 255, .6);
 }
@@ -322,10 +274,6 @@ button:focus {
     color: rgba(229, 238, 255, .6);
 }
 
-.regularHighlight {
-    @extend .plainTextBase;
-    color: var(--snow-white);
-}
 
 .app-badge {
     flex-shrink: 0;
@@ -351,8 +299,4 @@ button:focus {
     line-height   : 12px;
     text-transform: uppercase;
     color         : rgb(255, 190, 125);
-}
-
-.footer-block {
-    height: var(--footer-height);
 }

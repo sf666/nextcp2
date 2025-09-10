@@ -5,7 +5,8 @@
     --mdc-text-button-label-text-color: rgb(255, 255, 255);
 }
 
-.mdc-button {
+button {
+    font-family    : 'HK Grotesk';
     letter-spacing : 0.04rem;
     font-weight    : 500;
     align-items    : center;
@@ -121,4 +122,3 @@ a {
     display       : flex;
     flex-direction: column;
 }
-

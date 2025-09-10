@@ -1,6 +1,6 @@
 <div flowbiteSidebarContent class="h-full overflow-y-auto bg-zinc-800">
   <div class="flex mb-8 ms-1 mt-1">
-    <button flowbiteSidebarToggle data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button" class="md:hidden inline-flex items-center p-2 text-sm rounded-lg focus:outline-none focus:ring-2 text-gray-400 hover:bg-gray-700 focus:ring-gray-600">
+    <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button" class="md:hidden inline-flex items-center p-2 text-sm rounded-lg focus:outline-none focus:ring-2 text-gray-400 hover:bg-gray-700 focus:ring-gray-600">
       <span class="sr-only">Open sidebar</span>
       <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
         <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
@@ -9,60 +9,61 @@
     <div class="ms-2 align-center align-middle app-label-text">nextCP/2</div>
   </div>
   <div class="flex flex-col">
-    <button flowbiteSidebarItem mat-button [routerLink]="'/music-library'" class="margin-reactive {{getTextClass('/music-library')}}" (click)="musicLibraryClicked()">
-      <mat-icon class="material-symbols-outlined thin">library_music</mat-icon>
+    
+    <button type="button" [routerLink]="'/music-library'" class="inline-flex items-center text-left ps-6 mx-2 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/music-library')}}" (click)="musicLibraryClicked()">
+      <mat-icon class="material-symbols-outlined thin ">library_music</mat-icon>
       <span class="hide-element buttonText">Music Library</span>
     </button>
-    <a mat-button flowbiteSidebarItem [routerLink]="'/playlist'" (click)="buttonClicked('/playlist')" class="margin-reactive {{getTextClass('/playlist')}}">
+    <button type="button" [routerLink]="'/playlist'" (click)="buttonClicked('/playlist')" class="inline-flex items-center text-left ps-6 mx-2 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/playlist')}}">
       <mat-icon class="material-symbols-outlined thin">queue_music</mat-icon>
       <span class="hide-element buttonText">Player Queue</span>
-    </a>
-    <a mat-button flowbiteSidebarItem [routerLink]="'/player'" (click)="buttonClicked('/player')" class="margin-reactive {{getTextClass('/player')}}">
+    </button>
+    <button type="button" [routerLink]="'/player'" (click)="buttonClicked('/player')" class="inline-flex items-center text-left ps-6 mx-2 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/player')}}">
       <mat-icon class="material-symbols-outlined thin">surround_sound</mat-icon>
       <span class="buttonText hide-element">Now Listening</span>
-    </a>
+    </button>
 
-    <a mat-button flowbiteSidebarItem [routerLink]="'/radio'" (click)="buttonClicked('/radio')" class="margin-reactive  {{getTextClass('/radio')}}">
+    <button type="button" [routerLink]="'/radio'" (click)="buttonClicked('/radio')" class="inline-flex items-center text-left ps-6 mx-2 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/radio')}}">
       <mat-icon class="material-symbols-outlined thin">radio</mat-icon>
       <span class="hide-element buttonText">Radio</span>
-    </a>
+    </button>
 
     @if(deviceService.selectedMediaServerDevice().extendedApi) {
-      <a mat-button flowbiteSidebarItem [routerLink]="'/ums-audioaddict'" (click)="buttonClicked('/ums-audioaddict')" class="margin-reactive  {{getTextClass('/ums-audioaddict')}}">
+      <button type="button" [routerLink]="'/ums-audioaddict'" (click)="buttonClicked('/ums-audioaddict')" class="inline-flex items-center text-left ps-6 mx-2 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/ums-audioaddict')}}">
         <mat-icon class="material-symbols-outlined thin">radio</mat-icon>
         <span class="hide-element buttonText">Radio Networks</span>
-      </a>
+      </button>
     }
 
-    <a mat-button flowbiteSidebarItem [routerLink]="'/myAlbums'" (click)="myAlbumClicked()" class="margin-reactive {{getTextClass('/myAlbums')}}">
+    <button type="button" [routerLink]="'/myAlbums'" (click)="myAlbumClicked()" class="inline-flex items-center text-left ps-6 mx-2 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/myAlbums')}}">
       <mat-icon class="material-symbols-outlined thin">album</mat-icon>
       <span class="hide-element buttonText">My Albums</span>
-    </a>
+    </button>
 
     @if(mediaPlayerService.mediaServerExists()) {
-    <a mat-button flowbiteSidebarItem [routerLink]="'/mediaPlayerConfig'" (click)="buttonClicked('/mediaPlayerConfig')" class="margin-reactive  {{getTextClass('/mediaPlayerConfig')}}">
-      <mat-icon class="material-symbols-outlined thin">save</mat-icon>
-      <span class="hide-element buttonText">MediaPlayer</span>
-    </a>
+      <button type="button" [routerLink]="'/mediaPlayerConfig'" (click)="buttonClicked('/mediaPlayerConfig')" class="inline-flex items-center text-left ps-6 mx-2 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/mediaPlayerConfig')}}">
+        <mat-icon class="material-symbols-outlined thin">save</mat-icon>
+        <span class="hide-element buttonText">MediaPlayer</span>
+      </button>
     }
 
-    <a mat-button flowbiteSidebarItem [routerLink]="'/settings'" (click)="buttonClicked('/settings')" class="margin-reactive  {{getTextClass('/settings')}}">
+    <button type="button" [routerLink]="'/settings'" (click)="buttonClicked('/settings')" class="inline-flex items-center text-left ps-6 mx-2 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/settings')}}">
       <mat-icon class="material-symbols-outlined thin">settings</mat-icon>
       <span class="hide-element buttonText">App Settings</span>
-    </a>
+    </button>
   </div>
 
   <div class="myPlaylistSection hide-element">
     @if(deviceService.mediaServerSelected()){
       <div class="sub-label flex justify-between">
         <div class="align-self-center"> MY PLAYLISTS</div>
-        <div class="align-self-center me-2">
+        <div class="align-self-center mx-2">
           <mat-icon class="material-symbols-outlined" (click)="showPlaylistDialog()">pending</mat-icon>
         </div>
       </div>
     }
     @for (item of serverPlaylists; track item.playlistId) {
-    <a mat-button flowbiteSidebarItem [routerLink]="'/myPlaylists'" class="hide-element playlist {{getPlaylistClass(item.playlistId)}}" (click)="browseToPlaylist(item)">{{item.playlistName}}</a>
+    <button type="button" [routerLink]="'/myPlaylists'" class="text-left ps-6 me-2 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getPlaylistClass(item.playlistId)}}" (click)="browseToPlaylist(item)">{{item.playlistName}}</button>
     }
     @if (myFolderConfigured) {
       @if(serverPlaylistService.playlistLoading()) {

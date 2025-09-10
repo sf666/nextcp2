@@ -8,11 +8,9 @@ import { DeviceService } from './../../service/device.service';
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { ServerPlaylistDto } from 'src/app/service/dto';
 import { MatIcon } from '@angular/material/icon';
-import { MatButton, MatAnchor } from '@angular/material/button';
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
 import { DefaultPlaylistService } from 'src/app/mediaserver/popup/defaut-playlists/default-playlist.service';
 import { MusicLibraryService } from 'src/app/service/music-library/music-library.service';
-import { A11yModule } from "@angular/cdk/a11y";
 
 @Component({
   selector: 'app-sidebar',
@@ -21,11 +19,8 @@ import { A11yModule } from "@angular/cdk/a11y";
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    MatButton,
     RouterLink,
     MatIcon,
-    MatAnchor,
-    A11yModule
 ],
 })
 export class SidebarComponent {
@@ -125,6 +120,7 @@ export class SidebarComponent {
   public getTextClass(url: string): string {
     let id = this.routerMap.get(url);
     if (id == this.activeId()) {
+      console.log(url + " is active");
       return "active";
     }
     return "button-text";
