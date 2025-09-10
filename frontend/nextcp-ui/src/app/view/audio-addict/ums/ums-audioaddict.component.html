@@ -9,6 +9,11 @@
     ></nav-bar>
   }
   
+  @if(!hasAudioAddictService()) {
+    <div class="ms-8 p-4 max-w-lg mb-4 text-sm mt-8 rounded-lg bg-gray-800 text-red-400" role="alert">
+      AudioAddict Network unavailable. Please configure credentials for this media server in App Settings.
+    </div>          
+  }
   
   <!-- display music library -->
   

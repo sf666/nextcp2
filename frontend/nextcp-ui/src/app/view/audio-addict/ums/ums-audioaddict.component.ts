@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { ScrollLoadHandler } from 'src/app/mediaserver/display-container/defs';
 import { DisplayContainerComponent } from 'src/app/mediaserver/display-container/display-container.component';
@@ -18,6 +18,7 @@ import { NavBarComponent } from '../../nav-bar/nav-bar.component';
 })
 export class UmsAudioaddictComponent {
   private rootID = '';
+  hasAudioAddictService = signal<boolean>(false);
 
   constructor(
     public layoutService: LayoutService,
@@ -26,6 +27,7 @@ export class UmsAudioaddictComponent {
     console.log("constructor call : MyAlbumComponent");
     toObservable(this.deviceService.selectedMediaServerDevice).subscribe(data => this.mediaServerChanged(data));
   }
+
 
   mediaServerChanged(data: MediaServerDto): void {
     this.loadRadioNetwork();
@@ -37,6 +39,11 @@ export class UmsAudioaddictComponent {
       this.contentDirectoryService.browseChildren(oid, "", this.deviceService.selectedMediaServerDevice().udn).subscribe((data) => {
         console.log("root id of UMS audioaddict network node is " + data?.currentContainer?.id);
         this.rootID = data.currentContainer.id;
+        if (data.containerDto.length > 0) {
+          this.hasAudioAddictService.set(true);
+        } else {
+          this.hasAudioAddictService.set(false);
+        }
       });
     }
   }

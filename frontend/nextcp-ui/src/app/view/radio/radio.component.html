@@ -40,6 +40,15 @@
     </div>
   </div>
 } @else {
-  <div class="regularText infotext">There are no configured radio stations available.</div>
+  @if(deviceService.selectedMediaRendererDevice().udn.length > 0) {
+    <div class="ms-8 p-4 max-w-lg mb-4 text-sm mt-8 rounded-lg bg-gray-800 text-red-400" role="alert">
+      {{deviceService.selectedMediaRendererDevice().friendlyName}} : Selected player has provides no radio stations.
+    </div>          
+  } @else {
+    <div class="inline-flex items-center ms-8 p-4 max-w-lg mb-4 text-sm mt-8 rounded-lg bg-gray-800 text-red-400" role="alert">
+      Please select a media renderer by clicking the 
+      <span class="material-symbols-outlined icon-main">speaker</span> button.
+    </div>          
+  }
 }
 
