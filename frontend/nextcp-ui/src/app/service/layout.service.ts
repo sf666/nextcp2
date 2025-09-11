@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LayoutService {
 
-  constructor(private deviceService: DeviceDetectorService) {
+  constructor() {
 
   }
 
@@ -33,6 +32,6 @@ export class LayoutService {
   }
 
   public isMobileDevice(): boolean {
-      return this.deviceService.isMobile() || this.deviceService.isTablet();
+      return false;
   }  
 }

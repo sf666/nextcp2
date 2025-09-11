@@ -135,7 +135,7 @@ export class SidebarComponent {
 
   public get myFolderConfigured(): boolean {
     if (this.deviceService.mediaServerSelected()) {
-      var sc = this.configurationService.getSelectedServerConfig(this.deviceService.selectedMediaServerDevice().udn);
+      var sc = this.configurationService.findServerConfig(this.deviceService.selectedMediaServerDevice().udn);
       console.log("`this.deviceService.selectedMediaServerDevice().friendlyName` : configures playlist folder id `sc?.playistObjectId`");
       return sc?.playistObjectId?.length > 0;
     } else {

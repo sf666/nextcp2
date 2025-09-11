@@ -128,14 +128,12 @@ public class ServerConfig
         {
             log.debug(remoteDevice.getDetails().getFriendlyName() + " is already known.");
             updateDefaults(remoteDevice, configEntry.get());
+            device.updateCurrentConfigState(configEntry.get());
+            writeServerDevicesAndSendConfig();
         }
         else
         {
-            ServerDeviceConfiguration c = new ServerDeviceConfiguration();
-            c.enabled = true;
-            c.ip = remoteDevice.getIdentity().getDescriptorURL().getHost();
-            c.displayString = remoteDevice.getDisplayString();
-            c.mediaServer = device.getAsDto();
+            ServerDeviceConfiguration c = device.getNewServerConfig();
             serverConfig.serverDevices.add(c);
             writeServerDevicesAndSendConfig();
             log.info(remoteDevice.getDetails().getFriendlyName() + " added ServerDevice config : " + c);
@@ -178,7 +176,6 @@ public class ServerConfig
         {
             serverDeviceConfiguration.ip = remoteDevice.getIdentity().getDescriptorURL().getHost();
         }
-        writeServerDevicesAndSendConfig();
     }
 
     public boolean isMediaServerActive(String udn)

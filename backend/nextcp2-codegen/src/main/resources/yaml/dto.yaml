@@ -110,6 +110,7 @@ ServerDeviceConfiguration:
    enabled: Boolean
    mediaServer: MediaServerDto
    playistObjectId: String
+   updateRatingInFile: Boolean
 
 MusicbrainzSupport:
     username: String

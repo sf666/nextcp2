@@ -34,6 +34,7 @@ import nextcp.dto.ContainerDto;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MediaServerDto;
 import nextcp.dto.MusicItemDto;
+import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.UpdateAlbumArtUriRequest;
 import nextcp.dto.UpdateStarRatingRequest;
 import nextcp.service.ToastEventPublisher;
@@ -54,6 +55,7 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumL
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMediaStoreFolderInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAnonymousDevicesWriteInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioUpdateRatingTagInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWriteInput;
 import nextcp.util.BackendException;
 import okhttp3.Call;
@@ -105,7 +107,8 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 				umsServiceEventListener = new UmsExtendedServicesServiceEventListener(getDevice(), this);
 				umsServices.addSubscriptionEventListener(umsServiceEventListener);
 			} else {
-				log.warn("This UMS version has no UPnP extended UMS services. Please use the fork from https://github.com/ik666/UniversalMediaServer or you can try a current version of UMS.");
+				log.warn(
+					"This UMS version has no UPnP extended UMS services. Please use the fork from https://github.com/ik666/UniversalMediaServer or you can try a current version of UMS.");
 			}
 		} catch (Exception e) {
 			log.info("This UMS version has no UPnP extended UMS services.");
@@ -495,7 +498,42 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		}
 	}
 
+	public boolean isUpdateRatingInFile() {
+		if (umsServiceEventListener.getStateVariable().AudioUpdateRating != null) {
+			return umsServiceEventListener.getStateVariable().AudioUpdateRating;
+		} else {
+			return false;
+		}
+	}
+
 	public void newUmsConfig() {
 		configureServer();
+	}
+
+	public ServerDeviceConfiguration getNewServerConfig() {
+		ServerDeviceConfiguration c = super.getNewServerConfig();
+		c.updateRatingInFile = isUpdateRatingInFile();
+		return c;
+	}
+
+	public void updateCurrentConfigState(ServerDeviceConfiguration c) {
+		super.updateCurrentConfigState(c);
+		c.updateRatingInFile = isUpdateRatingInFile();
+	}
+
+	@Override
+	public void updateExtApiConfig(ServerDeviceConfiguration serverDeviceConfig) {
+		if (serverDeviceConfig == null) {
+			log.debug("[UmsServerDevice-{}] do not change config. No configuration.", getFriendlyName());
+			return;
+		}
+		if (umsServiceEventListener.getStateVariable().AudioUpdateRating != null) {
+			if (umsServiceEventListener.getStateVariable().AudioUpdateRating != serverDeviceConfig.updateRatingInFile) {
+				log.info("[UmsServerDevice-{}] setting AudioUpdateRatingTag to {} ", getFriendlyName(), serverDeviceConfig.updateRatingInFile);
+				SetAudioUpdateRatingTagInput inp = new SetAudioUpdateRatingTagInput();
+				inp.AudioUpdateRating = serverDeviceConfig.updateRatingInFile;
+				umsServices.setAudioUpdateRatingTag(inp);
+			}
+		}
 	}
 }

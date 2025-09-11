@@ -1,68 +1,67 @@
 <div class="flex flex-col m-3 mb-32">
   <div class="">
     <div class="flex flex-row">
-      <h1 class="text-xl font-medium tracking-tight text-white">Server Configuration</h1>
-      <mat-slide-toggle color="accent" class="ms-4 self-center" [(ngModel)]="showOnlyActiveServer">
-        show only online server
-      </mat-slide-toggle>
+      <div class="flex mb-4">
+        <h1 class="text-xl font-medium tracking-tight text-white">Server Configuration</h1>
+        <div class="flex items-center ms-4">
+          <input id="enabled-all-Server" type="checkbox" [(ngModel)]="showOnlyActiveServer" class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+          <label for="enabled-all-Server" class="ms-2 text-sm font-light">show only active server</label>
+        </div>
+      </div>
     </div>
-
-    <p class="mb-6 font-light text-gray-400 max-w-2xl">
-      Servers previously discovered may be offline. Disabled servers will not appear in certain pop-ups or selection lists.</p>
+    <my-alert prefix="Info" text="Disabled servers will not appear in certain pop-ups or selection lists"></my-alert>
 
     <div class="flex flex-wrap gap-4">
-      @for (serverConfig of getMediaServer(); track serverConfig) {
-      <div class="media-container">
-        <div class="media-device">
-          <div class="flex header">
-            <div class="no-wrap title">{{serverConfig.mediaServer.friendlyName}}</div>
-              <mat-slide-toggle color="primary" class="ms-2" [(ngModel)]="serverConfig.enabled">
-                Enable
-              </mat-slide-toggle>
+      @for (serverConfig of getMediaServerConfig(); track serverConfig.mediaServer.udn) {
+      <div class="flex flex-col bg-zinc-900 border-0 rounded-2xl">
+        <!-- Header -->
+         <div class="border-0 border-b-1 border-zinc-600 grow p-6 pb-2 flex flex-col">
+            <div class="no-wrap text-lg font-bold">{{serverConfig.mediaServer.friendlyName}}</div>
+            <div class="col-span-2 text-xs font-light text-zinc-600">{{serverConfig.mediaServer.udn}}</div>
+         </div>
+
+        <!-- Body -->
+        <div class="flex p-4">
+          <div class="grid grid-cols-3 gap-3 text-sm grow">
+            <div class="font-medium">Enabled</div>
+            <div class="col-span-2 flex items-center">
+              <input id="enabled-checkbox" type="checkbox" [(ngModel)]="serverConfig.enabled" class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
             </div>
-            <div class="flex">
-              <mat-form-field appearance="outline" class="me-2">
-                <mat-label>Status</mat-label>
-                @if (isServerConfigActive(serverConfig)) {
-                <input class="online" matInput type="text" value="ONLINE" readonly="true">
-                }
-                @if (!isServerConfigActive(serverConfig)) {
-                <input class="offline" matInput type="text" value="OFFLINE" readonly="true">
-                }
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>IP</mat-label>
-                <input matInput type="text" value="{{serverConfig.ip}}" readonly="true">
-              </mat-form-field>
-            </div>
-            <mat-form-field appearance="outline">
-              <mat-label>UDN</mat-label>
-              <input matInput type="text" value="{{serverConfig.mediaServer.udn}}" readonly="true">
-            </mat-form-field>
-            <div class="relative z-0 w-full mb-5 group">
-              <input [(ngModel)]="serverConfig.playistObjectId" type="text" name="MY_PLAYLISTID" id="MY_PLAYLISTID"
-                class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
-                placeholder=" " />
-              <label for="MY_PLAYLISTID"
-                class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">MY
-                PLAYLIST - ObjectID</label>
+            <div class="font-medium">Status</div>                
+              @if (isServerConfigActive(serverConfig)) {
+                <div class="col-span-2 text-zink-500 text-green-500">ONLINE</div>
+              } @else {
+                <div class="col-span-2">OFFLINE</div>
+              }
+            <div class="font-medium">IP</div>                
+            <div class="col-span-2 font-light">{{serverConfig.ip}}</div>
+            <div class="font-medium">MY PLAYLIST</div>                
+            <div class="col-span-2 font-light">
+              <input [(ngModel)]="serverConfig.playistObjectId" type="text" name="MY_PLAYLISTID_2" id="MY_PLAYLISTID_2"
+              class="px-0 w-full text-sm bg-transparent border-0 border-b-1 appearance-none border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
+              placeholder="MY PLAYLIST - ObjectID" />
             </div>
             @if (serverConfig.mediaServer.extendedApi) {
-                <!-- show UMS configuration -->
+              <div class="font-medium">ID3 Rating</div>
+              <div class="col-span-2 flex items-center">
+                <input id="id3-checkbox" type="checkbox" [(ngModel)]="serverConfig.updateRatingInFile" class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+                <label for="id3-checkbox" class="ms-2 text-sm font-light">update tag in media file</label>
+              </div>
             }
-            <div class="flex mt-4">
-              <button mat-stroked-button class="ms-2" color="primary" (click)="saveServerConfig(serverConfig)">save</button>
-              <button mat-stroked-button class="ms-2" color="warn" (click)="deleteServerConfig(serverConfig)">delete</button>
-            </div>
           </div>
-          @if (getMediaServer()?.length == 0) {
-          <div class="no-online">
-            No media server online
-          </div>
-          }
         </div>
+
+        <!-- Footer -->
+        <div class="flex border-0 border-t-1 border-zinc-600 p-6 flex justify-around">
+          <button mat-stroked-button class="" color="primary" (click)="saveServerConfig(serverConfig)">save</button>
+          <button mat-stroked-button class="" color="warn" (click)="deleteServerConfig(serverConfig)">delete</button>
+        </div>
+      </div>
       }
     </div>
+    @if (getMediaServerConfig()?.length == 0) {
+      <my-alert prefix="Info" text="No media server online"></my-alert>
+    }
 
     <div class="mt-6 mt-8 flex flex-row mt-4">
       <h1 class="text-xl font-medium tracking-tight text-white">Renderer Configuration</h1>
@@ -146,9 +145,7 @@
       </div>
       }
       @if (getMediaRenderer()?.length == 0) {
-      <div class="no-online">
-        no renderer online
-      </div>
+        <my-alert class="grow" prefix="Info" text="No renderer online"></my-alert>
       }
     </div>
 
@@ -346,15 +343,7 @@
             class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">enter Spotify API Code</label>
       </div>
       <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="sendSpotifyCode()">send it</button>
-      <div class="flex max-w-2xl items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
-        <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-        </svg>
-        <span class="sr-only">Info</span>
-        <div class="mt-2">
-          <span class="font-medium max-w-2xl">Hint!</span> To copy the access code, click in your browsers URL bar and copy everything after 'http://localhost:65525/?code='
-        </div>
-      </div>      
+      <my-alert prefix="Hint" text="To copy the access code, click in your browsers URL bar and copy everything after 'http://localhost:65525/?code='"></my-alert>
     }
 
     <h2 class="mt-8 tracking-tight text-gray-300">MusicBrainz</h2>

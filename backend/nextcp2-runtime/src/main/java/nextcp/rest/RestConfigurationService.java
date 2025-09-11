@@ -33,11 +33,11 @@ import nextcp.dto.RendererConfigDto;
 import nextcp.dto.RendererDeviceConfiguration;
 import nextcp.dto.ServerConfigDto;
 import nextcp.dto.ServerDeviceConfiguration;
-import nextcp.dto.ToastrMessage;
 import nextcp.service.ConfigService;
 import nextcp.service.upnp.Nextcp2UpnpServiceImpl;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
+import nextcp.upnp.device.mediaserver.UmsServerDevice;
 import nextcp.util.IApplicationRestartable;
 import nextcp2.upnp.localdevice.MediaPlayerConfigService;
 
@@ -241,11 +241,14 @@ public class RestConfigurationService
     }
 
     @PostMapping("/saveMediaServerConfig")
-    public void saveMediaServerConfig(@RequestBody ServerDeviceConfiguration serverDevice)
+    public void saveMediaServerConfig(@RequestBody ServerDeviceConfiguration serverDeviceConfig)
     {
         try
         {
-            serverConfigService.updateServerDevice(serverDevice);
+            serverConfigService.updateServerDevice(serverDeviceConfig);
+            if (deviceRegistry.getMediaServerByUDN(new UDN(serverDeviceConfig.mediaServer.udn)) instanceof UmsServerDevice d) {
+            	d.updateExtApiConfig(serverDeviceConfig);
+            }
         }
         catch (Exception e)
         {

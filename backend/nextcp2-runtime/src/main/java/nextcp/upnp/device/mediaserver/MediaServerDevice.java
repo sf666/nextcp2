@@ -17,7 +17,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.annotation.PostConstruct;
 import nextcp.config.ServerConfig;
 import nextcp.domainmodel.device.mediaserver.search.SearchSupport;
-import nextcp.dto.Config;
 import nextcp.dto.ContainerDto;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MediaServerDto;
@@ -298,5 +297,20 @@ public class MediaServerDevice extends BaseDevice {
 
 	public void rescanFile(String objectId) {
 		log.warn("scan file not implemented for this device : " + getFriendlyName());
+	}
+	
+	public ServerDeviceConfiguration getNewServerConfig() {
+        ServerDeviceConfiguration c = new ServerDeviceConfiguration();
+        c.enabled = true;
+        c.ip = getDevice().getIdentity().getDescriptorURL().getHost();
+        c.displayString = getDevice().getDisplayString();
+        c.mediaServer = getAsDto();
+		return c;
+	}
+
+	public void updateCurrentConfigState(ServerDeviceConfiguration c) {
+        c.ip = getDevice().getIdentity().getDescriptorURL().getHost();
+        c.displayString = getDevice().getDisplayString();
+        c.mediaServer = getAsDto();
 	}
 }

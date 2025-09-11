@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-09-05 10:51:19.
+// Generated using typescript-generator version 3.2.1263 on 2025-09-11 13:06:47.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -378,6 +378,7 @@ export interface ServerDeviceConfiguration {
     enabled: boolean;
     mediaServer: MediaServerDto;
     playistObjectId: string;
+    updateRatingInFile: boolean;
 }
 
 export interface ServerPlaylistDto {

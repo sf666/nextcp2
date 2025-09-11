@@ -25,6 +25,7 @@ import {
   MatFormFieldModule,
   MatLabel,
 } from '@angular/material/form-field';
+import { AlertComponent } from "src/app/comp/alert/alert.component";
 
 @Component({
   selector: 'settings',
@@ -43,8 +44,9 @@ import {
     MatInputModule,
     MatButtonModule,
     MatSlideToggleModule,
-    ReactiveFormsModule
-  ],
+    ReactiveFormsModule,
+    AlertComponent
+],
 })
 export class SettingsComponent implements OnInit {
 
@@ -112,11 +114,10 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  public getMediaServer(): ServerDeviceConfiguration[] {
+  public getMediaServerConfig(): ServerDeviceConfiguration[] {
     if (this.configService?.getServerConfig()?.serverDevices) {
       if (this.showOnlyActiveServer) {
-        return this.configService
-          .getServerConfig()
+        return this.configService.getServerConfig()
           .serverDevices.filter((server) => this.isServerConfigActive(server));
       } else {
         return this.configService.getServerConfig().serverDevices;
