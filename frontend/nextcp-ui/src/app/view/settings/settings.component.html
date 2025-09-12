@@ -38,7 +38,7 @@
             <div class="font-medium">MY PLAYLIST</div>                
             <div class="col-span-2 font-light">
               <input [(ngModel)]="serverConfig.playistObjectId" type="text" name="MY_PLAYLISTID_2" id="MY_PLAYLISTID_2"
-              class="px-0 w-full text-sm bg-transparent border-0 border-b-1 appearance-none border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
+              class="px-0 w-full text-sm bg-transparent bg-zinc-800 appearance-none border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
               placeholder="MY PLAYLIST - ObjectID" />
             </div>
             @if (serverConfig.mediaServer.extendedApi) {
@@ -80,12 +80,49 @@
 
     <div class="flex flex-wrap gap-4 mt-8">
       @for (rendererConfig of getMediaRenderer(); track rendererConfig) {
+      <div class="flex flex-col bg-zinc-900 border-0 rounded-2xl">
+        <!-- Header -->
+         <div class="border-0 border-b-1 border-zinc-600 grow p-6 pb-2 flex flex-col">
+            <div class="no-wrap text-lg font-bold">{{rendererConfig.mediaRenderer.friendlyName}}</div>
+            <div class="col-span-2 text-xs font-light text-zinc-600">{{rendererConfig.mediaRenderer.udn}}</div>
+         </div>
+
+        <!-- Body -->
+        <div class="flex p-4">
+          <div class="grid grid-cols-3 gap-3 text-sm grow">
+            <div class="font-medium">Enabled</div>
+            <div class="col-span-2 flex items-center">
+              <input type="checkbox" [(ngModel)]="rendererConfig.active" class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+            </div>
+            <div class="font-medium">Status</div>                
+            @if (isRendererConfigActive(rendererConfig)) {
+              <div class="col-span-2 text-zink-500 text-green-500">ONLINE</div>
+            } @else {
+              <div class="col-span-2">OFFLINE</div>
+            }
+            <div class="font-medium">IP</div>
+            <div class="col-span-2 font-light">{{rendererConfig.ip}}</div>
+            <div class="font-medium">Amplifier Driver</div>
+            <div>
+              <select id="countries" class="p-1 border text-sm rounded-lg  block w-full bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
+                <option selected>Choose a country</option>
+                <option value="US">United States</option>
+                <option value="CA">Canada</option>
+                <option value="FR">France</option>
+                <option value="DE">Germany</option>
+              </select>              
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+
+
       <div class="media-container">
         <div class="media-device">
           <div class="no-wrap title">{{rendererConfig.mediaRenderer.friendlyName}}
-            <mat-slide-toggle color="primary" class="ms-2" [(ngModel)]="rendererConfig.active">
-              Enable
-            </mat-slide-toggle>
           </div>
           <div class="flex">
             <mat-form-field appearance="outline" class="me-2">

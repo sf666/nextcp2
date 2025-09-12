@@ -1,6 +1,6 @@
-import { Inject, Injectable, signal } from '@angular/core';
-import Stack from 'ts-data.stack';
+import { Injectable, signal } from '@angular/core';
 import { PersistenceService } from '../service/persistence/persistence.service';
+import Stack from './stack';
 
 const baseId = 'ID_SCROLL_TO_ELEMENT_STEP_IN';
 
