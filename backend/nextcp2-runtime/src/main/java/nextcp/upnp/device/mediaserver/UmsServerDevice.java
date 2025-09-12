@@ -528,12 +528,10 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			return;
 		}
 		if (umsServiceEventListener.getStateVariable().AudioUpdateRating != null) {
-			if (umsServiceEventListener.getStateVariable().AudioUpdateRating != serverDeviceConfig.updateRatingInFile) {
-				log.info("[UmsServerDevice-{}] setting AudioUpdateRatingTag to {} ", getFriendlyName(), serverDeviceConfig.updateRatingInFile);
-				SetAudioUpdateRatingTagInput inp = new SetAudioUpdateRatingTagInput();
-				inp.AudioUpdateRating = serverDeviceConfig.updateRatingInFile;
-				umsServices.setAudioUpdateRatingTag(inp);
-			}
+			log.info("[UmsServerDevice-{}] setting AudioUpdateRatingTag to {} ", getFriendlyName(), serverDeviceConfig.updateRatingInFile);
+			SetAudioUpdateRatingTagInput inp = new SetAudioUpdateRatingTagInput();
+			inp.AudioUpdateRating = serverDeviceConfig.updateRatingInFile;
+			umsServices.setAudioUpdateRatingTag(inp);
 		}
 	}
 }
