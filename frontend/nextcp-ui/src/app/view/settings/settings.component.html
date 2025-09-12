@@ -13,7 +13,7 @@
 
     <div class="flex flex-wrap gap-4 max-w-4xl">
       @for (serverConfig of getMediaServerConfig(); track serverConfig.mediaServer.udn) {
-      <div class="flex flex-col bg-zinc-900 border-0 rounded-2xl">
+      <div class="flex flex-col bg-zinc-900 border-0 rounded-2xl max-w-md">
         <!-- Header -->
          <div class="border-0 border-b-1 border-zinc-600 grow p-6 pb-2 flex flex-col">
             <div class="no-wrap text-lg font-bold">{{serverConfig.mediaServer.friendlyName}}</div>
