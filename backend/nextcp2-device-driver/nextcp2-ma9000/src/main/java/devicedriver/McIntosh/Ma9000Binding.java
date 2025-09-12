@@ -2,10 +2,8 @@ package devicedriver.McIntosh;
 
 import java.io.IOException;
 import java.net.SocketAddress;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import devicedriver.McIntosh.control.Commands;
 import devicedriver.McIntosh.tcp.IMcIntoshDeviceChanged;
 import devicedriver.McIntosh.tcp.McIntoshDeviceConnection;
@@ -47,17 +45,23 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
 	}
 
 	@Override
-	public void start() {
+	public void start() {		
 		log.info("starting physical device ...");
 		if (device != null) {
 			device.close();
 		}
 		device = new McIntoshDeviceConnection(this, hostAddress, null);
 		
-		device.open();
-
-		checkPowerState();
-		
+		Runnable r = new Runnable() {
+			
+			@Override
+			public void run() {
+				device.open();
+				checkPowerState();
+			}
+		};
+		Thread t = new Thread(r, "MA9000 socket connect");
+		t.start();
 	}
 
 	@Override

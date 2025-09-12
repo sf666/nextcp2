@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,13 +47,14 @@ public class TcpDeviceConnection
     {
         close();
         try
-        {
+        {        	
             socketToDevice = SocketChannel.open(address);
             if (!socketToDevice.finishConnect())
             {
                 log.error("cannot finish connect to remote address " + address);
+            } else {
+                createReadTread();
             }
-            createReadTread();
         }
         catch (IOException e)
         {
