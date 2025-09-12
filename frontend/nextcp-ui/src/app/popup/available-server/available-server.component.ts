@@ -3,6 +3,7 @@ import { DeviceService } from 'src/app/service/device.service';
 import { PopupService } from './../../util/popup.service';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 import { Component, OnInit, Inject, ElementRef, computed } from '@angular/core';
+import { ConfigurationService } from 'src/app/service/configuration.service';
 
 @Component({
     selector: 'app-available-server',
@@ -17,13 +18,26 @@ export class AvailableServerComponent {
   private readonly triggerElementRef: ElementRef;
 
   popupHeight = computed(() => this.deviceService.mediaServerList().length * 30 + 120);
+  filteredMediaServerList = computed(() => {
+    return this.deviceService.mediaServerList().filter(
+      pl => {
+        if (this.configurationService.findServerConfig(pl.udn)) {
+          return this.configurationService.findServerConfig(pl.udn).enabled;
+        } else {
+          console.log("server config not found for : " + pl.friendlyName);
+          return true;
+        }
+      })
+  });
+
 
   constructor(
     _matDialogRef: MatDialogRef<AvailableServerComponent>,
     @Inject(MAT_DIALOG_DATA) data: { trigger: ElementRef, id: string },
     private popupService: PopupService,
     private persistenceService: PersistenceService,
-    public deviceService: DeviceService
+    public deviceService: DeviceService,
+    public configurationService : ConfigurationService,
   ) {
     this.triggerElementRef = data.trigger;
     this._matDialogRef = _matDialogRef;

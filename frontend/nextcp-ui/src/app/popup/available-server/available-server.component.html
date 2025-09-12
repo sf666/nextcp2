@@ -2,7 +2,7 @@
   <div class="panel" (mouseleave)="close()">
     <div class="dialogTitle">Media Server</div>
     <div class="dialogItems flex flex-col flex-wrap mt-4 minWidth">
-      @for (device of deviceService.mediaServerList(); track device) {
+      @for (device of filteredMediaServerList(); track device.udn) {
         <div class="flex no-wrap element-item {{getSelectedClass(device.udn)}}"
           (click)="selectServer(device.udn)">
           <img class="h-6 w-6" src="{{device.img}}" alt="{{device.friendlyName}}">

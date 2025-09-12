@@ -2,6 +2,7 @@ import { DeviceService } from 'src/app/service/device.service';
 import { PopupService } from './../../util/popup.service';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 import { Component, OnInit, Inject, ElementRef, computed } from '@angular/core';
+import { ConfigurationService } from 'src/app/service/configuration.service';
 
 @Component({
   selector: 'app-available-renderer',
@@ -17,11 +18,24 @@ export class AvailableRendererComponent {
   rendererCount = computed(() => this.deviceService.mediaRendererList().length);
   popupHeight = computed(() => this.rendererCount() * 30 + 120);
 
+  filteredMediaRendererList = computed(() => {
+    return this.deviceService.mediaServerList().filter(
+      pl => {
+        if (this.configurationService.findRendererConfig(pl.udn)) {
+          return this.configurationService.findRendererConfig(pl.udn).active;
+        } else {
+          console.log("renderer config not found for : " + pl.friendlyName);
+          return true;
+        }
+      })
+  });
+
   constructor(
     _matDialogRef: MatDialogRef<AvailableRendererComponent>,
     @Inject(MAT_DIALOG_DATA) data: { trigger: ElementRef, id: string },
     private popupService: PopupService,
-    public deviceService: DeviceService
+    public deviceService: DeviceService,
+    public configurationService : ConfigurationService,
   ) {
     this.triggerElementRef = data.trigger;
     this._matDialogRef = _matDialogRef;

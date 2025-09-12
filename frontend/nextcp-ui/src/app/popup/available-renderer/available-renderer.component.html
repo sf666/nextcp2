@@ -1,7 +1,7 @@
 <div class="panel" (mouseleave)="close()">
   <div class="dialogTitle">Media Renderer</div>
   <div class="dialogItems flex flex-col flex-wrap mt-4">
-    @for (device of deviceService.enabledMediaRendererList(); track device) {
+    @for (device of filteredMediaRendererList(); track device) {
         <div class="flex no-wrap element-item {{getSelectedClass(device.udn)}}"
           (click)="selectRenderer(device.udn)">
           <img class="h-6 w-6" src="{{device.img}}" alt="{{device.friendlyName}}">

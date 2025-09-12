@@ -8,8 +8,6 @@ import { RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCap
 import { GenericResultService } from './generic-result.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
-import { isAssigned } from '../global';
-import { ServerPlaylistService } from './server-playlist.service';
 
 @Injectable({
   providedIn: 'root'
@@ -119,6 +117,10 @@ export class ConfigurationService {
 
   public findServerConfig(udn: string): ServerDeviceConfiguration {
     return this.serverConfigDto().serverDevices.find(d => d.mediaServer.udn === udn);
+  }
+
+  public findRendererConfig(udn: string): RendererDeviceConfiguration {
+    return this.rendererConfig().rendererDevices.find(d => d.mediaRenderer.udn === udn);
   }
 
   public getSelectedServerConfig(udn: string): ServerDeviceConfiguration {
