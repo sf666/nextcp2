@@ -36,7 +36,6 @@ import { AlertComponent } from "src/app/comp/alert/alert.component";
   providers: [{ provide: ContentDirectoryService, useClass: ContentDirectoryService },], // non singleton injections
   imports: [
     MatFormFieldModule,
-    MatLabel,
     MatSelectModule,
     FormsModule,
     MatOptionModule,
@@ -94,9 +93,7 @@ export class SettingsComponent implements OnInit {
     this.layoutService.setFramedViewWithoutNavbar();
   }
 
-  showAdvancedRendererSettings(
-    rendererConfig: RendererDeviceConfiguration
-  ): boolean {
+  showAdvancedRendererSettings(rendererConfig: RendererDeviceConfiguration): boolean {
     if (rendererConfig.deviceDriverType) {
       return true;
     } else {

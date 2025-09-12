@@ -11,7 +11,7 @@
     </div>
     <my-alert prefix="Info" text="Disabled servers will not appear in certain pop-ups or selection lists"></my-alert>
 
-    <div class="flex flex-wrap gap-4">
+    <div class="flex flex-wrap gap-4 max-w-4xl">
       @for (serverConfig of getMediaServerConfig(); track serverConfig.mediaServer.udn) {
       <div class="flex flex-col bg-zinc-900 border-0 rounded-2xl">
         <!-- Header -->
@@ -39,7 +39,7 @@
             <div class="col-span-2 font-light">
               <input [(ngModel)]="serverConfig.playistObjectId" type="text" name="MY_PLAYLISTID_2" id="MY_PLAYLISTID_2"
               class="px-0 w-full text-sm bg-transparent bg-zinc-800 appearance-none border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
-              placeholder="MY PLAYLIST - ObjectID" />
+              placeholder="enter playlist object-id" />
             </div>
             @if (serverConfig.mediaServer.extendedApi) {
               <div class="font-medium">ID3 Rating</div>
@@ -78,14 +78,14 @@
       instead of the streamer’s. A default volume level can be applied to the amplifier when powered on. If UPnP Max Volume is enabled,
       the streaming device’s volume can be set to 100% at startup.</p>
 
-    <div class="flex flex-wrap gap-4 mt-8">
-      @for (rendererConfig of getMediaRenderer(); track rendererConfig) {
+    <div class="flex flex-wrap gap-4 mt-8 max-w-4xl">
+      @for (rendererConfig of getMediaRenderer(); track rendererConfig.mediaRenderer.udn) {
       <div class="flex flex-col bg-zinc-900 border-0 rounded-2xl">
         <!-- Header -->
-         <div class="border-0 border-b-1 border-zinc-600 grow p-6 pb-2 flex flex-col">
-            <div class="no-wrap text-lg font-bold">{{rendererConfig.mediaRenderer.friendlyName}}</div>
-            <div class="col-span-2 text-xs font-light text-zinc-600">{{rendererConfig.mediaRenderer.udn}}</div>
-         </div>
+        <div class="border-0 border-b-1 border-zinc-600 grow p-6 pb-2 flex flex-col">
+          <div class="no-wrap text-lg font-bold">{{rendererConfig.mediaRenderer.friendlyName}}</div>
+          <div class="col-span-2 text-xs font-light text-zinc-600">{{rendererConfig.mediaRenderer.udn}}</div>
+        </div>
 
         <!-- Body -->
         <div class="flex p-4">
@@ -102,82 +102,53 @@
             }
             <div class="font-medium">IP</div>
             <div class="col-span-2 font-light">{{rendererConfig.ip}}</div>
-            <div class="font-medium">Amplifier Driver</div>
+            <div class="font-medium mt-1">Amplifier Driver</div>
             <div>
-              <select id="countries" class="p-1 border text-sm rounded-lg  block w-full bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
-                <option selected>Choose a country</option>
-                <option value="US">United States</option>
-                <option value="CA">Canada</option>
-                <option value="FR">France</option>
-                <option value="DE">Germany</option>
+              <select [(ngModel)]="rendererConfig.deviceDriverType" id="dd-select" class="p-1 border text-sm rounded-lg  block w-full bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
+                <option selected value="">Choose a driver</option>
+                @for (dd of configService.deviceDriverList; track dd) {
+                  <option [value]="dd.deviceType">{{dd.deviceType}}</option>
+                }                
               </select>              
             </div>
+            @if (showAdvancedRendererSettings(rendererConfig)) {
+              <div class="col-span-3 font-bold text-zinc-500">Device Driver Configuration</div>
 
+              <div class="font-medium">connection string</div>
+              <div class="col-span-2 font-light">
+                <input [(ngModel)]="rendererConfig.connectionString" type="text" name="MY_PLAYLISTID_2" id="MY_PLAYLISTID_2"
+                class="px-0 w-full text-sm bg-transparent bg-zinc-800 appearance-none border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
+                placeholder="ip:port" />
+              </div>
+
+              <div class="font-medium">Amp default vol</div>
+              <div class="col-span-2 font-light">
+                <input [(ngModel)]="rendererConfig.powerOnVolPercent" type="number"
+                class="px-0 w-full text-sm bg-transparent bg-zinc-800 appearance-none border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
+                placeholder="enter power on default volume" />
+              </div>
+
+              <div class="font-medium">Amp default bal</div>
+              <div class="col-span-2 font-light">
+                <input [(ngModel)]="rendererConfig.powerOnBalance" type="number"
+                class="px-0 w-full text-sm bg-transparent bg-zinc-800 appearance-none border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
+                placeholder="enter power on default balance" />
+              </div>
+
+              <div class="font-medium">Max. Vol</div>
+              <div class="col-span-2 font-light">
+                <input id="{{rendererConfig.mediaRenderer.udn}}-vol" type="checkbox" [(ngModel)]="rendererConfig.setCoveredUpnpDeviceToMaxVolume" class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+                <label for="{{rendererConfig.mediaRenderer.udn}}-vol" class="ms-2 text-sm font-light">set streamer to max volume</label>
+              </div>
+            }
           </div>
         </div>
-      </div>
 
-
-
-
-      <div class="media-container">
-        <div class="media-device">
-          <div class="no-wrap title">{{rendererConfig.mediaRenderer.friendlyName}}
-          </div>
-          <div class="flex">
-            <mat-form-field appearance="outline" class="me-2">
-              <mat-label>Status</mat-label>
-              @if (isRendererConfigActive(rendererConfig)) {
-              <input class="online" matInput type="text" value="ONLINE" readonly="true">
-              }
-              @if (!isRendererConfigActive(rendererConfig)) {
-              <input class="offline" matInput type="text" value="OFFLINE" readonly="true">
-              }
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>IP</mat-label>
-              <input matInput type="text" value="{{rendererConfig.ip}}" readonly="true">
-            </mat-form-field>
-          </div>
-          <mat-form-field appearance="outline">
-            <mat-label>UDN</mat-label>
-            <input matInput type="text" value="{{rendererConfig.mediaRenderer.udn}}" readonly="true">
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>amplifier type</mat-label>
-            <mat-select [(ngModel)]="rendererConfig.deviceDriverType">
-              <mat-option value="">None</mat-option>
-              @for (dd of configService.deviceDriverList; track dd) {
-              <mat-option [value]="dd.deviceType">
-                {{dd.deviceType}}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-          @if (showAdvancedRendererSettings(rendererConfig)) {
-          <div class="flex flex-col">
-            <mat-form-field appearance="outline">
-              <mat-label>amplifier driver connection</mat-label>
-              <input matInput type="text" [(ngModel)]="rendererConfig.connectionString" placeholder="ip:port">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>amplifier on power default volume</mat-label>
-              <input matInput type="number" min="0" max="100" [(ngModel)]="rendererConfig.powerOnVolPercent" placeholder="undefined">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>amplifier default balance</mat-label>
-              <input matInput type="number" min="-50" max="50" [(ngModel)]="rendererConfig.powerOnBalance" placeholder="undefined">
-            </mat-form-field>
-            <mat-slide-toggle class="mb-2" [(ngModel)]="rendererConfig.setCoveredUpnpDeviceToMaxVolume" [disabled]="!rendererConfig.deviceDriverType">
-              UPnP/streamer max volume
-            </mat-slide-toggle>
-          </div>
-          }
-          <div class="middle-spacer">&nbsp;</div>
-          <div class="flex mt-4 mb-4">
+        <!-- Footer -->
+        <div class="flex border-0 border-t-1 border-zinc-600 p-6 flex justify-around">
             <button mat-stroked-button class="ms-2" color="primary" (click)="saveRendererConfig(rendererConfig)">save</button>
             <button mat-stroked-button class="ms-2" color="warn" (click)="deleteRendererConfig(rendererConfig)">delete</button>
             <button mat-stroked-button class="ms-2" color="basic" (click)="initServices(rendererConfig)">init services</button>
-          </div>
         </div>
       </div>
       }
