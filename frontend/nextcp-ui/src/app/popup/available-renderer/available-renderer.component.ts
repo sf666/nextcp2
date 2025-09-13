@@ -19,7 +19,7 @@ export class AvailableRendererComponent {
   popupHeight = computed(() => this.rendererCount() * 30 + 120);
 
   filteredMediaRendererList = computed(() => {
-    return this.deviceService.mediaServerList().filter(
+    return this.deviceService.mediaRendererList().filter(
       pl => {
         if (this.configurationService.findRendererConfig(pl.udn)) {
           return this.configurationService.findRendererConfig(pl.udn).active;
