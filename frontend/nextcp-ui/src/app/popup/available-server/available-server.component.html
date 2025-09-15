@@ -1,14 +1,12 @@
-@if (true) {
-  <div class="panel" (mouseleave)="close()">
-    <div class="dialogTitle">Media Server</div>
-    <div class="dialogItems flex flex-col flex-wrap mt-4 minWidth">
-      @for (device of filteredMediaServerList(); track device.udn) {
-        <div class="flex no-wrap element-item {{getSelectedClass(device.udn)}}"
-          (click)="selectServer(device.udn)">
-          <img class="h-6 w-6" src="{{device.img}}" alt="{{device.friendlyName}}">
-          <div class="ml-4">{{device.friendlyName}}</div>
-        </div>
-      }
-    </div>
+<div class="panel border-0 rounded-xl" (mouseleave)="close()">
+  <div class="border-0 border-b-1 text-lg font-bold border-zinc-600 p-4">Media Server</div>
+  <div class="dialogItems flex flex-col flex-wrap mt-4 minWidth">
+    @for (device of filteredMediaServerList(); track device.udn) {
+      <div class="flex no-wrap element-item {{getSelectedClass(device.udn)}}"
+        (click)="selectServer(device.udn)">
+        <img class="h-6 w-6" src="{{device.img}}" alt="{{device.friendlyName}}">
+        <div class="ml-4">{{device.friendlyName}}</div>
+      </div>
+    }
   </div>
-}
+</div>

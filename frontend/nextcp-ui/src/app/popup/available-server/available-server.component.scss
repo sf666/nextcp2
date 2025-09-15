@@ -1,15 +1,10 @@
 @use "tailwindcss";
 
-.dialogTitle {
-    font-size     : 1rem;
-    letter-spacing: 0.05rem;
-    font-weight   : 500;
-    min-width     : 250px;
-    padding-left  : 20px;
-    padding-top   : 16px;
-    padding-bottom: 12px;
-    color         : var(--snow-white);
+
+p, h1, h2, h3, h4, h5, h6, div {
+    font-family    : 'HK Grotesk';
 }
+
 
 .element-item {
     color         : var(--glas-white-3);

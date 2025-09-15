@@ -63,20 +63,21 @@
       <my-alert prefix="Info" text="No media server online"></my-alert>
     }
 
-    <div class="mt-6 mt-8 flex flex-row mt-4">
+    <div class="mb-6 mt-8 flex flex-row mt-4">
       <h1 class="text-xl font-medium tracking-tight text-white">Renderer Configuration</h1>
-      <mat-slide-toggle color="accent" class="ms-4 w-40 self-center grow-3" [(ngModel)]="showOnlyActiveRenderer">
-        show only online renderer
-      </mat-slide-toggle>
+      <div class="flex items-center ms-4">
+        <input id="enabled-all-Renderer" type="checkbox" [(ngModel)]="showOnlyActiveRenderer" class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+        <label for="enabled-all-Renderer" class="ms-2 text-sm font-light">show only active renderer</label>
+      </div>
     </div>
 
-    <p class="mt-4 font-light text-gray-400 max-w-2xl">
-      Renderers may be offline. Disabled renderers will not appear in certain pop-ups or selection lists.</p>
+    <my-alert prefix="Info" text="Disabled renderer will not appear in certain pop-ups or selection lists"></my-alert>
 
     <p class="mt-2 font-light text-gray-400 max-w-2xl">
-      If a streaming device is connected to an amplifier, a device driver can be selected to control the amplifier’s power and volume
-      instead of the streamer’s. A default volume level can be applied to the amplifier when powered on. If UPnP Max Volume is enabled,
-      the streaming device’s volume can be set to 100% at startup.</p>
+      If a streaming device is connected to an amplifier, a device driver can be assigned to control the amplifier’s power 
+      and volume instead of the streamer’s. A default volume level is applied each time the amplifier is powered on. 
+      When UPnP Max Volume is enabled, the streaming device automatically sets its volume to 100% at startup.
+    </p>
 
     <div class="flex flex-wrap gap-4 mt-8 max-w-4xl">
       @for (rendererConfig of getMediaRenderer(); track rendererConfig.mediaRenderer.udn) {
@@ -291,15 +292,7 @@
 
     <h1 class="mt-8 text-xl font-medium tracking-tight text-white">Audio Addict Radio Network</h1>
     <form class="max-w-2xl m-8 mt-8">
-      <div class="grid grid-cols-2 gap-4">
-        <div class="relative z-0 w-full mb-5 group">
-          <input [(ngModel)]="configService.audioAddictConfig().token" type="text" name="FORM_AA_token" id="FORM_AA_token"
-            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
-            placeholder=" " />
-          <label for="FORM_AA_token"
-            class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">network
-            token</label>
-        </div>
+      <div class="grid grid-cols-3 gap-4">
         <div class="relative z-0 w-full mb-5 group">
           <input [(ngModel)]="configService.audioAddictConfig().user" type="text" name="FORM_AA_user" id="FORM_AA_user"
             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
@@ -320,7 +313,7 @@
             placeholder=" " />
           <label for="FORM_AA_euro"
             class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">prefer
-            european stream server</label>
+            european server</label>
         </div>
       </div>
       <button mat-stroked-button color="primary" (click)="saveAudioAddict()">save</button>
@@ -335,11 +328,11 @@
       <span class="text-gray-400"> Your Spotify account is connected.</span>
     </p>
     } @else {
-      <p class="mt-2 text-gray-400">
+      <p class="my-2 text-gray-400">
         Click this button. A new window will open. Login and approve access to nextCP/2 :
       </p>
       <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="registerAppAtSpotify()">nextCP/2 Spotify access</button>
-      <p class="max-w-2xl text-gray-400 mb-4">
+      <p class="my-2 max-w-2xl text-gray-400 mb-4">
           After granting access you wil be redirected to a localhost URL (error page). Copy spotify access code
           from your browsers URL bar into the input field below
       </p>
@@ -348,10 +341,12 @@
             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
             placeholder="" />
           <label for="FORM_SPOTIFY_CODE"
-            class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">enter Spotify API Code</label>
+            class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">enter Spotify API Code here</label>
       </div>
       <button id="spotifyLoginBtn" mat-stroked-button class="settings maxButton" (click)="sendSpotifyCode()">send it</button>
-      <my-alert prefix="Hint" text="To copy the access code, click in your browsers URL bar and copy everything after 'http://localhost:65525/?code='"></my-alert>
+      <div class="my-4">
+        <my-alert prefix="Hint" text="To copy the access code, click in your browsers URL bar and copy everything after 'http://localhost:65525/?code='"></my-alert>
+      </div>
     }
 
     <h2 class="mt-8 tracking-tight text-gray-300">MusicBrainz</h2>
@@ -378,9 +373,9 @@
     </form>
 
     <h2 class="mt-4 font-medium tracking-tight text-gray-300">Last FM</h2>
-    <p class="mt-2 text-gray-400">1. Click this button to open a new window. Log in and approve access for nextCP/2 :</p>
+    <p class="my-2 text-gray-400">1. Click this button to open a new window. Log in and approve access for nextCP/2 :</p>
     <button mat-stroked-button class="settings maxButton" (click)="activateLastFM()">nextCP/2 LastFM access</button>
-    <p class="mt-2 max-w-2xl text-gray-400">2. After completing Step 1, click this button to connect nextCP/2 to LastFM :</p>
+    <p class="mt-4 mb-2 max-w-2xl text-gray-400">2. After completing Step 1, click this button to connect nextCP/2 to LastFM :</p>
     <button mat-stroked-button class="settings maxButton" (click)="generateSession()">generate LastFM session</button>
 
     <h1 class="mt-8 text-xl font-medium tracking-tight text-white">System Information</h1>
