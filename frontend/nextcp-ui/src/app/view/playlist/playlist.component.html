@@ -1,25 +1,21 @@
 <div class="playlistMainScreen mb-32" id="Player_Queue">
-  @if (!deviceService.mediaRendererSelected) {
-    <div class="regular ms-3 mt-3">
-      No player
-    </div>
-  }
-  @if (deviceService.mediaRendererSelected) {
+
+  @if (deviceService.mediaRendererSelected()) {
     <div class="flex ms-3">
       <div class="regular me-2">Playlist of :</div>
       <div class="highlight">{{deviceService.selectedMediaRendererDevice().friendlyName}}</div>       
     </div>
+    <div class="flex border-bottom border-secondary">
+      <button mat-stroked-button color="primary" class="mv-4 my-buttons m-4" [disabled]="!deviceService.mediaRendererSelected" (click)="play()">
+        <mat-icon class="material-symbols-outlined thin">play_arrow</mat-icon>
+        <span class="button button-text">play</span>
+      </button>
+      <button mat-stroked-button color="warn" class="mv-4 my-buttons m-4" [disabled]="!deviceService.mediaRendererSelected" (click)="delete()">
+        <mat-icon class="material-symbols-outlined thin">delete</mat-icon>
+        <span class="button button-text">delete</span>
+      </button>
+    </div>
   }
-  <div class="flex border-bottom border-secondary">
-    <button mat-stroked-button color="primary" class="mv-4 my-buttons m-4" [disabled]="!deviceService.mediaRendererSelected" (click)="play()">
-      <mat-icon class="material-symbols-outlined thin">play_arrow</mat-icon>
-      <span class="button button-text">play</span>
-    </button>
-    <button mat-stroked-button color="warn" class="mv-4 my-buttons m-4" [disabled]="!deviceService.mediaRendererSelected" (click)="delete()">
-      <mat-icon class="material-symbols-outlined thin">delete</mat-icon>
-      <span class="button button-text">delete</span>
-    </button>
-  </div>
 
   @if (deviceService.mediaRendererSelected()) {
     <div>
@@ -56,8 +52,9 @@
       }
     </div>
   } @else {
-    <div class="regularText infotext">
-      Please select a media renderer below or define a default media renderer in the <a href="#/settings">App settings</a>.
+    <div class="inline-flex items-center ms-8 p-4 max-w-lg mb-4 text-sm mt-8 rounded-lg bg-gray-800 text-red-400" role="alert">
+      Please select a media renderer by clicking the 
+      <span class="material-symbols-outlined icon-main">speaker</span> button.
     </div>
   }
 </div>
