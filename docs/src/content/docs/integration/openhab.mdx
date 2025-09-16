@@ -57,16 +57,65 @@ It is sufficient to copy only the first parts of the radio station label, that u
 <Bullets title="Configuration steps">
     <li>Click on the new added thing and click on `channels`.</li>
     <li>Click on `add channel`.</li>
-    <li>Select `Switch-Channel`.</li>
-    <li>Configure the channel by adding a label like "Amplifier Power".</li>
-    <li>Enter for "command url extension" `/standby/DEVICE_UUID/%2$s`</li>
-    <li>Enter for "status url extension" `/standby/DEVICE_UUID`</li>
-    <li>Enter for "ON value" `false`</li>
-    <li>Enter for "OFF value" `true`</li>
+    <li>Select `Player channel`.</li>
+    <li>Configure the channel by adding a label like "Play Radio FFN".</li>
+    <li>Enter for "mode" `WRITE ONLY`</li>
+    <li>Enter for "playValue" `playDefaultRadio/[DEVICE_UDN]/[RADIO_NAME_URL_ENCODED]`</li>
+    <li>Enter for "pauseValue" `pauseRadio/[DEVICE_UDN]`</li>
+    <li>Enter for "commandExtension" `%2$s`</li>
     <li>SAVE</li>
-    <li>In the channel overview. Identify the new created channel "Amplifier Power" and click on "Add link to item"</li>
-    <li>Click on "create new item". Choose an identifying name that will be used in Alexa later like "Amplifier". Click on "link".</li>
+    <li>In the channel overview. Identify the new created channel "Play Radio" and click on "Add link to item"</li>
+    <li>Click on "create new item". Choose an identifying name that will be used in Alexa later like "PLAY FFN". Click on "link".</li>
 </Bullets>
+
+### OpenHab NextCP/2 Thing configuration
+
+Change the baseURL, DEVICE_UDN and RADIO_NAME according to your setup.
+
+```yaml
+UID: http:url:464b7fb4a0
+label: NexctCP/2
+thingTypeUID: http:url
+configuration:
+  authMode: BASIC
+  ignoreSSLErrors: false
+  baseURL: http://192.168.112.5:8085/SimpleDeviceControl
+  delay: 0
+  stateMethod: GET
+  refresh: 30
+  commandMethod: GET
+  contentType: application/json
+  timeout: 3000
+  bufferSize: 2048
+location: Server
+channels:
+  - id: last-failure
+    channelTypeUID: http:request-date-time
+    label: Last Failure
+    configuration: {}
+  - id: last-success
+    channelTypeUID: http:request-date-time
+    label: Last Success
+    configuration: {}
+  - id: McIntosh_Standby_State
+    channelTypeUID: http:switch
+    label: McIntosh Standby
+    description: ""
+    configuration:
+      onValue: "false"
+      offValue: "true"
+      stateExtension: /standby/4c494e4e-3d9b-11e1-b86c-0016e808df4b
+      commandExtension: /standby/4c494e4e-3d9b-11e1-b86c-0016e808df4b/%2$s
+  - id: Play_Radio_FFN
+    channelTypeUID: http:player
+    label: Play Radio FFN
+    description: ""
+    configuration:
+      mode: WRITEONLY
+      playValue: playDefaultRadio/4c494e4e-3d9b-11e1-b86c-0016e808df4b/103.1%20%7C%20radio%20ffn
+      pauseValue: pauseRadio/4c494e4e-3d9b-11e1-b86c-0016e808df4b
+      commandExtension: "%2$s"
+```
 
 
 ## Item / Alexa integration
