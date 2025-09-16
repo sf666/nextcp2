@@ -189,7 +189,7 @@
 
     <h1 class="text-xl font-medium tracking-tight text-white">General Configuration</h1>
     <form class="max-w-2xl m-8">
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div class="relative z-0 w-full mb-5 group">
           <input [(ngModel)]="configService.applicationConfig.libraryPath" type="text" name="FORM_DDLP" id="FORM_DDLP"
             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
@@ -292,7 +292,7 @@
 
     <h1 class="mt-8 text-xl font-medium tracking-tight text-white">Audio Addict Radio Network</h1>
     <form class="max-w-2xl m-8 mt-8">
-      <div class="grid grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <div class="relative z-0 w-full mb-5 group">
           <input [(ngModel)]="configService.audioAddictConfig().user" type="text" name="FORM_AA_user" id="FORM_AA_user"
             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"

@@ -3,6 +3,7 @@ package nextcp.upnp.device.mediaserver;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Base64;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -11,6 +12,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.support.contentdirectory.DIDLParser;
 import org.jupnp.support.model.DIDLContent;
@@ -30,6 +32,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import jakarta.annotation.PostConstruct;
 import nextcp.config.ServerConfig;
+import nextcp.dto.Config;
 import nextcp.dto.ContainerDto;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MediaServerDto;
@@ -55,6 +58,11 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumL
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMediaStoreFolderInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAnonymousDevicesWriteInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictEurope;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictEuropeInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictPassInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictUser;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictUserInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioUpdateRatingTagInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWriteInput;
 import nextcp.util.BackendException;
@@ -81,6 +89,9 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	@Autowired
 	private ServerConfig serverConfig = null;
+
+	@Autowired
+	private Config config = null;
 
 	@Autowired
 	private ApplicationEventPublisher publisher = null;
@@ -134,6 +145,27 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			SetAnonymousDevicesWriteInput inp = new SetAnonymousDevicesWriteInput();
 			inp.AnonymousDevicesWrite = Boolean.TRUE;
 			umsServices.setAnonymousDevicesWrite(inp);
+		}
+
+		if (!StringUtils.isAllBlank(config.audioAddictConfig.user) && !StringUtils.isAllBlank(config.audioAddictConfig.pass)) {
+			log.debug("[AudioAddict Config] updating UMS.conf with user & password ...");
+			try {
+				SetAudioAddictEuropeInput inp = new SetAudioAddictEuropeInput();
+				inp.AudioAddictEurope = config.audioAddictConfig.preferEuropeanServer; 
+				umsServices.setAudioAddictEurope(inp);
+				
+				SetAudioAddictUserInput inp_user = new SetAudioAddictUserInput();
+				inp_user.AudioAddictUser = config.audioAddictConfig.user; 
+				umsServices.setAudioAddictUser(inp_user);
+
+				SetAudioAddictPassInput inp_pass = new SetAudioAddictPassInput();
+				inp_pass.AudioAddictPass = new String(Base64.getDecoder().decode(config.audioAddictConfig.pass));
+				umsServices.setAudioAddictPass(inp_pass);
+			} catch (Exception e) {
+				log.warn("couldn't update AudioAddict Network.", e);
+			}			
+		} else {
+			log.debug("[AudioAddict Config] disabled. Please set username & password to activate AudioAddict network support.");
 		}
 
 		ServerDeviceConfiguration sd = getNewServerConfig();
