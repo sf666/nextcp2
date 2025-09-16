@@ -21,6 +21,9 @@
 @source "../node_modules/flowbite";
 
 
+p, h1, h2, h3, h4, h5, h6, div {
+    font-family    : 'HK Grotesk';
+}
 
 html, body {
     min-height: -webkit-fill-available;
