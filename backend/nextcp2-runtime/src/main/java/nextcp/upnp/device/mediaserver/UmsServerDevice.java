@@ -135,6 +135,9 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			inp.AnonymousDevicesWrite = Boolean.TRUE;
 			umsServices.setAnonymousDevicesWrite(inp);
 		}
+
+		ServerDeviceConfiguration sd = getNewServerConfig();
+		serverConfig.updateServerDevice(sd);
 	}
 
 	@Override
@@ -519,6 +522,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	public void updateCurrentConfigState(ServerDeviceConfiguration c) {
 		super.updateCurrentConfigState(c);
 		c.updateRatingInFile = isUpdateRatingInFile();
+		serverConfig.updateServerDevice(c);
 	}
 
 	@Override

@@ -47,6 +47,9 @@ public class MediaServerDevice extends BaseDevice {
     @Autowired
     private ServerConfig serverConfigService = null;
 	
+	@Autowired
+	private ServerConfig serverConfig = null;
+
 	public MediaServerDevice(RemoteDevice device) {
 		super(device);
 	}
@@ -312,5 +315,6 @@ public class MediaServerDevice extends BaseDevice {
         c.ip = getDevice().getIdentity().getDescriptorURL().getHost();
         c.displayString = getDevice().getDisplayString();
         c.mediaServer = getAsDto();
+		serverConfig.updateServerDevice(c);        
 	}
 }
