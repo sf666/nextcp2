@@ -89,7 +89,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	@Autowired
 	private ServerConfig serverConfig = null;
-
+	
 	@Autowired
 	private Config config = null;
 
@@ -99,6 +99,8 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	@Autowired
 	private ToastEventPublisher toast = null;
 
+	private volatile boolean initialConfigUpdateDone = false;
+	
 	public UmsServerDevice(RemoteDevice device) {
 		super(device);
 		factory.setNamespaceAware(false);
@@ -126,12 +128,22 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		}
 	}
 
-	private void configureServer() {
-		log.info("anonwrite : {} ", umsServiceEventListener.getStateVariable().AnonymousDevicesWrite);
-		log.info("like in root  : {} ", umsServiceEventListener.getStateVariable().AudioLikesVisibleRoot);
-		log.info("update rating : {} ", umsServiceEventListener.getStateVariable().AudioUpdateRating);
-		log.info("upnp cds write : {} ", umsServiceEventListener.getStateVariable().UpnpCdsWrite);
+	/**
+	 * Rating ID3 is stored in the UMS configuration.
+	 */
+	private void updateServerConfig() {
+		ServerDeviceConfiguration sd = serverConfig.getMediaServerConfig(getUdnAsString());
+		
+		if (umsServiceEventListener.getStateVariable().AudioUpdateRating != null && !umsServiceEventListener.getStateVariable().AudioUpdateRating) {
+			sd.updateRatingInFile = umsServiceEventListener.getStateVariable().AudioUpdateRating;
+		}
+		
+		serverConfig.updateServerDevice(sd);		
+	}
 
+	private void configureUmsOnce() {
+		initialConfigUpdateDone = true;
+		
 		if (umsServiceEventListener.getStateVariable().UpnpCdsWrite != null && !umsServiceEventListener.getStateVariable().UpnpCdsWrite) {
 			log.info("UMS server -> activating UPnP create object ability ...");
 			SetUpnpCdsWriteInput inp = new SetUpnpCdsWriteInput();
@@ -167,9 +179,22 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		} else {
 			log.debug("[AudioAddict Config] disabled. Please set username & password to activate AudioAddict network support.");
 		}
-
-		ServerDeviceConfiguration sd = getNewServerConfig();
-		serverConfig.updateServerDevice(sd);
+	}
+	
+	/**
+	 * received new UMS config ... 
+	 */
+	public void newUmsConfig() {
+		updateServerConfig();
+		
+		if (!initialConfigUpdateDone) {
+			configureUmsOnce();
+		}
+		
+		log.info("anonwrite : {} ", umsServiceEventListener.getStateVariable().AnonymousDevicesWrite);
+		log.info("like in root  : {} ", umsServiceEventListener.getStateVariable().AudioLikesVisibleRoot);
+		log.info("update rating : {} ", umsServiceEventListener.getStateVariable().AudioUpdateRating);
+		log.info("upnp cds write : {} ", umsServiceEventListener.getStateVariable().UpnpCdsWrite);
 	}
 
 	@Override
@@ -539,10 +564,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		} else {
 			return false;
 		}
-	}
-
-	public void newUmsConfig() {
-		configureServer();
 	}
 
 	public ServerDeviceConfiguration getNewServerConfig() {
