@@ -143,6 +143,15 @@ public class UmsExtendedServicesServiceEventListenerImpl implements IUmsExtended
         }
     }
     
+    public void audioAddictPassChange(String value)
+    {
+        stateVariable.AudioAddictPass = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "AudioAddictPass", value));
+        }
+    }
+    
     public void audioLikesVisibleRootChange(Boolean value)
     {
         stateVariable.AudioLikesVisibleRoot = value;
@@ -152,12 +161,30 @@ public class UmsExtendedServicesServiceEventListenerImpl implements IUmsExtended
         }
     }
     
+    public void audioAddictEuropeChange(Boolean value)
+    {
+        stateVariable.AudioAddictEurope = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "AudioAddictEurope", value));
+        }
+    }
+    
     public void upnpCdsWriteChange(Boolean value)
     {
         stateVariable.UpnpCdsWrite = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "UpnpCdsWrite", value));
+        }
+    }
+    
+    public void audioAddictUserChange(String value)
+    {
+        stateVariable.AudioAddictUser = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "AudioAddictUser", value));
         }
     }
     

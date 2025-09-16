@@ -16,8 +16,14 @@ public interface IUmsExtendedServicesServiceEventListener extends ISubscriptionE
     
     public void audioUpdateRatingChange(Boolean value);
     
+    public void audioAddictPassChange(String value);
+    
     public void audioLikesVisibleRootChange(Boolean value);
     
+    public void audioAddictEuropeChange(Boolean value);
+    
     public void upnpCdsWriteChange(Boolean value);
+    
+    public void audioAddictUserChange(String value);
     
 }
