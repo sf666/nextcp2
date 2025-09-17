@@ -20,7 +20,11 @@ public class RemoteDeviceFacade {
 
     public String getFriendlyName(RemoteDevice device)
     {
-        return device.getDetails().getFriendlyName();
+    	if (device.getDetails() != null) {
+            return device.getDetails().getFriendlyName();
+    	} else {
+    		return "NOT AVAILABLE";
+    	}    	
     }
 	
 }
