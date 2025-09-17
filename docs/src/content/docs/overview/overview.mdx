@@ -19,11 +19,14 @@ supports all additional features and is therefore the recommended media server.
 
 ### Why is the fork needed
 
-The current implementation of Universal Media Server (UMS) hasn't migrated all needed features for the best integration scenario. Furthermore, it is primarily optimized for video playback on TVs and 2-box setups. However, it lacks several key features necessary for a modern and versatile media server experience. This fork aims to address these limitations by introducing enhancements and new functionalities tailored to the needs of audiophile users.
+The current implementation of Universal Media Server (UMS) hasn't migrated all needed features for the best integration scenario. Furthermore, it is primarily optimized for video playback on TVs in a 2-box setup. However, it lacks several key features necessary for a modern and versatile media server experience. This fork aims to address these limitations by introducing enhancements and new functionalities tailored to the needs of audiophile users.
 
-One major improvement over the original implementation is accurate renderer identification in a three-box setup—a configuration widely used by users who prioritize high-quality audio playback. With this enhancement, you can control your UPnP streaming device not only via nextCP/2 but also through your preferred control point applications, such as BubbleUPnP or the LINN App.
+Major improvement over the original implementation is an accurate renderer identification in a 3-box setup — a configuration widely used by users who prioritize high quality audio playback. With this enhancement, you can control your UPnP streaming devices through your preferred control point application, such as BubbleUPnP, DENON HEOS App or the LINN App. The correct renderer configuration will be used, no matter to which renderer device you stream the content.
 
-To support the three-box setup, the UMS "authorization" feature has been disabled.
+:::caution
+To support the three-box setup, the UMS "authorization" feature has been disabled on the server side. The UI let's you still configure it, but it will be ignored.
+:::
+
 
 ### Additional features supported by UMS fork
 
