@@ -1,5 +1,5 @@
 ---
-title: What is NextCP?
+title: Preferred Media Server
 order: 2
 ---
 
@@ -10,6 +10,14 @@ import imgLike from './img/like_album.png';
 import imgPlaylist from './img/playlist_support.png';
 import imgPlaylistDialog from './img/playlist_dialog.png';
 
+export const Bullets = ({children, title}) => (
+  <div>
+    <h6 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{title}</h6>
+    <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+      {children}
+    </ul>
+  </div>
+);
 
 This control point put's it focus on providing the best user experience for audio enthusiasts. Controlling other content is also supported but with less UI
 awareness.
@@ -61,6 +69,19 @@ Clicking the &#x22EE; button displays additional song options.
 When you create a new playlist or add songs to an existing one, a dialog will appear allowing you to select the desired playlist.
 
 <Image src={imgPlaylistDialog} alt="like album" class="" />
+
+#### Audio Addict Network Support
+
+If you have a paid subscription to the Audio Addict Network, you can access the following radio stations directly from the server:
+
+<Bullets title="Supported Stations">
+    <li>Classical Radio</li>
+    <li>Radio Tunes</li>
+    <li>Rock Radio</li>
+    <li>Jazz Radio</li>
+    <li>Zen Radio</li>
+    <li>DI.fm</li>
+</Bullets>
 
 #### Other Server Side Actions
 
