@@ -236,6 +236,7 @@ ContainerItemDto:
    musicItemDto: List<MusicItemDto>
    minimServerSupportTags: List<ContainerDto>
    totalMatches: Long
+   resourceId: String
    
 
 ContainerIdDto:
@@ -310,6 +311,7 @@ MusicItemDto:
    parentId: String
    refId: String
    songId: MusicItemIdDto
+   resourceId: String
    
    conductor: String
    composer: String

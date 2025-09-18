@@ -89,6 +89,7 @@ export class DtoGeneratorService {
       numberOfThisDisc: '',
       objectClass: '',
       objectID: '',
+      resourceId: '',
       originalTrackNumber: '',
       parentId: '',
       rating: 0,
@@ -163,7 +164,8 @@ export class DtoGeneratorService {
       minimServerSupportTags: [],
       musicItemDto: [],
       albumDto: [],
-      totalMatches: 0
+      totalMatches: 0,
+      resourceId: '',
     }
   }
 
@@ -207,6 +209,7 @@ export class DtoGeneratorService {
       parentId: '',
       rating: 0,
       refId: '',
+      resourceId: '',
       streamingURL: '',
       title: '',
       genre: '',

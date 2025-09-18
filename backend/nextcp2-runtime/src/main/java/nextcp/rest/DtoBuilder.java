@@ -369,6 +369,10 @@ public class DtoBuilder
                 String nodeName = n.getNodeName().toLowerCase();
                 switch (nodeName)
                 {
+                    case "resourceid":
+                        itemDto.resourceId = getTextAndCheckForNull(n);
+                        log.debug("resourceId : " + itemDto.resourceId);
+                        break;
                     case "musicbrainztrackid":
                         itemDto.songId.musicBrainzIdTrackId = getTextAndCheckForNull(n);
                         log.debug("musicbrainztrackid : " + itemDto.songId.musicBrainzIdTrackId);

@@ -102,7 +102,7 @@ export class SettingsComponent implements OnInit {
   }
 
   public getMediaRenderer(): RendererDeviceConfiguration[] {
-    if (this.showOnlyActiveRenderer) {
+    if (this.showOnlyActiveRenderer()) {
       return this.configService
         .getRendererDevicesConfig()
         .filter((renderer) => this.isRendererConfigActive(renderer));
@@ -113,7 +113,7 @@ export class SettingsComponent implements OnInit {
 
   public getMediaServerConfig(): ServerDeviceConfiguration[] {
     if (this.configService?.getServerConfig()?.serverDevices) {
-      if (this.showOnlyActiveServer) {
+      if (this.showOnlyActiveServer()) {
         return this.configService.getServerConfig()
           .serverDevices.filter((server) => this.isServerConfigActive(server));
       } else {

@@ -50,7 +50,7 @@ public class Nextcp2NetworkAddressFactory extends NetworkAddressFactoryImpl {
 						}
 					}
 					synchronized (networkInterfaces) {
-						log.info("Binding to network interface: {}", iface.getDisplayName());
+						log.info("found network interface: {}", iface.getDisplayName());
 						networkInterfaces.add(iface);
 					}
 				} else {

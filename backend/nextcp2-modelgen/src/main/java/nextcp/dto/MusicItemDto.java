@@ -19,6 +19,7 @@ public class MusicItemDto
     public String parentId;
     public String refId;
     public MusicItemIdDto songId;
+    public String resourceId;
     public String conductor;
     public String composer;
     public String currentTrackMetadata;
@@ -39,7 +40,7 @@ public class MusicItemDto
     {
     }
 
-    public MusicItemDto(String mediaServerUDN, String streamingURL, String objectID, String objectClass, String parentId, String refId, MusicItemIdDto songId, String conductor, String composer, String currentTrackMetadata, String creator, String title, String artistName, String numberOfThisDisc, String originalTrackNumber, String album, String date, AudioFormat audioFormat, String albumArtUrl, String genre, Integer rating, MusicBrainzId musicBrainzId)
+    public MusicItemDto(String mediaServerUDN, String streamingURL, String objectID, String objectClass, String parentId, String refId, MusicItemIdDto songId, String resourceId, String conductor, String composer, String currentTrackMetadata, String creator, String title, String artistName, String numberOfThisDisc, String originalTrackNumber, String album, String date, AudioFormat audioFormat, String albumArtUrl, String genre, Integer rating, MusicBrainzId musicBrainzId)
     {
         this.mediaServerUDN = mediaServerUDN;
         this.streamingURL = streamingURL;
@@ -48,6 +49,7 @@ public class MusicItemDto
         this.parentId = parentId;
         this.refId = refId;
         this.songId = songId;
+        this.resourceId = resourceId;
         this.conductor = conductor;
         this.composer = composer;
         this.currentTrackMetadata = currentTrackMetadata;
@@ -77,6 +79,7 @@ public class MusicItemDto
         sb.append("parentId=").append(this.parentId).append(", ");
         sb.append("refId=").append(this.refId).append(", ");
         sb.append("songId=").append(this.songId).append(", ");
+        sb.append("resourceId=").append(this.resourceId).append(", ");
         sb.append("conductor=").append(this.conductor).append(", ");
         sb.append("composer=").append(this.composer).append(", ");
         sb.append("currentTrackMetadata=").append(this.currentTrackMetadata).append(", ");
