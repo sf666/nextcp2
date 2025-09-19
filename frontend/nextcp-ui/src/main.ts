@@ -1,4 +1,3 @@
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { MediaPlayerComponent } from './app/view/media-player/media-player.component';
 import { enableProdMode, importProvidersFrom, provideZonelessChangeDetection } from '@angular/core';
 import { environment } from './environments/environment';
@@ -118,6 +117,5 @@ bootstrapApplication(AppComponent, {
     },
     provideHttpClient(withInterceptorsFromDi()),
     provideZonelessChangeDetection(),
-    provideAnimations()
   ],
 }).catch((err) => console.error(err));
