@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject, ChangeDetectionStrategy, signal, AnimationCallbackEvent } from '@angular/core';
+import { Component, OnInit, Inject, ChangeDetectionStrategy, signal, AnimationCallbackEvent } from '@angular/core';
 
 import { ToastData, TOAST_CONFIG_TOKEN, ToastConfig } from './toast-config';
 import { ToastRef } from './toast-ref';
