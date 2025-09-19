@@ -2,7 +2,6 @@ import { MediaPlayerComponent } from './app/view/media-player/media-player.compo
 import { enableProdMode, importProvidersFrom, provideZonelessChangeDetection } from '@angular/core';
 import { environment } from './environments/environment';
 import { AppComponent } from './app/app.component';
-import { ToastrModule } from 'ngx-toastr';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -20,7 +19,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSliderModule } from '@angular/material/slider';
 import { CustomHttpInterceptor } from './app/service/http-interceptor';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import {
   HTTP_INTERCEPTORS,
   withInterceptorsFromDi,
@@ -103,12 +101,6 @@ bootstrapApplication(AppComponent, {
       BrowserModule,
       FormsModule,
       ReactiveFormsModule,
-      ToastrModule.forRoot({
-        timeOut: 3000,
-        countDuplicates: true,
-        maxOpened: 10,
-        preventDuplicates: true,
-      }),
     ),
     provideClientHydration(),
     {
@@ -122,6 +114,5 @@ bootstrapApplication(AppComponent, {
     },
     provideHttpClient(withInterceptorsFromDi()),
     provideZonelessChangeDetection(),
-    provideAnimations(),
   ],
 }).catch((err) => console.error(err));
