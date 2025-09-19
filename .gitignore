@@ -26,7 +26,6 @@ rating_db.trace.db
 .git-versioned-pom.xml
 nextcp2.log
 *.versionsBackup
-yarn.lock
 package-lock.json
 tslint-to-eslint-config.log
 frontend/nextcp-ui/.cache
