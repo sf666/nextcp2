@@ -1,0 +1,17 @@
+@if (isShown()) {
+<div animate.enter="fade-in" animate.leave="fade-out" (animate.leave)="animateLeave($event)">
+    <div class="flex flex-col items-start items-center w-full max-w-lg min-w-sm rounded-lg shadow-sm text-gray-400 bg-gray-800" role="alert">
+        <div class="px-4 pt-4 pb-2 text-sm w-full font-normal border-0 border-b-1">
+            <span class="mt-4 text-sm font-semibold text-gray-900 dark:text-white">{{ data.header }}</span>
+        </div>
+        <div class="flex items-center p-4">
+            <div [class]="getColor()">
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path [attr.d]="getPathForIcon()" />
+                </svg>
+            </div>
+            <div class="ms-3 text-sm font-normal">{{ data.text }}</div>
+        </div>
+    </div>
+</div>
+}

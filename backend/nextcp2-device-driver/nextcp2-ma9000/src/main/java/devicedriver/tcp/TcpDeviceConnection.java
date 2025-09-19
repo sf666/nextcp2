@@ -122,7 +122,7 @@ public class TcpDeviceConnection
             reconnect();
         }
 
-        if (socketToDevice == null)
+        if (this.socketToDevice == null)
         {
             log.error("Not connected to device. Reconnecting to address " + this.address);
             reconnect();
@@ -130,20 +130,20 @@ public class TcpDeviceConnection
 
         try
         {
-            if (!socketToDevice.isConnected())
+            if (!this.socketToDevice.isConnected())
             {
                 log.warn("Not connected to tcpDevice ... " + socketToDevice);
                 reconnect();
             }
-            if (!socketToDevice.isConnected())
+            if (!this.socketToDevice.isConnected())
             {
                 log.error("reconnection failed. returning without sending data ... ");
                 return;
             }
-            socketToDevice.write(data);
+            this.socketToDevice.write(data);
             lastSend = System.currentTimeMillis();
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             log.error("send error", e);
             reconnect();

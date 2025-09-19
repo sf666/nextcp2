@@ -1,3 +1,4 @@
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { MediaPlayerComponent } from './app/view/media-player/media-player.component';
 import { enableProdMode, importProvidersFrom, provideZonelessChangeDetection } from '@angular/core';
 import { environment } from './environments/environment';
@@ -48,6 +49,7 @@ import { NetworksComponent } from './app/view/audio-addict/networks/networks.com
 import { NetworkComponent } from './app/view/audio-addict/network/network.component';
 import { UmsAudioaddictComponent } from './app/view/audio-addict/ums/ums-audioaddict.component';
 import { ContentDirectoryService } from './app/service/content-directory.service';
+import { defaultToastConfig, TOAST_CONFIG_TOKEN } from './app/service/toast/toast-config';
 
 const ROUTES: Routes = [
   { path: 'music-library/:objectId', component: MusicLibraryComponent },
@@ -72,6 +74,7 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
   providers: [
+    { provide: TOAST_CONFIG_TOKEN, useValue: defaultToastConfig },
     { provide: ContentDirectoryService, useClass: ContentDirectoryService },
     provideRouter(
       ROUTES,
@@ -101,6 +104,7 @@ bootstrapApplication(AppComponent, {
       BrowserModule,
       FormsModule,
       ReactiveFormsModule,
+      
     ),
     provideClientHydration(),
     {
@@ -114,5 +118,6 @@ bootstrapApplication(AppComponent, {
     },
     provideHttpClient(withInterceptorsFromDi()),
     provideZonelessChangeDetection(),
+    provideAnimations()
   ],
 }).catch((err) => console.error(err));
