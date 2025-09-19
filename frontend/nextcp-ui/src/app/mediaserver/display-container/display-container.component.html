@@ -8,7 +8,7 @@
 
 <!-- Top browsing element: Displays image and information about current container -->
 <div id="display-container-component-top-id" class="flex flex-col w-full">
-@if (showTopHeader) {
+@if (showTopHeader()) {
   <div class="flex w-full">
     <display-container-header class="flex grow"
     [contentDirectoryService]="contentHandler().contentDirectoryService"

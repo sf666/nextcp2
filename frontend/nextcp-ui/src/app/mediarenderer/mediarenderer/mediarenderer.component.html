@@ -1,7 +1,7 @@
 <div class="flex flex-col mb-32">
   @if(deviceService.mediaRendererSelected()) {
   <div class="flex">
-    @if (rendererService.trackInfoAvailable) {
+    @if (rendererService.trackInfoAvailable()) {
       <div class="ms-4 mt-4 flex flex-col">
         <div class="mb-3 max-image-width">
             <img src="{{getImgSrc()}}">
@@ -53,7 +53,7 @@
   </div>
 
   <!-- Detail Info -->
-  @if (rendererService.trackInfoAvailable) {
+  @if (rendererService.trackInfoAvailable()) {
     <div>
       <div mat-subheader class="p-2">audio information provided by player {{deviceService.selectedMediaRendererDevice().friendlyName}}</div>
       <div class="inputSource flex">
