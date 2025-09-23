@@ -51,7 +51,6 @@ MediaPlayerConfigDto:
    mediaServerUdn: String
 
 AudioAddictConfig:
-   token: String
    preferEuropeanServer: Boolean
    user: String
    pass: String

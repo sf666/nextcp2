@@ -12,7 +12,6 @@ export class DtoGeneratorService {
     return {
       pass:'',
       preferEuropeanServer: true,
-      token:'',
       user:''
     }
   }

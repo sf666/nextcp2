@@ -12,7 +12,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class AudioAddictConfig
 {
 
-    public String token;
     public Boolean preferEuropeanServer;
     public String user;
     public String pass;
@@ -21,9 +20,8 @@ public class AudioAddictConfig
     {
     }
 
-    public AudioAddictConfig(String token, Boolean preferEuropeanServer, String user, String pass)
+    public AudioAddictConfig(Boolean preferEuropeanServer, String user, String pass)
     {
-        this.token = token;
         this.preferEuropeanServer = preferEuropeanServer;
         this.user = user;
         this.pass = pass;
@@ -34,7 +32,6 @@ public class AudioAddictConfig
     {
         StringBuilder sb = new StringBuilder();
         sb.append("AudioAddictConfig [");
-        sb.append("token=").append(this.token).append(", ");
         sb.append("preferEuropeanServer=").append(this.preferEuropeanServer).append(", ");
         sb.append("user=").append(this.user).append(", ");
         sb.append("pass=").append(this.pass).append(", ");

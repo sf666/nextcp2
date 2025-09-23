@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-09-18 08:29:02.
+// Generated using typescript-generator version 3.2.1263 on 2025-09-23 14:01:05.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -33,7 +33,6 @@ export interface AudioAddictChannelDto {
 }
 
 export interface AudioAddictConfig {
-    token: string;
     preferEuropeanServer: boolean;
     user: string;
     pass: string;
