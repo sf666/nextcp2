@@ -46,7 +46,9 @@ public class Nextcp2JettyServerCustomizer implements JettyServerCustomizer {
 		this.server = server;
 		server.setStopAtShutdown(true);
 		server.setStopTimeout(5000L);
+		server.setHandler(new JettyHeaderFilterHandler(server.getHandler()));
 
+		
 		// Jetty doesn't accept encoded URL's for the REST services due
 		// to security reasons.
 		// Possible URI compliance level : UriCompliance.LEGACY,
