@@ -1,10 +1,5 @@
 @use "tailwindcss";
 
-:host {
-    --mdc-text-button-container-height: 36px;
-    --mdc-text-button-label-text-color: rgb(255, 255, 255);
-}
-
 button {
     font-family    : 'HK Grotesk';
     letter-spacing : 0.04rem;
@@ -14,15 +9,6 @@ button {
     width          : auto;
 }
 
-.app-label-text {
-    font-size  : 1.8rem;
-    font-weight: 300;
-}
-
-.buttonText {
-    margin-left: 0.8rem;
-}
-
 
 .create-icon {
     border-radius   : 50%;
@@ -30,35 +16,9 @@ button {
     background-color: var(--bg-grey-8);
 }
 
-
 .active {
     color: rgb(0, 255, 255) !important;
 }
-
-.sidebar-base {
-    position: fixed;
-    top     : 0;
-    left    : 0;
-    width   : var(--sidebar-width);
-    height  : calc(var(--vh, 1vh) * 100 - var(--footer-height));
-
-    display       : flex;
-    align-items   : flex-start;
-    flex-direction: column;
-    flex-shrink   : 0;
-    background    : #242428;
-    transition    : 50ms ease-in;
-    overflow-y    : auto;
-    overflow-x    : hidden;
-    letter-spacing: 0.04rem;
-    font-weight   : 300;
-}
-
-.sidebar {
-    @extend.sidebar-base;
-    width: var(--sidebar-width);
-}
-
 
 .sub-label {
     color      : var(--glas-white-4);
@@ -70,16 +30,3 @@ button {
     margin-bottom: 1rem;
 }
 
-.button-text {
-    color: rgb(255, 255, 255);
-}
-
-.myPlaylistSection {
-    display       : flex;
-    flex-direction: column;
-}
-
-.myRouterLinkSection {
-    display       : flex;
-    flex-direction: column;
-}
