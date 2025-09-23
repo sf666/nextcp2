@@ -63,8 +63,8 @@ public class RestRadioNetworks {
 
 	@GetMapping("/getNetworks")
 	public List<RadioNetwork> getNetworks() {
-		if (StringUtils.isAllBlank(config.audioAddictConfig.token)) {
-			publisher.publishEvent(new ToastrMessage(null, "warn", "Audio Addict Radio Network", "No radio network token set."));
+		if (StringUtils.isAllBlank(config.audioAddictConfig.pass)) {
+			publisher.publishEvent(new ToastrMessage(null, "warn", "Audio Addict Radio Network", "No radio network passwort set. Network will be unavailable."));
 		}
 		return networks;
 	}
