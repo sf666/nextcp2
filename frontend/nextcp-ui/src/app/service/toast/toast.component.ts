@@ -55,6 +55,11 @@ export class ToastComponent {
     setTimeout(() => {
       this.isShown.set(false);
     }, 3000);
+
+    setTimeout(() => {
+      // close ref after animation is done
+      this.ref.close();
+    }, 5000);
   }
 
   animateLeave(event: AnimationCallbackEvent) {
