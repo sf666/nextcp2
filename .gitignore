@@ -33,3 +33,4 @@ mbservice.log
 frontend/nextcp-ui/.yarn
 GEMINI.md
 frontend/node_modules
+.idea
