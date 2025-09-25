@@ -35,6 +35,8 @@ public class Nextcp2Renderer {
 	protected LastChange avTransportLastChange = null;
 	protected LastChange renderingControlLastChange = null;
 
+    protected static UDN staticUDN = new UDN("7889347a-746d-4ee5-b87f-401e1c8de34c");
+
 	final protected ServiceManager<Nextcp2ConnectionManagerService> connectionManager;
 	final protected LastChangeAwareServiceManager<Nextcp2AvTransportService> avTransport;
 	final protected LastChangeAwareServiceManager<Nextcp2AudioRenderingControl> renderingControl;
@@ -108,8 +110,12 @@ public class Nextcp2Renderer {
 
 		try {
 
-			device = new LocalDevice(new DeviceIdentity(UDN.uniqueSystemIdentifier("SALT ")), new UDADeviceType("MediaRenderer", 1),
-				new DeviceDetails("DENON", new ManufacturerDetails("Denon", "http://www.denon.com"), new ModelDetails("*DRA-N4")),
+			device = new LocalDevice(
+                new DeviceIdentity(staticUDN),
+                new UDADeviceType("MediaRenderer", 1),
+				new DeviceDetails("DENON",
+                new ManufacturerDetails("Denon", "http://www.denon.com"),
+                new ModelDetails("*DRA-N4")),
 				new Icon[] { createDefaultDeviceIcon() },
 				new LocalService[] { avTransportService, renderingControlService, connectionManagerService });
 
