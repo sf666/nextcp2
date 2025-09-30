@@ -69,22 +69,33 @@ public class RestMediaRendererService implements ISongPlayedCallback {
 
 	@PostConstruct
 	private void init() {
-		mpf = mediaPlayerDiscoveryService.getFirstFactory();
-		if (mpf == null) {
-			log.debug("Player not initialized. No factory found.");
-			return;
-		}
-		renderer = new Nextcp2Renderer(mpf, mediaPlayerConfigService, this);
-		try {
-			if (!upnpService.upnpService().getRouter().isEnabled()) {
-				upnpService.upnpService().getRouter().enable();
-			}
-		} catch (RouterException e) {
-			log.error("router error ... ", e);
-		}
 		
-		upnp.getRegistry().addDevice(renderer.getLocalDevice());
-		upnpService.upnpService().getProtocolFactory().createSendingNotificationAlive(renderer.getLocalDevice()).run();
+		ISongPlayedCallback cb = this;  
+		
+		Runnable r = new Runnable() {
+
+			public void run() {
+				mpf = mediaPlayerDiscoveryService.getFirstFactory();
+				if (mpf == null) {
+					log.debug("Player not initialized. No factory found.");
+					return;
+				}
+				renderer = new Nextcp2Renderer(mpf, mediaPlayerConfigService, cb);
+				try {
+					if (!upnpService.upnpService().getRouter().isEnabled()) {
+						upnpService.upnpService().getRouter().enable();
+					}
+				} catch (RouterException e) {
+					log.error("router error ... ", e);
+				}
+				
+		 		upnp.getRegistry().addDevice(renderer.getLocalDevice());
+				upnpService.upnpService().getProtocolFactory().createSendingNotificationAlive(renderer.getLocalDevice()).run();				
+			}
+		};
+		
+		Thread mrs = new Thread(r);
+		mrs.setName("Media Renderer Service init thread.");
 	}
 
 	@GetMapping("/mediaPlayerExists")

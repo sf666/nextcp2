@@ -114,10 +114,10 @@ public class Nextcp2Renderer {
                 new DeviceIdentity(staticUDN),
                 new UDADeviceType("MediaRenderer", 1),
 				new DeviceDetails("DENON",
-                new ManufacturerDetails("Denon", "http://www.denon.com"),
-                new ModelDetails("*DRA-N4")),
-				new Icon[] { createDefaultDeviceIcon() },
-				new LocalService[] { avTransportService, renderingControlService, connectionManagerService });
+					new ManufacturerDetails("Denon", "http://www.denon.com"),
+					new ModelDetails("*DRA-N4")),
+					new Icon[] { createDefaultDeviceIcon() },
+					new LocalService[] { avTransportService, renderingControlService, connectionManagerService });
 
 		} catch (ValidationException ex) {
 			throw new RuntimeException(ex);
