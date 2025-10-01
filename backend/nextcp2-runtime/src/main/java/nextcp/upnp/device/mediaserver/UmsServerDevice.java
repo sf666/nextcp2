@@ -2,16 +2,7 @@ package nextcp.upnp.device.mediaserver;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.Base64;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.support.contentdirectory.DIDLParser;
@@ -26,10 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import jakarta.annotation.PostConstruct;
 import nextcp.config.ServerConfig;
 import nextcp.dto.Config;
@@ -58,14 +45,13 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumL
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMediaStoreFolderInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAnonymousDevicesWriteInput;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictEurope;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictEuropeInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictPassInput;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictUser;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictUserInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioUpdateRatingTagInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWriteInput;
 import nextcp.util.BackendException;
+import nextcp.util.UpnpErrorDescriptionHandler;
 import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -78,11 +64,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	private static final Logger log = LoggerFactory.getLogger(UmsServerDevice.class.getName());
 	private OkHttpClient okClient = new OkHttpClient.Builder().build();
-	private DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	private DocumentBuilder builder = null;
-	private XPathFactory xpathfactory = XPathFactory.newInstance();
-	private XPath xpath = xpathfactory.newXPath();
-	private XPathExpression expr = null;
 
 	private UmsExtendedServicesService umsServices = null;
 	private UmsExtendedServicesServiceEventListenerImpl umsServiceEventListener = null;
@@ -98,18 +79,13 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	@Autowired
 	private ToastEventPublisher toast = null;
+	
+	private UpnpErrorDescriptionHandler errorHandler = new UpnpErrorDescriptionHandler();
 
 	private volatile boolean initialConfigUpdateDone = false;
 	
 	public UmsServerDevice(RemoteDevice device) {
 		super(device);
-		factory.setNamespaceAware(false);
-		try {
-			builder = factory.newDocumentBuilder();
-			expr = xpath.compile("//*/errorDescription/text()");
-		} catch (ParserConfigurationException | XPathExpressionException e) {
-			log.error("cannot build XML reader", e);
-		}
 	}
 
 	@PostConstruct
@@ -263,7 +239,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		try {
 			getContentDirectoryService().updateObject(inp);
 		} catch (GenActionException e) {
-			String errorText = extractErrorText(e.description);
+			String errorText = errorHandler.extractErrorText(e.description);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
@@ -281,7 +257,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		try {
 			getContentDirectoryService().updateObject(inp);
 		} catch (GenActionException e) {
-			String errorText = extractErrorText(e.description);
+			String errorText = errorHandler.extractErrorText(e.description);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
@@ -376,7 +352,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			log.info("new folder created with object id : " + newPL.getId());
 			return newPL;
 		} catch (GenActionException e) {
-			String errorText = extractErrorText(e.description);
+			String errorText = errorHandler.extractErrorText(e.description);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
@@ -405,7 +381,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			Container newPL = content.getFirstContainer();
 			return newPL;
 		} catch (GenActionException e) {
-			String errorText = extractErrorText(e.description);
+			String errorText = errorHandler.extractErrorText(e.description);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
@@ -423,27 +399,11 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			log.debug("song added. returned object id : {} ", out.NewID);
 			return out.NewID;
 		} catch (GenActionException e) {
-			String errorText = extractErrorText(e.description);
+			String errorText = errorHandler.extractErrorText(e.description);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
 		}
-	}
-
-	private String extractErrorText(String description) {
-		InputSource is = new InputSource(new StringReader(description));
-		try {
-			Document doc = builder.parse(is);
-			Object result = expr.evaluate(doc, XPathConstants.NODESET);
-			NodeList nodes = (NodeList) result;
-
-			for (int i = 0; i < nodes.getLength();) {
-				return nodes.item(i).getNodeValue();
-			}
-		} catch (SAXException | IOException | XPathExpressionException e) {
-			log.warn("cannot extract error message", e);
-		}
-		return "";
 	}
 
 	public MediaServerDto getAsDto() {
@@ -459,7 +419,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			getContentDirectoryService().destroyObject(inp);
 			log.error("deleteObject : failed for id {} ", objectId);
 		} catch (GenActionException e) {
-			String errorText = extractErrorText(e.description);
+			String errorText = errorHandler.extractErrorText(e.description);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
@@ -533,7 +493,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 				return null;
 			}
 		} catch (GenActionException e) {
-			String errorText = extractErrorText(e.description);
+			String errorText = errorHandler.extractErrorText(e.description);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);

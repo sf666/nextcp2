@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import nextcp.domainmodel.services.MyMusicService;
 import nextcp.dto.GenericResult;
+import nextcp.service.ToastEventPublisher;
+import nextcp.upnp.GenActionException;
+import nextcp.util.UpnpErrorDescriptionHandler;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
@@ -22,6 +25,12 @@ public class RestMyMusicService extends BaseRestService
     @Lazy
     private MyMusicService myMusicService = null;
 
+	@Autowired
+	private ToastEventPublisher toast = null;
+	
+	private UpnpErrorDescriptionHandler errorHandler = new UpnpErrorDescriptionHandler();
+	
+	
     public RestMyMusicService()
     {
     }
@@ -46,79 +55,63 @@ public class RestMyMusicService extends BaseRestService
     }
 
     @GetMapping("/backupLikedAlbums/{deviceId}")
-    public GenericResult backupLikedAlbum(@PathVariable("deviceId") String deviceId)
+    public void backupLikedAlbum(@PathVariable("deviceId") String deviceId)
     {
-        GenericResult gr = new GenericResult();
-        gr.success = true;
-        gr.headerMessage = "backup liked albums";
         try
         {
             myMusicService.backupMyMusic(getExtendedMediaServerByUdn(deviceId));
+            toast.publishSuccessMessage(null, "backup liked albums", "success");
         }
         catch (Exception e)
         {
-            gr.success = false;
-            gr.message = e.getMessage();
+            toast.publishErrorMessage(null, "backup liked albums", e.getMessage());
         }
-        gr.message = "success";
-        return gr;
     }
     
     @GetMapping("/restoreLikedAlbums/{deviceId}")
-    public GenericResult restoreLikedAlbum(@PathVariable("deviceId") String deviceId)
+    public void restoreLikedAlbum(@PathVariable("deviceId") String deviceId)
     {
-        GenericResult gr = new GenericResult();
-        gr.success = true;
-        gr.headerMessage = "restore liked albums";
         try
         {
             myMusicService.restoreMyMusic(getExtendedMediaServerByUdn(deviceId));
-            gr.message = "success";
+            toast.publishSuccessMessage(null, "restore liked albums", "success");
         }
         catch (Exception e)
         {
-            gr.success = false;
-            gr.message = e.getMessage();
+            toast.publishErrorMessage(null, "restore liked albums", e.getMessage());
         }
-        return gr;
     }
     
     @GetMapping("/restoreRatings/{deviceId}")
-    public GenericResult restoreRatings(@PathVariable("deviceId") String deviceId)
+    public void restoreRatings(@PathVariable("deviceId") String deviceId)
     {
-        GenericResult gr = new GenericResult();
-        gr.success = true;
-        gr.headerMessage = "restore ratings";
         try
         {
             myMusicService.restoreRatings(getExtendedMediaServerByUdn(deviceId));
-            gr.message = "success";
+            toast.publishSuccessMessage(null, "restore audio ratings", "success");
+        }
+        catch (GenActionException e)
+        {
+            toast.publishErrorMessage(null, "restore audio ratings", errorHandler.extractErrorText(e.description));
         }
         catch (Exception e)
         {
-            gr.success = false;
-            gr.message = e.getMessage();
+            toast.publishErrorMessage(null, "restore audio ratings", e.getMessage());
         }
-        return gr;
     }
     
     @GetMapping("/backupRatings/{deviceId}")
-    public GenericResult backupRatings(@PathVariable("deviceId") String deviceId)
+    public void backupRatings(@PathVariable("deviceId") String deviceId)
     {
-        GenericResult gr = new GenericResult();
-        gr.success = true;
-        gr.headerMessage = "backup liked albums";
         try
         {
             myMusicService.backupRatings(getExtendedMediaServerByUdn(deviceId));
+            toast.publishSuccessMessage(null, "backup liked albums", "success");
         }
         catch (Exception e)
         {
-            gr.success = false;
-            gr.message = e.getMessage();
+            toast.publishErrorMessage(null, "backup liked albums", e.getMessage());
         }
-        gr.message = "success";
-        return gr;
     }
     
 }

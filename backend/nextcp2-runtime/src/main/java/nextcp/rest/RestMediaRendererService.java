@@ -73,6 +73,11 @@ public class RestMediaRendererService implements ISongPlayedCallback {
 
 		Runnable r = new Runnable() {
 			public void run() {
+				try {
+					Thread.sleep(10000l);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
 				mpf = mediaPlayerDiscoveryService.getFirstFactory();
 				if (mpf == null) {
 					log.debug("Player not initialized. No factory found.");

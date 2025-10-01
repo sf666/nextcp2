@@ -50,7 +50,7 @@ export class MyMusicService {
       return;
     }
     const uri = '/backupLikedAlbums/' + this.deviceService.selectedMediaServerDevice().udn;
-    this.httpService.getWithGenericResult(this.baseUri, uri, "backup liked albums");
+    this.httpService.get(this.baseUri, uri, "backup liked albums");
   }
 
   public restoreLikedAlbums(): void {
@@ -59,7 +59,7 @@ export class MyMusicService {
       return;
     }
     const uri = '/restoreLikedAlbums/' + this.deviceService.selectedMediaServerDevice().udn;
-    this.httpService.getWithGenericResult(this.baseUri, uri, "restore liked albums");
+    this.httpService.get(this.baseUri, uri, "restore liked albums");
   }
 
   public backupRatings(): void {
@@ -68,7 +68,7 @@ export class MyMusicService {
       return;
     }
     const uri = '/backupRatings/' + this.deviceService.selectedMediaServerDevice().udn;
-    this.httpService.getWithGenericResult(this.baseUri, uri, "backup ratings");
+    this.httpService.get(this.baseUri, uri, "backup ratings");
   }
 
   public restoreRatings(): void {
@@ -77,7 +77,7 @@ export class MyMusicService {
       return;
     }
     const uri = '/restoreRatings/' + this.deviceService.selectedMediaServerDevice().udn;
-    this.httpService.getWithGenericResult(this.baseUri, uri, "restore ratings");
+    this.httpService.get(this.baseUri, uri, "restore ratings");
   }
 
 }
