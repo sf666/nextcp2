@@ -1,6 +1,6 @@
 <div class="panel">
     @if(isFolder()) {
-    @if(mediaPlayerService.mediaServerExists()) {
+    @if(mediaPlayerService.mediaPlayerExists()) {
     <div class="dialogItems flex flex-col flex-wrap">
         <div class="flex" (click)="selectPlayerFolder()">
             <button class="popupButton" color="" mat-mini-fab>
@@ -21,7 +21,7 @@
     </div>
     }
 
-    @if(mediaPlayerService.mediaServerExists() && isPlaylist()) {
+    @if(mediaPlayerService.mediaPlayerExists() && isPlaylist()) {
         <div class="dialogItems flex flex-col flex-wrap">
             <div class="flex" (click)="selectPlayerPlaylist()">
                 <button class="popupButton" color="" mat-mini-fab>

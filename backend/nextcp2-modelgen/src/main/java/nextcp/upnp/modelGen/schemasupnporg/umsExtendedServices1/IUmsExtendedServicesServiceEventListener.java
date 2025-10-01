@@ -14,9 +14,9 @@ public interface IUmsExtendedServicesServiceEventListener extends ISubscriptionE
 {
     public void anonymousDevicesWriteChange(Boolean value);
     
-    public void audioUpdateRatingChange(Boolean value);
-    
     public void audioAddictPassChange(String value);
+    
+    public void audioUpdateRatingChange(Boolean value);
     
     public void audioLikesVisibleRootChange(Boolean value);
     

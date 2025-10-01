@@ -63,7 +63,7 @@ public class RestMyMusicService extends BaseRestService
         gr.message = "success";
         return gr;
     }
-
+    
     @GetMapping("/restoreLikedAlbums/{deviceId}")
     public GenericResult restoreLikedAlbum(@PathVariable("deviceId") String deviceId)
     {
@@ -82,4 +82,43 @@ public class RestMyMusicService extends BaseRestService
         }
         return gr;
     }
+    
+    @GetMapping("/restoreRatings/{deviceId}")
+    public GenericResult restoreRatings(@PathVariable("deviceId") String deviceId)
+    {
+        GenericResult gr = new GenericResult();
+        gr.success = true;
+        gr.headerMessage = "restore ratings";
+        try
+        {
+            myMusicService.restoreRatings(getExtendedMediaServerByUdn(deviceId));
+            gr.message = "success";
+        }
+        catch (Exception e)
+        {
+            gr.success = false;
+            gr.message = e.getMessage();
+        }
+        return gr;
+    }
+    
+    @GetMapping("/backupRatings/{deviceId}")
+    public GenericResult backupRatings(@PathVariable("deviceId") String deviceId)
+    {
+        GenericResult gr = new GenericResult();
+        gr.success = true;
+        gr.headerMessage = "backup liked albums";
+        try
+        {
+            myMusicService.backupRatings(getExtendedMediaServerByUdn(deviceId));
+        }
+        catch (Exception e)
+        {
+            gr.success = false;
+            gr.message = e.getMessage();
+        }
+        gr.message = "success";
+        return gr;
+    }
+    
 }

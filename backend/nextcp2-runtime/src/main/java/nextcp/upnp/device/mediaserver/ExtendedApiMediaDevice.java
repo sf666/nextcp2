@@ -38,6 +38,10 @@ public interface ExtendedApiMediaDevice
     public void backupMyMusic();
 
     public void restoreMyMusic();
+
+    public void backupRatings();
+
+    public void restoreRatings();
     
     // PlaylistServices
     

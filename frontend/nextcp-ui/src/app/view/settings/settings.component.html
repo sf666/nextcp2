@@ -172,15 +172,33 @@
     }
     }
 
+    <h2 class="mt-4 font-medium tracking-tight text-gray-300">Album Actions</h2>
     <div class="section subhead flex flex-col">
       <div class="flex flex-wrap">
-        <button mat-stroked-button color="" class="ms-2 mb-2 my-buttons" (click)="rescan()" [disabled]="extendedApiNotAvailable()">rescan media library</button>
         <button mat-stroked-button color="warn" class="ms-2 mb-2 my-buttons" (click)="myMusicService.backupLikedAlbums()" [disabled]="extendedApiNotAvailable()">
           backup liked albums
         </button>
         <button mat-stroked-button class="ms-2 mb-2 my-buttons" (click)="myMusicService.restoreLikedAlbums()" [disabled]="extendedApiNotAvailable()">
           restore liked albums
         </button>
+      </div>
+    </div>
+
+    <h2 class="mt-4 font-medium tracking-tight text-gray-300">Rating Actions</h2>
+    <div class="section subhead flex flex-col">
+      <div class="flex flex-wrap">
+        <button mat-stroked-button color="warn" class="ms-2 mb-2 my-buttons" (click)="myMusicService.backupRatings()" [disabled]="extendedApiNotAvailable()">
+          backup ratings
+        </button>
+        <button mat-stroked-button class="ms-2 mb-2 my-buttons" (click)="myMusicService.restoreRatings()" [disabled]="extendedApiNotAvailable()">
+          restore ratings
+        </button>
+      </div>
+    </div>
+
+    <h2 class="mt-4 font-medium tracking-tight text-gray-300">Other Actions</h2>
+    <div class="section subhead flex flex-col">
+      <div class="flex flex-wrap">
         <button mat-stroked-button class="ms-2 my-buttons" [disabled]="extendedApiNotAvailable()" (click)="ratingServiceService.syncRatingsFromMusicBrainzToBackend()">import rating
           from musicBrainz.org</button>
       </div>

@@ -69,11 +69,9 @@ public class RestMediaRendererService implements ISongPlayedCallback {
 
 	@PostConstruct
 	private void init() {
-		
 		ISongPlayedCallback cb = this;  
-		
-		Runnable r = new Runnable() {
 
+		Runnable r = new Runnable() {
 			public void run() {
 				mpf = mediaPlayerDiscoveryService.getFirstFactory();
 				if (mpf == null) {
@@ -96,6 +94,7 @@ public class RestMediaRendererService implements ISongPlayedCallback {
 		
 		Thread mrs = new Thread(r);
 		mrs.setName("Media Renderer Service init thread.");
+		mrs.start();
 	}
 
 	@GetMapping("/mediaPlayerExists")

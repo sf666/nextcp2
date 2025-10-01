@@ -298,6 +298,16 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		umsServices.restoreAudioLikes();
 	}
 
+	@Override
+	public void backupRatings() {
+		umsServices.backupRatings();
+	}
+
+	@Override
+	public void restoreRatings() {
+		umsServices.restoreRatings();
+	}
+
 	private String browseChildrenSearchFolder(long start, long end, String objectId, String foldername) {
 		log.debug("search folder having id {} and title {} ...", objectId, foldername);
 		BrowseInput inp = new BrowseInput();

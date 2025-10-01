@@ -14,9 +14,11 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
 
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RestoreRatings;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.BackupAudioLikes;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictUser;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictUserInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.BackupRatings;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWrite;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWriteInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictPass;
@@ -31,11 +33,11 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMe
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMediaStoreFolderInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioUpdateRatingTag;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioUpdateRatingTagInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictEurope;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictEuropeInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLiked;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedOutput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedInput;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictEurope;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictEuropeInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioLikesVisibleRoot;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioLikesVisibleRootInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbum;
@@ -127,6 +129,12 @@ public class UmsExtendedServicesService
 
 
 
+    public void restoreRatings()
+    {
+        RestoreRatings restoreRatings = new RestoreRatings(umsExtendedServicesService,  upnpService.getControlPoint());
+        restoreRatings.executeAction();
+    }
+
     public void backupAudioLikes()
     {
         BackupAudioLikes backupAudioLikes = new BackupAudioLikes(umsExtendedServicesService,  upnpService.getControlPoint());
@@ -137,6 +145,12 @@ public class UmsExtendedServicesService
     {
         SetAudioAddictUser setAudioAddictUser = new SetAudioAddictUser(umsExtendedServicesService, inp, upnpService.getControlPoint());
         setAudioAddictUser.executeAction();
+    }
+
+    public void backupRatings()
+    {
+        BackupRatings backupRatings = new BackupRatings(umsExtendedServicesService,  upnpService.getControlPoint());
+        backupRatings.executeAction();
     }
 
     public void setUpnpCdsWrite(SetUpnpCdsWriteInput inp)
@@ -187,17 +201,17 @@ public class UmsExtendedServicesService
         setAudioUpdateRatingTag.executeAction();
     }
 
+    public void setAudioAddictEurope(SetAudioAddictEuropeInput inp)
+    {
+        SetAudioAddictEurope setAudioAddictEurope = new SetAudioAddictEurope(umsExtendedServicesService, inp, upnpService.getControlPoint());
+        setAudioAddictEurope.executeAction();
+    }
+
     public IsAlbumLikedOutput isAlbumLiked(IsAlbumLikedInput inp)
     {
         IsAlbumLiked isAlbumLiked = new IsAlbumLiked(umsExtendedServicesService, inp, upnpService.getControlPoint());
         IsAlbumLikedOutput res = isAlbumLiked.executeAction();
         return res;        
-    }
-
-    public void setAudioAddictEurope(SetAudioAddictEuropeInput inp)
-    {
-        SetAudioAddictEurope setAudioAddictEurope = new SetAudioAddictEurope(umsExtendedServicesService, inp, upnpService.getControlPoint());
-        setAudioAddictEurope.executeAction();
     }
 
     public void setAudioLikesVisibleRoot(SetAudioLikesVisibleRootInput inp)

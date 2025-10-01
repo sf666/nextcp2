@@ -61,4 +61,23 @@ export class MyMusicService {
     const uri = '/restoreLikedAlbums/' + this.deviceService.selectedMediaServerDevice().udn;
     this.httpService.getWithGenericResult(this.baseUri, uri, "restore liked albums");
   }
+
+  public backupRatings(): void {
+    if (!this.deviceService.selectedMediaServerDevice().udn) {
+      this.toastService.error("select media server first", "backup ratings");
+      return;
+    }
+    const uri = '/backupRatings/' + this.deviceService.selectedMediaServerDevice().udn;
+    this.httpService.getWithGenericResult(this.baseUri, uri, "backup ratings");
+  }
+
+  public restoreRatings(): void {
+    if (!this.deviceService.selectedMediaServerDevice().udn) {
+      this.toastService.error("select media server first", "restore ratings");
+      return;
+    }
+    const uri = '/restoreRatings/' + this.deviceService.selectedMediaServerDevice().udn;
+    this.httpService.getWithGenericResult(this.baseUri, uri, "restore ratings");
+  }
+
 }

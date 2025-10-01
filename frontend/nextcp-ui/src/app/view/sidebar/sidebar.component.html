@@ -39,7 +39,7 @@
       <span class="ms-2">My Albums</span>
     </button>
 
-    @if(mediaPlayerService.mediaServerExists()) {
+    @if(mediaPlayerService.mediaPlayerExists()) {
       <button type="button" [routerLink]="'/mediaPlayerConfig'" (click)="buttonClicked('/mediaPlayerConfig')" class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/mediaPlayerConfig')}}">
         <mat-icon class="material-symbols-outlined thin">save</mat-icon>
         <span class="ms-2">MediaPlayer</span>

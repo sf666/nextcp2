@@ -52,4 +52,22 @@ public class MyMusicService
         device.restoreMyMusic();
     }
     
+    public void backupRatings(ExtendedApiMediaDevice device)
+    {
+        if (device == null)
+        {
+            throw new RuntimeException("device not supplied");
+        }
+        device.backupRatings();
+    }
+
+    public void restoreRatings(ExtendedApiMediaDevice device)
+    {
+        if (device == null)
+        {
+            throw new RuntimeException("device not supplied");
+        }
+        device.restoreRatings();
+    }
+    
 }

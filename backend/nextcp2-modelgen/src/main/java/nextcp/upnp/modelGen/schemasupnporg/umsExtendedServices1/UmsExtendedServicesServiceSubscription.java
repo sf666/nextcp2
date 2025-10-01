@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ISubscriptionEventListener;
 
 /**
- * Last Change : 05.09.2025
+ * Last Change : 08.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -110,22 +110,47 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
                 switch (key)
                 {
                     case "AnonymousDevicesWrite":
-                        anonymousDevicesWriteChange((Boolean) stateVar.getValue());
-                        break;
-                    case "AudioUpdateRating":
-                        audioUpdateRatingChange((Boolean) stateVar.getValue());
+                    	try {
+                    		anonymousDevicesWriteChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[anonymousDevicesWrite] unexpected value : " + stateVar.getValue());
+                    		anonymousDevicesWriteChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "AudioAddictPass":
                         audioAddictPassChange((String) stateVar.getValue());
                         break;
+                    case "AudioUpdateRating":
+                    	try {
+                    		audioUpdateRatingChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[audioUpdateRating] unexpected value : " + stateVar.getValue());
+                    		audioUpdateRatingChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
+                        break;
                     case "AudioLikesVisibleRoot":
-                        audioLikesVisibleRootChange((Boolean) stateVar.getValue());
+                    	try {
+                    		audioLikesVisibleRootChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[audioLikesVisibleRoot] unexpected value : " + stateVar.getValue());
+                    		audioLikesVisibleRootChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "AudioAddictEurope":
-                        audioAddictEuropeChange((Boolean) stateVar.getValue());
+                    	try {
+                    		audioAddictEuropeChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[audioAddictEurope] unexpected value : " + stateVar.getValue());
+                    		audioAddictEuropeChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "UpnpCdsWrite":
-                        upnpCdsWriteChange((Boolean) stateVar.getValue());
+                    	try {
+                    		upnpCdsWriteChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[upnpCdsWrite] unexpected value : " + stateVar.getValue());
+                    		upnpCdsWriteChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "AudioAddictUser":
                         audioAddictUserChange((String) stateVar.getValue());
@@ -158,19 +183,19 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
         }
     }    
 
-    private void audioUpdateRatingChange(Boolean value)
-    {
-        for (IUmsExtendedServicesServiceEventListener listener : eventListener)
-        {
-            listener.audioUpdateRatingChange(value);
-        }
-    }    
-
     private void audioAddictPassChange(String value)
     {
         for (IUmsExtendedServicesServiceEventListener listener : eventListener)
         {
             listener.audioAddictPassChange(value);
+        }
+    }    
+
+    private void audioUpdateRatingChange(Boolean value)
+    {
+        for (IUmsExtendedServicesServiceEventListener listener : eventListener)
+        {
+            listener.audioUpdateRatingChange(value);
         }
     }    
 

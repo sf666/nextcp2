@@ -10,7 +10,7 @@ import { Injectable, signal } from '@angular/core';
 export class MediaPlayerService {
   baseUri = 'MediaRendererService';
 
-  public mediaServerExists = signal<boolean>(false);
+  public mediaPlayerExists = signal<boolean>(false);
 
   constructor(
     private deviceService: DeviceService,
@@ -18,7 +18,7 @@ export class MediaPlayerService {
   ) {
     this.mediaPlayerExistsRequest().subscribe(status => {
       console.log("mediaPlayerExists : " + status);
-      this.mediaServerExists.set(status);
+      this.mediaPlayerExists.set(status);
     });
   }
 

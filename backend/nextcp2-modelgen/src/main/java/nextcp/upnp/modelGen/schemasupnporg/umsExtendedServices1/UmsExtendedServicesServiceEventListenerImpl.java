@@ -134,21 +134,21 @@ public class UmsExtendedServicesServiceEventListenerImpl implements IUmsExtended
         }
     }
     
-    public void audioUpdateRatingChange(Boolean value)
-    {
-        stateVariable.AudioUpdateRating = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "AudioUpdateRating", value));
-        }
-    }
-    
     public void audioAddictPassChange(String value)
     {
         stateVariable.AudioAddictPass = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "AudioAddictPass", value));
+        }
+    }
+    
+    public void audioUpdateRatingChange(Boolean value)
+    {
+        stateVariable.AudioUpdateRating = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "AudioUpdateRating", value));
         }
     }
     
