@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>de.sf666</groupId>
 		<artifactId>nextcp2-root</artifactId>
-		<version>4.1.0</version>
+		<version>4.1.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>nextcp2-codegen</artifactId>
 	<description>codegen module</description>

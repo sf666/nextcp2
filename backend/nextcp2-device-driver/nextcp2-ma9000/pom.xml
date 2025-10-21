@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>de.sf666</groupId>
 		<artifactId>nextcp2-DeviceDriver</artifactId>
-		<version>4.1.0</version>
+		<version>4.1.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>nextcp2-ma9000</artifactId>
