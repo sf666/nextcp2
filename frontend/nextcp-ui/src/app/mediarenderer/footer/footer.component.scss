@@ -16,6 +16,7 @@ $col-grey: $col-4;
     left            : 0;
     bottom          : 0;
     height          : var(--footer-height);
+    min-height      : calc(var(--site-header-height) + env(safe-area-inset-bottom,0) * 2);
     width           : 100%;
     text-align      : left;
     letter-spacing  : 0.05rem;
