@@ -12,9 +12,6 @@ $col-grey: $col-4;
 .footer {
     font-weight     : 600;
     font-size       : 1rem;
-    position        : fixed;
-    left            : 0;
-    bottom          : 0;
     height          : var(--footer-height);
     min-height      : calc(var(--site-header-height) + env(safe-area-inset-bottom,0) * 2);
     width           : 100%;
