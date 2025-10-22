@@ -1,4 +1,4 @@
-<div class="dark">
+<div class="dark h-svh">
   <div class="app-root">
 
     @if (showBlur()) {
@@ -23,12 +23,12 @@
     <div id="mainContent" class="mainContent {{headerVisibleClass}} flex flex-col grow ml-0 md:ml-52 w-full">
         <router-outlet class="absolute flex grow left-0 w-full"></router-outlet>
     </div>
-
-    @if (layoutService.footerVisible) {
-    <renderer-footer></renderer-footer>
-    }
-    @if (layoutService.footerVisible && showBlur()) {
-    <div class="bg-img-footer" id="footer-background"></div>
-    }
   </div>
 </div>
+
+@if (layoutService.footerVisible) {
+<renderer-footer></renderer-footer>
+}
+@if (layoutService.footerVisible && showBlur()) {
+<div class="bg-img-footer" id="footer-background"></div>
+}
