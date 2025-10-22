@@ -13,7 +13,6 @@ $col-grey: $col-4;
     font-weight     : 600;
     font-size       : 1rem;
     height          : var(--footer-height);
-    min-height      : calc(var(--site-header-height) + env(safe-area-inset-bottom,0) * 2);
     width           : 100%;
     text-align      : left;
     letter-spacing  : 0.05rem;
