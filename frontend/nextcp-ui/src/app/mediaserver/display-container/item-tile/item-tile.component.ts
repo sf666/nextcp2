@@ -222,7 +222,11 @@ export class ItemTileComponent {
   }
 
   public selectedRowClass(musicItemDto: MusicItemDto): string {
-    if (musicItemDto?.streamingURL == this.currentUrl()) {
+    if (musicItemDto?.streamingURL.length < 1) {
+      return '';
+    }
+    
+    if (musicItemDto?.streamingURL === this.currentUrl()) {
       return 'selectRow';
     }
     return '';
