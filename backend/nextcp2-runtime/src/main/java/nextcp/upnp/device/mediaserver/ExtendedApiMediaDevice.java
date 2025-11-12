@@ -43,6 +43,10 @@ public interface ExtendedApiMediaDevice
 
     public void restoreRatings();
     
+    public void backupFilesStatus();
+
+    public void restoreFilesStatus();
+    
     // PlaylistServices
     
     public Container createPlaylist(String parentContainerId, String playlistName) throws Exception;

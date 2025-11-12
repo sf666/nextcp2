@@ -561,4 +561,15 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			umsServices.setAudioUpdateRatingTag(inp);
 		}
 	}
+
+	@Override
+	public void backupFilesStatus() {
+		// TODO
+	}
+
+	@Override
+	public void restoreFilesStatus() {
+		// TODO Auto-generated method stub
+		
+	}
 }
