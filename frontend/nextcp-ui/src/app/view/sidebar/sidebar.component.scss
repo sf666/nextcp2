@@ -9,6 +9,9 @@ button {
     width          : auto;
 }
 
+.sidebar {
+    height: calc(var(--h-svh, 1vh) * 100 - var(--footer-height));
+}
 
 .create-icon {
     border-radius   : 50%;
