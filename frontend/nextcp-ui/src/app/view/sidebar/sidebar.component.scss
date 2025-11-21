@@ -10,10 +10,8 @@ button {
 }
 
 .sidebar {
-//     height: calc(var(--h-svh, 1vh) * 100 - var(--footer-height));
-    height: calc(100dvh - var(--footer-height));
+    height: calc(var(--h-dvh, 1vh) * 100 - var(--footer-height));
 }
-
 
 .create-icon {
     border-radius   : 50%;
