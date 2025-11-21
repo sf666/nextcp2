@@ -1,4 +1,4 @@
-<div class="dark h-dvh">
+<div class="dark">
   <div class="app-root">
 
     @if (showBlur()) {
@@ -15,13 +15,13 @@
     }
 
     @if (layoutService.sidebarVisible) {
-    <aside flowbiteSidebar id="default-sidebar" class="fixed top-0 left-0 z-1 md:translate-x-0 w-52 h-screen transition-transform -translate-x-full" aria-label="Sidebar">
+    <aside flowbiteSidebar id="default-sidebar" class="fixed top-0 left-0 z-1 overflow-y-auto md:translate-x-0 w-52 h-screen transition-transform -translate-x-full" aria-label="Sidebar">
       <app-sidebar></app-sidebar>
     </aside>
     }
 
-    <div id="mainContent" class="mainContent {{headerVisibleClass}} flex flex-col grow ml-0 md:ml-52 w-full">
-        <router-outlet class="absolute flex grow left-0 w-full"></router-outlet>
+    <div id="mainContent" class="{{headerVisibleClass}} overflow-y-auto flex ml-0 md:ml-52 w-full">
+        <router-outlet></router-outlet>
     </div>
   </div>
 </div>

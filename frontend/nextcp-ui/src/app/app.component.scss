@@ -5,18 +5,21 @@
 }
 
 .mainContent {
-    margin-top: var(--nav-height);
+    margin-top     : var(--nav-height);
     overflow-y     : scroll;
     overflow-x     : hidden;
     letter-spacing : 0.07rem;
-    scrollbar-width: none
+    top            : var(--nav-height);
+    scrollbar-width: none;
+    height         : calc(100dvh - var(--footer-height) - var(--nav-height));
 }
 
 .mainContentNoHeader {
     overflow-y     : scroll;
     overflow-x     : hidden;
     letter-spacing : 0.07rem;
-    scrollbar-width: none
+    scrollbar-width: none;
+    height         : calc(100dvh - var(--footer-height));
 }
 
 .app-root {
