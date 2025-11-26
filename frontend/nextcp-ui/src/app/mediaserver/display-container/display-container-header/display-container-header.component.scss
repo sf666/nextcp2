@@ -5,8 +5,7 @@
 @use "app-icons";
 @use "tailwindcss";
 
-:root {
-}
+:root {}
 
 .title {
     font-size     : 2rem;
@@ -18,8 +17,8 @@
 
 // area right to the image
 .right-section {
-    min-height  : calc(av.$top-header-Height - av.$top-header-Vertical-Indent);
-    max-height  : calc(av.$top-header-Height - av.$top-header-Vertical-Indent);
+    min-height: calc(av.$top-header-Height - av.$top-header-Vertical-Indent);
+    max-height: calc(av.$top-header-Height - av.$top-header-Vertical-Indent);
 }
 
 .plainText {
@@ -71,11 +70,11 @@
 }
 
 .infobox {
-    align-self    : center;
+    align-self: center;
 }
 
 .app-input {
-    --mat-form-field-container-height : 56px;
+    --mat-form-field-container-height: 56px;
 }
 
 // Buttons
@@ -118,9 +117,11 @@
 
 .btn-play-shuffle {
     background-color: rgb(0, 160, 160);
+
     &:hover {
         background-color: rgb(0, 190, 190);
-    }}
+    }
+}
 
 .btn-play {
     background-color: rgb(0, 112, 239);
@@ -141,33 +142,30 @@
 // Image
 
 .bg-img-header::before {
-    content                          : "";
-    position                         : absolute;
-    max-height                       : av.$top-header-Height;
-    min-height                       : av.$top-header-Height;
-    width                            : 100%;
-    height                           : 100%;
-    background-color                 : rgba(0, 0, 0, .5);
-    -webkit-backdrop-filter          : blur(64px) saturate(120%) brightness(80%);
-    -moz-backdrop-filter             : blur(64px) saturate(120%) brightness(80%);
-    backdrop-filter                  : blur(64px) saturate(120%) brightness(80%);
-    pointer-events                   : none;
-    // background-position    : 0 -500px;
+    content                : "";
+    display                : block;
+    position               : absolute;
+    max-height             : av.$top-header-Height;
+    min-height             : av.$top-header-Height;
+    width                  : 100%;
+    background-color       : rgba(0, 0, 0, .5);
+    -webkit-backdrop-filter: blur(64px) saturate(120%) brightness(80%);
+    -moz-backdrop-filter   : blur(64px) saturate(120%) brightness(80%);
+    backdrop-filter        : blur(64px) saturate(120%) brightness(80%);
+    pointer-events         : none;
+    background-position    : 0 -200px;
 }
 
 .bg-img-header {
-    display   : block;
-    position  : absolute;
-    max-height: av.$top-header-Height;
-    min-height: av.$top-header-Height;
-    width     : 100%;
-    top       : 0px;
-
-    background-repeat: calc(var(--vh, 1vh) * 100);
-
-    height             : 100%;
+    display            : block;
+    position           : absolute;
+    background-size    : cover;
+    max-height         : av.$top-header-Height;
+    min-height         : av.$top-header-Height;
+    width              : 100%;
     background-repeat  : calc(var(--vh, 1vh) * 100);
-    background-position: 0 -500px;
+    background-position: 0 -200px;
+    height             : 100%;
 }
 
 

@@ -1,8 +1,8 @@
 <!--                                                                -->
 <!-- display component header                                       -->
 <!-- ############################################################## -->
-<div id="outer" class="flex relative grow shrink justify-items-center">
-  <div class="bg-img-header items-center" id="header-background"></div>
+<div id="outer" class="flex relative w-full grow shrink justify-items-center">
+  <div class="bg-img-header w-full" id="header-background"></div>
   <!-- Header Button group -->
   @if(hasSongs()) {
   <div id="headButtonRow" class="button-row ">
@@ -36,6 +36,7 @@
   </div>
   }
 
+  <!-- Background image -->
   <div id="middle_wrapper" class="flex items-center grow shrink">
     <div id="topImgContainer" class="flex top-img-container items-center">
       <img src="{{currentContainer.albumartUri}}" class="img-top">
