@@ -4,22 +4,28 @@
     min-height: var(--nav-height);
 }
 
-.mainContent {
-    margin-top     : var(--nav-height);
-    overflow-y     : scroll;
-    overflow-x     : hidden;
-    letter-spacing : 0.07rem;
-    top            : var(--nav-height);
-    scrollbar-width: none;
-    height         : calc(100dvh - var(--footer-height) - var(--nav-height));
+.noScrollBar {
+    overflow: hidden;
+    /* Hide scrollbars */
 }
 
-.mainContentNoHeader {
+.navVisible {
+    position: absolute;
+    top     : calc(var(--nav-height));
+    height  : calc(100dvh - var(--footer-height) - var(--nav-height));
+}
+
+.navHidden {
+    position: absolute;
+    top     : 0;
+    height  : calc(100dvh - var(--footer-height));
+}
+
+.mainContent {
     overflow-y     : scroll;
     overflow-x     : hidden;
     letter-spacing : 0.07rem;
     scrollbar-width: none;
-    height         : calc(100dvh - var(--footer-height));
 }
 
 .app-root {

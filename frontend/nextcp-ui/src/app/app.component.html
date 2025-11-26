@@ -15,12 +15,12 @@
     }
 
     @if (layoutService.sidebarVisible) {
-    <aside flowbiteSidebar id="default-sidebar" class="fixed top-0 left-0 z-1 overflow-y-auto md:translate-x-0 w-52 h-screen transition-transform -translate-x-full" aria-label="Sidebar">
+    <aside flowbiteSidebar id="default-sidebar" class="fixed top-0 left-0 z-1 noScrollBar overflow-y-auto md:translate-x-0 w-52 h-screen transition-transform -translate-x-full" aria-label="Sidebar">
       <app-sidebar></app-sidebar>
     </aside>
     }
 
-    <div id="mainContent" class="{{headerVisibleClass}} overflow-y-auto flex flex-col grow ml-0 md:ml-52 w-full">
+    <div id="mainContent" class="mainContent {{headerVisibleClass}} overflow-y-auto noScrollBar w-full pl-0 md:pl-52 ">
         <router-outlet></router-outlet>
     </div>
   </div>

@@ -1,6 +1,6 @@
 <div id="music-library-component-id" class="flex flex-col grow w-full">
   @if (layoutService.headerVisible) {
-  <nav-bar class="absolute w-full" [parentTitle]="getParentTitle()" [homeButtonVisible]="true"
+  <nav-bar class="w-full" [parentTitle]="getParentTitle()" [homeButtonVisible]="true"
     [backButtonVisible]="backButtonVisible()" [contentHandler]="getContentHandler()"
     (backButtonPressed)="backButtonPressed($event)" (homeButtonPressed)="homeButtonPressed($event)"></nav-bar>
   }

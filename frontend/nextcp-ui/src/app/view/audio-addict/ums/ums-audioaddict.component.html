@@ -1,13 +1,15 @@
-@if (layoutService.headerVisible) {
-    <nav-bar
-      [parentTitle]="getParentTitle()"
-      [backButtonVisible]="backButtonVisible()"
-      [homeButtonVisible]="true"
-      [contentHandler]="getContentHandler()"
-      (homeButtonPressed)="homeButtonPressed($event)"
-      (backButtonPressed)="backButtonPressed($event)"
-    ></nav-bar>
-  }
+<div class="flex flex-col" >
+
+  @if (layoutService.headerVisible) {
+      <nav-bar
+        [parentTitle]="getParentTitle()"
+        [backButtonVisible]="backButtonVisible()"
+        [homeButtonVisible]="true"
+        [contentHandler]="getContentHandler()"
+        (homeButtonPressed)="homeButtonPressed($event)"
+        (backButtonPressed)="backButtonPressed($event)"
+      ></nav-bar>
+    }
   
   @if(!hasAudioAddictService()) {
     <div class="ms-8 p-4 max-w-lg mb-4 text-sm mt-8 rounded-lg bg-gray-800 text-red-400" role="alert">
@@ -22,3 +24,4 @@
     [contentHandler]="getContentHandler()"
   />
   
+</div>

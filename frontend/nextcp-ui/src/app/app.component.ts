@@ -43,9 +43,9 @@ export class AppComponent implements OnInit {
 
   get headerVisibleClass() : string {
     if (this.layoutService.headerVisible) {
-      return "mainContent";
+      return "navVisible";
     } else {
-      return "mainContentNoHeader";
+      return "navHidden";
     }
   }
 
