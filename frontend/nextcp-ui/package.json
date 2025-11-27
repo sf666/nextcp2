@@ -27,6 +27,7 @@
     "@babel/core": "7.28.5",
     "@babel/preset-env": "7.28.5",
     "@popperjs/core": "^2.11.8",
+    "@standard-schema/spec": "^1.0.0",
     "@tailwindcss/postcss": "^4.1.10",
     "@types/streamsaver": "^2.0.0",
     "@typescript-eslint/types": "8",

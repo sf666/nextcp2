@@ -2,6 +2,12 @@
 
 Diese Datei enthält wichtige Informationen für AI-Assistenten zur besseren Code-Generierung und -bearbeitung.
 
+## Programmierrichtlinie 
+
+- Verwende die Datei .ai/best-practices_angular.md für die Erstellung von Angular code.
+- Der generierte Code muss durch mich geprüft werden. Commite den code nicht ohne mein Einverständnis in das GIT repository
+
+ 
 ## Projektübersicht
 
 nextCP/2 ist ein web-basierter UPnP Control Point mit:
