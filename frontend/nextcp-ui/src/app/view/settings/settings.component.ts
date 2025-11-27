@@ -12,7 +12,7 @@ import {
   ServerDeviceConfiguration,
 } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
-import { ChangeDetectionStrategy, Component, OnInit, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal, form } from '@angular/core';
 import { LayoutService } from 'src/app/service/layout.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
@@ -26,6 +26,12 @@ import {
   MatLabel,
 } from '@angular/material/form-field';
 import { AlertComponent } from "src/app/comp/alert/alert.component";
+
+interface SettingsFormModel {
+  spotifyCode: string;
+  showOnlyActiveServer: boolean;
+  showOnlyActiveRenderer: boolean;
+}
 
 @Component({
   selector: 'settings',
@@ -49,9 +55,14 @@ import { AlertComponent } from "src/app/comp/alert/alert.component";
 })
 export class SettingsComponent implements OnInit {
 
-  spotifyCode = model<string>('');
-  showOnlyActiveServer = model<boolean>(true);
-  showOnlyActiveRenderer = model<boolean>(true);
+  // Signal Forms Setup
+  settingsModel = signal<SettingsFormModel>({
+    spotifyCode: '',
+    showOnlyActiveServer: true,
+    showOnlyActiveRenderer: true,
+  });
+
+  settingsForm = form(this.settingsModel);
 
   none_serverdevice: MediaServerDto = {
     img: '',
@@ -102,7 +113,7 @@ export class SettingsComponent implements OnInit {
   }
 
   public getMediaRenderer(): RendererDeviceConfiguration[] {
-    if (this.showOnlyActiveRenderer()) {
+    if (this.settingsForm.showOnlyActiveRenderer().value()) {
       return this.configService
         .getRendererDevicesConfig()
         .filter((renderer) => this.isRendererConfigActive(renderer));
@@ -113,7 +124,7 @@ export class SettingsComponent implements OnInit {
 
   public getMediaServerConfig(): ServerDeviceConfiguration[] {
     if (this.configService?.getServerConfig()?.serverDevices) {
-      if (this.showOnlyActiveServer()) {
+      if (this.settingsForm.showOnlyActiveServer().value()) {
         return this.configService.getServerConfig()
           .serverDevices.filter((server) => this.isServerConfigActive(server));
       } else {
@@ -161,7 +172,7 @@ export class SettingsComponent implements OnInit {
   }
 
   sendSpotifyCode(): void {
-    this.systemService.setSpotifyCode(this.spotifyCode());
+    this.systemService.setSpotifyCode(this.settingsForm.spotifyCode().value());
   }
 
   registerAppAtSpotify(): void {
