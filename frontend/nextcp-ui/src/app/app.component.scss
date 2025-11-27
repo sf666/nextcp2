@@ -35,26 +35,30 @@
 
 .bg-img::before {
     content                : "";
+    display                : block;
     position               : absolute;
     width                  : 100%;
-    height                 : 100%;
     -webkit-backdrop-filter: contrast(200%) blur(80px) brightness(0.20) contrast(110%) opacity(100%);
     -moz-backdrop-filter   : contrast(200%) blur(80px) brightness(0.20) contrast(110%) opacity(100%);
     backdrop-filter        : contrast(200%) blur(80px) brightness(0.20) contrast(110%) opacity(100%);
     pointer-events         : none;
+    height                 : calc(100dvh - var(--footer-height));
+    background-size        : cover;
 }
 
 .bg-img {
     display : block;
     top     : 0px;
-    right   : 0px;
-    position: fixed;
+    left    : 0px;
+    position: absolute;
 
-    background-repeat: calc(var(--vh, 1vh) * 100);
-    background-size  : cover;
-    background-color : rgb(0, 0, 0);
+    display         : block;
+    position        : absolute;
+    width           : 100%;
+    background-size : cover;
+    background-color: rgb(0, 0, 0);
 
-    height: calc(var(--vh, 1vh) * 100 - var(--footer-height));
+    height: calc(100dvh - var(--footer-height));
 }
 
 .bg-img-footer::before {

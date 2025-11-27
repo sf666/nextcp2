@@ -163,7 +163,6 @@
     max-height         : av.$top-header-Height;
     min-height         : av.$top-header-Height;
     width              : 100%;
-    background-repeat  : calc(var(--vh, 1vh) * 100);
     background-position: 0 -200px;
     height             : 100%;
 }
