@@ -6,7 +6,14 @@
         <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
       </svg>
     </button>
-    <div class="ms-2 align-center align-middle font-light text-3xl">nextCP/2</div>
+    <div class="logo-container ms-2 flex items-center">
+      <div class="logo-icon">
+        <mat-icon class="material-symbols-outlined">headphones</mat-icon>
+      </div>
+      <div class="logo-text">
+        <span class="logo-main">next</span><span class="logo-accent">CP</span><span class="logo-version">/2</span>
+      </div>
+    </div>
   </div>
   <div class="flex flex-col">    
     <button type="button" [routerLink]="'/music-library'" class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/music-library')}}" (click)="musicLibraryClicked()">

@@ -33,3 +33,62 @@ button {
     margin-bottom: 1rem;
 }
 
+// Logo Styling
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    
+    .logo-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #00ffff 0%, #0080ff 100%);
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);
+        
+        .material-symbols-outlined {
+            color: #1a1a1a;
+            font-size: 24px;
+            font-weight: 600;
+        }
+    }
+    
+    .logo-text {
+        font-family: 'HK Grotesk', sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        
+        .logo-main {
+            color: #ffffff;
+        }
+        
+        .logo-accent {
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        
+        .logo-version {
+            color: #888888;
+            font-weight: 300;
+            font-size: 20px;
+        }
+    }
+    
+    // Hover Effekt
+    &:hover {
+        .logo-icon {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 255, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .logo-text .logo-accent {
+            text-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+    }
+}
