@@ -77,18 +77,4 @@ button {
             font-size: 20px;
         }
     }
-    
-    // Hover Effekt
-    &:hover {
-        .logo-icon {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(0, 255, 255, 0.4);
-            transition: all 0.3s ease;
-        }
-        
-        .logo-text .logo-accent {
-            text-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
-            transition: all 0.3s ease;
-        }
-    }
 }
