@@ -1,5 +1,11 @@
 @use "tailwindcss";
 
+.dialog-root {
+    width: 320px;
+    max-width: 100%;
+    overflow: hidden;
+}
+
 img {
     width        : 64px;
     min-width    : 64px;
@@ -11,16 +17,27 @@ img {
 
 .albumAndTitle {
     align-self: center;
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
 }
 
 .title {
     letter-spacing: 1px;
     color         : var(--snow-white);
+    max-width     : 100%;
+    white-space   : nowrap;
+    overflow      : hidden;
+    text-overflow : ellipsis;
 }
 
 .artist {
     letter-spacing: 1px;
     color         : var(--glas-white-5);
+    max-width     : 100%;
+    white-space   : nowrap;
+    overflow      : hidden;
+    text-overflow : ellipsis;
 }
 
 .divider {
