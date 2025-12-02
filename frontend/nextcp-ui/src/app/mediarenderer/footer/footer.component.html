@@ -1,9 +1,9 @@
 <div class="flex flex-row flex-nowrap justify-between fixed inset-x-0 bottom-0 footer bg-zinc-950">
   <!-- left footer section -->
-  <div class="flex min-w-4xs grow-3">
+  <div id="left-section" class="flex min-w-4xs grow-3 basis-0 min-w-3xs">
     <img src="{{rendererService.imgSrc()}}">
 
-    <div class="flex flex-col grow albumAndTitle">
+    <div class="flex flex-col w-full albumAndTitle">
       <div class="title no-wrap">{{getCurrentSongTitle()}}</div>
       <div class="flex flex-col no-wrap">
         @if (rendererService.trackInfo().currentTrack?.artistName ) {
@@ -28,7 +28,7 @@
   </div>
 
   <!-- Middle footer section -->
-  <div class="flex grow-3 min-w-3xs justify-center ml-4 h-full">
+  <div id="middle-section" class="flex grow-3 min-w-3xs justify-center ml-4 h-full basis-0">
     <div class="flex grow max-w-md flex-col justify-around">
       <div class="player-button-group">
         <span class="material-symbols-outlined icon-button {{shuffleClass}}" (click)="playlistService.toggleShuffle()">shuffle</span>
@@ -62,7 +62,7 @@
   </div>
 
   <!-- right footer section -->
-  <div class="flex grow-3 min-w-4xs justify-end mx-4">
+  <div id="right-section" class="flex grow-3 min-w-4xs justify-end mx-4 basis-0">
     <div class="flex grow max-w-xs h-full self-center me-4">
       <div class="flex">
         <span class="material-symbols-outlined icon-main" (click)="serverClicked($event)">dns</span>
