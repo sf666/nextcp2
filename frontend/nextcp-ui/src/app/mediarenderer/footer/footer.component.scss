@@ -17,6 +17,10 @@ $col-grey: $col-4;
     text-align      : left;
     letter-spacing  : 0.05rem;
     z-index         : 80;
+    backdrop-filter : blur(24px);
+    background      : rgba(9, 9, 11, 0.85);
+    border-top      : 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow      : 0 -4px 24px rgba(0, 0, 0, 0.4);
 }
 
 mat-slider {
@@ -41,7 +45,14 @@ mat-slider {
 .icon-font {
     font-variation-settings: 'wght'300, 'FILL'0, 'GRAD'-25, 'opsz'24;
     align-self             : center;
-    color                  : var(--glas-white-5);
+    color                  : rgba(255, 255, 255, 0.7);
+    transition             : all 0.2s ease;
+    cursor                 : pointer;
+    
+    &:hover {
+        color: rgba(255, 255, 255, 0.95);
+        transform: scale(1.1);
+    }
 }
 
 .infoItems {
@@ -63,31 +74,53 @@ mat-slider {
     @extend .icon-font;
 
     margin-left: 1rem;
+    padding: 0.5rem;
+    border-radius: 50%;
 
     &.active {
         color: cv.$blue-pantone-2;
+        background: rgba(59, 130, 246, 0.15);
     }
 
     &.disabled {
-        color: var(--glas-white-8);
+        color: rgba(255, 255, 255, 0.25);
+        cursor: not-allowed;
+        
+        &:hover {
+            transform: none;
+            color: rgba(255, 255, 255, 0.25);
+        }
     }
 
     &:first-child {
         margin-left: 0;
     }
+    
+    &:hover:not(.disabled) {
+        background: rgba(255, 255, 255, 0.1);
+    }
 }
 
 .icon-main {
     font-variation-settings: 'wght'300, 'FILL'0, 'GRAD'-25, 'opsz'24;
-    padding-left           : 0.2rem;
-    padding-right          : 0.2rem;
-    color                  : var(--glas-white-5);
+    padding                : 0.5rem;
+    color                  : rgba(255, 255, 255, 0.7);
     align-self             : center;
+    border-radius          : 8px;
+    transition             : all 0.2s ease;
+    cursor                 : pointer;
+    
+    &:hover {
+        color: rgba(255, 255, 255, 0.95);
+        background: rgba(255, 255, 255, 0.1);
+    }
 }
 
 .time-progressbar {
     height: 5px;
     width : 100%;
+    border-radius: 3px;
+    overflow: hidden;
 }
 
 .qualityBadge {
@@ -122,12 +155,13 @@ mat-slider {
 
 .timeText {
     font-size     : 0.8rem;
-    font-weight   : 600;
-    color         : var(--glas-white-5);
-    letter-spacing: 0.02rem;
-    align-self    : center; // vertical center
+    font-weight   : 500;
+    color         : rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.03rem;
+    align-self    : center;
     padding-left  : 1rem;
     padding-right : 1rem;
+    font-variant-numeric: tabular-nums;
 }
 
 .timeProgessContainer {
@@ -149,8 +183,14 @@ mat-slider {
 img {
     height       : calc(var(--footer-height) - 2px);
     width        : calc(var(--footer-height) - 2px);
-    border-radius: 8px;
-    padding      : 4px;
+    border-radius: 12px;
+    padding      : 6px;
+    box-shadow   : 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition   : transform 0.2s ease;
+    
+    &:hover {
+        transform: scale(1.05);
+    }
 }
 
 .standbyOn {
@@ -181,18 +221,20 @@ img {
 .title {
     @extend .baseFontsize;
     font-size              : 0.95rem;
-    font-weight            : 500;
-    font-variation-settings: "wght"500;
-    color                  : rgb(252, 252, 252);
+    font-weight            : 600;
+    font-variation-settings: "wght"600;
+    color                  : rgba(255, 255, 255, 0.95);
     margin-bottom          : 4px;
+    letter-spacing         : 0.01rem;
 }
 
 .artist {
     @extend .baseFontsize;
     font-size    : 0.85rem;
     font-weight  : 400;
-    color        : rgba(252, 252, 252, 0.65);
+    color        : rgba(255, 255, 255, 0.6);
     margin-bottom: 16px;
+    letter-spacing: 0.01rem;
 }
 
 .album {
@@ -252,6 +294,8 @@ img {
 
 .progressbar {
     align-self: center;
+    border-radius: 3px;
+    overflow: hidden;
 }
 
 .time-slider {
