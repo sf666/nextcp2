@@ -1,50 +1,16 @@
 @use "card-layout";
 @use "tailwindcss";
 
-.defaultFont {
-    font-family     : 'HK Grotesk';
-}
-
 .selectRow {
-    color: aqua;
-}
-
-.itemDetails {
-    margin-bottom: 10rem;
-}
-
-.text-right {
-    text-align: end;
-}
-
-.disc-label {
-    margin-top   : 1rem;
-    font-weight  : 700;
-    margin-bottom: 0.5rem;
-}
-
-.row-alignment {
-    align-items: center;
-    overflow   : hidden;
-}
-
-.img-small {
-    object-fit      : cover;
-    background-color: rgba(0, 0, 0, 0.5);
-
-    width        : 4rem;
-    height       : 4rem;
-    margin-bottom: 2px;
-    margin-top   : 2px;
-}
-
-.trackNum {
-    min-width: 1.8rem;
-}
-
-.albumSubtitle {
-    font-weight: 400;
-    margin-top : 1rem;
-    width      : 100%;
+    background: linear-gradient(to right, rgba(0, 255, 255, 0.2), rgba(0, 200, 255, 0.2));
+    border-left: 3px solid aqua;
+    
+    .text-white {
+        color: aqua !important;
+    }
+    
+    .text-gray-400 {
+        color: #7fffd4 !important;
+    }
 }
 

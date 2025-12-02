@@ -1,88 +1,156 @@
-<!--                                                                -->
-<!-- Browse Result Music Items                                      -->
-<!-- ############################################################## -->
+<!-- Browse Result Music Items -->
 @if (musicTracks()?.length > 0) {
-<div id="Browse_Result_Music_Items" tabindex="-1" class="flex grow defaultFont font-semibold pe-4">
+<div id="Browse_Result_Music_Items" tabindex="-1" class="flex grow font-['HK_Grotesk']">
     @if (isListView()) {
-    <div id="head_browse_result_items_list_view_ID" class="flex grow flex-col">
-        <div class="flex grow row col-greyed text-xs pb-3 mt-2 h-full w-full">
+    <div id="head_browse_result_items_list_view_ID" class="w-full px-4">
+        <!-- Header Row - Using CSS Grid for perfect alignment -->
         @if (allTracksSameAlbum()) {
-            <div class="w-8 text-right">#</div>
-            <div class="w-16 ms-3 grow-3">TITLE</div>
-            <div class="w-16 ms-3 grow-2 hidden md:block">ARTIST</div>
-            @if (extendedApi()) {<div class="w-24 text-center hidden lg:block">RATING</div>}
-            <div class="w-16 ms-3 text-right">LG</div>
-            <div class="w-4 ms-6">&nbsp;</div>
-        } @else {
-            <div class="w-16 ms-3">&nbsp;</div>
-            <div class="w-16 ms-3 grow-3">TITLE</div>
-            <div class="w-16 ms-3 grow-2">ALBUM</div>
-            <div class="w-16 ms-3 grow-2 hidden md:block">ARTIST</div>
-            @if (extendedApi()) {<div class="w-24 text-center hidden lg:block">RATING</div>}
-            <div class="w-16 ms-3 text-right">LG</div>
-            <div class="w-4 ms-6">&nbsp;</div>
-        }
+        <div class="grid gap-4 sticky top-0 z-10 text-xs uppercase tracking-wider text-gray-400 font-semibold py-3 border-b border-white/10"
+             style="grid-template-columns: 48px 2fr minmax(150px, 1fr) 128px 80px 48px;">
+            <div class="text-center">#</div>
+            <div>Title</div>
+            <div class="hidden md:block">Artist</div>
+            @if (extendedApi()) {<div class="text-center hidden lg:block">Rating</div>}
+            <div class="text-right">Duration</div>
+            <div></div>
         </div>
+        } @else {
+        <div class="grid gap-4 sticky top-0 z-10 text-xs uppercase tracking-wider text-gray-400 font-semibold py-3 border-b border-white/10"
+             style="grid-template-columns: 64px 2fr minmax(150px, 1fr) minmax(150px, 1fr) 128px 80px 48px;">
+            <div></div>
+            <div>Title</div>
+            <div>Album</div>
+            <div class="hidden md:block">Artist</div>
+            @if (extendedApi()) {<div class="text-center hidden lg:block">Rating</div>}
+            <div class="text-right">Duration</div>
+            <div></div>
+        </div>
+        }
 
-        <!--                                  -->
-        <!-- one item is displayed over a row -->
-        <!--                                  -->
+        <!-- Track Rows -->
+        <div class="mt-1">
         @for (item of musicTracks(); track item.objectID) {
             @if (allTracksSameAlbum() && !allTracksSameDisc()) {
-                @if (newDiscLabel(item)) {<div class="font-bold text-zinc-500 mb-2 pt-3">{{getDiscLabel(item)}}</div>}
+                @if (newDiscLabel(item)) {
+                    <div class="text-sm font-semibold text-gray-400 mt-6 mb-3">{{getDiscLabel(item)}}</div>
+                }
             }
 
-        <div class="flex grow text-sm tracking-widest font-semibold mb-1">
-            <!--  COL 1 TRACK NUM OR IMAGE     -->
-            @if (!allTracksSameAlbum()) {
-            <div id="col_1_img_{{item.objectID}}" class="w-16 ms-3 {{selectedRowClass(item)}}" >
-                <img class="img-small" src="{{item.albumArtUrl}}" (click)="playItem(item)">
-            </div>
-            } @else {
-                <div id="col_1_num_{{item.objectID}}" class="w-8 text-right trackNum {{selectedRowClass(item)}}">@if(item.originalTrackNumber != 'null'){{{item.originalTrackNumber}}}</div>
-            }
-
-            <!--  COL 2 TITLE                  -->
-            <div id="{{item.objectID}}" (click)="playItem(item)" class="flex ms-3 w-16 grow-3 justify-between {{selectedRowClass(item)}}" >
-                <div class="content-center">{{item.title}}</div>
-                <quality-badge class="content-center" [item]="item"></quality-badge>
+        <!-- Row for Same Album View -->
+        @if (allTracksSameAlbum()) {
+        <div class="grid gap-4 items-center text-sm py-2.5 px-2 rounded-lg hover:bg-white/5 transition-all duration-200 group {{selectedRowClass(item)}}"
+             style="grid-template-columns: 48px minmax(100px, 2fr) minmax(100px, 1fr) 128px 80px 48px;">
+            <!-- Track Number -->
+            <div id="col_1_num_{{item.objectID}}" class="text-center text-gray-400 group-hover:text-white transition-colors">
+                @if(item.originalTrackNumber != 'null'){{{item.originalTrackNumber}}}
             </div>
 
-            <!--  COL 3 optional ALBUM         -->
-            @if (!allTracksSameAlbum()) {
-                <div id="OPT_ALBUM_{{item.objectID}}" (click)="playItem(item)" class="w-16 ms-3 grow-2 content-center">{{item.album}}</div>
-            }
-            
-            <!--  COL 4 ARTIST                 -->
-            <div id="OPT_ARTIST_{{item.objectID}}" (click)="playItem(item)" class="hidden ms-3 md:block w-16 ms-3 grow-2 content-center {{selectedRowClass(item)}}"> {{item.artistName}}</div>
+            <!-- Title -->
+            <div id="{{item.objectID}}" (click)="playItem(item)" class="flex items-center gap-2 cursor-pointer min-w-0">
+                <div class="truncate text-white group-hover:text-aqua transition-colors font-medium">{{item.title}}</div>
+                <quality-badge class="flex-shrink-0" [item]="item"></quality-badge>
+            </div>
 
-            <!--  COL 5 optional RATING        -->
+            <!-- Artist -->
+            <div id="OPT_ARTIST_{{item.objectID}}" (click)="playItem(item)" class="hidden md:block truncate text-gray-400 cursor-pointer hover:text-white transition-colors">
+                {{item.artistName}}
+            </div>
+
+            <!-- Rating -->
             @if (extendedApi()) {
-                <div id="OPT_RATING_{{item.objectID}}" class="hidden lg:block w-24 content-center"><star-rating [currentSong]="item"></star-rating></div>
+                <div id="OPT_RATING_{{item.objectID}}" class="hidden lg:flex justify-center">
+                    <star-rating [currentSong]="item"></star-rating>
+                </div>
             }
 
-            <!--  COL 6 TIME (LG)              -->
-            <div id="OPT_TIME_{{item.objectID}}" class="w-16 ms-3 text-right content-center">{{getDuration(item)}}</div>
+            <!-- Duration -->
+            <div id="OPT_TIME_{{item.objectID}}" class="text-right text-gray-400 font-mono text-xs">
+                {{getDuration(item)}}
+            </div>
 
-            <!--  COL 7 song OPTION            -->
-            <div id="OPT_OPTIONS_{{item.objectID}}" class="w-4 ms-6 col-greyed content-center font-bold" (click)="showSongPopup($event, item)">&#x22EE;</div>
+            <!-- Options Menu -->
+            <div id="OPT_OPTIONS_{{item.objectID}}" class="flex justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" (click)="showSongPopup($event, item)">
+                <span class="material-symbols-outlined text-gray-400 text-xl">more_vert</span>
+            </div>
+        </div>
+        } @else {
+        <!-- Row for Mixed Album View -->
+        <div class="grid gap-4 items-center text-sm py-2.5 px-2 rounded-lg hover:bg-white/5 transition-all duration-200 group {{selectedRowClass(item)}}"
+             style="grid-template-columns: 64px minmax(100px, 2fr) minmax(100px, 1fr) minmax(100px, 1fr) 128px 80px 48px;">
+            <!-- Album Art -->
+            <div id="col_1_img_{{item.objectID}}">
+                <img class="w-14 h-14 rounded-md object-cover shadow-md cursor-pointer transition-all" 
+                     src="{{item.albumArtUrl}}" 
+                     (click)="playItem(item)">
+            </div>
+
+            <!-- Title -->
+            <div id="{{item.objectID}}" (click)="playItem(item)" class="flex items-center gap-2 cursor-pointer min-w-0">
+                <div class="truncate text-white group-hover:text-aqua transition-colors font-medium">{{item.title}}</div>
+                <quality-badge class="flex-shrink-0" [item]="item"></quality-badge>
+            </div>
+
+            <!-- Album -->
+            <div id="OPT_ALBUM_{{item.objectID}}" (click)="playItem(item)" class="truncate text-gray-400 cursor-pointer transition-colors">
+                {{item.album}}
+            </div>
+            
+            <!-- Artist -->
+            <div id="OPT_ARTIST_{{item.objectID}}" (click)="playItem(item)" class="hidden md:block truncate text-gray-400 cursor-pointer transition-colors">
+                {{item.artistName}}
+            </div>
+
+            <!-- Rating -->
+            @if (extendedApi()) {
+                <div id="OPT_RATING_{{item.objectID}}" class="hidden lg:flex justify-center">
+                    <star-rating [currentSong]="item"></star-rating>
+                </div>
+            }
+
+            <!-- Duration -->
+            <div id="OPT_TIME_{{item.objectID}}" class="text-right text-gray-400 font-mono text-xs">
+                {{getDuration(item)}}
+            </div>
+
+            <!-- Options Menu -->
+            <div id="OPT_OPTIONS_{{item.objectID}}" class="flex justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" (click)="showSongPopup($event, item)">
+                <span class="material-symbols-outlined text-gray-400 text-xl">more_vert</span>
+            </div>
         </div>
         }
+        }
+        </div>
     </div>
     } @else { <!-- CARD Layout -->
-    <div id="head_browse_result_items_mixed_titles_ID" class="grid grid-cols-2 mt-3 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-3 defaultFont font-semibold">
+    <div id="head_browse_result_items_mixed_titles_ID" class="grid grid-cols-2 mt-6 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-6 p-4">
         @for (item of musicTracks(); track item.objectID) {
-        <div id="{{item.objectID}}" class="albumImageContainer flex flex-col">
-            <img class="h-auto max-w-full" src="{{item.albumArtUrl}}" alt="{{item.title}}">
-            <div class="overlay-child flex flex-col justify-center">
-                <div class="flex justify-around items-center pb-4">
-                    <span class="material-symbols-outlined md-36 m-3" (click)="playItem(item)">play_circle</span>
-                    <span class="material-symbols-outlined md-36 m-3" (click)="addItemToPlaylist(item)">playlist_add</span>
-                    <span class="material-symbols-outlined md-36 m-3" (click)="showSongPopup($event, item)">more_vert</span>
+        <div id="{{item.objectID}}" class="group flex flex-col cursor-pointer">
+            <div class="relative overflow-hidden rounded-xl shadow-lg transition-transform duration-300 hover:scale-105">
+                <img class="w-full aspect-square object-cover" 
+                     src="{{item.albumArtUrl}}" 
+                     alt="{{item.title}}">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <div class="flex gap-3">
+                        <button class="p-3 bg-aqua hover:bg-aqua/80 rounded-full shadow-xl transition-all duration-200 hover:scale-110" 
+                                (click)="playItem(item)">
+                            <span class="material-symbols-outlined text-white text-2xl">play_arrow</span>
+                        </button>
+                        <button class="p-3 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full shadow-xl transition-all duration-200 hover:scale-110" 
+                                (click)="addItemToPlaylist(item)">
+                            <span class="material-symbols-outlined text-white text-2xl">playlist_add</span>
+                        </button>
+                        <button class="p-3 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full shadow-xl transition-all duration-200 hover:scale-110" 
+                                (click)="showSongPopup($event, item)">
+                            <span class="material-symbols-outlined text-white text-2xl">more_vert</span>
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div class="flex mt-4 mb-4"> <!-- card-body & card-title from bootstrap -->
-                <div class="ms-3">{{item.title}}</div>
+            <div class="mt-3 px-1">
+                <h3 class="text-white font-medium text-sm truncate group-hover:text-aqua transition-colors">{{item.title}}</h3>
+                @if (item.artistName) {
+                    <p class="text-gray-400 text-xs truncate mt-1">{{item.artistName}}</p>
+                }
             </div>
         </div>
         }
