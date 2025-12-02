@@ -1,116 +1,146 @@
-<div class="flex flex-col mb-4">
+<div class="flex flex-col items-center justify-center min-h-screen p-8">
   @if(deviceService.mediaRendererSelected()) {
-  <div class="flex">
-    @if (rendererService.trackInfoAvailable()) {
-      <div class="ms-4 mt-4 flex flex-col">
-        <div class="mb-3 max-image-width">
-            <img src="{{getImgSrc()}}">
-        </div>
-        <star-rating [size]="getStarSize()" [currentSong]="getCurrentTrack()"></star-rating>
-      </div>
-    }
     @if (hasCurrentSongTitle()) {
-      <div class="flex flex-col ms-5 mt-5 mb-4">
-        <div class="flex flex-col">
-          <div class="title">{{getCurrentSongTitle()}}</div>
-          <div class="flex flex-col">
-            @if (rendererService.trackInfo().currentTrack?.artistName ) {
-              <div class="regularText align-self-start">
-                by <span class="highlightText">{{rendererService.trackInfo().currentTrack?.artistName}}</span>
-              </div>
+      <!-- Album Art Section -->
+      <div class="mb-8">
+        <img 
+          [src]="getImgSrc()" 
+          alt="Album Art"
+          class="w-96 h-96 object-cover rounded-2xl shadow-2xl transition-transform duration-300 hover:scale-105"
+        />
+      </div>
+
+      <!-- Track Info Section -->
+      <div class="text-center max-w-2xl mb-8">
+        <h1 class="text-4xl font-semibold text-white mb-2">
+          {{ getCurrentSongTitle() }}
+        </h1>
+        
+        @if (rendererService.trackInfo().currentTrack?.artistName) {
+          <p class="text-xl text-gray-400 mb-4">
+            {{ rendererService.trackInfo().currentTrack?.artistName }}
+          </p>
+        }
+        
+        @if (rendererService.trackInfo().currentTrack?.album) {
+          <p class="text-lg text-gray-500">
+            @if (!streaming()) {
+              {{ rendererService.trackInfo().currentTrack?.album }}
             } @else {
-              <div>&nbsp;</div>
+              Broadcasted by {{ rendererService.trackInfo().currentTrack?.album }}
             }
-            @if (rendererService.trackInfo().currentTrack?.album) {
-              <div class="regularText align-self-start">
-                @if (!streaming()) {
-                  <div>
-                    from the album <span class="highlightText">{{rendererService.trackInfo().currentTrack?.album}}</span>
-                  </div>
-                } @else {
-                  <div>
-                    broadcasted by <span class="highlightText">{{rendererService.trackInfo().currentTrack?.album}}</span>
-                  </div>
-                }
+          </p>
+        }
+      </div>
+
+      <!-- Rating Section -->
+      @if (rendererService.trackInfoAvailable() && !streaming()) {
+        <div class="mb-8">
+          <star-rating [size]="getStarSize()" [currentSong]="getCurrentTrack()"></star-rating>
+        </div>
+      }
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap gap-4 justify-center mb-8">
+        @if (canBeAddedToPlaylist) {
+          <button 
+            (click)="openAddPlaylistDialog()"
+            class="px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all duration-200 backdrop-blur-sm flex items-center gap-2">
+            <span class="material-symbols-outlined">playlist_add</span>
+            <span>Add to Playlist</span>
+          </button>
+        }
+        
+        <button 
+          (click)="detailsClicked()"
+          class="px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all duration-200 backdrop-blur-sm flex items-center gap-2">
+          <span class="material-symbols-outlined">{{ showDetail() ? 'expand_less' : 'expand_more' }}</span>
+          <span>{{ showDetail() ? 'Hide Details' : 'Show Details' }}</span>
+        </button>
+      </div>
+
+      <!-- Details Section -->
+      @if (showDetail() && rendererService.trackInfoAvailable()) {
+        <div class="mt-4 p-6 bg-white/5 rounded-lg backdrop-blur-sm max-w-4xl w-full">
+          <h2 class="text-2xl font-semibold text-white mb-6">Audio Information</h2>
+          
+          <!-- Player Info -->
+          <div class="mb-6">
+            <h3 class="text-sm text-gray-400 mb-3 uppercase tracking-wide">
+              Player: {{ deviceService.selectedMediaRendererDevice().friendlyName }}
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div class="bg-white/5 rounded-lg p-4">
+                <span class="text-xs text-gray-500 block mb-1">Input Source</span>
+                <span class="text-white">{{ deviceService.getCurrentInputSource()?.Name }}</span>
               </div>
-            } @else {
-              <div>&nbsp;</div>
-            }
+              <div class="bg-white/5 rounded-lg p-4">
+                <span class="text-xs text-gray-500 block mb-1">Codec</span>
+                <span class="text-white">{{ rendererService.trackInfo().codecName }}</span>
+              </div>
+              <div class="bg-white/5 rounded-lg p-4">
+                <span class="text-xs text-gray-500 block mb-1">Lossless</span>
+                <span class="text-white">{{ rendererService.trackInfo().lossless }}</span>
+              </div>
+              <div class="bg-white/5 rounded-lg p-4">
+                <span class="text-xs text-gray-500 block mb-1">Sample Rate</span>
+                <span class="text-white">{{ rendererService.trackInfo().sampleRate }} Hz</span>
+              </div>
+              <div class="bg-white/5 rounded-lg p-4">
+                <span class="text-xs text-gray-500 block mb-1">Bit Depth</span>
+                <span class="text-white">{{ rendererService.trackInfo().bitDepth }} bit</span>
+              </div>
+              <div class="bg-white/5 rounded-lg p-4">
+                <span class="text-xs text-gray-500 block mb-1">Bitrate</span>
+                <span class="text-white">{{ rendererService.trackInfo().bitrate }} bit/s</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Media Server Info -->
+          <div>
+            <h3 class="text-sm text-gray-400 mb-3 uppercase tracking-wide">Media Server</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div class="bg-white/5 rounded-lg p-4">
+                <span class="text-xs text-gray-500 block mb-1">Sample Rate</span>
+                <span class="text-white">{{ rendererService.sampleFreq() || 'N/A' }} Hz</span>
+              </div>
+              <div class="bg-white/5 rounded-lg p-4">
+                <span class="text-xs text-gray-500 block mb-1">Bit Depth</span>
+                <span class="text-white">{{ rendererService.bitsPerSample() }} bit</span>
+              </div>
+              <div class="bg-white/5 rounded-lg p-4">
+                <span class="text-xs text-gray-500 block mb-1">Bitrate</span>
+                <span class="text-white">{{ rendererService.bitrate() }} bit/s</span>
+              </div>
+              <div class="bg-white/5 rounded-lg p-4">
+                <span class="text-xs text-gray-500 block mb-1">Content Format</span>
+                <span class="text-white">{{ getCurrentTrack()?.audioFormat?.contentFormat }}</span>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="flex buttons-container">
-          @if (canBeAddedToPlaylist) {
-            <button mat-flat-button class="mr-buttons" (click)="openAddPlaylistDialog()">
-              <span class="material-symbols-outlined">playlist_add</span>
-              <span> Playlists</span>
-            </button>
-          }
+      }
+    } @else {
+      <!-- No Track Playing -->
+      <div class="text-center">
+        <div class="w-96 h-96 bg-white/5 rounded-2xl flex items-center justify-center mb-8">
+          <span class="material-symbols-outlined text-gray-600" style="font-size: 128px;">music_note</span>
         </div>
+        <p class="text-2xl text-gray-500">No track currently playing</p>
       </div>
-      } @else {
-      <div class="regularText infotext">song info not available</div>
     }
-  </div>
-
-  <!-- Detail Info -->
-  @if (rendererService.trackInfoAvailable()) {
-    <div>
-      <div mat-subheader class="p-2">audio information provided by player {{deviceService.selectedMediaRendererDevice().friendlyName}}</div>
-      <div class="inputSource flex">
-        <form>
-          <mat-form-field appearance="outline" class="p-2">
-            <mat-label>input source</mat-label>
-            <input matInput type="text" value="{{deviceService.getCurrentInputSource()?.Name}}" readonly="true">
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="p-2">
-            <mat-label>codec name</mat-label>
-            <input matInput type="text" value="{{rendererService.trackInfo().codecName}}" readonly="true">
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="p-2">
-            <mat-label>lossless</mat-label>
-            <input matInput type="text" value="{{rendererService.trackInfo().lossless}}" readonly="true">
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="p-2">
-            <mat-label>sample rate [Hz]</mat-label>
-            <input matInput type="text" value="{{rendererService.trackInfo().sampleRate}}" readonly="true">
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="p-2">
-            <mat-label>bit depth [bit]</mat-label>
-            <input matInput type="text" value="{{rendererService.trackInfo().bitDepth}}" readonly="true">
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="p-2">
-            <mat-label>bitrate [bit/s]</mat-label>
-            <input matInput type="text" value="{{rendererService.trackInfo().bitrate}}" readonly="true">
-          </mat-form-field>
-        </form>
+  } @else {
+    <!-- No Renderer Selected -->
+    <div class="text-center">
+      <div class="w-96 h-96 bg-white/5 rounded-2xl flex items-center justify-center mb-8">
+        <span class="material-symbols-outlined text-gray-600" style="font-size: 128px;">speaker</span>
       </div>
-      <div mat-subheader class="p-2">media server</div>
-      <div>
-        <form>
-          <mat-form-field appearance="outline" class="p-2">
-            <mat-label>sample rate [Hz]</mat-label>
-            <input matInput type="text" value="{{rendererService.sampleFreq()}}" placeholder="N/A" readonly="true">
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="p-2">
-            <mat-label>bit depth</mat-label>
-            <input matInput type="text" value="{{rendererService.bitsPerSample()}}" readonly="true">
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="p-2">
-            <mat-label>bitrate [bit/s]</mat-label>
-            <input matInput type="text" value="{{rendererService.bitrate()}}" readonly="true">
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="p-2">
-            <mat-label>content format</mat-label>
-            <input matInput type="text" value="{{getCurrentTrack()?.audioFormat?.contentFormat}}" readonly="true">
-          </mat-form-field>
-        </form>
-      </div>
-    </div>
-  }
-} @else {
-    <div class="inline-flex items-center ms-8 p-4 max-w-lg mb-4 text-sm mt-8 rounded-lg bg-gray-800 text-red-400" role="alert">
-      Please select a media renderer by clicking the 
-      <span class="material-symbols-outlined icon-main">speaker</span> button.
+      <p class="text-2xl text-gray-400 mb-4">No Media Renderer Selected</p>
+      <p class="text-gray-500">
+        Please select a media renderer by clicking the 
+        <span class="material-symbols-outlined align-middle">speaker</span> button.
+      </p>
     </div>
   }
 </div>
