@@ -39,20 +39,26 @@
         <span class="material-symbols-outlined icon-button" (click)="rendererService.next()">skip_next</span>
         <span class="material-symbols-outlined icon-button {{repeatClass}}" (click)="playlistService.toggleRepeat()">repeat</span>
       </div>
-      <div class="timeProgessContainer flex">
+      <div id="timeProgressContainer" class="timeProgressContainer flex">
         <div class="timeText">{{rendererService.trackTime().secondsDisp}}</div>
         <div class="timeSliderBox">
           @if (!streaming()) {
-            <mat-slider class="absolute hidden time-slider" min="0" max="100" step="1">
-              <input matSliderThumb (valueChange)="trackTimePercentSeek($event)" [value]="trackTimePercent()">
-            </mat-slider>
+            <input 
+              type="range" 
+              min="0" 
+              max="100" 
+              step="1" 
+              [value]="trackTimePercent()" 
+              (input)="trackTimePercentSeek($event.target.value)"
+              class="time-range-slider"
+              style="--value: {{trackTimePercent()}}%"
+            />
+          } @else {
+            <div class="time-progress-static" [style.width.%]="trackTimePercent()"></div>
           }
-          <mat-progress-bar class="absolute time-progressbar self-center" mode="determinate" [value]="trackTimePercent()">
-          </mat-progress-bar>
         </div>
         @if (!streaming()) {
-          <div class="timeText">{{getFinishTime()}}
-          </div>
+          <div class="timeText">{{getFinishTime()}}</div>
         }
       </div>
     </div>
