@@ -54,7 +54,7 @@
               style="--value: {{trackTimePercent()}}%"
             />
           } @else {
-            <div class="time-progress-static" [style.width.%]="trackTimePercent()"></div>
+            <div class="time-progress-static w-full"></div>
           }
         </div>
         @if (!streaming()) {
