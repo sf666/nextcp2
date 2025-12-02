@@ -1,56 +1,59 @@
-<div class="dialog-root flex flex-col justify-center">
-  <!-- (mouseleave)="close()" -->
-  <div class="flex mt-3" (mouseenter)="closeAllDialogs()">
-    <div class="align-middle self-center">
-      <img src="{{selectedMusicItem.albumArtUrl}}">
-    </div>
-
-    <div class="flex flex-col self-center justify-around albumAndTitle">
-      <div class="title text-base no-wrap ml-4">{{selectedMusicItem.title}}</div>
-      <div class="artist mt-1 text-xs no-wrap ml-4">{{selectedMusicItem.artistName}}</div>
-      <star-rating class="ml-4 mt-2" [currentSong]="selectedMusicItem"></star-rating>
+<div class="dialog-root flex flex-col">
+  <!-- Header with track info -->
+  <div class="flex gap-4 p-4 border-b border-white/10" (mouseenter)="closeAllDialogs()">
+    <img src="{{selectedMusicItem.albumArtUrl}}" class="w-16 h-16 rounded-lg object-cover shadow-lg">
+    <div class="flex flex-col justify-center albumAndTitle">
+      <div class="title text-base font-semibold">{{selectedMusicItem.title}}</div>
+      <div class="artist mt-1 text-xs">{{selectedMusicItem.artistName}}</div>
+      <star-rating class="mt-2 scale-90 origin-left" [currentSong]="selectedMusicItem"></star-rating>
     </div>
   </div>
 
-  <div class="divider mb-3">&nbsp;</div>
+  <!-- Menu items -->
 
-  <div class="dialogItems flex flex-col flex-wrap">
+  <div class="dialogItems flex flex-col py-1">
     @if (hasValidSongId()) {
-    <div class="ml-2 mb-1 flex text-sm justify-between playlist-item-header ml-2">
-      <div>Server side playlist actions</div>
-    </div>
-    <div class="ml-4 text-sm flex justify-between playlist-item" (click)="openAddToPlaylistDialog($event)">
-      <div>Add to playlist</div>
-    </div>
+      <div class="section-header px-4 py-2 text-xs font-semibold uppercase tracking-wider">
+        Server side playlist actions
+      </div>
+      <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="openAddToPlaylistDialog($event)">
+        <span class="material-symbols-outlined text-lg opacity-70">playlist_add</span>
+        <span>Add to playlist</span>
+      </button>
     }
     @if (isParentPlaylist) {
-    <div class="ml-4 mt-1 playlist-item" (mouseover)="closeAllDialogs()" (click)="deleteFromPlaylist()">
-      Delete from this playlist
-    </div>
+      <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (mouseover)="closeAllDialogs()" (click)="deleteFromPlaylist()">
+        <span class="material-symbols-outlined text-lg opacity-70">delete</span>
+        <span>Delete from playlist</span>
+      </button>
     }
 
     @if (hasValidSongId()) {
-    <div class="divider mb-3 mt-1">&nbsp;</div>
-    <div class="ml-2 mb-1 flex justify-between playlist-item-header">
-      Player playlist actions
-    </div>
-    <div class="ml-4 mb-1 playlist-item" (mouseenter)="closeAllDialogs()" (click)="actionPlayNext()">
-      Play next
-    </div>
-    <div class="ml-4 mb-1 playlist-item" (mouseenter)="closeAllDialogs()" (click)="actionPlayLast()">
-      Add at last position
-    </div>
-    <div class="divider mb-3 mt-1">&nbsp;</div>
-    <div class="ml-2 mb-1 flex justify-between playlist-item-header">
-      Other server actions
-    </div>
-    <div class="ml-4 mb-1 playlist-item" (mouseover)="closeAllDialogs()" (click)="download()">
-      Download
-    </div>
-    <div class="ml-4 playlist-item" (mouseover)="closeAllDialogs()" (click)="updateAlbumArt()">
-      Update Album Art
-    </div>
+      <div class="divider my-1"></div>
+      <div class="section-header px-4 py-2 text-xs font-semibold uppercase tracking-wider">
+        Player playlist actions
+      </div>
+      <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (mouseenter)="closeAllDialogs()" (click)="actionPlayNext()">
+        <span class="material-symbols-outlined text-lg opacity-70">skip_next</span>
+        <span>Play next</span>
+      </button>
+      <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (mouseenter)="closeAllDialogs()" (click)="actionPlayLast()">
+        <span class="material-symbols-outlined text-lg opacity-70">add_to_queue</span>
+        <span>Add to queue</span>
+      </button>
+      
+      <div class="divider my-1"></div>
+      <div class="section-header px-4 py-2 text-xs font-semibold uppercase tracking-wider">
+        Other server actions
+      </div>
+      <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (mouseover)="closeAllDialogs()" (click)="download()">
+        <span class="material-symbols-outlined text-lg opacity-70">download</span>
+        <span>Download</span>
+      </button>
+      <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (mouseover)="closeAllDialogs()" (click)="updateAlbumArt()">
+        <span class="material-symbols-outlined text-lg opacity-70">image</span>
+        <span>Update album art</span>
+      </button>
     }
   </div>
-  <div class="spaces">&nbsp;</div>
 </div>
