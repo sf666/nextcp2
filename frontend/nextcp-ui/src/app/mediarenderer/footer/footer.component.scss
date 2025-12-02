@@ -23,39 +23,12 @@ $col-grey: $col-4;
     box-shadow     : 0 -4px 24px rgba(0, 0, 0, 0.4);
 }
 
-mat-slider {
-    height: 40px;
-}
-
-.timeDispContainer {
-    font-family: 'HK Grotesk';
-    font-weight: 600;
-    font-style : normal;
-
-
-    flex           : 1 2 auto;
-    display        : flex;
-    flex-direction : row;
-    justify-content: center;
-    align-self     : center; // vertical center
-    width          : 150px;
-    min-width      : 150px;
-}
-
 .icon-font {
     font-variation-settings: 'wght'300, 'FILL'0, 'GRAD'-25, 'opsz'24;
     align-self             : center;
     color                  : rgba(255, 255, 255, 0.7);
     transition             : all 0.2s ease;
     cursor                 : pointer;
-}
-
-.infoItems {
-    display      : flex;
-    flex         : 1 1 6rem;
-    padding-right: 10px;
-    margin-top   : 24px;
-    margin-bottom: 24px;
 }
 
 .player-button-group {
@@ -122,26 +95,6 @@ mat-slider {
     margin-right: 0.5rem;
     margin-left : 0.5rem;
     align-self  : center;
-}
-
-.audioInfoLabel {
-    color: $col-4;
-    width: 8rem;
-}
-
-.unit {
-    color       : $col-4;
-    margin-left : 8px;
-    width       : 2.5rem;
-    margin-right: 8px;
-}
-
-.audioInfoValue {
-    color          : $col-2;
-    width          : 4.5rem;
-    align-self     : flex-end;
-    text-align     : end;
-    text-align-last: end;
 }
 
 .baseFontsize {
@@ -258,25 +211,6 @@ img {
     min-width    : 0;
 }
 
-.renderer-label {
-    align-self : center;
-    text-align : center;
-    font-size  : 1rem;
-    font-weight: 400;
-    color      : var(--glas-white-3);
-    align-self : flex-start;
-    color      : var(--primary-color-reduced);
-}
-
-.renderer-icon {
-    font-size     : 1.2rem;
-    width         : 2rem;
-    height        : 1.3rem;
-    color         : var(--primary-color-reduced);
-    align-self    : center;
-    vertical-align: middle;
-}
-
 /**
     Footer sections
     ==============================================================
@@ -293,13 +227,6 @@ img {
     align-self   : center;
     border-radius: 3px;
     overflow     : hidden;
-}
-
-.time-slider {
-    height : 48px;
-    width  : 100%;
-    opacity: 0;
-    top    : -1rem;
 }
 
 .timeSliderBox {
@@ -405,16 +332,4 @@ img {
 
 .hidden {
     opacity: 0;
-}
-
-.volume-bar {
-    line-height: 1.6rem;
-}
-
-.songPopup {
-    flex           : 1 1 10px;
-    align-self     : center;
-    justify-content: center;
-    margin-left    : 0.5rem;
-    margin-right   : 0.5rem;
 }
