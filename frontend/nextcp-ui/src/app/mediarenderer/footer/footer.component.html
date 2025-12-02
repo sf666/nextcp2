@@ -26,7 +26,7 @@
 
   <!-- Middle footer section -->
   <div id="middle-section" class="flex grow-3 min-w-3xs justify-center h-full basis-0 mx-4">
-    <div class="flex grow max-w-md flex-col justify-around">
+    <div class="flex grow max-w-md flex-col ">
       <div class="player-button-group">
         <span class="material-symbols-outlined icon-button {{shuffleClass}}" (click)="playlistService.toggleShuffle()">shuffle</span>
         <span class="material-symbols-outlined icon-button" (click)="playlistService.previous()">skip_previous</span>
@@ -39,7 +39,7 @@
         <span class="material-symbols-outlined icon-button" (click)="rendererService.next()">skip_next</span>
         <span class="material-symbols-outlined icon-button {{repeatClass}}" (click)="playlistService.toggleRepeat()">repeat</span>
       </div>
-      <div id="timeProgressContainer" class="timeProgressContainer flex">
+      <div id="timeProgressContainer" class="pb-4 flex">
         <div class="timeText">{{rendererService.trackTime().secondsDisp}}</div>
         <div class="timeSliderBox">
           @if (!streaming()) {
@@ -74,14 +74,19 @@
           <span class="material-symbols-outlined {{getStandbyClass()}} icon-main" (click)="powerClicked()">power_settings_new</span>
         }
       </div>
-      <div class="flex w-full">
+      <div id="volume-slider" class="flex w-full items-center gap-2">
         <span class="material-symbols-outlined icon-main">volume_up</span>
-        <div class="flex grow overlayBox">
-            <mat-slider class="absolute flex hidden mySlider grow" style="width: 100%;" min="0" max="90" step="1" value="0">
-              <input class="flex grow" matSliderThumb (valueChange)="volChanged($event)" [value]="rendererService.deviceDriverState().volume">
-            </mat-slider>
-          <mat-progress-bar class="absolute flex progressbar grow" mode="determinate" [value]="rendererService.deviceDriverState().volume">
-          </mat-progress-bar>
+        <div class="flex grow volumeSliderBox">
+          <input 
+            type="range" 
+            min="0" 
+            max="90" 
+            step="1" 
+            [value]="rendererService.deviceDriverState().volume" 
+            (input)="volChanged($event.target.value)"
+            class="volume-range-slider"
+            style="--value: {{rendererService.deviceDriverState().volume / 90 * 100}}%"
+          />
         </div>
       </div>
     </div>

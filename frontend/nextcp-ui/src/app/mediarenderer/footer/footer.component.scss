@@ -216,19 +216,6 @@ img {
     ==============================================================
 **/
 
-.mySlider {
-    height    : 48px;
-    align-self: center;
-    opacity   : 0;
-    flex      : 1 1 auto;
-}
-
-.progressbar {
-    align-self   : center;
-    border-radius: 3px;
-    overflow     : hidden;
-}
-
 .timeSliderBox {
     position : relative;
     display  : flex;
@@ -312,24 +299,76 @@ img {
     transition: width 0.3s ease;
 }
 
-.overlayBox {
-    position    : relative;
-    padding-left: 0.5rem;
+.volumeSliderBox {
+    position: relative;
+    display: flex;
+    height: 24px;
+    align-items: center;
+}
 
-    &:hover .hidden {
-        opacity: 1;
-        margin : auto;
-    }
+.volume-range-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 5px;
+    border-radius: 3px;
+    background: linear-gradient(
+        to right,
+        rgba(59, 130, 246, 0.8) 0%,
+        rgba(59, 130, 246, 0.8) var(--value),
+        rgba(255, 255, 255, 0.2) var(--value),
+        rgba(255, 255, 255, 0.2) 100%
+    );
+    outline: none;
+    cursor: pointer;
+    transition: background 0.15s ease;
 
-    &:hover>.progressbar {
+    &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #3b82f6;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        transition: all 0.2s ease;
         opacity: 0;
     }
-}
 
-.absolute {
-    position: absolute;
-}
+    &::-moz-range-thumb {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #3b82f6;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        transition: all 0.2s ease;
+        opacity: 0;
+    }
 
-.hidden {
-    opacity: 0;
+    &:hover {
+        &::-webkit-slider-thumb {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+        &::-moz-range-thumb {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+    }
+
+    &:active {
+        &::-webkit-slider-thumb {
+            opacity: 1;
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.5);
+        }
+        &::-moz-range-thumb {
+            opacity: 1;
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.5);
+        }
+    }
 }
