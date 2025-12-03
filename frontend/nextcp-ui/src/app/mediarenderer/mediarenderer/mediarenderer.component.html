@@ -1,8 +1,8 @@
-<div class="flex flex-col items-center justify-center min-h-screen p-8">
+<div class="flex flex-col items-center justify-start min-h-screen p-8">
   @if(deviceService.mediaRendererSelected()) {
     @if (hasCurrentSongTitle()) {
       <!-- Album Art Section -->
-      <div class="mb-8">
+      <div class="">
         <img 
           [src]="getImgSrc()" 
           alt="Album Art"
