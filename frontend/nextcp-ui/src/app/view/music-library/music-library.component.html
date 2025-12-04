@@ -6,28 +6,58 @@
   }
 
   @if(!mediaServerSelected()) {
-      <div id="server-selection" class="flex flex-col ml-4 pt-8">
-        <div class="text-lg font-bold mb-2">Select Media Server</div>
-        <div class="inline-flex items-center text-sm mb-2">You can change the media server selection later by clicking the
-            <span class="material-symbols-outlined icon-main">dns</span> button.            
-        </div>
-        <div class="text-sm inline-flex items-center">
-            Select a media renderer by clicking the 
-            <span class="material-symbols-outlined icon-main">speaker</span> button.
-        </div>
-        @for (device of deviceService.mediaServerList(); track device) {
-          <div class="mb-4 mt-8">
-            <button (click)="selectServer(device.udn)" class="ml-4 rounded-md ring-2 py-2 px-4 ring-slate-600 hover:bg-slate-600">
-              <img class="h-6 w-6 absolute" src="{{device.img}}" alt="{{device.friendlyName}}">
-              <span class="ml-10 text-slate-200">{{device.friendlyName}}</span>
-            </button>
+      <div id="server-selection" class="flex flex-col items-center justify-center pt-16 px-4">
+        <div class="max-w-2xl w-full">
+          <!-- Header Section -->
+          <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold text-white mb-3">Select Media Server</h2>
+            <p class="text-gray-400 text-sm">Choose a media server to browse your music library</p>
           </div>
-        }
-        @if(deviceService.mediaServerList().length == 0) {
-          <div class="p-4 max-w-lg mb-4 text-sm mt-8 rounded-lg bg-gray-800 text-red-400" role="alert">
-            No media servers have been discovered on the network.
-          </div>          
-        }
+
+          <!-- Info Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div class="flex items-start gap-3 p-4 rounded-xl bg-zinc-800/50 border border-zinc-700/50">
+              <span class="material-symbols-outlined text-cyan-400 text-xl">dns</span>
+              <div class="flex-1">
+                <div class="text-sm font-medium text-gray-200 mb-1">Media Server</div>
+                <div class="text-xs text-gray-400">Change server selection anytime using the server button</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 p-4 rounded-xl bg-zinc-800/50 border border-zinc-700/50">
+              <span class="material-symbols-outlined text-cyan-400 text-xl">speaker</span>
+              <div class="flex-1">
+                <div class="text-sm font-medium text-gray-200 mb-1">Media Renderer</div>
+                <div class="text-xs text-gray-400">Select your playback device using the speaker button</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Server List -->
+          <div class="space-y-3">
+            @for (device of deviceService.mediaServerList(); track device) {
+              <button (click)="selectServer(device.udn)" 
+                      class="w-full flex items-center gap-4 p-4 rounded-xl bg-zinc-800/70 border border-zinc-700/50 hover:border-cyan-500/50 hover:bg-zinc-700/70 transition-all duration-200 group">
+                <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-zinc-900/50 border border-zinc-700/50 group-hover:border-cyan-500/30">
+                  <img class="h-7 w-7" src="{{device.img}}" alt="{{device.friendlyName}}">
+                </div>
+                <div class="flex-1 text-left">
+                  <div class="text-base font-medium text-gray-200 group-hover:text-white">{{device.friendlyName}}</div>
+                  <div class="text-xs text-gray-500">Media Server</div>
+                </div>
+                <span class="material-symbols-outlined text-gray-600 group-hover:text-cyan-400 transition-colors">chevron_right</span>
+              </button>
+            }
+            @if(deviceService.mediaServerList().length == 0) {
+              <div class="flex items-start gap-3 p-6 rounded-xl bg-red-950/20 border border-red-900/30" role="alert">
+                <span class="material-symbols-outlined text-red-400 text-xl">error</span>
+                <div class="flex-1">
+                  <div class="text-sm font-medium text-red-300 mb-1">No Servers Found</div>
+                  <div class="text-xs text-red-400/80">No media servers have been discovered on the network</div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
       </div>
   }
 
