@@ -1,17 +1,13 @@
 package nextcp.lastfm.service;
 
 import java.util.TreeSet;
-
-import jakarta.annotation.PostConstruct;
-
 import org.apache.commons.lang3.StringUtils;
+import org.apache.hc.core5.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
+import jakarta.annotation.PostConstruct;
 import nextcp.lastfm.ILastFmConfig;
 import nextcp.lastfm.dto.auth.AuthSessionStatus;
 import nextcp.lastfm.dto.auth.AuthToken;
@@ -93,7 +89,7 @@ public class LastFmAuthService
         AuthToken authToken = getUserGrantingAuthToken();
         if (authToken == null || StringUtils.isEmpty(authToken.getToken()))
         {
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Unknown LastFm Token is.");
+            throw new RuntimeException(HttpStatus.SC_EXPECTATION_FAILED +  " : Unknown LastFm Token.");
         }
 
         return String.format("http://www.last.fm/api/auth/?api_key=%s&token=%s", lastFmConfig.getApiKey(), authToken.getToken());

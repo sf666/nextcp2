@@ -46,6 +46,7 @@
 		</repository>
 	</distributionManagement>
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<timestamp>${maven.build.timestamp}</timestamp>
    		<maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
 		<maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
@@ -59,10 +60,11 @@
 		<springboot.version>4.0.0</springboot.version>
 		<jupiter.version>6.0.1</jupiter.version>
 		<commons-codec.version>1.15</commons-codec.version>
-		<snakeyaml.version>1.33</snakeyaml.version>
+		<snakeyaml.version>2.5</snakeyaml.version>
         <commons-configuration.version>1.10</commons-configuration.version>
         <commons-io.version>2.21.0</commons-io.version>
-		<jdom2.version>2.0.6.1</jdom2.version>		
+		<jdom2.version>2.0.6.1</jdom2.version>
+		<jetty.version>12.1.5</jetty.version>		
 	</properties>
 	<modules>
 		<module>nextcp2-external-information-provider</module>
@@ -136,21 +138,21 @@
 	</build>
 	<!-- common dependencies for all modules -->
 	<dependencies>
+		<!-- REMOVE after migration to 4-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-properties-migrator</artifactId>
 			<version>${springboot.version}</version>
 			<scope>runtime</scope>
 		</dependency>
+				
+	    <dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-json</artifactId>
+		</dependency>
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-starter-log4j2</artifactId>
-		    <exclusions>
-		        <exclusion>
-		            <groupId>org.springframework.boot</groupId>
-		            <artifactId>spring-boot-starter-logging</artifactId>
-		        </exclusion>
-		    </exclusions>
+		    <artifactId>spring-boot-configuration-processor</artifactId>
 		</dependency>
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
@@ -161,6 +163,10 @@
 		            <artifactId>spring-boot-starter-logging</artifactId>
 		        </exclusion>
 		    </exclusions>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-web</artifactId>
 		</dependency>		
 		<!-- Logging -->
 		<dependency>
@@ -204,6 +210,47 @@
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
+		    <dependency>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-starter-json</artifactId>
+				<version>${springboot.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>com.fasterxml.jackson.core</groupId>
+			    <artifactId>jackson-annotations</artifactId>
+			    <version>2.20</version>
+			</dependency>
+		    <dependency>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-starter-web</artifactId>
+				<version>${springboot.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-configuration-processor</artifactId>
+				<version>${springboot.version}</version>
+			</dependency>
+			<dependency>
+		    	<groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-http-converter</artifactId>
+				<version>${springboot.version}</version>
+			    <scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-alpn-server</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-alpn-java-server</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty.http2</groupId>
+				<artifactId>jetty-http2-server</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.jdom</groupId>
 				<artifactId>jdom2</artifactId>
@@ -253,10 +300,6 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-test</artifactId>
 		        <version>${springboot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-client</artifactId>
 			</dependency>
 			<!-- Logging -->
 			<dependency>
@@ -407,23 +450,6 @@
 				<groupId>de.sf666</groupId>
 				<artifactId>musicbrainz</artifactId>
 				<version>1.4</version>
-			</dependency>
-
-			<!-- Jetty 12-->
-			<dependency>
-				<groupId>org.eclipse.jetty.ee10</groupId>
-				<artifactId>jetty-ee10-servlet</artifactId>
-				<version>12.0.16</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.jetty.http2</groupId>
-				<artifactId>jetty-http2-server</artifactId>
-				<version>12.0.16</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-client</artifactId>
-				<version>12.0.24</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
