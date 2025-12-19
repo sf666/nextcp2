@@ -11,6 +11,11 @@
 	<artifactId>nextcp2-runtime</artifactId>
 	<packaging>jar</packaging>
 	<dependencies>
+	    <!-- Spring Boot Jetty Server for UPnP -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-jetty</artifactId>
+		</dependency>
 		<!--  cover and album lookup  -->
 		<dependency>
 			<groupId>se.michaelthelin.spotify</groupId>

@@ -16,17 +16,17 @@
  */
 package nextcp.service.upnp;
 
+import java.io.IOException;
+import org.jupnp.model.message.Connection;
+import org.jupnp.protocol.ProtocolFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jakarta.servlet.AsyncContext;
 import jakarta.servlet.AsyncEvent;
 import jakarta.servlet.AsyncListener;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import org.jupnp.model.message.Connection;
-import org.jupnp.protocol.ProtocolFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Implementation based on JakartaEE Servlet 9+ API.

@@ -1,10 +1,8 @@
 package nextcp.upnp.device.mediarenderer.avtransport;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
-
 import nextcp.dto.TrackInfoDto;
 import nextcp.dto.TransportServiceStateDto;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;

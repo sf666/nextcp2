@@ -99,16 +99,5 @@ public class NextcpApplicationStartup implements IApplicationRestartable
     @PostConstruct
     private void init()
     {
-        initLogger();
-    }
-
-    private void initLogger()
-    {
-        File log4jFile = new File(config.applicationConfig.log4jConfigFile);
-        if (log4jFile.exists())
-        {
-            System.out.println("initializing log4j with external file : " + config.applicationConfig.log4jConfigFile);
-            Configurator.initialize(null, log4jFile.getAbsolutePath());
-        }
     }
 }
