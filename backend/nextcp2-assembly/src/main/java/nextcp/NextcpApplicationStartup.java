@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,15 +38,34 @@ public class NextcpApplicationStartup implements IApplicationRestartable
     {
 //        System.setProperty("org.springframework.boot.logging.LoggingSystem", NextcpLoggingSystemConfiguration.class.getName());
         // Startup ...
-    	FileConfigPersistence config = new FileConfigPersistence();
-    	String log4jConfigFile = config.getConfig().applicationConfig.log4jConfigFile;
+    	Config config = new FileConfigPersistence().getConfig();
+    	String log4jConfigFile = config.applicationConfig.log4jConfigFile;
         NextcpApplicationStartup.args = args;
-        NextcpApplicationStartup.context = new SpringApplicationBuilder(NextcpApplicationStartup.class)
-        	.properties(String.format("logging.config=file:%s", log4jConfigFile))
-			.build()
-        	.run(args);
+
+        SpringApplicationBuilder builder = new SpringApplicationBuilder(NextcpApplicationStartup.class);
+        builder = builder.properties("server.ssl.enabled=false");
+//         builder = addH2Server(builder, config);
+        builder = builder.properties(String.format("logging.config=file:%s", log4jConfigFile));
+        builder = builder.properties(String.format("server.port=%s", config.applicationConfig.embeddedServerPort));
+        
+        NextcpApplicationStartup.context = builder.build().run(args);
     }
 
+    
+    private static SpringApplicationBuilder addH2Server(SpringApplicationBuilder builder, Config config) {
+    	if (config.applicationConfig.embeddedServerSslP12Keystore == null || config.applicationConfig.embeddedServerSslP12Keystore.isEmpty()) {
+	    	return builder.properties("server.http2.enabled=true")
+		    	.properties("server.ssl.key-store=classpath:springboot.p12")
+		    	.properties("server.ssl.key-store-password=password")
+		    	.properties("server.ssl.key-store-type=PKCS12");
+		} else {
+	    	return builder.properties("server.http2.enabled=true")
+				    	.properties("server.ssl.key-store=" + config.applicationConfig.embeddedServerSslP12Keystore)
+				    	.properties("server.ssl.key-store-password=" + config.applicationConfig.embeddedServerSslP12KeystorePassword)
+				    	.properties("server.ssl.key-store-type=PKCS12");
+		}
+    }
+    
     public void restart()
     {
         try
