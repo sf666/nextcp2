@@ -20,7 +20,7 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.embedded.jetty.JettyServerCustomizer;
+import org.springframework.boot.jetty.JettyServerCustomizer;
 import org.springframework.stereotype.Component;
 import nextcp.dto.Config;
 

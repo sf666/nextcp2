@@ -52,30 +52,7 @@
 			<artifactId>freemarker</artifactId>
 		</dependency>
 		<!-- JDOM parsing xml structure -->
-		<dependency>
-			<groupId>org.jdom</groupId>
-			<artifactId>jdom2</artifactId>
-		</dependency>
 		<!-- SpringBoot / WebSocket -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>ch.qos.logback</groupId>
-					<artifactId>logback-classic</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.logging.log4j</groupId>
-					<artifactId>log4j-to-slf4j</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-tomcat</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<!-- using spring boot with jetty -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jetty</artifactId>
@@ -83,15 +60,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty.ee10</groupId>
-			<artifactId>jetty-ee10-servlet</artifactId>
 		</dependency>
 		<!-- UPnP -->
 		<dependency>
@@ -106,10 +74,6 @@
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.service.http</artifactId>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-server</artifactId>
 		</dependency>
 		<!-- Utils -->
 		<dependency>
@@ -132,23 +96,9 @@
 		</dependency>
 		<!-- Jackson -->
 		<dependency>
-			<groupId>com.fasterxml.jackson.module</groupId>
-			<artifactId>jackson-module-jaxb-annotations</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.jaxrs</groupId>
-			<artifactId>jackson-jaxrs-json-provider</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-		</dependency>
-		<!-- JUnit -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-jackson</artifactId>
+		</dependency>		
 		<!-- UMS Server connect uses okhttp3 -->
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
@@ -158,5 +108,12 @@
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp-urlconnection</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
 	</dependencies>
 </project>

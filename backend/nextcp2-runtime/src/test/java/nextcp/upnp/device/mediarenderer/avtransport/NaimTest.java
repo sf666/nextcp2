@@ -1,6 +1,6 @@
 package nextcp.upnp.device.mediarenderer.avtransport;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.net.URL;
 import org.jdom2.Document;

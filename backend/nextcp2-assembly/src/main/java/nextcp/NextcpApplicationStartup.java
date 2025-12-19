@@ -17,6 +17,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import jakarta.annotation.PostConstruct;
+import nextcp.config.FileConfigPersistence;
 import nextcp.dto.Config;
 import nextcp.util.IApplicationRestartable;
 
@@ -36,10 +37,15 @@ public class NextcpApplicationStartup implements IApplicationRestartable
 
     public static void main(String[] args)
     {
-        System.setProperty("org.springframework.boot.logging.LoggingSystem", NextcpLoggingSystemConfiguration.class.getName());
+//        System.setProperty("org.springframework.boot.logging.LoggingSystem", NextcpLoggingSystemConfiguration.class.getName());
         // Startup ...
+    	FileConfigPersistence config = new FileConfigPersistence();
+    	String log4jConfigFile = config.getConfig().applicationConfig.log4jConfigFile;
         NextcpApplicationStartup.args = args;
-        NextcpApplicationStartup.context = new SpringApplicationBuilder(NextcpApplicationStartup.class).run(args);
+        NextcpApplicationStartup.context = new SpringApplicationBuilder(NextcpApplicationStartup.class)
+        	.properties(String.format("logging.config=file:%s", log4jConfigFile))
+			.build()
+        	.run(args);
     }
 
     public void restart()

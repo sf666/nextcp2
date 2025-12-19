@@ -4,6 +4,7 @@
 		<groupId>de.sf666</groupId>
 		<artifactId>nextcp2-root</artifactId>
 		<version>4.1.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>nextcp2-codegen</artifactId>
 	<description>codegen module</description>
@@ -18,6 +19,11 @@
 			<groupId>org.jupnp</groupId>
 			<artifactId>org.jupnp.support</artifactId>
 		</dependency>
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-jackson</artifactId>
+		</dependency>		
+		
 		<!-- YAML code generator support -->
 		<dependency>
 			<groupId>org.yaml</groupId>
@@ -36,7 +42,7 @@
 		<!-- SpringBoot / WebSocket -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<artifactId>spring-boot-starter-jetty</artifactId>
 			<exclusions>
 				<exclusion>
 					<groupId>ch.qos.logback</groupId>
@@ -60,25 +66,6 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-		</dependency>
-		<!-- Jackson -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.module</groupId>
-			<artifactId>jackson-module-jaxb-annotations</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.jaxrs</groupId>
-			<artifactId>jackson-jaxrs-json-provider</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-		</dependency>
-		<!-- JUnit -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

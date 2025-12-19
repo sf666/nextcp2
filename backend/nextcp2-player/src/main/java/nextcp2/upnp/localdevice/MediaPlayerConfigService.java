@@ -5,16 +5,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JsonParseException;
 import org.springframework.stereotype.Service;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import nextcp.db.service.BasicDbService;
 import nextcp.db.service.KeyValuePair;
 import nextcp.dto.ContainerIdDto;
 import nextcp.dto.MediaPlayerConfigDto;
 import nextcp2.upnp.localdevice.LocalDeviceConfig.FileType;
+import tools.jackson.databind.ObjectWriter;
+import tools.jackson.databind.json.JsonMapper;
 
 @Service
 public class MediaPlayerConfigService implements ILocalDeviceConfigProducer {
@@ -22,7 +21,7 @@ public class MediaPlayerConfigService implements ILocalDeviceConfigProducer {
 	private static final Logger log = LoggerFactory.getLogger(MediaPlayerConfigService.class.getName());
 	private static final String CONFIG_KEY_MEDIA_PLAYER = "MEDIAPLAYER_CONFIG";
 
-	private ObjectMapper om = new ObjectMapper();
+	private JsonMapper om = JsonMapper.builder().build();
 
 	private BasicDbService dbService = null;
 	
@@ -46,7 +45,7 @@ public class MediaPlayerConfigService implements ILocalDeviceConfigProducer {
 			ObjectWriter writer = om.writer();
 			String value = writer.withDefaultPrettyPrinter().writeValueAsString(mediaPlayerConfig);
 			dbService.updateJsonStoreValue(new KeyValuePair(CONFIG_KEY_MEDIA_PLAYER, value));
-		} catch (JsonProcessingException e) {
+		} catch (Exception e) {
 			log.error("could not write config", e);
 		}
 	}
@@ -71,7 +70,7 @@ public class MediaPlayerConfigService implements ILocalDeviceConfigProducer {
 			return om.readValue(json, MediaPlayerConfigDto.class);
 		} catch (JsonParseException e) {
 			log.error("error in config file. JSON text could not be parsed.", e);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			log.error("could not read config", e);
 		}
 		return generateDefaultConfig();

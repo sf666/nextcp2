@@ -16,11 +16,6 @@
 	<licenses>
 		<license />
 	</licenses>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.4</version>
-	</parent>
 	<scm>
 		<connection>scm:git:https://github.com/sf666/nextcp2.git</connection>
 		<developerConnection>scm:git:https://github.com/sf666/nextcp2.git</developerConnection>
@@ -56,11 +51,18 @@
 		<maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
 		<commit>${commit.short}</commit>
 		<jupnp.version>3.0.3</jupnp.version>
-		<maven.compiler.release>21</maven.compiler.release>
+		<maven.compiler.release>25</maven.compiler.release>
 		<slf4j.version>2.0.5</slf4j.version>
 		<freemarker.version>2.3.32</freemarker.version>
 		<h2database.version>2.1.210</h2database.version>
 		<jackson.version>2.16.0</jackson.version>
+		<springboot.version>4.0.0</springboot.version>
+		<jupiter.version>6.0.1</jupiter.version>
+		<commons-codec.version>1.15</commons-codec.version>
+		<snakeyaml.version>1.33</snakeyaml.version>
+        <commons-configuration.version>1.10</commons-configuration.version>
+        <commons-io.version>2.21.0</commons-io.version>
+		<jdom2.version>2.0.6.1</jdom2.version>		
 	</properties>
 	<modules>
 		<module>nextcp2-external-information-provider</module>
@@ -135,30 +137,44 @@
 	<!-- common dependencies for all modules -->
 	<dependencies>
 		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-alpn-server</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.jetty.http2</groupId>
-			<artifactId>jetty-http2-client</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-properties-migrator</artifactId>
+			<version>${springboot.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-client</artifactId>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-log4j2</artifactId>
+		    <exclusions>
+		        <exclusion>
+		            <groupId>org.springframework.boot</groupId>
+		            <artifactId>spring-boot-starter-logging</artifactId>
+		        </exclusion>
+		    </exclusions>
 		</dependency>
-
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-jetty</artifactId>
+		    <exclusions>
+		        <exclusion>
+		            <groupId>org.springframework.boot</groupId>
+		            <artifactId>spring-boot-starter-logging</artifactId>
+		        </exclusion>
+		    </exclusions>
+		</dependency>		
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j2</artifactId>
-		</dependency>
+		</dependency>	
+
 		<!-- JUnit test -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
 		<!-- Spring Test -->
 		<!--
 		https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
@@ -188,6 +204,79 @@
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>org.jdom</groupId>
+				<artifactId>jdom2</artifactId>
+				<version>${jdom2.version}</version>
+			</dependency>		
+			<dependency>
+				<groupId>org.yaml</groupId>
+				<artifactId>snakeyaml</artifactId>
+				<version>${snakeyaml.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>commons-codec</groupId>
+			    <artifactId>commons-codec</artifactId>
+				<version>${commons-codec.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-configuration</groupId>
+				<artifactId>commons-configuration</artifactId>
+				<version>${commons-configuration.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>${commons-io.version}</version>
+			</dependency>						
+			<dependency>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-starter-jackson</artifactId>
+				<version>${springboot.version}</version>
+			</dependency>		
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-jetty</artifactId>
+				<version>${springboot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-websocket</artifactId>
+				<version>${springboot.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-starter-log4j2</artifactId>
+				<version>${springboot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-test</artifactId>
+		        <version>${springboot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-client</artifactId>
+			</dependency>
+			<!-- Logging -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-log4j2</artifactId>
+				<version>${springboot.version}</version>
+			</dependency>	
+			<!-- JUnit test -->
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter</artifactId>
+				<version>${jupiter.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+			    <groupId>org.junit.jupiter</groupId>
+			    <artifactId>junit-jupiter-api</artifactId>
+				<version>${jupiter.version}</version>
+			    <scope>test</scope>
+			</dependency>		
 			<dependency>
 				<groupId>de.sf666</groupId>
 				<artifactId>nextcp2-player</artifactId>

@@ -18,24 +18,12 @@
 			<groupId>de.sf666</groupId>
 			<artifactId>nextcp2-modelgen</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>jakarta.annotation</groupId>
-			<artifactId>jakarta.annotation-api</artifactId>
-		</dependency>
 		<!-- Spotify binding -->
 		<dependency>
 			<groupId>se.michaelthelin.spotify</groupId>
 			<artifactId>spotify-web-api-java</artifactId>
 		</dependency>
 		<!-- Spring REST Services & Annotations -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-		</dependency>
 		<!-- HTTP client -->
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
@@ -46,23 +34,10 @@
 			<artifactId>okhttp-urlconnection</artifactId>
 		</dependency>
 		
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-client</artifactId>
-		</dependency>
-		
 		<!-- JSON parser -->
 		<dependency>
-			<groupId>com.fasterxml.jackson.module</groupId>
-			<artifactId>jackson-module-jaxb-annotations</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.jaxrs</groupId>
-			<artifactId>jackson-jaxrs-json-provider</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jackson</artifactId>
 		</dependency>
 		<!-- OR Mapper (SQL) -->
 		<dependency>
@@ -78,24 +53,6 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>ch.qos.logback</groupId>
-					<artifactId>logback-classic</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.logging.log4j</groupId>
-					<artifactId>log4j-to-slf4j</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-tomcat</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 	</dependencies>
 </project>
