@@ -100,14 +100,14 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-jackson</artifactId>
 		</dependency>		
-		<!-- UMS Server connect uses okhttp3 -->
+		<!-- Jetty HTTP client with multipart support -->
 		<dependency>
-			<groupId>com.squareup.okhttp3</groupId>
-			<artifactId>okhttp</artifactId>
+		    <groupId>org.eclipse.jetty</groupId>
+		    <artifactId>jetty-client</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.squareup.okhttp3</groupId>
-			<artifactId>okhttp-urlconnection</artifactId>
+		    <groupId>org.eclipse.jetty</groupId>
+		    <artifactId>jetty-http</artifactId>
 		</dependency>
 		
 		<dependency>

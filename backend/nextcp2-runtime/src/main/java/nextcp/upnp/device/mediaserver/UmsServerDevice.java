@@ -1,9 +1,16 @@
 package nextcp.upnp.device.mediaserver;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Base64;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jetty.client.ContentResponse;
+import org.eclipse.jetty.client.HttpClient;
+import org.eclipse.jetty.client.MultiPartRequestContent;
+import org.eclipse.jetty.http.HttpFields;
+import org.eclipse.jetty.http.MultiPart;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.support.contentdirectory.DIDLParser;
 import org.jupnp.support.model.DIDLContent;
@@ -18,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import nextcp.config.ServerConfig;
 import nextcp.dto.Config;
 import nextcp.dto.ContainerDto;
@@ -52,18 +60,11 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudio
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWriteInput;
 import nextcp.util.BackendException;
 import nextcp.util.UpnpErrorDescriptionHandler;
-import okhttp3.Call;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMediaDevice {
 
 	private static final Logger log = LoggerFactory.getLogger(UmsServerDevice.class.getName());
-	private OkHttpClient okClient = new OkHttpClient.Builder().build();
+	private HttpClient httpClient = null;
 
 	private UmsExtendedServicesService umsServices = null;
 	private UmsExtendedServicesServiceEventListenerImpl umsServiceEventListener = null;
@@ -91,6 +92,13 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	@PostConstruct
 	private void init() {
 		try {
+			httpClient = new HttpClient();
+			httpClient.start();
+		} catch (Exception e) {
+			log.error("Failed to start Jetty HTTP client", e);
+		}
+		
+		try {
 			umsServices = new UmsExtendedServicesService(getUpnpService(), getDevice());
 			if (umsServices.getUmsExtendedServicesService() != null) {
 				umsServiceEventListener = new UmsExtendedServicesServiceEventListener(getDevice(), this);
@@ -101,6 +109,17 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			}
 		} catch (Exception e) {
 			log.info("This UMS version has no UPnP extended UMS services.");
+		}
+	}
+	
+	@PreDestroy
+	private void destroy() {
+		if (httpClient != null) {
+			try {
+				httpClient.stop();
+			} catch (Exception e) {
+				log.error("Failed to stop Jetty HTTP client", e);
+			}
 		}
 	}
 
@@ -510,17 +529,42 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 				} else {
 					log.info("import uri : " + resource.getImportUri());
 				}
-				RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-					.addFormDataPart("filename", file.getName(), RequestBody.create(file, MediaType.parse("application/octet-stream")))
-					.build();
-
-				Request request = new Request.Builder().url(resource.getImportUri().toString()).post(requestBody).build();
-
-				Call call = okClient.newCall(request);
+				
 				try {
-					Response response = call.execute();
-					log.info("upload response code : " + response.code());
-				} catch (IOException e) {
+					// Create multipart request content
+					MultiPartRequestContent multiPart = new MultiPartRequestContent();
+					
+					// Create custom headers for the file part
+					HttpFields partHeaders = HttpFields.build()
+						.put("Content-Type", "application/octet-stream");
+					
+					// Add file part using PathPart (with ByteBufferPool parameter to avoid deprecation)
+					MultiPart.PathPart pathPart = new MultiPart.PathPart(
+						null, // ByteBufferPool - null uses default
+						"filename",
+						file.getName(),
+						partHeaders,
+						file.toPath()
+					);
+					multiPart.addPart(pathPart);
+					
+					multiPart.close();
+					
+					// Send POST request
+					ContentResponse response = httpClient.newRequest(resource.getImportUri())
+						.body(multiPart)
+						.timeout(60, TimeUnit.SECONDS)
+						.send();
+					
+					log.info("upload response code : " + response.getStatus());
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+					log.error("importFile interrupted", e);
+				} catch (TimeoutException e) {
+					log.error("importFile timeout", e);
+				} catch (ExecutionException e) {
+					log.error("importFile execution error", e);
+				} catch (Exception e) {
 					log.error("importFile", e);
 				}
 				break;
