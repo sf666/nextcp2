@@ -11,6 +11,11 @@
 	<artifactId>nextcp2-runtime</artifactId>
 	<packaging>jar</packaging>
 	<dependencies>
+		<dependency>
+			<groupId>net.jthink</groupId>
+			<artifactId>jaudiotagger</artifactId>
+		</dependency>
+		
 	    <!-- Spring Boot Jetty Server for UPnP -->
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
