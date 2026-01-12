@@ -35,6 +35,7 @@ public class Nextcp2Renderer {
 	protected LastChange avTransportLastChange = null;
 	protected LastChange renderingControlLastChange = null;
 
+	// TODO: Make it configurable 
     protected static UDN staticUDN = new UDN("7889347a-746d-4ee5-b87f-401e1c8de34c");
 
 	final protected ServiceManager<Nextcp2ConnectionManagerService> connectionManager;

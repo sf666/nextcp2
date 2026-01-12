@@ -59,14 +59,14 @@ public class Nextcp2AvTransportService extends AbstractAVTransportService {
 			throw new AVTransportException(ErrorCode.INVALID_ARGS, "CurrentURI can not be null or malformed");
 		}
 
-		if (currentURI.startsWith("http:")) {
+		if (currentURI.startsWith("http:") || currentURI.startsWith("https:")) {
 			try {
 				HttpFetch.validate(URIUtil.toURL(uri));
 			} catch (Exception ex) {
 				throw new AVTransportException(AVTransportErrorCode.RESOURCE_NOT_FOUND, ex.getMessage());
 			}
 		} else if (!currentURI.startsWith("file:")) {
-			throw new AVTransportException(ErrorCode.INVALID_ARGS, "Only HTTP and file: resource identifiers are supported");
+			throw new AVTransportException(ErrorCode.INVALID_ARGS, "Only HTTP, HTTPS and file: resource identifiers are supported");
 		}
 
 		// TODO: Check mime type of resource against supported types
@@ -143,6 +143,30 @@ public class Nextcp2AvTransportService extends AbstractAVTransportService {
 	@Override
 	public void setNextAVTransportURI(UnsignedIntegerFourBytes instanceId, String nextURI, String nextURIMetaData)
 		throws AVTransportException {
+		
+		// Allow empty/null URI to clear the next URI
+		if (nextURI == null || nextURI.isEmpty()) {
+			getInstance(instanceId).setNextAVTransportURI("", nextURIMetaData != null ? nextURIMetaData : "");
+			return;
+		}
+		
+		URI uri;
+		try {
+			uri = new URI(nextURI);
+		} catch (Exception ex) {
+			throw new AVTransportException(ErrorCode.INVALID_ARGS, "NextURI can not be malformed");
+		}
+
+		if (nextURI.startsWith("http:") || nextURI.startsWith("https:")) {
+			try {
+				HttpFetch.validate(URIUtil.toURL(uri));
+			} catch (Exception ex) {
+				throw new AVTransportException(AVTransportErrorCode.RESOURCE_NOT_FOUND, ex.getMessage());
+			}
+		} else if (!nextURI.startsWith("file:")) {
+			throw new AVTransportException(ErrorCode.INVALID_ARGS, "Only HTTP, HTTPS and file: resource identifiers are supported");
+		}
+
 		getInstance(instanceId).setNextAVTransportURI(nextURI, nextURIMetaData);
 	}
 

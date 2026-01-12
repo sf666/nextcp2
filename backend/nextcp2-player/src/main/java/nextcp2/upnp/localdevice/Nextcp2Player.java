@@ -144,6 +144,10 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 	public void pause() {
 		log.debug("pause");
 		transportStateChanged(TransportState.PAUSED_PLAYBACK);
+		if (mediaPlayerBackend != null) {
+			mediaPlayerBackend.pause();
+		}
+		rootDevice.fireLastChange();
 	}
 
 	public void seek(String unit, String target) {
@@ -152,16 +156,53 @@ public class Nextcp2Player implements IMediaPlayerCallback {
 
 	public void next() {
 		log.debug("next");
+		if (currentMediaInfo != null && !StringUtil.isBlank(currentMediaInfo.getNextURI())) {
+			skipToNextSong();
+		} else {
+			log.warn("No next track available");
+		}
 	}
 
 	public void previous() {
-		log.debug("previous");
+		log.warn("previous() not supported - no previous track queue implemented");
+		// Previous track functionality would require maintaining a history/queue
+		// which is not currently implemented in this player
 	}
 
 	public void setNextAVTransportURI(String nextURI, String nextURIMetaData) {
 		log.info("setNextAVTransportURI to : " + nextURI);
-		nextMediaInfo = createMediaInfo(currentMediaInfo.getCurrentURI(), currentMediaInfo.getCurrentURIMetaData(), nextURI,
-			nextURIMetaData, currentMediaInfo.getMediaDuration());
+		
+		// If nextURI is empty, clear the next track
+		if (StringUtil.isBlank(nextURI)) {
+			currentMediaInfo = createMediaInfo(currentMediaInfo.getCurrentURI(), currentMediaInfo.getCurrentURIMetaData(), "",
+				"", currentMediaInfo.getMediaDuration());
+			nextMediaInfo = null;
+			
+			try {
+				getAvTransportLastChange().setEventedValue(getInstanceId(), 
+					new AVTransportVariable.NextAVTransportURI(URI.create("")),
+					new AVTransportVariable.NextAVTransportURIMetaData(""));
+			} catch (Exception e) {
+				log.error("Error clearing NextAVTransportURI in LastChange", e);
+			}
+		} else {
+			// Update current media info to include the next URI
+			currentMediaInfo = createMediaInfo(currentMediaInfo.getCurrentURI(), currentMediaInfo.getCurrentURIMetaData(), nextURI,
+				nextURIMetaData, currentMediaInfo.getMediaDuration());
+			
+			// Store next media info for when transitioning
+			nextMediaInfo = createMediaInfo(nextURI, nextURIMetaData, "", "", "00:00:00");
+			
+			// Update LastChange with next URI information
+			try {
+				getAvTransportLastChange().setEventedValue(getInstanceId(), 
+					new AVTransportVariable.NextAVTransportURI(URI.create(nextURI)),
+					new AVTransportVariable.NextAVTransportURIMetaData(nextURIMetaData));
+			} catch (Exception e) {
+				log.error("Error setting NextAVTransportURI in LastChange", e);
+			}
+		}
+		
 		rootDevice.fireLastChange();
 	}
 
