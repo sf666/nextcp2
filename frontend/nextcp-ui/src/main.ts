@@ -44,8 +44,6 @@ import { MySongsComponent } from './app/view/my-songs/my-songs.component';
 import { MyPlaylistsComponent } from './app/view/my-playlists/my-playlists.component';
 import { RadioComponent } from './app/view/radio/radio.component';
 import { PlaylistComponent } from './app/view/playlist/playlist.component';
-import { NetworksComponent } from './app/view/audio-addict/networks/networks.component';
-import { NetworkComponent } from './app/view/audio-addict/network/network.component';
 import { UmsAudioaddictComponent } from './app/view/audio-addict/ums/ums-audioaddict.component';
 import { ContentDirectoryService } from './app/service/content-directory.service';
 import { defaultToastConfig, TOAST_CONFIG_TOKEN } from './app/service/toast/toast-config';
@@ -61,9 +59,7 @@ const ROUTES: Routes = [
   { path: 'radio', component: RadioComponent },
   { path: 'playlist', component: PlaylistComponent },
   { path: 'mediaPlayerConfig', component: MediaPlayerComponent },
-  { path: 'networks', component: NetworksComponent},
   { path: 'ums-audioaddict', component: UmsAudioaddictComponent},
-  { path: 'getNetworkChannels/:network', component: NetworkComponent},
   { path: '', redirectTo: '/music-library', pathMatch: 'full' },
 ];
 

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import jakarta.annotation.PostConstruct;
-import nextcp.audioaddict.AudioAddictService;
 import nextcp.config.ConfigPersistence;
 import nextcp.config.RendererConfig;
 import nextcp.config.ServerConfig;
@@ -65,9 +64,6 @@ public class RestConfigurationService
     private ConfigService configService = null;
 
     @Autowired
-    private AudioAddictService audioAddictService = null;
-
-    @Autowired
     private RendererConfig rendererConfigService = null;
 
     @Autowired
@@ -107,20 +103,6 @@ public class RestConfigurationService
     public List<DeviceDriverCapability> getAvailableDeviceDriver()
     {
         return deviceDriverList;
-    }
-
-    @PostMapping("/saveAudioAddictConfig")
-    public void saveAudioAddictConfig(@RequestBody AudioAddictConfig aaConfig)
-    {
-        try
-        {
-            configService.saveAudioAddictConfig(aaConfig);
-            audioAddictService.updateConfig(configPersistence.createAudioAddictConfig());
-        }
-        catch (Exception e)
-        {
-            log.error("saveAudioAddictConfig", e);
-        }
     }
 
     @PostMapping("/saveMusicBrainzConfig")

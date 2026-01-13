@@ -1,12 +1,10 @@
 package nextcp.config;
 
 import java.util.Base64;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
-import nextcp.audioaddict.AudioAddictServiceConfig;
 import nextcp.db.service.BasicDbService;
 import nextcp.dto.Config;
 import nextcp.dto.MusicbrainzSupport;
@@ -95,18 +93,6 @@ public class ConfigPersistence {
 		return config;
 	}
 
-	@Bean
-	public AudioAddictServiceConfig createAudioAddictConfig() {
-		AudioAddictServiceConfig aac = new AudioAddictServiceConfig();
-		aac.preferEuropeanServer = config.audioAddictConfig.preferEuropeanServer;
-		aac.user = config.audioAddictConfig.user;
-		
-		if (!StringUtils.isAllBlank(config.audioAddictConfig.pass)) {
-			aac.pass = new String(Base64.getDecoder().decode(config.audioAddictConfig.pass));
-		}
-
-		return aac;
-	}
 
 	/**
 	 * Saves config values in all backends
