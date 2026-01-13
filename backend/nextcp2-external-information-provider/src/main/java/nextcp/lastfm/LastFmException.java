@@ -1,7 +1,5 @@
 package nextcp.lastfm;
 
-import okhttp3.Response;
-
 /**
  * <pre>
    
@@ -41,17 +39,11 @@ import okhttp3.Response;
 public class LastFmException extends RuntimeException
 {
     public int errorCode;
-    public Response response;
 
     /**
      * 
      */
     private static final long serialVersionUID = 8471222056296196283L;
-
-    public LastFmException(int errorCode, Response response)
-    {
-        this.errorCode = errorCode;
-    }
 
     public LastFmException(int errorCode, String errorMessage)
     {

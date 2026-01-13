@@ -1,21 +1,18 @@
 package nextcp.lastfm.request;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.TreeSet;
-
+import java.util.concurrent.TimeUnit;
+import org.eclipse.jetty.client.HttpClient;
+import org.eclipse.jetty.http.HttpMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import nextcp.lastfm.LastFmException;
 import nextcp.lastfm.dto.ResponseError;
-import okhttp3.Call;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Calls to LastFM
@@ -25,15 +22,17 @@ public class LastFmApiRequestService
 {
     private static final Logger log = LoggerFactory.getLogger(LastFmApiRequestService.class.getName());
 
-    private OkHttpClient okClient = new OkHttpClient.Builder().build();
+    private HttpClient httpClient;
 
     private ObjectMapper om = new ObjectMapper();
 
     @Autowired
     private Signer signer = null;
 
-    public LastFmApiRequestService()
+    public LastFmApiRequestService() throws Exception
     {
+        this.httpClient = new HttpClient();
+        this.httpClient.start();
     }
 
     /**
@@ -100,25 +99,32 @@ public class LastFmApiRequestService
     public <T> T doApiRequest(String requestUrl, Class<T> cls)
     {
         log.info("Calling service at : " + requestUrl);
-        Request request = new Request.Builder().url(requestUrl).get().build();
-        Call call = okClient.newCall(request);
         try
         {
-            Response response = call.execute();
-            if (response.isSuccessful())
+            var request = httpClient.newRequest(URI.create(requestUrl))
+                .method(HttpMethod.GET);
+            var response = request
+                .timeout(10, TimeUnit.SECONDS)
+                .send();
+            
+            if (response.getStatus() == 200)
             {
-                String body = response.body().string();
+                String body = response.getContentAsString();
                 return om.readValue(body, cls);
             }
             else
             {
-                String errorBody = response.body().string();
+                String errorBody = response.getContentAsString();
                 ResponseError err = om.readValue(errorBody, ResponseError.class);
                 log.warn("LastFM request call failed with " + err.getError() + " : " + err.getMessage());
-                throw new LastFmException(err.getError(), response);
+                throw new LastFmException(err.getError(), err.getMessage());
             }
         }
         catch (IOException e)
+        {
+            throw new RuntimeException("LastFM request error", e);
+        }
+        catch (Exception e)
         {
             throw new RuntimeException("LastFM request error", e);
         }

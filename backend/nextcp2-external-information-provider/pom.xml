@@ -24,14 +24,14 @@
 			<artifactId>spotify-web-api-java</artifactId>
 		</dependency>
 		<!-- Spring REST Services & Annotations -->
-		<!-- HTTP client -->
+		<!-- HTTP client - Jetty 12 -->
 		<dependency>
-			<groupId>com.squareup.okhttp3</groupId>
-			<artifactId>okhttp</artifactId>
+			<groupId>org.eclipse.jetty.http2</groupId>
+			<artifactId>jetty-http2-client</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.squareup.okhttp3</groupId>
-			<artifactId>okhttp-urlconnection</artifactId>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-client</artifactId>
 		</dependency>
 		
 		<!-- JSON parser -->
