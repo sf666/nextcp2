@@ -5,17 +5,16 @@
     <div id="head_browse_result_items_list_view_ID" class="w-full px-4">
         <!-- Header Row - Using CSS Grid for perfect alignment -->
         @if (allTracksSameAlbum()) {
-        <div class="grid gap-4 sticky top-0 z-10 text-xs uppercase tracking-wider text-gray-400 font-semibold py-3 border-b border-white/10"
+        <div class="bg-black grid gap-4 sticky top-0 z-10 text-xs uppercase tracking-wider text-gray-400 font-semibold py-3 border-b border-white/10"
              style="grid-template-columns: 48px 2fr minmax(150px, 1fr) 128px 80px 48px;">
             <div class="text-center">#</div>
             <div>Title</div>
             <div class="hidden md:block">Artist</div>
             @if (extendedApi()) {<div class="text-center hidden lg:block">Rating</div>}
             <div class="text-right">Duration</div>
-            <div></div>
         </div>
         } @else {
-        <div class="grid gap-4 sticky top-0 z-10 text-xs uppercase tracking-wider text-gray-400 font-semibold py-3 border-b border-white/10"
+        <div class="bg-black grid gap-4 sticky top-0 z-10 text-xs uppercase tracking-wider text-gray-400 font-semibold py-3 border-b border-white/10"
              style="grid-template-columns: 64px 2fr minmax(150px, 1fr) minmax(150px, 1fr) 128px 80px 48px;">
             <div></div>
             <div>Title</div>
@@ -23,7 +22,6 @@
             <div class="hidden md:block">Artist</div>
             @if (extendedApi()) {<div class="text-center hidden lg:block">Rating</div>}
             <div class="text-right">Duration</div>
-            <div></div>
         </div>
         }
 
@@ -39,7 +37,7 @@
         <!-- Row for Same Album View -->
         @if (allTracksSameAlbum()) {
         <div class="grid gap-4 items-center text-sm py-2.5 px-2 rounded-lg hover:bg-white/5 transition-all duration-200 group {{selectedRowClass(item)}}"
-             style="grid-template-columns: 48px minmax(100px, 2fr) minmax(100px, 1fr) 128px 80px 48px;">
+             style="grid-template-columns: 48px minmax(150px, 1fr) minmax(150px, 1fr) 128px 80px 48px;">
             <!-- Track Number -->
             <div id="col_1_num_{{item.objectID}}" class="text-center text-gray-400 group-hover:text-white transition-colors">
                 @if(item.originalTrackNumber != 'null'){{{item.originalTrackNumber}}}
@@ -76,7 +74,7 @@
         } @else {
         <!-- Row for Mixed Album View -->
         <div class="grid gap-4 items-center text-sm py-2.5 px-2 rounded-lg hover:bg-white/5 transition-all duration-200 group {{selectedRowClass(item)}}"
-             style="grid-template-columns: 64px minmax(100px, 2fr) minmax(100px, 1fr) minmax(100px, 1fr) 128px 80px 48px;">
+             style="grid-template-columns: 64px minmax(100px, 2fr) minmax(150px, 1fr) minmax(150px, 1fr) 128px 80px 48px;">
             <!-- Album Art -->
             <div id="col_1_img_{{item.objectID}}">
                 <img class="w-14 h-14 rounded-md object-cover shadow-md cursor-pointer transition-all" 
