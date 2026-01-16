@@ -56,6 +56,7 @@ public class MediaPlayerDiscoveryService {
 
 			for (int i = 0; i < flist.length; i++) {
 				urls.add(flist[i].toURI().toURL());
+				log.debug("checking jar for media player : " + flist[i].getAbsolutePath());
 			}
 
 			URLClassLoader ucl = new URLClassLoader(urls.toArray(new URL[0]), this.getClass().getClassLoader());
@@ -63,10 +64,10 @@ public class MediaPlayerDiscoveryService {
 			ServiceLoader<IMediaPlayerFactory> loader = ServiceLoader.load(IMediaPlayerFactory.class, ucl);
 			for (IMediaPlayerFactory factory : loader) {
 				availableMediaPlayer.add(factory);
-				log.info(String.format("Found media player factory backend : %s ", factory.getFactoryType()));
+				log.info("Found media player factory backend : {} ", factory.getFactoryType());
 			}
 		} else {
-			log.debug("no device driver available.");
+			log.debug("no media player available.");
 		}
 	}
 	

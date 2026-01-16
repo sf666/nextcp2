@@ -4,13 +4,17 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
+
 import org.eclipse.jetty.client.HttpClient;
+import org.eclipse.jetty.client.ContentResponse;
 import org.eclipse.jetty.http.HttpMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import nextcp.lastfm.LastFmException;
 import nextcp.lastfm.dto.ResponseError;
 
