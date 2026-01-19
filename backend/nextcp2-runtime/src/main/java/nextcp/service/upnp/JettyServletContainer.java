@@ -23,7 +23,7 @@ import org.eclipse.jetty.ee11.servlet.ServletHolder;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.eclipse.jetty.util.thread.VirtualThreadPool;
 import org.jupnp.transport.spi.ServletContainerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,7 +122,7 @@ public class JettyServletContainer
 	}
 
 	private void resetServer() {
-		QueuedThreadPool threadPool = new QueuedThreadPool();
+		VirtualThreadPool threadPool = new VirtualThreadPool();
 		threadPool.setName("jupnp-stream-server");
 		server = new Server(threadPool);
 	}

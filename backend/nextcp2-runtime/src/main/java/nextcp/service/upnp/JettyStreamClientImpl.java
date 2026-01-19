@@ -31,7 +31,7 @@ import org.eclipse.jetty.http.HttpHeader;
 import org.eclipse.jetty.http.HttpHeaderValue;
 import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.util.Jetty;
-import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.eclipse.jetty.util.thread.VirtualThreadPool;
 import org.jupnp.http.Headers;
 import org.jupnp.model.message.StreamRequestMessage;
 import org.jupnp.model.message.StreamResponseMessage;
@@ -74,9 +74,9 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
 		int cpus = Runtime.getRuntime().availableProcessors();
 		int maxThreads = 5 * cpus;
 
-		final QueuedThreadPool queuedThreadPool = createThreadPool("jupnp-stream-client", 5, maxThreads, 60000);
+		final VirtualThreadPool virtualThreadPool = createThreadPool("jupnp-stream-client", maxThreads);
 
-		httpClient.setExecutor(queuedThreadPool);
+		httpClient.setExecutor(virtualThreadPool );
 
 		if (configuration.getSocketBufferSize() != -1) {
 			httpClient.setRequestBufferSize(configuration.getSocketBufferSize());
@@ -238,11 +238,10 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
 		}
 	}
 
-	private QueuedThreadPool createThreadPool(String consumerName, int minThreads, int maxThreads, int keepAliveTimeout) {
-		QueuedThreadPool queuedThreadPool = new QueuedThreadPool(maxThreads, minThreads, keepAliveTimeout);
-		queuedThreadPool.setName(consumerName);
-		queuedThreadPool.setDaemon(true);
-		return queuedThreadPool;
+	private VirtualThreadPool createThreadPool(String consumerName, int maxThreads) {
+		VirtualThreadPool virtualThreadPool = new VirtualThreadPool(maxThreads);
+		virtualThreadPool.setName(consumerName);
+		return virtualThreadPool;
 	}
 
 	/**

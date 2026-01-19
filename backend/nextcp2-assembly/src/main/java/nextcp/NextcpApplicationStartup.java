@@ -36,18 +36,27 @@ public class NextcpApplicationStartup implements IApplicationRestartable
 
     public static void main(String[] args)
     {
-//        System.setProperty("org.springframework.boot.logging.LoggingSystem", NextcpLoggingSystemConfiguration.class.getName());
         // Startup ...
     	Config config = new FileConfigPersistence().getConfig();
     	String log4jConfigFile = config.applicationConfig.log4jConfigFile;
         NextcpApplicationStartup.args = args;
 
         SpringApplicationBuilder builder = new SpringApplicationBuilder(NextcpApplicationStartup.class);
+        
+        // Enable SSL 
+        log.info("Disabling embedded server SSL support");
         builder = builder.properties("server.ssl.enabled=false");
-//         builder = addH2Server(builder, config);
+        // Set log4j config file
+        log.info(String.format("Using log4j configuration file: %s", log4jConfigFile));
         builder = builder.properties(String.format("logging.config=file:%s", log4jConfigFile));
+        // Enable virtual threads from JDK 25
+        log.info("Enabling virtual threads for Spring async processing");
+        builder = builder.properties("spring.threads.virtual.enabled=true");
+        // Set configured listen port
+        log.info("Setting embedded server port to {}", config.applicationConfig.embeddedServerPort);
         builder = builder.properties(String.format("server.port=%s", config.applicationConfig.embeddedServerPort));
         
+//      builder = addH2Server(builder, config);
         NextcpApplicationStartup.context = builder.build().run(args);
     }
 
