@@ -57,7 +57,7 @@
 		<freemarker.version>2.3.32</freemarker.version>
 		<h2database.version>2.1.210</h2database.version>
 		<jackson.version>2.16.0</jackson.version>
-		<springboot.version>4.0.0</springboot.version>
+		<springboot.version>4.0.1</springboot.version>
 		<jupiter.version>6.0.1</jupiter.version>
 		<commons-codec.version>1.15</commons-codec.version>
 		<snakeyaml.version>2.5</snakeyaml.version>
