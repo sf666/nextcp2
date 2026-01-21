@@ -67,9 +67,16 @@
   <!-- right footer section -->
   <div id="right-section" class="flex grow-3 min-w-4xs justify-end me-4 basis-0">
     <div class="flex w-full max-w-xs h-full self-center">
-      <div class="flex">
+      <div class="flex items-center gap-3">
+        <!-- Speaker button with name for XL+ screens -->
+        <div class="hidden xl:flex items-center gap-2 px-3 py-1 border border-amber-400 rounded transition-colors cursor-pointer max-w-[150px]" (click)="rendererClicked($event)">
+          <span class="material-symbols-outlined text-amber-400 flex-shrink-0">speaker</span>
+          <span class="text-sm text-amber-400 font-light truncate">{{currentMediaRendererName()}}</span>
+        </div>
+        <!-- Speaker icon only for smaller screens -->
+        <span class="xl:hidden material-symbols-outlined icon-main" (click)="rendererClicked($event)">speaker</span>
+        
         <span class="material-symbols-outlined icon-main" (click)="serverClicked($event)">dns</span>
-        <span class="material-symbols-outlined icon-main" (click)="rendererClicked($event)">speaker</span>
         @if (hasDeviceDriver()) {
           <span class="material-symbols-outlined {{getStandbyClass()}} icon-main" (click)="powerClicked()">power_settings_new</span>
         }
