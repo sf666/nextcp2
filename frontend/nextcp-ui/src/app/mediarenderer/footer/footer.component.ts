@@ -24,7 +24,10 @@ import { toObservable } from '@angular/core/rxjs-interop';
 export class FooterComponent {
 
   currentMediaRendererName = signal<string>('');
+  minVal = 0;
+  maxVal = 100;
 
+  
   constructor(
     private dialog: MatDialog,
     public transportService: TransportService,
@@ -102,7 +105,11 @@ export class FooterComponent {
   }
 
   volChanged(event): void {
-    this.rendererService.setVolume(event);
+    const expVal = 2;
+    const norm = event / 100;    
+    const logVal = Math.round(this.minVal + (this.maxVal - this.minVal) * Math.pow(norm, expVal));
+    console.log("volume changed to " + logVal);
+    this.rendererService.setVolume(logVal);
   }
 
   streaming(): boolean {

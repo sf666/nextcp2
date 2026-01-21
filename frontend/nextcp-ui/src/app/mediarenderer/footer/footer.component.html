@@ -88,8 +88,8 @@
         <div class="flex grow volumeSliderBox">
           <input 
             type="range" 
-            min="0" 
-            max="90" 
+            [min]="minVal" 
+            [max]="maxVal" 
             step="1" 
             [value]="rendererService.deviceDriverState().volume" 
             (input)="volChanged($event.target.value)"
