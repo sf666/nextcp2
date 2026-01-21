@@ -43,16 +43,14 @@ public class RestTransportService extends BaseRestService {
 	public void playResource(@RequestBody PlayRequestDto playRequest) {
 		log.debug("playResource called ... ");
 		MediaRendererDevice device = checkPlayInput(playRequest);
-		if (device.getProductService() != null) {
-			if (device.getProductService().getCurrentInputSource().Type.equalsIgnoreCase("playlist")) {
-				log.info("Try to find current song in playlist ... ");
-				if (device.getPlaylistServiceBridge().seekId(playRequest.streamUrl)) {
-					log.debug("playing streamURL from playlist ... ");
-					publisher.publishEvent(new ToastrMessage(null, "info", "play song", "song found in playlist, playing from there."));
-					return;
-				} else {
-					log.info("song not found in current playlist, playing as new stream ... ");
-				}
+		if (device.isPlaylistPlaying()) {
+			log.info("Playlist is playig. Try to find current song in playlist ... ");
+			if (device.getPlaylistServiceBridge().seekId(playRequest.streamUrl)) {
+				log.debug("playing streamURL from playlist ... ");
+				publisher.publishEvent(new ToastrMessage(null, "info", "play song", "Skipping to song in playlist, continue playing from there."));
+				return;
+			} else {
+				log.info("song not found in current playlist, playing as new stream ... ");
 			}
 		}
 		log.debug("try playing on AVTransport ... ");
