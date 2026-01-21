@@ -97,6 +97,4 @@ public class AvTransportEventPublisher extends BaseAvTransportChangeEventImpl
     {
         this.shouldPublishTransportServiceState = shouldPublishTransportServiceState;
     }
-    
-    
 }

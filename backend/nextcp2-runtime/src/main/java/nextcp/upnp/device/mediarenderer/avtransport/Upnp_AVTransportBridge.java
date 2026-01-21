@@ -234,7 +234,7 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
         dto.repeat = false;
         dto.shuffle = false;
 
-        dto.transportState = "PLAYING";//currentAvTransportState.TransportState;
+        dto.transportState = currentAvTransportState.TransportState;
         
         dto.udn = device.getUdnAsString();
         
