@@ -115,7 +115,9 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
     // upnp wrapper for transport information. OpenHome has an own implementation.
     protected Upnp_AVTransportBridge avTransportBridge = null;
-
+    // In case no OpenHome playlist service is available, we use an internal playlist implementation.
+    protected CpPlaylistService playlist = null;
+    
     // openhome services
     protected InfoService oh_infoService = null;
     protected TimeService oh_timeService = null;
@@ -227,7 +229,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         	log.info(String.format("[%s] PlaylistSerive: initialize nextCp/2 playlist implementation ...", getFriendlyName()));
             if (avTransportEventListener != null && hasUpnpAvTransport())
             {
-                CpPlaylistService playlist = new CpPlaylistService(this);
+                playlist = new CpPlaylistService(this);
                 playlistService = playlist;
                 avTransportEventListener.addEventListener(playlist);
             }
@@ -744,5 +746,37 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         {
             log.warn("setVolume failed", e);
         }
+	}
+	
+	public boolean isPlaylistPlaying() {
+		log.debug("isPlaylistPlaying called ... ");
+		if (getProductService() != null) {		
+			log.debug("Device has product service. Checking current input source ... ");
+			if (getProductService().getCurrentInputSource().Type.equalsIgnoreCase("playlist")) {
+				log.debug("OhService : current input source is playlist ... ");
+				return true;
+			} else {
+				log.debug("OhService : current input source is not playlist ... ");
+				return false;
+			}
+		} else if (playlist != null) {
+			if (playlist.isPlaylistPlaying()) {
+				log.debug("CpPlaylistService : playlist is playing ... ");
+				return true;
+			} else {
+				log.debug("CpPlaylistService : playlist is not playing ... ");
+				return false;
+			}
+		}
+		log.debug("no playlist service available ... ");
+		return false;
+	}
+	
+	/** Accessors for internal services
+	 * 
+	 * @return ControlPoint internal playlist implementation
+	 */
+	public CpPlaylistService getPlaylist() {
+		return playlist;
 	}
 }

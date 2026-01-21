@@ -109,6 +109,7 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
         StopInput inp = new StopInput();
         inp.InstanceID = 0L;
         avTransportService.stop(inp);
+        device.getPlaylist().stop();
     }
 
     public void setNextUrl(String streamingURL, String trackMetadata)

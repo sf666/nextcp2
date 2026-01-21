@@ -119,11 +119,11 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 		if ("PAUSED_PLAYBACK".equalsIgnoreCase(value)) {
 			log.debug(
 				String.format("[%s] transportStateChange to PAUSED_PLAYBACK. Proceeding to next song ...", getDevice().getFriendlyName()));
-			proceedToNextSongToPlayNoNextUriSupport();
+			proceedToNextSongToPlay();
 		} else if ("STOPPED".equalsIgnoreCase(value) || "TRANSITIONING".equalsIgnoreCase(value)) {
 			log.debug(String.format("[%s] transportStateChange to STOPPED/TRANSITIONING. Proceeding to next song ...",
 				getDevice().getFriendlyName()));
-			proceedToNextSongToPlayNoNextUriSupport();
+			proceedToNextSongToPlay();
 		} else if ("PLAYING".equalsIgnoreCase(value)) {
 			log.debug(String.format("[%s] transportStateChange to PLAYING. Do nothing ...", getDevice().getFriendlyName()));
 		} else {
@@ -136,10 +136,10 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 		return !"NOT_IMPLEMENTED".equalsIgnoreCase(device.getAvTransportEventListener().getCurrentAvTransportState().NextAVTransportURI);
 	}
 
-	private void proceedToNextSongToPlayNoNextUriSupport() {
-		log.debug("proceedToNextSongToPlayNoNextUriSupport ...");
-		// if device has no nextUrl support, it goes into PAUSED state
+	private void proceedToNextSongToPlay() {
+		log.debug("proceedToNextSongToPlay ...");
 		if (!hasNextUriSupport()) {
+			log.debug("device has no nextUriSupport. Proceeding to next song ... ");
 			if (isPlaylistPlaying()) {
 				MusicItemDto nextSong = moveToNextTrack();
 				if (nextSong != null) {
@@ -150,6 +150,8 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 					log.info("proceedToNextSongToPlayNoNextUriSupport : stopping ...");
 					stop();
 				}
+			} else {
+				log.info("device is not in playing state. Do nothing ... ");
 			}
 		} else {
 			log.debug("device has nextUriSupport. Do nothing ... ");
@@ -190,7 +192,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 		}
 	}
 
-	private boolean isPlaylistPlaying() {
+	public boolean isPlaylistPlaying() {
 		return TransportState.Playing.name().equals(state.TransportState);
 	}
 

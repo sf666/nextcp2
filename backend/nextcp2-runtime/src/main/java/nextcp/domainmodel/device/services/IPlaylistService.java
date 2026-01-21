@@ -9,7 +9,6 @@ import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.InsertInput;
 
 public interface IPlaylistService
 {
-
     void setShuffle(boolean inp);
 
     void pause();
