@@ -1,6 +1,6 @@
 <div class="flex flex-row flex-nowrap justify-between fixed inset-x-0 bottom-0 footer bg-zinc-950">
   <!-- left footer section -->
-  <div id="left-section" class="flex min-w-4xs grow-4 basis-0 min-w-3xs">
+  <div id="left-section" class="flex min-w-4xs grow-2 basis-0 min-w-3xs">
     <img src="{{rendererService.imgSrc()}}">
 
     <div class="flex flex-col w-full albumAndTitle">
@@ -25,7 +25,7 @@
   </div>
 
   <!-- Middle footer section -->
-  <div id="middle-section" class="flex grow-3 min-w-3xs justify-center h-full basis-0 mx-4">
+  <div id="middle-section" class="flex grow-2 min-w-3xs justify-center h-full basis-0 mx-4">
     <div class="flex grow max-w-md flex-col ">
       <div class="player-button-group">
         <span class="material-symbols-outlined icon-button {{shuffleClass}}" (click)="playlistService.toggleShuffle()">shuffle</span>
@@ -66,22 +66,24 @@
 
   <!-- right footer section -->
   <div id="right-section" class="flex grow-3 min-w-4xs justify-end me-4 basis-0">
-    <div class="flex w-full max-w-xs h-full self-center">
-      <div class="flex items-center gap-3">
+    <div class="flex w-full max-w-xs xl:max-w-md h-full self-center">
+      <div class="flex items-center gap-3 flex-shrink-0">
         <!-- Speaker button with name for XL+ screens -->
         <div class="hidden xl:flex items-center gap-2 px-3 py-1 border border-amber-400 rounded transition-colors cursor-pointer max-w-[150px]" (click)="rendererClicked($event)">
           <span class="material-symbols-outlined text-amber-400 flex-shrink-0">speaker</span>
           <span class="text-sm text-amber-400 font-light truncate">{{currentMediaRendererName()}}</span>
         </div>
         <!-- Speaker icon only for smaller screens -->
-        <span class="xl:hidden material-symbols-outlined icon-main" (click)="rendererClicked($event)">speaker</span>
+        <div class="flex xl:hidden">
+          <span class="material-symbols-outlined icon-main" (click)="rendererClicked($event)">speaker</span>
+        </div>
         
-        <span class="material-symbols-outlined icon-main" (click)="serverClicked($event)">dns</span>
+        <div class="material-symbols-outlined icon-main" (click)="serverClicked($event)">dns</div>
         @if (hasDeviceDriver()) {
           <span class="material-symbols-outlined {{getStandbyClass()}} icon-main" (click)="powerClicked()">power_settings_new</span>
         }
       </div>
-      <div id="volume-slider" class="flex w-full items-center gap-2">
+      <div id="volume-slider" class="flex w-full items-center gap-2 min-w-0">
         <span class="material-symbols-outlined icon-main">volume_up</span>
         <div class="flex grow volumeSliderBox">
           <input 
