@@ -7,11 +7,11 @@ import { PlaylistService } from './../../service/playlist.service';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
 import { TransportService as TransportService } from '../../service/transport.service';
-import { ChangeDetectionStrategy, Component, ElementRef, Optional, computed, signal } from '@angular/core';
-import { MatProgressBar } from '@angular/material/progress-bar';
-import { MatSlider, MatSliderThumb } from '@angular/material/slider';
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, Optional, computed, signal } from '@angular/core';
 import { QualityBadgeComponent } from '../../util/comp/quality-badge/quality-badge.component';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
 
 @Component({
     selector: 'renderer-footer',
@@ -19,14 +19,14 @@ import { toObservable } from '@angular/core/rxjs-interop';
     styleUrls: ['./footer.component.scss'],
     standalone: true,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [QualityBadgeComponent, MatSlider, MatSliderThumb, MatProgressBar]
+    imports: [QualityBadgeComponent, ReactiveFormsModule]
 })
-export class FooterComponent {
+export class FooterComponent implements OnInit{
 
   currentMediaRendererName = signal<string>('');
   minVal = 0;
   maxVal = 100;
-
+  volControl = new FormControl(0);
   
   constructor(
     private dialog: MatDialog,
@@ -36,6 +36,19 @@ export class FooterComponent {
     public songOptionsServiceService: SongOptionsServiceService,
     public rendererService: RendererService) {
       toObservable(this.deviceService.selectedMediaRendererDevice).subscribe(data => this.currentMediaRendererName.set(data.friendlyName));
+  }
+
+  ngOnInit(): void {
+    this.volControl.valueChanges.pipe(
+    debounceTime(300),          // Wartet 300ms nach der letzten Bewegung
+    distinctUntilChanged()      // Nur feuern, wenn der Wert sich wirklich geändert hat
+  ).subscribe(val => {
+    const expVal = 2;
+    const norm = val / 100;    
+    const logVal = Math.round(this.minVal + (this.maxVal - this.minVal) * Math.pow(norm, expVal));
+    console.log("volume changed to " + logVal);
+    this.rendererService.setVolume(logVal);
+  });
   }
 
   trackTimePercent = computed(() => {
