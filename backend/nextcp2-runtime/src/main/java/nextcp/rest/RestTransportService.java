@@ -48,7 +48,10 @@ public class RestTransportService extends BaseRestService {
 				log.info("Try to find current song in playlist ... ");
 				if (device.getPlaylistServiceBridge().seekId(playRequest.streamUrl)) {
 					log.debug("playing streamURL from playlist ... ");
+					publisher.publishEvent(new ToastrMessage(null, "info", "play song", "song found in playlist, playing from there."));
 					return;
+				} else {
+					log.info("song not found in current playlist, playing as new stream ... ");
 				}
 			}
 		}

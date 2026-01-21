@@ -569,9 +569,8 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 				playbackItems.addFirst(idxSong);
 			} else {
 				log.info("linear play mode. moving to index : " + idxSong);
-				for (int i = 0; i < idxSong; i++) {
-					moveToNextTrack();
-				}
+				this.currentSongIdx = idxSong-1;
+				moveToNextTrack();
 			}
 			play();
 			return true;
