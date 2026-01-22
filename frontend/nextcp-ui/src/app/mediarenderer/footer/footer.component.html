@@ -66,10 +66,10 @@
 
   <!-- right footer section -->
   <div id="right-section" class="flex grow-3 min-w-4xs justify-end me-4 basis-0">
-    <div class="flex w-full max-w-xs xl:max-w-md h-full self-center">
-      <div class="flex items-center gap-3 flex-shrink-0">
+    <div class="flex self-center">
+      <div class="flex items-center">
         <!-- Speaker button with name for XL+ screens -->
-        <div class="hidden xl:flex items-center gap-2 px-3 py-1 border border-amber-400 rounded transition-colors cursor-pointer max-w-[150px]" (click)="rendererClicked($event)">
+        <div class="hidden xl:flex items-center gap-2 px-3 py-1 border border-amber-400 rounded transition-colors cursor-pointer max-w-[50px]" (click)="rendererClicked($event)">
           <span class="material-symbols-outlined text-amber-400 flex-shrink-0">speaker</span>
           <span class="text-sm text-amber-400 font-light truncate">{{currentMediaRendererName()}}</span>
         </div>
