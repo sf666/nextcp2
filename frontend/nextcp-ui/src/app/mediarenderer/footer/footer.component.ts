@@ -24,8 +24,11 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
 export class FooterComponent implements OnInit{
 
   currentMediaRendererName = signal<string>('');
+  sliderPos = computed(() => this.reverseLogVal(this.rendererService.deviceDriverState().volume));
+
   minVal = 0;
   maxVal = 100;
+  expVal = 2;
   volControl = new FormControl(0);
   
   constructor(
@@ -39,16 +42,20 @@ export class FooterComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.volControl.valueChanges.pipe(
-    debounceTime(300),          // Wartet 300ms nach der letzten Bewegung
-    distinctUntilChanged()      // Nur feuern, wenn der Wert sich wirklich geändert hat
-  ).subscribe(val => {
-    const expVal = 2;
-    const norm = val / 100;    
-    const logVal = Math.round(this.minVal + (this.maxVal - this.minVal) * Math.pow(norm, expVal));
-    console.log("volume changed to " + logVal);
-    this.rendererService.setVolume(logVal);
-  });
+    this.volControl.valueChanges.pipe( debounceTime(300), distinctUntilChanged()).subscribe(val => {
+      const norm = val / 100;    
+      const logVal = Math.round(this.minVal + (this.maxVal - this.minVal) * Math.pow(norm, this.expVal));
+      console.log("volume changed to " + logVal);
+      this.rendererService.setVolume(logVal);
+    });
+  }
+
+  // reverse from volume value to logarithmic slider position
+  reverseLogVal(val) : number{
+    const norm = (val - this.minVal) / (this.maxVal - this.minVal);
+    const rev = Math.round(Math.pow(Math.max(0, norm), 1 / this.expVal) * 100);
+    console.log("reverse log val " + val + " to " + rev);
+    return rev;
   }
 
   trackTimePercent = computed(() => {

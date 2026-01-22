@@ -91,7 +91,7 @@
             [min]="minVal" 
             [max]="maxVal" 
             step="1" 
-            [value]="rendererService.deviceDriverState().volume" 
+            [value]="sliderPos()" 
             [formControl]="volControl"
             class="volume-range-slider"
             style="--value: {{rendererService.deviceDriverState().volume / 90 * 100}}%"
