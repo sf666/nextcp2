@@ -1,13 +1,31 @@
+@use "custom_variables"as cv;
+@use "tailwindcss";
+
 .icon-main {
     color: var(--glas-white-5);
 }
 
-mat-slider {
-    height: 416px;
+
+.vertical-range {
+    -webkit-appearance: slider-vertical;
+    appearance        : slider-vertical;
+    width             : 24px;
 }
 
-.popup-container {
-    padding-top   : 8px;
-    padding-bottom: 8px;
+.volume-range-slider {
+    accent-color: var(--aqua, #00ffff);
+    cursor      : pointer;
 }
 
+.popup.cdk-overlay-pane {
+    min-width: 0 !important;
+    max-width: none !important;
+}
+
+.popup .mat-mdc-dialog-container,
+.popup mat-dialog-container {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    padding: 8px !important;
+}

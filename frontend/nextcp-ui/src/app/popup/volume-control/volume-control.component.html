@@ -1,6 +1,18 @@
-<div class="popup-container flex flex-col justify-between align-self-center">
-    <mat-icon class="material-symbols-outlined align-self-center">volume_up</mat-icon>
-    <mat-slider vertical class="align-self-center sidebar-slider" min="0" max="90" step="1"
-        value="0"><input matSliderThumb (valueChange)="volChanged($event)" [value]="rendererService.deviceDriverState().volume"></mat-slider>
-    <mat-icon class="material-symbols-outlined align-self-center">volume_mute</mat-icon>
+<div class="flex flex-col items-center justify-between h-full m-1">
+    <div class="flex mb-2">
+        <span class="material-symbols-outlined icon-main">volume_up</span>
+    </div>
+    <div class="flex grow">
+        <input
+            type="range"
+            class="volume-range-slider vertical-range"
+            [min]="minVal"
+            [max]="maxVal"
+            step="1"
+            [value]="sliderPos()"
+        />
+    </div>
+    <div class="flex mt-2">
+        <span class="material-symbols-outlined icon-main">volume_mute</span>
+    </div>
 </div>

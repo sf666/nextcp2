@@ -82,21 +82,7 @@
         @if (hasDeviceDriver()) {
           <span class="material-symbols-outlined {{getStandbyClass()}} icon-main" (click)="powerClicked()">power_settings_new</span>
         }
-      </div>
-      <div id="volume-slider" class="flex w-full items-center gap-2 min-w-0">
-        <span class="material-symbols-outlined icon-main">volume_up</span>
-        <div class="flex grow volumeSliderBox">
-          <input 
-            type="range" 
-            [min]="minVal" 
-            [max]="maxVal" 
-            step="1" 
-            [value]="sliderPos()" 
-            [formControl]="volControl"
-            class="volume-range-slider"
-            style="--value: {{rendererService.deviceDriverState().volume / 90 * 100}}%"
-          />
-        </div>
+        <span class="material-symbols-outlined icon-main" (click)="volumeClicked($event)">volume_up</span>
       </div>
     </div>
   </div>
