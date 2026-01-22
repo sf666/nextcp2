@@ -22,7 +22,7 @@ export class VolumeControlComponent {
   private myTimer : NodeJS.Timeout;
 
   minVal = 0;
-  maxVal = 90;
+  maxVal = 100;
   expVal = 2;
   volControl = new FormControl(0);
   sliderPos = computed(() => this.toSliderPos(this.rendererService.deviceDriverState().volume ?? 0));
@@ -70,14 +70,14 @@ export class VolumeControlComponent {
   private toSliderPos(volume: number): number {
     const norm = (volume - this.minVal) / (this.maxVal - this.minVal);
     const toSlidePos = Math.round(Math.pow(Math.max(0, norm), 1 / this.expVal) * 100);
-    console.log("to slider pos " + volume + " to " + toSlidePos);
+    console.log("received new volume " + volume + " putting slider to pos " + toSlidePos);
     return toSlidePos;
   }
 
   private fromSliderPos(pos: number): number {
     const norm = pos / 100;
     const fromSlidePos = Math.round(this.minVal + (this.maxVal - this.minVal) * Math.pow(norm, this.expVal));
-    console.log("from slider pos " + pos + " to " + fromSlidePos);
+    console.log("slider moved to pos " + pos + ". Sending new volume :" + fromSlidePos);
     return fromSlidePos;
   }
 

@@ -15,8 +15,8 @@ export class DeviceService {
 
   public mediaServerList = signal<MediaServerDto[]>([]);
   public mediaRendererList = signal<MediaRendererDto[]>([]);
-  public selectedMediaServerDevice = signal<MediaServerDto>({ udn: '', img: '', friendlyName: 'please select Media-Server', extendedApi: false });
-  public selectedMediaRendererDevice = signal<MediaRendererDto>({ udn: '', img: '', friendlyName: 'please select Media-Renderer', services: [], allSources: [], currentSource: null });
+  public selectedMediaServerDevice = signal<MediaServerDto>({ udn: '', img: '', friendlyName: 'select Media-Server', extendedApi: false });
+  public selectedMediaRendererDevice = signal<MediaRendererDto>({ udn: '', img: '', friendlyName: 'select Media-Renderer', services: [], allSources: [], currentSource: null });
 
   public mediaRendererSelected = computed (() => {
     return this.selectedMediaRendererDevice().udn.length > 0;
