@@ -25,7 +25,6 @@ import org.jupnp.support.model.item.PlaylistItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import nextcp.config.ServerConfig;
@@ -70,6 +69,8 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	private UmsExtendedServicesService umsServices = null;
 	private UmsExtendedServicesServiceEventListenerImpl umsServiceEventListener = null;
+	
+	private static final Long BROWSE_PAGE_SIZE = 200l;
 
 	@Autowired
 	private ServerConfig serverConfig = null;
@@ -307,13 +308,13 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		umsServices.restoreRatings();
 	}
 
-	private String browseChildrenSearchFolder(long start, long end, String objectId, String foldername, int retryCount) {
+	private String browseChildrenSearchFolder(long start, String objectId, String foldername, int retryCount) {
 		log.debug("search folder having id {} and title {} ...", objectId, foldername);
 		BrowseInput inp = new BrowseInput();
 		inp.ObjectID = objectId;
 		inp.SortCriteria = "";
 		inp.StartingIndex = start;
-		inp.RequestedCount = end;
+		inp.RequestedCount = BROWSE_PAGE_SIZE;
 		inp.Filter = "*";
 		try {
 			ContainerItemDto resultContainer = browseChildren(inp);
@@ -326,31 +327,30 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 					return folder.id;
 				}
 			}
-			if (resultContainer.totalMatches != null && resultContainer.totalMatches > end) {
-				long diff = end - start;
-				log.debug("extending search to items from {} to {}", end, end + diff);
-				return browseChildrenSearchFolder(end, end + diff, objectId, foldername, 3);
+			if (resultContainer.totalMatches != null && resultContainer.totalMatches < (start + BROWSE_PAGE_SIZE)) {
+				log.debug("extending search to items from {} to {}", start, start + BROWSE_PAGE_SIZE);
+				return browseChildrenSearchFolder(start + BROWSE_PAGE_SIZE, objectId, foldername, 3);
 			} else {
 				log.warn("CDS didn't fill totalMatches attribute.");
 			}
 			log.debug("folder not found : {}", foldername);
+			return null;
 		} catch (Exception e) {
-			log.error("browsing children failed from range {} to {} .", start, end, e);
+			log.error("browsing children failed from range {} to {} .", start, start + BROWSE_PAGE_SIZE, e);
 			if (retryCount > 0) {
 				log.info("retrying browseChildrenSearchFolder ... attempts left : {} ", retryCount);
-				long diff = end - start;
-				return browseChildrenSearchFolder(end, end + diff, objectId, foldername, retryCount - 1);				
+				return browseChildrenSearchFolder(start + BROWSE_PAGE_SIZE, objectId, foldername, retryCount - 1);				
 			}
+			log.warn("couldn't fully browse the directory. Stopped at end item {}", start + BROWSE_PAGE_SIZE);
+			toast.publishWarningMessage(null,"Create folder failed", "couldn't fully browse the directory. Stopped at end item " + (start + BROWSE_PAGE_SIZE));
+			return null;
 		}
-		log.warn("couldn't fully browse the directory. Stopped at item count {}", end);
-		toast.publishWarningMessage(null,"Create folder failed", "couldn't fully browse the directory. Stopped at item count " + end);
-		return null;
 	}
 
 	@Override
 	public String getOrCreateChildFolderId(String parentContainerId, String folderName) throws Exception {
 		log.debug("getting or creating folder with name {} in parentfolder having id {} ...", folderName, parentContainerId);
-		String childId = this.browseChildrenSearchFolder(0, 200, parentContainerId, folderName, 3);
+		String childId = this.browseChildrenSearchFolder(0, parentContainerId, folderName, 3);
 		if (childId == null) {
 			Container c = createFolder(parentContainerId, folderName);
 			if (c != null) {
