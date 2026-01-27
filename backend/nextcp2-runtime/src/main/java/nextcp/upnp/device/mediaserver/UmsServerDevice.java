@@ -78,9 +78,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	private Config config = null;
 
 	@Autowired
-	private ApplicationEventPublisher publisher = null;
-
-	@Autowired
 	private ToastEventPublisher toast = null;
 
 	private UpnpErrorDescriptionHandler errorHandler = new UpnpErrorDescriptionHandler();
@@ -306,7 +303,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		umsServices.restoreRatings();
 	}
 
-	private String browseChildrenSearchFolder(long start, long end, String objectId, String foldername) {
+	private String browseChildrenSearchFolder(long start, long end, String objectId, String foldername, int retryCount) {
 		log.debug("search folder having id {} and title {} ...", objectId, foldername);
 		BrowseInput inp = new BrowseInput();
 		inp.ObjectID = objectId;
@@ -328,21 +325,28 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			if (resultContainer.totalMatches != null && resultContainer.totalMatches > end) {
 				long diff = end - start;
 				log.debug("extending search to items from {} to {}", end, end + diff);
-				return browseChildrenSearchFolder(end, end + diff, objectId, foldername);
+				return browseChildrenSearchFolder(end, end + diff, objectId, foldername, 3);
 			} else {
 				log.warn("CDS didn't fill totalMatches attribute.");
 			}
 			log.debug("folder not found : {}", foldername);
 		} catch (Exception e) {
 			log.error("browsing children failed from range {} to {} .", start, end, e);
+			if (retryCount > 0) {
+				log.info("retrying browseChildrenSearchFolder ... attempts left : {} ", retryCount);
+				long diff = end - start;
+				return browseChildrenSearchFolder(end, end + diff, objectId, foldername, retryCount - 1);				
+			}
 		}
+		log.warn("couldn't fully browse the directory. Stopped at item count {}", end);
+		toast.publishWarningMessage(null,"Create folder failed", "couldn't fully browse the directory. Stopped at item count " + end);
 		return null;
 	}
 
 	@Override
 	public String getOrCreateChildFolderId(String parentContainerId, String folderName) throws Exception {
 		log.debug("getting or creating folder with name {} in parentfolder having id {} ...", folderName, parentContainerId);
-		String childId = this.browseChildrenSearchFolder(0, 200, parentContainerId, folderName);
+		String childId = this.browseChildrenSearchFolder(0, 200, parentContainerId, folderName, 3);
 		if (childId == null) {
 			Container c = createFolder(parentContainerId, folderName);
 			if (c != null) {
