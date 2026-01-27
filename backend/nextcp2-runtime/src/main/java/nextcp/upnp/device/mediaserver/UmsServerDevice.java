@@ -73,7 +73,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	@Autowired
 	private ServerConfig serverConfig = null;
-	
+
 	@Autowired
 	private Config config = null;
 
@@ -82,11 +82,11 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	@Autowired
 	private ToastEventPublisher toast = null;
-	
+
 	private UpnpErrorDescriptionHandler errorHandler = new UpnpErrorDescriptionHandler();
 
 	private volatile boolean initialConfigUpdateDone = false;
-	
+
 	public UmsServerDevice(RemoteDevice device) {
 		super(device);
 	}
@@ -99,7 +99,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		} catch (Exception e) {
 			log.error("Failed to start Jetty HTTP client", e);
 		}
-		
+
 		try {
 			umsServices = new UmsExtendedServicesService(getUpnpService(), getDevice());
 			if (umsServices.getUmsExtendedServicesService() != null) {
@@ -113,7 +113,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			log.info("This UMS version has no UPnP extended UMS services.");
 		}
 	}
-	
+
 	@PreDestroy
 	private void destroy() {
 		if (httpClient != null) {
@@ -130,17 +130,18 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	 */
 	private void updateServerConfig() {
 		ServerDeviceConfiguration sd = serverConfig.getMediaServerConfig(getUdnAsString());
-		
-		if (umsServiceEventListener.getStateVariable().AudioUpdateRating != null && !umsServiceEventListener.getStateVariable().AudioUpdateRating) {
+
+		if (umsServiceEventListener.getStateVariable().AudioUpdateRating != null &&
+			!umsServiceEventListener.getStateVariable().AudioUpdateRating) {
 			sd.updateRatingInFile = umsServiceEventListener.getStateVariable().AudioUpdateRating;
 		}
-		
-		serverConfig.updateServerDevice(sd);		
+
+		serverConfig.updateServerDevice(sd);
 	}
 
 	private void configureUmsOnce() {
 		initialConfigUpdateDone = true;
-		
+
 		if (umsServiceEventListener.getStateVariable().UpnpCdsWrite != null && !umsServiceEventListener.getStateVariable().UpnpCdsWrite) {
 			log.info("UMS server -> activating UPnP create object ability ...");
 			SetUpnpCdsWriteInput inp = new SetUpnpCdsWriteInput();
@@ -160,11 +161,11 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			log.debug("[AudioAddict Config] updating UMS.conf with user & password ...");
 			try {
 				SetAudioAddictEuropeInput inp = new SetAudioAddictEuropeInput();
-				inp.AudioAddictEurope = config.audioAddictConfig.preferEuropeanServer; 
+				inp.AudioAddictEurope = config.audioAddictConfig.preferEuropeanServer;
 				umsServices.setAudioAddictEurope(inp);
-				
+
 				SetAudioAddictUserInput inp_user = new SetAudioAddictUserInput();
-				inp_user.AudioAddictUser = config.audioAddictConfig.user; 
+				inp_user.AudioAddictUser = config.audioAddictConfig.user;
 				umsServices.setAudioAddictUser(inp_user);
 
 				SetAudioAddictPassInput inp_pass = new SetAudioAddictPassInput();
@@ -172,22 +173,22 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 				umsServices.setAudioAddictPass(inp_pass);
 			} catch (Exception e) {
 				log.warn("couldn't update AudioAddict Network.", e);
-			}			
+			}
 		} else {
 			log.debug("[AudioAddict Config] disabled. Please set username & password to activate AudioAddict network support.");
 		}
 	}
-	
+
 	/**
-	 * received new UMS config ... 
+	 * received new UMS config ...
 	 */
 	public void newUmsConfig() {
 		updateServerConfig();
-		
+
 		if (!initialConfigUpdateDone) {
 			configureUmsOnce();
 		}
-		
+
 		log.info("anonwrite : {} ", umsServiceEventListener.getStateVariable().AnonymousDevicesWrite);
 		log.info("like in root  : {} ", umsServiceEventListener.getStateVariable().AudioLikesVisibleRoot);
 		log.info("update rating : {} ", umsServiceEventListener.getStateVariable().AudioUpdateRating);
@@ -313,24 +314,28 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		inp.StartingIndex = start;
 		inp.RequestedCount = end;
 		inp.Filter = "*";
-		ContainerItemDto resultContainer = browseChildren(inp);
-		log.info("Reported total matches : {} ", resultContainer.totalMatches);
-		log.info("result container size : {} ", resultContainer.containerDto.size());
-		for (ContainerDto folder : resultContainer.containerDto) {
-			log.debug("Found folder named : {}", folder.title);
-			if (folder.title.equalsIgnoreCase(foldername)) {
-				log.debug("Found folder id : {}", folder.id);
-				return folder.id;
+		try {
+			ContainerItemDto resultContainer = browseChildren(inp);
+			log.info("Reported total matches : {} ", resultContainer.totalMatches);
+			log.info("result container size : {} ", resultContainer.containerDto.size());
+			for (ContainerDto folder : resultContainer.containerDto) {
+				log.debug("Found folder named : {}", folder.title);
+				if (folder.title.equalsIgnoreCase(foldername)) {
+					log.debug("Found folder id : {}", folder.id);
+					return folder.id;
+				}
 			}
+			if (resultContainer.totalMatches != null && resultContainer.totalMatches > end) {
+				long diff = end - start;
+				log.debug("extending search to items from {} to {}", end, end + diff);
+				return browseChildrenSearchFolder(end, end + diff, objectId, foldername);
+			} else {
+				log.warn("CDS didn't fill totalMatches attribute.");
+			}
+			log.debug("folder not found : {}", foldername);
+		} catch (Exception e) {
+			log.error("browsing children failed from range {} to {} .", start, end, e);
 		}
-		if (resultContainer.totalMatches != null && resultContainer.totalMatches > end) {
-			long diff = end - start;
-			log.debug("extending search to items from {} to {}", end + 1, end + diff + 1);
-			return browseChildrenSearchFolder(end + 1, end + diff + 1, objectId, foldername);
-		} else {
-			log.warn("CDS didn't fill totalMatches attribute.");
-		}
-		log.debug("folder not found : {}", foldername);
 		return null;
 	}
 
@@ -341,8 +346,10 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		if (childId == null) {
 			Container c = createFolder(parentContainerId, folderName);
 			if (c != null) {
+				log.info("getOrCreateChildFolderId : found existing folder named {} with id : {}", folderName, c.getId());
 				return c.getId();
 			}
+			log.error("Didn't get a folder ID from media server for created directory.");
 			throw new RuntimeException("cannot create directory");
 		} else {
 			log.info("folder already exists with id : " + childId);
@@ -531,25 +538,19 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 				} else {
 					log.info("import uri : " + resource.getImportUri());
 				}
-				
+
 				try {
 					// Send POST request with file upload
 					MultiPartRequestContent multiPart = new MultiPartRequestContent();
 					PathRequestContent fileContent = new PathRequestContent(file.toPath());
 
-					multiPart.addPart(new MultiPart.ContentSourcePart(
-					    "filename", 
-					    file.getAbsoluteFile().getName(), 
-					    HttpFields.EMPTY, 
-					    fileContent
-					));
+					multiPart.addPart(
+						new MultiPart.ContentSourcePart("filename", file.getAbsoluteFile().getName(), HttpFields.EMPTY, fileContent));
 					multiPart.close();
-					
-					ContentResponse response = httpClient.POST(resource.getImportUri())
-						.body(multiPart)
-						.timeout(10, TimeUnit.SECONDS)
+
+					ContentResponse response = httpClient.POST(resource.getImportUri()).body(multiPart).timeout(10, TimeUnit.SECONDS)
 						.send();
-					
+
 					log.info("upload response code : " + response.getStatus());
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
@@ -608,6 +609,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	@Override
 	public void restoreFilesStatus() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
