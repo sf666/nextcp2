@@ -327,14 +327,14 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 					return folder.id;
 				}
 			}
-			if (resultContainer.totalMatches != null && resultContainer.totalMatches < (start + BROWSE_PAGE_SIZE)) {
+			if (resultContainer.totalMatches != null && resultContainer.totalMatches > (start + BROWSE_PAGE_SIZE)) {
 				log.debug("extending search to items from {} to {}", start, start + BROWSE_PAGE_SIZE);
 				return browseChildrenSearchFolder(start + BROWSE_PAGE_SIZE, objectId, foldername, 3);
 			} else {
-				log.warn("CDS didn't fill totalMatches attribute.");
+				log.warn("End of page reached. Page position {}. Total matches {}.", start + BROWSE_PAGE_SIZE, resultContainer.totalMatches);
+				log.debug("folder not found : {}", foldername);
+				return null;
 			}
-			log.debug("folder not found : {}", foldername);
-			return null;
 		} catch (Exception e) {
 			log.error("browsing children failed from range {} to {} .", start, start + BROWSE_PAGE_SIZE, e);
 			if (retryCount > 0) {
