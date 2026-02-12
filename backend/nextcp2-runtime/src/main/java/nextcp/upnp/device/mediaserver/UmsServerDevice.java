@@ -14,7 +14,7 @@ import org.eclipse.jetty.http.HttpFields;
 import org.eclipse.jetty.http.MultiPart;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.jupnp.model.meta.RemoteDevice;
-import org.jupnp.support.contentdirectory.DIDLParser;
+import nextcp.util.DIDLParser;
 import org.jupnp.support.model.DIDLContent;
 import org.jupnp.support.model.DIDLObject.Class;
 import org.jupnp.support.model.Res;
@@ -530,8 +530,10 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			}
 		} catch (GenActionException e) {
 			String errorText = errorHandler.extractErrorText(e.description);
+			log.error("createItem : GenActionException -> couldn't create item : {}", errorText);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
 		} catch (Exception e) {
+			log.error("createItem : Exception -> couldn't create item : {}", e);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
 		}
 	}

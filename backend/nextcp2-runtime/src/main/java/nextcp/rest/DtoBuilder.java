@@ -9,7 +9,7 @@ import java.util.Optional;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.jupnp.support.contentdirectory.DIDLParser;
+import nextcp.util.DIDLParser;
 import org.jupnp.support.model.DIDLContent;
 import org.jupnp.support.model.DIDLObject;
 import org.jupnp.support.model.DIDLObject.Property;
