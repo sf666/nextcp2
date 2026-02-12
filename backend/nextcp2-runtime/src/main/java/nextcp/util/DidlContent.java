@@ -2,7 +2,7 @@ package nextcp.util;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
-import nextcp.util.DIDLParser;
+import org.jupnp.support.contentdirectory.DIDLParser;
 import org.jupnp.support.model.DIDLContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
