@@ -1,4 +1,4 @@
-@if (radioService.radioItems()?.length > 0) {
+@if (radioService.radioItems()?.length ?? 0 > 0) {
   <div class="mt-3 mb-4">
     <div class="section head">Radio stations provided by {{deviceService.selectedMediaRendererDevice().friendlyName}}</div>
     <div class="albumLayout ps-3">
@@ -20,7 +20,7 @@
   </div>
 }
 
-@if (configurationService.serverConfig?.radioStation?.length > 0) {
+@if (configurationService.serverConfig?.radioStation?.length ?? 0 > 0) {
   <div class="mb-4">
     <div class="albumLayout ps-3">
       @for (item of configurationService.serverConfig.radioStation; track item.id) {
@@ -39,10 +39,12 @@
       }
     </div>
   </div>
-} @else {
-  @if(deviceService.selectedMediaRendererDevice().udn.length > 0) {
+} 
+
+@if(!hasRadioStations()) {
+  @if(deviceService.selectedMediaRendererDevice().udn.length ?? 0 > 0) {
     <div class="ms-8 p-4 max-w-lg mb-4 text-sm mt-8 rounded-lg bg-gray-800 text-red-400" role="alert">
-      {{deviceService.selectedMediaRendererDevice().friendlyName}} : Selected player has provides no radio stations.
+      {{deviceService.selectedMediaRendererDevice().friendlyName}} : Selected player provides no radio stations.
     </div>          
   } @else {
     <div class="inline-flex items-center ms-8 p-4 max-w-lg mb-4 text-sm mt-8 rounded-lg bg-gray-800 text-red-400" role="alert">
