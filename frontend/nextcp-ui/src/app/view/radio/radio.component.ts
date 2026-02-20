@@ -40,4 +40,9 @@ export class RadioComponent implements OnInit{
     this.backgroundImageService.setBackgroundImageMainScreen(radioStation.albumArtUrl);
     this.radioService.playOpenHomeStation(radioStation);
   }
+
+  hasRadioStations() : boolean {
+    return (this.configurationService.serverConfig?.radioStation?.length ?? 0) > 0 ||
+    (this.radioService.radioItems()?.length ?? 0) > 0;
+  }
 }
