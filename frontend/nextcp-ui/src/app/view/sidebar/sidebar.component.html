@@ -1,101 +1,117 @@
 <div class="sidebar flex-col grow overflow-y-auto bg-zinc-800">
   <div class="flex mb-8 ms-1 mt-1">
-    <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button" class="md:hidden inline-flex items-center p-2 text-sm rounded-lg focus:outline-none focus:ring-2 text-gray-400 hover:bg-gray-700 focus:ring-gray-600">
+    <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button"
+      class="md:hidden inline-flex items-center p-2 text-sm rounded-lg focus:outline-none focus:ring-2 text-gray-400 hover:bg-gray-700 focus:ring-gray-600">
       <span class="sr-only">Open sidebar</span>
       <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-        <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+        <path clip-rule="evenodd" fill-rule="evenodd"
+          d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+        </path>
       </svg>
     </button>
     <div id="logo" class="logo-container ms-2 flex items-center gap-3">
       <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Outer circle with gradient -->
         <defs>
-          <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#06b5d4cd;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#3bd1f677;stop-opacity:1" />
+          <linearGradient id="nextcpGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#0891b2" />
+            <stop offset="100%" stop-color="#67e8f9" />
           </linearGradient>
         </defs>
-        <circle cx="20" cy="20" r="18" stroke="url(#logoGradient)" stroke-width="2" fill="none" opacity="0.3"/>
-        
-        <!-- Play/Forward symbol -->
-        <path d="M15 12 L15 28 L27 20 Z" fill="url(#logoGradient)"/>
-        <path d="M28 12 L28 28" stroke="url(#logoGradient)" stroke-width="2.5" stroke-linecap="round"/>
-        
-        <!-- Waveform accent -->
-        <path d="M8 20 Q 10 16, 12 20" stroke="#06b6d4" stroke-width="1.5" fill="none" opacity="0.6"/>
-        <path d="M8 20 Q 10 24, 12 20" stroke="#06b6d4" stroke-width="1.5" fill="none" opacity="0.6"/>
+
+        <!-- Outer precision ring -->
+        <circle cx="20" cy="20" r="17" stroke="url(#nextcpGradient)" stroke-width="1" fill="none" opacity="0.3" />
+
+        <!-- First resonance ring -->
+        <circle cx="20" cy="20" r="10" stroke="url(#nextcpGradient)" stroke-width="1" fill="none" opacity="0.45" />
+
+        <!-- Second resonance ring (symbolic /2) -->
+        <circle cx="20" cy="20" r="7" stroke="url(#nextcpGradient)" stroke-width="1" fill="none" opacity="0.7" />
+
+        <!-- Inner audiophile core -->
+        <circle cx="20" cy="20" r="3.5" fill="url(#nextcpGradient)" />
       </svg>
       <div class="logo-text">
         <span class="logo-main">next</span><span class="logo-accent">CP</span><span class="logo-version">/2</span>
       </div>
     </div>
   </div>
-  <div class="flex flex-col">    
-    <button type="button" [routerLink]="'/music-library'" class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/music-library')}}" (click)="musicLibraryClicked()">
+  <div class="flex flex-col">
+    <button type="button" [routerLink]="'/music-library'"
+      class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/music-library')}}"
+      (click)="musicLibraryClicked()">
       <mat-icon class="material-symbols-outlined thin ">library_music</mat-icon>
       <span class="ms-2">Music Library</span>
     </button>
-    <button type="button" [routerLink]="'/playlist'" (click)="buttonClicked('/playlist')" class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/playlist')}}">
+    <button type="button" [routerLink]="'/playlist'" (click)="buttonClicked('/playlist')"
+      class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/playlist')}}">
       <mat-icon class="material-symbols-outlined thin">queue_music</mat-icon>
       <span class="ms-2">Player Queue</span>
     </button>
-    <button type="button" [routerLink]="'/player'" (click)="buttonClicked('/player')" class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/player')}}">
+    <button type="button" [routerLink]="'/player'" (click)="buttonClicked('/player')"
+      class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/player')}}">
       <mat-icon class="material-symbols-outlined thin">surround_sound</mat-icon>
       <span class="ms-2">Now Listening</span>
     </button>
 
-    <button type="button" [routerLink]="'/radio'" (click)="buttonClicked('/radio')" class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/radio')}}">
+    <button type="button" [routerLink]="'/radio'" (click)="buttonClicked('/radio')"
+      class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/radio')}}">
       <mat-icon class="material-symbols-outlined thin">radio</mat-icon>
       <span class="ms-2">Radio</span>
     </button>
 
     @if(deviceService.selectedMediaServerDevice().extendedApi) {
-      <button type="button" [routerLink]="'/ums-audioaddict'" (click)="buttonClicked('/ums-audioaddict')" class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/ums-audioaddict')}}">
-        <mat-icon class="material-symbols-outlined thin">radio</mat-icon>
-        <span class="ms-2">Radio Networks</span>
-      </button>
+    <button type="button" [routerLink]="'/ums-audioaddict'" (click)="buttonClicked('/ums-audioaddict')"
+      class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/ums-audioaddict')}}">
+      <mat-icon class="material-symbols-outlined thin">radio</mat-icon>
+      <span class="ms-2">Radio Networks</span>
+    </button>
     }
 
-    <button type="button" [routerLink]="'/myAlbums'" (click)="myAlbumClicked()" class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/myAlbums')}}">
+    <button type="button" [routerLink]="'/myAlbums'" (click)="myAlbumClicked()"
+      class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/myAlbums')}}">
       <mat-icon class="material-symbols-outlined thin">album</mat-icon>
       <span class="ms-2">My Albums</span>
     </button>
 
     @if(mediaPlayerService.mediaPlayerExists()) {
-      <button type="button" [routerLink]="'/mediaPlayerConfig'" (click)="buttonClicked('/mediaPlayerConfig')" class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/mediaPlayerConfig')}}">
-        <mat-icon class="material-symbols-outlined thin">save</mat-icon>
-        <span class="ms-2">MediaPlayer</span>
-      </button>
+    <button type="button" [routerLink]="'/mediaPlayerConfig'" (click)="buttonClicked('/mediaPlayerConfig')"
+      class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/mediaPlayerConfig')}}">
+      <mat-icon class="material-symbols-outlined thin">save</mat-icon>
+      <span class="ms-2">MediaPlayer</span>
+    </button>
     }
 
-    <button type="button" [routerLink]="'/settings'" (click)="buttonClicked('/settings')" class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/settings')}}">
+    <button type="button" [routerLink]="'/settings'" (click)="buttonClicked('/settings')"
+      class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/settings')}}">
       <mat-icon class="material-symbols-outlined thin">settings</mat-icon>
       <span class="ms-2">App Settings</span>
     </button>
   </div>
 
   <div class="flex flex-col mb-4">
-      <div class="sub-label flex justify-between">
-        <div class="align-self-center"> MY PLAYLISTS</div>
-        @if(deviceService.mediaServerSelected()){
-          <div class="align-self-center mx-2">
-            <mat-icon class="material-symbols-outlined" (click)="showPlaylistDialog()">pending</mat-icon>
-          </div>
-        }
+    <div class="sub-label flex justify-between">
+      <div class="align-self-center"> MY PLAYLISTS</div>
+      @if(deviceService.mediaServerSelected()){
+      <div class="align-self-center mx-2">
+        <mat-icon class="material-symbols-outlined" (click)="showPlaylistDialog()">pending</mat-icon>
       </div>
+      }
+    </div>
     @for (item of serverPlaylists; track item.playlistId) {
-    <button type="button" [routerLink]="'/myPlaylists'" class="text-left ps-4 mx-2 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getPlaylistClass(item.playlistId)}}" (click)="browseToPlaylist(item)">{{item.playlistName}}</button>
+    <button type="button" [routerLink]="'/myPlaylists'"
+      class="text-left ps-4 mx-2 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getPlaylistClass(item.playlistId)}}"
+      (click)="browseToPlaylist(item)">{{item.playlistName}}</button>
     }
     @if(deviceService.mediaServerSelected()) {
-      @if (myFolderConfigured) {
-        @if(serverPlaylistService.playlistLoading()) {
-          <div class="px-4 text-sm font-medium text-stone-400">loading playlist ...</div>
-        } @else if(serverPlaylistService.serverPl().serverPlaylists?.length == 0) {
-        <div class="px-4 text-sm font-medium text-stone-400">Playlist folder contains no playlists.</div>
-        }
-      } @else {
-        <div class="px-4 text-sm font-medium text-stone-400">No playlist folder configured in settings for selected media server.</div>
-      }
-    } 
+    @if (myFolderConfigured) {
+    @if(serverPlaylistService.playlistLoading()) {
+    <div class="px-4 text-sm font-medium text-stone-400">loading playlist ...</div>
+    } @else if(serverPlaylistService.serverPl().serverPlaylists?.length == 0) {
+    <div class="px-4 text-sm font-medium text-stone-400">Playlist folder contains no playlists.</div>
+    }
+    } @else {
+    <div class="px-4 text-sm font-medium text-stone-400">No playlist folder configured in settings for selected media server.</div>
+    }
+    }
   </div>
 </div>

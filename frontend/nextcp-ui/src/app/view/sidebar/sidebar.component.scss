@@ -34,46 +34,40 @@ button {
 }
 
 // Logo Styling
+/* Container */
 .logo-container {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    
-    .logo-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, #00ffff80 0%, #156877 100%);
-        border-radius: 10px;
-        box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);
-        
-        .material-symbols-outlined {
-            color: #1a1a1a;
-            font-size: 24px;
-            font-weight: 600;
-        }
-    }
-    
-    .logo-text {
-        font-family: 'HK Grotesk', sans-serif;
-        font-size: 28px;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-        
-        .logo-main {
-            color: rgba(151, 147, 137, 0.412);
-        }
-        
-        .logo-accent {
-            color: #156877;
-        }
-        
-        .logo-version {
-            color: rgba(151, 147, 137, 0.412);
-            font-weight: 300;
-            font-size: 20px;
-        }
-    }
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Main text "next" */
+.logo-main {
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  color: #e2e8f0;            /* soft slate-200 */
+  text-transform: lowercase;
+}
+
+/* Accent "CP" */
+.logo-accent {
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  background: linear-gradient(90deg, #0891b2, #67e8f9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Optional: Slight premium glow on hover */
+.logo-container:hover .logo-accent {
+  filter: drop-shadow(0 0 6px rgba(103, 232, 249, 0.4));
+  transition: 0.3s ease;
+}
+
+.logo-version {
+  font-size: 0.75em;
+  vertical-align: super;
+  color: #67e8f9;
+  opacity: 0.6;
+  letter-spacing: 0.12em;
 }
