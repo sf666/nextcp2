@@ -175,7 +175,7 @@ export class DtoGeneratorService {
       mediaServerUDN: '',
       searchRequest: '',
       sortCriteria: '',
-      parentObjectID: ''
+      parentObjectID: '0'
     }
   }
 
@@ -187,7 +187,7 @@ export class DtoGeneratorService {
       mediaServerUDN: _mediaServerUDN,
       searchRequest: _searchRequest,
       sortCriteria: _sortCriteria,
-      parentObjectID: parentObjectID
+      parentObjectID: parentObjectID,
     }
   }
 

@@ -1,7 +1,8 @@
 <div class="nav-search-container">
     <span class="material-symbols-outlined thin md-light">search</span>
-    <input class="nav-search" [(ngModel)]="globalSearchService.quickSearchString" matInput placeholder="global search" #searchInput
+    <input class="nav-search" [(ngModel)]="globalSearchService.quickSearchString" matInput [placeholder]="globalSearchService.globalSearch() ? 'global search' : 'search below this folder'" #searchInput
       (keyup)="keyUp($event)" (focus)="focus()" (blur)="blur()" >
+    <span class="material-symbols-outlined thin md-light" (click)="toggleGlobalSearch()">change_circle</span>
     <span class="material-symbols-outlined thin md-light" (click)="globalSearchService.clearSearch()">close</span>
 </div>
 

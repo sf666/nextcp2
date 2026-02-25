@@ -160,6 +160,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			try {
 				if (config.audioAddictConfig.preferEuropeanServer != null) {
 					SetAudioAddictEuropeInput inp = new SetAudioAddictEuropeInput();
+					log.info("UMS server -> prefer european server : {}", config.audioAddictConfig.preferEuropeanServer);
 					inp.AudioAddictEurope = config.audioAddictConfig.preferEuropeanServer;
 					umsServices.setAudioAddictEurope(inp);
 				} else {

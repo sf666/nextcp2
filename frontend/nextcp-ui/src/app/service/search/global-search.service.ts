@@ -12,11 +12,14 @@ import {
 import { Injectable, signal } from '@angular/core';
 import { debounce } from 'src/app/global';
 import { Subject } from 'rxjs';
+import { MusicLibraryService } from '../music-library/music-library.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GlobalSearchService {
+  public globalSearch = signal(true);
+
   //
   // Event publishing
   //
@@ -43,12 +46,21 @@ export class GlobalSearchService {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private doSearchFunc: any;
 
+  toggleGlobalSearch(): void {
+    this.globalSearch.update((value) => !value);
+  }
+
   private doSearchThrotteled = (): void => {
+    let containerId = '0';
+    if (!this.globalSearch()) {
+      containerId = this.musicLibraryService.currentContainerId();
+    }
     this.contentDirectoryService
       .quickSearch(
         this.currentSearchText,
         '',
-        this.deviceService.selectedMediaServerDevice().udn
+        this.deviceService.selectedMediaServerDevice().udn,
+        containerId
       )
       .subscribe((data) => this.searchResultReceived(data));
   };
@@ -56,6 +68,7 @@ export class GlobalSearchService {
   constructor(
     public contentDirectoryService: ContentDirectoryService,
     private deviceService: DeviceService,
+    private musicLibraryService: MusicLibraryService,
     private dtoGeneratorService: DtoGeneratorService,
     private router: Router,
     private configurationService: ConfigurationService

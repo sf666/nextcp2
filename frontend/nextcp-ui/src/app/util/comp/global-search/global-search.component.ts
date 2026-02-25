@@ -17,7 +17,7 @@ import { ModalSearchResultComponent } from 'src/app/view/search/modal-search-res
 })
 export class GlobalSearchComponent {
   constructor(public globalSearchService: GlobalSearchService) {}
-
+  
 
   keyUp(event: KeyboardEvent): void {
     if (event.key === 'Escape') {
@@ -31,6 +31,10 @@ export class GlobalSearchComponent {
 
   blur(): void {
     //this.globalSearchService.clearSearch();
+  }
+
+  toggleGlobalSearch(): void {
+    this.globalSearchService.toggleGlobalSearch();
   }
 
 }

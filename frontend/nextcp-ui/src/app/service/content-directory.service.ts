@@ -358,13 +358,14 @@ export class ContentDirectoryService {
     searchQuery: string,
     sortCriteria: string,
     mediaServerUdn: string,
+    objectID: string,
   ): Subject<SearchResultDto> {
     return this.quickSearchByDto(
       this.dtoGeneratorService.generateQuickSearchDto(
         searchQuery,
         mediaServerUdn,
         sortCriteria,
-        this.currentContainerID,
+        objectID,
       ),
     );
   }
