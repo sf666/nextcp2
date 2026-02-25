@@ -54,6 +54,7 @@ button {
   font-weight: 600;
   letter-spacing: 0.08em;
   background: linear-gradient(90deg, #0891b2, #67e8f9);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

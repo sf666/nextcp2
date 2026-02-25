@@ -69,7 +69,7 @@
             </div>
           </div>
           } @else {
-            @if (currentContainer.title?.length > 0) {
+            @if (currentContainer.title?.length ?? 0 > 0) {
             <div id="template_containerTitle" class="flex flex-col infobox self-start">
               <div class="title">{{currentContainer.title}}</div>
               @if (contentDirectoryService().currentContainerList().totalMatches > 0 || musicItemsCount > 0) {
@@ -81,7 +81,7 @@
           }
         </div>
         <!-- current content search box -->
-        @if (currentContainer.id?.length > 0) {
+        @if (currentContainer.id?.length ?? 0 > 0) {
           <div class="flex flex-wrap grow justify-end">
             <div class="flex content-center me-3">
               <div class="flex me-3 self-end" style="height: 56px;">
