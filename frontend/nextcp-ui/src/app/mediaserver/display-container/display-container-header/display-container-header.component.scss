@@ -1,11 +1,22 @@
 @use 'appTable';
 @use "card-layout";
 @use "buttons";
-@use "app-variables" as av;
+@use "app-variables"as av;
 @use "app-icons";
 @use "tailwindcss";
 
-:root {}
+:host {
+    --top-header-Height         : 310px;
+    --top-header-Vertical-Indent: 120px;
+}
+
+
+@media (max-height: 1024px) {
+    :host {
+        --top-header-Height: 210px;
+        --top-header-Vertical-Indent: 80px;
+    }
+}
 
 .title {
     font-size     : 2rem;
@@ -17,8 +28,8 @@
 
 // area right to the image
 .right-section {
-    min-height: calc(av.$top-header-Height - av.$top-header-Vertical-Indent);
-    max-height: calc(av.$top-header-Height - av.$top-header-Vertical-Indent);
+    min-height: calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
+    max-height: calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
 }
 
 .plainText {
@@ -41,18 +52,18 @@
 }
 
 .top-img-container {
-    max-height: av.$top-header-Height;
-    min-height: av.$top-header-Height;
+    max-height: var(--top-header-Height);
+    min-height: var(--top-header-Height);
 }
 
 .img-top {
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter : drop-shadow(4px 4px 10px black);
 
-    min-width   : calc(av.$top-header-Height - av.$top-header-Vertical-Indent);
-    min-height  : calc(av.$top-header-Height - av.$top-header-Vertical-Indent);
-    max-width   : calc(av.$top-header-Height - av.$top-header-Vertical-Indent);
-    max-height  : calc(av.$top-header-Height - av.$top-header-Vertical-Indent);
+    min-width   : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
+    min-height  : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
+    max-width   : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
+    max-height  : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
     margin-left : 32px;
     margin-right: 32px;
 }
@@ -82,7 +93,7 @@
 // Button Group
 .button-row {
     position : absolute;
-    top      : calc(av.$top-header-Height - 41px);
+    top      : calc(var(--top-header-Height) - 41px);
     left     : 32px;
     display  : table-cell;
     max-width: 400px;
@@ -145,8 +156,8 @@
     content                : "";
     display                : block;
     position               : absolute;
-    max-height             : av.$top-header-Height;
-    min-height             : av.$top-header-Height;
+    max-height             : var(--top-header-Height);
+    min-height             : var(--top-header-Height);
     width                  : 100%;
     background-color       : rgba(0, 0, 0, .5);
     -webkit-backdrop-filter: blur(64px) saturate(120%) brightness(80%);
@@ -160,8 +171,8 @@
     display            : block;
     position           : absolute;
     background-size    : cover;
-    max-height         : av.$top-header-Height;
-    min-height         : av.$top-header-Height;
+    max-height         : var(--top-header-Height);
+    min-height         : var(--top-header-Height);
     width              : 100%;
     background-position: 0 -200px;
     height             : 100%;
