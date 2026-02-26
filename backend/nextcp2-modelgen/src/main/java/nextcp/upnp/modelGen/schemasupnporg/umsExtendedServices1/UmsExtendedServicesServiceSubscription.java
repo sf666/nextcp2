@@ -117,20 +117,20 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
                     		anonymousDevicesWriteChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
                         break;
-                    case "AudioUpdateRating":
-                    	try {
-                    		audioUpdateRatingChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[audioUpdateRating] unexpected value : " + stateVar.getValue());
-                    		audioUpdateRatingChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
                     case "PreferEuropeanServer":
                     	try {
                     		preferEuropeanServerChange((Boolean) stateVar.getValue());
                     	} catch (Exception e) {
                     		log.warn("[preferEuropeanServer] unexpected value : " + stateVar.getValue());
                     		preferEuropeanServerChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
+                        break;
+                    case "AudioUpdateRating":
+                    	try {
+                    		audioUpdateRatingChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[audioUpdateRating] unexpected value : " + stateVar.getValue());
+                    		audioUpdateRatingChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
                         break;
                     case "AudioLikesVisibleRoot":
@@ -177,19 +177,19 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
         }
     }    
 
-    private void audioUpdateRatingChange(Boolean value)
-    {
-        for (IUmsExtendedServicesServiceEventListener listener : eventListener)
-        {
-            listener.audioUpdateRatingChange(value);
-        }
-    }    
-
     private void preferEuropeanServerChange(Boolean value)
     {
         for (IUmsExtendedServicesServiceEventListener listener : eventListener)
         {
             listener.preferEuropeanServerChange(value);
+        }
+    }    
+
+    private void audioUpdateRatingChange(Boolean value)
+    {
+        for (IUmsExtendedServicesServiceEventListener listener : eventListener)
+        {
+            listener.audioUpdateRatingChange(value);
         }
     }    
 
