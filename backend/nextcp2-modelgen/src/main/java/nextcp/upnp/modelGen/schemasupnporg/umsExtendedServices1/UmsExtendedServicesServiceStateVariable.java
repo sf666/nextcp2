@@ -10,11 +10,9 @@ public class UmsExtendedServicesServiceStateVariable
 {
 
     public Boolean AnonymousDevicesWrite = null;
-    public String AudioAddictPass = null;
     public Boolean AudioUpdateRating = null;
+    public Boolean PreferEuropeanServer = null;
     public Boolean AudioLikesVisibleRoot = null;
-    public Boolean AudioAddictEurope = null;
     public Boolean UpnpCdsWrite = null;
-    public String AudioAddictUser = null;
 
 }

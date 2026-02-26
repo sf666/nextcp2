@@ -117,15 +117,20 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
                     		anonymousDevicesWriteChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
                         break;
-                    case "AudioAddictPass":
-                        audioAddictPassChange((String) stateVar.getValue());
-                        break;
                     case "AudioUpdateRating":
                     	try {
                     		audioUpdateRatingChange((Boolean) stateVar.getValue());
                     	} catch (Exception e) {
                     		log.warn("[audioUpdateRating] unexpected value : " + stateVar.getValue());
                     		audioUpdateRatingChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
+                        break;
+                    case "PreferEuropeanServer":
+                    	try {
+                    		preferEuropeanServerChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[preferEuropeanServer] unexpected value : " + stateVar.getValue());
+                    		preferEuropeanServerChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
                         break;
                     case "AudioLikesVisibleRoot":
@@ -136,14 +141,6 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
                     		audioLikesVisibleRootChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
                         break;
-                    case "AudioAddictEurope":
-                    	try {
-                    		audioAddictEuropeChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[audioAddictEurope] unexpected value : " + stateVar.getValue());
-                    		audioAddictEuropeChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
                     case "UpnpCdsWrite":
                     	try {
                     		upnpCdsWriteChange((Boolean) stateVar.getValue());
@@ -151,9 +148,6 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
                     		log.warn("[upnpCdsWrite] unexpected value : " + stateVar.getValue());
                     		upnpCdsWriteChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
-                        break;
-                    case "AudioAddictUser":
-                        audioAddictUserChange((String) stateVar.getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -183,19 +177,19 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
         }
     }    
 
-    private void audioAddictPassChange(String value)
-    {
-        for (IUmsExtendedServicesServiceEventListener listener : eventListener)
-        {
-            listener.audioAddictPassChange(value);
-        }
-    }    
-
     private void audioUpdateRatingChange(Boolean value)
     {
         for (IUmsExtendedServicesServiceEventListener listener : eventListener)
         {
             listener.audioUpdateRatingChange(value);
+        }
+    }    
+
+    private void preferEuropeanServerChange(Boolean value)
+    {
+        for (IUmsExtendedServicesServiceEventListener listener : eventListener)
+        {
+            listener.preferEuropeanServerChange(value);
         }
     }    
 
@@ -207,27 +201,11 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
         }
     }    
 
-    private void audioAddictEuropeChange(Boolean value)
-    {
-        for (IUmsExtendedServicesServiceEventListener listener : eventListener)
-        {
-            listener.audioAddictEuropeChange(value);
-        }
-    }    
-
     private void upnpCdsWriteChange(Boolean value)
     {
         for (IUmsExtendedServicesServiceEventListener listener : eventListener)
         {
             listener.upnpCdsWriteChange(value);
-        }
-    }    
-
-    private void audioAddictUserChange(String value)
-    {
-        for (IUmsExtendedServicesServiceEventListener listener : eventListener)
-        {
-            listener.audioAddictUserChange(value);
         }
     }    
 }
