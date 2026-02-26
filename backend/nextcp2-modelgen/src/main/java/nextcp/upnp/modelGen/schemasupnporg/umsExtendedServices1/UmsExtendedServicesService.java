@@ -21,13 +21,17 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumL
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedDiscogsOutput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedDiscogsInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.BackupAudioLikes;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictUser;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictUserInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetPreferEuropeanServer;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetPreferEuropeanServerInput;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.BackupRatings;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWrite;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWriteInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.BackupRatings;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumDiscogs;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumDiscogsInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictPass;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictPassInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RestoreAudioLikes;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumMusicBrainz;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumMusicBrainzInput;
@@ -36,9 +40,9 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAnony
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedMusicBrainz;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedMusicBrainzOutput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedMusicBrainzInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMediaStore;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.DislikeAlbumDiscogs;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.DislikeAlbumDiscogsInput;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMediaStore;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMediaStoreFolder;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMediaStoreFolderInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioUpdateRatingTag;
@@ -157,16 +161,16 @@ public class UmsExtendedServicesService
         backupAudioLikes.executeAction();
     }
 
+    public void setAudioAddictUser(SetAudioAddictUserInput inp)
+    {
+        SetAudioAddictUser setAudioAddictUser = new SetAudioAddictUser(umsExtendedServicesService, inp, upnpService.getControlPoint());
+        setAudioAddictUser.executeAction();
+    }
+
     public void setPreferEuropeanServer(SetPreferEuropeanServerInput inp)
     {
         SetPreferEuropeanServer setPreferEuropeanServer = new SetPreferEuropeanServer(umsExtendedServicesService, inp, upnpService.getControlPoint());
         setPreferEuropeanServer.executeAction();
-    }
-
-    public void backupRatings()
-    {
-        BackupRatings backupRatings = new BackupRatings(umsExtendedServicesService,  upnpService.getControlPoint());
-        backupRatings.executeAction();
     }
 
     public void setUpnpCdsWrite(SetUpnpCdsWriteInput inp)
@@ -175,10 +179,22 @@ public class UmsExtendedServicesService
         setUpnpCdsWrite.executeAction();
     }
 
+    public void backupRatings()
+    {
+        BackupRatings backupRatings = new BackupRatings(umsExtendedServicesService,  upnpService.getControlPoint());
+        backupRatings.executeAction();
+    }
+
     public void likeAlbumDiscogs(LikeAlbumDiscogsInput inp)
     {
         LikeAlbumDiscogs likeAlbumDiscogs = new LikeAlbumDiscogs(umsExtendedServicesService, inp, upnpService.getControlPoint());
         likeAlbumDiscogs.executeAction();
+    }
+
+    public void setAudioAddictPass(SetAudioAddictPassInput inp)
+    {
+        SetAudioAddictPass setAudioAddictPass = new SetAudioAddictPass(umsExtendedServicesService, inp, upnpService.getControlPoint());
+        setAudioAddictPass.executeAction();
     }
 
     public void restoreAudioLikes()
@@ -206,16 +222,16 @@ public class UmsExtendedServicesService
         return res;        
     }
 
-    public void dislikeAlbumDiscogs(DislikeAlbumDiscogsInput inp)
-    {
-        DislikeAlbumDiscogs dislikeAlbumDiscogs = new DislikeAlbumDiscogs(umsExtendedServicesService, inp, upnpService.getControlPoint());
-        dislikeAlbumDiscogs.executeAction();
-    }
-
     public void rescanMediaStore()
     {
         RescanMediaStore rescanMediaStore = new RescanMediaStore(umsExtendedServicesService,  upnpService.getControlPoint());
         rescanMediaStore.executeAction();
+    }
+
+    public void dislikeAlbumDiscogs(DislikeAlbumDiscogsInput inp)
+    {
+        DislikeAlbumDiscogs dislikeAlbumDiscogs = new DislikeAlbumDiscogs(umsExtendedServicesService, inp, upnpService.getControlPoint());
+        dislikeAlbumDiscogs.executeAction();
     }
 
     public void rescanMediaStoreFolder(RescanMediaStoreFolderInput inp)

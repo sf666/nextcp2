@@ -49,15 +49,18 @@ import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.UpdateObjec
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.UmsExtendedServicesService;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.UmsExtendedServicesServiceEventListenerImpl;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.DislikeAlbumInput;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedInput;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedOutput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.DislikeAlbumMusicBrainzInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedMusicBrainzInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedMusicBrainzOutput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumMusicBrainzInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMediaStoreFolderInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAnonymousDevicesWriteInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictEuropeInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictPassInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictUserInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioUpdateRatingTagInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetPreferEuropeanServerInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWriteInput;
 import nextcp.util.BackendException;
 import nextcp.util.UpnpErrorDescriptionHandler;
@@ -159,9 +162,9 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			log.debug("[AudioAddict Config] updating UMS.conf with user & password ...");
 			try {
 				if (config.audioAddictConfig.preferEuropeanServer != null) {
-					SetAudioAddictEuropeInput inp = new SetAudioAddictEuropeInput();
+					SetPreferEuropeanServerInput inp = new SetPreferEuropeanServerInput();
 					log.info("UMS server -> prefer european server : {}", config.audioAddictConfig.preferEuropeanServer);
-					inp.AudioAddictEurope = config.audioAddictConfig.preferEuropeanServer;
+					inp.PreferEuropeanServer = config.audioAddictConfig.preferEuropeanServer;
 					umsServices.setPreferEuropeanServer(inp);
 				} else {
 					log.info("AudioAddict Europe server preference not set. Not updating UMS server.");
@@ -212,9 +215,9 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	@Override
 	public boolean isAlbumLiked(String musicBrainzReleaseId) {
-		IsAlbumLikedInput inp = new IsAlbumLikedInput();
-		inp.MusicBraizReleaseID = musicBrainzReleaseId;
-		IsAlbumLikedOutput out = umsServices.isAlbumLiked(inp);
+		IsAlbumLikedMusicBrainzInput inp = new IsAlbumLikedMusicBrainzInput();
+		inp.MusicBrainzReleaseID = musicBrainzReleaseId;
+		IsAlbumLikedMusicBrainzOutput out = umsServices.isAlbumLikedMusicBrainz(inp);
 		if (out.AlbumLikedValue != null) {
 			return out.AlbumLikedValue;
 		}
@@ -223,16 +226,16 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	@Override
 	public void likeAlbum(String musicBrainzReleaseId) {
-		LikeAlbumInput inp = new LikeAlbumInput();
-		inp.MusicBraizReleaseID = musicBrainzReleaseId;
-		umsServices.likeAlbum(inp);
+		LikeAlbumMusicBrainzInput inp = new LikeAlbumMusicBrainzInput();
+		inp.MusicBrainzReleaseID = musicBrainzReleaseId;
+		umsServices.likeAlbumMusicBrainz(inp);
 	}
 
 	@Override
 	public void dislikeAlbum(String musicBrainzReleaseId) {
-		DislikeAlbumInput inp = new DislikeAlbumInput();
-		inp.MusicBraizReleaseID = musicBrainzReleaseId;
-		umsServices.dislikeAlbum(inp);
+		DislikeAlbumMusicBrainzInput inp = new DislikeAlbumMusicBrainzInput();
+		inp.MusicBrainzReleaseID = musicBrainzReleaseId;
+		umsServices.dislikeAlbumMusicBrainz(inp);
 	}
 
 	@Override

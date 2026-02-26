@@ -134,21 +134,21 @@ public class UmsExtendedServicesServiceEventListenerImpl implements IUmsExtended
         }
     }
     
-    public void preferEuropeanServerChange(Boolean value)
-    {
-        stateVariable.PreferEuropeanServer = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "PreferEuropeanServer", value));
-        }
-    }
-    
     public void audioUpdateRatingChange(Boolean value)
     {
         stateVariable.AudioUpdateRating = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "AudioUpdateRating", value));
+        }
+    }
+    
+    public void preferEuropeanServerChange(Boolean value)
+    {
+        stateVariable.PreferEuropeanServer = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "PreferEuropeanServer", value));
         }
     }
     
