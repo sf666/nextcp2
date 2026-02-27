@@ -1,4 +1,4 @@
-import { ContainerDto, SearchResultDto, ContainerItemDto, SearchRequestDto, MusicItemDto, AudioFormat, MusicBrainzId, TrackTimeDto, TrackInfoDto, SystemInformationDto, MusicItemIdDto, InputSourceDto, TransportServiceStateDto, DeviceDriverState, UpnpAvTransportState, MediaRendererDto, AudioAddictConfig, ServerConfigDto, RendererConfigDto } from './../service/dto.d';
+import { ContainerDto, SearchResultDto, ContainerItemDto, SearchRequestDto, MusicItemDto, AudioFormat, MusicBrainzId, TrackTimeDto, TrackInfoDto, SystemInformationDto, MusicItemIdDto, InputSourceDto, TransportServiceStateDto, DeviceDriverState, UpnpAvTransportState, MediaRendererDto, AudioAddictConfig, ServerConfigDto, RendererConfigDto, DiscogsId } from './../service/dto.d';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -85,6 +85,7 @@ export class DtoGeneratorService {
       genre: '',
       mediaServerUDN: '',
       musicBrainzId: this.emptyMusicBrainzId(),
+      discogsId: this.emptyDiscogsId(),
       numberOfThisDisc: '',
       objectClass: '',
       objectID: '',
@@ -213,6 +214,7 @@ export class DtoGeneratorService {
       title: '',
       genre: '',
       musicBrainzId: this.emptyMusicBrainzId(),
+      discogsId: this.emptyDiscogsId(),
       songId: this.emptySongId(),
       composer: '',
       conductor: ''
@@ -290,6 +292,13 @@ export class DtoGeneratorService {
       ArtistId: '',
       ReleaseTrackId: '',
       WorkId: ''
+    }
+  }
+
+  emptyDiscogsId(): DiscogsId {
+    return {
+      ArtistId: '',
+      ReleaseId: ''
     }
   }
 

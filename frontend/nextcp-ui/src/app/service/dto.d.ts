@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-12-19 10:24:18.
+// Generated using typescript-generator version 3.2.1263 on 2026-02-27 10:41:55.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -137,6 +137,11 @@ export interface DeviceVolumeChanged {
     vol: number;
 }
 
+export interface DiscogsId {
+    ArtistId: string;
+    ReleaseId: string;
+}
+
 export interface FileChangedEventDto {
     type: string;
     path: string;
@@ -256,6 +261,7 @@ export interface MusicItemDto {
     genre: string;
     rating: number;
     musicBrainzId: MusicBrainzId;
+    discogsId: DiscogsId;
 }
 
 export interface MusicItemIdDto {

@@ -35,12 +35,13 @@ public class MusicItemDto
     public String genre;
     public Integer rating;
     public MusicBrainzId musicBrainzId;
+    public DiscogsId discogsId;
 
     public MusicItemDto()
     {
     }
 
-    public MusicItemDto(String mediaServerUDN, String streamingURL, String objectID, String objectClass, String parentId, String refId, MusicItemIdDto songId, String resourceId, String conductor, String composer, String currentTrackMetadata, String creator, String title, String artistName, String numberOfThisDisc, String originalTrackNumber, String album, String date, AudioFormat audioFormat, String albumArtUrl, String genre, Integer rating, MusicBrainzId musicBrainzId)
+    public MusicItemDto(String mediaServerUDN, String streamingURL, String objectID, String objectClass, String parentId, String refId, MusicItemIdDto songId, String resourceId, String conductor, String composer, String currentTrackMetadata, String creator, String title, String artistName, String numberOfThisDisc, String originalTrackNumber, String album, String date, AudioFormat audioFormat, String albumArtUrl, String genre, Integer rating, MusicBrainzId musicBrainzId, DiscogsId discogsId)
     {
         this.mediaServerUDN = mediaServerUDN;
         this.streamingURL = streamingURL;
@@ -65,6 +66,7 @@ public class MusicItemDto
         this.genre = genre;
         this.rating = rating;
         this.musicBrainzId = musicBrainzId;
+        this.discogsId = discogsId;
     }
     
     @Override
@@ -95,6 +97,7 @@ public class MusicItemDto
         sb.append("genre=").append(this.genre).append(", ");
         sb.append("rating=").append(this.rating).append(", ");
         sb.append("musicBrainzId=").append(this.musicBrainzId).append(", ");
+        sb.append("discogsId=").append(this.discogsId).append(", ");
         sb.append("]");
         return sb.toString();
     }
