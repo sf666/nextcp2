@@ -185,7 +185,7 @@ public class MediaServerDevice extends BaseDevice {
 		}
 		// UMS sends the releaseTrackId as releaseId ... maybe we need to refactor
 		String firstMB = null;
-		String firstDiscogs = null;
+		Long firstDiscogs = null;
 		
 		if (musicItemDto.get(0).musicBrainzId != null) {
 			firstMB = musicItemDto.get(0).musicBrainzId.ReleaseTrackId;
@@ -216,12 +216,7 @@ public class MediaServerDevice extends BaseDevice {
 		}
 		if (allSameDiscogs) {
 			log.debug("same discogs release id : {}", firstDiscogs);
-			try {
-				result.discogsReleaseId = Long.parseLong(firstDiscogs);
-			} catch (Exception e) {
-				log.warn("cannot parse discogs release id : " + firstDiscogs, e);
-				result.discogsReleaseId = null;
-			}
+			result.discogsReleaseId = firstDiscogs;
 		}
 		
 		return result;
