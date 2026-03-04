@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2026-02-27 10:41:55.
+// Generated using typescript-generator version 3.2.1263 on 2026-03-04 10:50:32.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -227,6 +227,11 @@ export interface MediaServerDto {
     udn: string;
     friendlyName: string;
     extendedApi: boolean;
+}
+
+export interface MusicAlbumIds {
+    musicBrainzAlbumId: string;
+    discogsReleaseId: number;
 }
 
 export interface MusicBrainzId {
