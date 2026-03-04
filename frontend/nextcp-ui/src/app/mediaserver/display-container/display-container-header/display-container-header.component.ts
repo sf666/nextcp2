@@ -120,7 +120,10 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   private checkLikePossible(): void {
     if (this.currentContainerItem().allTracksSameAlbumIds.discogsReleaseId != undefined || this.currentContainerItem().allTracksSameAlbumIds.musicBrainzAlbumId !== '') {
+      console.log("like possible for container : " + this.currentContainer.title);
       this.likePossible.set(true);
+    } else {
+      console.log("like not possible for container : " + this.currentContainer.title);
     }
   }
 

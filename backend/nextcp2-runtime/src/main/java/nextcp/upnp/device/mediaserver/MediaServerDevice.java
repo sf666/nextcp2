@@ -3,6 +3,7 @@ package nextcp.upnp.device.mediaserver;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.support.model.DIDLContent;
 import org.jupnp.support.model.DIDLObject.Property.UPNP;
@@ -166,9 +167,9 @@ public class MediaServerDevice extends BaseDevice {
 		}
 		result.currentContainer = curContainer;
 		if (didl != null) {
-			result.allTracksSameAlbumIds = allSongsSameAlbum(result.musicItemDto);
 			addContainerObjects(result, didl);
 			addItemObjects(result.musicItemDto, didl);
+			result.allTracksSameAlbumIds = allSongsSameAlbum(result.musicItemDto);
 		} else {
 			log.warn("DIDL is null");
 		}
@@ -179,14 +180,12 @@ public class MediaServerDevice extends BaseDevice {
 	private MusicAlbumIds allSongsSameAlbum(List<MusicItemDto> musicItemDto) {
 		MusicAlbumIds result = new MusicAlbumIds();
 		if (musicItemDto.size() < 1) {
+			log.debug("allSongsSameAlbum: no music items found ... ");
 			return result;
 		}
 		// UMS sends the releaseTrackId as releaseId ... maybe we need to refactor
 		String firstMB = null;
 		String firstDiscogs = null;
-		
-		boolean allSameMB = firstMB != null;
-		boolean allSameDiscogs = firstDiscogs != null;
 		
 		if (musicItemDto.get(0).musicBrainzId != null) {
 			firstMB = musicItemDto.get(0).musicBrainzId.ReleaseTrackId;
@@ -194,6 +193,9 @@ public class MediaServerDevice extends BaseDevice {
 		if (musicItemDto.get(0).discogsId != null) {
 			firstDiscogs = musicItemDto.get(0).discogsId.ReleaseId;
 		}
+
+		boolean allSameMB = !StringUtils.isAllBlank(firstMB);
+		boolean allSameDiscogs = (firstDiscogs != null);
 
 		for (MusicItemDto item : musicItemDto) {
 			if (allSameMB && item.musicBrainzId != null && item.musicBrainzId.ReleaseTrackId != null) {
