@@ -302,6 +302,10 @@ MusicItemIdDto:
    objectID: String
 
 
+MusicAlbumIds:
+   musicBrainzAlbumId: String
+   discogsReleaseId: Long
+   
 MusicItemDto:
    mediaServerUDN: String
    streamingURL: String
