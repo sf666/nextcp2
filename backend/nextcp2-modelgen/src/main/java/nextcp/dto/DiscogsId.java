@@ -13,13 +13,13 @@ public class DiscogsId
 {
 
     public String ArtistId;
-    public String ReleaseId;
+    public Long ReleaseId;
 
     public DiscogsId()
     {
     }
 
-    public DiscogsId(String ArtistId, String ReleaseId)
+    public DiscogsId(String ArtistId, Long ReleaseId)
     {
         this.ArtistId = ArtistId;
         this.ReleaseId = ReleaseId;

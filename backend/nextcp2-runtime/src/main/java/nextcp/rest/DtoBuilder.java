@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.w3c.dom.Node;
 import nextcp.dto.AudioFormat;
 import nextcp.dto.ContainerDto;
+import nextcp.dto.DiscogsId;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.MediaServerDto;
 import nextcp.dto.MusicBrainzId;
@@ -321,7 +322,13 @@ public class DtoBuilder
         //
         MusicBrainzId mb = new MusicBrainzId();
         itemDto.musicBrainzId = mb;
+        DiscogsId discogsId = new DiscogsId();
+        itemDto.discogsId = discogsId;
 
+        
+        // 
+        // tags given by MPD server
+        // 
         Optional<DescMeta<?>> descMetadata = item.getDescMetadata().stream().filter(n -> n.getType() != null && n.getType().equalsIgnoreCase("mpd-tags")).findFirst();
         if (descMetadata.isPresent())
         {
@@ -380,6 +387,14 @@ public class DtoBuilder
                     case "musicbrainzreleaseid":
                         mb.ReleaseTrackId = getTextAndCheckForNull(n);
                         log.debug("musicbrainzreleaseid : " + mb.ReleaseTrackId);
+                        break;
+                    case "discogsreleaseid":
+                    	try {
+                    		itemDto.discogsId.ReleaseId = Long.parseLong(getTextAndCheckForNull(n));
+                    		log.debug("discogsreleaseid : " + mb.ReleaseTrackId);
+                    	} catch (Exception e) {
+                    		log.warn("cannot parse discogs release id : {}", getTextAndCheckForNull(n), e);
+                    	}
                         break;
                     case "numberofthisdisc":
                         itemDto.numberOfThisDisc = getTextAndCheckForNull(n);

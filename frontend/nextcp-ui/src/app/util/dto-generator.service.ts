@@ -299,7 +299,7 @@ export class DtoGeneratorService {
   emptyDiscogsId(): DiscogsId {
     return {
       ArtistId: '',
-      ReleaseId: ''
+      ReleaseId: undefined
     }
   }
 

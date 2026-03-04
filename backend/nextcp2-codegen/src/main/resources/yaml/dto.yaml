@@ -344,7 +344,7 @@ MusicBrainzId:
 
 DiscogsId:
    ArtistId: String
-   ReleaseId: String
+   ReleaseId: Long
    
 RendererPlaylist:
    udn: String
