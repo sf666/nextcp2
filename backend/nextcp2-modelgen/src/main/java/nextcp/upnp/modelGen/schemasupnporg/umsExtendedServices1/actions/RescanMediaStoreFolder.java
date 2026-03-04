@@ -29,6 +29,8 @@ public class RescanMediaStoreFolder extends ActionCallback
 		
         if (input.ObjectID != null) {
 	        getActionInvocation().setInput("ObjectID", input.ObjectID);
+		} else {
+    	    getActionInvocation().setInput("ObjectID", null);
 		}
     }
 

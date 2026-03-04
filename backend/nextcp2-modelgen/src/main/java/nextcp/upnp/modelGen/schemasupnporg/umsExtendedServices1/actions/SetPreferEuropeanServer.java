@@ -29,6 +29,8 @@ public class SetPreferEuropeanServer extends ActionCallback
 		
         if (input.PreferEuropeanServer != null) {
         	getActionInvocation().setInput("PreferEuropeanServer", input.PreferEuropeanServer);
+		} else {
+    	    getActionInvocation().setInput("PreferEuropeanServer", null);
 		}
     }
 

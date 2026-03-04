@@ -29,6 +29,8 @@ public class SetAudioAddictPass extends ActionCallback
 		
         if (input.AudioAddictPass != null) {
 	        getActionInvocation().setInput("AudioAddictPass", input.AudioAddictPass);
+		} else {
+    	    getActionInvocation().setInput("AudioAddictPass", null);
 		}
     }
 

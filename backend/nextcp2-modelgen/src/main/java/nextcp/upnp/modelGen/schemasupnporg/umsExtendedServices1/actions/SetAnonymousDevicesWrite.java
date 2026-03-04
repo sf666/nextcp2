@@ -29,6 +29,8 @@ public class SetAnonymousDevicesWrite extends ActionCallback
 		
         if (input.AnonymousDevicesWrite != null) {
         	getActionInvocation().setInput("AnonymousDevicesWrite", input.AnonymousDevicesWrite);
+		} else {
+    	    getActionInvocation().setInput("AnonymousDevicesWrite", null);
 		}
     }
 

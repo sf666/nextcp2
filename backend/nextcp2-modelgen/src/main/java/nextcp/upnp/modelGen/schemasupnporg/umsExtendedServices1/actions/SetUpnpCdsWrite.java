@@ -29,6 +29,8 @@ public class SetUpnpCdsWrite extends ActionCallback
 		
         if (input.UpnpCdsWrite != null) {
         	getActionInvocation().setInput("UpnpCdsWrite", input.UpnpCdsWrite);
+		} else {
+    	    getActionInvocation().setInput("UpnpCdsWrite", null);
 		}
     }
 

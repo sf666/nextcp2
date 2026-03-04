@@ -51,6 +51,8 @@ public class ${className} extends ActionCallback
   <#else>
         	throw new RuntimeException("Please update file action.ftl to support datatype : ${var.upnpDataType}");
   </#if>        
+		} else {
+    	    getActionInvocation().setInput("${var.name}", null);
 		}
 </#list>
     }

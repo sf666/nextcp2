@@ -29,6 +29,8 @@ public class SetAudioLikesVisibleRoot extends ActionCallback
 		
         if (input.AudioLikesVisibleRoot != null) {
         	getActionInvocation().setInput("AudioLikesVisibleRoot", input.AudioLikesVisibleRoot);
+		} else {
+    	    getActionInvocation().setInput("AudioLikesVisibleRoot", null);
 		}
     }
 

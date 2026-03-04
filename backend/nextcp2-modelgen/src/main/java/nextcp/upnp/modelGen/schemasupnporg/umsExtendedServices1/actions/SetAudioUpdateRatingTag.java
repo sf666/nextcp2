@@ -29,6 +29,8 @@ public class SetAudioUpdateRatingTag extends ActionCallback
 		
         if (input.AudioUpdateRating != null) {
         	getActionInvocation().setInput("AudioUpdateRating", input.AudioUpdateRating);
+		} else {
+    	    getActionInvocation().setInput("AudioUpdateRating", null);
 		}
     }
 

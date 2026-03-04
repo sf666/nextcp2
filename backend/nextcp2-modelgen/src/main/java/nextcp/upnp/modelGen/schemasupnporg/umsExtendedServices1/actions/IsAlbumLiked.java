@@ -29,9 +29,13 @@ public class IsAlbumLiked extends ActionCallback
 		
         if (input.MusicBrainzId != null) {
 	        getActionInvocation().setInput("MusicBrainzId", input.MusicBrainzId);
+		} else {
+    	    getActionInvocation().setInput("MusicBrainzId", null);
 		}
         if (input.DiscogsId != null) {
     	    getActionInvocation().setInput("DiscogsId", new UnsignedIntegerFourBytes(input.DiscogsId));
+		} else {
+    	    getActionInvocation().setInput("DiscogsId", null);
 		}
     }
 
