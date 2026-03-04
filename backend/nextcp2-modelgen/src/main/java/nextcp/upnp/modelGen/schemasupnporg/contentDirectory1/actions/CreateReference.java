@@ -26,9 +26,17 @@ public class CreateReference extends ActionCallback
     public CreateReference(Service service, CreateReferenceInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("CreateReference"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("ContainerID", input.ContainerID);
-        getActionInvocation().setInput("ObjectID", input.ObjectID);
+		
+        if (input.ContainerID != null) {
+	        getActionInvocation().setInput("ContainerID", input.ContainerID);
+		} else {
+    	    getActionInvocation().setInput("ContainerID", null);
+		}
+        if (input.ObjectID != null) {
+	        getActionInvocation().setInput("ObjectID", input.ObjectID);
+		} else {
+    	    getActionInvocation().setInput("ObjectID", null);
+		}
     }
 
     public CreateReferenceOutput executeAction()

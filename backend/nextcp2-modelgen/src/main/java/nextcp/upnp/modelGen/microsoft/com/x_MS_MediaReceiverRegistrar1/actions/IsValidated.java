@@ -26,8 +26,12 @@ public class IsValidated extends ActionCallback
     public IsValidated(Service service, IsValidatedInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("IsValidated"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("DeviceID", input.DeviceID);
+		
+        if (input.DeviceID != null) {
+	        getActionInvocation().setInput("DeviceID", input.DeviceID);
+		} else {
+    	    getActionInvocation().setInput("DeviceID", null);
+		}
     }
 
     public IsValidatedOutput executeAction()

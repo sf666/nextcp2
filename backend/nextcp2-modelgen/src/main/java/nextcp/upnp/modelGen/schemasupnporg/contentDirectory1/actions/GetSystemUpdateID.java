@@ -26,7 +26,7 @@ public class GetSystemUpdateID extends ActionCallback
     public GetSystemUpdateID(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetSystemUpdateID"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetSystemUpdateIDOutput executeAction()

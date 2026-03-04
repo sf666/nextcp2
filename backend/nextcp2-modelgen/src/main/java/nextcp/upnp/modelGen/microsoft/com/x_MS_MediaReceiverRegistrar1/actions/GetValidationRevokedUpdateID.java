@@ -26,7 +26,7 @@ public class GetValidationRevokedUpdateID extends ActionCallback
     public GetValidationRevokedUpdateID(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetValidationRevokedUpdateID"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetValidationRevokedUpdateIDOutput executeAction()

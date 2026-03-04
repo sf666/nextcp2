@@ -26,7 +26,7 @@ public class GetCurrentConnectionIDs extends ActionCallback
     public GetCurrentConnectionIDs(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetCurrentConnectionIDs"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetCurrentConnectionIDsOutput executeAction()

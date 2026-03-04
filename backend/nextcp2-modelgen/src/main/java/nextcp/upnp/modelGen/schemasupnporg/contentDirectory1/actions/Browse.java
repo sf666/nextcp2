@@ -26,13 +26,37 @@ public class Browse extends ActionCallback
     public Browse(Service service, BrowseInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Browse"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("ObjectID", input.ObjectID);
-        getActionInvocation().setInput("BrowseFlag", input.BrowseFlag);
-        getActionInvocation().setInput("Filter", input.Filter);
-        getActionInvocation().setInput("StartingIndex", new UnsignedIntegerFourBytes(input.StartingIndex));
-        getActionInvocation().setInput("RequestedCount", new UnsignedIntegerFourBytes(input.RequestedCount));
-        getActionInvocation().setInput("SortCriteria", input.SortCriteria);
+		
+        if (input.ObjectID != null) {
+	        getActionInvocation().setInput("ObjectID", input.ObjectID);
+		} else {
+    	    getActionInvocation().setInput("ObjectID", null);
+		}
+        if (input.BrowseFlag != null) {
+	        getActionInvocation().setInput("BrowseFlag", input.BrowseFlag);
+		} else {
+    	    getActionInvocation().setInput("BrowseFlag", null);
+		}
+        if (input.Filter != null) {
+	        getActionInvocation().setInput("Filter", input.Filter);
+		} else {
+    	    getActionInvocation().setInput("Filter", null);
+		}
+        if (input.StartingIndex != null) {
+    	    getActionInvocation().setInput("StartingIndex", new UnsignedIntegerFourBytes(input.StartingIndex));
+		} else {
+    	    getActionInvocation().setInput("StartingIndex", null);
+		}
+        if (input.RequestedCount != null) {
+    	    getActionInvocation().setInput("RequestedCount", new UnsignedIntegerFourBytes(input.RequestedCount));
+		} else {
+    	    getActionInvocation().setInput("RequestedCount", null);
+		}
+        if (input.SortCriteria != null) {
+	        getActionInvocation().setInput("SortCriteria", input.SortCriteria);
+		} else {
+    	    getActionInvocation().setInput("SortCriteria", null);
+		}
     }
 
     public BrowseOutput executeAction()

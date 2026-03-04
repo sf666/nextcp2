@@ -26,8 +26,12 @@ public class GetCurrentConnectionInfo extends ActionCallback
     public GetCurrentConnectionInfo(Service service, GetCurrentConnectionInfoInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetCurrentConnectionInfo"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("ConnectionID", new IntegerDatatype(input.ConnectionID));
+		
+        if (input.ConnectionID != null) {
+	        getActionInvocation().setInput("ConnectionID", new IntegerDatatype(input.ConnectionID));
+		} else {
+    	    getActionInvocation().setInput("ConnectionID", null);
+		}
     }
 
     public GetCurrentConnectionInfoOutput executeAction()

@@ -26,8 +26,12 @@ public class DestroyObject extends ActionCallback
     public DestroyObject(Service service, DestroyObjectInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("DestroyObject"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("ObjectID", input.ObjectID);
+		
+        if (input.ObjectID != null) {
+	        getActionInvocation().setInput("ObjectID", input.ObjectID);
+		} else {
+    	    getActionInvocation().setInput("ObjectID", null);
+		}
     }
 
     public void executeAction()

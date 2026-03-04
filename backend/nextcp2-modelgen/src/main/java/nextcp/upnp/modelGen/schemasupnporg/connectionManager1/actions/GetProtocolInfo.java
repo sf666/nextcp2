@@ -26,7 +26,7 @@ public class GetProtocolInfo extends ActionCallback
     public GetProtocolInfo(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetProtocolInfo"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetProtocolInfoOutput executeAction()

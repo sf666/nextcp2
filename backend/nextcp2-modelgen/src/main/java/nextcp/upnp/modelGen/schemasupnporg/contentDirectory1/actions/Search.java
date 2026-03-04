@@ -26,13 +26,37 @@ public class Search extends ActionCallback
     public Search(Service service, SearchInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Search"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("ContainerID", input.ContainerID);
-        getActionInvocation().setInput("SearchCriteria", input.SearchCriteria);
-        getActionInvocation().setInput("Filter", input.Filter);
-        getActionInvocation().setInput("StartingIndex", new UnsignedIntegerFourBytes(input.StartingIndex));
-        getActionInvocation().setInput("RequestedCount", new UnsignedIntegerFourBytes(input.RequestedCount));
-        getActionInvocation().setInput("SortCriteria", input.SortCriteria);
+		
+        if (input.ContainerID != null) {
+	        getActionInvocation().setInput("ContainerID", input.ContainerID);
+		} else {
+    	    getActionInvocation().setInput("ContainerID", null);
+		}
+        if (input.SearchCriteria != null) {
+	        getActionInvocation().setInput("SearchCriteria", input.SearchCriteria);
+		} else {
+    	    getActionInvocation().setInput("SearchCriteria", null);
+		}
+        if (input.Filter != null) {
+	        getActionInvocation().setInput("Filter", input.Filter);
+		} else {
+    	    getActionInvocation().setInput("Filter", null);
+		}
+        if (input.StartingIndex != null) {
+    	    getActionInvocation().setInput("StartingIndex", new UnsignedIntegerFourBytes(input.StartingIndex));
+		} else {
+    	    getActionInvocation().setInput("StartingIndex", null);
+		}
+        if (input.RequestedCount != null) {
+    	    getActionInvocation().setInput("RequestedCount", new UnsignedIntegerFourBytes(input.RequestedCount));
+		} else {
+    	    getActionInvocation().setInput("RequestedCount", null);
+		}
+        if (input.SortCriteria != null) {
+	        getActionInvocation().setInput("SortCriteria", input.SortCriteria);
+		} else {
+    	    getActionInvocation().setInput("SortCriteria", null);
+		}
     }
 
     public SearchOutput executeAction()

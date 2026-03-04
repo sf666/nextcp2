@@ -26,8 +26,12 @@ public class IsAuthorized extends ActionCallback
     public IsAuthorized(Service service, IsAuthorizedInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("IsAuthorized"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("DeviceID", input.DeviceID);
+		
+        if (input.DeviceID != null) {
+	        getActionInvocation().setInput("DeviceID", input.DeviceID);
+		} else {
+    	    getActionInvocation().setInput("DeviceID", null);
+		}
     }
 
     public IsAuthorizedOutput executeAction()

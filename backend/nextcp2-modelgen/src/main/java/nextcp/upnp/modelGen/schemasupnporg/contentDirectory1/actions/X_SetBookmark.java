@@ -26,11 +26,27 @@ public class X_SetBookmark extends ActionCallback
     public X_SetBookmark(Service service, X_SetBookmarkInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("X_SetBookmark"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("ObjectID", input.ObjectID);
-        getActionInvocation().setInput("PosSecond", new UnsignedIntegerFourBytes(input.PosSecond));
-        getActionInvocation().setInput("CategoryType", input.CategoryType);
-        getActionInvocation().setInput("RID", input.RID);
+		
+        if (input.ObjectID != null) {
+	        getActionInvocation().setInput("ObjectID", input.ObjectID);
+		} else {
+    	    getActionInvocation().setInput("ObjectID", null);
+		}
+        if (input.PosSecond != null) {
+    	    getActionInvocation().setInput("PosSecond", new UnsignedIntegerFourBytes(input.PosSecond));
+		} else {
+    	    getActionInvocation().setInput("PosSecond", null);
+		}
+        if (input.CategoryType != null) {
+	        getActionInvocation().setInput("CategoryType", input.CategoryType);
+		} else {
+    	    getActionInvocation().setInput("CategoryType", null);
+		}
+        if (input.RID != null) {
+	        getActionInvocation().setInput("RID", input.RID);
+		} else {
+    	    getActionInvocation().setInput("RID", null);
+		}
     }
 
     public void executeAction()

@@ -26,10 +26,22 @@ public class UpdateObject extends ActionCallback
     public UpdateObject(Service service, UpdateObjectInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("UpdateObject"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("ObjectID", input.ObjectID);
-        getActionInvocation().setInput("CurrentTagValue", input.CurrentTagValue);
-        getActionInvocation().setInput("NewTagValue", input.NewTagValue);
+		
+        if (input.ObjectID != null) {
+	        getActionInvocation().setInput("ObjectID", input.ObjectID);
+		} else {
+    	    getActionInvocation().setInput("ObjectID", null);
+		}
+        if (input.CurrentTagValue != null) {
+	        getActionInvocation().setInput("CurrentTagValue", input.CurrentTagValue);
+		} else {
+    	    getActionInvocation().setInput("CurrentTagValue", null);
+		}
+        if (input.NewTagValue != null) {
+	        getActionInvocation().setInput("NewTagValue", input.NewTagValue);
+		} else {
+    	    getActionInvocation().setInput("NewTagValue", null);
+		}
     }
 
     public void executeAction()

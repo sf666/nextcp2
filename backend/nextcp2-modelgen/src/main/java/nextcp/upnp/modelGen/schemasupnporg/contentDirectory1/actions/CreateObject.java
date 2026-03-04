@@ -26,9 +26,17 @@ public class CreateObject extends ActionCallback
     public CreateObject(Service service, CreateObjectInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("CreateObject"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("ContainerID", input.ContainerID);
-        getActionInvocation().setInput("Elements", input.Elements);
+		
+        if (input.ContainerID != null) {
+	        getActionInvocation().setInput("ContainerID", input.ContainerID);
+		} else {
+    	    getActionInvocation().setInput("ContainerID", null);
+		}
+        if (input.Elements != null) {
+	        getActionInvocation().setInput("Elements", input.Elements);
+		} else {
+    	    getActionInvocation().setInput("Elements", null);
+		}
     }
 
     public CreateObjectOutput executeAction()

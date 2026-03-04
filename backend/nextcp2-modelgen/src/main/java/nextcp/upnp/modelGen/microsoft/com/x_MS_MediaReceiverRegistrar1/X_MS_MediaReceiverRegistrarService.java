@@ -16,11 +16,11 @@ import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.GetAuthorizationGrantedUpdateID;
 import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.GetAuthorizationGrantedUpdateIDOutput;
+import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.GetValidationSucceededUpdateID;
+import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.GetValidationSucceededUpdateIDOutput;
 import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.IsValidated;
 import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.IsValidatedOutput;
 import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.IsValidatedInput;
-import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.GetValidationSucceededUpdateID;
-import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.GetValidationSucceededUpdateIDOutput;
 import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.GetAuthorizationDeniedUpdateID;
 import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.GetAuthorizationDeniedUpdateIDOutput;
 import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.GetValidationRevokedUpdateID;
@@ -125,17 +125,17 @@ public class X_MS_MediaReceiverRegistrarService
         return res;        
     }
 
-    public IsValidatedOutput isValidated(IsValidatedInput inp)
-    {
-        IsValidated isValidated = new IsValidated(x_MS_MediaReceiverRegistrarService, inp, upnpService.getControlPoint());
-        IsValidatedOutput res = isValidated.executeAction();
-        return res;        
-    }
-
     public GetValidationSucceededUpdateIDOutput getValidationSucceededUpdateID()
     {
         GetValidationSucceededUpdateID getValidationSucceededUpdateID = new GetValidationSucceededUpdateID(x_MS_MediaReceiverRegistrarService,  upnpService.getControlPoint());
         GetValidationSucceededUpdateIDOutput res = getValidationSucceededUpdateID.executeAction();
+        return res;        
+    }
+
+    public IsValidatedOutput isValidated(IsValidatedInput inp)
+    {
+        IsValidated isValidated = new IsValidated(x_MS_MediaReceiverRegistrarService, inp, upnpService.getControlPoint());
+        IsValidatedOutput res = isValidated.executeAction();
         return res;        
     }
 

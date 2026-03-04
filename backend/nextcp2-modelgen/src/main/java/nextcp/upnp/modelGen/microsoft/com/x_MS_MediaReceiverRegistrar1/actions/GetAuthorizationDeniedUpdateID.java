@@ -26,7 +26,7 @@ public class GetAuthorizationDeniedUpdateID extends ActionCallback
     public GetAuthorizationDeniedUpdateID(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetAuthorizationDeniedUpdateID"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetAuthorizationDeniedUpdateIDOutput executeAction()

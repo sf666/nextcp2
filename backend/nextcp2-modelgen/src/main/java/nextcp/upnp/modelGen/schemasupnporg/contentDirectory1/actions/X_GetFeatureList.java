@@ -26,7 +26,7 @@ public class X_GetFeatureList extends ActionCallback
     public X_GetFeatureList(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("X_GetFeatureList"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public X_GetFeatureListOutput executeAction()

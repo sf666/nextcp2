@@ -27,8 +27,12 @@ public class RegisterDevice extends ActionCallback
     public RegisterDevice(Service service, RegisterDeviceInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("RegisterDevice"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("RegistrationReqMsg", b64.getString(input.RegistrationReqMsg));
+		
+        if (input.RegistrationReqMsg != null) {
+    	    getActionInvocation().setInput("RegistrationReqMsg", b64.getString(input.RegistrationReqMsg));
+		} else {
+    	    getActionInvocation().setInput("RegistrationReqMsg", null);
+		}
     }
 
     public RegisterDeviceOutput executeAction()

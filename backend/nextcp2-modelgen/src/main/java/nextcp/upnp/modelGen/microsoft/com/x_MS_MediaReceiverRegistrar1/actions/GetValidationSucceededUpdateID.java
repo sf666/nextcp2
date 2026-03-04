@@ -26,7 +26,7 @@ public class GetValidationSucceededUpdateID extends ActionCallback
     public GetValidationSucceededUpdateID(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetValidationSucceededUpdateID"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetValidationSucceededUpdateIDOutput executeAction()

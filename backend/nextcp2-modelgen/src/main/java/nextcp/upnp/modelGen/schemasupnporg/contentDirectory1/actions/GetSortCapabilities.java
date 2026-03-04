@@ -26,7 +26,7 @@ public class GetSortCapabilities extends ActionCallback
     public GetSortCapabilities(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetSortCapabilities"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetSortCapabilitiesOutput executeAction()

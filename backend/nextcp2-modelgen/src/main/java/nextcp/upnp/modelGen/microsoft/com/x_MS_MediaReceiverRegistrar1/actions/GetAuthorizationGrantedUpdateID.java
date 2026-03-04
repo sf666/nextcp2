@@ -26,7 +26,7 @@ public class GetAuthorizationGrantedUpdateID extends ActionCallback
     public GetAuthorizationGrantedUpdateID(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetAuthorizationGrantedUpdateID"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetAuthorizationGrantedUpdateIDOutput executeAction()
