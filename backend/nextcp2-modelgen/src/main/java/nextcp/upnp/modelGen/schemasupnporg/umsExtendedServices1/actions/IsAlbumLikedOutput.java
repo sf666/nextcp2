@@ -6,9 +6,9 @@ package nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions;
  * Template: actionParam.ftl
  *  
  */
-public class IsAlbumLikedMusicBrainzInput
+public class IsAlbumLikedOutput
 {
 
-    public String MusicBrainzReleaseID = null;
+    public Boolean AlbumLikedValue = null;
 
 }

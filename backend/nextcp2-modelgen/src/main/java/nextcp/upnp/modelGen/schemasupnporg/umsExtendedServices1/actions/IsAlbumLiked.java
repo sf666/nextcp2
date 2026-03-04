@@ -18,23 +18,24 @@ import nextcp.upnp.NextcpClientInfo;
  * Template: action.ftl
  *  
  */
-public class IsAlbumLikedMusicBrainz extends ActionCallback
+public class IsAlbumLiked extends ActionCallback
 {
-    private static Logger log = LoggerFactory.getLogger(IsAlbumLikedMusicBrainz.class.getName());
+    private static Logger log = LoggerFactory.getLogger(IsAlbumLiked.class.getName());
     private ActionInvocation<?> invocation;
 
-    public IsAlbumLikedMusicBrainz(Service service, IsAlbumLikedMusicBrainzInput input, ControlPoint cp)
+    public IsAlbumLiked(Service service, IsAlbumLikedInput input, ControlPoint cp)
     {
-        super(new ActionInvocation(service.getAction("IsAlbumLikedMusicBrainz"), new NextcpClientInfo()), cp);
+        super(new ActionInvocation(service.getAction("IsAlbumLiked"), new NextcpClientInfo()), cp);
 
-        getActionInvocation().setInput("MusicBrainzReleaseID", input.MusicBrainzReleaseID);
+        getActionInvocation().setInput("MusicBrainzId", input.MusicBrainzId);
+        getActionInvocation().setInput("DiscogsId", new UnsignedIntegerFourBytes(input.DiscogsId));
     }
 
-    public IsAlbumLikedMusicBrainzOutput executeAction()
+    public IsAlbumLikedOutput executeAction()
     {
         invocation = execute();
 
-        IsAlbumLikedMusicBrainzOutput result = new IsAlbumLikedMusicBrainzOutput();
+        IsAlbumLikedOutput result = new IsAlbumLikedOutput();
 
         BooleanDatatype data_AlbumLikedValue = new BooleanDatatype();
         result.AlbumLikedValue = data_AlbumLikedValue.valueOf(invocation.getOutput("AlbumLikedValue").getValue().toString());

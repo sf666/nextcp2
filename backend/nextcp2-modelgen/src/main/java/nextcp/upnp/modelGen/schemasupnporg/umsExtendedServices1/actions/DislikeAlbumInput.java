@@ -6,9 +6,10 @@ package nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions;
  * Template: actionParam.ftl
  *  
  */
-public class IsAlbumLikedDiscogsInput
+public class DislikeAlbumInput
 {
 
-    public String DiscogsReleaseID = null;
+    public String MusicBrainzId = null;
+    public Long DiscogsId = null;
 
 }

@@ -18,16 +18,17 @@ import nextcp.upnp.NextcpClientInfo;
  * Template: action.ftl
  *  
  */
-public class LikeAlbumDiscogs extends ActionCallback
+public class LikeAlbum extends ActionCallback
 {
-    private static Logger log = LoggerFactory.getLogger(LikeAlbumDiscogs.class.getName());
+    private static Logger log = LoggerFactory.getLogger(LikeAlbum.class.getName());
     private ActionInvocation<?> invocation;
 
-    public LikeAlbumDiscogs(Service service, LikeAlbumDiscogsInput input, ControlPoint cp)
+    public LikeAlbum(Service service, LikeAlbumInput input, ControlPoint cp)
     {
-        super(new ActionInvocation(service.getAction("LikeAlbumDiscogs"), new NextcpClientInfo()), cp);
+        super(new ActionInvocation(service.getAction("LikeAlbum"), new NextcpClientInfo()), cp);
 
-        getActionInvocation().setInput("DiscogsReleaseID", input.DiscogsReleaseID);
+        getActionInvocation().setInput("MusicBrainzId", input.MusicBrainzId);
+        getActionInvocation().setInput("DiscogsId", new UnsignedIntegerFourBytes(input.DiscogsId));
     }
 
     public void executeAction()
