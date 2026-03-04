@@ -32,6 +32,7 @@ import nextcp.dto.Config;
 import nextcp.dto.ContainerDto;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MediaServerDto;
+import nextcp.dto.MusicAlbumIds;
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.UpdateAlbumArtUriRequest;
@@ -48,10 +49,10 @@ import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.DestroyObje
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.UpdateObjectInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.UmsExtendedServicesService;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.UmsExtendedServicesServiceEventListenerImpl;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.DislikeAlbumMusicBrainzInput;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedMusicBrainzInput;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedMusicBrainzOutput;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumMusicBrainzInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.DislikeAlbumInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedOutput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMediaStoreFolderInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAnonymousDevicesWriteInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictPassInput;
@@ -211,10 +212,12 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	}
 
 	@Override
-	public boolean isAlbumLiked(String musicBrainzReleaseId) {
-		IsAlbumLikedMusicBrainzInput inp = new IsAlbumLikedMusicBrainzInput();
-		inp.MusicBrainzReleaseID = musicBrainzReleaseId;
-		IsAlbumLikedMusicBrainzOutput out = umsServices.isAlbumLikedMusicBrainz(inp);
+	public boolean isAlbumLiked(MusicAlbumIds albumIds) {
+		IsAlbumLikedInput inp = new IsAlbumLikedInput();
+		inp.MusicBrainzId = albumIds.musicBrainzAlbumId;
+		inp.DiscogsId = albumIds.discogsReleaseId;
+		
+		IsAlbumLikedOutput out = umsServices.isAlbumLiked(inp);
 		if (out.AlbumLikedValue != null) {
 			return out.AlbumLikedValue;
 		}
@@ -222,17 +225,19 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	}
 
 	@Override
-	public void likeAlbum(String musicBrainzReleaseId) {
-		LikeAlbumMusicBrainzInput inp = new LikeAlbumMusicBrainzInput();
-		inp.MusicBrainzReleaseID = musicBrainzReleaseId;
-		umsServices.likeAlbumMusicBrainz(inp);
+	public void likeAlbum(MusicAlbumIds albumIds) {
+		LikeAlbumInput inp = new LikeAlbumInput();
+		inp.MusicBrainzId = albumIds.musicBrainzAlbumId;
+		inp.DiscogsId = albumIds.discogsReleaseId;
+		umsServices.likeAlbum(inp);
 	}
 
 	@Override
-	public void dislikeAlbum(String musicBrainzReleaseId) {
-		DislikeAlbumMusicBrainzInput inp = new DislikeAlbumMusicBrainzInput();
-		inp.MusicBrainzReleaseID = musicBrainzReleaseId;
-		umsServices.dislikeAlbumMusicBrainz(inp);
+	public void dislikeAlbum(MusicAlbumIds albumIds) {
+		DislikeAlbumInput inp = new DislikeAlbumInput();
+		inp.MusicBrainzId = albumIds.musicBrainzAlbumId;
+		inp.DiscogsId = albumIds.discogsReleaseId;
+		umsServices.dislikeAlbum(inp);
 	}
 
 	@Override

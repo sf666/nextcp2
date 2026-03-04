@@ -26,7 +26,7 @@ public class RestoreRatings extends ActionCallback
     public RestoreRatings(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("RestoreRatings"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public void executeAction()

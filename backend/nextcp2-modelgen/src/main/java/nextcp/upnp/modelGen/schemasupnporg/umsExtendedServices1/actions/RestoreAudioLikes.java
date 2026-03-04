@@ -26,7 +26,7 @@ public class RestoreAudioLikes extends ActionCallback
     public RestoreAudioLikes(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("RestoreAudioLikes"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public void executeAction()

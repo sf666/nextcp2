@@ -234,6 +234,7 @@ ContainerItemDto:
    albumDto: List<ContainerDto>
    musicItemDto: List<MusicItemDto>
    minimServerSupportTags: List<ContainerDto>
+   allTracksSameAlbumIds: MusicAlbumIds
    totalMatches: Long
    resourceId: String
    

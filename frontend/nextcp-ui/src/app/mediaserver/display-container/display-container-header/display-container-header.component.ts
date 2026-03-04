@@ -1,5 +1,5 @@
 import { CdsBrowsePathService } from 'src/app/util/cds-browse-path.service';
-import { ContainerDto } from './../../../service/dto.d';
+import { ContainerDto, ContainerItemDto, MusicAlbumIds } from './../../../service/dto.d';
 import {
   Component,
   OnInit,
@@ -47,7 +47,7 @@ import { DisplayHeaderOptionsComponent } from '../../popup/display-header-option
 
 export class DisplayContainerHeaderComponent implements OnInit {
 
-  @ViewChild('genresSelect') genresSelectbox : MatSelect;
+  @ViewChild('genresSelect') genresSelectbox: MatSelect;
 
   //
   // signals
@@ -68,10 +68,8 @@ export class DisplayContainerHeaderComponent implements OnInit {
   totalPlaytimeShort = computed(() => this.calcTotalPlaytimeShort(this.contentDirectoryService().musicTracks_()));
   totalPlaytime = computed(() => this.calcTotalPlaytimeLong(this.contentDirectoryService().musicTracks_()));
 
-  likePossible = computed(() => this.allTracksSameMusicBrainzReleaseId_());
-  allTracksSameMusicBrainzReleaseId_ = signal<boolean>(false);
+  likePossible = signal<boolean>(false);
   allTracksSameAlbum_ = signal<boolean>(false);
-  currentAlbumReleaseID = signal<string>('');
   mediaServerExists = signal<boolean>(false);
 
   genresForm = new FormControl('');
@@ -111,17 +109,19 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   private cdsBrowseFinished() {
     console.log("cdsBrowseFinished ... ");
-    this.clearSearch();    
+    this.clearSearch();
     this.fillGenres();
-    this.checkAllTracksSameAlbum();
+    this.checkLikePossible();
     this.checkLikeStatus();
     this.backgroundImageService.setDisplayContainerHeaderImage(this.currentContainer.albumartUri);
     console.log("like possible : " + this.likePossible());
     this.cdsBrowsePathService.scrollIntoViewID();
   }
 
-  public get bgHeaderUrl() {
-    return this.currentContainer.albumartUri;
+  private checkLikePossible(): void {
+    if (this.currentContainerItem().allTracksSameAlbumIds.discogsReleaseId != undefined || this.currentContainerItem().allTracksSameAlbumIds.musicBrainzAlbumId !== '') {
+      this.likePossible.set(true);
+    }
   }
 
   get albums(): ContainerDto[] {
@@ -155,28 +155,22 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   private checkLikeStatus() {
-    if (this.allTracksSameMusicBrainzReleaseId_()) {
-      if (this.musicTracks[0]?.musicBrainzId?.ReleaseTrackId) {
-        console.log("set current album release id to : " + this.musicTracks[0]?.musicBrainzId?.ReleaseTrackId);
-        this.currentAlbumReleaseID.set(this.musicTracks[0].musicBrainzId.ReleaseTrackId);
-        this.myMusicService
-          .isAlbumLiked(this.currentAlbumReleaseID())
-          .subscribe(
-            (res) => {
-              console.log("current album liked : " + res);
-              (this.currentAlbumLiked.set(res));
-            }
-          );
-      }
-    } else {
-      this.currentAlbumLiked.set(false);
-      this.currentAlbumReleaseID.set('');
+    if (this.likePossible()) {
+      this.myMusicService
+        .isAlbumLiked(this.currentContainerItem().allTracksSameAlbumIds)
+        .subscribe(
+          (res) => {
+            console.log("current album liked : " + res);
+            (this.currentAlbumLiked.set(res));
+          }
+        );
     }
+
   }
 
   get isContainerAlbum(): boolean {
     // TODO can/should also be identified by other means
-    return this.allTracksSameMusicBrainzReleaseId_();
+    return this.likePossible();
   }
 
   hasSongs(): boolean {
@@ -231,18 +225,18 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   dislikeAlbum(): void {
-    this.myMusicService
-      .deleteAlbumLike(this.currentAlbumReleaseID())
-      .subscribe((d) => this.checkLikeStatus());
+    if (this.likePossible()) {
+      this.myMusicService
+        .deleteAlbumLike(this.currentContainerItem().allTracksSameAlbumIds)
+        .subscribe((d) => this.checkLikeStatus());
+    }
   }
 
   likeAlbum(): void {
-    if (this.currentAlbumReleaseID().length > 0) {
+    if (this.likePossible()) {
       this.myMusicService
-      .likeAlbum(this.currentAlbumReleaseID())
-      .subscribe((d) => this.checkLikeStatus());
-    } else {
-      console.log("cannot like. Album has no release ID");
+        .likeAlbum(this.currentContainerItem().allTracksSameAlbumIds)
+        .subscribe((d) => this.checkLikeStatus());
     }
   }
 
@@ -267,50 +261,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
     return this.contentDirectoryService().musicTracks_();
   }
 
-  // Like support
-  private checkAllTracksSameAlbum(): void {
-    const numtrack = this.musicTracks?.length;
-    const numMbid = this.musicTracks?.filter(
-      (item) => item.musicBrainzId?.ReleaseTrackId?.length > 0
-    ).length;
-
-    console.log('number of tracs : ' + numtrack);
-    console.log('number of tracs with mbid: ' + numMbid);
-
-    this.allTracksSameMusicBrainzReleaseId_.set(false);
-
-    if (numMbid > 0 && numtrack == numMbid) {
-      const firstTrackMbid = this.musicTracks[0]?.musicBrainzId?.ReleaseTrackId;
-      const numSameMbid = this.musicTracks.filter(
-        (item) => item.musicBrainzId?.ReleaseTrackId === firstTrackMbid
-      ).length;
-      this.allTracksSameAlbum_.set(numSameMbid == numMbid);
-      this.allTracksSameMusicBrainzReleaseId_.set(this.allTracksSameAlbum_());
-      console.log(
-        'number of tracs with same mbid like first track : ' + numSameMbid
-      );
-    } else {
-      this.allTracksSameMusicBrainzReleaseId_.set(false);
-      if (this.musicTracks?.length > 0) {
-        const firstTrackAlbum = this.musicTracks[0].album;
-        if (firstTrackAlbum != null) {
-          const albumsWithOtherNames = this.musicTracks.filter(
-            (item) => item.album !== firstTrackAlbum
-          ).length;
-          this.allTracksSameAlbum_.set(albumsWithOtherNames == 0);
-          console.log('number of tracks with other album title : ' + albumsWithOtherNames);  
-        } else {
-          this.allTracksSameAlbum_.set(false);
-          console.log('music track have no album information');  
-        }
-      }
-    }
-    console.log('checkAllTracksSameAlbum : ' + this.allTracksSameAlbum_());
-    console.log(
-      'checkAllTracksSameMusicbrainzReleaseId : ' +
-      this.allTracksSameMusicBrainzReleaseId_()
-    );
-  }
 
   //
   // Statistics
@@ -397,5 +347,12 @@ export class DisplayContainerHeaderComponent implements OnInit {
       return this.contentDirectoryService().currentContainerList().currentContainer;
     }
     return this.dtoGeneratorService.generateEmptyContainerDto();
+  }
+
+  public currentContainerItem(): ContainerItemDto {
+    if (this.contentDirectoryService().currentContainerList()) {
+      return this.contentDirectoryService().currentContainerList();
+    }
+    return this.dtoGeneratorService.generateEmptyContainerItemDto();
   }
 }

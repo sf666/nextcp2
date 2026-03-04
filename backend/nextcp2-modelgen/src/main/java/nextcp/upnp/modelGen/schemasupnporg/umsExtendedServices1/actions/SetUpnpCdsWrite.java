@@ -26,8 +26,10 @@ public class SetUpnpCdsWrite extends ActionCallback
     public SetUpnpCdsWrite(Service service, SetUpnpCdsWriteInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetUpnpCdsWrite"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("UpnpCdsWrite", input.UpnpCdsWrite);
+		
+        if (input.UpnpCdsWrite != null) {
+        	getActionInvocation().setInput("UpnpCdsWrite", input.UpnpCdsWrite);
+		}
     }
 
     public void executeAction()

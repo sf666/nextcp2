@@ -26,8 +26,10 @@ public class SetAudioLikesVisibleRoot extends ActionCallback
     public SetAudioLikesVisibleRoot(Service service, SetAudioLikesVisibleRootInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetAudioLikesVisibleRoot"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("AudioLikesVisibleRoot", input.AudioLikesVisibleRoot);
+		
+        if (input.AudioLikesVisibleRoot != null) {
+        	getActionInvocation().setInput("AudioLikesVisibleRoot", input.AudioLikesVisibleRoot);
+		}
     }
 
     public void executeAction()

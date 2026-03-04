@@ -166,6 +166,7 @@ export class DtoGeneratorService {
       albumDto: [],
       totalMatches: 0,
       resourceId: '',
+      allTracksSameAlbumIds: {musicBrainzAlbumId: '', discogsReleaseId: undefined},
     }
   }
 

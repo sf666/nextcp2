@@ -1,37 +1,37 @@
 package nextcp.domainmodel.services;
 
 import org.springframework.stereotype.Service;
-
+import nextcp.dto.MusicAlbumIds;
 import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
 
 @Service
 public class MyMusicService
 {
-    public void likeAlbum(String uuid, ExtendedApiMediaDevice device)
+    public void likeAlbum(MusicAlbumIds albumIds, ExtendedApiMediaDevice device)
     {
         if (device == null)
         {
             return;
         }
-        device.likeAlbum(uuid);
+        device.likeAlbum(albumIds);
     }
 
-    public void dislikeAlbum(String uuid, ExtendedApiMediaDevice device)
+    public void dislikeAlbum(MusicAlbumIds albumIds, ExtendedApiMediaDevice device)
     {
         if (device == null)
         {
             return;
         }
-        device.dislikeAlbum(uuid);
+        device.dislikeAlbum(albumIds);
     }
 
-    public boolean isAlbumLiked(String uuid, ExtendedApiMediaDevice device)
+    public boolean isAlbumLiked(MusicAlbumIds albumIds, ExtendedApiMediaDevice device)
     {
         if (device == null)
         {
             return false;
         }
-        return device.isAlbumLiked(uuid);
+        return device.isAlbumLiked(albumIds);
     }
 
     public void backupMyMusic(ExtendedApiMediaDevice device)

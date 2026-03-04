@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2026-03-04 10:50:32.
+// Generated using typescript-generator version 3.2.1263 on 2026-03-04 13:03:36.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -103,6 +103,7 @@ export interface ContainerItemDto {
     albumDto: ContainerDto[];
     musicItemDto: MusicItemDto[];
     minimServerSupportTags: ContainerDto[];
+    allTracksSameAlbumIds: MusicAlbumIds;
     totalMatches: number;
     resourceId: string;
 }

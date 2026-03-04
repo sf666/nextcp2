@@ -26,7 +26,7 @@ public class RescanMediaStore extends ActionCallback
     public RescanMediaStore(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("RescanMediaStore"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public void executeAction()

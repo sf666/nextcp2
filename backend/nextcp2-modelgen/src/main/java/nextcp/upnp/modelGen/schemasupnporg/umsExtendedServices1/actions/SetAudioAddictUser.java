@@ -26,8 +26,10 @@ public class SetAudioAddictUser extends ActionCallback
     public SetAudioAddictUser(Service service, SetAudioAddictUserInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetAudioAddictUser"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("AudioAddictUser", input.AudioAddictUser);
+		
+        if (input.AudioAddictUser != null) {
+	        getActionInvocation().setInput("AudioAddictUser", input.AudioAddictUser);
+		}
     }
 
     public void executeAction()

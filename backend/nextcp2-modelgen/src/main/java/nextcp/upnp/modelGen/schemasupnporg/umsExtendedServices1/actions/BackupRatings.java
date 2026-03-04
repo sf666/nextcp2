@@ -26,7 +26,7 @@ public class BackupRatings extends ActionCallback
     public BackupRatings(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("BackupRatings"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public void executeAction()

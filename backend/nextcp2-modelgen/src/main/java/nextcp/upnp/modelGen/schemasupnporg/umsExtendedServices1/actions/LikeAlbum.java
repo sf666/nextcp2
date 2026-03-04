@@ -26,9 +26,13 @@ public class LikeAlbum extends ActionCallback
     public LikeAlbum(Service service, LikeAlbumInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("LikeAlbum"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("MusicBrainzId", input.MusicBrainzId);
-        getActionInvocation().setInput("DiscogsId", new UnsignedIntegerFourBytes(input.DiscogsId));
+		
+        if (input.MusicBrainzId != null) {
+	        getActionInvocation().setInput("MusicBrainzId", input.MusicBrainzId);
+		}
+        if (input.DiscogsId != null) {
+    	    getActionInvocation().setInput("DiscogsId", new UnsignedIntegerFourBytes(input.DiscogsId));
+		}
     }
 
     public void executeAction()

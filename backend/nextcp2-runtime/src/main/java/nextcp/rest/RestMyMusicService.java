@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import nextcp.domainmodel.services.MyMusicService;
-import nextcp.dto.GenericResult;
+import nextcp.dto.MusicAlbumIds;
 import nextcp.service.ToastEventPublisher;
 import nextcp.upnp.GenActionException;
 import nextcp.util.UpnpErrorDescriptionHandler;
@@ -36,21 +35,21 @@ public class RestMyMusicService extends BaseRestService
     }
 
     @PostMapping("/likeAlbum/{deviceId}")
-    public void likeAlbum(@RequestBody String uuid, @PathVariable("deviceId") String deviceId)
+    public void likeAlbum(@RequestBody MusicAlbumIds albumIds, @PathVariable("deviceId") String deviceId)
     {
-        myMusicService.likeAlbum(uuid, getExtendedMediaServerByUdn(deviceId));
+        myMusicService.likeAlbum(albumIds, getExtendedMediaServerByUdn(deviceId));
     }
 
     @PostMapping("/deleteAlbumLike/{deviceId}")
-    public void deleteAlbumLike(@RequestBody String uuid, @PathVariable("deviceId") String deviceId)
+    public void deleteAlbumLike(@RequestBody MusicAlbumIds albumIds, @PathVariable("deviceId") String deviceId)
     {
-        myMusicService.dislikeAlbum(uuid, getExtendedMediaServerByUdn(deviceId));
+        myMusicService.dislikeAlbum(albumIds, getExtendedMediaServerByUdn(deviceId));
     }
 
     @PostMapping("/isAlbumLiked/{deviceId}")
-    public boolean isAlbumLiked(@RequestBody String uuid, @PathVariable("deviceId") String deviceId)
+    public boolean isAlbumLiked(@RequestBody MusicAlbumIds albumIds, @PathVariable("deviceId") String deviceId)
     {
-        boolean status = myMusicService.isAlbumLiked(uuid, getExtendedMediaServerByUdn(deviceId));
+        boolean status = myMusicService.isAlbumLiked(albumIds, getExtendedMediaServerByUdn(deviceId));
         return status;
     }
 

@@ -18,6 +18,7 @@ public class ContainerItemDto
     public List<ContainerDto> albumDto;
     public List<MusicItemDto> musicItemDto;
     public List<ContainerDto> minimServerSupportTags;
+    public MusicAlbumIds allTracksSameAlbumIds;
     public Long totalMatches;
     public String resourceId;
 
@@ -25,7 +26,7 @@ public class ContainerItemDto
     {
     }
 
-    public ContainerItemDto(String parentFolderTitle, ContainerDto currentContainer, List<ContainerDto> containerDto, List<ContainerDto> albumDto, List<MusicItemDto> musicItemDto, List<ContainerDto> minimServerSupportTags, Long totalMatches, String resourceId)
+    public ContainerItemDto(String parentFolderTitle, ContainerDto currentContainer, List<ContainerDto> containerDto, List<ContainerDto> albumDto, List<MusicItemDto> musicItemDto, List<ContainerDto> minimServerSupportTags, MusicAlbumIds allTracksSameAlbumIds, Long totalMatches, String resourceId)
     {
         this.parentFolderTitle = parentFolderTitle;
         this.currentContainer = currentContainer;
@@ -33,6 +34,7 @@ public class ContainerItemDto
         this.albumDto = albumDto;
         this.musicItemDto = musicItemDto;
         this.minimServerSupportTags = minimServerSupportTags;
+        this.allTracksSameAlbumIds = allTracksSameAlbumIds;
         this.totalMatches = totalMatches;
         this.resourceId = resourceId;
     }
@@ -48,6 +50,7 @@ public class ContainerItemDto
         sb.append("albumDto=").append(this.albumDto).append(", ");
         sb.append("musicItemDto=").append(this.musicItemDto).append(", ");
         sb.append("minimServerSupportTags=").append(this.minimServerSupportTags).append(", ");
+        sb.append("allTracksSameAlbumIds=").append(this.allTracksSameAlbumIds).append(", ");
         sb.append("totalMatches=").append(this.totalMatches).append(", ");
         sb.append("resourceId=").append(this.resourceId).append(", ");
         sb.append("]");

@@ -33,23 +33,25 @@ public class ${className} extends ActionCallback
 </#if>
     {
         super(new ActionInvocation(service.getAction("${className}"), new NextcpClientInfo()), cp);
-
+		
 <#list varInList as var>
+        if (input.${var.name} != null) {
   <#if var.upnpDataType == "(StringDatatype)">
-        getActionInvocation().setInput("${var.name}", input.${var.name});
+	        getActionInvocation().setInput("${var.name}", input.${var.name});
   <#elseif var.upnpDataType == "(UnsignedIntegerFourBytesDatatype)">
-        getActionInvocation().setInput("${var.name}", new UnsignedIntegerFourBytes(input.${var.name}));
+    	    getActionInvocation().setInput("${var.name}", new UnsignedIntegerFourBytes(input.${var.name}));
   <#elseif var.upnpDataType == "(UnsignedIntegerTwoBytesDatatype)">
-        getActionInvocation().setInput("${var.name}", new UnsignedIntegerTwoBytes(input.${var.name}));
+        	getActionInvocation().setInput("${var.name}", new UnsignedIntegerTwoBytes(input.${var.name}));
   <#elseif var.upnpDataType == "(IntegerDatatype)">
-        getActionInvocation().setInput("${var.name}", new IntegerDatatype(input.${var.name}));
+	        getActionInvocation().setInput("${var.name}", new IntegerDatatype(input.${var.name}));
   <#elseif var.upnpDataType == "(Base64Datatype)">
-        getActionInvocation().setInput("${var.name}", b64.getString(input.${var.name}));
+    	    getActionInvocation().setInput("${var.name}", b64.getString(input.${var.name}));
   <#elseif var.upnpDataType == "(BooleanDatatype)">
-        getActionInvocation().setInput("${var.name}", input.${var.name});
+        	getActionInvocation().setInput("${var.name}", input.${var.name});
   <#else>
-        throw new RuntimeException("Please update file action.ftl to support datatype : ${var.upnpDataType}");
+        	throw new RuntimeException("Please update file action.ftl to support datatype : ${var.upnpDataType}");
   </#if>        
+		}
 </#list>
     }
 

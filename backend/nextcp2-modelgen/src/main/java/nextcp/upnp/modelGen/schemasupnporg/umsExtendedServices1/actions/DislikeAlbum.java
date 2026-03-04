@@ -26,9 +26,13 @@ public class DislikeAlbum extends ActionCallback
     public DislikeAlbum(Service service, DislikeAlbumInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("DislikeAlbum"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("MusicBrainzId", input.MusicBrainzId);
-        getActionInvocation().setInput("DiscogsId", new UnsignedIntegerFourBytes(input.DiscogsId));
+		
+        if (input.MusicBrainzId != null) {
+	        getActionInvocation().setInput("MusicBrainzId", input.MusicBrainzId);
+		}
+        if (input.DiscogsId != null) {
+    	    getActionInvocation().setInput("DiscogsId", new UnsignedIntegerFourBytes(input.DiscogsId));
+		}
     }
 
     public void executeAction()

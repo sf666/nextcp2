@@ -26,9 +26,13 @@ public class IsAlbumLiked extends ActionCallback
     public IsAlbumLiked(Service service, IsAlbumLikedInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("IsAlbumLiked"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("MusicBrainzId", input.MusicBrainzId);
-        getActionInvocation().setInput("DiscogsId", new UnsignedIntegerFourBytes(input.DiscogsId));
+		
+        if (input.MusicBrainzId != null) {
+	        getActionInvocation().setInput("MusicBrainzId", input.MusicBrainzId);
+		}
+        if (input.DiscogsId != null) {
+    	    getActionInvocation().setInput("DiscogsId", new UnsignedIntegerFourBytes(input.DiscogsId));
+		}
     }
 
     public IsAlbumLikedOutput executeAction()

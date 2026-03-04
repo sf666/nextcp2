@@ -5,6 +5,7 @@ import org.jupnp.support.model.container.Container;
 import org.jupnp.support.model.item.Item;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import nextcp.dto.MusicAlbumIds;
 import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.ServerPlaylists;
 import nextcp.dto.UpdateAlbumArtUriRequest;
@@ -17,11 +18,11 @@ public interface ExtendedApiMediaDevice
 {
     // Like Services
     
-    public boolean isAlbumLiked(String musicBrainzReleaseId);
+    public boolean isAlbumLiked(MusicAlbumIds musicBrainzReleaseId);
 
-    public void likeAlbum(String musicBrainzReleaseId);
+    public void likeAlbum(MusicAlbumIds musicBrainzReleaseId);
 
-    public void dislikeAlbum(String musicBrainzReleaseId);
+    public void dislikeAlbum(MusicAlbumIds musicBrainzReleaseId);
 
     public void likeSong(String musicBrainzTrackId);
 

@@ -26,8 +26,10 @@ public class SetPreferEuropeanServer extends ActionCallback
     public SetPreferEuropeanServer(Service service, SetPreferEuropeanServerInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetPreferEuropeanServer"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("PreferEuropeanServer", input.PreferEuropeanServer);
+		
+        if (input.PreferEuropeanServer != null) {
+        	getActionInvocation().setInput("PreferEuropeanServer", input.PreferEuropeanServer);
+		}
     }
 
     public void executeAction()

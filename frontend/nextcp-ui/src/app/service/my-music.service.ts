@@ -3,6 +3,7 @@ import { DeviceService } from 'src/app/service/device.service';
 import { Subject } from 'rxjs';
 import { HttpService } from './http.service';
 import { Injectable } from '@angular/core';
+import { MusicAlbumIds } from './dto';
 
 @Injectable({
   providedIn: 'root'
@@ -18,29 +19,43 @@ export class MyMusicService {
     private toastService: ToastService) {
   }
 
-  public likeAlbum(mbReleaseID: string): Subject<any> {
+  public likeAlbum(albumIds: MusicAlbumIds): Subject<any> {
     if (!this.deviceService.selectedMediaServerDevice().udn) {
       this.toastService.error("select media server", "like album");
       return;
     }
     const uri = '/likeAlbum/' + this.deviceService.selectedMediaServerDevice().udn;
-    if (mbReleaseID !== '') {
-      console.log("like musicbrainz album : " + mbReleaseID);
-      return this.httpService.post(this.baseUri, uri, mbReleaseID);
+    let hasId: boolean = false;
+    if (albumIds.musicBrainzAlbumId !== '') {
+      console.log("like musicbrainz album : " + albumIds.musicBrainzAlbumId);
+      hasId = true;
+    }
+    if (albumIds.discogsReleaseId != undefined) {
+      console.log("like discogs release : " + albumIds.discogsReleaseId);
+      hasId = true;
+    }
+    if (hasId) {      
+      return this.httpService.post(this.baseUri, uri, albumIds);
+    } else {
+      console.log("no id's given for like album");
     }
   }
 
-  public deleteAlbumLike(mbReleaseID: string): Subject<any> {
+  public deleteAlbumLike(albumIds: MusicAlbumIds): Subject<any> {
     const uri = '/deleteAlbumLike/' + this.deviceService.selectedMediaServerDevice().udn;
-    if (mbReleaseID !== '') {
-      return this.httpService.post(this.baseUri, uri, mbReleaseID);
+    if (albumIds.musicBrainzAlbumId !== '' || albumIds.discogsReleaseId != undefined) {
+      return this.httpService.post(this.baseUri, uri, albumIds);
+    } else {
+      console.log("no id's given for delete album like");
     }
   }
 
-  public isAlbumLiked(mbReleaseID: string): Subject<boolean> {
+  public isAlbumLiked(albumIds: MusicAlbumIds): Subject<boolean> {
     const uri = '/isAlbumLiked/' + this.deviceService.selectedMediaServerDevice().udn;
-    if (mbReleaseID !== '') {
-      return this.httpService.post<boolean>(this.baseUri, uri, mbReleaseID);
+    if (albumIds.musicBrainzAlbumId !== '' || albumIds.discogsReleaseId != undefined) {
+      return this.httpService.post<boolean>(this.baseUri, uri, albumIds);
+    } else {
+      console.log("no id's given for is album liked");
     }
   }
 

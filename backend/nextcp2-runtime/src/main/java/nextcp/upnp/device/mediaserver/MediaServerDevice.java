@@ -20,6 +20,7 @@ import nextcp.domainmodel.device.mediaserver.search.SearchSupport;
 import nextcp.dto.ContainerDto;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MediaServerDto;
+import nextcp.dto.MusicAlbumIds;
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.SearchRequestDto;
 import nextcp.dto.SearchResultDto;
@@ -165,6 +166,7 @@ public class MediaServerDevice extends BaseDevice {
 		}
 		result.currentContainer = curContainer;
 		if (didl != null) {
+			result.allTracksSameAlbumIds = allSongsSameAlbum(result.musicItemDto);
 			addContainerObjects(result, didl);
 			addItemObjects(result.musicItemDto, didl);
 		} else {
@@ -174,6 +176,55 @@ public class MediaServerDevice extends BaseDevice {
 		return result;
 	}
 
+	private MusicAlbumIds allSongsSameAlbum(List<MusicItemDto> musicItemDto) {
+		MusicAlbumIds result = new MusicAlbumIds();
+		if (musicItemDto.size() < 1) {
+			return result;
+		}
+		// UMS sends the releaseTrackId as releaseId ... maybe we need to refactor
+		String firstMB = null;
+		String firstDiscogs = null;
+		
+		boolean allSameMB = firstMB != null;
+		boolean allSameDiscogs = firstDiscogs != null;
+		
+		if (musicItemDto.get(0).musicBrainzId != null) {
+			firstMB = musicItemDto.get(0).musicBrainzId.ReleaseTrackId;
+		}
+		if (musicItemDto.get(0).discogsId != null) {
+			firstDiscogs = musicItemDto.get(0).discogsId.ReleaseId;
+		}
+
+		for (MusicItemDto item : musicItemDto) {
+			if (allSameMB && item.musicBrainzId != null && item.musicBrainzId.ReleaseTrackId != null) {
+				if (!firstMB.equals(item.musicBrainzId.ReleaseTrackId)) {
+					allSameMB = false;
+				}
+			}
+			if (allSameDiscogs && item.discogsId != null && item.discogsId.ReleaseId != null) {
+				if (!firstDiscogs.equals(item.discogsId.ReleaseId)) {
+					allSameDiscogs = false;
+				}
+			}
+		}
+		
+		if (allSameMB) {
+			log.debug("same musicbrainz release id : {}", firstMB);
+			result.musicBrainzAlbumId = firstMB;
+		}
+		if (allSameDiscogs) {
+			log.debug("same discogs release id : {}", firstDiscogs);
+			try {
+				result.discogsReleaseId = Long.parseLong(firstDiscogs);
+			} catch (Exception e) {
+				log.warn("cannot parse discogs release id : " + firstDiscogs, e);
+				result.discogsReleaseId = null;
+			}
+		}
+		
+		return result;
+	}
+	
 	private DIDLContent generateDidlContent(BrowseOutput out) {
 		try {
 			log.debug("generateDidlContent : {}", out.Result);
