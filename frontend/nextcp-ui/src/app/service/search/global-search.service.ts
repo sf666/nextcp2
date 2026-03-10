@@ -38,7 +38,7 @@ export class GlobalSearchService {
 
   // QuickSearch Support (Global search)
   public quickSearchResultList = signal<SearchResultDto>(this.dtoGeneratorService.generateEmptySearchResultDto());
-  public quickSearchQueryString: string;
+  public quickSearchQueryString = signal('');
   private quickSearchPanelVisible_: boolean;
   private MIN_SEARCH_LEN = 2;
 
@@ -95,7 +95,7 @@ export class GlobalSearchService {
   }
 
   set quickSearchPanelVisible(value: boolean) {
-    if (value && this.quickSearchQueryString?.length > this.MIN_SEARCH_LEN) {
+    if (value && this.quickSearchQueryString().length > this.MIN_SEARCH_LEN) {
       this.quickSearchPanelVisible_ = value;
     }
     if (value == false) {
@@ -127,32 +127,28 @@ export class GlobalSearchService {
   // Search
   // =========================================================================
 
-  get quickSearchString(): string {
-    return this.quickSearchQueryString;
-  }
-
-  set quickSearchString(value: string) {
-    this.quickSearchQueryString = value;
+  public updateQuickSearchQueryString(value: string): void {
+    this.quickSearchQueryString.set(value);
     this.executeSearchWithCurrentQuickSearchValue();
   }
 
   public executeSearchWithCurrentQuickSearchValue(): void {
-    if (this.quickSearchQueryString == '') {
+    if (this.quickSearchQueryString() === '') {
       this.quickSearchPanelVisible_ = false;
     } else {
       if (
-        this.quickSearchQueryString &&
-        this.quickSearchQueryString?.length > this.MIN_SEARCH_LEN
+        this.quickSearchQueryString() &&
+        this.quickSearchQueryString().length > this.MIN_SEARCH_LEN
       ) {
         this.quickSearchPanelVisible_ = true;
-        this.currentSearchText = this.quickSearchQueryString;
+        this.currentSearchText = this.quickSearchQueryString().replace(/"/g, '""');
         this.doSearch();
       }
     }
   }
 
   clearSearch(): void {
-    this.quickSearchString = '';
+    this.quickSearchQueryString.set('');
     this.quickSearchResultList.set(this.dtoGeneratorService.generateEmptySearchResultDto());
     this.quickSearchPanelVisible_ = false;
   }
@@ -189,9 +185,9 @@ export class GlobalSearchService {
 
   showAllItem(): void {
     const sr = this.dtoGeneratorService.generateQuickSearchDto(
-      this.quickSearchQueryString,
+      this.quickSearchQueryString(),
       this.deviceService.selectedMediaServerDevice().udn,
-      '-upnp:rating, +dc:title',
+      '',
       this.currentContainerID,
       0,
       100
@@ -204,9 +200,9 @@ export class GlobalSearchService {
 
   showAllAlbum(): void {
     const sr = this.dtoGeneratorService.generateQuickSearchDto(
-      this.quickSearchQueryString,
+      this.quickSearchQueryString(),
       this.deviceService.selectedMediaServerDevice().udn,
-      '-ums:likedAlbum, +dc:title',
+      '-ums:likedAlbum',
       this.currentContainerID,
       0,
       100
@@ -219,7 +215,7 @@ export class GlobalSearchService {
 
   showAllItemArtist(): void {
     const sr = this.dtoGeneratorService.generateQuickSearchDto(
-      this.quickSearchQueryString,
+      this.quickSearchQueryString(),
       this.deviceService.selectedMediaServerDevice().udn,
       '',
       this.currentContainerID,
@@ -234,7 +230,7 @@ export class GlobalSearchService {
 
   showAllPlaylist(): void {
     const sr = this.dtoGeneratorService.generateQuickSearchDto(
-      this.quickSearchQueryString,
+      this.quickSearchQueryString(),
       this.deviceService.selectedMediaServerDevice().udn,
       '',
       this.currentContainerID,

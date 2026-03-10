@@ -114,11 +114,12 @@ export class DisplayContainerHeaderComponent implements OnInit {
     this.checkLikePossible();
     this.checkLikeStatus();
     this.backgroundImageService.setDisplayContainerHeaderImage(this.currentContainer.albumartUri);
-    console.log("like possible : " + this.likePossible());
     this.cdsBrowsePathService.scrollIntoViewID();
   }
 
   private checkLikePossible(): void {
+      console.log("DISCOGS ID     : " + this.currentContainerItem().allTracksSameAlbumIds.discogsReleaseId);
+      console.log("MUSICBRAINZ ID : " + this.currentContainerItem().allTracksSameAlbumIds.musicBrainzAlbumId);
     if (this.currentContainerItem().allTracksSameAlbumIds.discogsReleaseId != undefined || this.currentContainerItem().allTracksSameAlbumIds.musicBrainzAlbumId !== '') {
       console.log("like possible for container : " + this.currentContainer.title);
       this.likePossible.set(true);
