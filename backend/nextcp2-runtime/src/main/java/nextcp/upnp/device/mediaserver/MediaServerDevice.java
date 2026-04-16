@@ -86,8 +86,8 @@ public class MediaServerDevice extends BaseDevice {
 		return searchSupportDelegate.searchAllAlbum(searchRequest);
 	}
 
-	public SearchResultDto searchAllPlaylist(SearchRequestDto searchReques) {
-		return searchSupportDelegate.searchAllPlaylist(searchReques);
+	public SearchResultDto searchAllPlaylist(SearchRequestDto searchRequest) {
+		return searchSupportDelegate.searchAllPlaylist(searchRequest);
 	}
 
 	/**

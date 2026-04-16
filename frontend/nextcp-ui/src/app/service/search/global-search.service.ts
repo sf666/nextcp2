@@ -184,11 +184,15 @@ export class GlobalSearchService {
   }
 
   showAllItem(): void {
+    let containerId = '0';
+    if (!this.globalSearch()) {
+      containerId = this.musicLibraryService.currentContainerId();
+    }    
     const sr = this.dtoGeneratorService.generateQuickSearchDto(
       this.quickSearchQueryString(),
       this.deviceService.selectedMediaServerDevice().udn,
       '',
-      this.currentContainerID,
+      containerId,
       0,
       100
     );

@@ -26,7 +26,7 @@ export class SongOptionsComponent implements OnInit {
   private readonly _matDialogRef: MatDialogRef<SongOptionsComponent>;
   private readonly triggerElementRef: ElementRef;
   private playlistDialogOpen: boolean;
-  private currentContainer: ContainerDto;
+  private currentContainer: ContainerDto | undefined;
 
   readonly inputDialog = inject(MatDialog);
   readonly cdsUpdateService = inject(CdsUpdateService);
@@ -118,7 +118,10 @@ export class SongOptionsComponent implements OnInit {
   }
 
   get isParentPlaylist(): boolean {
-    return this.currentContainer.objectClass === "object.container.playlistContainer";
+    if (this.currentContainer != undefined) {
+      return this.currentContainer.objectClass === "object.container.playlistContainer";
+    }
+    return false;
   }
 
   public updateAlbumArt(): void {

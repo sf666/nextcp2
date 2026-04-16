@@ -12,7 +12,7 @@ export class SongOptionsServiceService {
   constructor(
     private dialog: MatDialog) { }
 
-  public openOptionsDialog(event: MouseEvent, item: MusicItemDto, currentContainer: ContainerDto): Observable<any> {
+  public openOptionsDialog(event: MouseEvent, item: MusicItemDto, currentContainer?: ContainerDto): Observable<any> {
     const target = new ElementRef(event.currentTarget);
     const dialogRef = this.dialog.open(SongOptionsComponent, {
       height: '400px',

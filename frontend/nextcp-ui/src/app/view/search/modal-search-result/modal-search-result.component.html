@@ -9,16 +9,20 @@
     @if (globalSearchService.quickSearchResultList().musicItems?.length > 0) {
       <div class="search-row">
         @for (item of globalSearchService.quickSearchResultList().musicItems; track item.objectID) {
-          <div
-            class="search-row flex" (click)="globalSearchService.musicItemSelected(item)">
-            <img src="{{item.albumArtUrl}}" class="cropImg searchImgHeight align-self-center" alt="">
-            <div class="row-text">
-              <div class="flex">
-                <div class="title">{{item.title}}</div>
-                <quality-badge [item]="item"></quality-badge>
+          <div class="flex justify-between">
+            <div class="search-row flex" (click)="globalSearchService.musicItemSelected(item)">
+              <img src="{{item.albumArtUrl}}" class="cropImg searchImgHeight align-self-center" alt="">
+              <div class="row-text">
+                <div class="flex">
+                  <div class="title">{{item.title}}</div>
+                  <quality-badge [item]="item"></quality-badge>
+                </div>
+                <div class="artist">from {{item.artistName}}</div>
               </div>
-              <div class="artist">from {{item.artistName}}</div>
             </div>
+            <div class="search-row flex items-center" (click)="showSongPopup($event, item)">
+                <span class="material-symbols-outlined text-white text-2xl">more_vert</span>
+            </div>              
           </div>
         }
       </div>

@@ -5,6 +5,8 @@ import { TransportService } from '../../../service/transport.service';
 import { ContentDirectoryService } from './../../../service/content-directory.service';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { QualityBadgeComponent } from '../../../util/comp/quality-badge/quality-badge.component';
+import { SongOptionsServiceService } from 'src/app/mediaserver/popup/song-options/song-options-service.service';
+import { MusicItemDto } from 'src/app/service/dto';
 
 @Component({
     selector: 'modal-search-result',
@@ -25,10 +27,19 @@ import { QualityBadgeComponent } from '../../../util/comp/quality-badge/quality-
 export class ModalSearchResultComponent{
 
   constructor(
+    private songOptionsServiceService: SongOptionsServiceService,
     private gss: GlobalSearchService,
   ) {}
 
   get globalSearchService() : GlobalSearchService {
     return this.gss;
   }
+
+  showSongPopup(event: MouseEvent, item: MusicItemDto): void {
+      this.songOptionsServiceService
+        .openOptionsDialog(event, item, undefined)
+        .subscribe((result) => {
+          // handle individual user action from dialog if needed
+        });
+    }
 }

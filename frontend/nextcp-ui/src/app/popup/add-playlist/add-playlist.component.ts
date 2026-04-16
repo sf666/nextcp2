@@ -111,15 +111,15 @@ export class AddPlaylistComponent {
   }
 
   getRecentPlaylistsCount(): number {
-    return this.filteredRecentPlaylists().length;
+    return this.filteredRecentPlaylists()?.length ?? 0;
   }
 
   getServerPlaylistsCount(): number {
-    return this.serverPlaylistService.serverPl().serverPlaylists?.length;
+    return this.serverPlaylistService.serverPl().serverPlaylists?.length ?? 0;
   }
 
   getOtherPlaylistsCount(): number {
-    return this.otherPlaylists()?.length;
+    return this.otherPlaylists()?.length ?? 0;
   }
 
   addTo(serverPlaylist: ServerPlaylistDto) {

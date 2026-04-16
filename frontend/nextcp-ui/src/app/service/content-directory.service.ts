@@ -297,7 +297,7 @@ export class ContentDirectoryService {
     return this.turn_page_id;
   }
 
-  private updatePageTurnId(data: ContainerItemDto): string {
+  private updatePageTurnId(data: ContainerItemDto): string | undefined {
     let idxObj: number;
     let dataArrayLen: number;
     if (data.albumDto?.length) {
@@ -326,7 +326,7 @@ export class ContentDirectoryService {
       return;
     }
 
-    this.turn_page_id = null;
+    this.turn_page_id = undefined;
   }
 
   private createBrowseRequest(
