@@ -114,6 +114,10 @@ export class GlobalSearchService {
 
   private searchResultReceived(data: SearchResultDto): void {
     this.quickSearchResultList.set(data);
+    console.debug('search result received total music items count: ' + data.musicItemsTotal);
+    console.debug('search result received total album items count: ' + data.albumItemsTotal);
+    console.debug('search result received total artist items count: ' + data.artistItemsTotal);
+    console.debug('search result received total playlist items count: ' + data.playlistItemsTotal);
   }
 
   private doSearch(): void {

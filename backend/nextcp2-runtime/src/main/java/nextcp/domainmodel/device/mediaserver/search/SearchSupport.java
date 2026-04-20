@@ -92,20 +92,20 @@ public class SearchSupport
 
     private void searchAndAddPlaylistContainer(String quickSearch, String sortCriteria, SearchResultDto container, long requestCount, String parentObjectID)
     {
-        searchAndAddArtistContainer(quickSearch, sortCriteria, container.playlistItems, "object.container.playlistContainer", requestCount, parentObjectID);
+    	container.playlistItemsTotal = searchAndAddContainer(quickSearch, sortCriteria, container.playlistItems, "object.container.playlistContainer", requestCount, parentObjectID);
     }
 
     private void searchAndAddAlbumContainer(String quickSearch, String sortCriteria, SearchResultDto container, long requestCount, String objectId)
     {
-        searchAndAddArtistContainer(quickSearch, sortCriteria, container.albumItems, "object.container.album", requestCount, objectId);
+        container.albumItemsTotal = searchAndAddContainer(quickSearch, sortCriteria, container.albumItems, "object.container.album", requestCount, objectId);
     }
 
     private void searchAndAddArtistContainer(String quickSearch, String sortCriteria, SearchResultDto container, long requestCount, String objectId)
     {
-        searchAndAddArtistContainer(quickSearch, sortCriteria, container.artistItems, "object.container.person", requestCount, objectId);
+    	container.artistItemsTotal = searchAndAddContainer(quickSearch, sortCriteria, container.artistItems, "object.container.person", requestCount, objectId);
     }
 
-    private void searchAndAddArtistContainer(String quickSearch, String sortCriteria, List<ContainerDto> container, String upnpClass, long requestCount, String parentObjectID)
+    private int searchAndAddContainer(String quickSearch, String sortCriteria, List<ContainerDto> container, String upnpClass, long requestCount, String parentObjectID)
     {
         SearchInput searchInput = new SearchInput();
         searchInput.ContainerID = getContainerId(parentObjectID);
@@ -134,6 +134,7 @@ public class SearchSupport
         {
             log.warn("search error", e);
         }
+        return out.TotalMatches.intValue();
     }
 
     private void searchAndAddMusicItems(String quickSearch, String sortCriteria, SearchResultDto container, Long requestCount, String parentObjectID)
@@ -154,6 +155,7 @@ public class SearchSupport
         try
         {
             SearchOutput out = contentDirectoryService.search(searchInput);
+            container.musicItemsTotal = out.TotalMatches.intValue();
             didl = didlContent.generateDidlContent(out.Result);
             if (didl != null) 
             {
@@ -180,6 +182,10 @@ public class SearchSupport
         dto.artistItems = new ArrayList<ContainerDto>();
         dto.musicItems = new ArrayList<>();
         dto.playlistItems = new ArrayList<>();
+        dto.albumItemsTotal = 0;
+        dto.artistItemsTotal = 0;
+        dto.musicItemsTotal = 0;
+        dto.playlistItemsTotal = 0;
         return dto;
     }
 

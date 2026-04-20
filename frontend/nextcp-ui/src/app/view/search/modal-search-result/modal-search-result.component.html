@@ -3,7 +3,7 @@
   <div class="section-box">
     <div class="flex justify-between mb-3">
       <div class="search-title">Title</div>
-      <div class="search-show-all" (click)="globalSearchService.showAllItem()">show all</div>
+      <div class="search-show-all" (click)="globalSearchService.showAllItem()">show all ({{globalSearchService.quickSearchResultList().musicItemsTotal}})</div>
     </div>
 
     @if (globalSearchService.quickSearchResultList().musicItems?.length > 0) {
@@ -34,7 +34,7 @@
   <div class="section-box">
     <div class="flex justify-between mb-3">
       <div class="search-title">Album</div>
-      <div class="search-show-all" (click)="globalSearchService.showAllAlbum()">show all</div>
+      <div class="search-show-all" (click)="globalSearchService.showAllAlbum()">show all ({{globalSearchService.quickSearchResultList().albumItemsTotal}})</div>
     </div>
     @if (globalSearchService.quickSearchResultList().albumItems?.length > 0) {
       <div>
@@ -57,7 +57,7 @@
   <div class="section-box">
     <div class="flex justify-between mb-3">
       <div class="search-title">Playlist</div>
-      <div class="search-show-all" (click)="globalSearchService.showAllPlaylist()">show all</div>
+      <div class="search-show-all" (click)="globalSearchService.showAllPlaylist()">show all ({{globalSearchService.quickSearchResultList().playlistItemsTotal}})</div>
     </div>
     @if (globalSearchService.quickSearchResultList().playlistItems?.length > 0) {
       <div>
@@ -79,7 +79,7 @@
   <div class="section-box">
     <div class="flex justify-between mb-3">
       <div class="search-title">Artist</div>
-      <div class="search-show-all" (click)="globalSearchService.showAllItemArtist()">show all</div>
+      <div class="search-show-all" (click)="globalSearchService.showAllItemArtist()">show all ({{globalSearchService.quickSearchResultList().artistItemsTotal}})</div>
     </div>
     @if (globalSearchService.quickSearchResultList().artistItems?.length > 0) {
       <div class="search-row">

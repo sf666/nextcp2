@@ -151,7 +151,11 @@ export class DtoGeneratorService {
       albumItems: [],
       artistItems: [],
       musicItems: [],
-      playlistItems: []
+      playlistItems: [],
+      albumItemsTotal: 0,
+      artistItemsTotal: 0,
+      musicItemsTotal: 0,
+      playlistItemsTotal: 0,
     }
   }
 

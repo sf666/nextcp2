@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2026-04-14 12:42:00.
+// Generated using typescript-generator version 3.2.1263 on 2026-04-20 15:10:00.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -369,6 +369,10 @@ export interface SearchResultDto {
     albumItems: ContainerDto[];
     artistItems: ContainerDto[];
     playlistItems: ContainerDto[];
+    musicItemsTotal: number;
+    albumItemsTotal: number;
+    artistItemsTotal: number;
+    playlistItemsTotal: number;
 }
 
 export interface SeekSecondsDto {

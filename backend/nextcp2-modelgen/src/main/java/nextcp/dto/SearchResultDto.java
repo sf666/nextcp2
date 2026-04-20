@@ -17,18 +17,26 @@ public class SearchResultDto
     public List<ContainerDto> albumItems;
     public List<ContainerDto> artistItems;
     public List<ContainerDto> playlistItems;
+    public Integer musicItemsTotal;
+    public Integer albumItemsTotal;
+    public Integer artistItemsTotal;
+    public Integer playlistItemsTotal;
 
     public SearchResultDto()
     {
     }
 
-    public SearchResultDto(String parentID, List<MusicItemDto> musicItems, List<ContainerDto> albumItems, List<ContainerDto> artistItems, List<ContainerDto> playlistItems)
+    public SearchResultDto(String parentID, List<MusicItemDto> musicItems, List<ContainerDto> albumItems, List<ContainerDto> artistItems, List<ContainerDto> playlistItems, Integer musicItemsTotal, Integer albumItemsTotal, Integer artistItemsTotal, Integer playlistItemsTotal)
     {
         this.parentID = parentID;
         this.musicItems = musicItems;
         this.albumItems = albumItems;
         this.artistItems = artistItems;
         this.playlistItems = playlistItems;
+        this.musicItemsTotal = musicItemsTotal;
+        this.albumItemsTotal = albumItemsTotal;
+        this.artistItemsTotal = artistItemsTotal;
+        this.playlistItemsTotal = playlistItemsTotal;
     }
     
     @Override
@@ -41,6 +49,10 @@ public class SearchResultDto
         sb.append("albumItems=").append(this.albumItems).append(", ");
         sb.append("artistItems=").append(this.artistItems).append(", ");
         sb.append("playlistItems=").append(this.playlistItems).append(", ");
+        sb.append("musicItemsTotal=").append(this.musicItemsTotal).append(", ");
+        sb.append("albumItemsTotal=").append(this.albumItemsTotal).append(", ");
+        sb.append("artistItemsTotal=").append(this.artistItemsTotal).append(", ");
+        sb.append("playlistItemsTotal=").append(this.playlistItemsTotal).append(", ");
         sb.append("]");
         return sb.toString();
     }

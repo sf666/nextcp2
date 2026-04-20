@@ -441,6 +441,10 @@ SearchResultDto:
    albumItems: List<ContainerDto>
    artistItems: List<ContainerDto>
    playlistItems: List<ContainerDto>
+   musicItemsTotal: Integer
+   albumItemsTotal: Integer
+   artistItemsTotal: Integer
+   playlistItemsTotal: Integer
 
 PlayRequestDto:
    mediaRendererDto: MediaRendererDto
