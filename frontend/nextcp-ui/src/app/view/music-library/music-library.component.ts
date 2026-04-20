@@ -104,7 +104,11 @@ export class MusicLibraryComponent implements AfterViewInit {
     } else {
       if (this.persistenceService.getLastObjectId() !== undefined && this.persistenceService.getLastObjectId() !== '') {
         console.log("browse to last persistent object ID : " + this.persistenceService.getLastObjectId());
-        this.browseToUid(udn, this.persistenceService.getLastObjectId());
+        let lastOid = this.persistenceService.getLastObjectId();
+        if (lastOid == undefined || lastOid.length == 0) {
+          lastOid = "0";
+        }
+        this.browseToUid(udn, lastOid);
       } else {
         console.log("browse to object ID : 0");
         this.browseToUid(udn, "0");

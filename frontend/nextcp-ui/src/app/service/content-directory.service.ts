@@ -142,6 +142,9 @@ export class ContentDirectoryService {
     udn: string,
     sortCriteria?: string,
   ): Subject<ContainerItemDto> {
+    if (!oid) {
+      oid = '0';
+    }
     let browseRequestDto = this.createBrowseRequest(oid, sortCriteria, udn);
     return this.browseChildrenByRequest(browseRequestDto);
   }
