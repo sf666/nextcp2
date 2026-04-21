@@ -18,8 +18,8 @@ export class VolumeControlComponent {
 
   private readonly _matDialogRef: MatDialogRef<VolumeControlComponent>;
   private readonly triggerElementRef: ElementRef;
-  private closeOnMs: number;
-  private myTimer : NodeJS.Timeout;
+  private closeOnMs: number = 0;
+  private myTimer!: ReturnType<typeof setTimeout>;
 
   minVal = 0;
   maxVal = 100;

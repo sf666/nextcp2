@@ -39,10 +39,10 @@ export class GlobalSearchService {
   // QuickSearch Support (Global search)
   public quickSearchResultList = signal<SearchResultDto>(this.dtoGeneratorService.generateEmptySearchResultDto());
   public quickSearchQueryString = signal('');
-  private quickSearchPanelVisible_: boolean;
+  private quickSearchPanelVisible_ = signal(false);
   private MIN_SEARCH_LEN = 2;
 
-  private currentSearchText: string;
+  private currentSearchText = '';
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private doSearchFunc: any;
 
@@ -73,7 +73,6 @@ export class GlobalSearchService {
     private router: Router,
     private configurationService: ConfigurationService
   ) {
-    this.quickSearchPanelVisible_ = false;
     this.doSearchFunc = debounce(
       this.getSearchDelay(),
       this.doSearchThrotteled
@@ -91,12 +90,12 @@ export class GlobalSearchService {
   }
 
   get quickSearchPanelVisible() {
-    return this.quickSearchPanelVisible_;
+    return this.quickSearchPanelVisible_();
   }
 
   set quickSearchPanelVisible(value: boolean) {
     if (value && this.quickSearchQueryString().length > this.MIN_SEARCH_LEN) {
-      this.quickSearchPanelVisible_ = value;
+      this.quickSearchPanelVisible_.set(value);
     }
     if (value == false) {
       this.clearSearch();
@@ -104,12 +103,12 @@ export class GlobalSearchService {
   }
 
   public showQuickSearchPanel(): void {
-    this.quickSearchPanelVisible_ = true;
+    this.quickSearchPanelVisible_.set(true);
     this.executeSearchWithCurrentQuickSearchValue();
   }
 
   public hideQuickSearchPanel(): void {
-    this.quickSearchPanelVisible_ = false;
+    this.quickSearchPanelVisible_.set(false);
   }
 
   private searchResultReceived(data: SearchResultDto): void {
@@ -138,13 +137,13 @@ export class GlobalSearchService {
 
   public executeSearchWithCurrentQuickSearchValue(): void {
     if (this.quickSearchQueryString() === '') {
-      this.quickSearchPanelVisible_ = false;
+      this.quickSearchPanelVisible_.set(false);
     } else {
       if (
         this.quickSearchQueryString() &&
         this.quickSearchQueryString().length > this.MIN_SEARCH_LEN
       ) {
-        this.quickSearchPanelVisible_ = true;
+        this.quickSearchPanelVisible_.set(true);
         this.currentSearchText = this.quickSearchQueryString().replace(/"/g, '""');
         this.doSearch();
       }
@@ -154,7 +153,8 @@ export class GlobalSearchService {
   clearSearch(): void {
     this.quickSearchQueryString.set('');
     this.quickSearchResultList.set(this.dtoGeneratorService.generateEmptySearchResultDto());
-    this.quickSearchPanelVisible_ = false;
+    this.quickSearchPanelVisible_.set(false);
+    this.currentSearchText = '';
   }
 
   public setSelectedContainer(container: ContainerDto): void {

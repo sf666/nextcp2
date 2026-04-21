@@ -43,6 +43,9 @@ export class FooterComponent implements OnInit{
 
   ngOnInit(): void {
     this.volControl.valueChanges.pipe( debounceTime(300), distinctUntilChanged()).subscribe(val => {
+      if (val == null) {
+        return;
+      }
       const norm = val / 100;    
       const logVal = Math.round(this.minVal + (this.maxVal - this.minVal) * Math.pow(norm, this.expVal));
       console.log("volume changed to " + logVal);
@@ -51,7 +54,7 @@ export class FooterComponent implements OnInit{
   }
 
   // reverse from volume value to logarithmic slider position
-  reverseLogVal(val) : number{
+  reverseLogVal(val : number) : number{
     const norm = (val - this.minVal) / (this.maxVal - this.minVal);
     const rev = Math.round(Math.pow(Math.max(0, norm), 1 / this.expVal) * 100);
     console.log("reverse log val " + val + " to " + rev);
@@ -124,14 +127,6 @@ export class FooterComponent implements OnInit{
     }
   }
 
-  volChanged(event): void {
-    const expVal = 2;
-    const norm = event / 100;    
-    const logVal = Math.round(this.minVal + (this.maxVal - this.minVal) * Math.pow(norm, expVal));
-    console.log("volume changed to " + logVal);
-    this.rendererService.setVolume(logVal);
-  }
-
   streaming(): boolean {
     return this.rendererService.isStreaming();
   }
@@ -179,7 +174,7 @@ export class FooterComponent implements OnInit{
 
   showSongPopup(event: MouseEvent): void {
     if (this.rendererService.trackInfo().currentTrack?.streamingURL) {
-      this.songOptionsServiceService.openOptionsDialog(event, this.rendererService.trackInfo().currentTrack, null);
+      this.songOptionsServiceService.openOptionsDialog(event, this.rendererService.trackInfo().currentTrack, undefined);
     }
   }
 

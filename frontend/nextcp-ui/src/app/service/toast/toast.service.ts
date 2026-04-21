@@ -9,7 +9,7 @@ import { ToastComponent } from './toast.component';
 @Injectable({ providedIn: 'any' })
 export class ToastService {
 
-  private lastToast: ToastRef;
+  private lastToast!: ToastRef;
 
   constructor(
     private overlay: Overlay,
@@ -17,7 +17,7 @@ export class ToastService {
     @Inject(TOAST_CONFIG_TOKEN) private toastConfig: ToastConfig
   ) { }
 
-  info(message, header: string) {
+  info(message: string, header: string) {
     this.show({
       text: message,
       header: header,
@@ -25,7 +25,7 @@ export class ToastService {
     });
   }
 
-  error(message, header: string) {
+  error(message: string, header: string) {
     this.show({
       text: message,
       header: header,
@@ -33,7 +33,7 @@ export class ToastService {
     });
   }
 
-  success(message, header: string) {
+  success(message: string, header: string) {
     this.show({
       text: message,
       header: header,
@@ -60,14 +60,14 @@ export class ToastService {
     return this.overlay.position()
       .global()
       .top(this.getPosition())
-      .right(this.toastConfig.position.right + 'px');
+      .right((this.toastConfig.position?.right ?? 0) + 'px');
   }
 
   getPosition() {
     const lastToastIsVisible = this.lastToast && this.lastToast.isVisible();
     const position = lastToastIsVisible
       ? this.lastToast.getPosition().bottom + 8
-      : this.toastConfig.position.top;
+      : this.toastConfig.position?.top ?? 0;
 
     return position + 'px';
   }

@@ -16,7 +16,7 @@ import { MusicItemDto } from 'src/app/service/dto';
   styleUrl: './other-item-tile.component.scss',
 })
 export class OtherItemTileComponent {
-  otherItems = input<MusicItemDto[]>();
+  otherItems = input<MusicItemDto[]>([]);
   quickSearchString = input<string>('');
   items = computed(() =>
     this.getOtherItemsFilter(this.otherItems(), this.quickSearchString())

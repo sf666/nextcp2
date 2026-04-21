@@ -88,6 +88,8 @@ export class ItemTileComponent {
       );
       console.log('[item-tile] allTracksSameDisc : ' + sameDisc);
       return sameDisc;
+    } else {
+      return false;
     }
   }
 
@@ -122,6 +124,7 @@ export class ItemTileComponent {
         }
       }
     }
+    return false;
   }
 
   private filteredMusicTracks(data: MusicItemDto[]): MusicItemDto[] {

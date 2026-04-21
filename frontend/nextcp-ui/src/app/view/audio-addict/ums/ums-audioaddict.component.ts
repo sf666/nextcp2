@@ -73,7 +73,7 @@ export class UmsAudioaddictComponent {
   }
 
   getContentHandler(): ScrollLoadHandler {
-    return { contentDirectoryService: this.contentDirectoryService, persistenceService: null }
+    return { contentDirectoryService: this.contentDirectoryService, persistenceService: undefined }
   }
 
   showTopHeader(): boolean {

@@ -19,7 +19,7 @@ export class MyMusicService {
     private toastService: ToastService) {
   }
 
-  public likeAlbum(albumIds: MusicAlbumIds): Subject<any> {
+  public likeAlbum(albumIds: MusicAlbumIds): Subject<any> | undefined {
     if (!this.deviceService.selectedMediaServerDevice().udn) {
       this.toastService.error("select media server", "like album");
       return;
@@ -41,7 +41,7 @@ export class MyMusicService {
     }
   }
 
-  public deleteAlbumLike(albumIds: MusicAlbumIds): Subject<any> {
+  public deleteAlbumLike(albumIds: MusicAlbumIds): Subject<any> | undefined {
     const uri = '/deleteAlbumLike/' + this.deviceService.selectedMediaServerDevice().udn;
     if (albumIds.musicBrainzAlbumId !== '' || albumIds.discogsReleaseId != undefined) {
       return this.httpService.post(this.baseUri, uri, albumIds);
@@ -50,7 +50,7 @@ export class MyMusicService {
     }
   }
 
-  public isAlbumLiked(albumIds: MusicAlbumIds): Subject<boolean> {
+  public isAlbumLiked(albumIds: MusicAlbumIds): Subject<boolean> | undefined {
     const uri = '/isAlbumLiked/' + this.deviceService.selectedMediaServerDevice().udn;
     if (albumIds.musicBrainzAlbumId !== '' || albumIds.discogsReleaseId != undefined) {
       return this.httpService.post<boolean>(this.baseUri, uri, albumIds);

@@ -95,7 +95,7 @@ export class MyPlaylistsComponent implements OnInit {
   getContentHandler(): ScrollLoadHandler {
     return {
       contentDirectoryService: this.contentDirectoryService,
-      persistenceService: null,
+      persistenceService: undefined,
     };
   }
 
@@ -143,11 +143,11 @@ export class MyPlaylistsComponent implements OnInit {
   }
 
   backButtonVisible(): boolean {
-    if (this.rootPlaylistId === '' ||
-      this.contentDirectoryService.currentContainerList().currentContainer.id.length == 0) {
+    const currentContainer = this.contentDirectoryService.currentContainerList().currentContainer;
+    if (this.rootPlaylistId === '' || !currentContainer || currentContainer.id.length == 0) {
       return false;
     }
-    return this.rootPlaylistId != this.contentDirectoryService.currentContainerList().currentContainer.id;
+    return this.rootPlaylistId != currentContainer.id;
   }
 
   getParentTitle(): string {

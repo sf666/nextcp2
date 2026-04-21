@@ -72,17 +72,17 @@ export class AddPlaylistComponent {
   });
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) data: { item: MusicItemDto, container: ContainerDto },
+    @Inject(MAT_DIALOG_DATA) data: { item: MusicItemDto | undefined, container: ContainerDto },
     public serverPlaylistService: ServerPlaylistService,
     deviceService: DeviceService,
     private contentDirectoryService: ContentDirectoryService,
     private dtoGeneratorService: DtoGeneratorService,
     public dialogRef: MatDialogRef<AddPlaylistComponent>,
   ) {
-    this.musicItemToAdd.set(data.item);
     this.addToContainer = data.container;
-    if (data.item) {
+    if (data.item != undefined && data.item.objectID.length > 0) {
       this.playlistMode.set(PlaylistMode.Add);
+      this.musicItemToAdd.set(data.item);
     } else {
       this.playlistMode.set(PlaylistMode.Create);
     }

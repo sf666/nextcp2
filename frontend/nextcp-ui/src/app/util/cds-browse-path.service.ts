@@ -31,7 +31,7 @@ export class CdsBrowsePathService {
   }
 
   public stepOut(): void {
-    if (this.stack.isEmpty) {
+    if (this.stack.isEmpty()) {
       this.setScrollId(baseId);
     }
     var previous = this.stack.pop();

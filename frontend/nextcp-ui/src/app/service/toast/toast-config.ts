@@ -1,8 +1,8 @@
 import { InjectionToken, TemplateRef } from '@angular/core';
 
 export class ToastData {
-  type: ToastType;
-  header: string;
+  type: ToastType = 'info';
+  header: string = '';
   text?: string;
   template?: TemplateRef<any>;
   templateContext?: {};

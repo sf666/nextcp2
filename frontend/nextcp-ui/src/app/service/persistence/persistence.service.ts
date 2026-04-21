@@ -17,7 +17,7 @@ export class PersistenceService {
     localStorage.setItem('lastMediaServerDevice', udn);
   }
 
-  public getCurrentMediaServerDevice(): string {
+  public getCurrentMediaServerDevice(): string | null{
     return localStorage.getItem('lastMediaServerDevice');
   }
 
@@ -35,7 +35,7 @@ export class PersistenceService {
     localStorage.setItem('lastMediaRendererDevice', udn);
   }
 
-  public getCurrentMediaRendererDevice(): string {
+  public getCurrentMediaRendererDevice(): string | null {
     return localStorage.getItem('lastMediaRendererDevice');
   }
 
@@ -49,7 +49,7 @@ export class PersistenceService {
     localStorage.setItem('lastMediaServerPath', oid);    
   }
 
-  public getLastObjectId(): string {
+  public getLastObjectId(): string | null{
     return localStorage.getItem('lastMediaServerPath');
   }
 
@@ -58,7 +58,7 @@ export class PersistenceService {
     localStorage.setItem('lastFocusId', oid);    
   }
 
-  public getLastFocusId(): string {
+  public getLastFocusId(): string | null {
     return localStorage.getItem('lastFocusId');
   }
 

@@ -22,7 +22,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
 })
 export class MusicLibraryComponent implements AfterViewInit {
 
-  @ViewChild(DisplayContainerComponent) dispContainer: DisplayContainerComponent;
+  @ViewChild(DisplayContainerComponent) dispContainer!: DisplayContainerComponent;
   @Input() objectId!: string;
   
   constructor(
@@ -134,7 +134,7 @@ export class MusicLibraryComponent implements AfterViewInit {
     }
   }
 
-  private browseToOid(oid: string, udn: string, stepIn: boolean, sortCriteria?: string): Promise<boolean> {
+  private browseToOid(oid: string, udn: string, stepIn: boolean, sortCriteria?: string): Promise<boolean> | undefined {
     if (this.dispContainer) {
       return this.dispContainer.browseToOid(oid, udn, stepIn, sortCriteria);
     }

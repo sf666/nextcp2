@@ -4,7 +4,6 @@ import { Subject } from 'rxjs';
 import { MusicItemIdDto, UpdateStarRatingRequest } from './dto.d';
 import { HttpService } from './http.service';
 import { Injectable } from '@angular/core';
-import { error } from 'console';
 
 @Injectable({
   providedIn: 'root'

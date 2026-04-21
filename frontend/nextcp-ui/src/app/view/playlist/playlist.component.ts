@@ -47,6 +47,7 @@ export class PlaylistComponent implements OnInit {
     if (id === this.playlistService.playlistState().Id) {
       return "active";
     }
+    return "";
   }
 
   play() : void {

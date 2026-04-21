@@ -76,7 +76,7 @@ export class ContainerTileComponent {
   }
 
   getSmallCss() {
-    if (this.smallIcons) {
+    if (this.smallIcons()) {
       return ' small ';
     } else {
       return '';

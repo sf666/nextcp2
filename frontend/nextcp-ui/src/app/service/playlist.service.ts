@@ -86,11 +86,12 @@ export class PlaylistService implements OnInit {
     this.setRepeat(!this.rendererService.isRepeat());
   }
 
-  private getSelectedMediaRendererUdn(): string {
+  private getSelectedMediaRendererUdn(): string | undefined {
     if (this.deviceService.selectedMediaRendererDevice().udn !== '') {
       return this.deviceService.selectedMediaRendererDevice().udn;
     }
     this.genericResultService.displayErrorMessage("output device not selected. Aborting ... ", "Output device error");
+    return undefined;
   }
 
   //
@@ -98,14 +99,20 @@ export class PlaylistService implements OnInit {
   // ===========================================================================
 
   public seekId(id: string): void {
-    if (this.getSelectedMediaRendererUdn() !== '') {
-      const uri = '/seekId';
-      const genericNumberRequest: GenericNumberRequest = { deviceUDN: this.getSelectedMediaRendererUdn(), value: parseInt(id) };
-      this.httpService.post(this.baseUri, uri, genericNumberRequest).subscribe();
+    const udn = this.getSelectedMediaRendererUdn();
+    if (!udn) {
+      return;
     }
+    const uri = '/seekId';
+    const genericNumberRequest: GenericNumberRequest = { deviceUDN: udn, value: parseInt(id) };
+    this.httpService.post(this.baseUri, uri, genericNumberRequest).subscribe();
   }
 
   public getPlaylistItems(udn: string): void {
+    if (!udn) {
+      return;
+    }
+
     const uri = '/getPlaylistItems';
     if (udn !== '') {
       this.httpService.post<MusicItemDto[]>(this.baseUri, uri, udn).subscribe(data => {
@@ -116,6 +123,10 @@ export class PlaylistService implements OnInit {
   }
 
   public getPlaylistState(udn: string): void {
+    if (!udn) {
+      return;
+    }
+
     const uri = '/getState';
     if (udn !== '') {
       this.httpService.post<PlaylistState>(this.baseUri, uri, udn).subscribe(data => {
@@ -129,11 +140,20 @@ export class PlaylistService implements OnInit {
   }
 
   public readList(): void {
+    const udn = this.getSelectedMediaRendererUdn();
+    if (!udn) {
+      return;
+    }
     const uri = '/readList';
-    this.httpService.post(this.baseUri, uri, this.getSelectedMediaRendererUdn()).subscribe();
+    this.httpService.post(this.baseUri, uri, udn).subscribe();
   }
 
   public addToPlaylist(musicItemDto: MusicItemDto): void {
+    const udn = this.getSelectedMediaRendererUdn();
+    if (!udn) {
+      return;
+    }
+
     const uri = '/insert';
     const playRequestDto: PlayRequestDto = {
       mediaRendererDto: this.deviceService.selectedMediaRendererDevice(),
@@ -145,6 +165,11 @@ export class PlaylistService implements OnInit {
   }
 
   public addToPlaylistNext(musicItemDto: MusicItemDto): void {
+    const udn = this.getSelectedMediaRendererUdn();
+    if (!udn) {
+      return;
+    }
+
     const uri = '/insertNext';
     const playRequestDto: PlayRequestDto = {
       mediaRendererDto: this.deviceService.selectedMediaRendererDevice(),
@@ -156,81 +181,118 @@ export class PlaylistService implements OnInit {
   }
 
   public addContainerToPlaylist(containerDto: ContainerDto): void {
+    const udn = this.getSelectedMediaRendererUdn();
+    if (!udn) {
+      return;
+    }
     const uri = '/insertContainer';
     const playlistAddContainerRequest: PlaylistAddContainerRequest = {
       containerDto: containerDto,
       shuffle: false,
-      mediaRendererUdn: this.getSelectedMediaRendererUdn()
+      mediaRendererUdn: udn
     }
-
     this.httpService.postWithSuccessMessage(this.baseUri, uri, playlistAddContainerRequest, 'Playlist', 'Songs successfully added.', "Error adding songs to playlist.").subscribe();
   }
+  
 
   public addContainerToPlaylistAndPlay(containerDto: ContainerDto, _shuffle: boolean): void {
+    const udn = this.getSelectedMediaRendererUdn();
+    if (!udn) {
+      return;
+    }
     const uri = '/insertAndPlayContainer';
     const playlistAddContainerRequest: PlaylistAddContainerRequest = {
       containerDto: containerDto,
       shuffle: _shuffle,
-      mediaRendererUdn: this.getSelectedMediaRendererUdn()
+      mediaRendererUdn: udn
     }
 
     this.httpService.postWithSuccessMessage(this.baseUri, uri, playlistAddContainerRequest, 'Playlist', 'Songs successfully added. Start playing ... ', "Error adding songs to playlist.").subscribe();
   }
 
   public setShuffle(shuffle: boolean): void {
+    const udn = this.getSelectedMediaRendererUdn();
+    if (!udn) {
+      return;
+    }
     const uri = '/setShuffle';
     const req: GenericBooleanRequest = {
-      deviceUDN: this.getSelectedMediaRendererUdn(),
+      deviceUDN: udn,
       value: shuffle
     };
-
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }
 
   public pause(): void {
+    const udn = this.getSelectedMediaRendererUdn();
+    if (!udn) {
+      return;
+    }
     const uri = '/pause';
-    this.httpService.post(this.baseUri, uri, this.getSelectedMediaRendererUdn()).subscribe();
+    this.httpService.post(this.baseUri, uri, udn).subscribe();
   }
 
   public deleteAll(): void {
+    const udn = this.getSelectedMediaRendererUdn();
+    if (!udn) {
+      return;
+    }
     const uri = '/deleteAll';
-    this.httpService.post(this.baseUri, uri, this.getSelectedMediaRendererUdn()).subscribe(() => {
+    this.httpService.post(this.baseUri, uri, udn).subscribe(() => {
       this.updatePlaylistItems();
     });
   }
 
   public setRepeat(repeat: boolean): void {
+    const udn = this.getSelectedMediaRendererUdn();
+    if (!udn) {
+      return;
+    }
     const uri = '/setRepeat';
     const req: GenericBooleanRequest = {
-      deviceUDN: this.getSelectedMediaRendererUdn(),
+      deviceUDN: udn,
       value: repeat
     };
-
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }
 
   public deleteSongFromRendererPlaylist(id: string): void {
+    const udn = this.getSelectedMediaRendererUdn();
+    if (!udn) {
+      return;
+    }
     const uri = '/delete';
     const req: GenericNumberRequest = {
-      deviceUDN: this.getSelectedMediaRendererUdn(),
+      deviceUDN: udn,
       value: parseInt(id)
     };
-
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }
 
   public play(): void {
+    const udn = this.getSelectedMediaRendererUdn();
+    if (!udn) {
+      return;
+    }
     const uri = '/play';
-    this.httpService.post(this.baseUri, uri, this.getSelectedMediaRendererUdn()).subscribe();
+    this.httpService.post(this.baseUri, uri, udn).subscribe();
   }
 
   public next(): void {
+    const udn = this.getSelectedMediaRendererUdn();
+    if (!udn) {
+      return;
+    }
     const uri = '/next';
-    this.httpService.post(this.baseUri, uri, this.getSelectedMediaRendererUdn()).subscribe();
+    this.httpService.post(this.baseUri, uri, udn).subscribe();
   }
 
   public previous(): void {
+    const udn = this.getSelectedMediaRendererUdn();
+    if (!udn) {
+      return;
+    }
     const uri = '/previous';
-    this.httpService.post(this.baseUri, uri, this.getSelectedMediaRendererUdn()).subscribe();
+    this.httpService.post(this.baseUri, uri, udn).subscribe();
   }
 }

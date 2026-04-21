@@ -61,5 +61,6 @@ export class AvailableServerComponent {
     if (this.deviceService.isMediaServerSelected(udn)) {
       return "selected";
     }
+    return "";
   }
 }

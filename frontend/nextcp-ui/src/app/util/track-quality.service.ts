@@ -25,7 +25,7 @@ export class TrackQualityService {
     return false;
   }
 
-  public getHifiString(song: MusicItemDto) : string {
+  public getHifiString(song: MusicItemDto) : string | undefined {
     let bps = this.getBitsPerSample(song);
     let sFreq = this.getSampleFreq(song);
     if (!this.isHifi) {
@@ -37,6 +37,7 @@ export class TrackQualityService {
     } else if (bps >= 16 && sFreq > 44100) {
       return "Hi-Res"
     }
+    return undefined;
   }
 
   public getBitrate(song: MusicItemDto): number {

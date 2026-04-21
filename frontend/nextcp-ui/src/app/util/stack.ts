@@ -1,6 +1,6 @@
 export default class Stack<TData> {
 
-    private _topNode: Node<TData> = undefined;
+    private _topNode: Node<TData> | undefined = undefined;
     private _count: number = 0;
 
     public count(): number {
@@ -19,15 +19,22 @@ export default class Stack<TData> {
     }
 
     public pop(): TData {
+        if (!this._topNode) {
+            throw new Error('Cannot pop from an empty stack');
+        }
+
         // remove the top node from the stack.
         // the node at the top now is the one before it
-        let poppedNode = this._topNode;
+        let poppedNode  = this._topNode;
         this._topNode = poppedNode.previous;
         this._count--;
         return poppedNode.data;
     }
 
     public peek(): TData {
+        if (!this._topNode) {
+            throw new Error('Cannot peek an empty stack');
+        }
         return this._topNode.data;
     }
 
@@ -35,10 +42,10 @@ export default class Stack<TData> {
 
 class Node<T> {
 
-    previous: Node<T>;
+    previous: Node<T> | undefined;
     data: T;
 
-    constructor (data: T, previous: Node<T>) {
+    constructor (data: T, previous: Node<T> | undefined) {
         this.previous = previous;
         this.data = data;
     }

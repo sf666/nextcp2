@@ -19,7 +19,7 @@ export class ContentDirectoryService {
   baseUri = '/ContentDirectoryService';
 
   // for parent navigation back to last CDS objectId
-  private lastBrowseRequest: BrowseRequestDto;
+  private lastBrowseRequest!: BrowseRequestDto;
 
   //
   // signals
@@ -55,8 +55,8 @@ export class ContentDirectoryService {
   private page = 0;
   private TURN_PAGE_AFTER = 60;
   private MAX_REQUEST_ITEMS = 100;
-  private PAGED_BROWSE_REQUEST: BrowseRequestDto;
-  private turn_page_id: string;
+  private PAGED_BROWSE_REQUEST!: BrowseRequestDto;
+  private turn_page_id: string | undefined;
 
   // search
   lastSearchObject = signal<SearchRequestDto>(this.dtoGeneratorService.generateEmptySearchRequestDto());
@@ -97,6 +97,7 @@ export class ContentDirectoryService {
     if (!this.isCurrentContainerRoot()) {
       return this.browseChildren(this.currentContainerList().currentContainer.parentID, sortCriteria, mediaServerUdn);
     }
+    return new Subject<ContainerItemDto>();
   }
 
   /**
@@ -113,6 +114,7 @@ export class ContentDirectoryService {
     if (!mediaServerUdn) {
       if (!this.deviceService.selectedMediaServerDevice().udn) {
         this.toastService.error('select media server', 'MediaLibrary');
+        return new Subject<ContainerItemDto>();
       } else {
         mediaServerUdn = this.deviceService.selectedMediaServerDevice().udn;
       }
@@ -171,7 +173,7 @@ export class ContentDirectoryService {
 
     if (browseRequestDto.mediaServerUDN?.length < 1) {
       console.log(this.id + "UDN not set. Stop browsing.");
-      return;
+      return new Subject<ContainerItemDto>();
     }
 
     this.setActivePage(browseRequestDto);
@@ -297,7 +299,7 @@ export class ContentDirectoryService {
   }
 
   public getPageTurnId(): string {
-    return this.turn_page_id;
+    return this.turn_page_id ?? '';
   }
 
   private updatePageTurnId(data: ContainerItemDto): string | undefined {
@@ -334,14 +336,14 @@ export class ContentDirectoryService {
 
   private createBrowseRequest(
     objectID: string,
-    sortCriteria: string,
-    mediaServerUdn: string,
+    sortCriteria?: string,
+    mediaServerUdn?: string,
     searchInOID?: string,
   ): BrowseRequestDto {
     const br: BrowseRequestDto = {
-      mediaServerUDN: mediaServerUdn,
+      mediaServerUDN: mediaServerUdn ?? '',
       objectID: objectID,
-      sortCriteria: sortCriteria,
+      sortCriteria: sortCriteria ?? '',
       start: 0,
       filter: '*',
       count: 999,

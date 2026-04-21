@@ -55,5 +55,6 @@ export class AvailableRendererComponent {
     if (this.deviceService.isMediaRendererSelected(udn)) {
       return "selected";
     }
+    return "";
   }
 }

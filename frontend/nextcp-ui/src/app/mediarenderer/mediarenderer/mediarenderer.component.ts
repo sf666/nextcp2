@@ -2,7 +2,6 @@ import { DeviceService } from 'src/app/service/device.service';
 import { DefaultPlaylistService } from './../../mediaserver/popup/defaut-playlists/default-playlist.service';
 import { LayoutService } from './../../service/layout.service';
 import { MusicItemDto } from './../../service/dto.d';
-import { BackgroundImageService } from './../../util/background-image.service';
 import { RendererService } from './../../service/renderer.service';
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { StarRatingComponent } from '../../view/star-rating/star-rating.component';
@@ -26,7 +25,6 @@ export class MediarendererComponent implements OnInit {
     public deviceService: DeviceService,
     private layoutService: LayoutService,
     public musicLibraryService: MusicLibraryService,
-    private backgroundImageService: BackgroundImageService,
     public rendererService: RendererService) {
   }
 
@@ -35,7 +33,7 @@ export class MediarendererComponent implements OnInit {
   }
 
   public hasCurrentSongTitle(): boolean {
-    if (this.rendererService.trackInfoAvailable) {
+    if (this.rendererService.trackInfoAvailable()) {
       return true;
     }
     else {

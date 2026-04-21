@@ -9,12 +9,12 @@ import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 export class ImageCropperComponent implements OnInit {
 
     @ViewChild("image", { static: false })
-    public imageElement: ElementRef;
+    public imageElement!: ElementRef;
 
     @Input("src")
-    public imageSource: string;
+    public imageSource!: string;
 
-    public croppedImageData: string;
+    public croppedImageData: string = '';
 
     public constructor() {
     }
@@ -55,6 +55,9 @@ export class ImageCropperComponent implements OnInit {
 
             // draw our image at position 0, 0 on the canvas
             const ctx = outputImage.getContext('2d');
+            if (!ctx) {
+                return;
+            }
             ctx.drawImage(inputImage, 0, 0);
 
             this.croppedImageData = outputImage.toDataURL();

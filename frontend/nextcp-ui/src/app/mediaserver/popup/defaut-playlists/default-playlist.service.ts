@@ -10,11 +10,9 @@ import { AddPlaylistComponent } from 'src/app/popup/add-playlist/add-playlist.co
 })
 export class DefaultPlaylistService {
 
-  private dialogRef: MatDialogRef<any, any>;
+  private dialogRef: MatDialogRef<any, any> | undefined;
 
-  constructor(
-    private dialog: MatDialog) {
-    this.dialog = dialog;
+  constructor(private dialog: MatDialog) { 
   }
 
   public openAddGlobalPlaylistDialog(item: MusicItemDto, folder: ContainerDto): MatDialogRef<any, any> {
@@ -28,7 +26,7 @@ export class DefaultPlaylistService {
     return this.dialogRef;
   }
 
-  public openAddGlobalPlaylistDialogWithBackdrop(item: MusicItemDto, folder: ContainerDto): MatDialogRef<any, any> {
+  public openAddGlobalPlaylistDialogWithBackdrop(item: MusicItemDto | undefined, folder: ContainerDto): MatDialogRef<any, any> {
     this.dialogRef = this.dialog.open(AddPlaylistComponent, {
       hasBackdrop: true,
       height: '500px',
@@ -47,8 +45,8 @@ export class DefaultPlaylistService {
    * @param parent 
    * @returns 
    */
-  public openAddPlaylistDialogWithParent(event: any, objectID: string, parent: SongOptionsComponent): MatDialogRef<any, any> {
-    let target: ElementRef;
+  public openAddPlaylistDialogWithParent(event: any, objectID: string, parent?: SongOptionsComponent): MatDialogRef<any, any> {
+    let target: ElementRef | undefined;
 
     if (event.target) {
       target = new ElementRef(event.target);
@@ -64,12 +62,13 @@ export class DefaultPlaylistService {
   }
 
   public openAddPlaylistDialog(event: any, objectID: string): MatDialogRef<any, any> {
-    return this.openAddPlaylistDialogWithParent(event, objectID, null);
+    return this.openAddPlaylistDialogWithParent(event, objectID, undefined);
   }
 
   public close(): void {
-    if (this.dialogRef) {
+    if (this.dialogRef != undefined) {
       this.dialogRef.close();
+      this.dialogRef = undefined;
     }
   }
 }

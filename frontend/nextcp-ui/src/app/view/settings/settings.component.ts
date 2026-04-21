@@ -1,3 +1,4 @@
+import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { RendererService } from './../../service/renderer.service';
 import { ToastService } from './../../service/toast/toast.service';
 import { MyMusicService } from './../../service/my-music.service';
@@ -72,13 +73,14 @@ export class SettingsComponent implements OnInit {
     friendlyName: '',
     extendedApi: false,
   };
+
   none_renderdevice: MediaRendererDto = {
     img: '',
     udn: '',
     friendlyName: '',
     services: [],
     allSources: [],
-    currentSource: null,
+    currentSource: this.dtoGeneratorService.emptyInputSourceDto(),
   };
 
   constructor(
@@ -90,7 +92,8 @@ export class SettingsComponent implements OnInit {
     public systemService: SystemService,
     public myMusicService: MyMusicService,
     private layoutService: LayoutService,
-    public configService: ConfigurationService
+    public configService: ConfigurationService,
+    public dtoGeneratorService: DtoGeneratorService
   ) {
     var currentLocation = window.location;
     if (this.protocolHandlerAvailable()) {
@@ -138,11 +141,10 @@ export class SettingsComponent implements OnInit {
   }
 
   protocolHandlerAvailable(): boolean {
-    if (navigator.registerProtocolHandler) {
-      return true;
-    } else {
-      return false;
-    }
+    const protocolHandler =
+      window.isSecureContext &&
+      typeof (navigator as Navigator & { registerProtocolHandler?: unknown }).registerProtocolHandler === 'function';
+    return protocolHandler;
   }
 
   isRendererConfigActive(deviceConfig: RendererDeviceConfiguration): boolean {

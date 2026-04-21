@@ -10,7 +10,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class QualityBadgeComponent implements OnInit {
 
-  @Input() item: MusicItemDto;
+  @Input() item!: MusicItemDto;
 
   constructor(public trackQualityService: TrackQualityService) { }
 

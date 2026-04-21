@@ -38,13 +38,10 @@ export class SystemService {
     const options = {
       responseType: 'text',
     };
-    
-    let protocolHandler: boolean;
-    if (navigator.registerProtocolHandler) {
-      protocolHandler = true;
-    } else {
-      protocolHandler = false;
-    }
+
+    const protocolHandler =
+      window.isSecureContext &&
+      typeof (navigator as Navigator & { registerProtocolHandler?: unknown }).registerProtocolHandler === 'function';
 
     this.http.post("/SystemService/getSpotifyAppRegistration", protocolHandler, { responseType: 'text' }).subscribe(url => window.open(url, "_blanc"));
   }
@@ -66,7 +63,9 @@ export class SystemService {
   private openUrl(url: string) {
     console.log("opening registration link : " + url);
     const frame = document.getElementById("spotifyIframe");
-    frame.setAttribute("src", url);
+    if (frame) {
+      frame.setAttribute("src", url);
+    }
   }
 
   public get build(): SystemInformationDto {

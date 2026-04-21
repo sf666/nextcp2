@@ -11,7 +11,7 @@ export function debounce<T extends (...args: any[]) => any>(
   ms: number,
   callback: T
 ): (...args: Parameters<T>) => Promise<ReturnType<T>> {
-  let timer: NodeJS.Timeout | undefined;
+  let timer: ReturnType<typeof setTimeout> | undefined;
 
   return (...args: Parameters<T>) => {
     if (timer) {

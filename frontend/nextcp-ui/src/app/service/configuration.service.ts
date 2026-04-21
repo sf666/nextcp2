@@ -25,7 +25,8 @@ export class ConfigurationService {
   // Configs
   // ===============================================================================
 
-  serverConfig: Config;                       // global server side configuration file (server state) (read only)
+  // global server side configuration file (server state) (read only)
+  serverConfig!: Config;
   rendererConfig = signal<RendererConfigDto>(this.dtoGeneratorService.emptyRendererConfigDto());  // renderer configurations
   serverConfigDto = signal<ServerConfigDto>(this.dtoGeneratorService.emptyServerConfigDto());  // List of server devices
 
@@ -72,7 +73,7 @@ export class ConfigurationService {
     })
   };
 
-  public deviceDriverList: DeviceDriverCapability[];
+  public deviceDriverList: DeviceDriverCapability[] = [];
 
   baseUri = '/ConfigurationService';
 
@@ -115,15 +116,15 @@ export class ConfigurationService {
     });
   }
 
-  public findServerConfig(udn: string): ServerDeviceConfiguration {
+  public findServerConfig(udn: string): ServerDeviceConfiguration | undefined{
     return this.serverConfigDto().serverDevices.find(d => d.mediaServer.udn === udn);
   }
 
-  public findRendererConfig(udn: string): RendererDeviceConfiguration {
+  public findRendererConfig(udn: string): RendererDeviceConfiguration | undefined{
     return this.rendererConfig().rendererDevices.find(d => d.mediaRenderer.udn === udn);
   }
 
-  public getSelectedServerConfig(udn: string): ServerDeviceConfiguration {
+  public getSelectedServerConfig(udn: string): ServerDeviceConfiguration | undefined {
     return this.serverConfigDto().serverDevices.find(d => d.mediaServer.udn === udn);
   }
 

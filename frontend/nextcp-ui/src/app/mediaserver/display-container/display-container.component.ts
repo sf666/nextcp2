@@ -160,7 +160,7 @@ export class DisplayContainerComponent {
     udn: string,
     stepIn: boolean,
     sortCriteria?: string
-  ): Promise<boolean> {
+  ): Promise<boolean> | undefined{
     if (!this.contentHandler) {
       console.error('contentHandler not initialized.');
       return;
@@ -171,8 +171,8 @@ export class DisplayContainerComponent {
     }
 
     const promise = new Promise<boolean>((resolve, reject) => {
-      if (this.contentHandler().persistenceService) {
-        this.contentHandler().persistenceService.setCurrentObjectID(oid);
+      if (this.contentHandler().persistenceService != undefined) {
+        this.contentHandler().persistenceService?.setCurrentObjectID(oid);
       }
       if (this.contentHandler().contentDirectoryService) {
         this.contentHandler().contentDirectoryService

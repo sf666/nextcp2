@@ -16,7 +16,7 @@ export class DeviceService {
   public mediaServerList = signal<MediaServerDto[]>([]);
   public mediaRendererList = signal<MediaRendererDto[]>([]);
   public selectedMediaServerDevice = signal<MediaServerDto>({ udn: '', img: '', friendlyName: 'select Media-Server', extendedApi: false });
-  public selectedMediaRendererDevice = signal<MediaRendererDto>({ udn: '', img: '', friendlyName: 'select Media-Renderer', services: [], allSources: [], currentSource: null });
+  public selectedMediaRendererDevice = signal<MediaRendererDto>({ udn: '', img: '', friendlyName: 'select Media-Renderer', services: [], allSources: [], currentSource: { id: 0, Name: '', Type: '', Visible: false } });
 
   public mediaRendererSelected = computed (() => {
     return this.selectedMediaRendererDevice().udn.length > 0;
@@ -162,6 +162,9 @@ export class DeviceService {
 
   private selectLastPersistentRendererDevice(): boolean {
     let udn = this.persistenceService.getCurrentMediaRendererDevice();
+    if (!udn) {
+      return false;
+    }
     let b = this.setMediaRendererByUdn(udn);
     if (!b) {
       console.log("last persistence media renderer device not available yet.");
@@ -171,6 +174,9 @@ export class DeviceService {
 
   private selectLastPersistentServerDevice(): boolean {
     let udn = this.persistenceService.getCurrentMediaServerDevice();
+    if (!udn) {
+      return false;
+    }
     let b = this.setMediaServerByUdn(udn);
     if (!b) {
       console.log("last persistence media server device not available yet.");
