@@ -189,7 +189,8 @@ export class MusicLibraryComponent implements AfterViewInit {
   }
 
   public backButtonVisible(): boolean {
-    if (this.contentDirectoryService.currentContainerList().currentContainer.id.length == 0) {
+    const currentContainer = this.contentDirectoryService.currentContainerList().currentContainer;
+    if (!currentContainer || currentContainer.id.length == 0) {
       return false;
     }
 
