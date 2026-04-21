@@ -26,7 +26,6 @@ import {
 } from '@angular/common/http';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import {
-  provideClientHydration,
   BrowserModule,
   bootstrapApplication,
 } from '@angular/platform-browser';
@@ -101,7 +100,6 @@ bootstrapApplication(AppComponent, {
       ReactiveFormsModule,
       
     ),
-    provideClientHydration(),
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy,

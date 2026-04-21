@@ -47,7 +47,7 @@ import { DisplayHeaderOptionsComponent } from '../../popup/display-header-option
 
 export class DisplayContainerHeaderComponent implements OnInit {
 
-  @ViewChild('genresSelect') genresSelectbox: MatSelect;
+  @ViewChild('genresSelect') genresSelectbox!: MatSelect;
 
   //
   // signals
@@ -199,7 +199,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     this.quickSearchString.set('');
   }
 
-  public clearGenres(event): void {
+  public clearGenres(event: MouseEvent): void {
     this.genresSelectbox.options.forEach((item: MatOption) => item.deselect());
     event.stopPropagation();
   }
@@ -297,8 +297,8 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   private getTotalTimeSeconds(tracks: MusicItemDto[]): number {
     let completeTime: number;
+    completeTime = 0;
     if (tracks.length > 0) {
-      completeTime = 0;
       tracks.forEach(
         (el) =>
         (completeTime =
