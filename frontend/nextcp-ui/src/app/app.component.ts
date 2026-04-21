@@ -1,6 +1,6 @@
 import { SpinnerService } from './service/spinner.service';
 import { LayoutService } from './service/layout.service';
-import { ChangeDetectionStrategy, Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, inject, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as _ from "lodash";
@@ -10,6 +10,7 @@ import { SidebarComponent } from './view/sidebar/sidebar.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { RouterOutlet } from '@angular/router';
 import { initFlowbite } from 'flowbite';
+import { AppVisibilityService } from './service/app-visibility/app-visibility-service.service';
 
 @Component({
     selector: 'app-root',
@@ -21,7 +22,9 @@ import { initFlowbite } from 'flowbite';
 })
 export class AppComponent implements OnInit {
   title = 'nextCP/2';
-
+  // AppVisibilityService instance is injected to track app visibility and trigger route reloads when the app becomes visible again
+  readonly visibilityService = inject(AppVisibilityService);
+  
   ngOnInit(): void {
     initFlowbite();
   }
@@ -48,17 +51,4 @@ export class AppComponent implements OnInit {
       return "navHidden";
     }
   }
-
-  /*
-  // Mobile Devices URL bar / view height fix.
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    // this.throttleResize();
-    // this.resiseVh();
-  }
-  private resiseVh() {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  }
-*/
 }
