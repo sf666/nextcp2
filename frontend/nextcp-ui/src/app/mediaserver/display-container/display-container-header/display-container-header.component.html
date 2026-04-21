@@ -84,7 +84,7 @@
         @if (currentContainer.id?.length ?? 0 > 0) {
           <div class="flex flex-wrap grow justify-end">
             <div class="flex content-center me-3">
-              <div class="flex me-3 self-end" style="height: 56px;">
+              <div id="search_in_this_page" class="flex me-3 self-end" style="height: 56px;">
                 <label for="search" class="mb-2 text-sm font-medium sr-only text-white">search in this page</label>
                 <div class="relative flex w-64">
                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -110,8 +110,8 @@
               </div>
               }
               @if(!hasSongs()) {
-              <div class="button-container self-end" (click)="openOptionsDialog($event)">
-                <button type="button" class="text-white focus:outline-none focus:ring-4 font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 bg-gray-800 hover:bg-gray-700 focus:ring-gray-700 border-gray-700">
+              <div class="button-container self-end" style="height: 56px; width: 56px;">
+                <button id="options_button" type="button" style="width: 100%; height: 100%; padding: 0;" class="text-white focus:outline-none focus:ring-4 font-medium rounded-lg text-sm bg-zinc-300/10 bg-zinc-700/40 border border-zinc-600 hover:bg-zinc-600/40" (click)="openOptionsDialog($event)">
                   <mat-icon class="material-symbols-sharp">more_vert</mat-icon>
                 </button>
               </div>
