@@ -3,6 +3,7 @@ package devicedriver.tcp;
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.channels.AsynchronousCloseException;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.ExecutorService;
@@ -22,8 +23,17 @@ public class TcpDeviceConnection {
 	// Constants
 	// -------------------------------------------------------------------------
 
+	/** Size of the read buffer in bytes. */
 	private static final int BUFFER_SIZE = 4096;
+
+	/**
+	 * Maximum time in milliseconds to wait for a response after a send. The
+	 * timeout is only evaluated after a send has been issued and no response
+	 * has been received yet. Idle time between sends is not affected.
+	 */
 	private static final long RECEIVE_TIMEOUT_MS = 1000;
+
+	/** Maximum time in milliseconds to wait for executor shutdown. */
 	private static final long THREAD_SHUTDOWN_TIMEOUT_MS = 5000;
 
 	// -------------------------------------------------------------------------
@@ -37,8 +47,8 @@ public class TcpDeviceConnection {
 	private volatile SocketChannel socketToDevice = null;
 
 	/**
-	 * Optional callback for received data. May be null if dataReceived() is
-	 * overridden in a subclass.
+	 * Optional callback for received data. May be null if
+	 * {@link #dataReceived(ByteBuffer)} is overridden in a subclass.
 	 */
 	private final IDataReceivedCallback receivedCallback;
 
@@ -57,16 +67,23 @@ public class TcpDeviceConnection {
 	/** Future representing the currently running read task. */
 	private volatile Future<?> readFuture = null;
 
-	/** Timestamp of the last successful send operation. */
+	/**
+	 * Timestamp of the last successful send operation. Used together with
+	 * {@link #lastReceive} to detect unanswered sends.
+	 */
 	private final AtomicLong lastSend = new AtomicLong(System.currentTimeMillis());
 
-	/** Timestamp of the last successful receive operation. */
+	/**
+	 * Timestamp of the last successful receive operation. Updated every time
+	 * data is received from the remote device.
+	 */
 	private final AtomicLong lastReceive = new AtomicLong(System.currentTimeMillis());
 
 	/**
 	 * Flag indicating whether any data has ever been received on this
-	 * connection. Used to avoid triggering a reconnect before the first
-	 * response is received.
+	 * connection. The receive timeout is only active after the first response
+	 * has been received. This prevents a premature reconnect before the device
+	 * has had a chance to respond.
 	 */
 	private final AtomicBoolean dataEverReceived = new AtomicBoolean(false);
 
@@ -75,6 +92,14 @@ public class TcpDeviceConnection {
 	 */
 	private volatile boolean isReconnecting = false;
 
+	// -------------------------------------------------------------------------
+	// Constructor
+	// -------------------------------------------------------------------------
+
+	public TcpDeviceConnection(SocketAddress address) {
+		this(address, null);
+	}
+	
 	/**
 	 * Creates a new TcpDeviceConnection.
 	 *
@@ -84,10 +109,6 @@ public class TcpDeviceConnection {
 	 *            overridden.
 	 * @throws IllegalArgumentException if address is null.
 	 */
-	public TcpDeviceConnection(SocketAddress address) {
-		this(address, null);		
-	}
-	
 	public TcpDeviceConnection(SocketAddress address, IDataReceivedCallback receivedCallback) {
 		if (address == null) {
 			throw new IllegalArgumentException("address must not be null");
@@ -111,6 +132,10 @@ public class TcpDeviceConnection {
 		});
 	}
 
+	// -------------------------------------------------------------------------
+	// Public API
+	// -------------------------------------------------------------------------
+
 	/**
 	 * Returns the remote socket address of this connection.
 	 *
@@ -122,7 +147,7 @@ public class TcpDeviceConnection {
 
 	/**
 	 * Opens the TCP connection to the remote device and starts the read task.
-	 * Any previously open connection is closed before attempting to reconnect.
+	 * Any previously open connection is closed before attempting to connect.
 	 *
 	 * @return true if the connection was established successfully, false
 	 *         otherwise.
@@ -166,7 +191,7 @@ public class TcpDeviceConnection {
 			try {
 				log.info("Reconnecting to {} ...", address);
 
-				// Reset timestamps and received flag so the timeout check
+				// Reset timestamps and the received flag so the timeout check
 				// does not fire immediately after the new connection is
 				// established.
 				lastSend.set(System.currentTimeMillis());
@@ -182,10 +207,31 @@ public class TcpDeviceConnection {
 
 	/**
 	 * Sends data to the remote device.
+	 *
 	 * <p>
-	 * If no data has been received within {@value #RECEIVE_TIMEOUT_MS}ms after
-	 * the first successful receive, a reconnect is triggered and the send is
-	 * aborted. The caller is responsible for retrying after the connection is
+	 * The receive timeout is evaluated before each send according to the
+	 * following rules:
+	 * </p>
+	 * <ul>
+	 * <li>No timeout check before the first response has been received
+	 * ({@link #dataEverReceived} is false). This allows arbitrary idle time
+	 * between {@link #open()} and the first send.</li>
+	 * <li>No timeout check when the last receive happened after the last send
+	 * (i.e. the device is not currently expected to respond).</li>
+	 * <li>A reconnect is triggered when all of the following are true:
+	 * <ol>
+	 * <li>At least one response has been received on this connection.</li>
+	 * <li>The last send happened after the last receive, meaning a response is
+	 * outstanding.</li>
+	 * <li>More than {@value #RECEIVE_TIMEOUT_MS}ms have passed since the last
+	 * send without receiving a response.</li>
+	 * </ol>
+	 * </li>
+	 * </ul>
+	 *
+	 * <p>
+	 * If a reconnect is triggered, the data is not re-sent automatically. The
+	 * caller is responsible for retrying after the connection is
 	 * re-established.
 	 * </p>
 	 *
@@ -198,12 +244,17 @@ public class TcpDeviceConnection {
 			return;
 		}
 
-		// Only check the receive timeout after at least one response has been
-		// received.
-		// This prevents an immediate reconnect on the very first send after
-		// connect.
-		if (dataEverReceived.get() && (System.currentTimeMillis() - lastReceive.get()) > RECEIVE_TIMEOUT_MS) {
-			log.warn("Did not receive any data in the last {}ms, reconnecting ...", RECEIVE_TIMEOUT_MS);
+		// Evaluate the receive timeout only if:
+		// 1. At least one response has ever been received on this connection.
+		// Before the first receive, arbitrary idle time is allowed (e.g. after
+		// open()).
+		// 2. The last send happened AFTER the last receive.
+		// This means a response is currently outstanding.
+		// 3. More than RECEIVE_TIMEOUT_MS have passed since the last send.
+		// This means the device did not respond in time.
+		if (dataEverReceived.get() && lastSend.get() > lastReceive.get() &&
+			(System.currentTimeMillis() - lastSend.get()) > RECEIVE_TIMEOUT_MS) {
+			log.warn("No response received within {}ms after last send to {}, reconnecting ...", RECEIVE_TIMEOUT_MS, address);
 			reconnect();
 			// Data is not re-sent after reconnect since the connection state is
 			// unclear.
@@ -260,19 +311,21 @@ public class TcpDeviceConnection {
 
 	/**
 	 * Called when data has been received from the remote device.
+	 *
 	 * <p>
 	 * The default implementation delegates to the {@link IDataReceivedCallback}
 	 * if one was provided at construction time. Subclasses may override this
 	 * method to handle received data directly.
 	 * </p>
+	 *
 	 * <p>
 	 * The provided buffer is managed by the read task. Implementations must not
-	 * call {@code clear()} or modify the buffer position/limit. Use
+	 * call {@code clear()} or modify the buffer position or limit. Use
 	 * {@link ByteBuffer#asReadOnlyBuffer()} if a read-only view is needed.
 	 * </p>
 	 *
 	 * @param receivedBuffer the buffer containing the received data, ready for
-	 *            reading (flipped).
+	 *            reading (already flipped).
 	 */
 	protected void dataReceived(ByteBuffer receivedBuffer) {
 		if (receivedCallback != null) {
@@ -282,6 +335,9 @@ public class TcpDeviceConnection {
 		}
 	}
 
+	// -------------------------------------------------------------------------
+	// Private helpers
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Starts the read task on the read executor. Any previously running read
@@ -318,24 +374,29 @@ public class TcpDeviceConnection {
 						reconnect();
 						break;
 					} else if (bytesRead == 0) {
-						// No data available in non-blocking mode: sleep briefly
-						// to avoid CPU spin
+						// No data available in non-blocking mode.
+						// Sleep briefly to avoid busy-waiting / CPU spin.
 						log.debug("No data available, sleeping briefly ...");
 						Thread.sleep(10);
 						continue;
 					} else {
 						log.debug("Received {} bytes from {}", bytesRead, address);
+
+						// Update receive timestamp and mark that data has been
+						// received at least once. This enables the timeout
+						// check
+						// in sendData() for subsequent sends.
 						lastReceive.set(System.currentTimeMillis());
 						dataEverReceived.set(true);
+
 						buffer.flip();
 						dataReceived(buffer);
 						buffer.clear();
 					}
 				} catch (ClosedChannelException e) {
 					// Expected when the socket is closed externally while
-					// read() is blocking.
-					// This is not an error - it happens during intentional
-					// close/reconnect.
+					// read() is blocking. This is not an error - it happens
+					// during intentional close() or reconnect() calls.
 					log.debug("Socket closed during read for {}, terminating read task", address);
 					break;
 				} catch (IOException e) {
