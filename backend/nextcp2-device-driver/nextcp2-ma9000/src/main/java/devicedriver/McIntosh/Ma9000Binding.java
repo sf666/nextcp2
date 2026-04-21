@@ -1,6 +1,5 @@
 package devicedriver.McIntosh;
 
-import java.io.IOException;
 import java.net.SocketAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,24 +13,26 @@ import nextcp.dto.InputSourceDto;
 
 public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverService {
 
-	private static final Logger log = LoggerFactory.getLogger(Ma9000Binding.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(Ma9000Binding.class);
 
-	private McIntoshDeviceConnection device = null;
+	private volatile McIntoshDeviceConnection device = null;
+	private final DeviceDriverState state = new DeviceDriverState();
+	private final IDeviceDriverCallback callback;
+	private final InputManager inputManager = new InputManager();
+	private final Object stateLock = new Object();
 
-	private DeviceDriverState state = new DeviceDriverState();
-
-	private IDeviceDriverCallback callback = null;
-
-	private InputManager inputManager = new InputManager();
-	private SocketAddress hostAddress = null;
-	
-	public Ma9000Binding(SocketAddress hostAddress, IDeviceDriverCallback callback, String rendererUdn) throws IOException {
+	public Ma9000Binding(SocketAddress hostAddress, IDeviceDriverCallback callback, String rendererUdn) {
 		if (hostAddress == null) {
-			throw new RuntimeException("hostAddress shall not be null");
+			throw new IllegalArgumentException("hostAddress must not be null");
 		}
-		this.hostAddress = hostAddress;
+		if (callback == null) {
+			throw new IllegalArgumentException("callback must not be null");
+		}
+		if (rendererUdn == null) {
+			throw new IllegalArgumentException("rendererUdn must not be null");
+		}
 
-		log.info("Initializing MA 9000 driver. connecting to : {}", hostAddress.toString());
+		log.info("Initializing MA9000 driver, connecting to: {}", hostAddress);
 		this.callback = callback;
 
 		state.rendererUDN = rendererUdn;
@@ -40,84 +41,94 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
 		state.hasDeviceDriver = true;
 		state.input = new InputSourceDto();
 		state.balance = 0;
-		
-		start();
+
+		start(hostAddress);
 	}
 
 	@Override
-	public void start() {		
-		log.info("starting physical device ...");
+	public void start() {
 		if (device != null) {
-			device.close();
+			start(device.getSocketAddress());
+		} else {
+			log.error("Cannot restart: no previous device connection available");
 		}
-		device = new McIntoshDeviceConnection(this, hostAddress, null);
-		
-		Runnable r = new Runnable() {
-			
-			@Override
-			public void run() {
-				device.open();
+	}
+
+	private void start(SocketAddress hostAddress) {
+		log.info("Starting physical device connection to {} ...", hostAddress);
+
+		McIntoshDeviceConnection oldDevice = device;
+		if (oldDevice != null) {
+			oldDevice.shutdown();
+		}
+
+		McIntoshDeviceConnection newDevice = new McIntoshDeviceConnection(this, hostAddress);
+		device = newDevice;
+
+		Thread t = new Thread(() -> {
+			if (newDevice.open()) {
+				log.info("Connection established to {}", hostAddress);
 				checkPowerState();
+			} else {
+				log.error("Failed to open connection to {}", hostAddress);
 			}
-		};
-		Thread t = new Thread(r, "MA9000 socket connect");
+		}, "MA9000-connect-thread");
+		t.setDaemon(true);
 		t.start();
 	}
 
 	@Override
 	public void stop() {
-		if (device != null) {
-			log.info("stopping physical device ...");
-			device.close();
+		McIntoshDeviceConnection currentDevice = device;
+		if (currentDevice != null) {
+			log.info("Stopping physical device ...");
+			currentDevice.shutdown();
+			device = null;
 		}
 	}
-	
-	
+
 	private void checkPowerState() {
 		device.send(Commands.POWER_STATUS);
 	}
 
 	@Override
 	public void standbyStateChanged(boolean standbyState) {
-		if (deviceSwitchedOn(standbyState)) {
+		log.debug("Standby state changed to: {}", standbyState);
+
+		if (!standbyState) {
 			readDeviceInfoAfterPowerChange();
 		}
-		state.standby = standbyState;
-		callback.standbyChanged(standbyState); // convert from power logic to
-												 // standby logic
-	}
 
-	private boolean deviceSwitchedOn(boolean standbyState) {
-		return standbyState == false;
+		synchronized (stateLock) {
+			state.standby = standbyState;
+		}
+		callback.standbyChanged(standbyState);
 	}
 
 	/**
-	 * device information can only be read, if the device is powered on.
+	 * read device information after power on.
+	 * power state will NOT be read to avoid an endless loop.
 	 */
 	private void readDeviceInfoAfterPowerChange() {
 		device.send(Commands.INPUT_STATUS);
 		device.send(Commands.VOLUME_STATUS);
-		// Do not read power status, since this method is called on power change
-		// ... this would end in a loop
 	}
 
 	public int getVolume() {
-		if (state.volume != null) {
-			return state.volume;
+		synchronized (stateLock) {
+			return state.volume != null ? state.volume : 0;
 		}
-
-		return 0;
 	}
 
 	@Override
-	public void setStandby(boolean gotoStandybyMode) {
-		if (!gotoStandybyMode) {
+	public void setStandby(boolean gotoStandbyMode) {
+		log.info("MA9000 at {} : set standby to {}", device.getSocketAddress(), gotoStandbyMode);
+
+		if (!gotoStandbyMode) {
 			device.send(Commands.POWER_ON);
 		} else {
 			device.send(Commands.POWER_OFF);
 		}
-		log.info(
-			String.format("MA9000 at %s : set standby to %s", device.getSocketAddress().toString(), Boolean.toString(gotoStandybyMode)));
 	}
 
 	@Override
@@ -125,27 +136,27 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
 		device.send(Commands.VOLUME_SET_PERCENT, volInPercent);
 	}
 
-	/**
-	 * Volume is delivered in percent
-	 */
 	@Override
 	public void volumeStatusChanged(int volume) {
-		state.volume = volume;
+		log.debug("Volume changed to: {}", volume);
+		synchronized (stateLock) {
+			state.volume = volume;
+		}
 		callback.volumeChanged(volume);
 	}
 
 	@Override
 	public DeviceDriverState getCurrentState() {
-		return state;
+		synchronized (stateLock) {
+			return state;
+		}
 	}
 
 	@Override
 	public boolean getStandby() {
-		if (state.standby != null) {
-			return state.standby;
+		synchronized (stateLock) {
+			return state.standby != null ? state.standby : false;
 		}
-
-		return false;
 	}
 
 	@Override
@@ -155,40 +166,44 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
 
 	@Override
 	public InputSourceDto getInput() {
-		return state.input;
+		synchronized (stateLock) {
+			return state.input;
+		}
 	}
 
 	@Override
 	public void inputChanged(String input) {
+		log.debug("McIntosh input changed to: {}", input);
 		try {
-			log.debug("McIntosh input changed to : " + input);
 			int id = Integer.parseInt(input.trim());
-			state.input = inputManager.getInputSource(id);
-			callback.inputChanged(state.input);
-		} catch (Exception e) {
-			log.warn("cannot parse input : " + input != null ? input : "NULL", e);
+			InputSourceDto inputSource = inputManager.getInputSource(id);
+			synchronized (stateLock) {
+				state.input = inputSource;
+			}
+			callback.inputChanged(inputSource);
+		} catch (NumberFormatException e) {
+			// Fix: Operator-Precedence Bug behoben
+			log.warn("Cannot parse input: '{}'", input != null ? input : "NULL", e);
 		}
 	}
 
 	@Override
 	public void trimBalanceChanged(int balance) {
-		try {
-			log.debug("trim balance changed to : {}", balance);
+		log.debug("Trim balance changed to: {}", balance);
+		synchronized (stateLock) {
 			state.balance = balance;
-			callback.trimBalanaceChanged(state.balance);
-		} catch (Exception e) {
-			log.error("trimBalanceChanged", e);
 		}
+		callback.trimBalanaceChanged(balance);
 	}
 
 	@Override
 	public void trimInputChanged(float trimInp) {
-		log.debug("trim input changed to : {}", trimInp);
+		log.debug("Trim input changed to: {}", trimInp);
 	}
 
 	@Override
 	public void trimEqChanged(boolean eq) {
-		log.debug("trim EQ changed to : {}", eq);
+		log.debug("Trim EQ changed to: {}", eq);
 	}
 
 	@Override

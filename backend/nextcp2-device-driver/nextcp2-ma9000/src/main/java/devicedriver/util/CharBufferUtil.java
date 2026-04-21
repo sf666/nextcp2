@@ -1,129 +1,154 @@
 package devicedriver.util;
 
-
 import java.nio.CharBuffer;
 
 /**
- * Der Buffers muss gefliped sein.
+ * Utility methods for CharBuffer operations. Prerequisite: The buffer must
+ * be flipped before use (flip() has been called).
  */
-public class CharBufferUtil
-{
-    public static int getFirstIndexOf(char c, CharBuffer buffer)
-    {
-        if (buffer == null)
-        {
-            return -1;
-        }
+public class CharBufferUtil {
 
-        for (int i = 0; i < buffer.limit() - 1; i++)
-        {
-            if (buffer.get(i) == c)
-            {
-                return i;
-            }
-        }
-        return -1;
-    }
+	private CharBufferUtil() {
+	}
 
-    public static int getLastIndexOf(char c, CharBuffer buffer)
-    {
-        if (buffer == null)
-        {
-            return -1;
-        }
-        for (int i = buffer.limit() - 1; i >= 0; i--)
-        {
-            if (buffer.get(i) == c)
-            {
-                return i;
-            }
-        }
-        return -1;
-    }
+	/**
+	 * Returns the first index of the searched character.
+	 *
+	 * @param c Character to search for
+	 * @param buffer Flipped CharBuffer
+	 * @return Index of the first occurrence, or -1 if not found
+	 */
+	public static int getFirstIndexOf(char c, CharBuffer buffer) {
+		if (buffer == null) {
+			return -1;
+		}
 
-    public static boolean endsWith(char c, CharBuffer buffer)
-    {
-        if (buffer == null)
-        {
-            return false;
-        }
+		for (int i = 0; i < buffer.limit(); i++) {
+			if (buffer.get(i) == c) {
+				return i;
+			}
+		}
+		return -1;
+	}
 
-        if (buffer.limit() < 0)
-        {
-            return false;
-        }
+	/**
+	 * Returns the last index of the searched character.
+	 *
+	 * @param c Character to search for
+	 * @param buffer Flipped CharBuffer
+	 * @return Index of the last occurrence, or -1 if not found
+	 */
+	public static int getLastIndexOf(char c, CharBuffer buffer) {
+		if (buffer == null) {
+			return -1;
+		}
 
-        return buffer.get(buffer.limit() - 1) == c;
-    }
+		for (int i = buffer.limit() - 1; i >= 0; i--) {
+			if (buffer.get(i) == c) {
+				return i;
+			}
+		}
+		return -1;
+	}
 
-    public static boolean endsWith(String chars, CharBuffer buffer)
-    {
-        if (buffer == null)
-        {
-            return false;
-        }
+	/**
+	 * Checks whether the buffer ends with the specified character.
+	 *
+	 * @param c Character to search for
+	 * @param buffer Flipped CharBuffer
+	 * @return true if the buffer ends with the character
+	 */
+	public static boolean endsWith(char c, CharBuffer buffer) {
+		if (buffer == null || buffer.limit() == 0) {
+			return false;
+		}
 
-        if (buffer.limit() < 0)
-        {
-            return false;
-        }
+		return buffer.get(buffer.limit() - 1) == c;
+	}
 
-        int comparePos = buffer.limit() - chars.length();
-        for (int i = 0; i < chars.length() - 1; i++)
-        {
-            if (chars.charAt(i) != buffer.get(comparePos + i))
-            {
-//                System.out.println("chars : >" + chars + "<");
-//                System.out.println("buffer : >" + buffer.toString() + "<");
-//                System.out.println("pos : " + comparePos);
-//                System.out.println("i :" + i);
-//                System.out.println("char at : >" + chars.charAt(i) + "<");
-//                System.out.println("buffer at : >" + buffer.get(comparePos + i) + "<");
-                return false;
-            }
-        }
+	/**
+	 * Checks whether the buffer ends with the specified string.
+	 *
+	 * @param chars String to search for
+	 * @param buffer Flipped CharBuffer
+	 * @return true if the buffer ends with the string
+	 */
+	public static boolean endsWith(String chars, CharBuffer buffer) {
+		if (buffer == null || chars == null) {
+			return false;
+		}
 
-        return true;
-    }
+		// Fix: Guard against a buffer that is too short
+		if (buffer.limit() < chars.length()) {
+			return false;
+		}
 
-    public static boolean startsWith(char c, CharBuffer buffer)
-    {
-        if (buffer == null)
-        {
-            return false;
-        }
-        if (buffer.limit() < 0)
-        {
-            return false;
-        }
-        return buffer.get(0) == c;
-    }
+		int comparePos = buffer.limit() - chars.length();
 
-    public static boolean startsWith(String request, CharBuffer buffer)
-    {
-        if (buffer == null || request == null)
-        {
-            return false;
-        }
+		// Fix: < chars.length() instead of < chars.length() - 1
+		for (int i = 0; i < chars.length(); i++) {
+			if (chars.charAt(i) != buffer.get(comparePos + i)) {
+				return false;
+			}
+		}
 
-        if (buffer.limit() < 0)
-        {
-            return false;
-        }
+		return true;
+	}
 
-        for (int i = 0; i < request.length() - 1; i++)
-        {
-            if (request.charAt(i) != buffer.get(i))
-            {
-                return false;
-            }
-        }
+	/**
+	 * Checks whether the buffer starts with the specified character.
+	 *
+	 * @param c Character to search for
+	 * @param buffer Flipped CharBuffer
+	 * @return true if the buffer starts with the character
+	 */
+	public static boolean startsWith(char c, CharBuffer buffer) {
+		if (buffer == null || buffer.limit() == 0) {
+			return false;
+		}
 
-        return true;
-    }
+		return buffer.get(0) == c;
+	}
 
-    public static String[] split(CharBuffer buffer, String regex)
-    {
-        return buffer.toString().split(regex);
-    }
+	/**
+	 * Checks whether the buffer starts with the specified string.
+	 *
+	 * @param request String to search for
+	 * @param buffer Flipped CharBuffer
+	 * @return true if the buffer starts with the string
+	 */
+	public static boolean startsWith(String request, CharBuffer buffer) {
+		if (buffer == null || request == null) {
+			return false;
+		}
+
+		// Fix: Guard against a buffer that is too short
+		if (buffer.limit() < request.length()) {
+			return false;
+		}
+
+		// Fix: < request.length() instead of < request.length() - 1
+		for (int i = 0; i < request.length(); i++) {
+			if (request.charAt(i) != buffer.get(i)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Splits the buffer using the specified regex.
+	 *
+	 * @param buffer Flipped CharBuffer
+	 * @param regex Delimiter as regex
+	 * @return Array of split strings, empty array for null input
+	 */
+	public static String[] split(CharBuffer buffer, String regex) {
+		if (buffer == null || regex == null) {
+			return new String[0];
+		}
+
+		return buffer.toString().split(regex);
+	}
 }
