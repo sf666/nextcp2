@@ -14,7 +14,7 @@ import {
 } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
-import { form, Field } from '@angular/forms/signals';
+import { form, FormField } from '@angular/forms/signals';
 import { LayoutService } from 'src/app/service/layout.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
@@ -53,7 +53,7 @@ interface SettingsFormModel {
     MatSlideToggleModule,
     ReactiveFormsModule,
     AlertComponent,
-    Field
+    FormField,
   ],
 })
 export class SettingsComponent implements OnInit {

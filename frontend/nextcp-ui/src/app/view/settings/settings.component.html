@@ -4,7 +4,7 @@
       <div class="flex mb-4">
         <h1 class="text-xl font-medium tracking-tight text-white">Server Configuration</h1>
         <div class="flex items-center ms-4">
-          <input id="enabled-all-Server" type="checkbox" [field]="settingsForm.showOnlyActiveServer" class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+          <input id="enabled-all-Server" type="checkbox" [formField]="settingsForm.showOnlyActiveServer" class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
           <label for="enabled-all-Server" class="ms-2 text-sm font-light">show only active server</label>
         </div>
       </div>
@@ -66,7 +66,7 @@
     <div class="mb-6 mt-8 flex flex-row mt-4">
       <h1 class="text-xl font-medium tracking-tight text-white">Renderer Configuration</h1>
       <div class="flex items-center ms-4">
-        <input id="enabled-all-Renderer" type="checkbox" [field]="settingsForm.showOnlyActiveRenderer" class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+        <input id="enabled-all-Renderer" type="checkbox" [formField]="settingsForm.showOnlyActiveRenderer" class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
         <label for="enabled-all-Renderer" class="ms-2 text-sm font-light">show only active renderer</label>
       </div>
     </div>
@@ -366,7 +366,7 @@
           from your browsers URL bar into the input field below
       </p>
       <div class="relative z-0 w-full mb-5 group max-w-2xl">
-          <input [field]="settingsForm.spotifyCode" type="text" id="FORM_SPOTIFY_CODE"
+          <input [formField]="settingsForm.spotifyCode" type="text" id="FORM_SPOTIFY_CODE"
             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
             placeholder="" />
           <label for="FORM_SPOTIFY_CODE"
