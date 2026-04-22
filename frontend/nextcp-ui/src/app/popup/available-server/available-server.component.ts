@@ -21,8 +21,9 @@ export class AvailableServerComponent {
   filteredMediaServerList = computed(() => {
     return this.deviceService.mediaServerList().filter(
       pl => {
-        if (this.configurationService.findServerConfig(pl.udn)) {
-          return this.configurationService.findServerConfig(pl.udn).enabled;
+        const serverConfig = this.configurationService.findServerConfig(pl.udn);
+        if (serverConfig) {
+          return serverConfig.enabled;
         } else {
           console.log("server config not found for : " + pl.friendlyName);
           return true;

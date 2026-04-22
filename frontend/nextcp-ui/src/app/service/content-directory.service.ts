@@ -59,8 +59,8 @@ export class ContentDirectoryService {
   private turn_page_id: string | undefined;
 
   // search
-  lastSearchObject = signal<SearchRequestDto>(this.dtoGeneratorService.generateEmptySearchRequestDto());
-  lastSearchType = signal<string>('');
+  private lastSearchObject = signal<SearchRequestDto>(this.dtoGeneratorService.generateEmptySearchRequestDto());
+  private lastSearchType = signal<string>('');
 
   private id = "id_" + Math.random().toString(16).slice(2);
 

@@ -2,10 +2,16 @@
   <div class="border-0 border-b-1 text-lg font-bold border-zinc-600 p-4">Media Renderer</div>
   <div class="dialogItems flex flex-col flex-wrap mt-4 minWidth">
   @for (device of filteredMediaRendererList(); track device) {
-        <div class="flex no-wrap element-item {{getSelectedClass(device.udn)}}"
+        <div class="element-item {{getSelectedClass(device.udn)}}"
           (click)="selectRenderer(device.udn)">
-          <img class="h-6 w-6" src="{{device.img}}" alt="{{device.friendlyName}}">
-          <div class="ml-4">{{device.friendlyName}}</div>
+          <div class="renderer-icon-slot">
+            @if (device.img?.length > 0) {
+              <img class="renderer-icon" src="{{device.img}}" alt="{{device.friendlyName}}">
+            } @else {
+              <div class="renderer-icon-placeholder"></div>
+            }
+          </div>
+          <div class="renderer-name" title="{{device.friendlyName}}">{{device.friendlyName}}</div>
         </div>
   }
   </div>
