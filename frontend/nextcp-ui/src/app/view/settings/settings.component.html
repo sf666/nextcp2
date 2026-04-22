@@ -149,7 +149,7 @@
         <div class="flex border-0 border-t-1 border-zinc-600 p-6 flex justify-around">
             <button mat-stroked-button class="ms-2" color="primary" (click)="saveRendererConfig(rendererConfig)">save</button>
             <button mat-stroked-button class="ms-2" color="warn" (click)="deleteRendererConfig(rendererConfig)">delete</button>
-            <button mat-stroked-button class="ms-2" color="basic" (click)="initServices(rendererConfig)">init services</button>
+            <button mat-stroked-button class="ms-2 init-services-button" (click)="initServices(rendererConfig)">init services</button>
         </div>
       </div>
       }
@@ -165,20 +165,20 @@
       {{currentMediaServer.friendlyName}}
     </div>
     } @else {
-    @if (extendedApiNotAvailable()) {
-    <div class="p-4 m-4 text-sm rounded-lg bg-gray-800 text-red-400" role="alert">
-      Advanced actions are available only when using <i>Universal Media Server</i>.
-    </div>
-    }
+      @if (extendedApiNotAvailable()) {
+      <div class="p-4 m-4 text-sm rounded-lg bg-gray-800 text-red-400" role="alert">
+        Advanced actions are available only when using <i>Universal Media Server</i>.
+      </div>
+      }
     }
 
     <h2 class="mt-4 font-medium tracking-tight text-gray-300">Album Actions</h2>
     <div class="section subhead flex flex-col">
-      <div class="flex flex-wrap">
-        <button mat-stroked-button color="warn" class="ms-2 mb-2 my-buttons" (click)="myMusicService.backupLikedAlbums()" [disabled]="extendedApiNotAvailable()">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-2xl">
+        <button mat-stroked-button class="my-buttons w-full" (click)="myMusicService.backupLikedAlbums()" [disabled]="extendedApiNotAvailable()">
           backup liked albums
         </button>
-        <button mat-stroked-button class="ms-2 mb-2 my-buttons" (click)="myMusicService.restoreLikedAlbums()" [disabled]="extendedApiNotAvailable()">
+        <button mat-stroked-button color="warn" class="my-buttons w-full" (click)="myMusicService.restoreLikedAlbums()" [disabled]="extendedApiNotAvailable()">
           restore liked albums
         </button>
       </div>
@@ -186,11 +186,11 @@
 
     <h2 class="mt-4 font-medium tracking-tight text-gray-300">Rating Actions</h2>
     <div class="section subhead flex flex-col">
-      <div class="flex flex-wrap">
-        <button mat-stroked-button color="warn" class="ms-2 mb-2 my-buttons" (click)="myMusicService.backupRatings()" [disabled]="extendedApiNotAvailable()">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-2xl">
+        <button mat-stroked-button class="my-buttons w-full" (click)="myMusicService.backupRatings()" [disabled]="extendedApiNotAvailable()">
           backup ratings
         </button>
-        <button mat-stroked-button class="ms-2 mb-2 my-buttons" (click)="myMusicService.restoreRatings()" [disabled]="extendedApiNotAvailable()">
+        <button mat-stroked-button color="warn" class="my-buttons w-full" (click)="myMusicService.restoreRatings()" [disabled]="extendedApiNotAvailable()">
           restore ratings
         </button>
       </div>
@@ -198,8 +198,8 @@
 
     <h2 class="mt-4 font-medium tracking-tight text-gray-300">Other Actions</h2>
     <div class="section subhead flex flex-col">
-      <div class="flex flex-wrap">
-        <button mat-stroked-button class="ms-2 my-buttons" [disabled]="extendedApiNotAvailable()" (click)="ratingServiceService.syncRatingsFromMusicBrainzToBackend()">import rating
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-2xl">
+        <button mat-stroked-button class="my-buttons w-full" [disabled]="extendedApiNotAvailable()" (click)="ratingServiceService.syncRatingsFromMusicBrainzToBackend()">import rating
           from musicBrainz.org</button>
       </div>
     </div>

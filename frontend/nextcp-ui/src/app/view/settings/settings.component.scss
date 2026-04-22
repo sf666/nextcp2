@@ -1,4 +1,5 @@
 @use "tailwindcss";
+@use '@angular/material' as mat;
 
 :host {
     --mdc-switch-track-height : 20px;
@@ -14,4 +15,17 @@ p, h1, h2, h3, h4, h5, h6, div {
     &.icon-middle {
         margin-top: 0.6rem;
     }
+}
+
+.init-services-button {
+  @include mat.button-overrides((
+    // text color 
+    outlined-label-text-color: #f59e0b,
+    // border color
+//     outlined-outline-color: #f59e0b,
+
+    // color for hover effect (overlay) and focus
+    outlined-state-layer-color: #f59e0b,
+    outlined-ripple-color: #f59e0b
+  ));
 }
