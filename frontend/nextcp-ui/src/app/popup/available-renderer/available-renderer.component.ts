@@ -21,8 +21,9 @@ export class AvailableRendererComponent {
   filteredMediaRendererList = computed(() => {
     return this.deviceService.mediaRendererList().filter(
       pl => {
-        if (this.configurationService.findRendererConfig(pl.udn)) {
-          return this.configurationService.findRendererConfig(pl.udn).active;
+        const rendererConfig = this.configurationService.findRendererConfig(pl.udn);
+        if (rendererConfig) {
+          return rendererConfig.active;
         } else {
           console.log("renderer config not found for : " + pl.friendlyName);
           return true;
@@ -39,7 +40,7 @@ export class AvailableRendererComponent {
   ) {
     this.triggerElementRef = data.trigger;
     this._matDialogRef = _matDialogRef;
-    this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 250, this.popupHeight());
+    this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 350, this.popupHeight());
   }
 
   close(): void {
