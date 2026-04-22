@@ -440,7 +440,7 @@
 			<dependency>
 				<groupId>org.mybatis</groupId>
 				<artifactId>mybatis</artifactId>
-				<version>3.5.8</version>
+				<version>3.5.19</version>
 			</dependency>
 			<!-- Freemarker Template -->
 			<dependency>
