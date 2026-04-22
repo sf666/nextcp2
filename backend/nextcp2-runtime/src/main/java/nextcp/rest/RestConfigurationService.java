@@ -23,7 +23,6 @@ import nextcp.config.ServerConfig;
 import nextcp.devicedriver.DeviceCapabilityDto;
 import nextcp.devicedriver.DeviceDriverDiscoveryService;
 import nextcp.dto.ApplicationConfig;
-import nextcp.dto.AudioAddictConfig;
 import nextcp.dto.Config;
 import nextcp.dto.DeviceDriverCapability;
 import nextcp.dto.MediaPlayerConfigDto;
@@ -33,6 +32,7 @@ import nextcp.dto.RendererDeviceConfiguration;
 import nextcp.dto.ServerConfigDto;
 import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.service.ConfigService;
+import nextcp.service.upnp.Nextcp2NetworkAddressFactory;
 import nextcp.service.upnp.Nextcp2UpnpServiceImpl;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
@@ -105,6 +105,12 @@ public class RestConfigurationService
         return deviceDriverList;
     }
 
+    @GetMapping("/availableBindInterfaces")
+    public List<String> getAvailableBindInterfaces()
+    {
+        return Nextcp2NetworkAddressFactory.getUsableInterfaces();
+    }
+    
     @PostMapping("/saveMusicBrainzConfig")
     public void saveClientConfig(@RequestBody MusicbrainzSupport mbConfig)
     {

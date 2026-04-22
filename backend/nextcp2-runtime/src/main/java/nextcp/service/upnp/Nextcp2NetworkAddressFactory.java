@@ -1,8 +1,10 @@
 package nextcp.service.upnp;
 
 import java.net.NetworkInterface;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.jupnp.transport.impl.NetworkAddressFactoryImpl;
 import org.jupnp.transport.spi.InitializationException;
@@ -16,6 +18,8 @@ public class Nextcp2NetworkAddressFactory extends NetworkAddressFactoryImpl {
 
 	private String bindNetworkInterface = null;
 
+	private static List<String> usableInterfaces = new ArrayList<String>();
+	
 	public Nextcp2NetworkAddressFactory(int streamListenPort, int multicastResponsePort) throws InitializationException {
 		this(streamListenPort, multicastResponsePort, null);
 	}
@@ -34,15 +38,23 @@ public class Nextcp2NetworkAddressFactory extends NetworkAddressFactoryImpl {
 		}
 	}
 
+	
+	public static List<String> getUsableInterfaces() {
+		return usableInterfaces;
+	}
+	
 	@Override
 	protected void discoverNetworkInterfaces() throws InitializationException {
 		bindAddresses.clear();
 		networkInterfaces.clear();
+		usableInterfaces.clear();
+		
 		try {
 			Enumeration<NetworkInterface> interfaceEnumeration = NetworkInterface.getNetworkInterfaces();
 			for (NetworkInterface iface : Collections.list(interfaceEnumeration)) {
 				log.trace("Analyzing network interface: {}", iface.getDisplayName());
 				if (isUsableNetworkInterface(iface)) {
+					usableInterfaces.add(iface.getDisplayName());
 					if (!StringUtils.isBlank(bindNetworkInterface)) {
 						if (!iface.getDisplayName().equalsIgnoreCase(bindNetworkInterface)) {
 							log.warn("ignore interface with name : " + iface.getDisplayName());

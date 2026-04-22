@@ -17,18 +17,19 @@ export class ConfigurationService {
 
   // Observer
   // ===============================================================================
-  rendererConfigChanged$: Subject<RendererDeviceConfiguration[]> = new Subject();
-  applicationConfigChanged$: Subject<ApplicationConfig> = new Subject();
+  public rendererConfigChanged$: Subject<RendererDeviceConfiguration[]> = new Subject();
+  public applicationConfigChanged$: Subject<ApplicationConfig> = new Subject();
   
-  serverConfigurationChanged$: Subject<ServerDeviceConfiguration> = new Subject();
+  public serverConfigurationChanged$: Subject<ServerDeviceConfiguration> = new Subject();
 
   // Configs
   // ===============================================================================
 
   // global server side configuration file (server state) (read only)
-  serverConfig!: Config;
-  rendererConfig = signal<RendererConfigDto>(this.dtoGeneratorService.emptyRendererConfigDto());  // renderer configurations
-  serverConfigDto = signal<ServerConfigDto>(this.dtoGeneratorService.emptyServerConfigDto());  // List of server devices
+  public serverConfig!: Config;
+  public rendererConfig = signal<RendererConfigDto>(this.dtoGeneratorService.emptyRendererConfigDto());  // renderer configurations
+  public serverConfigDto = signal<ServerConfigDto>(this.dtoGeneratorService.emptyServerConfigDto());  // List of server devices
+  public availableBindInterfaces = signal<string[]>([]); // List of available network interfaces for UPnP bind interface configuration
 
   public mediaPlayerConfigDto = signal<MediaPlayerConfigDto>({
     overwrite: false,
@@ -90,6 +91,7 @@ export class ConfigurationService {
       this.getMediaServerConfig();
       this.getMediaPlayerConfig();
       this.getCurrentMediaPlayerConfig();
+      this.getAvailableBindInterfaces();
       sseService.configChanged$.subscribe(serverConfig => this.applyServerConfigurationFile(serverConfig));
       sseService.rendererConfigChanged$.subscribe(data => this.applyRendererServerRendererList(data));
       sseService.serverDevicesConfigChanged$.subscribe(data => this.applyMediaServerList(data));
@@ -107,6 +109,17 @@ export class ConfigurationService {
       this.mediaPlayerConfigDto.set(data);
     });
   }
+
+   private getAvailableBindInterfaces() {
+    const uri = '/availableBindInterfaces';
+
+    this.httpService.get<string[]>(this.baseUri, uri).subscribe(data => {
+      if (data != undefined && data.length > 0) {
+          this.availableBindInterfaces.set(['', ...data]);
+      }
+    });
+  }
+ 
 
   private getDeviceDriverFromServer() {
     const uri = '/availableDeviceDriver';
