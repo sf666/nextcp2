@@ -54,13 +54,13 @@
 		<jupnp.version>3.0.5.ik</jupnp.version>
 		<maven.compiler.release>25</maven.compiler.release>
 		<slf4j.version>2.0.5</slf4j.version>
-		<freemarker.version>2.3.34</freemarker.version>
-		<h2database.version>2.1.210</h2database.version>
+		<freemarker.version>2.3.32</freemarker.version>
+		<h2database.version>2.4.240</h2database.version>
 		<jackson.version>2.16.0</jackson.version>
 		<springboot.version>4.0.5</springboot.version>
-		<jupiter.version>6.0.1</jupiter.version>
+		<jupiter.version>6.0.3</jupiter.version>
 		<commons-codec.version>1.15</commons-codec.version>
-		<snakeyaml.version>2.5</snakeyaml.version>
+		<snakeyaml.version>2.6</snakeyaml.version>
         <commons-configuration.version>1.10</commons-configuration.version>
         <commons-io.version>2.21.0</commons-io.version>
 		<jdom2.version>2.0.6.1</jdom2.version>
@@ -88,7 +88,7 @@
 			<plugin>
 			    <groupId>org.apache.maven.plugins</groupId>
 			    <artifactId>maven-resources-plugin</artifactId>
-			    <version>3.4.0</version>
+			    <version>3.5.0</version>
 				<configuration>
 					<nonFilteredFileExtensions>
 						<nonFilteredFileExtension>woff</nonFilteredFileExtension>
@@ -473,7 +473,7 @@
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
-				<version>3.12.0</version>
+				<version>3.20.0</version>
 			</dependency>
 			<dependency>
 				<groupId>net.jthink</groupId>
