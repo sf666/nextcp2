@@ -488,7 +488,7 @@
 			<dependency>
 				<groupId>com.squareup.okhttp3</groupId>
 				<artifactId>okhttp-urlconnection</artifactId>
-				<version>4.12.0</version>
+				<version>5.3.2</version>
 			</dependency>
 			<!-- Cover and Artist lookup -->
 			<dependency>
