@@ -8,6 +8,7 @@ import { RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCap
 import { GenericResultService } from './generic-result.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
+import { isAssigned } from '../global';
 
 @Injectable({
   providedIn: 'root'
@@ -217,8 +218,12 @@ export class ConfigurationService {
 
   public getMediaServerConfig(): void {
     const uri = '/getMediaServerConfig';
-    this.httpService.get<ServerConfigDto>(this.baseUri, uri).subscribe(data =>
-      this.serverConfigDto.set(data));
+    this.httpService.get<ServerConfigDto>(this.baseUri, uri).subscribe(data => {
+      console.log("Received server config: " + JSON.stringify(data));
+      if (data != undefined) { 
+        this.serverConfigDto.set(data);
+      }
+    });
   }
 
   private getClientConfigFromServer() {
@@ -231,7 +236,10 @@ export class ConfigurationService {
   }
 
   private applyMediaServerList(data: ServerConfigDto) {
-    this.serverConfigDto.set(data);
+    console.log("Applying server config: " + JSON.stringify(data));
+    if (isAssigned(data)) {
+      this.serverConfigDto.set(data);
+    }
 
     this.serverConfigDto().serverDevices = this.serverConfigDto().serverDevices.sort((n1, n2) => {
       return n1.displayString.localeCompare(n2.displayString);
@@ -239,7 +247,10 @@ export class ConfigurationService {
   }
 
   private applyRendererServerRendererList(data: RendererConfigDto) {
-    this.rendererConfig.set(data);
+    console.log("Applying renderer config: " + JSON.stringify(data));
+    if (isAssigned(data)) {
+      this.rendererConfig.set(data);
+    }
 
     this.rendererConfig().rendererDevices = this.rendererConfig().rendererDevices.sort((n1, n2) => {
       return n1.displayString.localeCompare(n2.displayString);
