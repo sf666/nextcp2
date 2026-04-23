@@ -123,7 +123,7 @@ public class ServerConfig
     public void addMediaServerDeviceConfig(RemoteDevice remoteDevice, MediaServerDevice device)
     {
         Optional<ServerDeviceConfiguration> configEntry = serverConfig.serverDevices.stream()
-                .filter(d -> d.mediaServer.udn.contentEquals(remoteDevice.getIdentity().getUdn().getIdentifierString())).findFirst();
+                .filter(d -> d.mediaServer != null && d.mediaServer.udn.contentEquals(remoteDevice.getIdentity().getUdn().getIdentifierString())).findFirst();
         if (configEntry.isPresent())
         {
             log.debug(remoteDevice.getDetails().getFriendlyName() + " is already known.");
@@ -142,7 +142,7 @@ public class ServerConfig
 
     public void updateServerDevice(ServerDeviceConfiguration rendererDevice)
     {
-        serverConfig.serverDevices.removeIf(d -> d.mediaServer.udn.contentEquals(rendererDevice.mediaServer.udn));
+        serverConfig.serverDevices.removeIf(d -> d.mediaServer != null && d.mediaServer.udn.contentEquals(rendererDevice.mediaServer.udn));
         serverConfig.serverDevices.add(rendererDevice);
         writeServerDevicesAndSendConfig();
     }
@@ -160,7 +160,7 @@ public class ServerConfig
 
     public void deleteServerDevice(ServerDeviceConfiguration serverDevice)
     {
-        serverConfig.serverDevices.removeIf(d -> d.mediaServer.udn.contentEquals(serverDevice.mediaServer.udn));
+        serverConfig.serverDevices.removeIf(d -> d.mediaServer != null && d.mediaServer.udn.contentEquals(serverDevice.mediaServer.udn));
         writeServerDevicesAndSendConfig();
     }
 

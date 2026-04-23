@@ -102,7 +102,7 @@ public class RendererConfig {
 		}
 
 		Optional<RendererDeviceConfiguration> configEntry = config.rendererDevices.stream()
-			.filter(d -> d.mediaRenderer.udn.contentEquals(udn)).findFirst();
+			.filter(d -> d.mediaRenderer != null && d.mediaRenderer.udn.contentEquals(udn)).findFirst();
 		if (configEntry.isPresent()) {
 			log.debug(String.format("[%s] device is active : ", configEntry.get().active));
 			return configEntry.get().active;
@@ -137,7 +137,7 @@ public class RendererConfig {
 	}
 
 	private boolean checkIfRendererConfigExists(RemoteDevice remoteDevice, RendererDeviceConfiguration d) {
-		return d.mediaRenderer.udn.equals(remoteDevice.getIdentity().getUdn().getIdentifierString());
+		return d.mediaRenderer != null && d.mediaRenderer.udn.equals(remoteDevice.getIdentity().getUdn().getIdentifierString());
 	}
 
 	private void updateDefaults(RemoteDevice remoteDevice, RendererDeviceConfiguration configEntry) {
@@ -160,7 +160,7 @@ public class RendererConfig {
 	 */
 	public boolean updateRendererDevice(RendererDeviceConfiguration rendererDevice) {
 		RendererDeviceConfiguration old = config.rendererDevices.stream()
-			.filter(d -> d.mediaRenderer.udn.contentEquals(rendererDevice.mediaRenderer.udn)).findFirst().get();
+			.filter(d -> d.mediaRenderer != null && d.mediaRenderer.udn.contentEquals(rendererDevice.mediaRenderer.udn)).findFirst().get();
 		if (old != null) {
 			config.rendererDevices.remove(old);
 		}
@@ -170,7 +170,7 @@ public class RendererConfig {
 	}
 
 	public void deleteRendererDevice(RendererDeviceConfiguration rendererDevice) {
-		config.rendererDevices.removeIf(d -> d.mediaRenderer.udn.contentEquals(rendererDevice.mediaRenderer.udn));
+		config.rendererDevices.removeIf(d -> d.mediaRenderer != null && d.mediaRenderer.udn.contentEquals(rendererDevice.mediaRenderer.udn));
 		writeAndSendConfig();
 	}
 
@@ -193,7 +193,7 @@ public class RendererConfig {
 		}
 
 		Optional<RendererDeviceConfiguration> configEntry = config.rendererDevices.stream()
-			.filter(d -> d.mediaRenderer.udn.contentEquals(udn)).findFirst();
+			.filter(d -> d.mediaRenderer != null && d.mediaRenderer.udn.contentEquals(udn)).findFirst();
 		if (configEntry.isPresent()) {
 			return configEntry.get();
 		}
