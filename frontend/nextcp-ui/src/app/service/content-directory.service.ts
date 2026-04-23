@@ -1,7 +1,8 @@
 import { ConfigurationService } from './configuration.service';
 import { DeviceService } from './device.service';
 import { ToastService } from './toast/toast.service';
-import { Observable, Subject } from 'rxjs';
+import { EMPTY, expand, Observable, Subject } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DtoGeneratorService } from './../util/dto-generator.service';
 import { HttpService } from './http.service';
 import {
@@ -12,7 +13,7 @@ import {
   SearchResultDto,
   MusicItemDto,
 } from './dto.d';
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
 
 @Injectable()
 export class ContentDirectoryService {
@@ -52,10 +53,8 @@ export class ContentDirectoryService {
 
   // to which page was browsed
 
-  private page = 0;
   private TURN_PAGE_AFTER = 60;
-  private MAX_REQUEST_ITEMS = 100;
-  private PAGED_BROWSE_REQUEST!: BrowseRequestDto;
+  private MAX_REQUEST_ITEMS = 200;
   private turn_page_id: string | undefined;
 
   // search
@@ -63,6 +62,7 @@ export class ContentDirectoryService {
   private lastSearchType = signal<string>('');
 
   private id = "id_" + Math.random().toString(16).slice(2);
+  private destroyRef = inject(DestroyRef);
 
   constructor(
     public configService: ConfigurationService,
@@ -124,7 +124,6 @@ export class ContentDirectoryService {
       sortCriteria,
       mediaServerUdn,
     );
-    this.setActivePage(browseRequestDto);
     return this.browseChildrenByRequest(browseRequestDto);
   }
 
@@ -163,58 +162,63 @@ export class ContentDirectoryService {
     );
   }
 
-  private browseChildrenByRequest(
-    browseRequestDto: BrowseRequestDto,
-    additive?: boolean,
-  ): Subject<ContainerItemDto> {
-    if (!additive) {
-      this.page = 0;
-    }
-
+  private browseChildrenByRequest(browseRequestDto: BrowseRequestDto): Subject<ContainerItemDto> {
     if (browseRequestDto.mediaServerUDN?.length < 1) {
-      console.log(this.id + "UDN not set. Stop browsing.");
+      console.log(this.id + ' UDN not set. Stop browsing.');
       return new Subject<ContainerItemDto>();
     }
 
-    this.setActivePage(browseRequestDto);
-
-    const uri = '/browseChildren';
     this.lastBrowseRequest = browseRequestDto;
-    const sub = this.httpService.post<ContainerItemDto>(
+    let page = 0;
+    let isFirstPage = true;
+
+    const firstPage$ = this.httpService.post<ContainerItemDto>(
       this.baseUri,
-      uri,
-      browseRequestDto,
+      '/browseChildren',
+      { ...browseRequestDto, start: 0, count: this.MAX_REQUEST_ITEMS },
     );
-    if (additive) {
-      console.log(this.id + " : browseChildrenByRequest - additive");
-      sub.subscribe((data) => this.addContainer(data));
-    } else {
-      console.log(this.id + " : browseChildrenByRequest - single");
-      sub.subscribe((data) => this.updateContainer(data));
-    }
-    return sub;
+
+    firstPage$.pipe(
+      expand(data => {
+        const count = (data.albumDto?.length ?? 0)
+          + (data.containerDto?.length ?? 0)
+          + (data.musicItemDto?.length ?? 0);
+        if (count < this.MAX_REQUEST_ITEMS) return EMPTY;
+        page++;
+        console.log(this.id + ' : loading page ' + page);
+        return this.httpService.post<ContainerItemDto>(
+          this.baseUri,
+          '/browseChildren',
+          { ...browseRequestDto, start: page * this.MAX_REQUEST_ITEMS, count: this.MAX_REQUEST_ITEMS },
+        );
+      }),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe({
+      next: (data) => {
+        if (isFirstPage) {
+          isFirstPage = false;
+          this.updateContainer(data);
+        } else {
+          this.addContainer(data);
+        }
+      },
+      error: (err) => console.error(this.id + ' : browse error', err),
+    });
+
+    return firstPage$;
   }
 
-  private setActivePage(browseRequestDto: BrowseRequestDto) {
-    this.PAGED_BROWSE_REQUEST = browseRequestDto;
-    browseRequestDto.start = this.MAX_REQUEST_ITEMS * this.page;
-    browseRequestDto.count = this.MAX_REQUEST_ITEMS;
-  }
-
+  // Pagination is now handled automatically via expand in browseChildrenByRequest.
   public browseToNextPage(): Subject<ContainerItemDto> {
-    this.page++;
-    return this.browseChildrenByRequest(this.PAGED_BROWSE_REQUEST, true);
+    return new Subject<ContainerItemDto>();
   }
 
   public refreshCurrentContainer(): void {
-    let browseRequestDto = this.createBrowseRequest(
+    const browseRequestDto = this.createBrowseRequest(
       this.currentContainerID,
       '',
       this.deviceService.selectedMediaServerDevice().udn,
-      '',
     );
-    this.page = 0;
-    this.setActivePage(browseRequestDto);
     this.browseChildrenByRequest(browseRequestDto);
   }
 
@@ -242,16 +246,6 @@ export class ContentDirectoryService {
           item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0,
       ));
       this.browseFinished$.next(data);
-
-      const count =
-        data.albumDto?.length +
-        data.containerDto?.length +
-        data.musicItemDto?.length;
-      if (count >= this.MAX_REQUEST_ITEMS) {
-        this.browseToNextPage();
-      } else {
-        console.log('CDS ' + this.id + ' : updateContainer loaded last page.');
-      }
     } else {
       console.log('CDS ' + this.id + " : no search result was provided.");
     }
@@ -264,10 +258,6 @@ export class ContentDirectoryService {
   public addContainer(data: ContainerItemDto): void {
     if (data) {
       this.currentContainerList.set(data);
-      const count =
-        data.albumDto.length +
-        data.containerDto.length +
-        data.musicItemDto.length;
       this.updatePageTurnId(data);
 
       this.albumList_.update(v => { return [...v].concat(data.albumDto) });
@@ -289,12 +279,6 @@ export class ContentDirectoryService {
       });
 
       this.browseFinished$.next(data);
-
-      if (count >= this.MAX_REQUEST_ITEMS) {
-        this.browseToNextPage();
-      } else {
-        console.log(this.id + ' : addContainer loaded last page.');
-      }
     }
   }
 
