@@ -1,17 +1,15 @@
 package nextcp.spotify.cache;
 
 import java.io.IOException;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.wrapper.spotify.model_objects.specification.Artist;
+import se.michaelthelin.spotify.model_objects.specification.Artist;
 
 @Service
 public class ArtistCacheService
