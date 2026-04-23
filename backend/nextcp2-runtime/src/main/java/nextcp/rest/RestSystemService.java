@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import nextcp.dto.SystemInformationDto;
 import nextcp.service.LastFmService;
 import nextcp.service.SpotifyAuthServiceBridge;
 import nextcp.service.SystemService;
+import nextcp.service.ToastEventPublisher;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
@@ -35,6 +35,9 @@ public class RestSystemService
     @Autowired
     private SpotifyAuthServiceBridge spotifyService = null;
 
+    @Autowired
+    private ToastEventPublisher toastEventPublisher = null;
+    
     public RestSystemService()
     {
     }
@@ -87,10 +90,16 @@ public class RestSystemService
     }
 
     @GetMapping("/spotifyCallback")
-    public void spotifyCallback(@RequestParam String code)
+    public void spotifyCallback(@RequestParam(name = "code") String code)
     {
-        spotifyService.registerSpotifyCode(code);
-        log.info("Spotify account connected with code : " + code);
+    	try {
+            spotifyService.registerSpotifyCode(code);
+            toastEventPublisher.publishSuccessMessage("", "Spotify", "Spotify account connected.");
+            log.info("Spotify account connected with code : " + code);
+    	} catch (Exception e) {
+			log.error("Error registering spotify code : " + code, e);
+            toastEventPublisher.publishErrorMessage("", "Spotify", "Error connecting Spotify account.");
+		}
     }
 
     @GetMapping("/restartNextcp2")
