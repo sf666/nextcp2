@@ -34,194 +34,164 @@ import nextcp.upnp.device.mediaserver.MediaServerDevice;
  * This class is responsible for updating server based configuration entries.
  */
 @Service
-public class ServerConfig
-{
-    private static final Logger log = LoggerFactory.getLogger(ServerConfig.class.getName());
-    private static final String CONFIG_KEY_SERVER_DEVICES = "SERVER_DEVICES";
-    public static final String SERVER_CONFIG_QUEUENAME = "SERVER_DEVICES_CONFIG_CHANGED";
+public class ServerConfig {
 
-    private ServerConfigDto serverConfig = null;
-    private Config globalConfig = null;
+	private static final Logger log = LoggerFactory.getLogger(ServerConfig.class.getName());
+	private static final String CONFIG_KEY_SERVER_DEVICES = "SERVER_DEVICES";
+	public static final String SERVER_CONFIG_QUEUENAME = "SERVER_DEVICES_CONFIG_CHANGED";
 
-    private ConfigService configService = null;
+	private ServerConfigDto serverConfig = null;
+	private Config globalConfig = null;
 
-    private ObjectMapper om = new ObjectMapper();
+	private ConfigService configService = null;
 
-    private SsePublisher ssePublisher = null;
-    private BasicDbService dbService = null;
+	private ObjectMapper om = new ObjectMapper();
 
-    @Autowired
-    public ServerConfig(BasicDbService dbService, SsePublisher ssePublisher, Config globalConfig, ConfigService configService)
-    {
-        this.dbService = dbService;
-        this.ssePublisher = ssePublisher;
-        this.globalConfig = globalConfig;
-        this.configService = configService;
+	private SsePublisher ssePublisher = null;
+	private BasicDbService dbService = null;
 
-        om.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
-        serverConfig = readConfig();
-    }
+	@Autowired
+	public ServerConfig(BasicDbService dbService, SsePublisher ssePublisher, Config globalConfig, ConfigService configService) {
+		this.dbService = dbService;
+		this.ssePublisher = ssePublisher;
+		this.globalConfig = globalConfig;
+		this.configService = configService;
 
-    public ServerConfigDto getServerConfig()
-    {
-        return serverConfig;
-    }
+		om.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
+		serverConfig = readConfig();
+	}
 
-    public ServerDeviceConfiguration getMediaServerConfig(String udn)
-    {
-        if (serverConfig == null || serverConfig.serverDevices == null)
-        {
-            return null;
-        }
+	public ServerConfigDto getServerConfig() {
+		return serverConfig;
+	}
 
-        Optional<ServerDeviceConfiguration> configEntry = serverConfig.serverDevices.stream().filter(d -> d.mediaServer.udn.contentEquals(udn)).findFirst();
-        if (configEntry.isPresent())
-        {
-            return configEntry.get();
-        }
-        return null;
-    }
+	public ServerDeviceConfiguration getMediaServerConfig(String udn) {
+		if (serverConfig == null || serverConfig.serverDevices == null) {
+			return null;
+		}
 
-    /**
-     * Server devices configuration will be saved in database key-value store.
-     */
-    public void writeServerDevicesConfig()
-    {
-        try
-        {
-            ObjectWriter writer = om.writer();
-            String value = writer.withDefaultPrettyPrinter().writeValueAsString(serverConfig.serverDevices);
-            dbService.updateJsonStoreValue(new KeyValuePair(CONFIG_KEY_SERVER_DEVICES, value));
-        }
-        catch (JsonProcessingException e)
-        {
-            log.error("could not write config", e);
-        }
-    }
+		Optional<ServerDeviceConfiguration> configEntry = serverConfig.serverDevices.stream()
+			.filter(d -> d != null && d.mediaServer != null && d.mediaServer.udn.contentEquals(udn)).findFirst();
+		if (configEntry.isPresent()) {
+			return configEntry.get();
+		}
+		return null;
+	}
 
-    /**
-     * Build config from file system and database entries for client transfer
-     * 
-     * @return
-     */
-    private ServerConfigDto readConfig()
-    {
-        ServerConfigDto sc = new ServerConfigDto();
-        try
-        {
-            String value = "";
-            value = dbService.selectJsonStoreValue(CONFIG_KEY_SERVER_DEVICES);
-            sc.serverDevices = readMediaServerConfig(value);
-            return sc;
-        }
-        catch (Exception e)
-        {
-            return generateDefaultConfig();
-        }
-    }
+	/**
+	 * Server devices configuration will be saved in database key-value store.
+	 */
+	public void writeServerDevicesConfig() {
+		try {
+			ObjectWriter writer = om.writer();
+			String value = writer.withDefaultPrettyPrinter().writeValueAsString(serverConfig.serverDevices);
+			dbService.updateJsonStoreValue(new KeyValuePair(CONFIG_KEY_SERVER_DEVICES, value));
+		} catch (JsonProcessingException e) {
+			log.error("could not write config", e);
+		}
+	}
 
-    public void addMediaServerDeviceConfig(RemoteDevice remoteDevice, MediaServerDevice device)
-    {
-        Optional<ServerDeviceConfiguration> configEntry = serverConfig.serverDevices.stream()
-                .filter(d -> d.mediaServer != null && d.mediaServer.udn.contentEquals(remoteDevice.getIdentity().getUdn().getIdentifierString())).findFirst();
-        if (configEntry.isPresent())
-        {
-            log.debug(remoteDevice.getDetails().getFriendlyName() + " is already known.");
-            updateDefaults(remoteDevice, configEntry.get());
-            device.updateCurrentConfigState(configEntry.get());
-            writeServerDevicesAndSendConfig();
-        }
-        else
-        {
-            ServerDeviceConfiguration c = device.getNewServerConfig();
-            serverConfig.serverDevices.add(c);
-            writeServerDevicesAndSendConfig();
-            log.info(remoteDevice.getDetails().getFriendlyName() + " added ServerDevice config : " + c);
-        }
-    }
+	/**
+	 * Build config from file system and database entries for client transfer
+	 * 
+	 * @return
+	 */
+	private ServerConfigDto readConfig() {
+		ServerConfigDto sc = new ServerConfigDto();
+		try {
+			String value = "";
+			value = dbService.selectJsonStoreValue(CONFIG_KEY_SERVER_DEVICES);
+			log.debug("read server config : " + value);
+			sc.serverDevices = readMediaServerConfig(value);
+			return sc;
+		} catch (Exception e) {
+			return generateDefaultConfig();
+		}
+	}
 
-    public void updateServerDevice(ServerDeviceConfiguration rendererDevice)
-    {
-        serverConfig.serverDevices.removeIf(d -> d.mediaServer != null && d.mediaServer.udn.contentEquals(rendererDevice.mediaServer.udn));
-        serverConfig.serverDevices.add(rendererDevice);
-        writeServerDevicesAndSendConfig();
-    }
+	public void addMediaServerDeviceConfig(RemoteDevice remoteDevice, MediaServerDevice device) {
+		Optional<ServerDeviceConfiguration> configEntry = serverConfig.serverDevices.stream().filter(d -> d != null &&
+			d.mediaServer != null && d.mediaServer.udn.contentEquals(remoteDevice.getIdentity().getUdn().getIdentifierString()))
+			.findFirst();
+		if (configEntry.isPresent()) {
+			log.debug(remoteDevice.getDetails().getFriendlyName() + " is already known.");
+			updateDefaults(remoteDevice, configEntry.get());
+			device.updateCurrentConfigState(configEntry.get());
+			writeServerDevicesAndSendConfig();
+		} else {
+			ServerDeviceConfiguration c = device.getNewServerConfig();
+			serverConfig.serverDevices.add(c);
+			writeServerDevicesAndSendConfig();
+			log.info(remoteDevice.getDetails().getFriendlyName() + " added ServerDevice config : " + c);
+		}
+	}
 
-    /**
-     * 
-     * @param fileConfig
-     *            Is the editable part of the filesystem config entries
-     */
-    public void updateFileServerConfig(ApplicationConfig applicationConfig)
-    {
-        globalConfig.applicationConfig = applicationConfig;
-        configService.writeAndSendConfig();
-    }
+	public void updateServerDevice(ServerDeviceConfiguration rendererDevice) {
+		serverConfig.serverDevices
+			.removeIf(d -> d != null && d.mediaServer != null && d.mediaServer.udn.contentEquals(rendererDevice.mediaServer.udn));
+		serverConfig.serverDevices.add(rendererDevice);
+		writeServerDevicesAndSendConfig();
+	}
 
-    public void deleteServerDevice(ServerDeviceConfiguration serverDevice)
-    {
-        serverConfig.serverDevices.removeIf(d -> d.mediaServer != null && d.mediaServer.udn.contentEquals(serverDevice.mediaServer.udn));
-        writeServerDevicesAndSendConfig();
-    }
+	/**
+	 * 
+	 * @param fileConfig Is the editable part of the filesystem config entries
+	 */
+	public void updateFileServerConfig(ApplicationConfig applicationConfig) {
+		globalConfig.applicationConfig = applicationConfig;
+		configService.writeAndSendConfig();
+	}
 
-    private void writeServerDevicesAndSendConfig()
-    {
-        writeServerDevicesConfig();
-        ssePublisher.sendObjectAsJson(SERVER_CONFIG_QUEUENAME, serverConfig);
-    }
+	public void deleteServerDevice(ServerDeviceConfiguration serverDevice) {
+		serverConfig.serverDevices
+			.removeIf(d -> d != null && d.mediaServer != null && d.mediaServer.udn.contentEquals(serverDevice.mediaServer.udn));
+		writeServerDevicesAndSendConfig();
+	}
 
-    private void updateDefaults(RemoteDevice remoteDevice, ServerDeviceConfiguration serverDeviceConfiguration)
-    {
-        if (!remoteDevice.getIdentity().getDescriptorURL().getHost().contentEquals(serverDeviceConfiguration.ip))
-        {
-            serverDeviceConfiguration.ip = remoteDevice.getIdentity().getDescriptorURL().getHost();
-        }
-    }
+	private void writeServerDevicesAndSendConfig() {
+		writeServerDevicesConfig();
+		ssePublisher.sendObjectAsJson(SERVER_CONFIG_QUEUENAME, serverConfig);
+	}
 
-    public boolean isMediaServerActive(String udn)
-    {
-        if (udn == null)
-        {
-            return true;
-        }
+	private void updateDefaults(RemoteDevice remoteDevice, ServerDeviceConfiguration serverDeviceConfiguration) {
+		if (!remoteDevice.getIdentity().getDescriptorURL().getHost().contentEquals(serverDeviceConfiguration.ip)) {
+			serverDeviceConfiguration.ip = remoteDevice.getIdentity().getDescriptorURL().getHost();
+		}
+	}
 
-        Optional<ServerDeviceConfiguration> configEntry = serverConfig.serverDevices.stream().filter(d -> d.mediaServer.udn.contentEquals(udn)).findFirst();
-        if (configEntry.isPresent())
-        {
-            return configEntry.get().enabled;
-        }
+	public boolean isMediaServerActive(String udn) {
+		if (udn == null) {
+			return true;
+		}
 
-        return true;
-    }
+		Optional<ServerDeviceConfiguration> configEntry = serverConfig.serverDevices.stream()
+			.filter(d -> d != null && d.mediaServer != null && d.mediaServer.udn.contentEquals(udn)).findFirst();
+		if (configEntry.isPresent()) {
+			return configEntry.get().enabled;
+		}
 
-    private ServerConfigDto generateDefaultConfig()
-    {
-        ServerConfigDto c = new ServerConfigDto();
-        c.serverDevices = new ArrayList<ServerDeviceConfiguration>();
-        return c;
-    }
+		return true;
+	}
 
-    private List<ServerDeviceConfiguration> readMediaServerConfig(String json)
-    {
-        if (StringUtils.isAllBlank(json))
-        {
-            return new CopyOnWriteArrayList<ServerDeviceConfiguration>();
-        }
-        try
-        {
-            return om.readValue(json, new TypeReference<List<ServerDeviceConfiguration>>()
-            {
-            });
-        }
-        catch (JsonParseException e)
-        {
-            log.error("error in config file. File could not be parsed.", e);
-        }
-        catch (IOException e)
-        {
-            log.error("could not read config", e);
-        }
-        return new CopyOnWriteArrayList<ServerDeviceConfiguration>();
-    }
+	private ServerConfigDto generateDefaultConfig() {
+		ServerConfigDto c = new ServerConfigDto();
+		c.serverDevices = new ArrayList<ServerDeviceConfiguration>();
+		return c;
+	}
+
+	private List<ServerDeviceConfiguration> readMediaServerConfig(String json) {
+		if (StringUtils.isAllBlank(json)) {
+			return new CopyOnWriteArrayList<ServerDeviceConfiguration>();
+		}
+		try {
+			return om.readValue(json, new TypeReference<List<ServerDeviceConfiguration>>() {
+			});
+		} catch (JsonParseException e) {
+			log.error("error in config file. File could not be parsed.", e);
+		} catch (IOException e) {
+			log.error("could not read config", e);
+		}
+		return new CopyOnWriteArrayList<ServerDeviceConfiguration>();
+	}
 
 }

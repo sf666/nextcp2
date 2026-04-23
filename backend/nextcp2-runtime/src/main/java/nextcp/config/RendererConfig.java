@@ -3,8 +3,6 @@ package nextcp.config;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import org.apache.commons.lang3.StringUtils;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.types.ServiceType;
@@ -12,13 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-
 import nextcp.db.service.BasicDbService;
 import nextcp.db.service.KeyValuePair;
 import nextcp.dto.RendererConfigDto;
@@ -67,6 +63,7 @@ public class RendererConfig {
 		try {
 			String value = "";
 			value = dbService.selectJsonStoreValue(CONFIG_KEY_RENDERER_DEVICES);
+			log.debug("read renderer config : " + value);
 			RendererConfigDto renderer = readConfig(value);
 			filterBrokenRendererDevice();
 			return renderer;
@@ -84,7 +81,7 @@ public class RendererConfig {
 
 	private RendererConfigDto readConfig(String json) {
 		if (StringUtils.isAllBlank(json)) {
-			return new RendererConfigDto(new CopyOnWriteArrayList<RendererDeviceConfiguration>());
+			return generateDefaultConfig();
 		}
 		try {
 			return om.readValue(json, RendererConfigDto.class);
@@ -102,7 +99,7 @@ public class RendererConfig {
 		}
 
 		Optional<RendererDeviceConfiguration> configEntry = config.rendererDevices.stream()
-			.filter(d -> d.mediaRenderer != null && d.mediaRenderer.udn.contentEquals(udn)).findFirst();
+			.filter(d -> d != null && d.mediaRenderer != null && d.mediaRenderer.udn.contentEquals(udn)).findFirst();
 		if (configEntry.isPresent()) {
 			log.debug(String.format("[%s] device is active : ", configEntry.get().active));
 			return configEntry.get().active;
@@ -137,7 +134,12 @@ public class RendererConfig {
 	}
 
 	private boolean checkIfRendererConfigExists(RemoteDevice remoteDevice, RendererDeviceConfiguration d) {
-		return d.mediaRenderer != null && d.mediaRenderer.udn.equals(remoteDevice.getIdentity().getUdn().getIdentifierString());
+		if (d == null) {
+			log.warn("RendererDeviceConfiguration is null");
+			return false;
+		}
+		boolean exists = d.mediaRenderer != null && d.mediaRenderer.udn.equals(remoteDevice.getIdentity().getUdn().getIdentifierString());
+		return exists;
 	}
 
 	private void updateDefaults(RemoteDevice remoteDevice, RendererDeviceConfiguration configEntry) {
@@ -160,7 +162,7 @@ public class RendererConfig {
 	 */
 	public boolean updateRendererDevice(RendererDeviceConfiguration rendererDevice) {
 		RendererDeviceConfiguration old = config.rendererDevices.stream()
-			.filter(d -> d.mediaRenderer != null && d.mediaRenderer.udn.contentEquals(rendererDevice.mediaRenderer.udn)).findFirst().get();
+			.filter(d -> d != null && d.mediaRenderer != null && d.mediaRenderer.udn.contentEquals(rendererDevice.mediaRenderer.udn)).findFirst().get();
 		if (old != null) {
 			config.rendererDevices.remove(old);
 		}
@@ -178,7 +180,7 @@ public class RendererConfig {
 		if (config.rendererDevices == null) {
 			return;
 		}
-		config.rendererDevices.removeIf(d -> d.mediaRenderer == null);
+		config.rendererDevices.removeIf(d -> d != null && d.mediaRenderer == null);
 		writeAndSendConfig();
 	}
 
@@ -193,7 +195,7 @@ public class RendererConfig {
 		}
 
 		Optional<RendererDeviceConfiguration> configEntry = config.rendererDevices.stream()
-			.filter(d -> d.mediaRenderer != null && d.mediaRenderer.udn.contentEquals(udn)).findFirst();
+			.filter(d -> d != null && d.mediaRenderer != null && d.mediaRenderer.udn.contentEquals(udn)).findFirst();
 		if (configEntry.isPresent()) {
 			return configEntry.get();
 		}
