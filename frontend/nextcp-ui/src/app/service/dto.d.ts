@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2026-04-21 09:50:53.
+// Generated using typescript-generator version 4.0.0 on 2026-04-23 10:02:00.
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -67,7 +67,6 @@ export interface Config {
     musicbrainzSupport: MusicbrainzSupport;
     lastFmSessionKey: string;
     spotifyConfig: SpotifyConfigDto;
-    mediaPlayerConfig: MediaPlayerConfigDto;
     audioAddictConfig: AudioAddictConfig;
 }
 

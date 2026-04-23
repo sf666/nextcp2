@@ -37,7 +37,6 @@ Config:
    musicbrainzSupport: MusicbrainzSupport
    lastFmSessionKey: String
    spotifyConfig: SpotifyConfigDto
-   mediaPlayerConfig: MediaPlayerConfigDto
    audioAddictConfig: AudioAddictConfig
 
 MediaPlayerConfigDto:

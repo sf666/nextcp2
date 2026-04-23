@@ -17,21 +17,19 @@ public class Config
     public MusicbrainzSupport musicbrainzSupport;
     public String lastFmSessionKey;
     public SpotifyConfigDto spotifyConfig;
-    public MediaPlayerConfigDto mediaPlayerConfig;
     public AudioAddictConfig audioAddictConfig;
 
     public Config()
     {
     }
 
-    public Config(ApplicationConfig applicationConfig, List<RadioStation> radioStation, MusicbrainzSupport musicbrainzSupport, String lastFmSessionKey, SpotifyConfigDto spotifyConfig, MediaPlayerConfigDto mediaPlayerConfig, AudioAddictConfig audioAddictConfig)
+    public Config(ApplicationConfig applicationConfig, List<RadioStation> radioStation, MusicbrainzSupport musicbrainzSupport, String lastFmSessionKey, SpotifyConfigDto spotifyConfig, AudioAddictConfig audioAddictConfig)
     {
         this.applicationConfig = applicationConfig;
         this.radioStation = radioStation;
         this.musicbrainzSupport = musicbrainzSupport;
         this.lastFmSessionKey = lastFmSessionKey;
         this.spotifyConfig = spotifyConfig;
-        this.mediaPlayerConfig = mediaPlayerConfig;
         this.audioAddictConfig = audioAddictConfig;
     }
     
@@ -45,7 +43,6 @@ public class Config
         sb.append("musicbrainzSupport=").append(this.musicbrainzSupport).append(", ");
         sb.append("lastFmSessionKey=").append(this.lastFmSessionKey).append(", ");
         sb.append("spotifyConfig=").append(this.spotifyConfig).append(", ");
-        sb.append("mediaPlayerConfig=").append(this.mediaPlayerConfig).append(", ");
         sb.append("audioAddictConfig=").append(this.audioAddictConfig).append(", ");
         sb.append("]");
         return sb.toString();
