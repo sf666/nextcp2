@@ -38,7 +38,7 @@
     "flowbite": "^3.1.2",
     "glob-to-regexp": "^0.4.1",
     "jsonc-parser": "^3.3.1",
-    "postcss": "^8.5.6",
+    "postcss": "^8.5.10",
     "prettier": "^3.6.2",
     "rxjs": "^7.4.0",
     "service": "0.1.4",
