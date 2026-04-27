@@ -36,36 +36,6 @@
 					<skip>false</skip>
 				</configuration>
 			</plugin>
-			
-			<plugin>
-			    <groupId>com.akathist.maven.plugins</groupId>
-			    <artifactId>launch4j-maven-plugin</artifactId>
-			    <version>2.7.0</version>
-			    <executions>
-			        <execution>
-			            <id>build-windows-executable</id>
-			            <phase>package</phase>
-			            <goals>
-			                <goal>launch4j</goal>
-			            </goals>
-			            <configuration>
-				            <disableVersionInfoDefaults>true</disableVersionInfoDefaults>
-			                <headerType>gui</headerType>
-			                <outfile>target/nextcp2.exe</outfile>
-			                <jar>target/nextcp2.jar</jar> <!-- Hier den echten Namen deines Jars eintragen -->
-			                <errTitle>NextCP2</errTitle>
-			                <classPath>
-			                    <mainClass>de.nextcp2.NextCP2Application</mainClass>
-			                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-			                </classPath>
-			                <jre>
-			                    <path>%JAVA_HOME%</path>
-			                    <minVersion>17</minVersion>
-			                </jre>
-			            </configuration>
-			        </execution>
-			    </executions>
-			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
@@ -118,12 +88,5 @@
 			<groupId>de.sf666</groupId>
 			<artifactId>nextcp2-player</artifactId>
 		</dependency>
-		
-		<dependency>
-		    <groupId>com.akathist.maven.plugins.launch4j</groupId>
-		    <artifactId>launch4j-maven-plugin</artifactId>
-		    <version>2.7.0</version>
-		    <scope>compile</scope>
-		</dependency>		
 	</dependencies>
 </project>
