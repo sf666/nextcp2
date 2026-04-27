@@ -36,55 +36,34 @@
 					<skip>false</skip>
 				</configuration>
 			</plugin>
+			
 			<plugin>
-				<groupId>com.akathist.maven.plugins.launch4j</groupId>
-				<artifactId>launch4j-maven-plugin</artifactId>
-				<version>2.7.0</version>
-				<executions>
-					<execution>
-						<id>build-windows-executable</id>
-						<phase>package</phase>
-						<goals>
-							<goal>launch4j</goal>
-						</goals>
-							<configuration>
-				                <versionInfo>
-				                    <fileVersion>4.2.3.0</fileVersion>
-				                    <txtFileVersion>4.2.3.0</txtFileVersion>
-				                    <productVersion>4.2.3.0</productVersion>
-				                    <txtProductVersion>4.2.3.0</txtProductVersion>
-				                    <productName>${project.name}</productName>
-				                    <internalName>nextcp2</internalName>
-				                    <originalFilename>nextcp2.exe</originalFilename>
-				                </versionInfo>
-				            </configuration>						
-					</execution>
-				</executions>
-				<configuration>
-					<headerType>console</headerType>
-					<outfile>
-						${project.build.directory}/${project.artifactId}.exe</outfile>
-					<jar>${project.build.directory}/nextcp2.jar</jar>
-					<errTitle>${project.artifactId}</errTitle>
-					<classPath>
-						<mainClass>org.springframework.boot.loader.JarLauncher</mainClass>
-						<addDependencies>false</addDependencies>
-					</classPath>
-					<jre>
-						<minVersion>21</minVersion>						
-					</jre>
-					<versionInfo>
-						<fileVersion>${exe.version}</fileVersion>
-						<txtFileVersion>${exe.version}</txtFileVersion>
-						<fileDescription>nextcp/2 control point</fileDescription>
-						<copyright>MIT</copyright>
-						<productVersion>${exe.version}</productVersion>
-						<txtProductVersion>${exe.version}</txtProductVersion>
-						<productName>nextcp/2</productName>
-						<internalName>nextcp/2</internalName>
-						<originalFilename>nextcp2_${project.version}.exe</originalFilename>
-					</versionInfo>
-				</configuration>
+			    <groupId>com.akathist.maven.plugins</groupId>
+			    <artifactId>launch4j-maven-plugin</artifactId>
+			    <version>2.7.0</version>
+			    <executions>
+			        <execution>
+			            <id>build-windows-executable</id>
+			            <phase>package</phase>
+			            <goals>
+			                <goal>launch4j</goal>
+			            </goals>
+			            <configuration>
+			                <headerType>gui</headerType>
+			                <outfile>target/nextcp2.exe</outfile>
+			                <jar>target/nextcp2.jar</jar> <!-- Hier den echten Namen deines Jars eintragen -->
+			                <errTitle>NextCP2</errTitle>
+			                <classPath>
+			                    <mainClass>de.nextcp2.NextCP2Application</mainClass>
+			                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+			                </classPath>
+			                <jre>
+			                    <path>%JAVA_HOME%</path>
+			                    <minVersion>17</minVersion>
+			                </jre>
+			            </configuration>
+			        </execution>
+			    </executions>
 			</plugin>
 		</plugins>
 	</build>
