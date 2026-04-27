@@ -47,6 +47,17 @@
 						<goals>
 							<goal>launch4j</goal>
 						</goals>
+							<configuration>
+				                <versionInfo>
+				                    <fileVersion>4.2.3.0</fileVersion>
+				                    <txtFileVersion>4.2.3.0</txtFileVersion>
+				                    <productVersion>4.2.3.0</productVersion>
+				                    <txtProductVersion>4.2.3.0</txtProductVersion>
+				                    <productName>${project.name}</productName>
+				                    <internalName>nextcp2</internalName>
+				                    <originalFilename>nextcp2.exe</originalFilename>
+				                </versionInfo>
+				            </configuration>						
 					</execution>
 				</executions>
 				<configuration>
