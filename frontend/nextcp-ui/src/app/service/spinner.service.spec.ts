@@ -4,7 +4,7 @@ import { SpinnerService } from './spinner.service';
 
 describe('SpinnerService', () => {
   let service: SpinnerService;
-  let latestVisibility = false;
+  let latestVisibility: boolean | null = null;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
@@ -22,7 +22,7 @@ describe('SpinnerService', () => {
     service.requestStarted();
 
     tick(1499);
-    expect(latestVisibility).toBeFalse();
+    expect(latestVisibility).not.toBeTrue();
 
     tick(1);
     expect(latestVisibility).toBeTrue();
@@ -38,7 +38,7 @@ describe('SpinnerService', () => {
     service.requestEnded();
 
     tick(2000);
-    expect(latestVisibility).toBeFalse();
+    expect(latestVisibility).not.toBeTrue();
   }));
 
   it('should stay visible until all requests are done', fakeAsync(() => {

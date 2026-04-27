@@ -1,75 +1,38 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, Signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { distinctUntilChanged, map, of, Subject, switchMap, timer } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpinnerService {
-  visibility: BehaviorSubject<boolean>;
-  private readonly showDelayMs = 1500;
   private pendingRequests = 0;
-  private showTimer: ReturnType<typeof setTimeout> | null = null;
-  private isVisible = false;
+  private readonly pending$ = new Subject<number>();
 
-  constructor() {
-    this.visibility = new BehaviorSubject(false);
-  }
+  /**
+   * Signal that becomes `true` only after 1.5 s of continuous pending requests.
+   * Quick responses never show the spinner.
+   * Becomes `false` immediately when all requests complete.
+   */
+  readonly isLoading: Signal<boolean> = toSignal(
+    this.pending$.pipe(
+      map(count => count > 0),
+      distinctUntilChanged(),
+      switchMap(busy => busy ? timer(1500).pipe(map(() => true)) : of(false)),
+      distinctUntilChanged()
+    ),
+    { initialValue: false }
+  );
 
   requestStarted(): void {
     this.pendingRequests++;
-
-    if (this.pendingRequests === 1) {
-      this.scheduleShow();
-    }
+    this.pending$.next(this.pendingRequests);
   }
 
   requestEnded(): void {
-    if (this.pendingRequests === 0) {
-      return;
-    }
-
-    this.pendingRequests--;
-
-    if (this.pendingRequests === 0) {
-      this.clearShowTimer();
-      this.hide();
-    }
-  }
-
-  show() {
-    if (this.isVisible) {
-      return;
-    }
-
-    this.isVisible = true;
-    this.visibility.next(true);
-  }
-
-  hide() {
-    if (!this.isVisible) {
-      return;
-    }
-
-    this.isVisible = false;
-    this.visibility.next(false);
-  }
-
-  private scheduleShow(): void {
-    this.clearShowTimer();
-
-    this.showTimer = setTimeout(() => {
-      this.showTimer = null;
-
-      if (this.pendingRequests > 0) {
-        this.show();
-      }
-    }, this.showDelayMs);
-  }
-
-  private clearShowTimer(): void {
-    if (this.showTimer) {
-      clearTimeout(this.showTimer);
-      this.showTimer = null;
+    if (this.pendingRequests > 0) {
+      this.pendingRequests--;
+      this.pending$.next(this.pendingRequests);
     }
   }
 }

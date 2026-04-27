@@ -1,13 +1,11 @@
 <div class="dark">
   <div class="app-root">
 
-    @if (spinnerService.visibility | async) {
-    <div class="spinner-overlay">
+    <div class="spinner-overlay" [class.spinner-overlay--visible]="spinnerService.isLoading()">
       <div class="spinner">
         <mat-spinner [diameter]="50" mode="indeterminate"></mat-spinner>
       </div>
     </div>
-    }
 
     @if (layoutService.sidebarVisible) {
     <aside  id="default-sidebar" class="fixed top-0 left-0 z-1 noScrollBar overflow-y-auto md:translate-x-0 w-52 h-screen transition-transform -translate-x-full" aria-label="Sidebar">
