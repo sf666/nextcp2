@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { HttpService } from './http.service';
 import { Injectable } from '@angular/core';
 import { MusicAlbumIds } from './dto';
+import { isAssigned } from '../global';
 
 @Injectable({
   providedIn: 'root'
@@ -26,14 +27,15 @@ export class MyMusicService {
     }
     const uri = '/likeAlbum/' + this.deviceService.selectedMediaServerDevice().udn;
     let hasId: boolean = false;
-    if (albumIds.musicBrainzAlbumId !== '') {
+    if (isAssigned(albumIds.musicBrainzAlbumId)) {
       console.log("like musicbrainz album : " + albumIds.musicBrainzAlbumId);
       hasId = true;
     }
-    if (albumIds.discogsReleaseId != undefined) {
+    else if (isAssigned(albumIds.discogsReleaseId)) {
       console.log("like discogs release : " + albumIds.discogsReleaseId);
       hasId = true;
     }
+    
     if (hasId) {      
       return this.httpService.post(this.baseUri, uri, albumIds);
     } else {

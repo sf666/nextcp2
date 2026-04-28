@@ -26,6 +26,7 @@ import { BackgroundImageService } from 'src/app/util/background-image.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { DisplayHeaderOptionsComponent } from '../../popup/display-header-options/display-header-options.component';
+import { isAssigned } from 'src/app/global';
 
 @Component({
   selector: 'display-container-header',
@@ -118,8 +119,14 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   private checkLikePossible(): void {
-    if (this.currentContainerItem().allTracksSameAlbumIds.discogsReleaseId != undefined || 
-        this.currentContainerItem().allTracksSameAlbumIds.musicBrainzAlbumId !== '') {
+    const albumIds = this.getCurrentAlbumIds();
+
+    if (!albumIds) {
+      this.likePossible.set(false);
+      return;
+    }
+
+    if (isAssigned(albumIds.discogsReleaseId) || isAssigned(albumIds.musicBrainzAlbumId)) {
       console.log("like possible for container : " + this.currentContainer.title);
       this.likePossible.set(true);
     } else {
@@ -159,15 +166,21 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   private checkLikeStatus() {
+    const albumIds = this.getCurrentAlbumIds();
+
+    if (!albumIds) {
+      this.currentAlbumLiked.set(false);
+      return;
+    }
+
     if (this.likePossible()) {
-      this.myMusicService
-        .isAlbumLiked(this.currentContainerItem().allTracksSameAlbumIds)
-        .subscribe(
-          (res) => {
-            console.log("current album liked : " + res);
-            (this.currentAlbumLiked.set(res));
-          }
-        );
+      const likeStatusRequest = this.myMusicService.isAlbumLiked(albumIds);
+      likeStatusRequest?.subscribe(
+        (res) => {
+          console.log("current album liked : " + res);
+          (this.currentAlbumLiked.set(res));
+        }
+      );
     }
 
   }
@@ -229,18 +242,24 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   dislikeAlbum(): void {
-    if (this.likePossible()) {
-      this.myMusicService
-        .deleteAlbumLike(this.currentContainerItem().allTracksSameAlbumIds)
-        .subscribe((d) => this.checkLikeStatus());
+    const albumIds = this.getCurrentAlbumIds();
+
+    if (this.likePossible() && albumIds != undefined) {
+      const deleteLikeRequest = this.myMusicService.deleteAlbumLike(albumIds);
+      deleteLikeRequest?.subscribe((d) => this.checkLikeStatus());
+    } else {
+      console.log("cannot dislike album, because no valid album ids found");
     }
   }
 
   likeAlbum(): void {
-    if (this.likePossible()) {
-      this.myMusicService
-        .likeAlbum(this.currentContainerItem().allTracksSameAlbumIds)
-        .subscribe((d) => this.checkLikeStatus());
+    const albumIds = this.getCurrentAlbumIds();
+
+    if (this.likePossible() && albumIds != undefined) {
+      const likeAlbumRequest = this.myMusicService.likeAlbum(albumIds);
+      likeAlbumRequest?.subscribe((d) => this.checkLikeStatus());
+    } else {
+      console.log("cannot like album, because no valid album ids found");
     }
   }
 
@@ -358,5 +377,15 @@ export class DisplayContainerHeaderComponent implements OnInit {
       return this.contentDirectoryService().currentContainerList();
     }
     return this.dtoGeneratorService.generateEmptyContainerItemDto();
+  }
+
+  private getCurrentAlbumIds(): MusicAlbumIds | undefined {
+    const albumIds = this.currentContainerItem()?.allTracksSameAlbumIds;
+
+    if (!isAssigned(albumIds)) {
+      return undefined;
+    }
+
+    return albumIds;
   }
 }
