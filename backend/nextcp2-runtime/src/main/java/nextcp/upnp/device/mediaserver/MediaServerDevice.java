@@ -264,8 +264,10 @@ public class MediaServerDevice extends BaseDevice {
 			log.info("[browseMetadataMeta] Response Objects : {}", out.NumberReturned);
 			if (out.NumberReturned == 1) {
 				DIDLContent didl = generateDidlContent(out.Result);
-				if (didl != null) {
+				if (didl != null && didl.getContainers().size() > 0) {
 					result = getDtoBuilder().buildContainerDto(didl.getFirstContainer());
+				} else {
+					log.warn("DIDL containers are null or empty for objectId : {}", objectId);
 				}
 			}
 			result.mediaServerUDN = getUDN().getIdentifierString();

@@ -71,7 +71,7 @@ public abstract class JakartaServletUpnpStream extends UpnpStream {
 				getResponse().setStatus(HttpServletResponse.SC_NOT_FOUND);
 			}
 
-		} catch (IOException e) {
+		} catch (IOException | RuntimeException e) {
 			LOGGER.info("Exception occurred during UPnP stream processing", e);
 			if (!getResponse().isCommitted()) {
 				LOGGER.trace("Response hasn't been committed, returning INTERNAL SERVER ERROR to client");
