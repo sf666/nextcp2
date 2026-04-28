@@ -264,6 +264,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   toggleLikeAlbum(): void {
+    console.log("toggle like album ... ");
     if (this.isLiked()) {
       this.dislikeAlbum();
     } else {
