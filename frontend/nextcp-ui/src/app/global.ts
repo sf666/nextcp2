@@ -1,5 +1,5 @@
 export function isAssigned(object: any): boolean {
-  if (typeof object !== 'undefined') {
+  if (typeof object !== 'undefined' && object !== null) {
     return true;
   }
   return false;

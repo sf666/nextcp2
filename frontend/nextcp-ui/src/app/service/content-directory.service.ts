@@ -228,6 +228,7 @@ export class ContentDirectoryService {
   public updateContainer(data: ContainerItemDto): void {
 //    console.log("CDS " + this.id + " : updating container with " + data.musicItemDto.length + " items.");
     if (data) {
+      console.log("Album ids MBID / discogs : " + data.allTracksSameAlbumIds?.musicBrainzAlbumId + " / " + data.allTracksSameAlbumIds?.discogsReleaseId);
       this.currentContainerList.set(data);
       this.updatePageTurnId(data);
       this.albumList_.set(data.albumDto);
