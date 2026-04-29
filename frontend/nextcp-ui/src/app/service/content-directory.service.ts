@@ -1,7 +1,7 @@
 import { ConfigurationService } from './configuration.service';
 import { DeviceService } from './device.service';
 import { ToastService } from './toast/toast.service';
-import { EMPTY, expand, Observable, Subject } from 'rxjs';
+import { map, mergeMap, Observable, range, Subject, take, takeUntil } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DtoGeneratorService } from './../util/dto-generator.service';
 import { HttpService } from './http.service';
@@ -55,7 +55,9 @@ export class ContentDirectoryService {
 
   private TURN_PAGE_AFTER = 60;
   private MAX_REQUEST_ITEMS = 200;
+  private PAGE_REQUEST_CONCURRENCY = 4;
   private turn_page_id: string | undefined;
+  private browseRequestAbort$ = new Subject<void>();
 
   // search
   private lastSearchObject = signal<SearchRequestDto>(this.dtoGeneratorService.generateEmptySearchRequestDto());
@@ -168,9 +170,10 @@ export class ContentDirectoryService {
       return new Subject<ContainerItemDto>();
     }
 
+    // Abort stale paging streams when a new browse request starts.
+    this.browseRequestAbort$.next();
     this.lastBrowseRequest = browseRequestDto;
-    let page = 0;
-    let isFirstPage = true;
+    const browseStartedAt = performance.now();
 
     const firstPage$ = this.httpService.post<ContainerItemDto>(
       this.baseUri,
@@ -179,28 +182,58 @@ export class ContentDirectoryService {
     );
 
     firstPage$.pipe(
-      expand(data => {
-        const count = (data.albumDto?.length ?? 0)
-          + (data.containerDto?.length ?? 0)
-          + (data.musicItemDto?.length ?? 0);
-        if (count < this.MAX_REQUEST_ITEMS) return EMPTY;
-        page++;
-        console.log(this.id + ' : loading page ' + page);
-        return this.httpService.post<ContainerItemDto>(
-          this.baseUri,
-          '/browseChildren',
-          { ...browseRequestDto, start: page * this.MAX_REQUEST_ITEMS, count: this.MAX_REQUEST_ITEMS },
-        );
-      }),
+      take(1),
+      takeUntil(this.browseRequestAbort$),
       takeUntilDestroyed(this.destroyRef),
     ).subscribe({
-      next: (data) => {
-        if (isFirstPage) {
-          isFirstPage = false;
-          this.updateContainer(data);
-        } else {
-          this.addContainer(data);
+      next: (firstPage) => {
+        this.updateContainer(firstPage);
+
+        const firstPageDuration = Math.round(performance.now() - browseStartedAt);
+        console.log(this.id + ' : first page loaded in ' + firstPageDuration + ' ms');
+
+        const totalItems = firstPage.currentContainer?.childCount ?? this.getPageItemCount(firstPage);
+        const totalPages = Math.ceil(totalItems / this.MAX_REQUEST_ITEMS);
+        if (totalPages <= 1) {
+          console.log(this.id + ' : browse finished in ' + firstPageDuration + ' ms (single page)');
+          return;
         }
+
+        console.log(this.id + ' : loading ' + (totalPages - 1) + ' remaining pages');
+
+        const bufferedPages = new Map<number, ContainerItemDto>();
+        let nextPageToApply = 1;
+
+        range(1, totalPages - 1).pipe(
+          mergeMap(
+            (page) => this.httpService.post<ContainerItemDto>(
+              this.baseUri,
+              '/browseChildren',
+              { ...browseRequestDto, start: page * this.MAX_REQUEST_ITEMS, count: this.MAX_REQUEST_ITEMS },
+            ).pipe(
+              take(1),
+              map((data) => ({ page, data })),
+            ),
+            this.PAGE_REQUEST_CONCURRENCY,
+          ),
+          takeUntil(this.browseRequestAbort$),
+          takeUntilDestroyed(this.destroyRef),
+        ).subscribe({
+          next: ({ page, data }) => {
+            bufferedPages.set(page, data);
+            while (bufferedPages.has(nextPageToApply)) {
+              this.addContainer(bufferedPages.get(nextPageToApply)!);
+              bufferedPages.delete(nextPageToApply);
+              nextPageToApply++;
+            }
+
+            if (nextPageToApply >= totalPages) {
+              const totalDuration = Math.round(performance.now() - browseStartedAt);
+              console.log(this.id + ' : browse finished in ' + totalDuration + ' ms (' + totalPages + ' pages)');
+            }
+          },
+          error: (err) => console.error(this.id + ' : browse page error', err),
+        });
       },
       error: (err) => console.error(this.id + ' : browse error', err),
     });
@@ -208,7 +241,13 @@ export class ContentDirectoryService {
     return firstPage$;
   }
 
-  // Pagination is now handled automatically via expand in browseChildrenByRequest.
+  private getPageItemCount(data: ContainerItemDto): number {
+    return (data.albumDto?.length ?? 0)
+      + (data.containerDto?.length ?? 0)
+      + (data.musicItemDto?.length ?? 0);
+  }
+
+  // Pagination is handled automatically in browseChildrenByRequest.
   public browseToNextPage(): Subject<ContainerItemDto> {
     return new Subject<ContainerItemDto>();
   }
