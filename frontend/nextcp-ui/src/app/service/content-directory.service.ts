@@ -192,8 +192,9 @@ export class ContentDirectoryService {
         const firstPageDuration = Math.round(performance.now() - browseStartedAt);
         console.log(this.id + ' : first page loaded in ' + firstPageDuration + ' ms');
 
-        const totalItems = firstPage.currentContainer?.childCount ?? this.getPageItemCount(firstPage);
+        const totalItems = firstPage.totalMatches;
         const totalPages = Math.ceil(totalItems / this.MAX_REQUEST_ITEMS);
+        console.log('total items: ' + totalItems + ', total pages: ' + totalPages);
         if (totalPages <= 1) {
           console.log(this.id + ' : browse finished in ' + firstPageDuration + ' ms (single page)');
           return;
