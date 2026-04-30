@@ -15,6 +15,7 @@ import { StarRatingComponent } from 'src/app/view/star-rating/star-rating.compon
 import { SseService } from 'src/app/service/sse/sse.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { QualityBadgeComponent } from 'src/app/util/comp/quality-badge/quality-badge.component';
+import { RendererService } from 'src/app/service/renderer.service';
 
 @Component({
   selector: 'item-tile',
@@ -47,6 +48,7 @@ export class ItemTileComponent {
   allMusicTracks = computed(() => this.contentDirectoryService().musicTracks_());
 
   currentUrl = signal<string>('');
+  currentObjectId = signal<string>('');
   lastDiscLabel = '';
 
   constructor(
@@ -54,8 +56,17 @@ export class ItemTileComponent {
     private dtoGeneratorService: DtoGeneratorService,
     private timeDisplayService: TimeDisplayService,
     private deviceService: DeviceService,
-    private sseService: SseService
+    private sseService: SseService,
+    private rendererService: RendererService,
   ) {
+    const currentTrack = this.rendererService.currentTrack();
+    if (currentTrack?.streamingURL) {
+      this.currentUrl.set(currentTrack.streamingURL);
+    }
+    if (currentTrack?.objectID) {
+      this.currentObjectId.set(currentTrack.objectID);
+    }
+
     sseService.mediaRendererTrackInfoChanged$.subscribe((data) => {
       if (
         data?.mediaRendererUdn &&
@@ -63,6 +74,7 @@ export class ItemTileComponent {
         deviceService.isMediaRendererSelected(data.mediaRendererUdn)
       ) {
         this.currentUrl.set(data.currentTrack.streamingURL);
+        this.currentObjectId.set(data.currentTrack.objectID);
       }
     });
   }
@@ -225,11 +237,16 @@ export class ItemTileComponent {
   }
 
   public selectedRowClass(musicItemDto: MusicItemDto): string {
-    if (musicItemDto?.streamingURL.length < 1) {
+    if (!musicItemDto) {
       return '';
     }
-    
-    if (musicItemDto?.streamingURL === this.currentUrl()) {
+
+    const matchByUrl = musicItemDto.streamingURL?.length > 0
+      && musicItemDto.streamingURL === this.currentUrl();
+    const matchByObjectId = musicItemDto.objectID?.length > 0
+      && musicItemDto.objectID === this.currentObjectId();
+
+    if (matchByUrl || matchByObjectId) {
       return 'selectRow';
     }
     return '';
