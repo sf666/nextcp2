@@ -39,7 +39,15 @@
              style="grid-template-columns: 48px 2fr minmax(150px, 1fr) 128px 80px 48px;">
             <!-- Track Number -->
             <div id="col_1_num_{{item.objectID}}" class="text-center text-gray-400 group-hover:text-white transition-colors">
-                @if(item.originalTrackNumber != 'null'){{{item.originalTrackNumber}}}
+                @if (isPlayingItem(item)) {
+                    <span class="playing-eq" aria-label="Playing">
+                        <span class="playing-eq-bar"></span>
+                        <span class="playing-eq-bar"></span>
+                        <span class="playing-eq-bar"></span>
+                    </span>
+                } @else {
+                    @if(item.originalTrackNumber != 'null'){{{item.originalTrackNumber}}}
+                }
             </div>
 
             <!-- Title -->

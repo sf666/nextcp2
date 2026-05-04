@@ -237,8 +237,15 @@ export class ItemTileComponent {
   }
 
   public selectedRowClass(musicItemDto: MusicItemDto): string {
+    if (this.isPlayingItem(musicItemDto)) {
+      return 'selectRow';
+    }
+    return '';
+  }
+
+  public isPlayingItem(musicItemDto: MusicItemDto): boolean {
     if (!musicItemDto) {
-      return '';
+      return false;
     }
 
     const matchByUrl = musicItemDto.streamingURL?.length > 0
@@ -246,10 +253,7 @@ export class ItemTileComponent {
     const matchByObjectId = musicItemDto.objectID?.length > 0
       && musicItemDto.objectID === this.currentObjectId();
 
-    if (matchByUrl || matchByObjectId) {
-      return 'selectRow';
-    }
-    return '';
+    return matchByUrl || matchByObjectId;
   }
 
   // Disc Label support

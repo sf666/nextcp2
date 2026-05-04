@@ -2,15 +2,49 @@
 @use "tailwindcss";
 
 .selectRow {
-    background: linear-gradient(to right, rgba(0, 255, 255, 0.2), rgba(0, 200, 255, 0.2));
-    border-left: 3px solid aqua;
-    
-    .text-white {
-        color: aqua !important;
+    background: linear-gradient(to right, rgba(0, 255, 255, 0.08), rgba(0, 200, 255, 0.04));
+}
+
+.playing-eq {
+    width: 18px;
+    height: 14px;
+    display: inline-flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 2px;
+    vertical-align: middle;
+}
+
+.playing-eq-bar {
+    width: 3px;
+    height: 4px;
+    background-color: #9ca3af;
+    border-radius: 999px;
+    transform-origin: center bottom;
+    animation: playingEqPulse 0.95s ease-in-out infinite;
+}
+
+.playing-eq-bar:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.playing-eq-bar:nth-child(2) {
+    animation-delay: 0.16s;
+}
+
+.playing-eq-bar:nth-child(3) {
+    animation-delay: 0.32s;
+}
+
+@keyframes playingEqPulse {
+    0%,
+    100% {
+        transform: scaleY(0.45);
+        opacity: 0.75;
     }
-    
-    .text-gray-400 {
-        color: #7fffd4 !important;
+    50% {
+        transform: scaleY(1.85);
+        opacity: 1;
     }
 }
 
