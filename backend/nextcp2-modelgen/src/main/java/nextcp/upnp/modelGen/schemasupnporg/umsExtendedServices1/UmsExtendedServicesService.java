@@ -15,11 +15,15 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RestoreRatings;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioArtistDir;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioArtistDirInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetAudioArtistDir;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetAudioArtistDirOutput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.BackupAudioLikes;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetPreferEuropeanServer;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetPreferEuropeanServerInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictUser;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictUserInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetPreferEuropeanServer;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetPreferEuropeanServerInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.BackupRatings;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWrite;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWriteInput;
@@ -38,10 +42,10 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudio
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLiked;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedOutput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedInput;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbum;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioLikesVisibleRoot;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioLikesVisibleRootInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbum;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumInput;
 
 
 /**
@@ -135,22 +139,35 @@ public class UmsExtendedServicesService
         restoreRatings.executeAction();
     }
 
+    public void setAudioArtistDir(SetAudioArtistDirInput inp)
+    {
+        SetAudioArtistDir setAudioArtistDir = new SetAudioArtistDir(umsExtendedServicesService, inp, upnpService.getControlPoint());
+        setAudioArtistDir.executeAction();
+    }
+
+    public GetAudioArtistDirOutput getAudioArtistDir()
+    {
+        GetAudioArtistDir getAudioArtistDir = new GetAudioArtistDir(umsExtendedServicesService,  upnpService.getControlPoint());
+        GetAudioArtistDirOutput res = getAudioArtistDir.executeAction();
+        return res;        
+    }
+
     public void backupAudioLikes()
     {
         BackupAudioLikes backupAudioLikes = new BackupAudioLikes(umsExtendedServicesService,  upnpService.getControlPoint());
         backupAudioLikes.executeAction();
     }
 
-    public void setPreferEuropeanServer(SetPreferEuropeanServerInput inp)
-    {
-        SetPreferEuropeanServer setPreferEuropeanServer = new SetPreferEuropeanServer(umsExtendedServicesService, inp, upnpService.getControlPoint());
-        setPreferEuropeanServer.executeAction();
-    }
-
     public void setAudioAddictUser(SetAudioAddictUserInput inp)
     {
         SetAudioAddictUser setAudioAddictUser = new SetAudioAddictUser(umsExtendedServicesService, inp, upnpService.getControlPoint());
         setAudioAddictUser.executeAction();
+    }
+
+    public void setPreferEuropeanServer(SetPreferEuropeanServerInput inp)
+    {
+        SetPreferEuropeanServer setPreferEuropeanServer = new SetPreferEuropeanServer(umsExtendedServicesService, inp, upnpService.getControlPoint());
+        setPreferEuropeanServer.executeAction();
     }
 
     public void backupRatings()
@@ -214,15 +231,15 @@ public class UmsExtendedServicesService
         return res;        
     }
 
-    public void likeAlbum(LikeAlbumInput inp)
-    {
-        LikeAlbum likeAlbum = new LikeAlbum(umsExtendedServicesService, inp, upnpService.getControlPoint());
-        likeAlbum.executeAction();
-    }
-
     public void setAudioLikesVisibleRoot(SetAudioLikesVisibleRootInput inp)
     {
         SetAudioLikesVisibleRoot setAudioLikesVisibleRoot = new SetAudioLikesVisibleRoot(umsExtendedServicesService, inp, upnpService.getControlPoint());
         setAudioLikesVisibleRoot.executeAction();
+    }
+
+    public void likeAlbum(LikeAlbumInput inp)
+    {
+        LikeAlbum likeAlbum = new LikeAlbum(umsExtendedServicesService, inp, upnpService.getControlPoint());
+        likeAlbum.executeAction();
     }
 }
