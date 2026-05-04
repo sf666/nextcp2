@@ -164,6 +164,12 @@ export class ConfigurationService {
     return this.httpService.get<MediaPlayerConfigDto>(this.baseUri, uri);
   }
 
+  public setAlbumArtistFolder(udn: string, objectId: string) {
+    const base = '/ContentDirectoryService';
+    const uri = `/updateUmsAlbumArtistDirectory/${udn}`;
+    this.httpService.post(base, uri, objectId).subscribe();
+  }
+
   public saveMediaPlayerConfig(mediaPlayerConfig: MediaPlayerConfigDto): void {
     const uri = '/saveMediaPlayerConfig';
     this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaPlayerConfig, "Save media player config", "success").subscribe(() => {

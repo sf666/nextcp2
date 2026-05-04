@@ -32,7 +32,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
     public mediaPlayerService: MediaPlayerService,
     public serverPlaylistService: ServerPlaylistService,
     private configurationService: ConfigurationService,
-    private deviceService: DeviceService,
+    public deviceService: DeviceService,
     private popupService: PopupService,
     _matDialogRef: MatDialogRef<DisplayHeaderOptionsComponent>,
     @Inject(MAT_DIALOG_DATA) data: {
@@ -51,19 +51,34 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let height = 140;
     if (this.isFolder()) {
-      this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 250, 180);
-    } else if (this.isPlaylist()) {
-      // Playlist 
-      this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 250, 150);
-    } else {
-      console.log("ERROR: unknown type");
-      this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 250, 150);
+      height = height + 30;       // for set MY PLAYLISTS option
+      if (this.deviceService.selectedMediaServerDevice().extendedApi) {
+          height = height + 30;     // for set ARTIST FOLDER option (ums devices)
+        if (this.mediaPlayerService.mediaPlayerExists()) {
+          height = height + 30;     // for select player folder option
+        }
+      }
     }
+    if(this.mediaPlayerService.mediaPlayerExists() && this.isPlaylist()) {
+      height = height + 30; // for select player playlist option
+    }
+
+    if (this.isPlaylist()) {
+      height = height + 30; // for add to playlist option
+    }
+
+    this.popupService.configurePopupPosition(this._matDialogRef, this.triggerElementRef, 250, height);
   }
 
   addToPlaylist(): void {
     this.addToPlaylistOutput.emit(this.currentContainer);
+    this.close();
+  }
+
+  selectArtistFolder(): void {
+    this.configurationService.setAlbumArtistFolder(this.deviceService.selectedMediaServerDevice().udn, this.getCurrentContainerIdDto().id);
     this.close();
   }
 

@@ -71,4 +71,8 @@ public interface ExtendedApiMediaDevice
 	// Configuration Services
     
 	public void updateExtApiConfig(ServerDeviceConfiguration serverDevice);
+	
+	public void setUmsAlbumDirectory(String objectId);
+	
+	public String getUmsAlbumDirectory();
 }

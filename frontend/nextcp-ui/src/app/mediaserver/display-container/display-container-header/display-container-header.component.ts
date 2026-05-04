@@ -377,6 +377,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     if (this.contentDirectoryService().currentContainerList()) {
       return this.contentDirectoryService().currentContainerList();
     }
+    
     console.log("no current container item found, returning empty one");
     return this.dtoGeneratorService.generateEmptyContainerItemDto();
   }

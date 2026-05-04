@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -185,6 +186,18 @@ public class RestContentDirectoryService extends BaseRestService {
 		} catch (Exception e) {
 			log.error("updateAlbumArtUri failed : {}", updateRequest, e);
 			publisher.publishEvent(new ToastrMessage(null, "error", "update album cover failed", e.getMessage()));
+		}
+	}
+	
+	@PostMapping("/updateUmsAlbumArtistDirectory/{udn}")
+	public void updateUmsAlbumArtistDirectory(@PathVariable("udn") String udn, @RequestBody() String objectcId) {
+		try {
+			ExtendedApiMediaDevice device = getExtendedMediaServerByUdn(udn);
+			device.setUmsAlbumDirectory(objectcId);
+			publisher.publishEvent(new ToastrMessage(null, "info", "Artist Directory", "Update of album artist directory was successful."));
+		} catch (Exception e) {
+			log.error("updateUmsAlbumArtistDirectory failed : {}", objectcId, e);
+			publisher.publishEvent(new ToastrMessage(null, "error", "Artist Directory", "update album artist directory failed :\n" + e.getMessage()));
 		}
 	}
 }

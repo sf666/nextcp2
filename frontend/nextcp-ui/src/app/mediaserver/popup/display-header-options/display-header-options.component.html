@@ -1,24 +1,35 @@
 <div class="panel">
     @if(isFolder()) {
-    @if(mediaPlayerService.mediaPlayerExists()) {
-    <div class="dialogItems flex flex-col flex-wrap">
-        <div class="flex" (click)="selectPlayerFolder()">
-            <button class="popupButton" color="" mat-mini-fab>
-                <mat-icon class="material-symbols-sharp">save</mat-icon>
-            </button>
-            <div class="textNextToButton">select player folder</div>
+        @if(mediaPlayerService.mediaPlayerExists()) {
+        <div class="dialogItems flex flex-col flex-wrap">
+            <div class="flex" (click)="selectPlayerFolder()">
+                <button class="popupButton" color="" mat-mini-fab>
+                    <mat-icon class="material-symbols-sharp">save</mat-icon>
+                </button>
+                <div class="textNextToButton">select player folder</div>
+            </div>
         </div>
-    </div>
-    }
+        }
 
-    <div class="dialogItems flex flex-col flex-wrap">
-        <div class="flex" (click)="selectPlayerFolderSidebar()">
-            <button class="popupButton" color="" mat-mini-fab>
-                <mat-icon class="material-symbols-sharp">post_add</mat-icon>
-            </button>
-            <div class="textNextToButton">set MY PLAYLISTS</div>
+        <div class="dialogItems flex flex-col flex-wrap">
+            <div class="flex" (click)="selectPlayerFolderSidebar()">
+                <button class="popupButton" color="" mat-mini-fab>
+                    <mat-icon class="material-symbols-sharp">post_add</mat-icon>
+                </button>
+                <div class="textNextToButton">set MY PLAYLISTS</div>
+            </div>
         </div>
-    </div>
+
+        @if (deviceService.selectedMediaServerDevice().extendedApi) {
+        <div class="dialogItems flex flex-col flex-wrap">
+            <div class="flex" (click)="selectArtistFolder()">
+                <button class="popupButton" color="" mat-mini-fab>
+                    <mat-icon class="material-symbols-sharp">folder_shared</mat-icon>
+                </button>
+                <div class="textNextToButton">set ARTIST FOLDER</div>
+            </div>
+        </div>
+        }
     }
 
     @if(mediaPlayerService.mediaPlayerExists() && isPlaylist()) {

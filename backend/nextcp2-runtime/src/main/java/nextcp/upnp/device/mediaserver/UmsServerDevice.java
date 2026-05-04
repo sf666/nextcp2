@@ -50,6 +50,7 @@ import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.UpdateObjec
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.UmsExtendedServicesService;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.UmsExtendedServicesServiceEventListenerImpl;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.DislikeAlbumInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetAudioArtistDirOutput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedOutput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumInput;
@@ -57,6 +58,7 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMe
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAnonymousDevicesWriteInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictPassInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictUserInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioArtistDirInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioUpdateRatingTagInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetPreferEuropeanServerInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWriteInput;
@@ -225,7 +227,23 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	}
 
 	@Override
+	public void setUmsAlbumDirectory(String objectId) {
+		log.debug("setting UMS album directory to object id {} ...", objectId);
+		SetAudioArtistDirInput inp = new SetAudioArtistDirInput();
+		inp.ObjectID = objectId;
+		umsServices.setAudioArtistDir(inp);
+	}
+
+	@Override
+	public String getUmsAlbumDirectory() {
+		GetAudioArtistDirOutput out = umsServices.getAudioArtistDir();
+		log.debug("current UMS album directory is {}", out.ObjectID);
+		return out.ObjectID;
+	}
+	
+	@Override
 	public void likeAlbum(MusicAlbumIds albumIds) {
+		log.debug("likeAlbum : musicBrainzId {} / discogsId {} ", albumIds.musicBrainzAlbumId, albumIds.discogsReleaseId);
 		LikeAlbumInput inp = new LikeAlbumInput();
 		inp.MusicBrainzId = albumIds.musicBrainzAlbumId;
 		inp.DiscogsId = albumIds.discogsReleaseId;
@@ -234,6 +252,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	@Override
 	public void dislikeAlbum(MusicAlbumIds albumIds) {
+		log.debug("dislikeAlbum : musicBrainzId {} / discogsId {} ", albumIds.musicBrainzAlbumId, albumIds.discogsReleaseId);
 		DislikeAlbumInput inp = new DislikeAlbumInput();
 		inp.MusicBrainzId = albumIds.musicBrainzAlbumId;
 		inp.DiscogsId = albumIds.discogsReleaseId;
