@@ -55,14 +55,17 @@ export class DisplayHeaderOptionsComponent implements OnInit {
     if (this.isFolder()) {
       height = height + 30;       // for set MY PLAYLISTS option
       if (this.deviceService.selectedMediaServerDevice().extendedApi) {
+          console.log('extended API supported, adding options for artist folder and player folder');
           height = height + 30;     // for set ARTIST FOLDER option (ums devices)
         if (this.mediaPlayerService.mediaPlayerExists()) {
+          console.log('media player exists, adding option for player folder');
           height = height + 30;     // for select player folder option
         }
       }
     }
     if(this.mediaPlayerService.mediaPlayerExists() && this.isPlaylist()) {
       height = height + 30; // for select player playlist option
+      console.log('playlist detected, adding option for select player playlist');
     }
 
     if (this.isPlaylist()) {

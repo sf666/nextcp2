@@ -185,57 +185,94 @@ public class FileConfigPersistence
         }
         String logfile = FilenameUtils.getBaseName(log4jConfigFile2);
 
-        String data = "<Configuration status=\"info\">\n" +
-                "    <Properties>\n" +
-                "        <Property name=\"LOG_DIR\">" + basePath + "</Property>\n" +
-                "        <Property name=\"LOG_FILE\">${LOG_DIR}/" + logfile + ".log</Property>\n" +
-                "        <Property name=\"LOG_PATTERN\">\n" +
-                "            %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n\n" +
-                "        </Property>\n" +
-                "        <Property name=\"LOG_PATTERN_SHORT\">\n" +
-                "            %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %c{1.1.1.*} - %msg%n\n" +
-                "        </Property>\n" +
-                "    </Properties>\n" +
-                "    <Appenders>\n" +
-                "        <Console name=\"Console\" target=\"SYSTEM_OUT\">\n" +
-                "            <PatternLayout pattern=\"${LOG_PATTERN}\" />\n" +
-                "        </Console>\n" +
-                "\n" +
-                "        <!-- Rolling File Appender -->\n" +
-                "        <RollingFile\n" +
-                "            name=\"rollingFile\"\n" +
-                "            fileName=\"${LOG_FILE}\"\n" +
-                "            filePattern=\"${LOG_DIR}/" + logfile + ".log.%d{yyyy-MM-dd}.%i.gz\"\n" +
-                "            ignoreExceptions=\"false\">\n" +
-                "\n" +
-                "            <PatternLayout>\n" +
-                "                <Pattern>${LOG_PATTERN_SHORT}</Pattern>\n" +
-                "            </PatternLayout>\n" +
-                "\n" +
-                "            <Policies>\n" +
-                "                <!-- Daily rotation -->\n" +
-                "                <TimeBasedTriggeringPolicy interval=\"1\" modulate=\"true\"/>\n" +
-                "                <!-- Also rotate at 200MB -->\n" +
-                "                <SizeBasedTriggeringPolicy size=\"200MB\"/>\n" +
-                "            </Policies>\n" +
-                "\n" +
-                "            <DefaultRolloverStrategy max=\"5\">\n" +
-                "                <Delete basePath=\"${LOG_DIR}\" maxDepth=\"1\">\n" +
-                "                    <IfFileName glob=\"" + logfile + ".log.*.gz\"/>\n" +
-                "                    <IfLastModified age=\"P30D\"/>\n" +
-                "                </Delete>\n" +
-                "            </DefaultRolloverStrategy>\n" +
-                "\n" +
-                "        </RollingFile>\n" +
-                "    </Appenders>\n" +
-                "\n" +
-                "    <Loggers>\n" +
-                "        <Root level=\"info\">\n" +
-                "            <AppenderRef ref=\"Console\" />\n" +
-                "            <AppenderRef ref=\"rollingFile\" />\n" +
-                "        </Root>\n" +
-                "    </Loggers>\n" +
-                "</Configuration>\n";
+        
+        String data = """
+<Configuration status="info">
+    <Properties>
+        <Property name="LOG_DIR">%1$s</Property>
+        <Property name="LOG_FILE">${LOG_DIR}/%2$s</Property>
+        <Property name="LOG_PATTERN">
+            %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+        </Property>
+        <Property name="LOG_PATTERN_SHORT">
+            %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %c{1.1.1.*} - %msg%n
+        </Property>
+    </Properties>
+
+    <Appenders>
+
+        <!-- Console Appender -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+
+        <!-- Rolling File Appender -->
+        <RollingFile
+            name="rollingFile"
+            fileName="${LOG_FILE}"
+            filePattern="${LOG_DIR}/%2$s.%d{yyyy-MM-dd}.%i.gz"
+            ignoreExceptions="false">
+
+            <PatternLayout>
+                <Pattern>${LOG_PATTERN_SHORT}</Pattern>
+            </PatternLayout>
+
+            <Policies>
+                <!-- Täglich rotieren -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <!-- Zusätzlich bei 200MB rotieren -->
+                <SizeBasedTriggeringPolicy size="200MB"/>
+            </Policies>
+
+            <DefaultRolloverStrategy max="5">
+                <Delete basePath="${LOG_DIR}" maxDepth="1">
+                    <IfFileName glob="%2$s.*.gz"/>
+                    <IfLastModified age="P30D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+
+        </RollingFile>
+
+        <!-- Async Appender mit erhöhter Queue -->
+        <Async name="Async"
+               bufferSize="2048"
+               ignoreExceptions="false">
+            <AppenderRef ref="rollingFile"/>
+        </Async>
+
+    </Appenders>
+    
+    <Loggers>
+        <Root level="warn">
+		<AppenderRef ref="Async" />
+		<!--
+    		<AppenderRef ref="Console" />
+		-->
+        </Root>
+        	
+        <Logger name="nextcp.service.upnp" level="warn" additivity="false">
+            <AppenderRef ref="Async" />
+        </Logger>
+        <Logger name="nextcp.upnp.device.UpnpDeviceDiscovery" level="warn" additivity="false">
+            <AppenderRef ref="Async" />
+        </Logger>
+        
+		<!-- JAudioTagger -->
+	
+        <Logger name="org.jaudiotagger" level="warn" additivity="false">
+            <AppenderRef ref="Async" />
+        </Logger>
+	
+		<!-- Spring -->
+		<Logger name="org.springframework" level="warn" additivity="false">
+	            <AppenderRef ref="Async" />
+        </Logger>
+                
+
+    </Loggers>
+</Configuration>
+        	""".formatted(basePath, logfile);
+        
         try
         {
             FileOpsNio.writeFile(log4jConfigFile2, data.getBytes());
