@@ -106,23 +106,12 @@ export class ItemTileComponent {
   }
 
   private checkAllTracksSameAlbum(data: MusicItemDto[]): boolean {
-    const numtrack = this.allMusicTracks().length;
-    const numMbid = this.allMusicTracks().filter(
-      (item) => item.musicBrainzId?.ReleaseTrackId?.length > 0
-    ).length;
-
-    console.log('[item-tile] number of tracs : ' + numtrack);
-    console.log('[item-tile] number of tracs with mbid: ' + numMbid);
-
-    if (numMbid > 0 && numtrack == numMbid) {
-      const firstTrackMbid = data[0]?.musicBrainzId?.ReleaseTrackId;
-      const numSameMbid = data.filter(
-        (item) => item.musicBrainzId?.ReleaseTrackId === firstTrackMbid
-      ).length;
-      console.log('[item-tile] number of tracs with same mbid like first track : ' + numSameMbid);
-      return numSameMbid == numMbid;
+    if (this.contentDirectoryService().albumIdExists()) {
+      console.log('[item-tile] : album identified by musicBrainz or discogs id, assuming all tracks have same album');
+      return true;
     } else {
       if (data.length > 0) {
+        console.log('[item-tile] : no album id available, checking album title for all tracks');
         const firstTrackAlbum = data[0].album;
         if (firstTrackAlbum != null) {
           const albumsWithOtherNames = data.filter(

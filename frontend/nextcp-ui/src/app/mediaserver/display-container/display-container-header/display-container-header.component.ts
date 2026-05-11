@@ -26,7 +26,6 @@ import { BackgroundImageService } from 'src/app/util/background-image.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { DisplayHeaderOptionsComponent } from '../../popup/display-header-options/display-header-options.component';
-import { isAssigned } from 'src/app/global';
 
 @Component({
   selector: 'display-container-header',
@@ -69,7 +68,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   totalPlaytimeShort = computed(() => this.calcTotalPlaytimeShort(this.contentDirectoryService().musicTracks_()));
   totalPlaytime = computed(() => this.calcTotalPlaytimeLong(this.contentDirectoryService().musicTracks_()));
 
-  likePossible = signal<boolean>(false);
+  likePossible = computed(() => this.contentDirectoryService().albumIdExists());
   allTracksSameAlbum_ = signal<boolean>(false);
   mediaServerExists = signal<boolean>(false);
 
@@ -112,27 +111,9 @@ export class DisplayContainerHeaderComponent implements OnInit {
     console.log("cdsBrowseFinished ... ");
     this.clearSearch();
     this.fillGenres();
-    this.checkLikePossible();
     this.checkLikeStatus();
     this.backgroundImageService.setDisplayContainerHeaderImage(this.currentContainer.albumartUri);
     this.cdsBrowsePathService.scrollIntoViewID();
-  }
-
-  private checkLikePossible(): void {
-    const albumIds = this.getCurrentAlbumIds();
-
-    if (!albumIds) {
-      this.likePossible.set(false);
-      return;
-    }
-
-    if (isAssigned(albumIds.discogsReleaseId) || isAssigned(albumIds.musicBrainzAlbumId)) {
-      console.log("like possible for container : " + this.currentContainer.title);
-      this.likePossible.set(true);
-    } else {
-      this.likePossible.set(false);
-      console.log("like not possible for container : " + this.currentContainer.title);
-    }
   }
 
   get albums(): ContainerDto[] {
@@ -166,7 +147,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   private checkLikeStatus() {
-    const albumIds = this.getCurrentAlbumIds();
+    const albumIds = this.contentDirectoryService().getCurrentAlbumIds();
 
     if (!albumIds) {
       this.currentAlbumLiked.set(false);
@@ -242,7 +223,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   dislikeAlbum(): void {
-    const albumIds = this.getCurrentAlbumIds();
+    const albumIds = this.contentDirectoryService().getCurrentAlbumIds();
 
     if (this.likePossible() && albumIds != undefined) {
       const deleteLikeRequest = this.myMusicService.deleteAlbumLike(albumIds);
@@ -253,7 +234,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   likeAlbum(): void {
-    const albumIds = this.getCurrentAlbumIds();
+    const albumIds = this.contentDirectoryService().getCurrentAlbumIds();
 
     if (this.likePossible() && albumIds != undefined) {
       const likeAlbumRequest = this.myMusicService.likeAlbum(albumIds);
@@ -380,15 +361,5 @@ export class DisplayContainerHeaderComponent implements OnInit {
     
     console.log("no current container item found, returning empty one");
     return this.dtoGeneratorService.generateEmptyContainerItemDto();
-  }
-
-  private getCurrentAlbumIds(): MusicAlbumIds | undefined {
-    const albumIds = this.currentContainerItem()?.allTracksSameAlbumIds;
-
-    if (!isAssigned(albumIds)) {
-      return undefined;
-    }
-
-    return albumIds;
   }
 }

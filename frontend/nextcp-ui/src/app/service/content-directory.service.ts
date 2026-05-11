@@ -12,8 +12,10 @@ import {
   SearchRequestDto,
   SearchResultDto,
   MusicItemDto,
+  MusicAlbumIds,
 } from './dto.d';
 import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
+import { isAssigned } from '../global';
 
 @Injectable()
 export class ContentDirectoryService {
@@ -26,7 +28,7 @@ export class ContentDirectoryService {
   // signals
   // ==========================================================
 
-  currentContainerList = signal<ContainerItemDto>(this.dtoGeneratorService.generateEmptyContainerItemDto());
+  public currentContainerList = signal<ContainerItemDto>(this.dtoGeneratorService.generateEmptyContainerItemDto());
   
   isCurrentContainerRoot = computed(() => {
     return this.currentContainerList().currentContainer.id === '0' || 
@@ -512,4 +514,33 @@ export class ContentDirectoryService {
   public deleteMusicTrack(item: MusicItemDto) {
     this.musicTracks_.update(v => v.filter((listitem) => listitem.songId !== item.songId));
   }
+
+  public getCurrentAlbumIds(): MusicAlbumIds | undefined {
+    const albumIds = this.currentContainerList()?.allTracksSameAlbumIds;
+
+    if (!isAssigned(albumIds)) {
+      return undefined;
+    }
+
+    return albumIds;
+  }
+
+  albumIdExists = computed(() => {
+    const albumIds = this.getCurrentAlbumIds();
+
+    if (!albumIds) {
+      console.log("like not possible for container : " + this.currentContainerList().currentContainer.title);
+      return false;
+    }
+
+    const exists = isAssigned(albumIds.discogsReleaseId) || isAssigned(albumIds.musicBrainzAlbumId);
+
+    if (exists) {
+      console.log("like possible for container : " + this.currentContainerList().currentContainer.title);
+    } else {
+      console.log("like not possible for container : " + this.currentContainerList().currentContainer.title);
+    }
+
+    return exists;
+  });  
 }
