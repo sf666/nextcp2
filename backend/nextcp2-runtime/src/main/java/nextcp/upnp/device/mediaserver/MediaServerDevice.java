@@ -202,11 +202,15 @@ public class MediaServerDevice extends BaseDevice {
 				if (!firstMB.equals(item.musicBrainzId.ReleaseTrackId)) {
 					allSameMB = false;
 				}
+			} else {
+				allSameMB = false;
 			}
 			if (allSameDiscogs && item.discogsId != null && item.discogsId.ReleaseId != null) {
 				if (!firstDiscogs.equals(item.discogsId.ReleaseId)) {
 					allSameDiscogs = false;
 				}
+			} else {
+				allSameDiscogs = false;
 			}
 		}
 		
