@@ -51,7 +51,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let height = 140;
+    let height = 210;
     if (this.isFolder()) {
       height = height + 30;       // for set MY PLAYLISTS option
       if (this.deviceService.selectedMediaServerDevice().extendedApi) {
