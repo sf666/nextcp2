@@ -1,12 +1,14 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Inject, Output, OutputEmitterRef, ViewContainerRef, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Inject, Output, OutputEmitterRef, ViewContainerRef, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { CdsUpdateService } from 'src/app/service/cds-update.service';
 import { ConfigurationService } from 'src/app/service/configuration.service';
 import { DeviceService } from 'src/app/service/device.service';
-import { ContainerDto, ContainerIdDto, MediaPlayerConfigDto } from 'src/app/service/dto';
+import { ContainerDto, ContainerIdDto, MediaPlayerConfigDto, MusicItemIdDto } from 'src/app/service/dto';
 import { MediaPlayerService } from 'src/app/service/media-player/media-player.service';
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
+import { InputPopupComponent, InputPopupData } from 'src/app/util/comp/input-popup/input-popup/input-popup.component';
 import { PopupService } from 'src/app/util/popup.service';
 
 @Component({
@@ -21,6 +23,9 @@ import { PopupService } from 'src/app/util/popup.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DisplayHeaderOptionsComponent implements OnInit {
+
+  readonly inputDialog = inject(MatDialog);
+  readonly cdsUpdateService = inject(CdsUpdateService);
 
   private readonly _matDialogRef: MatDialogRef<DisplayHeaderOptionsComponent>;
   private addToPlaylistOutput: OutputEmitterRef<ContainerDto>;
@@ -54,6 +59,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
     let height = 210;
     if (this.isFolder()) {
       height = height + 30;       // for set MY PLAYLISTS option
+      height = height + 30;       // for update album art option
       if (this.deviceService.selectedMediaServerDevice().extendedApi) {
           console.log('extended API supported, adding options for artist folder and player folder');
           height = height + 30;     // for set ARTIST FOLDER option (ums devices)
@@ -78,6 +84,35 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   addToPlaylist(): void {
     this.addToPlaylistOutput.emit(this.currentContainer);
     this.close();
+  }
+
+  updateAlbumArt(): void {
+    const inputTextData: InputPopupData = {
+      cancelText: 'cancel',
+      inputText: '',
+      inputTextExplanation: 'Enter full album art URL. Reload parent container after update.',
+      labelInputText: '',
+      okText: 'update',
+      title: 'Update album art',
+    };
+    const dialogRef = this.inputDialog.open(InputPopupComponent, {
+      width: '480px',
+      maxWidth: '640px',
+      data: inputTextData,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        const musicItemId: MusicItemIdDto = {
+          acoustID: '',
+          musicBrainzIdTrackId: '',
+          objectID: this.currentContainer.id,
+        };
+
+        this.cdsUpdateService.setNewAlbumArtUri(musicItemId, this.currentContainer.albumartUri, result);
+        this.close();
+      }
+    });
   }
 
   selectArtistFolder(): void {

@@ -1,3 +1,64 @@
 .mat-mdc-form-field {
     width: 100%;
 }
+
+::ng-deep .mat-mdc-dialog-container {
+    border-radius: 16px !important;
+    overflow: hidden;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+::ng-deep .mat-mdc-dialog-surface {
+    border-radius: 16px !important;
+    overflow: hidden;
+    background: transparent !important;
+}
+
+.dialog-root {
+    width: 480px;
+    max-width: 100%;
+    overflow: hidden;
+    background: rgba(30, 30, 30, 0.98);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+[mat-dialog-title] {
+    margin: 0;
+    padding: 1rem 1.5rem 0.5rem;
+    color: #ffffff;
+}
+
+mat-dialog-content {
+    padding: 0 1.5rem 1rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+mat-dialog-actions {
+    padding: 0 1.5rem 1.25rem;
+    justify-content: flex-end;
+}
+
+::ng-deep .dialog-root .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+::ng-deep .dialog-root .mat-mdc-form-field-focus-overlay {
+    background-color: transparent;
+}
+
+::ng-deep .dialog-root .mdc-floating-label,
+::ng-deep .dialog-root .mat-mdc-input-element,
+::ng-deep .dialog-root .mdc-line-ripple::before,
+::ng-deep .dialog-root .mdc-line-ripple::after,
+::ng-deep .dialog-root .mat-mdc-button {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+::ng-deep .dialog-root .mat-mdc-button {
+    --mdc-text-button-label-text-color: rgba(255, 255, 255, 0.85);
+}

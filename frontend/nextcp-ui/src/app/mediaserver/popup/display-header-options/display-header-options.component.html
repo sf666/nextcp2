@@ -47,6 +47,12 @@
       <span class="material-symbols-outlined text-lg opacity-70">playlist_add</span>
       <span>Add to playlist</span>
     </button>
+    
+    <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="updateAlbumArt()">
+    <span class="material-symbols-outlined text-lg opacity-70">image</span>
+    <span>Update album art</span>
+    </button>
+
     @if (deviceService.selectedMediaServerDevice().extendedApi) {
     <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="selectArtistFolder()">
         <span class="material-symbols-outlined text-lg opacity-70">folder_shared</span>
