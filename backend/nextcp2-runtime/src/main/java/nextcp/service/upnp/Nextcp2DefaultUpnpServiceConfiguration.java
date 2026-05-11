@@ -271,7 +271,7 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
 	@Override
 	public StreamClient createStreamClient() {
 		ExecutorService executorService = getStreamClientExecutorService();
-		return tc.createStreamClient(executorService, new StreamClientConfigurationImpl(executorService));
+		return tc.createStreamClient(executorService, new StreamClientConfigurationImpl(executorService, 30));
 	}
 
 	@Override
