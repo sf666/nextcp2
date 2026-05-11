@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
 import { GlobalSearchService } from 'src/app/service/search/global-search.service';
@@ -16,7 +16,22 @@ import { ModalSearchResultComponent } from 'src/app/view/search/modal-search-res
   styleUrl: './global-search.component.scss',
 })
 export class GlobalSearchComponent {
-  constructor(public globalSearchService: GlobalSearchService) {}
+  constructor(
+    public globalSearchService: GlobalSearchService,
+    private elementRef: ElementRef<HTMLElement>
+  ) {}
+
+  @HostListener('document:mousedown', ['$event'])
+  onDocumentMouseDown(event: MouseEvent): void {
+    if (!this.globalSearchService.quickSearchPanelVisible) {
+      return;
+    }
+
+    const target = event.target as Node | null;
+    if (target && !this.elementRef.nativeElement.contains(target)) {
+      this.globalSearchService.clearSearch();
+    }
+  }
   
 
   keyUp(event: KeyboardEvent): void {
