@@ -11,6 +11,7 @@ import { PersistenceService } from 'src/app/service/persistence/persistence.serv
 import { ActivatedRoute } from '@angular/router';
 import { MusicLibraryService } from 'src/app/service/music-library/music-library.service';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { isAssigned } from 'src/app/global';
 
 @Component({
   selector: 'app-music-library',
@@ -190,7 +191,7 @@ export class MusicLibraryComponent implements AfterViewInit {
 
   public backButtonVisible(): boolean {
     const currentContainer = this.contentDirectoryService.currentContainerList().currentContainer;
-    if (!currentContainer || currentContainer.id.length == 0) {
+    if (!isAssigned(currentContainer) || currentContainer.id?.length == 0) {
       return false;
     }
 

@@ -44,7 +44,12 @@ export class CdsBrowsePathService {
   }
 
   public peekCurrentPathID(): string {
-    return this.stack.peek();
+    try {
+      return this.stack.peek();
+    } catch (error) {
+      console.log('[CdsBrowsePathService] stack is already empty');
+      return '';
+    }
   }
 
   public clear(): void {

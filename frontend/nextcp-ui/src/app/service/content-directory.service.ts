@@ -31,9 +31,10 @@ export class ContentDirectoryService {
   public currentContainerList = signal<ContainerItemDto>(this.dtoGeneratorService.generateEmptyContainerItemDto());
   
   isCurrentContainerRoot = computed(() => {
-    return this.currentContainerList().currentContainer.id === '0' || 
-      this.currentContainerList().currentContainer.parentID === '-1' || 
-      this.currentContainerList().currentContainer.id.length == 0;
+    return (isAssigned(this.currentContainerList().currentContainer) && 
+      this.currentContainerList().currentContainer?.id === '0' || 
+      this.currentContainerList().currentContainer?.parentID === '-1' || 
+      this.currentContainerList().currentContainer?.id.length == 0);
   });
 
   isCurrentContainerRootOrHasParentRoot = computed(() => {
