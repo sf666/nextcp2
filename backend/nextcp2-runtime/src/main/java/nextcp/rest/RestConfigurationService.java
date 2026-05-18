@@ -23,6 +23,7 @@ import nextcp.config.ServerConfig;
 import nextcp.devicedriver.DeviceCapabilityDto;
 import nextcp.devicedriver.DeviceDriverDiscoveryService;
 import nextcp.dto.ApplicationConfig;
+import nextcp.dto.AudioAddictConfig;
 import nextcp.dto.Config;
 import nextcp.dto.DeviceDriverCapability;
 import nextcp.dto.MediaPlayerConfigDto;
@@ -110,7 +111,20 @@ public class RestConfigurationService
     {
         return Nextcp2NetworkAddressFactory.getUsableInterfaces();
     }
-    
+
+    @PostMapping("/saveAudioAddictConfig")
+    public void saveAudioAddictConfig(@RequestBody AudioAddictConfig audioAddictConfig)
+    {
+        try
+        {
+            configService.saveAudioAddictConfig(audioAddictConfig);
+        }
+        catch (Exception e)
+        {
+            log.error("saveAudioAddictConfig", e);
+        }
+    }
+
     @PostMapping("/saveMusicBrainzConfig")
     public void saveClientConfig(@RequestBody MusicbrainzSupport mbConfig)
     {
