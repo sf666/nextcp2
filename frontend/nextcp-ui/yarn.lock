@@ -1206,20 +1206,10 @@
     "@babel/helper-module-transforms" "^7.28.6"
     "@babel/helper-plugin-utils" "^7.28.6"
 
-"@babel/plugin-transform-modules-systemjs@^7.28.5":
-  version "7.28.5"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-modules-systemjs/-/plugin-transform-modules-systemjs-7.28.5.tgz#7439e592a92d7670dfcb95d0cbc04bd3e64801d2"
-  integrity sha512-vn5Jma98LCOeBy/KpeQhXcV2WZgaRUtjwQmjoBuLNlOmkg0fB5pdvYVeWRYI69wWKwK2cD1QbMiUQnoujWvrew==
-  dependencies:
-    "@babel/helper-module-transforms" "^7.28.3"
-    "@babel/helper-plugin-utils" "^7.27.1"
-    "@babel/helper-validator-identifier" "^7.28.5"
-    "@babel/traverse" "^7.28.5"
-
-"@babel/plugin-transform-modules-systemjs@^7.29.0":
-  version "7.29.0"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-modules-systemjs/-/plugin-transform-modules-systemjs-7.29.0.tgz#e458a95a17807c415924106a3ff188a3b8dee964"
-  integrity sha512-PrujnVFbOdUpw4UHiVwKvKRLMMic8+eC0CuNlxjsyZUiBjhFdPsewdXCkveh2KqBA9/waD0W1b4hXSOBQJezpQ==
+"@babel/plugin-transform-modules-systemjs@^7.28.5", "@babel/plugin-transform-modules-systemjs@^7.29.0":
+  version "7.29.4"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-modules-systemjs/-/plugin-transform-modules-systemjs-7.29.4.tgz#f621105da99919c15cf4bde6fcc7346ef95e7b20"
+  integrity sha512-N7QmZ0xRZfjHOfZeQLJjwgX2zS9pdGHSVl/cjSGlo4dXMqvurfxXDMKY4RqEKzPozV78VMcd0lxyG13mlbKc4w==
   dependencies:
     "@babel/helper-module-transforms" "^7.28.6"
     "@babel/helper-plugin-utils" "^7.28.6"
@@ -6072,9 +6062,9 @@ fast-levenshtein@^2.0.6:
   integrity sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==
 
 fast-uri@^3.0.1:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/fast-uri/-/fast-uri-3.1.0.tgz#66eecff6c764c0df9b762e62ca7edcfb53b4edfa"
-  integrity sha512-iPeeDKJSWf4IEOasVVrknXpaBV0IApz/gp7S2bb7Z4Lljbl2MGJRqInZiUrQwV16cpzw/D3S5j5Julj/gT52AA==
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/fast-uri/-/fast-uri-3.1.2.tgz#8af3d4fc9d3e71b11572cc2673b514a7d1a8c8ec"
+  integrity sha512-rVjf7ArG3LTk+FS6Yw81V1DLuZl1bRbNrev6Tmd/9RaroeeRRJhAt7jg/6YFxbvAQXUCavSoZhPPj6oOx+5KjQ==
 
 faye-websocket@^0.11.3:
   version "0.11.4"
@@ -6480,9 +6470,9 @@ hasown@^2.0.2:
     function-bind "^1.1.2"
 
 hono@^4.11.4:
-  version "4.12.14"
-  resolved "https://registry.yarnpkg.com/hono/-/hono-4.12.14.tgz#4777c9512b7c84138e4f09e61e3d2fa305eb1414"
-  integrity sha512-am5zfg3yu6sqn5yjKBNqhnTX7Cv+m00ox+7jbaKkrLMRJ4rAdldd1xPd/JzbBWspqaQv6RSTrgFN95EsfhC+7w==
+  version "4.12.21"
+  resolved "https://registry.yarnpkg.com/hono/-/hono-4.12.21.tgz#f11846462095d365b9a8b4859b37c02cb0981df3"
+  integrity sha512-uV63apnb0kyPtAUwoWgaGh9HyIFcv8lgmzPZSiTBQAFOFGIzka5EZ1dZocmGnn0XdX0+XTqJ6Tqv7selMuGLRQ==
 
 hosted-git-info@^9.0.0:
   version "9.0.2"
@@ -8644,10 +8634,10 @@ postcss@8.5.6:
     picocolors "^1.1.1"
     source-map-js "^1.2.1"
 
-postcss@^8.2.14, postcss@^8.4.40, postcss@^8.4.41, postcss@^8.4.49, postcss@^8.5.1, postcss@^8.5.10, postcss@^8.5.6:
-  version "8.5.10"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.5.10.tgz#8992d8c30acf3f12169e7c09514a12fed7e48356"
-  integrity sha512-pMMHxBOZKFU6HgAZ4eyGnwXF/EvPGGqUr0MnZ5+99485wwW41kW91A4LOGxSHhgugZmSChL5AlElNdwlNgcnLQ==
+postcss@^8.2.14, postcss@^8.4.40, postcss@^8.4.41, postcss@^8.4.49, postcss@^8.5.1, postcss@^8.5.11, postcss@^8.5.6:
+  version "8.5.11"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.5.11.tgz#42ed344ff95c002a76f73678416adabecc8607dd"
+  integrity sha512-5dDj8+lmvA8XB78SmzGI8NlQoksv7IfutGWeVZxiixHbO+p4LDPT3wuG/D9sM/wrjZZ9I+Siy/e117vbFPxSZg==
   dependencies:
     nanoid "^3.3.11"
     picocolors "^1.1.1"

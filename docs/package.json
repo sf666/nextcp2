@@ -19,7 +19,7 @@
     "@tailwindcss/vite": "^4.2.4",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "astro": "^6.1.8",
+    "astro": "^6.1.10",
     "flowbite": "^4.0.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
