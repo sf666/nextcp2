@@ -32,12 +32,19 @@ GenericResult:
 #
 
 Config:
+   aiConfig: AiConfig
    applicationConfig: ApplicationConfig
    radioStation: List<RadioStation>
    musicbrainzSupport: MusicbrainzSupport
    lastFmSessionKey: String
    spotifyConfig: SpotifyConfigDto
    audioAddictConfig: AudioAddictConfig
+
+AiConfig:
+   aiEnabled: Boolean
+   aiProvider: String
+   aiApiKey: String
+   aiModel: String
 
 MediaPlayerConfigDto:
    workdir: String

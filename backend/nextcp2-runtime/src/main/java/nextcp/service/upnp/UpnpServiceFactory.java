@@ -6,13 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
 import nextcp.config.RendererConfig;
 
-@Configuration
+@Service
 public class UpnpServiceFactory
 {
     private Nextcp2UpnpServiceImpl upnpService = null;
@@ -25,8 +24,8 @@ public class UpnpServiceFactory
     @Autowired
 	private RendererConfig rendererConfigService;
     
-    public UpnpServiceFactory()
-    {
+    public UpnpServiceFactory() {
+    	log.debug("creating UpnpServiceFactory ... {}", upnpService);
     }
 
     @PostConstruct
@@ -40,7 +39,6 @@ public class UpnpServiceFactory
     }
     
     @Bean
-    @Scope(value = "prototype")
     public Nextcp2UpnpServiceImpl upnpService()
     {
         return upnpService;

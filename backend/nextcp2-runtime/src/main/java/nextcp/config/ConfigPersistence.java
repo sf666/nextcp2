@@ -3,8 +3,7 @@ package nextcp.config;
 import java.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Service;
-import jakarta.annotation.PostConstruct;
+import org.springframework.context.annotation.Configuration;
 import nextcp.db.service.BasicDbService;
 import nextcp.dto.Config;
 import nextcp.dto.MusicbrainzSupport;
@@ -14,7 +13,7 @@ import nextcp.musicbrainz.MusicBrainzConfig;
 /**
  * After adding new configuration parameter, do not forget to "applyDefaults()".
  */
-@Service
+@Configuration
 public class ConfigPersistence {
 
 	private Config config = null;
@@ -25,15 +24,19 @@ public class ConfigPersistence {
 
 	private CodeGenConfig codegen = new CodeGenConfig();
 
-	@Autowired
 	private FileConfigPersistence fileConfigPersistence = null;
 
-	@Autowired
 	private BasicDbService basicDbService = null;
 
 	private DatabaseConfigPersistence databaseConfigPersistence = null;
 
-	@PostConstruct
+	@Autowired
+	public ConfigPersistence(FileConfigPersistence fileConfigPersistence, BasicDbService basicDbService) {
+		this.fileConfigPersistence = fileConfigPersistence;
+		this.basicDbService = basicDbService;
+		init();
+	}
+
 	private void init() {
 		// Read config from filesystem
 		config = fileConfigPersistence.getConfig();

@@ -1,6 +1,13 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.0.0 on 2026-04-23 10:02:00.
+// Generated using typescript-generator version 4.1.1 on 2026-05-26 13:33:54.
+
+export interface AiConfig {
+    aiEnabled: boolean;
+    aiProvider: string;
+    aiApiKey: string;
+    aiModel: string;
+}
 
 export interface ApplicationConfig {
     generateUpnpCode: boolean;
@@ -62,6 +69,7 @@ export interface BrowseRequestDto {
 }
 
 export interface Config {
+    aiConfig: AiConfig;
     applicationConfig: ApplicationConfig;
     radioStation: RadioStation[];
     musicbrainzSupport: MusicbrainzSupport;

@@ -12,6 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Config
 {
 
+    public AiConfig aiConfig;
     public ApplicationConfig applicationConfig;
     public List<RadioStation> radioStation;
     public MusicbrainzSupport musicbrainzSupport;
@@ -23,8 +24,9 @@ public class Config
     {
     }
 
-    public Config(ApplicationConfig applicationConfig, List<RadioStation> radioStation, MusicbrainzSupport musicbrainzSupport, String lastFmSessionKey, SpotifyConfigDto spotifyConfig, AudioAddictConfig audioAddictConfig)
+    public Config(AiConfig aiConfig, ApplicationConfig applicationConfig, List<RadioStation> radioStation, MusicbrainzSupport musicbrainzSupport, String lastFmSessionKey, SpotifyConfigDto spotifyConfig, AudioAddictConfig audioAddictConfig)
     {
+        this.aiConfig = aiConfig;
         this.applicationConfig = applicationConfig;
         this.radioStation = radioStation;
         this.musicbrainzSupport = musicbrainzSupport;
@@ -38,6 +40,7 @@ public class Config
     {
         StringBuilder sb = new StringBuilder();
         sb.append("Config [");
+        sb.append("aiConfig=").append(this.aiConfig).append(", ");
         sb.append("applicationConfig=").append(this.applicationConfig).append(", ");
         sb.append("radioStation=").append(this.radioStation).append(", ");
         sb.append("musicbrainzSupport=").append(this.musicbrainzSupport).append(", ");

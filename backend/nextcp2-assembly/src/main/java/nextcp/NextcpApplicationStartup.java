@@ -20,7 +20,7 @@ import nextcp.config.FileConfigPersistence;
 import nextcp.dto.Config;
 import nextcp.util.IApplicationRestartable;
 
-@SpringBootApplication(scanBasePackages = "nextcp, nextcp2, devicedriver, codegen")
+@SpringBootApplication(scanBasePackages = "nextcp, nextcp2, devicedriver, codegen", excludeName = { "org.springframework.ai.model.google.genai.autoconfigure.chat.GoogleGenAiChatAutoConfiguration" })
 @EnableScheduling
 public class NextcpApplicationStartup implements IApplicationRestartable
 {

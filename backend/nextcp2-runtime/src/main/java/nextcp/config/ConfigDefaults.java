@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import nextcp.dto.AiConfig;
 import nextcp.dto.AudioAddictConfig;
 import nextcp.dto.Config;
 import nextcp.dto.MusicbrainzSupport;
@@ -20,6 +21,15 @@ public class ConfigDefaults
         {
             config.spotifyConfig = new SpotifyConfigDto();
             config.spotifyConfig.clientId = "07c3ea9a85b045b09f0dea60b83fb949";
+        }
+    	
+        if (config.aiConfig == null)
+        {
+            config.aiConfig = new AiConfig();
+            config.aiConfig.aiEnabled = true;
+            config.aiConfig.aiProvider = "google";
+            config.aiConfig.aiApiKey = "your-api-key";
+            config.aiConfig.aiModel = "gemini-3.5-flash";
         }
         else if (StringUtils.isBlank(config.spotifyConfig.clientId))
         {

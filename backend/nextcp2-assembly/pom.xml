@@ -27,6 +27,18 @@
 	                    </goals>
 	                </execution>
 	            </executions>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>ch.qos.logback</groupId>
+							<artifactId>logback-classic</artifactId>
+						</exclude>
+						<exclude>
+							<groupId>ch.qos.logback</groupId>
+							<artifactId>logback-core</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 			<!-- do not deploy -->
 			<plugin>
@@ -88,5 +100,7 @@
 			<groupId>de.sf666</groupId>
 			<artifactId>nextcp2-player</artifactId>
 		</dependency>
+
+		<!-- Explicitly exclude logback from fat jar (provided = not packaged by Spring Boot plugin) -->
 	</dependencies>
 </project>
