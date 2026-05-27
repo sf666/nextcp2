@@ -6,6 +6,7 @@ format: PROPERTIES_JAVA
 
 push:
   # Wo liegt die englische Basisdatei zum Hochladen?
+  language: en
   filesTemplate: "./backend/nextcp2-runtime/src/main/resources/messages.properties"
 
 pull:
