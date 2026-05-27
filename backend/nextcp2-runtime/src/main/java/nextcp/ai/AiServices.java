@@ -14,7 +14,7 @@ public class AiServices {
 	private static final Logger log = LoggerFactory.getLogger(AiServices.class.getName());
 	
 	private final ChatClient chatClient;
-
+    
 	public AiServices(@Autowired(required = false) ChatClient chatClient) {
 		this.chatClient = chatClient;
 	}
