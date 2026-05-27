@@ -2,7 +2,7 @@ name: Sync Translations with Tolgee
 
 on:
   push:
-    branches: [ main ] # start workflow on push
+    branches: [ main ] # Runs the workflow on every push to the 'main' branch
 
 jobs:
   tolgee-sync:
@@ -19,14 +19,15 @@ jobs:
       - name: Install Tolgee CLI
         run: npm install -g @tolgee/cli
 
-      # 1. push new english keys
+      # 1. Push new English keys from Spring Boot to Tolgee Cloud
       - name: Push new Keys to Tolgee
         run: tolgee push --api-key ${{ secrets.TOLGEE_API_KEY }}
 
-      # 2. pull translations
+      # 2. Pull the latest translations (e.g. German) from Tolgee Cloud
       - name: Pull Translations from Tolgee
         run: tolgee pull --api-key ${{ secrets.TOLGEE_API_KEY }}
-	
+
+      # 3. Automatically commit and push updated .properties files back to the repository
       - name: Commit & Push updated translations
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
