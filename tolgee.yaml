@@ -9,6 +9,8 @@ push:
       language: en
 
 pull:
-  # Pulling stays automated; Tolgee creates messages_de.properties flach im Ordner
-  filesTemplate: "./backend/nextcp2-runtime/src/main/resources/messages_{languageTag}.properties"
+  # The base directory where Tolgee will save the pulled translation files
+  path: "./backend/nextcp2-runtime/src/main/resources"
+  # The file naming template relative to the pull path
+  filesTemplate: "messages_{languageTag}.properties"
 
