@@ -1,4 +1,4 @@
-package nextcp.external;
+package nextcp.ai;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
 @Configuration
-public class AiConfig {
+public class AiChatClient {
 
-	private static final Logger log = LoggerFactory.getLogger(AiConfig.class);
+	private static final Logger log = LoggerFactory.getLogger(AiChatClient.class);
 
     @Bean
     public ChatClient chatClient(@Lazy GoogleGenAiChatModel googleGenAiChatModel) {

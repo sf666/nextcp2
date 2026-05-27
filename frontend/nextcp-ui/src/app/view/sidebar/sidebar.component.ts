@@ -50,6 +50,7 @@ export class SidebarComponent {
     this.routerMap.set("/settings", "-6");
     this.routerMap.set("/mediaPlayerConfig", "-7");
     this.routerMap.set("/ums-audioaddict", "-8");
+    this.routerMap.set("/chat-ai", "-9");
     this.routerMap.set("/myPlaylists", "0");      // All positives ID's are playlists
 
     this.routerMap.set("/myTracks", "-999");      // not used yet

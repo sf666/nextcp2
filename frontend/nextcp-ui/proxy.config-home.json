@@ -1,4 +1,8 @@
 {
+    "/api/ai/*": {
+      "target": "http://192.168.112.5:8085",
+      "secure": false
+    },
     "/DeviceRegistry/*": {
       "target": "http://192.168.112.5:8085",
       "secure": false

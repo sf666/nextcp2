@@ -1,0 +1,43 @@
+<section class="chat-ai-shell p-4 md:p-6">
+  <div class="chat-ai-card rounded-2xl">
+    <header class="chat-ai-header px-4 py-3 border-b border-zinc-700/70">
+      <h1 class="text-lg md:text-xl font-semibold text-white">AI Chatbot</h1>
+      <p class="text-sm text-zinc-400">Route: /chat-ai</p>
+    </header>
+
+    <div class="chat-ai-messages p-4 md:p-6">
+      @for (message of messages(); track $index) {
+        <div class="message-row" [class.message-row-user]="message.role === 'user'">
+          <div class="message-bubble" [class.message-bubble-user]="message.role === 'user'">
+            {{ message.content }}
+          </div>
+        </div>
+      }
+      @if (isLoading()) {
+        <div class="message-row">
+          <div class="message-bubble typing">AI schreibt ...</div>
+        </div>
+      }
+    </div>
+
+    <form class="chat-ai-input border-t border-zinc-700/70 p-3 md:p-4" (ngSubmit)="send()">
+      <div class="flex gap-2">
+        <input
+          type="text"
+          name="chatMessage"
+          [(ngModel)]="userInput"
+          placeholder="Nachricht eingeben ..."
+          autocomplete="off"
+          class="flex-1 rounded-xl border border-zinc-700 bg-zinc-900/80 text-zinc-100 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+        />
+        <button
+          type="submit"
+          class="rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white px-4 py-2 disabled:opacity-50"
+          [disabled]="isLoading() || userInput.trim().length === 0"
+        >
+          Senden
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

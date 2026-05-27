@@ -1,0 +1,69 @@
+@use "tailwindcss";
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+.chat-ai-shell {
+  min-height: calc(100dvh - var(--footer-height));
+}
+
+.chat-ai-card {
+  background: linear-gradient(160deg, rgba(9, 9, 11, 0.92), rgba(24, 24, 27, 0.94));
+  border: 1px solid rgba(63, 63, 70, 0.5);
+  max-width: 980px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.chat-ai-header h1,
+.chat-ai-header p,
+.message-bubble,
+.chat-ai-input input,
+.chat-ai-input button {
+  font-family: 'HK Grotesk';
+}
+
+.chat-ai-messages {
+  min-height: 52dvh;
+  max-height: 62dvh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.message-row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.message-row-user {
+  justify-content: flex-end;
+}
+
+.message-bubble {
+  max-width: min(80%, 700px);
+  border-radius: 1rem;
+  padding: 0.65rem 0.9rem;
+  background: rgba(39, 39, 42, 0.9);
+  color: rgb(228, 228, 231);
+  border: 1px solid rgba(82, 82, 91, 0.5);
+  white-space: pre-wrap;
+}
+
+.message-bubble-user {
+  background: rgba(8, 145, 178, 0.2);
+  border-color: rgba(6, 182, 212, 0.5);
+}
+
+.typing {
+  animation: pulse-text 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse-text {
+  0% { opacity: 0.45; }
+  50% { opacity: 1; }
+  100% { opacity: 0.45; }
+}

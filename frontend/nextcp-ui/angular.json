@@ -107,7 +107,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "nextcp-ui:build"
+            "buildTarget": "nextcp-ui:build",
+            "proxyConfig": "proxy.config.json"
           },
           "configurations": {
             "production": {

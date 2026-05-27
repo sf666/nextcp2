@@ -44,6 +44,7 @@ import { MyPlaylistsComponent } from './app/view/my-playlists/my-playlists.compo
 import { RadioComponent } from './app/view/radio/radio.component';
 import { PlaylistComponent } from './app/view/playlist/playlist.component';
 import { UmsAudioaddictComponent } from './app/view/audio-addict/ums/ums-audioaddict.component';
+import { ChatAiComponent } from './app/view/chat-ai/chat-ai.component';
 import { ContentDirectoryService } from './app/service/content-directory.service';
 import { defaultToastConfig, TOAST_CONFIG_TOKEN } from './app/service/toast/toast-config';
 
@@ -57,6 +58,7 @@ const ROUTES: Routes = [
   { path: 'myPlaylists', component: MyPlaylistsComponent },
   { path: 'radio', component: RadioComponent },
   { path: 'playlist', component: PlaylistComponent },
+  { path: 'chat-ai', component: ChatAiComponent },
   { path: 'mediaPlayerConfig', component: MediaPlayerComponent },
   { path: 'ums-audioaddict', component: UmsAudioaddictComponent},
   { path: '', redirectTo: '/music-library', pathMatch: 'full' },

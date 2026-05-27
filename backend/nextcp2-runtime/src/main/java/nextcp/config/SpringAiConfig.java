@@ -8,7 +8,6 @@ import org.springframework.ai.google.genai.GoogleGenAiChatOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.Lazy;
 import com.google.genai.Client;
 import nextcp.dto.Config;
 
@@ -22,6 +21,8 @@ public class SpringAiConfig {
     public GoogleGenAiChatModel googleGenAiChatModel(Config config) {
     	try {
             if (config != null && config.aiConfig != null && "google".equalsIgnoreCase(config.aiConfig.aiProvider)) {
+            	log.info("Initializing GoogleGenAiChatModel with model: {}", config.aiConfig.aiModel);
+            	log.info("Initializing GoogleGenAiChatModel with API key: {}", config.aiConfig.aiApiKey);
                 Client genAiClient = Client.builder()
                     .apiKey(config.aiConfig.aiApiKey)
                     .build();
@@ -36,7 +37,7 @@ public class SpringAiConfig {
                         .build();
             }
 		} catch (Exception e) {
-			log.error("Error initializing GoogleGenAiChatModel: {}", e.getMessage(), e);
+			log.error("Error initializing GoogleGenAiChatModel.", e);
 		}
         return null;
     }
