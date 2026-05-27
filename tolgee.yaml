@@ -5,10 +5,10 @@ format: PROPERTIES_JAVA
 push:
   # Explicitly map the base file without language suffixes to English (en)
   files:
-    - file: "./backend/nextcp2-runtime/src/main/resources/messages.properties"
+    - path: "./backend/nextcp2-runtime/src/main/resources/messages.properties"
       language: en
 
 pull:
-  # Pulling stays automated; Tolgee creates messages_de.properties, messages_fr.properties etc.
+  # Pulling stays automated; Tolgee creates messages_de.properties flach im Ordner
   filesTemplate: "./backend/nextcp2-runtime/src/main/resources/messages_{languageTag}.properties"
 
