@@ -25,7 +25,7 @@ jobs:
 
       # 1. Push new English keys from Spring Boot to Tolgee Cloud
       - name: Push new Keys to Tolgee
-        run: tolgee push --api-key ${{ secrets.TOLGEE_API_KEY }} --config ./tolgee.yaml --verbose
+        run: tolgee push --api-key ${{ secrets.TOLGEE_API_KEY }} --config ./tolgee.yaml --force-mode keep --verbose
 
       # 2. Pull the latest translations (e.g. German) from Tolgee Cloud
       - name: Pull Translations from Tolgee

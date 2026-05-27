@@ -11,6 +11,7 @@ push:
 pull:
   # The base directory where Tolgee will save the pulled translation files
   path: "./backend/nextcp2-runtime/src/main/resources"
+  languages: [en, de]
   # The file naming template relative to the pull path
   filesTemplate: "messages_{languageTag}.properties"
 
