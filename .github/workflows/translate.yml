@@ -4,6 +4,10 @@ on:
   push:
     branches: [ main ] # Runs the workflow on every push to the 'main' branch
 
+# Force GitHub runner to use Node 24 for JavaScript actions
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   tolgee-sync:
     runs-on: ubuntu-latest
@@ -14,18 +18,18 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24' # Updated to modern Node 24
 
       - name: Install Tolgee CLI
         run: npm install -g @tolgee/cli
 
       # 1. Push new English keys from Spring Boot to Tolgee Cloud
       - name: Push new Keys to Tolgee
-        run: tolgee push --api-key ${{ secrets.TOLGEE_API_KEY }}
+        run: tolgee push --api-key ${{ secrets.TOLGEE_API_KEY }} --verbose
 
       # 2. Pull the latest translations (e.g. German) from Tolgee Cloud
       - name: Pull Translations from Tolgee
-        run: tolgee pull --api-key ${{ secrets.TOLGEE_API_KEY }}
+        run: tolgee pull --api-key ${{ secrets.TOLGEE_API_KEY }} --verbose
 
       # 3. Automatically commit and push updated .properties files back to the repository
       - name: Commit & Push updated translations
