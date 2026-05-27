@@ -1,0 +1,15 @@
+# tolgee.yaml project config
+
+
+projectId: 31950
+format: PROPERTIES_JAVA
+
+push:
+  # Wo liegt die englische Basisdatei zum Hochladen?
+  filesTemplate: "./backend/nextcp2-runtime/src/main/resources/messages.properties"
+
+pull:
+  # Wohin sollen die übersetzten Dateien heruntergeladen werden?
+  # {languageTag} wird von Tolgee automatisch durch "de", "fr" etc. ersetzt.
+  filesTemplate: "./backend/nextcp2-runtime/src/main/resources/messages_{languageTag}.properties"
+

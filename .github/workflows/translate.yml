@@ -1,0 +1,35 @@
+name: Sync Translations with Tolgee
+
+on:
+  push:
+    branches: [ main ] # start workflow on push
+
+jobs:
+  tolgee-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Tolgee CLI
+        run: npm install -g @tolgee/cli
+
+      # 1. push new english keys
+      - name: Push new Keys to Tolgee
+        run: tolgee push --api-key ${{ secrets.TOLGEE_API_KEY }}
+
+      # 2. pull translations
+      - name: Pull Translations from Tolgee
+        run: tolgee pull --api-key ${{ secrets.TOLGEE_API_KEY }}
+	
+      - name: Commit & Push updated translations
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(i18n): update translations from Tolgee [skip ci]"
+          file_pattern: "backend/nextcp2-runtime/src/main/resources/messages_*.properties"
+
