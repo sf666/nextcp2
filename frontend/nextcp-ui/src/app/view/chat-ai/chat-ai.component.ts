@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ChatAiResponse, ChatAiService } from 'src/app/service/chat-ai.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -17,15 +18,20 @@ interface ChatMessage {
   styleUrl: './chat-ai.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChatAiComponent {
+export class ChatAiComponent implements OnDestroy {
 
   userInput = '';
   isLoading = signal(false);
   messages = signal<ChatMessage[]>([
     { role: 'assistant', content: 'Hallo! Ich bin dein AI Assistent. Stelle mir gerne eine Frage.' },
   ]);
+  private activeRequest?: Subscription;
 
   constructor(private chatAiService: ChatAiService) {}
+
+  ngOnDestroy(): void {
+    this.activeRequest?.unsubscribe();
+  }
 
   send(): void {
     const message = this.userInput.trim();
@@ -33,30 +39,96 @@ export class ChatAiComponent {
       return;
     }
 
-    this.messages.update((items) => [...items, { role: 'user', content: message }]);
+    this.activeRequest?.unsubscribe();
+
+    this.messages.update((items) => [
+      ...items,
+      { role: 'user', content: message },
+      { role: 'assistant', content: '' },
+    ]);
     this.userInput = '';
     this.isLoading.set(true);
     console.debug('[chat-ai] sending request', { endpoint: '/api/ai/doAction', message });
 
-    this.chatAiService.sendMessage(message).subscribe({
+    this.activeRequest = this.chatAiService.sendMessage(message).subscribe({
       next: (data) => {
         console.debug('[chat-ai] response received', data);
         const text = this.extractResponse(data);
-        this.messages.update((items) => [...items, { role: 'assistant', content: text }]);
+        if (!text) {
+          return;
+        }
+        this.appendToLatestAssistantMessage(text);
       },
       error: (err: unknown) => {
         const details = this.extractErrorDetails(err);
         console.error('[chat-ai] request failed', details.rawError);
-        this.messages.update((items) => [
-          ...items,
-          {
-            role: 'assistant',
-            content: `Die Anfrage konnte nicht verarbeitet werden (${details.statusText}).`,
-          },
-        ]);
+        this.setLatestAssistantMessage(`Die Anfrage konnte nicht verarbeitet werden (${details.statusText}).`);
+        this.isLoading.set(false);
       },
-      complete: () => this.isLoading.set(false),
+      complete: () => {
+        this.ensureAssistantResponsePresent();
+        this.isLoading.set(false);
+      },
     });
+  }
+
+  private appendToLatestAssistantMessage(chunk: string): void {
+    this.messages.update((items) => {
+      const next = [...items];
+      const idx = this.findLatestAssistantMessageIndex(next);
+
+      if (idx < 0) {
+        next.push({ role: 'assistant', content: chunk });
+        return next;
+      }
+
+      const current = next[idx];
+      next[idx] = { ...current, content: `${current.content}${chunk}` };
+      return next;
+    });
+  }
+
+  private setLatestAssistantMessage(content: string): void {
+    this.messages.update((items) => {
+      const next = [...items];
+      const idx = this.findLatestAssistantMessageIndex(next);
+
+      if (idx < 0) {
+        next.push({ role: 'assistant', content });
+        return next;
+      }
+
+      next[idx] = { ...next[idx], content };
+      return next;
+    });
+  }
+
+  private ensureAssistantResponsePresent(): void {
+    this.messages.update((items) => {
+      const next = [...items];
+      const idx = this.findLatestAssistantMessageIndex(next);
+
+      if (idx < 0) {
+        next.push({ role: 'assistant', content: 'Keine Antwort vom Server erhalten.' });
+        return next;
+      }
+
+      if (!next[idx].content.trim()) {
+        next[idx] = { ...next[idx], content: 'Keine Antwort vom Server erhalten.' };
+      }
+
+      return next;
+    });
+  }
+
+  private findLatestAssistantMessageIndex(messages: ChatMessage[]): number {
+    for (let idx = messages.length - 1; idx >= 0; idx -= 1) {
+      if (messages[idx].role === 'assistant') {
+        return idx;
+      }
+    }
+
+    return -1;
   }
 
   private extractResponse(data: ChatAiResponse | string): string {

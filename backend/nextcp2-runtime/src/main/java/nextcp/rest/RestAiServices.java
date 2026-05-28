@@ -1,12 +1,18 @@
 package nextcp.rest;
 
+import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nextcp.ai.AiServices;
@@ -22,21 +28,34 @@ public class RestAiServices {
 	@Autowired
 	private AiServices aiServices;
 
-	// @Autowired
-	// private ToastEventPublisher toastEventPublisher = null;
-
 	public RestAiServices() {
 	}
 
-	@PostMapping("/doAction")
-	public String sendTextToGemini(@RequestBody String userText) {
-		try {
-			String extractedMessage = extractMessage(userText);
-			return aiServices.sendTextToGemini(extractedMessage);
-		} catch (Exception e) {
-			log.error("Error processing AI request:", e);
-			return "Error processing AI request: " + e.getMessage();
-		}
+	@PostMapping(value = "/doAction", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	public SseEmitter sendTextToGemini(@RequestBody String userText) {
+		SseEmitter emitter = new SseEmitter(120000L);
+
+		CompletableFuture.runAsync(() -> {
+			try {
+				String extractedMessage = extractMessage(userText);
+				String response = aiServices.sendTextToGemini(extractedMessage);
+				emitter.send(SseEmitter.event().data(Map.of("response", response), MediaType.APPLICATION_JSON));
+				emitter.send(SseEmitter.event().data("[DONE]", MediaType.TEXT_PLAIN));
+				emitter.complete();
+			} catch (Exception e) {
+				log.error("Error processing AI request:", e);
+				try {
+					emitter.send(SseEmitter.event().data(Map.of("response", "Error processing AI request: " + e.getMessage()), MediaType.APPLICATION_JSON));
+					emitter.send(SseEmitter.event().data("[DONE]", MediaType.TEXT_PLAIN));
+					emitter.complete();
+				} catch (IOException ioException) {
+					log.warn("Could not send error response over SSE: {}", ioException.getMessage());
+					emitter.completeWithError(e);
+				}
+			}
+		});
+
+		return emitter;
 	}
 
 	private String extractMessage(String input) {
@@ -44,7 +63,6 @@ public class RestAiServices {
 			return "";
 		}
 		try {
-			// Prüfen, ob der String wie ein JSON-Objekt aussieht
 			if (input.trim().startsWith("{")) {
 				JsonNode rootNode = objectMapper.readTree(input);
 				if (rootNode.has("message")) {
@@ -54,6 +72,6 @@ public class RestAiServices {
 		} catch (Exception e) {
 			log.warn("Input looked like JSON but could not be parsed, using raw input. Error: {}", e.getMessage());
 		}
-		return input; // Fallback, falls kein JSON oder Feld fehlt
+		return input; 
 	}
 }
