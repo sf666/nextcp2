@@ -23,7 +23,7 @@ export class ChatAiComponent implements OnDestroy {
   userInput = '';
   isLoading = signal(false);
   messages = signal<ChatMessage[]>([
-    { role: 'assistant', content: 'Hallo! Ich bin dein AI Assistent. Stelle mir gerne eine Frage.' },
+    { role: 'assistant', content: 'Hello! I am your AI assistant. Feel free to ask me anything.' },
   ]);
   private activeRequest?: Subscription;
 
@@ -62,7 +62,7 @@ export class ChatAiComponent implements OnDestroy {
       error: (err: unknown) => {
         const details = this.extractErrorDetails(err);
         console.error('[chat-ai] request failed', details.rawError);
-        this.setLatestAssistantMessage(`Die Anfrage konnte nicht verarbeitet werden (${details.statusText}).`);
+        this.setLatestAssistantMessage(`The request could not be processed (${details.statusText}).`);
         this.isLoading.set(false);
       },
       complete: () => {
@@ -109,12 +109,12 @@ export class ChatAiComponent implements OnDestroy {
       const idx = this.findLatestAssistantMessageIndex(next);
 
       if (idx < 0) {
-        next.push({ role: 'assistant', content: 'Keine Antwort vom Server erhalten.' });
+        next.push({ role: 'assistant', content: 'No response received from the server.' });
         return next;
       }
 
       if (!next[idx].content.trim()) {
-        next[idx] = { ...next[idx], content: 'Keine Antwort vom Server erhalten.' };
+        next[idx] = { ...next[idx], content: 'No response received from the server.' };
       }
 
       return next;
@@ -135,7 +135,7 @@ export class ChatAiComponent implements OnDestroy {
     if (typeof data === 'string') {
       return data;
     }
-    return data?.response ?? 'Keine Antwort vom Server erhalten.';
+    return data?.response ?? 'No response received from the server.';
   }
 
   private extractErrorDetails(err: unknown): { statusText: string; rawError: unknown } {
@@ -146,7 +146,7 @@ export class ChatAiComponent implements OnDestroy {
     }
 
     return {
-      statusText: 'unbekannter Fehler',
+      statusText: 'unknown error',
       rawError: err,
     };
   }

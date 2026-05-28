@@ -15,7 +15,7 @@
       }
       @if (isLoading()) {
         <div class="message-row">
-          <div class="message-bubble typing">AI schreibt ...</div>
+          <div class="message-bubble typing">AI is typing ...</div>
         </div>
       }
     </div>
@@ -26,7 +26,7 @@
           type="text"
           name="chatMessage"
           [(ngModel)]="userInput"
-          placeholder="Nachricht eingeben ..."
+          placeholder="Type your message ..."
           autocomplete="off"
           class="flex-1 rounded-xl border border-zinc-700 bg-zinc-900/80 text-zinc-100 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
         />
@@ -35,7 +35,7 @@
           class="rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white px-4 py-2 disabled:opacity-50"
           [disabled]="isLoading() || userInput.trim().length === 0"
         >
-          Senden
+          Send
         </button>
       </div>
     </form>
