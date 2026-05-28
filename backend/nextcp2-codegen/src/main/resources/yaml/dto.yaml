@@ -45,6 +45,8 @@ AiConfig:
    aiProvider: String
    aiApiKey: String
    aiModel: String
+   selectedRendererUdn: String
+   selectedServerUdn: String
 
 MediaPlayerConfigDto:
    workdir: String
@@ -78,6 +80,7 @@ ApplicationConfig:
    nextPageAfter: Long
    pathToRestartScript: String
    upnpBindInterface: String
+   chatHistorySize: Integer
 
 UmsServerApiKey:
    serverUuid: String
@@ -490,6 +493,20 @@ SystemInformationDto:
 SelectedDevicesDto:
    mediaRenderer: MediaRendererDto
    mediaServer: MediaServerDto
+
+# Single chat history entry. status is one of: PENDING, COMPLETE, ERROR.
+# role is one of: USER, ASSISTANT.
+ChatMessageDto:
+   id: Long
+   role: String
+   content: String
+   status: String
+   timestamp: Long
+
+# Chat history snapshot returned by the REST API; max is the configured cap.
+ChatHistoryDto:
+   messages: List<ChatMessageDto>
+   max: Integer
 
 #
 # Event classes

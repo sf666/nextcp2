@@ -21,16 +21,21 @@
 
     <div class="chat-ai-messages p-4 md:p-6">
       @for (message of messages(); track $index) {
-        <div class="message-row" [class.message-row-user]="message.role === 'user'">
-          <div class="message-bubble" [class.message-bubble-user]="message.role === 'user'">
-            {{ message.content }}
+        @if (message.status === 'PENDING' && !message.content) {
+          <div class="message-row">
+            <div class="message-bubble typing">AI is typing ...</div>
           </div>
-        </div>
-      }
-      @if (isLoading()) {
-        <div class="message-row">
-          <div class="message-bubble typing">AI is typing ...</div>
-        </div>
+        } @else {
+          <div class="message-row" [class.message-row-user]="message.role === 'user'">
+            <div
+              class="message-bubble"
+              [class.message-bubble-user]="message.role === 'user'"
+              [class.message-bubble-error]="message.status === 'ERROR'"
+            >
+              {{ message.content }}
+            </div>
+          </div>
+        }
       }
     </div>
 

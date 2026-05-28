@@ -166,6 +166,7 @@ public class FileConfigPersistence
         c.applicationConfig.log4jConfigFile = FilenameUtils.concat(systemConfig.getString("user.dir"), "log4j2.xml");
         c.applicationConfig.libraryPath = systemConfig.getString("user.dir");
         c.applicationConfig.loggingDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+        c.applicationConfig.chatHistorySize = 50;
 
         createDefaultLog(c.applicationConfig.log4jConfigFile);
 

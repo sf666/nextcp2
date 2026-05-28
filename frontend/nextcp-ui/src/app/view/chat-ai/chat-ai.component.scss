@@ -58,6 +58,12 @@
   border-color: rgba(6, 182, 212, 0.5);
 }
 
+.message-bubble-error {
+  background: rgba(220, 38, 38, 0.18);
+  border-color: rgba(248, 113, 113, 0.6);
+  color: rgb(254, 226, 226);
+}
+
 .typing {
   animation: pulse-text 1.2s ease-in-out infinite;
 }

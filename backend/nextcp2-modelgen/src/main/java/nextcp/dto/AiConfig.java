@@ -7,7 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
  *
  * Template: javadataclass.ftl
- *   
+ *
  */
 public class AiConfig
 {
@@ -16,19 +16,23 @@ public class AiConfig
     public String aiProvider;
     public String aiApiKey;
     public String aiModel;
+    public String selectedRendererUdn;
+    public String selectedServerUdn;
 
     public AiConfig()
     {
     }
 
-    public AiConfig(Boolean aiEnabled, String aiProvider, String aiApiKey, String aiModel)
+    public AiConfig(Boolean aiEnabled, String aiProvider, String aiApiKey, String aiModel, String selectedRendererUdn, String selectedServerUdn)
     {
         this.aiEnabled = aiEnabled;
         this.aiProvider = aiProvider;
         this.aiApiKey = aiApiKey;
         this.aiModel = aiModel;
+        this.selectedRendererUdn = selectedRendererUdn;
+        this.selectedServerUdn = selectedServerUdn;
     }
-    
+
     @Override
     public String toString()
     {
@@ -38,6 +42,8 @@ public class AiConfig
         sb.append("aiProvider=").append(this.aiProvider).append(", ");
         sb.append("aiApiKey=").append(this.aiApiKey).append(", ");
         sb.append("aiModel=").append(this.aiModel).append(", ");
+        sb.append("selectedRendererUdn=").append(this.selectedRendererUdn).append(", ");
+        sb.append("selectedServerUdn=").append(this.selectedServerUdn).append(", ");
         sb.append("]");
         return sb.toString();
     }

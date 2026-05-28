@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { SelectedDevicesDto } from './dto.d';
+import { ChatHistoryDto, SelectedDevicesDto } from './dto.d';
 
 export interface ChatAiRequest {
   message: string;
@@ -19,6 +19,7 @@ export class ChatAiService {
   private readonly baseUri = '/api/ai';
   private readonly actionUri = '/doAction';
   private readonly selectedDevicesUri = '/selectedDevices';
+  private readonly historyUri = '/history';
   private readonly headers: HeadersInit = {
     'Content-Type': 'application/json',
     'Accept': 'text/event-stream',
@@ -36,6 +37,15 @@ export class ChatAiService {
    */
   public getSelectedDevices(): Observable<SelectedDevicesDto> {
     return this.http.get<SelectedDevicesDto>(`${this.baseUri}${this.selectedDevicesUri}`);
+  }
+
+  /**
+   * Fetches the in-memory chat history from the backend so the conversation
+   * can be restored after a browser reload. Messages with status PENDING
+   * indicate a request that is still being processed by the AI provider.
+   */
+  public getHistory(): Observable<ChatHistoryDto> {
+    return this.http.get<ChatHistoryDto>(`${this.baseUri}${this.historyUri}`);
   }
 
   public sendMessage(message: string): Observable<ChatAiResponse | string> {

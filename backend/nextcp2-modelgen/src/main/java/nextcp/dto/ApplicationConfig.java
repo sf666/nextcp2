@@ -28,12 +28,13 @@ public class ApplicationConfig
     public Long nextPageAfter;
     public String pathToRestartScript;
     public String upnpBindInterface;
+    public Integer chatHistorySize;
 
     public ApplicationConfig()
     {
     }
 
-    public ApplicationConfig(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Integer embeddedServerSslPort, String embeddedServerSslP12Keystore, String embeddedServerSslP12KeystorePassword, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript, String upnpBindInterface)
+    public ApplicationConfig(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Integer embeddedServerSslPort, String embeddedServerSslP12Keystore, String embeddedServerSslP12KeystorePassword, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript, String upnpBindInterface, Integer chatHistorySize)
     {
         this.generateUpnpCode = generateUpnpCode;
         this.generateUpnpCodePath = generateUpnpCodePath;
@@ -51,6 +52,7 @@ public class ApplicationConfig
         this.nextPageAfter = nextPageAfter;
         this.pathToRestartScript = pathToRestartScript;
         this.upnpBindInterface = upnpBindInterface;
+        this.chatHistorySize = chatHistorySize;
     }
     
     @Override
@@ -74,6 +76,7 @@ public class ApplicationConfig
         sb.append("nextPageAfter=").append(this.nextPageAfter).append(", ");
         sb.append("pathToRestartScript=").append(this.pathToRestartScript).append(", ");
         sb.append("upnpBindInterface=").append(this.upnpBindInterface).append(", ");
+        sb.append("chatHistorySize=").append(this.chatHistorySize).append(", ");
         sb.append("]");
         return sb.toString();
     }

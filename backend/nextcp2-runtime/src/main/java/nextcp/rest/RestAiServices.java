@@ -19,7 +19,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nextcp.ai.AiServices;
 import nextcp.ai.BudgetExceededException;
+import nextcp.ai.ChatHistoryService;
 import nextcp.ai.mcp.McpLocale;
+import nextcp.dto.ChatHistoryDto;
 import nextcp.dto.SelectedDevicesDto;
 
 @RestController
@@ -39,6 +41,9 @@ public class RestAiServices {
 	@Autowired
 	private McpLocale mcpLocale;
 
+	@Autowired
+	private ChatHistoryService chatHistoryService;
+
 	public RestAiServices() {
 	}
 
@@ -52,30 +57,67 @@ public class RestAiServices {
 		return aiServices.getSelectedDevices();
 	}
 
+	/**
+	 * Returns the in-memory chat history so a browser reload can restore the
+	 * previous conversation. Pending entries indicate that a response is still
+	 * being computed by the AI provider; the client should poll this endpoint
+	 * until all messages are {@code COMPLETE} or {@code ERROR}.
+	 */
+	@GetMapping(value = "/history", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ChatHistoryDto getHistory() {
+		return chatHistoryService.getHistory();
+	}
+
 	@PostMapping(value = "/doAction", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public SseEmitter sendTextToGemini(@RequestBody String userText) {
 		SseEmitter emitter = new SseEmitter(120000L);
 
+		// Record the exchange in the history BEFORE kicking off the async task,
+		// so that a browser reload while the LLM is still computing can find a
+		// PENDING placeholder and pick up the eventual answer on the next poll.
+		String extractedMessage = extractMessage(userText);
+		long assistantId = chatHistoryService.startExchange(extractedMessage);
+
 		CompletableFuture.runAsync(() -> {
 			try {
-				String extractedMessage = extractMessage(userText);
 				String response = aiServices.sendTextToGemini(extractedMessage);
-				emitter.send(SseEmitter.event().data(Map.of("response", response), MediaType.APPLICATION_JSON));
-				emitter.send(SseEmitter.event().data("[DONE]", MediaType.TEXT_PLAIN));
-				emitter.complete();
+				chatHistoryService.completeExchange(assistantId, response);
+				sendSuccessResponse(emitter, response);
 			} catch (BudgetExceededException e) {
 				// AI provider quota / budget exhausted - report a friendly,
 				// localized message to the caller instead of leaking the stack trace.
 				log.warn("AI request rejected: budget/quota exceeded. {}", e.getMessage());
 				String friendly = messageSource.getMessage("mcp.ai.budgetExceeded.response", null, mcpLocale.getCurrentLocale());
+				chatHistoryService.failExchange(assistantId, friendly);
 				sendErrorResponse(emitter, friendly, e);
 			} catch (Exception e) {
 				log.error("Error processing AI request:", e);
-				sendErrorResponse(emitter, "Error processing AI request: " + e.getMessage(), e);
+				String msg = "Error processing AI request: " + e.getMessage();
+				chatHistoryService.failExchange(assistantId, msg);
+				sendErrorResponse(emitter, msg, e);
 			}
 		});
 
 		return emitter;
+	}
+
+	/**
+	 * Sends the AI response as a JSON payload over the SSE emitter and
+	 * completes it. Mirrors {@link #sendErrorResponse(SseEmitter, String, Exception)}
+	 * so both branches use the same wire format.
+	 */
+	private void sendSuccessResponse(SseEmitter emitter, String response) {
+		try {
+			emitter.send(SseEmitter.event().data(Map.of("response", response), MediaType.APPLICATION_JSON));
+			emitter.send(SseEmitter.event().data("[DONE]", MediaType.TEXT_PLAIN));
+			emitter.complete();
+		} catch (IOException ioException) {
+			// Client disconnected (e.g. browser reload). The history already
+			// holds the response, so the next /history poll will deliver it.
+			log.info("SSE response could not be delivered (client likely disconnected); response is preserved in history: {}",
+				ioException.getMessage());
+			emitter.completeWithError(ioException);
+		}
 	}
 
 	/**
@@ -108,6 +150,6 @@ public class RestAiServices {
 		} catch (Exception e) {
 			log.warn("Input looked like JSON but could not be parsed, using raw input. Error: {}", e.getMessage());
 		}
-		return input; 
+		return input;
 	}
 }

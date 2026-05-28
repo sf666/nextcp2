@@ -46,6 +46,7 @@ export class ConfigurationService {
   public audioAddictConfig = signal<AudioAddictConfig>(this.dtoGeneratorService.emptyAudioAddictDto());
 
   applicationConfig: ApplicationConfig = {    // This is a DTO copy and can be used to update server configuration
+    chatHistorySize: 50,
     databaseFilename: '',
     embeddedServerPort: 0,
     embeddedServerSslPort: 0,

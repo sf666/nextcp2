@@ -1,12 +1,14 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-05-26 13:33:54.
+// Generated using typescript-generator version 4.1.1 on 2026-05-28 16:27:48.
 
 export interface AiConfig {
     aiEnabled: boolean;
     aiProvider: string;
     aiApiKey: string;
     aiModel: string;
+    selectedRendererUdn: string;
+    selectedServerUdn: string;
 }
 
 export interface ApplicationConfig {
@@ -26,6 +28,7 @@ export interface ApplicationConfig {
     nextPageAfter: number;
     pathToRestartScript: string;
     upnpBindInterface: string;
+    chatHistorySize: number;
 }
 
 export interface AudioAddictChannelDto {
@@ -66,6 +69,19 @@ export interface BrowseRequestDto {
     start: number;
     count: number;
     searchInOID: string;
+}
+
+export interface ChatHistoryDto {
+    messages: ChatMessageDto[];
+    max: number;
+}
+
+export interface ChatMessageDto {
+    id: number;
+    role: string;
+    content: string;
+    status: string;
+    timestamp: number;
 }
 
 export interface Config {
