@@ -1,0 +1,93 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## What this is
+
+nextCP/2 is a web-based UPnP audio control point. A single instance (typically on a NAS, server, or Raspberry Pi) is controlled by any browser on the LAN — there is no per-device install. The backend is a Spring Boot app speaking UPnP via [JUPnP](https://github.com/jupnp/jupnp); the frontend is an Angular SPA served as static resources from the same JAR.
+
+## Repository layout
+
+```
+backend/                                  Maven multi-module (groupId de.sf666)
+├── nextcp2-assembly/                     Builds the runnable nextcp2.jar (Spring Boot)
+├── nextcp2-runtime/                      Spring Boot app: REST, SSE, UPnP, services
+├── nextcp2-modelgen/                     GENERATED Java DTOs live here (nextcp.dto.*)
+├── nextcp2-codegen/                      DTO + UPnP code generators (DtoModelGen, UpnpModelGen)
+├── nextcp2-db/                           H2 + MyBatis persistence
+├── nextcp2-player/                       Player module
+├── nextcp2-external-information-provider/  MusicBrainz / Last.fm / Spotify
+└── nextcp2-device-driver/
+    └── nextcp2-ma9000/                   McIntosh MA9000/MA12000 driver (RS232/TCP)
+
+frontend/nextcp-ui/                       Angular app — output is copied into
+                                          backend/nextcp2-runtime/src/main/resources/static/
+                                          (do not commit the static/ directory)
+```
+
+## Build
+
+The frontend **must be built before** the backend, because the Angular build writes into the backend's `static/` resource directory which gets packaged into the JAR.
+
+```bash
+./build_dependencies.sh                   # one-time: clones+installs sf666/musicbrainz into ~/.m2
+./build.sh                                # full clean rebuild; artifacts land in ./build/
+```
+
+`build.sh` runs roughly: `yarn install && ng build` in `frontend/nextcp-ui/`, then `mvn clean install package` in `backend/`. The final `nextcp2.jar` ends up in `backend/nextcp2-assembly/target/` and is copied to `./build/`.
+
+Single-module / partial builds:
+
+```bash
+cd frontend/nextcp-ui && yarn install && ./ng build      # frontend only
+cd backend && mvn -pl nextcp2-runtime -am install        # one Maven module + its deps
+cd backend && mvn -pl nextcp2-runtime test               # tests for one module
+cd backend && mvn -Dtest=ClassName#method test           # one JUnit test method
+cd frontend/nextcp-ui && yarn test                       # Karma/Jasmine frontend tests
+```
+
+Compiler target: backend Maven uses `<maven.compiler.release>25</maven.compiler.release>` even though the README still says JDK 17 minimum — install a JDK that can target 25, or lower the property locally if you must. Frontend requires Node 24.
+
+## Dev loop
+
+```bash
+# 1. Start the backend in your IDE — main class:
+#    backend/nextcp2-assembly/src/main/java/nextcp/NextcpApplicationStartup
+#    Listens on http://localhost:8085
+
+# 2. Start the frontend dev server with the proxy that forwards REST/SSE to :8085
+cd frontend/nextcp-ui
+yarn start          # uses proxy.config.json (alias: ng serve --proxy-config proxy.config.json)
+```
+
+`proxy.config.json` forwards every REST endpoint and `/SSE` to `localhost:8085`. If you add a new top-level REST path on the backend, also add it to `proxy.config.json` or it won't reach the backend in dev. The browser must support Server-Sent Events.
+
+## Configuration
+
+The app searches for `nextcp2Config.json` in this order: `-DconfigFile=…`, `/etc/nextcp2/`, `$HOME/`, then the working directory. If none is found, one is generated in the working directory on first start.
+
+## Code generation — do not hand-edit generated files
+
+Two generators live in `backend/nextcp2-codegen/`:
+
+- **DTOs** — `codegen.DtoModelGen` reads `backend/nextcp2-codegen/src/main/resources/yaml/dto.yaml` and writes Java DTOs into `nextcp2-modelgen/src/main/java/nextcp/dto/`. The Maven `process-classes` phase of `nextcp2-modelgen` then derives `frontend/nextcp-ui/src/app/service/dto.d.ts` from those Java classes. To regenerate TS only: `cd backend/nextcp2-modelgen && mvn process-classes` (or run `gen_typescript.sh`).
+- **UPnP services** — `codegen.UpnpModelGen` can generate Java service/event classes for any discovered UPnP service (controlled by config flags).
+
+Never edit anything under `nextcp2-modelgen/src/main/java/nextcp/dto/` or `frontend/nextcp-ui/src/app/service/dto.d.ts` directly — the next generator run overwrites it. Change `dto.yaml` and regenerate.
+
+## Angular conventions (from `.ai/best-practices_angular.md`)
+
+- Standalone components only (do **not** set `standalone: true` — it's the v20+ default).
+- Use `signal()` / `computed()` for state; never call `mutate` on signals.
+- Set `changeDetection: ChangeDetectionStrategy.OnPush` on every component.
+- Use `input()` / `output()` functions, not `@Input`/`@Output` decorators.
+- Use `inject()`, not constructor DI.
+- Use native control flow (`@if`, `@for`, `@switch`) — not `*ngIf`/`*ngFor`.
+- Use `class`/`style` bindings — not `ngClass`/`ngStyle`.
+- No arrow functions in templates.
+- Services: `providedIn: 'root'`, single responsibility.
+
+## Notes
+
+- `GEMINI.md` and `.ai/context.md` exist for other AI assistants and are gitignored / partially in-repo respectively — they overlap with this file; treat this file as authoritative for Claude Code.
+- Translations are managed via Tolgee (`tolgee.yaml`, `.github/workflows/translate.yml`); commits prefixed `chore(i18n)` come from that bot.
