@@ -387,6 +387,11 @@ export interface SeekSecondsDto {
     seconds: number;
 }
 
+export interface SelectedDevicesDto {
+    mediaRenderer: MediaRendererDto;
+    mediaServer: MediaServerDto;
+}
+
 export interface ServerConfigDto {
     serverDevices: ServerDeviceConfiguration[];
 }

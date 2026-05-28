@@ -155,4 +155,24 @@ public class McpDevices {
 		}
 	}
 
+	/**
+	 * Returns the currently selected Media Renderer as DTO. Used by REST endpoints
+	 * to expose the LLM-driven selection to the frontend.
+	 *
+	 * @return the selected {@link MediaRendererDto} or {@code null} if none is selected
+	 */
+	public MediaRendererDto getSelectedMediaRendererDto() {
+		return selectedMediaRenderer;
+	}
+
+	/**
+	 * Returns the currently selected Media Server as DTO. Used by REST endpoints
+	 * to expose the LLM-driven selection to the frontend.
+	 *
+	 * @return the selected {@link MediaServerDto} or {@code null} if none is selected
+	 */
+	public MediaServerDto getSelectedMediaServerDto() {
+		return selectedMediaServer;
+	}
+
 }

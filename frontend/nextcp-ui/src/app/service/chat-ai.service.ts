@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { SelectedDevicesDto } from './dto.d';
 
 export interface ChatAiRequest {
   message: string;
@@ -16,13 +18,25 @@ export class ChatAiService {
 
   private readonly baseUri = '/api/ai';
   private readonly actionUri = '/doAction';
+  private readonly selectedDevicesUri = '/selectedDevices';
   private readonly headers: HeadersInit = {
     'Content-Type': 'application/json',
     'Accept': 'text/event-stream',
     'Application': 'nextcp2',
   };
 
+  private readonly http = inject(HttpClient);
+
   constructor() {}
+
+  /**
+   * Fetches the Media Renderer and Media Server currently selected by the
+   * LLM via the MCP tools. Either field of the returned DTO may be null when
+   * no device of that type has been selected yet.
+   */
+  public getSelectedDevices(): Observable<SelectedDevicesDto> {
+    return this.http.get<SelectedDevicesDto>(`${this.baseUri}${this.selectedDevicesUri}`);
+  }
 
   public sendMessage(message: string): Observable<ChatAiResponse | string> {
     const req: ChatAiRequest = { message };

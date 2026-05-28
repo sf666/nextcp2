@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ChatAiResponse, ChatAiService } from 'src/app/service/chat-ai.service';
@@ -18,19 +18,48 @@ interface ChatMessage {
   styleUrl: './chat-ai.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChatAiComponent implements OnDestroy {
+export class ChatAiComponent implements OnInit, OnDestroy {
 
   userInput = '';
   isLoading = signal(false);
   messages = signal<ChatMessage[]>([
     { role: 'assistant', content: 'Hello! I am your AI assistant. Feel free to ask me anything.' },
   ]);
+
+  // friendlyName of the Media Renderer / Media Server currently selected by the LLM.
+  selectedRendererName = signal<string | null>(null);
+  selectedServerName = signal<string | null>(null);
+
   private activeRequest?: Subscription;
+  private selectionRequest?: Subscription;
 
   constructor(private chatAiService: ChatAiService) {}
 
+  ngOnInit(): void {
+    this.refreshSelectedDevices();
+  }
+
   ngOnDestroy(): void {
     this.activeRequest?.unsubscribe();
+    this.selectionRequest?.unsubscribe();
+  }
+
+  /**
+   * Loads the currently selected Media Renderer/Server from the backend so the
+   * UI reflects the LLM-driven selection. Called on init and after every chat
+   * exchange because the LLM may switch devices via MCP tools.
+   */
+  private refreshSelectedDevices(): void {
+    this.selectionRequest?.unsubscribe();
+    this.selectionRequest = this.chatAiService.getSelectedDevices().subscribe({
+      next: (dto) => {
+        this.selectedRendererName.set(dto?.mediaRenderer?.friendlyName ?? null);
+        this.selectedServerName.set(dto?.mediaServer?.friendlyName ?? null);
+      },
+      error: (err: unknown) => {
+        console.warn('[chat-ai] could not load selected devices', err);
+      },
+    });
   }
 
   send(): void {
@@ -68,6 +97,9 @@ export class ChatAiComponent implements OnDestroy {
       complete: () => {
         this.ensureAssistantResponsePresent();
         this.isLoading.set(false);
+        // The LLM may have called select_renderer / select_server during the
+        // exchange — refresh the displayed selection.
+        this.refreshSelectedDevices();
       },
     });
   }

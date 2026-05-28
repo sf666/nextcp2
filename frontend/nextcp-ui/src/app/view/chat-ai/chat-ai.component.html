@@ -1,8 +1,22 @@
 <section class="chat-ai-shell p-4 md:p-6">
   <div class="chat-ai-card rounded-2xl">
     <header class="chat-ai-header px-4 py-3 border-b border-zinc-700/70">
-      <h1 class="text-lg md:text-xl font-semibold text-white">AI Chatbot</h1>
-      <p class="text-sm text-zinc-400">Route: /chat-ai</p>
+      <h1 class="text-lg md:text-xl font-semibold text-white">AI Bot</h1>
+
+      <div class="selected-devices mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-300">
+        <span>
+          <span class="text-zinc-500">Player:</span>
+          <span class="font-medium text-zinc-100">
+            {{ selectedRendererName() ?? '—' }}
+          </span>
+        </span>
+        <span>
+          <span class="text-zinc-500">Server:</span>
+          <span class="font-medium text-zinc-100">
+            {{ selectedServerName() ?? '—' }}
+          </span>
+        </span>
+      </div>
     </header>
 
     <div class="chat-ai-messages p-4 md:p-6">

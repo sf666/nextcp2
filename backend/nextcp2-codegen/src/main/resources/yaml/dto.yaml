@@ -484,7 +484,14 @@ SystemInformationDto:
    name: String
    time: String
 
-#   
+#
+# AI / MCP related DTOs
+#
+SelectedDevicesDto:
+   mediaRenderer: MediaRendererDto
+   mediaServer: MediaServerDto
+
+#
 # Event classes
 #
 FileChangedEventDto:
