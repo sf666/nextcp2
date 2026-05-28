@@ -57,7 +57,7 @@ Compiler target: backend Maven uses `<maven.compiler.release>25</maven.compiler.
 
 # 2. Start the frontend dev server with the proxy that forwards REST/SSE to :8085
 cd frontend/nextcp-ui
-yarn start          # uses proxy.config.json (alias: ng serve --proxy-config proxy.config.json)
+yarn start -c dev         # uses proxy.config.json (alias: ng serve --proxy-config proxy.config.json)
 ```
 
 `proxy.config.json` forwards every REST endpoint and `/SSE` to `localhost:8085`. If you add a new top-level REST path on the backend, also add it to `proxy.config.json` or it won't reach the backend in dev. The browser must support Server-Sent Events.
@@ -90,4 +90,30 @@ Never edit anything under `nextcp2-modelgen/src/main/java/nextcp/dto/` or `front
 ## Notes
 
 - `GEMINI.md` and `.ai/context.md` exist for other AI assistants and are gitignored / partially in-repo respectively — they overlap with this file; treat this file as authoritative for Claude Code.
-- Translations are managed via Tolgee (`tolgee.yaml`, `.github/workflows/translate.yml`); commits prefixed `chore(i18n)` come from that bot.
+- All comments written into source files (code, YAML, properties, build scripts, etc.) MUST be in English, regardless of the language used in chat.
+
+## Translations
+
+Translation files live in `./backend/nextcp2-runtime/src/main/resources/`:
+
+- `messages.properties` — English, **single source of truth**, hand-edited in code.
+- `messages_<locale>.properties` (e.g. `messages_de.properties`) — generated/maintained via Tolgee, do not hand-edit.
+
+Config: `tolgee.yaml` (project 31950) and CI in `.github/workflows/translate.yml`. Auto-commits from the workflow are prefixed `chore(i18n)`.
+
+### Ownership
+
+| Concern                  | Owner                | Where to edit              |
+| ------------------------ | -------------------- | -------------------------- |
+| Keys (add / remove)      | Developer            | `messages.properties`      |
+| English values           | Developer            | `messages.properties`      |
+| German / other languages | Translators          | Tolgee web UI              |
+
+Do **not** edit English values in the Tolgee UI — they are overwritten on the next CI run. Do **not** hand-edit `messages_de.properties` etc. — the CI overwrites them with what Tolgee returns.
+
+
+### Cheat sheet for developers
+
+1. Add or remove a key? Edit `messages.properties` (English only).
+2. Push to `main`. The CI does the rest: syncs Tolgee, pulls every language, commits the localized files back.
+3. Need a German translation? Open Tolgee, translate, save. Next CI run on `main` will commit `messages_de.properties` into the repo.

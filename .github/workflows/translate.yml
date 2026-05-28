@@ -25,9 +25,13 @@ jobs:
       - name: Install Tolgee CLI
         run: npm install -g @tolgee/cli
 
-      # 1. Push neue/geänderte englische Keys zu Tolgee Cloud
+      # 1. Push new/changed English keys to Tolgee Cloud
+      #    --force-mode OVERRIDE : the English messages.properties is the single source of truth;
+      #                            changed English texts overwrite the Tolgee state.
+      #    --remove-other-keys   : keys that are no longer present in messages.properties
+      #                            are deleted from Tolgee (orphan key cleanup).
       - name: Push new Keys to Tolgee
-        run: tolgee push --api-key ${{ secrets.TOLGEE_API_KEY }} --config ./tolgee.yaml --force-mode keep --verbose
+        run: tolgee push --api-key ${{ secrets.TOLGEE_API_KEY }} --config ./tolgee.yaml --force-mode OVERRIDE --remove-other-keys --verbose
 
       # 2. Pull ALLE Sprachen von Tolgee Cloud
       - name: Pull Translations from Tolgee
