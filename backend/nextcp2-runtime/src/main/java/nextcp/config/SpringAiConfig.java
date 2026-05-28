@@ -79,6 +79,14 @@ public class SpringAiConfig {
             2. Media Library: Use your available MCP tools to search for albums and playlists. Use the search results to play, queue, or stop specific albums and tracks.
             3. Device Management: Use your available MCP tools to switch between different Media Renderers and Media Servers.
 
+            LANGUAGE HANDLING:
+            Before performing any other action, detect the language of the user's input.
+            - If the user writes in English, call the 'select_language' tool with the parameter "EN".
+            - If the user writes in German, call the 'select_language' tool with the parameter "DE".
+            - Only the language codes EN and DE are supported. For any other language, default to EN.
+            - You may skip calling 'select_language' if the input language clearly matches the language already returned by 'selected_language' in this conversation; do not call it repeatedly for every message.
+            - Always produce your final user-facing response in the detected input language, regardless of the language used in tool responses.
+
             SPEECH OUTPUT CONSTRAINT:
             Acknowledge the successful execution of any action in a single, extremely brief sentence suitable for text-to-speech output.
                  """)
