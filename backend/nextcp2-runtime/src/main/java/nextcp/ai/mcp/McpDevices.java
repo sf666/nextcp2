@@ -1,7 +1,6 @@
 package nextcp.ai.mcp;
 
 import java.util.Collection;
-import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.tool.annotation.Tool;
@@ -23,9 +22,9 @@ import nextcp.upnp.device.DeviceRegistry;
  * 
  */
 @Service
-public class McpDeviceServer {
+public class McpDevices {
 
-	private static final Logger log = LoggerFactory.getLogger(McpDeviceServer.class);
+	private static final Logger log = LoggerFactory.getLogger(McpDevices.class);
 
 	@Autowired
 	private DeviceRegistry deviceRegistry = null;
@@ -36,6 +35,9 @@ public class McpDeviceServer {
 	@Autowired
 	private MessageSource messageSource;
 
+	@Autowired
+	private McpLocale mcpLocale;
+	
 	private MediaRendererDto selectedMediaRenderer = null;
 
 	private MediaServerDto selectedMediaServer = null;
@@ -65,17 +67,17 @@ public class McpDeviceServer {
 	public String getSelectedMediaRenderer() {
 		log.info("UPnP command received: Get selected Media Renderer");
 		if (this.selectedMediaServer == null) {
-			return messageSource.getMessage("mcp.device.renderer.select.noSelection.response", null, Locale.getDefault());
+			return messageSource.getMessage("mcp.device.renderer.select.noSelection.response", null, mcpLocale.getCurrentLocale());
 		}
 		
 		var found = deviceRegistry.getAvailableMediaRenderer().stream().filter(renderer -> renderer.getUdnAsString().equals(selectedMediaRenderer.udn))
 			.findFirst();
 
 		if (found.isPresent()) {
-			return messageSource.getMessage("mcp.device.renderer.select.response", new Object[] { selectedMediaRenderer.friendlyName }, Locale.getDefault());
+			return messageSource.getMessage("mcp.device.renderer.select.response", new Object[] { selectedMediaRenderer.friendlyName }, mcpLocale.getCurrentLocale());
 		} else {
 			return messageSource.getMessage("mcp.device.renderer.select.notFound.response", new Object[] { selectedMediaRenderer.friendlyName },
-				Locale.getDefault());
+				mcpLocale.getCurrentLocale());
 		}
 	}
 
@@ -88,11 +90,11 @@ public class McpDeviceServer {
 
 		if (found.isPresent()) {
 			selectedMediaRenderer = found.get().getAsDto();
-			return messageSource.getMessage("mcp.device.renderer.select.response", new Object[] { selectedMediaRenderer.friendlyName }, Locale.getDefault());
+			return messageSource.getMessage("mcp.device.renderer.select.response", new Object[] { selectedMediaRenderer.friendlyName }, mcpLocale.getCurrentLocale());
 		} else {
 			selectedMediaRenderer = null;
 			return messageSource.getMessage("mcp.device.renderer.select.notFound.response", new Object[] { selectedMediaRenderer.friendlyName },
-				Locale.getDefault());
+				mcpLocale.getCurrentLocale());
 		}
 	}
 
@@ -122,17 +124,17 @@ public class McpDeviceServer {
 		log.info("UPnP command received: Get selected Media Server");
 
 		if(this.selectedMediaServer == null) {
-			return messageSource.getMessage("mcp.device.server.select.noSelection.response", null, Locale.getDefault());
+			return messageSource.getMessage("mcp.device.server.select.noSelection.response", null, mcpLocale.getCurrentLocale());
 		}
 		
 		var found = deviceRegistry.getAvailableMediaServer().stream().filter(server -> server.getUdnAsString().equals(selectedMediaServer.udn))
 			.findFirst();
 
 		if (found.isPresent()) {
-			return messageSource.getMessage("mcp.device.server.select.response", new Object[] { selectedMediaServer.friendlyName }, Locale.getDefault());
+			return messageSource.getMessage("mcp.device.server.select.response", new Object[] { selectedMediaServer.friendlyName }, mcpLocale.getCurrentLocale());
 		} else {
 			return messageSource.getMessage("mcp.device.server.select.notFound.response", new Object[] { selectedMediaServer.friendlyName },
-				Locale.getDefault());
+				mcpLocale.getCurrentLocale());
 		}
 	}
 	
@@ -145,11 +147,11 @@ public class McpDeviceServer {
 
 		if (found.isPresent()) {
 			selectedMediaServer = found.get().getAsDto();
-			return messageSource.getMessage("mcp.device.server.select.response", new Object[] { selectedMediaServer.friendlyName }, Locale.getDefault());
+			return messageSource.getMessage("mcp.device.server.select.response", new Object[] { selectedMediaServer.friendlyName }, mcpLocale.getCurrentLocale());
 		} else {
 			selectedMediaServer = null;
 			return messageSource.getMessage("mcp.device.server.select.notFound.response", new Object[] { selectedMediaServer.friendlyName },
-				Locale.getDefault());
+				mcpLocale.getCurrentLocale());
 		}
 	}
 

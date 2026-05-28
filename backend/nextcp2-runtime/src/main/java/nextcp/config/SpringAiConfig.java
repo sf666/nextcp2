@@ -13,7 +13,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
 import com.google.genai.Client;
-import nextcp.ai.mcp.McpDeviceServer;
+import nextcp.ai.mcp.McpDevices;
+import nextcp.ai.mcp.McpLocale;
 import nextcp.dto.Config;
 
 @Configuration
@@ -22,8 +23,8 @@ public class SpringAiConfig {
 	private static final Logger log = LoggerFactory.getLogger(SpringAiConfig.class.getName());
 
 	@Bean
-	public ToolCallbackProvider upnpControlPointTools(McpDeviceServer mcpDeviceServer) {
-		ToolCallbackProvider provider = MethodToolCallbackProvider.builder().toolObjects(mcpDeviceServer).build();
+	public ToolCallbackProvider upnpControlPointTools(McpDevices mcpDevices, McpLocale mcpLocale) {
+		ToolCallbackProvider provider = MethodToolCallbackProvider.builder().toolObjects(mcpDevices, mcpLocale).build();
 
 		log.info("=== Registered MCP Tools ===");
 		Arrays.asList(provider.getToolCallbacks()).forEach(tool -> log.info("  Tool registered: name={}", tool.getToolDefinition().name()));
