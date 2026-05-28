@@ -14,7 +14,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          # Wichtig: Vollständiger Checkout für git-auto-commit
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -26,29 +25,65 @@ jobs:
       - name: Install Tolgee CLI
         run: npm install -g @tolgee/cli
 
-      # 1. Push neue englische Keys zu Tolgee Cloud
+      # 1. Push neue/geänderte englische Keys zu Tolgee Cloud
       - name: Push new Keys to Tolgee
         run: tolgee push --api-key ${{ secrets.TOLGEE_API_KEY }} --config ./tolgee.yaml --force-mode keep --verbose
 
-      # 2. Pull aktuelle Übersetzungen von Tolgee Cloud
+      # 2. Pull ALLE Sprachen von Tolgee Cloud
       - name: Pull Translations from Tolgee
         run: tolgee pull --api-key ${{ secrets.TOLGEE_API_KEY }} --config ./tolgee.yaml --verbose
 
-      # Debug: Zeige was sich geändert hat
+      # 3. Tolgee-Dateien in Spring Boot Namenskonvention umbenennen
+      - name: Rename pulled files to Spring Boot convention
+        run: |
+          RESOURCES_DIR="./backend/nextcp2-runtime/src/main/resources"
+
+          echo "=== Dateien vor dem Rename ==="
+          ls -la "$RESOURCES_DIR"/*.properties
+
+          # Englisch: en.properties → messages.properties
+          if [ -f "$RESOURCES_DIR/en.properties" ]; then
+            echo "✓ Benenne en.properties → messages.properties"
+            mv "$RESOURCES_DIR/en.properties" "$RESOURCES_DIR/messages.properties"
+          elif [ -f "$RESOURCES_DIR/messages_en.properties" ]; then
+            echo "✓ Benenne messages_en.properties → messages.properties"
+            mv "$RESOURCES_DIR/messages_en.properties" "$RESOURCES_DIR/messages.properties"
+          else
+            echo "⚠️  WARNUNG: Keine englische Quelldatei gefunden!"
+          fi
+
+          # Deutsch: de.properties → messages_de.properties
+          if [ -f "$RESOURCES_DIR/de.properties" ]; then
+            echo "✓ Benenne de.properties → messages_de.properties"
+            mv "$RESOURCES_DIR/de.properties" "$RESOURCES_DIR/messages_de.properties"
+          elif [ -f "$RESOURCES_DIR/messages_de.properties" ]; then
+            echo "✓ messages_de.properties bereits korrekt benannt"
+          else
+            echo "⚠️  WARNUNG: Keine deutsche Übersetzungsdatei gefunden!"
+          fi
+
+          echo "=== Dateien nach dem Rename ==="
+          ls -la "$RESOURCES_DIR"/*.properties
+
+      # 4. Debug: Zeige finale Änderungen
       - name: Show changed files
         run: |
           echo "=== Git Status ==="
           git status
-          echo "=== Changed translation files ==="
-          find ./backend/nextcp2-runtime/src/main/resources -name "messages_*.properties" -exec echo "Found: {}" \;
-          echo "=== Content of messages_de.properties ==="
-          cat ./backend/nextcp2-runtime/src/main/resources/messages_de.properties || echo "File not found!"
+          echo ""
+          echo "=== Diff messages.properties (EN) ==="
+          git diff ./backend/nextcp2-runtime/src/main/resources/messages.properties | head -80 || echo "Keine Änderungen"
+          echo ""
+          echo "=== Diff messages_de.properties (DE) ==="
+          git diff ./backend/nextcp2-runtime/src/main/resources/messages_de.properties | head -80 || echo "Keine Änderungen"
 
-      # 3. Commit und Push der aktualisierten Übersetzungen
+      # 5. Commit und Push aller aktualisierten Übersetzungen
       - name: Commit & Push updated translations
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore(i18n): update translations from Tolgee [skip ci]"
-          file_pattern: "backend/nextcp2-runtime/src/main/resources/messages_*.properties"
+          file_pattern: |
+            backend/nextcp2-runtime/src/main/resources/messages.properties
+            backend/nextcp2-runtime/src/main/resources/messages_*.properties
           commit_user_name: "github-actions[bot]"
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
