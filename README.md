@@ -17,7 +17,7 @@ If no config file is given or found, a config-file will be generated next to the
 
 ## system requirements
 
-- minimum JDK 17
+- minimum JDK 25
 - maven 3.8
 - yarn
 - GIT client
