@@ -72,8 +72,7 @@ ApplicationConfig:
    embeddedServerSslP12Keystore: String
    embeddedServerSslP12KeystorePassword: String
    sseEmitterTimeout: Long
-   log4jConfigFile: String
-   loggingDateTimeFormat: String
+   loggingConfigFile: String
    globalSearchDelay: Long
    databaseFilename: String
    itemsPerPage: Long

@@ -47,6 +47,15 @@ public class ConfigDefaults
             config.applicationConfig.generateUpnpCode = false;
         }
 
+        if (StringUtils.isBlank(config.applicationConfig.loggingConfigFile))
+        {
+            // Backfill for configs written before the log4j2 -> Logback migration
+            // (the former 'log4jConfigFile' key is now 'loggingConfigFile').
+            String defaultLoggingConfig = new java.io.File(System.getProperty("user.dir"), "logback.xml").getPath();
+            log.info("adding new configuration value 'loggingConfigFile = {}'", defaultLoggingConfig);
+            config.applicationConfig.loggingConfigFile = defaultLoggingConfig;
+        }
+
         if (config.musicbrainzSupport == null)
         {
             log.info("adding new configuration value 'musicbrainzSupport' as disabled. To activate this feature, provide username and password.");

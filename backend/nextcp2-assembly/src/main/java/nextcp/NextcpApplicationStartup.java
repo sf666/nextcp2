@@ -38,7 +38,7 @@ public class NextcpApplicationStartup implements IApplicationRestartable
     {
         // Startup ...
     	Config config = new FileConfigPersistence().getConfig();
-    	String log4jConfigFile = config.applicationConfig.log4jConfigFile;
+    	String loggingConfigFile = config.applicationConfig.loggingConfigFile;
         NextcpApplicationStartup.args = args;
 
         SpringApplicationBuilder builder = new SpringApplicationBuilder(NextcpApplicationStartup.class);
@@ -46,9 +46,18 @@ public class NextcpApplicationStartup implements IApplicationRestartable
         // Enable SSL 
         log.info("Disabling embedded server SSL support");
         builder = builder.properties("server.ssl.enabled=false");
-        // Set log4j config file
-        log.info(String.format("Using log4j configuration file: %s", log4jConfigFile));
-        builder = builder.properties(String.format("logging.config=file:%s", log4jConfigFile));
+        // Set the external logging (Logback) configuration file, but only if it exists.
+        // Otherwise fall back to Spring Boot's built-in default logging to avoid a hard
+        // startup failure on a missing/stale logging.config location (e.g. after upgrades).
+        if (loggingConfigFile != null && new File(loggingConfigFile).isFile())
+        {
+            log.info(String.format("Using logging configuration file: %s", loggingConfigFile));
+            builder = builder.properties(String.format("logging.config=file:%s", loggingConfigFile));
+        }
+        else
+        {
+            log.warn(String.format("Logging configuration file not found (%s); using Spring Boot default logging.", loggingConfigFile));
+        }
         // Enable virtual threads from JDK 25
         log.info("Enabling virtual threads for Spring async processing");
         builder = builder.properties("spring.threads.virtual.enabled=true");

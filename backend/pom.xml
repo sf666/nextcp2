@@ -170,18 +170,9 @@
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-web</artifactId>
-		    <exclusions>
-		        <exclusion>
-		            <groupId>org.springframework.boot</groupId>
-		            <artifactId>spring-boot-starter-logging</artifactId>
-		        </exclusion>
-		    </exclusions>
-		</dependency>		
-		<!-- Logging -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-log4j2</artifactId>
-		</dependency>	
+		</dependency>
+		<!-- Logging: default Spring Boot logging (Logback) via spring-boot-starter-logging,
+		     transitively provided by the starters above. -->
 
 		<!-- JUnit test -->
 		<dependency>
@@ -199,10 +190,6 @@
 			<scope>test</scope>
 			<exclusions>
 				<exclusion>
-					<groupId>org.apache.logging.log4j</groupId>
-					<artifactId>log4j-to-slf4j</artifactId>
-				</exclusion>
-				<exclusion>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-tomcat</artifactId>
 				</exclusion>
@@ -218,25 +205,10 @@
 	            <type>pom</type>
 	            <scope>import</scope>
 	        </dependency>
-			<!-- Global exclusion of logback from all Spring Boot starters -->
 		    <dependency>
 			    <groupId>org.springframework.boot</groupId>
 			    <artifactId>spring-boot-starter-json</artifactId>
 				<version>${springboot.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>ch.qos.logback</groupId>
-						<artifactId>logback-classic</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>ch.qos.logback</groupId>
-						<artifactId>logback-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-starter-logging</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 			    <groupId>com.fasterxml.jackson.core</groupId>
@@ -247,20 +219,6 @@
 			    <groupId>org.springframework.boot</groupId>
 			    <artifactId>spring-boot-starter-web</artifactId>
 				<version>${springboot.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>ch.qos.logback</groupId>
-						<artifactId>logback-classic</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>ch.qos.logback</groupId>
-						<artifactId>logback-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-starter-logging</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 			    <groupId>org.springframework.boot</groupId>
@@ -302,82 +260,21 @@
 			    <groupId>org.springframework.boot</groupId>
 			    <artifactId>spring-boot-starter-jackson</artifactId>
 				<version>${springboot.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>ch.qos.logback</groupId>
-						<artifactId>logback-classic</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>ch.qos.logback</groupId>
-						<artifactId>logback-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-starter-logging</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>		
+			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-jetty</artifactId>
 				<version>${springboot.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>ch.qos.logback</groupId>
-						<artifactId>logback-classic</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>ch.qos.logback</groupId>
-						<artifactId>logback-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-starter-logging</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-websocket</artifactId>
-				<version>${springboot.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>ch.qos.logback</groupId>
-						<artifactId>logback-classic</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>ch.qos.logback</groupId>
-						<artifactId>logback-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-starter-logging</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-			    <groupId>org.springframework.boot</groupId>
-			    <artifactId>spring-boot-starter-log4j2</artifactId>
 				<version>${springboot.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-test</artifactId>
 		        <version>${springboot.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>ch.qos.logback</groupId>
-						<artifactId>logback-classic</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>ch.qos.logback</groupId>
-						<artifactId>logback-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-starter-logging</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<!-- JUnit test -->
 			<dependency>
@@ -520,43 +417,15 @@
 		        <groupId>org.springframework.ai</groupId>
 		        <artifactId>spring-ai-starter-model-google-genai</artifactId>
 		        <version>2.0.0-M8</version>
-		        <exclusions>
-		            <exclusion>
-		                <groupId>ch.qos.logback</groupId>
-		                <artifactId>logback-classic</artifactId>
-		            </exclusion>
-		            <exclusion>
-		                <groupId>ch.qos.logback</groupId>
-		                <artifactId>logback-core</artifactId>
-		            </exclusion>
-		            <exclusion>
-		                <groupId>org.springframework.boot</groupId>
-		                <artifactId>spring-boot-starter-logging</artifactId>
-		            </exclusion>
-		        </exclusions>
 		    </dependency>
-		
+
 		    <!-- Der offizielle, konsolidierte MCP-Server-Starter ab 2.0.0-M6 -->
 		    <dependency>
 		        <groupId>org.springframework.ai</groupId>
 		        <artifactId>spring-ai-starter-mcp-server</artifactId>
 		        <version>2.0.0-M8</version>
-		        <exclusions>
-		            <exclusion>
-		                <groupId>ch.qos.logback</groupId>
-		                <artifactId>logback-classic</artifactId>
-		            </exclusion>
-		            <exclusion>
-		                <groupId>ch.qos.logback</groupId>
-		                <artifactId>logback-core</artifactId>
-		            </exclusion>
-		            <exclusion>
-		                <groupId>org.springframework.boot</groupId>
-		                <artifactId>spring-boot-starter-logging</artifactId>
-		            </exclusion>
-		        </exclusions>
 		    </dependency>
-		    
+
     	</dependencies>
 	</dependencyManagement>
 </project>

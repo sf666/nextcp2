@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-05-28 16:27:48.
+// Generated using typescript-generator version 4.1.1 on 2026-06-01 16:17:15.
 
 export interface AiConfig {
     aiEnabled: boolean;
@@ -20,8 +20,7 @@ export interface ApplicationConfig {
     embeddedServerSslP12Keystore: string;
     embeddedServerSslP12KeystorePassword: string;
     sseEmitterTimeout: number;
-    log4jConfigFile: string;
-    loggingDateTimeFormat: string;
+    loggingConfigFile: string;
     globalSearchDelay: number;
     databaseFilename: string;
     itemsPerPage: number;

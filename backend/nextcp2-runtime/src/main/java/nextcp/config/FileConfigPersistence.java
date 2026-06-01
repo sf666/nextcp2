@@ -163,12 +163,11 @@ public class FileConfigPersistence
         c.applicationConfig.itemsPerPage = 100L;
         c.applicationConfig.nextPageAfter = 60L;
         c.applicationConfig.sseEmitterTimeout = 180000L;
-        c.applicationConfig.log4jConfigFile = FilenameUtils.concat(systemConfig.getString("user.dir"), "log4j2.xml");
+        c.applicationConfig.loggingConfigFile = FilenameUtils.concat(systemConfig.getString("user.dir"), "logback.xml");
         c.applicationConfig.libraryPath = systemConfig.getString("user.dir");
-        c.applicationConfig.loggingDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
         c.applicationConfig.chatHistorySize = 50;
 
-        createDefaultLog(c.applicationConfig.log4jConfigFile);
+        createDefaultLog(c.applicationConfig.loggingConfigFile);
 
         c.radioStation = new ArrayList<>();
         c.musicbrainzSupport = new MusicbrainzSupport("", "");
@@ -176,107 +175,86 @@ public class FileConfigPersistence
         return c;
     }
 
-    private void createDefaultLog(String log4jConfigFile2)
+    private void createDefaultLog(String loggingConfigFile)
     {
-        File log4jFile = new File(log4jConfigFile2);
-        String basePath = log4jFile.getParent();
+        File loggingFile = new File(loggingConfigFile);
+        String basePath = loggingFile.getParent();
         if (basePath == null)
         {
             basePath = systemConfig.getString("user.dir");
         }
-        String logfile = FilenameUtils.getBaseName(log4jConfigFile2);
+        String logfile = FilenameUtils.getBaseName(loggingConfigFile);
 
-        
+        // NOTE: This is a Logback configuration (default Spring Boot logging system).
+        // We use plain token replacement instead of String.format because the template
+        // contains many Logback conversion words ("%d", "%level", "%msg", ...) that would
+        // otherwise be misinterpreted as format specifiers.
         String data = """
-<Configuration status="info">
-    <Properties>
-        <Property name="LOG_DIR">%1$s</Property>
-        <Property name="LOG_FILE">${LOG_DIR}/%2$s</Property>
-        <Property name="LOG_PATTERN">
-            %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
-        </Property>
-        <Property name="LOG_PATTERN_SHORT">
-            %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %c{1.1.1.*} - %msg%n
-        </Property>
-    </Properties>
+<configuration>
 
-    <Appenders>
+    <property name="LOG_DIR" value="@LOG_DIR@" />
+    <property name="LOG_FILE" value="${LOG_DIR}/@LOG_FILE@" />
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+    <property name="LOG_PATTERN_SHORT" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
 
-        <!-- Console Appender -->
-        <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-        </Console>
+    <!-- Console Appender -->
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
 
-        <!-- Rolling File Appender -->
-        <RollingFile
-            name="rollingFile"
-            fileName="${LOG_FILE}"
-            filePattern="${LOG_DIR}/%2$s.%d{yyyy-MM-dd}.%i.gz"
-            ignoreExceptions="false">
+    <!-- Rolling File Appender -->
+    <appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- Roll over daily and additionally when the file reaches 200MB; keep 30 days, gz compressed -->
+            <fileNamePattern>${LOG_DIR}/@LOG_FILE@.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <maxFileSize>200MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN_SHORT}</pattern>
+        </encoder>
+    </appender>
 
-            <PatternLayout>
-                <Pattern>${LOG_PATTERN_SHORT}</Pattern>
-            </PatternLayout>
+    <!-- Async Appender with increased queue -->
+    <appender name="Async" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>2048</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="rollingFile" />
+    </appender>
 
-            <Policies>
-                <!-- Täglich rotieren -->
-                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
-                <!-- Zusätzlich bei 200MB rotieren -->
-                <SizeBasedTriggeringPolicy size="200MB"/>
-            </Policies>
+    <root level="warn">
+        <appender-ref ref="Async" />
+        <!--
+        <appender-ref ref="Console" />
+        -->
+    </root>
 
-            <DefaultRolloverStrategy max="5">
-                <Delete basePath="${LOG_DIR}" maxDepth="1">
-                    <IfFileName glob="%2$s.*.gz"/>
-                    <IfLastModified age="P30D"/>
-                </Delete>
-            </DefaultRolloverStrategy>
+    <logger name="nextcp.service.upnp" level="warn" additivity="false">
+        <appender-ref ref="Async" />
+    </logger>
+    <logger name="nextcp.upnp.device.UpnpDeviceDiscovery" level="warn" additivity="false">
+        <appender-ref ref="Async" />
+    </logger>
 
-        </RollingFile>
+    <!-- JAudioTagger -->
+    <logger name="org.jaudiotagger" level="warn" additivity="false">
+        <appender-ref ref="Async" />
+    </logger>
 
-        <!-- Async Appender mit erhöhter Queue -->
-        <Async name="Async"
-               bufferSize="2048"
-               ignoreExceptions="false">
-            <AppenderRef ref="rollingFile"/>
-        </Async>
+    <!-- Spring -->
+    <logger name="org.springframework" level="warn" additivity="false">
+        <appender-ref ref="Async" />
+    </logger>
 
-    </Appenders>
-    
-    <Loggers>
-        <Root level="warn">
-		<AppenderRef ref="Async" />
-		<!--
-    		<AppenderRef ref="Console" />
-		-->
-        </Root>
-        	
-        <Logger name="nextcp.service.upnp" level="warn" additivity="false">
-            <AppenderRef ref="Async" />
-        </Logger>
-        <Logger name="nextcp.upnp.device.UpnpDeviceDiscovery" level="warn" additivity="false">
-            <AppenderRef ref="Async" />
-        </Logger>
-        
-		<!-- JAudioTagger -->
-	
-        <Logger name="org.jaudiotagger" level="warn" additivity="false">
-            <AppenderRef ref="Async" />
-        </Logger>
-	
-		<!-- Spring -->
-		<Logger name="org.springframework" level="warn" additivity="false">
-	            <AppenderRef ref="Async" />
-        </Logger>
-                
+</configuration>
+        	""".replace("@LOG_DIR@", basePath).replace("@LOG_FILE@", logfile);
 
-    </Loggers>
-</Configuration>
-        	""".formatted(basePath, logfile);
-        
         try
         {
-            FileOpsNio.writeFile(log4jConfigFile2, data.getBytes());
+            FileOpsNio.writeFile(loggingConfigFile, data.getBytes());
         }
         catch (IOException e)
         {

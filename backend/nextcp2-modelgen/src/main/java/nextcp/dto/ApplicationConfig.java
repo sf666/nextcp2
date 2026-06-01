@@ -20,8 +20,7 @@ public class ApplicationConfig
     public String embeddedServerSslP12Keystore;
     public String embeddedServerSslP12KeystorePassword;
     public Long sseEmitterTimeout;
-    public String log4jConfigFile;
-    public String loggingDateTimeFormat;
+    public String loggingConfigFile;
     public Long globalSearchDelay;
     public String databaseFilename;
     public Long itemsPerPage;
@@ -34,7 +33,7 @@ public class ApplicationConfig
     {
     }
 
-    public ApplicationConfig(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Integer embeddedServerSslPort, String embeddedServerSslP12Keystore, String embeddedServerSslP12KeystorePassword, Long sseEmitterTimeout, String log4jConfigFile, String loggingDateTimeFormat, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript, String upnpBindInterface, Integer chatHistorySize)
+    public ApplicationConfig(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Integer embeddedServerSslPort, String embeddedServerSslP12Keystore, String embeddedServerSslP12KeystorePassword, Long sseEmitterTimeout, String loggingConfigFile, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript, String upnpBindInterface, Integer chatHistorySize)
     {
         this.generateUpnpCode = generateUpnpCode;
         this.generateUpnpCodePath = generateUpnpCodePath;
@@ -44,8 +43,7 @@ public class ApplicationConfig
         this.embeddedServerSslP12Keystore = embeddedServerSslP12Keystore;
         this.embeddedServerSslP12KeystorePassword = embeddedServerSslP12KeystorePassword;
         this.sseEmitterTimeout = sseEmitterTimeout;
-        this.log4jConfigFile = log4jConfigFile;
-        this.loggingDateTimeFormat = loggingDateTimeFormat;
+        this.loggingConfigFile = loggingConfigFile;
         this.globalSearchDelay = globalSearchDelay;
         this.databaseFilename = databaseFilename;
         this.itemsPerPage = itemsPerPage;
@@ -68,8 +66,7 @@ public class ApplicationConfig
         sb.append("embeddedServerSslP12Keystore=").append(this.embeddedServerSslP12Keystore).append(", ");
         sb.append("embeddedServerSslP12KeystorePassword=").append(this.embeddedServerSslP12KeystorePassword).append(", ");
         sb.append("sseEmitterTimeout=").append(this.sseEmitterTimeout).append(", ");
-        sb.append("log4jConfigFile=").append(this.log4jConfigFile).append(", ");
-        sb.append("loggingDateTimeFormat=").append(this.loggingDateTimeFormat).append(", ");
+        sb.append("loggingConfigFile=").append(this.loggingConfigFile).append(", ");
         sb.append("globalSearchDelay=").append(this.globalSearchDelay).append(", ");
         sb.append("databaseFilename=").append(this.databaseFilename).append(", ");
         sb.append("itemsPerPage=").append(this.itemsPerPage).append(", ");
