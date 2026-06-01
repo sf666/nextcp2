@@ -211,20 +211,6 @@
 	</dependencies>
 	<dependencyManagement>
 	    <dependencies>
-	        <!-- Schließt logback-classic global für alle Module aus -->
-	        <dependency>
-	            <groupId>ch.qos.logback</groupId>
-	            <artifactId>logback-classic</artifactId>
-	            <version>1.5.32</version>
-	            <scope>provided</scope> 
-	        </dependency>
-	        <dependency>
-	            <groupId>ch.qos.logback</groupId>
-	            <artifactId>logback-core</artifactId>
-	            <version>1.5.32</version>
-	            <scope>provided</scope> 
-	        </dependency>
-	        
 	        <dependency>
 	            <groupId>org.eclipse.jetty</groupId>
 	            <artifactId>jetty-bom</artifactId>
