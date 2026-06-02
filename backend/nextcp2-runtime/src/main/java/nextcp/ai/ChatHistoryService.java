@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import nextcp.dto.ChatHistoryDto;
 import nextcp.dto.ChatMessageDto;
@@ -42,6 +43,9 @@ public class ChatHistoryService {
 	@Autowired
 	private Config config;
 
+	@Autowired
+	private ApplicationEventPublisher eventPublisher;
+
 	private final Deque<ChatMessageDto> messages = new ArrayDeque<>();
 
 	private final AtomicLong idSequence = new AtomicLong(0L);
@@ -67,27 +71,33 @@ public class ChatHistoryService {
 	 * @param userText the text the user sent
 	 * @return ID of the pending assistant message that callers must complete
 	 */
-	public synchronized long startExchange(String userText) {
-		long now = System.currentTimeMillis();
+	public long startExchange(String userText) {
+		long assistantId;
+		synchronized (this) {
+			long now = System.currentTimeMillis();
 
-		ChatMessageDto userMessage = new ChatMessageDto();
-		userMessage.id = idSequence.incrementAndGet();
-		userMessage.role = ROLE_USER;
-		userMessage.content = userText == null ? "" : userText;
-		userMessage.status = STATUS_COMPLETE;
-		userMessage.timestamp = now;
-		append(userMessage);
+			ChatMessageDto userMessage = new ChatMessageDto();
+			userMessage.id = idSequence.incrementAndGet();
+			userMessage.role = ROLE_USER;
+			userMessage.content = userText == null ? "" : userText;
+			userMessage.status = STATUS_COMPLETE;
+			userMessage.timestamp = now;
+			append(userMessage);
 
-		ChatMessageDto assistantPlaceholder = new ChatMessageDto();
-		assistantPlaceholder.id = idSequence.incrementAndGet();
-		assistantPlaceholder.role = ROLE_ASSISTANT;
-		assistantPlaceholder.content = "";
-		assistantPlaceholder.status = STATUS_PENDING;
-		assistantPlaceholder.timestamp = now;
-		append(assistantPlaceholder);
+			ChatMessageDto assistantPlaceholder = new ChatMessageDto();
+			assistantPlaceholder.id = idSequence.incrementAndGet();
+			assistantPlaceholder.role = ROLE_ASSISTANT;
+			assistantPlaceholder.content = "";
+			assistantPlaceholder.status = STATUS_PENDING;
+			assistantPlaceholder.timestamp = now;
+			append(assistantPlaceholder);
 
-		log.debug("Started exchange: userId={}, pendingAssistantId={}", userMessage.id, assistantPlaceholder.id);
-		return assistantPlaceholder.id;
+			log.debug("Started exchange: userId={}, pendingAssistantId={}", userMessage.id, assistantPlaceholder.id);
+			assistantId = assistantPlaceholder.id;
+		}
+		// Notify SSE clients outside the lock to avoid holding it during I/O.
+		publishHistoryChanged();
+		return assistantId;
 	}
 
 	/**
@@ -95,30 +105,57 @@ public class ChatHistoryService {
 	 * response content. Silently ignored when the message has already been
 	 * evicted (because the ring buffer overflowed).
 	 */
-	public synchronized void completeExchange(long assistantId, String content) {
-		ChatMessageDto msg = findById(assistantId);
-		if (msg == null) {
-			log.warn("Cannot complete exchange - message id {} no longer in history", assistantId);
-			return;
+	public void completeExchange(long assistantId, String content) {
+		boolean changed;
+		synchronized (this) {
+			ChatMessageDto msg = findById(assistantId);
+			if (msg == null) {
+				log.warn("Cannot complete exchange - message id {} no longer in history", assistantId);
+				changed = false;
+			} else {
+				msg.content = content == null ? "" : content;
+				msg.status = STATUS_COMPLETE;
+				msg.timestamp = System.currentTimeMillis();
+				changed = true;
+			}
 		}
-		msg.content = content == null ? "" : content;
-		msg.status = STATUS_COMPLETE;
-		msg.timestamp = System.currentTimeMillis();
+		if (changed) {
+			publishHistoryChanged();
+		}
 	}
 
 	/**
 	 * Marks the assistant message with the given ID as failed and stores a
 	 * (typically user-facing) error description as its content.
 	 */
-	public synchronized void failExchange(long assistantId, String errorContent) {
-		ChatMessageDto msg = findById(assistantId);
-		if (msg == null) {
-			log.warn("Cannot fail exchange - message id {} no longer in history", assistantId);
-			return;
+	public void failExchange(long assistantId, String errorContent) {
+		boolean changed;
+		synchronized (this) {
+			ChatMessageDto msg = findById(assistantId);
+			if (msg == null) {
+				log.warn("Cannot fail exchange - message id {} no longer in history", assistantId);
+				changed = false;
+			} else {
+				msg.content = errorContent == null ? "" : errorContent;
+				msg.status = STATUS_ERROR;
+				msg.timestamp = System.currentTimeMillis();
+				changed = true;
+			}
 		}
-		msg.content = errorContent == null ? "" : errorContent;
-		msg.status = STATUS_ERROR;
-		msg.timestamp = System.currentTimeMillis();
+		if (changed) {
+			publishHistoryChanged();
+		}
+	}
+
+	/**
+	 * Publishes a {@link ChatHistoryChanged} event with a fresh snapshot of the
+	 * current history. Must be called outside the instance lock so the
+	 * (synchronous) SSE broadcast does not block other history operations.
+	 */
+	private void publishHistoryChanged() {
+		if (eventPublisher != null) {
+			eventPublisher.publishEvent(new ChatHistoryChanged(getHistory()));
+		}
 	}
 
 	/**

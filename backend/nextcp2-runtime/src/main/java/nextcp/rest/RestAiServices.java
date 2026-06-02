@@ -60,8 +60,10 @@ public class RestAiServices {
 	/**
 	 * Returns the in-memory chat history so a browser reload can restore the
 	 * previous conversation. Pending entries indicate that a response is still
-	 * being computed by the AI provider; the client should poll this endpoint
-	 * until all messages are {@code COMPLETE} or {@code ERROR}.
+	 * being computed by the AI provider. Clients no longer need to poll this
+	 * endpoint: subsequent state changes are pushed via the SSE event
+	 * {@code CHAT_HISTORY_CHANGED}. This endpoint is only used for the initial
+	 * restore on page load.
 	 */
 	@GetMapping(value = "/history", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ChatHistoryDto getHistory() {
@@ -72,9 +74,10 @@ public class RestAiServices {
 	public SseEmitter sendTextToGemini(@RequestBody String userText) {
 		SseEmitter emitter = new SseEmitter(120000L);
 
-		// Record the exchange in the history BEFORE kicking off the async task,
-		// so that a browser reload while the LLM is still computing can find a
-		// PENDING placeholder and pick up the eventual answer on the next poll.
+		// Record the exchange in the history BEFORE kicking off the async task.
+		// startExchange pushes a CHAT_HISTORY_CHANGED SSE event so connected
+		// clients immediately see the PENDING placeholder; the eventual answer
+		// is pushed the same way when completeExchange / failExchange runs.
 		String extractedMessage = extractMessage(userText);
 		long assistantId = chatHistoryService.startExchange(extractedMessage);
 
@@ -113,7 +116,9 @@ public class RestAiServices {
 			emitter.complete();
 		} catch (IOException ioException) {
 			// Client disconnected (e.g. browser reload). The history already
-			// holds the response, so the next /history poll will deliver it.
+			// holds the response and a CHAT_HISTORY_CHANGED event was pushed,
+			// so reconnecting clients receive it via SSE (or the initial
+			// /history fetch on reload).
 			log.info("SSE response could not be delivered (client likely disconnected); response is preserved in history: {}",
 				ioException.getMessage());
 			emitter.completeWithError(ioException);

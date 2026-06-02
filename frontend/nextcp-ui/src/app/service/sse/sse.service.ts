@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { MediaRendererDto, PlaylistState } from '../dto';
-import { MediaServerDto, UpnpAvTransportState, Config, DeviceDriverState, TrackTimeDto, TrackInfoDto, RendererConfigDto, RendererPlaylist, ToastrMessage, ServerConfigDto, ServerPlaylistDto, ServerPlaylists, InputSourceDto, InputSourceChangeDto, TransportServiceStateDto } from './../dto.d';
+import { MediaServerDto, UpnpAvTransportState, Config, DeviceDriverState, TrackTimeDto, TrackInfoDto, RendererConfigDto, RendererPlaylist, ToastrMessage, ServerConfigDto, ServerPlaylistDto, ServerPlaylists, InputSourceDto, InputSourceChangeDto, TransportServiceStateDto, ChatHistoryDto } from './../dto.d';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +41,9 @@ export class SseService {
   // Toastr info messages
   toasterMessageReceived$: Subject<ToastrMessage> = new Subject();
 
+  // AI chat history push (replaces polling of /api/ai/history)
+  chatHistoryChanged$: Subject<ChatHistoryDto> = new Subject();
+
   constructor() {
     const eventSource = new EventSource('/SSE');
     eventSource.onopen = e => console.log('opened SSE connection.');
@@ -66,6 +69,8 @@ export class SseService {
     eventSource.addEventListener('DEVICE_MEDIASERVER_CHANGED', m => { this.sendNotification(this.mediaServerListChanged$, m) }, false);
     eventSource.addEventListener('DEVICE_MEDIASERVER_PLAYLIST_STATE', m => { this.sendNotification(this.mediaServerPlaylistChanged$, m) }, false);
     eventSource.addEventListener('DEVICE_MEDIASERVER_RECENT_PLAYLIST_STATE', m => { this.sendNotification(this.mediaServerRecentPlaylistChanged$, m) }, false);
+
+    eventSource.addEventListener('CHAT_HISTORY_CHANGED', m => { this.sendNotification(this.chatHistoryChanged$, m) }, false);
 
     eventSource.addEventListener('TOASTR_INFO', m => { this.sendNotification(this.toasterMessageReceived$, m) }, false);
     eventSource.addEventListener('RENDERER_CONFIG_CHANGED', m => { this.sendNotification(this.rendererConfigChanged$, m) }, false);

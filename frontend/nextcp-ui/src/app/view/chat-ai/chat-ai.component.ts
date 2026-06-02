@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ChatAiResponse, ChatAiService } from 'src/app/service/chat-ai.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { ChatAiService } from 'src/app/service/chat-ai.service';
+import { SseService } from 'src/app/service/sse/sse.service';
 import { Subscription } from 'rxjs';
-import { ChatMessageDto } from 'src/app/service/dto.d';
+import { ChatHistoryDto, ChatMessageDto } from 'src/app/service/dto.d';
 
 type MessageStatus = 'COMPLETE' | 'PENDING' | 'ERROR';
 
@@ -22,9 +22,6 @@ const WELCOME_MESSAGE: ChatMessage = {
   content: 'Hello! I am your AI assistant. Feel free to ask me anything.',
   status: 'COMPLETE',
 };
-
-// Interval used when polling the history endpoint for a PENDING response.
-const HISTORY_POLL_INTERVAL_MS = 1500;
 
 @Component({
   selector: 'app-chat-ai',
@@ -47,22 +44,25 @@ export class ChatAiComponent implements OnInit, OnDestroy {
   private activeRequest?: Subscription;
   private selectionRequest?: Subscription;
   private historyRequest?: Subscription;
-  private pollTimer?: ReturnType<typeof setTimeout>;
+  private historyPushSub?: Subscription;
 
-  constructor(private chatAiService: ChatAiService) {}
+  constructor(private chatAiService: ChatAiService, private sseService: SseService) {}
 
   ngOnInit(): void {
     this.refreshSelectedDevices();
-    // Restore previous conversation on page load. Also kicks off polling if a
-    // pending response is still being computed by the backend.
-    this.loadHistory();
+    // Restore the previous conversation once on page load. All later changes
+    // (pending placeholder, completed answer, errors) arrive by SSE push.
+    this.loadInitialHistory();
+    this.historyPushSub = this.sseService.chatHistoryChanged$.subscribe({
+      next: (dto) => this.applyHistory(dto),
+    });
   }
 
   ngOnDestroy(): void {
     this.activeRequest?.unsubscribe();
     this.selectionRequest?.unsubscribe();
     this.historyRequest?.unsubscribe();
-    this.clearPollTimer();
+    this.historyPushSub?.unsubscribe();
   }
 
   /**
@@ -84,47 +84,32 @@ export class ChatAiComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Loads the chat history from the backend and applies it to the messages
-   * signal. If any message is still PENDING, starts polling until it
-   * transitions to COMPLETE or ERROR.
+   * One-off fetch of the chat history used to restore the conversation on page
+   * load. Ongoing updates are delivered via the CHAT_HISTORY_CHANGED SSE push.
    */
-  private loadHistory(): void {
+  private loadInitialHistory(): void {
     this.historyRequest?.unsubscribe();
     this.historyRequest = this.chatAiService.getHistory().subscribe({
-      next: (dto) => {
-        const items = (dto?.messages ?? []).map((m) => this.mapDto(m));
-        if (items.length === 0) {
-          this.messages.set([WELCOME_MESSAGE]);
-        } else {
-          this.messages.set(items);
-        }
-        const hasPending = items.some((m) => m.status === 'PENDING');
-        this.isLoading.set(hasPending);
-        if (hasPending) {
-          this.schedulePoll();
-        } else {
-          this.clearPollTimer();
-        }
-      },
+      next: (dto) => this.applyHistory(dto),
       error: (err: unknown) => {
         console.warn('[chat-ai] could not load chat history', err);
       },
     });
   }
 
-  private schedulePoll(): void {
-    this.clearPollTimer();
-    this.pollTimer = setTimeout(() => {
-      this.pollTimer = undefined;
-      this.loadHistory();
-    }, HISTORY_POLL_INTERVAL_MS);
-  }
-
-  private clearPollTimer(): void {
-    if (this.pollTimer !== undefined) {
-      clearTimeout(this.pollTimer);
-      this.pollTimer = undefined;
+  /**
+   * Applies an authoritative history snapshot (from the initial fetch or an SSE
+   * push) to the UI: rebuilds the message list and reflects whether a response
+   * is still pending.
+   */
+  private applyHistory(dto: ChatHistoryDto | null): void {
+    const items = (dto?.messages ?? []).map((m) => this.mapDto(m));
+    if (items.length === 0) {
+      this.messages.set([WELCOME_MESSAGE]);
+    } else {
+      this.messages.set(items);
     }
+    this.isLoading.set(items.some((m) => m.status === 'PENDING'));
   }
 
   private mapDto(dto: ChatMessageDto): ChatMessage {
@@ -146,10 +131,10 @@ export class ChatAiComponent implements OnInit, OnDestroy {
 
     this.activeRequest?.unsubscribe();
 
-    // Optimistic UI update: drop the welcome placeholder once the user
-    // engages, append the user message and a pending assistant entry. The
-    // backend will create matching history entries; on completion we
-    // reconcile against the server state via loadHistory().
+    // Optimistic UI update for instant feedback: drop the welcome placeholder,
+    // append the user message and a pending assistant entry. The backend
+    // immediately pushes a matching CHAT_HISTORY_CHANGED snapshot which becomes
+    // the authoritative state (and again once the answer or an error arrives).
     this.messages.update((items) => {
       const withoutWelcome = items.length === 1 && items[0] === WELCOME_MESSAGE ? [] : items;
       return [
@@ -162,98 +147,22 @@ export class ChatAiComponent implements OnInit, OnDestroy {
     this.isLoading.set(true);
     console.debug('[chat-ai] sending request', { endpoint: '/api/ai/doAction', message });
 
+    // POST /doAction only triggers the backend exchange; the response content
+    // and status are delivered through the history push, so we do not consume
+    // the streamed body here.
     this.activeRequest = this.chatAiService.sendMessage(message).subscribe({
-      next: (data) => {
-        console.debug('[chat-ai] response received', data);
-        const text = this.extractResponse(data);
-        if (!text) {
-          return;
-        }
-        this.appendToLatestAssistantMessage(text);
-      },
+      next: () => { /* content is applied via chatHistoryChanged$ push */ },
       error: (err: unknown) => {
-        const details = this.extractErrorDetails(err);
-        console.error('[chat-ai] request failed', details.rawError);
-        // The backend keeps the answer in history even when the SSE channel
-        // breaks. Pull the authoritative state instead of synthesising one.
-        this.loadHistory();
+        // The backend records the failure in the history and pushes it; this is
+        // only a network/transport problem with the trigger call itself.
+        console.warn('[chat-ai] doAction request failed', err);
+        this.refreshSelectedDevices();
       },
       complete: () => {
-        // Reconcile with the backend's authoritative history; this also
-        // clears the loading flag and stops polling when no more PENDING
-        // entries remain.
-        this.loadHistory();
         // The LLM may have called select_renderer / select_server during the
         // exchange — refresh the displayed selection.
         this.refreshSelectedDevices();
       },
     });
-  }
-
-  private appendToLatestAssistantMessage(chunk: string): void {
-    this.messages.update((items) => {
-      const next = [...items];
-      const idx = this.findLatestAssistantMessageIndex(next);
-
-      if (idx < 0) {
-        next.push({ role: 'assistant', content: chunk, status: 'COMPLETE' });
-        return next;
-      }
-
-      const current = next[idx];
-      next[idx] = { ...current, content: `${current.content}${chunk}`, status: 'COMPLETE' };
-      return next;
-    });
-  }
-
-  private findLatestAssistantMessageIndex(messages: ChatMessage[]): number {
-    for (let idx = messages.length - 1; idx >= 0; idx -= 1) {
-      if (messages[idx].role === 'assistant') {
-        return idx;
-      }
-    }
-
-    return -1;
-  }
-
-  private extractResponse(data: ChatAiResponse | string): string {
-    if (typeof data === 'string') {
-      return data;
-    }
-    return data?.response ?? '';
-  }
-
-  private extractErrorDetails(err: unknown): { statusText: string; rawError: unknown } {
-    if (err instanceof HttpErrorResponse) {
-      const backendMessage = this.extractBackendMessage(err.error);
-      const statusText = `${err.status} ${err.statusText}${backendMessage ? ` - ${backendMessage}` : ''}`;
-      return { statusText, rawError: err };
-    }
-
-    return {
-      statusText: 'unknown error',
-      rawError: err,
-    };
-  }
-
-  private extractBackendMessage(errorPayload: unknown): string {
-    if (!errorPayload) {
-      return '';
-    }
-
-    if (typeof errorPayload === 'string') {
-      return errorPayload;
-    }
-
-    if (typeof errorPayload === 'object') {
-      const payload = errorPayload as Record<string, unknown>;
-      const message = payload.message;
-      const error = payload.error;
-      const path = payload.path;
-      const parts = [message, error, path].filter((p) => typeof p === 'string' && p.length > 0) as string[];
-      return parts.join(' | ');
-    }
-
-    return '';
   }
 }
