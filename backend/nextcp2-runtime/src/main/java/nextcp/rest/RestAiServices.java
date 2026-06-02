@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import nextcp.ai.AiServices;
 import nextcp.ai.BudgetExceededException;
 import nextcp.ai.ChatHistoryService;
+import nextcp.ai.ModelUnavailableException;
 import nextcp.ai.mcp.McpLocale;
 import nextcp.dto.ChatHistoryDto;
 import nextcp.dto.SelectedDevicesDto;
@@ -91,6 +92,13 @@ public class RestAiServices {
 				// localized message to the caller instead of leaking the stack trace.
 				log.warn("AI request rejected: budget/quota exceeded. {}", e.getMessage());
 				String friendly = messageSource.getMessage("mcp.ai.budgetExceeded.response", null, mcpLocale.getCurrentLocale());
+				chatHistoryService.failExchange(assistantId, friendly);
+				sendErrorResponse(emitter, friendly, e);
+			} catch (ModelUnavailableException e) {
+				// AI model temporarily overloaded / unavailable (e.g. HTTP 503).
+				// Report a friendly, retryable message instead of leaking the stack trace.
+				log.warn("AI request failed: model temporarily unavailable. {}", e.getMessage());
+				String friendly = messageSource.getMessage("mcp.ai.modelUnavailable.response", null, mcpLocale.getCurrentLocale());
 				chatHistoryService.failExchange(assistantId, friendly);
 				sendErrorResponse(emitter, friendly, e);
 			} catch (Exception e) {

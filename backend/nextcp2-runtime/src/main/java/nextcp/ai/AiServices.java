@@ -43,6 +43,10 @@ public class AiServices {
 				log.warn("AI provider rejected request because the quota/budget is exceeded: {}", rootMessage(ex));
 				throw new BudgetExceededException("AI quota exceeded", ex);
 			}
+			if (isModelUnavailable(ex)) {
+				log.warn("AI provider temporarily unavailable (model overloaded): {}", rootMessage(ex));
+				throw new ModelUnavailableException("AI model temporarily unavailable", ex);
+			}
 			throw ex;
 		}
 	}
@@ -67,6 +71,32 @@ public class AiServices {
 				return true;
 			}
 			if (messageIndicatesQuota && message.contains("429")) {
+				return true;
+			}
+			current = current.getCause();
+		}
+		return false;
+	}
+
+	/**
+	 * Checks whether the given exception (or any of its causes) indicates that
+	 * the AI provider is temporarily unavailable / overloaded. Google Gemini
+	 * reports this as a {@code com.google.genai.errors.ServerException} carrying
+	 * HTTP status 503 ("This model is currently experiencing high demand").
+	 * Matched by class name / message to avoid a hard compile-time dependency on
+	 * the provider SDK.
+	 */
+	private boolean isModelUnavailable(Throwable throwable) {
+		Throwable current = throwable;
+		while (current != null) {
+			String className = current.getClass().getName();
+			String message = current.getMessage();
+			String lower = message == null ? "" : message.toLowerCase();
+			boolean isServerException = "com.google.genai.errors.ServerException".equals(className);
+			boolean messageIndicatesUnavailable = message != null
+				&& (message.contains("503") || lower.contains("high demand") || lower.contains("overloaded")
+					|| lower.contains("try again later") || lower.contains("unavailable"));
+			if ((isServerException && messageIndicatesUnavailable) || (message != null && message.contains("503"))) {
 				return true;
 			}
 			current = current.getCause();

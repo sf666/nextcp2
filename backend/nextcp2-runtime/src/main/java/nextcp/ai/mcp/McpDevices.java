@@ -113,6 +113,9 @@ public class McpDevices {
 	public Collection<MusicItemDto> listMediaRendererRadioStation() {
 		log.info("UPnP command received: list_renderer_radio_station. List Radio Stations provided by media renderer.");
 		
+		if (availableMediaRendererRadioStations == null) {
+			log.info("No radio stations available from media renderer.");
+		}
 		return availableMediaRendererRadioStations;
 	}
 
@@ -201,7 +204,7 @@ public class McpDevices {
         - The user asks 'Where is my music coming from?' or 'Which media server is active? '.
         """)
 	public String getSelectedMediaServer() {
-		log.info("UPnP command received: Get selected Media Server");
+		log.info("UPnP command received: selected_server. Deliver selected Media Server ...");
 
 		MediaServerDto current = getSelectedMediaServerDto();
 		if (current == null) {
@@ -250,12 +253,9 @@ public class McpDevices {
 		Use this tool when:
 	      - The user asks to play a specific radio station which doen't matches to a preset on the selected Media Renderer.
 	""")
-	public void playRadioStation(@ToolParam(description = "The radio station to play by station name. ", required = true) String stationName) {
+	public String playRadioStation(@ToolParam(description = "The radio station to play by station name. ", required = true) String stationName) {
 		log.info("Command received: play_radio_on_renderer. Play radio station {} from media server.", stationName);
-		if (selectedMediaRenderer.hasOhPlaylistService()) {
-			log.info("Request : Playing preset radio station '{}'", stationName);
-			return;
-		} 
+		return "ok";
 	}
 	
 	@Tool(name = "play_preset_radio_on_renderer", description = """
@@ -270,12 +270,13 @@ public class McpDevices {
 			Use this tool when:
 		      - The user asks to play a specific radio station which matches to a preset on the selected Media Renderer.
 		""")
-	public void playRadioStationPreset(@ToolParam(description = "The preset object of the radio station to play. ", required = true) MusicItemDto station) {
+	public String playRadioStationPreset(@ToolParam(description = "The preset object of the radio station to play. ", required = true) MusicItemDto station) {
 		log.info("Command received: play_preset_radio_on_renderer - {}", station.title);
 		if (selectedMediaRenderer.hasOhPlaylistService()) {
 			log.info("Request : Playing preset radio station '{}'", station.title);
-			return;
-		} 
+			return "ok";
+		}
+		return "ok";
 	}
 
 	/**
