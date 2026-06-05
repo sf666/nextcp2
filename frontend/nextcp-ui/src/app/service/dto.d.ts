@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-06-01 16:17:15.
+// Generated using typescript-generator version 4.1.1 on 2026-06-02 14:02:48.
 
 export interface AiConfig {
     aiEnabled: boolean;

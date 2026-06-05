@@ -17,6 +17,13 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
 
 	private volatile McIntoshDeviceConnection device = null;
 	private final DeviceDriverState state = new DeviceDriverState();
+
+	/**
+	 * Last standby state reported by the device, null until the first
+	 * response. Used to suppress redundant callbacks and follow-up queries
+	 * when the periodic heartbeat ("(PWR)") reports an unchanged state.
+	 */
+	private Boolean lastReportedStandby = null;
 	private final IDeviceDriverCallback callback;
 	private final InputManager inputManager = new InputManager();
 	private final Object stateLock = new Object();
@@ -93,15 +100,26 @@ public class Ma9000Binding implements IMcIntoshDeviceChanged, IDeviceDriverServi
 
 	@Override
 	public void standbyStateChanged(boolean standbyState) {
+		boolean changed;
+		synchronized (stateLock) {
+			changed = lastReportedStandby == null || lastReportedStandby != standbyState;
+			lastReportedStandby = standbyState;
+			state.standby = standbyState;
+		}
+
+		if (!changed) {
+			// Unchanged state, e.g. reported by the periodic heartbeat. No
+			// callback and no follow-up queries necessary.
+			log.debug("Standby state unchanged: {}", standbyState);
+			return;
+		}
+
 		log.debug("Standby state changed to: {}", standbyState);
 
 		if (!standbyState) {
 			readDeviceInfoAfterPowerChange();
 		}
 
-		synchronized (stateLock) {
-			state.standby = standbyState;
-		}
 		callback.standbyChanged(standbyState);
 	}
 

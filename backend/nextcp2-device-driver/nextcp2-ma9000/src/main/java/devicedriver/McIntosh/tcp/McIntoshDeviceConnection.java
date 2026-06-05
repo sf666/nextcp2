@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import devicedriver.McIntosh.Ma9000Binding;
 import devicedriver.McIntosh.control.BaseCommandStructure;
+import devicedriver.McIntosh.control.Commands;
 import devicedriver.tcp.TcpDeviceConnection;
 import devicedriver.util.CharBufferUtil;
 
@@ -108,6 +109,20 @@ public class McIntoshDeviceConnection extends TcpDeviceConnection {
 				log.info("Received unhandled command: {}", command);
 			}
 		});
+	}
+
+	/**
+	 * Uses the power status query "(PWR)" as heartbeat probe. The device
+	 * answers it in every power state, so a missing answer reliably indicates
+	 * a dead TCP connection and triggers a reconnect in the base class.
+	 */
+	@Override
+	protected ByteBuffer createHeartbeatPayload() {
+		byte[] command = Commands.POWER_STATUS.getCommandAsByteArray();
+		ByteBuffer buffer = ByteBuffer.allocateDirect(command.length);
+		buffer.put(command);
+		buffer.flip();
+		return buffer;
 	}
 
 	public void send(BaseCommandStructure request, Object... params) {

@@ -3,12 +3,12 @@ package devicedriver.tcp;
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.AsynchronousCloseException;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -35,6 +35,20 @@ public class TcpDeviceConnection {
 
 	/** Maximum time in milliseconds to wait for executor shutdown. */
 	private static final long THREAD_SHUTDOWN_TIMEOUT_MS = 5000;
+
+	/**
+	 * Interval in milliseconds between two heartbeat checks. A heartbeat is
+	 * only sent if the connection has been idle (no send and no receive) for
+	 * at least this long, so regular traffic suppresses heartbeats.
+	 */
+	private static final long HEARTBEAT_INTERVAL_MS = 10 * 60 * 1000;
+
+	/**
+	 * Maximum time in milliseconds to wait for any response after a heartbeat
+	 * has been sent. If no data is received within this time, the connection
+	 * is considered dead and a reconnect is triggered.
+	 */
+	private static final long HEARTBEAT_RESPONSE_TIMEOUT_MS = 3_000;
 
 	// -------------------------------------------------------------------------
 	// Fields
@@ -64,6 +78,9 @@ public class TcpDeviceConnection {
 	/** Executor for async reconnect operations. */
 	private final ExecutorService reconnectExecutor;
 
+	/** Executor for the periodic heartbeat / connection supervision task. */
+	private final ScheduledExecutorService heartbeatExecutor;
+
 	/** Future representing the currently running read task. */
 	private volatile Future<?> readFuture = null;
 
@@ -91,6 +108,14 @@ public class TcpDeviceConnection {
 	 * Flag to prevent multiple simultaneous reconnect attempts.
 	 */
 	private volatile boolean isReconnecting = false;
+
+	/**
+	 * True while the connection is supposed to be up, i.e. between
+	 * {@link #open()} and an explicit {@link #close()} / {@link #shutdown()}.
+	 * The heartbeat task only supervises the connection while this is true,
+	 * so an intentionally closed connection is not reopened automatically.
+	 */
+	private volatile boolean connectionDesired = false;
 
 	// -------------------------------------------------------------------------
 	// Constructor
@@ -130,6 +155,15 @@ public class TcpDeviceConnection {
 			t.setDaemon(true);
 			return t;
 		});
+
+		this.heartbeatExecutor = Executors.newSingleThreadScheduledExecutor(r -> {
+			Thread t = new Thread(r);
+			t.setName("tcp-heartbeat-thread-" + address);
+			t.setDaemon(true);
+			return t;
+		});
+		this.heartbeatExecutor.scheduleWithFixedDelay(this::heartbeatTick, HEARTBEAT_INTERVAL_MS, HEARTBEAT_INTERVAL_MS,
+			TimeUnit.MILLISECONDS);
 	}
 
 	// -------------------------------------------------------------------------
@@ -154,6 +188,9 @@ public class TcpDeviceConnection {
 	 */
 	public boolean open() {
 		close();
+		// From now on the heartbeat task supervises the connection and will
+		// retry/reconnect on failure until close() or shutdown() is called.
+		connectionDesired = true;
 		try {
 			synchronized (socketLock) {
 				SocketChannel channel = SocketChannel.open(address);
@@ -252,8 +289,7 @@ public class TcpDeviceConnection {
 		// This means a response is currently outstanding.
 		// 3. More than RECEIVE_TIMEOUT_MS have passed since the last send.
 		// This means the device did not respond in time.
-		if (dataEverReceived.get() && lastSend.get() > lastReceive.get() &&
-			(System.currentTimeMillis() - lastSend.get()) > RECEIVE_TIMEOUT_MS) {
+		if (isResponseOutstanding()) {
 			log.warn("No response received within {}ms after last send to {}, reconnecting ...", RECEIVE_TIMEOUT_MS, address);
 			reconnect();
 			// Data is not re-sent after reconnect since the connection state is
@@ -290,6 +326,9 @@ public class TcpDeviceConnection {
 	 * fully release all resources.
 	 */
 	public void close() {
+		// Stop heartbeat supervision first so an intentional close is not
+		// immediately answered with an automatic reconnect.
+		connectionDesired = false;
 		closeSocketInternal();
 		stopReadTask();
 	}
@@ -301,6 +340,7 @@ public class TcpDeviceConnection {
 	 */
 	public void shutdown() {
 		close();
+		shutdownExecutor(heartbeatExecutor, "heartbeat");
 		shutdownExecutor(readExecutor, "read");
 		shutdownExecutor(reconnectExecutor, "reconnect");
 	}
@@ -335,9 +375,120 @@ public class TcpDeviceConnection {
 		}
 	}
 
+	/**
+	 * Provides the payload that is sent as a heartbeat when the connection has
+	 * been idle for {@value #HEARTBEAT_INTERVAL_MS}ms. The command must be one
+	 * the remote device is guaranteed to answer (e.g. a status query), since a
+	 * missing answer within {@value #HEARTBEAT_RESPONSE_TIMEOUT_MS}ms triggers
+	 * a reconnect.
+	 *
+	 * <p>
+	 * The default implementation returns null, which disables the active
+	 * heartbeat. Connection supervision (reconnect on closed/broken socket) is
+	 * still performed. A new buffer must be returned on every call.
+	 * </p>
+	 *
+	 * @return the heartbeat payload ready for reading, or null to disable the
+	 *         active heartbeat.
+	 */
+	protected ByteBuffer createHeartbeatPayload() {
+		return null;
+	}
+
 	// -------------------------------------------------------------------------
 	// Private helpers
 	// -------------------------------------------------------------------------
+
+	/**
+	 * Returns true if a send is outstanding without a response for longer than
+	 * {@value #RECEIVE_TIMEOUT_MS}ms. Only meaningful after at least one
+	 * response has ever been received on this connection.
+	 */
+	private boolean isResponseOutstanding() {
+		return dataEverReceived.get() && lastSend.get() > lastReceive.get()
+			&& (System.currentTimeMillis() - lastSend.get()) > RECEIVE_TIMEOUT_MS;
+	}
+
+	/**
+	 * Periodic connection supervision, executed every
+	 * {@value #HEARTBEAT_INTERVAL_MS}ms on the heartbeat executor.
+	 *
+	 * <ul>
+	 * <li>Does nothing while the connection is not desired (before
+	 * {@link #open()} / after {@link #close()}) or while a reconnect is in
+	 * progress.</li>
+	 * <li>Reconnects if the socket is gone (e.g. after a send error or a
+	 * failed reconnect attempt) — this also acts as a periodic retry when the
+	 * device is temporarily unreachable.</li>
+	 * <li>Reconnects if a regular send is still unanswered.</li>
+	 * <li>Otherwise, if the connection has been idle for at least
+	 * {@value #HEARTBEAT_INTERVAL_MS}ms, sends the heartbeat payload provided
+	 * by {@link #createHeartbeatPayload()} and verifies that some response
+	 * arrives within {@value #HEARTBEAT_RESPONSE_TIMEOUT_MS}ms.</li>
+	 * </ul>
+	 */
+	private void heartbeatTick() {
+		try {
+			if (!connectionDesired || isReconnecting) {
+				return;
+			}
+
+			boolean connected;
+			synchronized (socketLock) {
+				connected = socketToDevice != null && socketToDevice.isConnected();
+			}
+
+			if (!connected) {
+				log.info("Heartbeat: no open connection to {}, trying to reconnect ...", address);
+				reconnect();
+				return;
+			}
+
+			if (isResponseOutstanding()) {
+				log.warn("Heartbeat: response outstanding for more than {}ms from {}, reconnecting ...", RECEIVE_TIMEOUT_MS, address);
+				reconnect();
+				return;
+			}
+
+			// Active heartbeat only when the line has been idle. Regular
+			// traffic proves the connection is alive, no probe needed.
+			long now = System.currentTimeMillis();
+			if (now - lastReceive.get() < HEARTBEAT_INTERVAL_MS || now - lastSend.get() < HEARTBEAT_INTERVAL_MS) {
+				return;
+			}
+
+			ByteBuffer payload = createHeartbeatPayload();
+			if (payload == null) {
+				return;
+			}
+
+			log.debug("Heartbeat: sending probe to {}", address);
+			final long sentAt = System.currentTimeMillis();
+			sendData(payload);
+			heartbeatExecutor.schedule(() -> verifyHeartbeatResponse(sentAt), HEARTBEAT_RESPONSE_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+		} catch (RuntimeException e) {
+			// Never let an exception kill the periodic heartbeat task.
+			log.error("Heartbeat tick failed for {}", address, e);
+		}
+	}
+
+	/**
+	 * Checks whether any data has been received since the heartbeat was sent.
+	 * Triggers a reconnect if the device stayed silent.
+	 *
+	 * @param heartbeatSentAt timestamp of the heartbeat send.
+	 */
+	private void verifyHeartbeatResponse(long heartbeatSentAt) {
+		if (!connectionDesired || isReconnecting) {
+			return;
+		}
+		if (lastReceive.get() < heartbeatSentAt) {
+			log.warn("Heartbeat: no response from {} within {}ms, reconnecting ...", address, HEARTBEAT_RESPONSE_TIMEOUT_MS);
+			reconnect();
+		} else {
+			log.debug("Heartbeat: response received from {}", address);
+		}
+	}
 
 	/**
 	 * Starts the read task on the read executor. Any previously running read
