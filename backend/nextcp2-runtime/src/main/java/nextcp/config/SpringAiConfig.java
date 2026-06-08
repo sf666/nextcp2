@@ -44,7 +44,7 @@ public class SpringAiConfig {
 
 				GoogleGenAiChatOptions defaultOptions = GoogleGenAiChatOptions.builder().model(config.aiConfig.aiModel).build();
 
-				return GoogleGenAiChatModel.builder().genAiClient(genAiClient).defaultOptions(defaultOptions).build();
+				return GoogleGenAiChatModel.builder().genAiClient(genAiClient).options(defaultOptions).build();
 			}
 		} catch (Exception e) {
 			log.error("Error initializing GoogleGenAiChatModel.", e);
@@ -69,7 +69,7 @@ public class SpringAiConfig {
         }
 
         return ChatClient.builder(googleGenAiChatModel)
-        	.defaultToolCallbacks(upnpControlPointTools.getToolCallbacks())
+        	.defaultTools(upnpControlPointTools)
             .defaultSystem(
                  """
             You are the core logic interface of a UPnP control point audio system.
