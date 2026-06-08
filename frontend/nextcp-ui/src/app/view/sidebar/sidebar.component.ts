@@ -37,7 +37,7 @@ export class SidebarComponent {
     public musicLibraryService: MusicLibraryService,
     public layoutService: LayoutService,
     private defaultPlaylistService: DefaultPlaylistService,
-    private configurationService: ConfigurationService,
+    public configurationService: ConfigurationService,
     public mediaPlayerService: MediaPlayerService,
     public rendererService: RendererService) {
 

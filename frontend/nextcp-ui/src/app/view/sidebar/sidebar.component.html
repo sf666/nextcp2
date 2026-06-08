@@ -87,11 +87,13 @@
       <span class="ms-2">App Settings</span>
     </button>
 
-    <button type="button" [routerLink]="'/chat-ai'" (click)="buttonClicked('/chat-ai')"
-      class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/chat-ai')}}">
-      <mat-icon class="material-symbols-outlined thin">smart_toy</mat-icon>
-      <span class="ms-2">AI Chatbot</span>
-    </button>
+    @if (configurationService.aiEnabled()) {
+      <button type="button" [routerLink]="'/chat-ai'" (click)="buttonClicked('/chat-ai')"
+        class="mx-2 inline-flex items-center text-left ps-4 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getTextClass('/chat-ai')}}">
+        <mat-icon class="material-symbols-outlined thin">smart_toy</mat-icon>
+        <span class="ms-2">AI Chatbot</span>
+      </button>
+    }
   </div>
 
   <div class="flex flex-col mb-4">

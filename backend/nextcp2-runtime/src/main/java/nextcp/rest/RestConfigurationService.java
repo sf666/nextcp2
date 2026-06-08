@@ -22,6 +22,7 @@ import nextcp.config.RendererConfig;
 import nextcp.config.ServerConfig;
 import nextcp.devicedriver.DeviceCapabilityDto;
 import nextcp.devicedriver.DeviceDriverDiscoveryService;
+import nextcp.dto.AiConfig;
 import nextcp.dto.ApplicationConfig;
 import nextcp.dto.AudioAddictConfig;
 import nextcp.dto.Config;
@@ -205,6 +206,20 @@ public class RestConfigurationService
         {
             log.error("saveFileServerConfig", e);
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "saving file server config failed : " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/saveAiConfig")
+    public void saveAiConfig(@RequestBody AiConfig aiConfig)
+    {
+        try
+        {
+            serverConfigService.updateAiConfig(aiConfig);
+        }
+        catch (Exception e)
+        {
+            log.error("saveAiConfig", e);
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "saving AI config failed : " + e.getMessage());
         }
     }
 

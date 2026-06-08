@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 
 import nextcp.db.service.BasicDbService;
 import nextcp.db.service.KeyValuePair;
+import nextcp.dto.AiConfig;
 import nextcp.dto.ApplicationConfig;
 import nextcp.dto.Config;
 import nextcp.dto.ServerConfigDto;
@@ -139,6 +140,27 @@ public class ServerConfig {
 	 */
 	public void updateFileServerConfig(ApplicationConfig applicationConfig) {
 		globalConfig.applicationConfig = applicationConfig;
+		configService.writeAndSendConfig();
+	}
+
+	/**
+	 * Updates the editable AI configuration entries. The selected renderer/server
+	 * UDNs are managed at runtime by the LLM and are therefore preserved here
+	 * instead of being overwritten by the (possibly stale) values from the client.
+	 *
+	 * @param aiConfig the AI configuration edited by the user
+	 */
+	public void updateAiConfig(AiConfig aiConfig) {
+		AiConfig current = globalConfig.aiConfig;
+		if (current == null) {
+			current = new AiConfig();
+			globalConfig.aiConfig = current;
+		}
+		current.aiEnabled = aiConfig.aiEnabled;
+		current.aiProvider = aiConfig.aiProvider;
+		current.aiApiKey = aiConfig.aiApiKey;
+		current.aiModel = aiConfig.aiModel;
+		// selectedRendererUdn / selectedServerUdn are runtime-managed and intentionally preserved.
 		configService.writeAndSendConfig();
 	}
 

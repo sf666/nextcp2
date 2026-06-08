@@ -196,6 +196,10 @@ export class SettingsComponent implements OnInit {
     this.configService.saveApplicationConfig();
   }
 
+  saveAiConfig(): void {
+    this.configService.saveAiConfig();
+  }
+
   saveMusicBrainzConfig(): void {
     this.configService.saveMusicBrainzConfig();
   }

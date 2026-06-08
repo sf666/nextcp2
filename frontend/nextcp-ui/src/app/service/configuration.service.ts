@@ -4,7 +4,7 @@ import { UuidService } from './../util/uuid.service';
 import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { SseService } from './sse/sse.service';
-import { RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, ApplicationConfig, MusicbrainzSupport, MediaPlayerConfigDto, AudioAddictConfig } from './dto.d';
+import { RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, ApplicationConfig, MusicbrainzSupport, MediaPlayerConfigDto, AudioAddictConfig, AiConfig } from './dto.d';
 import { GenericResultService } from './generic-result.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
@@ -63,6 +63,18 @@ export class ConfigurationService {
     pathToRestartScript: '',
     upnpBindInterface: '',
   }
+
+  aiConfig: AiConfig = {    // This is a DTO copy and can be used to update the AI configuration
+    aiEnabled: true,
+    aiProvider: '',
+    aiApiKey: '',
+    aiModel: '',
+    selectedRendererUdn: '',
+    selectedServerUdn: '',
+  }
+
+  // Reactive flag so OnPush components (e.g. sidebar) update immediately when AI is toggled.
+  public aiEnabled = signal<boolean>(true);
 
   musicBrainzConfig: MusicbrainzSupport = {   // MusicBrainz username/password
     password: '',
@@ -193,6 +205,12 @@ export class ConfigurationService {
       .subscribe(() => {this.applicationConfigChanged$.next(this.applicationConfig)});
   }
 
+  public saveAiConfig(): void {
+    const uri = '/saveAiConfig';
+    this.httpService.postWithSuccessMessage(this.baseUri, uri, this.aiConfig, "Save AI config", "success")
+      .subscribe(() => this.aiEnabled.set(this.aiConfig.aiEnabled ?? true));
+  }
+
   public saveMediaRendererConfig(mediaRendererConfig: RendererDeviceConfiguration): void {
     const uri = '/saveMediaRendererConfig';
     this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaRendererConfig, "Save mediarenderer config", "success").subscribe();
@@ -266,6 +284,8 @@ export class ConfigurationService {
   private applyServerConfigurationFile(serverConfig: Config) {
     this.serverConfig = serverConfig;
     this.applicationConfig = Object.assign({}, serverConfig.applicationConfig);
+    this.aiConfig = Object.assign({}, serverConfig.aiConfig);
+    this.aiEnabled.set(serverConfig.aiConfig?.aiEnabled ?? true);
     this.musicBrainzConfig = Object.assign({}, serverConfig.musicbrainzSupport);
     this.audioAddictConfig.set(serverConfig.audioAddictConfig);
   }
