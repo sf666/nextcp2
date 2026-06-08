@@ -4,7 +4,19 @@
 :host {
     --mdc-switch-track-height : 20px;
     --mat-switch-with-icon-handle-size : 20px;
-    --mdc-switch-track-width : 44px;    
+    --mdc-switch-track-width : 44px;
+
+    // Local design tokens for the settings page
+    --set-accent       : #3b82f6;
+    --set-accent-soft  : rgba(59, 130, 246, 0.15);
+    --set-warn         : #f59e0b;
+    --set-online       : #34d399;
+    --set-online-soft  : rgba(52, 211, 153, 0.12);
+    --set-offline      : #71717a;
+    --set-card-bg      : #18181b;
+    --set-card-border  : #27272a;
+    --set-card-hover   : #3f3f46;
+    --set-muted        : #a1a1aa;
 }
 
 p, h1, h2, h3, h4, h5, h6, div {
@@ -17,14 +29,317 @@ p, h1, h2, h3, h4, h5, h6, div {
     }
 }
 
+/* ---------- Page shell ---------- */
+.settings-page {
+    max-width : 72rem;
+    margin    : 0 auto;
+    padding   : 1.5rem 1.25rem 4rem;
+}
+
+.settings-hero {
+    display       : flex;
+    align-items   : center;
+    gap           : 1rem;
+    padding       : 1.25rem 1.5rem;
+    margin-bottom : 2rem;
+    border-radius : 1rem;
+    background    : linear-gradient(135deg, rgba(59, 130, 246, 0.18) 0%, rgba(24, 24, 27, 0.6) 55%, transparent 100%);
+    border        : 1px solid var(--set-card-border);
+
+    .hero-icon {
+        display          : flex;
+        align-items      : center;
+        justify-content  : center;
+        width            : 3rem;
+        height           : 3rem;
+        border-radius    : 0.85rem;
+        background        : var(--set-accent-soft);
+        color            : var(--set-accent);
+        flex-shrink      : 0;
+
+        .mat-icon, .material-symbols-outlined {
+            font-size : 1.6rem;
+            width     : 1.6rem;
+            height    : 1.6rem;
+        }
+    }
+
+    .hero-title {
+        font-size      : 1.6rem;
+        font-weight    : 600;
+        letter-spacing : -0.02em;
+        color          : #fff;
+        line-height    : 1.2;
+    }
+
+    .hero-subtitle {
+        font-size  : 0.85rem;
+        font-weight: 300;
+        color      : var(--set-muted);
+        margin-top : 0.15rem;
+    }
+}
+
+/* ---------- Sections ---------- */
+.settings-section {
+    margin-bottom : 2.5rem;
+    scroll-margin-top : 1rem;
+}
+
+.section-head {
+    display       : flex;
+    align-items   : center;
+    gap           : 0.75rem;
+    margin-bottom : 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom : 1px solid var(--set-card-border);
+    flex-wrap     : wrap;
+
+    .section-icon {
+        display         : flex;
+        align-items     : center;
+        justify-content : center;
+        color           : var(--set-accent);
+
+        .mat-icon, .material-symbols-outlined {
+            font-size : 1.3rem;
+            width     : 1.3rem;
+            height    : 1.3rem;
+        }
+    }
+
+    .section-title {
+        font-size      : 1.15rem;
+        font-weight    : 600;
+        letter-spacing : -0.01em;
+        color          : #fff;
+    }
+
+    .section-inline-toggle {
+        margin-left : auto;
+        display     : flex;
+        align-items : center;
+        gap         : 0.5rem;
+        font-size   : 0.8rem;
+        font-weight : 300;
+        color       : var(--set-muted);
+    }
+}
+
+.subsection-title {
+    font-size      : 0.95rem;
+    font-weight    : 600;
+    letter-spacing : 0.04em;
+    text-transform : uppercase;
+    color          : var(--set-muted);
+    margin         : 1.5rem 0 0.75rem;
+}
+
+/* ---------- Device cards (server / renderer) ---------- */
+.device-grid {
+    display               : grid;
+    grid-template-columns : repeat(auto-fill, minmax(20rem, 1fr));
+    gap                   : 1rem;
+    align-items           : start;
+}
+
+.device-card {
+    display       : flex;
+    flex-direction: column;
+    background    : var(--set-card-bg);
+    border        : 1px solid var(--set-card-border);
+    border-radius : 1rem;
+    overflow      : hidden;
+    transition    : border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+
+    &:hover {
+        border-color : var(--set-card-hover);
+        transform    : translateY(-2px);
+        box-shadow   : 0 12px 30px -12px rgba(0, 0, 0, 0.7);
+    }
+
+    .device-card-head {
+        display       : flex;
+        align-items   : flex-start;
+        gap           : 0.75rem;
+        padding       : 1.1rem 1.25rem;
+        border-bottom : 1px solid var(--set-card-border);
+    }
+
+    .device-avatar {
+        display         : flex;
+        align-items     : center;
+        justify-content : center;
+        width           : 2.5rem;
+        height          : 2.5rem;
+        border-radius   : 0.7rem;
+        background      : var(--set-accent-soft);
+        color           : var(--set-accent);
+        flex-shrink     : 0;
+
+        .mat-icon, .material-symbols-outlined {
+            font-size : 1.35rem;
+            width     : 1.35rem;
+            height    : 1.35rem;
+        }
+    }
+
+    .device-name {
+        font-size     : 1.02rem;
+        font-weight   : 700;
+        color         : #fafafa;
+        line-height   : 1.25;
+        overflow-wrap : anywhere;
+    }
+
+    .device-udn {
+        font-size     : 0.7rem;
+        font-weight   : 300;
+        color         : #52525b;
+        margin-top    : 0.15rem;
+        overflow-wrap : anywhere;
+    }
+
+    .device-card-body {
+        padding : 1.1rem 1.25rem;
+    }
+
+    .device-card-foot {
+        display       : flex;
+        gap           : 0.5rem;
+        flex-wrap     : wrap;
+        padding       : 0.9rem 1.25rem;
+        border-top    : 1px solid var(--set-card-border);
+        margin-top    : auto;
+    }
+}
+
+/* key/value rows inside a card */
+.kv-grid {
+    display               : grid;
+    grid-template-columns : minmax(6.5rem, auto) 1fr;
+    gap                   : 0.7rem 1rem;
+    align-items           : center;
+    font-size             : 0.85rem;
+
+    .kv-key {
+        font-weight : 500;
+        color       : var(--set-muted);
+    }
+
+    .kv-val {
+        font-weight   : 300;
+        color         : #e4e4e7;
+        overflow-wrap : anywhere;
+    }
+
+    .kv-full {
+        grid-column : 1 / -1;
+    }
+}
+
+/* ---------- Status pill ---------- */
+.status-pill {
+    display       : inline-flex;
+    align-items   : center;
+    gap           : 0.4rem;
+    padding       : 0.15rem 0.6rem;
+    border-radius : 999px;
+    font-size     : 0.72rem;
+    font-weight   : 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    width         : fit-content;
+
+    &::before {
+        content       : '';
+        width         : 0.45rem;
+        height        : 0.45rem;
+        border-radius : 50%;
+        background    : currentColor;
+    }
+
+    &.is-online {
+        color      : var(--set-online);
+        background : var(--set-online-soft);
+    }
+
+    &.is-offline {
+        color      : var(--set-offline);
+        background : rgba(113, 113, 122, 0.15);
+    }
+}
+
+/* inline text input used inside cards */
+.inline-input {
+    width        : 100%;
+    font-size    : 0.85rem;
+    color        : #fff;
+    background   : #09090b;
+    border       : 1px solid var(--set-card-border);
+    border-radius: 0.5rem;
+    padding      : 0.4rem 0.6rem;
+    transition   : border-color 0.15s ease;
+
+    &::placeholder { color : #52525b; }
+
+    &:focus {
+        outline      : none;
+        border-color : var(--set-accent);
+        box-shadow   : 0 0 0 2px var(--set-accent-soft);
+    }
+}
+
+.checkbox-row {
+    display     : flex;
+    align-items : center;
+    gap         : 0.5rem;
+
+    label {
+        font-size  : 0.8rem;
+        font-weight: 300;
+        color      : var(--set-muted);
+    }
+}
+
+.driver-config {
+    margin-top    : 1rem;
+    padding-top   : 1rem;
+    border-top    : 1px dashed var(--set-card-border);
+}
+
+/* ---------- Config panels (forms) ---------- */
+.config-panel {
+    background    : var(--set-card-bg);
+    border        : 1px solid var(--set-card-border);
+    border-radius : 1rem;
+    padding       : 1.5rem;
+}
+
+.actions-grid {
+    display               : grid;
+    grid-template-columns : repeat(auto-fit, minmax(15rem, 1fr));
+    gap                   : 0.6rem;
+    max-width             : 42rem;
+}
+
+/* ---------- Info banner accents ---------- */
+.account-status {
+    display       : inline-flex;
+    align-items   : center;
+    gap           : 0.5rem;
+    padding       : 0.5rem 0.85rem;
+    border-radius : 0.6rem;
+    background    : var(--set-online-soft);
+    color         : var(--set-online);
+    font-size     : 0.85rem;
+    margin-top    : 0.5rem;
+}
+
+/* ---------- existing overrides retained ---------- */
 .init-services-button {
   @include mat.button-overrides((
-    // text color 
     outlined-label-text-color: #f59e0b,
-    // border color
-//     outlined-outline-color: #f59e0b,
-
-    // color for hover effect (overlay) and focus
     outlined-state-layer-color: #f59e0b,
     outlined-ripple-color: #f59e0b
   ));
