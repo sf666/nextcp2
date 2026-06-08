@@ -73,15 +73,9 @@
 
     <my-alert prefix="Info" text="Disabled renderer will not appear in certain pop-ups or selection lists"></my-alert>
 
-    <p class="mt-2 font-light text-gray-400 max-w-2xl">
-      If a streaming device is connected to an amplifier, a device driver can be assigned to control the amplifier's power 
-      and volume instead of the streamer's. A default volume level is applied each time the amplifier is powered on. 
-      When UPnP Max Volume is enabled, the streaming device automatically sets its volume to 100% at startup.
-    </p>
-
     <div class="flex flex-wrap gap-4 mt-8 max-w-4xl items-start">
       @for (rendererConfig of getMediaRenderer(); track rendererConfig.mediaRenderer.udn) {
-      <div class="flex flex-col bg-zinc-900 border-0 rounded-2xl">
+      <div class="flex flex-col bg-zinc-900 border-0 rounded-2xl w-full max-w-md">
         <!-- Header -->
         <div class="border-0 border-b-1 border-zinc-600 p-6 pb-2 flex flex-col">
           <div class="no-wrap text-lg font-bold">{{rendererConfig.mediaRenderer.friendlyName}}</div>
@@ -90,29 +84,53 @@
 
         <!-- Body -->
         <div class="flex p-4">
-          <div class="grid grid-cols-3 gap-3 text-sm">
-            <div class="font-medium">Enabled</div>
-            <div class="col-span-2 flex items-center">
-              <input type="checkbox" [(ngModel)]="rendererConfig.active" class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
-            </div>
-            <div class="font-medium">Status</div>                
-            @if (isRendererConfigActive(rendererConfig)) {
-              <div class="col-span-2 text-zink-500 text-green-500">ONLINE</div>
-            } @else {
-              <div class="col-span-2">OFFLINE</div>
-            }
-            <div class="font-medium">IP</div>
-            <div class="col-span-2 font-light">{{rendererConfig.ip}}</div>
-            <div class="font-medium mt-1">Amplifier Driver</div>
-            <div>
-              <select [(ngModel)]="rendererConfig.deviceDriverType" id="dd-select" class="p-1 border text-sm rounded-lg  block w-full bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
-                <option selected value="">Choose a driver</option>
-                @for (dd of configService.deviceDriverList; track dd) {
-                  <option [value]="dd.deviceType">{{dd.deviceType}}</option>
-                }                
-              </select>              
+          <div class="w-full">
+            <div class="grid grid-cols-2 gap-3 text-sm">
+              <div class="font-medium">Enabled</div>
+              <div class="flex items-center">
+                <input type="checkbox" [(ngModel)]="rendererConfig.active" class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+              </div>
+              <div class="font-medium">Status</div>
+              @if (isRendererConfigActive(rendererConfig)) {
+                <div class="text-zink-500 text-green-500">ONLINE</div>
+              } @else {
+                <div>OFFLINE</div>
+              }
+              <div class="font-medium">IP</div>
+              <div class="font-light">{{rendererConfig.ip}}</div>
+              <div class="font-medium mt-1 flex items-center gap-2 whitespace-nowrap">
+                <div class="whitespace-nowrap">Amplifier Driver</div>
+                <div>
+                  <button
+                    type="button"
+                    mat-icon-button
+                    class="amp-help-button"
+                    aria-label="Show amplifier driver info"
+                    (click)="toggleAmplifierInfo(rendererConfig.mediaRenderer.udn)">
+                    <mat-icon class="material-symbols-outlined thin">help</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div>
+                <select [(ngModel)]="rendererConfig.deviceDriverType" id="dd-select" class="p-1 border text-sm rounded-lg  block w-full bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
+                  <option selected value="">Choose a driver</option>
+                  @for (dd of configService.deviceDriverList; track dd) {
+                    <option [value]="dd.deviceType">{{dd.deviceType}}</option>
+                  }
+                </select>
+              </div>
+              @if (isAmplifierInfoOpen(rendererConfig.mediaRenderer.udn)) {
+                <div class="col-span-2 amplifier-info-popup w-full max-w-full" role="dialog" aria-label="Amplifier driver information">
+                  <p>
+                    If a streaming device is connected to an amplifier, a device driver can be assigned to control the amplifier's power
+                    and volume instead of the streamer's. A default volume level is applied each time the amplifier is powered on.
+                    When UPnP Max Volume is enabled, the streaming device automatically sets its volume to 100% at startup.
+                  </p>
+                </div>
+              }
             </div>
             @if (showAdvancedRendererSettings(rendererConfig)) {
+              <div class="grid grid-cols-3 gap-3 text-sm mt-3">
               <div class="col-span-3 font-bold text-zinc-500">Device Driver Configuration</div>
 
               <div class="font-medium">connection string</div>
@@ -140,6 +158,7 @@
               <div class="col-span-2 font-light">
                 <input id="{{rendererConfig.mediaRenderer.udn}}-vol" type="checkbox" [(ngModel)]="rendererConfig.setCoveredUpnpDeviceToMaxVolume" class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
                 <label for="{{rendererConfig.mediaRenderer.udn}}-vol" class="ms-2 text-sm font-light">set streamer to max volume</label>
+              </div>
               </div>
             }
           </div>

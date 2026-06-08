@@ -29,3 +29,41 @@ p, h1, h2, h3, h4, h5, h6, div {
     outlined-ripple-color: #f59e0b
   ));
 }
+
+.amp-help-button {
+    width: 1.5rem;
+    height: 1.5rem;
+    min-height: 1.5rem;
+    min-width: 1.5rem;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    color: #cbd5e1;
+
+    .mat-icon {
+        display: block;
+        width: 1rem;
+        height: 1rem;
+        font-size: 1rem;
+        line-height: 1;
+    }
+}
+
+.amplifier-info-popup {
+    border: 1px solid #52525b;
+    border-radius: 0.75rem;
+    background: #18181b;
+    color: #e4e4e7;
+    font-size: 0.85rem;
+    line-height: 1.35rem;
+    font-weight: 300;
+    padding: 0.75rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}

@@ -57,6 +57,7 @@ interface SettingsFormModel {
   ],
 })
 export class SettingsComponent implements OnInit {
+  amplifierInfoRendererUdn: string | null = null;
 
   // Signal Forms Setup
   settingsModel = signal<SettingsFormModel>({
@@ -115,6 +116,14 @@ export class SettingsComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  toggleAmplifierInfo(rendererUdn: string): void {
+    this.amplifierInfoRendererUdn = this.amplifierInfoRendererUdn === rendererUdn ? null : rendererUdn;
+  }
+
+  isAmplifierInfoOpen(rendererUdn: string): boolean {
+    return this.amplifierInfoRendererUdn === rendererUdn;
   }
 
   public getMediaRenderer(): RendererDeviceConfiguration[] {
