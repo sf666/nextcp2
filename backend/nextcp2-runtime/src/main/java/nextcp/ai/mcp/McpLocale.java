@@ -93,9 +93,11 @@ public class McpLocale {
 		}
 
 		selectedLocale = Locale.forLanguageTag(normalized.toLowerCase(Locale.ROOT));
-		// Set the JVM default locale so that other MCP tools using Locale.getDefault()
-		// also produce responses in the newly selected language.
-		Locale.setDefault(selectedLocale);
+
+		// LIMITATION: McpLocale is a singleton @Service, so selectedLocale is still
+		// server-global state shared across all MCP sessions. For true per-session
+		// language isolation, resolve the locale from the MCP exchange/session
+		// context per call instead of from this field.
 
 		return messageSource.getMessage("mcp.locale.select.response", new Object[] { normalized }, selectedLocale);
 	}

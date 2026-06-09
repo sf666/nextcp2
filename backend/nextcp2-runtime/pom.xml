@@ -134,10 +134,10 @@
 		    <version>2.0.0-RC1</version>
 		</dependency>
 
-		<!-- Spring AI MCP Server -->
+		<!-- Spring AI MCP Server (WebMVC / Streamable-HTTP transport, consumable by remote MCP gateways such as obot) -->
 		<dependency>
 		    <groupId>org.springframework.ai</groupId>
-		    <artifactId>spring-ai-starter-mcp-server</artifactId>
+		    <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
 		    <version>2.0.0-RC1</version>
 		</dependency>
 		

@@ -419,10 +419,10 @@
 		        <version>2.0.0-RC1</version>
 		    </dependency>
 
-		    <!-- Der offizielle, konsolidierte MCP-Server-Starter ab 2.0.0-M6 -->
+		    <!-- WebMVC MCP server starter (Streamable-HTTP transport) for remote MCP clients/gateways such as obot -->
 		    <dependency>
 		        <groupId>org.springframework.ai</groupId>
-		        <artifactId>spring-ai-starter-mcp-server</artifactId>
+		        <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
 		        <version>2.0.0-RC1</version>
 		    </dependency>
 
