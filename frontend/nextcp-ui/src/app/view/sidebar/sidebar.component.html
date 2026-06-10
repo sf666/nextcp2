@@ -1,5 +1,5 @@
 <div class="sidebar flex-col grow overflow-y-auto bg-zinc-800">
-  <div class="flex mb-8 ms-1 mt-1">
+  <div class="flex items-center mb-8 mt-4">
     <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button"
       class="md:hidden inline-flex items-center p-2 text-sm rounded-lg focus:outline-none focus:ring-2 text-gray-400 hover:bg-gray-700 focus:ring-gray-600">
       <span class="sr-only">Open sidebar</span>
@@ -9,7 +9,7 @@
         </path>
       </svg>
     </button>
-    <div id="logo" class="logo-container ms-2 flex items-center gap-3">
+    <div id="logo" class="logo-container ms-6 flex items-center gap-3">
       <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="nextcpGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -21,10 +21,11 @@
         <!-- Squircle frame -->
         <rect x="3" y="3" width="34" height="34" rx="10" stroke="url(#nextcpGradient)" stroke-width="2" fill="none" />
 
-        <!-- N2 monogram -->
-        <text x="18" y="27" text-anchor="middle" font-family="'HK Grotesk', Inter, Helvetica, Arial, sans-serif"
-          font-weight="600" fill="url(#nextcpGradient)"><tspan font-size="20">N</tspan><tspan font-size="11"
-            dy="-7">2</tspan></text>
+        <!-- N2 monogram: whole N+2 cluster optically centered, 2 as a small accent -->
+        <text x="16" y="27" text-anchor="middle" font-family="'HK Grotesk', Inter, Helvetica, Arial, sans-serif"
+          font-weight="600" font-size="21" fill="url(#nextcpGradient)">N</text>
+        <text x="28" y="16" text-anchor="middle" font-family="'HK Grotesk', Inter, Helvetica, Arial, sans-serif"
+          font-weight="600" font-size="10" fill="url(#nextcpGradient)">2</text>
       </svg>
       <div class="logo-text">
         <span class="logo-main">next</span><span class="logo-accent">CP</span><span class="logo-version">/2</span>

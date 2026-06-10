@@ -86,6 +86,7 @@ Never edit anything under `nextcp2-modelgen/src/main/java/nextcp/dto/` or `front
 - Use `class`/`style` bindings — not `ngClass`/`ngStyle`.
 - No arrow functions in templates.
 - Services: `providedIn: 'root'`, single responsibility.
+- Use component 'flowbite' and 'tailwindcss' where possible to reduce complex scss.
 
 ## Notes
 
