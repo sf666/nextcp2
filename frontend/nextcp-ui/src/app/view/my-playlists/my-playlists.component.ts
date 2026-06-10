@@ -5,7 +5,12 @@ import { ContainerDto, MusicItemDto } from './../../service/dto.d';
 import { DeviceService } from 'src/app/service/device.service';
 import { LayoutService } from './../../service/layout.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
-import { Component, OnInit, computed } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  computed,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { DisplayContainerComponent } from '../../mediaserver/display-container/display-container.component';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { toObservable } from '@angular/core/rxjs-interop';
@@ -16,6 +21,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
   styleUrls: ['./my-playlists.component.scss'],
   providers: [ContentDirectoryService],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [DisplayContainerComponent, NavBarComponent],
 })
 /**
@@ -31,11 +37,12 @@ export class MyPlaylistsComponent implements OnInit {
     private myPlaylistService: MyPlaylistService,
     public contentDirectoryService: ContentDirectoryService,
   ) {
-    toObservable(this.deviceService.selectedMediaServerDevice).subscribe((server) =>
-      this.browseToMyPlaylist(
-        this.myPlaylistService.activePlaylistId,
-        server.udn,
-      ),
+    toObservable(this.deviceService.selectedMediaServerDevice).subscribe(
+      (server) =>
+        this.browseToMyPlaylist(
+          this.myPlaylistService.activePlaylistId,
+          server.udn,
+        ),
     );
   }
 
@@ -67,14 +74,14 @@ export class MyPlaylistsComponent implements OnInit {
         mediaServerUdn,
       );
     } else {
-      console.log("initial media server -> not selected yet.");
+      console.log('initial media server -> not selected yet.');
     }
   }
 
   //
   // Event
   //
-  containerSelected(event: ContainerDto) { }
+  containerSelected(event: ContainerDto) {}
 
   itemDeleted(event: MusicItemDto) {
     this.contentDirectoryService.refreshCurrentContainer();
@@ -139,18 +146,24 @@ export class MyPlaylistsComponent implements OnInit {
   }
 
   public backButtonPressed(event: any) {
-    this.contentDirectoryService.browseToParent("");
+    this.contentDirectoryService.browseToParent('');
   }
 
   backButtonVisible(): boolean {
-    const currentContainer = this.contentDirectoryService.currentContainerList().currentContainer;
-    if (this.rootPlaylistId === '' || !currentContainer || currentContainer.id.length == 0) {
+    const currentContainer =
+      this.contentDirectoryService.currentContainerList().currentContainer;
+    if (
+      this.rootPlaylistId === '' ||
+      !currentContainer ||
+      currentContainer.id.length == 0
+    ) {
       return false;
     }
     return this.rootPlaylistId != currentContainer.id;
   }
 
   getParentTitle(): string {
-    return this.contentDirectoryService.currentContainerList().parentFolderTitle;
+    return this.contentDirectoryService.currentContainerList()
+      .parentFolderTitle;
   }
 }

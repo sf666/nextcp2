@@ -1,4 +1,9 @@
-import { Component, ElementRef, HostListener } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
 import { GlobalSearchService } from 'src/app/service/search/global-search.service';
@@ -7,18 +12,15 @@ import { ModalSearchResultComponent } from 'src/app/view/search/modal-search-res
 @Component({
   selector: 'global-search',
   standalone: true,
-  imports: [
-    MatInput,
-    FormsModule,
-    ModalSearchResultComponent,
-  ],
+  imports: [MatInput, FormsModule, ModalSearchResultComponent],
   templateUrl: './global-search.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './global-search.component.scss',
 })
 export class GlobalSearchComponent {
   constructor(
     public globalSearchService: GlobalSearchService,
-    private elementRef: ElementRef<HTMLElement>
+    private elementRef: ElementRef<HTMLElement>,
   ) {}
 
   @HostListener('document:mousedown', ['$event'])
@@ -32,7 +34,6 @@ export class GlobalSearchComponent {
       this.globalSearchService.clearSearch();
     }
   }
-  
 
   keyUp(event: KeyboardEvent): void {
     if (event.key === 'Escape') {
@@ -41,7 +42,7 @@ export class GlobalSearchComponent {
   }
 
   focus(): void {
-    this.globalSearchService.quickSearchPanelVisible = true;;
+    this.globalSearchService.quickSearchPanelVisible = true;
   }
 
   blur(): void {
@@ -51,5 +52,4 @@ export class GlobalSearchComponent {
   toggleGlobalSearch(): void {
     this.globalSearchService.toggleGlobalSearch();
   }
-
 }

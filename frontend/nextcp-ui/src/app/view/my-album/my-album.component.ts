@@ -1,29 +1,36 @@
 import { ScrollLoadHandler } from './../../mediaserver/display-container/defs.d';
 import { DeviceService } from 'src/app/service/device.service';
 import { LayoutService } from './../../service/layout.service';
-import { ContainerDto, MusicItemDto, MediaServerDto } from './../../service/dto.d';
+import {
+  ContainerDto,
+  MusicItemDto,
+  MediaServerDto,
+} from './../../service/dto.d';
 import { ContentDirectoryService } from './../../service/content-directory.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { DisplayContainerComponent } from '../../mediaserver/display-container/display-container.component';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
-    selector: 'myAlbums',
-    templateUrl: './my-album.component.html',
-    styleUrls: ['./my-album.component.scss'],
-    providers: [ContentDirectoryService],
-    standalone: true,
-    imports: [NavBarComponent, DisplayContainerComponent]
+  selector: 'myAlbums',
+  templateUrl: './my-album.component.html',
+  styleUrls: ['./my-album.component.scss'],
+  providers: [ContentDirectoryService],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [NavBarComponent, DisplayContainerComponent],
 })
 export class MyAlbumComponent implements OnInit {
-
   constructor(
     public layoutService: LayoutService,
     private deviceService: DeviceService,
-    public contentDirectoryService: ContentDirectoryService) {
-    console.log("constructor call : MyAlbumComponent");
-    toObservable(this.deviceService.selectedMediaServerDevice).subscribe(data => this.mediaServerChanged(data));
+    public contentDirectoryService: ContentDirectoryService,
+  ) {
+    console.log('constructor call : MyAlbumComponent');
+    toObservable(this.deviceService.selectedMediaServerDevice).subscribe(
+      (data) => this.mediaServerChanged(data),
+    );
   }
 
   mediaServerChanged(data: MediaServerDto): void {
@@ -36,9 +43,15 @@ export class MyAlbumComponent implements OnInit {
   }
 
   private loadMyAlbums() {
-    const oid = "$DBID$MYMUSIC$";
+    const oid = '$DBID$MYMUSIC$';
     if (this.deviceService.selectedMediaServerDevice().udn) {
-      this.contentDirectoryService.browseChildren(oid, "", this.deviceService.selectedMediaServerDevice().udn).subscribe();
+      this.contentDirectoryService
+        .browseChildren(
+          oid,
+          '',
+          this.deviceService.selectedMediaServerDevice().udn,
+        )
+        .subscribe();
     }
   }
 
@@ -51,7 +64,8 @@ export class MyAlbumComponent implements OnInit {
   //
 
   getParentTitle(): string {
-    return this.contentDirectoryService.currentContainerList().parentFolderTitle;
+    return this.contentDirectoryService.currentContainerList()
+      .parentFolderTitle;
   }
 
   public homeButtonPressed(event: any) {
@@ -62,7 +76,10 @@ export class MyAlbumComponent implements OnInit {
   // bindings
   //
   getContentHandler(): ScrollLoadHandler {
-    return {contentDirectoryService: this.contentDirectoryService, persistenceService: undefined }
+    return {
+      contentDirectoryService: this.contentDirectoryService,
+      persistenceService: undefined,
+    };
   }
 
   showTopHeader(): boolean {
@@ -94,6 +111,6 @@ export class MyAlbumComponent implements OnInit {
   }
 
   scrollToID(): string {
-    return "";
+    return '';
   }
 }

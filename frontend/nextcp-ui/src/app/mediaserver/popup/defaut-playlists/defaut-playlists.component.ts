@@ -12,7 +12,7 @@ import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
 })
 export class DefautPlaylistsComponent implements OnInit {
 
-  private data;
+  private data: { trigger: ElementRef; id: string; parentPanel?: { closeThisPopup: () => void } };
   private readonly _matDialogRef: MatDialogRef<DefautPlaylistsComponent>;
   private readonly triggerElementRef: ElementRef;
 
@@ -39,6 +39,6 @@ export class DefautPlaylistsComponent implements OnInit {
   addToPlaylist(playlistName: string) {
     this.serverPlaylistService.addSongToServerPlaylist(this.data.id, playlistName);
     this._matDialogRef.close();
-    this.data.parentPanel.closeThisPopup();
+    this.data.parentPanel?.closeThisPopup();
   }
 }

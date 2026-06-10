@@ -17,7 +17,7 @@ import { MediaPlayerService } from 'src/app/service/media-player/media-player.se
   standalone: true,
   templateUrl: './media-player.component.html',
   styleUrl: './media-player.component.scss',
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFormFieldModule,
     MatLabel,
@@ -27,24 +27,22 @@ import { MediaPlayerService } from 'src/app/service/media-player/media-player.se
     MatInputModule,
     MatButtonModule,
     MatSlideToggleModule,
-    ReactiveFormsModule]
+    ReactiveFormsModule,
+  ],
 })
-
 export class MediaPlayerComponent {
-
-
   playMonitoring = signal<boolean>(false);
 
-  mediaPlayerConfigDto : MediaPlayerConfigDto;
+  mediaPlayerConfigDto: MediaPlayerConfigDto;
 
   constructor(
-    private configurationService: ConfigurationService, 
+    private configurationService: ConfigurationService,
     private mediaPlayerService: MediaPlayerService,
     private deviceService: DeviceService,
     public musicLibraryService: MusicLibraryService,
   ) {
-
-    this.mediaPlayerConfigDto = this.configurationService.mediaPlayerConfigDto();
+    this.mediaPlayerConfigDto =
+      this.configurationService.mediaPlayerConfigDto();
     this.getPlayStatus();
   }
 
@@ -54,13 +52,29 @@ export class MediaPlayerComponent {
   }
 
   private logConfigDto(): void {
-    console.log("received server config : " +
-      "overwrite " + this.mediaPlayerConfigDto.overwrite +
-      ". playtype : " + this.mediaPlayerConfigDto.playType +
-      ". workdir : " + this.mediaPlayerConfigDto.workdir +
-      ". Script : " + this.mediaPlayerConfigDto.script);
-    console.log("AlbumID " + this.mediaPlayerConfigDto.addToPlaylistId.id + " / " + this.mediaPlayerConfigDto.addToPlaylistId.title);
-    console.log("FolderID " + this.mediaPlayerConfigDto.addToFolderId.id + " / " + this.mediaPlayerConfigDto.addToFolderId.title);
+    console.log(
+      'received server config : ' +
+        'overwrite ' +
+        this.mediaPlayerConfigDto.overwrite +
+        '. playtype : ' +
+        this.mediaPlayerConfigDto.playType +
+        '. workdir : ' +
+        this.mediaPlayerConfigDto.workdir +
+        '. Script : ' +
+        this.mediaPlayerConfigDto.script,
+    );
+    console.log(
+      'AlbumID ' +
+        this.mediaPlayerConfigDto.addToPlaylistId.id +
+        ' / ' +
+        this.mediaPlayerConfigDto.addToPlaylistId.title,
+    );
+    console.log(
+      'FolderID ' +
+        this.mediaPlayerConfigDto.addToFolderId.id +
+        ' / ' +
+        this.mediaPlayerConfigDto.addToFolderId.title,
+    );
   }
 
   updatePlaylistRecording(event: Event): void {
@@ -68,7 +82,7 @@ export class MediaPlayerComponent {
   }
 
   updateMonitoringState(event: Event): void {
-    console.log("monitoring set to " + event);
+    console.log('monitoring set to ' + event);
     if (event) {
       this.mediaPlayerService.startPlayScreening();
     } else {
@@ -78,7 +92,9 @@ export class MediaPlayerComponent {
   }
 
   getPlayStatus(): void {
-    this.mediaPlayerService.isPlayScreening().subscribe(status => this.playMonitoring.set(status));
+    this.mediaPlayerService
+      .isPlayScreening()
+      .subscribe((status) => this.playMonitoring.set(status));
   }
 
   createFolder(): void {
@@ -100,14 +116,18 @@ export class MediaPlayerComponent {
   }
 
   selectMediaServer() {
-    this.mediaPlayerConfigDto.mediaServerUdn = this.deviceService.selectedMediaServerDevice().udn;
+    this.mediaPlayerConfigDto.mediaServerUdn =
+      this.deviceService.selectedMediaServerDevice().udn;
     this.saveConfig();
   }
 
   public getCurrentContainerIdDto(): ContainerIdDto {
     return {
-      id: this.musicLibraryService.currentMediaLibraryFolder().currentContainer.id,
-      title: this.musicLibraryService.currentMediaLibraryFolder().currentContainer.title
-    }
+      id: this.musicLibraryService.currentMediaLibraryFolder().currentContainer
+        .id,
+      title:
+        this.musicLibraryService.currentMediaLibraryFolder().currentContainer
+          .title,
+    };
   }
 }

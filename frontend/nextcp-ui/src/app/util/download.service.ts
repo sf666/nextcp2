@@ -13,7 +13,7 @@ export class DownloadService {
 
   constructor(private httpService: HttpService) { }
 
-  downloadFileByMBID(song: MusicItemDto, callback?): void {
+  downloadFileByMBID(song: MusicItemDto, callback?: { close?: () => void; closeThisPopup?: (...args: any[]) => void }): void {
 
     const a = document.createElement('a');
     a.download = "file";
@@ -23,7 +23,8 @@ export class DownloadService {
     
     a.onclick = function () {
       if (callback) {
-        callback.close();
+        callback.close?.();
+        callback.closeThisPopup?.();
       }
     };
 

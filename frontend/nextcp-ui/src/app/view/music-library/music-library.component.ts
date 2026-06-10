@@ -1,6 +1,17 @@
-import { ContainerDto, ContainerItemDto, MusicItemDto } from './../../service/dto.d';
+import {
+  ContainerDto,
+  ContainerItemDto,
+  MusicItemDto,
+} from './../../service/dto.d';
 import { GlobalSearchService } from './../../service/search/global-search.service';
-import { AfterViewInit, Component, Input, signal, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  signal,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ScrollLoadHandler } from 'src/app/mediaserver/display-container/defs';
 import { ContentDirectoryService } from 'src/app/service/content-directory.service';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
@@ -17,15 +28,18 @@ import { isAssigned } from 'src/app/global';
   selector: 'app-music-library',
   standalone: true,
   imports: [NavBarComponent, DisplayContainerComponent],
-  providers: [{ provide: ContentDirectoryService, useClass: ContentDirectoryService },], // non singleton injections
+  providers: [
+    { provide: ContentDirectoryService, useClass: ContentDirectoryService },
+  ], // non singleton injections
   templateUrl: './music-library.component.html',
-  styleUrl: './music-library.component.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './music-library.component.scss',
 })
 export class MusicLibraryComponent implements AfterViewInit {
-
-  @ViewChild(DisplayContainerComponent) dispContainer!: DisplayContainerComponent;
+  @ViewChild(DisplayContainerComponent)
+  dispContainer!: DisplayContainerComponent;
   @Input() objectId!: string;
-  
+
   constructor(
     private route: ActivatedRoute,
     public contentDirectoryService: ContentDirectoryService,
@@ -33,23 +47,39 @@ export class MusicLibraryComponent implements AfterViewInit {
     private persistenceService: PersistenceService,
     public deviceService: DeviceService,
     private musicLibraryService: MusicLibraryService,
-    private globalSearchService: GlobalSearchService
+    private globalSearchService: GlobalSearchService,
   ) {
-    console.log("constructor call : MusicLibraryComponent");
-    globalSearchService.musicItemClicked$.subscribe(musicItem => this.musicItemClickedFromSearch(musicItem))
-    globalSearchService.containerClicked$.subscribe(containerItem => this.containerItemClickedFromSearch(containerItem))
+    console.log('constructor call : MusicLibraryComponent');
+    globalSearchService.musicItemClicked$.subscribe((musicItem) =>
+      this.musicItemClickedFromSearch(musicItem),
+    );
+    globalSearchService.containerClicked$.subscribe((containerItem) =>
+      this.containerItemClickedFromSearch(containerItem),
+    );
 
-    globalSearchService.showAllItemClicked$.subscribe(searchReq => this.contentDirectoryService.searchAllItems(searchReq));
-    globalSearchService.showAllAlbumClicked$.subscribe(searchReq => this.contentDirectoryService.searchAllAlbum(searchReq));
-    globalSearchService.showAllArtistClicked$.subscribe(searchReq => this.contentDirectoryService.searchAllArtists(searchReq));
-    globalSearchService.showAllPlaylistClicked$.subscribe(searchReq => this.contentDirectoryService.searchAllPlaylist(searchReq));
+    globalSearchService.showAllItemClicked$.subscribe((searchReq) =>
+      this.contentDirectoryService.searchAllItems(searchReq),
+    );
+    globalSearchService.showAllAlbumClicked$.subscribe((searchReq) =>
+      this.contentDirectoryService.searchAllAlbum(searchReq),
+    );
+    globalSearchService.showAllArtistClicked$.subscribe((searchReq) =>
+      this.contentDirectoryService.searchAllArtists(searchReq),
+    );
+    globalSearchService.showAllPlaylistClicked$.subscribe((searchReq) =>
+      this.contentDirectoryService.searchAllPlaylist(searchReq),
+    );
 
-    this.getContentHandler().contentDirectoryService.browseFinished$.subscribe(data => this.browseFinished(data));
+    this.getContentHandler().contentDirectoryService.browseFinished$.subscribe(
+      (data) => this.browseFinished(data),
+    );
     try {
-      toObservable(this.deviceService.selectedMediaServerDevice).subscribe(() => {
-        let udn = this.deviceService.selectedMediaServerDevice().udn;
-        this.initViewData(udn);
-      });
+      toObservable(this.deviceService.selectedMediaServerDevice).subscribe(
+        () => {
+          let udn = this.deviceService.selectedMediaServerDevice().udn;
+          this.initViewData(udn);
+        },
+      );
     } catch (error) {
       console.error('Caught an error:', error);
     }
@@ -60,15 +90,18 @@ export class MusicLibraryComponent implements AfterViewInit {
     // for first call of application wait till we know the devices ...
     this.deviceService.mediaServerInitiated$.subscribe(() => {
       let udn = this.deviceService.selectedMediaServerDevice().udn;
-      this.route.params.subscribe(val => {
+      this.route.params.subscribe((val) => {
         if (val.objectId) {
-          console.log("route parameter given at constructor time. Navigating to : " + val.objectId);
+          console.log(
+            'route parameter given at constructor time. Navigating to : ' +
+              val.objectId,
+          );
           this.browseToUid(udn, this.objectId);
         } else {
           if (udn?.length > 0) {
             this.initViewData(udn);
           } else {
-            console.log("no media server device selected.");
+            console.log('no media server device selected.');
           }
         }
       });
@@ -92,65 +125,78 @@ export class MusicLibraryComponent implements AfterViewInit {
   }
 
   private containerItemClickedFromSearch(container: ContainerDto) {
-    console.debug("selected container : " + container.objectClass);
+    console.debug('selected container : ' + container.objectClass);
     this.contentDirectoryService.browseChildrenByContainer(container);
   }
 
   private initViewData(udn: string): void {
-    console.log("Music Library : initViewData ...");
+    console.log('Music Library : initViewData ...');
     this.layoutService.setFramedView();
     if (this.objectId) {
-      console.log("browse to injected OID : " + this.objectId);
+      console.log('browse to injected OID : ' + this.objectId);
       this.browseToUid(udn, this.objectId);
     } else {
-      if (this.persistenceService.getLastObjectId() !== undefined && this.persistenceService.getLastObjectId() !== '') {
-        console.log("browse to last persistent object ID : " + this.persistenceService.getLastObjectId());
+      if (
+        this.persistenceService.getLastObjectId() !== undefined &&
+        this.persistenceService.getLastObjectId() !== ''
+      ) {
+        console.log(
+          'browse to last persistent object ID : ' +
+            this.persistenceService.getLastObjectId(),
+        );
         let lastOid = this.persistenceService.getLastObjectId();
         if (lastOid == undefined || lastOid.length == 0) {
-          lastOid = "0";
+          lastOid = '0';
         }
         this.browseToUid(udn, lastOid);
       } else {
-        console.log("browse to object ID : 0");
-        this.browseToUid(udn, "0");
+        console.log('browse to object ID : 0');
+        this.browseToUid(udn, '0');
       }
     }
   }
 
   private browseToUid(udn: string, objectId: string) {
     if (!(udn?.length > 0)) {
-      console.log("last media server device not found ... ");
+      console.log('last media server device not found ... ');
       udn = this.deviceService.selectedMediaServerDevice().udn;
-      console.log("Music Library - initial : selected media server : " + udn);
-      objectId = "0";
+      console.log('Music Library - initial : selected media server : ' + udn);
+      objectId = '0';
     } else {
       console.log();
-      let prom = this.browseToOid(objectId, udn, true, "");
+      let prom = this.browseToOid(objectId, udn, true, '');
       if (prom) {
         prom.then(
-          (val) => { if (!val) this.browseToRoot(udn) },
-          (err) => console.error(err)
+          (val) => {
+            if (!val) this.browseToRoot(udn);
+          },
+          (err) => console.error(err),
         );
       }
     }
   }
 
-  private browseToOid(oid: string, udn: string, stepIn: boolean, sortCriteria?: string): Promise<boolean> | undefined {
+  private browseToOid(
+    oid: string,
+    udn: string,
+    stepIn: boolean,
+    sortCriteria?: string,
+  ): Promise<boolean> | undefined {
     if (this.dispContainer) {
       return this.dispContainer.browseToOid(oid, udn, stepIn, sortCriteria);
     }
   }
 
   public browseToRoot(udn: string, sortCriteria?: string): void {
-    console.log("browsing to root folder ... ")
-    this.browseToOid("0", udn, true, sortCriteria);
+    console.log('browsing to root folder ... ');
+    this.browseToOid('0', udn, true, sortCriteria);
   }
 
   //
   // Events
   //
   containerSelected(event: ContainerDto) {
-    // no special activities yet ... 
+    // no special activities yet ...
   }
 
   itemDeleted(event: MusicItemDto) {
@@ -166,46 +212,63 @@ export class MusicLibraryComponent implements AfterViewInit {
   }
 
   getContentHandler(): ScrollLoadHandler {
-    return { contentDirectoryService: this.contentDirectoryService, persistenceService: this.persistenceService }
+    return {
+      contentDirectoryService: this.contentDirectoryService,
+      persistenceService: this.persistenceService,
+    };
   }
 
   //
   // Nav-Bar bindings
   //
   getParentTitle(): string {
-    return this.contentDirectoryService.currentContainerList().parentFolderTitle;
+    return this.contentDirectoryService.currentContainerList()
+      .parentFolderTitle;
   }
 
   homeButtonPressed(event: any) {
     this.globalSearchService.clearSearch();
-    this.browseToOid("0", this.deviceService.selectedMediaServerDevice().udn, false, "");
+    this.browseToOid(
+      '0',
+      this.deviceService.selectedMediaServerDevice().udn,
+      false,
+      '',
+    );
   }
 
   public backButtonPressed(event: any) {
     this.globalSearchService.clearSearch();
-    const currentParent = this.contentDirectoryService?.currentContainerList().currentContainer?.parentID;
+    const currentParent =
+      this.contentDirectoryService?.currentContainerList().currentContainer
+        ?.parentID;
     if (currentParent) {
-      this.browseToOid(currentParent, this.deviceService.selectedMediaServerDevice().udn, false, "");
+      this.browseToOid(
+        currentParent,
+        this.deviceService.selectedMediaServerDevice().udn,
+        false,
+        '',
+      );
     }
   }
 
   public backButtonVisible(): boolean {
-    const currentContainer = this.contentDirectoryService.currentContainerList().currentContainer;
+    const currentContainer =
+      this.contentDirectoryService.currentContainerList().currentContainer;
     if (!isAssigned(currentContainer) || currentContainer.id?.length == 0) {
       return false;
     }
 
-    if(this.contentDirectoryService.isCurrentContainerRootOrHasParentRoot()) {
+    if (this.contentDirectoryService.isCurrentContainerRootOrHasParentRoot()) {
       return false;
     }
 
     return true;
   }
 
- selectServer(udn: string): void {
-    this.persistenceService.setCurrentObjectID("0");
+  selectServer(udn: string): void {
+    this.persistenceService.setCurrentObjectID('0');
     this.deviceService.setMediaServerByUdn(udn);
-    this.browseToOid("0", udn, false, "");
+    this.browseToOid('0', udn, false, '');
   }
 
   mediaServerSelected(): boolean {

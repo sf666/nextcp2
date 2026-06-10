@@ -1,27 +1,31 @@
 import { MusicItemDto } from './../../../service/dto.d';
 import { TrackQualityService } from './../../track-quality.service';
-import { Component, OnInit, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 @Component({
-    selector: 'quality-badge',
-    templateUrl: './quality-badge.component.html',
-    styleUrls: ['./quality-badge.component.scss'],
-    standalone: true
+  selector: 'quality-badge',
+  templateUrl: './quality-badge.component.html',
+  styleUrls: ['./quality-badge.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: true,
 })
 export class QualityBadgeComponent implements OnInit {
-
   @Input() item!: MusicItemDto;
 
-  constructor(public trackQualityService: TrackQualityService) { }
+  constructor(public trackQualityService: TrackQualityService) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   get isHifi(): boolean {
     return this.trackQualityService.isHifi(this.item);
   }
 
   get hifiString(): string {
-    return this.trackQualityService.getHifiString(this.item);
+    return this.trackQualityService.getHifiString(this.item) ?? '';
   }
 }

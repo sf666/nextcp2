@@ -162,7 +162,7 @@ export interface DeviceVolumeChanged {
 
 export interface DiscogsId {
     ArtistId: string;
-    ReleaseId: number;
+    ReleaseId?: number;
 }
 
 export interface FileChangedEventDto {
@@ -254,7 +254,7 @@ export interface MediaServerDto {
 
 export interface MusicAlbumIds {
     musicBrainzAlbumId: string;
-    discogsReleaseId: number;
+    discogsReleaseId: number | null;
 }
 
 export interface MusicBrainzId {

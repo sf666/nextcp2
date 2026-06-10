@@ -12,7 +12,7 @@ import { DeviceService } from './device.service';
 export class TransportService {
 
   upnpAvTransportState = signal<UpnpAvTransportState>(this.dtoGeneratorService.emptyUpnpAvTransportState());
-  public lastPlayedMusicItem: MusicItemDto;
+  public lastPlayedMusicItem!: MusicItemDto;
   baseUri = '/TransportService';
 
   constructor(

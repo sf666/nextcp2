@@ -1,5 +1,9 @@
 import { MediaPlayerComponent } from './app/view/media-player/media-player.component';
-import { enableProdMode, importProvidersFrom, provideZonelessChangeDetection } from '@angular/core';
+import {
+  enableProdMode,
+  importProvidersFrom,
+  provideZonelessChangeDetection,
+} from '@angular/core';
 import { environment } from './environments/environment';
 import { AppComponent } from './app/app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -23,12 +27,10 @@ import {
   HTTP_INTERCEPTORS,
   withInterceptorsFromDi,
   provideHttpClient,
+  withXhr,
 } from '@angular/common/http';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
-import {
-  BrowserModule,
-  bootstrapApplication,
-} from '@angular/platform-browser';
+import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 import {
   Routes,
   provideRouter,
@@ -46,7 +48,10 @@ import { PlaylistComponent } from './app/view/playlist/playlist.component';
 import { UmsAudioaddictComponent } from './app/view/audio-addict/ums/ums-audioaddict.component';
 import { ChatAiComponent } from './app/view/chat-ai/chat-ai.component';
 import { ContentDirectoryService } from './app/service/content-directory.service';
-import { defaultToastConfig, TOAST_CONFIG_TOKEN } from './app/service/toast/toast-config';
+import {
+  defaultToastConfig,
+  TOAST_CONFIG_TOKEN,
+} from './app/service/toast/toast-config';
 
 const ROUTES: Routes = [
   { path: 'music-library/:objectId', component: MusicLibraryComponent },
@@ -60,7 +65,7 @@ const ROUTES: Routes = [
   { path: 'playlist', component: PlaylistComponent },
   { path: 'chat-ai', component: ChatAiComponent },
   { path: 'mediaPlayerConfig', component: MediaPlayerComponent },
-  { path: 'ums-audioaddict', component: UmsAudioaddictComponent},
+  { path: 'ums-audioaddict', component: UmsAudioaddictComponent },
   { path: '', redirectTo: '/music-library', pathMatch: 'full' },
 ];
 
@@ -100,7 +105,6 @@ bootstrapApplication(AppComponent, {
       BrowserModule,
       FormsModule,
       ReactiveFormsModule,
-      
     ),
     {
       provide: LocationStrategy,
@@ -111,7 +115,7 @@ bootstrapApplication(AppComponent, {
       useClass: CustomHttpInterceptor,
       multi: true,
     },
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withXhr(), withInterceptorsFromDi()),
     provideZonelessChangeDetection(),
   ],
 }).catch((err) => console.error(err));
