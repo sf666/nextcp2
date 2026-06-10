@@ -160,6 +160,7 @@ public class ServerConfig {
 		current.aiProvider = aiConfig.aiProvider;
 		current.aiApiKey = aiConfig.aiApiKey;
 		current.aiModel = aiConfig.aiModel;
+		current.aiBaseUrl = aiConfig.aiBaseUrl;
 		// selectedRendererUdn / selectedServerUdn are runtime-managed and intentionally preserved.
 		configService.writeAndSendConfig();
 	}
