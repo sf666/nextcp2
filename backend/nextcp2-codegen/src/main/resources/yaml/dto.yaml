@@ -45,8 +45,9 @@ AiConfig:
    aiProvider: String
    aiApiKey: String
    aiModel: String
-   selectedRendererUdn: String
-   selectedServerUdn: String
+   aiBaseUrl: String?
+   selectedRendererUdn: String?
+   selectedServerUdn: String?
 
 MediaPlayerConfigDto:
    workdir: String
@@ -313,7 +314,7 @@ MusicItemIdDto:
 
 MusicAlbumIds:
    musicBrainzAlbumId: String
-   discogsReleaseId: Long
+   discogsReleaseId: Long?
    
 MusicItemDto:
    mediaServerUDN: String
@@ -340,7 +341,7 @@ MusicItemDto:
    genre: String
    rating: Integer
    musicBrainzId: MusicBrainzId
-   discogsId: DiscogsId
+   discogsId: DiscogsId?
 
    
 MusicBrainzId:
@@ -352,7 +353,7 @@ MusicBrainzId:
 
 DiscogsId:
    ArtistId: String
-   ReleaseId: Long
+   ReleaseId: Long?
    
 RendererPlaylist:
    udn: String

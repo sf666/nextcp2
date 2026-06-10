@@ -35,6 +35,7 @@ public class MusicItemDto
     public String genre;
     public Integer rating;
     public MusicBrainzId musicBrainzId;
+    @nextcp.handcoded.Nullable
     public DiscogsId discogsId;
 
     public MusicItemDto()

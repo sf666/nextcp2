@@ -49,6 +49,12 @@
 					</classPatterns>
 					<outputKind>module</outputKind>
 					<outputFile>../../frontend/nextcp-ui/src/app/service/dto.d.ts</outputFile>
+					<!-- fields annotated with @nextcp.handcoded.Nullable become optional in TS
+					     (e.g. "discogsReleaseId?: number;" => number | undefined) -->
+					<optionalProperties>useSpecifiedAnnotations</optionalProperties>
+					<optionalAnnotations>
+						<annotation>nextcp.handcoded.Nullable</annotation>
+					</optionalAnnotations>
 				</configuration>
 			</plugin>
 		</plugins>

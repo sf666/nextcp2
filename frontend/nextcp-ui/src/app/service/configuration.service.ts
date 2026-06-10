@@ -69,6 +69,7 @@ export class ConfigurationService {
     aiProvider: '',
     aiApiKey: '',
     aiModel: '',
+    aiBaseUrl: '',
     selectedRendererUdn: '',
     selectedServerUdn: '',
   }

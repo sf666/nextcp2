@@ -13,7 +13,8 @@ public class ${classSpecification.name}
 {
 
 <#list classSpecification.fieldSpecifications as field>
-    public ${field.type} ${field.name};
+<#if field.optional>    @nextcp.handcoded.Nullable
+</#if>    public ${field.type} ${field.name};
 </#list>
 
     public ${classSpecification.name}()

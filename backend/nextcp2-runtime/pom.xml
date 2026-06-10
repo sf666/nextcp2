@@ -131,14 +131,18 @@
 		<dependency>
 		    <groupId>org.springframework.ai</groupId>
 		    <artifactId>spring-ai-starter-model-google-genai</artifactId>
-		    <version>2.0.0-RC1</version>
+		</dependency>
+
+		<!-- Spring AI OpenAI (used for any OpenAI-compatible endpoint, e.g. OpenWebUI) -->
+		<dependency>
+		    <groupId>org.springframework.ai</groupId>
+		    <artifactId>spring-ai-starter-model-openai</artifactId>
 		</dependency>
 
 		<!-- Spring AI MCP Server (WebMVC / Streamable-HTTP transport, consumable by remote MCP gateways such as obot) -->
 		<dependency>
 		    <groupId>org.springframework.ai</groupId>
 		    <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
-		    <version>2.0.0-RC1</version>
 		</dependency>
 		
 	</dependencies>

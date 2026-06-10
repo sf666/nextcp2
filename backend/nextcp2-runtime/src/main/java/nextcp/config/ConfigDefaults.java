@@ -30,11 +30,20 @@ public class ConfigDefaults
             config.aiConfig.aiProvider = "google";
             config.aiConfig.aiApiKey = "your-api-key";
             config.aiConfig.aiModel = "gemini-3.5-flash";
+            // Only used by OpenAI-compatible providers (e.g. openwebui); empty for google.
+            // Must include the full path prefix, e.g. http://host:3000/v1 for OpenWebUI.
+            config.aiConfig.aiBaseUrl = "";
         }
         else if (StringUtils.isBlank(config.spotifyConfig.clientId))
         {
             config.spotifyConfig.clientId = "07c3ea9a85b045b09f0dea60b83fb949";
         }
+        if (config.aiConfig != null && config.aiConfig.aiBaseUrl == null)
+        {
+            // Backfill for configs written before the OpenAI-compatible provider support was added.
+            config.aiConfig.aiBaseUrl = "";
+        }
+
         if (config.radioStation == null)
         {
             log.info("adding new configuration value 'radioStation'. List is empty.");

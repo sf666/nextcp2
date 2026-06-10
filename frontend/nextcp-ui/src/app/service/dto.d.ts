@@ -1,14 +1,15 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-06-02 14:02:48.
+// Generated using typescript-generator version 4.1.1 on 2026-06-10 16:00:18.
 
 export interface AiConfig {
     aiEnabled: boolean;
     aiProvider: string;
     aiApiKey: string;
     aiModel: string;
-    selectedRendererUdn: string;
-    selectedServerUdn: string;
+    aiBaseUrl?: string;
+    selectedRendererUdn?: string;
+    selectedServerUdn?: string;
 }
 
 export interface ApplicationConfig {
@@ -254,7 +255,7 @@ export interface MediaServerDto {
 
 export interface MusicAlbumIds {
     musicBrainzAlbumId: string;
-    discogsReleaseId: number | null;
+    discogsReleaseId?: number;
 }
 
 export interface MusicBrainzId {
@@ -289,7 +290,7 @@ export interface MusicItemDto {
     genre: string;
     rating: number;
     musicBrainzId: MusicBrainzId;
-    discogsId: DiscogsId;
+    discogsId?: DiscogsId;
 }
 
 export interface MusicItemIdDto {

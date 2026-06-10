@@ -170,7 +170,7 @@ export class DtoGeneratorService {
       albumDto: [],
       totalMatches: 0,
       resourceId: '',
-      allTracksSameAlbumIds: {musicBrainzAlbumId: '', discogsReleaseId: null},
+      allTracksSameAlbumIds: {musicBrainzAlbumId: '', discogsReleaseId: undefined},
     }
   }
 

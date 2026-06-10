@@ -13,6 +13,7 @@ public class DiscogsId
 {
 
     public String ArtistId;
+    @nextcp.handcoded.Nullable
     public Long ReleaseId;
 
     public DiscogsId()

@@ -13,6 +13,7 @@ public class MusicAlbumIds
 {
 
     public String musicBrainzAlbumId;
+    @nextcp.handcoded.Nullable
     public Long discogsReleaseId;
 
     public MusicAlbumIds()
