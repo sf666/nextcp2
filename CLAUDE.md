@@ -46,7 +46,7 @@ cd backend && mvn -Dtest=ClassName#method test           # one JUnit test method
 cd frontend/nextcp-ui && yarn test                       # Karma/Jasmine frontend tests
 ```
 
-Compiler target: backend Maven uses `<maven.compiler.release>25</maven.compiler.release>` even though the README still says JDK 17 minimum — install a JDK that can target 25, or lower the property locally if you must. Frontend requires Node 24.
+Compiler target: backend Maven uses `<maven.compiler.release>25</maven.compiler.release>` even though the README still says JDK 17 minimum — install a JDK that can target 25, or lower the property locally if you must. Frontend requires Node 26.
 
 ## Dev loop
 
