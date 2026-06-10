@@ -12,10 +12,10 @@ import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.Lazy;
 import com.google.genai.Client;
 import nextcp.ai.mcp.McpDevices;
 import nextcp.ai.mcp.McpLocale;
@@ -110,22 +110,29 @@ public class SpringAiConfig {
 
     /**
      * Builds the {@link ChatClient} from whichever provider-specific
-     * {@link ChatModel} was initialized (Google or OpenAI-compatible). Exactly one
-     * of the model beans is non-null, depending on {@code aiProvider}. It's
-     * important to register the MCP Tools used by this application.
+     * {@link ChatModel} was initialized (Google or OpenAI-compatible). Depending on
+     * {@code aiProvider} only one of the model bean factory methods returns a
+     * non-null instance; the other returns {@code null}. We resolve them via
+     * {@link ObjectProvider} so a {@code null}-producing bean is simply treated as
+     * "not available" instead of being injected as a non-null lazy proxy (which
+     * would always win the selection and then fail on first use). It's important to
+     * register the MCP Tools used by this application.
      *
-     * @param googleGenAiChatModel Google Gemini model (null unless provider=google)
-     * @param openAiChatModel OpenAI-compatible model (null unless provider=openai/openwebui)
+     * @param googleGenAiChatModelProvider provider for the Google Gemini model
+     * @param openAiChatModelProvider provider for the OpenAI-compatible model
      * @param upnpControlPointTools registered MCP tool callbacks
      * @return the configured ChatClient, or null when no provider is available
      */
     @Bean
     public ChatClient chatClient(
-            @Lazy GoogleGenAiChatModel googleGenAiChatModel,
-            @Lazy OpenAiChatModel openAiChatModel,
+            ObjectProvider<GoogleGenAiChatModel> googleGenAiChatModelProvider,
+            ObjectProvider<OpenAiChatModel> openAiChatModelProvider,
             ToolCallbackProvider upnpControlPointTools) {
 
-        ChatModel chatModel = googleGenAiChatModel != null ? googleGenAiChatModel : openAiChatModel;
+        ChatModel chatModel = googleGenAiChatModelProvider.getIfAvailable();
+        if (chatModel == null) {
+            chatModel = openAiChatModelProvider.getIfAvailable();
+        }
 
         if (chatModel == null) {
             log.info("No AI ChatModel available - ChatClient will not be initialized.");
