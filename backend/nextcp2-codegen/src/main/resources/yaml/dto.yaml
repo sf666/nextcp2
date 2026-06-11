@@ -490,6 +490,16 @@ SystemInformationDto:
 #
 # AI / MCP related DTOs
 #
+
+# Supported AI providers as implemented by the backend (e.g. google, openai).
+AiProvidersDto:
+   providers: List<String>
+
+# Available models for the currently configured provider.
+AiModelsDto:
+   provider: String?
+   models: List<String>
+
 SelectedDevicesDto:
    mediaRenderer: MediaRendererDto
    mediaServer: MediaServerDto

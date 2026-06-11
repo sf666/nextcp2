@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
+import nextcp.ai.AiModelCatalog;
 import nextcp.ai.AiProviderChangeNotifier;
 import nextcp.db.service.BasicDbService;
 import nextcp.db.service.KeyValuePair;
@@ -52,15 +53,17 @@ public class ServerConfig {
 	private SsePublisher ssePublisher = null;
 	private BasicDbService dbService = null;
 	private AiProviderChangeNotifier aiProviderChangeNotifier = null;
+	private AiModelCatalog aiModelCatalog = null;
 
 	@Autowired
 	public ServerConfig(BasicDbService dbService, SsePublisher ssePublisher, Config globalConfig, ConfigService configService,
-		AiProviderChangeNotifier aiProviderChangeNotifier) {
+		AiProviderChangeNotifier aiProviderChangeNotifier, AiModelCatalog aiModelCatalog) {
 		this.dbService = dbService;
 		this.ssePublisher = ssePublisher;
 		this.globalConfig = globalConfig;
 		this.configService = configService;
 		this.aiProviderChangeNotifier = aiProviderChangeNotifier;
+		this.aiModelCatalog = aiModelCatalog;
 
 		om.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
 		serverConfig = readConfig();
@@ -169,6 +172,17 @@ public class ServerConfig {
 		current.aiApiKey = aiConfig.aiApiKey;
 		current.aiModel = aiConfig.aiModel;
 		current.aiBaseUrl = aiConfig.aiBaseUrl;
+
+		// When no model was chosen, auto-select an available one before persisting.
+		if (StringUtils.isBlank(current.aiModel)) {
+			String defaultModel = aiModelCatalog.pickDefaultModel(current);
+			if (StringUtils.isNotBlank(defaultModel)) {
+				log.info("No AI model selected; auto-selecting '{}' for provider '{}'.", defaultModel, current.aiProvider);
+				current.aiModel = defaultModel;
+			} else {
+				log.warn("No AI model selected and none could be determined for provider '{}'.", current.aiProvider);
+			}
+		}
 
 		configService.writeAndSendConfig();
 

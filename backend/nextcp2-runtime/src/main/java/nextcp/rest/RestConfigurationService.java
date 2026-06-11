@@ -17,12 +17,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import jakarta.annotation.PostConstruct;
+import nextcp.ai.AiModelCatalog;
 import nextcp.config.ConfigPersistence;
 import nextcp.config.RendererConfig;
 import nextcp.config.ServerConfig;
 import nextcp.devicedriver.DeviceCapabilityDto;
 import nextcp.devicedriver.DeviceDriverDiscoveryService;
 import nextcp.dto.AiConfig;
+import nextcp.dto.AiModelsDto;
+import nextcp.dto.AiProvidersDto;
 import nextcp.dto.ApplicationConfig;
 import nextcp.dto.AudioAddictConfig;
 import nextcp.dto.Config;
@@ -67,6 +70,9 @@ public class RestConfigurationService
 
     @Autowired
     private RendererConfig rendererConfigService = null;
+
+    @Autowired
+    private AiModelCatalog aiModelCatalog = null;
 
     @Autowired
     private ServerConfig serverConfigService = null;
@@ -221,6 +227,32 @@ public class RestConfigurationService
             log.error("saveAiConfig", e);
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "saving AI config failed : " + e.getMessage());
         }
+    }
+
+    /**
+     * Returns the AI providers supported by this backend (derived from the
+     * implemented chat-model builders), used to populate the provider dropdown.
+     */
+    @GetMapping("/getAiProviders")
+    public AiProvidersDto getAiProviders()
+    {
+        AiProvidersDto dto = new AiProvidersDto();
+        dto.providers = aiModelCatalog.getSupportedProviders();
+        return dto;
+    }
+
+    /**
+     * Returns the models available for the currently configured provider, used to
+     * populate the model dropdown after the AI base URL has been saved. For an
+     * OpenAI-compatible provider this queries {@code {aiBaseUrl}/models} live.
+     */
+    @GetMapping("/getAiModels")
+    public AiModelsDto getAiModels()
+    {
+        AiModelsDto dto = new AiModelsDto();
+        dto.provider = aiModelCatalog.getCurrentProvider();
+        dto.models = aiModelCatalog.getAvailableModelsForCurrentConfig();
+        return dto;
     }
 
     @PostMapping("/saveMediaRendererConfig")

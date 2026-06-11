@@ -4,7 +4,7 @@ import { UuidService } from './../util/uuid.service';
 import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { SseService } from './sse/sse.service';
-import { RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, ApplicationConfig, MusicbrainzSupport, MediaPlayerConfigDto, AudioAddictConfig, AiConfig } from './dto.d';
+import { RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, ApplicationConfig, MusicbrainzSupport, MediaPlayerConfigDto, AudioAddictConfig, AiConfig, AiProvidersDto, AiModelsDto } from './dto.d';
 import { GenericResultService } from './generic-result.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
@@ -77,6 +77,10 @@ export class ConfigurationService {
   // Reactive flag so OnPush components (e.g. sidebar) update immediately when AI is toggled.
   public aiEnabled = signal<boolean>(true);
 
+  // AI providers/models offered by the backend, used to populate the settings dropdowns.
+  public aiProviders = signal<string[]>([]);
+  public aiModels = signal<string[]>([]);
+
   musicBrainzConfig: MusicbrainzSupport = {   // MusicBrainz username/password
     password: '',
     username: ''
@@ -106,6 +110,7 @@ export class ConfigurationService {
       this.getMediaPlayerConfig();
       this.getCurrentMediaPlayerConfig();
       this.getAvailableBindInterfaces();
+      this.getAiProviders();
       sseService.configChanged$.subscribe(serverConfig => this.applyServerConfigurationFile(serverConfig));
       sseService.rendererConfigChanged$.subscribe(data => this.applyRendererServerRendererList(data));
       sseService.serverDevicesConfigChanged$.subscribe(data => this.applyMediaServerList(data));
@@ -209,7 +214,27 @@ export class ConfigurationService {
   public saveAiConfig(): void {
     const uri = '/saveAiConfig';
     this.httpService.postWithSuccessMessage(this.baseUri, uri, this.aiConfig, "Save AI config", "success")
-      .subscribe(() => this.aiEnabled.set(this.aiConfig.aiEnabled ?? true));
+      .subscribe(() => {
+        this.aiEnabled.set(this.aiConfig.aiEnabled ?? true);
+        // Refresh the available models now that the (base URL / provider) is saved.
+        this.getAiModels();
+      });
+  }
+
+  // Loads the AI providers supported by the backend (for the provider dropdown).
+  public getAiProviders(): void {
+    const uri = '/getAiProviders';
+    this.httpService.get<AiProvidersDto>(this.baseUri, uri).subscribe(data => {
+      this.aiProviders.set(data?.providers ?? []);
+    });
+  }
+
+  // Loads the models available for the currently configured provider (for the model dropdown).
+  public getAiModels(): void {
+    const uri = '/getAiModels';
+    this.httpService.get<AiModelsDto>(this.baseUri, uri).subscribe(data => {
+      this.aiModels.set(data?.models ?? []);
+    });
   }
 
   public saveMediaRendererConfig(mediaRendererConfig: RendererDeviceConfiguration): void {
@@ -287,6 +312,8 @@ export class ConfigurationService {
     this.applicationConfig = Object.assign({}, serverConfig.applicationConfig);
     this.aiConfig = Object.assign({}, serverConfig.aiConfig);
     this.aiEnabled.set(serverConfig.aiConfig?.aiEnabled ?? true);
+    // Populate the model dropdown for the now-known provider/base URL.
+    this.getAiModels();
     this.musicBrainzConfig = Object.assign({}, serverConfig.musicbrainzSupport);
     this.audioAddictConfig.set(serverConfig.audioAddictConfig);
   }

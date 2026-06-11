@@ -200,6 +200,25 @@ export class SettingsComponent implements OnInit {
     this.configService.saveAiConfig();
   }
 
+  // Provider options from the backend, including the currently configured value
+  // (so a legacy/custom provider is never silently dropped from the dropdown).
+  aiProviderOptions(): string[] {
+    return this.mergeCurrent(this.configService.aiProviders(), this.configService.aiConfig.aiProvider);
+  }
+
+  // Model options for the current provider, including the currently configured model.
+  aiModelOptions(): string[] {
+    return this.mergeCurrent(this.configService.aiModels(), this.configService.aiConfig.aiModel);
+  }
+
+  private mergeCurrent(list: string[], current: string | null | undefined): string[] {
+    const result = [...(list ?? [])];
+    if (current && !result.includes(current)) {
+      result.unshift(current);
+    }
+    return result;
+  }
+
   saveMusicBrainzConfig(): void {
     this.configService.saveMusicBrainzConfig();
   }

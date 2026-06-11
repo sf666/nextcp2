@@ -43,6 +43,13 @@ public class ConfigDefaults
             // Backfill for configs written before the OpenAI-compatible provider support was added.
             config.aiConfig.aiBaseUrl = "";
         }
+        if (config.aiConfig != null && "openwebui".equalsIgnoreCase(config.aiConfig.aiProvider))
+        {
+            // 'openwebui' is reached via the canonical 'openai' provider plus its base URL.
+            // Migrate the stored value so the UI shows a single, non-redundant provider option.
+            log.info("Migrating legacy aiProvider 'openwebui' to canonical 'openai'.");
+            config.aiConfig.aiProvider = "openai";
+        }
 
         if (config.radioStation == null)
         {

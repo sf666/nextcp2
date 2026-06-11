@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-06-10 16:00:18.
+// Generated using typescript-generator version 4.1.1 on 2026-06-11 09:07:02.
 
 export interface AiConfig {
     aiEnabled: boolean;
@@ -10,6 +10,15 @@ export interface AiConfig {
     aiBaseUrl?: string;
     selectedRendererUdn?: string;
     selectedServerUdn?: string;
+}
+
+export interface AiModelsDto {
+    provider?: string;
+    models: string[];
+}
+
+export interface AiProvidersDto {
+    providers: string[];
 }
 
 export interface ApplicationConfig {
