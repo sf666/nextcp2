@@ -4,6 +4,7 @@
 
 export interface AiConfig {
     aiEnabled: boolean;
+    aiSendTools: boolean;
     aiProvider: string;
     aiApiKey: string;
     aiModel: string;

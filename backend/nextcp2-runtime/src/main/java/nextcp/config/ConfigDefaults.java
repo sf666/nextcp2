@@ -27,6 +27,8 @@ public class ConfigDefaults
         {
             config.aiConfig = new AiConfig();
             config.aiConfig.aiEnabled = true;
+            // Send nextCP's own MCP tools by default (previous behavior).
+            config.aiConfig.aiSendTools = true;
             config.aiConfig.aiProvider = "google";
             config.aiConfig.aiApiKey = "your-api-key";
             config.aiConfig.aiModel = "gemini-3.5-flash";
@@ -42,6 +44,11 @@ public class ConfigDefaults
         {
             // Backfill for configs written before the OpenAI-compatible provider support was added.
             config.aiConfig.aiBaseUrl = "";
+        }
+        if (config.aiConfig != null && config.aiConfig.aiSendTools == null)
+        {
+            // Backfill for configs written before the send-tools switch was added.
+            config.aiConfig.aiSendTools = true;
         }
         if (config.aiConfig != null && "openwebui".equalsIgnoreCase(config.aiConfig.aiProvider))
         {

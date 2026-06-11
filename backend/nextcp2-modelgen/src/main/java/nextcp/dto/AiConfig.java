@@ -13,6 +13,7 @@ public class AiConfig
 {
 
     public Boolean aiEnabled;
+    public Boolean aiSendTools;
     public String aiProvider;
     public String aiApiKey;
     public String aiModel;
@@ -27,9 +28,10 @@ public class AiConfig
     {
     }
 
-    public AiConfig(Boolean aiEnabled, String aiProvider, String aiApiKey, String aiModel, String aiBaseUrl, String selectedRendererUdn, String selectedServerUdn)
+    public AiConfig(Boolean aiEnabled, Boolean aiSendTools, String aiProvider, String aiApiKey, String aiModel, String aiBaseUrl, String selectedRendererUdn, String selectedServerUdn)
     {
         this.aiEnabled = aiEnabled;
+        this.aiSendTools = aiSendTools;
         this.aiProvider = aiProvider;
         this.aiApiKey = aiApiKey;
         this.aiModel = aiModel;
@@ -44,6 +46,7 @@ public class AiConfig
         StringBuilder sb = new StringBuilder();
         sb.append("AiConfig [");
         sb.append("aiEnabled=").append(this.aiEnabled).append(", ");
+        sb.append("aiSendTools=").append(this.aiSendTools).append(", ");
         sb.append("aiProvider=").append(this.aiProvider).append(", ");
         sb.append("aiApiKey=").append(this.aiApiKey).append(", ");
         sb.append("aiModel=").append(this.aiModel).append(", ");

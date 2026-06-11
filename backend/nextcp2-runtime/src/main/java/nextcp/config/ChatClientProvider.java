@@ -81,18 +81,35 @@ public class ChatClientProvider {
 		}
 
 		ChatModel chatModel = createChatModel(aiConfig);
-		cachedClient = (chatModel != null) ? buildChatClient(chatModel) : null;
+		cachedClient = (chatModel != null) ? buildChatClient(chatModel, aiConfig) : null;
 		cachedSignature = signature;
 
 		if (cachedClient != null) {
-			log.info("ChatClient (re)built for provider '{}' with model '{}' ({}).", aiConfig.aiProvider, aiConfig.aiModel,
-				chatModel.getClass().getSimpleName());
+			log.info("ChatClient (re)built for provider '{}' with model '{}' ({}), sendTools={}.", aiConfig.aiProvider,
+				aiConfig.aiModel, chatModel.getClass().getSimpleName(), shouldSendTools(aiConfig));
 		}
 		return cachedClient;
 	}
 
-	private ChatClient buildChatClient(ChatModel chatModel) {
-		return ChatClient.builder(chatModel).defaultTools(upnpControlPointTools).defaultSystem(SYSTEM_PROMPT).build();
+	private ChatClient buildChatClient(ChatModel chatModel, AiConfig aiConfig) {
+		ChatClient.Builder builder = ChatClient.builder(chatModel).defaultSystem(SYSTEM_PROMPT);
+		if (shouldSendTools(aiConfig)) {
+			// Register nextCP's own MCP tools (device / language control) with the request.
+			builder.defaultTools(upnpControlPointTools);
+		} else {
+			// Do not send our tools, so an OpenAI-compatible server (e.g. OpenWebUI) can
+			// resolve its own account/model-bound tools instead.
+			log.info("aiSendTools=false: not registering nextCP MCP tools; provider-side tools (if any) will be used.");
+		}
+		return builder.build();
+	}
+
+	/**
+	 * Whether nextCP should send its own tools. Defaults to {@code true} (previous
+	 * behavior) when the flag is not set.
+	 */
+	private boolean shouldSendTools(AiConfig aiConfig) {
+		return aiConfig == null || aiConfig.aiSendTools == null || Boolean.TRUE.equals(aiConfig.aiSendTools);
 	}
 
 	/**
@@ -104,8 +121,8 @@ public class ChatClientProvider {
 		if (c == null) {
 			return "none";
 		}
-		return String.join("|", String.valueOf(c.aiEnabled), String.valueOf(c.aiProvider), String.valueOf(c.aiModel),
-			String.valueOf(c.aiBaseUrl), String.valueOf(c.aiApiKey));
+		return String.join("|", String.valueOf(c.aiEnabled), String.valueOf(c.aiSendTools), String.valueOf(c.aiProvider),
+			String.valueOf(c.aiModel), String.valueOf(c.aiBaseUrl), String.valueOf(c.aiApiKey));
 	}
 
 	/**

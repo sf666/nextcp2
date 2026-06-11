@@ -42,6 +42,7 @@ Config:
 
 AiConfig:
    aiEnabled: Boolean
+   aiSendTools: Boolean
    aiProvider: String
    aiApiKey: String
    aiModel: String

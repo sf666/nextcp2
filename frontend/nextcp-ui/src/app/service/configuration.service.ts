@@ -66,6 +66,7 @@ export class ConfigurationService {
 
   aiConfig: AiConfig = {    // This is a DTO copy and can be used to update the AI configuration
     aiEnabled: true,
+    aiSendTools: true,
     aiProvider: '',
     aiApiKey: '',
     aiModel: '',

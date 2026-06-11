@@ -168,6 +168,7 @@ public class ServerConfig {
 		String previousModel = current.aiModel;
 
 		current.aiEnabled = aiConfig.aiEnabled;
+		current.aiSendTools = aiConfig.aiSendTools;
 		current.aiProvider = aiConfig.aiProvider;
 		current.aiApiKey = aiConfig.aiApiKey;
 		current.aiModel = aiConfig.aiModel;
