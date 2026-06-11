@@ -101,6 +101,26 @@ public class ChatHistoryService {
 	}
 
 	/**
+	 * Appends a standalone, already-completed assistant message to the history.
+	 * Used for system-generated notices (e.g. "AI provider switched ...") that are
+	 * not the result of a user exchange. Pushes the updated history to SSE clients.
+	 *
+	 * @param content the notice text to display in the chat
+	 */
+	public void addAssistantNotice(String content) {
+		synchronized (this) {
+			ChatMessageDto notice = new ChatMessageDto();
+			notice.id = idSequence.incrementAndGet();
+			notice.role = ROLE_ASSISTANT;
+			notice.content = content == null ? "" : content;
+			notice.status = STATUS_COMPLETE;
+			notice.timestamp = System.currentTimeMillis();
+			append(notice);
+		}
+		publishHistoryChanged();
+	}
+
+	/**
 	 * Marks the assistant message with the given ID as completed and stores the
 	 * response content. Silently ignored when the message has already been
 	 * evicted (because the ring buffer overflowed).

@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
+import nextcp.ai.AiProviderChangeNotifier;
 import nextcp.db.service.BasicDbService;
 import nextcp.db.service.KeyValuePair;
 import nextcp.dto.AiConfig;
@@ -50,13 +51,16 @@ public class ServerConfig {
 
 	private SsePublisher ssePublisher = null;
 	private BasicDbService dbService = null;
+	private AiProviderChangeNotifier aiProviderChangeNotifier = null;
 
 	@Autowired
-	public ServerConfig(BasicDbService dbService, SsePublisher ssePublisher, Config globalConfig, ConfigService configService) {
+	public ServerConfig(BasicDbService dbService, SsePublisher ssePublisher, Config globalConfig, ConfigService configService,
+		AiProviderChangeNotifier aiProviderChangeNotifier) {
 		this.dbService = dbService;
 		this.ssePublisher = ssePublisher;
 		this.globalConfig = globalConfig;
 		this.configService = configService;
+		this.aiProviderChangeNotifier = aiProviderChangeNotifier;
 
 		om.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
 		serverConfig = readConfig();
@@ -156,13 +160,21 @@ public class ServerConfig {
 			current = new AiConfig();
 			globalConfig.aiConfig = current;
 		}
+		// Remember the previous provider/model to detect a switch after applying.
+		String previousProvider = current.aiProvider;
+		String previousModel = current.aiModel;
+
 		current.aiEnabled = aiConfig.aiEnabled;
 		current.aiProvider = aiConfig.aiProvider;
 		current.aiApiKey = aiConfig.aiApiKey;
 		current.aiModel = aiConfig.aiModel;
 		current.aiBaseUrl = aiConfig.aiBaseUrl;
-		// selectedRendererUdn / selectedServerUdn are runtime-managed and intentionally preserved.
+
 		configService.writeAndSendConfig();
+
+		// Inform the user in the chat when the active provider/model changed. The
+		// ChatClient itself is rebuilt lazily on the next request (see ChatClientProvider).
+		aiProviderChangeNotifier.notifyProviderChanged(previousProvider, previousModel, current);
 	}
 
 	public void deleteServerDevice(ServerDeviceConfiguration serverDevice) {

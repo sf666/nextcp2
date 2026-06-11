@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import nextcp.ai.mcp.McpDevices;
+import nextcp.config.ChatClientProvider;
 import nextcp.dto.SelectedDevicesDto;
 
 /**
@@ -16,19 +17,22 @@ import nextcp.dto.SelectedDevicesDto;
 public class AiServices {
 	private static final Logger log = LoggerFactory.getLogger(AiServices.class.getName());
 
-	private final ChatClient chatClient;
+	private final ChatClientProvider chatClientProvider;
 
 	@Autowired
 	private McpDevices mcpDevices;
 
-	public AiServices(@Autowired(required = false) ChatClient chatClient) {
-		this.chatClient = chatClient;
+	public AiServices(ChatClientProvider chatClientProvider) {
+		this.chatClientProvider = chatClientProvider;
 	}
 
 
 	public String sendTextToGemini(String userText) {
-		if (this.chatClient == null) {
-			throw new RuntimeException("ChatClient  not initialized! Please ensure it is properly configured.");
+		// Resolve the ChatClient for the currently configured provider. It is rebuilt
+		// automatically when the AI configuration changed, so no restart is needed.
+		ChatClient chatClient = chatClientProvider.getChatClient();
+		if (chatClient == null) {
+			throw new RuntimeException("ChatClient not initialized! Please check the AI configuration (provider/model/baseUrl/apiKey).");
 		}
 		log.info("Sending text to Gemini: {}", userText);
 
