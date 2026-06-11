@@ -4,7 +4,7 @@ import { UuidService } from './../util/uuid.service';
 import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { SseService } from './sse/sse.service';
-import { RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, ApplicationConfig, MusicbrainzSupport, MediaPlayerConfigDto, AudioAddictConfig, AiConfig, AiProvidersDto, AiModelsDto, AiToolDto, AiToolsDto } from './dto.d';
+import { RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, ApplicationConfig, MusicbrainzSupport, MediaPlayerConfigDto, AudioAddictConfig, AiConfig, AiProvidersDto, AiModelsDto, AiProviderProfile, AiToolDto, AiToolsDto } from './dto.d';
 import { GenericResultService } from './generic-result.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
@@ -73,6 +73,7 @@ export class ConfigurationService {
     aiModel: '',
     aiBaseUrl: '',
     aiToolIds: '',
+    aiProviderProfiles: [],
     selectedRendererUdn: '',
     selectedServerUdn: '',
   }
@@ -217,12 +218,15 @@ export class ConfigurationService {
   }
 
   public saveAiConfig(): void {
+    // Snapshot the current form values into the active provider's profile so the
+    // persisted profiles always reflect the latest edits.
+    this.storeAiProviderProfile();
     const uri = '/saveAiConfig';
     this.httpService.postWithSuccessMessage(this.baseUri, uri, this.aiConfig, "Save AI config", "success")
       .subscribe(() => {
         this.aiEnabled.set(this.aiConfig.aiEnabled ?? true);
         // Refresh the available models/tools now that the (base URL / provider) is saved.
-        this.getAiModels();
+        this.listAiModels();
         this.listAiTools();
       });
   }
@@ -235,10 +239,74 @@ export class ConfigurationService {
     });
   }
 
-  // Loads the models available for the currently configured provider (for the model dropdown).
-  public getAiModels(): void {
-    const uri = '/getAiModels';
-    this.httpService.get<AiModelsDto>(this.baseUri, uri).subscribe(data => {
+  // Discards unsaved AI form edits by restoring the values from the last
+  // received (persisted) server configuration and reloading the dependent lists.
+  public resetAiConfig(): void {
+    this.aiConfig = this.deepCopyAiConfig(this.serverConfig?.aiConfig);
+    this.aiEnabled.set(this.aiConfig.aiEnabled ?? true);
+    this.listAiModels();
+    this.listAiTools();
+  }
+
+  // Switches the active AI provider: stores the current form values into the old
+  // provider's profile, restores the new provider's profile (or sensible defaults)
+  // and reloads the model/tool lists.
+  public switchAiProvider(newProvider: string): void {
+    this.storeAiProviderProfile();
+    this.aiConfig.aiProvider = newProvider;
+    this.applyAiProviderProfile(newProvider);
+    this.listAiModels();
+    this.listAiTools();
+  }
+
+  // Saves the current provider-specific form values into the profile list.
+  private storeAiProviderProfile(): void {
+    const provider = this.aiConfig.aiProvider;
+    if (!provider) {
+      return;
+    }
+    const profile: AiProviderProfile = {
+      aiProvider: provider,
+      aiApiKey: this.aiConfig.aiApiKey,
+      aiBaseUrl: this.aiConfig.aiBaseUrl,
+      aiModel: this.aiConfig.aiModel,
+      aiToolIds: this.aiConfig.aiToolIds,
+      aiSendTools: this.aiConfig.aiSendTools,
+    };
+    const profiles = this.aiConfig.aiProviderProfiles ?? [];
+    const index = profiles.findIndex(p => p.aiProvider === provider);
+    if (index >= 0) {
+      profiles[index] = profile;
+    } else {
+      profiles.push(profile);
+    }
+    this.aiConfig.aiProviderProfiles = profiles;
+  }
+
+  // Restores the provider-specific form values from the profile list (or defaults).
+  private applyAiProviderProfile(provider: string): void {
+    const profile = (this.aiConfig.aiProviderProfiles ?? []).find(p => p.aiProvider === provider);
+    this.aiConfig.aiApiKey = profile?.aiApiKey ?? '';
+    this.aiConfig.aiBaseUrl = profile?.aiBaseUrl ?? '';
+    this.aiConfig.aiModel = profile?.aiModel ?? '';
+    this.aiConfig.aiToolIds = profile?.aiToolIds ?? '';
+    this.aiConfig.aiSendTools = profile?.aiSendTools ?? true;
+    if (provider.toLowerCase() === 'google') {
+      // Google is reached via SDK/API key only - a base URL does not apply.
+      this.aiConfig.aiBaseUrl = '';
+    }
+  }
+
+  // Deep copy so form edits (incl. the profile list) never mutate serverConfig.
+  private deepCopyAiConfig(aiConfig: AiConfig | undefined): AiConfig {
+    return aiConfig ? JSON.parse(JSON.stringify(aiConfig)) : ({} as AiConfig);
+  }
+
+  // Loads the models available for the provider of the CURRENT (possibly unsaved)
+  // AI form values, so the model dropdown follows provider/base URL edits.
+  public listAiModels(): void {
+    const uri = '/listAiModels';
+    this.httpService.post<AiModelsDto>(this.baseUri, uri, this.aiConfig).subscribe(data => {
       this.aiModels.set(data?.models ?? []);
     });
   }
@@ -325,10 +393,10 @@ export class ConfigurationService {
   private applyServerConfigurationFile(serverConfig: Config) {
     this.serverConfig = serverConfig;
     this.applicationConfig = Object.assign({}, serverConfig.applicationConfig);
-    this.aiConfig = Object.assign({}, serverConfig.aiConfig);
+    this.aiConfig = this.deepCopyAiConfig(serverConfig.aiConfig);
     this.aiEnabled.set(serverConfig.aiConfig?.aiEnabled ?? true);
     // Populate the model dropdown and tool list for the now-known provider/base URL.
-    this.getAiModels();
+    this.listAiModels();
     this.listAiTools();
     this.musicBrainzConfig = Object.assign({}, serverConfig.musicbrainzSupport);
     this.audioAddictConfig.set(serverConfig.audioAddictConfig);

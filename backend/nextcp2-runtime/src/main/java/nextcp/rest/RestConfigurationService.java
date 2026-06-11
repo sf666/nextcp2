@@ -243,16 +243,18 @@ public class RestConfigurationService
     }
 
     /**
-     * Returns the models available for the currently configured provider, used to
-     * populate the model dropdown after the AI base URL has been saved. For an
-     * OpenAI-compatible provider this queries {@code {aiBaseUrl}/models} live.
+     * Returns the models available for the provider of the given (possibly not yet
+     * saved) AI configuration, used to populate the model dropdown. Takes the edited
+     * configuration from the client so the list follows provider/base URL changes
+     * without saving first. For an OpenAI-compatible provider this queries
+     * {@code {aiBaseUrl}/models} live; for Google a curated static list is returned.
      */
-    @GetMapping("/getAiModels")
-    public AiModelsDto getAiModels()
+    @PostMapping("/listAiModels")
+    public AiModelsDto listAiModels(@RequestBody AiConfig aiConfig)
     {
         AiModelsDto dto = new AiModelsDto();
-        dto.provider = aiModelCatalog.getCurrentProvider();
-        dto.models = aiModelCatalog.getAvailableModelsForCurrentConfig();
+        dto.provider = (aiConfig != null) ? aiConfig.aiProvider : null;
+        dto.models = aiModelCatalog.getAvailableModels(aiConfig);
         return dto;
     }
 

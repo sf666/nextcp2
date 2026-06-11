@@ -108,7 +108,8 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.layoutService.setFramedViewWithoutNavbar();
-    // Populate the server-side tool list for the current AI configuration.
+    // Populate the model dropdown and server-side tool list for the current AI configuration.
+    this.configService.listAiModels();
     this.configService.listAiTools();
   }
 
@@ -202,6 +203,11 @@ export class SettingsComponent implements OnInit {
     this.configService.saveAiConfig();
   }
 
+  // Discards unsaved AI form edits and restores the persisted configuration.
+  resetAiConfig(): void {
+    this.configService.resetAiConfig();
+  }
+
   // Provider options from the backend, including the currently configured value
   // (so a legacy/custom provider is never silently dropped from the dropdown).
   aiProviderOptions(): string[] {
@@ -213,14 +219,20 @@ export class SettingsComponent implements OnInit {
     return this.mergeCurrent(this.configService.aiModels(), this.configService.aiConfig.aiModel);
   }
 
-  // Applies an AI provider change and reloads the server-side tools for it.
+  // Applies an AI provider change: the old provider's form values are kept in its
+  // profile, the new provider's profile is restored and the lists are reloaded.
   onAiProviderChange(provider: string): void {
-    this.configService.aiConfig.aiProvider = provider;
-    this.configService.listAiTools();
+    this.configService.switchAiProvider(provider);
   }
 
-  // Reloads the server-side tools, e.g. after the base URL or API key was edited.
+  // Whether the Google provider is selected (base URL does not apply then).
+  isGoogleProvider(): boolean {
+    return (this.configService.aiConfig.aiProvider ?? '').toLowerCase() === 'google';
+  }
+
+  // Reloads the model/tool lists, e.g. after the base URL or API key was edited.
   reloadAiTools(): void {
+    this.configService.listAiModels();
     this.configService.listAiTools();
   }
 

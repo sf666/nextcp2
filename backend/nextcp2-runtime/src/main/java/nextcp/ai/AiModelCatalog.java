@@ -18,7 +18,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import nextcp.dto.AiConfig;
 import nextcp.dto.AiToolDto;
-import nextcp.dto.Config;
 
 /**
  * Catalog of the AI providers implemented by this backend and the models
@@ -43,39 +42,23 @@ public class AiModelCatalog {
 	private static final List<String> SUPPORTED_PROVIDERS = List.of(PROVIDER_GOOGLE, PROVIDER_OPENAI);
 
 	/**
-	 * Curated list of common Google Gemini chat models. Google models are not
-	 * discovered live; adjust this list as new models become available.
+	 * Fallback list of common Google Gemini chat models, used when the live model
+	 * listing is not possible (e.g. no API key entered yet) or fails.
 	 */
 	private static final List<String> GOOGLE_MODELS = List.of("gemini-2.5-pro", "gemini-2.5-flash", "gemini-2.0-flash",
 		"gemini-1.5-pro", "gemini-1.5-flash");
 
-	private final Config config;
+	/** Gemini API endpoint listing the available models. */
+	private static final String GOOGLE_MODELS_URL = "https://generativelanguage.googleapis.com/v1beta/models?pageSize=1000";
+
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	private final HttpClient httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5)).build();
-
-	public AiModelCatalog(Config config) {
-		this.config = config;
-	}
 
 	/**
 	 * @return the AI providers supported by this backend
 	 */
 	public List<String> getSupportedProviders() {
 		return SUPPORTED_PROVIDERS;
-	}
-
-	/**
-	 * @return available models for the currently persisted AI configuration
-	 */
-	public List<String> getAvailableModelsForCurrentConfig() {
-		return getAvailableModels(config != null ? config.aiConfig : null);
-	}
-
-	/**
-	 * @return the currently configured provider, or {@code null} if none
-	 */
-	public String getCurrentProvider() {
-		return (config != null && config.aiConfig != null) ? config.aiConfig.aiProvider : null;
 	}
 
 	/**
@@ -90,7 +73,7 @@ public class AiModelCatalog {
 		}
 		String provider = aiConfig.aiProvider;
 		if (PROVIDER_GOOGLE.equalsIgnoreCase(provider)) {
-			return GOOGLE_MODELS;
+			return listGoogleModels(aiConfig);
 		}
 		if (isOpenAiCompatible(provider)) {
 			return listOpenAiCompatibleModels(aiConfig);
@@ -107,6 +90,63 @@ public class AiModelCatalog {
 	public String pickDefaultModel(AiConfig aiConfig) {
 		List<String> models = getAvailableModels(aiConfig);
 		return models.isEmpty() ? null : models.get(0);
+	}
+
+	/**
+	 * Queries the Gemini API for the available models and extracts the chat-capable
+	 * ones (supporting {@code generateContent}) from the {@code models[].name}
+	 * response, stripping the {@code models/} prefix. Falls back to the curated
+	 * {@link #GOOGLE_MODELS} list when no API key is configured or the request fails.
+	 */
+	private List<String> listGoogleModels(AiConfig aiConfig) {
+		if (StringUtils.isBlank(aiConfig.aiApiKey)) {
+			log.info("No Google API key configured - falling back to the curated model list.");
+			return GOOGLE_MODELS;
+		}
+		try {
+			HttpRequest request = HttpRequest.newBuilder(URI.create(GOOGLE_MODELS_URL))
+				.header("x-goog-api-key", aiConfig.aiApiKey)
+				.GET().timeout(Duration.ofSeconds(8)).build();
+
+			HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+			if (response.statusCode() / 100 != 2) {
+				log.warn("Listing Google models failed with HTTP {} - falling back to the curated model list.",
+					response.statusCode());
+				return GOOGLE_MODELS;
+			}
+
+			JsonNode models = objectMapper.readTree(response.body()).path("models");
+			List<String> result = new ArrayList<>();
+			if (models.isArray()) {
+				for (JsonNode model : models) {
+					if (!supportsGenerateContent(model)) {
+						continue;
+					}
+					String name = model.path("name").asText(null);
+					if (StringUtils.isNotBlank(name)) {
+						result.add(StringUtils.removeStart(name, "models/"));
+					}
+				}
+			}
+			return result.isEmpty() ? GOOGLE_MODELS : result;
+		} catch (Exception e) {
+			log.warn("Could not list Google models ({}) - falling back to the curated model list.", e.getMessage());
+			return GOOGLE_MODELS;
+		}
+	}
+
+	/** Whether the Gemini model supports chat ({@code generateContent}). */
+	private boolean supportsGenerateContent(JsonNode model) {
+		JsonNode methods = model.path("supportedGenerationMethods");
+		if (!methods.isArray()) {
+			return false;
+		}
+		for (JsonNode method : methods) {
+			if ("generateContent".equals(method.asText())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private boolean isOpenAiCompatible(String provider) {

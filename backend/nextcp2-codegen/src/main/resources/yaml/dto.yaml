@@ -49,8 +49,19 @@ AiConfig:
    aiModel: String
    aiBaseUrl: String?
    aiToolIds: String?
+   aiProviderProfiles: List<AiProviderProfile>
    selectedRendererUdn: String?
    selectedServerUdn: String?
+
+# Stored per-provider settings so multiple providers can be configured in
+# parallel; switching the active provider restores the matching profile.
+AiProviderProfile:
+   aiProvider: String
+   aiApiKey: String?
+   aiBaseUrl: String?
+   aiModel: String?
+   aiToolIds: String?
+   aiSendTools: Boolean?
 
 MediaPlayerConfigDto:
    workdir: String

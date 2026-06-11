@@ -57,6 +57,11 @@ public class ConfigDefaults
             // Backfill for configs written before the conversation-memory switch was added.
             config.aiConfig.aiConversationMemory = false;
         }
+        if (config.aiConfig != null && config.aiConfig.aiProviderProfiles == null)
+        {
+            // Backfill for configs written before per-provider profiles were added.
+            config.aiConfig.aiProviderProfiles = new ArrayList<>();
+        }
         if (config.aiConfig != null && "openwebui".equalsIgnoreCase(config.aiConfig.aiProvider))
         {
             // 'openwebui' is reached via the canonical 'openai' provider plus its base URL.

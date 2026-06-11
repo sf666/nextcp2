@@ -22,6 +22,7 @@ public class AiConfig
     public String aiBaseUrl;
     @nextcp.handcoded.Nullable
     public String aiToolIds;
+    public List<AiProviderProfile> aiProviderProfiles;
     @nextcp.handcoded.Nullable
     public String selectedRendererUdn;
     @nextcp.handcoded.Nullable
@@ -31,7 +32,7 @@ public class AiConfig
     {
     }
 
-    public AiConfig(Boolean aiEnabled, Boolean aiSendTools, Boolean aiConversationMemory, String aiProvider, String aiApiKey, String aiModel, String aiBaseUrl, String aiToolIds, String selectedRendererUdn, String selectedServerUdn)
+    public AiConfig(Boolean aiEnabled, Boolean aiSendTools, Boolean aiConversationMemory, String aiProvider, String aiApiKey, String aiModel, String aiBaseUrl, String aiToolIds, List<AiProviderProfile> aiProviderProfiles, String selectedRendererUdn, String selectedServerUdn)
     {
         this.aiEnabled = aiEnabled;
         this.aiSendTools = aiSendTools;
@@ -41,6 +42,7 @@ public class AiConfig
         this.aiModel = aiModel;
         this.aiBaseUrl = aiBaseUrl;
         this.aiToolIds = aiToolIds;
+        this.aiProviderProfiles = aiProviderProfiles;
         this.selectedRendererUdn = selectedRendererUdn;
         this.selectedServerUdn = selectedServerUdn;
     }
@@ -58,6 +60,7 @@ public class AiConfig
         sb.append("aiModel=").append(this.aiModel).append(", ");
         sb.append("aiBaseUrl=").append(this.aiBaseUrl).append(", ");
         sb.append("aiToolIds=").append(this.aiToolIds).append(", ");
+        sb.append("aiProviderProfiles=").append(this.aiProviderProfiles).append(", ");
         sb.append("selectedRendererUdn=").append(this.selectedRendererUdn).append(", ");
         sb.append("selectedServerUdn=").append(this.selectedServerUdn).append(", ");
         sb.append("]");

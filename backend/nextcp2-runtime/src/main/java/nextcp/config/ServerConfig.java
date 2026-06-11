@@ -175,6 +175,7 @@ public class ServerConfig {
 		current.aiModel = aiConfig.aiModel;
 		current.aiBaseUrl = aiConfig.aiBaseUrl;
 		current.aiToolIds = aiConfig.aiToolIds;
+		current.aiProviderProfiles = aiConfig.aiProviderProfiles;
 
 		// When no model was chosen, auto-select an available one before persisting.
 		if (StringUtils.isBlank(current.aiModel)) {
