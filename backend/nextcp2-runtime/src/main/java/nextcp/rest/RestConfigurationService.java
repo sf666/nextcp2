@@ -25,6 +25,7 @@ import nextcp.devicedriver.DeviceCapabilityDto;
 import nextcp.devicedriver.DeviceDriverDiscoveryService;
 import nextcp.dto.AiConfig;
 import nextcp.dto.AiModelsDto;
+import nextcp.dto.AiToolsDto;
 import nextcp.dto.AiProvidersDto;
 import nextcp.dto.ApplicationConfig;
 import nextcp.dto.AudioAddictConfig;
@@ -252,6 +253,21 @@ public class RestConfigurationService
         AiModelsDto dto = new AiModelsDto();
         dto.provider = aiModelCatalog.getCurrentProvider();
         dto.models = aiModelCatalog.getAvailableModelsForCurrentConfig();
+        return dto;
+    }
+
+    /**
+     * Returns the server-side tools offered by the OpenAI-compatible endpoint of the
+     * given (possibly not yet saved) AI configuration (e.g. OpenWebUI
+     * {@code {aiBaseUrl}/v1/tools/}), used to populate the tool checkboxes in the AI
+     * settings. Takes the edited configuration from the client so the list follows
+     * provider/base URL changes without saving first.
+     */
+    @PostMapping("/listAiTools")
+    public AiToolsDto listAiTools(@RequestBody AiConfig aiConfig)
+    {
+        AiToolsDto dto = new AiToolsDto();
+        dto.tools = aiModelCatalog.listServerTools(aiConfig);
         return dto;
     }
 

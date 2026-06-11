@@ -1,5 +1,8 @@
 package nextcp.config;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.lang.StringUtils;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import com.google.genai.Client;
 
+import nextcp.ai.AiModelCatalog;
 import nextcp.dto.AiConfig;
 import nextcp.dto.Config;
 
@@ -55,15 +59,20 @@ public class ChatClientProvider {
 			Acknowledge the successful execution of any action in a single, extremely brief sentence suitable for text-to-speech output.
 			""";
 
+	/** Wildcard value for {@code aiToolIds}: use all tools offered by the server. */
+	private static final String TOOL_IDS_WILDCARD = "*";
+
 	private final Config config;
 	private final ToolCallbackProvider upnpControlPointTools;
+	private final AiModelCatalog aiModelCatalog;
 
 	private ChatClient cachedClient;
 	private String cachedSignature;
 
-	public ChatClientProvider(Config config, ToolCallbackProvider upnpControlPointTools) {
+	public ChatClientProvider(Config config, ToolCallbackProvider upnpControlPointTools, AiModelCatalog aiModelCatalog) {
 		this.config = config;
 		this.upnpControlPointTools = upnpControlPointTools;
+		this.aiModelCatalog = aiModelCatalog;
 	}
 
 	/**
@@ -74,13 +83,17 @@ public class ChatClientProvider {
 	 */
 	public synchronized ChatClient getChatClient() {
 		AiConfig aiConfig = (config != null) ? config.aiConfig : null;
-		String signature = signatureOf(aiConfig);
+		// Resolve the server-side tool ids first: with the wildcard configured they are
+		// fetched live from the server, so a changed toolset alters the signature and
+		// triggers a client rebuild without any config change or restart.
+		List<String> toolIds = resolveToolIds(aiConfig);
+		String signature = signatureOf(aiConfig) + "|" + toolIds;
 
 		if (cachedClient != null && Objects.equals(signature, cachedSignature)) {
 			return cachedClient;
 		}
 
-		ChatModel chatModel = createChatModel(aiConfig);
+		ChatModel chatModel = createChatModel(aiConfig, toolIds);
 		cachedClient = (chatModel != null) ? buildChatClient(chatModel, aiConfig) : null;
 		cachedSignature = signature;
 
@@ -122,7 +135,7 @@ public class ChatClientProvider {
 			return "none";
 		}
 		return String.join("|", String.valueOf(c.aiEnabled), String.valueOf(c.aiSendTools), String.valueOf(c.aiProvider),
-			String.valueOf(c.aiModel), String.valueOf(c.aiBaseUrl), String.valueOf(c.aiApiKey));
+			String.valueOf(c.aiModel), String.valueOf(c.aiBaseUrl), String.valueOf(c.aiApiKey), String.valueOf(c.aiToolIds));
 	}
 
 	/**
@@ -130,7 +143,7 @@ public class ChatClientProvider {
 	 * Provider-independent attributes such as the API key and the model name are
 	 * read from the same {@link AiConfig} for every provider.
 	 */
-	private ChatModel createChatModel(AiConfig aiConfig) {
+	private ChatModel createChatModel(AiConfig aiConfig, List<String> toolIds) {
 		if (aiConfig == null || StringUtils.isBlank(aiConfig.aiProvider)) {
 			log.info("No aiProvider configured - ChatModel will not be initialized.");
 			return null;
@@ -141,7 +154,7 @@ public class ChatClientProvider {
 			return buildGoogleChatModel(aiConfig);
 		}
 		if (isOpenAiCompatible(provider)) {
-			return buildOpenAiChatModel(aiConfig);
+			return buildOpenAiChatModel(aiConfig, toolIds);
 		}
 
 		log.error("Unknown aiProvider '{}'. Supported values: google, openai, openwebui.", provider);
@@ -176,7 +189,7 @@ public class ChatClientProvider {
 	 * configured base URL, so {@code aiBaseUrl} must include the full prefix, e.g.
 	 * {@code http://my-host:3000/api} for OpenWebUI.
 	 */
-	private ChatModel buildOpenAiChatModel(AiConfig aiConfig) {
+	private ChatModel buildOpenAiChatModel(AiConfig aiConfig, List<String> toolIds) {
 		try {
 			log.info("Initializing OpenAiChatModel (provider={}) with model: {} at baseUrl: {}", aiConfig.aiProvider,
 				aiConfig.aiModel, aiConfig.aiBaseUrl);
@@ -190,16 +203,43 @@ public class ChatClientProvider {
 			// In Spring AI 2.0 the OpenAI integration is backed by the official
 			// openai-java SDK. baseUrl, apiKey and model are configured directly on
 			// the options; OpenAiChatModel builds the underlying client from them.
-			OpenAiChatOptions options = OpenAiChatOptions.builder()
+			OpenAiChatOptions.Builder optionsBuilder = OpenAiChatOptions.builder()
 				.baseUrl(aiConfig.aiBaseUrl)
 				.apiKey(StringUtils.defaultString(aiConfig.aiApiKey))
-				.model(aiConfig.aiModel)
-				.build();
+				.model(aiConfig.aiModel);
 
-			return OpenAiChatModel.builder().options(options).build();
+			// OpenWebUI executes its own (server-side) tools for API requests only when
+			// the request body contains a "tool_ids" array referencing registered tools
+			// (e.g. "server:mcp:nextcp2"). The OpenAI API itself has no such field, so it
+			// is injected as an extra body property. Requires the model's function calling
+			// mode to be "default" in OpenWebUI, otherwise the tool calls are returned to
+			// the client instead of being executed server-side.
+			if (!toolIds.isEmpty()) {
+				log.info("Injecting tool_ids {} into chat completion requests (server-side tool execution).", toolIds);
+				optionsBuilder.extraBody(Map.of("tool_ids", toolIds));
+			}
+
+			return OpenAiChatModel.builder().options(optionsBuilder.build()).build();
 		} catch (Exception e) {
 			log.error("Error initializing OpenAiChatModel.", e);
 			return null;
 		}
+	}
+
+	/**
+	 * Resolves the server-side tool ids for the given configuration. A blank value
+	 * yields no tool ids, the wildcard {@code *} fetches all tools currently
+	 * registered on the server (OpenAI-compatible providers only, e.g. OpenWebUI),
+	 * otherwise the value is treated as a comma-separated list of tool ids.
+	 */
+	private List<String> resolveToolIds(AiConfig aiConfig) {
+		if (aiConfig == null || StringUtils.isBlank(aiConfig.aiToolIds) || !isOpenAiCompatible(aiConfig.aiProvider)) {
+			return List.of();
+		}
+		String value = aiConfig.aiToolIds.trim();
+		if (TOOL_IDS_WILDCARD.equals(value)) {
+			return aiModelCatalog.listServerToolIds(aiConfig);
+		}
+		return Arrays.stream(value.split(",")).map(String::trim).filter(StringUtils::isNotBlank).toList();
 	}
 }

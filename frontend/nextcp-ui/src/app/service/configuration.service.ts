@@ -4,7 +4,7 @@ import { UuidService } from './../util/uuid.service';
 import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { SseService } from './sse/sse.service';
-import { RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, ApplicationConfig, MusicbrainzSupport, MediaPlayerConfigDto, AudioAddictConfig, AiConfig, AiProvidersDto, AiModelsDto } from './dto.d';
+import { RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, ApplicationConfig, MusicbrainzSupport, MediaPlayerConfigDto, AudioAddictConfig, AiConfig, AiProvidersDto, AiModelsDto, AiToolDto, AiToolsDto } from './dto.d';
 import { GenericResultService } from './generic-result.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
@@ -72,6 +72,7 @@ export class ConfigurationService {
     aiApiKey: '',
     aiModel: '',
     aiBaseUrl: '',
+    aiToolIds: '',
     selectedRendererUdn: '',
     selectedServerUdn: '',
   }
@@ -82,6 +83,8 @@ export class ConfigurationService {
   // AI providers/models offered by the backend, used to populate the settings dropdowns.
   public aiProviders = signal<string[]>([]);
   public aiModels = signal<string[]>([]);
+  // Server-side tools offered by the configured OpenAI-compatible endpoint (e.g. OpenWebUI).
+  public aiTools = signal<AiToolDto[]>([]);
 
   musicBrainzConfig: MusicbrainzSupport = {   // MusicBrainz username/password
     password: '',
@@ -218,8 +221,9 @@ export class ConfigurationService {
     this.httpService.postWithSuccessMessage(this.baseUri, uri, this.aiConfig, "Save AI config", "success")
       .subscribe(() => {
         this.aiEnabled.set(this.aiConfig.aiEnabled ?? true);
-        // Refresh the available models now that the (base URL / provider) is saved.
+        // Refresh the available models/tools now that the (base URL / provider) is saved.
         this.getAiModels();
+        this.listAiTools();
       });
   }
 
@@ -236,6 +240,15 @@ export class ConfigurationService {
     const uri = '/getAiModels';
     this.httpService.get<AiModelsDto>(this.baseUri, uri).subscribe(data => {
       this.aiModels.set(data?.models ?? []);
+    });
+  }
+
+  // Loads the server-side tools offered by the endpoint of the CURRENT (possibly
+  // unsaved) AI form values, so the checkbox list follows provider/base URL edits.
+  public listAiTools(): void {
+    const uri = '/listAiTools';
+    this.httpService.post<AiToolsDto>(this.baseUri, uri, this.aiConfig).subscribe(data => {
+      this.aiTools.set(data?.tools ?? []);
     });
   }
 
@@ -314,8 +327,9 @@ export class ConfigurationService {
     this.applicationConfig = Object.assign({}, serverConfig.applicationConfig);
     this.aiConfig = Object.assign({}, serverConfig.aiConfig);
     this.aiEnabled.set(serverConfig.aiConfig?.aiEnabled ?? true);
-    // Populate the model dropdown for the now-known provider/base URL.
+    // Populate the model dropdown and tool list for the now-known provider/base URL.
     this.getAiModels();
+    this.listAiTools();
     this.musicBrainzConfig = Object.assign({}, serverConfig.musicbrainzSupport);
     this.audioAddictConfig.set(serverConfig.audioAddictConfig);
   }

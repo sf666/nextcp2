@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import nextcp.dto.AiConfig;
+import nextcp.dto.AiToolDto;
 import nextcp.dto.Config;
 
 /**
@@ -110,6 +111,73 @@ public class AiModelCatalog {
 
 	private boolean isOpenAiCompatible(String provider) {
 		return "openai".equalsIgnoreCase(provider) || "openwebui".equalsIgnoreCase(provider);
+	}
+
+	/**
+	 * Lists the ids of all tools registered on an OpenWebUI server by querying
+	 * {@code {aiBaseUrl}/v1/tools/}. These ids can be passed as {@code tool_ids} in a
+	 * chat completion request so OpenWebUI executes the tools server-side. Network or
+	 * parse errors are logged and result in an empty list. Non-OpenWebUI endpoints
+	 * (e.g. api.openai.com) simply return an error status, which also yields an
+	 * empty list.
+	 *
+	 * @param aiConfig the AI configuration providing base URL and API key
+	 * @return a (possibly empty) list of tool ids, never {@code null}
+	 */
+	public List<String> listServerToolIds(AiConfig aiConfig) {
+		return listServerTools(aiConfig).stream().map(t -> t.id).toList();
+	}
+
+	/**
+	 * Lists all tools registered on an OpenWebUI server by querying
+	 * {@code {aiBaseUrl}/v1/tools/}, extracting id and display name per tool.
+	 * Network or parse errors are logged and result in an empty list. Non-OpenWebUI
+	 * endpoints (e.g. api.openai.com) simply return an error status, which also
+	 * yields an empty list.
+	 *
+	 * @param aiConfig the AI configuration providing base URL and API key
+	 * @return a (possibly empty) list of tools, never {@code null}
+	 */
+	public List<AiToolDto> listServerTools(AiConfig aiConfig) {
+		if (aiConfig == null || StringUtils.isBlank(aiConfig.aiBaseUrl) || !isOpenAiCompatible(aiConfig.aiProvider)) {
+			return List.of();
+		}
+		try {
+			String base = StringUtils.removeEnd(aiConfig.aiBaseUrl.trim(), "/");
+			URI uri = URI.create(base + "/v1/tools/");
+
+			HttpRequest.Builder requestBuilder = HttpRequest.newBuilder(uri).GET().timeout(Duration.ofSeconds(8));
+			if (StringUtils.isNotBlank(aiConfig.aiApiKey)) {
+				requestBuilder.header("Authorization", "Bearer " + aiConfig.aiApiKey);
+			}
+
+			HttpResponse<String> response = httpClient.send(requestBuilder.build(), HttpResponse.BodyHandlers.ofString());
+			if (response.statusCode() / 100 != 2) {
+				log.warn("Listing tools from {} failed with HTTP {}.", uri, response.statusCode());
+				return List.of();
+			}
+
+			// OpenWebUI returns a top-level JSON array of tool objects; tolerate a
+			// wrapped {"data": [...]} structure as well.
+			JsonNode root = objectMapper.readTree(response.body());
+			JsonNode tools = root.isArray() ? root : root.path("data");
+			List<AiToolDto> result = new ArrayList<>();
+			if (tools.isArray()) {
+				for (JsonNode tool : tools) {
+					String id = tool.path("id").asText(null);
+					if (StringUtils.isNotBlank(id)) {
+						AiToolDto dto = new AiToolDto();
+						dto.id = id;
+						dto.name = tool.path("name").asText(id);
+						result.add(dto);
+					}
+				}
+			}
+			return result;
+		} catch (Exception e) {
+			log.warn("Could not list tools from OpenAI-compatible endpoint: {}", e.getMessage());
+			return List.of();
+		}
 	}
 
 	/**

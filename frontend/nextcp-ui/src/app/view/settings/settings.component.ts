@@ -108,6 +108,8 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.layoutService.setFramedViewWithoutNavbar();
+    // Populate the server-side tool list for the current AI configuration.
+    this.configService.listAiTools();
   }
 
   showAdvancedRendererSettings(rendererConfig: RendererDeviceConfiguration): boolean {
@@ -209,6 +211,47 @@ export class SettingsComponent implements OnInit {
   // Model options for the current provider, including the currently configured model.
   aiModelOptions(): string[] {
     return this.mergeCurrent(this.configService.aiModels(), this.configService.aiConfig.aiModel);
+  }
+
+  // Applies an AI provider change and reloads the server-side tools for it.
+  onAiProviderChange(provider: string): void {
+    this.configService.aiConfig.aiProvider = provider;
+    this.configService.listAiTools();
+  }
+
+  // Reloads the server-side tools, e.g. after the base URL or API key was edited.
+  reloadAiTools(): void {
+    this.configService.listAiTools();
+  }
+
+  // Whether the given server-side tool is part of the configured aiToolIds.
+  // The wildcard '*' selects every tool offered by the server.
+  isAiToolSelected(toolId: string): boolean {
+    const value = (this.configService.aiConfig.aiToolIds ?? '').trim();
+    if (value === '*') {
+      return true;
+    }
+    return this.parseAiToolIds(value).includes(toolId);
+  }
+
+  // Adds or removes a tool id from aiToolIds. A configured wildcard is
+  // materialized into the explicit list of all server tools first.
+  toggleAiTool(toolId: string, checked: boolean): void {
+    const value = (this.configService.aiConfig.aiToolIds ?? '').trim();
+    let selected = value === '*'
+      ? this.configService.aiTools().map(t => t.id)
+      : this.parseAiToolIds(value);
+
+    if (checked && !selected.includes(toolId)) {
+      selected = [...selected, toolId];
+    } else if (!checked) {
+      selected = selected.filter(id => id !== toolId);
+    }
+    this.configService.aiConfig.aiToolIds = selected.join(',');
+  }
+
+  private parseAiToolIds(value: string): string[] {
+    return value.split(',').map(id => id.trim()).filter(id => id.length > 0);
   }
 
   private mergeCurrent(list: string[], current: string | null | undefined): string[] {

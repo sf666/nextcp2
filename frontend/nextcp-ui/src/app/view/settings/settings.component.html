@@ -366,15 +366,16 @@
           <label for="FORM_ai_enabled" class="text-sm text-gray-400">AI enabled</label>
         </div>
         <div class="relative z-0 w-full mb-5 group">
-          <input [(ngModel)]="configService.aiConfig.aiBaseUrl" type="text" name="FORM_ai_baseurl" id="FORM_ai_baseurl"
+          <input [(ngModel)]="configService.aiConfig.aiBaseUrl" (change)="reloadAiTools()" type="text" name="FORM_ai_baseurl" id="FORM_ai_baseurl"
             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
             placeholder=" " />
           <label for="FORM_ai_baseurl"
             class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">AI
-            base URL incl. prefix (e.g. http://host:3000/api for OpenWebUI)</label>
+            base URL (e.g. http://host:3000/api)</label>
         </div>
         <div class="relative z-0 w-full mb-5 group">
-          <select [(ngModel)]="configService.aiConfig.aiProvider" name="FORM_ai_provider" id="FORM_ai_provider"
+          <select [ngModel]="configService.aiConfig.aiProvider" (ngModelChange)="onAiProviderChange($event)"
+            name="FORM_ai_provider" id="FORM_ai_provider"
             class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer">
             @for (provider of aiProviderOptions(); track provider) {
               <option [ngValue]="provider">{{ provider }}</option>
@@ -385,7 +386,7 @@
             provider</label>
         </div>
         <div class="relative z-0 w-full mb-5 group">
-          <input [(ngModel)]="configService.aiConfig.aiApiKey" type="text" name="FORM_ai_apikey" id="FORM_ai_apikey"
+          <input [(ngModel)]="configService.aiConfig.aiApiKey" (change)="reloadAiTools()" type="text" name="FORM_ai_apikey" id="FORM_ai_apikey"
             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
             placeholder=" " />
           <label for="FORM_ai_apikey"
@@ -399,13 +400,6 @@
             (ngModelChange)="configService.aiConfig.aiSendTools = $event">
           <label for="FORM_ai_sendtools" class="text-sm text-gray-400">Send nextCP tools</label>
         </div>
-        <div class="relative z-0 w-full mb-5 group flex items-center gap-3 py-2.5">
-          <input type="checkbox" name="FORM_ai_memory" id="FORM_ai_memory"
-            class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
-            [ngModel]="configService.aiConfig.aiConversationMemory ?? false"
-            (ngModelChange)="configService.aiConfig.aiConversationMemory = $event">
-          <label for="FORM_ai_memory" class="text-sm text-gray-400">Conversation memory</label>
-        </div>
         <div class="relative z-0 w-full mb-5 group">
           <select [(ngModel)]="configService.aiConfig.aiModel" name="FORM_ai_model" id="FORM_ai_model"
             class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer">
@@ -417,6 +411,40 @@
           <label for="FORM_ai_model"
             class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">AI
             model</label>
+        </div>
+        <div class="relative z-0 w-full mb-5 group flex items-center gap-3 py-2.5">
+          <input type="checkbox" name="FORM_ai_memory" id="FORM_ai_memory"
+            class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
+            [ngModel]="configService.aiConfig.aiConversationMemory ?? false"
+            (ngModelChange)="configService.aiConfig.aiConversationMemory = $event">
+          <label for="FORM_ai_memory" class="text-sm text-gray-400">Conversation memory</label>
+        </div>
+        <div class="relative z-0 w-full mb-5 group sm:col-span-2">
+          <input [(ngModel)]="configService.aiConfig.aiToolIds" type="text" name="FORM_ai_toolids" id="FORM_ai_toolids"
+            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
+            placeholder=" " />
+          <label for="FORM_ai_toolids"
+            class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Server-side
+            tool IDs (* = all)</label>
+        </div>
+        <div class="relative z-0 w-full mb-5 group sm:col-span-2">
+          <span class="text-sm text-gray-400">Server-side tools</span>
+          @if (configService.aiTools().length > 0) {
+            <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-y-1 gap-x-6">
+              @for (tool of configService.aiTools(); track tool.id) {
+                <div class="flex items-center gap-3 py-1">
+                  <input type="checkbox" [name]="'FORM_ai_tool_' + tool.id" [id]="'FORM_ai_tool_' + tool.id"
+                    class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
+                    [ngModel]="isAiToolSelected(tool.id)"
+                    (ngModelChange)="toggleAiTool(tool.id, $event)">
+                  <label [for]="'FORM_ai_tool_' + tool.id" class="text-sm text-gray-400"
+                    [title]="tool.id">{{ tool.name || tool.id }}</label>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="mt-2 text-sm text-gray-500">No server-side tools found for this provider / base URL.</div>
+          }
         </div>
       </div>
       <button mat-stroked-button color="primary" (click)="saveAiConfig()">save</button>

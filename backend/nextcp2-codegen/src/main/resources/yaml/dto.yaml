@@ -48,6 +48,7 @@ AiConfig:
    aiApiKey: String
    aiModel: String
    aiBaseUrl: String?
+   aiToolIds: String?
    selectedRendererUdn: String?
    selectedServerUdn: String?
 
@@ -501,6 +502,15 @@ AiProvidersDto:
 AiModelsDto:
    provider: String?
    models: List<String>
+
+# Single server-side tool offered by the AI endpoint (e.g. OpenWebUI).
+AiToolDto:
+   id: String
+   name: String?
+
+# Tools available on the configured OpenAI-compatible endpoint.
+AiToolsDto:
+   tools: List<AiToolDto>
 
 SelectedDevicesDto:
    mediaRenderer: MediaRendererDto
