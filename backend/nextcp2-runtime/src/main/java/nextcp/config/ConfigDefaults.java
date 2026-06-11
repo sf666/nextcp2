@@ -29,6 +29,8 @@ public class ConfigDefaults
             config.aiConfig.aiEnabled = true;
             // Send nextCP's own MCP tools by default (previous behavior).
             config.aiConfig.aiSendTools = true;
+            // Conversation memory off by default (each message handled statelessly).
+            config.aiConfig.aiConversationMemory = false;
             config.aiConfig.aiProvider = "google";
             config.aiConfig.aiApiKey = "your-api-key";
             config.aiConfig.aiModel = "gemini-3.5-flash";
@@ -49,6 +51,11 @@ public class ConfigDefaults
         {
             // Backfill for configs written before the send-tools switch was added.
             config.aiConfig.aiSendTools = true;
+        }
+        if (config.aiConfig != null && config.aiConfig.aiConversationMemory == null)
+        {
+            // Backfill for configs written before the conversation-memory switch was added.
+            config.aiConfig.aiConversationMemory = false;
         }
         if (config.aiConfig != null && "openwebui".equalsIgnoreCase(config.aiConfig.aiProvider))
         {

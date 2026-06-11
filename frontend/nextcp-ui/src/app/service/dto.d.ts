@@ -1,10 +1,11 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-06-11 09:32:05.
+// Generated using typescript-generator version 4.1.1 on 2026-06-11 11:34:33.
 
 export interface AiConfig {
     aiEnabled: boolean;
     aiSendTools: boolean;
+    aiConversationMemory: boolean;
     aiProvider: string;
     aiApiKey: string;
     aiModel: string;

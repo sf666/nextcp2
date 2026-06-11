@@ -20,6 +20,7 @@ export class ChatAiService {
   private readonly actionUri = '/doAction';
   private readonly selectedDevicesUri = '/selectedDevices';
   private readonly historyUri = '/history';
+  private readonly clearHistoryUri = '/clearHistory';
   private readonly headers: HeadersInit = {
     'Content-Type': 'application/json',
     'Accept': 'text/event-stream',
@@ -46,6 +47,14 @@ export class ChatAiService {
    */
   public getHistory(): Observable<ChatHistoryDto> {
     return this.http.get<ChatHistoryDto>(`${this.baseUri}${this.historyUri}`);
+  }
+
+  /**
+   * Clears the chat history (start a new chat). The backend pushes the empty
+   * history via the CHAT_HISTORY_CHANGED SSE event, so the UI updates itself.
+   */
+  public clearHistory(): Observable<void> {
+    return this.http.post<void>(`${this.baseUri}${this.clearHistoryUri}`, {});
   }
 
   public sendMessage(message: string): Observable<ChatAiResponse | string> {

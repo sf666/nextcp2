@@ -101,6 +101,20 @@ public class ChatHistoryService {
 	}
 
 	/**
+	 * Clears the entire chat history (e.g. when the user starts a new chat) and
+	 * pushes the now-empty history to SSE clients. When conversation memory is
+	 * enabled this also effectively resets the memory window, because the memory
+	 * is derived from this history.
+	 */
+	public void clearHistory() {
+		synchronized (this) {
+			messages.clear();
+		}
+		log.info("Chat history cleared.");
+		publishHistoryChanged();
+	}
+
+	/**
 	 * Appends a standalone, already-completed assistant message to the history.
 	 * Used for system-generated notices (e.g. "AI provider switched ...") that are
 	 * not the result of a user exchange. Pushes the updated history to SSE clients.

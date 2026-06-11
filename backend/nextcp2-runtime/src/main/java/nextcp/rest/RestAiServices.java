@@ -71,6 +71,15 @@ public class RestAiServices {
 		return chatHistoryService.getHistory();
 	}
 
+	/**
+	 * Clears the chat history to start a new conversation. The empty history is
+	 * pushed to all connected clients via the {@code CHAT_HISTORY_CHANGED} SSE event.
+	 */
+	@PostMapping(value = "/clearHistory")
+	public void clearHistory() {
+		chatHistoryService.clearHistory();
+	}
+
 	@PostMapping(value = "/doAction", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public SseEmitter sendTextToGemini(@RequestBody String userText) {
 		SseEmitter emitter = new SseEmitter(120000L);

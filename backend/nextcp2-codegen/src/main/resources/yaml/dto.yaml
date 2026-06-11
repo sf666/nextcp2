@@ -43,6 +43,7 @@ Config:
 AiConfig:
    aiEnabled: Boolean
    aiSendTools: Boolean
+   aiConversationMemory: Boolean
    aiProvider: String
    aiApiKey: String
    aiModel: String

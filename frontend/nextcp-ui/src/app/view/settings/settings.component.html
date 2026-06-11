@@ -399,6 +399,13 @@
             (ngModelChange)="configService.aiConfig.aiSendTools = $event">
           <label for="FORM_ai_sendtools" class="text-sm text-gray-400">Send nextCP tools</label>
         </div>
+        <div class="relative z-0 w-full mb-5 group flex items-center gap-3 py-2.5">
+          <input type="checkbox" name="FORM_ai_memory" id="FORM_ai_memory"
+            class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
+            [ngModel]="configService.aiConfig.aiConversationMemory ?? false"
+            (ngModelChange)="configService.aiConfig.aiConversationMemory = $event">
+          <label for="FORM_ai_memory" class="text-sm text-gray-400">Conversation memory</label>
+        </div>
         <div class="relative z-0 w-full mb-5 group">
           <select [(ngModel)]="configService.aiConfig.aiModel" name="FORM_ai_model" id="FORM_ai_model"
             class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer">

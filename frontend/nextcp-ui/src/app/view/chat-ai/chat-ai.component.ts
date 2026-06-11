@@ -45,6 +45,7 @@ export class ChatAiComponent implements OnInit, OnDestroy {
   private selectionRequest?: Subscription;
   private historyRequest?: Subscription;
   private historyPushSub?: Subscription;
+  private clearRequest?: Subscription;
 
   constructor(private chatAiService: ChatAiService, private sseService: SseService) {}
 
@@ -63,6 +64,23 @@ export class ChatAiComponent implements OnInit, OnDestroy {
     this.selectionRequest?.unsubscribe();
     this.historyRequest?.unsubscribe();
     this.historyPushSub?.unsubscribe();
+    this.clearRequest?.unsubscribe();
+  }
+
+  /**
+   * Starts a new chat: clears the conversation on the backend (which also resets
+   * the conversation-memory window) and optimistically resets the local view.
+   */
+  newChat(): void {
+    if (this.isLoading()) {
+      return;
+    }
+    this.clearRequest?.unsubscribe();
+    this.messages.set([WELCOME_MESSAGE]);
+    this.userInput = '';
+    this.clearRequest = this.chatAiService.clearHistory().subscribe({
+      error: (err: unknown) => console.warn('[chat-ai] could not clear history', err),
+    });
   }
 
   /**

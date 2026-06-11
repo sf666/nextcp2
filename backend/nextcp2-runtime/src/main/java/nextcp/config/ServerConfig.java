@@ -169,6 +169,7 @@ public class ServerConfig {
 
 		current.aiEnabled = aiConfig.aiEnabled;
 		current.aiSendTools = aiConfig.aiSendTools;
+		current.aiConversationMemory = aiConfig.aiConversationMemory;
 		current.aiProvider = aiConfig.aiProvider;
 		current.aiApiKey = aiConfig.aiApiKey;
 		current.aiModel = aiConfig.aiModel;
