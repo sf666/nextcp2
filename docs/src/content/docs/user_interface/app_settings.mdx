@@ -191,6 +191,61 @@ Here are additional UMS server actions available, if the active media server is 
     </table>
 </div>
 
+## AI Configuration
+
+Configures the built-in [AI chat assistant](/nextcp2/ai/chat_assistant/). <span class="text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">NOTE: The AI feature is experimental and under active development — settings may change with any release.</span>
+Changes are applied immediately after saving — no restart is required.
+For provider setup examples (Google Gemini, OpenWebUI) and troubleshooting see [AI Configuration](/nextcp2/ai/ai_configuration/).
+
+<div class="relative overflow-x-auto">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">field</th>
+                <th scope="col" class="px-6 py-3">purpose</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">AI enabled</td>
+                <td class="px-6 py-4">Master switch for the AI assistant feature.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">AI provider</td>
+                <td class="px-6 py-4">Selects the active provider: <code>google</code> (Gemini) or <code>openai</code> (OpenAI and OpenAI-compatible endpoints like OpenWebUI). Switching providers saves the current settings to a per-provider profile and restores the settings last used with the newly selected provider.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Base URL</td>
+                <td class="px-6 py-4">Only for OpenAI-compatible endpoints; disabled for Google. Enter the API root, i.e. <code>http://localhost:3000/api</code> for OpenWebUI. <span class="text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">NOTE: Do not append /v1 or /chat/completions — these are added automatically.</span></td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">API key</td>
+                <td class="px-6 py-4">Provider API key. Required for Google; for OpenAI-compatible endpoints it depends on the server.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Model</td>
+                <td class="px-6 py-4">The model to use. The list is fetched live from the provider and can be filtered by typing.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Send nextCP tools</td>
+                <td class="px-6 py-4">If checked (default), nextCP/2 sends its built-in tools (device selection, radio playback, language switching) to the model. Uncheck if your endpoint provides its own server-side tools.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Conversation memory</td>
+                <td class="px-6 py-4">If checked, recent messages of the conversation are sent as context with each request, so follow-up questions work. Increases token usage. Default: off.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Tool IDs</td>
+                <td class="px-6 py-4">OpenWebUI only: comma-separated list of server-side tool IDs to attach to each request, or <code>*</code> to use all tools registered on the endpoint.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Server-side tools</td>
+                <td class="px-6 py-4">OpenWebUI only: if the endpoint exposes tools, they are listed as checkboxes for granular selection.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
 ## Accounts
 ##### Spotify
 Connect your Spotify account to enable discovery of artist album art. If the browser is connected to localhost, a one-step connection linking process is available.

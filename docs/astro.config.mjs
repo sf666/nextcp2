@@ -66,7 +66,11 @@ export default defineConfig({
 				'user_interface/my_albums',
 				'user_interface/app_settings',
 			]},
-			{ label: 'Integration', items: [ 
+			{ label: 'AI Assistant', items: [
+				'ai/chat_assistant',
+				'ai/ai_configuration',
+			]},
+			{ label: 'Integration', items: [
 				'integration/rest_api',
 				'integration/openhab',
 			]},

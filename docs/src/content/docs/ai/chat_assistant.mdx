@@ -1,0 +1,59 @@
+---
+title: AI Chat Assistant
+order: 1
+---
+
+:::caution[Experimental]
+The AI assistant is experimental and under active development. Features, settings and behavior may change with any release.
+:::
+
+nextCP/2 includes a built-in AI assistant that lets you control your audio setup with natural language.
+Open it via the **AI Bot** entry in the sidebar. You can ask the assistant to select a player or a music
+server, start a radio station, or switch the application language — the assistant performs these actions
+directly through nextCP/2.
+
+:::note
+The AI assistant requires a configured AI provider (Google Gemini or any OpenAI-compatible endpoint).
+See [AI Configuration](/nextcp2/ai/ai_configuration/) for setup instructions.
+:::
+
+## What the assistant can do
+
+The assistant has access to a set of tools inside nextCP/2. With these it can:
+
+| Capability | Example prompt |
+| ---------- | -------------- |
+| List and select media renderers (players) | "Which players are available?" / "Use the living room player." |
+| List and select media servers | "Show me my music servers." / "Switch to the NAS server." |
+| List radio stations of the selected player | "What radio presets does my player have?" |
+| Play a radio station | "Play Radio Paradise in the living room." |
+| Switch the UI language | "Switch the language to German." |
+
+When the assistant selects a player or server, the selection is persisted and shown in the chat header
+(**Player** / **Server**), so you always know which devices the assistant is acting on.
+
+## Chat window
+
+- **Message input** — type your request and press send. While the assistant works, an
+  "AI is typing ..." indicator is shown; the answer streams in as soon as it is available.
+- **New chat** — clears the conversation history and starts a fresh session.
+- **History** — the conversation is stored on the server and restored when you reopen the page,
+  even from a different browser or device.
+
+## Conversation memory
+
+By default each message is answered independently. If you enable **conversation memory** in the
+AI settings, the assistant receives the most recent messages of the current conversation as context
+(up to 20 completed messages), so follow-up questions like "and now the next station" work as expected.
+
+:::caution
+Conversation memory increases token usage with every request. Keep it disabled if you use a paid,
+metered API and don't need follow-up context.
+:::
+
+## Voice control via Alexa
+
+The AI assistant can also be reached through an Amazon Alexa custom skill. The skill forwards the
+spoken text to the endpoint `POST /api/voice/alexa`, the assistant processes it with the same tools as
+the chat window, and the answer is read back by Alexa. Voice requests do not appear in the chat
+history of the web UI.

@@ -118,3 +118,17 @@ Do **not** edit English values in the Tolgee UI — they are overwritten on the 
 1. Add or remove a key? Edit `messages.properties` (English only).
 2. Push to `main`. The CI does the rest: syncs Tolgee, pulls every language, commits the localized files back.
 3. Need a German translation? Open Tolgee, translate, save. Next CI run on `main` will commit `messages_de.properties` into the repo.
+
+## Documentation site
+
+The docs are an Astro + Starlight site in `docs/` (Yarn, base path `/nextcp2/`). The published site lives in a separate repo checkout at `/Volumes/Data/svn/sf666.github.io/nextcp2/` (GitHub Pages, `sf666.github.io`).
+
+To rebuild and deploy the docs:
+
+```bash
+cd docs && yarn build                                          # builds docs/dist/ (Astro + Pagefind index)
+rm -rf /Volumes/Data/svn/sf666.github.io/nextcp2/*             # clear the published folder
+cp -R docs/dist/. /Volumes/Data/svn/sf666.github.io/nextcp2/   # copy fresh dist in
+```
+
+Then commit/push in the `sf666.github.io` repo to publish. The `[WARN] @astrojs/sitemap … requires the site option` during build is expected and harmless.

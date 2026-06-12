@@ -1,0 +1,68 @@
+---
+title: AI Configuration
+order: 2
+---
+
+:::caution[Experimental]
+The AI assistant is experimental and under active development. Settings described here may change with any release.
+:::
+
+The AI assistant is configured in **App Settings → AI Configuration**. All settings are stored in
+`nextcp2Config.json` and applied immediately after saving — no restart is required, the AI client is
+rebuilt on the fly.
+
+## Supported providers
+
+| Provider | Identifier | Notes |
+| -------- | ---------- | ----- |
+| Google Gemini | `google` | Official Google Gemini API. Requires an API key. |
+| OpenAI-compatible | `openai` | Works with OpenAI itself and any OpenAI-compatible endpoint such as OpenWebUI, Ollama (OpenAI layer), vLLM or LiteLLM. |
+
+## Settings reference
+
+| Setting | Description |
+| ------- | ----------- |
+| AI enabled | Master switch for the AI feature. |
+| AI provider | Selects the active provider (`google` or `openai`). Switching providers restores the last used settings of that provider from its profile. |
+| Base URL | Only for OpenAI-compatible endpoints; disabled for Google. Enter the API root of your endpoint, e.g. `http://localhost:3000/api` for OpenWebUI. Do **not** append `/v1` or `/chat/completions` — this is added automatically. |
+| API key | Provider API key. For Google it is required. For OpenAI-compatible endpoints it is sent as `Authorization: Bearer` header and may be optional, depending on your server. |
+| Model | The model to use. The dropdown is filled live from the provider (Google model API or `{baseUrl}/models`); you can filter by typing. |
+| Send nextCP tools | When enabled (default), nextCP/2 sends its built-in tools (device selection, radio playback, language) to the model. Disable this if your endpoint provides its own server-side tools. |
+| Conversation memory | When enabled, recent messages of the conversation are sent as context with each request. Default: off. |
+| Tool IDs | OpenWebUI only: comma-separated list of server-side tool IDs to attach to each request, or `*` to use all tools registered on the endpoint. |
+| Server-side tools | OpenWebUI only: if the endpoint exposes tools, they are listed as checkboxes for granular selection. |
+
+Use **Save AI config** to persist your changes, or **Reset AI config** to discard unsaved edits.
+
+## Provider profiles
+
+nextCP/2 stores a profile per provider. When you switch the provider in the dropdown, the API key,
+base URL, model and tool settings of the previous provider are saved, and the settings of the newly
+selected provider are restored. This makes it easy to alternate between, for example, Google Gemini
+and a local OpenWebUI instance without re-entering credentials.
+
+## Example: Google Gemini
+
+1. Create an API key in [Google AI Studio](https://aistudio.google.com/).
+2. Select provider `google` and paste the API key.
+3. Pick a model from the dropdown (e.g. `gemini-2.5-flash`).
+4. Save the AI config and open the chat window.
+
+## Example: OpenWebUI (local LLM)
+
+1. Select provider `openai`.
+2. Set the base URL to your OpenWebUI instance including the API path, e.g. `http://nas.local:3000/api`.
+3. Enter your OpenWebUI API key (Settings → Account in OpenWebUI).
+4. Pick a model from the dropdown.
+5. Optional: if you use tools registered in OpenWebUI, set **Tool IDs** (or `*` for all) and consider
+   disabling **Send nextCP tools** to avoid duplicate tool sets.
+6. Save the AI config.
+
+## Troubleshooting
+
+| Symptom | Cause / solution |
+| ------- | ---------------- |
+| "ChatClient not initialized! Please check the AI configuration ..." | Provider, model, base URL or API key is missing or invalid. Verify the settings and save again. |
+| Model dropdown is empty | The model list could not be fetched. For Google check the API key; for OpenAI-compatible endpoints check that `{baseUrl}/models` is reachable. |
+| Assistant answers but doesn't control devices | **Send nextCP tools** is disabled, or the selected model does not support tool calling. |
+| Answers lack context from previous messages | Enable **Conversation memory**. |
