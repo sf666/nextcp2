@@ -59,6 +59,9 @@ interface SettingsFormModel {
 export class SettingsComponent implements OnInit {
   amplifierInfoRendererUdn: string | null = null;
 
+  // Open state of the AI model combobox (free text + full clickable list).
+  modelDropdownOpen = signal(false);
+
   // Signal Forms Setup
   settingsModel = signal<SettingsFormModel>({
     spotifyCode: '',
@@ -217,6 +220,37 @@ export class SettingsComponent implements OnInit {
   // Model options for the current provider, including the currently configured model.
   aiModelOptions(): string[] {
     return this.mergeCurrent(this.configService.aiModels(), this.configService.aiConfig.aiModel);
+  }
+
+  // Options shown in the open combobox panel. Shows the full list when the field
+  // is empty or holds an exact selection; filters by substring while typing a new
+  // term; falls back to the full list when nothing matches (free text).
+  filteredModelOptions(): string[] {
+    const all = this.aiModelOptions();
+    const current = (this.configService.aiConfig.aiModel ?? '').trim().toLowerCase();
+    if (!current || all.some(o => o.toLowerCase() === current)) {
+      return all;
+    }
+    const filtered = all.filter(o => o.toLowerCase().includes(current));
+    return filtered.length > 0 ? filtered : all;
+  }
+
+  openModelDropdown(): void {
+    this.modelDropdownOpen.set(true);
+  }
+
+  closeModelDropdown(): void {
+    this.modelDropdownOpen.set(false);
+  }
+
+  toggleModelDropdown(): void {
+    this.modelDropdownOpen.update(open => !open);
+  }
+
+  // Picks a model from the list (free text in the input stays possible).
+  selectModel(model: string): void {
+    this.configService.aiConfig.aiModel = model;
+    this.modelDropdownOpen.set(false);
   }
 
   // Applies an AI provider change: the old provider's form values are kept in its

@@ -401,19 +401,28 @@
             (ngModelChange)="configService.aiConfig.aiSendTools = $event">
           <label for="FORM_ai_sendtools" class="text-sm text-gray-400">Send nextCP tools</label>
         </div>
-        <div class="relative z-0 w-full mb-5 group">
-          <input [(ngModel)]="configService.aiConfig.aiModel" list="FORM_ai_model_options"
-            type="text" name="FORM_ai_model" id="FORM_ai_model"
-            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
+        <div class="relative w-full mb-5 group" [class.z-0]="!modelDropdownOpen()" [class.z-50]="modelDropdownOpen()">
+          <input [(ngModel)]="configService.aiConfig.aiModel" (focus)="openModelDropdown()" (input)="openModelDropdown()"
+            type="text" name="FORM_ai_model" id="FORM_ai_model" autocomplete="off"
+            class="relative z-20 block py-2.5 px-0 pr-8 w-full text-sm bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
             placeholder=" " />
-          <datalist id="FORM_ai_model_options">
-            @for (model of aiModelOptions(); track model) {
-              <option [value]="model"></option>
-            }
-          </datalist>
+          <button type="button" tabindex="-1" (click)="toggleModelDropdown()"
+            class="absolute right-0 top-2 z-20 text-gray-400 hover:text-white">&#9662;</button>
           <label for="FORM_ai_model"
             class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">AI
             model (empty = auto-select)</label>
+          @if (modelDropdownOpen()) {
+            <div class="fixed inset-0 z-10" (click)="closeModelDropdown()"></div>
+            <ul class="absolute left-0 right-0 top-full z-20 mt-1 max-h-60 overflow-auto rounded-md border border-gray-600 bg-gray-800 shadow-lg">
+              @for (model of filteredModelOptions(); track model) {
+                <li (click)="selectModel(model)"
+                  class="cursor-pointer px-3 py-2 text-sm text-gray-100 hover:bg-gray-700"
+                  [class.bg-gray-700]="model === configService.aiConfig.aiModel">{{ model }}</li>
+              } @empty {
+                <li class="px-3 py-2 text-sm text-gray-500">no models</li>
+              }
+            </ul>
+          }
         </div>
         <div class="relative z-0 w-full mb-5 group flex items-center gap-3 py-2.5">
           <input type="checkbox" name="FORM_ai_memory" id="FORM_ai_memory"
