@@ -3,30 +3,32 @@ import { DefaultPlaylistService } from './../../mediaserver/popup/defaut-playlis
 import { LayoutService } from './../../service/layout.service';
 import { MusicItemDto } from './../../service/dto.d';
 import { RendererService } from './../../service/renderer.service';
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  signal,
+  inject,
+} from '@angular/core';
 import { StarRatingComponent } from '../../view/star-rating/star-rating.component';
 import { MusicLibraryService } from 'src/app/service/music-library/music-library.service';
 
 @Component({
-    selector: 'app-mediarenderer',
-    templateUrl: './mediarenderer.component.html',
-    styleUrls: ['./mediarenderer.component.scss'],
-    standalone: true,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [StarRatingComponent]
+  selector: 'app-mediarenderer',
+  templateUrl: './mediarenderer.component.html',
+  styleUrls: ['./mediarenderer.component.scss'],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [StarRatingComponent],
 })
-
 export class MediarendererComponent implements OnInit {
+  private defaultPlaylistService = inject(DefaultPlaylistService);
+  deviceService = inject(DeviceService);
+  private layoutService = inject(LayoutService);
+  musicLibraryService = inject(MusicLibraryService);
+  rendererService = inject(RendererService);
 
   showDetail = signal<boolean>(false);
-
-  constructor(
-    private defaultPlaylistService: DefaultPlaylistService,
-    public deviceService: DeviceService,
-    private layoutService: LayoutService,
-    public musicLibraryService: MusicLibraryService,
-    public rendererService: RendererService) {
-  }
 
   ngOnInit(): void {
     this.layoutService.setFramedView();
@@ -35,8 +37,7 @@ export class MediarendererComponent implements OnInit {
   public hasCurrentSongTitle(): boolean {
     if (this.rendererService.trackInfoAvailable()) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
@@ -58,7 +59,7 @@ export class MediarendererComponent implements OnInit {
   }
 
   getStarSize(): string {
-    return "lg";
+    return 'lg';
   }
 
   public get canBeAddedToPlaylist(): boolean {
@@ -67,8 +68,12 @@ export class MediarendererComponent implements OnInit {
 
   openAddPlaylistDialog(): void {
     if (this.getCurrentTrack().objectID != null) {
-      const dialogRef = this.defaultPlaylistService.openAddGlobalPlaylistDialogWithBackdrop(this.getCurrentTrack(), this.musicLibraryService.currentContainer());
-    }    
+      const dialogRef =
+        this.defaultPlaylistService.openAddGlobalPlaylistDialogWithBackdrop(
+          this.getCurrentTrack(),
+          this.musicLibraryService.currentContainer(),
+        );
+    }
   }
 
   detailsClicked(): void {

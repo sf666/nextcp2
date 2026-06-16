@@ -1,6 +1,6 @@
 import { RatingServiceService } from './../../service/rating-service.service';
 import { MusicItemDto } from './../../service/dto.d';
-import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation, computed, input, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation, computed, input, model, signal, inject } from '@angular/core';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 
 @Component({
@@ -9,46 +9,50 @@ import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './star-rating.component.html',
   styleUrls: ['./star-rating.component.scss'],
-  standalone: true
+  standalone: true,
 })
+export class StarRatingComponent implements OnInit {
+  private dtoGeneratorService = inject(DtoGeneratorService);
+  private ratingServiceService = inject(RatingServiceService);
 
-export class StarRatingComponent implements OnInit{
-
-  currentSong = input<MusicItemDto>(this.dtoGeneratorService.emptyMusicItemDto());
+  currentSong = input<MusicItemDto>(
+    this.dtoGeneratorService.emptyMusicItemDto(),
+  );
   isVisible = computed(() => this.currentSong().objectID?.length > 0 != null);
   rating = signal<number>(this.currentSong().rating);
-  size = input<string>("sm");
+  size = input<string>('sm');
 
-  starsAvail = model<number[]>(Array(5).fill(1).map((x, i) => i + 1));
-
-  constructor(
-    private dtoGeneratorService: DtoGeneratorService,
-    private ratingServiceService: RatingServiceService) {
-  }
+  starsAvail = model<number[]>(
+    Array(5)
+      .fill(1)
+      .map((x, i) => i + 1),
+  );
 
   ngOnInit(): void {
     this.rating.set(this.currentSong().rating);
   }
 
   starSelected(num: number): void {
-    this.ratingServiceService.setStarRating(this.currentSong().songId, this.rating(), num).subscribe({
-      next: () => this.rating.set(num),
-      error: (err) => console.log("error star selected : " + err),
-    })
+    this.ratingServiceService
+      .setStarRating(this.currentSong().songId, this.rating(), num)
+      .subscribe({
+        next: () => this.rating.set(num),
+        error: (err) => console.log('error star selected : ' + err),
+      });
   }
 
   isActive(num: number): string {
     if (this.rating() >= num) {
-      return "active";
+      return 'active';
     } else {
-      return "inactive";
+      return 'inactive';
     }
   }
 
   getIconFor(num: number): string {
     if (this.rating() >= num) {
-      return "star";
+      return 'star';
     }
-    return "grade";
+    return 'grade';
   }
 }

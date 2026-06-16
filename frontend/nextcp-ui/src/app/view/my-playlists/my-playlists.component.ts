@@ -5,12 +5,7 @@ import { ContainerDto, MusicItemDto } from './../../service/dto.d';
 import { DeviceService } from 'src/app/service/device.service';
 import { LayoutService } from './../../service/layout.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
-import {
-  Component,
-  OnInit,
-  computed,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { DisplayContainerComponent } from '../../mediaserver/display-container/display-container.component';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { toObservable } from '@angular/core/rxjs-interop';
@@ -28,15 +23,15 @@ import { toObservable } from '@angular/core/rxjs-interop';
  * Sidebar "my playlist" items.
  */
 export class MyPlaylistsComponent implements OnInit {
+  layoutService = inject(LayoutService);
+  private deviceService = inject(DeviceService);
+  private router = inject(Router);
+  private myPlaylistService = inject(MyPlaylistService);
+  contentDirectoryService = inject(ContentDirectoryService);
+
   private rootPlaylistId = '';
 
-  constructor(
-    public layoutService: LayoutService,
-    private deviceService: DeviceService,
-    private router: Router,
-    private myPlaylistService: MyPlaylistService,
-    public contentDirectoryService: ContentDirectoryService,
-  ) {
+  constructor() {
     toObservable(this.deviceService.selectedMediaServerDevice).subscribe(
       (server) =>
         this.browseToMyPlaylist(

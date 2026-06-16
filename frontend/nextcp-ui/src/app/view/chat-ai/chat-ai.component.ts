@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+  signal,
+  inject,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ChatAiService } from 'src/app/service/chat-ai.service';
@@ -32,6 +39,8 @@ const WELCOME_MESSAGE: ChatMessage = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatAiComponent implements OnInit, OnDestroy {
+  private chatAiService = inject(ChatAiService);
+  private sseService = inject(SseService);
 
   userInput = '';
   isLoading = signal(false);
@@ -46,8 +55,6 @@ export class ChatAiComponent implements OnInit, OnDestroy {
   private historyRequest?: Subscription;
   private historyPushSub?: Subscription;
   private clearRequest?: Subscription;
-
-  constructor(private chatAiService: ChatAiService, private sseService: SseService) {}
 
   ngOnInit(): void {
     this.refreshSelectedDevices();
@@ -79,7 +86,8 @@ export class ChatAiComponent implements OnInit, OnDestroy {
     this.messages.set([WELCOME_MESSAGE]);
     this.userInput = '';
     this.clearRequest = this.chatAiService.clearHistory().subscribe({
-      error: (err: unknown) => console.warn('[chat-ai] could not clear history', err),
+      error: (err: unknown) =>
+        console.warn('[chat-ai] could not clear history', err),
     });
   }
 
@@ -132,7 +140,10 @@ export class ChatAiComponent implements OnInit, OnDestroy {
 
   private mapDto(dto: ChatMessageDto): ChatMessage {
     const role = dto.role === 'USER' ? 'user' : 'assistant';
-    const status: MessageStatus = dto.status === 'PENDING' || dto.status === 'ERROR' ? dto.status : 'COMPLETE';
+    const status: MessageStatus =
+      dto.status === 'PENDING' || dto.status === 'ERROR'
+        ? dto.status
+        : 'COMPLETE';
     return {
       id: dto.id,
       role,
@@ -154,7 +165,8 @@ export class ChatAiComponent implements OnInit, OnDestroy {
     // immediately pushes a matching CHAT_HISTORY_CHANGED snapshot which becomes
     // the authoritative state (and again once the answer or an error arrives).
     this.messages.update((items) => {
-      const withoutWelcome = items.length === 1 && items[0] === WELCOME_MESSAGE ? [] : items;
+      const withoutWelcome =
+        items.length === 1 && items[0] === WELCOME_MESSAGE ? [] : items;
       return [
         ...withoutWelcome,
         { role: 'user', content: message, status: 'COMPLETE' },
@@ -163,13 +175,18 @@ export class ChatAiComponent implements OnInit, OnDestroy {
     });
     this.userInput = '';
     this.isLoading.set(true);
-    console.debug('[chat-ai] sending request', { endpoint: '/api/ai/doAction', message });
+    console.debug('[chat-ai] sending request', {
+      endpoint: '/api/ai/doAction',
+      message,
+    });
 
     // POST /doAction only triggers the backend exchange; the response content
     // and status are delivered through the history push, so we do not consume
     // the streamed body here.
     this.activeRequest = this.chatAiService.sendMessage(message).subscribe({
-      next: () => { /* content is applied via chatHistoryChanged$ push */ },
+      next: () => {
+        /* content is applied via chatHistoryChanged$ push */
+      },
       error: (err: unknown) => {
         // The backend records the failure in the history and pushes it; this is
         // only a network/transport problem with the trigger call itself.

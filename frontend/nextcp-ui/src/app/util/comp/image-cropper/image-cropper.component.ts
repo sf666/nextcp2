@@ -1,11 +1,11 @@
 import {
   Component,
   OnInit,
-  ViewChild,
   ElementRef,
-  Input,
   signal,
   ChangeDetectionStrategy,
+  input,
+  viewChild,
 } from '@angular/core';
 
 @Component({
@@ -16,11 +16,9 @@ import {
   standalone: true,
 })
 export class ImageCropperComponent implements OnInit {
-  @ViewChild('image', { static: false })
-  public imageElement!: ElementRef;
+  public readonly imageElement = viewChild.required<ElementRef>('image');
 
-  @Input('src')
-  public imageSource!: string;
+  public readonly imageSource = input.required<string>({ alias: 'src' });
 
   // Signal so the async image.onload result is picked up under OnPush.
   public readonly croppedImageData = signal('');
@@ -74,7 +72,7 @@ export class ImageCropperComponent implements OnInit {
     };
 
     // start loading our image
-    inputImage.src = this.imageSource;
+    inputImage.src = this.imageSource();
 
     /*
         this.cropper = new Cropper(this.imageElement.nativeElement, {

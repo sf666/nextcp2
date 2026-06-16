@@ -1,22 +1,26 @@
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { DtoGeneratorService } from './../util/dto-generator.service';
 import { SystemInformationDto } from './dto.d';
 import { HttpService } from './http.service';
-import { Injectable, OnInit, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SystemService {
+  private httpService = inject(HttpService);
+  private http = inject(HttpClient);
+  private dtoGeneratorService = inject(DtoGeneratorService);
 
   private baseUri = '/SystemService';
-  private systemInformationDto = signal<SystemInformationDto>(this.dtoGeneratorService.generateSystemInformationDto());
+  private systemInformationDto = signal<SystemInformationDto>(
+    this.dtoGeneratorService.generateSystemInformationDto(),
+  );
 
-  constructor(
-    private httpService: HttpService,
-    private http: HttpClient,
-    private dtoGeneratorService: DtoGeneratorService) {
-    this.httpService.get<SystemInformationDto>(this.baseUri, "/getSystemInformation").subscribe(version => this.updateBuildVersion(version));
+  constructor() {
+    this.httpService
+      .get<SystemInformationDto>(this.baseUri, '/getSystemInformation')
+      .subscribe((version) => this.updateBuildVersion(version));
   }
 
   private updateBuildVersion(data: SystemInformationDto) {
@@ -27,12 +31,14 @@ export class SystemService {
     const options = {
       responseType: 'text',
     };
-    this.http.get("/SystemService/getLastFmAppRegistration", { responseType: 'text' }).subscribe(url => this.openUrl(url));
+    this.http
+      .get('/SystemService/getLastFmAppRegistration', { responseType: 'text' })
+      .subscribe((url) => this.openUrl(url));
   }
 
   public restart(): void {
-    this.http.get("/SystemService/restartNextcp2").subscribe();
-  } 
+    this.http.get('/SystemService/restartNextcp2').subscribe();
+  }
 
   public registerNextcp2AtSpotify(): void {
     const options = {
@@ -41,30 +47,37 @@ export class SystemService {
 
     const protocolHandler =
       window.isSecureContext &&
-      typeof (navigator as Navigator & { registerProtocolHandler?: unknown }).registerProtocolHandler === 'function';
+      typeof (navigator as Navigator & { registerProtocolHandler?: unknown })
+        .registerProtocolHandler === 'function';
 
-    this.http.post("/SystemService/getSpotifyAppRegistration", protocolHandler, { responseType: 'text' }).subscribe(url => window.open(url, "_blanc"));
+    this.http
+      .post('/SystemService/getSpotifyAppRegistration', protocolHandler, {
+        responseType: 'text',
+      })
+      .subscribe((url) => window.open(url, '_blanc'));
   }
 
   public setSpotifyCode(code: string): void {
     const options = {
       responseType: 'text',
     };
-    this.httpService.get(this.baseUri, "/spotifyCallback?code=" + code).subscribe();
+    this.httpService
+      .get(this.baseUri, '/spotifyCallback?code=' + code)
+      .subscribe();
   }
 
   public getLastFmSession(): void {
     const options = {
       responseType: 'text',
     };
-    this.httpService.get(this.baseUri, "/createLastFmSession").subscribe();
+    this.httpService.get(this.baseUri, '/createLastFmSession').subscribe();
   }
 
   private openUrl(url: string) {
-    console.log("opening registration link : " + url);
-    const frame = document.getElementById("spotifyIframe");
+    console.log('opening registration link : ' + url);
+    const frame = document.getElementById('spotifyIframe');
     if (frame) {
-      frame.setAttribute("src", url);
+      frame.setAttribute('src', url);
     }
   }
 

@@ -1,16 +1,28 @@
 import { RendererService } from './renderer.service';
 import { SseService } from './sse/sse.service';
 import { GenericResultService } from './generic-result.service';
-import { GenericBooleanRequest, GenericNumberRequest, MusicItemDto, PlayRequestDto, PlaylistState, ContainerDto, PlaylistAddContainerRequest } from './dto.d';
+import {
+  GenericBooleanRequest,
+  GenericNumberRequest,
+  MusicItemDto,
+  PlayRequestDto,
+  PlaylistState,
+  ContainerDto,
+  PlaylistAddContainerRequest,
+} from './dto.d';
 import { DeviceService } from './device.service';
 import { HttpService } from './http.service';
-import { Injectable, OnInit, signal } from '@angular/core';
+import { Injectable, OnInit, signal, inject } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PlaylistService implements OnInit {
+  private httpService = inject(HttpService);
+  private rendererService = inject(RendererService);
+  private genericResultService = inject(GenericResultService);
+  private deviceService = inject(DeviceService);
 
   private baseUri = '/PlaylistService';
 
@@ -21,31 +33,31 @@ export class PlaylistService implements OnInit {
     Repeat: false,
     Shuffle: false,
     TracksMax: 255,
-    TransportState: 'unknown'
+    TransportState: 'unknown',
   });
 
   // Playlist items of selected media renderer device
   public playlistItems = signal<MusicItemDto[]>([]);
 
-  constructor(
-    private httpService: HttpService,
-    sseService: SseService,
-    private rendererService: RendererService,
-    private genericResultService: GenericResultService,
-    private deviceService: DeviceService) {
+  constructor() {
+    const sseService = inject(SseService);
+    const deviceService = this.deviceService;
 
-    // 
+    //
     // register for domain events (playlist items & playlist state)
     // ================================================================================
 
-    sseService.mediaRendererPlaylistItemsChanged$.subscribe(data => {
+    sseService.mediaRendererPlaylistItemsChanged$.subscribe((data) => {
       if (deviceService.isMediaRendererSelected(data.udn)) {
-        console.log("playlist-service mediaRendererPlaylistItemsChanged. Item count : " + data.musicItemDto.length);
+        console.log(
+          'playlist-service mediaRendererPlaylistItemsChanged. Item count : ' +
+            data.musicItemDto.length,
+        );
         this.playlistItems.set(data.musicItemDto);
       }
     });
 
-    sseService.mediaRendererPlaylistStateChanged$.subscribe(data => {
+    sseService.mediaRendererPlaylistStateChanged$.subscribe((data) => {
       if (deviceService.isMediaRendererSelected(data.udn)) {
         this.playlistState.set(data);
       }
@@ -58,19 +70,23 @@ export class PlaylistService implements OnInit {
     // ================================================================================
     this.updatePlaylistItems();
 
-
     // subscribe to device changes
-    toObservable(this.deviceService.selectedMediaRendererDevice).subscribe(data => {
-      this.getPlaylistItems(data.udn);
-      this.getPlaylistState(data.udn);
-    })
+    toObservable(this.deviceService.selectedMediaRendererDevice).subscribe(
+      (data) => {
+        this.getPlaylistItems(data.udn);
+        this.getPlaylistState(data.udn);
+      },
+    );
   }
-
 
   public updatePlaylistItems(): void {
     if (this.deviceService.selectedMediaRendererDevice().udn !== '') {
-      this.getPlaylistItems(this.deviceService.selectedMediaRendererDevice().udn);
-      this.getPlaylistState(this.deviceService.selectedMediaRendererDevice().udn);
+      this.getPlaylistItems(
+        this.deviceService.selectedMediaRendererDevice().udn,
+      );
+      this.getPlaylistState(
+        this.deviceService.selectedMediaRendererDevice().udn,
+      );
     }
   }
 
@@ -90,7 +106,10 @@ export class PlaylistService implements OnInit {
     if (this.deviceService.selectedMediaRendererDevice().udn !== '') {
       return this.deviceService.selectedMediaRendererDevice().udn;
     }
-    this.genericResultService.displayErrorMessage("output device not selected. Aborting ... ", "Output device error");
+    this.genericResultService.displayErrorMessage(
+      'output device not selected. Aborting ... ',
+      'Output device error',
+    );
     return undefined;
   }
 
@@ -104,7 +123,10 @@ export class PlaylistService implements OnInit {
       return;
     }
     const uri = '/seekId';
-    const genericNumberRequest: GenericNumberRequest = { deviceUDN: udn, value: parseInt(id) };
+    const genericNumberRequest: GenericNumberRequest = {
+      deviceUDN: udn,
+      value: parseInt(id),
+    };
     this.httpService.post(this.baseUri, uri, genericNumberRequest).subscribe();
   }
 
@@ -115,10 +137,14 @@ export class PlaylistService implements OnInit {
 
     const uri = '/getPlaylistItems';
     if (udn !== '') {
-      this.httpService.post<MusicItemDto[]>(this.baseUri, uri, udn).subscribe(data => {
-        this.playlistItems.set(data);
-        console.log("playlist-service getPlaylistItems. Item count : " + data.length);
-      });
+      this.httpService
+        .post<MusicItemDto[]>(this.baseUri, uri, udn)
+        .subscribe((data) => {
+          this.playlistItems.set(data);
+          console.log(
+            'playlist-service getPlaylistItems. Item count : ' + data.length,
+          );
+        });
     }
   }
 
@@ -129,12 +155,14 @@ export class PlaylistService implements OnInit {
 
     const uri = '/getState';
     if (udn !== '') {
-      this.httpService.post<PlaylistState>(this.baseUri, uri, udn).subscribe(data => {
-        if (data) {
-          this.playlistState.set(data);
-        } else {
-          console.log("no playlist state received for media renderer.");
-        }
+      this.httpService
+        .post<PlaylistState>(this.baseUri, uri, udn)
+        .subscribe((data) => {
+          if (data) {
+            this.playlistState.set(data);
+          } else {
+            console.log('no playlist state received for media renderer.');
+          }
         });
     }
   }
@@ -158,8 +186,8 @@ export class PlaylistService implements OnInit {
     const playRequestDto: PlayRequestDto = {
       mediaRendererDto: this.deviceService.selectedMediaRendererDevice(),
       streamMetadata: musicItemDto.currentTrackMetadata,
-      streamUrl: musicItemDto.streamingURL
-    }
+      streamUrl: musicItemDto.streamingURL,
+    };
 
     this.httpService.post(this.baseUri, uri, playRequestDto).subscribe();
   }
@@ -174,8 +202,8 @@ export class PlaylistService implements OnInit {
     const playRequestDto: PlayRequestDto = {
       mediaRendererDto: this.deviceService.selectedMediaRendererDevice(),
       streamMetadata: musicItemDto.currentTrackMetadata,
-      streamUrl: musicItemDto.streamingURL
-    }
+      streamUrl: musicItemDto.streamingURL,
+    };
 
     this.httpService.post(this.baseUri, uri, playRequestDto).subscribe();
   }
@@ -189,13 +217,24 @@ export class PlaylistService implements OnInit {
     const playlistAddContainerRequest: PlaylistAddContainerRequest = {
       containerDto: containerDto,
       shuffle: false,
-      mediaRendererUdn: udn
-    }
-    this.httpService.postWithSuccessMessage(this.baseUri, uri, playlistAddContainerRequest, 'Playlist', 'Songs successfully added.', "Error adding songs to playlist.").subscribe();
+      mediaRendererUdn: udn,
+    };
+    this.httpService
+      .postWithSuccessMessage(
+        this.baseUri,
+        uri,
+        playlistAddContainerRequest,
+        'Playlist',
+        'Songs successfully added.',
+        'Error adding songs to playlist.',
+      )
+      .subscribe();
   }
-  
 
-  public addContainerToPlaylistAndPlay(containerDto: ContainerDto, _shuffle: boolean): void {
+  public addContainerToPlaylistAndPlay(
+    containerDto: ContainerDto,
+    _shuffle: boolean,
+  ): void {
     const udn = this.getSelectedMediaRendererUdn();
     if (!udn) {
       return;
@@ -204,10 +243,19 @@ export class PlaylistService implements OnInit {
     const playlistAddContainerRequest: PlaylistAddContainerRequest = {
       containerDto: containerDto,
       shuffle: _shuffle,
-      mediaRendererUdn: udn
-    }
+      mediaRendererUdn: udn,
+    };
 
-    this.httpService.postWithSuccessMessage(this.baseUri, uri, playlistAddContainerRequest, 'Playlist', 'Songs successfully added. Start playing ... ', "Error adding songs to playlist.").subscribe();
+    this.httpService
+      .postWithSuccessMessage(
+        this.baseUri,
+        uri,
+        playlistAddContainerRequest,
+        'Playlist',
+        'Songs successfully added. Start playing ... ',
+        'Error adding songs to playlist.',
+      )
+      .subscribe();
   }
 
   public setShuffle(shuffle: boolean): void {
@@ -218,7 +266,7 @@ export class PlaylistService implements OnInit {
     const uri = '/setShuffle';
     const req: GenericBooleanRequest = {
       deviceUDN: udn,
-      value: shuffle
+      value: shuffle,
     };
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }
@@ -251,7 +299,7 @@ export class PlaylistService implements OnInit {
     const uri = '/setRepeat';
     const req: GenericBooleanRequest = {
       deviceUDN: udn,
-      value: repeat
+      value: repeat,
     };
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }
@@ -264,7 +312,7 @@ export class PlaylistService implements OnInit {
     const uri = '/delete';
     const req: GenericNumberRequest = {
       deviceUDN: udn,
-      value: parseInt(id)
+      value: parseInt(id),
     };
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }

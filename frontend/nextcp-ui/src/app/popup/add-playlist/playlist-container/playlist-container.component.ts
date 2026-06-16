@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, inject } from '@angular/core';
 import { ServerPlaylistDto } from 'src/app/service/dto';
 import { PlaylistMode } from '../add-playlist.component';
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
-import { server } from 'typescript';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -15,6 +14,8 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './playlist-container.component.scss',
 })
 export class PlaylistContainerComponent {
+  serverPlaylistService = inject(ServerPlaylistService);
+
   playlists = input<ServerPlaylistDto[]>();
   playlistMode = input<PlaylistMode>();
 
@@ -22,9 +23,6 @@ export class PlaylistContainerComponent {
   deleteClicked = output<ServerPlaylistDto>();
 
   PlaylistModeEnum: typeof PlaylistMode = PlaylistMode;
-
-  constructor(public serverPlaylistService: ServerPlaylistService) {
-  }
 
   isPlaylistMode(mode: PlaylistMode): boolean {
     if (mode.valueOf() === this.playlistMode()?.valueOf()) {

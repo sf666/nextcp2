@@ -13,7 +13,13 @@ import {
   ServerDeviceConfiguration,
 } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  signal,
+  inject,
+} from '@angular/core';
 import { form, FormField } from '@angular/forms/signals';
 import { LayoutService } from 'src/app/service/layout.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -23,11 +29,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatOptionModule } from '@angular/material/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
-import {
-  MatFormFieldModule,
-  MatLabel,
-} from '@angular/material/form-field';
-import { AlertComponent } from "src/app/comp/alert/alert.component";
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { AlertComponent } from 'src/app/comp/alert/alert.component';
 
 interface SettingsFormModel {
   spotifyCode: string;
@@ -41,7 +44,9 @@ interface SettingsFormModel {
   styleUrls: ['./settings.component.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [{ provide: ContentDirectoryService, useClass: ContentDirectoryService },], // non singleton injections
+  providers: [
+    { provide: ContentDirectoryService, useClass: ContentDirectoryService },
+  ], // non singleton injections
   imports: [
     MatFormFieldModule,
     MatSelectModule,
@@ -57,6 +62,17 @@ interface SettingsFormModel {
   ],
 })
 export class SettingsComponent implements OnInit {
+  ratingServiceService = inject(RatingServiceService);
+  contentDirectoryService = inject(ContentDirectoryService);
+  private rendererService = inject(RendererService);
+  deviceService = inject(DeviceService);
+  toastService = inject(ToastService);
+  systemService = inject(SystemService);
+  myMusicService = inject(MyMusicService);
+  private layoutService = inject(LayoutService);
+  configService = inject(ConfigurationService);
+  dtoGeneratorService = inject(DtoGeneratorService);
+
   amplifierInfoRendererUdn: string | null = null;
 
   // Open state of the AI model combobox (free text + full clickable list).
@@ -87,18 +103,7 @@ export class SettingsComponent implements OnInit {
     currentSource: this.dtoGeneratorService.emptyInputSourceDto(),
   };
 
-  constructor(
-    public ratingServiceService: RatingServiceService,
-    public contentDirectoryService: ContentDirectoryService,
-    private rendererService: RendererService,
-    public deviceService: DeviceService,
-    public toastService: ToastService,
-    public systemService: SystemService,
-    public myMusicService: MyMusicService,
-    private layoutService: LayoutService,
-    public configService: ConfigurationService,
-    public dtoGeneratorService: DtoGeneratorService
-  ) {
+  constructor() {
     var currentLocation = window.location;
     if (this.protocolHandlerAvailable()) {
       const url = `http://${currentLocation.hostname}:${currentLocation.port}/SystemService/spotifyCallbackOAuth/%s`;
@@ -116,7 +121,9 @@ export class SettingsComponent implements OnInit {
     this.configService.listAiTools();
   }
 
-  showAdvancedRendererSettings(rendererConfig: RendererDeviceConfiguration): boolean {
+  showAdvancedRendererSettings(
+    rendererConfig: RendererDeviceConfiguration,
+  ): boolean {
     if (rendererConfig.deviceDriverType) {
       return true;
     } else {
@@ -125,7 +132,8 @@ export class SettingsComponent implements OnInit {
   }
 
   toggleAmplifierInfo(rendererUdn: string): void {
-    this.amplifierInfoRendererUdn = this.amplifierInfoRendererUdn === rendererUdn ? null : rendererUdn;
+    this.amplifierInfoRendererUdn =
+      this.amplifierInfoRendererUdn === rendererUdn ? null : rendererUdn;
   }
 
   isAmplifierInfoOpen(rendererUdn: string): boolean {
@@ -145,7 +153,8 @@ export class SettingsComponent implements OnInit {
   public getMediaServerConfig(): ServerDeviceConfiguration[] {
     if (this.configService?.getServerConfig()?.serverDevices) {
       if (this.settingsForm.showOnlyActiveServer().value()) {
-        return this.configService.getServerConfig()
+        return this.configService
+          .getServerConfig()
           .serverDevices.filter((server) => this.isServerConfigActive(server));
       } else {
         return this.configService.getServerConfig().serverDevices;
@@ -158,7 +167,8 @@ export class SettingsComponent implements OnInit {
   protocolHandlerAvailable(): boolean {
     const protocolHandler =
       window.isSecureContext &&
-      typeof (navigator as Navigator & { registerProtocolHandler?: unknown }).registerProtocolHandler === 'function';
+      typeof (navigator as Navigator & { registerProtocolHandler?: unknown })
+        .registerProtocolHandler === 'function';
     return protocolHandler;
   }
 
@@ -180,7 +190,6 @@ export class SettingsComponent implements OnInit {
   get buildTime(): string {
     return this.systemService.build.time;
   }
-
 
   activateLastFM(): void {
     this.systemService.registerNextcp2AtLastFM();
@@ -214,12 +223,18 @@ export class SettingsComponent implements OnInit {
   // Provider options from the backend, including the currently configured value
   // (so a legacy/custom provider is never silently dropped from the dropdown).
   aiProviderOptions(): string[] {
-    return this.mergeCurrent(this.configService.aiProviders(), this.configService.aiConfig.aiProvider);
+    return this.mergeCurrent(
+      this.configService.aiProviders(),
+      this.configService.aiConfig.aiProvider,
+    );
   }
 
   // Model options for the current provider, including the currently configured model.
   aiModelOptions(): string[] {
-    return this.mergeCurrent(this.configService.aiModels(), this.configService.aiConfig.aiModel);
+    return this.mergeCurrent(
+      this.configService.aiModels(),
+      this.configService.aiConfig.aiModel,
+    );
   }
 
   // Options shown in the open combobox panel. Shows the full list when the field
@@ -227,11 +242,13 @@ export class SettingsComponent implements OnInit {
   // term; falls back to the full list when nothing matches (free text).
   filteredModelOptions(): string[] {
     const all = this.aiModelOptions();
-    const current = (this.configService.aiConfig.aiModel ?? '').trim().toLowerCase();
-    if (!current || all.some(o => o.toLowerCase() === current)) {
+    const current = (this.configService.aiConfig.aiModel ?? '')
+      .trim()
+      .toLowerCase();
+    if (!current || all.some((o) => o.toLowerCase() === current)) {
       return all;
     }
-    const filtered = all.filter(o => o.toLowerCase().includes(current));
+    const filtered = all.filter((o) => o.toLowerCase().includes(current));
     return filtered.length > 0 ? filtered : all;
   }
 
@@ -244,7 +261,7 @@ export class SettingsComponent implements OnInit {
   }
 
   toggleModelDropdown(): void {
-    this.modelDropdownOpen.update(open => !open);
+    this.modelDropdownOpen.update((open) => !open);
   }
 
   // Picks a model from the list (free text in the input stays possible).
@@ -261,7 +278,9 @@ export class SettingsComponent implements OnInit {
 
   // Whether the Google provider is selected (base URL does not apply then).
   isGoogleProvider(): boolean {
-    return (this.configService.aiConfig.aiProvider ?? '').toLowerCase() === 'google';
+    return (
+      (this.configService.aiConfig.aiProvider ?? '').toLowerCase() === 'google'
+    );
   }
 
   // Reloads the model/tool lists, e.g. after the base URL or API key was edited.
@@ -284,23 +303,30 @@ export class SettingsComponent implements OnInit {
   // materialized into the explicit list of all server tools first.
   toggleAiTool(toolId: string, checked: boolean): void {
     const value = (this.configService.aiConfig.aiToolIds ?? '').trim();
-    let selected = value === '*'
-      ? this.configService.aiTools().map(t => t.id)
-      : this.parseAiToolIds(value);
+    let selected =
+      value === '*'
+        ? this.configService.aiTools().map((t) => t.id)
+        : this.parseAiToolIds(value);
 
     if (checked && !selected.includes(toolId)) {
       selected = [...selected, toolId];
     } else if (!checked) {
-      selected = selected.filter(id => id !== toolId);
+      selected = selected.filter((id) => id !== toolId);
     }
     this.configService.aiConfig.aiToolIds = selected.join(',');
   }
 
   private parseAiToolIds(value: string): string[] {
-    return value.split(',').map(id => id.trim()).filter(id => id.length > 0);
+    return value
+      .split(',')
+      .map((id) => id.trim())
+      .filter((id) => id.length > 0);
   }
 
-  private mergeCurrent(list: string[], current: string | null | undefined): string[] {
+  private mergeCurrent(
+    list: string[],
+    current: string | null | undefined,
+  ): string[] {
     const result = [...(list ?? [])];
     if (current && !result.includes(current)) {
       result.unshift(current);
@@ -342,7 +368,7 @@ export class SettingsComponent implements OnInit {
 
   rescan(): void {
     this.contentDirectoryService.rescanContent(
-      this.deviceService.selectedMediaServerDevice().udn
+      this.deviceService.selectedMediaServerDevice().udn,
     );
   }
 

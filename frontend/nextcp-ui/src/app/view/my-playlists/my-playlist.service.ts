@@ -1,18 +1,17 @@
 import { Subject } from 'rxjs';
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { LayoutService } from 'src/app/service/layout.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MyPlaylistService {
+  private layoutService = inject(LayoutService);
 
   private activePlaylistId_ = signal<string>('');
   public activePlaylistId$: Subject<string> = new Subject();
 
-  constructor(
-    private layoutService: LayoutService
-  ) {
+  constructor() {
     this.activePlaylistId_.set(localStorage.getItem('lastMyPlaylistId') ?? '');
   }
 

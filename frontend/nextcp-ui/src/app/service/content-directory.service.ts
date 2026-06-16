@@ -1,7 +1,15 @@
 import { ConfigurationService } from './configuration.service';
 import { DeviceService } from './device.service';
 import { ToastService } from './toast/toast.service';
-import { map, mergeMap, Observable, range, Subject, take, takeUntil } from 'rxjs';
+import {
+  map,
+  mergeMap,
+  Observable,
+  range,
+  Subject,
+  take,
+  takeUntil,
+} from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DtoGeneratorService } from './../util/dto-generator.service';
 import { HttpService } from './http.service';
@@ -14,11 +22,23 @@ import {
   MusicItemDto,
   MusicAlbumIds,
 } from './dto.d';
-import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
+import {
+  computed,
+  DestroyRef,
+  inject,
+  Injectable,
+  signal,
+} from '@angular/core';
 import { isAssigned } from '../global';
 
 @Injectable()
 export class ContentDirectoryService {
+  configService = inject(ConfigurationService);
+  private httpService = inject(HttpService);
+  private dtoGeneratorService = inject(DtoGeneratorService);
+  private deviceService = inject(DeviceService);
+  private toastService = inject(ToastService);
+
   baseUri = '/ContentDirectoryService';
 
   // for parent navigation back to last CDS objectId
@@ -28,17 +48,24 @@ export class ContentDirectoryService {
   // signals
   // ==========================================================
 
-  public currentContainerList = signal<ContainerItemDto>(this.dtoGeneratorService.generateEmptyContainerItemDto());
-  
+  public currentContainerList = signal<ContainerItemDto>(
+    this.dtoGeneratorService.generateEmptyContainerItemDto(),
+  );
+
   isCurrentContainerRoot = computed(() => {
-    return (isAssigned(this.currentContainerList().currentContainer) && 
-      this.currentContainerList().currentContainer?.id === '0' || 
-      this.currentContainerList().currentContainer?.parentID === '-1' || 
-      this.currentContainerList().currentContainer?.id.length == 0);
+    return (
+      (isAssigned(this.currentContainerList().currentContainer) &&
+        this.currentContainerList().currentContainer?.id === '0') ||
+      this.currentContainerList().currentContainer?.parentID === '-1' ||
+      this.currentContainerList().currentContainer?.id.length == 0
+    );
   });
 
   isCurrentContainerRootOrHasParentRoot = computed(() => {
-    return this.isCurrentContainerRoot() || this.currentContainerList().currentContainer.parentID === '0';
+    return (
+      this.isCurrentContainerRoot() ||
+      this.currentContainerList().currentContainer.parentID === '0'
+    );
   });
 
   // result container split by types
@@ -63,20 +90,18 @@ export class ContentDirectoryService {
   private browseRequestAbort$ = new Subject<void>();
 
   // search
-  private lastSearchObject = signal<SearchRequestDto>(this.dtoGeneratorService.generateEmptySearchRequestDto());
+  private lastSearchObject = signal<SearchRequestDto>(
+    this.dtoGeneratorService.generateEmptySearchRequestDto(),
+  );
   private lastSearchType = signal<string>('');
 
-  private id = "id_" + Math.random().toString(16).slice(2);
+  private id = 'id_' + Math.random().toString(16).slice(2);
   private destroyRef = inject(DestroyRef);
 
-  constructor(
-    public configService: ConfigurationService,
-    private httpService: HttpService,
-    private dtoGeneratorService: DtoGeneratorService,
-    private deviceService: DeviceService,
-    private toastService: ToastService,
-  ) {
-    console.log("[ContentDirectoryService-" + this.id +"] : constructor call");
+  constructor() {
+    const configService = this.configService;
+
+    console.log('[ContentDirectoryService-' + this.id + '] : constructor call');
     // Initialize empty result object
     if (configService.applicationConfig.nextPageAfter) {
       this.TURN_PAGE_AFTER = configService.applicationConfig.nextPageAfter;
@@ -98,9 +123,13 @@ export class ContentDirectoryService {
   public browseToParent(
     sortCriteria: string,
     mediaServerUdn?: string,
-  ): Subject<ContainerItemDto> {    
+  ): Subject<ContainerItemDto> {
     if (!this.isCurrentContainerRoot()) {
-      return this.browseChildren(this.currentContainerList().currentContainer.parentID, sortCriteria, mediaServerUdn);
+      return this.browseChildren(
+        this.currentContainerList().currentContainer.parentID,
+        sortCriteria,
+        mediaServerUdn,
+      );
     }
     return new Subject<ContainerItemDto>();
   }
@@ -167,7 +196,9 @@ export class ContentDirectoryService {
     );
   }
 
-  private browseChildrenByRequest(browseRequestDto: BrowseRequestDto): Subject<ContainerItemDto> {
+  private browseChildrenByRequest(
+    browseRequestDto: BrowseRequestDto,
+  ): Subject<ContainerItemDto> {
     if (browseRequestDto.mediaServerUDN?.length < 1) {
       console.log(this.id + ' UDN not set. Stop browsing.');
       return new Subject<ContainerItemDto>();
@@ -184,71 +215,103 @@ export class ContentDirectoryService {
       { ...browseRequestDto, start: 0, count: this.MAX_REQUEST_ITEMS },
     );
 
-    firstPage$.pipe(
-      take(1),
-      takeUntil(this.browseRequestAbort$),
-      takeUntilDestroyed(this.destroyRef),
-    ).subscribe({
-      next: (firstPage) => {
-        this.updateContainer(firstPage);
+    firstPage$
+      .pipe(
+        take(1),
+        takeUntil(this.browseRequestAbort$),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        next: (firstPage) => {
+          this.updateContainer(firstPage);
 
-        const firstPageDuration = Math.round(performance.now() - browseStartedAt);
-        console.log(this.id + ' : first page loaded in ' + firstPageDuration + ' ms');
+          const firstPageDuration = Math.round(
+            performance.now() - browseStartedAt,
+          );
+          console.log(
+            this.id + ' : first page loaded in ' + firstPageDuration + ' ms',
+          );
 
-        const totalItems = firstPage.totalMatches;
-        const totalPages = Math.ceil(totalItems / this.MAX_REQUEST_ITEMS);
-        console.log('total items: ' + totalItems + ', total pages: ' + totalPages);
-        if (totalPages <= 1) {
-          console.log(this.id + ' : browse finished in ' + firstPageDuration + ' ms (single page)');
-          return;
-        }
+          const totalItems = firstPage.totalMatches;
+          const totalPages = Math.ceil(totalItems / this.MAX_REQUEST_ITEMS);
+          console.log(
+            'total items: ' + totalItems + ', total pages: ' + totalPages,
+          );
+          if (totalPages <= 1) {
+            console.log(
+              this.id +
+                ' : browse finished in ' +
+                firstPageDuration +
+                ' ms (single page)',
+            );
+            return;
+          }
 
-        console.log(this.id + ' : loading ' + (totalPages - 1) + ' remaining pages');
+          console.log(
+            this.id + ' : loading ' + (totalPages - 1) + ' remaining pages',
+          );
 
-        const bufferedPages = new Map<number, ContainerItemDto>();
-        let nextPageToApply = 1;
+          const bufferedPages = new Map<number, ContainerItemDto>();
+          let nextPageToApply = 1;
 
-        range(1, totalPages - 1).pipe(
-          mergeMap(
-            (page) => this.httpService.post<ContainerItemDto>(
-              this.baseUri,
-              '/browseChildren',
-              { ...browseRequestDto, start: page * this.MAX_REQUEST_ITEMS, count: this.MAX_REQUEST_ITEMS },
-            ).pipe(
-              take(1),
-              map((data) => ({ page, data })),
-            ),
-            this.PAGE_REQUEST_CONCURRENCY,
-          ),
-          takeUntil(this.browseRequestAbort$),
-          takeUntilDestroyed(this.destroyRef),
-        ).subscribe({
-          next: ({ page, data }) => {
-            bufferedPages.set(page, data);
-            while (bufferedPages.has(nextPageToApply)) {
-              this.addContainer(bufferedPages.get(nextPageToApply)!);
-              bufferedPages.delete(nextPageToApply);
-              nextPageToApply++;
-            }
+          range(1, totalPages - 1)
+            .pipe(
+              mergeMap(
+                (page) =>
+                  this.httpService
+                    .post<ContainerItemDto>(this.baseUri, '/browseChildren', {
+                      ...browseRequestDto,
+                      start: page * this.MAX_REQUEST_ITEMS,
+                      count: this.MAX_REQUEST_ITEMS,
+                    })
+                    .pipe(
+                      take(1),
+                      map((data) => ({ page, data })),
+                    ),
+                this.PAGE_REQUEST_CONCURRENCY,
+              ),
+              takeUntil(this.browseRequestAbort$),
+              takeUntilDestroyed(this.destroyRef),
+            )
+            .subscribe({
+              next: ({ page, data }) => {
+                bufferedPages.set(page, data);
+                while (bufferedPages.has(nextPageToApply)) {
+                  this.addContainer(bufferedPages.get(nextPageToApply)!);
+                  bufferedPages.delete(nextPageToApply);
+                  nextPageToApply++;
+                }
 
-            if (nextPageToApply >= totalPages) {
-              const totalDuration = Math.round(performance.now() - browseStartedAt);
-              console.log(this.id + ' : browse finished in ' + totalDuration + ' ms (' + totalPages + ' pages)');
-            }
-          },
-          error: (err) => console.error(this.id + ' : browse page error', err),
-        });
-      },
-      error: (err) => console.error(this.id + ' : browse error', err),
-    });
+                if (nextPageToApply >= totalPages) {
+                  const totalDuration = Math.round(
+                    performance.now() - browseStartedAt,
+                  );
+                  console.log(
+                    this.id +
+                      ' : browse finished in ' +
+                      totalDuration +
+                      ' ms (' +
+                      totalPages +
+                      ' pages)',
+                  );
+                }
+              },
+              error: (err) =>
+                console.error(this.id + ' : browse page error', err),
+            });
+        },
+        error: (err) => console.error(this.id + ' : browse error', err),
+      });
 
     return firstPage$;
   }
 
   private getPageItemCount(data: ContainerItemDto): number {
-    return (data.albumDto?.length ?? 0)
-      + (data.containerDto?.length ?? 0)
-      + (data.musicItemDto?.length ?? 0);
+    return (
+      (data.albumDto?.length ?? 0) +
+      (data.containerDto?.length ?? 0) +
+      (data.musicItemDto?.length ?? 0)
+    );
   }
 
   // Pagination is handled automatically in browseChildrenByRequest.
@@ -269,34 +332,47 @@ export class ContentDirectoryService {
    * @param data Gets called after a browse request returns ...
    */
   public updateContainer(data: ContainerItemDto): void {
-//    console.log("CDS " + this.id + " : updating container with " + data.musicItemDto.length + " items.");
+    //    console.log("CDS " + this.id + " : updating container with " + data.musicItemDto.length + " items.");
     if (data) {
-      console.log("Album ids MBID / discogs : " + data.allTracksSameAlbumIds?.musicBrainzAlbumId + " / " + data.allTracksSameAlbumIds?.discogsReleaseId);
+      console.log(
+        'Album ids MBID / discogs : ' +
+          data.allTracksSameAlbumIds?.musicBrainzAlbumId +
+          ' / ' +
+          data.allTracksSameAlbumIds?.discogsReleaseId,
+      );
       this.currentContainerList.set(data);
       this.updatePageTurnId(data);
       this.albumList_.set(data.albumDto);
-      this.containerList_.set(data.containerDto?.filter(
-        (item) => item.objectClass !== 'object.container.playlistContainer',
-      ));
-      this.playlistList_.set(data.containerDto?.filter(
-        (item) => item.objectClass === 'object.container.playlistContainer',
-      ));
-      this.musicTracks_.set(data.musicItemDto?.filter(
-        (item) =>
-          item.objectClass.lastIndexOf('object.item.audioItem', 0) === 0,
-      ));
-      this.otherItems_.set(data.musicItemDto?.filter(
-        (item) =>
-          item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0,
-      ));
+      this.containerList_.set(
+        data.containerDto?.filter(
+          (item) => item.objectClass !== 'object.container.playlistContainer',
+        ),
+      );
+      this.playlistList_.set(
+        data.containerDto?.filter(
+          (item) => item.objectClass === 'object.container.playlistContainer',
+        ),
+      );
+      this.musicTracks_.set(
+        data.musicItemDto?.filter(
+          (item) =>
+            item.objectClass.lastIndexOf('object.item.audioItem', 0) === 0,
+        ),
+      );
+      this.otherItems_.set(
+        data.musicItemDto?.filter(
+          (item) =>
+            item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0,
+        ),
+      );
       this.browseFinished$.next(data);
     } else {
-      console.log('CDS ' + this.id + " : no search result was provided.");
+      console.log('CDS ' + this.id + ' : no search result was provided.');
     }
   }
 
   /**
-   * 
+   *
    * @param data Adding new data to existing array.
    */
   public addContainer(data: ContainerItemDto): void {
@@ -304,22 +380,42 @@ export class ContentDirectoryService {
       this.currentContainerList.set(data);
       this.updatePageTurnId(data);
 
-      this.albumList_.update(v => { return [...v].concat(data.albumDto) });
-
-      this.containerList_.update(v => {
-        return v.concat(data.containerDto.filter((item) => item.objectClass !== 'object.container.playlistContainer'))
+      this.albumList_.update((v) => {
+        return [...v].concat(data.albumDto);
       });
 
-      this.playlistList_.update(v => {
-        return v.concat(data.containerDto.filter((item) => item.objectClass === 'object.container.playlistContainer'))
+      this.containerList_.update((v) => {
+        return v.concat(
+          data.containerDto.filter(
+            (item) => item.objectClass !== 'object.container.playlistContainer',
+          ),
+        );
       });
 
-      this.musicTracks_.update(v => {
-        return v.concat(data.musicItemDto.filter((item) => item.objectClass.lastIndexOf('object.item.audioItem', 0) === 0))
+      this.playlistList_.update((v) => {
+        return v.concat(
+          data.containerDto.filter(
+            (item) => item.objectClass === 'object.container.playlistContainer',
+          ),
+        );
       });
 
-      this.otherItems_.update(v => {
-        return v.concat(data.musicItemDto.filter((item) => item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0))
+      this.musicTracks_.update((v) => {
+        return v.concat(
+          data.musicItemDto.filter(
+            (item) =>
+              item.objectClass.lastIndexOf('object.item.audioItem', 0) === 0,
+          ),
+        );
+      });
+
+      this.otherItems_.update((v) => {
+        return v.concat(
+          data.musicItemDto.filter(
+            (item) =>
+              item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0,
+          ),
+        );
       });
 
       this.browseFinished$.next(data);
@@ -407,7 +503,7 @@ export class ContentDirectoryService {
     quickSearchDto: SearchRequestDto,
   ): Subject<SearchResultDto> {
     const uri = '/quickSearch';
-    console.log(this.id + " : do quick search");
+    console.log(this.id + ' : do quick search');
     return this.httpService.post<SearchResultDto>(
       this.baseUri,
       uri,
@@ -421,28 +517,32 @@ export class ContentDirectoryService {
   }
 
   public searchAllItems(quickSearchDto: SearchRequestDto): void {
-    console.log("CDS " + this.id + " : searchAllItems");
+    console.log('CDS ' + this.id + ' : searchAllItems');
     const uri = '/searchAllItems';
     this.lastSearchObject.set(quickSearchDto);
     this.lastSearchType.set('songs');
-    console.log(this.id + "performing search for all matching items ...");
+    console.log(this.id + 'performing search for all matching items ...');
     this.httpService
       .post<SearchResultDto>(this.baseUri, uri, quickSearchDto)
       .subscribe({
         next: (data) => {
-          console.log("received " + data.musicItems.length + " items. Updating search result ...");
+          console.log(
+            'received ' +
+              data.musicItems.length +
+              ' items. Updating search result ...',
+          );
           this.updateSearchResultItem(data.musicItems);
         },
         error: (error: any) => {
           console.error(this.id + 'searchAllItems error : ', error);
-        }
+        },
       });
   }
 
   public searchAllPlaylist(
     quickSearchDto: SearchRequestDto,
   ): Observable<SearchResultDto> {
-    console.log("CDS " + this.id + " : searchAllPlaylist");
+    console.log('CDS ' + this.id + ' : searchAllPlaylist');
     const uri = '/searchAllPlaylist';
     this.lastSearchObject.set(quickSearchDto);
     this.lastSearchType.set('playlists');
@@ -458,7 +558,7 @@ export class ContentDirectoryService {
   }
 
   public searchAllAlbum(quickSearchDto: SearchRequestDto): void {
-    console.log("CDS " + this.id + " : searchAllAlbum");
+    console.log('CDS ' + this.id + ' : searchAllAlbum');
     const uri = '/searchAllAlbum';
     this.lastSearchObject.set(quickSearchDto);
     this.lastSearchType.set('album');
@@ -470,7 +570,7 @@ export class ContentDirectoryService {
   }
 
   public searchAllArtists(quickSearchDto: SearchRequestDto): void {
-    console.log("CDS " + this.id + " : searchAllArtists");
+    console.log('CDS ' + this.id + ' : searchAllArtists');
     const uri = '/searchAllArtists';
     this.lastSearchObject.set(quickSearchDto);
     this.lastSearchType.set('artists');
@@ -484,9 +584,15 @@ export class ContentDirectoryService {
   private updateSearchResultContainer(searchResultContainer: ContainerDto[]) {
     let ci = this.dtoGeneratorService.generateEmptyContainerItemDto();
     ci.containerDto = searchResultContainer;
-    ci.currentContainer.parentID = this.lastBrowseRequest?.objectID !== undefined ? this.lastBrowseRequest.objectID : "0";
-    ci.currentContainer.title = this.lastSearchType() + " matching '" +
-      this.lastSearchObject().searchRequest + "'";
+    ci.currentContainer.parentID =
+      this.lastBrowseRequest?.objectID !== undefined
+        ? this.lastBrowseRequest.objectID
+        : '0';
+    ci.currentContainer.title =
+      this.lastSearchType() +
+      " matching '" +
+      this.lastSearchObject().searchRequest +
+      "'";
     ci.currentContainer.id = 'search_result';
     ci.currentContainer.albumartUri = '/assets/images/search-icon.png';
     ci.parentFolderTitle = 'back to music library';
@@ -507,13 +613,17 @@ export class ContentDirectoryService {
       "'";
     ci.currentContainer.childCount = searchResultItems.length;
     ci.parentFolderTitle = 'back to music library';
-    console.log(this.id + " : updating current container with search result ...");
+    console.log(
+      this.id + ' : updating current container with search result ...',
+    );
     this.updateContainer(ci);
     this.searchFinished$.next(ci);
   }
 
   public deleteMusicTrack(item: MusicItemDto) {
-    this.musicTracks_.update(v => v.filter((listitem) => listitem.songId !== item.songId));
+    this.musicTracks_.update((v) =>
+      v.filter((listitem) => listitem.songId !== item.songId),
+    );
   }
 
   public getCurrentAlbumIds(): MusicAlbumIds | undefined {
@@ -530,18 +640,29 @@ export class ContentDirectoryService {
     const albumIds = this.getCurrentAlbumIds();
 
     if (!albumIds) {
-      console.log("like not possible for container : " + this.currentContainerList().currentContainer.title);
+      console.log(
+        'like not possible for container : ' +
+          this.currentContainerList().currentContainer.title,
+      );
       return false;
     }
 
-    const exists = isAssigned(albumIds.discogsReleaseId) || isAssigned(albumIds.musicBrainzAlbumId);
+    const exists =
+      isAssigned(albumIds.discogsReleaseId) ||
+      isAssigned(albumIds.musicBrainzAlbumId);
 
     if (exists) {
-      console.log("like possible for container : " + this.currentContainerList().currentContainer.title);
+      console.log(
+        'like possible for container : ' +
+          this.currentContainerList().currentContainer.title,
+      );
     } else {
-      console.log("like not possible for container : " + this.currentContainerList().currentContainer.title);
+      console.log(
+        'like not possible for container : ' +
+          this.currentContainerList().currentContainer.title,
+      );
     }
 
     return exists;
-  });  
+  });
 }

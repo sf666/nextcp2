@@ -1,35 +1,62 @@
-import { DeviceService } from 'src/app/service/device.service';
+
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { UuidService } from './../util/uuid.service';
 import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { SseService } from './sse/sse.service';
-import { RendererConfigDto, Config, RendererDeviceConfiguration, DeviceDriverCapability, ServerDeviceConfiguration, ServerConfigDto, ApplicationConfig, MusicbrainzSupport, MediaPlayerConfigDto, AudioAddictConfig, AiConfig, AiProvidersDto, AiModelsDto, AiProviderProfile, AiToolDto, AiToolsDto } from './dto.d';
+import {
+  RendererConfigDto,
+  Config,
+  RendererDeviceConfiguration,
+  DeviceDriverCapability,
+  ServerDeviceConfiguration,
+  ServerConfigDto,
+  ApplicationConfig,
+  MusicbrainzSupport,
+  MediaPlayerConfigDto,
+  AudioAddictConfig,
+  AiConfig,
+  AiProvidersDto,
+  AiModelsDto,
+  AiProviderProfile,
+  AiToolDto,
+  AiToolsDto,
+} from './dto.d';
 import { GenericResultService } from './generic-result.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { isAssigned } from '../global';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class ConfigurationService {
+  private http = inject(HttpClient);
+  private genericResultService = inject(GenericResultService);
+  dtoGeneratorService = inject(DtoGeneratorService);
+  private httpService = inject(HttpService);
+  private uuidService = inject(UuidService);
 
   // Observer
   // ===============================================================================
-  public rendererConfigChanged$: Subject<RendererDeviceConfiguration[]> = new Subject();
+  public rendererConfigChanged$: Subject<RendererDeviceConfiguration[]> =
+    new Subject();
   public applicationConfigChanged$: Subject<ApplicationConfig> = new Subject();
-  
-  public serverConfigurationChanged$: Subject<ServerDeviceConfiguration> = new Subject();
+
+  public serverConfigurationChanged$: Subject<ServerDeviceConfiguration> =
+    new Subject();
 
   // Configs
   // ===============================================================================
 
   // global server side configuration file (server state) (read only)
   public serverConfig!: Config;
-  public rendererConfig = signal<RendererConfigDto>(this.dtoGeneratorService.emptyRendererConfigDto());  // renderer configurations
-  public serverConfigDto = signal<ServerConfigDto>(this.dtoGeneratorService.emptyServerConfigDto());  // List of server devices
+  public rendererConfig = signal<RendererConfigDto>(
+    this.dtoGeneratorService.emptyRendererConfigDto(),
+  ); // renderer configurations
+  public serverConfigDto = signal<ServerConfigDto>(
+    this.dtoGeneratorService.emptyServerConfigDto(),
+  ); // List of server devices
   public availableBindInterfaces = signal<string[]>([]); // List of available network interfaces for UPnP bind interface configuration
 
   public mediaPlayerConfigDto = signal<MediaPlayerConfigDto>({
@@ -40,12 +67,15 @@ export class ConfigurationService {
     addToFolderId: { id: '', title: '' },
     addToPlaylist: false,
     mediaServerUdn: '',
-    addToPlaylistId: { id: '', title: '', },
+    addToPlaylistId: { id: '', title: '' },
   });
 
-  public audioAddictConfig = signal<AudioAddictConfig>(this.dtoGeneratorService.emptyAudioAddictDto());
+  public audioAddictConfig = signal<AudioAddictConfig>(
+    this.dtoGeneratorService.emptyAudioAddictDto(),
+  );
 
-  applicationConfig: ApplicationConfig = {    // This is a DTO copy and can be used to update server configuration
+  applicationConfig: ApplicationConfig = {
+    // This is a DTO copy and can be used to update server configuration
     chatHistorySize: 50,
     databaseFilename: '',
     embeddedServerPort: 0,
@@ -62,9 +92,10 @@ export class ConfigurationService {
     nextPageAfter: 60,
     pathToRestartScript: '',
     upnpBindInterface: '',
-  }
+  };
 
-  aiConfig: AiConfig = {    // This is a DTO copy and can be used to update the AI configuration
+  aiConfig: AiConfig = {
+    // This is a DTO copy and can be used to update the AI configuration
     aiEnabled: true,
     aiSendTools: true,
     aiConversationMemory: false,
@@ -76,7 +107,7 @@ export class ConfigurationService {
     aiProviderProfiles: [],
     selectedRendererUdn: '',
     selectedServerUdn: '',
-  }
+  };
 
   // Reactive flag so OnPush components (e.g. sidebar) update immediately when AI is toggled.
   public aiEnabled = signal<boolean>(true);
@@ -87,40 +118,43 @@ export class ConfigurationService {
   // Server-side tools offered by the configured OpenAI-compatible endpoint (e.g. OpenWebUI).
   public aiTools = signal<AiToolDto[]>([]);
 
-  musicBrainzConfig: MusicbrainzSupport = {   // MusicBrainz username/password
+  musicBrainzConfig: MusicbrainzSupport = {
+    // MusicBrainz username/password
     password: '',
-    username: ''
-  }
+    username: '',
+  };
 
   httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
+      'Content-Type': 'application/json',
+    }),
   };
 
   public deviceDriverList: DeviceDriverCapability[] = [];
 
   baseUri = '/ConfigurationService';
 
-  constructor(
-    private http: HttpClient, 
-    private genericResultService: GenericResultService, 
-    sseService: SseService,
-    public dtoGeneratorService: DtoGeneratorService,
-    private httpService: HttpService, 
-    private uuidService: UuidService) {
-      this.getClientConfigFromServer();
-      this.getDeviceDriverFromServer();
-      this.getMediaRendererConfig();
-      this.getMediaServerConfig();
-      this.getMediaPlayerConfig();
-      this.getCurrentMediaPlayerConfig();
-      this.getAvailableBindInterfaces();
-      this.getAiProviders();
-      sseService.configChanged$.subscribe(serverConfig => this.applyServerConfigurationFile(serverConfig));
-      sseService.rendererConfigChanged$.subscribe(data => this.applyRendererServerRendererList(data));
-      sseService.serverDevicesConfigChanged$.subscribe(data => this.applyMediaServerList(data));
-      console.log("ConfigurationService constructor call");
+  constructor() {
+    const sseService = inject(SseService);
+
+    this.getClientConfigFromServer();
+    this.getDeviceDriverFromServer();
+    this.getMediaRendererConfig();
+    this.getMediaServerConfig();
+    this.getMediaPlayerConfig();
+    this.getCurrentMediaPlayerConfig();
+    this.getAvailableBindInterfaces();
+    this.getAiProviders();
+    sseService.configChanged$.subscribe((serverConfig) =>
+      this.applyServerConfigurationFile(serverConfig),
+    );
+    sseService.rendererConfigChanged$.subscribe((data) =>
+      this.applyRendererServerRendererList(data),
+    );
+    sseService.serverDevicesConfigChanged$.subscribe((data) =>
+      this.applyMediaServerList(data),
+    );
+    console.log('ConfigurationService constructor call');
   }
 
   public restart(): void {
@@ -130,52 +164,63 @@ export class ConfigurationService {
   }
 
   private getCurrentMediaPlayerConfig(): void {
-    this.getMediaPlayerConfig().subscribe(data => {
+    this.getMediaPlayerConfig().subscribe((data) => {
       this.mediaPlayerConfigDto.set(data);
     });
   }
 
-   private getAvailableBindInterfaces() {
+  private getAvailableBindInterfaces() {
     const uri = '/availableBindInterfaces';
 
-    this.httpService.get<string[]>(this.baseUri, uri).subscribe(data => {
+    this.httpService.get<string[]>(this.baseUri, uri).subscribe((data) => {
       if (data != undefined && data.length > 0) {
-          this.availableBindInterfaces.set(['', ...data]);
+        this.availableBindInterfaces.set(['', ...data]);
       }
     });
   }
- 
 
   private getDeviceDriverFromServer() {
     const uri = '/availableDeviceDriver';
 
-    this.httpService.get<DeviceDriverCapability[]>(this.baseUri, uri).subscribe(data => {
-      this.deviceDriverList = data;
-    });
+    this.httpService
+      .get<DeviceDriverCapability[]>(this.baseUri, uri)
+      .subscribe((data) => {
+        this.deviceDriverList = data;
+      });
   }
 
-  public findServerConfig(udn: string): ServerDeviceConfiguration | undefined{
-    return this.serverConfigDto().serverDevices.find(d => d.mediaServer.udn === udn);
+  public findServerConfig(udn: string): ServerDeviceConfiguration | undefined {
+    return this.serverConfigDto().serverDevices.find(
+      (d) => d.mediaServer.udn === udn,
+    );
   }
 
-  public findRendererConfig(udn: string): RendererDeviceConfiguration | undefined{
-    return this.rendererConfig().rendererDevices.find(d => d.mediaRenderer.udn === udn);
+  public findRendererConfig(
+    udn: string,
+  ): RendererDeviceConfiguration | undefined {
+    return this.rendererConfig().rendererDevices.find(
+      (d) => d.mediaRenderer.udn === udn,
+    );
   }
 
-  public getSelectedServerConfig(udn: string): ServerDeviceConfiguration | undefined {
-    return this.serverConfigDto().serverDevices.find(d => d.mediaServer.udn === udn);
+  public getSelectedServerConfig(
+    udn: string,
+  ): ServerDeviceConfiguration | undefined {
+    return this.serverConfigDto().serverDevices.find(
+      (d) => d.mediaServer.udn === udn,
+    );
   }
 
   public updateServerPlaylistId(udn: string, playlistId: string) {
     if (!udn) {
-      return "";
+      return '';
     }
     var sc = this.findServerConfig(udn);
     if (sc) {
       sc.playistObjectId = playlistId;
       this.saveMediaServerConfig(sc);
     } else {
-      console.log("[updateServerPlaylistId] : no server udn given.");
+      console.log('[updateServerPlaylistId] : no server udn given.');
     }
   }
 
@@ -196,25 +241,58 @@ export class ConfigurationService {
 
   public saveMediaPlayerConfig(mediaPlayerConfig: MediaPlayerConfigDto): void {
     const uri = '/saveMediaPlayerConfig';
-    this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaPlayerConfig, "Save media player config", "success").subscribe(() => {
-      this.getCurrentMediaPlayerConfig();
-    });
+    this.httpService
+      .postWithSuccessMessage(
+        this.baseUri,
+        uri,
+        mediaPlayerConfig,
+        'Save media player config',
+        'success',
+      )
+      .subscribe(() => {
+        this.getCurrentMediaPlayerConfig();
+      });
   }
 
   public saveAudioAddictConfig(): void {
     const uri = '/saveAudioAddictConfig';
-    this.httpService.postWithSuccessMessage(this.baseUri, uri, this.audioAddictConfig(), "Save audio addict config", "success").subscribe();
+    this.httpService
+      .postWithSuccessMessage(
+        this.baseUri,
+        uri,
+        this.audioAddictConfig(),
+        'Save audio addict config',
+        'success',
+      )
+      .subscribe();
   }
 
   public saveMusicBrainzConfig(): void {
     const uri = '/saveMusicBrainzConfig';
-    this.httpService.postWithSuccessMessage(this.baseUri, uri, this.musicBrainzConfig, "Save MusicBrainz config", "success").subscribe();
+    this.httpService
+      .postWithSuccessMessage(
+        this.baseUri,
+        uri,
+        this.musicBrainzConfig,
+        'Save MusicBrainz config',
+        'success',
+      )
+      .subscribe();
   }
 
   public saveApplicationConfig(): void {
     const uri = '/saveApplicationConfig';
-    this.httpService.postWithSuccessMessage(this.baseUri, uri, this.applicationConfig, "Save application config", "success")
-      .subscribe(() => {this.applicationConfigChanged$.next(this.applicationConfig)});
+    this.httpService
+      .postWithSuccessMessage(
+        this.baseUri,
+        uri,
+        this.applicationConfig,
+        'Save application config',
+        'success',
+      )
+      .subscribe(() => {
+        this.applicationConfigChanged$.next(this.applicationConfig);
+      });
   }
 
   public saveAiConfig(): void {
@@ -222,7 +300,14 @@ export class ConfigurationService {
     // persisted profiles always reflect the latest edits.
     this.storeAiProviderProfile();
     const uri = '/saveAiConfig';
-    this.httpService.postWithSuccessMessage(this.baseUri, uri, this.aiConfig, "Save AI config", "success")
+    this.httpService
+      .postWithSuccessMessage(
+        this.baseUri,
+        uri,
+        this.aiConfig,
+        'Save AI config',
+        'success',
+      )
       .subscribe(() => {
         this.aiEnabled.set(this.aiConfig.aiEnabled ?? true);
         // Refresh the available models/tools now that the (base URL / provider) is saved.
@@ -234,9 +319,11 @@ export class ConfigurationService {
   // Loads the AI providers supported by the backend (for the provider dropdown).
   public getAiProviders(): void {
     const uri = '/getAiProviders';
-    this.httpService.get<AiProvidersDto>(this.baseUri, uri).subscribe(data => {
-      this.aiProviders.set(data?.providers ?? []);
-    });
+    this.httpService
+      .get<AiProvidersDto>(this.baseUri, uri)
+      .subscribe((data) => {
+        this.aiProviders.set(data?.providers ?? []);
+      });
   }
 
   // Discards unsaved AI form edits by restoring the values from the last
@@ -274,7 +361,7 @@ export class ConfigurationService {
       aiSendTools: this.aiConfig.aiSendTools,
     };
     const profiles = this.aiConfig.aiProviderProfiles ?? [];
-    const index = profiles.findIndex(p => p.aiProvider === provider);
+    const index = profiles.findIndex((p) => p.aiProvider === provider);
     if (index >= 0) {
       profiles[index] = profile;
     } else {
@@ -285,7 +372,9 @@ export class ConfigurationService {
 
   // Restores the provider-specific form values from the profile list (or defaults).
   private applyAiProviderProfile(provider: string): void {
-    const profile = (this.aiConfig.aiProviderProfiles ?? []).find(p => p.aiProvider === provider);
+    const profile = (this.aiConfig.aiProviderProfiles ?? []).find(
+      (p) => p.aiProvider === provider,
+    );
     this.aiConfig.aiApiKey = profile?.aiApiKey ?? '';
     this.aiConfig.aiBaseUrl = profile?.aiBaseUrl ?? '';
     this.aiConfig.aiModel = profile?.aiModel ?? '';
@@ -306,88 +395,144 @@ export class ConfigurationService {
   // AI form values, so the model dropdown follows provider/base URL edits.
   public listAiModels(): void {
     const uri = '/listAiModels';
-    this.httpService.post<AiModelsDto>(this.baseUri, uri, this.aiConfig).subscribe(data => {
-      this.aiModels.set(data?.models ?? []);
-    });
+    this.httpService
+      .post<AiModelsDto>(this.baseUri, uri, this.aiConfig)
+      .subscribe((data) => {
+        this.aiModels.set(data?.models ?? []);
+      });
   }
 
   // Loads the server-side tools offered by the endpoint of the CURRENT (possibly
   // unsaved) AI form values, so the checkbox list follows provider/base URL edits.
   public listAiTools(): void {
     const uri = '/listAiTools';
-    this.httpService.post<AiToolsDto>(this.baseUri, uri, this.aiConfig).subscribe(data => {
-      this.aiTools.set(data?.tools ?? []);
-    });
+    this.httpService
+      .post<AiToolsDto>(this.baseUri, uri, this.aiConfig)
+      .subscribe((data) => {
+        this.aiTools.set(data?.tools ?? []);
+      });
   }
 
-  public saveMediaRendererConfig(mediaRendererConfig: RendererDeviceConfiguration): void {
+  public saveMediaRendererConfig(
+    mediaRendererConfig: RendererDeviceConfiguration,
+  ): void {
     const uri = '/saveMediaRendererConfig';
-    this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaRendererConfig, "Save mediarenderer config", "success").subscribe();
+    this.httpService
+      .postWithSuccessMessage(
+        this.baseUri,
+        uri,
+        mediaRendererConfig,
+        'Save mediarenderer config',
+        'success',
+      )
+      .subscribe();
   }
 
-  public deleteMediaRendererConfig(mediaRendererConfig: RendererDeviceConfiguration): void {
+  public deleteMediaRendererConfig(
+    mediaRendererConfig: RendererDeviceConfiguration,
+  ): void {
     const uri = '/deleteMediaRendererConfig';
-    this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaRendererConfig, "Delete mediarenderer config", "success").subscribe();
+    this.httpService
+      .postWithSuccessMessage(
+        this.baseUri,
+        uri,
+        mediaRendererConfig,
+        'Delete mediarenderer config',
+        'success',
+      )
+      .subscribe();
   }
 
-  public saveMediaServerConfig(mediaServerConfig: ServerDeviceConfiguration): void {
+  public saveMediaServerConfig(
+    mediaServerConfig: ServerDeviceConfiguration,
+  ): void {
     const uri = '/saveMediaServerConfig';
-    this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaServerConfig, "Save mediaserver config", "success").subscribe(
-      () => this.serverConfigurationChanged$.next(mediaServerConfig)
-    );
+    this.httpService
+      .postWithSuccessMessage(
+        this.baseUri,
+        uri,
+        mediaServerConfig,
+        'Save mediaserver config',
+        'success',
+      )
+      .subscribe(() =>
+        this.serverConfigurationChanged$.next(mediaServerConfig),
+      );
   }
 
-  public deleteMediaServerConfig(mediaServerConfig: ServerDeviceConfiguration): void {
+  public deleteMediaServerConfig(
+    mediaServerConfig: ServerDeviceConfiguration,
+  ): void {
     const uri = '/deleteMediaServerConfig';
-    this.httpService.postWithSuccessMessage(this.baseUri, uri, mediaServerConfig, "Delete mediaserver config", "success").subscribe();
+    this.httpService
+      .postWithSuccessMessage(
+        this.baseUri,
+        uri,
+        mediaServerConfig,
+        'Delete mediaserver config',
+        'success',
+      )
+      .subscribe();
   }
 
   public getMediaRendererConfig(): void {
     const uri = '/getMediaRendererConfig';
-    this.httpService.get<RendererConfigDto>(this.baseUri, uri).subscribe(data => {
-      this.rendererConfig.set(data);
-    });
+    this.httpService
+      .get<RendererConfigDto>(this.baseUri, uri)
+      .subscribe((data) => {
+        this.rendererConfig.set(data);
+      });
   }
 
   public getMediaServerConfig(): void {
     const uri = '/getMediaServerConfig';
-    this.httpService.get<ServerConfigDto>(this.baseUri, uri).subscribe(data => {
-      console.log("Received server config: " + JSON.stringify(data));
-      if (data != undefined) { 
-        this.serverConfigDto.set(data);
-      }
-    });
+    this.httpService
+      .get<ServerConfigDto>(this.baseUri, uri)
+      .subscribe((data) => {
+        console.log('Received server config: ' + JSON.stringify(data));
+        if (data != undefined) {
+          this.serverConfigDto.set(data);
+        }
+      });
   }
 
   private getClientConfigFromServer() {
     const uri = '/configuration';
-    this.http.get<Config>(this.baseUri + uri).subscribe(data => {
-      this.applyServerConfigurationFile(data);
-    }, err => {
-      this.genericResultService.displayHttpError(err, "cannot read configuration");
-    });
+    this.http.get<Config>(this.baseUri + uri).subscribe(
+      (data) => {
+        this.applyServerConfigurationFile(data);
+      },
+      (err) => {
+        this.genericResultService.displayHttpError(
+          err,
+          'cannot read configuration',
+        );
+      },
+    );
   }
 
   private applyMediaServerList(data: ServerConfigDto) {
-    console.log("Applying server config: " + JSON.stringify(data));
+    console.log('Applying server config: ' + JSON.stringify(data));
     if (isAssigned(data)) {
       this.serverConfigDto.set(data);
     }
 
-    this.serverConfigDto().serverDevices = this.serverConfigDto().serverDevices.sort((n1, n2) => {
-      return n1.displayString.localeCompare(n2.displayString);
-    });
+    this.serverConfigDto().serverDevices =
+      this.serverConfigDto().serverDevices.sort((n1, n2) => {
+        return n1.displayString.localeCompare(n2.displayString);
+      });
   }
 
   private applyRendererServerRendererList(data: RendererConfigDto) {
-    console.log("Applying renderer config: " + JSON.stringify(data));
+    console.log('Applying renderer config: ' + JSON.stringify(data));
     if (isAssigned(data)) {
       this.rendererConfig.set(data);
     }
 
-    this.rendererConfig().rendererDevices = this.rendererConfig().rendererDevices.sort((n1, n2) => {
-      return n1.displayString.localeCompare(n2.displayString);
-    });
+    this.rendererConfig().rendererDevices =
+      this.rendererConfig().rendererDevices.sort((n1, n2) => {
+        return n1.displayString.localeCompare(n2.displayString);
+      });
   }
 
   private applyServerConfigurationFile(serverConfig: Config) {
@@ -407,7 +552,9 @@ export class ConfigurationService {
   }
 
   public isRenderDeviceUdnActive(deviceUdn: string): boolean {
-    const configEntry = this.rendererConfig().rendererDevices.filter(conf => conf.mediaRenderer.udn == deviceUdn);
+    const configEntry = this.rendererConfig().rendererDevices.filter(
+      (conf) => conf.mediaRenderer.udn == deviceUdn,
+    );
     if (!configEntry || configEntry.length == 0) {
       return false;
     }

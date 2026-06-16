@@ -1,14 +1,8 @@
 import { ConfigurationService } from 'src/app/service/configuration.service';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, signal, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import {
-  CreateServerPlaylistVO,
-  MediaServerDto,
-  ServerDeleteObjectRequest,
-  ServerPlaylistEntry,
-  ServerPlaylists,
-} from './dto';
+import { CreateServerPlaylistVO, ServerDeleteObjectRequest, ServerPlaylistEntry, ServerPlaylists } from './dto';
 import { HttpService } from './http.service';
 import { SseService } from './sse/sse.service';
 import { DeviceService } from './device.service';
@@ -17,6 +11,10 @@ import { DeviceService } from './device.service';
   providedIn: 'root',
 })
 export class ServerPlaylistService {
+  private httpService = inject(HttpService);
+  private configurationService = inject(ConfigurationService);
+  private deviceService = inject(DeviceService);
+
   baseUri = '/MediaServerPlaylistService';
 
   playlistLoading = signal<boolean>(true);
@@ -42,22 +40,29 @@ export class ServerPlaylistService {
     return ids;
   });
 
-  selectedMediaServer = computed(() => { return this.deviceService.selectedMediaServerDevice() });
+  selectedMediaServer = computed(() => {
+    return this.deviceService.selectedMediaServerDevice();
+  });
 
-  constructor(
-    private httpService: HttpService,
-    private configurationService: ConfigurationService,
-    private deviceService: DeviceService,
-    sseService: SseService,
-  ) {
-    // reconstruct sidebar after potential playlist folder change 
-    configurationService.serverConfigurationChanged$.subscribe(mediaServerConfig => {
-      if (mediaServerConfig.mediaServer.udn === this.selectedMediaServer().udn) {
-        this.afterMediaServerChanged();
-      }
-    });
+  constructor() {
+    const configurationService = this.configurationService;
+    const deviceService = this.deviceService;
+    const sseService = inject(SseService);
 
-    toObservable(this.selectedMediaServer).subscribe(data => this.afterMediaServerChanged())
+    // reconstruct sidebar after potential playlist folder change
+    configurationService.serverConfigurationChanged$.subscribe(
+      (mediaServerConfig) => {
+        if (
+          mediaServerConfig.mediaServer.udn === this.selectedMediaServer().udn
+        ) {
+          this.afterMediaServerChanged();
+        }
+      },
+    );
+
+    toObservable(this.selectedMediaServer).subscribe((data) =>
+      this.afterMediaServerChanged(),
+    );
 
     sseService.mediaServerPlaylistChanged$.subscribe((data) => {
       if (deviceService.isMediaServerSelected(data.mediaServerUdn)) {
@@ -66,9 +71,9 @@ export class ServerPlaylistService {
     });
 
     sseService.mediaServerRecentPlaylistChanged$.subscribe((data) => {
-      console.log("updating recently used playlists ... ");
+      console.log('updating recently used playlists ... ');
       this.recentServerPl.set(data);
-    })
+    });
   }
 
   private afterMediaServerChanged() {
@@ -84,13 +89,19 @@ export class ServerPlaylistService {
       this.playlistLoading.set(true);
       const uri = '/getServerPlaylists';
       this.httpService
-        .post<ServerPlaylists>(this.baseUri, uri, this.selectedMediaServer().udn)
+        .post<ServerPlaylists>(
+          this.baseUri,
+          uri,
+          this.selectedMediaServer().udn,
+        )
         .subscribe((data) => {
           this.serverPl.set(data);
           this.playlistLoading.set(false);
         });
     } else {
-      console.log("updateServerAccessiblePlaylists : skipping, no server selected ...");
+      console.log(
+        'updateServerAccessiblePlaylists : skipping, no server selected ...',
+      );
     }
   }
 
@@ -98,12 +109,18 @@ export class ServerPlaylistService {
     if (this.selectedMediaServer().udn) {
       const uri = '/getRecentServerPlaylists';
       this.httpService
-        .post<ServerPlaylists>(this.baseUri, uri, this.selectedMediaServer().udn)
+        .post<ServerPlaylists>(
+          this.baseUri,
+          uri,
+          this.selectedMediaServer().udn,
+        )
         .subscribe((data) => {
           this.recentServerPl.set(data);
         });
     } else {
-      console.log("updateRecentServerAccessiblePlaylists : skipping, no server selected ...");
+      console.log(
+        'updateRecentServerAccessiblePlaylists : skipping, no server selected ...',
+      );
     }
   }
 
@@ -115,19 +132,25 @@ export class ServerPlaylistService {
   // Filesystem Playlist actions (MediaServer actions)
   // ========================================================================
 
-  public createPlaylist(playlistName: string, containerId: string): Observable<string> {
+  public createPlaylist(
+    playlistName: string,
+    containerId: string,
+  ): Observable<string> {
     const createPL: CreateServerPlaylistVO = {
       containerId: containerId,
       mediaServerUdn: this.selectedMediaServer().udn,
       playlistName: playlistName + '.m3u8',
     };
     const uri = '/createPlaylist';
-    let ret = this.httpService.post<string>(this.baseUri, uri, createPL)
+    let ret = this.httpService.post<string>(this.baseUri, uri, createPL);
     ret.subscribe(() => this.updateServerAccessiblePlaylists());
     return ret;
   }
 
-  public addSongToServerPlaylist(songId: string, playlistId: string): Observable<any> {
+  public addSongToServerPlaylist(
+    songId: string,
+    playlistId: string,
+  ): Observable<any> {
     const uri = '/addToServerPlaylist'; // void return
     const req: ServerPlaylistEntry = {
       serverUdn: this.selectedMediaServer().udn,

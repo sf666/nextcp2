@@ -5,13 +5,20 @@ import {
   SearchResultDto,
   ContainerDto,
 } from './../../service/dto.d';
-import { ChangeDetectionStrategy, Component, Inject, computed, model, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  model,
+  signal,
+  inject,
+} from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { DeviceService } from 'src/app/service/device.service';
-import { FormsModule, NgModel } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
 import { PlaylistContainerComponent } from './playlist-container/playlist-container.component';
 
@@ -29,56 +36,72 @@ export enum PlaylistMode {
   templateUrl: './add-playlist.component.html',
   styleUrl: './add-playlist.component.scss',
 })
-
 export class AddPlaylistComponent {
+  serverPlaylistService = inject(ServerPlaylistService);
+  private contentDirectoryService = inject(ContentDirectoryService);
+  private dtoGeneratorService = inject(DtoGeneratorService);
+  dialogRef = inject<MatDialogRef<AddPlaylistComponent>>(MatDialogRef);
+
   PlaylistModeEnum: typeof PlaylistMode = PlaylistMode;
   addToContainer: ContainerDto;
 
   otherPlaylists = signal<ServerPlaylistDto[]>([]);
   playlistFilter = model<string>('');
-  musicItemToAdd = signal<MusicItemDto>(this.dtoGeneratorService.emptyMusicItemDto());
+  musicItemToAdd = signal<MusicItemDto>(
+    this.dtoGeneratorService.emptyMusicItemDto(),
+  );
   newPlaylistName = model<string>('');
   playlistMode = signal<PlaylistMode>(PlaylistMode.Add);
 
   filteredServerPlaylists = computed(() => {
-    return this.serverPlaylistService.serverPl().serverPlaylists.filter(
-      pl => {
+    return this.serverPlaylistService
+      .serverPl()
+      .serverPlaylists.filter((pl) => {
         if (this.playlistFilter().length > 0) {
-          return pl.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase());
+          return pl.playlistName
+            .toLowerCase()
+            .includes(this.playlistFilter().toLowerCase());
         } else {
           return true;
         }
-      })
+      });
   });
 
   filteredOtherPlaylists = computed(() => {
     if (this.playlistFilter().length > 0) {
-      return this.otherPlaylists().filter(pl => pl.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase()))
+      return this.otherPlaylists().filter((pl) =>
+        pl.playlistName
+          .toLowerCase()
+          .includes(this.playlistFilter().toLowerCase()),
+      );
     } else {
       return this.otherPlaylists();
     }
   });
 
   filteredRecentPlaylists = computed(() => {
-    return this.serverPlaylistService.recentServerPl().serverPlaylists.filter(pl => {
-      console.log("Playlist name : " + pl.playlistName);
-      if (this.playlistFilter().length > 0) {
-        return pl.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase());
-      } else {
-        return true;
-      }
-    }
-    );
+    return this.serverPlaylistService
+      .recentServerPl()
+      .serverPlaylists.filter((pl) => {
+        console.log('Playlist name : ' + pl.playlistName);
+        if (this.playlistFilter().length > 0) {
+          return pl.playlistName
+            .toLowerCase()
+            .includes(this.playlistFilter().toLowerCase());
+        } else {
+          return true;
+        }
+      });
   });
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) data: { item: MusicItemDto | undefined, container: ContainerDto },
-    public serverPlaylistService: ServerPlaylistService,
-    deviceService: DeviceService,
-    private contentDirectoryService: ContentDirectoryService,
-    private dtoGeneratorService: DtoGeneratorService,
-    public dialogRef: MatDialogRef<AddPlaylistComponent>,
-  ) {
+  constructor() {
+    const data = inject<{
+      item: MusicItemDto | undefined;
+      container: ContainerDto;
+    }>(MAT_DIALOG_DATA);
+    const deviceService = inject(DeviceService);
+    const dtoGeneratorService = this.dtoGeneratorService;
+
     this.addToContainer = data.container;
     if (data.item != undefined && data.item.objectID.length > 0) {
       this.playlistMode.set(PlaylistMode.Add);
@@ -89,20 +112,25 @@ export class AddPlaylistComponent {
     let sr = dtoGeneratorService.generateEmptySearchRequestDto();
     sr.searchRequest = '';
     sr.mediaServerUDN = deviceService.selectedMediaServerDevice().udn;
-    this.contentDirectoryService.searchAllPlaylist(sr).subscribe(data => this.updateOtherPlaylists(data));
+    this.contentDirectoryService
+      .searchAllPlaylist(sr)
+      .subscribe((data) => this.updateOtherPlaylists(data));
   }
 
   private updateOtherPlaylists(data: SearchResultDto): void {
     let newPl: ServerPlaylistDto[] = [];
 
-    let other = data.playlistItems.filter((spe) => !this.serverPlaylistService.playlistIdExistsInServerPlaylists(spe.id));
-    other?.forEach(pl => {
+    let other = data.playlistItems.filter(
+      (spe) =>
+        !this.serverPlaylistService.playlistIdExistsInServerPlaylists(spe.id),
+    );
+    other?.forEach((pl) => {
       const entry = {} as ServerPlaylistDto;
-      entry.albumArtUrl = pl.albumartUri,
-        entry.playlistId = pl.id,
-        entry.playlistName = pl.title,
-        newPl.push(entry);
-    })
+      ((entry.albumArtUrl = pl.albumartUri),
+        (entry.playlistId = pl.id),
+        (entry.playlistName = pl.title),
+        newPl.push(entry));
+    });
     this.otherPlaylists.set(newPl);
   }
 
@@ -131,14 +159,21 @@ export class AddPlaylistComponent {
   }
 
   deletePlaylist(serverPlaylist: ServerPlaylistDto) {
-    this.serverPlaylistService.deleteObject(serverPlaylist.playlistId).subscribe({
-      next: (data) => {
-        this.serverPlaylistService.serverPl().serverPlaylists = this.serverPlaylistService.serverPl().serverPlaylists.filter(
-          pl => pl.playlistId !== serverPlaylist.playlistId);
-      },
-      error: (data) => { console.error(data); }
-
-    });
+    this.serverPlaylistService
+      .deleteObject(serverPlaylist.playlistId)
+      .subscribe({
+        next: (data) => {
+          this.serverPlaylistService.serverPl().serverPlaylists =
+            this.serverPlaylistService
+              .serverPl()
+              .serverPlaylists.filter(
+                (pl) => pl.playlistId !== serverPlaylist.playlistId,
+              );
+        },
+        error: (data) => {
+          console.error(data);
+        },
+      });
   }
 
   close(): void {
@@ -159,9 +194,9 @@ export class AddPlaylistComponent {
 
   playlistActiveClass(mode: PlaylistMode): string {
     if (mode.valueOf() === this.playlistMode().valueOf()) {
-      return "active";
+      return 'active';
     } else {
-      return "inactive";
+      return 'inactive';
     }
   }
 
@@ -178,17 +213,24 @@ export class AddPlaylistComponent {
   }
 
   createPlaylistClicked(): void {
-    this.serverPlaylistService.createPlaylist(this.newPlaylistName(), this.addToContainer.id).subscribe(newId => this.newPlaylistId(newId))
+    this.serverPlaylistService
+      .createPlaylist(this.newPlaylistName(), this.addToContainer.id)
+      .subscribe((newId) => this.newPlaylistId(newId));
     this.close();
   }
 
   cancelClicked(): void {
-    this.newPlaylistName.set(''),
-      this.close();
+    (this.newPlaylistName.set(''), this.close());
   }
 
   private newPlaylistId(newId: string) {
-    this.addTo({ playlistId: newId, albumArtUrl: '', playlistName: '', numberOfElements: 0, totalPlaytime: '' });
+    this.addTo({
+      playlistId: newId,
+      albumArtUrl: '',
+      playlistName: '',
+      numberOfElements: 0,
+      totalPlaytime: '',
+    });
     this.serverPlaylistService.updateServerAccessiblePlaylists();
   }
 

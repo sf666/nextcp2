@@ -1,21 +1,22 @@
-import { Directive, ElementRef, OnInit } from '@angular/core';
+import { Directive, ElementRef, OnInit, inject } from '@angular/core';
 
 @Directive({
-    selector: '[domTreeChange]',
-    standalone: true
+  selector: '[domTreeChange]',
+  standalone: true,
 })
 export class DomChangedDirective implements OnInit {
-  constructor(private elRef: ElementRef) { }
- 
+  private elRef = inject(ElementRef);
+
   ngOnInit() {
     this.registerDomChangedEvent(this.elRef.nativeElement);
   }
 
   registerDomChangedEvent(el) {
-    const observer = new MutationObserver(list => {
-      const evt =
-        new CustomEvent('dom-changed',
-          { detail: list, bubbles: true });
+    const observer = new MutationObserver((list) => {
+      const evt = new CustomEvent('dom-changed', {
+        detail: list,
+        bubbles: true,
+      });
       el.dispatchEvent(evt);
     });
 

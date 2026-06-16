@@ -9,7 +9,7 @@ import {
   MusicItemDto,
   SearchRequestDto,
 } from './../dto.d';
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { debounce } from 'src/app/global';
 import { Subject } from 'rxjs';
 import { MusicLibraryService } from '../music-library/music-library.service';
@@ -18,6 +18,13 @@ import { MusicLibraryService } from '../music-library/music-library.service';
   providedIn: 'root',
 })
 export class GlobalSearchService {
+  contentDirectoryService = inject(ContentDirectoryService);
+  private deviceService = inject(DeviceService);
+  private musicLibraryService = inject(MusicLibraryService);
+  private dtoGeneratorService = inject(DtoGeneratorService);
+  private router = inject(Router);
+  private configurationService = inject(ConfigurationService);
+
   public globalSearch = signal(true);
 
   //
@@ -37,7 +44,9 @@ export class GlobalSearchService {
   showAllPlaylistClicked$: Subject<SearchRequestDto> = new Subject();
 
   // QuickSearch Support (Global search)
-  public quickSearchResultList = signal<SearchResultDto>(this.dtoGeneratorService.generateEmptySearchResultDto());
+  public quickSearchResultList = signal<SearchResultDto>(
+    this.dtoGeneratorService.generateEmptySearchResultDto(),
+  );
   public quickSearchQueryString = signal('');
   private quickSearchPanelVisible_ = signal(false);
   private MIN_SEARCH_LEN = 2;
@@ -60,22 +69,15 @@ export class GlobalSearchService {
         this.currentSearchText,
         '',
         this.deviceService.selectedMediaServerDevice().udn,
-        containerId
+        containerId,
       )
       .subscribe((data) => this.searchResultReceived(data));
   };
 
-  constructor(
-    public contentDirectoryService: ContentDirectoryService,
-    private deviceService: DeviceService,
-    private musicLibraryService: MusicLibraryService,
-    private dtoGeneratorService: DtoGeneratorService,
-    private router: Router,
-    private configurationService: ConfigurationService
-  ) {
+  constructor() {
     this.doSearchFunc = debounce(
       this.getSearchDelay(),
-      this.doSearchThrotteled
+      this.doSearchThrotteled,
     );
   }
 
@@ -113,10 +115,20 @@ export class GlobalSearchService {
 
   private searchResultReceived(data: SearchResultDto): void {
     this.quickSearchResultList.set(data);
-    console.debug('search result received total music items count: ' + data.musicItemsTotal);
-    console.debug('search result received total album items count: ' + data.albumItemsTotal);
-    console.debug('search result received total artist items count: ' + data.artistItemsTotal);
-    console.debug('search result received total playlist items count: ' + data.playlistItemsTotal);
+    console.debug(
+      'search result received total music items count: ' + data.musicItemsTotal,
+    );
+    console.debug(
+      'search result received total album items count: ' + data.albumItemsTotal,
+    );
+    console.debug(
+      'search result received total artist items count: ' +
+        data.artistItemsTotal,
+    );
+    console.debug(
+      'search result received total playlist items count: ' +
+        data.playlistItemsTotal,
+    );
   }
 
   private doSearch(): void {
@@ -144,7 +156,10 @@ export class GlobalSearchService {
         this.quickSearchQueryString().length > this.MIN_SEARCH_LEN
       ) {
         this.quickSearchPanelVisible_.set(true);
-        this.currentSearchText = this.quickSearchQueryString().replace(/"/g, '""');
+        this.currentSearchText = this.quickSearchQueryString().replace(
+          /"/g,
+          '""',
+        );
         this.doSearch();
       }
     }
@@ -152,7 +167,9 @@ export class GlobalSearchService {
 
   clearSearch(): void {
     this.quickSearchQueryString.set('');
-    this.quickSearchResultList.set(this.dtoGeneratorService.generateEmptySearchResultDto());
+    this.quickSearchResultList.set(
+      this.dtoGeneratorService.generateEmptySearchResultDto(),
+    );
     this.quickSearchPanelVisible_.set(false);
     this.currentSearchText = '';
   }
@@ -191,14 +208,14 @@ export class GlobalSearchService {
     let containerId = '0';
     if (!this.globalSearch()) {
       containerId = this.musicLibraryService.currentContainerId();
-    }    
+    }
     const sr = this.dtoGeneratorService.generateQuickSearchDto(
       this.quickSearchQueryString(),
       this.deviceService.selectedMediaServerDevice().udn,
       '',
       containerId,
       0,
-      100
+      100,
     );
     this.hideQuickSearchPanel();
     this.router.navigateByUrl('/music-library');
@@ -213,7 +230,7 @@ export class GlobalSearchService {
       '-ums:likedAlbum',
       this.currentContainerID,
       0,
-      100
+      100,
     );
     this.hideQuickSearchPanel();
     this.router.navigateByUrl('/music-library');
@@ -228,7 +245,7 @@ export class GlobalSearchService {
       '',
       this.currentContainerID,
       0,
-      100
+      100,
     );
     this.hideQuickSearchPanel();
     this.router.navigateByUrl('/music-library');
@@ -243,7 +260,7 @@ export class GlobalSearchService {
       '',
       this.currentContainerID,
       0,
-      100
+      100,
     );
     this.hideQuickSearchPanel();
     this.router.navigateByUrl('/music-library');

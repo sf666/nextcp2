@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpInterceptor } from '@angular/common/http';
 import { HttpRequest } from '@angular/common/http';
 import { HttpHandler } from '@angular/common/http';
@@ -10,28 +10,30 @@ import { SpinnerService } from './spinner.service';
 /**
  * Purpose:
  * ==========================
- * 
+ *
  * 1. show / hide spinner on the view
- * 
+ *
  * 2. add nextcp2 user agent header
- * 
+ *
  */
 @Injectable()
 export class CustomHttpInterceptor implements HttpInterceptor {
+  private spinnerService = inject(SpinnerService);
 
-     constructor(private spinnerService: SpinnerService) { }
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler,
+  ): Observable<HttpEvent<any>> {
+    this.spinnerService.requestStarted();
 
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const modifiedReq = req.clone({
+      headers: req.headers.set('control-point', 'nextcp/2.0'),
+    });
 
-        this.spinnerService.requestStarted();
-
-        const modifiedReq = req.clone({ 
-            headers: req.headers.set('control-point', 'nextcp/2.0'),
-          });
-
-        return next.handle(modifiedReq)
-             .pipe(finalize(() => {
-                    this.spinnerService.requestEnded();
-                }));
-    }
+    return next.handle(modifiedReq).pipe(
+      finalize(() => {
+        this.spinnerService.requestEnded();
+      }),
+    );
+  }
 }

@@ -1,28 +1,29 @@
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { ContainerDto, ContainerItemDto } from './../dto.d';
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 /**
- * Global service to inform views about current selected media library folder. 
+ * Global service to inform views about current selected media library folder.
  */
 export class MusicLibraryService {
+  dtoGeneratorService = inject(DtoGeneratorService);
 
-  constructor(public dtoGeneratorService: DtoGeneratorService) { }
-
-  public currentMediaLibraryFolder = signal<ContainerItemDto>(this.dtoGeneratorService.generateEmptyContainerItemDto());
+  public currentMediaLibraryFolder = signal<ContainerItemDto>(
+    this.dtoGeneratorService.generateEmptyContainerItemDto(),
+  );
 
   public updateCurrentContainer(container: ContainerItemDto) {
     this.currentMediaLibraryFolder.set(container);
   }
 
-  public currentContainerId() : string {
-    return this.currentMediaLibraryFolder().currentContainer.id;    
+  public currentContainerId(): string {
+    return this.currentMediaLibraryFolder().currentContainer.id;
   }
 
-  public currentContainer() : ContainerDto {
+  public currentContainer(): ContainerDto {
     return this.currentMediaLibraryFolder().currentContainer;
   }
 }

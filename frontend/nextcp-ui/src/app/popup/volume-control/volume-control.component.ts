@@ -1,16 +1,7 @@
 import { PopupService } from './../../util/popup.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RendererService } from './../../service/renderer.service';
-import {
-  Component,
-  OnInit,
-  ElementRef,
-  Inject,
-  computed,
-  ViewEncapsulation,
-  ChangeDetectionStrategy,
-} from '@angular/core';
-import { MatIcon } from '@angular/material/icon';
+import { Component, ElementRef, computed, ViewEncapsulation, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
@@ -24,6 +15,9 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
   encapsulation: ViewEncapsulation.None,
 })
 export class VolumeControlComponent {
+  rendererService = inject(RendererService);
+  private popupService = inject(PopupService);
+
   private readonly _matDialogRef: MatDialogRef<VolumeControlComponent>;
   private readonly triggerElementRef: ElementRef;
   private closeOnMs: number = 0;
@@ -37,12 +31,14 @@ export class VolumeControlComponent {
     this.toSliderPos(this.rendererService.deviceDriverState().volume ?? 0),
   );
 
-  constructor(
-    _matDialogRef: MatDialogRef<VolumeControlComponent>,
-    @Inject(MAT_DIALOG_DATA) data: { trigger: ElementRef; id: string },
-    public rendererService: RendererService,
-    private popupService: PopupService,
-  ) {
+  constructor() {
+    const _matDialogRef =
+      inject<MatDialogRef<VolumeControlComponent>>(MatDialogRef);
+    const data = inject<{
+      trigger: ElementRef;
+      id: string;
+    }>(MAT_DIALOG_DATA);
+
     this.triggerElementRef = data.trigger;
     this._matDialogRef = _matDialogRef;
     this.popupService.configurePopupPosition(

@@ -2,66 +2,85 @@ import { HttpService } from './http.service';
 import { Subject } from 'rxjs';
 import { ConfigurationService } from './configuration.service';
 import { SseService } from './sse/sse.service';
-import { MediaServerDto, MediaRendererDto, InputSourceChangeDto,  InputSourceDto } from './dto.d';
-import { Injectable, computed, signal } from '@angular/core';
+import {
+  MediaServerDto,
+  MediaRendererDto,
+  InputSourceChangeDto,
+  InputSourceDto,
+} from './dto.d';
+import { Injectable, computed, signal, inject } from '@angular/core';
 import { PersistenceService } from './persistence/persistence.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DeviceService {
+  private httpService = inject(HttpService);
+  private persistenceService = inject(PersistenceService);
+  private configService = inject(ConfigurationService);
 
   baseUri = '/DeviceRegistry';
 
   public mediaServerList = signal<MediaServerDto[]>([]);
   public mediaRendererList = signal<MediaRendererDto[]>([]);
-  public selectedMediaServerDevice = signal<MediaServerDto>({ udn: '', img: '', friendlyName: 'select Media-Server', extendedApi: false });
-  public selectedMediaRendererDevice = signal<MediaRendererDto>({ udn: '', img: '', friendlyName: 'select Media-Renderer', services: [], allSources: [], currentSource: { id: 0, Name: '', Type: '', Visible: false } });
+  public selectedMediaServerDevice = signal<MediaServerDto>({
+    udn: '',
+    img: '',
+    friendlyName: 'select Media-Server',
+    extendedApi: false,
+  });
+  public selectedMediaRendererDevice = signal<MediaRendererDto>({
+    udn: '',
+    img: '',
+    friendlyName: 'select Media-Renderer',
+    services: [],
+    allSources: [],
+    currentSource: { id: 0, Name: '', Type: '', Visible: false },
+  });
 
-  public mediaRendererSelected = computed (() => {
+  public mediaRendererSelected = computed(() => {
     return this.selectedMediaRendererDevice().udn.length > 0;
   });
 
-  public mediaServerSelected = computed (() => {
+  public mediaServerSelected = computed(() => {
     return this.selectedMediaServerDevice().udn.length > 0;
   });
 
   mediaRendererInitiated$: Subject<MediaRendererDto[]> = new Subject();
   mediaServerInitiated$: Subject<MediaServerDto[]> = new Subject();
 
-
   public enabledMediaRendererList = computed(() => {
-    return this.mediaRendererList().filter(renderer => {
+    return this.mediaRendererList().filter((renderer) => {
       const enabled = this.configService.isRenderDeviceUdnActive(renderer.udn);
       return enabled;
     });
-  });   
+  });
 
-  constructor(
-    // class services
-    sse: SseService,
-
-    // instance services
-    private httpService: HttpService,
-    private persistenceService: PersistenceService,
-    private configService: ConfigurationService) {
+  constructor() {
+    const sse = inject(SseService);
 
     // Initialize MediaRenderer & MediaServer ...
     this.initAllMediaServer();
     this.initAllMediaRenderer();
 
     // push notification: We are interested in added and removed devices
-    sse.mediaRendererListChanged$.subscribe(data => this.mediarendererListChanged(data));
-    sse.mediaServerListChanged$.subscribe(data => this.mediaserverListChanged(data));
+    sse.mediaRendererListChanged$.subscribe((data) =>
+      this.mediarendererListChanged(data),
+    );
+    sse.mediaServerListChanged$.subscribe((data) =>
+      this.mediaserverListChanged(data),
+    );
 
-    sse.mediaRendererInputSourceChanged$.subscribe(data => this.updateRenderDeviceSource(data));
+    sse.mediaRendererInputSourceChanged$.subscribe((data) =>
+      this.updateRenderDeviceSource(data),
+    );
   }
 
   // TODO check update signaling
   private updateRenderDeviceSource(source: InputSourceChangeDto) {
-    console.log("new input source : " + source)
+    console.log('new input source : ' + source);
     if (source.udn == this.selectedMediaRendererDevice().udn) {
-      console.log("new input source applied");
+      console.log('new input source applied');
       this.selectedMediaRendererDevice().currentSource = source.inputSource;
     }
   }
@@ -71,19 +90,20 @@ export class DeviceService {
   }
 
   public isRenderOnline(device: MediaRendererDto): boolean {
-    if (this.mediaRendererList().some(renderer => renderer.udn == device.udn)) {
+    if (
+      this.mediaRendererList().some((renderer) => renderer.udn == device.udn)
+    ) {
       return true;
     }
     return false;
   }
 
   public isServerOnline(device: MediaServerDto): boolean {
-    if (this.mediaServerList().some(server => server.udn == device.udn)) {
+    if (this.mediaServerList().some((server) => server.udn == device.udn)) {
       return true;
     }
     return false;
   }
-
 
   public isMediaRendererSelected(udn: string): boolean {
     return udn === this.selectedMediaRendererDevice().udn;
@@ -94,7 +114,7 @@ export class DeviceService {
   }
 
   public isMediaServerAvailable(udn: string): boolean {
-    if (this.mediaServerList().some(e => e.udn === udn)) {
+    if (this.mediaServerList().some((e) => e.udn === udn)) {
       return true;
     }
     return false;
@@ -108,7 +128,7 @@ export class DeviceService {
   private mediarendererListChanged(data: MediaRendererDto[]): void {
     this.mediaRendererList.set(data);
     this.selectLastPersistentRendererDevice();
-    console.log("renderer list updated.");
+    console.log('renderer list updated.');
     // this.logMediaRendererServices(data);
   }
 
@@ -126,7 +146,7 @@ export class DeviceService {
 
   public setMediaRendererByUdn(udn: string): boolean {
     this.persistenceService.setNewMediaRendererDevice(udn);
-    const renderer = this.mediaRendererList().filter(e => e.udn === udn);
+    const renderer = this.mediaRendererList().filter((e) => e.udn === udn);
     if (renderer?.length > 0) {
       this.selectedMediaRendererDevice.set(renderer[0]);
       return true;
@@ -136,13 +156,15 @@ export class DeviceService {
 
   public setMediaServerByUdn(udn: string): boolean {
     this.persistenceService.setNewMediaServerDevice(udn);
-    const serverDevice = this.mediaServerList().filter(e => e.udn === udn);
+    const serverDevice = this.mediaServerList().filter((e) => e.udn === udn);
     if (serverDevice?.length > 0) {
-      console.log("media server was found. Setting to " + serverDevice[0].friendlyName);
+      console.log(
+        'media server was found. Setting to ' + serverDevice[0].friendlyName,
+      );
       this.selectedMediaServerDevice.set(serverDevice[0]);
       return true;
     } else {
-      console.log("udn not yet available : " + udn);
+      console.log('udn not yet available : ' + udn);
       return false;
     }
   }
@@ -153,11 +175,13 @@ export class DeviceService {
 
   private initAllMediaServer() {
     const uri = '/mediaServer';
-    this.httpService.get<MediaServerDto[]>(this.baseUri, uri).subscribe(data => {
-      this.mediaServerList.set(data);
-      this.selectLastPersistentServerDevice();
-      this.mediaServerInitiated$.next(data);
-    });
+    this.httpService
+      .get<MediaServerDto[]>(this.baseUri, uri)
+      .subscribe((data) => {
+        this.mediaServerList.set(data);
+        this.selectLastPersistentServerDevice();
+        this.mediaServerInitiated$.next(data);
+      });
   }
 
   private selectLastPersistentRendererDevice(): boolean {
@@ -167,7 +191,7 @@ export class DeviceService {
     }
     let b = this.setMediaRendererByUdn(udn);
     if (!b) {
-      console.log("last persistence media renderer device not available yet.");
+      console.log('last persistence media renderer device not available yet.');
     }
     return b;
   }
@@ -179,7 +203,7 @@ export class DeviceService {
     }
     let b = this.setMediaServerByUdn(udn);
     if (!b) {
-      console.log("last persistence media server device not available yet.");
+      console.log('last persistence media server device not available yet.');
     }
     return b;
   }
@@ -187,10 +211,12 @@ export class DeviceService {
   private initAllMediaRenderer() {
     const uri = '/mediaRenderer';
 
-    this.httpService.get<MediaRendererDto[]>(this.baseUri, uri).subscribe(data => {
-      this.mediaRendererList.set(data);
-      this.selectLastPersistentRendererDevice();
-      this.mediaRendererInitiated$.next(data);
-    });
+    this.httpService
+      .get<MediaRendererDto[]>(this.baseUri, uri)
+      .subscribe((data) => {
+        this.mediaRendererList.set(data);
+        this.selectLastPersistentRendererDevice();
+        this.mediaRendererInitiated$.next(data);
+      });
   }
 }

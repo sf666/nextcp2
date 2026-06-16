@@ -15,6 +15,7 @@ import {
   input,
   output,
   afterRenderEffect,
+  inject,
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
@@ -31,7 +32,9 @@ import { CdsBrowsePathService } from 'src/app/util/cds-browse-path.service';
   selector: 'mediaServer-display-container',
   templateUrl: './display-container.component.html',
   styleUrls: ['./display-container.component.scss'],
-  providers: [{ provide: CdsBrowsePathService, useClass: CdsBrowsePathService },], // non singleton injections
+  providers: [
+    { provide: CdsBrowsePathService, useClass: CdsBrowsePathService },
+  ], // non singleton injections
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
@@ -47,14 +50,18 @@ import { CdsBrowsePathService } from 'src/app/util/cds-browse-path.service';
   ],
 })
 export class DisplayContainerComponent {
+  playlistService = inject(PlaylistService);
+  transportService = inject(TransportService);
+  private configurationService = inject(ConfigurationService);
+  private cdsBrowsePathService = inject(CdsBrowsePathService);
+  trackQualityService = inject(TrackQualityService);
 
   showTopHeader = input(true);
-  extendedApi = input (true);
+  extendedApi = input(true);
   enableAlbumSort = input(false);
   // When true, the track list view shows an additional "Genre" column (upnp:genre).
   showGenre = input(false);
   contentHandler = input.required<ScrollLoadHandler>();
-
 
   // Inform parent about actions
   containerSelected = output<ContainerDto>();
@@ -62,22 +69,16 @@ export class DisplayContainerComponent {
   itemDeleted = output<MusicItemDto>();
 
   listView = signal<boolean>(true);
-  displayFilterString = signal<string>("");
+  displayFilterString = signal<string>('');
   selectedGenres = signal<Array<string>>([]);
   sortCriteria = signal<string>('NONE');
 
-  constructor(
-    public playlistService: PlaylistService,
-    public transportService: TransportService,
-    private configurationService: ConfigurationService,
-    private cdsBrowsePathService: CdsBrowsePathService,
-    public trackQualityService: TrackQualityService
-  ) {
-      afterRenderEffect({
+  constructor() {
+    afterRenderEffect({
       read: (writeResult) => {
         this.cdsBrowsePathService.scrollIntoViewID();
       },
-    });    
+    });
   }
 
   /**
@@ -163,15 +164,15 @@ export class DisplayContainerComponent {
     oid: string,
     udn: string,
     stepIn: boolean,
-    sortCriteria?: string
-  ): Promise<boolean> | undefined{
+    sortCriteria?: string,
+  ): Promise<boolean> | undefined {
     if (!this.contentHandler) {
       console.error('contentHandler not initialized.');
       return;
     }
     if (udn?.length < 1) {
       console.error('display-container : UDN not set');
-      return
+      return;
     }
 
     const promise = new Promise<boolean>((resolve, reject) => {
@@ -179,8 +180,8 @@ export class DisplayContainerComponent {
         this.contentHandler().persistenceService?.setCurrentObjectID(oid);
       }
       if (this.contentHandler().contentDirectoryService) {
-        this.contentHandler().contentDirectoryService
-          .browseChildrenByOID(oid, udn, '')
+        this.contentHandler()
+          .contentDirectoryService.browseChildrenByOID(oid, udn, '')
           .subscribe((data) => {
             this.browseFinished(data);
             if (data?.currentContainer?.id) {
@@ -196,7 +197,7 @@ export class DisplayContainerComponent {
           });
       } else {
         console.error(
-          'display-container.component: contentDirectoryService not set.'
+          'display-container.component: contentDirectoryService not set.',
         );
         reject('display-container.component: contentDirectoryService not set.');
       }
@@ -219,7 +220,9 @@ export class DisplayContainerComponent {
   }
 
   public loadNextBrowsePage() {
-    this.contentHandler().contentDirectoryService.browseToNextPage().subscribe();
+    this.contentHandler()
+      .contentDirectoryService.browseToNextPage()
+      .subscribe();
   }
 
   addPlaylist(container: ContainerDto): void {

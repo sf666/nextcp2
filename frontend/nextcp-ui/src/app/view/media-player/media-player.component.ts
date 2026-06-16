@@ -2,7 +2,12 @@ import { DeviceService } from './../../service/device.service';
 import { MusicLibraryService } from './../../service/music-library/music-library.service';
 import { MediaPlayerConfigDto, ContainerIdDto } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  signal,
+  inject,
+} from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
@@ -31,16 +36,16 @@ import { MediaPlayerService } from 'src/app/service/media-player/media-player.se
   ],
 })
 export class MediaPlayerComponent {
+  private configurationService = inject(ConfigurationService);
+  private mediaPlayerService = inject(MediaPlayerService);
+  private deviceService = inject(DeviceService);
+  musicLibraryService = inject(MusicLibraryService);
+
   playMonitoring = signal<boolean>(false);
 
   mediaPlayerConfigDto: MediaPlayerConfigDto;
 
-  constructor(
-    private configurationService: ConfigurationService,
-    private mediaPlayerService: MediaPlayerService,
-    private deviceService: DeviceService,
-    public musicLibraryService: MusicLibraryService,
-  ) {
+  constructor() {
     this.mediaPlayerConfigDto =
       this.configurationService.mediaPlayerConfigDto();
     this.getPlayStatus();

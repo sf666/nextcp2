@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, Output, computed, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { ContainerDto } from 'src/app/service/dto';
 
 @Component({

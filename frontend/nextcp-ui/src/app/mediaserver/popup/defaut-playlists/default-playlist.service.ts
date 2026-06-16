@@ -1,21 +1,22 @@
 import { ContainerDto, MusicItemDto } from './../../../service/dto.d';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DefautPlaylistsComponent } from './defaut-playlists.component';
-import { Injectable, ElementRef } from '@angular/core';
+import { Injectable, ElementRef, inject } from '@angular/core';
 import { SongOptionsComponent } from '../song-options/song-options/song-options.component';
 import { AddPlaylistComponent } from 'src/app/popup/add-playlist/add-playlist.component';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DefaultPlaylistService {
+  private dialog = inject(MatDialog);
 
   private dialogRef: MatDialogRef<any, any> | undefined;
 
-  constructor(private dialog: MatDialog) { 
-  }
-
-  public openAddGlobalPlaylistDialog(item: MusicItemDto, folder: ContainerDto): MatDialogRef<any, any> {
+  public openAddGlobalPlaylistDialog(
+    item: MusicItemDto,
+    folder: ContainerDto,
+  ): MatDialogRef<any, any> {
     this.dialogRef = this.dialog.open(AddPlaylistComponent, {
       hasBackdrop: false,
       height: '500px',
@@ -26,7 +27,10 @@ export class DefaultPlaylistService {
     return this.dialogRef;
   }
 
-  public openAddGlobalPlaylistDialogWithBackdrop(item: MusicItemDto | undefined, folder: ContainerDto): MatDialogRef<any, any> {
+  public openAddGlobalPlaylistDialogWithBackdrop(
+    item: MusicItemDto | undefined,
+    folder: ContainerDto,
+  ): MatDialogRef<any, any> {
     this.dialogRef = this.dialog.open(AddPlaylistComponent, {
       hasBackdrop: true,
       height: '500px',
@@ -39,13 +43,17 @@ export class DefaultPlaylistService {
 
   /**
    * Opens a dialog next to a parent element.
-   * 
+   *
    * @param event
-   * @param objectID 
-   * @param parent 
-   * @returns 
+   * @param objectID
+   * @param parent
+   * @returns
    */
-  public openAddPlaylistDialogWithParent(event: any, objectID: string, parent?: SongOptionsComponent): MatDialogRef<any, any> {
+  public openAddPlaylistDialogWithParent(
+    event: any,
+    objectID: string,
+    parent?: SongOptionsComponent,
+  ): MatDialogRef<any, any> {
     let target: ElementRef | undefined;
 
     if (event.target) {
@@ -61,7 +69,10 @@ export class DefaultPlaylistService {
     return this.dialogRef;
   }
 
-  public openAddPlaylistDialog(event: any, objectID: string): MatDialogRef<any, any> {
+  public openAddPlaylistDialog(
+    event: any,
+    objectID: string,
+  ): MatDialogRef<any, any> {
     return this.openAddPlaylistDialogWithParent(event, objectID, undefined);
   }
 

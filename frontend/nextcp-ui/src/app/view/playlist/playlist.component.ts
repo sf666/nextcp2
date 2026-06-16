@@ -4,32 +4,42 @@ import { SseService } from './../../service/sse/sse.service';
 import { DeviceService } from './../../service/device.service';
 import { MusicItemDto } from './../../service/dto.d';
 import { PlaylistService } from '../../service/playlist.service';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { LayoutService } from 'src/app/service/layout.service';
 import { QualityBadgeComponent } from '../../util/comp/quality-badge/quality-badge.component';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
 
 @Component({
-    selector: 'playlist',
-    templateUrl: './playlist.component.html',
-    styleUrls: ['./playlist.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [CdsBrowsePathService, { provide: 'uniqueId', useValue: 'cds_playlist' }],
-    standalone: true,
-    imports: [MatButton, MatIcon, QualityBadgeComponent]
+  selector: 'playlist',
+  templateUrl: './playlist.component.html',
+  styleUrls: ['./playlist.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    CdsBrowsePathService,
+    { provide: 'uniqueId', useValue: 'cds_playlist' },
+  ],
+  standalone: true,
+  imports: [MatButton, MatIcon, QualityBadgeComponent],
 })
 export class PlaylistComponent implements OnInit {
+  deviceService = inject(DeviceService);
+  private sseService = inject(SseService);
+  private layoutService = inject(LayoutService);
+  private backgroundImageService = inject(BackgroundImageService);
+  playlistService = inject(PlaylistService);
 
-  constructor(
-    public deviceService: DeviceService,
-    private sseService: SseService,
-    private layoutService: LayoutService,
-    private backgroundImageService: BackgroundImageService,
-    scrollViewService: CdsBrowsePathService,
-    public playlistService: PlaylistService) {
+  constructor() {
+    const deviceService = this.deviceService;
+    const sseService = this.sseService;
+    const scrollViewService = inject(CdsBrowsePathService);
 
-    sseService.mediaRendererPlaylistStateChanged$.subscribe(data => {
+    sseService.mediaRendererPlaylistStateChanged$.subscribe((data) => {
       if (deviceService.isMediaRendererSelected(data.udn)) {
         scrollViewService.scrollIntoViewID(`PL-${data.Id}`);
       }
@@ -39,22 +49,24 @@ export class PlaylistComponent implements OnInit {
   ngOnInit(): void {
     this.layoutService.setFramedViewWithoutNavbar();
     this.playlistService.updatePlaylistItems();
-    this.backgroundImageService.setBackgroundImageMainScreen("/assets/images/playlist_bg.png");
+    this.backgroundImageService.setBackgroundImageMainScreen(
+      '/assets/images/playlist_bg.png',
+    );
   }
 
-  getActiveClass(item: MusicItemDto) : string{
+  getActiveClass(item: MusicItemDto): string {
     const id: number = +item.objectID;
     if (id === this.playlistService.playlistState().Id) {
-      return "active";
+      return 'active';
     }
-    return "";
+    return '';
   }
 
-  play() : void {
+  play(): void {
     this.playlistService.play();
   }
 
-  delete() : void {
+  delete(): void {
     this.playlistService.deleteAll();
   }
 

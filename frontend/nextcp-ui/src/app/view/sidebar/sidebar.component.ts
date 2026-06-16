@@ -5,8 +5,13 @@ import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { MyPlaylistService } from './../my-playlists/my-playlist.service';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { MusicItemDto, ServerPlaylistDto } from 'src/app/service/dto';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  signal,
+  inject,
+} from '@angular/core';
+import { ServerPlaylistDto } from 'src/app/service/dto';
 import { MatIcon } from '@angular/material/icon';
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
 import { DefaultPlaylistService } from 'src/app/mediaserver/popup/defaut-playlists/default-playlist.service';
@@ -18,58 +23,56 @@ import { MusicLibraryService } from 'src/app/service/music-library/music-library
   styleUrls: ['./sidebar.component.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    RouterLink,
-    MatIcon,
-],
+  imports: [RouterLink, MatIcon],
 })
 export class SidebarComponent {
+  deviceService = inject(DeviceService);
+  serverPlaylistService = inject(ServerPlaylistService);
+  private myPlaylistService = inject(MyPlaylistService);
+  private router = inject(Router);
+  musicLibraryService = inject(MusicLibraryService);
+  layoutService = inject(LayoutService);
+  private defaultPlaylistService = inject(DefaultPlaylistService);
+  configurationService = inject(ConfigurationService);
+  mediaPlayerService = inject(MediaPlayerService);
+  rendererService = inject(RendererService);
 
   private routerMap = new Map<string, string>();
 
-  activeId = signal<string>("");
+  activeId = signal<string>('');
 
-  constructor(
-    public deviceService: DeviceService,
-    public serverPlaylistService: ServerPlaylistService,
-    private myPlaylistService: MyPlaylistService,
-    private router: Router,
-    public musicLibraryService: MusicLibraryService,
-    public layoutService: LayoutService,
-    private defaultPlaylistService: DefaultPlaylistService,
-    public configurationService: ConfigurationService,
-    public mediaPlayerService: MediaPlayerService,
-    public rendererService: RendererService) {
+  constructor() {
+    const router = this.router;
 
-    this.routerMap.set("/", "-1");                // default route is music-library
-    this.routerMap.set("/music-library", "-1");
-    this.routerMap.set("/playlist", "-2");
-    this.routerMap.set("/player", "-3");
-    this.routerMap.set("/radio", "-4");
-    this.routerMap.set("/myAlbums", "-5");
-    this.routerMap.set("/settings", "-6");
-    this.routerMap.set("/mediaPlayerConfig", "-7");
-    this.routerMap.set("/ums-audioaddict", "-8");
-    this.routerMap.set("/chat-ai", "-9");
-    this.routerMap.set("/myPlaylists", "0");      // All positives ID's are playlists
+    this.routerMap.set('/', '-1'); // default route is music-library
+    this.routerMap.set('/music-library', '-1');
+    this.routerMap.set('/playlist', '-2');
+    this.routerMap.set('/player', '-3');
+    this.routerMap.set('/radio', '-4');
+    this.routerMap.set('/myAlbums', '-5');
+    this.routerMap.set('/settings', '-6');
+    this.routerMap.set('/mediaPlayerConfig', '-7');
+    this.routerMap.set('/ums-audioaddict', '-8');
+    this.routerMap.set('/chat-ai', '-9');
+    this.routerMap.set('/myPlaylists', '0'); // All positives ID's are playlists
 
-    this.routerMap.set("/myTracks", "-999");      // not used yet
+    this.routerMap.set('/myTracks', '-999'); // not used yet
     /*
         this.routerMap.set("/networks", "-8");
         this.routerMap.set("/getNetworkChannels", "-8");
     */
-    router.events.subscribe(event => this.calActiveId(event));
+    router.events.subscribe((event) => this.calActiveId(event));
   }
 
   private calActiveId(nav: any) {
     if (nav instanceof NavigationEnd) {
       let url = nav.url;
-      if (url.lastIndexOf("/") > 0) {
-        url = url.substring(0, url.lastIndexOf("/"));
+      if (url.lastIndexOf('/') > 0) {
+        url = url.substring(0, url.lastIndexOf('/'));
       }
       var targetId = this.routerMap.get(url);
       this.activeId.set(targetId ?? '');
-      if (this.activeId() == "0") {
+      if (this.activeId() == '0') {
         this.activeId.set(this.myPlaylistService.activePlaylistId);
       }
     }
@@ -77,7 +80,7 @@ export class SidebarComponent {
 
   /**
    * Browse to last visited UMS directory
-   * 
+   *
    * @param itemId Button ID
    */
   public musicLibraryClicked(): void {
@@ -95,7 +98,7 @@ export class SidebarComponent {
 
   /**
    * My Album clicked.
-   * 
+   *
    * @param id ID of my album button
    */
   public myAlbumClicked(): void {
@@ -104,7 +107,7 @@ export class SidebarComponent {
 
   /**
    * One Button is clicked. ID will be tracked for delivering the active class.
-   * @param itemId 
+   * @param itemId
    */
   public buttonClicked(routerUrl: string): void {
     this.afterButtonClicked(this.routerMap.get(routerUrl) ?? '');
@@ -121,23 +124,29 @@ export class SidebarComponent {
   public getTextClass(url: string): string {
     let id = this.routerMap.get(url);
     if (id == this.activeId()) {
-      console.log(url + " is active");
-      return "active";
+      console.log(url + ' is active');
+      return 'active';
     }
-    return "button-text";
+    return 'button-text';
   }
 
   public getPlaylistClass(id: string) {
     if (id == this.activeId()) {
-      return "active";
+      return 'active';
     }
-    return "button-text";
+    return 'button-text';
   }
 
   public get myFolderConfigured(): boolean {
     if (this.deviceService.mediaServerSelected()) {
-      var sc = this.configurationService.findServerConfig(this.deviceService.selectedMediaServerDevice().udn);
-      console.log(this.deviceService.selectedMediaServerDevice().friendlyName + " : configures playlist folder id " + sc?.playistObjectId);
+      var sc = this.configurationService.findServerConfig(
+        this.deviceService.selectedMediaServerDevice().udn,
+      );
+      console.log(
+        this.deviceService.selectedMediaServerDevice().friendlyName +
+          ' : configures playlist folder id ' +
+          sc?.playistObjectId,
+      );
       return (sc?.playistObjectId?.length ?? 0) > 0;
     } else {
       return false;
@@ -145,7 +154,10 @@ export class SidebarComponent {
   }
 
   public showPlaylistDialog(): void {
-    this.defaultPlaylistService.openAddGlobalPlaylistDialogWithBackdrop(undefined, this.musicLibraryService.currentContainer());
+    this.defaultPlaylistService.openAddGlobalPlaylistDialogWithBackdrop(
+      undefined,
+      this.musicLibraryService.currentContainer(),
+    );
   }
 
   get myMediaServerAvailable(): boolean {

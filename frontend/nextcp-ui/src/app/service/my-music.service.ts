@@ -2,41 +2,37 @@ import { ToastService } from './toast/toast.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { Subject } from 'rxjs';
 import { HttpService } from './http.service';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { MusicAlbumIds } from './dto';
 import { isAssigned } from '../global';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class MyMusicService {
+  private httpService = inject(HttpService);
+  private deviceService = inject(DeviceService);
+  private toastService = inject(ToastService);
 
   private baseUri = '/MyMusicService';
 
-  constructor(
-    private httpService: HttpService,
-    private deviceService: DeviceService,
-    private toastService: ToastService) {
-  }
-
   public likeAlbum(albumIds: MusicAlbumIds): Subject<any> | undefined {
     if (!this.deviceService.selectedMediaServerDevice().udn) {
-      this.toastService.error("select media server", "like album");
+      this.toastService.error('select media server', 'like album');
       return;
     }
-    const uri = '/likeAlbum/' + this.deviceService.selectedMediaServerDevice().udn;
+    const uri =
+      '/likeAlbum/' + this.deviceService.selectedMediaServerDevice().udn;
     let hasId: boolean = false;
     if (isAssigned(albumIds.musicBrainzAlbumId)) {
-      console.log("like musicbrainz album : " + albumIds.musicBrainzAlbumId);
+      console.log('like musicbrainz album : ' + albumIds.musicBrainzAlbumId);
+      hasId = true;
+    } else if (isAssigned(albumIds.discogsReleaseId)) {
+      console.log('like discogs release : ' + albumIds.discogsReleaseId);
       hasId = true;
     }
-    else if (isAssigned(albumIds.discogsReleaseId)) {
-      console.log("like discogs release : " + albumIds.discogsReleaseId);
-      hasId = true;
-    }
-    
-    if (hasId) {      
+
+    if (hasId) {
       return this.httpService.post(this.baseUri, uri, albumIds);
     } else {
       console.log("no id's given for like album");
@@ -44,8 +40,12 @@ export class MyMusicService {
   }
 
   public deleteAlbumLike(albumIds: MusicAlbumIds): Subject<any> | undefined {
-    const uri = '/deleteAlbumLike/' + this.deviceService.selectedMediaServerDevice().udn;
-    if (albumIds.musicBrainzAlbumId !== '' || albumIds.discogsReleaseId != undefined) {
+    const uri =
+      '/deleteAlbumLike/' + this.deviceService.selectedMediaServerDevice().udn;
+    if (
+      albumIds.musicBrainzAlbumId !== '' ||
+      albumIds.discogsReleaseId != undefined
+    ) {
       return this.httpService.post(this.baseUri, uri, albumIds);
     } else {
       console.log("no id's given for delete album like");
@@ -53,8 +53,12 @@ export class MyMusicService {
   }
 
   public isAlbumLiked(albumIds: MusicAlbumIds): Subject<boolean> | undefined {
-    const uri = '/isAlbumLiked/' + this.deviceService.selectedMediaServerDevice().udn;
-    if (albumIds.musicBrainzAlbumId !== '' || albumIds.discogsReleaseId != undefined) {
+    const uri =
+      '/isAlbumLiked/' + this.deviceService.selectedMediaServerDevice().udn;
+    if (
+      albumIds.musicBrainzAlbumId !== '' ||
+      albumIds.discogsReleaseId != undefined
+    ) {
       return this.httpService.post<boolean>(this.baseUri, uri, albumIds);
     } else {
       console.log("no id's given for is album liked");
@@ -63,38 +67,46 @@ export class MyMusicService {
 
   public backupLikedAlbums(): void {
     if (!this.deviceService.selectedMediaServerDevice().udn) {
-      this.toastService.error("select media server first", "backup like album");
+      this.toastService.error('select media server first', 'backup like album');
       return;
     }
-    const uri = '/backupLikedAlbums/' + this.deviceService.selectedMediaServerDevice().udn;
-    this.httpService.get(this.baseUri, uri, "backup liked albums");
+    const uri =
+      '/backupLikedAlbums/' +
+      this.deviceService.selectedMediaServerDevice().udn;
+    this.httpService.get(this.baseUri, uri, 'backup liked albums');
   }
 
   public restoreLikedAlbums(): void {
     if (!this.deviceService.selectedMediaServerDevice().udn) {
-      this.toastService.error("select media server first", "restore liked albums");
+      this.toastService.error(
+        'select media server first',
+        'restore liked albums',
+      );
       return;
     }
-    const uri = '/restoreLikedAlbums/' + this.deviceService.selectedMediaServerDevice().udn;
-    this.httpService.get(this.baseUri, uri, "restore liked albums");
+    const uri =
+      '/restoreLikedAlbums/' +
+      this.deviceService.selectedMediaServerDevice().udn;
+    this.httpService.get(this.baseUri, uri, 'restore liked albums');
   }
 
   public backupRatings(): void {
     if (!this.deviceService.selectedMediaServerDevice().udn) {
-      this.toastService.error("select media server first", "backup ratings");
+      this.toastService.error('select media server first', 'backup ratings');
       return;
     }
-    const uri = '/backupRatings/' + this.deviceService.selectedMediaServerDevice().udn;
-    this.httpService.get(this.baseUri, uri, "backup ratings");
+    const uri =
+      '/backupRatings/' + this.deviceService.selectedMediaServerDevice().udn;
+    this.httpService.get(this.baseUri, uri, 'backup ratings');
   }
 
   public restoreRatings(): void {
     if (!this.deviceService.selectedMediaServerDevice().udn) {
-      this.toastService.error("select media server first", "restore ratings");
+      this.toastService.error('select media server first', 'restore ratings');
       return;
     }
-    const uri = '/restoreRatings/' + this.deviceService.selectedMediaServerDevice().udn;
-    this.httpService.get(this.baseUri, uri, "restore ratings");
+    const uri =
+      '/restoreRatings/' + this.deviceService.selectedMediaServerDevice().udn;
+    this.httpService.get(this.baseUri, uri, 'restore ratings');
   }
-
 }

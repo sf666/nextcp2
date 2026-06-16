@@ -5,6 +5,7 @@ import {
   input,
   output,
   signal,
+  inject,
 } from '@angular/core';
 import { ContentDirectoryService } from 'src/app/service/content-directory.service';
 import { ContainerDto, MusicItemDto } from 'src/app/service/dto';
@@ -26,6 +27,13 @@ import { RendererService } from 'src/app/service/renderer.service';
   styleUrl: './item-tile.component.scss',
 })
 export class ItemTileComponent {
+  private songOptionsServiceService = inject(SongOptionsServiceService);
+  private dtoGeneratorService = inject(DtoGeneratorService);
+  private timeDisplayService = inject(TimeDisplayService);
+  private deviceService = inject(DeviceService);
+  private sseService = inject(SseService);
+  private rendererService = inject(RendererService);
+
   isListView = input<boolean>(false);
   contentDirectoryService = input.required<ContentDirectoryService>();
   quickSearchString = input<string>('');
@@ -40,35 +48,33 @@ export class ItemTileComponent {
 
   // some calculated constants
   allTracksSameDisc = computed(() =>
-    this.checkAllTracksSameDisc(this.allMusicTracks())
+    this.checkAllTracksSameDisc(this.allMusicTracks()),
   );
   allTracksSameAlbum = computed(() =>
-    this.checkAllTracksSameAlbum(this.allMusicTracks())
+    this.checkAllTracksSameAlbum(this.allMusicTracks()),
   );
   musicTracks = computed(() => this.filteredMusicTracks(this.allMusicTracks()));
 
-  allMusicTracks = computed(() => this.contentDirectoryService().musicTracks_());
+  allMusicTracks = computed(() =>
+    this.contentDirectoryService().musicTracks_(),
+  );
 
   // True when the current view shows global "show all" search results.
   // Disc labels must not be rendered for search results (mixed albums/discs).
   isSearchResult = computed(
     () =>
       this.contentDirectoryService().currentContainerList().currentContainer
-        ?.id === 'search_result'
+        ?.id === 'search_result',
   );
 
   currentUrl = signal<string>('');
   currentObjectId = signal<string>('');
   lastDiscLabel = '';
 
-  constructor(
-    private songOptionsServiceService: SongOptionsServiceService,
-    private dtoGeneratorService: DtoGeneratorService,
-    private timeDisplayService: TimeDisplayService,
-    private deviceService: DeviceService,
-    private sseService: SseService,
-    private rendererService: RendererService,
-  ) {
+  constructor() {
+    const deviceService = this.deviceService;
+    const sseService = this.sseService;
+
     const currentTrack = this.rendererService.currentTrack();
     if (currentTrack?.streamingURL) {
       this.currentUrl.set(currentTrack.streamingURL);
@@ -90,7 +96,7 @@ export class ItemTileComponent {
   }
 
   playItem(item: MusicItemDto) {
-    console.log("playitem clicked : " + item.title);
+    console.log('playitem clicked : ' + item.title);
     this.playItemClicked.emit(item);
   }
 
@@ -106,7 +112,7 @@ export class ItemTileComponent {
     if (data.length > 0) {
       const firstTrackDisc = data[0]?.numberOfThisDisc;
       const sameDisc = !data?.find(
-        (item) => item.numberOfThisDisc !== firstTrackDisc
+        (item) => item.numberOfThisDisc !== firstTrackDisc,
       );
       console.log('[item-tile] allTracksSameDisc : ' + sameDisc);
       return sameDisc;
@@ -117,17 +123,24 @@ export class ItemTileComponent {
 
   private checkAllTracksSameAlbum(data: MusicItemDto[]): boolean {
     if (this.contentDirectoryService().albumIdExists()) {
-      console.log('[item-tile] : album identified by musicBrainz or discogs id, assuming all tracks have same album');
+      console.log(
+        '[item-tile] : album identified by musicBrainz or discogs id, assuming all tracks have same album',
+      );
       return true;
     } else {
       if (data.length > 0) {
-        console.log('[item-tile] : no album id available, checking album title for all tracks');
+        console.log(
+          '[item-tile] : no album id available, checking album title for all tracks',
+        );
         const firstTrackAlbum = data[0].album;
         if (firstTrackAlbum != null) {
           const albumsWithOtherNames = data.filter(
-            (item) => item.album !== firstTrackAlbum
+            (item) => item.album !== firstTrackAlbum,
           ).length;
-          console.log('[item-tile] number of tracs with other album title : ' + albumsWithOtherNames);
+          console.log(
+            '[item-tile] number of tracs with other album title : ' +
+              albumsWithOtherNames,
+          );
           return albumsWithOtherNames == 0;
         } else {
           console.log('[item-tile] no album information available');
@@ -143,7 +156,7 @@ export class ItemTileComponent {
     let tracks: Array<MusicItemDto>;
     if (this.quickSearchString()) {
       tracks = data.filter((item) =>
-        this.doFilterText(item.title, this.quickSearchString())
+        this.doFilterText(item.title, this.quickSearchString()),
       );
     } else {
       tracks = data;
@@ -179,14 +192,14 @@ export class ItemTileComponent {
   //
   // CSS support like responsive grid layout counting in respect to first image visible or not
   // ===============================================================================================
-  getColNumber() : number {
+  getColNumber(): number {
     let num = 5;
     if (this.extendedApi()) {
       num = num + 1;
-    } 
+    }
     if (!this.allTracksSameAlbum()) {
       num = num + 1;
-    } 
+    }
     return num;
   }
 
@@ -201,7 +214,7 @@ export class ItemTileComponent {
   getDuration(item: MusicItemDto): string {
     if (item.audioFormat?.durationInSeconds) {
       return this.timeDisplayService.convertLongToDateStringShort(
-        item.audioFormat.durationInSeconds
+        item.audioFormat.durationInSeconds,
       );
     } else {
       return '';
@@ -255,10 +268,12 @@ export class ItemTileComponent {
       return false;
     }
 
-    const matchByUrl = musicItemDto.streamingURL?.length > 0
-      && musicItemDto.streamingURL === this.currentUrl();
-    const matchByObjectId = musicItemDto.objectID?.length > 0
-      && musicItemDto.objectID === this.currentObjectId();
+    const matchByUrl =
+      musicItemDto.streamingURL?.length > 0 &&
+      musicItemDto.streamingURL === this.currentUrl();
+    const matchByObjectId =
+      musicItemDto.objectID?.length > 0 &&
+      musicItemDto.objectID === this.currentObjectId();
 
     return matchByUrl || matchByObjectId;
   }

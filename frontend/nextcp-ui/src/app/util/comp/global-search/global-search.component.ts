@@ -3,6 +3,7 @@ import {
   ElementRef,
   HostListener,
   ChangeDetectionStrategy,
+  inject,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
@@ -18,10 +19,8 @@ import { ModalSearchResultComponent } from 'src/app/view/search/modal-search-res
   styleUrl: './global-search.component.scss',
 })
 export class GlobalSearchComponent {
-  constructor(
-    public globalSearchService: GlobalSearchService,
-    private elementRef: ElementRef<HTMLElement>,
-  ) {}
+  globalSearchService = inject(GlobalSearchService);
+  private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
   @HostListener('document:mousedown', ['$event'])
   onDocumentMouseDown(event: MouseEvent): void {

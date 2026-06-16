@@ -1,23 +1,22 @@
 import { DeviceService } from './../device.service';
 import { Subject } from 'rxjs';
 import { HttpService } from './../http.service';
-import { HttpHeaders } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MediaPlayerService {
+  private deviceService = inject(DeviceService);
+  private httpService = inject(HttpService);
+
   baseUri = 'MediaRendererService';
 
   public mediaPlayerExists = signal<boolean>(false);
 
-  constructor(
-    private deviceService: DeviceService,
-    private httpService: HttpService
-  ) {
-    this.mediaPlayerExistsRequest().subscribe(status => {
-      console.log("mediaPlayerExists : " + status);
+  constructor() {
+    this.mediaPlayerExistsRequest().subscribe((status) => {
+      console.log('mediaPlayerExists : ' + status);
       this.mediaPlayerExists.set(status);
     });
   }
@@ -44,12 +43,22 @@ export class MediaPlayerService {
 
   public createFolder(): void {
     const uri = '/createFolder';
-    this.httpService.post<boolean>(this.baseUri, uri, this.deviceService.selectedMediaServerDevice().udn);
+    this.httpService.post<boolean>(
+      this.baseUri,
+      uri,
+      this.deviceService.selectedMediaServerDevice().udn,
+    );
   }
 
   public upload(): void {
     const uri = '/upload';
-    console.log("upload : " + this.deviceService.selectedMediaServerDevice().udn);
-    this.httpService.post<boolean>(this.baseUri, uri, this.deviceService.selectedMediaServerDevice().udn);
+    console.log(
+      'upload : ' + this.deviceService.selectedMediaServerDevice().udn,
+    );
+    this.httpService.post<boolean>(
+      this.baseUri,
+      uri,
+      this.deviceService.selectedMediaServerDevice().udn,
+    );
   }
 }

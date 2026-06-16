@@ -1,19 +1,8 @@
 import { PersistenceService } from './../../service/persistence/persistence.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { PopupService } from './../../util/popup.service';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogConfig,
-} from '@angular/material/dialog';
-import {
-  Component,
-  OnInit,
-  Inject,
-  ElementRef,
-  computed,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Component, ElementRef, computed, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ConfigurationService } from 'src/app/service/configuration.service';
 
 @Component({
@@ -24,6 +13,11 @@ import { ConfigurationService } from 'src/app/service/configuration.service';
   standalone: true,
 })
 export class AvailableServerComponent {
+  private popupService = inject(PopupService);
+  private persistenceService = inject(PersistenceService);
+  deviceService = inject(DeviceService);
+  configurationService = inject(ConfigurationService);
+
   private readonly _matDialogRef: MatDialogRef<AvailableServerComponent>;
   private readonly triggerElementRef: ElementRef;
 
@@ -42,14 +36,14 @@ export class AvailableServerComponent {
     });
   });
 
-  constructor(
-    _matDialogRef: MatDialogRef<AvailableServerComponent>,
-    @Inject(MAT_DIALOG_DATA) data: { trigger: ElementRef; id: string },
-    private popupService: PopupService,
-    private persistenceService: PersistenceService,
-    public deviceService: DeviceService,
-    public configurationService: ConfigurationService,
-  ) {
+  constructor() {
+    const _matDialogRef =
+      inject<MatDialogRef<AvailableServerComponent>>(MatDialogRef);
+    const data = inject<{
+      trigger: ElementRef;
+      id: string;
+    }>(MAT_DIALOG_DATA);
+
     this.triggerElementRef = data.trigger;
     this._matDialogRef = _matDialogRef;
     this.popupService.configurePopupPosition(

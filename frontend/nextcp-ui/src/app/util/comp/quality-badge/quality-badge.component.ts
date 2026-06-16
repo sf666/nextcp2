@@ -3,8 +3,9 @@ import { TrackQualityService } from './../../track-quality.service';
 import {
   Component,
   OnInit,
-  Input,
   ChangeDetectionStrategy,
+  input,
+  inject,
 } from '@angular/core';
 
 @Component({
@@ -15,17 +16,17 @@ import {
   standalone: true,
 })
 export class QualityBadgeComponent implements OnInit {
-  @Input() item!: MusicItemDto;
+  trackQualityService = inject(TrackQualityService);
 
-  constructor(public trackQualityService: TrackQualityService) {}
+  readonly item = input.required<MusicItemDto>();
 
   ngOnInit(): void {}
 
   get isHifi(): boolean {
-    return this.trackQualityService.isHifi(this.item);
+    return this.trackQualityService.isHifi(this.item());
   }
 
   get hifiString(): string {
-    return this.trackQualityService.getHifiString(this.item) ?? '';
+    return this.trackQualityService.getHifiString(this.item()) ?? '';
   }
 }

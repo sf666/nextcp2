@@ -1,5 +1,5 @@
 import { CdsBrowsePathService } from 'src/app/util/cds-browse-path.service';
-import { ContainerDto, ContainerItemDto, MusicAlbumIds } from './../../../service/dto.d';
+import { ContainerDto, ContainerItemDto } from './../../../service/dto.d';
 import {
   Component,
   OnInit,
@@ -10,14 +10,19 @@ import {
   computed,
   ChangeDetectionStrategy,
   ElementRef,
-  ViewChild,
+  viewChild,
+  inject,
 } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatOption, MatSelect, MatSelectModule } from '@angular/material/select';
+import {
+  MatOption,
+  MatSelect,
+  MatSelectModule,
+} from '@angular/material/select';
 import { Observable } from 'rxjs';
 import { ContentDirectoryService } from 'src/app/service/content-directory.service';
 import { MusicItemDto } from 'src/app/service/dto';
@@ -39,15 +44,20 @@ import { DisplayHeaderOptionsComponent } from '../../popup/display-header-option
     MatSelectModule,
     ReactiveFormsModule,
     MatOption,
-    MatDialogModule
+    MatDialogModule,
   ],
   templateUrl: './display-container-header.component.html',
   styleUrl: './display-container-header.component.scss',
 })
-
 export class DisplayContainerHeaderComponent implements OnInit {
+  private dialog = inject(MatDialog);
+  private myMusicService = inject(MyMusicService);
+  private dtoGeneratorService = inject(DtoGeneratorService);
+  private backgroundImageService = inject(BackgroundImageService);
+  private cdsBrowsePathService = inject(CdsBrowsePathService);
+  private timeDisplayService = inject(TimeDisplayService);
 
-  @ViewChild('genresSelect') genresSelectbox!: MatSelect;
+  readonly genresSelectbox = viewChild.required<MatSelect>('genresSelect');
 
   //
   // signals
@@ -68,15 +78,18 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   genresList = signal<Array<String>>([]);
   currentAlbumLiked = signal<boolean>(false);
-  totalPlaytimeShort = computed(() => this.calcTotalPlaytimeShort(this.contentDirectoryService().musicTracks_()));
-  totalPlaytime = computed(() => this.calcTotalPlaytimeLong(this.contentDirectoryService().musicTracks_()));
+  totalPlaytimeShort = computed(() =>
+    this.calcTotalPlaytimeShort(this.contentDirectoryService().musicTracks_()),
+  );
+  totalPlaytime = computed(() =>
+    this.calcTotalPlaytimeLong(this.contentDirectoryService().musicTracks_()),
+  );
 
   likePossible = computed(() => this.contentDirectoryService().albumIdExists());
   allTracksSameAlbum_ = signal<boolean>(false);
   mediaServerExists = signal<boolean>(false);
 
   genresForm = new FormControl('');
-
 
   containerType = computed(() => {
     if (
@@ -92,30 +105,22 @@ export class DisplayContainerHeaderComponent implements OnInit {
     }
   });
 
-  constructor(
-    private dialog: MatDialog,
-    private myMusicService: MyMusicService,
-    private dtoGeneratorService: DtoGeneratorService,
-    private backgroundImageService: BackgroundImageService,
-    private cdsBrowsePathService: CdsBrowsePathService,
-    private timeDisplayService: TimeDisplayService,
-  ) {
-  }
-
   ngOnInit(): void {
     if (this.contentDirectoryService) {
       this.contentDirectoryService().browseFinished$.subscribe((data) =>
-        this.cdsBrowseFinished()
+        this.cdsBrowseFinished(),
       );
     }
   }
 
   private cdsBrowseFinished() {
-    console.log("cdsBrowseFinished ... ");
+    console.log('cdsBrowseFinished ... ');
     this.clearSearch();
     this.fillGenres();
     this.checkLikeStatus();
-    this.backgroundImageService.setDisplayContainerHeaderImage(this.currentContainer.albumartUri);
+    this.backgroundImageService.setDisplayContainerHeaderImage(
+      this.currentContainer.albumartUri,
+    );
     this.cdsBrowsePathService.scrollIntoViewID();
   }
 
@@ -124,11 +129,11 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   private fillGenres(): void {
-    console.log("filling genres. Items size is " + this.musicTracks?.length);
+    console.log('filling genres. Items size is ' + this.musicTracks?.length);
     const mySet = new Set<String>();
     this.musicTracks?.forEach((value) => {
       if (value?.genre) {
-        console.log("reading genre music tracks : " + value.genre);
+        console.log('reading genre music tracks : ' + value.genre);
         let aGenre = value.genre.split('/');
         aGenre?.forEach((gen) => {
           mySet.add(gen.trim());
@@ -137,7 +142,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     });
     this.albums?.forEach((value) => {
       if (value?.genre) {
-        console.log("reading genre albums : " + value.genre);
+        console.log('reading genre albums : ' + value.genre);
         let aGenre = value.genre.split('/');
         aGenre?.forEach((gen) => {
           mySet.add(gen.trim());
@@ -159,14 +164,11 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
     if (this.likePossible()) {
       const likeStatusRequest = this.myMusicService.isAlbumLiked(albumIds);
-      likeStatusRequest?.subscribe(
-        (res) => {
-          console.log("current album liked : " + res);
-          (this.currentAlbumLiked.set(res));
-        }
-      );
+      likeStatusRequest?.subscribe((res) => {
+        console.log('current album liked : ' + res);
+        this.currentAlbumLiked.set(res);
+      });
     }
-
   }
 
   get isContainerAlbum(): boolean {
@@ -197,7 +199,9 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   public clearGenres(event: MouseEvent): void {
-    this.genresSelectbox.options.forEach((item: MatOption) => item.deselect());
+    this.genresSelectbox().options.forEach((item: MatOption) =>
+      item.deselect(),
+    );
     event.stopPropagation();
   }
 
@@ -232,7 +236,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
       const deleteLikeRequest = this.myMusicService.deleteAlbumLike(albumIds);
       deleteLikeRequest?.subscribe((d) => this.checkLikeStatus());
     } else {
-      console.log("cannot dislike album, because no valid album ids found");
+      console.log('cannot dislike album, because no valid album ids found');
     }
   }
 
@@ -243,12 +247,12 @@ export class DisplayContainerHeaderComponent implements OnInit {
       const likeAlbumRequest = this.myMusicService.likeAlbum(albumIds);
       likeAlbumRequest?.subscribe((d) => this.checkLikeStatus());
     } else {
-      console.log("cannot like album, because no valid album ids found");
+      console.log('cannot like album, because no valid album ids found');
     }
   }
 
   toggleLikeAlbum(): void {
-    console.log("toggle like album ... ");
+    console.log('toggle like album ... ');
     if (this.isLiked()) {
       this.dislikeAlbum();
     } else {
@@ -268,7 +272,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
   get musicTracks(): MusicItemDto[] {
     return this.contentDirectoryService().musicTracks_();
   }
-
 
   //
   // Statistics
@@ -305,14 +308,14 @@ export class DisplayContainerHeaderComponent implements OnInit {
     if (tracks.length > 0) {
       tracks.forEach(
         (el) =>
-        (completeTime =
-          completeTime +
-          (el.audioFormat?.durationInSeconds
-            ? el.audioFormat.durationInSeconds
-            : 0))
+          (completeTime =
+            completeTime +
+            (el.audioFormat?.durationInSeconds
+              ? el.audioFormat.durationInSeconds
+              : 0)),
       );
     }
-    console.log("total playtime seconds : " + completeTime);
+    console.log('total playtime seconds : ' + completeTime);
     return completeTime;
   }
 
@@ -320,20 +323,19 @@ export class DisplayContainerHeaderComponent implements OnInit {
   // Button actions
   // ===============================================================================================
   public playContainer(): void {
-    console.log("play container clicked ... ");
+    console.log('play container clicked ... ');
     this.playClicked.emit(this.currentContainer);
   }
 
   public shuffleContainer(): void {
-    console.log("shuffle container clicked ... ");
+    console.log('shuffle container clicked ... ');
     this.shuffleClicked.emit(this.currentContainer);
   }
 
   public addToPlaylist(): void {
-    console.log("add to playlist clicked ... ");
+    console.log('add to playlist clicked ... ');
     this.addToPlaylistClicked.emit(this.currentContainer);
   }
-
 
   public openOptionsDialog(event: MouseEvent): Observable<any> {
     const target = new ElementRef(event.currentTarget);
@@ -351,8 +353,11 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   // Other
   public get currentContainer(): ContainerDto {
-    if (this.contentDirectoryService().currentContainerList().currentContainer) {
-      return this.contentDirectoryService().currentContainerList().currentContainer;
+    if (
+      this.contentDirectoryService().currentContainerList().currentContainer
+    ) {
+      return this.contentDirectoryService().currentContainerList()
+        .currentContainer;
     }
     return this.dtoGeneratorService.generateEmptyContainerDto();
   }
@@ -361,8 +366,8 @@ export class DisplayContainerHeaderComponent implements OnInit {
     if (this.contentDirectoryService().currentContainerList()) {
       return this.contentDirectoryService().currentContainerList();
     }
-    
-    console.log("no current container item found, returning empty one");
+
+    console.log('no current container item found, returning empty one');
     return this.dtoGeneratorService.generateEmptyContainerItemDto();
   }
 }

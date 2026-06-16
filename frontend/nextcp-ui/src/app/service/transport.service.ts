@@ -2,28 +2,37 @@ import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { ToastService } from './toast/toast.service';
 import { HttpService } from './http.service';
 import { SseService } from './sse/sse.service';
-import { MusicItemDto, PlayRequestDto, MediaRendererDto, UpnpAvTransportState, RadioStation, PlayRadioDto, SeekSecondsDto } from './dto';
-import { Injectable, signal } from '@angular/core';
+import {
+  MusicItemDto,
+  PlayRequestDto,
+  MediaRendererDto,
+  UpnpAvTransportState,
+  RadioStation,
+  PlayRadioDto,
+  SeekSecondsDto,
+} from './dto';
+import { Injectable, signal, inject } from '@angular/core';
 import { DeviceService } from './device.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TransportService {
+  private sse = inject(SseService);
+  private httpService = inject(HttpService);
+  private toastr = inject(ToastService);
+  private dtoGeneratorService = inject(DtoGeneratorService);
+  private deviceService = inject(DeviceService);
 
-  upnpAvTransportState = signal<UpnpAvTransportState>(this.dtoGeneratorService.emptyUpnpAvTransportState());
+  upnpAvTransportState = signal<UpnpAvTransportState>(
+    this.dtoGeneratorService.emptyUpnpAvTransportState(),
+  );
   public lastPlayedMusicItem!: MusicItemDto;
   baseUri = '/TransportService';
 
-  constructor(
-    private sse: SseService,
-    private httpService: HttpService,
-    private toastr: ToastService,
-    private dtoGeneratorService: DtoGeneratorService,
-    private deviceService: DeviceService) {
-
+  constructor() {
     // Register to domain event (change of TransportState)
-    this.sse.mediaRendererAvTransportStateChanged$.subscribe(data => {
+    this.sse.mediaRendererAvTransportStateChanged$.subscribe((data) => {
       if (this.deviceService.isMediaRendererSelected(data.mediaRenderer.udn)) {
         this.updateTransportState(data);
       }
@@ -34,12 +43,16 @@ export class TransportService {
     return this.deviceService.selectedMediaRendererDevice();
   }
 
-  // 
-  // event processing 
+  //
+  // event processing
   // ================================================================================
 
   private updateTransportState(upnpAvTransportState: UpnpAvTransportState) {
-    if (this.deviceService.isMediaRendererSelected(upnpAvTransportState.mediaRenderer.udn)) {
+    if (
+      this.deviceService.isMediaRendererSelected(
+        upnpAvTransportState.mediaRenderer.udn,
+      )
+    ) {
       this.upnpAvTransportState.set(upnpAvTransportState);
     }
   }
@@ -50,18 +63,25 @@ export class TransportService {
 
   public play(): void {
     const uri = '/play';
-    this.httpService.post(this.baseUri, uri, this.selectedMediaRenderer.udn).subscribe();
+    this.httpService
+      .post(this.baseUri, uri, this.selectedMediaRenderer.udn)
+      .subscribe();
   }
 
   public pause(): void {
     const uri = '/pause';
-    this.httpService.post(this.baseUri, uri, this.selectedMediaRenderer.udn).subscribe();
+    this.httpService
+      .post(this.baseUri, uri, this.selectedMediaRenderer.udn)
+      .subscribe();
   }
 
   public seek(secondsAbsolute: number): void {
     const uri = '/seekSecondsAbsolute';
     if (this.deviceService.selectedMediaRendererDevice().udn) {
-      let seek: SeekSecondsDto = { rendererUDN: this.deviceService.selectedMediaRendererDevice().udn, seconds: secondsAbsolute };
+      let seek: SeekSecondsDto = {
+        rendererUDN: this.deviceService.selectedMediaRendererDevice().udn,
+        seconds: secondsAbsolute,
+      };
       this.httpService.post(this.baseUri, uri, seek).subscribe();
     }
   }
@@ -81,12 +101,15 @@ export class TransportService {
       const playReq: PlayRequestDto = {
         mediaRendererDto: this.selectedMediaRenderer,
         streamMetadata: musicItemDto.currentTrackMetadata,
-        streamUrl: musicItemDto.streamingURL
-      }
+        streamUrl: musicItemDto.streamingURL,
+      };
 
       this.httpService.post(this.baseUri, uri, playReq).subscribe();
     } else {
-      this.toastr.error("select media renderer before playing songs", "media renderer");
+      this.toastr.error(
+        'select media renderer before playing songs',
+        'media renderer',
+      );
     }
   }
 
@@ -94,8 +117,8 @@ export class TransportService {
     const uri = '/playOnlineResource';
     const playReq: PlayRadioDto = {
       mediaRendererDto: this.selectedMediaRenderer,
-      radioStation: radio
-    }
+      radioStation: radio,
+    };
 
     this.httpService.post(this.baseUri, uri, playReq).subscribe();
   }

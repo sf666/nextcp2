@@ -1,29 +1,28 @@
 import { ToastService } from './toast/toast.service';
-import { GenericResult, GenericNumberRequest } from './dto.d';
+import { GenericResult } from './dto.d';
 import { SseService } from './sse/sse.service';
 import { delay } from './../global';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GenericResultService {
+  private toastr = inject(ToastService);
+  private sseService = inject(SseService);
 
-  private lastError: Array<string> = new Array();;
+  private lastError: Array<string> = new Array();
   private debounceDelayMs: number = 1000;
 
-  constructor(
-    private toastr: ToastService,
-    private sseService: SseService,
-  ) {
-    sseService.toasterMessageReceived$.subscribe(message => {
-      if (message.type.toLowerCase() === "info") {
+  constructor() {
+    const sseService = this.sseService;
+
+    sseService.toasterMessageReceived$.subscribe((message) => {
+      if (message.type.toLowerCase() === 'info') {
         this.toastr.info(message.body, message.header);
-      }
-      else if (message.type.toLowerCase() === "error") {
+      } else if (message.type.toLowerCase() === 'error') {
         this.toastr.error(message.body, message.header);
-      }
-      else if (message.type.toLowerCase() === "success") {
+      } else if (message.type.toLowerCase() === 'success') {
         this.toastr.success(message.body, message.header);
       } else {
         // if no type is given, default to info
@@ -36,13 +35,11 @@ export class GenericResultService {
     if (typeof result !== 'undefined') {
       if (result.success) {
         this.toastr.info(result.message, result.headerMessage);
-      }
-      else {
+      } else {
         this.toastr.error(result.message, result.headerMessage);
       }
-    }
-    else {
-      this.toastr.error("undefined result", "server response");
+    } else {
+      this.toastr.error('undefined result', 'server response');
     }
   }
 
@@ -60,12 +57,13 @@ export class GenericResultService {
 
   public displayHttpError(err: any, toastrMessage: string): void {
     if (err.status == 504) {
-      this.displayErrorMessage("Server unavailable. Please check if your computer is connected to your LAN and nextcp/2 server process is online.", "gateway error");
-    }
-    else if (err.status == 417) {
-      this.toastr.error(err.error.message, "invalid request");
-    }
-    else {
+      this.displayErrorMessage(
+        'Server unavailable. Please check if your computer is connected to your LAN and nextcp/2 server process is online.',
+        'gateway error',
+      );
+    } else if (err.status == 417) {
+      this.toastr.error(err.error.message, 'invalid request');
+    } else {
       if (err.error?.message) {
         this.toastr.error(err.error.message, toastrMessage);
       } else if (err.error) {
@@ -81,21 +79,25 @@ export class GenericResultService {
 
   /**
    * Displays error message
-   * 
+   *
    * @param message Shows error messages. Debouncing message text.
-   * @param head 
+   * @param head
    */
   public displayErrorMessage(message: string, head: string): void {
     if (!this.lastError.includes(message)) {
       this.toastr.error(message, head);
       this.lastError.push(message);
-      void delay(this.debounceDelayMs).then(() => this.lastError.filter(item => item !== message));
+      void delay(this.debounceDelayMs).then(() =>
+        this.lastError.filter((item) => item !== message),
+      );
     }
   }
 
   public displaySuccessMessage(head: string, message: string): void {
     this.toastr.info(message, head);
     this.lastError.push(message);
-    void delay(this.debounceDelayMs).then(() => this.lastError.filter(item => item !== message));
+    void delay(this.debounceDelayMs).then(() =>
+      this.lastError.filter((item) => item !== message),
+    );
   }
 }

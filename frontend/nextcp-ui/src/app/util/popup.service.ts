@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { Injectable, ElementRef } from '@angular/core';
 
 @Injectable({

@@ -7,7 +7,12 @@ import {
   MediaServerDto,
 } from './../../service/dto.d';
 import { ContentDirectoryService } from './../../service/content-directory.service';
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  inject,
+} from '@angular/core';
 import { DisplayContainerComponent } from '../../mediaserver/display-container/display-container.component';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { toObservable } from '@angular/core/rxjs-interop';
@@ -22,11 +27,11 @@ import { toObservable } from '@angular/core/rxjs-interop';
   imports: [NavBarComponent, DisplayContainerComponent],
 })
 export class MyAlbumComponent implements OnInit {
-  constructor(
-    public layoutService: LayoutService,
-    private deviceService: DeviceService,
-    public contentDirectoryService: ContentDirectoryService,
-  ) {
+  layoutService = inject(LayoutService);
+  private deviceService = inject(DeviceService);
+  contentDirectoryService = inject(ContentDirectoryService);
+
+  constructor() {
     console.log('constructor call : MyAlbumComponent');
     toObservable(this.deviceService.selectedMediaServerDevice).subscribe(
       (data) => this.mediaServerChanged(data),
