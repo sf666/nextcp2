@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { ScrollLoadHandler } from 'src/app/mediaserver/display-container/defs';
 import { DisplayContainerComponent } from 'src/app/mediaserver/display-container/display-container.component';
 import { ContentDirectoryService } from 'src/app/service/content-directory.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { ContainerDto, MediaServerDto, MusicItemDto } from 'src/app/service/dto';
 import { LayoutService } from 'src/app/service/layout.service';
+import { PersistenceService } from 'src/app/service/persistence/persistence.service';
 import { NavBarComponent } from '../../nav-bar/nav-bar.component';
 
 @Component({
@@ -18,13 +19,27 @@ import { NavBarComponent } from '../../nav-bar/nav-bar.component';
 })
 export class UmsAudioaddictComponent {
   private rootID = '';
+  // Object ID to restore once after a page reload (captured before any browse overwrites it).
+  private restoreOid = '';
+  private restoreDone = false;
   hasAudioAddictService = signal<boolean>(true);
 
   constructor(
     public layoutService: LayoutService,
     private deviceService: DeviceService,
+    private persistenceService: PersistenceService,
     public contentDirectoryService: ContentDirectoryService) {
     console.log("constructor call : MyAlbumComponent");
+    this.restoreOid = this.persistenceService.getLastAudioAddictObjectId() ?? '';
+    // Remember the last displayed container so a reload returns to it.
+    this.contentDirectoryService.browseFinished$
+      .pipe(takeUntilDestroyed())
+      .subscribe((data) => {
+        const id = data?.currentContainer?.id;
+        if (id && id.length > 0) {
+          this.persistenceService.setLastAudioAddictObjectId(id);
+        }
+      });
     toObservable(this.deviceService.selectedMediaServerDevice).subscribe(data => this.mediaServerChanged(data));
   }
 
@@ -35,14 +50,22 @@ export class UmsAudioaddictComponent {
 
   loadRadioNetwork() {
     const oid = "$DBID$AUDIOADDICT$";
-    if (this.deviceService.selectedMediaServerDevice().udn) {
-      this.contentDirectoryService.browseChildren(oid, "", this.deviceService.selectedMediaServerDevice().udn).subscribe((data) => {
+    const udn = this.deviceService.selectedMediaServerDevice().udn;
+    if (udn) {
+      this.contentDirectoryService.browseChildren(oid, "", udn).subscribe((data) => {
         console.log("root id of UMS audioaddict network node is " + data?.currentContainer?.id);
         this.rootID = data.currentContainer.id;
         if (data.containerDto.length > 0) {
           this.hasAudioAddictService.set(true);
         } else {
           this.hasAudioAddictService.set(false);
+        }
+        // On the first load only, restore the last visited sub-container.
+        if (!this.restoreDone) {
+          this.restoreDone = true;
+          if (this.restoreOid && this.restoreOid !== this.rootID) {
+            this.contentDirectoryService.browseChildren(this.restoreOid, "", udn).subscribe();
+          }
         }
       });
     }

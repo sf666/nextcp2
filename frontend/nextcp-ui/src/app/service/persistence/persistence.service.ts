@@ -53,6 +53,16 @@ export class PersistenceService {
     return localStorage.getItem('lastMediaServerPath');
   }
 
+  // Last object ID for the AudioAddict ("Radio Networks") view.
+  // Kept separate from the media library path so the two views do not interfere on reload.
+  public setLastAudioAddictObjectId(oid : string) : void {
+    localStorage.setItem('lastAudioAddictPath', oid);
+  }
+
+  public getLastAudioAddictObjectId(): string | null {
+    return localStorage.getItem('lastAudioAddictPath');
+  }
+
   // Last focused item
   public setLastFocusID(oid : string) : void {
     localStorage.setItem('lastFocusId', oid);    
