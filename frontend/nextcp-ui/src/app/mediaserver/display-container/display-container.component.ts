@@ -50,6 +50,7 @@ export class DisplayContainerComponent {
 
   showTopHeader = input(true);
   extendedApi = input (true);
+  enableAlbumSort = input(false);
   contentHandler = input.required<ScrollLoadHandler>();
 
 
@@ -61,6 +62,7 @@ export class DisplayContainerComponent {
   listView = signal<boolean>(true);
   displayFilterString = signal<string>("");
   selectedGenres = signal<Array<string>>([]);
+  sortCriteria = signal<string>('NONE');
 
   constructor(
     public playlistService: PlaylistService,

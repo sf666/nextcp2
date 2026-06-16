@@ -16,6 +16,8 @@
     [(listView)]="listView"
     [(quickSearchString)]="displayFilterString"
     [(selectedGenres)]="selectedGenres"
+    [(sortCriteria)]="sortCriteria"
+    [enableAlbumSort]="enableAlbumSort()"
 
     (playClicked)="playPlaylist($event)"
     (shuffleClicked)="shufflePlaylist($event)"
@@ -52,10 +54,11 @@ Main Content
     @if (albumList?.length > 0) {
     <div id="head_browse_result_album_ID" class="flex w-full">
       <container-tile class="flex grow"
-        [smallIcons]="this.allMusicTracks.length > 0" 
+        [smallIcons]="this.allMusicTracks.length > 0"
         [container]="albumList"
         [quickSearchString]="displayFilterString()"
         [selectedGenres]="selectedGenres()"
+        [sortCriteria]="sortCriteria()"
         (browseClicked)="browseTo($event)">
       </container-tile>
     </div>

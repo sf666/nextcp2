@@ -1,23 +1,30 @@
-<div class="grid grid-cols-1 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-1 ">
-  @for (container of (containerList()); track container.id) {
-  <div class="albumTile {{getSmallCss()}}" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)">
-    <div class="albumImageContainer">
-      <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
-    </div>
-    @if(isAlbum(container)) {
-    <div class="flex flex-col albumDesc">
-      <div class="album no-wrap">{{container.title}}</div>
-      <div class="albumSubheader no-wrap">{{container.artist}}</div>
-      <div class="albumYear no-wrap">{{container.media_date}}</div>
-    </div>
-    } @else {
-    <div class="flex flex-col albumDesc">
-      @if(getOtherContainerHeadline(container)) {
-        <div class="playlistText">{{getOtherContainerHeadline(container)}}</div>
+<div class="flex flex-col grow w-full">
+@for (group of groupedContainers(); track group.key) {
+  @if (group.key) {
+    <div class="albumSectionHeader w-full block text-lg font-semibold text-gray-300 mt-6 mb-2 px-1">{{group.key}}</div>
+  }
+  <div class="grid grid-cols-1 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-1 ">
+    @for (container of group.items; track container.id) {
+    <div class="albumTile {{getSmallCss()}}" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)">
+      <div class="albumImageContainer">
+        <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
+      </div>
+      @if(isAlbum(container)) {
+      <div class="flex flex-col albumDesc">
+        <div class="album no-wrap">{{container.title}}</div>
+        <div class="albumSubheader no-wrap">{{container.artist}}</div>
+        <div class="albumYear no-wrap">{{container.media_date}}</div>
+      </div>
+      } @else {
+      <div class="flex flex-col albumDesc">
+        @if(getOtherContainerHeadline(container)) {
+          <div class="playlistText">{{getOtherContainerHeadline(container)}}</div>
+        }
+        <div class="albumTitle">{{container.title}}</div>
+      </div>
       }
-      <div class="albumTitle">{{container.title}}</div>
     </div>
     }
   </div>
-  }
+}
 </div>

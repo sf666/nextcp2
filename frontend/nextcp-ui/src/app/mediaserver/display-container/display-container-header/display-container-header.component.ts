@@ -58,6 +58,9 @@ export class DisplayContainerHeaderComponent implements OnInit {
   listView = model<boolean>();
   quickSearchString = model<string>();
   selectedGenres = model<Array<string>>([]);
+  // Album sort/group control (only shown when enableAlbumSort is true).
+  sortCriteria = model<string>('NONE');
+  enableAlbumSort = input<boolean>(false);
 
   playClicked = output<ContainerDto>();
   shuffleClicked = output<ContainerDto>();

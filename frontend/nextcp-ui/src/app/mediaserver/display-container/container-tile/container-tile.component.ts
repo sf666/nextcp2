@@ -15,9 +15,70 @@ export class ContainerTileComponent {
   showPlayOverlay = input<boolean>(false);
   quickSearchString = input<string>("");
   selectedGenres = input<Array<string>>([]);
+  // Sort/group criteria: 'NONE' | 'TITLE' | 'ARTIST' | 'GENRE'
+  sortCriteria = input<string>('NONE');
   containerList = computed(() => this.filteredContainer(this.container()));
 
+  // Containers grouped into sections according to sortCriteria.
+  // A section with an empty key is rendered without a header.
+  groupedContainers = computed(() =>
+    this.groupAndSort(this.containerList(), this.sortCriteria())
+  );
+
   browseClicked = output<ContainerDto>();
+
+  private groupAndSort(
+    items: ContainerDto[],
+    criteria: string
+  ): { key: string; items: ContainerDto[] }[] {
+    // No sorting: keep original order, single section without header.
+    if (!criteria || criteria === 'NONE') {
+      return [{ key: '', items }];
+    }
+
+    // "Album Title" sorts alphabetically without section headers.
+    if (criteria === 'TITLE') {
+      const sorted = [...items].sort((a, b) =>
+        this.compareText(a.title, b.title)
+      );
+      return [{ key: '', items: sorted }];
+    }
+
+    // "Album Artist" / "Genre" group into labelled sections.
+    const groups = new Map<string, ContainerDto[]>();
+    for (const item of items) {
+      const key = this.groupKey(item, criteria);
+      const bucket = groups.get(key);
+      if (bucket) {
+        bucket.push(item);
+      } else {
+        groups.set(key, [item]);
+      }
+    }
+
+    const result = Array.from(groups.entries()).map(([key, groupItems]) => ({
+      key,
+      items: groupItems.sort((a, b) => this.compareText(a.title, b.title)),
+    }));
+    result.sort((a, b) => this.compareText(a.key, b.key));
+    return result;
+  }
+
+  private groupKey(item: ContainerDto, criteria: string): string {
+    if (criteria === 'ARTIST') {
+      return item.artist?.trim() || 'Unknown';
+    }
+    if (criteria === 'GENRE') {
+      // Use the first genre token only (e.g. "R&B / Soul" -> "R&B").
+      const genre = item.genre?.split('/')[0]?.trim();
+      return genre || 'Unknown';
+    }
+    return '';
+  }
+
+  private compareText(a?: string, b?: string): number {
+    return (a ?? '').localeCompare(b ?? '', undefined, { sensitivity: 'base' });
+  }
 
   private filteredContainer(container : ContainerDto[]): ContainerDto[] {
     let tracks: Array<ContainerDto>;
