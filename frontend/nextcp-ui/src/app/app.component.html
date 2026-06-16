@@ -7,7 +7,7 @@
       </div>
     </div>
 
-    @if (layoutService.sidebarVisible) {
+    @if (layoutService.sidebarVisible()) {
     <aside  id="default-sidebar" class="fixed top-0 left-0 z-1 noScrollBar overflow-y-auto md:translate-x-0 w-52 h-screen transition-transform -translate-x-full" aria-label="Sidebar">
       <app-sidebar></app-sidebar>
     </aside>
@@ -22,9 +22,9 @@
   </div>
 </div>
 
-@if (layoutService.footerVisible) {
+@if (layoutService.footerVisible()) {
 <renderer-footer class="z-1000"></renderer-footer>
 }
-@if (layoutService.footerVisible && showBlur()) {
+@if (layoutService.footerVisible() && showBlur()) {
 <div class="bg-img-footer z-1000" id="footer-background"></div>
 }

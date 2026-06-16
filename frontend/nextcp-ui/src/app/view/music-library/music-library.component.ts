@@ -7,9 +7,9 @@ import { GlobalSearchService } from './../../service/search/global-search.servic
 import {
   AfterViewInit,
   Component,
-  Input,
-  signal,
-  ViewChild,
+  inject,
+  input,
+  viewChild,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { ScrollLoadHandler } from 'src/app/mediaserver/display-container/defs';
@@ -32,23 +32,23 @@ import { isAssigned } from 'src/app/global';
     { provide: ContentDirectoryService, useClass: ContentDirectoryService },
   ], // non singleton injections
   templateUrl: './music-library.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './music-library.component.scss',
 })
 export class MusicLibraryComponent implements AfterViewInit {
-  @ViewChild(DisplayContainerComponent)
-  dispContainer!: DisplayContainerComponent;
-  @Input() objectId!: string;
+  readonly dispContainer = viewChild(DisplayContainerComponent);
+  readonly objectId = input<string>();
 
-  constructor(
-    private route: ActivatedRoute,
-    public contentDirectoryService: ContentDirectoryService,
-    public layoutService: LayoutService,
-    private persistenceService: PersistenceService,
-    public deviceService: DeviceService,
-    private musicLibraryService: MusicLibraryService,
-    private globalSearchService: GlobalSearchService,
-  ) {
+  private readonly route = inject(ActivatedRoute);
+  public readonly contentDirectoryService = inject(ContentDirectoryService);
+  public readonly layoutService = inject(LayoutService);
+  private readonly persistenceService = inject(PersistenceService);
+  public readonly deviceService = inject(DeviceService);
+  private readonly musicLibraryService = inject(MusicLibraryService);
+  private readonly globalSearchService = inject(GlobalSearchService);
+
+  constructor() {
+    const globalSearchService = this.globalSearchService;
     console.log('constructor call : MusicLibraryComponent');
     globalSearchService.musicItemClicked$.subscribe((musicItem) =>
       this.musicItemClickedFromSearch(musicItem),
@@ -96,7 +96,7 @@ export class MusicLibraryComponent implements AfterViewInit {
             'route parameter given at constructor time. Navigating to : ' +
               val.objectId,
           );
-          this.browseToUid(udn, this.objectId);
+          this.browseToUid(udn, this.objectId() ?? '');
         } else {
           if (udn?.length > 0) {
             this.initViewData(udn);
@@ -121,7 +121,7 @@ export class MusicLibraryComponent implements AfterViewInit {
   //
   private musicItemClickedFromSearch(musicItem: MusicItemDto) {
     // Just play
-    this.dispContainer.playItem(musicItem);
+    this.dispContainer()?.playItem(musicItem);
   }
 
   private containerItemClickedFromSearch(container: ContainerDto) {
@@ -132,9 +132,10 @@ export class MusicLibraryComponent implements AfterViewInit {
   private initViewData(udn: string): void {
     console.log('Music Library : initViewData ...');
     this.layoutService.setFramedView();
-    if (this.objectId) {
-      console.log('browse to injected OID : ' + this.objectId);
-      this.browseToUid(udn, this.objectId);
+    const objectId = this.objectId();
+    if (objectId) {
+      console.log('browse to injected OID : ' + objectId);
+      this.browseToUid(udn, objectId);
     } else {
       if (
         this.persistenceService.getLastObjectId() !== undefined &&
@@ -182,8 +183,9 @@ export class MusicLibraryComponent implements AfterViewInit {
     stepIn: boolean,
     sortCriteria?: string,
   ): Promise<boolean> | undefined {
-    if (this.dispContainer) {
-      return this.dispContainer.browseToOid(oid, udn, stepIn, sortCriteria);
+    const dispContainer = this.dispContainer();
+    if (dispContainer) {
+      return dispContainer.browseToOid(oid, udn, stepIn, sortCriteria);
     }
   }
 

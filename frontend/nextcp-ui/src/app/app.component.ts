@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
   }
 
   get headerVisibleClass() : string {
-    if (this.layoutService.headerVisible) {
+    if (this.layoutService.headerVisible()) {
       return "navVisible";
     } else {
       return "navHidden";

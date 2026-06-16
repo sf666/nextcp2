@@ -1,6 +1,6 @@
 <div class="flex flex-col" >
 
-  @if (layoutService.headerVisible) {
+  @if (layoutService.headerVisible()) {
       <nav-bar
         [parentTitle]="getParentTitle()"
         [backButtonVisible]="backButtonVisible()"

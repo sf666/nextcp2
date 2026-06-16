@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import {
   Component,
+  inject,
   input,
   output,
-  computed,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -17,10 +17,14 @@ import { ScrollLoadHandler } from 'src/app/mediaserver/display-container/defs';
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.scss'],
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormsModule, GlobalSearchComponent],
 })
 export class NavBarComponent {
+  private readonly router = inject(Router);
+  public readonly globalSearchService = inject(GlobalSearchService);
+  public readonly searchContentDirectoryService = inject(ContentDirectoryService);
+
   parentTitle = input<string>();
   homeButtonVisible = input<boolean>(false);
   backButtonVisible = input<boolean>(false);
@@ -31,12 +35,6 @@ export class NavBarComponent {
   searchKeyUp = output<KeyboardEvent>();
   backButtonPressed = output<any>();
   homeButtonPressed = output<any>();
-
-  constructor(
-    private router: Router,
-    public globalSearchService: GlobalSearchService,
-    public searchContentDirectoryService: ContentDirectoryService,
-  ) {}
 
   gotoParent(): void {
     this.backButtonPressed.emit('');
