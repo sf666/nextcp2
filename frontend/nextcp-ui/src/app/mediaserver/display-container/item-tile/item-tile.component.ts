@@ -31,6 +31,8 @@ export class ItemTileComponent {
   quickSearchString = input<string>('');
   selectedGenres = input<Array<string>>([]);
   extendedApi = input<boolean>(true);
+  // When true, an additional "Genre" column (upnp:genre) is shown in list view.
+  showGenre = input<boolean>(false);
 
   playItemClicked = output<MusicItemDto>();
   addItemToPlaylistClicked = output<MusicItemDto>();
@@ -186,6 +188,14 @@ export class ItemTileComponent {
       num = num + 1;
     } 
     return num;
+  }
+
+  // Builds the CSS grid template for the list view rows/header.
+  // An optional genre column is inserted between Artist and Rating when showGenre() is set.
+  gridColumns(sameAlbum: boolean): string {
+    const firstAndTitle = sameAlbum ? '48px 2fr' : '64px minmax(100px, 2fr)';
+    const genre = this.showGenre() ? ' minmax(120px, 1fr)' : '';
+    return `${firstAndTitle} minmax(150px, 1fr)${genre} 128px 80px 48px`;
   }
 
   getDuration(item: MusicItemDto): string {

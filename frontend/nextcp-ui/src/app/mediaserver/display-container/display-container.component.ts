@@ -51,6 +51,8 @@ export class DisplayContainerComponent {
   showTopHeader = input(true);
   extendedApi = input (true);
   enableAlbumSort = input(false);
+  // When true, the track list view shows an additional "Genre" column (upnp:genre).
+  showGenre = input(false);
   contentHandler = input.required<ScrollLoadHandler>();
 
 
