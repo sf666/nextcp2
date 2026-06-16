@@ -27,7 +27,7 @@
         <!-- Track Rows -->
         <div class="mt-1">
         @for (item of musicTracks(); track item.objectID) {
-            @if (allTracksSameAlbum() && !allTracksSameDisc()) {
+            @if (allTracksSameAlbum() && !allTracksSameDisc() && !isSearchResult()) {
                 @if (newDiscLabel(item)) {
                     <div class="text-sm font-semibold text-gray-400 mt-6 mb-3">{{getDiscLabel(item)}}</div>
                 }

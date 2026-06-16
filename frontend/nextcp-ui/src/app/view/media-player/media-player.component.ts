@@ -121,6 +121,14 @@ export class MediaPlayerComponent {
     this.saveConfig();
   }
 
+  // Format a container reference as "title (id)" for display, e.g. "Charts (12494)".
+  public formatContainerLabel(container: ContainerIdDto): string {
+    if (container?.id) {
+      return container.title + ' (' + container.id + ')';
+    }
+    return container?.title ?? '';
+  }
+
   public getCurrentContainerIdDto(): ContainerIdDto {
     return {
       id: this.musicLibraryService.currentMediaLibraryFolder().currentContainer

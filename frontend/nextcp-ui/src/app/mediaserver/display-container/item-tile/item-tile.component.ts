@@ -47,6 +47,14 @@ export class ItemTileComponent {
 
   allMusicTracks = computed(() => this.contentDirectoryService().musicTracks_());
 
+  // True when the current view shows global "show all" search results.
+  // Disc labels must not be rendered for search results (mixed albums/discs).
+  isSearchResult = computed(
+    () =>
+      this.contentDirectoryService().currentContainerList().currentContainer
+        ?.id === 'search_result'
+  );
+
   currentUrl = signal<string>('');
   currentObjectId = signal<string>('');
   lastDiscLabel = '';
