@@ -20,7 +20,7 @@ import { ConfigurationService } from 'src/app/service/configuration.service';
   selector: 'app-available-server',
   templateUrl: './available-server.component.html',
   styleUrls: ['./available-server.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
 })
 export class AvailableServerComponent {

@@ -19,7 +19,7 @@ import { ConfigurationService } from 'src/app/service/configuration.service';
   selector: 'app-available-renderer',
   templateUrl: './available-renderer.component.html',
   styleUrls: ['./available-renderer.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
 })
 export class AvailableRendererComponent {

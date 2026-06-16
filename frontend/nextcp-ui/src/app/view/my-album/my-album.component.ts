@@ -18,7 +18,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
   styleUrls: ['./my-album.component.scss'],
   providers: [ContentDirectoryService],
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NavBarComponent, DisplayContainerComponent],
 })
 export class MyAlbumComponent implements OnInit {

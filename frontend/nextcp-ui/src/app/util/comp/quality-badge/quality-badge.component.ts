@@ -11,7 +11,7 @@ import {
   selector: 'quality-badge',
   templateUrl: './quality-badge.component.html',
   styleUrls: ['./quality-badge.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
 })
 export class QualityBadgeComponent implements OnInit {

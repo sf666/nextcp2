@@ -4,6 +4,7 @@ import {
   ViewChild,
   ElementRef,
   Input,
+  signal,
   ChangeDetectionStrategy,
 } from '@angular/core';
 
@@ -11,7 +12,7 @@ import {
   selector: 'image-cropper',
   templateUrl: './image-cropper.component.html',
   styleUrls: ['./image-cropper.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
 })
 export class ImageCropperComponent implements OnInit {
@@ -21,7 +22,8 @@ export class ImageCropperComponent implements OnInit {
   @Input('src')
   public imageSource!: string;
 
-  public croppedImageData: string = '';
+  // Signal so the async image.onload result is picked up under OnPush.
+  public readonly croppedImageData = signal('');
 
   public constructor() {}
 
@@ -65,7 +67,7 @@ export class ImageCropperComponent implements OnInit {
       }
       ctx.drawImage(inputImage, 0, 0);
 
-      this.croppedImageData = outputImage.toDataURL();
+      this.croppedImageData.set(outputImage.toDataURL());
       // show both the image and the canvas
       //            document.body.appendChild(inputImage);
       //            document.body.appendChild(outputImage);

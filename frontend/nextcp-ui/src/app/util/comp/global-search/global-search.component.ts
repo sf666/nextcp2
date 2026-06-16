@@ -14,7 +14,7 @@ import { ModalSearchResultComponent } from 'src/app/view/search/modal-search-res
   standalone: true,
   imports: [MatInput, FormsModule, ModalSearchResultComponent],
   templateUrl: './global-search.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './global-search.component.scss',
 })
 export class GlobalSearchComponent {

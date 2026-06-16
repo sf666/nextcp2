@@ -17,7 +17,7 @@ import { MediaPlayerService } from 'src/app/service/media-player/media-player.se
   standalone: true,
   templateUrl: './media-player.component.html',
   styleUrl: './media-player.component.scss',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatFormFieldModule,
     MatLabel,

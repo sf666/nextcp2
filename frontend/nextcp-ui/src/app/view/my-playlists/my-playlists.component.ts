@@ -21,7 +21,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
   styleUrls: ['./my-playlists.component.scss'],
   providers: [ContentDirectoryService],
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DisplayContainerComponent, NavBarComponent],
 })
 /**

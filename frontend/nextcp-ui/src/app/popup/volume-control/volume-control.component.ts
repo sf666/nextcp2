@@ -20,7 +20,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
   styleUrls: ['./volume-control.component.scss'],
   standalone: true,
   imports: [ReactiveFormsModule],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
 export class VolumeControlComponent {
