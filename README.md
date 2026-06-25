@@ -9,13 +9,16 @@ Documentation is available at [GitHub Pages](https://sf666.github.io/nextcp2).
 - Download prebuild binaries from the [release](https://github.com/sf666/nextcp2/releases) page (JAR files) and put them in a directory with write permissions.
 - start the application (with optional more memory by adding "-Xms256m -Xmx512m")
 
-A Docker image is also available. See the [Docker quick install instructions](https://sf666.github.io/nextcp2/quick_install/docker/) for details.
-
 ```
 java [-Xms256m -Xmx512m] -jar [-DconfigFile=path_to_config_file] nextcp2.jar
 ```
 
 If no config file is given or found, a config-file will be generated next to the JAR file on the first startup. In this case the application might complain about incorrect or missing (default) configuration items. In this case adopt the config to your system by navigating to `App setting' and restart the application.
+
+### docker installation
+
+A Docker image is also available. See the [Docker quick install instructions](https://sf666.github.io/nextcp2/quick_install/docker/) for details.
+
 
 ## system requirements
 
