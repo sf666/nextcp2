@@ -11,6 +11,7 @@ import { ContentDirectoryService } from 'src/app/service/content-directory.servi
 import { DeviceService } from 'src/app/service/device.service';
 import {
   ContainerDto,
+  ContainerItemDto,
   MediaServerDto,
   MusicItemDto,
 } from 'src/app/service/dto';
@@ -63,31 +64,43 @@ export class UmsAudioaddictComponent {
   loadRadioNetwork() {
     const oid = '$DBID$AUDIOADDICT$';
     const udn = this.deviceService.selectedMediaServerDevice().udn;
-    if (udn) {
-      this.contentDirectoryService
-        .browseChildren(oid, '', udn)
-        .subscribe((data) => {
-          console.log(
-            'root id of UMS audioaddict network node is ' +
-              data?.currentContainer?.id,
-          );
-          this.rootID = data.currentContainer.id;
-          if (data.containerDto.length > 0) {
-            this.hasAudioAddictService.set(true);
-          } else {
-            this.hasAudioAddictService.set(false);
-          }
-          // On the first load only, restore the last visited sub-container.
-          if (!this.restoreDone) {
-            this.restoreDone = true;
-            if (this.restoreOid && this.restoreOid !== this.rootID) {
-              this.contentDirectoryService
-                .browseChildren(this.restoreOid, '', udn)
-                .subscribe();
-            }
-          }
-        });
+    if (!udn) {
+      return;
     }
+
+    // On the first load with a saved sub-container, render that container
+    // directly (single round trip, no root "Radio Networks" flash) and resolve
+    // the root metadata in parallel WITHOUT rendering it. The root metadata is
+    // only needed for the back-button-at-root check and the service-availability
+    // warning - neither is required for the initial render, so it must not block
+    // or delay showing the last visited page (e.g. "Events").
+    if (!this.restoreDone && this.restoreOid) {
+      this.restoreDone = true;
+      this.contentDirectoryService
+        .browseChildren(this.restoreOid, '', udn)
+        .subscribe();
+      this.contentDirectoryService
+        .browseChildrenMetadataOnly(oid, '', udn)
+        .subscribe((data) => this.applyRootMetadata(data));
+      return;
+    }
+
+    // Normal path: browse and display the root "Radio Networks" page.
+    this.restoreDone = true;
+    this.contentDirectoryService
+      .browseChildren(oid, '', udn)
+      .subscribe((data) => this.applyRootMetadata(data));
+  }
+
+  // Capture root container info (resolved root id and service availability)
+  // from a browse result without assuming it is the rendered container.
+  private applyRootMetadata(data: ContainerItemDto): void {
+    console.log(
+      'root id of UMS audioaddict network node is ' +
+        data?.currentContainer?.id,
+    );
+    this.rootID = data.currentContainer.id;
+    this.hasAudioAddictService.set((data.containerDto?.length ?? 0) > 0);
   }
 
   //

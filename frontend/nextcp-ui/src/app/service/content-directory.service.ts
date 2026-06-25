@@ -161,6 +161,41 @@ export class ContentDirectoryService {
     return this.browseChildrenByRequest(browseRequestDto);
   }
 
+  /**
+   * Browse a container WITHOUT updating the displayed content signals.
+   *
+   * Use this to inspect a container (e.g. resolve the real root object id or
+   * check service availability) when the result must NOT be rendered to the
+   * user. The returned data is delivered only to the caller's subscription.
+   *
+   * @param objectID
+   * @param sortCriteria
+   * @param mediaServerUdn
+   */
+  public browseChildrenMetadataOnly(
+    objectID: string,
+    sortCriteria: string,
+    mediaServerUdn?: string,
+  ): Subject<ContainerItemDto> {
+    if (!mediaServerUdn) {
+      mediaServerUdn = this.deviceService.selectedMediaServerDevice().udn;
+    }
+    if (!mediaServerUdn || mediaServerUdn.length < 1) {
+      console.log(this.id + ' UDN not set. Stop metadata browse.');
+      return new Subject<ContainerItemDto>();
+    }
+    const browseRequestDto = this.createBrowseRequest(
+      objectID,
+      sortCriteria,
+      mediaServerUdn,
+    );
+    return this.httpService.post<ContainerItemDto>(
+      this.baseUri,
+      '/browseChildren',
+      { ...browseRequestDto, start: 0, count: this.MAX_REQUEST_ITEMS },
+    );
+  }
+
   public browseChildrenByContainer(
     containerDto: ContainerDto,
     sortCriteria?: string,
