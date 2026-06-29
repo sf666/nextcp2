@@ -118,3 +118,76 @@ docker-compose up -d
 ```
 
 You can now start using NextCP/2 with UMS as your media server. To continue configuring the application, navigate to the `App Settings` tab.
+
+## Running behind a reverse proxy (Traefik)
+
+If you already operate a reverse proxy such as Traefik (for TLS termination, a single entry point, certificates, etc.), you can put the nextCP/2 web UI behind it. You do **not** need to start Traefik together with nextCP/2 — the steps below assume an existing proxy and only describe how to point it at the running container. A few details are specific to nextCP/2 because it is a UPnP control point.
+
+### Keep the container on the host network
+
+nextCP/2 must stay on `network_mode: host`. UPnP discovery (SSDP multicast), GENA event callbacks and the audio stream server all talk directly to renderers and media servers on your LAN, which does not work from a bridge network. The reverse proxy therefore only fronts the **web UI on port `8085`** (and, if you use it, the `/mcp` endpoint). UPnP and streaming traffic keeps flowing directly over the LAN and bypasses the proxy — leave the `Bind Interface Stream Server` setting pointing at your host interface as described above. Do not try to route the stream server through the proxy.
+
+### Trust the proxy's forwarded headers
+
+The connection between the proxy and nextCP/2 is plain HTTP on port `8085` — you do **not** enable HTTPS or install certificates on the container itself. When TLS terminates at the proxy, tell Spring to honour the `X-Forwarded-*` headers so it reconstructs the correct external scheme and host for any absolute URLs (relevant e.g. for the `/mcp` endpoint). This is precisely what conveys the original `https` scheme across the plain-HTTP hop to the backend. Add the system property to `JAVA_TOOL_OPTIONS` in your `nextcp2` service:
+
+```yaml
+  nextcp2:
+    container_name: nextcp2
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - next_data:/nextcp2_data
+    environment:
+      JAVA_TOOL_OPTIONS: '-Xms1024m -Xmx2048m -XX:+UseShenandoahGC -Dserver.forward-headers-strategy=framework'
+    image: ik6666/nextcp2:latest
+```
+
+:::note
+If you don't use HTTPS at the edge either (plain HTTP from the browser to the proxy), route through the plain `web` entry point and omit the `tls` / `certResolver` lines in the examples below. `forward-headers-strategy=framework` then simply forwards the `http` scheme and stays harmless.
+:::
+
+### Use a dedicated (sub)domain — not a sub-path
+
+:::caution
+Serve nextCP/2 from the **root of its own (sub)domain** (e.g. `https://nextcp.example.com/`). The Angular app is built with `<base href="/">`, so hosting it under a sub-path like `https://example.com/nextcp/` breaks asset loading — a `StripPrefix` middleware will **not** fix this. A sub-path would require rebuilding the frontend with a matching `--base-href` and adding a backend context path.
+:::
+
+### Point your existing Traefik at port 8085
+
+Because a host-network container has no dedicated container IP, Traefik's Docker label provider cannot auto-discover it reliably. Use the file (dynamic) provider and point it at the LAN address of the Docker host on port `8085`:
+
+```yaml
+# Traefik dynamic configuration, e.g. /etc/traefik/dynamic/nextcp2.yml
+http:
+  routers:
+    nextcp2:
+      rule: "Host(`nextcp.example.com`)"
+      entryPoints: [websecure]
+      service: nextcp2
+      tls:
+        certResolver: le
+  services:
+    nextcp2:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          # LAN IP of the Docker host running nextCP/2
+          - url: "http://192.168.1.10:8085"
+```
+
+If Traefik runs as a bridge-network container on the same host, you can instead use `http://host.docker.internal:8085` and add `extra_hosts: ["host.docker.internal:host-gateway"]` to the Traefik service. If your Traefik itself runs with `network_mode: host`, `http://127.0.0.1:8085` works and label-based discovery is possible too.
+
+### Long-lived connections (SSE)
+
+The UI receives live updates over Server-Sent Events (`/SSE`), and the optional MCP endpoint (`/mcp`) is a long-lived stream as well. Traefik forwards `text/event-stream` responses immediately, so no buffering configuration is needed (unlike nginx). Make sure the proxy does not drop idle streaming connections — raise or disable the responding idle timeout on the entry point:
+
+```yaml
+# Traefik static configuration
+entryPoints:
+  websecure:
+    address: ":443"
+    transport:
+      respondingTimeouts:
+        idleTimeout: 0   # do not cut off long-lived SSE / MCP streams
+```
