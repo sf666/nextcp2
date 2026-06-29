@@ -28,12 +28,14 @@ public class ApplicationConfig
     public String pathToRestartScript;
     public String upnpBindInterface;
     public Integer chatHistorySize;
+    public Boolean behindReverseProxy;
+    public Integer sseHeartbeatSeconds;
 
     public ApplicationConfig()
     {
     }
 
-    public ApplicationConfig(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Integer embeddedServerSslPort, String embeddedServerSslP12Keystore, String embeddedServerSslP12KeystorePassword, Long sseEmitterTimeout, String loggingConfigFile, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript, String upnpBindInterface, Integer chatHistorySize)
+    public ApplicationConfig(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Integer embeddedServerSslPort, String embeddedServerSslP12Keystore, String embeddedServerSslP12KeystorePassword, Long sseEmitterTimeout, String loggingConfigFile, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript, String upnpBindInterface, Integer chatHistorySize, Boolean behindReverseProxy, Integer sseHeartbeatSeconds)
     {
         this.generateUpnpCode = generateUpnpCode;
         this.generateUpnpCodePath = generateUpnpCodePath;
@@ -51,6 +53,8 @@ public class ApplicationConfig
         this.pathToRestartScript = pathToRestartScript;
         this.upnpBindInterface = upnpBindInterface;
         this.chatHistorySize = chatHistorySize;
+        this.behindReverseProxy = behindReverseProxy;
+        this.sseHeartbeatSeconds = sseHeartbeatSeconds;
     }
     
     @Override
@@ -74,6 +78,8 @@ public class ApplicationConfig
         sb.append("pathToRestartScript=").append(this.pathToRestartScript).append(", ");
         sb.append("upnpBindInterface=").append(this.upnpBindInterface).append(", ");
         sb.append("chatHistorySize=").append(this.chatHistorySize).append(", ");
+        sb.append("behindReverseProxy=").append(this.behindReverseProxy).append(", ");
+        sb.append("sseHeartbeatSeconds=").append(this.sseHeartbeatSeconds).append(", ");
         sb.append("]");
         return sb.toString();
     }

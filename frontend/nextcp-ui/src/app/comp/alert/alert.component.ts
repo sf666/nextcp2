@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
 @Component({
   selector: 'my-alert',
@@ -12,5 +12,20 @@ export class AlertComponent {
   prefix = input('info');
   screenReader = input<string>('info');
   text = input<string>('');
+  // Color variant: 'info' (blue, default) or 'warning' (yellow).
+  color = input<'info' | 'warning'>('info');
   svgPath = input<string>('M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z');
+
+  // Layout classes shared by every variant.
+  private static readonly BASE_CLASS = 'flex max-w-2xl items-center p-4 mb-4 text-sm rounded-lg dark:bg-gray-800';
+
+  // Flowbite alert color palette per variant. Full class tokens so Tailwind keeps them.
+  private static readonly COLOR_CLASS: Record<string, string> = {
+    info: 'text-blue-800 bg-blue-50 dark:text-blue-400',
+    warning: 'text-yellow-800 bg-yellow-50 dark:text-yellow-300',
+  };
+
+  readonly alertClass = computed(
+    () => `${AlertComponent.BASE_CLASS} ${AlertComponent.COLOR_CLASS[this.color()] ?? AlertComponent.COLOR_CLASS['info']}`
+  );
 }

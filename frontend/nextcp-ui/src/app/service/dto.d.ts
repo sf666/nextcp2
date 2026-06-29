@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-06-11 13:52:05.
+// Generated using typescript-generator version 4.1.1 on 2026-06-29 09:26:32.
 
 export interface AiConfig {
     aiEnabled: boolean;
@@ -60,6 +60,8 @@ export interface ApplicationConfig {
     pathToRestartScript: string;
     upnpBindInterface: string;
     chatHistorySize: number;
+    behindReverseProxy: boolean;
+    sseHeartbeatSeconds: number;
 }
 
 export interface AudioAddictChannelDto {

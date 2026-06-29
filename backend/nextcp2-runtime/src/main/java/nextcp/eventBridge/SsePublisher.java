@@ -3,7 +3,12 @@ package nextcp.eventBridge;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -36,8 +41,56 @@ public class SsePublisher
 
     private ObjectMapper om = new ObjectMapper();
 
+    // Default SSE heartbeat interval (seconds) when ApplicationConfig.sseHeartbeatSeconds is not set.
+    // A heartbeat keeps long-lived SSE connections alive across reverse-proxy / load-balancer idle timeouts.
+    private static final int DEFAULT_HEARTBEAT_SECONDS = 30;
+
+    private ScheduledExecutorService heartbeatExecutor = null;
+
     public SsePublisher()
     {
+    }
+
+    /**
+     * Start a periodic SSE heartbeat (an SSE comment frame) so long-lived connections are not dropped
+     * by reverse proxies or load balancers during quiet periods. The interval is taken from
+     * ApplicationConfig.sseHeartbeatSeconds; null falls back to the default, a value <= 0 disables it.
+     */
+    @PostConstruct
+    private void startHeartbeat()
+    {
+        Integer configured = config.applicationConfig.sseHeartbeatSeconds;
+        int seconds = (configured != null) ? configured : DEFAULT_HEARTBEAT_SECONDS;
+        if (seconds <= 0)
+        {
+            log.info("SSE heartbeat disabled (sseHeartbeatSeconds={})", configured);
+            return;
+        }
+        heartbeatExecutor = Executors.newSingleThreadScheduledExecutor(runnable -> {
+            Thread thread = new Thread(runnable, "sse-heartbeat");
+            thread.setDaemon(true);
+            return thread;
+        });
+        heartbeatExecutor.scheduleAtFixedRate(this::sendHeartbeat, seconds, seconds, TimeUnit.SECONDS);
+        log.info("SSE heartbeat enabled every {} s", seconds);
+    }
+
+    @PreDestroy
+    private void stopHeartbeat()
+    {
+        if (heartbeatExecutor != null)
+        {
+            heartbeatExecutor.shutdownNow();
+        }
+    }
+
+    private void sendHeartbeat()
+    {
+        if (sseEmitterList.isEmpty())
+        {
+            return;
+        }
+        sendToAllEmitters(SseEmitter.event().comment("heartbeat"));
     }
 
     /**
@@ -99,7 +152,7 @@ public class SsePublisher
         }
     }
 
-    private void sendToAllEmitters(SseEventBuilder eventBuilder)
+    private synchronized void sendToAllEmitters(SseEventBuilder eventBuilder)
     {
         List<SseEmitter> deadEmitters = new ArrayList<>();
         sseEmitterList.forEach(emitter -> {

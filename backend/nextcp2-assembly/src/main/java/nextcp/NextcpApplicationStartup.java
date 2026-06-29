@@ -66,6 +66,15 @@ public class NextcpApplicationStartup implements IApplicationRestartable
         // Set configured listen port
         log.info("Setting embedded server port to {}", config.applicationConfig.embeddedServerPort);
         builder = builder.properties(String.format("server.port=%s", config.applicationConfig.embeddedServerPort));
+
+        // Trust reverse-proxy forwarded headers (X-Forwarded-*) only when explicitly enabled, so
+        // absolute URLs use the external scheme/host while the proxy talks plain HTTP to the backend.
+        // Not on by default: trusting forwarded headers on a directly exposed port would be spoofable.
+        if (Boolean.TRUE.equals(config.applicationConfig.behindReverseProxy))
+        {
+            log.info("Running behind a reverse proxy: enabling forwarded-headers handling (strategy=framework)");
+            builder = builder.properties("server.forward-headers-strategy=framework");
+        }
         
 //      builder = addH2Server(builder, config);
         NextcpApplicationStartup.context = builder.build().run(args);

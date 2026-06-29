@@ -95,6 +95,8 @@ ApplicationConfig:
    pathToRestartScript: String
    upnpBindInterface: String
    chatHistorySize: Integer
+   behindReverseProxy: Boolean
+   sseHeartbeatSeconds: Integer
 
 UmsServerApiKey:
    serverUuid: String

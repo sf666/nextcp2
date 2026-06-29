@@ -92,6 +92,8 @@ export class ConfigurationService {
     nextPageAfter: 60,
     pathToRestartScript: '',
     upnpBindInterface: '',
+    behindReverseProxy: false,
+    sseHeartbeatSeconds: 30,
   };
 
   aiConfig: AiConfig = {
