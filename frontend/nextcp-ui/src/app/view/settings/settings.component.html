@@ -81,7 +81,7 @@
       }
     </div>
     @if (getMediaServerConfig()?.length == 0) {
-      <my-alert prefix="Info" text="No media server online"></my-alert>
+      <my-alert color="warning" prefix="Info" text="No media server online"></my-alert>
     }
   </section>
 
@@ -201,7 +201,7 @@
       </div>
       }
       @if (getMediaRenderer()?.length == 0) {
-        <my-alert class="grow" prefix="Info" text="No renderer online"></my-alert>
+        <my-alert class="grow" color="warning" prefix="Info" text="No renderer online"></my-alert>
       }
     </div>
   </section>
@@ -214,14 +214,10 @@
     </div>
 
     @if(currentMediaServer.udn === undefined || currentMediaServer.udn === '') {
-      <div class="p-4 text-sm rounded-lg bg-gray-800 text-red-400" role="alert">
-        {{currentMediaServer.friendlyName}}
-      </div>
+      <my-alert color="error" prefix="" [text]="currentMediaServer.friendlyName"></my-alert>
     } @else {
       @if (extendedApiNotAvailable()) {
-        <div class="p-4 text-sm rounded-lg bg-gray-800 text-red-400" role="alert">
-          Advanced actions are available only when using <i>Universal Media Server</i>.
-        </div>
+        <my-alert color="warning" prefix="" text="Advanced actions are available only when using Universal Media Server."></my-alert>
       }
     }
 
