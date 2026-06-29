@@ -54,16 +54,25 @@ public class AiModelCatalog {
 	private static final String GOOGLE_MODELS_URL = "https://generativelanguage.googleapis.com/v1beta/models?pageSize=1000";
 
 	private final ObjectMapper objectMapper = new ObjectMapper();
-	private final HttpClient httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5)).build();
+	private final HttpClient httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).build();
 
 	/** How long a successful model/tool listing is reused before being re-fetched. */
 	private static final Duration CACHE_TTL = Duration.ofMinutes(60 * 24); // 24h
 
+	/**
+	 * How long an empty result (provider unreachable / nothing returned) is cached.
+	 * Kept short so a fixed/recovered endpoint is picked up quickly, while an
+	 * unreachable one is not re-probed (and re-waited on its connect timeout) on every
+	 * settings visit.
+	 */
+	private static final Duration NEGATIVE_CACHE_TTL = Duration.ofSeconds(60);
+
 	private final Map<String, CacheEntry<List<String>>> modelsCache = new ConcurrentHashMap<>();
 	private final Map<String, CacheEntry<List<AiToolDto>>> toolsCache = new ConcurrentHashMap<>();
 
-	private static long expiry() {
-		return System.currentTimeMillis() + CACHE_TTL.toMillis();
+	private static long expiryFor(boolean empty) {
+		Duration ttl = empty ? NEGATIVE_CACHE_TTL : CACHE_TTL;
+		return System.currentTimeMillis() + ttl.toMillis();
 	}
 
 	private static String cacheKey(AiConfig c) {
@@ -102,10 +111,9 @@ public class AiModelCatalog {
 			return cached.value();
 		}
 		List<String> models = fetchAvailableModels(aiConfig);
-		// Only cache non-empty results
-		if (!models.isEmpty()) {
-			modelsCache.put(key, new CacheEntry<>(models, expiry()));
-		}
+		// Cache the result (empty ones only briefly, see NEGATIVE_CACHE_TTL) so an
+		// unreachable endpoint isn't re-probed with a connect timeout on every visit.
+		modelsCache.put(key, new CacheEntry<>(models, expiryFor(models.isEmpty())));
 		return models;
 	}
 
@@ -228,10 +236,8 @@ public class AiModelCatalog {
 			return cached.value();
 		}
 		List<AiToolDto> tools = fetchServerTools(aiConfig);
-		// See getAvailableModels: don't cache empty results so errors are retried.
-		if (!tools.isEmpty()) {
-			toolsCache.put(key, new CacheEntry<>(tools, expiry()));
-		}
+		// See getAvailableModels: empty results are cached only briefly (NEGATIVE_CACHE_TTL).
+		toolsCache.put(key, new CacheEntry<>(tools, expiryFor(tools.isEmpty())));
 		return tools;
 	}
 
