@@ -93,7 +93,7 @@ public class AiModelCatalog {
 	 * @return a (possibly empty) list of model identifiers, never {@code null}
 	 */
 	public List<String> getAvailableModels(AiConfig aiConfig) {
-		if (aiConfig == null || StringUtils.isBlank(aiConfig.aiProvider)) {
+		if (aiConfig == null || !Boolean.TRUE.equals(aiConfig.aiEnabled) || StringUtils.isBlank(aiConfig.aiProvider)) {
 			return List.of();
 		}
 		String key = cacheKey(aiConfig);
@@ -218,7 +218,8 @@ public class AiModelCatalog {
 	 * @return a (possibly empty) list of tools, never {@code null}
 	 */
 	public List<AiToolDto> listServerTools(AiConfig aiConfig) {
-		if (aiConfig == null || StringUtils.isBlank(aiConfig.aiBaseUrl) || !isOpenAiCompatible(aiConfig.aiProvider)) {
+		if (aiConfig == null || !Boolean.TRUE.equals(aiConfig.aiEnabled) || StringUtils.isBlank(aiConfig.aiBaseUrl)
+			|| !isOpenAiCompatible(aiConfig.aiProvider)) {
 			return List.of();
 		}
 		String key = cacheKey(aiConfig);
