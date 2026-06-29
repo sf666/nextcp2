@@ -116,9 +116,13 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.layoutService.setFramedViewWithoutNavbar();
-    // Populate the model dropdown and server-side tool list for the current AI configuration.
-    this.configService.listAiModels();
-    this.configService.listAiTools();
+
+    if (this.configService.aiModels().length === 0) {
+      this.configService.listAiModels();
+    }
+    if (this.configService.aiTools().length === 0) {
+      this.configService.listAiTools();
+    }
   }
 
   showAdvancedRendererSettings(
