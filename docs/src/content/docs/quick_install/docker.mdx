@@ -129,22 +129,22 @@ nextCP/2 must stay on `network_mode: host`. UPnP discovery (SSDP multicast), GEN
 
 ### Trust the proxy's forwarded headers
 
-The connection between the proxy and nextCP/2 is plain HTTP on port `8085` — you do **not** enable HTTPS or install certificates on the container itself. When TLS terminates at the proxy, tell Spring to honour the `X-Forwarded-*` headers so it reconstructs the correct external scheme and host for any absolute URLs (relevant e.g. for the `/mcp` endpoint). This is precisely what conveys the original `https` scheme across the plain-HTTP hop to the backend. Add the system property to `JAVA_TOOL_OPTIONS` in your `nextcp2` service:
+The connection between the proxy and nextCP/2 is plain HTTP on port `8085` — you do **not** enable HTTPS or install certificates on the container itself. When TLS terminates at the proxy, nextCP/2 must honour the `X-Forwarded-*` headers so it reconstructs the correct external scheme and host for any absolute URLs (relevant e.g. for the `/mcp` endpoint); this is what conveys the original `https` scheme across the plain-HTTP hop to the backend.
 
-```yaml
-  nextcp2:
-    container_name: nextcp2
-    network_mode: host
-    restart: unless-stopped
-    volumes:
-      - next_data:/nextcp2_data
-    environment:
-      JAVA_TOOL_OPTIONS: '-Xms1024m -Xmx2048m -XX:+UseShenandoahGC -Dserver.forward-headers-strategy=framework'
-    image: ik6666/nextcp2:latest
+Enable it either in the UI under **App Settings → General Configuration → "Behind reverse proxy"**, or directly in `nextcp2Config.json`:
+
+```json
+{
+  "applicationConfig": {
+    "behindReverseProxy": true
+  }
+}
 ```
 
+The option is opt-in on purpose: only enable it when nextCP/2 is reachable solely through a trusted proxy — on a directly exposed port the `X-Forwarded-*` headers could be spoofed.
+
 :::note
-If you don't use HTTPS at the edge either (plain HTTP from the browser to the proxy), route through the plain `web` entry point and omit the `tls` / `certResolver` lines in the examples below. `forward-headers-strategy=framework` then simply forwards the `http` scheme and stays harmless.
+If you don't use HTTPS at the edge either (plain HTTP from the browser to the proxy), route through the plain `web` entry point and omit the `tls` / `certResolver` lines in the examples below. With `behindReverseProxy` enabled, nextCP/2 simply forwards the `http` scheme and the option stays harmless.
 :::
 
 ### Use a dedicated (sub)domain — not a sub-path
@@ -180,10 +180,12 @@ If Traefik runs as a bridge-network container on the same host, you can instead 
 
 ### Long-lived connections (SSE)
 
-The UI receives live updates over Server-Sent Events (`/SSE`), and the optional MCP endpoint (`/mcp`) is a long-lived stream as well. Traefik forwards `text/event-stream` responses immediately, so no buffering configuration is needed (unlike nginx). Make sure the proxy does not drop idle streaming connections — raise or disable the responding idle timeout on the entry point:
+The UI receives live updates over Server-Sent Events (`/SSE`), and the optional MCP endpoint (`/mcp`) is a long-lived stream as well. To keep reverse proxies and load balancers from dropping these connections during quiet periods, nextCP/2 sends a periodic SSE heartbeat (every 30 s by default). You can change the interval — or disable it with `0` — in the UI under **App Settings → General Configuration → "SSE heartbeat interval"**, or via `sseHeartbeatSeconds` in `nextcp2Config.json`.
+
+With the heartbeat active you normally don't need to touch the proxy timeouts. Traefik also forwards `text/event-stream` responses immediately, so no buffering configuration is required (unlike nginx). If you still see streams being cut, raise or disable the responding idle timeout on the entry point as a fallback:
 
 ```yaml
-# Traefik static configuration
+# Traefik static configuration (fallback only — usually unnecessary with the heartbeat)
 entryPoints:
   websecure:
     address: ":443"
