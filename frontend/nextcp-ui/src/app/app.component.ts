@@ -7,6 +7,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { RouterOutlet } from '@angular/router';
 import { initFlowbite } from 'flowbite';
 import { AppVisibilityService } from './service/app-visibility/app-visibility-service.service';
+import { supportsBackdropFilter } from './util/browser-capabilities';
 
 @Component({
   selector: 'app-root',
@@ -34,11 +35,7 @@ export class AppComponent implements OnInit {
   }
 
   public showBlur(): boolean {
-    if (Modernizr.backdropfilter) {
-      return true;
-    } else {
-      return false;
-    }
+    return supportsBackdropFilter;
   }
 
   get headerVisibleClass(): string {
