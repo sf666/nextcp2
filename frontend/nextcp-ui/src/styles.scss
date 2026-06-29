@@ -11,9 +11,6 @@
 @use "app-icons" as *;
 
 // @use "tailwind"as *;
-@use "flowbite/src/themes/default" as *;
-@plugin "flowbite/plugin";
-@source "../node_modules/flowbite";
 
 
 p, h1, h2, h3, h4, h5, h6, div {

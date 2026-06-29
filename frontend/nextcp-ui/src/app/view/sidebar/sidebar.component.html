@@ -1,6 +1,6 @@
 <div class="sidebar flex-col grow overflow-y-auto bg-zinc-800">
   <div class="flex items-center mb-8 mt-4">
-    <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button"
+    <button type="button" (click)="layoutService.toggleSidebar()" aria-controls="default-sidebar" [attr.aria-expanded]="layoutService.sidebarOpen()"
       class="md:hidden inline-flex items-center p-2 text-sm rounded-lg focus:outline-none focus:ring-2 text-gray-400 hover:bg-gray-700 focus:ring-gray-600">
       <span class="sr-only">Open sidebar</span>
       <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

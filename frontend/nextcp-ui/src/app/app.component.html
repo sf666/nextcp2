@@ -8,9 +8,16 @@
     </div>
 
     @if (layoutService.sidebarVisible()) {
-    <aside  id="default-sidebar" class="fixed top-0 left-0 z-1 noScrollBar overflow-y-auto md:translate-x-0 w-52 h-screen transition-transform -translate-x-full" aria-label="Sidebar">
+    <aside id="default-sidebar"
+      class="fixed top-0 left-0 z-40 noScrollBar overflow-y-auto md:translate-x-0 w-52 h-screen transition-transform"
+      [class.-translate-x-full]="!layoutService.sidebarOpen()"
+      [class.translate-x-0]="layoutService.sidebarOpen()"
+      aria-label="Sidebar">
       <app-sidebar></app-sidebar>
     </aside>
+    @if (layoutService.sidebarOpen()) {
+    <div class="fixed inset-0 z-30 bg-black/50 md:hidden" aria-hidden="true" (click)="layoutService.closeSidebar()"></div>
+    }
     }
 
     @if (showBlur()) {

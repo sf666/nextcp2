@@ -115,6 +115,8 @@ export class SidebarComponent {
 
   private afterButtonClicked(itemId: string): void {
     this.activeId.set(itemId);
+    // Close the mobile drawer after navigating (no-op on md+ where it stays visible).
+    this.layoutService.closeSidebar();
   }
 
   get serverPlaylists() {

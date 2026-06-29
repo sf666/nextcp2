@@ -1,5 +1,6 @@
 import { GlobalSearchService } from './../../service/search/global-search.service';
 import { Router } from '@angular/router';
+import { LayoutService } from './../../service/layout.service';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import {
   Component,
@@ -24,6 +25,7 @@ export class NavBarComponent {
   private readonly router = inject(Router);
   public readonly globalSearchService = inject(GlobalSearchService);
   public readonly searchContentDirectoryService = inject(ContentDirectoryService);
+  public readonly layoutService = inject(LayoutService);
 
   parentTitle = input<string>();
   homeButtonVisible = input<boolean>(false);

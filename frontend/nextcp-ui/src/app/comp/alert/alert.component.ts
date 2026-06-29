@@ -20,7 +20,7 @@ export class AlertComponent {
   // Layout classes shared by every variant.
   private static readonly BASE_CLASS = 'flex max-w-2xl items-center p-4 mb-4 text-sm rounded-lg dark:bg-gray-800';
 
-  // Flowbite alert color palette per variant. Full class tokens so Tailwind keeps them.
+  // Alert color palette per variant. Full class tokens so Tailwind keeps them.
   private static readonly COLOR_CLASS: Record<string, string> = {
     info: 'text-blue-800 bg-blue-50 dark:text-blue-400',
     warning: 'text-yellow-800 bg-yellow-50 dark:text-yellow-300',
