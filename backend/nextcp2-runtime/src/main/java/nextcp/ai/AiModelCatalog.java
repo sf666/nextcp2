@@ -7,6 +7,8 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -54,6 +56,29 @@ public class AiModelCatalog {
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	private final HttpClient httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5)).build();
 
+	/** How long a successful model/tool listing is reused before being re-fetched. */
+	private static final Duration CACHE_TTL = Duration.ofMinutes(60 * 24); // 24h
+
+	private final Map<String, CacheEntry<List<String>>> modelsCache = new ConcurrentHashMap<>();
+	private final Map<String, CacheEntry<List<AiToolDto>>> toolsCache = new ConcurrentHashMap<>();
+
+	private static long expiry() {
+		return System.currentTimeMillis() + CACHE_TTL.toMillis();
+	}
+
+	private static String cacheKey(AiConfig c) {
+		return StringUtils.lowerCase(StringUtils.trimToEmpty(c.aiProvider)) + '|'
+			+ StringUtils.trimToEmpty(c.aiBaseUrl) + '|'
+			+ StringUtils.trimToEmpty(c.aiApiKey);
+	}
+
+	/** Cached value with an absolute expiry timestamp (epoch millis). */
+	private record CacheEntry<T>(T value, long expiresAtMillis) {
+		boolean isExpired() {
+			return System.currentTimeMillis() > expiresAtMillis;
+		}
+	}
+
 	/**
 	 * @return the AI providers supported by this backend
 	 */
@@ -71,6 +96,20 @@ public class AiModelCatalog {
 		if (aiConfig == null || StringUtils.isBlank(aiConfig.aiProvider)) {
 			return List.of();
 		}
+		String key = cacheKey(aiConfig);
+		CacheEntry<List<String>> cached = modelsCache.get(key);
+		if (cached != null && !cached.isExpired()) {
+			return cached.value();
+		}
+		List<String> models = fetchAvailableModels(aiConfig);
+		// Only cache non-empty results
+		if (!models.isEmpty()) {
+			modelsCache.put(key, new CacheEntry<>(models, expiry()));
+		}
+		return models;
+	}
+
+	private List<String> fetchAvailableModels(AiConfig aiConfig) {
 		String provider = aiConfig.aiProvider;
 		if (PROVIDER_GOOGLE.equalsIgnoreCase(provider)) {
 			return listGoogleModels(aiConfig);
@@ -182,6 +221,20 @@ public class AiModelCatalog {
 		if (aiConfig == null || StringUtils.isBlank(aiConfig.aiBaseUrl) || !isOpenAiCompatible(aiConfig.aiProvider)) {
 			return List.of();
 		}
+		String key = cacheKey(aiConfig);
+		CacheEntry<List<AiToolDto>> cached = toolsCache.get(key);
+		if (cached != null && !cached.isExpired()) {
+			return cached.value();
+		}
+		List<AiToolDto> tools = fetchServerTools(aiConfig);
+		// See getAvailableModels: don't cache empty results so errors are retried.
+		if (!tools.isEmpty()) {
+			toolsCache.put(key, new CacheEntry<>(tools, expiry()));
+		}
+		return tools;
+	}
+
+	private List<AiToolDto> fetchServerTools(AiConfig aiConfig) {
 		try {
 			String base = StringUtils.removeEnd(aiConfig.aiBaseUrl.trim(), "/");
 			URI uri = URI.create(base + "/v1/tools/");
