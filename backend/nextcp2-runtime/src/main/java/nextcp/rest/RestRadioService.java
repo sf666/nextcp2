@@ -77,7 +77,7 @@ public class RestRadioService extends BaseRestService
     public void playStream(@RequestBody PlayRequestDto playRequest)
     {
         MediaRendererDevice device = getMediaRendererByUdn(playRequest.mediaRendererDto.udn);
-        if (device.hasRadioService())
+        if (device.hasRadioService() && !device.isRadioPlayUnsupported())
         {
             try
             {
@@ -92,9 +92,11 @@ public class RestRadioService extends BaseRestService
             catch (Exception e)
             {
                 // Some OpenHome renderers (e.g. Linn/LUMIN) don't accept arbitrary stream URIs on
-                // their Radio source (SetChannel -> UPnP error 708 "Unsupported action"). Fall back
-                // to plain AVTransport so playback still works.
-                log.warn("OpenHome Radio play failed for {} ({}); falling back to AVTransport", playRequest.streamUrl, e.getMessage());
+                // their Radio source (SetChannel -> UPnP error 708 "Unsupported action"). Remember
+                // this per device so we don't retry on every play, and fall back to AVTransport.
+                device.setRadioPlayUnsupported(true);
+                log.warn("OpenHome Radio play failed for {} ({}); using AVTransport for this device from now on",
+                    playRequest.streamUrl, e.getMessage());
             }
         }
         log.debug("playing stream via AVTransport: {}", playRequest.streamUrl);

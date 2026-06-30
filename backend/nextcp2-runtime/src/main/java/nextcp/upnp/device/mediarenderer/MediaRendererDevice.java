@@ -141,6 +141,11 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     protected IProductService productService = null;
     protected IInfoService infoService = null;
 
+    // Remembered per device: this renderer's OpenHome Radio source rejected playing an arbitrary
+    // stream URL (e.g. Linn returns 708 for SetChannel). Once set, we skip the Radio attempt and go
+    // straight to AVTransport. Reset on re-discovery (new device instance), so we try once again.
+    private volatile boolean radioPlayUnsupported = false;
+
     public MediaRendererDevice(RemoteDevice device, boolean enabledByUser)
     {
         super(device);
@@ -547,6 +552,16 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     public IRadioService getRadioServiceBridge()
     {
         return radioService;
+    }
+
+    public boolean isRadioPlayUnsupported()
+    {
+        return radioPlayUnsupported;
+    }
+
+    public void setRadioPlayUnsupported(boolean radioPlayUnsupported)
+    {
+        this.radioPlayUnsupported = radioPlayUnsupported;
     }
 
     public IProductService getProductService()
