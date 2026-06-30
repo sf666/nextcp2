@@ -1,7 +1,6 @@
 import { ConfigurationService } from './../../service/configuration.service';
 import { ScrollLoadHandler } from './defs.d';
 import { TransportService } from 'src/app/service/transport.service';
-import { RadioService } from 'src/app/service/radio.service';
 import { PlaylistService } from './../../service/playlist.service';
 import { TrackQualityService } from './../../util/track-quality.service';
 import {
@@ -53,7 +52,6 @@ import { CdsBrowsePathService } from 'src/app/util/cds-browse-path.service';
 export class DisplayContainerComponent {
   playlistService = inject(PlaylistService);
   transportService = inject(TransportService);
-  private radioService = inject(RadioService);
   private configurationService = inject(ConfigurationService);
   private cdsBrowsePathService = inject(CdsBrowsePathService);
   trackQualityService = inject(TrackQualityService);
@@ -244,13 +242,8 @@ export class DisplayContainerComponent {
   }
 
   playItem(musicItemDto: MusicItemDto): void {
-    // An internet-radio / broadcast item must be played via the renderer's Radio source (OpenHome),
-    // not its Playlist/AVTransport path - that is where continuous streams play and ICY metadata is
-    // consumed. Everything else (normal tracks, finite files) keeps the regular play path.
-    if (musicItemDto.objectClass?.startsWith('object.item.audioItem.audioBroadcast')) {
-      this.radioService.playStream(musicItemDto);
-    } else {
-      this.transportService.playResource(musicItemDto);
-    }
+    // Broadcast/streaming routing (Radio source vs Playlist/AVTransport) is handled centrally in
+    // TransportService.playResource.
+    this.transportService.playResource(musicItemDto);
   }
 }

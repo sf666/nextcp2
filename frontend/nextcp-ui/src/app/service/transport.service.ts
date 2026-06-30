@@ -13,6 +13,7 @@ import {
 } from './dto';
 import { Injectable, signal, inject } from '@angular/core';
 import { DeviceService } from './device.service';
+import { RadioService } from './radio.service';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +24,7 @@ export class TransportService {
   private toastr = inject(ToastService);
   private dtoGeneratorService = inject(DtoGeneratorService);
   private deviceService = inject(DeviceService);
+  private radioService = inject(RadioService);
 
   upnpAvTransportState = signal<UpnpAvTransportState>(
     this.dtoGeneratorService.emptyUpnpAvTransportState(),
@@ -87,8 +89,22 @@ export class TransportService {
   }
 
   public playResource(musicItemDto: MusicItemDto): void {
+    // A continuous radio/broadcast stream must use the renderer's Radio source (OpenHome), where
+    // ICY metadata is consumed - not the Playlist/AVTransport path. Detected via the audioBroadcast
+    // UPnP class (e.g. AudioAddict) or the size-derived isStreaming flag (e.g. generic .m3u radio).
+    if (this.isBroadcastItem(musicItemDto)) {
+      this.radioService.playStream(musicItemDto);
+      return;
+    }
     const uri = '/playResource';
     this._playResource(uri, musicItemDto);
+  }
+
+  private isBroadcastItem(item: MusicItemDto): boolean {
+    return (
+      item.objectClass?.startsWith('object.item.audioItem.audioBroadcast') === true ||
+      item.audioFormat?.isStreaming === true
+    );
   }
 
   public playResourceNext(musicItemDto: MusicItemDto): void {
