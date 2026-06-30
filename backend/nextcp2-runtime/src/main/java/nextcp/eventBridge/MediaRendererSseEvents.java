@@ -45,14 +45,14 @@ public class MediaRendererSseEvents
     public void listenForInputSourceChanged(InputSourceChangeDto inputSource)
     {
         ssePublisher.sendObjectAsJson(DEVICE_MEDIARENDERER_INPUT_SOURCE, inputSource);
-        log.debug("listenForInputSourceChanged : %s", inputSource);
+        log.debug("listenForInputSourceChanged : {}", inputSource);
     }
     
     @EventListener
     public void listenForDeviceDriverStateChanged(DeviceDriverState deviceDriverState)
     {
         ssePublisher.sendObjectAsJson(DEVICE_MEDIARENDERER_DEVICE_DRIVER_STATE_CHANGED, deviceDriverState);
-        log.debug("listenForDeviceDriverStateChanged : %s", deviceDriverState);
+        log.debug("listenForDeviceDriverStateChanged : {}", deviceDriverState);
     }
     
     @EventListener
@@ -60,14 +60,14 @@ public class MediaRendererSseEvents
     {
         UpnpAvTransportState dto = dtoBuilder.buildAvTransportStateDto(event.state, event.device);
         ssePublisher.sendObjectAsJson(DEVICE_MEDIARENDERER_AVTRANSPORT, dto);
-        log.debug("listenForUpnpStateVariable : %s", event);
+        log.debug("listenForUpnpStateVariable : {}", event);
     }
 
     @EventListener
     public void listenForTransportStateVariable(TransportServiceStateDto event)
     {
         ssePublisher.sendObjectAsJson(DEVICE_MEDIARENDERER_TRANSPORT, event);
-        log.debug("listenForTransportStateVariable : %s", event);
+        log.debug("listenForTransportStateVariable : {}", event);
     }
     
     
@@ -75,14 +75,14 @@ public class MediaRendererSseEvents
     public void listenForTrackInfoStateVariable(TrackInfoDto event)
     {
         ssePublisher.sendObjectAsJson(DEVICE_MEDIARENDERER_TRACK_INFO, event);
-        log.debug("listenForTrackInfoStateVariable : %s", event);
+        log.debug("listenForTrackInfoStateVariable : {}", event);
     }
     
     @EventListener
     public void listenForPositionInfoStateVariable(TrackTimeDto event)
     {
         ssePublisher.sendObjectAsJson(DEVICE_MEDIARENDERER_TRACK_TIME, event);
-        log.debug("listenForPositionInfoStateVariable : %s", event);
+        log.debug("listenForPositionInfoStateVariable : {}", event);
     }
     
     //
@@ -93,13 +93,13 @@ public class MediaRendererSseEvents
     public void listenForPlaylistItems(PlaylistChangedEvent  event)
     {
         ssePublisher.sendObjectAsJson(DEVICE_MEDIARENDERER_PLAYLIST_ITEMS, event.rendererPlaylist);
-        log.debug("listenForPlaylistItems : %s", event);
+        log.debug("listenForPlaylistItems : {}", event);
     }
     
     @EventListener
     public void listenForPlaylistState(PlaylistState event)
     {
         ssePublisher.sendObjectAsJson(DEVICE_MEDIARENDERER_PLAYLIST_STATE, event);
-        log.debug("listenForPlaylistState : %s", event);
+        log.debug("listenForPlaylistState : {}", event);
     }
 }
