@@ -17,6 +17,7 @@ import nextcp.dto.Config;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.PlayOpenHomeRadioDto;
+import nextcp.dto.PlayRequestDto;
 import nextcp.dto.RadioStation;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 
@@ -64,5 +65,36 @@ public class RestRadioService extends BaseRestService
             return;
         }
         log.debug("device has no openhome radio service");
+    }
+
+    /**
+     * Plays an arbitrary stream URL (e.g. an audioBroadcast item from a media server). On an
+     * OpenHome renderer it switches the active source to "Radio" (so the renderer uses its radio
+     * pipeline, which consumes ICY metadata) and loads the stream with its DIDL metadata. If the
+     * renderer has no OpenHome Radio service it falls back to plain UPnP AVTransport.
+     */
+    @PostMapping("/playStream")
+    public void playStream(@RequestBody PlayRequestDto playRequest)
+    {
+        MediaRendererDevice device = getMediaRendererByUdn(playRequest.mediaRendererDto.udn);
+        if (device.hasRadioService())
+        {
+            if (device.hasProductService())
+            {
+                device.getProductService().switchToSource("Radio");
+            }
+            device.getRadioServiceBridge().playStream(playRequest.streamUrl, playRequest.streamMetadata);
+            return;
+        }
+        // No OpenHome Radio service: fall back to plain UPnP AVTransport.
+        log.debug("device has no openhome radio service, falling back to AVTransport for stream {}", playRequest.streamUrl);
+        if (device.getAvTransportBridge() != null)
+        {
+            device.getAvTransportBridge().play(playRequest.streamUrl, playRequest.streamMetadata);
+        }
+        else
+        {
+            log.warn("device has neither OpenHome radio nor AVTransport - cannot play stream {}", playRequest.streamUrl);
+        }
     }
 }

@@ -67,6 +67,16 @@ public class OhRadioBridge implements IRadioService, ITransport
         play();
     }
 
+    @Override
+    public void playStream(String uri, String metadata)
+    {
+        SetChannelInput inp = new SetChannelInput();
+        inp.Uri = uri;
+        inp.Metadata = metadata != null ? metadata : "";
+        radioService.setChannel(inp);
+        play();
+    }
+
     public void play()
     {
         radioService.play();

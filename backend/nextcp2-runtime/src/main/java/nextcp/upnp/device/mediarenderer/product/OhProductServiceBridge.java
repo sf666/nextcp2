@@ -10,6 +10,7 @@ import nextcp.dto.InputSourceDto;
 import nextcp.rest.DtoBuilder;
 import nextcp.upnp.device.mediarenderer.OpenHomeUtils;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.ProductService;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexInput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetStandbyInput;
 
 /**
@@ -84,5 +85,27 @@ public class OhProductServiceBridge implements IProductService
     public InputSourceDto getCurrentInputSource()
     {
         return getInputSource(listener.getStateVariable().SourceIndex);
+    }
+
+    @Override
+    public void switchToSource(String type)
+    {
+        if (sourceList == null)
+        {
+            log.warn("cannot switch to source '{}' : source list unavailable", type);
+            return;
+        }
+        for (int index = 0; index < sourceList.size(); index++)
+        {
+            if (type.equalsIgnoreCase(sourceList.get(index).Type))
+            {
+                SetSourceIndexInput inp = new SetSourceIndexInput();
+                inp.Value = (long) index;
+                productService.setSourceIndex(inp);
+                log.info("switched renderer source to '{}' (index {})", type, index);
+                return;
+            }
+        }
+        log.warn("renderer has no source of type '{}'", type);
     }
 }

@@ -1,5 +1,5 @@
 import { HttpService } from './http.service';
-import { MusicItemDto, MediaRendererDto, PlayOpenHomeRadioDto } from './dto.d';
+import { MusicItemDto, MediaRendererDto, PlayOpenHomeRadioDto, PlayRequestDto } from './dto.d';
 import { Injectable, signal, inject } from '@angular/core';
 import { DeviceService } from './device.service';
 import { toObservable } from '@angular/core/rxjs-interop';
@@ -36,6 +36,19 @@ export class RadioService {
       radioStation: station,
     };
     const uri = '/playRadioStation';
+    this.httpService.post(this.baseUri, uri, req).subscribe();
+  }
+
+  // Plays an arbitrary stream URL (e.g. an audioBroadcast item from a media server) via the
+  // renderer's OpenHome Radio source: the backend switches the source to "Radio" and loads the
+  // stream with its metadata, so the renderer treats it as radio and consumes ICY metadata.
+  playStream(item: MusicItemDto): void {
+    const req: PlayRequestDto = {
+      mediaRendererDto: this.deviceService.selectedMediaRendererDevice(),
+      streamUrl: item.streamingURL,
+      streamMetadata: item.currentTrackMetadata,
+    };
+    const uri = '/playStream';
     this.httpService.post(this.baseUri, uri, req).subscribe();
   }
 
