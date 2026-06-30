@@ -97,15 +97,33 @@ public class OhProductServiceBridge implements IProductService
         }
         for (int index = 0; index < sourceList.size(); index++)
         {
-            if (type.equalsIgnoreCase(sourceList.get(index).Type))
+            InputSourceDto src = sourceList.get(index);
+            if (type.equalsIgnoreCase(src.Type))
             {
+                log.info("switchToSource: target index={} name='{}' type='{}' ; current source index before switch = {}",
+                    index, src.Name, src.Type, readCurrentSourceIndex());
                 SetSourceIndexInput inp = new SetSourceIndexInput();
                 inp.Value = (long) index;
                 productService.setSourceIndex(inp);
-                log.info("switched renderer source to '{}' (index {})", type, index);
+                Long after = readCurrentSourceIndex();
+                log.info("switchToSource: setSourceIndex({}) sent ; current source index after switch = {} (expected {})",
+                    index, after, index);
                 return;
             }
         }
         log.warn("renderer has no source of type '{}'", type);
+    }
+
+    private Long readCurrentSourceIndex()
+    {
+        try
+        {
+            return productService.sourceIndex().Value;
+        }
+        catch (Exception e)
+        {
+            log.debug("could not read current source index: {}", e.getMessage());
+            return null;
+        }
     }
 }

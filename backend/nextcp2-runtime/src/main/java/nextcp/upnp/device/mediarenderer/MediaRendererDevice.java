@@ -19,6 +19,7 @@ import nextcp.domainmodel.device.services.ITransport;
 import nextcp.dto.DeviceDriverState;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.MediaRendererServicesDto;
+import nextcp.dto.PlayRequestDto;
 import nextcp.dto.RendererDeviceConfiguration;
 import nextcp.dto.ToastrMessage;
 import nextcp.dto.TrackInfoDto;
@@ -778,5 +779,41 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 	 */
 	public CpPlaylistService getPlaylist() {
 		return playlist;
+	}
+
+	public void playStream(PlayRequestDto playRequest) {
+        if (hasRadioService())
+        {
+            log.debug("playing stream via OpenHome Radio: {}", playRequest.streamUrl);
+            try
+            {
+                if (hasProductService())
+                {
+                	log.debug("switching to Radio source for device {}", getFriendlyName());
+                    getProductService().switchToSource("Radio");
+                }
+                getRadioServiceBridge().playStream(playRequest.streamUrl, playRequest.streamMetadata);
+                return;
+            }
+            catch (Exception e)
+            {
+                log.warn("OpenHome Radio play failed for {} ({}); falling back to AVTransport", playRequest.streamUrl, e.getMessage());
+            	playStreamFallback(playRequest);
+            }
+        } else {
+        	playStreamFallback(playRequest);
+        }
+	}
+	
+	private void playStreamFallback(PlayRequestDto playRequest) {
+        log.debug("playing stream via AVTransport: {}", playRequest.streamUrl);
+        if (getAvTransportBridge() != null)
+        {
+            getAvTransportBridge().play(playRequest.streamUrl, playRequest.streamMetadata);
+        }
+        else
+        {
+            log.warn("device has neither a working OpenHome radio nor AVTransport - cannot play stream {}", playRequest.streamUrl);
+        }        	
 	}
 }

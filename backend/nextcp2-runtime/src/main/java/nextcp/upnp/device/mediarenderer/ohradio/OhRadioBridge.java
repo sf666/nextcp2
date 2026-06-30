@@ -1,6 +1,8 @@
 package nextcp.upnp.device.mediarenderer.ohradio;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,11 +72,54 @@ public class OhRadioBridge implements IRadioService, ITransport
     @Override
     public void playStream(String uri, String metadata)
     {
+        if (metadata != null && !metadata.isBlank())
+        {
+            log.info("playStream: incoming source metadata ({} chars): {}", metadata.length(), metadata);
+        }
+        else
+        {
+            log.info("playStream: incoming source metadata is EMPTY");
+        }
+        // Some OpenHome renderers reject SetChannel with empty or overly complex metadata, so send a
+        // minimal, well-formed audioBroadcast DIDL-Lite (title + class) instead of the full media
+        // server document.
+        String didl = buildRadioMetadata(metadata);
         SetChannelInput inp = new SetChannelInput();
         inp.Uri = uri;
-        inp.Metadata = metadata != null ? metadata : "";
+        inp.Metadata = didl;
+        log.info("playStream: calling Radio.SetChannel with Uri='{}' (metadata length={})", inp.Uri, didl.length());
+        log.debug("playStream: SetChannel metadata = {}", didl);
         radioService.setChannel(inp);
+        log.info("playStream: Radio.SetChannel accepted; calling Radio.Play");
         play();
+        log.info("playStream: Radio.Play sent");
+    }
+
+    private static final Pattern TITLE_PATTERN = Pattern.compile("<dc:title>(.*?)</dc:title>", Pattern.DOTALL);
+
+    /**
+     * Builds a minimal, well-formed DIDL-Lite metadata document for Radio.SetChannel, carrying just
+     * the title (taken from the supplied metadata when present) and the audioBroadcast class.
+     */
+    private static String buildRadioMetadata(String sourceMetadata)
+    {
+        String title = "Radio";
+        if (sourceMetadata != null)
+        {
+            Matcher m = TITLE_PATTERN.matcher(sourceMetadata);
+            if (m.find() && !m.group(1).trim().isEmpty())
+            {
+                // The captured value is already XML-escaped within the source DIDL.
+                title = m.group(1).trim();
+            }
+        }
+        return "<DIDL-Lite xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\""
+            + " xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\""
+            + " xmlns:dc=\"http://purl.org/dc/elements/1.1/\">"
+            + "<item id=\"0\" parentID=\"0\" restricted=\"1\">"
+            + "<dc:title>" + title + "</dc:title>"
+            + "<upnp:class>object.item.audioItem.audioBroadcast</upnp:class>"
+            + "</item></DIDL-Lite>";
     }
 
     public void play()

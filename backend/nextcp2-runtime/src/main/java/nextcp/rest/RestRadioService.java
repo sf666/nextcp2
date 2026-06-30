@@ -79,22 +79,32 @@ public class RestRadioService extends BaseRestService
         MediaRendererDevice device = getMediaRendererByUdn(playRequest.mediaRendererDto.udn);
         if (device.hasRadioService())
         {
-            if (device.hasProductService())
+            try
             {
-                device.getProductService().switchToSource("Radio");
+                if (device.hasProductService())
+                {
+                	log.debug("switching to Radio source for device {}", device.getFriendlyName());
+                    device.getProductService().switchToSource("Radio");
+                }
+                device.getRadioServiceBridge().playStream(playRequest.streamUrl, playRequest.streamMetadata);
+                return;
             }
-            device.getRadioServiceBridge().playStream(playRequest.streamUrl, playRequest.streamMetadata);
-            return;
+            catch (Exception e)
+            {
+                // Some OpenHome renderers (e.g. Linn/LUMIN) don't accept arbitrary stream URIs on
+                // their Radio source (SetChannel -> UPnP error 708 "Unsupported action"). Fall back
+                // to plain AVTransport so playback still works.
+                log.warn("OpenHome Radio play failed for {} ({}); falling back to AVTransport", playRequest.streamUrl, e.getMessage());
+            }
         }
-        // No OpenHome Radio service: fall back to plain UPnP AVTransport.
-        log.debug("device has no openhome radio service, falling back to AVTransport for stream {}", playRequest.streamUrl);
+        log.debug("playing stream via AVTransport: {}", playRequest.streamUrl);
         if (device.getAvTransportBridge() != null)
         {
             device.getAvTransportBridge().play(playRequest.streamUrl, playRequest.streamMetadata);
         }
         else
         {
-            log.warn("device has neither OpenHome radio nor AVTransport - cannot play stream {}", playRequest.streamUrl);
+            log.warn("device has neither a working OpenHome radio nor AVTransport - cannot play stream {}", playRequest.streamUrl);
         }
     }
 }
