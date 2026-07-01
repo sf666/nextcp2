@@ -11,9 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import jakarta.annotation.PostConstruct;
@@ -175,5 +177,45 @@ public class NextcpApplicationStartup implements IApplicationRestartable
                 environment.getProperty("debug"),
                 environment.getProperty("logging.level.web"),
                 environment.getProperty("logging.level.org.springframework"));
+    }
+
+    /**
+     * Once the whole context (incl. all auto-configurations) is up, dump the explicitly-set vs.
+     * effective logback level for the relevant logger chain. This pinpoints WHICH node carries an
+     * unexpected DEBUG level: 'explicit' is non-null only on the node where someone called setLevel
+     * (or where the config file declares it), so the deepest node with explicit=DEBUG is the culprit
+     * that overrides the external logback.xml after it was loaded.
+     */
+    @EventListener(ApplicationReadyEvent.class)
+    public void reportEffectiveLogLevelsWhenReady()
+    {
+        String[] loggerNames = {
+                "ROOT",
+                "org.springframework",
+                "org.springframework.web",
+                "org.springframework.web.servlet",
+                "org.springframework.web.servlet.DispatcherServlet",
+                "org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor"
+        };
+        for (String name : loggerNames)
+        {
+            Logger slf4jLogger = LoggerFactory.getLogger(name);
+            String explicit = "n/a";
+            String effective = "n/a";
+            // Read logback's explicit (getLevel) and effective level via reflection so this stays
+            // compile-safe even though logback is only a transitive dependency here.
+            try
+            {
+                Object levelObj = slf4jLogger.getClass().getMethod("getLevel").invoke(slf4jLogger);
+                explicit = String.valueOf(levelObj);
+                Object effObj = slf4jLogger.getClass().getMethod("getEffectiveLevel").invoke(slf4jLogger);
+                effective = String.valueOf(effObj);
+            }
+            catch (Exception ex)
+            {
+                explicit = "<not logback: " + slf4jLogger.getClass().getName() + ">";
+            }
+            log.info("[log-level-audit] logger='{}' explicit={} effective={}", name, explicit, effective);
+        }
     }
 }
