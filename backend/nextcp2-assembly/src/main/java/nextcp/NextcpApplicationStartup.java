@@ -14,6 +14,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import jakarta.annotation.PostConstruct;
 import nextcp.config.FileConfigPersistence;
@@ -30,6 +31,9 @@ public class NextcpApplicationStartup implements IApplicationRestartable
 
     @Autowired
     private Config config = null;
+
+    @Autowired
+    private Environment environment = null;
 
     // @Autowired
     // private CommandLineRunner clr = null;
@@ -146,5 +150,19 @@ public class NextcpApplicationStartup implements IApplicationRestartable
     @PostConstruct
     private void init()
     {
+        // Log the effective logging configuration once the Spring logging system is initialized,
+        // so this line actually lands in the configured (external) logback appender/file - unlike
+        // the info() calls in main(), which run before logback reads the external file and therefore
+        // only reach Spring Boot's default console.
+        String effectiveLoggingConfig = environment.getProperty("logging.config");
+        if (effectiveLoggingConfig != null)
+        {
+            log.info("Active logging configuration file (Spring 'logging.config'): {}", effectiveLoggingConfig);
+        }
+        else
+        {
+            log.info("No external 'logging.config' set; using Spring Boot default logging. Configured loggingConfigFile was: {}",
+                    config.applicationConfig.loggingConfigFile);
+        }
     }
 }
