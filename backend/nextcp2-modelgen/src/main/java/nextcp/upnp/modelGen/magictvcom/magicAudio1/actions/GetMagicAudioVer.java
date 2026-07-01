@@ -26,7 +26,7 @@ public class GetMagicAudioVer extends ActionCallback
     public GetMagicAudioVer(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetMagicAudioVer"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetMagicAudioVerOutput executeAction()

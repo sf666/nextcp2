@@ -26,12 +26,32 @@ public class SetResamplingModeDetails extends ActionCallback
     public SetResamplingModeDetails(Service service, SetResamplingModeDetailsInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetResamplingModeDetails"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Mode", input.Mode);
-        getActionInvocation().setInput("FileType", input.FileType);
-        getActionInvocation().setInput("SrcSamplingRate", input.SrcSamplingRate);
-        getActionInvocation().setInput("NewSamplingRate", input.NewSamplingRate);
-        getActionInvocation().setInput("NewBitDepth", input.NewBitDepth);
+		
+        if (input.Mode != null) {
+	        getActionInvocation().setInput("Mode", input.Mode);
+		} else {
+    	    getActionInvocation().setInput("Mode", null);
+		}
+        if (input.FileType != null) {
+	        getActionInvocation().setInput("FileType", input.FileType);
+		} else {
+    	    getActionInvocation().setInput("FileType", null);
+		}
+        if (input.SrcSamplingRate != null) {
+	        getActionInvocation().setInput("SrcSamplingRate", input.SrcSamplingRate);
+		} else {
+    	    getActionInvocation().setInput("SrcSamplingRate", null);
+		}
+        if (input.NewSamplingRate != null) {
+	        getActionInvocation().setInput("NewSamplingRate", input.NewSamplingRate);
+		} else {
+    	    getActionInvocation().setInput("NewSamplingRate", null);
+		}
+        if (input.NewBitDepth != null) {
+	        getActionInvocation().setInput("NewBitDepth", input.NewBitDepth);
+		} else {
+    	    getActionInvocation().setInput("NewBitDepth", null);
+		}
     }
 
     public void executeAction()

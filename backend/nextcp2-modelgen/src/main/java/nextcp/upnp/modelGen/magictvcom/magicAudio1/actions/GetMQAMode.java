@@ -26,7 +26,7 @@ public class GetMQAMode extends ActionCallback
     public GetMQAMode(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetMQAMode"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetMQAModeOutput executeAction()

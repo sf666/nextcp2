@@ -26,7 +26,7 @@ public class GetScreensaver extends ActionCallback
     public GetScreensaver(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetScreensaver"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetScreensaverOutput executeAction()

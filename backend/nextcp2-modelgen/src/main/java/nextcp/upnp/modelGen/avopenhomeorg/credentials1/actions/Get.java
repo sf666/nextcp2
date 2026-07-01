@@ -26,8 +26,12 @@ public class Get extends ActionCallback
     public Get(Service service, GetInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Get"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Id", input.Id);
+		
+        if (input.Id != null) {
+	        getActionInvocation().setInput("Id", input.Id);
+		} else {
+    	    getActionInvocation().setInput("Id", null);
+		}
     }
 
     public GetOutput executeAction()

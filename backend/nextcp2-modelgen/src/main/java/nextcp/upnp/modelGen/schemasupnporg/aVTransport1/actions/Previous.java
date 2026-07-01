@@ -26,8 +26,12 @@ public class Previous extends ActionCallback
     public Previous(Service service, PreviousInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Previous"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		
+        if (input.InstanceID != null) {
+    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		} else {
+    	    getActionInvocation().setInput("InstanceID", null);
+		}
     }
 
     public void executeAction()

@@ -26,7 +26,7 @@ public class GetSpotifyNormalization extends ActionCallback
     public GetSpotifyNormalization(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetSpotifyNormalization"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetSpotifyNormalizationOutput executeAction()

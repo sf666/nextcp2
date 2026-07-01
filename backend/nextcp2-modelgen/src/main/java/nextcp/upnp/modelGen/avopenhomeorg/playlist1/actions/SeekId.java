@@ -26,8 +26,12 @@ public class SeekId extends ActionCallback
     public SeekId(Service service, SeekIdInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SeekId"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", new UnsignedIntegerFourBytes(input.Value));
+		
+        if (input.Value != null) {
+    	    getActionInvocation().setInput("Value", new UnsignedIntegerFourBytes(input.Value));
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

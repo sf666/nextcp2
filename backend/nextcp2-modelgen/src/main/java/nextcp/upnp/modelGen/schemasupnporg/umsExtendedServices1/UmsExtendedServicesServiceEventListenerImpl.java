@@ -161,6 +161,15 @@ public class UmsExtendedServicesServiceEventListenerImpl implements IUmsExtended
         }
     }
     
+    public void playlistLoopChange(Boolean value)
+    {
+        stateVariable.PlaylistLoop = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "PlaylistLoop", value));
+        }
+    }
+    
     public void audioUpdateRatingChange(Boolean value)
     {
         stateVariable.AudioUpdateRating = value;

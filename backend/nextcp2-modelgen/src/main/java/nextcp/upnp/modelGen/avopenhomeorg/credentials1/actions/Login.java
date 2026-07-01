@@ -26,8 +26,12 @@ public class Login extends ActionCallback
     public Login(Service service, LoginInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Login"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Id", input.Id);
+		
+        if (input.Id != null) {
+	        getActionInvocation().setInput("Id", input.Id);
+		} else {
+    	    getActionInvocation().setInput("Id", null);
+		}
     }
 
     public LoginOutput executeAction()

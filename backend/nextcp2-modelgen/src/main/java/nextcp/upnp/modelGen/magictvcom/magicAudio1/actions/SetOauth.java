@@ -27,14 +27,42 @@ public class SetOauth extends ActionCallback
     public SetOauth(Service service, SetOauthInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetOauth"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("ServiceId", input.ServiceId);
-        getActionInvocation().setInput("ClientId", b64.getString(input.ClientId));
-        getActionInvocation().setInput("ClientSecret", b64.getString(input.ClientSecret));
-        getActionInvocation().setInput("AccessToken", b64.getString(input.AccessToken));
-        getActionInvocation().setInput("RefreshToken", b64.getString(input.RefreshToken));
-        getActionInvocation().setInput("AccessExpiry", new UnsignedIntegerFourBytes(input.AccessExpiry));
-        getActionInvocation().setInput("UserName", input.UserName);
+		
+        if (input.ServiceId != null) {
+	        getActionInvocation().setInput("ServiceId", input.ServiceId);
+		} else {
+    	    getActionInvocation().setInput("ServiceId", null);
+		}
+        if (input.ClientId != null) {
+    	    getActionInvocation().setInput("ClientId", b64.getString(input.ClientId));
+		} else {
+    	    getActionInvocation().setInput("ClientId", null);
+		}
+        if (input.ClientSecret != null) {
+    	    getActionInvocation().setInput("ClientSecret", b64.getString(input.ClientSecret));
+		} else {
+    	    getActionInvocation().setInput("ClientSecret", null);
+		}
+        if (input.AccessToken != null) {
+    	    getActionInvocation().setInput("AccessToken", b64.getString(input.AccessToken));
+		} else {
+    	    getActionInvocation().setInput("AccessToken", null);
+		}
+        if (input.RefreshToken != null) {
+    	    getActionInvocation().setInput("RefreshToken", b64.getString(input.RefreshToken));
+		} else {
+    	    getActionInvocation().setInput("RefreshToken", null);
+		}
+        if (input.AccessExpiry != null) {
+    	    getActionInvocation().setInput("AccessExpiry", new UnsignedIntegerFourBytes(input.AccessExpiry));
+		} else {
+    	    getActionInvocation().setInput("AccessExpiry", null);
+		}
+        if (input.UserName != null) {
+	        getActionInvocation().setInput("UserName", input.UserName);
+		} else {
+    	    getActionInvocation().setInput("UserName", null);
+		}
     }
 
     public void executeAction()

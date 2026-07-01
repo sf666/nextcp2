@@ -26,7 +26,7 @@ public class GetAutoPlay extends ActionCallback
     public GetAutoPlay(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetAutoPlay"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetAutoPlayOutput executeAction()

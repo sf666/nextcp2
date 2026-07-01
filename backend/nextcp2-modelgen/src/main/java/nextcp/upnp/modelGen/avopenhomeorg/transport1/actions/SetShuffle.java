@@ -26,8 +26,12 @@ public class SetShuffle extends ActionCallback
     public SetShuffle(Service service, SetShuffleInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetShuffle"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Shuffle", input.Shuffle);
+		
+        if (input.Shuffle != null) {
+        	getActionInvocation().setInput("Shuffle", input.Shuffle);
+		} else {
+    	    getActionInvocation().setInput("Shuffle", null);
+		}
     }
 
     public void executeAction()

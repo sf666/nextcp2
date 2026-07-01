@@ -26,7 +26,7 @@ public class GetPublicKey extends ActionCallback
     public GetPublicKey(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetPublicKey"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetPublicKeyOutput executeAction()

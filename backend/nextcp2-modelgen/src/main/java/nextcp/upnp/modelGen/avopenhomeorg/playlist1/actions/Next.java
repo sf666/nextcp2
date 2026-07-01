@@ -26,7 +26,7 @@ public class Next extends ActionCallback
     public Next(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Next"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public void executeAction()

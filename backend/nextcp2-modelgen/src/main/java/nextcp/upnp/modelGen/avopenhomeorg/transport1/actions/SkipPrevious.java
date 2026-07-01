@@ -26,7 +26,7 @@ public class SkipPrevious extends ActionCallback
     public SkipPrevious(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SkipPrevious"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public void executeAction()

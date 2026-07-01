@@ -26,7 +26,7 @@ public class GetPublicDNS extends ActionCallback
     public GetPublicDNS(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetPublicDNS"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetPublicDNSOutput executeAction()

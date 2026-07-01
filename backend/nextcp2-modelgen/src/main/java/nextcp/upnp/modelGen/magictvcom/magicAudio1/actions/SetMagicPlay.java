@@ -26,8 +26,12 @@ public class SetMagicPlay extends ActionCallback
     public SetMagicPlay(Service service, SetMagicPlayInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetMagicPlay"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", input.Value);
+		
+        if (input.Value != null) {
+        	getActionInvocation().setInput("Value", input.Value);
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

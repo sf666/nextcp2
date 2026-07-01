@@ -26,8 +26,12 @@ public class GetPositionInfo extends ActionCallback
     public GetPositionInfo(Service service, GetPositionInfoInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetPositionInfo"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		
+        if (input.InstanceID != null) {
+    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		} else {
+    	    getActionInvocation().setInput("InstanceID", null);
+		}
     }
 
     public GetPositionInfoOutput executeAction()

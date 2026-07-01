@@ -26,9 +26,17 @@ public class SetPlayMode extends ActionCallback
     public SetPlayMode(Service service, SetPlayModeInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetPlayMode"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("NewPlayMode", input.NewPlayMode);
+		
+        if (input.InstanceID != null) {
+    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		} else {
+    	    getActionInvocation().setInput("InstanceID", null);
+		}
+        if (input.NewPlayMode != null) {
+	        getActionInvocation().setInput("NewPlayMode", input.NewPlayMode);
+		} else {
+    	    getActionInvocation().setInput("NewPlayMode", null);
+		}
     }
 
     public void executeAction()

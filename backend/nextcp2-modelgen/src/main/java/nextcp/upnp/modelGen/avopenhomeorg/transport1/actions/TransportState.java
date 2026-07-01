@@ -26,7 +26,7 @@ public class TransportState extends ActionCallback
     public TransportState(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("TransportState"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public TransportStateOutput executeAction()

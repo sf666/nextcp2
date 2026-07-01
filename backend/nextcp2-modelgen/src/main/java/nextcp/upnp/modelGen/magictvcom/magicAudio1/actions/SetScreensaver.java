@@ -26,9 +26,17 @@ public class SetScreensaver extends ActionCallback
     public SetScreensaver(Service service, SetScreensaverInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetScreensaver"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Mode", new UnsignedIntegerFourBytes(input.Mode));
-        getActionInvocation().setInput("Timeout", new UnsignedIntegerFourBytes(input.Timeout));
+		
+        if (input.Mode != null) {
+    	    getActionInvocation().setInput("Mode", new UnsignedIntegerFourBytes(input.Mode));
+		} else {
+    	    getActionInvocation().setInput("Mode", null);
+		}
+        if (input.Timeout != null) {
+    	    getActionInvocation().setInput("Timeout", new UnsignedIntegerFourBytes(input.Timeout));
+		} else {
+    	    getActionInvocation().setInput("Timeout", null);
+		}
     }
 
     public void executeAction()

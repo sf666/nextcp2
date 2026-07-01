@@ -26,8 +26,12 @@ public class SetPlaybackClockSource extends ActionCallback
     public SetPlaybackClockSource(Service service, SetPlaybackClockSourceInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetPlaybackClockSource"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", input.Value);
+		
+        if (input.Value != null) {
+	        getActionInvocation().setInput("Value", input.Value);
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

@@ -26,7 +26,7 @@ public class ModeInfo extends ActionCallback
     public ModeInfo(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("ModeInfo"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public ModeInfoOutput executeAction()

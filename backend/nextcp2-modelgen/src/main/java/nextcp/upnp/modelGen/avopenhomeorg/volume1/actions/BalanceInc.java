@@ -26,7 +26,7 @@ public class BalanceInc extends ActionCallback
     public BalanceInc(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("BalanceInc"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public void executeAction()

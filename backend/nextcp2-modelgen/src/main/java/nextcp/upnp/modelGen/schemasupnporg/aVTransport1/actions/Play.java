@@ -26,9 +26,17 @@ public class Play extends ActionCallback
     public Play(Service service, PlayInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Play"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("Speed", input.Speed);
+		
+        if (input.InstanceID != null) {
+    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		} else {
+    	    getActionInvocation().setInput("InstanceID", null);
+		}
+        if (input.Speed != null) {
+	        getActionInvocation().setInput("Speed", input.Speed);
+		} else {
+    	    getActionInvocation().setInput("Speed", null);
+		}
     }
 
     public void executeAction()

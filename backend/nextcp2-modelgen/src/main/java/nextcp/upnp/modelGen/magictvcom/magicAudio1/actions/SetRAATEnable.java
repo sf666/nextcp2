@@ -26,8 +26,12 @@ public class SetRAATEnable extends ActionCallback
     public SetRAATEnable(Service service, SetRAATEnableInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetRAATEnable"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", input.Value);
+		
+        if (input.Value != null) {
+        	getActionInvocation().setInput("Value", input.Value);
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

@@ -21,10 +21,10 @@ import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSearchCa
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSearchCapabilitiesOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSortCapabilities;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.GetSortCapabilitiesOutput;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.UpdateObject;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.UpdateObjectInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.DestroyObject;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.DestroyObjectInput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.UpdateObject;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.UpdateObjectInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.X_GetFeatureList;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.X_GetFeatureListOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateReference;
@@ -148,16 +148,16 @@ public class ContentDirectoryService
         return res;        
     }
 
-    public void updateObject(UpdateObjectInput inp)
-    {
-        UpdateObject updateObject = new UpdateObject(contentDirectoryService, inp, upnpService.getControlPoint());
-        updateObject.executeAction();
-    }
-
     public void destroyObject(DestroyObjectInput inp)
     {
         DestroyObject destroyObject = new DestroyObject(contentDirectoryService, inp, upnpService.getControlPoint());
         destroyObject.executeAction();
+    }
+
+    public void updateObject(UpdateObjectInput inp)
+    {
+        UpdateObject updateObject = new UpdateObject(contentDirectoryService, inp, upnpService.getControlPoint());
+        updateObject.executeAction();
     }
 
     public X_GetFeatureListOutput x_GetFeatureList()

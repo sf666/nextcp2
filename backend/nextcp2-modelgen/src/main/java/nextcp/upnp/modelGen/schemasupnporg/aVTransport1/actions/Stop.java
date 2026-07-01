@@ -26,8 +26,12 @@ public class Stop extends ActionCallback
     public Stop(Service service, StopInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Stop"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		
+        if (input.InstanceID != null) {
+    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		} else {
+    	    getActionInvocation().setInput("InstanceID", null);
+		}
     }
 
     public void executeAction()

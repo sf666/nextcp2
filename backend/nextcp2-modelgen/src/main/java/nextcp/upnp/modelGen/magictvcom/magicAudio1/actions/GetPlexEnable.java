@@ -26,7 +26,7 @@ public class GetPlexEnable extends ActionCallback
     public GetPlexEnable(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetPlexEnable"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetPlexEnableOutput executeAction()

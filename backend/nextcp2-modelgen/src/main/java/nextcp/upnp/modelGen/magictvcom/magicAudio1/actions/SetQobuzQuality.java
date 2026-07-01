@@ -26,8 +26,12 @@ public class SetQobuzQuality extends ActionCallback
     public SetQobuzQuality(Service service, SetQobuzQualityInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetQobuzQuality"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Quality", input.Quality);
+		
+        if (input.Quality != null) {
+	        getActionInvocation().setInput("Quality", input.Quality);
+		} else {
+    	    getActionInvocation().setInput("Quality", null);
+		}
     }
 
     public void executeAction()

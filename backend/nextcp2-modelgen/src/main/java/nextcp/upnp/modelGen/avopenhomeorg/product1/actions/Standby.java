@@ -26,7 +26,7 @@ public class Standby extends ActionCallback
     public Standby(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Standby"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public StandbyOutput executeAction()

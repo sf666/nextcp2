@@ -26,8 +26,12 @@ public class SetRepeat extends ActionCallback
     public SetRepeat(Service service, SetRepeatInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetRepeat"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", input.Value);
+		
+        if (input.Value != null) {
+        	getActionInvocation().setInput("Value", input.Value);
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

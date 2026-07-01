@@ -26,9 +26,17 @@ public class SeekSecondAbsolute extends ActionCallback
     public SeekSecondAbsolute(Service service, SeekSecondAbsoluteInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SeekSecondAbsolute"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("StreamId", new UnsignedIntegerFourBytes(input.StreamId));
-        getActionInvocation().setInput("SecondAbsolute", new UnsignedIntegerFourBytes(input.SecondAbsolute));
+		
+        if (input.StreamId != null) {
+    	    getActionInvocation().setInput("StreamId", new UnsignedIntegerFourBytes(input.StreamId));
+		} else {
+    	    getActionInvocation().setInput("StreamId", null);
+		}
+        if (input.SecondAbsolute != null) {
+    	    getActionInvocation().setInput("SecondAbsolute", new UnsignedIntegerFourBytes(input.SecondAbsolute));
+		} else {
+    	    getActionInvocation().setInput("SecondAbsolute", null);
+		}
     }
 
     public void executeAction()

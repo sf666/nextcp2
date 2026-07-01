@@ -26,7 +26,7 @@ public class GetInputLabelSupport extends ActionCallback
     public GetInputLabelSupport(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetInputLabelSupport"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetInputLabelSupportOutput executeAction()

@@ -26,7 +26,7 @@ public class GetSpotifyVer extends ActionCallback
     public GetSpotifyVer(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetSpotifyVer"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetSpotifyVerOutput executeAction()

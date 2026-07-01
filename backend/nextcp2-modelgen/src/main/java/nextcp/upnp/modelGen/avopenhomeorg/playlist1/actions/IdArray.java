@@ -26,7 +26,7 @@ public class IdArray extends ActionCallback
     public IdArray(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("IdArray"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public IdArrayOutput executeAction()

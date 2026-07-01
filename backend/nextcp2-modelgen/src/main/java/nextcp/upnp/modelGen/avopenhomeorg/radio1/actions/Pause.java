@@ -26,7 +26,7 @@ public class Pause extends ActionCallback
     public Pause(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Pause"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public void executeAction()

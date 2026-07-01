@@ -26,8 +26,12 @@ public class SetFade extends ActionCallback
     public SetFade(Service service, SetFadeInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetFade"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", new IntegerDatatype(input.Value));
+		
+        if (input.Value != null) {
+	        getActionInvocation().setInput("Value", new IntegerDatatype(input.Value));
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

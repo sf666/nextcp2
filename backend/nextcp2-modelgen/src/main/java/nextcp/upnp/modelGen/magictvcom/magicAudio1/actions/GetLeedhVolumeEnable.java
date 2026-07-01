@@ -26,7 +26,7 @@ public class GetLeedhVolumeEnable extends ActionCallback
     public GetLeedhVolumeEnable(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetLeedhVolumeEnable"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetLeedhVolumeEnableOutput executeAction()

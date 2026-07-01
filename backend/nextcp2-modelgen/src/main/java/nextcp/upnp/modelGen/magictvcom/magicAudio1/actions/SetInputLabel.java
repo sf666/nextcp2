@@ -26,9 +26,17 @@ public class SetInputLabel extends ActionCallback
     public SetInputLabel(Service service, SetInputLabelInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetInputLabel"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Index", new UnsignedIntegerFourBytes(input.Index));
-        getActionInvocation().setInput("Label", input.Label);
+		
+        if (input.Index != null) {
+    	    getActionInvocation().setInput("Index", new UnsignedIntegerFourBytes(input.Index));
+		} else {
+    	    getActionInvocation().setInput("Index", null);
+		}
+        if (input.Label != null) {
+	        getActionInvocation().setInput("Label", input.Label);
+		} else {
+    	    getActionInvocation().setInput("Label", null);
+		}
     }
 
     public void executeAction()

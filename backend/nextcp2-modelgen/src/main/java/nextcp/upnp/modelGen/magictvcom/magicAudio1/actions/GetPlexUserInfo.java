@@ -26,7 +26,7 @@ public class GetPlexUserInfo extends ActionCallback
     public GetPlexUserInfo(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetPlexUserInfo"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetPlexUserInfoOutput executeAction()

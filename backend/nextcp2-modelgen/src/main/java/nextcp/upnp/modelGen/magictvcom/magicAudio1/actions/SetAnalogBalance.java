@@ -26,8 +26,12 @@ public class SetAnalogBalance extends ActionCallback
     public SetAnalogBalance(Service service, SetAnalogBalanceInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetAnalogBalance"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", new IntegerDatatype(input.Value));
+		
+        if (input.Value != null) {
+	        getActionInvocation().setInput("Value", new IntegerDatatype(input.Value));
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

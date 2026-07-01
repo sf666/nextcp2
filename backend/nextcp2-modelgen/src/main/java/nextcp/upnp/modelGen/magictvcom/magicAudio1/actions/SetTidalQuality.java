@@ -26,8 +26,12 @@ public class SetTidalQuality extends ActionCallback
     public SetTidalQuality(Service service, SetTidalQualityInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetTidalQuality"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Quality", input.Quality);
+		
+        if (input.Quality != null) {
+	        getActionInvocation().setInput("Quality", input.Quality);
+		} else {
+    	    getActionInvocation().setInput("Quality", null);
+		}
     }
 
     public void executeAction()

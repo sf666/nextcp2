@@ -26,7 +26,7 @@ public class GetUSBSPDIFMode extends ActionCallback
     public GetUSBSPDIFMode(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetUSBSPDIFMode"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetUSBSPDIFModeOutput executeAction()

@@ -20,6 +20,8 @@ public interface IUmsExtendedServicesServiceEventListener extends ISubscriptionE
     
     public void upnpCdsWriteChange(Boolean value);
     
+    public void playlistLoopChange(Boolean value);
+    
     public void audioUpdateRatingChange(Boolean value);
     
 }

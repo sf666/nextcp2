@@ -26,7 +26,7 @@ public class Manufacturer extends ActionCallback
     public Manufacturer(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Manufacturer"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public ManufacturerOutput executeAction()

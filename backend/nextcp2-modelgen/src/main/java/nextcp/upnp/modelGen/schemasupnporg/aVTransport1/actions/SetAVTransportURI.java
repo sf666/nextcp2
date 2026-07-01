@@ -26,10 +26,22 @@ public class SetAVTransportURI extends ActionCallback
     public SetAVTransportURI(Service service, SetAVTransportURIInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetAVTransportURI"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("CurrentURI", input.CurrentURI);
-        getActionInvocation().setInput("CurrentURIMetaData", input.CurrentURIMetaData);
+		
+        if (input.InstanceID != null) {
+    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		} else {
+    	    getActionInvocation().setInput("InstanceID", null);
+		}
+        if (input.CurrentURI != null) {
+	        getActionInvocation().setInput("CurrentURI", input.CurrentURI);
+		} else {
+    	    getActionInvocation().setInput("CurrentURI", null);
+		}
+        if (input.CurrentURIMetaData != null) {
+	        getActionInvocation().setInput("CurrentURIMetaData", input.CurrentURIMetaData);
+		} else {
+    	    getActionInvocation().setInput("CurrentURIMetaData", null);
+		}
     }
 
     public void executeAction()

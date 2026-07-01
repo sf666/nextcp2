@@ -26,7 +26,7 @@ public class GetInvertPhase extends ActionCallback
     public GetInvertPhase(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetInvertPhase"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetInvertPhaseOutput executeAction()

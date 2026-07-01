@@ -26,8 +26,12 @@ public class SetPublicDNS extends ActionCallback
     public SetPublicDNS(Service service, SetPublicDNSInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetPublicDNS"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", input.Value);
+		
+        if (input.Value != null) {
+        	getActionInvocation().setInput("Value", input.Value);
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

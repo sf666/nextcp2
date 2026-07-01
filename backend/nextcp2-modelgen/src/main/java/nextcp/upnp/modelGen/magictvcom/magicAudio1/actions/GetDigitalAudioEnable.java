@@ -26,7 +26,7 @@ public class GetDigitalAudioEnable extends ActionCallback
     public GetDigitalAudioEnable(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetDigitalAudioEnable"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetDigitalAudioEnableOutput executeAction()

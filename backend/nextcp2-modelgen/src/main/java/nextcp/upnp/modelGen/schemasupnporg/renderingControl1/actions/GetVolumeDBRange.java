@@ -26,9 +26,17 @@ public class GetVolumeDBRange extends ActionCallback
     public GetVolumeDBRange(Service service, GetVolumeDBRangeInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetVolumeDBRange"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("Channel", input.Channel);
+		
+        if (input.InstanceID != null) {
+    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		} else {
+    	    getActionInvocation().setInput("InstanceID", null);
+		}
+        if (input.Channel != null) {
+	        getActionInvocation().setInput("Channel", input.Channel);
+		} else {
+    	    getActionInvocation().setInput("Channel", null);
+		}
     }
 
     public GetVolumeDBRangeOutput executeAction()

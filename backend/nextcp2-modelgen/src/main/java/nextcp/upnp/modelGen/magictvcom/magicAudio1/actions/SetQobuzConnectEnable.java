@@ -26,8 +26,12 @@ public class SetQobuzConnectEnable extends ActionCallback
     public SetQobuzConnectEnable(Service service, SetQobuzConnectEnableInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetQobuzConnectEnable"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", input.Value);
+		
+        if (input.Value != null) {
+        	getActionInvocation().setInput("Value", input.Value);
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

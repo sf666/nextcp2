@@ -26,8 +26,12 @@ public class Pause extends ActionCallback
     public Pause(Service service, PauseInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Pause"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		
+        if (input.InstanceID != null) {
+    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		} else {
+    	    getActionInvocation().setInput("InstanceID", null);
+		}
     }
 
     public void executeAction()

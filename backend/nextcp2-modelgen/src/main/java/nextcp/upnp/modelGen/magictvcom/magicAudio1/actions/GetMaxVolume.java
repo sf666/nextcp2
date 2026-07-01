@@ -26,7 +26,7 @@ public class GetMaxVolume extends ActionCallback
     public GetMaxVolume(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetMaxVolume"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetMaxVolumeOutput executeAction()

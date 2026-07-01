@@ -26,7 +26,7 @@ public class BalanceDec extends ActionCallback
     public BalanceDec(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("BalanceDec"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public void executeAction()

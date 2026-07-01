@@ -26,7 +26,7 @@ public class Attributes extends ActionCallback
     public Attributes(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Attributes"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public AttributesOutput executeAction()

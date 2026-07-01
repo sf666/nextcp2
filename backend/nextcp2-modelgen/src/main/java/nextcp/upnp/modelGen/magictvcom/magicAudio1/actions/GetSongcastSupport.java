@@ -26,7 +26,7 @@ public class GetSongcastSupport extends ActionCallback
     public GetSongcastSupport(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetSongcastSupport"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetSongcastSupportOutput executeAction()

@@ -26,7 +26,7 @@ public class StreamInfo extends ActionCallback
     public StreamInfo(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("StreamInfo"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public StreamInfoOutput executeAction()

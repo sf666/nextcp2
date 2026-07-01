@@ -26,7 +26,7 @@ public class GetKKBOXSupport extends ActionCallback
     public GetKKBOXSupport(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetKKBOXSupport"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetKKBOXSupportOutput executeAction()

@@ -26,7 +26,7 @@ public class StreamId extends ActionCallback
     public StreamId(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("StreamId"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public StreamIdOutput executeAction()

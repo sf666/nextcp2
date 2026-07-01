@@ -26,10 +26,22 @@ public class Insert extends ActionCallback
     public Insert(Service service, InsertInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Insert"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("AfterId", new UnsignedIntegerFourBytes(input.AfterId));
-        getActionInvocation().setInput("Uri", input.Uri);
-        getActionInvocation().setInput("Metadata", input.Metadata);
+		
+        if (input.AfterId != null) {
+    	    getActionInvocation().setInput("AfterId", new UnsignedIntegerFourBytes(input.AfterId));
+		} else {
+    	    getActionInvocation().setInput("AfterId", null);
+		}
+        if (input.Uri != null) {
+	        getActionInvocation().setInput("Uri", input.Uri);
+		} else {
+    	    getActionInvocation().setInput("Uri", null);
+		}
+        if (input.Metadata != null) {
+	        getActionInvocation().setInput("Metadata", input.Metadata);
+		} else {
+    	    getActionInvocation().setInput("Metadata", null);
+		}
     }
 
     public InsertOutput executeAction()

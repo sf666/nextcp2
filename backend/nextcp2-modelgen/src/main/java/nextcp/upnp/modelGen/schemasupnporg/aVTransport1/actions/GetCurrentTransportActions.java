@@ -26,8 +26,12 @@ public class GetCurrentTransportActions extends ActionCallback
     public GetCurrentTransportActions(Service service, GetCurrentTransportActionsInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetCurrentTransportActions"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		
+        if (input.InstanceID != null) {
+    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		} else {
+    	    getActionInvocation().setInput("InstanceID", null);
+		}
     }
 
     public GetCurrentTransportActionsOutput executeAction()

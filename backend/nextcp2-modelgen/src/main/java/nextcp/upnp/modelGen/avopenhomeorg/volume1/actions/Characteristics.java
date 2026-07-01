@@ -26,7 +26,7 @@ public class Characteristics extends ActionCallback
     public Characteristics(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Characteristics"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public CharacteristicsOutput executeAction()

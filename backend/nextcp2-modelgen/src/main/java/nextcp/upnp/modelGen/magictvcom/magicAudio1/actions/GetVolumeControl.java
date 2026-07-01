@@ -26,7 +26,7 @@ public class GetVolumeControl extends ActionCallback
     public GetVolumeControl(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetVolumeControl"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetVolumeControlOutput executeAction()

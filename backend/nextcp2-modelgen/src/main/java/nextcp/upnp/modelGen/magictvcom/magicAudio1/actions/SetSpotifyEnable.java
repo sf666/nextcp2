@@ -26,8 +26,12 @@ public class SetSpotifyEnable extends ActionCallback
     public SetSpotifyEnable(Service service, SetSpotifyEnableInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetSpotifyEnable"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", input.Value);
+		
+        if (input.Value != null) {
+        	getActionInvocation().setInput("Value", input.Value);
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

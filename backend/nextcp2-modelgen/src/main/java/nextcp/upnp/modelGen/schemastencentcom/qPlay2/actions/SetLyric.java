@@ -26,10 +26,22 @@ public class SetLyric extends ActionCallback
     public SetLyric(Service service, SetLyricInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetLyric"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("SongID", input.SongID);
-        getActionInvocation().setInput("LyricType", input.LyricType);
-        getActionInvocation().setInput("Lyric", input.Lyric);
+		
+        if (input.SongID != null) {
+	        getActionInvocation().setInput("SongID", input.SongID);
+		} else {
+    	    getActionInvocation().setInput("SongID", null);
+		}
+        if (input.LyricType != null) {
+	        getActionInvocation().setInput("LyricType", input.LyricType);
+		} else {
+    	    getActionInvocation().setInput("LyricType", null);
+		}
+        if (input.Lyric != null) {
+	        getActionInvocation().setInput("Lyric", input.Lyric);
+		} else {
+    	    getActionInvocation().setInput("Lyric", null);
+		}
     }
 
     public void executeAction()

@@ -26,7 +26,7 @@ public class GetTuneInDetails extends ActionCallback
     public GetTuneInDetails(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetTuneInDetails"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetTuneInDetailsOutput executeAction()

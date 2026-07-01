@@ -26,7 +26,7 @@ public class GetSongcastMode extends ActionCallback
     public GetSongcastMode(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetSongcastMode"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetSongcastModeOutput executeAction()

@@ -26,7 +26,7 @@ public class GetFPBrightness extends ActionCallback
     public GetFPBrightness(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetFPBrightness"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetFPBrightnessOutput executeAction()

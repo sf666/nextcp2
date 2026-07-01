@@ -26,8 +26,12 @@ public class GetTransportSettings extends ActionCallback
     public GetTransportSettings(Service service, GetTransportSettingsInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetTransportSettings"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		
+        if (input.InstanceID != null) {
+    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		} else {
+    	    getActionInvocation().setInput("InstanceID", null);
+		}
     }
 
     public GetTransportSettingsOutput executeAction()

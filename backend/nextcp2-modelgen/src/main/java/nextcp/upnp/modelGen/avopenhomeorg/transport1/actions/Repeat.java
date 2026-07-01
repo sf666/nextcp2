@@ -26,7 +26,7 @@ public class Repeat extends ActionCallback
     public Repeat(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Repeat"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public RepeatOutput executeAction()

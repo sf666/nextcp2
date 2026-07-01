@@ -26,9 +26,17 @@ public class SetId extends ActionCallback
     public SetId(Service service, SetIdInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetId"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", new UnsignedIntegerFourBytes(input.Value));
-        getActionInvocation().setInput("Uri", input.Uri);
+		
+        if (input.Value != null) {
+    	    getActionInvocation().setInput("Value", new UnsignedIntegerFourBytes(input.Value));
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
+        if (input.Uri != null) {
+	        getActionInvocation().setInput("Uri", input.Uri);
+		} else {
+    	    getActionInvocation().setInput("Uri", null);
+		}
     }
 
     public void executeAction()

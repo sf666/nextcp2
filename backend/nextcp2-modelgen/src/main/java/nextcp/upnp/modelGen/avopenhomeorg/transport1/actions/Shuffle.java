@@ -26,7 +26,7 @@ public class Shuffle extends ActionCallback
     public Shuffle(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Shuffle"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public ShuffleOutput executeAction()

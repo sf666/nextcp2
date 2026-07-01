@@ -26,7 +26,7 @@ public class SourceXmlChangeCount extends ActionCallback
     public SourceXmlChangeCount(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SourceXmlChangeCount"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public SourceXmlChangeCountOutput executeAction()

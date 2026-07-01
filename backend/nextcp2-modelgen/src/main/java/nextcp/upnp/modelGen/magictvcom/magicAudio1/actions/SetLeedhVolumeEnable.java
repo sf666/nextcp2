@@ -26,8 +26,12 @@ public class SetLeedhVolumeEnable extends ActionCallback
     public SetLeedhVolumeEnable(Service service, SetLeedhVolumeEnableInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetLeedhVolumeEnable"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", input.Value);
+		
+        if (input.Value != null) {
+        	getActionInvocation().setInput("Value", input.Value);
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

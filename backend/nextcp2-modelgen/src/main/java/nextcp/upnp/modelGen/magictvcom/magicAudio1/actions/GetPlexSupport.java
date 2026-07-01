@@ -26,7 +26,7 @@ public class GetPlexSupport extends ActionCallback
     public GetPlexSupport(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetPlexSupport"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetPlexSupportOutput executeAction()

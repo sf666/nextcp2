@@ -26,7 +26,7 @@ public class GetMagicPlay extends ActionCallback
     public GetMagicPlay(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetMagicPlay"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetMagicPlayOutput executeAction()

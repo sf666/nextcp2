@@ -26,9 +26,17 @@ public class SetEnabled extends ActionCallback
     public SetEnabled(Service service, SetEnabledInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetEnabled"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Id", input.Id);
-        getActionInvocation().setInput("Enabled", input.Enabled);
+		
+        if (input.Id != null) {
+	        getActionInvocation().setInput("Id", input.Id);
+		} else {
+    	    getActionInvocation().setInput("Id", null);
+		}
+        if (input.Enabled != null) {
+        	getActionInvocation().setInput("Enabled", input.Enabled);
+		} else {
+    	    getActionInvocation().setInput("Enabled", null);
+		}
     }
 
     public void executeAction()

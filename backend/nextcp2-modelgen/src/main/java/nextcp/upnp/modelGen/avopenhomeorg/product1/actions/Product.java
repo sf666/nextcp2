@@ -26,7 +26,7 @@ public class Product extends ActionCallback
     public Product(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Product"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public ProductOutput executeAction()

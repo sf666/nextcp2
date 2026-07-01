@@ -26,8 +26,12 @@ public class EnableServer extends ActionCallback
     public EnableServer(Service service, EnableServerInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("EnableServer"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Enable", input.Enable);
+		
+        if (input.Enable != null) {
+        	getActionInvocation().setInput("Enable", input.Enable);
+		} else {
+    	    getActionInvocation().setInput("Enable", null);
+		}
     }
 
     public void executeAction()

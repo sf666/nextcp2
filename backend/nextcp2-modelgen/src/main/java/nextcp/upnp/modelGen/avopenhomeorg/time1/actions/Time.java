@@ -26,7 +26,7 @@ public class Time extends ActionCallback
     public Time(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Time"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public TimeOutput executeAction()

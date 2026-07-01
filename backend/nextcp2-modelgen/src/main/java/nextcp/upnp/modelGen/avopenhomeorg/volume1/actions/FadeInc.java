@@ -26,7 +26,7 @@ public class FadeInc extends ActionCallback
     public FadeInc(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("FadeInc"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public void executeAction()

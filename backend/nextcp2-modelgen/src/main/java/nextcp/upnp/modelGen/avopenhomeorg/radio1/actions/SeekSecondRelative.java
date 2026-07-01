@@ -26,8 +26,12 @@ public class SeekSecondRelative extends ActionCallback
     public SeekSecondRelative(Service service, SeekSecondRelativeInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SeekSecondRelative"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", new IntegerDatatype(input.Value));
+		
+        if (input.Value != null) {
+	        getActionInvocation().setInput("Value", new IntegerDatatype(input.Value));
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

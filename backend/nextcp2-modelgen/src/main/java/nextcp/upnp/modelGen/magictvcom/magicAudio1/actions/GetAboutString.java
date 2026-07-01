@@ -26,8 +26,12 @@ public class GetAboutString extends ActionCallback
     public GetAboutString(Service service, GetAboutStringInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetAboutString"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Lang", new UnsignedIntegerFourBytes(input.Lang));
+		
+        if (input.Lang != null) {
+    	    getActionInvocation().setInput("Lang", new UnsignedIntegerFourBytes(input.Lang));
+		} else {
+    	    getActionInvocation().setInput("Lang", null);
+		}
     }
 
     public GetAboutStringOutput executeAction()

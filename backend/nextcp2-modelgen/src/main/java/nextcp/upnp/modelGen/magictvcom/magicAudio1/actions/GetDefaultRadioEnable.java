@@ -26,7 +26,7 @@ public class GetDefaultRadioEnable extends ActionCallback
     public GetDefaultRadioEnable(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetDefaultRadioEnable"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetDefaultRadioEnableOutput executeAction()

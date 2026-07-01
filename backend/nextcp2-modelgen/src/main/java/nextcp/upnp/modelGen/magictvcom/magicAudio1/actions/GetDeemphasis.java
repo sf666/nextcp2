@@ -26,7 +26,7 @@ public class GetDeemphasis extends ActionCallback
     public GetDeemphasis(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetDeemphasis"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetDeemphasisOutput executeAction()

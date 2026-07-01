@@ -26,8 +26,12 @@ public class Read extends ActionCallback
     public Read(Service service, ReadInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Read"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Id", new UnsignedIntegerFourBytes(input.Id));
+		
+        if (input.Id != null) {
+    	    getActionInvocation().setInput("Id", new UnsignedIntegerFourBytes(input.Id));
+		} else {
+    	    getActionInvocation().setInput("Id", null);
+		}
     }
 
     public ReadOutput executeAction()

@@ -26,8 +26,12 @@ public class SetDigitalAudioEnable extends ActionCallback
     public SetDigitalAudioEnable(Service service, SetDigitalAudioEnableInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetDigitalAudioEnable"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", input.Value);
+		
+        if (input.Value != null) {
+	        getActionInvocation().setInput("Value", input.Value);
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

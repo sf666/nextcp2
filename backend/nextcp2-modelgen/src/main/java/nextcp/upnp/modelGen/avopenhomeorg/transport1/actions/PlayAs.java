@@ -26,9 +26,17 @@ public class PlayAs extends ActionCallback
     public PlayAs(Service service, PlayAsInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("PlayAs"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Mode", input.Mode);
-        getActionInvocation().setInput("Command", input.Command);
+		
+        if (input.Mode != null) {
+	        getActionInvocation().setInput("Mode", input.Mode);
+		} else {
+    	    getActionInvocation().setInput("Mode", null);
+		}
+        if (input.Command != null) {
+	        getActionInvocation().setInput("Command", input.Command);
+		} else {
+    	    getActionInvocation().setInput("Command", null);
+		}
     }
 
     public void executeAction()

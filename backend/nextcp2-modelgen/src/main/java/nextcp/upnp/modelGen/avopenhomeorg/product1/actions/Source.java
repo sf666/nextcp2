@@ -26,8 +26,12 @@ public class Source extends ActionCallback
     public Source(Service service, SourceInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Source"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Index", new UnsignedIntegerFourBytes(input.Index));
+		
+        if (input.Index != null) {
+    	    getActionInvocation().setInput("Index", new UnsignedIntegerFourBytes(input.Index));
+		} else {
+    	    getActionInvocation().setInput("Index", null);
+		}
     }
 
     public SourceOutput executeAction()

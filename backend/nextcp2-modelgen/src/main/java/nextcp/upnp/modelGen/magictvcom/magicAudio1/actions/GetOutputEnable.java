@@ -26,8 +26,12 @@ public class GetOutputEnable extends ActionCallback
     public GetOutputEnable(Service service, GetOutputEnableInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetOutputEnable"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Port", new UnsignedIntegerFourBytes(input.Port));
+		
+        if (input.Port != null) {
+    	    getActionInvocation().setInput("Port", new UnsignedIntegerFourBytes(input.Port));
+		} else {
+    	    getActionInvocation().setInput("Port", null);
+		}
     }
 
     public GetOutputEnableOutput executeAction()

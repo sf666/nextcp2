@@ -26,7 +26,7 @@ public class GetCustomCode extends ActionCallback
     public GetCustomCode(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetCustomCode"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetCustomCodeOutput executeAction()

@@ -26,7 +26,7 @@ public class Stop extends ActionCallback
     public Stop(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Stop"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public void executeAction()

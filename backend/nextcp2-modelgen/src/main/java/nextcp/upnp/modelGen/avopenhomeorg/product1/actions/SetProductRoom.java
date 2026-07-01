@@ -26,8 +26,12 @@ public class SetProductRoom extends ActionCallback
     public SetProductRoom(Service service, SetProductRoomInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetProductRoom"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Room", input.Room);
+		
+        if (input.Room != null) {
+	        getActionInvocation().setInput("Room", input.Room);
+		} else {
+    	    getActionInvocation().setInput("Room", null);
+		}
     }
 
     public void executeAction()

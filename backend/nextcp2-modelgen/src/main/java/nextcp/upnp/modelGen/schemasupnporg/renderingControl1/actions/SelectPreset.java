@@ -26,9 +26,17 @@ public class SelectPreset extends ActionCallback
     public SelectPreset(Service service, SelectPresetInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SelectPreset"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("PresetName", input.PresetName);
+		
+        if (input.InstanceID != null) {
+    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		} else {
+    	    getActionInvocation().setInput("InstanceID", null);
+		}
+        if (input.PresetName != null) {
+	        getActionInvocation().setInput("PresetName", input.PresetName);
+		} else {
+    	    getActionInvocation().setInput("PresetName", null);
+		}
     }
 
     public void executeAction()

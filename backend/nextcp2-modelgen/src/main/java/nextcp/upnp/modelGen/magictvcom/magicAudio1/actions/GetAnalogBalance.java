@@ -26,7 +26,7 @@ public class GetAnalogBalance extends ActionCallback
     public GetAnalogBalance(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetAnalogBalance"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetAnalogBalanceOutput executeAction()

@@ -26,7 +26,7 @@ public class GetDetailsEx extends ActionCallback
     public GetDetailsEx(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetDetailsEx"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetDetailsExOutput executeAction()

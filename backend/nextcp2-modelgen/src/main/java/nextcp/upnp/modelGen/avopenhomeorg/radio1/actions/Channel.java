@@ -26,7 +26,7 @@ public class Channel extends ActionCallback
     public Channel(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Channel"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public ChannelOutput executeAction()

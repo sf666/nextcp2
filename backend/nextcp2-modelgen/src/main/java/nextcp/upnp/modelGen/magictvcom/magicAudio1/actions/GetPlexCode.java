@@ -26,7 +26,7 @@ public class GetPlexCode extends ActionCallback
     public GetPlexCode(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetPlexCode"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetPlexCodeOutput executeAction()

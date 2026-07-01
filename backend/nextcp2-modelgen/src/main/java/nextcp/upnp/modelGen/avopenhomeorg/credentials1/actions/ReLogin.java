@@ -26,9 +26,17 @@ public class ReLogin extends ActionCallback
     public ReLogin(Service service, ReLoginInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("ReLogin"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Id", input.Id);
-        getActionInvocation().setInput("CurrentToken", input.CurrentToken);
+		
+        if (input.Id != null) {
+	        getActionInvocation().setInput("Id", input.Id);
+		} else {
+    	    getActionInvocation().setInput("Id", null);
+		}
+        if (input.CurrentToken != null) {
+	        getActionInvocation().setInput("CurrentToken", input.CurrentToken);
+		} else {
+    	    getActionInvocation().setInput("CurrentToken", null);
+		}
     }
 
     public ReLoginOutput executeAction()

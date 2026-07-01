@@ -26,8 +26,12 @@ public class SeekIndex extends ActionCallback
     public SeekIndex(Service service, SeekIndexInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SeekIndex"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", new UnsignedIntegerFourBytes(input.Value));
+		
+        if (input.Value != null) {
+    	    getActionInvocation().setInput("Value", new UnsignedIntegerFourBytes(input.Value));
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

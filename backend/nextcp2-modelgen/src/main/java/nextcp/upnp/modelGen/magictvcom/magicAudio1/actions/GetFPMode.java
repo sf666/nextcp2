@@ -26,7 +26,7 @@ public class GetFPMode extends ActionCallback
     public GetFPMode(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetFPMode"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetFPModeOutput executeAction()

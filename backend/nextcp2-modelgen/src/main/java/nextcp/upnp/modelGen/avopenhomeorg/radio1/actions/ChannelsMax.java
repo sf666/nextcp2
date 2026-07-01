@@ -26,7 +26,7 @@ public class ChannelsMax extends ActionCallback
     public ChannelsMax(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("ChannelsMax"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public ChannelsMaxOutput executeAction()

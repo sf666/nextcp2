@@ -26,8 +26,12 @@ public class QPlayAuth extends ActionCallback
     public QPlayAuth(Service service, QPlayAuthInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("QPlayAuth"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Seed", input.Seed);
+		
+        if (input.Seed != null) {
+	        getActionInvocation().setInput("Seed", input.Seed);
+		} else {
+    	    getActionInvocation().setInput("Seed", null);
+		}
     }
 
     public QPlayAuthOutput executeAction()

@@ -26,8 +26,12 @@ public class DSDtoPCMEnable extends ActionCallback
     public DSDtoPCMEnable(Service service, DSDtoPCMEnableInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("DSDtoPCMEnable"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", input.Value);
+		
+        if (input.Value != null) {
+	        getActionInvocation().setInput("Value", input.Value);
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

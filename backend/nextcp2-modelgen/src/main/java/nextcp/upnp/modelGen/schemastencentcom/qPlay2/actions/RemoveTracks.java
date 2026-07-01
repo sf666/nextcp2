@@ -26,10 +26,22 @@ public class RemoveTracks extends ActionCallback
     public RemoveTracks(Service service, RemoveTracksInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("RemoveTracks"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("QueueID", input.QueueID);
-        getActionInvocation().setInput("StartingIndex", input.StartingIndex);
-        getActionInvocation().setInput("NumberOfTracks", input.NumberOfTracks);
+		
+        if (input.QueueID != null) {
+	        getActionInvocation().setInput("QueueID", input.QueueID);
+		} else {
+    	    getActionInvocation().setInput("QueueID", null);
+		}
+        if (input.StartingIndex != null) {
+	        getActionInvocation().setInput("StartingIndex", input.StartingIndex);
+		} else {
+    	    getActionInvocation().setInput("StartingIndex", null);
+		}
+        if (input.NumberOfTracks != null) {
+	        getActionInvocation().setInput("NumberOfTracks", input.NumberOfTracks);
+		} else {
+    	    getActionInvocation().setInput("NumberOfTracks", null);
+		}
     }
 
     public RemoveTracksOutput executeAction()

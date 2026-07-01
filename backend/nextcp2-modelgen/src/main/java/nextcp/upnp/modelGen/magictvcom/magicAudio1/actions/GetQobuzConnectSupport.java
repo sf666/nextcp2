@@ -26,7 +26,7 @@ public class GetQobuzConnectSupport extends ActionCallback
     public GetQobuzConnectSupport(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetQobuzConnectSupport"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetQobuzConnectSupportOutput executeAction()

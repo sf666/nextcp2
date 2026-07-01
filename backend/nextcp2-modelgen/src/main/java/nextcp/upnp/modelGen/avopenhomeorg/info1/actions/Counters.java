@@ -26,7 +26,7 @@ public class Counters extends ActionCallback
     public Counters(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Counters"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public CountersOutput executeAction()

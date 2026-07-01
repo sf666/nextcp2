@@ -26,7 +26,7 @@ public class GetExternalClockSupport extends ActionCallback
     public GetExternalClockSupport(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetExternalClockSupport"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetExternalClockSupportOutput executeAction()

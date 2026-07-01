@@ -26,7 +26,7 @@ public class SourceXml extends ActionCallback
     public SourceXml(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SourceXml"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public SourceXmlOutput executeAction()

@@ -26,7 +26,7 @@ public class SourceIndex extends ActionCallback
     public SourceIndex(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SourceIndex"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public SourceIndexOutput executeAction()

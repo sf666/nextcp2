@@ -26,7 +26,7 @@ public class GetPlaybackClockSource extends ActionCallback
     public GetPlaybackClockSource(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetPlaybackClockSource"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetPlaybackClockSourceOutput executeAction()

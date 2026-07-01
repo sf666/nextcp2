@@ -26,10 +26,22 @@ public class InsertTracks extends ActionCallback
     public InsertTracks(Service service, InsertTracksInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("InsertTracks"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("QueueID", input.QueueID);
-        getActionInvocation().setInput("StartingIndex", input.StartingIndex);
-        getActionInvocation().setInput("TracksMetaData", input.TracksMetaData);
+		
+        if (input.QueueID != null) {
+	        getActionInvocation().setInput("QueueID", input.QueueID);
+		} else {
+    	    getActionInvocation().setInput("QueueID", null);
+		}
+        if (input.StartingIndex != null) {
+	        getActionInvocation().setInput("StartingIndex", input.StartingIndex);
+		} else {
+    	    getActionInvocation().setInput("StartingIndex", null);
+		}
+        if (input.TracksMetaData != null) {
+	        getActionInvocation().setInput("TracksMetaData", input.TracksMetaData);
+		} else {
+    	    getActionInvocation().setInput("TracksMetaData", null);
+		}
     }
 
     public InsertTracksOutput executeAction()

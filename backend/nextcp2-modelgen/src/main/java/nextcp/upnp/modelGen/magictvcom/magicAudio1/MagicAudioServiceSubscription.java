@@ -117,73 +117,20 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     		inputLabelSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
                         break;
-                    case "SpotifyEnable":
-                    	try {
-                    		spotifyEnableChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[spotifyEnable] unexpected value : " + stateVar.getValue());
-                    		spotifyEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
-                    case "NewBitDepth":
-                        newBitDepthChange((String) stateVar.getValue());
-                        break;
                     case "Brightness":
                         brightnessChange((String) stateVar.getValue());
-                        break;
-                    case "Port":
-                        portChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "AppDisplayMessageId":
                         appDisplayMessageIdChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
-                    case "FirmwareDownloadProgress":
-                        firmwareDownloadProgressChange((Integer) stateVar.getValue());
-                        break;
-                    case "DefaultRadioSupport":
-                    	try {
-                    		defaultRadioSupportChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[defaultRadioSupport] unexpected value : " + stateVar.getValue());
-                    		defaultRadioSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
-                    case "BitDepth":
-                        bitDepthChange((String) stateVar.getValue());
-                        break;
-                    case "AboutString":
-                        aboutStringChange((String) stateVar.getValue());
-                        break;
-                    case "ServerEnabled":
-                    	try {
-                    		serverEnabledChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[serverEnabled] unexpected value : " + stateVar.getValue());
-                    		serverEnabledChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
                     case "SpotifyVer":
                         spotifyVerChange((String) stateVar.getValue());
                         break;
-                    case "FormatConversion":
-                        formatConversionChange((String) stateVar.getValue());
-                        break;
-                    case "LangID":
-                        langIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "USBSPDIFMode":
-                    	try {
-                    		uSBSPDIFModeChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[uSBSPDIFMode] unexpected value : " + stateVar.getValue());
-                    		uSBSPDIFModeChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
+                    case "Control4Enable":
+                        control4EnableChange((Integer) stateVar.getValue());
                         break;
                     case "TidalAccessExpiry":
                         tidalAccessExpiryChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "MaxVolume":
-                        maxVolumeChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "InvertPhase":
                     	try {
@@ -193,8 +140,13 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     		invertPhaseChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
                         break;
-                    case "CustomCode":
-                        customCodeChange((String) stateVar.getValue());
+                    case "HDMICECSupport":
+                    	try {
+                    		hDMICECSupportChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[hDMICECSupport] unexpected value : " + stateVar.getValue());
+                    		hDMICECSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "PlexFriendlyName":
                         plexFriendlyNameChange((String) stateVar.getValue());
@@ -207,36 +159,8 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     		qobuzConnectEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
                         break;
-                    case "TidalClientId":
-                        tidalClientIdChange((byte[]) stateVar.getValue());
-                        break;
-                    case "ResamplingMode":
-                        resamplingModeChange((String) stateVar.getValue());
-                        break;
-                    case "PublicKey":
-                        publicKeyChange((String) stateVar.getValue());
-                        break;
                     case "TidalUserName":
                         tidalUserNameChange((String) stateVar.getValue());
-                        break;
-                    case "NewSamplingRate":
-                        newSamplingRateChange((String) stateVar.getValue());
-                        break;
-                    case "OutputDeemphasis":
-                    	try {
-                    		outputDeemphasisChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[outputDeemphasis] unexpected value : " + stateVar.getValue());
-                    		outputDeemphasisChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
-                    case "PlexSupport":
-                    	try {
-                    		plexSupportChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[plexSupport] unexpected value : " + stateVar.getValue());
-                    		plexSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
                         break;
                     case "QobuzQuality":
                         qobuzQualityChange((String) stateVar.getValue());
@@ -249,17 +173,6 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     		magicPlayChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
                         break;
-                    case "LeedhVolumeSupport":
-                    	try {
-                    		leedhVolumeSupportChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[leedhVolumeSupport] unexpected value : " + stateVar.getValue());
-                    		leedhVolumeSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
-                    case "MQASampleRate":
-                        mQASampleRateChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
                     case "AnalogBalance":
                         analogBalanceChange((Integer) stateVar.getValue());
                         break;
@@ -271,11 +184,8 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     		kKBOXSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
                         break;
-                    case "FirmwareCommand":
-                        firmwareCommandChange((String) stateVar.getValue());
-                        break;
-                    case "USFilterDSD":
-                        uSFilterDSDChange((String) stateVar.getValue());
+                    case "LUFS":
+                        lUFSChange((Integer) stateVar.getValue());
                         break;
                     case "OutputBitDepth":
                         outputBitDepthChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
@@ -296,14 +206,6 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     		analogBalanceSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
                         break;
-                    case "PlexEnable":
-                    	try {
-                    		plexEnableChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[plexEnable] unexpected value : " + stateVar.getValue());
-                    		plexEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
                     case "AmazonMusicSupport":
                     	try {
                     		amazonMusicSupportChange((Boolean) stateVar.getValue());
@@ -311,15 +213,6 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     		log.warn("[amazonMusicSupport] unexpected value : " + stateVar.getValue());
                     		amazonMusicSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
-                        break;
-                    case "MagicAudioVer":
-                        magicAudioVerChange((String) stateVar.getValue());
-                        break;
-                    case "VolumeControl":
-                        volumeControlChange((String) stateVar.getValue());
-                        break;
-                    case "RAATVer":
-                        rAATVerChange((String) stateVar.getValue());
                         break;
                     case "OutputInvertPhase":
                     	try {
@@ -348,37 +241,14 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     		publicDNSChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
                         break;
-                    case "PlexCode":
-                        plexCodeChange((String) stateVar.getValue());
-                        break;
-                    case "AppDisplayMessageTag":
-                        appDisplayMessageTagChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "ResamplingTag":
-                        resamplingTagChange((String) stateVar.getValue());
-                        break;
                     case "MQAMode":
                         mQAModeChange((String) stateVar.getValue());
-                        break;
-                    case "NetworkLEDControl":
-                    	try {
-                    		networkLEDControlChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[networkLEDControl] unexpected value : " + stateVar.getValue());
-                    		networkLEDControlChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
                         break;
                     case "ScreensaverTimeout":
                         screensaverTimeoutChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "ExternalClockSupport":
                         externalClockSupportChange((String) stateVar.getValue());
-                        break;
-                    case "PlexUsername":
-                        plexUsernameChange((String) stateVar.getValue());
-                        break;
-                    case "ScreensaverMode":
-                        screensaverModeChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
                         break;
                     case "MQACreatorId":
                         mQACreatorIdChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
@@ -393,9 +263,6 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                         break;
                     case "OutputClockSource":
                         outputClockSourceChange((String) stateVar.getValue());
-                        break;
-                    case "TidalRefreshToken":
-                        tidalRefreshTokenChange((byte[]) stateVar.getValue());
                         break;
                     case "SpotifyNormalization":
                     	try {
@@ -427,31 +294,19 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     		defaultRadioEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
                         break;
-                    case "DSDtoPCM_type":
-                        dSDtoPCM_typeChange((String) stateVar.getValue());
-                        break;
-                    case "TidalAccessToken":
-                        tidalAccessTokenChange((byte[]) stateVar.getValue());
+                    case "Control4Support":
+                    	try {
+                    		control4SupportChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[control4Support] unexpected value : " + stateVar.getValue());
+                    		control4SupportChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "FirmwareResult":
                         firmwareResultChange((String) stateVar.getValue());
                         break;
                     case "MQASupport":
                         mQASupportChange((String) stateVar.getValue());
-                        break;
-                    case "AnalogOutLvl":
-                        analogOutLvlChange((String) stateVar.getValue());
-                        break;
-                    case "SourceName":
-                        sourceNameChange((String) stateVar.getValue());
-                        break;
-                    case "AmazonMusicEnable":
-                    	try {
-                    		amazonMusicEnableChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[amazonMusicEnable] unexpected value : " + stateVar.getValue());
-                    		amazonMusicEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
                         break;
                     case "KKBOXEnable":
                     	try {
@@ -469,30 +324,8 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     		qobuzConnectSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
                         break;
-                    case "TidalConnectEnable":
-                    	try {
-                    		tidalConnectEnableChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[tidalConnectEnable] unexpected value : " + stateVar.getValue());
-                    		tidalConnectEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
-                    case "OutputSampleRate":
-                        outputSampleRateChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "SamplingRate":
-                        samplingRateChange((String) stateVar.getValue());
-                        break;
                     case "MQAProvenance":
                         mQAProvenanceChange((String) stateVar.getValue());
-                        break;
-                    case "SongcastSupport":
-                    	try {
-                    		songcastSupportChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[songcastSupport] unexpected value : " + stateVar.getValue());
-                    		songcastSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
                         break;
                     case "SourceIndex":
                         sourceIndexChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
@@ -500,17 +333,16 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     case "FPMode":
                         fPModeChange((String) stateVar.getValue());
                         break;
-                    case "FileType":
-                        fileTypeChange((String) stateVar.getValue());
-                        break;
-                    case "TuneInUserName":
-                        tuneInUserNameChange((String) stateVar.getValue());
+                    case "LUFSSupport":
+                    	try {
+                    		lUFSSupportChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[lUFSSupport] unexpected value : " + stateVar.getValue());
+                    		lUFSSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
                         break;
                     case "TidalClientSecret":
                         tidalClientSecretChange((byte[]) stateVar.getValue());
-                        break;
-                    case "PlexEmail":
-                        plexEmailChange((String) stateVar.getValue());
                         break;
                     case "VolumeControlSupport":
                     	try {
@@ -536,11 +368,215 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     		tidalConnectSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
                         break;
-                    case "AppDisplayMessageString":
-                        appDisplayMessageStringChange((String) stateVar.getValue());
-                        break;
                     case "TidalQuality":
                         tidalQualityChange((String) stateVar.getValue());
+                        break;
+                    case "MQAAuthenticity":
+                        mQAAuthenticityChange((String) stateVar.getValue());
+                        break;
+                    case "SpotifyEnable":
+                    	try {
+                    		spotifyEnableChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[spotifyEnable] unexpected value : " + stateVar.getValue());
+                    		spotifyEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
+                        break;
+                    case "NewBitDepth":
+                        newBitDepthChange((String) stateVar.getValue());
+                        break;
+                    case "Port":
+                        portChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "FirmwareDownloadProgress":
+                        firmwareDownloadProgressChange((Integer) stateVar.getValue());
+                        break;
+                    case "DefaultRadioSupport":
+                    	try {
+                    		defaultRadioSupportChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[defaultRadioSupport] unexpected value : " + stateVar.getValue());
+                    		defaultRadioSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
+                        break;
+                    case "BitDepth":
+                        bitDepthChange((String) stateVar.getValue());
+                        break;
+                    case "AboutString":
+                        aboutStringChange((String) stateVar.getValue());
+                        break;
+                    case "ServerEnabled":
+                    	try {
+                    		serverEnabledChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[serverEnabled] unexpected value : " + stateVar.getValue());
+                    		serverEnabledChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
+                        break;
+                    case "FormatConversion":
+                        formatConversionChange((String) stateVar.getValue());
+                        break;
+                    case "LangID":
+                        langIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "USBSPDIFMode":
+                    	try {
+                    		uSBSPDIFModeChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[uSBSPDIFMode] unexpected value : " + stateVar.getValue());
+                    		uSBSPDIFModeChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
+                        break;
+                    case "MaxVolume":
+                        maxVolumeChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "CustomCode":
+                        customCodeChange((String) stateVar.getValue());
+                        break;
+                    case "TidalClientId":
+                        tidalClientIdChange((byte[]) stateVar.getValue());
+                        break;
+                    case "ResamplingMode":
+                        resamplingModeChange((String) stateVar.getValue());
+                        break;
+                    case "PublicKey":
+                        publicKeyChange((String) stateVar.getValue());
+                        break;
+                    case "NewSamplingRate":
+                        newSamplingRateChange((String) stateVar.getValue());
+                        break;
+                    case "OutputDeemphasis":
+                    	try {
+                    		outputDeemphasisChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[outputDeemphasis] unexpected value : " + stateVar.getValue());
+                    		outputDeemphasisChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
+                        break;
+                    case "PlexSupport":
+                    	try {
+                    		plexSupportChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[plexSupport] unexpected value : " + stateVar.getValue());
+                    		plexSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
+                        break;
+                    case "LeedhVolumeSupport":
+                    	try {
+                    		leedhVolumeSupportChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[leedhVolumeSupport] unexpected value : " + stateVar.getValue());
+                    		leedhVolumeSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
+                        break;
+                    case "MQASampleRate":
+                        mQASampleRateChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "FirmwareCommand":
+                        firmwareCommandChange((String) stateVar.getValue());
+                        break;
+                    case "USFilterDSD":
+                        uSFilterDSDChange((String) stateVar.getValue());
+                        break;
+                    case "PlexEnable":
+                    	try {
+                    		plexEnableChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[plexEnable] unexpected value : " + stateVar.getValue());
+                    		plexEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
+                        break;
+                    case "MagicAudioVer":
+                        magicAudioVerChange((String) stateVar.getValue());
+                        break;
+                    case "VolumeControl":
+                        volumeControlChange((String) stateVar.getValue());
+                        break;
+                    case "RAATVer":
+                        rAATVerChange((String) stateVar.getValue());
+                        break;
+                    case "PlexCode":
+                        plexCodeChange((String) stateVar.getValue());
+                        break;
+                    case "AppDisplayMessageTag":
+                        appDisplayMessageTagChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "ResamplingTag":
+                        resamplingTagChange((String) stateVar.getValue());
+                        break;
+                    case "NetworkLEDControl":
+                    	try {
+                    		networkLEDControlChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[networkLEDControl] unexpected value : " + stateVar.getValue());
+                    		networkLEDControlChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
+                        break;
+                    case "PlexUsername":
+                        plexUsernameChange((String) stateVar.getValue());
+                        break;
+                    case "ScreensaverMode":
+                        screensaverModeChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "TidalRefreshToken":
+                        tidalRefreshTokenChange((byte[]) stateVar.getValue());
+                        break;
+                    case "DSDtoPCM_type":
+                        dSDtoPCM_typeChange((String) stateVar.getValue());
+                        break;
+                    case "TidalAccessToken":
+                        tidalAccessTokenChange((byte[]) stateVar.getValue());
+                        break;
+                    case "AnalogOutLvl":
+                        analogOutLvlChange((String) stateVar.getValue());
+                        break;
+                    case "SourceName":
+                        sourceNameChange((String) stateVar.getValue());
+                        break;
+                    case "AmazonMusicEnable":
+                    	try {
+                    		amazonMusicEnableChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[amazonMusicEnable] unexpected value : " + stateVar.getValue());
+                    		amazonMusicEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
+                        break;
+                    case "TidalConnectEnable":
+                    	try {
+                    		tidalConnectEnableChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[tidalConnectEnable] unexpected value : " + stateVar.getValue());
+                    		tidalConnectEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
+                        break;
+                    case "OutputSampleRate":
+                        outputSampleRateChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "SamplingRate":
+                        samplingRateChange((String) stateVar.getValue());
+                        break;
+                    case "SongcastSupport":
+                    	try {
+                    		songcastSupportChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[songcastSupport] unexpected value : " + stateVar.getValue());
+                    		songcastSupportChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
+                        break;
+                    case "FileType":
+                        fileTypeChange((String) stateVar.getValue());
+                        break;
+                    case "TuneInUserName":
+                        tuneInUserNameChange((String) stateVar.getValue());
+                        break;
+                    case "PlexEmail":
+                        plexEmailChange((String) stateVar.getValue());
+                        break;
+                    case "HDMICECEnable":
+                        hDMICECEnableChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        break;
+                    case "AppDisplayMessageString":
+                        appDisplayMessageStringChange((String) stateVar.getValue());
                         break;
                     case "LeedhVolumeEnable":
                     	try {
@@ -549,9 +585,6 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
                     		log.warn("[leedhVolumeEnable] unexpected value : " + stateVar.getValue());
                     		leedhVolumeEnableChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
-                        break;
-                    case "MQAAuthenticity":
-                        mQAAuthenticityChange((String) stateVar.getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -581,35 +614,11 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void spotifyEnableChange(Boolean value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.spotifyEnableChange(value);
-        }
-    }    
-
-    private void newBitDepthChange(String value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.newBitDepthChange(value);
-        }
-    }    
-
     private void brightnessChange(String value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.brightnessChange(value);
-        }
-    }    
-
-    private void portChange(Long value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.portChange(value);
         }
     }    
 
@@ -621,46 +630,6 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void firmwareDownloadProgressChange(Integer value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.firmwareDownloadProgressChange(value);
-        }
-    }    
-
-    private void defaultRadioSupportChange(Boolean value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.defaultRadioSupportChange(value);
-        }
-    }    
-
-    private void bitDepthChange(String value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.bitDepthChange(value);
-        }
-    }    
-
-    private void aboutStringChange(String value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.aboutStringChange(value);
-        }
-    }    
-
-    private void serverEnabledChange(Boolean value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.serverEnabledChange(value);
-        }
-    }    
-
     private void spotifyVerChange(String value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
@@ -669,27 +638,11 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void formatConversionChange(String value)
+    private void control4EnableChange(Integer value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
-            listener.formatConversionChange(value);
-        }
-    }    
-
-    private void langIDChange(Long value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.langIDChange(value);
-        }
-    }    
-
-    private void uSBSPDIFModeChange(Boolean value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.uSBSPDIFModeChange(value);
+            listener.control4EnableChange(value);
         }
     }    
 
@@ -701,14 +654,6 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void maxVolumeChange(Long value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.maxVolumeChange(value);
-        }
-    }    
-
     private void invertPhaseChange(Boolean value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
@@ -717,11 +662,11 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void customCodeChange(String value)
+    private void hDMICECSupportChange(Boolean value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
-            listener.customCodeChange(value);
+            listener.hDMICECSupportChange(value);
         }
     }    
 
@@ -741,59 +686,11 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void tidalClientIdChange(byte[] value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.tidalClientIdChange(value);
-        }
-    }    
-
-    private void resamplingModeChange(String value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.resamplingModeChange(value);
-        }
-    }    
-
-    private void publicKeyChange(String value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.publicKeyChange(value);
-        }
-    }    
-
     private void tidalUserNameChange(String value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.tidalUserNameChange(value);
-        }
-    }    
-
-    private void newSamplingRateChange(String value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.newSamplingRateChange(value);
-        }
-    }    
-
-    private void outputDeemphasisChange(Boolean value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.outputDeemphasisChange(value);
-        }
-    }    
-
-    private void plexSupportChange(Boolean value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.plexSupportChange(value);
         }
     }    
 
@@ -813,22 +710,6 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void leedhVolumeSupportChange(Boolean value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.leedhVolumeSupportChange(value);
-        }
-    }    
-
-    private void mQASampleRateChange(Long value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.mQASampleRateChange(value);
-        }
-    }    
-
     private void analogBalanceChange(Integer value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
@@ -845,19 +726,11 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void firmwareCommandChange(String value)
+    private void lUFSChange(Integer value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
-            listener.firmwareCommandChange(value);
-        }
-    }    
-
-    private void uSFilterDSDChange(String value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.uSFilterDSDChange(value);
+            listener.lUFSChange(value);
         }
     }    
 
@@ -885,43 +758,11 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void plexEnableChange(Boolean value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.plexEnableChange(value);
-        }
-    }    
-
     private void amazonMusicSupportChange(Boolean value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.amazonMusicSupportChange(value);
-        }
-    }    
-
-    private void magicAudioVerChange(String value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.magicAudioVerChange(value);
-        }
-    }    
-
-    private void volumeControlChange(String value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.volumeControlChange(value);
-        }
-    }    
-
-    private void rAATVerChange(String value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.rAATVerChange(value);
         }
     }    
 
@@ -957,43 +798,11 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void plexCodeChange(String value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.plexCodeChange(value);
-        }
-    }    
-
-    private void appDisplayMessageTagChange(Long value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.appDisplayMessageTagChange(value);
-        }
-    }    
-
-    private void resamplingTagChange(String value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.resamplingTagChange(value);
-        }
-    }    
-
     private void mQAModeChange(String value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.mQAModeChange(value);
-        }
-    }    
-
-    private void networkLEDControlChange(Boolean value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.networkLEDControlChange(value);
         }
     }    
 
@@ -1010,22 +819,6 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.externalClockSupportChange(value);
-        }
-    }    
-
-    private void plexUsernameChange(String value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.plexUsernameChange(value);
-        }
-    }    
-
-    private void screensaverModeChange(Long value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.screensaverModeChange(value);
         }
     }    
 
@@ -1050,14 +843,6 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.outputClockSourceChange(value);
-        }
-    }    
-
-    private void tidalRefreshTokenChange(byte[] value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.tidalRefreshTokenChange(value);
         }
     }    
 
@@ -1101,19 +886,11 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void dSDtoPCM_typeChange(String value)
+    private void control4SupportChange(Boolean value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
-            listener.dSDtoPCM_typeChange(value);
-        }
-    }    
-
-    private void tidalAccessTokenChange(byte[] value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.tidalAccessTokenChange(value);
+            listener.control4SupportChange(value);
         }
     }    
 
@@ -1133,30 +910,6 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void analogOutLvlChange(String value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.analogOutLvlChange(value);
-        }
-    }    
-
-    private void sourceNameChange(String value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.sourceNameChange(value);
-        }
-    }    
-
-    private void amazonMusicEnableChange(Boolean value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.amazonMusicEnableChange(value);
-        }
-    }    
-
     private void kKBOXEnableChange(Boolean value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
@@ -1173,43 +926,11 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void tidalConnectEnableChange(Boolean value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.tidalConnectEnableChange(value);
-        }
-    }    
-
-    private void outputSampleRateChange(Long value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.outputSampleRateChange(value);
-        }
-    }    
-
-    private void samplingRateChange(String value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.samplingRateChange(value);
-        }
-    }    
-
     private void mQAProvenanceChange(String value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.mQAProvenanceChange(value);
-        }
-    }    
-
-    private void songcastSupportChange(Boolean value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.songcastSupportChange(value);
         }
     }    
 
@@ -1229,19 +950,11 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void fileTypeChange(String value)
+    private void lUFSSupportChange(Boolean value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
-            listener.fileTypeChange(value);
-        }
-    }    
-
-    private void tuneInUserNameChange(String value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.tuneInUserNameChange(value);
+            listener.lUFSSupportChange(value);
         }
     }    
 
@@ -1250,14 +963,6 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.tidalClientSecretChange(value);
-        }
-    }    
-
-    private void plexEmailChange(String value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.plexEmailChange(value);
         }
     }    
 
@@ -1285,14 +990,6 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void appDisplayMessageStringChange(String value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.appDisplayMessageStringChange(value);
-        }
-    }    
-
     private void tidalQualityChange(String value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
@@ -1301,19 +998,403 @@ public class MagicAudioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void leedhVolumeEnableChange(Boolean value)
-    {
-        for (IMagicAudioServiceEventListener listener : eventListener)
-        {
-            listener.leedhVolumeEnableChange(value);
-        }
-    }    
-
     private void mQAAuthenticityChange(String value)
     {
         for (IMagicAudioServiceEventListener listener : eventListener)
         {
             listener.mQAAuthenticityChange(value);
+        }
+    }    
+
+    private void spotifyEnableChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.spotifyEnableChange(value);
+        }
+    }    
+
+    private void newBitDepthChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.newBitDepthChange(value);
+        }
+    }    
+
+    private void portChange(Long value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.portChange(value);
+        }
+    }    
+
+    private void firmwareDownloadProgressChange(Integer value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.firmwareDownloadProgressChange(value);
+        }
+    }    
+
+    private void defaultRadioSupportChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.defaultRadioSupportChange(value);
+        }
+    }    
+
+    private void bitDepthChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.bitDepthChange(value);
+        }
+    }    
+
+    private void aboutStringChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.aboutStringChange(value);
+        }
+    }    
+
+    private void serverEnabledChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.serverEnabledChange(value);
+        }
+    }    
+
+    private void formatConversionChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.formatConversionChange(value);
+        }
+    }    
+
+    private void langIDChange(Long value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.langIDChange(value);
+        }
+    }    
+
+    private void uSBSPDIFModeChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.uSBSPDIFModeChange(value);
+        }
+    }    
+
+    private void maxVolumeChange(Long value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.maxVolumeChange(value);
+        }
+    }    
+
+    private void customCodeChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.customCodeChange(value);
+        }
+    }    
+
+    private void tidalClientIdChange(byte[] value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.tidalClientIdChange(value);
+        }
+    }    
+
+    private void resamplingModeChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.resamplingModeChange(value);
+        }
+    }    
+
+    private void publicKeyChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.publicKeyChange(value);
+        }
+    }    
+
+    private void newSamplingRateChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.newSamplingRateChange(value);
+        }
+    }    
+
+    private void outputDeemphasisChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.outputDeemphasisChange(value);
+        }
+    }    
+
+    private void plexSupportChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.plexSupportChange(value);
+        }
+    }    
+
+    private void leedhVolumeSupportChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.leedhVolumeSupportChange(value);
+        }
+    }    
+
+    private void mQASampleRateChange(Long value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.mQASampleRateChange(value);
+        }
+    }    
+
+    private void firmwareCommandChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.firmwareCommandChange(value);
+        }
+    }    
+
+    private void uSFilterDSDChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.uSFilterDSDChange(value);
+        }
+    }    
+
+    private void plexEnableChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.plexEnableChange(value);
+        }
+    }    
+
+    private void magicAudioVerChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.magicAudioVerChange(value);
+        }
+    }    
+
+    private void volumeControlChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.volumeControlChange(value);
+        }
+    }    
+
+    private void rAATVerChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.rAATVerChange(value);
+        }
+    }    
+
+    private void plexCodeChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.plexCodeChange(value);
+        }
+    }    
+
+    private void appDisplayMessageTagChange(Long value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.appDisplayMessageTagChange(value);
+        }
+    }    
+
+    private void resamplingTagChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.resamplingTagChange(value);
+        }
+    }    
+
+    private void networkLEDControlChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.networkLEDControlChange(value);
+        }
+    }    
+
+    private void plexUsernameChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.plexUsernameChange(value);
+        }
+    }    
+
+    private void screensaverModeChange(Long value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.screensaverModeChange(value);
+        }
+    }    
+
+    private void tidalRefreshTokenChange(byte[] value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.tidalRefreshTokenChange(value);
+        }
+    }    
+
+    private void dSDtoPCM_typeChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.dSDtoPCM_typeChange(value);
+        }
+    }    
+
+    private void tidalAccessTokenChange(byte[] value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.tidalAccessTokenChange(value);
+        }
+    }    
+
+    private void analogOutLvlChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.analogOutLvlChange(value);
+        }
+    }    
+
+    private void sourceNameChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.sourceNameChange(value);
+        }
+    }    
+
+    private void amazonMusicEnableChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.amazonMusicEnableChange(value);
+        }
+    }    
+
+    private void tidalConnectEnableChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.tidalConnectEnableChange(value);
+        }
+    }    
+
+    private void outputSampleRateChange(Long value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.outputSampleRateChange(value);
+        }
+    }    
+
+    private void samplingRateChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.samplingRateChange(value);
+        }
+    }    
+
+    private void songcastSupportChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.songcastSupportChange(value);
+        }
+    }    
+
+    private void fileTypeChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.fileTypeChange(value);
+        }
+    }    
+
+    private void tuneInUserNameChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.tuneInUserNameChange(value);
+        }
+    }    
+
+    private void plexEmailChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.plexEmailChange(value);
+        }
+    }    
+
+    private void hDMICECEnableChange(Long value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.hDMICECEnableChange(value);
+        }
+    }    
+
+    private void appDisplayMessageStringChange(String value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.appDisplayMessageStringChange(value);
+        }
+    }    
+
+    private void leedhVolumeEnableChange(Boolean value)
+    {
+        for (IMagicAudioServiceEventListener listener : eventListener)
+        {
+            listener.leedhVolumeEnableChange(value);
         }
     }    
 }

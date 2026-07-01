@@ -26,7 +26,7 @@ public class SourceCount extends ActionCallback
     public SourceCount(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SourceCount"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public SourceCountOutput executeAction()

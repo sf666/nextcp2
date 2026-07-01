@@ -26,7 +26,7 @@ public class GetResamplingMode extends ActionCallback
     public GetResamplingMode(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetResamplingMode"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetResamplingModeOutput executeAction()

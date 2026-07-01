@@ -26,7 +26,7 @@ public class GetRAATVer extends ActionCallback
     public GetRAATVer(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetRAATVer"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetRAATVerOutput executeAction()

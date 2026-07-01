@@ -26,7 +26,7 @@ public class GetTidalQuality extends ActionCallback
     public GetTidalQuality(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetTidalQuality"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetTidalQualityOutput executeAction()

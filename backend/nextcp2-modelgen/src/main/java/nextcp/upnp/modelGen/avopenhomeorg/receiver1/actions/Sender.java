@@ -26,7 +26,7 @@ public class Sender extends ActionCallback
     public Sender(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Sender"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public SenderOutput executeAction()

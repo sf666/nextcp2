@@ -26,7 +26,7 @@ public class LogoutPlex extends ActionCallback
     public LogoutPlex(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("LogoutPlex"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public void executeAction()

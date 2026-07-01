@@ -26,11 +26,27 @@ public class GetResamplingModeDetails extends ActionCallback
     public GetResamplingModeDetails(Service service, GetResamplingModeDetailsInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetResamplingModeDetails"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("ResamplingTag", input.ResamplingTag);
-        getActionInvocation().setInput("Mode", input.Mode);
-        getActionInvocation().setInput("FileType", input.FileType);
-        getActionInvocation().setInput("SrcSamplingRate", input.SrcSamplingRate);
+		
+        if (input.ResamplingTag != null) {
+	        getActionInvocation().setInput("ResamplingTag", input.ResamplingTag);
+		} else {
+    	    getActionInvocation().setInput("ResamplingTag", null);
+		}
+        if (input.Mode != null) {
+	        getActionInvocation().setInput("Mode", input.Mode);
+		} else {
+    	    getActionInvocation().setInput("Mode", null);
+		}
+        if (input.FileType != null) {
+	        getActionInvocation().setInput("FileType", input.FileType);
+		} else {
+    	    getActionInvocation().setInput("FileType", null);
+		}
+        if (input.SrcSamplingRate != null) {
+	        getActionInvocation().setInput("SrcSamplingRate", input.SrcSamplingRate);
+		} else {
+    	    getActionInvocation().setInput("SrcSamplingRate", null);
+		}
     }
 
     public GetResamplingModeDetailsOutput executeAction()

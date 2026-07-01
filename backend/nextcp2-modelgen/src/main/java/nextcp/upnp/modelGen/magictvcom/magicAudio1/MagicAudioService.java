@@ -85,6 +85,8 @@ import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetOutputEnableOutput
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetOutputEnableInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetCustomCode;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetCustomCodeOutput;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetControl4Enable;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetControl4EnableInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetDeemphasis;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetDeemphasisInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetRAATEnable;
@@ -134,6 +136,8 @@ import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetResamplingModeDeta
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetResamplingModeDetailsInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetOutputEnable;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetOutputEnableInput;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetHDMICECSupport;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetHDMICECSupportOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.DSDtoPCMEnable;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.DSDtoPCMEnableInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetOutputClockSource;
@@ -146,6 +150,8 @@ import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetVolumeControl;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetVolumeControlInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetLeedhVolumeSupport;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetLeedhVolumeSupportOutput;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetHDMICECEnable;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetHDMICECEnableInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetDeemphasis;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetDeemphasisOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetMaxVolume;
@@ -156,18 +162,24 @@ import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetAnalogOutLvl;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetAnalogOutLvlInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.EnableServer;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.EnableServerInput;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetControl4Support;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetControl4SupportOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetExternalClockSupport;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetExternalClockSupportOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetDefaultRadioEnable;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetDefaultRadioEnableOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetQobuzConnectSupport;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetQobuzConnectSupportOutput;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetControl4Enable;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetControl4EnableOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetInputLabelSupport;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetInputLabelSupportOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetQobuzQuality;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetQobuzQualityOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetInputLabel;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetInputLabelInput;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetLUFSSupport;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetLUFSSupportOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetInvertPhase;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetInvertPhaseOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetTidalQuality;
@@ -194,12 +206,16 @@ import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetResamplingMode;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetResamplingModeOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetRAATEnable;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetRAATEnableOutput;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetLUFS;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetLUFSInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetKKBOXSupport;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetKKBOXSupportOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetTuneInDetails;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetTuneInDetailsOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetUSBSPDIFMode;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetUSBSPDIFModeOutput;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetHDMICECEnable;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetHDMICECEnableOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetAboutString;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetAboutStringOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetAboutStringInput;
@@ -212,6 +228,8 @@ import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetAppDisplayMessageO
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetResamplingModeDetails;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetResamplingModeDetailsOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetResamplingModeDetailsInput;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetLUFS;
+import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetLUFSOutput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetDefaultRadioEnable;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.SetDefaultRadioEnableInput;
 import nextcp.upnp.modelGen.magictvcom.magicAudio1.actions.GetMagicAudioVer;
@@ -546,6 +564,12 @@ public class MagicAudioService
         return res;        
     }
 
+    public void setControl4Enable(SetControl4EnableInput inp)
+    {
+        SetControl4Enable setControl4Enable = new SetControl4Enable(magicAudioService, inp, upnpService.getControlPoint());
+        setControl4Enable.executeAction();
+    }
+
     public void setDeemphasis(SetDeemphasisInput inp)
     {
         SetDeemphasis setDeemphasis = new SetDeemphasis(magicAudioService, inp, upnpService.getControlPoint());
@@ -706,6 +730,13 @@ public class MagicAudioService
         setOutputEnable.executeAction();
     }
 
+    public GetHDMICECSupportOutput getHDMICECSupport()
+    {
+        GetHDMICECSupport getHDMICECSupport = new GetHDMICECSupport(magicAudioService,  upnpService.getControlPoint());
+        GetHDMICECSupportOutput res = getHDMICECSupport.executeAction();
+        return res;        
+    }
+
     public void dSDtoPCMEnable(DSDtoPCMEnableInput inp)
     {
         DSDtoPCMEnable dSDtoPCMEnable = new DSDtoPCMEnable(magicAudioService, inp, upnpService.getControlPoint());
@@ -745,6 +776,12 @@ public class MagicAudioService
         return res;        
     }
 
+    public void setHDMICECEnable(SetHDMICECEnableInput inp)
+    {
+        SetHDMICECEnable setHDMICECEnable = new SetHDMICECEnable(magicAudioService, inp, upnpService.getControlPoint());
+        setHDMICECEnable.executeAction();
+    }
+
     public GetDeemphasisOutput getDeemphasis()
     {
         GetDeemphasis getDeemphasis = new GetDeemphasis(magicAudioService,  upnpService.getControlPoint());
@@ -778,6 +815,13 @@ public class MagicAudioService
         enableServer.executeAction();
     }
 
+    public GetControl4SupportOutput getControl4Support()
+    {
+        GetControl4Support getControl4Support = new GetControl4Support(magicAudioService,  upnpService.getControlPoint());
+        GetControl4SupportOutput res = getControl4Support.executeAction();
+        return res;        
+    }
+
     public GetExternalClockSupportOutput getExternalClockSupport()
     {
         GetExternalClockSupport getExternalClockSupport = new GetExternalClockSupport(magicAudioService,  upnpService.getControlPoint());
@@ -799,6 +843,13 @@ public class MagicAudioService
         return res;        
     }
 
+    public GetControl4EnableOutput getControl4Enable()
+    {
+        GetControl4Enable getControl4Enable = new GetControl4Enable(magicAudioService,  upnpService.getControlPoint());
+        GetControl4EnableOutput res = getControl4Enable.executeAction();
+        return res;        
+    }
+
     public GetInputLabelSupportOutput getInputLabelSupport()
     {
         GetInputLabelSupport getInputLabelSupport = new GetInputLabelSupport(magicAudioService,  upnpService.getControlPoint());
@@ -817,6 +868,13 @@ public class MagicAudioService
     {
         SetInputLabel setInputLabel = new SetInputLabel(magicAudioService, inp, upnpService.getControlPoint());
         setInputLabel.executeAction();
+    }
+
+    public GetLUFSSupportOutput getLUFSSupport()
+    {
+        GetLUFSSupport getLUFSSupport = new GetLUFSSupport(magicAudioService,  upnpService.getControlPoint());
+        GetLUFSSupportOutput res = getLUFSSupport.executeAction();
+        return res;        
     }
 
     public GetInvertPhaseOutput getInvertPhase()
@@ -906,6 +964,12 @@ public class MagicAudioService
         return res;        
     }
 
+    public void setLUFS(SetLUFSInput inp)
+    {
+        SetLUFS setLUFS = new SetLUFS(magicAudioService, inp, upnpService.getControlPoint());
+        setLUFS.executeAction();
+    }
+
     public GetKKBOXSupportOutput getKKBOXSupport()
     {
         GetKKBOXSupport getKKBOXSupport = new GetKKBOXSupport(magicAudioService,  upnpService.getControlPoint());
@@ -924,6 +988,13 @@ public class MagicAudioService
     {
         GetUSBSPDIFMode getUSBSPDIFMode = new GetUSBSPDIFMode(magicAudioService,  upnpService.getControlPoint());
         GetUSBSPDIFModeOutput res = getUSBSPDIFMode.executeAction();
+        return res;        
+    }
+
+    public GetHDMICECEnableOutput getHDMICECEnable()
+    {
+        GetHDMICECEnable getHDMICECEnable = new GetHDMICECEnable(magicAudioService,  upnpService.getControlPoint());
+        GetHDMICECEnableOutput res = getHDMICECEnable.executeAction();
         return res;        
     }
 
@@ -957,6 +1028,13 @@ public class MagicAudioService
     {
         GetResamplingModeDetails getResamplingModeDetails = new GetResamplingModeDetails(magicAudioService, inp, upnpService.getControlPoint());
         GetResamplingModeDetailsOutput res = getResamplingModeDetails.executeAction();
+        return res;        
+    }
+
+    public GetLUFSOutput getLUFS()
+    {
+        GetLUFS getLUFS = new GetLUFS(magicAudioService,  upnpService.getControlPoint());
+        GetLUFSOutput res = getLUFS.executeAction();
         return res;        
     }
 

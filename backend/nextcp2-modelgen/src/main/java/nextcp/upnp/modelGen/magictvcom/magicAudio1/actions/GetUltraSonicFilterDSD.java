@@ -26,7 +26,7 @@ public class GetUltraSonicFilterDSD extends ActionCallback
     public GetUltraSonicFilterDSD(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetUltraSonicFilterDSD"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetUltraSonicFilterDSDOutput executeAction()

@@ -26,10 +26,22 @@ public class Seek extends ActionCallback
     public Seek(Service service, SeekInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Seek"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("Unit", input.Unit);
-        getActionInvocation().setInput("Target", input.Target);
+		
+        if (input.InstanceID != null) {
+    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		} else {
+    	    getActionInvocation().setInput("InstanceID", null);
+		}
+        if (input.Unit != null) {
+	        getActionInvocation().setInput("Unit", input.Unit);
+		} else {
+    	    getActionInvocation().setInput("Unit", null);
+		}
+        if (input.Target != null) {
+	        getActionInvocation().setInput("Target", input.Target);
+		} else {
+    	    getActionInvocation().setInput("Target", null);
+		}
     }
 
     public void executeAction()

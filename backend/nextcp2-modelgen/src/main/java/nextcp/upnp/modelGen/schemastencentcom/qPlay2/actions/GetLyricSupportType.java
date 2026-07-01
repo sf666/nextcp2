@@ -26,7 +26,7 @@ public class GetLyricSupportType extends ActionCallback
     public GetLyricSupportType(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetLyricSupportType"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetLyricSupportTypeOutput executeAction()

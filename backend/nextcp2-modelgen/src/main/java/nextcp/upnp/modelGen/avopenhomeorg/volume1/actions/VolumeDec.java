@@ -26,7 +26,7 @@ public class VolumeDec extends ActionCallback
     public VolumeDec(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("VolumeDec"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public void executeAction()

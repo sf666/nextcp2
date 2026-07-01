@@ -26,7 +26,7 @@ public class GetAnalogOutLvl extends ActionCallback
     public GetAnalogOutLvl(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetAnalogOutLvl"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetAnalogOutLvlOutput executeAction()

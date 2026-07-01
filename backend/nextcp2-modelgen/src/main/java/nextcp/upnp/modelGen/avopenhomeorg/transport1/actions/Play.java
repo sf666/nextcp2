@@ -26,7 +26,7 @@ public class Play extends ActionCallback
     public Play(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Play"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public void executeAction()

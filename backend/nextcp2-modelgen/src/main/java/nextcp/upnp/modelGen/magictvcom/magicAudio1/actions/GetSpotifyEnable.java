@@ -26,7 +26,7 @@ public class GetSpotifyEnable extends ActionCallback
     public GetSpotifyEnable(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetSpotifyEnable"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetSpotifyEnableOutput executeAction()

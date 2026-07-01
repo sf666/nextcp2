@@ -26,8 +26,12 @@ public class SetNetworkLED extends ActionCallback
     public SetNetworkLED(Service service, SetNetworkLEDInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetNetworkLED"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", input.Value);
+		
+        if (input.Value != null) {
+        	getActionInvocation().setInput("Value", input.Value);
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

@@ -26,7 +26,7 @@ public class GetTidalConnectEnable extends ActionCallback
     public GetTidalConnectEnable(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetTidalConnectEnable"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetTidalConnectEnableOutput executeAction()

@@ -26,8 +26,12 @@ public class SetBalance extends ActionCallback
     public SetBalance(Service service, SetBalanceInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetBalance"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", new IntegerDatatype(input.Value));
+		
+        if (input.Value != null) {
+	        getActionInvocation().setInput("Value", new IntegerDatatype(input.Value));
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

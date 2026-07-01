@@ -26,7 +26,7 @@ public class GetAmazonMusicSupport extends ActionCallback
     public GetAmazonMusicSupport(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetAmazonMusicSupport"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetAmazonMusicSupportOutput executeAction()

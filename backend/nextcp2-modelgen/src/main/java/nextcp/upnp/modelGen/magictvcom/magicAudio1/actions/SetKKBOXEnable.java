@@ -26,8 +26,12 @@ public class SetKKBOXEnable extends ActionCallback
     public SetKKBOXEnable(Service service, SetKKBOXEnableInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetKKBOXEnable"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", input.Value);
+		
+        if (input.Value != null) {
+        	getActionInvocation().setInput("Value", input.Value);
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

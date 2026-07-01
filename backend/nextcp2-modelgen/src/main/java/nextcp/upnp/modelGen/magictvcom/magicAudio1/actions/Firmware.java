@@ -26,8 +26,12 @@ public class Firmware extends ActionCallback
     public Firmware(Service service, FirmwareInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Firmware"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Command", input.Command);
+		
+        if (input.Command != null) {
+	        getActionInvocation().setInput("Command", input.Command);
+		} else {
+    	    getActionInvocation().setInput("Command", null);
+		}
     }
 
     public FirmwareOutput executeAction()

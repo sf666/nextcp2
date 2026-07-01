@@ -27,10 +27,22 @@ public class Set extends ActionCallback
     public Set(Service service, SetInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Set"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Id", input.Id);
-        getActionInvocation().setInput("UserName", input.UserName);
-        getActionInvocation().setInput("Password", b64.getString(input.Password));
+		
+        if (input.Id != null) {
+	        getActionInvocation().setInput("Id", input.Id);
+		} else {
+    	    getActionInvocation().setInput("Id", null);
+		}
+        if (input.UserName != null) {
+	        getActionInvocation().setInput("UserName", input.UserName);
+		} else {
+    	    getActionInvocation().setInput("UserName", null);
+		}
+        if (input.Password != null) {
+    	    getActionInvocation().setInput("Password", b64.getString(input.Password));
+		} else {
+    	    getActionInvocation().setInput("Password", null);
+		}
     }
 
     public void executeAction()

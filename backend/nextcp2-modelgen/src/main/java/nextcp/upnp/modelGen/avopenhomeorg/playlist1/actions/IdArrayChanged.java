@@ -26,8 +26,12 @@ public class IdArrayChanged extends ActionCallback
     public IdArrayChanged(Service service, IdArrayChangedInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("IdArrayChanged"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Token", new UnsignedIntegerFourBytes(input.Token));
+		
+        if (input.Token != null) {
+    	    getActionInvocation().setInput("Token", new UnsignedIntegerFourBytes(input.Token));
+		} else {
+    	    getActionInvocation().setInput("Token", null);
+		}
     }
 
     public IdArrayChangedOutput executeAction()

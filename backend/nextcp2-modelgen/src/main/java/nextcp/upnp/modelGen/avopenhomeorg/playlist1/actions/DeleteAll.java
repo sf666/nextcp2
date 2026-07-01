@@ -26,7 +26,7 @@ public class DeleteAll extends ActionCallback
     public DeleteAll(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("DeleteAll"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public void executeAction()

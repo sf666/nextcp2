@@ -26,7 +26,7 @@ public class GetIds extends ActionCallback
     public GetIds(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetIds"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetIdsOutput executeAction()

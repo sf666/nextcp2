@@ -26,8 +26,12 @@ public class ClearAppDisplayMessage extends ActionCallback
     public ClearAppDisplayMessage(Service service, ClearAppDisplayMessageInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("ClearAppDisplayMessage"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Tag", new UnsignedIntegerFourBytes(input.Tag));
+		
+        if (input.Tag != null) {
+    	    getActionInvocation().setInput("Tag", new UnsignedIntegerFourBytes(input.Tag));
+		} else {
+    	    getActionInvocation().setInput("Tag", null);
+		}
     }
 
     public void executeAction()

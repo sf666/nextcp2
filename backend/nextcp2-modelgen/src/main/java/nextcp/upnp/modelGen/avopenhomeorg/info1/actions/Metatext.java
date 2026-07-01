@@ -26,7 +26,7 @@ public class Metatext extends ActionCallback
     public Metatext(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Metatext"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public MetatextOutput executeAction()

@@ -26,8 +26,12 @@ public class Next extends ActionCallback
     public Next(Service service, NextInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Next"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		
+        if (input.InstanceID != null) {
+    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		} else {
+    	    getActionInvocation().setInput("InstanceID", null);
+		}
     }
 
     public void executeAction()

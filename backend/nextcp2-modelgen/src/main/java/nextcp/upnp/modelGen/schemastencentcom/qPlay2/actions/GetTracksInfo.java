@@ -26,9 +26,17 @@ public class GetTracksInfo extends ActionCallback
     public GetTracksInfo(Service service, GetTracksInfoInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetTracksInfo"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("StartingIndex", input.StartingIndex);
-        getActionInvocation().setInput("NumberOfTracks", input.NumberOfTracks);
+		
+        if (input.StartingIndex != null) {
+	        getActionInvocation().setInput("StartingIndex", input.StartingIndex);
+		} else {
+    	    getActionInvocation().setInput("StartingIndex", null);
+		}
+        if (input.NumberOfTracks != null) {
+	        getActionInvocation().setInput("NumberOfTracks", input.NumberOfTracks);
+		} else {
+    	    getActionInvocation().setInput("NumberOfTracks", null);
+		}
     }
 
     public GetTracksInfoOutput executeAction()

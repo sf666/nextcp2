@@ -26,10 +26,22 @@ public class SetVolume extends ActionCallback
     public SetVolume(Service service, SetVolumeInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetVolume"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("Channel", input.Channel);
-        getActionInvocation().setInput("DesiredVolume", new UnsignedIntegerTwoBytes(input.DesiredVolume));
+		
+        if (input.InstanceID != null) {
+    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		} else {
+    	    getActionInvocation().setInput("InstanceID", null);
+		}
+        if (input.Channel != null) {
+	        getActionInvocation().setInput("Channel", input.Channel);
+		} else {
+    	    getActionInvocation().setInput("Channel", null);
+		}
+        if (input.DesiredVolume != null) {
+        	getActionInvocation().setInput("DesiredVolume", new UnsignedIntegerTwoBytes(input.DesiredVolume));
+		} else {
+    	    getActionInvocation().setInput("DesiredVolume", null);
+		}
     }
 
     public void executeAction()

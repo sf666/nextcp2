@@ -26,7 +26,7 @@ public class Modes extends ActionCallback
     public Modes(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Modes"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public ModesOutput executeAction()

@@ -26,7 +26,7 @@ public class GetRAATEnable extends ActionCallback
     public GetRAATEnable(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetRAATEnable"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetRAATEnableOutput executeAction()

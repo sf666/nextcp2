@@ -26,7 +26,7 @@ public class Mute extends ActionCallback
     public Mute(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Mute"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public MuteOutput executeAction()

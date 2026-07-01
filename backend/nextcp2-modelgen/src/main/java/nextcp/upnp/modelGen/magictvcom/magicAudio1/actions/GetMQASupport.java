@@ -26,7 +26,7 @@ public class GetMQASupport extends ActionCallback
     public GetMQASupport(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetMQASupport"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetMQASupportOutput executeAction()

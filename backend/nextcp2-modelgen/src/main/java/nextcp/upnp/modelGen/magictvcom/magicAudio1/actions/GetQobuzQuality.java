@@ -26,7 +26,7 @@ public class GetQobuzQuality extends ActionCallback
     public GetQobuzQuality(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetQobuzQuality"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetQobuzQualityOutput executeAction()

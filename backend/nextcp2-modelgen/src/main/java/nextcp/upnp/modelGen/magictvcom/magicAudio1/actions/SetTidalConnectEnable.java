@@ -26,8 +26,12 @@ public class SetTidalConnectEnable extends ActionCallback
     public SetTidalConnectEnable(Service service, SetTidalConnectEnableInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetTidalConnectEnable"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", input.Value);
+		
+        if (input.Value != null) {
+        	getActionInvocation().setInput("Value", input.Value);
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

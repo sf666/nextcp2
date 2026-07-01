@@ -26,8 +26,12 @@ public class SetUltraSonicFilterDSD extends ActionCallback
     public SetUltraSonicFilterDSD(Service service, SetUltraSonicFilterDSDInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetUltraSonicFilterDSD"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", input.Value);
+		
+        if (input.Value != null) {
+	        getActionInvocation().setInput("Value", input.Value);
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

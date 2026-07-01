@@ -26,8 +26,12 @@ public class SetSpotifyNormalization extends ActionCallback
     public SetSpotifyNormalization(Service service, SetSpotifyNormalizationInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetSpotifyNormalization"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", input.Value);
+		
+        if (input.Value != null) {
+        	getActionInvocation().setInput("Value", input.Value);
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

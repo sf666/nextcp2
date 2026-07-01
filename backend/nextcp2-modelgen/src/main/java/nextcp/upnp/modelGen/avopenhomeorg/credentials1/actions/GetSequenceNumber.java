@@ -26,7 +26,7 @@ public class GetSequenceNumber extends ActionCallback
     public GetSequenceNumber(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetSequenceNumber"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetSequenceNumberOutput executeAction()

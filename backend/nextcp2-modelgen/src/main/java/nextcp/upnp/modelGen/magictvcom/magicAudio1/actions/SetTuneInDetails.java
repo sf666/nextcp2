@@ -26,8 +26,12 @@ public class SetTuneInDetails extends ActionCallback
     public SetTuneInDetails(Service service, SetTuneInDetailsInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetTuneInDetails"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("UserName", input.UserName);
+		
+        if (input.UserName != null) {
+	        getActionInvocation().setInput("UserName", input.UserName);
+		} else {
+    	    getActionInvocation().setInput("UserName", null);
+		}
     }
 
     public void executeAction()

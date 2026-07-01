@@ -26,7 +26,7 @@ public class Track extends ActionCallback
     public Track(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Track"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public TrackOutput executeAction()

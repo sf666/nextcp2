@@ -26,7 +26,7 @@ public class Volume extends ActionCallback
     public Volume(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Volume"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public VolumeOutput executeAction()

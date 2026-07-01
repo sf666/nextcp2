@@ -26,7 +26,7 @@ public class GetAppDisplayMessage extends ActionCallback
     public GetAppDisplayMessage(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetAppDisplayMessage"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetAppDisplayMessageOutput executeAction()

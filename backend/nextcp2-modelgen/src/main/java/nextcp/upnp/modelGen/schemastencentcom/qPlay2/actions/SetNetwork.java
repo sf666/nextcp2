@@ -26,11 +26,27 @@ public class SetNetwork extends ActionCallback
     public SetNetwork(Service service, SetNetworkInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetNetwork"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("SSID", input.SSID);
-        getActionInvocation().setInput("Key", input.Key);
-        getActionInvocation().setInput("AuthAlgo", input.AuthAlgo);
-        getActionInvocation().setInput("CipherAlgo", input.CipherAlgo);
+		
+        if (input.SSID != null) {
+	        getActionInvocation().setInput("SSID", input.SSID);
+		} else {
+    	    getActionInvocation().setInput("SSID", null);
+		}
+        if (input.Key != null) {
+	        getActionInvocation().setInput("Key", input.Key);
+		} else {
+    	    getActionInvocation().setInput("Key", null);
+		}
+        if (input.AuthAlgo != null) {
+	        getActionInvocation().setInput("AuthAlgo", input.AuthAlgo);
+		} else {
+    	    getActionInvocation().setInput("AuthAlgo", null);
+		}
+        if (input.CipherAlgo != null) {
+	        getActionInvocation().setInput("CipherAlgo", input.CipherAlgo);
+		} else {
+    	    getActionInvocation().setInput("CipherAlgo", null);
+		}
     }
 
     public void executeAction()

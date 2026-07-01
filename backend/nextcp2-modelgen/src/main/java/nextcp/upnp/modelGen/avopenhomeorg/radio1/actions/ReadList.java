@@ -26,8 +26,12 @@ public class ReadList extends ActionCallback
     public ReadList(Service service, ReadListInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("ReadList"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("IdList", input.IdList);
+		
+        if (input.IdList != null) {
+	        getActionInvocation().setInput("IdList", input.IdList);
+		} else {
+    	    getActionInvocation().setInput("IdList", null);
+		}
     }
 
     public ReadListOutput executeAction()

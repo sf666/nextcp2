@@ -26,7 +26,7 @@ public class GetNetworkLEDControl extends ActionCallback
     public GetNetworkLEDControl(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetNetworkLEDControl"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetNetworkLEDControlOutput executeAction()

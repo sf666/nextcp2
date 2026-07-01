@@ -26,8 +26,12 @@ public class Clear extends ActionCallback
     public Clear(Service service, ClearInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Clear"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Id", input.Id);
+		
+        if (input.Id != null) {
+	        getActionInvocation().setInput("Id", input.Id);
+		} else {
+    	    getActionInvocation().setInput("Id", null);
+		}
     }
 
     public void executeAction()

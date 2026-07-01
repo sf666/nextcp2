@@ -26,9 +26,17 @@ public class GetVolumeDB extends ActionCallback
     public GetVolumeDB(Service service, GetVolumeDBInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetVolumeDB"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("Channel", input.Channel);
+		
+        if (input.InstanceID != null) {
+    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		} else {
+    	    getActionInvocation().setInput("InstanceID", null);
+		}
+        if (input.Channel != null) {
+	        getActionInvocation().setInput("Channel", input.Channel);
+		} else {
+    	    getActionInvocation().setInput("Channel", null);
+		}
     }
 
     public GetVolumeDBOutput executeAction()

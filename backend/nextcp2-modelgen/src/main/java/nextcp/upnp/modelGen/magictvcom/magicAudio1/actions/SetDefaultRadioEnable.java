@@ -26,8 +26,12 @@ public class SetDefaultRadioEnable extends ActionCallback
     public SetDefaultRadioEnable(Service service, SetDefaultRadioEnableInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetDefaultRadioEnable"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", input.Value);
+		
+        if (input.Value != null) {
+        	getActionInvocation().setInput("Value", input.Value);
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

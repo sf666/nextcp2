@@ -26,8 +26,12 @@ public class SetSourceIndexByName extends ActionCallback
     public SetSourceIndexByName(Service service, SetSourceIndexByNameInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetSourceIndexByName"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", input.Value);
+		
+        if (input.Value != null) {
+	        getActionInvocation().setInput("Value", input.Value);
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

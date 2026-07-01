@@ -26,10 +26,22 @@ public class SetMute extends ActionCallback
     public SetMute(Service service, SetMuteInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetMute"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("Channel", input.Channel);
-        getActionInvocation().setInput("DesiredMute", input.DesiredMute);
+		
+        if (input.InstanceID != null) {
+    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		} else {
+    	    getActionInvocation().setInput("InstanceID", null);
+		}
+        if (input.Channel != null) {
+	        getActionInvocation().setInput("Channel", input.Channel);
+		} else {
+    	    getActionInvocation().setInput("Channel", null);
+		}
+        if (input.DesiredMute != null) {
+        	getActionInvocation().setInput("DesiredMute", input.DesiredMute);
+		} else {
+    	    getActionInvocation().setInput("DesiredMute", null);
+		}
     }
 
     public void executeAction()

@@ -26,9 +26,17 @@ public class SetSender extends ActionCallback
     public SetSender(Service service, SetSenderInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetSender"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Uri", input.Uri);
-        getActionInvocation().setInput("Metadata", input.Metadata);
+		
+        if (input.Uri != null) {
+	        getActionInvocation().setInput("Uri", input.Uri);
+		} else {
+    	    getActionInvocation().setInput("Uri", null);
+		}
+        if (input.Metadata != null) {
+	        getActionInvocation().setInput("Metadata", input.Metadata);
+		} else {
+    	    getActionInvocation().setInput("Metadata", null);
+		}
     }
 
     public void executeAction()

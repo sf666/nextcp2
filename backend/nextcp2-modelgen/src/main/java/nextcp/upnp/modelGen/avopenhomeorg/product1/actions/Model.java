@@ -26,7 +26,7 @@ public class Model extends ActionCallback
     public Model(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Model"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public ModelOutput executeAction()

@@ -26,11 +26,27 @@ public class SetTracksInfo extends ActionCallback
     public SetTracksInfo(Service service, SetTracksInfoInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetTracksInfo"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("QueueID", input.QueueID);
-        getActionInvocation().setInput("StartingIndex", input.StartingIndex);
-        getActionInvocation().setInput("NextIndex", input.NextIndex);
-        getActionInvocation().setInput("TracksMetaData", input.TracksMetaData);
+		
+        if (input.QueueID != null) {
+	        getActionInvocation().setInput("QueueID", input.QueueID);
+		} else {
+    	    getActionInvocation().setInput("QueueID", null);
+		}
+        if (input.StartingIndex != null) {
+	        getActionInvocation().setInput("StartingIndex", input.StartingIndex);
+		} else {
+    	    getActionInvocation().setInput("StartingIndex", null);
+		}
+        if (input.NextIndex != null) {
+	        getActionInvocation().setInput("NextIndex", input.NextIndex);
+		} else {
+    	    getActionInvocation().setInput("NextIndex", null);
+		}
+        if (input.TracksMetaData != null) {
+	        getActionInvocation().setInput("TracksMetaData", input.TracksMetaData);
+		} else {
+    	    getActionInvocation().setInput("TracksMetaData", null);
+		}
     }
 
     public SetTracksInfoOutput executeAction()

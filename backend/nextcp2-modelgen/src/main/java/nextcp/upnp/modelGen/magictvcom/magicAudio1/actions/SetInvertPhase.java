@@ -26,8 +26,12 @@ public class SetInvertPhase extends ActionCallback
     public SetInvertPhase(Service service, SetInvertPhaseInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetInvertPhase"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", input.Value);
+		
+        if (input.Value != null) {
+        	getActionInvocation().setInput("Value", input.Value);
+		} else {
+    	    getActionInvocation().setInput("Value", null);
+		}
     }
 
     public void executeAction()

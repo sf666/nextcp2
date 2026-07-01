@@ -26,7 +26,7 @@ public class GetOutputClockSource extends ActionCallback
     public GetOutputClockSource(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetOutputClockSource"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetOutputClockSourceOutput executeAction()
