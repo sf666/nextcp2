@@ -21,7 +21,7 @@ AudioAddictChannelDto:
    descLong: String
    descShort: String
    albumArt: String
-        
+
 GenericResult:
    success: Boolean
    message: String
@@ -358,6 +358,8 @@ MusicItemDto:
    rating: Integer
    musicBrainzId: MusicBrainzId
    discogsId: DiscogsId?
+   audioAddictChannelId: Integer
+   audioAddictNetwork: String
 
    
 MusicBrainzId:

@@ -411,6 +411,25 @@ public class DtoBuilder
                     case "audiotrackid":
                         log.debug("ignoring audiotrackid");
                         break;
+                    case "audioaddictchannelid":
+                        try
+                        {
+                            String channelId = getTextAndCheckForNull(n);
+                            if (channelId != null)
+                            {
+                                itemDto.audioAddictChannelId = Integer.valueOf(channelId);
+                                log.debug("audioaddictchannelid : {}", itemDto.audioAddictChannelId);
+                            }
+                        }
+                        catch (NumberFormatException e)
+                        {
+                            log.warn("cannot parse audioaddictchannelid : {}", getTextAndCheckForNull(n));
+                        }
+                        break;
+                    case "audioaddictnetwork":
+                        itemDto.audioAddictNetwork = getTextAndCheckForNull(n);
+                        log.debug("audioaddictnetwork : {}", itemDto.audioAddictNetwork);
+                        break;
                     case "rating":
                         try
                         {

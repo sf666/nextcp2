@@ -37,12 +37,14 @@ public class MusicItemDto
     public MusicBrainzId musicBrainzId;
     @nextcp.handcoded.Nullable
     public DiscogsId discogsId;
+    public Integer audioAddictChannelId;
+    public String audioAddictNetwork;
 
     public MusicItemDto()
     {
     }
 
-    public MusicItemDto(String mediaServerUDN, String streamingURL, String objectID, String objectClass, String parentId, String refId, MusicItemIdDto songId, String resourceId, String conductor, String composer, String currentTrackMetadata, String creator, String title, String artistName, String numberOfThisDisc, String originalTrackNumber, String album, String date, AudioFormat audioFormat, String albumArtUrl, String genre, Integer rating, MusicBrainzId musicBrainzId, DiscogsId discogsId)
+    public MusicItemDto(String mediaServerUDN, String streamingURL, String objectID, String objectClass, String parentId, String refId, MusicItemIdDto songId, String resourceId, String conductor, String composer, String currentTrackMetadata, String creator, String title, String artistName, String numberOfThisDisc, String originalTrackNumber, String album, String date, AudioFormat audioFormat, String albumArtUrl, String genre, Integer rating, MusicBrainzId musicBrainzId, DiscogsId discogsId, Integer audioAddictChannelId, String audioAddictNetwork)
     {
         this.mediaServerUDN = mediaServerUDN;
         this.streamingURL = streamingURL;
@@ -68,6 +70,8 @@ public class MusicItemDto
         this.rating = rating;
         this.musicBrainzId = musicBrainzId;
         this.discogsId = discogsId;
+        this.audioAddictChannelId = audioAddictChannelId;
+        this.audioAddictNetwork = audioAddictNetwork;
     }
     
     @Override
@@ -99,6 +103,8 @@ public class MusicItemDto
         sb.append("rating=").append(this.rating).append(", ");
         sb.append("musicBrainzId=").append(this.musicBrainzId).append(", ");
         sb.append("discogsId=").append(this.discogsId).append(", ");
+        sb.append("audioAddictChannelId=").append(this.audioAddictChannelId).append(", ");
+        sb.append("audioAddictNetwork=").append(this.audioAddictNetwork).append(", ");
         sb.append("]");
         return sb.toString();
     }

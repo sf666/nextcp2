@@ -84,7 +84,7 @@ public class MediaRendererSseEvents
         ssePublisher.sendObjectAsJson(DEVICE_MEDIARENDERER_TRACK_TIME, event);
         log.debug("listenForPositionInfoStateVariable : {}", event);
     }
-    
+
     //
     // Playlist Events
     //
