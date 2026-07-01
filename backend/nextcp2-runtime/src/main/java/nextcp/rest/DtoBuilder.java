@@ -430,6 +430,21 @@ public class DtoBuilder
                         itemDto.audioAddictNetwork = getTextAndCheckForNull(n);
                         log.debug("audioaddictnetwork : {}", itemDto.audioAddictNetwork);
                         break;
+                    case "audioaddictplaylistid":
+                        try
+                        {
+                            String playlistId = getTextAndCheckForNull(n);
+                            if (playlistId != null)
+                            {
+                                itemDto.audioAddictPlaylistId = Integer.valueOf(playlistId);
+                                log.debug("audioaddictplaylistid : {}", itemDto.audioAddictPlaylistId);
+                            }
+                        }
+                        catch (NumberFormatException e)
+                        {
+                            log.warn("cannot parse audioaddictplaylistid : {}", getTextAndCheckForNull(n));
+                        }
+                        break;
                     case "rating":
                         try
                         {

@@ -360,6 +360,7 @@ MusicItemDto:
    discogsId: DiscogsId?
    audioAddictChannelId: Integer?
    audioAddictNetwork: String?
+   audioAddictPlaylistId: Integer?
 
    
 MusicBrainzId:
