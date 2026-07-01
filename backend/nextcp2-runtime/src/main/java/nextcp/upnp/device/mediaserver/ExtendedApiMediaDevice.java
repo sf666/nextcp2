@@ -73,6 +73,14 @@ public interface ExtendedApiMediaDevice
 	public void updateExtApiConfig(ServerDeviceConfiguration serverDevice);
 	
 	public void setUmsAlbumDirectory(String objectId);
-	
+
 	public String getUmsAlbumDirectory();
+
+	// AudioAddict playlist now-playing
+
+	/**
+	 * @return the track currently playing on the given AudioAddict curated playlist, or {@code null}
+	 * when that playlist is not being streamed by this server right now.
+	 */
+	public AudioAddictPlaylistNowPlaying getPlaylistNowPlaying(int playlistId);
 }

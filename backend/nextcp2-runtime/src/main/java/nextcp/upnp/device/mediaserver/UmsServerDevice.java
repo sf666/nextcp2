@@ -6,6 +6,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.apache.commons.lang3.StringUtils;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.jetty.client.ContentResponse;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.MultiPartRequestContent;
@@ -51,6 +53,8 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.UmsExtendedServi
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.UmsExtendedServicesServiceEventListenerImpl;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.DislikeAlbumInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetAudioArtistDirOutput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetPlaylistNowPlayingInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetPlaylistNowPlayingOutput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedOutput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumInput;
@@ -68,6 +72,8 @@ import nextcp.util.UpnpErrorDescriptionHandler;
 public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMediaDevice {
 
 	private static final Logger log = LoggerFactory.getLogger(UmsServerDevice.class.getName());
+
+	private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 	private HttpClient httpClient = null;
 
 	private UmsExtendedServicesService umsServices = null;
@@ -239,6 +245,24 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		GetAudioArtistDirOutput out = umsServices.getAudioArtistDir();
 		log.debug("current UMS album directory is {}", out.ObjectID);
 		return out.ObjectID;
+	}
+
+	@Override
+	public AudioAddictPlaylistNowPlaying getPlaylistNowPlaying(int playlistId) {
+		GetPlaylistNowPlayingInput inp = new GetPlaylistNowPlayingInput();
+		inp.PlaylistId = (long) playlistId;
+		GetPlaylistNowPlayingOutput out = umsServices.getPlaylistNowPlaying(inp);
+		if (out == null || StringUtils.isBlank(out.NowPlaying)) {
+			return null;
+		}
+		try {
+			JsonNode node = OBJECT_MAPPER.readTree(out.NowPlaying);
+			return new AudioAddictPlaylistNowPlaying(node.path("artist").asText(""), node.path("title").asText(""),
+				node.path("artUrl").asText(""));
+		} catch (Exception e) {
+			log.warn("cannot parse playlist now-playing JSON for playlist {} : {}", playlistId, out.NowPlaying, e);
+			return null;
+		}
 	}
 	
 	@Override
