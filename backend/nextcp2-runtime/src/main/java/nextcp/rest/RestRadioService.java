@@ -19,6 +19,7 @@ import nextcp.dto.MusicItemDto;
 import nextcp.dto.PlayOpenHomeRadioDto;
 import nextcp.dto.PlayRequestDto;
 import nextcp.dto.RadioStation;
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -77,6 +78,9 @@ public class RestRadioService extends BaseRestService
     public void playStream(@RequestBody PlayRequestDto playRequest)
     {
         MediaRendererDevice device = getMediaRendererByUdn(playRequest.mediaRendererDto.udn);
+        // Diagnostic (temporary): capture which PlayAs Modes the renderer advertises on its
+        // OpenHome Transport service, to decide whether to migrate from the legacy Radio service.
+        device.logTransportModesForDiagnostics();
         if (device.hasRadioService() && !device.isRadioPlayUnsupported())
         {
             try
@@ -95,8 +99,11 @@ public class RestRadioService extends BaseRestService
                 // their Radio source (SetChannel -> UPnP error 708 "Unsupported action"). Remember
                 // this per device so we don't retry on every play, and fall back to AVTransport.
                 device.setRadioPlayUnsupported(true);
+                // GenActionException carries the full SOAP fault (incl. the UPnP errorCode /
+                // errorDescription) in its 'description' field, while getMessage() is null. Log the
+                // full fault at WARN so the exact reason for the 708 is not lost.
                 log.warn("OpenHome Radio play failed for {} ({}); using AVTransport for this device from now on",
-                    playRequest.streamUrl, e.getMessage());
+                    playRequest.streamUrl, describeActionError(e));
             }
         }
         log.debug("playing stream via AVTransport: {}", playRequest.streamUrl);
@@ -108,5 +115,20 @@ public class RestRadioService extends BaseRestService
         {
             log.warn("device has neither a working OpenHome radio nor AVTransport - cannot play stream {}", playRequest.streamUrl);
         }
+    }
+
+    /**
+     * Extracts the most informative message from a failed UPnP action. For a
+     * {@link GenActionException} the full SOAP fault body (including the UPnP errorCode /
+     * errorDescription) is carried in its {@code description} field, whereas {@code getMessage()}
+     * is null. Falls back to the exception message / class for other exception types.
+     */
+    private static String describeActionError(Throwable e)
+    {
+        if (e instanceof GenActionException ge && ge.description != null && !ge.description.isBlank())
+        {
+            return ge.description;
+        }
+        return e.getMessage() != null ? e.getMessage() : e.toString();
     }
 }

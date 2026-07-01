@@ -53,6 +53,8 @@ import nextcp.upnp.modelGen.avopenhomeorg.product1.ProductService;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.RadioService;
 import nextcp.upnp.modelGen.avopenhomeorg.time1.TimeService;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.TransportService;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.ModeInfoOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.ModesOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.VolumeService;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.AVTransportService;
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.ConnectionManagerService;
@@ -542,6 +544,40 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     public ITransport getTransportServiceBridge()
     {
         return transportBridge;
+    }
+
+    /**
+     * Diagnostic helper (temporary): logs the PlayAs Modes advertised by the OpenHome Transport
+     * service, if the device has one. This tells us whether a future migration from the legacy
+     * Radio service to Transport.PlayAs is viable on this renderer and which Mode string it would
+     * accept. Logged at WARN so it survives the default log level and nothing is lost.
+     */
+    public void logTransportModesForDiagnostics()
+    {
+        if (!hasOhTransport())
+        {
+            log.warn("[{}] Transport diagnostics: device has NO OpenHome Transport service (only legacy Radio/AVTransport available).", getFriendlyName());
+            return;
+        }
+        try
+        {
+            ModesOutput modes = oh_transportService.modes();
+            log.warn("[{}] Transport diagnostics: advertised PlayAs Modes = '{}'", getFriendlyName(), modes != null ? modes.Modes : "<null>");
+        }
+        catch (Exception e)
+        {
+            log.warn("[{}] Transport diagnostics: querying Transport.Modes failed: {}", getFriendlyName(), e.getMessage(), e);
+        }
+        try
+        {
+            ModeInfoOutput mi = oh_transportService.modeInfo();
+            log.warn("[{}] Transport diagnostics: current mode capabilities canSkipNext={} canSkipPrevious={} canRepeat={} canShuffle={}",
+                getFriendlyName(), mi.CanSkipNext, mi.CanSkipPrevious, mi.CanRepeat, mi.CanShuffle);
+        }
+        catch (Exception e)
+        {
+            log.warn("[{}] Transport diagnostics: querying Transport.ModeInfo failed: {}", getFriendlyName(), e.getMessage(), e);
+        }
     }
 
     public Upnp_AVTransportBridge getAvTransportBridge()
