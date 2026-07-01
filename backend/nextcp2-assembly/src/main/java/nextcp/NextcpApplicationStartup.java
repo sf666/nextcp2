@@ -18,6 +18,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.joran.JoranConfigurator;
 import jakarta.annotation.PostConstruct;
 import nextcp.config.FileConfigPersistence;
 import nextcp.dto.Config;
@@ -180,14 +182,54 @@ public class NextcpApplicationStartup implements IApplicationRestartable
     }
 
     /**
-     * Once the whole context (incl. all auto-configurations) is up, dump the explicitly-set vs.
-     * effective logback level for the relevant logger chain. This pinpoints WHICH node carries an
-     * unexpected DEBUG level: 'explicit' is non-null only on the node where someone called setLevel
-     * (or where the config file declares it), so the deepest node with explicit=DEBUG is the culprit
-     * that overrides the external logback.xml after it was loaded.
+     * Once the whole context (incl. all auto-configurations) is up, re-apply the external logback.xml
+     * so it becomes fully authoritative again.
+     * <p>
+     * Some dependencies/auto-configurations programmatically raise log levels (observed here:
+     * {@code org.springframework.web} was forced to DEBUG) AFTER Spring initially loaded the external
+     * logback.xml. Those programmatic {@code setLevel} calls win over the file. By resetting the
+     * logback context and re-reading the configured file at {@code ApplicationReadyEvent} time, every
+     * such override is wiped and the effective levels match exactly what the file declares.
      */
     @EventListener(ApplicationReadyEvent.class)
-    public void reportEffectiveLogLevelsWhenReady()
+    public void reapplyLogbackConfiguration()
+    {
+        String loggingConfigFile = config.applicationConfig.loggingConfigFile;
+        auditLogLevels("before-reconfigure");
+        if (loggingConfigFile == null || !new File(loggingConfigFile).isFile())
+        {
+            log.warn("Skipping logback re-configuration: file not found ({})", loggingConfigFile);
+            return;
+        }
+        if (!(LoggerFactory.getILoggerFactory() instanceof LoggerContext ctx))
+        {
+            log.warn("Skipping logback re-configuration: active logging system is not logback ({})",
+                    LoggerFactory.getILoggerFactory().getClass().getName());
+            return;
+        }
+        try
+        {
+            JoranConfigurator configurator = new JoranConfigurator();
+            configurator.setContext(ctx);
+            // reset() drops all loggers/levels/appenders; doConfigure() then rebuilds strictly from the
+            // file, so any programmatic level override applied during startup is discarded.
+            ctx.reset();
+            configurator.doConfigure(new File(loggingConfigFile));
+            log.info("Re-applied logback configuration from {} - external file is now authoritative", loggingConfigFile);
+        }
+        catch (Exception e)
+        {
+            log.warn("Failed to re-apply logback configuration from " + loggingConfigFile, e);
+        }
+        auditLogLevels("after-reconfigure");
+    }
+
+    /**
+     * Dump the explicitly-set vs. effective logback level for the relevant logger chain. 'explicit' is
+     * non-null only on the node where someone called setLevel (or where the config file declares it),
+     * so the deepest node with explicit=DEBUG is whatever overrides the external logback.xml.
+     */
+    private void auditLogLevels(String phase)
     {
         String[] loggerNames = {
                 "ROOT",
@@ -215,7 +257,7 @@ public class NextcpApplicationStartup implements IApplicationRestartable
             {
                 explicit = "<not logback: " + slf4jLogger.getClass().getName() + ">";
             }
-            log.info("[log-level-audit] logger='{}' explicit={} effective={}", name, explicit, effective);
+            log.info("[log-level-audit:{}] logger='{}' explicit={} effective={}", phase, name, explicit, effective);
         }
     }
 }
