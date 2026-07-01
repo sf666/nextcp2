@@ -164,5 +164,16 @@ public class NextcpApplicationStartup implements IApplicationRestartable
             log.info("No external 'logging.config' set; using Spring Boot default logging. Configured loggingConfigFile was: {}",
                     config.applicationConfig.loggingConfigFile);
         }
+        // Diagnostic: report the effective level of key loggers as logback sees it at runtime.
+        // If 'org.springframework' reports DEBUG/TRACE here even though the external logback.xml
+        // sets it to warn, something (a Spring 'logging.level.*'/'debug' property, a -D arg, or an
+        // app argument) is overriding the file levels after logback loaded them.
+        Logger springLog = LoggerFactory.getLogger("org.springframework");
+        log.info("Effective log levels -> nextcp.debug={}, org.springframework.debug={}, spring 'debug' property={}, spring 'logging.level.web'={}, spring 'logging.level.org.springframework'={}",
+                log.isDebugEnabled(),
+                springLog.isDebugEnabled(),
+                environment.getProperty("debug"),
+                environment.getProperty("logging.level.web"),
+                environment.getProperty("logging.level.org.springframework"));
     }
 }
