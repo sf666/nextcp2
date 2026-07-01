@@ -168,17 +168,6 @@ public class NextcpApplicationStartup implements IApplicationRestartable
             log.info("No external 'logging.config' set; using Spring Boot default logging. Configured loggingConfigFile was: {}",
                     config.applicationConfig.loggingConfigFile);
         }
-        // Diagnostic: report the effective level of key loggers as logback sees it at runtime.
-        // If 'org.springframework' reports DEBUG/TRACE here even though the external logback.xml
-        // sets it to warn, something (a Spring 'logging.level.*'/'debug' property, a -D arg, or an
-        // app argument) is overriding the file levels after logback loaded them.
-        Logger springLog = LoggerFactory.getLogger("org.springframework");
-        log.info("Effective log levels -> nextcp.debug={}, org.springframework.debug={}, spring 'debug' property={}, spring 'logging.level.web'={}, spring 'logging.level.org.springframework'={}",
-                log.isDebugEnabled(),
-                springLog.isDebugEnabled(),
-                environment.getProperty("debug"),
-                environment.getProperty("logging.level.web"),
-                environment.getProperty("logging.level.org.springframework"));
     }
 
     /**
@@ -195,7 +184,6 @@ public class NextcpApplicationStartup implements IApplicationRestartable
     public void reapplyLogbackConfiguration()
     {
         String loggingConfigFile = config.applicationConfig.loggingConfigFile;
-        auditLogLevels("before-reconfigure");
         if (loggingConfigFile == null || !new File(loggingConfigFile).isFile())
         {
             log.warn("Skipping logback re-configuration: file not found ({})", loggingConfigFile);
@@ -220,44 +208,6 @@ public class NextcpApplicationStartup implements IApplicationRestartable
         catch (Exception e)
         {
             log.warn("Failed to re-apply logback configuration from " + loggingConfigFile, e);
-        }
-        auditLogLevels("after-reconfigure");
-    }
-
-    /**
-     * Dump the explicitly-set vs. effective logback level for the relevant logger chain. 'explicit' is
-     * non-null only on the node where someone called setLevel (or where the config file declares it),
-     * so the deepest node with explicit=DEBUG is whatever overrides the external logback.xml.
-     */
-    private void auditLogLevels(String phase)
-    {
-        String[] loggerNames = {
-                "ROOT",
-                "org.springframework",
-                "org.springframework.web",
-                "org.springframework.web.servlet",
-                "org.springframework.web.servlet.DispatcherServlet",
-                "org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor"
-        };
-        for (String name : loggerNames)
-        {
-            Logger slf4jLogger = LoggerFactory.getLogger(name);
-            String explicit = "n/a";
-            String effective = "n/a";
-            // Read logback's explicit (getLevel) and effective level via reflection so this stays
-            // compile-safe even though logback is only a transitive dependency here.
-            try
-            {
-                Object levelObj = slf4jLogger.getClass().getMethod("getLevel").invoke(slf4jLogger);
-                explicit = String.valueOf(levelObj);
-                Object effObj = slf4jLogger.getClass().getMethod("getEffectiveLevel").invoke(slf4jLogger);
-                effective = String.valueOf(effObj);
-            }
-            catch (Exception ex)
-            {
-                explicit = "<not logback: " + slf4jLogger.getClass().getName() + ">";
-            }
-            log.info("[log-level-audit:{}] logger='{}' explicit={} effective={}", phase, name, explicit, effective);
         }
     }
 }
