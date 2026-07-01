@@ -358,8 +358,8 @@ MusicItemDto:
    rating: Integer
    musicBrainzId: MusicBrainzId
    discogsId: DiscogsId?
-   audioAddictChannelId: Integer
-   audioAddictNetwork: String
+   audioAddictChannelId: Integer?
+   audioAddictNetwork: String?
 
    
 MusicBrainzId:

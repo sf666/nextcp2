@@ -222,7 +222,7 @@ export class DtoGeneratorService {
       discogsId: this.emptyDiscogsId(),
       songId: this.emptySongId(),
       composer: '',
-      conductor: ''
+      conductor: '',
     }
   }
 

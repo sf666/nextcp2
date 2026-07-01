@@ -37,7 +37,9 @@ public class MusicItemDto
     public MusicBrainzId musicBrainzId;
     @nextcp.handcoded.Nullable
     public DiscogsId discogsId;
+    @nextcp.handcoded.Nullable
     public Integer audioAddictChannelId;
+    @nextcp.handcoded.Nullable
     public String audioAddictNetwork;
 
     public MusicItemDto()
