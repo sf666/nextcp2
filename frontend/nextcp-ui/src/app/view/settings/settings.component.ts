@@ -31,6 +31,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AlertComponent } from 'src/app/comp/alert/alert.component';
+import { AppVisibilityService } from 'src/app/service/app-visibility/app-visibility-service.service';
 
 interface SettingsFormModel {
   spotifyCode: string;
@@ -70,6 +71,7 @@ export class SettingsComponent implements OnInit {
   systemService = inject(SystemService);
   myMusicService = inject(MyMusicService);
   private layoutService = inject(LayoutService);
+  private appVisibilityService = inject(AppVisibilityService);
   configService = inject(ConfigurationService);
   dtoGeneratorService = inject(DtoGeneratorService);
 
@@ -213,6 +215,14 @@ export class SettingsComponent implements OnInit {
 
   saveGeneralConfig(): void {
     this.configService.saveApplicationConfig();
+  }
+
+  get reloadOnFocusEnabled(): boolean {
+    return this.appVisibilityService.reloadOnFocusEnabled();
+  }
+
+  setReloadOnFocusEnabled(enabled: boolean): void {
+    this.appVisibilityService.setReloadOnFocusEnabled(enabled);
   }
 
   saveAiConfig(): void {

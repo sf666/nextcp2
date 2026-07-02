@@ -13,8 +13,10 @@ import { Router } from '@angular/router';
 export class AppVisibilityService implements OnDestroy {
   private readonly document = inject(DOCUMENT);
   private readonly router = inject(Router);
+  private static readonly RELOAD_ON_FOCUS_STORAGE_KEY = 'reloadOnFocusEnabled';
 
   readonly isVisible = signal<boolean>(!this.document.hidden);
+  readonly reloadOnFocusEnabled = signal<boolean>(false);
   private initialized = false;
 
   private readonly listener = () => {
@@ -22,10 +24,12 @@ export class AppVisibilityService implements OnDestroy {
   };
 
   constructor() {
+    this.reloadOnFocusEnabled.set(this.readReloadOnFocusFlag());
     this.document.addEventListener('visibilitychange', this.listener);
 
     effect(() => {
       const visible = this.isVisible();
+      const reloadEnabled = this.reloadOnFocusEnabled();
 
       // skip initial effect run to avoid unnecessary route reload on app start
       if (!this.initialized) {
@@ -33,10 +37,38 @@ export class AppVisibilityService implements OnDestroy {
         return;
       }
 
-      if (visible) {        
+      if (visible && reloadEnabled) {
         untracked(() => this.reloadCurrentRoute());
       }
     });
+  }
+
+  setReloadOnFocusEnabled(enabled: boolean): void {
+    this.reloadOnFocusEnabled.set(enabled);
+    this.writeReloadOnFocusFlag(enabled);
+  }
+
+  toggleReloadOnFocus(): void {
+    this.setReloadOnFocusEnabled(!this.reloadOnFocusEnabled());
+  }
+
+  private readReloadOnFocusFlag(): boolean {
+    const storage = this.document.defaultView?.localStorage;
+    if (!storage) {
+      return false;
+    }
+
+    const rawValue = storage.getItem(AppVisibilityService.RELOAD_ON_FOCUS_STORAGE_KEY);
+    return rawValue === 'true';
+  }
+
+  private writeReloadOnFocusFlag(enabled: boolean): void {
+    const storage = this.document.defaultView?.localStorage;
+    if (!storage) {
+      return;
+    }
+
+    storage.setItem(AppVisibilityService.RELOAD_ON_FOCUS_STORAGE_KEY, String(enabled));
   }
 
   private async reloadCurrentRoute(): Promise<void> {

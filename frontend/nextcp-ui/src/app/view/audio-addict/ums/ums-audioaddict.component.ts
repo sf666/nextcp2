@@ -65,6 +65,8 @@ export class UmsAudioaddictComponent {
     const oid = '$DBID$AUDIOADDICT$';
     const udn = this.deviceService.selectedMediaServerDevice().udn;
     if (!udn) {
+      // No selected media server: keep warning hidden and skip backend browse.
+      this.hasAudioAddictService.set(true);
       return;
     }
 
@@ -170,5 +172,9 @@ export class UmsAudioaddictComponent {
 
   scrollToID(): string {
     return '';
+  }
+
+  hasSelectedMediaServer(): boolean {
+    return !!this.deviceService.selectedMediaServerDevice().udn;
   }
 }

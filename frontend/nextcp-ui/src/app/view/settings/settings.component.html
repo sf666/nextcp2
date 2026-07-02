@@ -241,6 +241,25 @@
     </div>
   </section>
 
+  <!-- ============ App Behavior ============ -->
+  <section class="settings-section">
+    <div class="section-head">
+      <span class="section-icon"><mat-icon class="material-symbols-outlined">visibility</mat-icon></span>
+      <span class="section-title">App Behavior</span>
+    </div>
+
+    <div class="config-panel">
+      <div class="relative z-0 w-full mb-2 group flex items-center gap-3 py-2.5">
+        <input type="checkbox" name="FORM_reload_on_focus" id="FORM_reload_on_focus"
+          class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
+          [ngModel]="reloadOnFocusEnabled"
+          (ngModelChange)="setReloadOnFocusEnabled($event)">
+        <label for="FORM_reload_on_focus" class="text-sm text-gray-400">Reload current page when app regains focus</label>
+      </div>
+      <my-alert prefix="Info" text="When disabled, returning to the tab/window no longer reloads the current page."></my-alert>
+    </div>
+  </section>
+
   <!-- ============ General Configuration ============ -->
   <section class="settings-section">
     <div class="section-head">
