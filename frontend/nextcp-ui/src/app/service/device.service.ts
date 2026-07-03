@@ -171,7 +171,13 @@ export class DeviceService {
     }
     const renderer = this.mediaRendererList().filter((e) => e.udn === udn);
     if (renderer?.length > 0) {
-      this.selectedMediaRendererDevice.set(renderer[0]);
+      // Skip re-setting the signal when the same renderer is already selected.
+      // Periodic UPnP re-announcements re-fire the renderer list event; without
+      // this guard every re-announcement would reset the signal to a fresh object
+      // reference and needlessly re-trigger all subscribing views.
+      if (this.selectedMediaRendererDevice().udn !== udn) {
+        this.selectedMediaRendererDevice.set(renderer[0]);
+      }
       return true;
     }
     return false;
@@ -181,10 +187,17 @@ export class DeviceService {
     this.persistenceService.setNewMediaServerDevice(udn);
     const serverDevice = this.mediaServerList().filter((e) => e.udn === udn);
     if (serverDevice?.length > 0) {
-      console.log(
-        'media server was found. Setting to ' + serverDevice[0].friendlyName,
-      );
-      this.selectedMediaServerDevice.set(serverDevice[0]);
+      // Skip re-setting the signal when the same server is already selected.
+      // Periodic UPnP re-announcements re-fire the media-server list event; without
+      // this guard every re-announcement would reset the signal to a fresh object
+      // reference and trigger a full content reload (browseChildren, getServerPlaylists,
+      // getRecentServerPlaylists, ...) in all subscribing views.
+      if (this.selectedMediaServerDevice().udn !== udn) {
+        console.log(
+          'media server was found. Setting to ' + serverDevice[0].friendlyName,
+        );
+        this.selectedMediaServerDevice.set(serverDevice[0]);
+      }
       return true;
     } else {
       console.log('udn not yet available : ' + udn);
