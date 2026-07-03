@@ -5,7 +5,17 @@
         <div class="element-item {{getSelectedClass(device.udn)}}"
           (click)="selectRenderer(device.udn)">
           <div class="renderer-icon-slot">
-            @if (device.img?.length > 0) {
+            @if (device.udn === deviceService.LOCAL_BROWSER_UDN) {
+              <svg class="renderer-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+                aria-hidden="true">
+                <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                <line x1="3" y1="8.5" x2="21" y2="8.5"></line>
+                <circle cx="6" cy="6.25" r="0.6" fill="currentColor" stroke="none"></circle>
+                <circle cx="8.4" cy="6.25" r="0.6" fill="currentColor" stroke="none"></circle>
+                <circle cx="10.8" cy="6.25" r="0.6" fill="currentColor" stroke="none"></circle>
+              </svg>
+            } @else if (device.img?.length > 0) {
               <img class="renderer-icon" src="{{device.img}}" alt="{{device.friendlyName}}">
             } @else {
               <div class="renderer-icon-placeholder"></div>
