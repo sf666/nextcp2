@@ -81,6 +81,10 @@ public class AiServices {
 				log.warn("AI provider temporarily unavailable (model overloaded): {}", rootMessage(ex));
 				throw new ModelUnavailableException("AI model temporarily unavailable", ex);
 			}
+			if (isEndpointUnreachable(ex)) {
+				log.warn("AI endpoint not reachable (check aiBaseUrl / that the AI server is running): {}", rootMessage(ex));
+				throw new ServiceUnreachableException("AI endpoint not reachable", ex);
+			}
 			throw ex;
 		}
 	}
@@ -171,6 +175,38 @@ public class AiServices {
 					|| lower.contains("try again later") || lower.contains("unavailable"));
 			if ((isServerException && messageIndicatesUnavailable) || (message != null && message.contains("503"))) {
 				return true;
+			}
+			current = current.getCause();
+		}
+		return false;
+	}
+
+	/**
+	 * Checks whether the given exception (or any of its causes) indicates that the
+	 * configured AI endpoint could not be reached at all - i.e. a transport-level
+	 * failure rather than an HTTP error response from a running server. Covers a
+	 * refused connection, connect timeout, unknown / unresolvable host and "no route
+	 * to host". Matched by exception type and message so it works regardless of which
+	 * provider SDK (OpenAI-compatible, Google) produced the failure.
+	 */
+	private boolean isEndpointUnreachable(Throwable throwable) {
+		Throwable current = throwable;
+		while (current != null) {
+			if (current instanceof java.net.ConnectException || current instanceof java.net.UnknownHostException
+				|| current instanceof java.net.SocketTimeoutException
+				|| current instanceof java.net.http.HttpConnectTimeoutException
+				|| current instanceof java.nio.channels.UnresolvedAddressException) {
+				return true;
+			}
+			String message = current.getMessage();
+			if (message != null) {
+				String lower = message.toLowerCase();
+				if (lower.contains("connection refused") || lower.contains("failed to connect")
+					|| lower.contains("connect timed out") || lower.contains("connection timed out")
+					|| lower.contains("no route to host") || lower.contains("network is unreachable")
+					|| lower.contains("unknownhost") || lower.contains("unable to resolve host")) {
+					return true;
+				}
 			}
 			current = current.getCause();
 		}

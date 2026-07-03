@@ -21,6 +21,7 @@ import nextcp.ai.AiServices;
 import nextcp.ai.BudgetExceededException;
 import nextcp.ai.ChatHistoryService;
 import nextcp.ai.ModelUnavailableException;
+import nextcp.ai.ServiceUnreachableException;
 import nextcp.ai.mcp.McpLocale;
 import nextcp.dto.ChatHistoryDto;
 import nextcp.dto.SelectedDevicesDto;
@@ -108,6 +109,14 @@ public class RestAiServices {
 				// Report a friendly, retryable message instead of leaking the stack trace.
 				log.warn("AI request failed: model temporarily unavailable. {}", e.getMessage());
 				String friendly = messageSource.getMessage("mcp.ai.modelUnavailable.response", null, mcpLocale.getCurrentLocale());
+				chatHistoryService.failExchange(assistantId, friendly);
+				sendErrorResponse(emitter, friendly, e);
+			} catch (ServiceUnreachableException e) {
+				// The AI endpoint could not be reached at all (wrong base URL or the AI
+				// server is not running). Report a friendly, retryable message instead
+				// of leaking a raw connection stack trace.
+				log.warn("AI request failed: endpoint not reachable. {}", e.getMessage());
+				String friendly = messageSource.getMessage("mcp.ai.unreachable.response", null, mcpLocale.getCurrentLocale());
 				chatHistoryService.failExchange(assistantId, friendly);
 				sendErrorResponse(emitter, friendly, e);
 			} catch (Exception e) {
