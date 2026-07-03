@@ -23,7 +23,7 @@ export class AvailableRendererComponent {
   popupHeight = computed(() => this.rendererCount() * 30 + 120);
 
   filteredMediaRendererList = computed(() => {
-    return this.deviceService.mediaRendererList().filter((pl) => {
+    const discovered = this.deviceService.mediaRendererList().filter((pl) => {
       const rendererConfig = this.configurationService.findRendererConfig(
         pl.udn,
       );
@@ -34,6 +34,8 @@ export class AvailableRendererComponent {
         return true;
       }
     });
+    // Offer the synthetic "This Browser" renderer as the first choice.
+    return [this.deviceService.localBrowserRenderer, ...discovered];
   });
 
   constructor() {

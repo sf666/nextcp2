@@ -46,6 +46,24 @@ export class DeviceService {
     return this.selectedMediaServerDevice().udn.length > 0;
   });
 
+  /**
+   * Synthetic renderer that plays audio in this browser (HTML5 audio) instead of on a real UPnP
+   * device. It is not part of the discovered renderer list; it is offered as an extra choice in the
+   * renderer selector and detected by its sentinel udn.
+   */
+  public readonly LOCAL_BROWSER_UDN = 'nextcp-local-browser';
+  public readonly localBrowserRenderer: MediaRendererDto = {
+    udn: this.LOCAL_BROWSER_UDN,
+    img: '',
+    friendlyName: 'This Browser',
+    services: [],
+    allSources: [],
+    currentSource: { id: 0, Name: '', Type: '', Visible: false },
+  };
+  public isLocalBrowserSelected = computed(
+    () => this.selectedMediaRendererDevice().udn === this.LOCAL_BROWSER_UDN,
+  );
+
   mediaRendererInitiated$: Subject<MediaRendererDto[]> = new Subject();
   mediaServerInitiated$: Subject<MediaServerDto[]> = new Subject();
 
@@ -146,6 +164,11 @@ export class DeviceService {
 
   public setMediaRendererByUdn(udn: string): boolean {
     this.persistenceService.setNewMediaRendererDevice(udn);
+    if (udn === this.LOCAL_BROWSER_UDN) {
+      // The local browser renderer is synthetic and not part of the discovered list.
+      this.selectedMediaRendererDevice.set(this.localBrowserRenderer);
+      return true;
+    }
     const renderer = this.mediaRendererList().filter((e) => e.udn === udn);
     if (renderer?.length > 0) {
       this.selectedMediaRendererDevice.set(renderer[0]);

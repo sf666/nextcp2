@@ -57,15 +57,18 @@ export class RadioService {
   }
 
   private updateRadioStations(rendererDto: MediaRendererDto) {
-    if (rendererDto.udn !== '') {
-      console.log('updating radio stations ...');
-      const uri = '/deviceRadioStations';
-      this.httpService
-        .post<MusicItemDto[]>(this.baseUri, uri, rendererDto)
-        .subscribe((data) => {
-          console.log('radio stations size : ' + data.length);
-          this.radioItems.set(data);
-        });
+    // The synthetic "This Browser" renderer has no UPnP OpenHome Radio source on the backend.
+    if (rendererDto.udn === '' || rendererDto.udn === this.deviceService.LOCAL_BROWSER_UDN) {
+      this.radioItems.set([]);
+      return;
     }
+    console.log('updating radio stations ...');
+    const uri = '/deviceRadioStations';
+    this.httpService
+      .post<MusicItemDto[]>(this.baseUri, uri, rendererDto)
+      .subscribe((data) => {
+        console.log('radio stations size : ' + data.length);
+        this.radioItems.set(data);
+      });
   }
 }

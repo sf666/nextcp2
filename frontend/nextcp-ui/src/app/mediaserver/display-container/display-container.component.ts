@@ -2,6 +2,8 @@ import { ConfigurationService } from './../../service/configuration.service';
 import { ScrollLoadHandler } from './defs.d';
 import { TransportService } from 'src/app/service/transport.service';
 import { PlaylistService } from './../../service/playlist.service';
+import { DeviceService } from './../../service/device.service';
+import { LocalPlayerService } from './../../service/local-player.service';
 import { TrackQualityService } from './../../util/track-quality.service';
 import {
   MusicItemDto,
@@ -52,6 +54,8 @@ import { CdsBrowsePathService } from 'src/app/util/cds-browse-path.service';
 export class DisplayContainerComponent {
   playlistService = inject(PlaylistService);
   transportService = inject(TransportService);
+  private deviceService = inject(DeviceService);
+  private localPlayer = inject(LocalPlayerService);
   private configurationService = inject(ConfigurationService);
   private cdsBrowsePathService = inject(CdsBrowsePathService);
   trackQualityService = inject(TrackQualityService);
@@ -153,10 +157,20 @@ export class DisplayContainerComponent {
   // ==============================================================================
 
   playPlaylist(container: ContainerDto): void {
+    // For the local browser player there is no server-side playlist; queue the currently displayed
+    // tracks and play them in the shown order.
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.playQueue(this.musicTracks, false);
+      return;
+    }
     this.playlistService.addContainerToPlaylistAndPlay(container, false);
   }
 
   shufflePlaylist(container: ContainerDto): void {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.playQueue(this.musicTracks, true);
+      return;
+    }
     this.playlistService.addContainerToPlaylistAndPlay(container, true);
   }
 
@@ -265,6 +279,12 @@ export class DisplayContainerComponent {
   }
 
   playItem(musicItemDto: MusicItemDto): void {
+    // For the local browser player, play the displayed track list starting at the clicked track, so
+    // the rest of the list keeps playing after it.
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.playQueueFrom(this.musicTracks, musicItemDto);
+      return;
+    }
     // Broadcast/streaming routing (Radio source vs Playlist/AVTransport) is handled centrally in
     // TransportService.playResource.
     this.transportService.playResource(musicItemDto);

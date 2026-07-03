@@ -11,6 +11,7 @@ import {
   PlaylistAddContainerRequest,
 } from './dto.d';
 import { DeviceService } from './device.service';
+import { LocalPlayerService } from './local-player.service';
 import { HttpService } from './http.service';
 import { Injectable, OnInit, signal, inject } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
@@ -23,6 +24,7 @@ export class PlaylistService implements OnInit {
   private rendererService = inject(RendererService);
   private genericResultService = inject(GenericResultService);
   private deviceService = inject(DeviceService);
+  private localPlayer = inject(LocalPlayerService);
 
   private baseUri = '/PlaylistService';
 
@@ -73,6 +75,10 @@ export class PlaylistService implements OnInit {
     // subscribe to device changes
     toObservable(this.deviceService.selectedMediaRendererDevice).subscribe(
       (data) => {
+        // The synthetic "This Browser" renderer has no server-side OpenHome playlist.
+        if (data.udn === '' || data.udn === this.deviceService.LOCAL_BROWSER_UDN) {
+          return;
+        }
         this.getPlaylistItems(data.udn);
         this.getPlaylistState(data.udn);
       },
@@ -80,13 +86,10 @@ export class PlaylistService implements OnInit {
   }
 
   public updatePlaylistItems(): void {
-    if (this.deviceService.selectedMediaRendererDevice().udn !== '') {
-      this.getPlaylistItems(
-        this.deviceService.selectedMediaRendererDevice().udn,
-      );
-      this.getPlaylistState(
-        this.deviceService.selectedMediaRendererDevice().udn,
-      );
+    const udn = this.deviceService.selectedMediaRendererDevice().udn;
+    if (udn !== '' && udn !== this.deviceService.LOCAL_BROWSER_UDN) {
+      this.getPlaylistItems(udn);
+      this.getPlaylistState(udn);
     }
   }
 
@@ -95,10 +98,18 @@ export class PlaylistService implements OnInit {
   // ===========================================================================
 
   public toggleShuffle(): void {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.toggleShuffle();
+      return;
+    }
     this.setShuffle(!this.rendererService.isShuffle());
   }
 
   public toggleRepeat(): void {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.toggleRepeat();
+      return;
+    }
     this.setRepeat(!this.rendererService.isRepeat());
   }
 
@@ -327,6 +338,10 @@ export class PlaylistService implements OnInit {
   }
 
   public next(): void {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.next();
+      return;
+    }
     const udn = this.getSelectedMediaRendererUdn();
     if (!udn) {
       return;
@@ -336,6 +351,10 @@ export class PlaylistService implements OnInit {
   }
 
   public previous(): void {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.previous();
+      return;
+    }
     const udn = this.getSelectedMediaRendererUdn();
     if (!udn) {
       return;

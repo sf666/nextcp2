@@ -11,7 +11,7 @@
 @if (showTopHeader()) {
   <div class="flex w-full">
     <display-container-header class="flex grow"
-    [contentDirectoryService]="contentHandler().contentDirectoryService"
+    [contentDirectoryService]="contentHandler()!.contentDirectoryService"
 
     [(listView)]="listView"
     [(quickSearchString)]="displayFilterString"
@@ -67,7 +67,7 @@ Main Content
     <div id="head_browse_result_items_ID" class="flex grow">
       <item-tile class="flex w-full"
         [isListView]="isListView()"
-        [contentDirectoryService]="contentHandler().contentDirectoryService"
+        [contentDirectoryService]="contentHandler()!.contentDirectoryService"
         [quickSearchString]="displayFilterString()"
         [selectedGenres]="selectedGenres()"
         [extendedApi]="extendedApi()"

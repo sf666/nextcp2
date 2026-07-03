@@ -14,6 +14,7 @@ import {
 import { Injectable, signal, inject } from '@angular/core';
 import { DeviceService } from './device.service';
 import { RadioService } from './radio.service';
+import { LocalPlayerService } from './local-player.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +26,7 @@ export class TransportService {
   private dtoGeneratorService = inject(DtoGeneratorService);
   private deviceService = inject(DeviceService);
   private radioService = inject(RadioService);
+  private localPlayer = inject(LocalPlayerService);
 
   upnpAvTransportState = signal<UpnpAvTransportState>(
     this.dtoGeneratorService.emptyUpnpAvTransportState(),
@@ -64,6 +66,10 @@ export class TransportService {
   // ================================================================================
 
   public play(): void {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.resume();
+      return;
+    }
     const uri = '/play';
     this.httpService
       .post(this.baseUri, uri, this.selectedMediaRenderer.udn)
@@ -71,6 +77,10 @@ export class TransportService {
   }
 
   public pause(): void {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.pause();
+      return;
+    }
     const uri = '/pause';
     this.httpService
       .post(this.baseUri, uri, this.selectedMediaRenderer.udn)
@@ -78,6 +88,10 @@ export class TransportService {
   }
 
   public seek(secondsAbsolute: number): void {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.seek(secondsAbsolute);
+      return;
+    }
     const uri = '/seekSecondsAbsolute';
     if (this.deviceService.selectedMediaRendererDevice().udn) {
       let seek: SeekSecondsDto = {
@@ -89,6 +103,13 @@ export class TransportService {
   }
 
   public playResource(musicItemDto: MusicItemDto): void {
+    // When the synthetic "This Browser" renderer is selected, play the stream in the browser itself
+    // (HTML5 audio) instead of driving a UPnP renderer. This also covers broadcast/radio items - the
+    // browser just fetches the stream URL.
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.play(musicItemDto);
+      return;
+    }
     // A continuous radio/broadcast stream must use the renderer's Radio source (OpenHome), where
     // ICY metadata is consumed - not the Playlist/AVTransport path. Detected via the audioBroadcast
     // UPnP class (e.g. AudioAddict) or the size-derived isStreaming flag (e.g. generic .m3u radio).

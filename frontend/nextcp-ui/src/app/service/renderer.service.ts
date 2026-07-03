@@ -6,6 +6,7 @@ import { DeviceDriverState, MediaRendererSwitchPower, MediaRendererSetVolume, Me
 import { SseService } from './sse/sse.service';
 import { Injectable, computed, signal, inject } from '@angular/core';
 import { GenericResultService } from './generic-result.service';
+import { LocalPlayerService } from './local-player.service';
 import { toObservable } from '@angular/core/rxjs-interop';
 
 @Injectable({
@@ -21,12 +22,14 @@ export class RendererService {
   private backgroundImageService = inject(BackgroundImageService);
   private genericResultService = inject(GenericResultService);
   private httpService = inject(HttpService);
+  private localPlayer = inject(LocalPlayerService);
 
   private baseUri = '/DeviceRendererService';
 
-  trackInfo = signal<TrackInfoDto>(this.dtoGeneratorService.emptyTrackInfo());
-  trackTime = signal<TrackTimeDto>(this.dtoGeneratorService.emptyTrackTime());
-  transportServiceStateDto = signal<TransportServiceStateDto>(
+  // Raw state from the selected UPnP renderer (set from SSE / device reads).
+  private trackInfoUpnp = signal<TrackInfoDto>(this.dtoGeneratorService.emptyTrackInfo());
+  private trackTimeUpnp = signal<TrackTimeDto>(this.dtoGeneratorService.emptyTrackTime());
+  private transportStateUpnp = signal<TransportServiceStateDto>(
     this.dtoGeneratorService.generateEmptyTransportServiceStateDto(),
   );
   inputSourceList = signal<InputSourceDto>(
@@ -34,6 +37,49 @@ export class RendererService {
   );
   deviceDriverState = signal<DeviceDriverState>(
     this.dtoGeneratorService.emptyDeviceDriverState(),
+  );
+
+  // Local browser player state, mapped to the same DTO shapes so the footer can render it unchanged.
+  private localTrackInfo = computed<TrackInfoDto>(() => {
+    const info = this.dtoGeneratorService.emptyTrackInfo();
+    const item = this.localPlayer.currentItem();
+    if (item) {
+      info.currentTrack = item;
+    }
+    return info;
+  });
+  private localTrackTime = computed<TrackTimeDto>(() => {
+    const time = this.dtoGeneratorService.emptyTrackTime();
+    const cur = this.localPlayer.currentTime();
+    const dur = this.localPlayer.duration();
+    time.seconds = Math.floor(cur);
+    time.secondsDisp = RendererService.formatTime(cur);
+    time.duration = Math.floor(dur);
+    time.durationDisp = dur > 0 ? RendererService.formatTime(dur) : '00:00';
+    time.percent = dur > 0 ? Math.min(100, Math.round((cur / dur) * 100)) : 0;
+    return time;
+  });
+  private localTransportState = computed<TransportServiceStateDto>(() => {
+    const state = this.dtoGeneratorService.generateEmptyTransportServiceStateDto();
+    state.transportState = this.localPlayer.playing() ? 'PLAYING' : 'PAUSED';
+    state.canPause = true;
+    state.canSeek = true;
+    state.canRepeat = true;
+    state.repeat = this.localPlayer.repeat();
+    state.canShuffle = true;
+    state.shuffle = this.localPlayer.shuffle();
+    return state;
+  });
+
+  // Public state: the local browser player when "This Browser" is selected, else the UPnP renderer.
+  trackInfo = computed<TrackInfoDto>(() =>
+    this.deviceService.isLocalBrowserSelected() ? this.localTrackInfo() : this.trackInfoUpnp(),
+  );
+  trackTime = computed<TrackTimeDto>(() =>
+    this.deviceService.isLocalBrowserSelected() ? this.localTrackTime() : this.trackTimeUpnp(),
+  );
+  transportServiceStateDto = computed<TransportServiceStateDto>(() =>
+    this.deviceService.isLocalBrowserSelected() ? this.localTransportState() : this.transportStateUpnp(),
   );
 
   trackInfoAvailable = computed(
@@ -119,7 +165,7 @@ export class RendererService {
     sseService.mediaRendererTrackInfoChanged$.subscribe((data) => {
       if (deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
         if (
-          this.trackInfo().currentTrack?.albumArtUrl !=
+          this.trackInfoUpnp().currentTrack?.albumArtUrl !=
           data.currentTrack?.albumArtUrl
         ) {
           // update background images
@@ -131,13 +177,13 @@ export class RendererService {
             data.currentTrack?.albumArtUrl,
           );
         }
-        this.trackInfo.set(data);
+        this.trackInfoUpnp.set(data);
       }
     });
 
     sseService.mediaRendererPositionChanged$.subscribe((data) => {
       if (deviceService.isMediaRendererSelected(data.mediaRendererUdn)) {
-        this.trackTime.set(data);
+        this.trackTimeUpnp.set(data);
       }
     });
 
@@ -152,12 +198,16 @@ export class RendererService {
   private updateTransportState(state: TransportServiceStateDto) {
     if (state.udn == this.deviceService.selectedMediaRendererDevice().udn) {
       console.log('new transport state : ' + state.transportState);
-      this.transportServiceStateDto.set(state);
+      this.transportStateUpnp.set(state);
     }
   }
 
   private renderDeviceChanged(device: MediaRendererDto) {
     console.log('renderDeviceChanged to : ' + device.friendlyName);
+    // The synthetic "This Browser" renderer has no UPnP device driver / transport state on the backend.
+    if (device.udn === this.deviceService.LOCAL_BROWSER_UDN) {
+      return;
+    }
     this.readDeviceDriverState(device);
     this.readTrackInfoState(device);
     this.readTransportServiceState(device);
@@ -173,7 +223,7 @@ export class RendererService {
             data &&
             this.deviceService.isMediaRendererSelected(data.mediaRendererUdn)
           ) {
-            this.trackInfo.set(data);
+            this.trackInfoUpnp.set(data);
           }
         });
     }
@@ -186,7 +236,7 @@ export class RendererService {
         .post<TransportServiceStateDto>(this.baseUri, uri, device)
         .subscribe((data) => {
           if (this.deviceService.isMediaRendererSelected(data?.udn)) {
-            this.transportServiceStateDto.set(data);
+            this.transportStateUpnp.set(data);
             console.log('readTransportServiceState shuffle : ' + data.shuffle);
             console.log('readTransportServiceState : ' + data);
           }
@@ -241,6 +291,10 @@ export class RendererService {
    * Set's volume in percent
    */
   public setVolume(vol: number) {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.setVolume(vol);
+      return;
+    }
     if (this.deviceService.selectedMediaRendererDevice().udn) {
       const uri = '/setVolume';
       let request: MediaRendererSetVolume = {
@@ -260,6 +314,10 @@ export class RendererService {
   // Renderer transport services for selected renderer
   // ================================================================================================================
   public pause() {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.pause();
+      return;
+    }
     const uri = '/pause';
     this.httpService.post(
       this.baseUri,
@@ -270,6 +328,10 @@ export class RendererService {
   }
 
   public stop() {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.stop();
+      return;
+    }
     const uri = '/stop';
     this.httpService.post(
       this.baseUri,
@@ -280,6 +342,10 @@ export class RendererService {
   }
 
   public play() {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.resume();
+      return;
+    }
     const uri = '/play';
     this.httpService.post(
       this.baseUri,
@@ -290,6 +356,10 @@ export class RendererService {
   }
 
   public next() {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.next();
+      return;
+    }
     const uri = '/next';
     this.httpService.post(
       this.baseUri,
@@ -303,5 +373,19 @@ export class RendererService {
   public initServices(udn: string) {
     const uri = '/initServices';
     this.httpService.post(this.baseUri, uri, udn, 'init services');
+  }
+
+  /** Formats a number of seconds as mm:ss (or h:mm:ss for durations of an hour or more). */
+  private static formatTime(totalSeconds: number): string {
+    if (!totalSeconds || isNaN(totalSeconds) || totalSeconds < 0) {
+      return '00:00';
+    }
+    const s = Math.floor(totalSeconds);
+    const hrs = Math.floor(s / 3600);
+    const mins = Math.floor((s % 3600) / 60);
+    const secs = s % 60;
+    const mm = String(mins).padStart(2, '0');
+    const ss = String(secs).padStart(2, '0');
+    return hrs > 0 ? String(hrs) + ':' + mm + ':' + ss : mm + ':' + ss;
   }
 }
