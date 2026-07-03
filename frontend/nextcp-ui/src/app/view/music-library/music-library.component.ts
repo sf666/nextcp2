@@ -38,6 +38,8 @@ import { isAssigned } from 'src/app/global';
 export class MusicLibraryComponent implements AfterViewInit {
   readonly dispContainer = viewChild(DisplayContainerComponent);
   readonly objectId = input<string>();
+  private viewReady = false;
+  private pendingBrowse: { udn: string; objectId: string } | null = null;
 
   private readonly route = inject(ActivatedRoute);
   public readonly contentDirectoryService = inject(ContentDirectoryService);
@@ -86,7 +88,9 @@ export class MusicLibraryComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.viewReady = true;
     this.layoutService.setFramedView();
+    this.flushPendingBrowse();
     // for first call of application wait till we know the devices ...
     this.deviceService.mediaServerInitiated$.subscribe(() => {
       let udn = this.deviceService.selectedMediaServerDevice().udn;
@@ -158,6 +162,12 @@ export class MusicLibraryComponent implements AfterViewInit {
   }
 
   private browseToUid(udn: string, objectId: string) {
+    const dispContainer = this.dispContainer();
+    if (!this.viewReady || !dispContainer) {
+      this.pendingBrowse = { udn, objectId };
+      return;
+    }
+
     if (!(udn?.length > 0)) {
       console.log('last media server device not found ... ');
       udn = this.deviceService.selectedMediaServerDevice().udn;
@@ -175,6 +185,16 @@ export class MusicLibraryComponent implements AfterViewInit {
         );
       }
     }
+  }
+
+  private flushPendingBrowse(): void {
+    if (!this.pendingBrowse || !this.viewReady || !this.dispContainer()) {
+      return;
+    }
+
+    const nextBrowse = this.pendingBrowse;
+    this.pendingBrowse = null;
+    this.browseToUid(nextBrowse.udn, nextBrowse.objectId);
   }
 
   private browseToOid(

@@ -61,7 +61,7 @@ export class DisplayContainerComponent {
   enableAlbumSort = input(false);
   // When true, the track list view shows an additional "Genre" column (upnp:genre).
   showGenre = input(false);
-  contentHandler = input.required<ScrollLoadHandler>();
+  contentHandler = input<ScrollLoadHandler | undefined>(undefined);
 
   // Inform parent about actions
   containerSelected = output<ContainerDto>();
@@ -109,23 +109,43 @@ export class DisplayContainerComponent {
   //
 
   get musicTracks(): MusicItemDto[] {
-    return this.contentHandler().contentDirectoryService.musicTracks_();
+    const handler = this.contentHandler();
+    if (!handler?.contentDirectoryService) {
+      return [];
+    }
+    return handler.contentDirectoryService.musicTracks_();
   }
 
   get otherItems_() {
-    return this.contentHandler().contentDirectoryService.otherItems_();
+    const handler = this.contentHandler();
+    if (!handler?.contentDirectoryService) {
+      return [];
+    }
+    return handler.contentDirectoryService.otherItems_();
   }
 
   get albums(): ContainerDto[] {
-    return this.contentHandler().contentDirectoryService.albumList_();
+    const handler = this.contentHandler();
+    if (!handler?.contentDirectoryService) {
+      return [];
+    }
+    return handler.contentDirectoryService.albumList_();
   }
 
   get playlists(): ContainerDto[] {
-    return this.contentHandler().contentDirectoryService.playlistList_();
+    const handler = this.contentHandler();
+    if (!handler?.contentDirectoryService) {
+      return [];
+    }
+    return handler.contentDirectoryService.playlistList_();
   }
 
   get container(): ContainerDto[] {
-    return this.contentHandler().contentDirectoryService.containerList_();
+    const handler = this.contentHandler();
+    if (!handler?.contentDirectoryService) {
+      return [];
+    }
+    return handler.contentDirectoryService.containerList_();
   }
 
   //
@@ -166,7 +186,8 @@ export class DisplayContainerComponent {
     stepIn: boolean,
     sortCriteria?: string,
   ): Promise<boolean> | undefined {
-    if (!this.contentHandler) {
+    const handler = this.contentHandler();
+    if (!handler) {
       console.error('contentHandler not initialized.');
       return;
     }
@@ -176,12 +197,12 @@ export class DisplayContainerComponent {
     }
 
     const promise = new Promise<boolean>((resolve, reject) => {
-      if (this.contentHandler().persistenceService != undefined) {
-        this.contentHandler().persistenceService?.setCurrentObjectID(oid);
+      if (handler.persistenceService != undefined) {
+        handler.persistenceService?.setCurrentObjectID(oid);
       }
-      if (this.contentHandler().contentDirectoryService) {
-        this.contentHandler()
-          .contentDirectoryService.browseChildrenByOID(oid, udn, '')
+      if (handler.contentDirectoryService) {
+        handler.contentDirectoryService
+          .browseChildrenByOID(oid, udn, '')
           .subscribe((data) => {
             this.browseFinished(data);
             if (data?.currentContainer?.id) {
@@ -220,9 +241,11 @@ export class DisplayContainerComponent {
   }
 
   public loadNextBrowsePage() {
-    this.contentHandler()
-      .contentDirectoryService.browseToNextPage()
-      .subscribe();
+    const handler = this.contentHandler();
+    if (!handler?.contentDirectoryService) {
+      return;
+    }
+    handler.contentDirectoryService.browseToNextPage().subscribe();
   }
 
   addPlaylist(container: ContainerDto): void {
