@@ -162,8 +162,18 @@ export class LocalPlayerService {
     this.currentItem.set(item);
     this.currentTime.set(0);
     this.duration.set(0);
-    this.audio.src = item.streamingURL;
+    this.audio.src = this.toProxyUrl(item.streamingURL);
     this.audio.play().catch((err) => console.error('local browser playback failed', err));
+  }
+
+  /**
+   * Routes the media server URL through the backend stream proxy instead of hitting the media
+   * server directly. The proxy tags the request as a browser renderer so the media server (UMS,
+   * via nextcp2webplayer.conf) transcodes formats the browser cannot decode, and it avoids CORS /
+   * mixed-content problems when the UI is served over HTTPS.
+   */
+  private toProxyUrl(streamingURL: string): string {
+    return '/LocalStream/stream?url=' + encodeURIComponent(streamingURL);
   }
 
   private onEnded(): void {
