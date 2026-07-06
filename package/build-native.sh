@@ -72,7 +72,7 @@ case "$(uname -s)" in
     ;;
   *)
     INSTALLER_TYPE="msi"
-    ICO="$ROOT_DIR/frontend/nextcp-ui/src/favicon.ico"
+    ICO="$SCRIPT_DIR/nextcp2.ico"
     [ -f "$ICO" ] && ICON_ARGS=(--icon "$ICO")
     ;;
 esac
@@ -85,8 +85,12 @@ COMMON_ARGS=(
   --input "$STAGE"
   --main-jar "$MAIN_JAR"
   --java-options "-Xmx512m"
-  "${ICON_ARGS[@]}"
 )
+# Append the icon only when one was found (guarded so an empty array does not
+# trip 'set -u' on the bash 3.2 shipped with macOS).
+if [ "${#ICON_ARGS[@]}" -gt 0 ]; then
+  COMMON_ARGS+=("${ICON_ARGS[@]}")
+fi
 
 echo "==> nextCP/2 $APP_VERSION - jpackage on $(uname -s)"
 

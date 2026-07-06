@@ -91,6 +91,22 @@ public class LocalStreamProxyService {
 			throw new IOException("proxied request was interrupted", e);
 		}
 
+		// Diagnostic for the browser player showing "Infinity:NaN:NaN" as duration: the browser can only
+		// determine a track's length if the media server announces it. A transcoding media server (UMS
+		// serving the nextcp2webplayer profile) streams chunked without a Content-Length, which is why
+		// audio.duration becomes Infinity. Log what upstream actually sends so a missing length is visible.
+		if (log.isInfoEnabled()) {
+			log.info("proxy upstream response: status={} Content-Type={} Content-Length={} Transfer-Encoding={} Accept-Ranges={} Content-Range={} (request Range={}) url={}",
+				upstream.statusCode(),
+				upstream.headers().firstValue("Content-Type").orElse("<none>"),
+				upstream.headers().firstValue("Content-Length").orElse("<none>"),
+				upstream.headers().firstValue("Transfer-Encoding").orElse("<none>"),
+				upstream.headers().firstValue("Accept-Ranges").orElse("<none>"),
+				upstream.headers().firstValue("Content-Range").orElse("<none>"),
+				StringUtils.defaultIfBlank(range, "<none>"),
+				uri);
+		}
+
 		response.setStatus(upstream.statusCode());
 		relayHeader(upstream, response, "Content-Type");
 		relayHeader(upstream, response, "Content-Length");

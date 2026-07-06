@@ -1,0 +1,111 @@
+name: Build native packages
+
+# Builds self-contained native packages of nextCP/2 (a bundled Java runtime is
+# included, so end users need no JVM). jpackage cannot cross-compile, hence the
+# per-OS matrix: each runner builds the package for its own platform.
+#
+#   * Push a tag  v*  (e.g. v4.4.1)  -> builds every platform and attaches the
+#     installers + portable app-image zips to a GitHub Release.
+#   * Run manually (workflow_dispatch) -> builds every platform and uploads the
+#     results as downloadable workflow artifacts (no release).
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write # required to create the GitHub Release and upload assets
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 26
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+          cache: maven
+
+      # WiX Toolset v3 is required by jpackage to build the Windows .msi installer.
+      # (The portable app-image needs no external tooling.)
+      - name: Install WiX Toolset (Windows)
+        if: runner.os == 'Windows'
+        run: choco install wixtoolset --version=3.14.1 -y --no-progress
+        shell: pwsh
+
+      # nextCP/2 depends on sf666/musicbrainz, which is not on Maven Central and
+      # must be installed into the local repository first.
+      - name: Build local dependencies (musicbrainz)
+        run: bash build_dependencies.sh
+        shell: bash
+
+      # The Angular build writes into backend/.../resources/static, which is then
+      # packaged into the Spring Boot jar - so it must run before the backend build.
+      - name: Build frontend
+        working-directory: frontend/nextcp-ui
+        run: |
+          yarn install
+          yarn build
+        shell: bash
+
+      - name: Build backend (Spring Boot fat jar)
+        working-directory: backend
+        run: mvn -B -DskipTests install
+        shell: bash
+
+      # Portable app-image: always built, needs no OS packaging tooling.
+      - name: Build native app-image
+        run: bash package/build-native.sh app-image
+        shell: bash
+
+      # Native installer (.dmg on macOS, .msi on Windows): best-effort so a
+      # missing/misbehaving installer toolchain does not lose the app-image above.
+      - name: Build native installer
+        continue-on-error: true
+        run: bash package/build-native.sh installer
+        shell: bash
+
+      - name: Zip portable app-image (macOS)
+        if: runner.os == 'macOS'
+        run: ditto -c -k --keepParent "build/native/app-image/nextCP2.app" "build/native/nextCP2-macos.zip"
+        shell: bash
+
+      - name: Zip portable app-image (Windows)
+        if: runner.os == 'Windows'
+        run: Compress-Archive -Path "build/native/app-image/nextCP2" -DestinationPath "build/native/nextCP2-windows.zip"
+        shell: pwsh
+
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nextCP2-${{ runner.os }}
+          if-no-files-found: error
+          path: |
+            build/native/*.dmg
+            build/native/*.msi
+            build/native/*.zip
+
+      - name: Attach to GitHub Release (on tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build/native/*.dmg
+            build/native/*.msi
+            build/native/*.zip
