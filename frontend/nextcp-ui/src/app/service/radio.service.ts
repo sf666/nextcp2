@@ -57,7 +57,7 @@ export class RadioService {
   }
 
   private updateRadioStations(rendererDto: MediaRendererDto) {
-    // The synthetic "This Browser" renderer has no UPnP OpenHome Radio source on the backend.
+    // The synthetic "This Device" renderer has no UPnP OpenHome Radio source on the backend.
     if (rendererDto.udn === '' || rendererDto.udn === this.deviceService.LOCAL_BROWSER_UDN) {
       this.radioItems.set([]);
       return;

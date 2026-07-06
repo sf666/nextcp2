@@ -132,6 +132,8 @@ p, h1, h2, h3, h4, h5, h6, div {
     text-transform : uppercase;
     color          : var(--set-muted);
     margin         : 1.5rem 0 0.75rem;
+    padding-bottom : 0.4rem;
+    border-bottom  : 1px solid var(--set-card-border);
 }
 
 /* ---------- Device cards (server / renderer) ---------- */

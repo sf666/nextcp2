@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import nextcp.service.LocalStreamProxyService;
 
 /**
- * Streaming endpoint for local, in-browser audio playback (the "This Browser" virtual renderer).
+ * Streaming endpoint for local, in-browser audio playback (the "This Device" virtual renderer).
  * <p>
  * The browser points an HTML5 {@code <audio>} element at {@code /LocalStream/stream?url=<mediaUrl>};
  * the actual pass-through, User-Agent tagging and format negotiation with the media server live in

@@ -94,6 +94,10 @@ export class ConfigurationService {
     upnpBindInterface: '',
     behindReverseProxy: false,
     sseHeartbeatSeconds: 30,
+    localPlayerPreTranscodeEnabled: true,
+    localPlayerCacheDir: '',
+    localPlayerCacheMaxMb: 2048,
+    localPlayerCacheTtlHours: 24,
   };
 
   aiConfig: AiConfig = {

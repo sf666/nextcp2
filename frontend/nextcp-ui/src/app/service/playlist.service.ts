@@ -75,7 +75,7 @@ export class PlaylistService implements OnInit {
     // subscribe to device changes
     toObservable(this.deviceService.selectedMediaRendererDevice).subscribe(
       (data) => {
-        // The synthetic "This Browser" renderer has no server-side OpenHome playlist.
+        // The synthetic "This Device" renderer has no server-side OpenHome playlist.
         if (data.udn === '' || data.udn === this.deviceService.LOCAL_BROWSER_UDN) {
           return;
         }

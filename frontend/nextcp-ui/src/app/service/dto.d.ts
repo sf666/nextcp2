@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-07-03 13:36:09.
+// Generated using typescript-generator version 4.1.1 on 2026-07-06 14:03:08.
 
 export interface AiConfig {
     aiEnabled: boolean;
@@ -62,6 +62,10 @@ export interface ApplicationConfig {
     chatHistorySize: number;
     behindReverseProxy: boolean;
     sseHeartbeatSeconds: number;
+    localPlayerPreTranscodeEnabled: boolean;
+    localPlayerCacheDir: string;
+    localPlayerCacheMaxMb: number;
+    localPlayerCacheTtlHours: number;
 }
 
 export interface AudioAddictChannelDto {

@@ -71,7 +71,7 @@ export class RendererService {
     return state;
   });
 
-  // Public state: the local browser player when "This Browser" is selected, else the UPnP renderer.
+  // Public state: the local browser player when "This Device" is selected, else the UPnP renderer.
   trackInfo = computed<TrackInfoDto>(() =>
     this.deviceService.isLocalBrowserSelected() ? this.localTrackInfo() : this.trackInfoUpnp(),
   );
@@ -204,7 +204,7 @@ export class RendererService {
 
   private renderDeviceChanged(device: MediaRendererDto) {
     console.log('renderDeviceChanged to : ' + device.friendlyName);
-    // The synthetic "This Browser" renderer has no UPnP device driver / transport state on the backend.
+    // The synthetic "This Device" renderer has no UPnP device driver / transport state on the backend.
     if (device.udn === this.deviceService.LOCAL_BROWSER_UDN) {
       return;
     }

@@ -30,12 +30,16 @@ public class ApplicationConfig
     public Integer chatHistorySize;
     public Boolean behindReverseProxy;
     public Integer sseHeartbeatSeconds;
+    public Boolean localPlayerPreTranscodeEnabled;
+    public String localPlayerCacheDir;
+    public Long localPlayerCacheMaxMb;
+    public Long localPlayerCacheTtlHours;
 
     public ApplicationConfig()
     {
     }
 
-    public ApplicationConfig(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Integer embeddedServerSslPort, String embeddedServerSslP12Keystore, String embeddedServerSslP12KeystorePassword, Long sseEmitterTimeout, String loggingConfigFile, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript, String upnpBindInterface, Integer chatHistorySize, Boolean behindReverseProxy, Integer sseHeartbeatSeconds)
+    public ApplicationConfig(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Integer embeddedServerSslPort, String embeddedServerSslP12Keystore, String embeddedServerSslP12KeystorePassword, Long sseEmitterTimeout, String loggingConfigFile, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript, String upnpBindInterface, Integer chatHistorySize, Boolean behindReverseProxy, Integer sseHeartbeatSeconds, Boolean localPlayerPreTranscodeEnabled, String localPlayerCacheDir, Long localPlayerCacheMaxMb, Long localPlayerCacheTtlHours)
     {
         this.generateUpnpCode = generateUpnpCode;
         this.generateUpnpCodePath = generateUpnpCodePath;
@@ -55,6 +59,10 @@ public class ApplicationConfig
         this.chatHistorySize = chatHistorySize;
         this.behindReverseProxy = behindReverseProxy;
         this.sseHeartbeatSeconds = sseHeartbeatSeconds;
+        this.localPlayerPreTranscodeEnabled = localPlayerPreTranscodeEnabled;
+        this.localPlayerCacheDir = localPlayerCacheDir;
+        this.localPlayerCacheMaxMb = localPlayerCacheMaxMb;
+        this.localPlayerCacheTtlHours = localPlayerCacheTtlHours;
     }
     
     @Override
@@ -80,6 +88,10 @@ public class ApplicationConfig
         sb.append("chatHistorySize=").append(this.chatHistorySize).append(", ");
         sb.append("behindReverseProxy=").append(this.behindReverseProxy).append(", ");
         sb.append("sseHeartbeatSeconds=").append(this.sseHeartbeatSeconds).append(", ");
+        sb.append("localPlayerPreTranscodeEnabled=").append(this.localPlayerPreTranscodeEnabled).append(", ");
+        sb.append("localPlayerCacheDir=").append(this.localPlayerCacheDir).append(", ");
+        sb.append("localPlayerCacheMaxMb=").append(this.localPlayerCacheMaxMb).append(", ");
+        sb.append("localPlayerCacheTtlHours=").append(this.localPlayerCacheTtlHours).append(", ");
         sb.append("]");
         return sb.toString();
     }

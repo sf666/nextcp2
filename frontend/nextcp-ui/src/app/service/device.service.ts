@@ -55,7 +55,7 @@ export class DeviceService {
   public readonly localBrowserRenderer: MediaRendererDto = {
     udn: this.LOCAL_BROWSER_UDN,
     img: '',
-    friendlyName: 'This Browser',
+    friendlyName: 'This Device',
     services: [],
     allSources: [],
     currentSource: { id: 0, Name: '', Type: '', Visible: false },

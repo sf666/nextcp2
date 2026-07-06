@@ -15,7 +15,7 @@ interface PersistedPlayerState {
 
 /**
  * Plays audio directly in the browser via an HTML5 audio element, used when the synthetic
- * "This Browser" renderer is selected instead of a real UPnP media renderer. Holds a simple in-memory
+ * "This Device" renderer is selected instead of a real UPnP media renderer. Holds a simple in-memory
  * queue (for play-all / shuffle of a displayed track list), auto-advances to the next track, and
  * supports repeat and a shuffle toggle. Only the stream URL is needed; the browser fetches and
  * decodes the media itself.
@@ -36,13 +36,19 @@ export class LocalPlayerService {
   // it. Instead the queue, current track and position are persisted here and restored on startup (and
   // auto-resumed when the browser renderer is still selected). See persistState()/restoreState().
   private static readonly STORAGE_KEY = 'nextcp.localPlayer.state.v1';
-  // UDN of the synthetic "This Browser" renderer (mirrors DeviceService.LOCAL_BROWSER_UDN); used to
+  // UDN of the synthetic "This Device" renderer (mirrors DeviceService.LOCAL_BROWSER_UDN); used to
   // avoid auto-resuming local audio when a real UPnP renderer is the one selected after a reload.
   private static readonly LOCAL_BROWSER_UDN = 'nextcp-local-browser';
   private lastPersistMs = 0;
 
+  // Guards against advancing to the next track more than once for the same track: the "ended" event
+  // and the near-end fallback (maybeAdvanceAtEnd) can both fire. Reset per track in playIndex().
+  private trackEndHandled = false;
+  // How close to the (metadata) duration counts as "reached the end" for the fallback advance.
+  private static readonly END_EPSILON_SECONDS = 0.6;
+
   // Playback state, consumed by RendererService so the footer now-playing/transport reflects the
-  // local browser player when the "This Browser" renderer is selected.
+  // local browser player when the "This Device" renderer is selected.
   public readonly playing = signal<boolean>(false);
   public readonly currentItem = signal<MusicItemDto | null>(null);
   public readonly currentTime = signal<number>(0);
@@ -55,7 +61,7 @@ export class LocalPlayerService {
   constructor() {
     this.audio.addEventListener('play', () => { this.playing.set(true); this.persistState(); });
     this.audio.addEventListener('playing', () => { this.playing.set(true); this.persistState(); });
-    this.audio.addEventListener('pause', () => { this.playing.set(false); this.persistState(); });
+    this.audio.addEventListener('pause', () => { this.playing.set(false); this.persistState(); this.maybeAdvanceAtEnd('pause'); });
     this.audio.addEventListener('error', () => {
       console.warn('[local-player] audio "error" event', {
         error: this.audio.error,
@@ -79,18 +85,20 @@ export class LocalPlayerService {
     // These fire when the browser cannot make progress on the stream; if one of them shows up at the
     // point the track should end (instead of "ended"), the proxied stream is the culprit, not the queue.
     (['stalled', 'suspend', 'waiting'] as const).forEach((evt) =>
-      this.audio.addEventListener(evt, () =>
+      this.audio.addEventListener(evt, () => {
         console.debug(`[local-player] audio "${evt}" event`, {
           currentTime: this.audio.currentTime,
           duration: this.audio.duration,
           readyState: this.audio.readyState,
           networkState: this.audio.networkState,
-        }),
-      ),
+        });
+        this.maybeAdvanceAtEnd(evt);
+      }),
     );
     this.audio.addEventListener('timeupdate', () => {
       this.currentTime.set(this.audio.currentTime);
       this.persistPositionThrottled();
+      this.maybeAdvanceAtEnd('timeupdate');
     });
     this.audio.addEventListener('durationchange', () => this.updateDuration());
     this.audio.addEventListener('loadedmetadata', () => this.updateDuration());
@@ -223,6 +231,7 @@ export class LocalPlayerService {
       return;
     }
     this.currentIndex = index;
+    this.trackEndHandled = false;
     const item = this.queue[index];
     this.currentItem.set(item);
     this.currentTime.set(0);
@@ -243,6 +252,11 @@ export class LocalPlayerService {
   }
 
   private onEnded(): void {
+    // Advance at most once per track (the "ended" event and the near-end fallback may both fire).
+    if (this.trackEndHandled) {
+      return;
+    }
+    this.trackEndHandled = true;
     // Auto-advance to the next queued track; at the end, restart from the top when repeat is on,
     // otherwise stop.
     if (this.currentIndex + 1 < this.queue.length) {
@@ -251,6 +265,29 @@ export class LocalPlayerService {
       this.playIndex(0);
     } else {
       this.playing.set(false);
+    }
+  }
+
+  /**
+   * Fallback auto-advance for streams whose length the browser does not know (transcoded / chunked,
+   * i.e. audio.duration === Infinity). For those the reliable "ended" event often never fires, so
+   * playback would simply stop on the current track. Once the position reaches the metadata duration
+   * we advance ourselves. Finite-duration media (native or fully pre-transcoded) is left entirely to
+   * the real "ended" event, so its exact tail is never clipped.
+   */
+  private maybeAdvanceAtEnd(reason: string): void {
+    if (Number.isFinite(this.audio.duration)) {
+      return;
+    }
+    const dur = this.duration();
+    if (dur > 0 && this.audio.currentTime >= dur - LocalPlayerService.END_EPSILON_SECONDS) {
+      console.debug(`[local-player] near-end fallback advance (trigger: ${reason})`, {
+        currentTime: this.audio.currentTime,
+        duration: dur,
+        currentIndex: this.currentIndex,
+        queueLength: this.queue.length,
+      });
+      this.onEnded();
     }
   }
 

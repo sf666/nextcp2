@@ -103,7 +103,7 @@ export class TransportService {
   }
 
   public playResource(musicItemDto: MusicItemDto): void {
-    // When the synthetic "This Browser" renderer is selected, play the stream in the browser itself
+    // When the synthetic "This Device" renderer is selected, play the stream in the browser itself
     // (HTML5 audio) instead of driving a UPnP renderer. This also covers broadcast/radio items - the
     // browser just fetches the stream URL.
     if (this.deviceService.isLocalBrowserSelected()) {

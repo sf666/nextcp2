@@ -97,6 +97,10 @@ ApplicationConfig:
    chatHistorySize: Integer
    behindReverseProxy: Boolean
    sseHeartbeatSeconds: Integer
+   localPlayerPreTranscodeEnabled: Boolean
+   localPlayerCacheDir: String
+   localPlayerCacheMaxMb: Long
+   localPlayerCacheTtlHours: Long
 
 UmsServerApiKey:
    serverUuid: String

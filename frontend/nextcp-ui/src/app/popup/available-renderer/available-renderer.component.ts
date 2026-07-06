@@ -34,7 +34,7 @@ export class AvailableRendererComponent {
         return true;
       }
     });
-    // Offer the synthetic "This Browser" renderer as the first choice.
+    // Offer the synthetic "This Device" renderer as the first choice.
     return [this.deviceService.localBrowserRenderer, ...discovered];
   });
 

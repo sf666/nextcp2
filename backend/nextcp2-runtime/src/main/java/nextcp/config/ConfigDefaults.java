@@ -119,6 +119,24 @@ public class ConfigDefaults
             log.info("adding new configuration value 'audioAddictPreferEuropeanServer = true'");
             config.audioAddictConfig.preferEuropeanServer = true;
         }
+
+        if (config.applicationConfig.localPlayerPreTranscodeEnabled == null)
+        {
+            log.info("adding new configuration value 'localPlayerPreTranscodeEnabled = true'");
+            config.applicationConfig.localPlayerPreTranscodeEnabled = true;
+        }
+        if (config.applicationConfig.localPlayerCacheDir == null)
+        {
+            log.info("adding new configuration value 'localPlayerCacheDir' (empty = system temp dir)");
+            config.applicationConfig.localPlayerCacheDir = "";
+        }
+        // localPlayerCacheMaxMb is intentionally NOT defaulted: null / empty / <= 0 means "unlimited"
+        // (no cache eviction), see LocalStreamProxyService.getMaxCacheBytes().
+        if (config.applicationConfig.localPlayerCacheTtlHours == null)
+        {
+            log.info("adding new configuration value 'localPlayerCacheTtlHours = 24'");
+            config.applicationConfig.localPlayerCacheTtlHours = Long.valueOf(24);
+        }
     }
 
 }
