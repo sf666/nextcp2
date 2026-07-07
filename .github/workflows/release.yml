@@ -91,6 +91,16 @@ jobs:
         run: Compress-Archive -Path "build/native/app-image/nextCP2" -DestinationPath "build/native/nextCP2-windows.zip"
         shell: pwsh
 
+      # The runnable fat jar and the MA9000 device driver are platform-independent
+      # and already built by the 'mvn install' step above. Stage them from a single
+      # runner (macOS) so they are published exactly once, not once per OS.
+      - name: Stage platform-independent jars (macOS only)
+        if: runner.os == 'macOS'
+        run: |
+          cp backend/nextcp2-assembly/target/nextcp2.jar build/native/nextcp2.jar
+          cp backend/nextcp2-device-driver/nextcp2-ma9000/target/device_driver_ma9000.jar build/native/nextcp2-ma9000.jar
+        shell: bash
+
       - name: Upload workflow artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -100,6 +110,7 @@ jobs:
             build/native/*.dmg
             build/native/*.msi
             build/native/*.zip
+            build/native/*.jar
 
       - name: Attach to GitHub Release (on tag)
         if: startsWith(github.ref, 'refs/tags/')
@@ -109,3 +120,4 @@ jobs:
             build/native/*.dmg
             build/native/*.msi
             build/native/*.zip
+            build/native/*.jar
