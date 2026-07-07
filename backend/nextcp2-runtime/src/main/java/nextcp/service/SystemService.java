@@ -6,7 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
 import nextcp.dto.Config;
 import nextcp.dto.SystemInformationDto;
@@ -28,6 +30,16 @@ public class SystemService
     @Autowired
     private ApplicationEventPublisher publisher = null;
 
+    @Autowired
+    private ConfigurableApplicationContext appContext = null;
+
+    /**
+     * System property that marks the native desktop app (set by package/build-native.sh).
+     * Desktop-only features such as the in-app shutdown are gated on this, so a server / NAS /
+     * Docker deployment cannot be shut down from the web UI by anyone on the LAN.
+     */
+    private static final String DESKTOP_MODE_PROPERTY = "nextcp.desktopMode";
+
     public SystemService()
     {
     }
@@ -35,6 +47,45 @@ public class SystemService
     public SystemInformationDto getSystemInformation()
     {
         return cw.getVersion();
+    }
+
+    /**
+     * @return {@code true} when running as the native desktop app.
+     */
+    public boolean isDesktopMode()
+    {
+        return Boolean.parseBoolean(System.getProperty(DESKTOP_MODE_PROPERTY, "false"));
+    }
+
+    /**
+     * Gracefully shuts down the application. Only permitted in desktop mode; a request in any
+     * other deployment is refused so the server cannot be stopped from the web UI. The JVM exit
+     * runs on a short-delayed background thread so the HTTP response can still be delivered first.
+     */
+    public void shutdownNextcp()
+    {
+        if (!isDesktopMode())
+        {
+            log.warn("Shutdown requested but not running in desktop mode - ignoring.");
+            publisher.publishEvent(new ToastrMessage(null, "error", "Shutdown", "Shutdown is only available in desktop mode."));
+            return;
+        }
+        log.info("Shutdown requested via UI (desktop mode). Terminating application ...");
+        Thread t = new Thread(() ->
+        {
+            try
+            {
+                // Give the REST call time to return before the context closes.
+                Thread.sleep(700);
+            }
+            catch (InterruptedException e)
+            {
+                Thread.currentThread().interrupt();
+            }
+            int exitCode = SpringApplication.exit(appContext, () -> 0);
+            System.exit(exitCode);
+        }, "nextcp2-shutdown");
+        t.start();
     }
 
     public void restartNextcp()

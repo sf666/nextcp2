@@ -85,6 +85,10 @@ COMMON_ARGS=(
   --input "$STAGE"
   --main-jar "$MAIN_JAR"
   --java-options "-Xmx512m"
+  # Marks this as the native desktop app. Enables desktop-only conveniences that
+  # must NOT apply to the plain jar / Docker image / headless server: opening the
+  # browser at the local UI on startup, and exposing the in-app shutdown button.
+  --java-options "-Dnextcp.desktopMode=true"
 )
 # Append the icon only when one was found (guarded so an empty array does not
 # trip 'set -u' on the bash 3.2 shipped with macOS).

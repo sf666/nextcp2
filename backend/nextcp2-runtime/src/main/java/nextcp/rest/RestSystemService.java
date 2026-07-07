@@ -107,4 +107,20 @@ public class RestSystemService
     {
         systemService.restartNextcp();
     }
+
+    /**
+     * @return whether the backend runs as the native desktop app. The UI uses this to show the
+     *         in-app shutdown button only in desktop mode.
+     */
+    @GetMapping("/isDesktopMode")
+    public boolean isDesktopMode()
+    {
+        return systemService.isDesktopMode();
+    }
+
+    @GetMapping("/shutdownNextcp2")
+    public void shutdown()
+    {
+        systemService.shutdownNextcp();
+    }
 }

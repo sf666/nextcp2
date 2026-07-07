@@ -197,6 +197,16 @@ export class SettingsComponent implements OnInit {
     return this.systemService.build.time;
   }
 
+  get desktopMode(): boolean {
+    return this.systemService.desktopMode();
+  }
+
+  shutdownApp(): void {
+    if (window.confirm('Shut down nextCP/2? The application will stop and this page will no longer respond.')) {
+      this.systemService.shutdown();
+    }
+  }
+
   activateLastFM(): void {
     this.systemService.registerNextcp2AtLastFM();
   }

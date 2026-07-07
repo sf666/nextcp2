@@ -663,6 +663,13 @@
           class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">build
           time</label>
       </div>
+
+      @if (desktopMode) {
+        <div class="mt-2">
+          <button type="button" mat-stroked-button color="warn" (click)="shutdownApp()">Shut down nextCP/2</button>
+          <p class="mt-2 text-sm text-gray-400">Stops the desktop application. Available only when running as the native desktop app.</p>
+        </div>
+      }
     </form>
   </section>
 

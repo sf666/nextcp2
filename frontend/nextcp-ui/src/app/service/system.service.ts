@@ -17,10 +17,16 @@ export class SystemService {
     this.dtoGeneratorService.generateSystemInformationDto(),
   );
 
+  // True when the backend runs as the native desktop app; gates the shutdown button.
+  public readonly desktopMode = signal<boolean>(false);
+
   constructor() {
     this.httpService
       .get<SystemInformationDto>(this.baseUri, '/getSystemInformation')
       .subscribe((version) => this.updateBuildVersion(version));
+    this.httpService
+      .get<boolean>(this.baseUri, '/isDesktopMode')
+      .subscribe((desktop) => this.desktopMode.set(desktop));
   }
 
   private updateBuildVersion(data: SystemInformationDto) {
@@ -38,6 +44,10 @@ export class SystemService {
 
   public restart(): void {
     this.http.get('/SystemService/restartNextcp2').subscribe();
+  }
+
+  public shutdown(): void {
+    this.http.get('/SystemService/shutdownNextcp2').subscribe();
   }
 
   public registerNextcp2AtSpotify(): void {

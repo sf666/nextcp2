@@ -1,7 +1,10 @@
 package nextcp;
 
+import java.awt.Desktop;
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -208,6 +211,52 @@ public class NextcpApplicationStartup implements IApplicationRestartable
         catch (Exception e)
         {
             log.warn("Failed to re-apply logback configuration from " + loggingConfigFile, e);
+        }
+    }
+
+    /**
+     * System property that marks the native desktop app. It is set only by the native desktop
+     * launchers (see {@code package/build-native.sh}), so the plain jar, the Docker image and
+     * headless server deployments never trigger desktop-only behavior (browser auto-open,
+     * in-app shutdown).
+     */
+    private static final String DESKTOP_MODE_PROPERTY = "nextcp.desktopMode";
+
+    /**
+     * Opens the default web browser at the local UI once the embedded server is ready, so users
+     * of the native desktop app do not have to type the address themselves. The port is read
+     * dynamically from the current configuration, so a changed {@code embeddedServerPort} is
+     * honored. Only runs when explicitly opted in ({@code -Dnextcp.openBrowser=true}) and when a
+     * desktop browser is actually available; any failure is logged and never breaks startup.
+     */
+    @EventListener(ApplicationReadyEvent.class)
+    public void openBrowserOnReady()
+    {
+        if (!Boolean.parseBoolean(System.getProperty(DESKTOP_MODE_PROPERTY, "false")))
+        {
+            return;
+        }
+        // Guard the whole body: this is a cosmetic convenience for the desktop app and must never
+        // affect the already-running server - not even via a missing java.desktop module (Throwable
+        // covers NoClassDefFoundError / HeadlessException as well as ordinary failures).
+        try
+        {
+            if (GraphicsEnvironment.isHeadless() || !Desktop.isDesktopSupported()
+                    || !Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
+            {
+                log.info("Auto-open browser requested, but no desktop browser is available - skipping.");
+                return;
+            }
+            Integer configuredPort = config.applicationConfig.embeddedServerPort;
+            int port = (configuredPort != null) ? configuredPort : 8085;
+            // SSL is disabled for the embedded server (see main()), so the UI is served over plain HTTP.
+            URI uri = URI.create(String.format("http://localhost:%d", port));
+            log.info("Opening default browser at {}", uri);
+            Desktop.getDesktop().browse(uri);
+        }
+        catch (Throwable t)
+        {
+            log.warn("Could not open the default browser: {}", t.getMessage());
         }
     }
 }
