@@ -1,0 +1,66 @@
+name: Deploy docs
+
+# Builds the Astro/Starlight documentation in docs/ and publishes it to GitHub
+# Pages as the project site at https://sf666.github.io/nextcp2/ (base '/nextcp2/'
+# is set in docs/astro.config.mjs). Requires the repository Pages source to be
+# set to "GitHub Actions" (Settings -> Pages).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - '.github/workflows/docs.yml'
+  workflow_dispatch: # allow a manual rebuild from the Actions tab
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never run two deploys at once; let an in-progress one finish (don't cancel a
+# publish half-way).
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 26
+
+      # Enables GitHub Pages on this repo (source = GitHub Actions) on the first
+      # run, using the workflow's GITHUB_TOKEN - no manual Settings -> Pages step.
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Build docs
+        working-directory: docs
+        run: |
+          yarn install --frozen-lockfile
+          yarn build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
