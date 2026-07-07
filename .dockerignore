@@ -1,0 +1,11 @@
+# Keep the Docker build context small: the runtime image only needs the two
+# built jars under backend/**/target. Exclude everything heavy / irrelevant.
+.git
+deps
+build
+docs
+release-notes
+frontend/nextcp-ui/node_modules
+frontend/nextcp-ui/.angular
+**/node_modules
+*.md
