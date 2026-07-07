@@ -43,15 +43,19 @@ jobs:
           cache: maven
 
       # WiX Toolset v3 is required by jpackage to build the Windows .msi installer.
-      # (The portable app-image needs no external tooling.)
-      - name: Install WiX Toolset (Windows)
+      # (The portable app-image needs no external tooling.) The windows-latest image
+      # already ships WiX 3.14, so install without a version pin - choco treats an
+      # existing install as success, and continue-on-error keeps a toolchain hiccup
+      # from failing the job (the .msi step is best-effort anyway).
+      - name: Ensure WiX Toolset (Windows)
         if: runner.os == 'Windows'
-        run: choco install wixtoolset --version=3.14.1 -y --no-progress
+        continue-on-error: true
+        run: choco install wixtoolset -y --no-progress
         shell: pwsh
 
-      # nextCP/2 depends on sf666/musicbrainz, which is not on Maven Central and
-      # must be installed into the local repository first.
-      - name: Build local dependencies (musicbrainz)
+      # nextCP/2 depends on custom forks (ik666/jupnp, sf666/musicbrainz) that are
+      # not on Maven Central and must be built into the local repository first.
+      - name: Build local dependencies (jupnp, musicbrainz)
         run: bash build_dependencies.sh
         shell: bash
 
