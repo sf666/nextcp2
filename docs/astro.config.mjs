@@ -55,8 +55,9 @@ export default defineConfig({
 				'overview/overview',
 				'overview/issue',
 			]},
-			{ label: 'Installation', items: [ 
+			{ label: 'Installation', items: [
 				'quick_install/quick_install',
+				'quick_install/native_builds',
 				'quick_install/docker',
 			]},
 			{ label: 'User Interface', items: [ 
