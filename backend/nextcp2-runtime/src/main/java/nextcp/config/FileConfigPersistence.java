@@ -136,17 +136,30 @@ public class FileConfigPersistence
         }
         else
         {
-            configurationFilename = FilenameUtils.concat(systemConfig.getString("user.dir"), DEFAULT_CONFIG_FILENAME);
+            configurationFilename = FilenameUtils.concat(getDefaultBaseDir(), DEFAULT_CONFIG_FILENAME);
             config = getDefaultConfig();
             log.warn("config file not found. Generating new file.");
             log.warn("crating default config file at location : " + configurationFilename);
             writeConfig();
-            if (getUserWorkdirPropertyFile() == null)
+            if (getConfigFileIfExists(getDefaultBaseDir()) == null)
             {
                 log.error("failed to generte default config file. Exiting ...");
                 throw new RuntimeException("No config files available.");
             }
         }
+    }
+
+    /**
+     * Base directory for freshly generated defaults (config file, database, logback config and
+     * library path). Unified to the user's home directory on all platforms: it is always defined
+     * and writable, unlike the working directory (user.dir), which for a native desktop app is the
+     * read-only install location. Existing config files, an explicit {@code -DconfigFile} and the
+     * {@code /etc/nextcp2} location are unaffected - this only governs where a brand-new default is
+     * created.
+     */
+    private String getDefaultBaseDir()
+    {
+        return systemConfig.getString("user.home");
     }
 
     private Config getDefaultConfig()
@@ -156,15 +169,15 @@ public class FileConfigPersistence
         c.applicationConfig = new ApplicationConfig();
         c.applicationConfig.generateUpnpCode = false;
         c.applicationConfig.generateUpnpCodePath = System.getProperty("java.io.tmpdir");
-        c.applicationConfig.databaseFilename = FilenameUtils.concat(systemConfig.getString("user.dir"), "nextcp2_db");
+        c.applicationConfig.databaseFilename = FilenameUtils.concat(getDefaultBaseDir(), "nextcp2_db");
         c.applicationConfig.embeddedServerPort = 8085;
         c.applicationConfig.embeddedServerSslPort = 18085;
         c.applicationConfig.embeddedServerSslP12Keystore = "";
         c.applicationConfig.itemsPerPage = 100L;
         c.applicationConfig.nextPageAfter = 60L;
         c.applicationConfig.sseEmitterTimeout = 180000L;
-        c.applicationConfig.loggingConfigFile = FilenameUtils.concat(systemConfig.getString("user.dir"), "logback.xml");
-        c.applicationConfig.libraryPath = systemConfig.getString("user.dir");
+        c.applicationConfig.loggingConfigFile = FilenameUtils.concat(getDefaultBaseDir(), "logback.xml");
+        c.applicationConfig.libraryPath = getDefaultBaseDir();
         c.applicationConfig.chatHistorySize = 50;
 
         createDefaultLog(c.applicationConfig.loggingConfigFile);
@@ -181,7 +194,7 @@ public class FileConfigPersistence
         String basePath = loggingFile.getParent();
         if (basePath == null)
         {
-            basePath = systemConfig.getString("user.dir");
+            basePath = getDefaultBaseDir();
         }
         String logfile = FilenameUtils.getBaseName(loggingConfigFile);
 

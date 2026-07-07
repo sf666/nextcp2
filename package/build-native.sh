@@ -57,8 +57,10 @@ cp "$JAR_PATH" "$STAGE/$MAIN_JAR"
 
 mkdir -p "$DIST_DIR"
 
-# Per-OS icon (optional; jpackage falls back to a default when absent).
+# Per-OS icon (optional; jpackage falls back to a default when absent) and
+# per-OS installer-only options.
 ICON_ARGS=()
+INSTALLER_ARGS=()
 case "$(uname -s)" in
   Darwin)
     INSTALLER_TYPE="dmg"
@@ -74,6 +76,11 @@ case "$(uname -s)" in
     INSTALLER_TYPE="msi"
     ICO="$SCRIPT_DIR/nextcp2.ico"
     [ -f "$ICO" ] && ICON_ARGS=(--icon "$ICO")
+    # Start-menu entry + desktop shortcut so the app is discoverable, and a per-user
+    # install into a user-writable location (%LOCALAPPDATA%): no admin/UAC prompt, and
+    # the app can write its config/database next to itself instead of into read-only
+    # Program Files on first start.
+    INSTALLER_ARGS=(--win-menu --win-menu-group "nextCP2" --win-shortcut --win-per-user-install)
     ;;
 esac
 
@@ -108,7 +115,12 @@ fi
 
 if [ "$WHAT" = "installer" ] || [ "$WHAT" = "both" ]; then
   echo "==> Building installer (.$INSTALLER_TYPE) ..."
-  jpackage --type "$INSTALLER_TYPE" "${COMMON_ARGS[@]}" --dest "$DIST_DIR"
+  # Append installer-only args guarded for the bash 3.2 'set -u' empty-array case.
+  if [ "${#INSTALLER_ARGS[@]}" -gt 0 ]; then
+    jpackage --type "$INSTALLER_TYPE" "${COMMON_ARGS[@]}" "${INSTALLER_ARGS[@]}" --dest "$DIST_DIR"
+  else
+    jpackage --type "$INSTALLER_TYPE" "${COMMON_ARGS[@]}" --dest "$DIST_DIR"
+  fi
   echo "    -> $DIST_DIR/*.$INSTALLER_TYPE"
 fi
 

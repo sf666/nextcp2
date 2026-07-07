@@ -85,8 +85,9 @@ public class ConfigDefaults
         if (StringUtils.isBlank(config.applicationConfig.loggingConfigFile))
         {
             // Backfill for configs written before the log4j2 -> Logback migration
-            // (the former 'log4jConfigFile' key is now 'loggingConfigFile').
-            String defaultLoggingConfig = new java.io.File(System.getProperty("user.dir"), "logback.xml").getPath();
+            // (the former 'log4jConfigFile' key is now 'loggingConfigFile'). Default to the
+            // user's home directory (unified, always writable) rather than the working directory.
+            String defaultLoggingConfig = new java.io.File(System.getProperty("user.home"), "logback.xml").getPath();
             log.info("adding new configuration value 'loggingConfigFile = {}'", defaultLoggingConfig);
             config.applicationConfig.loggingConfigFile = defaultLoggingConfig;
         }
