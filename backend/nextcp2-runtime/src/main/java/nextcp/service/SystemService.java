@@ -33,6 +33,9 @@ public class SystemService
     @Autowired
     private ConfigurableApplicationContext appContext = null;
 
+    @Autowired
+    private nextcp.eventBridge.SsePublisher ssePublisher = null;
+
     /**
      * System property that marks the native desktop app (set by package/build-native.sh).
      * Desktop-only features such as the in-app shutdown are gated on this, so a server / NAS /
@@ -82,6 +85,33 @@ public class SystemService
             {
                 Thread.currentThread().interrupt();
             }
+            // Complete the long-lived SSE streams first; otherwise the graceful web-server
+            // shutdown treats them as active requests and waits the full per-phase timeout (~30s).
+            try
+            {
+                ssePublisher.completeAllEmitters();
+            }
+            catch (Exception e)
+            {
+                log.warn("Error completing SSE emitters during shutdown: {}", e.getMessage());
+            }
+            // Backstop: if the orderly shutdown still stalls (e.g. another long-lived stream),
+            // force termination so the desktop quit stays responsive.
+            Thread watchdog = new Thread(() ->
+            {
+                try
+                {
+                    Thread.sleep(10_000);
+                }
+                catch (InterruptedException e)
+                {
+                    Thread.currentThread().interrupt();
+                }
+                log.warn("Shutdown still not complete after 10s - forcing exit.");
+                Runtime.getRuntime().halt(0);
+            }, "nextcp2-shutdown-watchdog");
+            watchdog.setDaemon(true);
+            watchdog.start();
             int exitCode = SpringApplication.exit(appContext, () -> 0);
             System.exit(exitCode);
         }, "nextcp2-shutdown");

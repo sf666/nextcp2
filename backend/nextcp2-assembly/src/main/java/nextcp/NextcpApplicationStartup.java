@@ -88,6 +88,18 @@ public class NextcpApplicationStartup implements IApplicationRestartable
         }
         
 //      builder = addH2Server(builder, config);
+
+        // Desktop app only: Spring Boot defaults to java.awt.headless=true, which would make
+        // GraphicsEnvironment.isHeadless() true (browser launch skipped) and, on macOS, leave the
+        // app unregistered with the window server so its Dock icon keeps bouncing. Enabling AWT
+        // here lets Desktop.browse() work and registers the app. Server / Docker deployments keep
+        // the headless default.
+        if (Boolean.parseBoolean(System.getProperty(DESKTOP_MODE_PROPERTY, "false")))
+        {
+            log.info("Desktop mode: enabling AWT (headless=false) for browser launch and Dock registration");
+            builder = builder.headless(false);
+        }
+
         NextcpApplicationStartup.context = builder.build().run(args);
     }
 

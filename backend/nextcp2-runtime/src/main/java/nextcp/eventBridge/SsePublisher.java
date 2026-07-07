@@ -114,6 +114,27 @@ public class SsePublisher
         sseEmitterList.remove(emitter);
     }
 
+    /**
+     * Completes all open SSE streams. Called during an application shutdown so these long-lived
+     * async requests finish immediately - otherwise the graceful web-server shutdown would wait
+     * for them until its per-phase timeout (up to 30s).
+     */
+    public void completeAllEmitters()
+    {
+        for (SseEmitter emitter : sseEmitterList)
+        {
+            try
+            {
+                emitter.complete();
+            }
+            catch (Exception e)
+            {
+                // Emitter may already be dead/closed; nothing to do.
+            }
+        }
+        sseEmitterList.clear();
+    }
+
     protected SseEmitter createEmitter(HttpServletResponse response)
     {
         response.setHeader("Cache-Control", "no-store");
