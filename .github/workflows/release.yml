@@ -116,6 +116,10 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
+          # Per-tag notes: release-notes/<tag>.md (e.g. release-notes/v4.4.1.md).
+          # Missing file -> only the auto-generated commit list is used (warning, no failure).
+          body_path: release-notes/${{ github.ref_name }}.md
+          generate_release_notes: true
           files: |
             build/native/*.dmg
             build/native/*.msi
