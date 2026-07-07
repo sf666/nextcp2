@@ -105,16 +105,31 @@ jobs:
           cp backend/nextcp2-device-driver/nextcp2-ma9000/target/device_driver_ma9000.jar build/native/nextcp2-ma9000.jar
         shell: bash
 
-      - name: Upload workflow artifacts
+      # Separate artifacts per format so each download stays small (the installer and the
+      # portable app image each bundle a full JRE, and the jars are platform-independent).
+      - name: Upload installer artifact
         uses: actions/upload-artifact@v7
         with:
-          name: nextCP2-${{ runner.os }}
-          if-no-files-found: error
+          name: nextCP2-${{ runner.os }}-installer
+          if-no-files-found: warn # installer build is best-effort (see the .msi/.dmg step)
           path: |
             build/native/*.dmg
             build/native/*.msi
-            build/native/*.zip
-            build/native/*.jar
+
+      - name: Upload portable app-image artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: nextCP2-${{ runner.os }}-appimage
+          if-no-files-found: error
+          path: build/native/*.zip
+
+      - name: Upload jars artifact (once, from macOS)
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v7
+        with:
+          name: nextcp2-jars
+          if-no-files-found: error
+          path: build/native/*.jar
 
       - name: Attach to GitHub Release (on tag)
         if: startsWith(github.ref, 'refs/tags/')
