@@ -2,281 +2,132 @@
 title: App Settings
 order: 8
 ---
-## Server Configuration
-Displays a card view of the detected media server.
 
-<div class="relative overflow-x-auto">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="px-6 py-3">field</th>
-                <th scope="col" class="px-6 py-3">purpose</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Enable</td>
-                <td class="px-6 py-4">Disabled Renderers will not be available for selection in certain pop-ups or lists.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Status</td>
-                <td class="px-6 py-4">Previously discovered servers may appear as `OFFLINE` if not yet discovered on the network. Active server are `ONLINE`. This attribute is read only.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">IP</td>
-                <td class="px-6 py-4">IP address of the device. This attribute is read only.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">UDN</td>
-                <td class="px-6 py-4">Unique Device Name, identifies the device on the network. This attribute is read only.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">MY PLAYLIST - ObjectID</td>
-                <td class="px-6 py-4">Enter the media server ObjectID of a folder containing playlists. Typically configured automatically by the UI.
-                    Once set, the playlists from that folder will appear in the sidebar.
-                    <span class="text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">NOTE: If the servers database is recreated or reindexed, the ObjectID of the playlist folder may change and has to be set again.</span></td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">ID3 Rating</td>
-                <td class="px-6 py-4">If checked enables reading and writing star ratings to audio file metadata, if supported by the audio file format. <span class="text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">NOTE: Only available for UMS media server (fork).</span></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-
-## Renderer configuration
-Displays a card view of the detected media renderer. Offline Renderers: May appear as offline if not yet discovered. Disabled Renderers: Will not be available for selection in certain pop-ups or lists.
-
-##### device driver
-If the media renderer is connected to a physical receiver or AV device with remote control capability (e.g., via RS232 or TCP/IP), a device driver can be used to control volume and balance directly.
-A Device driver for McIntosh devices is available for download.
-
-<div class="relative overflow-x-auto">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="px-6 py-3">field</th>
-                <th scope="col" class="px-6 py-3">purpose</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">amplifier type</td>
-                <td class="px-6 py-4">Select the device driver i.e. `MA9000` for McIntosh amplifiers.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">amplifier driver connection</td>
-                <td class="px-6 py-4">Enter the driver connection string. For `MA9000` driver i.e. `192.168.112.37:12345`.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">amplifier on power default volume</td>
-                <td class="px-6 py-4">Restores the amplifier volume to a predefined level when powered on, i.e. `10`.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">amplifier default balance</td>
-                <td class="px-6 py-4">Restores the amplifier balance to a predefined level when powered on, i.e. `-3`.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">UPnP/streamer max volume</td>
-                <td class="px-6 py-4">If checked, restores the UPnP/streamer to max volume (100%) when powered on.</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-export const Bullets = ({children, title}) => (
-  <div>
-    <h6 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{title}</h6>
-    <ul class="space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
-        {children}
-    </ul>
+export const Field = ({name, children}) => (
+  <div style={{display:'flex',flexWrap:'wrap',gap:'0.15rem 1.5rem',padding:'0.7rem 0',borderTop:'1px solid var(--sl-color-gray-5)'}}>
+    <div style={{flex:'0 0 13rem',maxWidth:'100%',fontWeight:600,color:'var(--sl-color-white)'}}>{name}</div>
+    <div style={{flex:'1 1 18rem',color:'var(--sl-color-text)'}}>{children}</div>
   </div>
 );
 
+export const Group = ({title, children}) => (
+  <div style={{margin:'0.75rem 0 1.75rem'}}>
+    {title ? <div style={{fontSize:'0.72rem',fontWeight:700,textTransform:'uppercase',letterSpacing:'0.09em',color:'var(--sl-color-text-accent)',marginBottom:'0.1rem'}}>{title}</div> : null}
+    {children}
+  </div>
+);
+
+export const Note = ({children}) => (
+  <div style={{marginTop:'0.35rem',fontSize:'0.8rem',fontStyle:'italic',color:'var(--sl-color-text-accent)'}}>Note — {children}</div>
+);
+
+## Server Configuration
+
+Displays a card view of the detected media server.
+
+<Group>
+  <Field name="Enable">Disabled servers will not be available for selection in certain pop-ups or lists.</Field>
+  <Field name="Status">Previously discovered servers may appear as <code>OFFLINE</code> if not yet discovered on the network; active servers are <code>ONLINE</code>. Read only.</Field>
+  <Field name="IP">IP address of the device. Read only.</Field>
+  <Field name="UDN">Unique Device Name, identifies the device on the network. Read only.</Field>
+  <Field name="MY PLAYLIST — ObjectID">Media server ObjectID of a folder containing playlists. Usually configured automatically by the UI; once set, the playlists from that folder appear in the sidebar.<Note>If the server's database is recreated or reindexed, the ObjectID may change and has to be set again.</Note></Field>
+  <Field name="ID3 Rating">If checked, enables reading and writing star ratings to audio file metadata, if the format supports it.<Note>Only available for the UMS media server (fork).</Note></Field>
+</Group>
+
+## Renderer configuration
+
+Displays a card view of the detected media renderers. Offline renderers may appear if not yet discovered; disabled renderers are excluded from selection lists.
+
+#### Device driver
+
+If the renderer is connected to a physical receiver or AV device with remote-control capability (e.g. via RS232 or TCP/IP), a device driver can control volume and balance directly. A driver for McIntosh devices is available for download.
+
+<Group>
+  <Field name="amplifier type">Select the device driver, e.g. <code>MA9000</code> for McIntosh amplifiers.</Field>
+  <Field name="amplifier driver connection">Driver connection string. For the <code>MA9000</code> driver, e.g. <code>192.168.112.37:12345</code>.</Field>
+  <Field name="amplifier on power default volume">Restores the amplifier to a predefined volume when powered on, e.g. <code>10</code>.</Field>
+  <Field name="amplifier default balance">Restores the amplifier to a predefined balance when powered on, e.g. <code>-3</code>.</Field>
+  <Field name="UPnP/streamer max volume">If checked, sets the UPnP/streamer to max volume (100%) when powered on.</Field>
+</Group>
+
 ## Server Actions
 
-Here are additional UMS server actions available, if the active media server is an instance of UMS.
+Additional UMS server actions, available when the active media server is a UMS instance.
 
-<div class="relative overflow-x-auto">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="px-6 py-3">Button</th>
-                <th scope="col" class="px-6 py-3">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">rescan media library</td>
-                <td class="px-6 py-4">Rescans UMS media library. Attention: This can be resource consuming on large media libraries!</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">backup liked albums</td>
-                <td class="px-6 py-4">Backs up UMS liked albums in a separate backup file on the UMS server. In case the UMS media library is deleted, liked albums can
-    be restored afterwards.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">restore liked albums </td>
-                <td class="px-6 py-4">Restored liked albums from a backup file, if exists.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">import rating from musicBrainz.org</td>
-                <td class="px-6 py-4">Restores star rating from configured musicbrainz.org account below.</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+<Group>
+  <Field name="rescan media library">Rescans the UMS media library. Can be resource-intensive on large libraries.</Field>
+  <Field name="backup liked albums">Backs up UMS liked albums to a separate file on the UMS server, so they can be restored if the library is deleted.</Field>
+  <Field name="restore liked albums">Restores liked albums from a backup file, if one exists.</Field>
+  <Field name="import rating from musicBrainz.org">Imports star ratings from the musicbrainz.org account configured under Accounts.</Field>
+</Group>
+
+## App Behavior
+
+<Group>
+  <Field name="Reload page on focus">When enabled, returning to the tab/window reloads the current page. This is a browser-local preference (stored per browser), not part of the server configuration.</Field>
+</Group>
 
 ## General Configuration
 
-<div class="relative overflow-x-auto">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="px-6 py-3">Property</th>
-                <th scope="col" class="px-6 py-3">description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">device driver library path</td>
-                <td class="px-6 py-4">Where to look for amplifier device drivers. Currently McIntosh amplifier like MA9000, MA12000 and other should work.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">database path</td>
-                <td class="px-6 py-4">Where to store internal settings.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">unsecure server listening port</td>
-                <td class="px-6 py-4">This is the port you connect to with your browser.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">secure server listening port</td>
-                <td class="px-6 py-4">This is the the https listening port. Secure listen port works only if P12 keystore path is configured.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">P12 keyfile file location</td>
-                <td class="px-6 py-4">Path to NextCP/2 keystore for using secure connections. File format has to be in P12 format.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">P12 keyfile password</td>
-                <td class="px-6 py-4">P12 keystore password.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">path to restart script</td>
-                <td class="px-6 py-4">Full path to the restart script. Read access to this resource is needed.<span class="text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">NOTE: This feature is experimental and may not work.</span></td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Log4j config file</td>
-                <td class="px-6 py-4">Where to look for a log4j2 config file.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Logging date format</td>
-                <td class="px-6 py-4">To adjust logging date format. Use the Log4j2 syntax.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">bind interface stream server</td>
-                <td class="px-6 py-4">Leave empty for binding to all interfaces. Changes require restart. <span class="text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">NOTE: If NextCP/2 is running inside a docker container, select the host interface here!</span></td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Generate UPnP code</td>
-                <td class="px-6 py-4">If set ti TRUE, <code>JUPnP</code> UPnP access wrapper are generated for discovered UPnP services.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">path for generated UPnP code</td>
-                <td class="px-6 py-4">This is the folder where generated UPnP code will be saved to.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Behind reverse proxy</td>
-                <td class="px-6 py-4">Trust the <code>X-Forwarded-*</code> headers so nextCP/2 reconstructs the correct external scheme and host when TLS terminates at a proxy. Enable only when nextCP/2 is reachable solely through a trusted proxy — see <a href="/nextcp2/quick_install/docker/#running-behind-a-reverse-proxy-traefik">running behind a reverse proxy</a>. Default: off.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">SSE heartbeat interval</td>
-                <td class="px-6 py-4">Interval in seconds for the Server-Sent-Events keep-alive ping that stops proxies from dropping the live <code>/SSE</code> and <code>/mcp</code> streams. Set <code>0</code> to disable. Default: 30.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Local player: transcode before streaming</td>
-                <td class="px-6 py-4">Applies to the built-in browser player ("This device"). If checked (default), a track that needs transcoding is fully transcoded before playback starts, which enables correct duration display and seeking. Uncheck for lower latency at the cost of seeking on transcoded tracks.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Local player: cache directory</td>
-                <td class="px-6 py-4">Directory where transcoded audio for the browser player is cached. Leave empty to use the system temp directory.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Local player: cache max size</td>
-                <td class="px-6 py-4">Maximum size of the transcode cache in MB. Set <code>0</code> for unlimited.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Local player: cache idle TTL</td>
-                <td class="px-6 py-4">How long (in hours) a cached transcode is kept after its last use. Set <code>0</code> to keep entries until the next restart.</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+<Group>
+  <Field name="device driver library path">Where to look for amplifier device drivers. McIntosh amplifiers such as MA9000 / MA12000 (and similar) should work.</Field>
+  <Field name="database path">Where nextCP/2 stores its internal settings.</Field>
+  <Field name="unsecure server listening port">The HTTP port you connect to with your browser.</Field>
+  <Field name="path to restart script">Full path to a restart script; read access is required.<Note>Experimental — may not work.</Note></Field>
+  <Field name="Log4j config file">Where to look for a Log4j2 configuration file.</Field>
+  <Field name="Behind reverse proxy">Trust the <code>X-Forwarded-*</code> headers so nextCP/2 reconstructs the correct external scheme and host when TLS terminates at a proxy. Enable only when nextCP/2 is reachable solely through a trusted proxy — see <a href="/nextcp2/quick_install/docker/#running-behind-a-reverse-proxy-traefik">running behind a reverse proxy</a>. Default: off.</Field>
+  <Field name="SSE heartbeat interval">Interval in seconds for the Server-Sent-Events keep-alive ping that stops proxies from dropping the live <code>/SSE</code> and <code>/mcp</code> streams. Set <code>0</code> to disable. Default: 30.</Field>
+</Group>
+
+<Group title="SSL">
+  <Field name="secure server listening port">The HTTPS listening port. Works only if a P12 keystore is configured below.</Field>
+  <Field name="P12 keyfile file location">Path to the nextCP/2 keystore for secure connections. Must be in P12 format.</Field>
+  <Field name="P12 keyfile password">Password for the P12 keystore.</Field>
+</Group>
+
+<Group title="UPnP">
+  <Field name="Generate UPnP code">If <code>true</code>, <code>JUPnP</code> access wrappers are generated for discovered UPnP services.</Field>
+  <Field name="bind interface stream server">Leave empty to bind to all interfaces. Changes require a restart.<Note>If nextCP/2 runs inside a Docker container, select the host interface here.</Note></Field>
+  <Field name="path for generated UPnP code">Folder where generated UPnP code is saved.</Field>
+</Group>
+
+<Group title="Browser Player">
+  <Field name="transcode before streaming">Applies to the built-in browser player ("This device"). If checked (default), a track that needs transcoding is fully transcoded before playback starts, enabling correct duration display and seeking. Uncheck for lower latency, at the cost of seeking on transcoded tracks.</Field>
+  <Field name="cache directory">Directory where transcoded audio for the browser player is cached. Leave empty to use the system temp directory.</Field>
+  <Field name="cache max size">Maximum size of the transcode cache in MB. Set <code>0</code> for unlimited.</Field>
+  <Field name="cache idle TTL">How long (in hours) a cached transcode is kept after its last use. Set <code>0</code> to keep entries until the next restart.</Field>
+</Group>
 
 ## AI Configuration
 
-Configures the built-in [AI chat assistant](/nextcp2/ai/chat_assistant/). <span class="text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">NOTE: The AI feature is experimental and under active development — settings may change with any release.</span>
-Changes are applied immediately after saving — no restart is required.
-For provider setup examples (Google Gemini, OpenWebUI) and troubleshooting see [AI Configuration](/nextcp2/ai/ai_configuration/).
+Configures the built-in [AI chat assistant](/nextcp2/ai/chat_assistant/). Changes are applied immediately after saving — no restart is required. For provider setup examples (Google Gemini, OpenWebUI) and troubleshooting, see [AI Configuration](/nextcp2/ai/ai_configuration/).
 
-<div class="relative overflow-x-auto">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="px-6 py-3">field</th>
-                <th scope="col" class="px-6 py-3">purpose</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">AI enabled</td>
-                <td class="px-6 py-4">Master switch for the AI assistant feature.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">AI provider</td>
-                <td class="px-6 py-4">Selects the active provider: <code>google</code> (Gemini) or <code>openai</code> (OpenAI and OpenAI-compatible endpoints like OpenWebUI). Switching providers saves the current settings to a per-provider profile and restores the settings last used with the newly selected provider.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Base URL</td>
-                <td class="px-6 py-4">Only for OpenAI-compatible endpoints; disabled for Google. Enter the API root, i.e. <code>http://localhost:3000/api</code> for OpenWebUI. <span class="text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">NOTE: Do not append /v1 or /chat/completions — these are added automatically.</span></td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">API key</td>
-                <td class="px-6 py-4">Provider API key. Required for Google; for OpenAI-compatible endpoints it depends on the server.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Model</td>
-                <td class="px-6 py-4">The model to use. The list is fetched live from the provider and can be filtered by typing.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Send nextCP tools</td>
-                <td class="px-6 py-4">If checked (default), nextCP/2 sends its built-in tools (device selection, radio playback, language switching) to the model. Uncheck if your endpoint provides its own server-side tools.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Conversation memory</td>
-                <td class="px-6 py-4">If checked, recent messages of the conversation are sent as context with each request, so follow-up questions work. Increases token usage. Default: off.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Tool IDs</td>
-                <td class="px-6 py-4">OpenWebUI only: comma-separated list of server-side tool IDs to attach to each request, or <code>*</code> to use all tools registered on the endpoint.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Server-side tools</td>
-                <td class="px-6 py-4">OpenWebUI only: if the endpoint exposes tools, they are listed as checkboxes for granular selection.</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+:::caution
+The AI feature is experimental and under active development — these settings may change with any release.
+:::
+
+<Group>
+  <Field name="AI enabled">Master switch for the AI assistant feature.</Field>
+  <Field name="AI provider">Selects the active provider: <code>google</code> (Gemini) or <code>openai</code> (OpenAI and OpenAI-compatible endpoints like OpenWebUI). Switching providers saves the current settings to a per-provider profile and restores the settings last used with the newly selected provider.</Field>
+  <Field name="Base URL">Only for OpenAI-compatible endpoints; disabled for Google. Enter the API root, e.g. <code>http://localhost:3000/api</code> for OpenWebUI.<Note>Do not append <code>/v1</code> or <code>/chat/completions</code> — these are added automatically.</Note></Field>
+  <Field name="API key">Provider API key. Required for Google; for OpenAI-compatible endpoints it depends on the server.</Field>
+  <Field name="Model">The model to use. The list is fetched live from the provider and can be filtered by typing.</Field>
+  <Field name="Send nextCP tools">If checked (default), nextCP/2 sends its built-in tools (device selection, radio playback, language switching) to the model. Uncheck if your endpoint provides its own server-side tools.</Field>
+  <Field name="Conversation memory">If checked, recent messages of the conversation are sent as context with each request, so follow-up questions work. Increases token usage. Default: off.</Field>
+  <Field name="Tool IDs">OpenWebUI only: comma-separated list of server-side tool IDs to attach to each request, or <code>*</code> to use all tools registered on the endpoint.</Field>
+  <Field name="Server-side tools">OpenWebUI only: if the endpoint exposes tools, they are listed as checkboxes for granular selection.</Field>
+</Group>
 
 ## Accounts
-##### Spotify
-Connect your Spotify account to enable discovery of artist album art. If the browser is connected to localhost, a one-step connection linking process is available.
-If the browser is not connected to localhost, the <code>authCode</code> must be copied manually into the provided code block.
 
-##### Last FM
-Account can be connected, but API is not used yet.
+#### Spotify
+
+Connect your Spotify account to enable discovery of artist album art. If the browser is connected to localhost, a one-step linking process is available. Otherwise the <code>authCode</code> must be copied manually into the provided code block.
+
+#### Last.fm
+
+The account can be connected, but the API is not used yet.
 
 ## System Information
-Build information are displayed here.
+
+Build information is displayed here.
