@@ -16,6 +16,7 @@ export default defineConfig({
 			},
 		},
 	},	
+	site: 'https://sf666.github.io',
 	base: '/nextcp2/',
 	vite: {
 		plugins: [tailwindcss()],
