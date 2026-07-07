@@ -187,6 +187,30 @@ Here are additional UMS server actions available, if the active media server is 
                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">path for generated UPnP code</td>
                 <td class="px-6 py-4">This is the folder where generated UPnP code will be saved to.</td>
             </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Behind reverse proxy</td>
+                <td class="px-6 py-4">Trust the <code>X-Forwarded-*</code> headers so nextCP/2 reconstructs the correct external scheme and host when TLS terminates at a proxy. Enable only when nextCP/2 is reachable solely through a trusted proxy — see <a href="/nextcp2/quick_install/docker/#running-behind-a-reverse-proxy-traefik">running behind a reverse proxy</a>. Default: off.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">SSE heartbeat interval</td>
+                <td class="px-6 py-4">Interval in seconds for the Server-Sent-Events keep-alive ping that stops proxies from dropping the live <code>/SSE</code> and <code>/mcp</code> streams. Set <code>0</code> to disable. Default: 30.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Local player: transcode before streaming</td>
+                <td class="px-6 py-4">Applies to the built-in browser player ("This device"). If checked (default), a track that needs transcoding is fully transcoded before playback starts, which enables correct duration display and seeking. Uncheck for lower latency at the cost of seeking on transcoded tracks.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Local player: cache directory</td>
+                <td class="px-6 py-4">Directory where transcoded audio for the browser player is cached. Leave empty to use the system temp directory.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Local player: cache max size</td>
+                <td class="px-6 py-4">Maximum size of the transcode cache in MB. Set <code>0</code> for unlimited.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Local player: cache idle TTL</td>
+                <td class="px-6 py-4">How long (in hours) a cached transcode is kept after its last use. Set <code>0</code> to keep entries until the next restart.</td>
+            </tr>
         </tbody>
     </table>
 </div>
