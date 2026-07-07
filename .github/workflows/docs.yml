@@ -36,12 +36,11 @@ jobs:
         with:
           node-version: 26
 
-      # Enables GitHub Pages on this repo (source = GitHub Actions) on the first
-      # run, using the workflow's GITHUB_TOKEN - no manual Settings -> Pages step.
+      # Requires GitHub Pages to be enabled once with source = "GitHub Actions"
+      # (Settings -> Pages). The workflow's GITHUB_TOKEN cannot create the Pages
+      # site itself, only deploy to it, so this one-time step is done by the owner.
       - name: Configure Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - name: Build docs
         working-directory: docs
