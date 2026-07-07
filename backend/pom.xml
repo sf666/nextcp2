@@ -57,7 +57,11 @@
    		<maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
 		<maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
 		<commit>${commit.short}</commit>
+		<!-- Custom forks not on Maven Central: build_dependencies.sh reads these
+		     properties to check out the matching git tags and install them locally.
+		     jupnp tag == version; musicbrainz tag == "musicbrainz-" + version. -->
 		<jupnp.version>3.0.5.ik</jupnp.version>
+		<musicbrainz.version>1.4.2</musicbrainz.version>
 		<maven.compiler.release>25</maven.compiler.release>
 		<slf4j.version>2.0.5</slf4j.version>
 		<freemarker.version>2.3.34</freemarker.version>
@@ -398,7 +402,7 @@
 			<dependency>
 				<groupId>de.sf666</groupId>
 				<artifactId>musicbrainz</artifactId>
-				<version>1.4.2</version>
+				<version>${musicbrainz.version}</version>
 			</dependency>
 			
 			<!-- Alexa / Google LLM integration -->					

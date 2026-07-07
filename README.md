@@ -33,13 +33,35 @@ A Docker image is also available. See the [Docker quick install instructions](ht
 
 ## Install maven dependencies
 
-Call `./build_dependencies.sh` script for installing dependent libraries from source into local maven repository.
+nextCP/2 depends on two custom forks that are **not published to Maven Central**
+and must be built from source into the local maven repository before building
+nextCP/2 itself:
 
-For manual installation clone the following repositories :
+| Fork                                                     | Maven artifact          | git tag                       |
+| -------------------------------------------------------- | ----------------------- | ----------------------------- |
+| [ik666/jupnp](https://github.com/ik666/jupnp)            | `org.jupnp:*`           | `<jupnp.version>`             |
+| [sf666/musicbrainz](https://github.com/sf666/musicbrainz)| `de.sf666:musicbrainz`  | `musicbrainz-<version>`       |
+
+Call the helper script to install both:
 
 ```bash
-git clone https://github.com/sf666/musicbrainz.git
+./build_dependencies.sh
 ```
+
+The script is version-driven from a **single source of truth**: it reads the
+`jupnp.version` and `musicbrainz.version` properties from `backend/pom.xml`,
+checks out the matching git tag of each fork (jUPnP tag = the version, MusicBrainz
+tag = `musicbrainz-` + version), and installs them locally. The same script runs
+in CI, so local and release builds resolve identical versions.
+
+To bump a fork version, change it in **one** place and create the matching tag:
+
+1. Edit `<jupnp.version>` / `<musicbrainz.version>` in `backend/pom.xml`.
+2. In the fork repository, tag the desired commit (e.g. `git tag 3.0.6.ik` or
+   `git tag musicbrainz-1.4.3`) and push the tag.
+
+`build_dependencies.sh` and the dependency declarations then follow automatically —
+there is no second place to keep in sync.
 
 ### automated build
 
