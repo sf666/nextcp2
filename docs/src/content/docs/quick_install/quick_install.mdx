@@ -1,23 +1,88 @@
 ---
 title: Quick install guide
-description: Quick install guide
+description: Install nextCP/2 on macOS, Windows, Docker or from a JAR
 ---
 
-Download current <a href="https://github.com/sf666/nextcp2/releases">release</a> into a folder of your choice. Make sure to use JDK 17 or later. Start the application by calling
+nextCP/2 ships as **self-contained native apps** for macOS and Windows (a Java runtime is bundled, so no separate Java installation is needed), as a **Docker image**, and as a plain **runnable JAR**. Pick the option that fits your platform below.
 
-<code>java -jar nextcp2-release.jar</code>. For Windows user an exe file is provided for download (experimental). For Linux/Unix systems
-with systemd service manager installed a service template <a href="https://github.com/sf666/nextcp2/tree/main/startup-services/systemd"> can be downloaded here
-</a> for starting nextcp/2 as a service.
+All downloads are on the [GitHub releases page](https://github.com/sf666/nextcp2/releases).
 
-After launching the application navigate with your browser to <code>http://server-ip-address:8085</code>. If the application is started on the local machine
-browse to <code>http://127.0.0.1:8085</code>. If port 8085 is already in use, edit the file <code>nextcp2config.json</code> located next to your jar file and
-change property <code>embeddedServerPort</code> to an available port. Further configuration can be done within the application itself.
+| Download | Platform | Java needed? |
+| --- | --- | --- |
+| `nextCP2-*.dmg` / `nextCP2-macos.zip` | macOS | no (JRE bundled) |
+| `nextCP2-*.msi` / `nextCP2-windows.zip` | Windows | no (JRE bundled) |
+| `ghcr.io/sf666/nextcp2` | Docker (Linux) | no (in image) |
+| `nextcp2.jar` | any OS | yes (JRE 25) |
 
-Prefer a self-contained app that needs no separate Java installation? The release also ships native desktop apps (macOS `.dmg`, Windows `.msi`, portable app images) and a Docker image — see [Native builds](/nextcp2/quick_install/native_builds/).
+After starting nextCP/2, open the web interface in your browser:
 
-In case of using the recommended <a href="https://www.universalmediaserver.com/">Universal Media Server (UMS)</a> as media server, unlock API features by editing UMS
-configuration file <code>UMS.conf</code> and add
+```
+http://localhost:8085
+```
+
+If it runs on another machine (server, NAS, …), replace `localhost` with that machine's IP address. To change the port, see [App Settings](/nextcp2/user_interface/app_settings/) (`embeddedServerPort`).
+
+:::tip[Media server]
+nextCP/2 is a control point — it needs a UPnP/DLNA media server on the network. See [Media server setup](#media-server-setup) at the end for the recommended Universal Media Server (UMS).
+:::
+
+## macOS
+
+Download the `.dmg` and drag nextCP/2 into **Applications** (or unzip the portable `nextCP2-macos.zip` and put `nextCP2.app` wherever you like).
+
+### Allow the app on first launch
+
+The macOS app is **not notarized by Apple**, so on first launch macOS shows *"Apple could not verify that nextCP2.app is free of malware"* and refuses to open it. This is expected for a self-built, unsigned app — nothing is wrong.
+
+Remove the download-quarantine flag once, then it opens normally on double-click:
+
+```bash
+sudo xattr -dr com.apple.quarantine /Applications/nextCP2.app
+```
+
+Adjust the path if the app is elsewhere (e.g. `~/Downloads/nextCP2.app`).
+
+Alternatively via the UI: **System Settings → Privacy & Security**, scroll to the blocked-app notice, click **Open Anyway**, and confirm with Touch ID / password.
+
+On startup the app opens your default browser at `http://localhost:8085` automatically.
+
+## Windows
+
+Run the `.msi` installer (adds nextCP/2 to the Start menu), or unzip the portable `nextCP2-windows.zip` and run `nextCP2.exe` from the extracted folder — no installation required.
+
+Windows SmartScreen may warn that the publisher is unknown, because the app is not code-signed. Choose **More info → Run anyway** to continue.
+
+On startup the app opens your default browser at `http://localhost:8085` automatically.
+
+## Docker
+
+A Linux image is published to the GitHub Container Registry on every release:
+
+```bash
+docker pull ghcr.io/sf666/nextcp2:latest
+```
+
+Docker is the recommended way to run nextCP/2 together with the UMS media server on a server or NAS. See the dedicated [Docker install guide](/nextcp2/quick_install/docker/) for a complete `docker compose` setup, the data volume and the available environment variables.
+
+## Run from a JAR
+
+For a server, NAS or Raspberry Pi you can also run the plain JAR. This is the only option that requires a **JRE 25** already installed on the machine. Download `nextcp2.jar` and start it:
+
+```bash
+java -jar nextcp2.jar
+```
+
+Configuration (config file, database, logs) is created in a per-user data directory on first start; see the [config file](https://github.com/sf666/nextcp2#config-file) notes for the exact locations and the `NEXTCP_DATA` / `NEXTCP_PORT` overrides.
+
+For Linux/Unix systems with the systemd service manager, a service template [is available here](https://github.com/sf666/nextcp2/tree/main/startup-services/systemd) to run nextCP/2 as a service.
+
+The optional `nextcp2-ma9000.jar` is the McIntosh MA9000/MA12000 device driver; place it in the configured device-driver library path (see [App Settings](/nextcp2/user_interface/app_settings/)).
+
+## Media server setup
+
+nextCP/2 works with any DLNA-compatible media server, but the recommended one is [Universal Media Server (UMS)](https://www.universalmediaserver.com/) (a maintained fork is bundled in the Docker compose example). To unlock the API features nextCP/2 uses, edit the UMS configuration file `UMS.conf` and add:
+
 <ul>
-  <li><code>audio_update_rating_tag = true</code> // If rating should be saved within the audio file (metadata section). Default is false.</li>
-  <li><code>audio_likes_visible_root = true</code> // If "My Albums" should be located in the root folder next to the library folder. Default is false</li>
+  <li><code>audio_update_rating_tag = true</code> — save the star rating into the audio file metadata. Default is false.</li>
+  <li><code>audio_likes_visible_root = true</code> — show "My Albums" in the root folder next to the library folder. Default is false.</li>
 </ul>

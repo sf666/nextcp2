@@ -57,7 +57,6 @@ export default defineConfig({
 			]},
 			{ label: 'Installation', items: [
 				'quick_install/quick_install',
-				'quick_install/native_builds',
 				'quick_install/docker',
 			]},
 			{ label: 'User Interface', items: [ 
