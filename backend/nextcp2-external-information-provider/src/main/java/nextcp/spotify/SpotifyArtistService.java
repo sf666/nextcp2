@@ -55,6 +55,14 @@ public class SpotifyArtistService
 
     public Artist getArtistByNameFromSpotify(String name)
     {
+        // Spotify is optional: when it is not configured/connected there is no API instance.
+        // Skip the image lookup instead of throwing a NullPointerException, which would otherwise
+        // abort building the artist search results.
+        if (spotifyService.getSpotifyApi() == null)
+        {
+            log.debug("Spotify API not configured - skipping artist image lookup for '{}'.", name);
+            return null;
+        }
         Paging<Artist> artists;
         try
         {

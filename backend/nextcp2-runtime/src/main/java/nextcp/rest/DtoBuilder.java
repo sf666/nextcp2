@@ -182,13 +182,21 @@ public class DtoBuilder
             addMusicAlbum((MusicAlbum) container, dto);
         }
 
-        // Read artists image from Spotify
+        // Read artists image from Spotify. This is an optional enrichment and must never break
+        // the search result, so any failure (e.g. Spotify not configured) is swallowed here.
         if (container instanceof MusicArtist)
         {
-            String url = spotifyArtistService.getArtistImageUrlByName(container.getTitle());
-            if (!StringUtils.isBlank(url))
+            try
             {
-                dto.albumartUri = url;
+                String url = spotifyArtistService.getArtistImageUrlByName(container.getTitle());
+                if (!StringUtils.isBlank(url))
+                {
+                    dto.albumartUri = url;
+                }
+            }
+            catch (Exception e)
+            {
+                log.warn("Could not resolve artist image for '{}': {}", container.getTitle(), e.getMessage());
             }
         }
 
