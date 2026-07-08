@@ -94,7 +94,7 @@ The image is configured entirely through environment variables — no file needs
 | --- | --- | --- |
 | `NEXTCP_DATA` | `/nextcp2_data` | Data directory (config, database, logs, upnp_code). Authoritative: nextCP/2 reads and writes its config here. Mount a volume at this path to persist it. |
 | `NEXTCP_LIB` | `/nextcp2/lib` | Device-driver library directory. The bundled McIntosh MA9000/MA12000 driver is shipped here, and the generated config points `libraryPath` at it so the driver is found. |
-| `NEXTCP_PORT` | `8085` | HTTP listen port used when the **default config is first generated**. Handy to run several instances or avoid a port clash. Once a config exists, change the port there (`embeddedServerPort`) instead — this variable only seeds the initial value. |
+| `NEXTCP_PORT` | `8085` | HTTP listen port used when the **default config is first generated**. Handy to avoid a port clash. Once a config exists, change the port there (`embeddedServerPort`) instead — this variable only seeds the initial value. |
 | `NEXTCP_BIND_INTERFACE` | *(auto-detected)* | Network interface for UPnP discovery and the stream server (`upnpBindInterface`, e.g. `eth0`). If unset, the container auto-detects the Docker host's primary interface on first start. Set it explicitly only if the wrong interface is picked (e.g. multiple NICs). |
 | `TZ` | `Europe/Berlin` | Container timezone; affects log timestamps. Set it to your own zone (e.g. `America/New_York`). |
 | `JAVA_TOOL_OPTIONS` | `-Xms1024m -Xmx2048m` | JVM options (heap, garbage collector, …). Override to tune memory or select a different GC as in the example above. |
