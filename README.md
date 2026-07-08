@@ -2,6 +2,8 @@
 
 NextCP/2 is a web-based UPnP control point written in Java and Typescript.
 
+![nextCP/2 user interface](docs/src/content/docs/user_interface/img/multiDiskSupport.png)
+
 Documentation and installation instructions are available at [GitHub Pages](https://sf666.github.io/nextcp2).
 
 ## running the application
