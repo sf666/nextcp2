@@ -74,6 +74,8 @@ If none is found, a default config is generated in the resolved **data directory
 
 Inside the data directory the app creates `logs/` and `upnp_code/` sub-directories; the generated `logback.xml` points `LOG_DIR` at `logs/`, and the H2 database lives in the data-dir root. Existing hand-edited configs and an explicit `-DconfigFile` are always respected.
 
+Two more env overrides seed the **generated default config only** (ignored once a config exists): `NEXTCP_LIB` / `-Dnextcp.libDir` sets `libraryPath` (the device-driver dir — Docker points it at `/nextcp2/lib` where the MA9000 driver ships), and `NEXTCP_PORT` / `-Dnextcp.port` sets `embeddedServerPort` (default 8085).
+
 ## Code generation — do not hand-edit generated files
 
 Two generators live in `backend/nextcp2-codegen/`:

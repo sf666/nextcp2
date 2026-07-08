@@ -52,6 +52,15 @@ public class FileConfigPersistence
     private static final String ENV_LIB_DIR = "NEXTCP_LIB";
     private static final String PROP_LIB_DIR = "nextcp.libDir";
 
+    /**
+     * HTTP listen-port override ({@code NEXTCP_PORT} env / {@code nextcp.port} property) applied
+     * to a freshly generated config's {@code embeddedServerPort}. Unset elsewhere, in which case
+     * the default port is used.
+     */
+    private static final String ENV_PORT = "NEXTCP_PORT";
+    private static final String PROP_PORT = "nextcp.port";
+    private static final int DEFAULT_PORT = 8085;
+
     /** Subdirectory name used for the app data folder under a per-user location. */
     private static final String APP_DIR_NAME = "nextcp2";
 
@@ -298,6 +307,36 @@ public class FileConfigPersistence
         return FilenameUtils.concat(base, APP_DIR_NAME);
     }
 
+    /**
+     * Resolves the HTTP listen port for a freshly generated config: the {@code NEXTCP_PORT} /
+     * {@code nextcp.port} override if set and valid, otherwise {@link #DEFAULT_PORT}.
+     */
+    private int resolvePort()
+    {
+        String value = systemConfig.getString(PROP_PORT);
+        if (value == null || value.isBlank())
+        {
+            value = System.getenv(ENV_PORT);
+        }
+        if (value != null && !value.isBlank())
+        {
+            try
+            {
+                int port = Integer.parseInt(value.trim());
+                if (port > 0 && port <= 65535)
+                {
+                    return port;
+                }
+                log.warn("ignoring out-of-range listen port '{}', using default {}", value, DEFAULT_PORT);
+            }
+            catch (NumberFormatException e)
+            {
+                log.warn("ignoring non-numeric listen port '{}', using default {}", value, DEFAULT_PORT);
+            }
+        }
+        return DEFAULT_PORT;
+    }
+
     /** Creates the given directory (and parents) if it does not exist yet. */
     private void ensureDir(String dir)
     {
@@ -318,15 +357,17 @@ public class FileConfigPersistence
         String base = getDefaultBaseDir();
         String logsDir = FilenameUtils.concat(base, "logs");
         String upnpCodeDir = FilenameUtils.concat(base, "upnp_code");
+        String tmpDir = FilenameUtils.concat(base, "tmp");
         ensureDir(base);
         ensureDir(logsDir);
         ensureDir(upnpCodeDir);
+        ensureDir(tmpDir);
 
         c.applicationConfig = new ApplicationConfig();
         c.applicationConfig.generateUpnpCode = false;
         c.applicationConfig.generateUpnpCodePath = upnpCodeDir;
         c.applicationConfig.databaseFilename = FilenameUtils.concat(base, "nextcp2_db");
-        c.applicationConfig.embeddedServerPort = 8085;
+        c.applicationConfig.embeddedServerPort = resolvePort();
         c.applicationConfig.embeddedServerSslPort = 18085;
         c.applicationConfig.embeddedServerSslP12Keystore = "";
         c.applicationConfig.itemsPerPage = 100L;
@@ -334,6 +375,9 @@ public class FileConfigPersistence
         c.applicationConfig.sseEmitterTimeout = 180000L;
         c.applicationConfig.loggingConfigFile = FilenameUtils.concat(base, "logback.xml");
         c.applicationConfig.libraryPath = resolveLibDir(base);
+        // Pre-transcode cache for the internal streaming proxy: keep it inside the data dir
+        // (on the mounted volume) rather than the ephemeral system temp / container layer.
+        c.applicationConfig.localPlayerCacheDir = tmpDir;
         c.applicationConfig.chatHistorySize = 50;
 
         createDefaultLog(c.applicationConfig.loggingConfigFile, logsDir);
