@@ -2,22 +2,21 @@
 
 NextCP/2 is a web-based UPnP control point written in Java and Typescript.
 
-Documentation is available at [GitHub Pages](https://sf666.github.io/nextcp2).
+Documentation and installation instructions are available at [GitHub Pages](https://sf666.github.io/nextcp2).
 
-## installation
+## running the application
 
-- Download prebuild binaries from the [release](https://github.com/sf666/nextcp2/releases) page (JAR files) and put them in a directory with write permissions.
-- start the application (with optional more memory by adding "-Xms256m -Xmx512m")
+Download a platform release or the docker image and start it. 
+
+By default the application will start on the current interface on port `8085`.
+
+Open your browser and connect to the application:
 
 ```
-java [-Xms256m -Xmx512m] -jar [-DconfigFile=path_to_config_file] nextcp2.jar
+http://localhost:8085
 ```
 
-If no config file is given or found, a config-file will be generated next to the JAR file on the first startup. In this case the application might complain about incorrect or missing (default) configuration items. In this case adopt the config to your system by navigating to `App setting' and restart the application.
-
-### docker installation
-
-A Docker image is also available. See the [Docker quick install instructions](https://sf666.github.io/nextcp2/quick_install/docker/) for details.
+If nextcp runs on a server or remote machine, replace `localhost` by the IP address of your device.
 
 
 ## system requirements
@@ -30,6 +29,8 @@ A Docker image is also available. See the [Docker quick install instructions](ht
 ## browser requirements
 
 - Web browser needs support for server-sent-events. Current Chromium based browser should work.
+
+# Developer notice
 
 ## Install maven dependencies
 
@@ -97,18 +98,18 @@ mvn install
 mvn package
 ```
 
-### build artifact
+## build artifact
 
 Build artifacts are located in the maven `target` directories. 
 
 - The runnable application jar is build in the module `backend/nextcp2-assembly/target`
 - Device Driver are build in the modules below `backend/nextcp2-device-driver`
 
-#### main application
+### main application
 
 After a successful build, the main application build artifact will be located here `backend/nextcp2-assembly/target`
 
-#### McIntosh device driver
+### McIntosh device driver
 
 This device driver controls (bi-directional) a McIntosh device connected to a RS232/TCP-IP transceiver like this on: __USR-TCP232-302__.
 
@@ -120,37 +121,36 @@ Current implemented features:
 
 After a successful build, the device driver (tested with McIntosh MA9000 and MA12000 amplifier) is located here: `backend/nextcp2-device-driver/nextcp2-ma9000/target/`.
 
-# running the application
-
-To run the snapshot call :
-
-```bash
-java -Xms256m -Xmx512m -jar [-DconfigFile=path_to_config_file] nextcp2.jar
-```
-
-By default the application will start on the current interface on port `8085`.
-
-Open your browser and connect to the application:
-
-```
-http://localhost:8085
-```
-
-If nextcp runs on a server or remote machine, replace `localhost` by the IP address of your device.
 
 
 ## config file
 
-The application tries to load the config file from the following locations in this order:
+nextCP/2 stores its state (config, database, logs, transcode cache) in a **data directory**.
 
-1. file provided by system-property 'configFile'
-2. file located '/etc/nextcp2/nextcp2Config.json'
-3. file located 'USER_HOME/nextcp2Config.json'
-4. file located 'WORK_DIR/nextcp2Config.json'
+If the environment variable `NEXTCP_DATA` (or the system property `-Dnextcp.dataDir`) is set, it is **authoritative**: the config is read from — or generated into — that directory, ignoring the locations below. This is what the Docker image uses (`NEXTCP_DATA=/nextcp2_data`, mounted as a volume so settings survive restarts).
 
-If no config file is found, a config file will be generated at this location : `WORK_DIR/nextcp2Config.json`.
+Otherwise the config file `nextcp2config.json` is looked up in this order:
 
-# developer notice
+1. file provided by system-property `configFile` (`-DconfigFile=/path/nextcp2config.json`)
+2. the platform-specific data directory (see below)
+3. `/etc/nextcp2/nextcp2config.json`
+4. `USER_HOME/nextcp2config.json`
+5. `WORK_DIR/nextcp2config.json`
+
+If none is found, a default config is generated in the resolved data directory (the `NEXTCP_DATA` override, or the platform default) and picked up again on the next start:
+
+| OS            | default data directory                    |
+| ------------- | ----------------------------------------- |
+| macOS         | `~/Library/Application Support/nextcp2`   |
+| Windows       | `%APPDATA%\nextcp2` (fallback `~\nextcp2`) |
+| Linux / other | `$XDG_CONFIG_HOME/nextcp2` or `~/.config/nextcp2` |
+
+Inside the data directory the app creates the sub-directories `logs/`, `upnp_code/` and `tmp/` (the streaming-proxy pre-transcode cache), writes a `logback.xml` whose `LOG_DIR` points at `logs/`, and keeps the H2 database in the data-dir root.
+
+Two further environment variables seed the **generated default config only** (they are ignored once a config exists, so they never override user-changed values):
+
+- `NEXTCP_LIB` / `-Dnextcp.libDir` — device-driver library directory (`libraryPath`). The Docker image sets this to `/nextcp2/lib`, where the bundled MA9000/MA12000 driver ships.
+- `NEXTCP_PORT` / `-Dnextcp.port` — HTTP listen port (`embeddedServerPort`, default `8085`).
 
 ## debugging
 
