@@ -34,11 +34,13 @@ services:
 
   nextcp2:
     container_name: nextcp2
-    network_mode: host
+    network_mode: host          # required for UPnP/SSDP discovery on the LAN
     restart: unless-stopped
     volumes:
+      # Persistent data: config, database, logs/ and upnp_code/ live here (see NEXTCP_DATA)
       - next_data:/nextcp2_data
     environment:
+      TZ: Europe/Berlin         # container timezone (affects log timestamps)
       JAVA_TOOL_OPTIONS: '-Xms1024m -Xmx2048m -XX:+UseShenandoahGC'
     image: ghcr.io/sf666/nextcp2:latest
 
@@ -67,6 +69,34 @@ docker volume ls
 
 The docker volumes are used to persist data across container restarts. The `ums_public` volume is used by UMS to store its configuration and cache, while the `next_data` volume is used by nextcp/2 to store its data.
 If you want to use a different volume name, make sure to update the `docker-compose.yml` file accordingly.
+
+### Data volume layout
+
+nextCP/2 keeps **all mutable state** under the data directory `/nextcp2_data` (the `next_data` volume). On first start it generates a default configuration there and recreates the layout below; nothing is baked into the image, so a fresh `pull` of a newer image keeps your settings:
+
+```
+/nextcp2_data/
+├── nextcp2config.json   # configuration (edit here or via the UI)
+├── nextcp2_db*          # H2 database files
+├── logback.xml          # logging config (LOG_DIR points at logs/)
+├── logs/                # rolling log files
+└── upnp_code/           # generated UPnP wrapper code (only if enabled)
+```
+
+Because this lives in a named volume, the config, database and logs survive `docker compose down` / image updates. To inspect or hand-edit the config, either `docker exec` into the container or locate the volume with `docker volume inspect next_data`.
+
+### Environment variables
+
+The image is configured entirely through environment variables — no file needs to be baked in:
+
+| Variable | Default (in image) | Purpose |
+| --- | --- | --- |
+| `NEXTCP_DATA` | `/nextcp2_data` | Data directory (config, database, logs, upnp_code). Authoritative: nextCP/2 reads and writes its config here. Mount a volume at this path to persist it. |
+| `NEXTCP_LIB` | `/nextcp2/lib` | Device-driver library directory. The bundled McIntosh MA9000/MA12000 driver is shipped here, and the generated config points `libraryPath` at it so the driver is found. |
+| `TZ` | `Europe/Berlin` | Container timezone; affects log timestamps. Set it to your own zone (e.g. `America/New_York`). |
+| `JAVA_TOOL_OPTIONS` | `-Xms1024m -Xmx2048m` | JVM options (heap, garbage collector, …). Override to tune memory or select a different GC as in the example above. |
+
+Normally only `TZ` (and optionally `JAVA_TOOL_OPTIONS`) need changing. Leave `NEXTCP_DATA` and `NEXTCP_LIB` at their defaults unless you deliberately relocate those directories.
 
 To start the containers, run the following command in the directory where your `docker-compose.yml` file is located:
 

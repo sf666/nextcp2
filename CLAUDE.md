@@ -64,7 +64,15 @@ yarn start -c dev         # uses proxy.config.json (alias: ng serve --proxy-conf
 
 ## Configuration
 
-The app searches for `nextcp2Config.json` in this order: `-DconfigFile=…`, `/etc/nextcp2/`, `$HOME/`, then the working directory. If none is found, one is generated in the working directory on first start.
+`FileConfigPersistence` locates `nextcp2config.json` at startup. If `NEXTCP_DATA` (env) / `-Dnextcp.dataDir` is set it is **authoritative**: the config is read from — or generated into — that directory, ignoring the legacy locations. This is what the Docker image uses (`NEXTCP_DATA=/nextcp2_data`, mounted as a volume). Otherwise the search order is: `-DconfigFile=…`, the platform per-user data dir (see below), `/etc/nextcp2/`, `$HOME/`, then the working directory.
+
+If none is found, a default config is generated in the resolved **data directory** and found again on the next start (so settings survive restarts / app updates). The data directory is the `NEXTCP_DATA` override, or platform-specific:
+
+- macOS: `~/Library/Application Support/nextcp2`
+- Windows: `%APPDATA%\nextcp2` (fallback `~\nextcp2`)
+- Linux/other: `$XDG_CONFIG_HOME/nextcp2` or `~/.config/nextcp2`
+
+Inside the data directory the app creates `logs/` and `upnp_code/` sub-directories; the generated `logback.xml` points `LOG_DIR` at `logs/`, and the H2 database lives in the data-dir root. Existing hand-edited configs and an explicit `-DconfigFile` are always respected.
 
 ## Code generation — do not hand-edit generated files
 

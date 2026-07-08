@@ -34,6 +34,27 @@ public class FileConfigPersistence
     private static final String DEFAULT_CONFIG_FILENAME = "nextcp2config.json";
     private static final String DEFAULT_UNIX_CONFIG_PATH = "/etc/nextcp2";
 
+    /**
+     * Explicit data-directory override. When set (environment variable {@code NEXTCP_DATA} or
+     * system property {@code nextcp.dataDir}), all freshly generated defaults live inside this
+     * directory. This is what the Docker image uses: a single mounted volume that survives
+     * container restarts.
+     */
+    private static final String ENV_DATA_DIR = "NEXTCP_DATA";
+    private static final String PROP_DATA_DIR = "nextcp.dataDir";
+
+    /**
+     * Device-driver library directory override ({@code NEXTCP_LIB} env / {@code nextcp.libDir}
+     * property). The Docker image sets this to {@code /nextcp2/lib}, where the bundled MA9000
+     * driver is copied, so a freshly generated config finds the driver. Unset elsewhere, in which
+     * case the library path defaults to the data directory.
+     */
+    private static final String ENV_LIB_DIR = "NEXTCP_LIB";
+    private static final String PROP_LIB_DIR = "nextcp.libDir";
+
+    /** Subdirectory name used for the app data folder under a per-user location. */
+    private static final String APP_DIR_NAME = "nextcp2";
+
     private String configurationFilename = null;
     private Config config = null;
     private ObjectMapper om = null;
@@ -118,6 +139,34 @@ public class FileConfigPersistence
         {
             configurationFilename = getSystemPropertyConfigFile();
             log.info("Using configuration file provided by system-property : '" + getSystemPropertyConfigFile() + "'");
+            return;
+        }
+
+        // An explicit data-directory override (NEXTCP_DATA / -Dnextcp.dataDir, e.g. the Docker
+        // volume) is authoritative: use the config inside it, or generate a fresh one there,
+        // WITHOUT consulting the legacy /etc, user.home or user.dir locations.
+        if (resolveDataDirOverride() != null)
+        {
+            String existing = getConfigFileIfExists(getDefaultBaseDir());
+            if (existing != null)
+            {
+                configurationFilename = existing;
+                log.info("Using data-directory configuration file : '" + configurationFilename + "'");
+            }
+            else
+            {
+                generateDefaultConfig();
+            }
+            return;
+        }
+
+        if (getConfigFileIfExists(getDefaultBaseDir()) != null)
+        {
+            // Platform-specific per-user data directory. Checked before the legacy locations so a
+            // config generated here on a previous start is picked up again (settings survive a
+            // restart / app update).
+            configurationFilename = getConfigFileIfExists(getDefaultBaseDir());
+            log.info("Using data-directory configuration file : '" + configurationFilename + "'");
         }
         else if (getUnixPropertyFile() != null)
         {
@@ -136,51 +185,158 @@ public class FileConfigPersistence
         }
         else
         {
-            configurationFilename = FilenameUtils.concat(getDefaultBaseDir(), DEFAULT_CONFIG_FILENAME);
-            config = getDefaultConfig();
-            log.warn("config file not found. Generating new file.");
-            log.warn("crating default config file at location : " + configurationFilename);
-            writeConfig();
-            if (getConfigFileIfExists(getDefaultBaseDir()) == null)
-            {
-                log.error("failed to generte default config file. Exiting ...");
-                throw new RuntimeException("No config files available.");
-            }
+            generateDefaultConfig();
         }
     }
 
     /**
-     * Base directory for freshly generated defaults (config file, database, logback config and
-     * library path). Unified to the user's home directory on all platforms: it is always defined
-     * and writable, unlike the working directory (user.dir), which for a native desktop app is the
-     * read-only install location. Existing config files, an explicit {@code -DconfigFile} and the
-     * {@code /etc/nextcp2} location are unaffected - this only governs where a brand-new default is
-     * created.
+     * Generates a fresh default configuration in the resolved data directory and writes it to disk.
+     */
+    private void generateDefaultConfig()
+    {
+        configurationFilename = FilenameUtils.concat(getDefaultBaseDir(), DEFAULT_CONFIG_FILENAME);
+        config = getDefaultConfig();
+        log.warn("config file not found. Generating new file.");
+        log.warn("creating default config file at location : " + configurationFilename);
+        writeConfig();
+        if (getConfigFileIfExists(getDefaultBaseDir()) == null)
+        {
+            log.error("failed to generate default config file. Exiting ...");
+            throw new RuntimeException("No config files available.");
+        }
+    }
+
+    /**
+     * Base directory for freshly generated defaults (config file, database, logback config, log
+     * and UPnP-code sub-directories). Resolution order:
+     * <ol>
+     * <li>Explicit override via {@code NEXTCP_DATA} / {@code -Dnextcp.dataDir} - used by the Docker
+     * image so everything lives in one mounted volume that survives restarts.</li>
+     * <li>Otherwise a platform-specific per-user application-data directory, always writable
+     * (unlike the working directory, which for a native desktop app is the read-only install
+     * location):
+     * <ul>
+     * <li>macOS: {@code ~/Library/Application Support/nextcp2}</li>
+     * <li>Windows: {@code %APPDATA%\nextcp2} (falls back to {@code <user.home>\nextcp2})</li>
+     * <li>Linux/other: {@code $XDG_CONFIG_HOME/nextcp2} or {@code ~/.config/nextcp2}</li>
+     * </ul>
+     * </li>
+     * </ol>
+     * Existing config files, an explicit {@code -DconfigFile} and the {@code /etc/nextcp2}
+     * location are unaffected - this only governs where a brand-new default is created (and later
+     * found again).
      */
     private String getDefaultBaseDir()
     {
-        return systemConfig.getString("user.home");
+        String override = resolveDataDirOverride();
+        if (override != null)
+        {
+            return override;
+        }
+        return platformDefaultDataDir();
+    }
+
+    /**
+     * @return the explicit data-directory override ({@code NEXTCP_DATA} env var or
+     *         {@code nextcp.dataDir} system property), or {@code null} when neither is set.
+     */
+    private String resolveDataDirOverride()
+    {
+        String prop = systemConfig.getString(PROP_DATA_DIR);
+        if (prop != null && !prop.isBlank())
+        {
+            return prop.trim();
+        }
+        String env = System.getenv(ENV_DATA_DIR);
+        if (env != null && !env.isBlank())
+        {
+            return env.trim();
+        }
+        return null;
+    }
+
+    /**
+     * Resolves the device-driver library path for a freshly generated config: the
+     * {@code NEXTCP_LIB} / {@code nextcp.libDir} override if set (Docker points this at the
+     * bundled driver directory), otherwise the given data-directory base.
+     */
+    private String resolveLibDir(String base)
+    {
+        String prop = systemConfig.getString(PROP_LIB_DIR);
+        if (prop != null && !prop.isBlank())
+        {
+            return prop.trim();
+        }
+        String env = System.getenv(ENV_LIB_DIR);
+        if (env != null && !env.isBlank())
+        {
+            return env.trim();
+        }
+        return base;
+    }
+
+    /**
+     * @return the platform-specific per-user application-data directory for nextCP/2.
+     */
+    private String platformDefaultDataDir()
+    {
+        String home = systemConfig.getString("user.home");
+        String os = System.getProperty("os.name", "").toLowerCase();
+        if (os.contains("mac") || os.contains("darwin"))
+        {
+            return FilenameUtils.concat(FilenameUtils.concat(home, "Library/Application Support"), APP_DIR_NAME);
+        }
+        if (os.contains("win"))
+        {
+            String appData = System.getenv("APPDATA");
+            String base = (appData != null && !appData.isBlank()) ? appData : home;
+            return FilenameUtils.concat(base, APP_DIR_NAME);
+        }
+        // Linux / other Unix: follow the XDG base-directory spec.
+        String xdg = System.getenv("XDG_CONFIG_HOME");
+        String base = (xdg != null && !xdg.isBlank()) ? xdg : FilenameUtils.concat(home, ".config");
+        return FilenameUtils.concat(base, APP_DIR_NAME);
+    }
+
+    /** Creates the given directory (and parents) if it does not exist yet. */
+    private void ensureDir(String dir)
+    {
+        File d = new File(dir);
+        if (!d.isDirectory() && !d.mkdirs())
+        {
+            log.warn("could not create directory : {}", dir);
+        }
     }
 
     private Config getDefaultConfig()
     {
         Config c = new Config();
 
+        // All defaults live under the resolved data directory (Docker volume or platform
+        // per-user dir). Logs and UPnP code get their own sub-directories; the config file,
+        // logback config and database sit in the data-dir root.
+        String base = getDefaultBaseDir();
+        String logsDir = FilenameUtils.concat(base, "logs");
+        String upnpCodeDir = FilenameUtils.concat(base, "upnp_code");
+        ensureDir(base);
+        ensureDir(logsDir);
+        ensureDir(upnpCodeDir);
+
         c.applicationConfig = new ApplicationConfig();
         c.applicationConfig.generateUpnpCode = false;
-        c.applicationConfig.generateUpnpCodePath = System.getProperty("java.io.tmpdir");
-        c.applicationConfig.databaseFilename = FilenameUtils.concat(getDefaultBaseDir(), "nextcp2_db");
+        c.applicationConfig.generateUpnpCodePath = upnpCodeDir;
+        c.applicationConfig.databaseFilename = FilenameUtils.concat(base, "nextcp2_db");
         c.applicationConfig.embeddedServerPort = 8085;
         c.applicationConfig.embeddedServerSslPort = 18085;
         c.applicationConfig.embeddedServerSslP12Keystore = "";
         c.applicationConfig.itemsPerPage = 100L;
         c.applicationConfig.nextPageAfter = 60L;
         c.applicationConfig.sseEmitterTimeout = 180000L;
-        c.applicationConfig.loggingConfigFile = FilenameUtils.concat(getDefaultBaseDir(), "logback.xml");
-        c.applicationConfig.libraryPath = getDefaultBaseDir();
+        c.applicationConfig.loggingConfigFile = FilenameUtils.concat(base, "logback.xml");
+        c.applicationConfig.libraryPath = resolveLibDir(base);
         c.applicationConfig.chatHistorySize = 50;
 
-        createDefaultLog(c.applicationConfig.loggingConfigFile);
+        createDefaultLog(c.applicationConfig.loggingConfigFile, logsDir);
 
         c.radioStation = new ArrayList<>();
         c.musicbrainzSupport = new MusicbrainzSupport("", "");
@@ -188,14 +344,14 @@ public class FileConfigPersistence
         return c;
     }
 
-    private void createDefaultLog(String loggingConfigFile)
+    private void createDefaultLog(String loggingConfigFile, String logDir)
     {
-        File loggingFile = new File(loggingConfigFile);
-        String basePath = loggingFile.getParent();
-        if (basePath == null)
+        String basePath = logDir;
+        if (basePath == null || basePath.isBlank())
         {
             basePath = getDefaultBaseDir();
         }
+        ensureDir(basePath);
         String logfile = FilenameUtils.getBaseName(loggingConfigFile);
 
         // NOTE: This is a Logback configuration (default Spring Boot logging system).
