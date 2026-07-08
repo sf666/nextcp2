@@ -113,7 +113,23 @@ After a successful build, the main application build artifact will be located he
 
 ### McIntosh device driver
 
-This device driver controls (bi-directional) a McIntosh device connected to a RS232/TCP-IP transceiver like this on: __USR-TCP232-302__.
+A **device driver** lets nextCP/2 control the device your streamer feeds its audio into — typically an integrated amplifier — and take over its **power, volume and balance** from the UI. These are hardware functions of the amplifier that UPnP alone cannot reach.
+
+![Device-driver control paths](docs/public/device-driver.svg)
+
+**Typical setup.** A network streamer (e.g. a LUMIN) is connected to an input of the amplifier (e.g. a McIntosh MA9000) — for example over USB — and feeds it the audio; the amplifier drives the speakers. How nextCP/2 reaches the amplifier depends on the device:
+
+- **network-controllable amplifiers** are driven **directly over TCP/IP**;
+- **serial-only amplifiers** (RS232) need a small, **optional** TCP/IP&nbsp;&#8596;&nbsp;RS232 bridge (e.g. a __USR-TCP232-302__) that puts the serial port on the network. The bundled McIntosh driver uses this path.
+
+Once a device driver is configured:
+
+- the **volume slider** in the UI controls the **amplifier** instead of the streamer (the audiophile path);
+- the **power button** likewise targets the amplifier;
+- the streamer can optionally be forced to **100 %** so all volume control happens in the amplifier;
+- default **volume** and **balance** can be applied automatically on power-on.
+
+Configure it in the app under **App Settings → Renderer configuration → Device driver** (see the [documentation](https://sf666.github.io/nextcp2/user_interface/app_settings/)).
 
 Current implemented features:
 

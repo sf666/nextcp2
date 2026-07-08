@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 660" font-family="Inter, system-ui, -apple-system, Segoe UI, sans-serif">
+  <defs>
+    <marker id="ar-net" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0891b2"/></marker>
+    <marker id="ar-audio" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#d97706"/></marker>
+    <marker id="ar-rs232" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#7c3aed"/></marker>
+    <marker id="ar-spk" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#16a34a"/></marker>
+  </defs>
+
+  <rect x="1" y="1" width="898" height="658" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+
+  <!-- ===== edges (behind nodes) ===== -->
+  <!-- media stream UMS -> LUMIN -->
+  <path d="M240 96 L240 190" fill="none" stroke="#0891b2" stroke-width="2.4" marker-end="url(#ar-net)"/>
+  <text x="252" y="148" font-size="11.5" fill="#0e7490">media stream (UPnP)</text>
+
+  <!-- UPnP control nextCP2 -> LUMIN -->
+  <path d="M500 68 L420 68 L420 218 L332 218" fill="none" stroke="#0891b2" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ar-net)"/>
+  <text x="345" y="210" font-size="11.5" fill="#0e7490">UPnP control</text>
+
+  <!-- audio LUMIN -> amp -->
+  <path d="M240 246 L240 360" fill="none" stroke="#d97706" stroke-width="2.6" marker-end="url(#ar-audio)"/>
+  <text x="252" y="308" font-size="11.5" font-weight="600" fill="#b45309">audio (USB)</text>
+
+  <!-- device-driver control trunk nextCP2 -> junction -->
+  <path d="M590 96 L590 200" fill="none" stroke="#0891b2" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="600" y="140" font-size="11.5" fill="#0e7490">device-driver control</text>
+  <circle cx="590" cy="200" r="3.5" fill="#0891b2"/>
+
+  <!-- option A: direct TCP/IP nextCP2 -> amp -->
+  <path d="M590 200 L590 392 L362 392" fill="none" stroke="#0891b2" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ar-net)"/>
+  <text x="398" y="384" font-size="11" fill="#0e7490">A &#183; direct (TCP/IP)</text>
+
+  <!-- option B: via bridge -->
+  <path d="M590 200 L720 200 L720 236" fill="none" stroke="#0891b2" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ar-net)"/>
+  <text x="626" y="192" font-size="10.5" fill="#0e7490">or</text>
+
+  <!-- RS232 bridge -> amp -->
+  <path d="M720 292 L720 432 L362 432" fill="none" stroke="#7c3aed" stroke-width="2.6" marker-end="url(#ar-rs232)"/>
+  <text x="600" y="424" font-size="11" font-weight="700" fill="#6b21a8">B &#183; RS232</text>
+
+  <!-- control note near amp inputs -->
+  <text x="398" y="414" font-size="10.5" fill="#334155">device driver &#8594; Power &#183; Volume &#183; Balance &#160;(not via UPnP)</text>
+
+  <!-- speakers -->
+  <g stroke="#16a34a" stroke-width="2.6" fill="none">
+    <path d="M250 450 L250 478 L193 478 L193 500" marker-end="url(#ar-spk)"/>
+    <path d="M250 450 L250 478 L307 478 L307 500" marker-end="url(#ar-spk)"/>
+  </g>
+
+  <!-- ===== nodes ===== -->
+  <rect x="150" y="40" width="180" height="56" rx="9" fill="#fff" stroke="#334155" stroke-width="1.5"/>
+  <text x="240" y="65" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">Media Server</text>
+  <text x="240" y="83" text-anchor="middle" font-size="12" fill="#475569">UMS</text>
+
+  <rect x="500" y="40" width="180" height="56" rx="9" fill="#ecfeff" stroke="#0891b2" stroke-width="2.5"/>
+  <text x="590" y="65" text-anchor="middle" font-size="14" font-weight="700" fill="#0e7490">Control Point</text>
+  <text x="590" y="83" text-anchor="middle" font-size="12" fill="#0e7490">nextCP/2</text>
+
+  <rect x="150" y="190" width="180" height="56" rx="9" fill="#fff" stroke="#334155" stroke-width="1.5"/>
+  <text x="240" y="215" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">Network Streamer</text>
+  <text x="240" y="233" text-anchor="middle" font-size="12" fill="#475569">e.g. LUMIN</text>
+
+  <!-- bridge (optional, dashed) -->
+  <rect x="630" y="236" width="190" height="56" rx="9" fill="#faf5ff" stroke="#7c3aed" stroke-width="2" stroke-dasharray="5 3"/>
+  <text x="725" y="260" text-anchor="middle" font-size="13.5" font-weight="700" fill="#6b21a8">TCP/IP &#8596; RS232</text>
+  <text x="725" y="279" text-anchor="middle" font-size="11" fill="#7c3aed">bridge &#8212; optional (serial-only amps)</text>
+
+  <!-- amplifier -->
+  <rect x="140" y="360" width="220" height="90" rx="10" fill="#fff" stroke="#0f172a" stroke-width="2"/>
+  <text x="250" y="392" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">Integrated Amplifier</text>
+  <text x="250" y="411" text-anchor="middle" font-size="12" fill="#475569">e.g. McIntosh MA9000</text>
+  <text x="250" y="430" text-anchor="middle" font-size="11" fill="#94a3b8">audio input (e.g. USB)</text>
+
+  <!-- speakers -->
+  <g>
+    <rect x="170" y="500" width="46" height="62" rx="6" fill="#fff" stroke="#16a34a" stroke-width="1.6"/>
+    <circle cx="193" cy="520" r="7" fill="none" stroke="#16a34a" stroke-width="1.4"/>
+    <circle cx="193" cy="544" r="11" fill="none" stroke="#16a34a" stroke-width="1.4"/>
+    <rect x="284" y="500" width="46" height="62" rx="6" fill="#fff" stroke="#16a34a" stroke-width="1.6"/>
+    <circle cx="307" cy="520" r="7" fill="none" stroke="#16a34a" stroke-width="1.4"/>
+    <circle cx="307" cy="544" r="11" fill="none" stroke="#16a34a" stroke-width="1.4"/>
+    <text x="250" y="582" text-anchor="middle" font-size="11.5" fill="#15803d">speakers</text>
+  </g>
+
+  <!-- ===== legend ===== -->
+  <g font-size="11.5" fill="#334155">
+    <text x="470" y="486" font-weight="700" fill="#0f172a">Signal types</text>
+    <line x1="470" y1="507" x2="502" y2="507" stroke="#0891b2" stroke-width="3"/><text x="508" y="511">Network (media)</text>
+    <line x1="470" y1="531" x2="502" y2="531" stroke="#0891b2" stroke-width="2" stroke-dasharray="6 4"/><text x="508" y="535">Control &#8212; TCP/IP (UPnP &amp; device driver)</text>
+    <line x1="470" y1="555" x2="502" y2="555" stroke="#d97706" stroke-width="3"/><text x="508" y="559">Digital audio (e.g. USB)</text>
+    <line x1="470" y1="579" x2="502" y2="579" stroke="#7c3aed" stroke-width="3"/><text x="508" y="583">RS232 (serial-only amps)</text>
+    <line x1="470" y1="603" x2="502" y2="603" stroke="#16a34a" stroke-width="3"/><text x="508" y="607">Speaker output</text>
+  </g>
+</svg>

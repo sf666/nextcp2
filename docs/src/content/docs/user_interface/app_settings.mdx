@@ -40,14 +40,30 @@ Displays a card view of the detected media renderers. Offline renderers may appe
 
 #### Device driver
 
-If the renderer is connected to a physical receiver or AV device with remote-control capability (e.g. via RS232 or TCP/IP), a device driver can control volume and balance directly. A driver for McIntosh devices is available for download.
+A **device driver** lets nextCP/2 control the device your streamer feeds its audio into — typically an integrated amplifier — and take over its **power, volume and balance** from the UI. These are hardware functions of the amplifier that UPnP alone cannot reach.
 
-<Group>
+<img src="/nextcp2/device-driver.svg" alt="Device-driver control paths: media server, control point, network streamer, amplifier and speakers; the amplifier is controlled either directly over TCP/IP or via an optional TCP/IP-to-RS232 bridge" style="max-width:100%;height:auto;margin:1rem 0" />
+
+**Typical setup.** A network streamer (e.g. a LUMIN) is connected to an input of the amplifier (e.g. a McIntosh MA9000) — for example over USB — and feeds it the audio; the amplifier drives the speakers.
+
+**How nextCP/2 reaches the amplifier** depends on the device:
+
+- **Network-controllable amplifiers** are driven **directly over TCP/IP**.
+- **Serial-only amplifiers** that offer just **RS232** need a small, **optional** **TCP/IP ↔ RS232 bridge** that puts the serial port on the network (see the [README](https://github.com/sf666/nextcp2#mcintosh-device-driver) for a tested adapter such as the *USR-TCP232-302*). The bundled McIntosh MA9000/MA12000 driver uses this path.
+
+**What changes once a device driver is configured:**
+
+- The **volume slider** in the UI now controls the **amplifier** instead of the streamer — the audiophile path, where the volume is done in the amp.
+- The **power button** in the UI likewise targets the amplifier.
+- Optionally, the streamer is forced to **100 %** (no attenuation, so it no longer controls the volume) via the *UPnP/streamer max volume* option — only the amplifier then changes the level.
+- Default **volume** and **balance** can be applied automatically when the amplifier is powered on.
+
+<Group title="Settings">
   <Field name="amplifier type">Select the device driver, e.g. <code>MA9000</code> for McIntosh amplifiers.</Field>
-  <Field name="amplifier driver connection">Driver connection string. For the <code>MA9000</code> driver, e.g. <code>192.168.112.37:12345</code>.</Field>
-  <Field name="amplifier on power default volume">Restores the amplifier to a predefined volume when powered on, e.g. <code>10</code>.</Field>
-  <Field name="amplifier default balance">Restores the amplifier to a predefined balance when powered on, e.g. <code>-3</code>.</Field>
-  <Field name="UPnP/streamer max volume">If checked, sets the UPnP/streamer to max volume (100%) when powered on.</Field>
+  <Field name="amplifier driver connection">Connection string (<code>host:port</code>) to the amplifier or, for serial-only amps, to the RS232 bridge — e.g. <code>192.168.112.37:12345</code>.</Field>
+  <Field name="amplifier on power default volume">Volume applied to the amplifier when it is powered on, e.g. <code>10</code>.</Field>
+  <Field name="amplifier default balance">Balance applied to the amplifier when it is powered on, e.g. <code>-3</code>.</Field>
+  <Field name="UPnP/streamer max volume">If checked, sets the UPnP/streamer to maximum (100 %) on power-on, so all volume control happens in the amplifier.</Field>
 </Group>
 
 ## Server Actions
