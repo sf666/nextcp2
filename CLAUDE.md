@@ -74,7 +74,7 @@ If none is found, a default config is generated in the resolved **data directory
 
 Inside the data directory the app creates `logs/`, `upnp_code/` and `tmp/` sub-directories (`tmp/` is the internal streaming proxy's pre-transcode cache, i.e. `localPlayerCacheDir`); the generated `logback.xml` points `LOG_DIR` at `logs/`, and the H2 database lives in the data-dir root. Existing hand-edited configs and an explicit `-DconfigFile` are always respected.
 
-Two more env overrides seed the **generated default config only** (ignored once a config exists): `NEXTCP_LIB` / `-Dnextcp.libDir` sets `libraryPath` (the device-driver dir — Docker points it at `/nextcp2/lib` where the MA9000 driver ships), and `NEXTCP_PORT` / `-Dnextcp.port` sets `embeddedServerPort` (default 8085).
+More env overrides seed the **generated default config only** (ignored once a config exists): `NEXTCP_LIB` / `-Dnextcp.libDir` sets `libraryPath` (the device-driver dir — Docker points it at `/nextcp2/lib` where the MA9000 driver ships), `NEXTCP_PORT` / `-Dnextcp.port` sets `embeddedServerPort` (default 8085), and `NEXTCP_BIND_INTERFACE` / `-Dnextcp.bindInterface` sets `upnpBindInterface`. When the bind interface is unset **and** a data-dir override is present (Docker), the primary host interface is auto-detected.
 
 ## Code generation — do not hand-edit generated files
 

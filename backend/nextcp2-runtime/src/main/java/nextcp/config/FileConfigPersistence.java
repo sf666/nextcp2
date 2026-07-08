@@ -2,8 +2,12 @@ package nextcp.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.SystemConfiguration;
 import org.apache.commons.io.FilenameUtils;
@@ -60,6 +64,18 @@ public class FileConfigPersistence
     private static final String ENV_PORT = "NEXTCP_PORT";
     private static final String PROP_PORT = "nextcp.port";
     private static final int DEFAULT_PORT = 8085;
+
+    /**
+     * UPnP / stream-server bind interface override ({@code NEXTCP_BIND_INTERFACE} env /
+     * {@code nextcp.bindInterface} property) applied to a freshly generated config's
+     * {@code upnpBindInterface} (an interface name such as {@code eth0}). When unset and running
+     * with an explicit data directory (i.e. the Docker image), the primary interface of the host
+     * is auto-detected — host networking exposes the host's interfaces to the container, so this
+     * picks the interface the host uses to reach the LAN. Empty everywhere else (= bind to all
+     * interfaces, the previous behavior for desktop / plain-jar installs).
+     */
+    private static final String ENV_BIND_IFACE = "NEXTCP_BIND_INTERFACE";
+    private static final String PROP_BIND_IFACE = "nextcp.bindInterface";
 
     /** Subdirectory name used for the app data folder under a per-user location. */
     private static final String APP_DIR_NAME = "nextcp2";
@@ -337,6 +353,88 @@ public class FileConfigPersistence
         return DEFAULT_PORT;
     }
 
+    /**
+     * Resolves the UPnP bind interface for a freshly generated config: the
+     * {@code NEXTCP_BIND_INTERFACE} / {@code nextcp.bindInterface} override if set; otherwise, when
+     * an explicit data directory is configured (Docker), the auto-detected primary host interface;
+     * otherwise empty (bind to all interfaces).
+     */
+    private String resolveBindInterface()
+    {
+        String prop = systemConfig.getString(PROP_BIND_IFACE);
+        if (prop != null && !prop.isBlank())
+        {
+            return prop.trim();
+        }
+        String env = System.getenv(ENV_BIND_IFACE);
+        if (env != null && !env.isBlank())
+        {
+            return env.trim();
+        }
+        if (resolveDataDirOverride() != null)
+        {
+            String detected = detectPrimaryInterfaceName();
+            if (detected != null && !detected.isBlank())
+            {
+                log.info("auto-detected host bind interface : {}", detected);
+                return detected;
+            }
+            log.info("could not auto-detect a host bind interface; binding to all interfaces");
+        }
+        return "";
+    }
+
+    /**
+     * Detects the name of the primary network interface - the one the host would use to reach the
+     * LAN. Uses a connected (but never sending) UDP socket to determine the outbound local address
+     * and maps it back to its interface; falls back to the first up, non-loopback, non-virtual
+     * interface with a site-local IPv4 address. Returns {@code null} if nothing suitable is found.
+     */
+    private String detectPrimaryInterfaceName()
+    {
+        try (DatagramSocket socket = new DatagramSocket())
+        {
+            // Connecting a UDP socket sends no packet but makes the OS pick the outbound interface.
+            socket.connect(InetAddress.getByName("8.8.8.8"), 9);
+            InetAddress local = socket.getLocalAddress();
+            if (local != null && !local.isAnyLocalAddress())
+            {
+                NetworkInterface ni = NetworkInterface.getByInetAddress(local);
+                if (ni != null)
+                {
+                    return ni.getDisplayName();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            log.debug("primary interface detection via socket failed: {}", e.getMessage());
+        }
+        // Fallback: first usable interface with a site-local IPv4 address.
+        try
+        {
+            for (NetworkInterface ni : Collections.list(NetworkInterface.getNetworkInterfaces()))
+            {
+                if (!ni.isUp() || ni.isLoopback() || ni.isVirtual() || ni.isPointToPoint())
+                {
+                    continue;
+                }
+                for (InetAddress addr : Collections.list(ni.getInetAddresses()))
+                {
+                    if (addr.isSiteLocalAddress() && addr.getAddress().length == 4)
+                    {
+                        return ni.getDisplayName();
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            log.debug("primary interface detection via enumeration failed: {}", e.getMessage());
+        }
+        return null;
+    }
+
     /** Creates the given directory (and parents) if it does not exist yet. */
     private void ensureDir(String dir)
     {
@@ -378,6 +476,8 @@ public class FileConfigPersistence
         // Pre-transcode cache for the internal streaming proxy: keep it inside the data dir
         // (on the mounted volume) rather than the ephemeral system temp / container layer.
         c.applicationConfig.localPlayerCacheDir = tmpDir;
+        // Bind interface: explicit override, auto-detected host interface (Docker), or empty (all).
+        c.applicationConfig.upnpBindInterface = resolveBindInterface();
         c.applicationConfig.chatHistorySize = 50;
 
         createDefaultLog(c.applicationConfig.loggingConfigFile, logsDir);

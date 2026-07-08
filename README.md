@@ -151,6 +151,7 @@ Two further environment variables seed the **generated default config only** (th
 
 - `NEXTCP_LIB` / `-Dnextcp.libDir` — device-driver library directory (`libraryPath`). The Docker image sets this to `/nextcp2/lib`, where the bundled MA9000/MA12000 driver ships.
 - `NEXTCP_PORT` / `-Dnextcp.port` — HTTP listen port (`embeddedServerPort`, default `8085`).
+- `NEXTCP_BIND_INTERFACE` / `-Dnextcp.bindInterface` — UPnP / stream-server network interface (`upnpBindInterface`, e.g. `eth0`). When unset in a Docker/data-dir setup, the host's primary interface is auto-detected.
 
 ## debugging
 
