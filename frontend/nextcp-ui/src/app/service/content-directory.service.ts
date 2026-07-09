@@ -75,7 +75,19 @@ export class ContentDirectoryService {
 
   // item treatment
   musicTracks_ = signal<MusicItemDto[]>([]);
-  otherItems_ = signal<MusicItemDto[]>([]);
+  // Raw (unfiltered) non-audio items of the current browse result, accumulated across pages.
+  private rawOtherItems_ = signal<MusicItemDto[]>([]);
+  // Displayed non-audio items. Reactive: re-filters instantly when the browse result changes OR
+  // the "show image items" setting is toggled - no re-browsing needed. Image items are hidden
+  // unless the user enabled them (default off).
+  otherItems_ = computed(() => {
+    const showImages = this.configService.showImageItems();
+    return this.rawOtherItems_().filter(
+      (item) =>
+        showImages ||
+        item.objectClass?.lastIndexOf('object.item.imageItem', 0) !== 0,
+    );
+  });
 
   // notify other about content change
   browseFinished$: Subject<ContainerItemDto> = new Subject();
@@ -366,18 +378,6 @@ export class ContentDirectoryService {
   /**
    * @param data Gets called after a browse request returns ...
    */
-  /**
-   * Whether a browsed item should be listed. Image items are hidden while browsing unless the
-   * user enabled "show image items" in the general configuration (default off) - many folders
-   * contain cover images that would otherwise clutter the listing.
-   */
-  private isBrowsableItem(item: MusicItemDto): boolean {
-    if (this.configService.applicationConfig.showImageItems === true) {
-      return true;
-    }
-    return item.objectClass?.lastIndexOf('object.item.imageItem', 0) !== 0;
-  }
-
   public updateContainer(data: ContainerItemDto): void {
     //    console.log("CDS " + this.id + " : updating container with " + data.musicItemDto.length + " items.");
     if (data) {
@@ -406,11 +406,10 @@ export class ContentDirectoryService {
             item.objectClass.lastIndexOf('object.item.audioItem', 0) === 0,
         ),
       );
-      this.otherItems_.set(
+      this.rawOtherItems_.set(
         data.musicItemDto?.filter(
           (item) =>
-            item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0 &&
-            this.isBrowsableItem(item),
+            item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0,
         ),
       );
       this.browseFinished$.next(data);
@@ -457,12 +456,11 @@ export class ContentDirectoryService {
         );
       });
 
-      this.otherItems_.update((v) => {
+      this.rawOtherItems_.update((v) => {
         return v.concat(
           data.musicItemDto.filter(
             (item) =>
-              item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0 &&
-              this.isBrowsableItem(item),
+              item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0,
           ),
         );
       });

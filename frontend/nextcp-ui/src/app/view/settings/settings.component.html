@@ -319,8 +319,8 @@
         <div class="relative z-0 w-full mb-5 group flex items-center gap-3 py-2.5">
           <input type="checkbox" name="FORM_show_images" id="FORM_show_images"
             class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
-            [ngModel]="configService.applicationConfig.showImageItems ?? false"
-            (ngModelChange)="configService.applicationConfig.showImageItems = $event">
+            [ngModel]="configService.showImageItems()"
+            (ngModelChange)="configService.setShowImageItems($event)">
           <label for="FORM_show_images" class="text-sm text-gray-400">Show image items while browsing</label>
         </div>
         <div class="relative z-0 w-full mb-5 group">

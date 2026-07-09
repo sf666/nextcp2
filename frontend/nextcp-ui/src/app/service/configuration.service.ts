@@ -117,6 +117,10 @@ export class ConfigurationService {
   };
 
   // Reactive flag so OnPush components (e.g. sidebar) update immediately when AI is toggled.
+  // Signal mirror of applicationConfig.showImageItems so the browse view reacts to toggling it
+  // without re-browsing. Kept in sync on config load and via setShowImageItems().
+  public showImageItems = signal<boolean>(false);
+
   public aiEnabled = signal<boolean>(true);
 
   // AI providers/models offered by the backend, used to populate the settings dropdowns.
@@ -285,6 +289,15 @@ export class ConfigurationService {
         'success',
       )
       .subscribe();
+  }
+
+  /**
+   * Updates the "show image items while browsing" setting. Writes both the persisted config field
+   * and the reactive signal so the current browse view updates immediately.
+   */
+  public setShowImageItems(value: boolean): void {
+    this.applicationConfig.showImageItems = value;
+    this.showImageItems.set(value);
   }
 
   public saveApplicationConfig(): void {
@@ -545,6 +558,7 @@ export class ConfigurationService {
   private applyServerConfigurationFile(serverConfig: Config) {
     this.serverConfig = serverConfig;
     this.applicationConfig = Object.assign({}, serverConfig.applicationConfig);
+    this.showImageItems.set(serverConfig.applicationConfig?.showImageItems ?? false);
     this.aiConfig = this.deepCopyAiConfig(serverConfig.aiConfig);
     this.aiEnabled.set(serverConfig.aiConfig?.aiEnabled ?? true);
     // Populate the model dropdown and tool list for the now-known provider/base URL.
