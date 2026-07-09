@@ -101,6 +101,7 @@ ApplicationConfig:
    localPlayerCacheDir: String
    localPlayerCacheMaxMb: Long
    localPlayerCacheTtlHours: Long
+   showImageItems: Boolean
 
 UmsServerApiKey:
    serverUuid: String

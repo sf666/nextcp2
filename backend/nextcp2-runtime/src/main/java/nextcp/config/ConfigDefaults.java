@@ -138,6 +138,11 @@ public class ConfigDefaults
             log.info("adding new configuration value 'localPlayerCacheTtlHours = 24'");
             config.applicationConfig.localPlayerCacheTtlHours = Long.valueOf(24);
         }
+        if (config.applicationConfig.showImageItems == null)
+        {
+            log.info("adding new configuration value 'showImageItems = false'");
+            config.applicationConfig.showImageItems = false;
+        }
     }
 
 }

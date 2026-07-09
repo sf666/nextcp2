@@ -116,6 +116,18 @@ docker-compose down
 If you prefer not to use UMS as your media server, you can either replace or remove the `ums` service from the `docker-compose.yml` file.
 
 ## Initial Application Setup
+
+### NextCP/2 Configuration
+
+Once the containers are running, you can access the NextCP/2 web interface at `http://localhost:8085` (or the IP address of your Docker host). 
+In the NextCP/2 web interface, navigate to the `App Settings` tab and scroll down to the `General Configuration` section.
+
+nextCP/2 **auto-detects the Docker host's primary network interface** on first start and sets `Bind Interface Stream Server` accordingly — usually no action is needed here. Verify it matches the interface you selected in the UMS configuration.
+
+Only if the wrong interface was picked (e.g. the host has several NICs), correct it: set the `NEXTCP_BIND_INTERFACE` environment variable to the desired interface name and restart the container, or enter it in the `Bind Interface Stream Server` field and save.
+
+<Image src={imgNextcp2} alt="" class="" />
+
 ### UMS Configuration
 
 Due to certain issues with Docker container networking, it is necessary to adjust the UPnP network settings. Once the containers are running, you can access the UMS web interface at `http://localhost:9001` (or the IP address of your Docker host).
@@ -130,17 +142,6 @@ In the example below, the host interface `enp0s31f6` has been selected.
 <Image src={imgUms2} alt="" class="" />
 
 Save the configuration.
-
-### NextCP/2 Configuration
-
-Once the containers are running, you can access the NextCP/2 web interface at `http://localhost:8085` (or the IP address of your Docker host). 
-In the NextCP/2 web interface, navigate to the `App Settings` tab and scroll down to the `General Configuration` section.
-
-nextCP/2 **auto-detects the Docker host's primary network interface** on first start and sets `Bind Interface Stream Server` accordingly — usually no action is needed here. Verify it matches the interface you selected in the UMS configuration.
-
-Only if the wrong interface was picked (e.g. the host has several NICs), correct it: set the `NEXTCP_BIND_INTERFACE` environment variable to the desired interface name and restart the container, or enter it in the `Bind Interface Stream Server` field and save.
-
-<Image src={imgNextcp2} alt="" class="" />
 
 ### Get started
 

@@ -366,6 +366,18 @@ export class ContentDirectoryService {
   /**
    * @param data Gets called after a browse request returns ...
    */
+  /**
+   * Whether a browsed item should be listed. Image items are hidden while browsing unless the
+   * user enabled "show image items" in the general configuration (default off) - many folders
+   * contain cover images that would otherwise clutter the listing.
+   */
+  private isBrowsableItem(item: MusicItemDto): boolean {
+    if (this.configService.applicationConfig.showImageItems === true) {
+      return true;
+    }
+    return item.objectClass?.lastIndexOf('object.item.imageItem', 0) !== 0;
+  }
+
   public updateContainer(data: ContainerItemDto): void {
     //    console.log("CDS " + this.id + " : updating container with " + data.musicItemDto.length + " items.");
     if (data) {
@@ -397,7 +409,8 @@ export class ContentDirectoryService {
       this.otherItems_.set(
         data.musicItemDto?.filter(
           (item) =>
-            item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0,
+            item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0 &&
+            this.isBrowsableItem(item),
         ),
       );
       this.browseFinished$.next(data);
@@ -448,7 +461,8 @@ export class ContentDirectoryService {
         return v.concat(
           data.musicItemDto.filter(
             (item) =>
-              item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0,
+              item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0 &&
+              this.isBrowsableItem(item),
           ),
         );
       });

@@ -479,6 +479,9 @@ public class FileConfigPersistence
         // Bind interface: explicit override, auto-detected host interface (Docker), or empty (all).
         c.applicationConfig.upnpBindInterface = resolveBindInterface();
         c.applicationConfig.chatHistorySize = 50;
+        // Hide image items while browsing by default (many folders contain cover images that
+        // would otherwise clutter the listing). The UI filters them out when this is false.
+        c.applicationConfig.showImageItems = false;
 
         createDefaultLog(c.applicationConfig.loggingConfigFile, logsDir);
 

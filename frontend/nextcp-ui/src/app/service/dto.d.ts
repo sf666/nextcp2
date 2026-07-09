@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-07-06 14:03:08.
+// Generated using typescript-generator version 4.1.1 on 2026-07-09 10:02:13.
 
 export interface AiConfig {
     aiEnabled: boolean;
@@ -66,6 +66,7 @@ export interface ApplicationConfig {
     localPlayerCacheDir: string;
     localPlayerCacheMaxMb: number;
     localPlayerCacheTtlHours: number;
+    showImageItems: boolean;
 }
 
 export interface AudioAddictChannelDto {

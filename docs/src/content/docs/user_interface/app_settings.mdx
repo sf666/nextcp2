@@ -93,6 +93,7 @@ Additional UMS server actions, available when the active media server is a UMS i
   <Field name="Log4j config file">Where to look for a Log4j2 configuration file.</Field>
   <Field name="Behind reverse proxy">Trust the <code>X-Forwarded-*</code> headers so nextCP/2 reconstructs the correct external scheme and host when TLS terminates at a proxy. Enable only when nextCP/2 is reachable solely through a trusted proxy — see <a href="/nextcp2/quick_install/docker/#running-behind-a-reverse-proxy-traefik">running behind a reverse proxy</a>. Default: off.</Field>
   <Field name="SSE heartbeat interval">Interval in seconds for the Server-Sent-Events keep-alive ping that stops proxies from dropping the live <code>/SSE</code> and <code>/mcp</code> streams. Set <code>0</code> to disable. Default: 30.</Field>
+  <Field name="Show image items while browsing">When off (default), image items are hidden while browsing. Many folders and playlists carry their cover as an image file in the same directory, which otherwise clutters the listing and makes it hard to tell folders from images. Enable to list image items as well.</Field>
 </Group>
 
 <Group title="SSL">
