@@ -90,6 +90,26 @@ public class BaseRestService
         throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "extended features not availbale : " + udn);
     }
 
+    /**
+     * Non-throwing variant of {@link #getExtendedMediaServerByUdn(String)}: returns {@code null}
+     * when the UDN is blank, the server is not (currently) registered, or it does not support the
+     * extended API. Use this for read-only status lookups (e.g. isAlbumLiked) that should degrade
+     * gracefully instead of surfacing an HTTP error to the UI.
+     */
+    protected ExtendedApiMediaDevice findExtendedMediaServerByUdn(String udn)
+    {
+        if (StringUtils.isBlank(udn))
+        {
+            return null;
+        }
+        MediaServerDevice device = deviceRegistry.getMediaServerByUDN(new UDN(udn));
+        if (device instanceof ExtendedApiMediaDevice extended)
+        {
+            return extended;
+        }
+        return null;
+    }
+
     protected DeviceRegistry getDeviceRegistry()
     {
         return deviceRegistry;

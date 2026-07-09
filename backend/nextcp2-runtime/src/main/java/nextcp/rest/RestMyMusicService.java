@@ -13,6 +13,7 @@ import nextcp.domainmodel.services.MyMusicService;
 import nextcp.dto.MusicAlbumIds;
 import nextcp.service.ToastEventPublisher;
 import nextcp.upnp.GenActionException;
+import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
 import nextcp.util.UpnpErrorDescriptionHandler;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -49,8 +50,15 @@ public class RestMyMusicService extends BaseRestService
     @PostMapping("/isAlbumLiked/{deviceId}")
     public boolean isAlbumLiked(@RequestBody MusicAlbumIds albumIds, @PathVariable("deviceId") String deviceId)
     {
-        boolean status = myMusicService.isAlbumLiked(albumIds, getExtendedMediaServerByUdn(deviceId));
-        return status;
+        // Read-only status check: degrade gracefully to "not liked" when the server is not
+        // (currently) available or does not support the extended API, instead of returning an
+        // HTTP error that surfaces in the UI on every album browse.
+        ExtendedApiMediaDevice device = findExtendedMediaServerByUdn(deviceId);
+        if (device == null)
+        {
+            return false;
+        }
+        return myMusicService.isAlbumLiked(albumIds, device);
     }
 
     @GetMapping("/backupLikedAlbums/{deviceId}")
