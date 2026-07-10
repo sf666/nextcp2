@@ -46,25 +46,20 @@
         <div class="flex mb-4 me-4">
           @if (hasSongs()) {
           <div id="hasSongs">
-            <div class="flex flex-col">
+            <div class="flex flex-col info-block">
+              <div class="eyebrow">{{containerType()}}</div>
               <div class="title">{{currentContainer.title}}</div>
               @if (musicItemsCount > 0) {
-              @if (isContainerAlbum) {
-              <div class="flex regular">
-                <div class="font-medium">Album</div>
-                @if (currentContainer.artist) {
-                <div>by {{currentContainer.artist}}</div>
+                @if (isContainerAlbum && currentContainer.artist) {
+                  <div class="subtitle">{{currentContainer.artist}}</div>
                 }
-              </div>
-              } @else {
-              <div class="highlight">Soundtracks</div>
-              }
-              <div class="flex regular meta-tracks">
-                <div>{{musicItemsCount}} Tracks</div>
-                @if (totalPlaytime().length > 0) {
-                <div>&nbsp;-&nbsp;{{totalPlaytime()}}</div>
-                }
-              </div>
+                <div class="meta-line meta-tracks">
+                  <span>{{musicItemsCount}} tracks</span>
+                  @if (totalPlaytime().length > 0) {
+                    <span class="meta-dot">·</span>
+                    <span>{{totalPlaytime()}}</span>
+                  }
+                </div>
               }
             </div>
           </div>

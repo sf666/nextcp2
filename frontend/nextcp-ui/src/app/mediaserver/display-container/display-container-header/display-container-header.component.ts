@@ -131,6 +131,8 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   // Scroll distance (px) over which the header fully collapses.
   private readonly COLLAPSE_RANGE = 150;
+  // Bottom zone (px) where collapse is frozen to avoid macOS overscroll wobble.
+  private readonly COLLAPSE_FREEZE_ZONE = 28;
   private scrollParent: HTMLElement | null = null;
   private rafPending = false;
 
@@ -141,15 +143,27 @@ export class DisplayContainerHeaderComponent implements OnInit {
     this.rafPending = true;
     requestAnimationFrame(() => {
       this.rafPending = false;
-      const y = this.scrollParent?.scrollTop ?? 0;
+      const el = this.scrollParent;
+      if (!el) {
+        return;
+      }
+      const y = el.scrollTop;
+      // Near the very bottom, macOS inertial overscroll makes scrollTop jitter.
+      // Because the collapsing header changes the scrollable height, that jitter
+      // would feed back and wobble the header. Hold the collapse value in this
+      // bottom zone (the header shouldn't keep changing there anyway) to break
+      // the loop — without needing a bottom spacer.
+      if (el.scrollHeight - el.clientHeight - y < this.COLLAPSE_FREEZE_ZONE) {
+        return;
+      }
       const next =
         Math.round(Math.min(1, Math.max(0, y / this.COLLAPSE_RANGE)) * 100) /
         100;
       if (next !== this.collapse()) {
         this.collapse.set(next);
-        // Drive the CSS var on the scroll container so both the header and the
-        // compensating bottom spacer (in display-container) inherit it.
-        this.scrollParent?.style.setProperty('--collapse', String(next));
+        // Drive the CSS var on the scroll container so the header (and the
+        // sticky column-header offset) inherit the current collapse.
+        el.style.setProperty('--collapse', String(next));
       }
     });
   };

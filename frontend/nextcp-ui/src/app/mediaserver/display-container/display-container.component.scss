@@ -13,10 +13,6 @@
 // height constant as the header collapses, so the scroll position can never be
 // clamped by the shrink — which is what caused the header to jitter during
 // macOS inertial (momentum) scrolling.
-#display-container-main-content {
-    padding-bottom: calc(206px * var(--collapse, 0));
-}
-
 // When the collapsing browse header is present, the sticky track-list column
 // header parks just below it. The offset tracks the header's *current* height
 // (same formula/constants as the header, driven by the inherited --collapse),

@@ -35,6 +35,52 @@
     max-width     : 100%;
 }
 
+// Three-line info block: eyebrow (type) / title / meta — spacing tightens as
+// the header collapses. The title's own padding is dropped here so the block's
+// rhythm is driven by the margins below.
+.info-block {
+    min-width: 0;
+
+    .title {
+        padding-bottom: 0;
+    }
+}
+
+.eyebrow {
+    font-size     : calc(0.72rem - 0.02rem * var(--collapse, 0));
+    font-weight   : 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color         : rgba(255, 255, 255, 0.5);
+    margin-bottom : calc(0.5rem - 0.35rem * var(--collapse, 0));
+}
+
+.subtitle {
+    margin-top   : calc(0.45rem - 0.3rem * var(--collapse, 0));
+    font-size    : calc(1.05rem - 0.15rem * var(--collapse, 0));
+    font-weight  : 500;
+    color        : rgba(255, 255, 255, 0.88);
+    max-width    : 100%;
+    white-space  : nowrap;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+}
+
+.meta-line {
+    display       : flex;
+    align-items   : center;
+    gap           : 0.5rem;
+    margin-top    : 0.4rem;
+    font-size     : 0.9rem;
+    font-weight   : 400;
+    letter-spacing: 0.02rem;
+    color         : rgba(255, 255, 255, 0.55);
+}
+
+.meta-dot {
+    color: rgba(255, 255, 255, 0.35);
+}
+
 // area right to the image
 .right-section {
     min-height   : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
