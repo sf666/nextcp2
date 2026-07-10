@@ -1,98 +1,104 @@
-<div class="flex flex-col items-center justify-start min-h-screen p-8">
+<div class="np-root">
   @if(deviceService.mediaRendererSelected()) {
     @if (hasCurrentSongTitle()) {
-      <!-- Album Art Section -->
-      <div class="">
-        <img 
-          [src]="getImgSrc()" 
-          alt="Album Art"
-          class="w-96 h-96 object-cover rounded-2xl shadow-2xl transition-transform duration-300 hover:scale-105"
-        />
-      </div>
-
-      <!-- Track Info Section -->
-      <div class="text-center max-w-2xl mb-8">
-        <h1 class="text-4xl font-semibold text-white mb-2">
-          {{ getCurrentSongTitle() }}
-        </h1>
-        
-        @if (rendererService.trackInfo().currentTrack?.artistName) {
-          <p class="text-xl text-gray-400 mb-4">
-            {{ rendererService.trackInfo().currentTrack?.artistName }}
-          </p>
-        }
-        
-        @if (rendererService.trackInfo().currentTrack?.album) {
-          <p class="text-lg text-gray-500">
-            @if (!streaming()) {
-              {{ rendererService.trackInfo().currentTrack?.album }}
-            } @else {
-              Broadcasted by {{ rendererService.trackInfo().currentTrack?.album }}
-            }
-          </p>
-        }
-      </div>
-
-      <!-- Rating Section -->
-      @if (rendererService.trackInfoAvailable() && !streaming()) {
-        <div class="mb-8">
-          <star-rating [size]="getStarSize()" [currentSong]="getCurrentTrack()"></star-rating>
+      <!-- Roon-style stage: album art left, metadata right, vertically centred -->
+      <div class="np-stage">
+        <div class="np-art-wrap">
+          <img class="np-art" [src]="getImgSrc()" alt="Album Art" />
         </div>
-      }
 
-      <!-- Action Buttons -->
-      <div class="flex flex-wrap gap-4 justify-center mb-8">
-        @if (canBeAddedToPlaylist) {
-          <button 
-            (click)="openAddPlaylistDialog()"
-            class="px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all duration-200 backdrop-blur-sm flex items-center gap-2">
-            <span class="material-symbols-outlined">playlist_add</span>
-            <span>Add to Playlist</span>
-          </button>
-        }
-        
-        <button 
-          (click)="detailsClicked()"
-          class="px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all duration-200 backdrop-blur-sm flex items-center gap-2">
-          <span class="material-symbols-outlined">{{ showDetail() ? 'expand_less' : 'expand_more' }}</span>
-          <span>{{ showDetail() ? 'Hide Details' : 'Show Details' }}</span>
-        </button>
+        <div class="np-meta">
+          <div class="np-eyebrow">
+            Now Playing · {{ deviceService.selectedMediaRendererDevice().friendlyName }}
+          </div>
+
+          <div class="np-headline">
+            <h1 class="np-title">{{ getCurrentSongTitle() }}</h1>
+
+            @if (rendererService.trackInfo().currentTrack?.artistName) {
+              <p class="np-artist">{{ rendererService.trackInfo().currentTrack?.artistName }}</p>
+            }
+
+            @if (rendererService.trackInfo().currentTrack?.album) {
+              <p class="np-album">
+                @if (!streaming()) {
+                  {{ rendererService.trackInfo().currentTrack?.album }}
+                } @else {
+                  Broadcasted by {{ rendererService.trackInfo().currentTrack?.album }}
+                }
+              </p>
+            }
+          </div>
+
+          <!-- Signal-path quality badge -->
+          @if (qualityChips().length > 0) {
+            <div class="np-sig">
+              <span class="np-dot" [class.lossy]="!isLossless()"></span>
+              <span class="np-sig-label">{{ isLossless() ? 'Lossless' : 'Lossy' }}</span>
+              <span class="np-sig-sep"></span>
+              <span class="np-chips">
+                @for (chip of qualityChips(); track chip) {
+                  <span class="np-chip">{{ chip }}</span>
+                }
+              </span>
+            </div>
+          }
+
+          @if (rendererService.trackInfoAvailable() && !streaming()) {
+            <div class="np-rating">
+              <star-rating [size]="getStarSize()" [currentSong]="getCurrentTrack()"></star-rating>
+            </div>
+          }
+
+          <div class="np-actions">
+            @if (canBeAddedToPlaylist) {
+              <button class="np-btn" (click)="openAddPlaylistDialog()">
+                <span class="material-symbols-outlined">playlist_add</span>
+                <span>Add to Playlist</span>
+              </button>
+            }
+            <button class="np-btn ghost" (click)="detailsClicked()">
+              <span class="material-symbols-outlined">{{ showDetail() ? 'expand_less' : 'expand_more' }}</span>
+              <span>{{ showDetail() ? 'Hide Details' : 'Show Details' }}</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- Details Section -->
       @if (showDetail() && rendererService.trackInfoAvailable()) {
-        <div class="mt-4 p-6 bg-white/5 rounded-lg backdrop-blur-sm max-w-4xl w-full">
+        <div class="np-details">
           <h2 class="text-2xl font-semibold text-white mb-6">Audio Information</h2>
-          
+
           <!-- Player Info -->
           <div class="mb-6">
             <h3 class="text-sm text-gray-400 mb-3 uppercase tracking-wide">
               Player: {{ deviceService.selectedMediaRendererDevice().friendlyName }}
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div class="bg-white/5 rounded-lg p-4">
-                <span class="text-xs text-gray-500 block mb-1">Input Source</span>
-                <span class="text-white">{{ deviceService.getCurrentInputSource()?.Name }}</span>
+              <div class="np-info-cell">
+                <span class="np-info-key">Input Source</span>
+                <span class="np-info-val">{{ deviceService.getCurrentInputSource()?.Name }}</span>
               </div>
-              <div class="bg-white/5 rounded-lg p-4">
-                <span class="text-xs text-gray-500 block mb-1">Codec</span>
-                <span class="text-white">{{ rendererService.trackInfo().codecName }}</span>
+              <div class="np-info-cell">
+                <span class="np-info-key">Codec</span>
+                <span class="np-info-val">{{ rendererService.trackInfo().codecName }}</span>
               </div>
-              <div class="bg-white/5 rounded-lg p-4">
-                <span class="text-xs text-gray-500 block mb-1">Lossless</span>
-                <span class="text-white">{{ rendererService.trackInfo().lossless }}</span>
+              <div class="np-info-cell">
+                <span class="np-info-key">Lossless</span>
+                <span class="np-info-val">{{ rendererService.trackInfo().lossless }}</span>
               </div>
-              <div class="bg-white/5 rounded-lg p-4">
-                <span class="text-xs text-gray-500 block mb-1">Sample Rate</span>
-                <span class="text-white">{{ rendererService.trackInfo().sampleRate }} Hz</span>
+              <div class="np-info-cell">
+                <span class="np-info-key">Sample Rate</span>
+                <span class="np-info-val">{{ rendererService.trackInfo().sampleRate }} Hz</span>
               </div>
-              <div class="bg-white/5 rounded-lg p-4">
-                <span class="text-xs text-gray-500 block mb-1">Bit Depth</span>
-                <span class="text-white">{{ rendererService.trackInfo().bitDepth }} bit</span>
+              <div class="np-info-cell">
+                <span class="np-info-key">Bit Depth</span>
+                <span class="np-info-val">{{ rendererService.trackInfo().bitDepth }} bit</span>
               </div>
-              <div class="bg-white/5 rounded-lg p-4">
-                <span class="text-xs text-gray-500 block mb-1">Bitrate</span>
-                <span class="text-white">{{ rendererService.trackInfo().bitrate }} bit/s</span>
+              <div class="np-info-cell">
+                <span class="np-info-key">Bitrate</span>
+                <span class="np-info-val">{{ rendererService.trackInfo().bitrate }} bit/s</span>
               </div>
             </div>
           </div>
@@ -101,21 +107,21 @@
           <div>
             <h3 class="text-sm text-gray-400 mb-3 uppercase tracking-wide">Media Server</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div class="bg-white/5 rounded-lg p-4">
-                <span class="text-xs text-gray-500 block mb-1">Sample Rate</span>
-                <span class="text-white">{{ rendererService.sampleFreq() || 'N/A' }} Hz</span>
+              <div class="np-info-cell">
+                <span class="np-info-key">Sample Rate</span>
+                <span class="np-info-val">{{ rendererService.sampleFreq() || 'N/A' }} Hz</span>
               </div>
-              <div class="bg-white/5 rounded-lg p-4">
-                <span class="text-xs text-gray-500 block mb-1">Bit Depth</span>
-                <span class="text-white">{{ rendererService.bitsPerSample() }} bit</span>
+              <div class="np-info-cell">
+                <span class="np-info-key">Bit Depth</span>
+                <span class="np-info-val">{{ rendererService.bitsPerSample() }} bit</span>
               </div>
-              <div class="bg-white/5 rounded-lg p-4">
-                <span class="text-xs text-gray-500 block mb-1">Bitrate</span>
-                <span class="text-white">{{ rendererService.bitrate() }} bit/s</span>
+              <div class="np-info-cell">
+                <span class="np-info-key">Bitrate</span>
+                <span class="np-info-val">{{ rendererService.bitrate() }} bit/s</span>
               </div>
-              <div class="bg-white/5 rounded-lg p-4">
-                <span class="text-xs text-gray-500 block mb-1">Content Format</span>
-                <span class="text-white">{{ getCurrentTrack()?.audioFormat?.contentFormat }}</span>
+              <div class="np-info-cell">
+                <span class="np-info-key">Content Format</span>
+                <span class="np-info-val">{{ getCurrentTrack()?.audioFormat?.contentFormat }}</span>
               </div>
             </div>
           </div>
@@ -123,27 +129,24 @@
       }
     } @else {
       <!-- No Track Playing -->
-      <div class="text-center">
-        <div class="w-96 h-96 bg-white/5 rounded-2xl flex items-center justify-center mb-8">
-          <span class="material-symbols-outlined text-gray-600" style="font-size: 128px;">music_note</span>
+      <div class="np-empty">
+        <div class="np-empty-art">
+          <span class="material-symbols-outlined">music_note</span>
         </div>
-        <p class="text-2xl text-gray-500">No track currently playing</p>
+        <p class="np-empty-text">No track currently playing</p>
       </div>
     }
   } @else {
     <!-- No Renderer Selected -->
-    <div class="text-center">
-      <div class="w-96 h-96 bg-white/5 rounded-2xl flex items-center justify-center mb-8">
-        <span class="material-symbols-outlined text-gray-600" style="font-size: 128px;">speaker</span>
+    <div class="np-empty">
+      <div class="np-empty-art">
+        <span class="material-symbols-outlined">speaker</span>
       </div>
-      <p class="text-2xl text-gray-400 mb-4">No Media Renderer Selected</p>
-      <p class="text-gray-500">
-        Please select a media renderer by clicking the 
+      <p class="np-empty-text">No Media Renderer Selected</p>
+      <p class="np-empty-hint">
+        Please select a media renderer by clicking the
         <span class="material-symbols-outlined align-middle">speaker</span> button.
       </p>
     </div>
   }
 </div>
-
-
-

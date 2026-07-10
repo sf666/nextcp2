@@ -1,9 +1,281 @@
+// Roon-style "Now Listening" screen. The immersive blurred cover behind it is
+// the app-wide living-canvas (#main-screen), so this surface stays transparent.
 
-// Minimal custom styles - most styling is done via Tailwind
-img {
-  transition: transform 0.3s ease;
-  
-  &:hover {
-    transform: scale(1.02);
-  }
+:host {
+    display: block;
+}
+
+.np-root {
+    min-height: 100%;
+    padding   : 2rem 2.5rem 4rem;
+}
+
+// ---- Stage: art left, metadata right, vertically centred ----
+.np-stage {
+    display              : grid;
+    grid-template-columns: clamp(260px, 40vh, 460px) 1fr;
+    gap                  : clamp(2rem, 5vw, 4.5rem);
+    align-items          : center;
+    max-width            : 1180px;
+    margin               : 0 auto;
+    min-height           : min(74vh, 680px);
+}
+
+.np-art-wrap {
+    width: 100%;
+}
+
+.np-art {
+    width        : 100%;
+    aspect-ratio : 1 / 1;
+    object-fit   : cover;
+    border-radius: 20px;
+    box-shadow   : 0 40px 90px rgba(0, 0, 0, 0.6);
+    transition   : transform 0.3s ease;
+
+    &:hover {
+        transform: scale(1.02);
+    }
+}
+
+.np-meta {
+    display       : flex;
+    flex-direction: column;
+    gap           : 1.4rem;
+    max-width     : 640px;
+    min-width     : 0;
+}
+
+.np-eyebrow {
+    font-size     : 0.8rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight   : 700;
+    color         : var(--primary-color);
+}
+
+.np-headline {
+    display       : flex;
+    flex-direction: column;
+    gap           : 0.6rem;
+    min-width     : 0;
+}
+
+.np-title {
+    font-size     : clamp(2.4rem, 4.4vw, 3.9rem);
+    font-weight   : 800;
+    letter-spacing: -0.02em;
+    line-height   : 1.03;
+    color         : var(--snow-white);
+    text-wrap     : balance;
+    overflow-wrap : anywhere;
+}
+
+.np-artist {
+    font-size  : clamp(1.15rem, 1.7vw, 1.6rem);
+    font-weight: 500;
+    color      : var(--glas-white-1);
+}
+
+.np-album {
+    font-size     : 1rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color         : rgba(255, 255, 255, 0.45);
+}
+
+// ---- Signal-path quality badge ----
+.np-sig {
+    display        : inline-flex;
+    align-items    : center;
+    gap            : 0.75rem;
+    width          : fit-content;
+    padding        : 0.55rem 1rem 0.55rem 0.8rem;
+    border-radius  : 999px;
+    background     : rgba(14, 14, 20, 0.5);
+    border         : 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(14px);
+}
+
+.np-dot {
+    width        : 10px;
+    height       : 10px;
+    border-radius: 50%;
+    background   : var(--primary-color);
+    box-shadow   : 0 0 10px var(--primary-color);
+
+    &.lossy {
+        background : #f59e0b;
+        box-shadow : 0 0 10px rgba(245, 158, 11, 0.8);
+    }
+}
+
+.np-sig-label {
+    font-size     : 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight   : 700;
+    color         : var(--primary-color);
+}
+
+.np-sig-sep {
+    width     : 1px;
+    height    : 15px;
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.np-chips {
+    display: inline-flex;
+    gap    : 0.55rem;
+}
+
+.np-chip {
+    font-size            : 0.78rem;
+    font-weight          : 600;
+    letter-spacing       : 0.06em;
+    color                : var(--glas-white-1);
+    font-variant-numeric : tabular-nums;
+
+    & + .np-chip::before {
+        content     : '·';
+        margin-right: 0.55rem;
+        color       : rgba(255, 255, 255, 0.4);
+    }
+}
+
+.np-rating {
+    margin-top: 0.1rem;
+}
+
+// ---- Action buttons ----
+.np-actions {
+    display  : flex;
+    flex-wrap: wrap;
+    gap      : 0.75rem;
+    margin-top: 0.2rem;
+}
+
+.np-btn {
+    display        : inline-flex;
+    align-items    : center;
+    gap            : 0.5rem;
+    padding        : 0.7rem 1.25rem;
+    border-radius  : 12px;
+    background     : rgba(255, 255, 255, 0.09);
+    border         : 1px solid rgba(255, 255, 255, 0.12);
+    color          : var(--snow-white);
+    font-size      : 0.95rem;
+    font-weight    : 500;
+    cursor         : pointer;
+    backdrop-filter: blur(8px);
+    transition     : background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+
+    .material-symbols-outlined {
+        font-size: 1.25rem;
+        opacity  : 0.9;
+    }
+
+    &:hover {
+        background   : rgba(0, 255, 255, 0.12);
+        border-color : var(--primary-color-reduced);
+        transform    : translateY(-1px);
+    }
+
+    &.ghost {
+        background: transparent;
+    }
+}
+
+// ---- Details panel ----
+.np-details {
+    max-width      : 1180px;
+    margin         : 1.5rem auto 0;
+    padding        : 1.5rem;
+    border-radius  : 16px;
+    background     : rgba(255, 255, 255, 0.05);
+    border         : 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.np-info-cell {
+    display       : flex;
+    flex-direction: column;
+    gap           : 0.25rem;
+    padding       : 0.9rem 1rem;
+    border-radius : 12px;
+    background    : rgba(255, 255, 255, 0.05);
+    border        : 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.np-info-key {
+    font-size     : 0.72rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color         : rgba(255, 255, 255, 0.45);
+}
+
+.np-info-val {
+    color      : var(--snow-white);
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+// ---- Empty / no-renderer states ----
+.np-empty {
+    display        : flex;
+    flex-direction : column;
+    align-items    : center;
+    justify-content: center;
+    text-align     : center;
+    min-height     : min(74vh, 680px);
+    gap            : 1rem;
+}
+
+.np-empty-art {
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    width          : 16rem;
+    height         : 16rem;
+    border-radius  : 20px;
+    background     : rgba(255, 255, 255, 0.05);
+    border         : 1px solid rgba(255, 255, 255, 0.08);
+
+    .material-symbols-outlined {
+        font-size: 7rem;
+        color    : rgba(255, 255, 255, 0.3);
+    }
+}
+
+.np-empty-text {
+    font-size: 1.5rem;
+    color    : rgba(255, 255, 255, 0.6);
+}
+
+.np-empty-hint {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+// ---- Narrow screens: stack, centred ----
+@media (max-width: 860px) {
+    .np-stage {
+        grid-template-columns: 1fr;
+        justify-items        : center;
+        text-align           : center;
+        gap                  : 2rem;
+        min-height           : 0;
+    }
+
+    .np-art-wrap {
+        max-width: 20rem;
+    }
+
+    .np-meta {
+        align-items: center;
+    }
+
+    .np-sig,
+    .np-actions {
+        justify-content: center;
+    }
 }
