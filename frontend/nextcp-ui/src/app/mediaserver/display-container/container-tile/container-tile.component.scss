@@ -1,5 +1,8 @@
 @use "card-layout";
 
+// Card look, grid and hover come from card-layout (shared). Only the
+// component-specific text bits live here.
+
 .playlistText {
     font-size     : 0.7rem;
     color         : var(--primary-color);
@@ -11,61 +14,11 @@
 .album {
     padding-bottom: 0.4rem;
     letter-spacing: 0.1rem;
+    white-space   : nowrap;
+    overflow      : hidden;
+    text-overflow : ellipsis;
 }
 
-// Fluid grid: add columns as the viewport widens (like the old flex-wrap) and
-// let each tile fill its track, instead of fixed column counts that cap and
-// leave empty space on wide screens.
-.tile-grid {
-    display              : grid;
-    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
-    gap                  : 1rem;
-}
-
-// Rounded, frosted cards that sit on the living canvas, with an aqua hover.
-// Overrides card-layout's boxy dark tiles (scoped to this component only).
-.albumTile {
-    padding        : 0;
-    max-width      : none;   // fill the grid track (card-layout caps this at 19rem)
-    border-radius  : 14px;
-    overflow       : hidden;
-    background      : rgba(20, 20, 26, 0.42);
-    backdrop-filter : blur(8px);
-    border          : 1px solid rgba(255, 255, 255, 0.08);
-    cursor          : pointer;
-    transition      : transform 0.2s ease, border-color 0.2s ease,
-                      box-shadow 0.2s ease, background-color 0.2s ease;
-
-    &:hover {
-        transform    : translateY(-4px);
-        border-color : var(--primary-color-reduced);
-        background    : rgba(0, 255, 255, 0.07);
-        box-shadow    : 0 12px 32px rgba(0, 0, 0, 0.5);
-    }
-
-    &:hover .albumTitle,
-    &:hover .album {
-        color: var(--snow-white);
-    }
-}
-
-.albumImageContainer {
-    background-color: transparent;
-    min-width       : 0;
-    max-width       : none;
-}
-
-.albumDesc {
-    background : transparent;
-    padding    : 12px 14px 14px;
-    min-height : auto;
-    min-width  : 0;
-}
-
-.albumTitle {
-    color        : var(--glas-white-1);
-    font-weight  : 600;
-    white-space  : nowrap;
-    overflow     : hidden;
-    text-overflow: ellipsis;
+.albumTile:hover .album {
+    color: var(--snow-white);
 }

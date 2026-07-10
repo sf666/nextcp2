@@ -1,6 +1,13 @@
 @use '@angular/material' as mat;
 
 :host {
+    // Settings is a config surface, not a browse view — give it a calm solid
+    // dark ground so the album "living canvas" wash doesn't bleed through and
+    // clash with the settings cards.
+    display   : block;
+    min-height: 100%;
+    background: #0d0d10;
+
     --mdc-switch-track-height : 20px;
     --mat-switch-with-icon-handle-size : 20px;
     --mdc-switch-track-width : 44px;

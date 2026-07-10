@@ -49,42 +49,12 @@
     color         : var(--snow-white);
 }
 
-// Section heading above each tile group (Playlists / Albums / Folders / Other
-// items): bold uppercase label with a cyan tab-underline, a cyan item count,
-// behind a faint full-width rule.
-.section-heading {
-    display       : flex;
-    align-items   : flex-end;
-    gap           : 0.7rem;
-    margin        : 1.75rem 0 0.9rem 0.15rem;
-    padding-bottom: 0.5rem;
-    border-bottom : 1px solid rgba(255, 255, 255, 0.1);
-}
-
-// The first section sits right under the browse header — keep its top gap
-// small; only the following sections need the larger separation above.
+// Section heading look (.section-heading / .section-label / .section-count) is
+// shared globally in app-styles.scss. Only the display-container-specific
+// spacing override lives here: the first section sits right under the browse
+// header, so keep its top gap small; the following sections need more room.
 #display-container-main-content > div > div:first-child .section-heading {
     margin-top: 0.6rem;
-}
-
-.section-label {
-    font-size     : 1.1rem;
-    font-weight   : 700;
-    letter-spacing: 0.11em;
-    text-transform: uppercase;
-    color         : var(--snow-white);
-    // Cyan tab-underline that sits on the faint full-width rule.
-    padding-bottom: 0.5rem;
-    margin-bottom : -0.5rem;
-    border-bottom : 2px solid var(--primary-color);
-}
-
-.section-count {
-    font-size     : 0.8rem;
-    font-weight   : 600;
-    letter-spacing: 0.04em;
-    color         : var(--primary-color);
-    padding-bottom: 0.05rem;
 }
 
 .left-spacer {

@@ -19,28 +19,56 @@ $imgCardWidth      : 8rem;
 $imgCardWidthSmall : 6rem;
 
 
+// Fluid tile grid — columns grow with the viewport, each tile fills its track.
+.tile-grid {
+    display              : grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap                  : 1rem;
+    width                : 100%;
+}
+
 .albumImageContainer {
     display         : flex;
     position        : relative;
-    background-color: rgb(17, 17, 17);
-
-    flex-basis: $grid-flex-basis;
-    min-width : $grid-flex-min-width;
-    max-width : $grid-flex-max-width;
+    background-color: transparent;
+    min-width       : 0;
+    max-width       : none;
 }
 
+// Rounded, frosted "living-canvas" card with an aqua hover. Shared by all tile
+// screens (music library, other items, radio, …).
 .albumTile {
-    display       : flex;
-    flex-direction: column;
+    display        : flex;
+    flex-direction : column;
 
-    max-width: $grid-flex-max-width;
-    flex     : 5 1 $grid-flex-basis;
-
-    padding: 1rem;
+    max-width      : none;
+    padding        : 0;
+    border-radius  : 14px;
+    overflow       : hidden;
+    background     : rgba(20, 20, 26, 0.42);
+    backdrop-filter: blur(8px);
+    border         : 1px solid rgba(255, 255, 255, 0.08);
+    cursor         : pointer;
 
     font-size     : 0.9rem;
     font-weight   : 500;
     letter-spacing: 0.08rem;
+
+    transition: transform 0.2s ease, border-color 0.2s ease,
+                box-shadow 0.2s ease, background-color 0.2s ease;
+
+    &:hover {
+        transform   : translateY(-4px);
+        border-color: var(--primary-color-reduced);
+        background   : rgba(0, 255, 255, 0.07);
+        box-shadow   : 0 12px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    &:hover .albumTitle,
+    &:hover .otherItemTitle,
+    &:hover .card-title {
+        color: var(--snow-white);
+    }
 
     &.small {
         max-width: $grid-flex-mid-max-width;
@@ -49,9 +77,14 @@ $imgCardWidthSmall : 6rem;
 
 
 // IMG & Title !
-.albumTitle {
-    color      : var(--glas-white-2);
-    font-weight: 600;
+.albumTitle,
+.otherItemTitle,
+.card-title {
+    color        : var(--glas-white-1);
+    font-weight  : 600;
+    white-space  : nowrap;
+    overflow     : hidden;
+    text-overflow: ellipsis;
 }
 
 .albumLayout {
@@ -66,14 +99,11 @@ $imgCardWidthSmall : 6rem;
     flex-direction : column;
     justify-content: center;
 
-    padding-left    : 16px;
-    padding-top     : 8px;
-    padding-bottom  : 8px;
-    min-width       : 10rem;
+    padding         : 12px 14px 14px;
+    min-width       : 0;
     width           : 100%;
-    min-height      : 4rem;
     flex            : 1 1 auto;
-    background-color: rgb(30, 30, 30);
+    background-color: transparent;
 }
 
 .albumImageContainer img {
