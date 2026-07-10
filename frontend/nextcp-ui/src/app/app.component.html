@@ -21,7 +21,9 @@
     }
 
     @if (showBlur()) {
-      <div id="main-content-bg-image"></div>
+      <!-- Full-screen album-art wash (the "living canvas"). Its background image
+           is set to the now-playing artwork by BackgroundImageService via #main-screen. -->
+      <div id="main-screen" class="bg-img"></div>
     }
     <div id="mainContent" class="mainContent {{headerVisibleClass}} overflow-y-auto noScrollBar w-full pl-0 md:pl-52 ">
         <router-outlet></router-outlet>

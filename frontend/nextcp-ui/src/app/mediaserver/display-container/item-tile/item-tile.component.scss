@@ -7,6 +7,11 @@
     position: sticky;
     top     : var(--list-sticky-top, 0px);
     z-index : 10;
+    // No fill — just bold labels over the living canvas with a thin bottom rule.
+    // A colourless backdrop-blur softens the rows passing underneath so the
+    // sticky labels stay readable without an opaque background.
+    background     : transparent;
+    backdrop-filter: blur(10px);
 }
 
 .selectRow {

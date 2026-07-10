@@ -246,6 +246,12 @@ export class DisplayContainerHeaderComponent implements OnInit {
     this.backgroundImageService.setDisplayContainerHeaderImage(
       this.currentContainer.albumartUri,
     );
+    // Drive the full-screen "living canvas" wash from the item currently being
+    // browsed (always present), so the frosted chrome reliably picks up the
+    // colour you are looking at — instead of the often-dark now-playing art.
+    this.backgroundImageService.setBackgroundImageMainScreen(
+      this.currentContainer.albumartUri,
+    );
     this.cdsBrowsePathService.scrollIntoViewID();
   }
 

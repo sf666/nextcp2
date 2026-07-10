@@ -1,4 +1,12 @@
 
+// Frosted-glass navbar — matches the sidebar/footer chrome and lets the
+// album-art wash bleed through instead of the old hard black bar.
+#nav_root {
+    background     : var(--chrome-bg);
+    backdrop-filter: var(--chrome-blur);
+    border-bottom  : 1px solid var(--chrome-hair);
+}
+
 .navbar {
     height  : var(--nav-height);
     z-index : 11;                        // material design button component have z-index of 10. So lets go +1

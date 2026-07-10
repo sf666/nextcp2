@@ -54,6 +54,13 @@ $top-header-Vertical-Indent     : 120px;
 
     --dark-grey: rgba(25, 25, 25, .8);
 
+    // Frosted-glass chrome (sidebar / navbar / footer) — "living canvas": these
+    // surfaces are translucent and blur+saturate whatever album-art wash sits
+    // behind them, so the whole UI picks up a hint of the current artwork.
+    --chrome-bg   : rgba(14, 14, 19, 0.46);
+    --chrome-blur : blur(34px) saturate(1.9);
+    --chrome-hair : rgba(255, 255, 255, 0.08);
+
     --footer-height    : 5.4rem;
     --sidebar-width    : 250px;
     --sidebar-width-mid: 220px;

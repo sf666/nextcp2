@@ -168,12 +168,11 @@ export class RendererService {
           this.trackInfoUpnp().currentTrack?.albumArtUrl !=
           data.currentTrack?.albumArtUrl
         ) {
-          // update background images
+          // update footer background to the now-playing artwork; the full-screen
+          // "living canvas" wash (#main-screen) is driven by the browsed item
+          // instead, so the chrome stays coherent with the header you see.
           console.log('updating background images');
           this.backgroundImageService.setFooterBackgroundImage(
-            data.currentTrack?.albumArtUrl,
-          );
-          this.backgroundImageService.setBackgroundImageMainScreen(
             data.currentTrack?.albumArtUrl,
           );
         }

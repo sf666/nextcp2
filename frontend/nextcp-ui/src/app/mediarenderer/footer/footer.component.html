@@ -77,8 +77,8 @@
       <span class="material-symbols-outlined chip-icon">speaker</span>
       <span class="chip-name truncate">{{currentMediaRendererName()}}</span>
     </button>
-    <!-- Renderer icon only on smaller screens -->
-    <button type="button" class="out-btn flex lg:hidden" (click)="rendererClicked($event)" title="Media renderer">
+    <!-- Renderer icon only on smaller screens (the named chip replaces it on lg+) -->
+    <button type="button" class="out-btn renderer-compact" (click)="rendererClicked($event)" title="Media renderer">
       <span class="material-symbols-outlined">speaker</span>
     </button>
 

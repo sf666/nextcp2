@@ -36,14 +36,22 @@
     display         : flex;
 }
 
+// Frosted-glass sidebar — part of the "living canvas" chrome: translucent so
+// the album-art wash behind it bleeds through the blur.
+#default-sidebar {
+    background     : var(--chrome-bg);
+    backdrop-filter: var(--chrome-blur);
+    border-right   : 1px solid var(--chrome-hair);
+}
+
 .bg-img::before {
     content                : "";
     display                : block;
     position               : absolute;
     width                  : 100%;
-    -webkit-backdrop-filter: contrast(200%) blur(80px) brightness(0.20) contrast(110%) opacity(100%);
-    -moz-backdrop-filter   : contrast(200%) blur(80px) brightness(0.20) contrast(110%) opacity(100%);
-    backdrop-filter        : contrast(200%) blur(80px) brightness(0.20) contrast(110%) opacity(100%);
+    -webkit-backdrop-filter: blur(110px) saturate(1.8) brightness(0.42);
+    -moz-backdrop-filter   : blur(110px) saturate(1.8) brightness(0.42);
+    backdrop-filter        : blur(110px) saturate(1.8) brightness(0.42);
     pointer-events         : none;
     height                 : calc(100dvh - var(--footer-height));
     background-size        : cover;
@@ -58,8 +66,12 @@
     display         : block;
     position        : absolute;
     width           : 100%;
-    background-size : cover;
-    background-color: rgb(0, 0, 0);
+    // Zoom into the artwork's centre so its dominant colour fills the whole
+    // frame (incl. behind the sidebar), instead of exposing dark cover edges.
+    background-size    : 190%;
+    background-position: center;
+    background-repeat  : no-repeat;
+    background-color   : rgb(0, 0, 0);
 
     height: calc(100dvh - var(--footer-height));
 }
