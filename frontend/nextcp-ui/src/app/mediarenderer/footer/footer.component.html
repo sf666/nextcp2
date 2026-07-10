@@ -1,90 +1,97 @@
-<div class="flex flex-row flex-nowrap justify-between fixed inset-x-0 bottom-0 footer bg-zinc-950">
-  <!-- left footer section -->
-  <div id="left-section" class="flex min-w-4xs grow-3 basis-0 min-w-3xs">
-    <img src="{{rendererService.imgSrc()}}">
+<div class="footer flex items-center flex-nowrap justify-between fixed inset-x-0 bottom-0">
+  <!-- Left: now playing -->
+  <div id="left-section" class="now-playing flex items-center min-w-0 grow-3 basis-0">
+    <button type="button" class="artwork-wrap" (click)="showSongPopup($event)" title="{{getCurrentSongTitle()}}">
+      <img class="artwork" src="{{rendererService.imgSrc()}}" alt="">
+    </button>
 
-    <div class="flex flex-col w-full albumAndTitle">
+    <div class="track-meta flex flex-col justify-center min-w-0">
       <div class="title no-wrap">{{getCurrentSongTitle()}}</div>
-      <div class="flex flex-col no-wrap">
-        @if (rendererService.trackInfo().currentTrack?.artistName ) {
-          <div class="align-self-start artist">{{rendererService.trackInfo().currentTrack?.artistName}}
-          </div>
-        } @else {
-          <div>&nbsp;</div>
-        }
-        @if (rendererService.trackInfo().currentTrack?.album) {
-          <div class="align-self-start album">{{rendererService.trackInfo().currentTrack?.album}}</div>
-        } @else {
-          <div>&nbsp;</div>
-        }
-      </div>
+      @if (rendererService.trackInfo().currentTrack?.artistName) {
+        <div class="artist no-wrap">{{rendererService.trackInfo().currentTrack?.artistName}}</div>
+      }
+      @if (rendererService.trackInfo().currentTrack?.album) {
+        <div class="album no-wrap">{{rendererService.trackInfo().currentTrack?.album}}</div>
+      }
     </div>
-    <div class="qualityBadge">
+
+    <div class="quality-badge-slot">
       <quality-badge [item]="rendererService.trackInfo().currentTrack"></quality-badge>
     </div>
   </div>
 
-  <!-- Middle footer section -->
-  <div id="middle-section" class="flex grow-2 min-w-3xs justify-center h-full basis-0 mx-4">
-    <div class="flex grow max-w-md flex-col ">
-      <div class="player-button-group">
-        <span class="material-symbols-outlined icon-button {{shuffleClass}}" (click)="playlistService.toggleShuffle()">shuffle</span>
-        <span class="material-symbols-outlined icon-button" (click)="playlistService.previous()">skip_previous</span>
-        @if (!rendererService.isPlaying()) {
-          <span class="material-symbols-outlined md-48 icon-button" (click)="rendererService.play()">play_arrow</span>
-        }
-        @if (rendererService.isPlaying()) {
-          <span class="material-symbols-outlined md-48 icon-button" (click)="rendererService.pause()">pause_circle</span>
-        }
-        <span class="material-symbols-outlined icon-button" (click)="rendererService.next()">skip_next</span>
-        <span class="material-symbols-outlined icon-button {{repeatClass}}" (click)="playlistService.toggleRepeat()">repeat</span>
-      </div>
-      <div id="timeProgressContainer" class="pb-4 flex">
-        <div class="timeText">{{rendererService.trackTime().secondsDisp}}</div>
-        <div class="timeSliderBox">
-          @if (!streaming()) {
-            <input 
-              type="range" 
-              min="0" 
-              max="100" 
-              step="1" 
-              [value]="trackTimePercent()" 
-              (input)="trackTimePercentSeek($event.target.value)"
-              class="time-range-slider"
-              style="--value: {{trackTimePercent()}}%"
-            />
-          } @else {
-            <div class="time-progress-static w-full"></div>
-          }
-        </div>
+  <!-- Middle: transport -->
+  <div id="middle-section" class="transport flex flex-col items-center justify-center grow-2 min-w-0 basis-0 mx-4">
+    <div class="control-row flex items-center">
+      <button type="button" class="ctrl-btn {{shuffleClass}}" (click)="playlistService.toggleShuffle()" title="Shuffle">
+        <span class="material-symbols-outlined">shuffle</span>
+      </button>
+      <button type="button" class="ctrl-btn" (click)="playlistService.previous()" title="Previous">
+        <span class="material-symbols-outlined">skip_previous</span>
+      </button>
+      @if (!rendererService.isPlaying()) {
+        <button type="button" class="play-btn" (click)="rendererService.play()" title="Play">
+          <span class="material-symbols-outlined">play_arrow</span>
+        </button>
+      } @else {
+        <button type="button" class="play-btn" (click)="rendererService.pause()" title="Pause">
+          <span class="material-symbols-outlined">pause</span>
+        </button>
+      }
+      <button type="button" class="ctrl-btn" (click)="rendererService.next()" title="Next">
+        <span class="material-symbols-outlined">skip_next</span>
+      </button>
+      <button type="button" class="ctrl-btn {{repeatClass}}" (click)="playlistService.toggleRepeat()" title="Repeat">
+        <span class="material-symbols-outlined">repeat</span>
+      </button>
+    </div>
+
+    <div class="progress-row flex items-center">
+      <span class="time-text">{{rendererService.trackTime().secondsDisp}}</span>
+      <div class="slider-box">
         @if (!streaming()) {
-          <div class="timeText">{{getFinishTime()}}</div>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            [value]="trackTimePercent()"
+            (input)="trackTimePercentSeek($event.target.value)"
+            class="time-range-slider"
+            style="--value: {{trackTimePercent()}}%"
+          />
+        } @else {
+          <div class="time-progress-static w-full"></div>
         }
       </div>
+      @if (!streaming()) {
+        <span class="time-text">{{getFinishTime()}}</span>
+      }
     </div>
   </div>
 
-  <!-- right footer section -->
-  <div id="right-section" class="flex grow-3 min-w-4xs justify-end me-4 basis-0">
-    <div class="flex self-center">
-      <div class="flex items-center">
-        <!-- Speaker button with name for XL+ screens -->
-        <div class="hidden lg:flex items-center gap-2 px-3 mr-6 py-1 border border-amber-400 rounded transition-colors cursor-pointer grow shrink max-w-65" (click)="rendererClicked($event)">
-          <span class="material-symbols-outlined text-amber-400 flex-shrink-0">speaker</span>
-          <span class="text-sm text-amber-400 font-light truncate">{{currentMediaRendererName()}}</span>
-        </div>
-        <!-- Speaker icon only for smaller screens -->
-        <div class="flex lg:hidden">
-          <span class="material-symbols-outlined icon-main" (click)="rendererClicked($event)">speaker</span>
-        </div>
-        
-        <div class="material-symbols-outlined icon-main" (click)="serverClicked($event)">dns</div>
-        @if (hasDeviceDriver()) {
-          <span class="material-symbols-outlined {{getStandbyClass()}} icon-main" (click)="powerClicked()">power_settings_new</span>
-        }
-        <span class="material-symbols-outlined icon-main" (click)="volumeClicked($event)">volume_up</span>
-      </div>
-    </div>
+  <!-- Right: outputs -->
+  <div id="right-section" class="outputs flex items-center justify-end grow-3 min-w-0 basis-0">
+    <!-- Active renderer pill (name shown on XL+ screens) -->
+    <button type="button" class="device-chip hidden lg:flex items-center gap-2" (click)="rendererClicked($event)" title="{{currentMediaRendererName()}}">
+      <span class="material-symbols-outlined chip-icon">speaker</span>
+      <span class="chip-name truncate">{{currentMediaRendererName()}}</span>
+    </button>
+    <!-- Renderer icon only on smaller screens -->
+    <button type="button" class="out-btn flex lg:hidden" (click)="rendererClicked($event)" title="Media renderer">
+      <span class="material-symbols-outlined">speaker</span>
+    </button>
+
+    <button type="button" class="out-btn" (click)="serverClicked($event)" title="Media server">
+      <span class="material-symbols-outlined">dns</span>
+    </button>
+    @if (hasDeviceDriver()) {
+      <button type="button" class="out-btn {{getStandbyClass()}}" (click)="powerClicked()" title="Power">
+        <span class="material-symbols-outlined">power_settings_new</span>
+      </button>
+    }
+    <button type="button" class="out-btn" (click)="volumeClicked($event)" title="Volume">
+      <span class="material-symbols-outlined">volume_up</span>
+    </button>
   </div>
 </div>
-
