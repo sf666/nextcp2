@@ -248,6 +248,22 @@ input {
     }
 }
 
+// Glass popup: the dialog wrapper (rendered by Angular Material outside the
+// component DOM) is made transparent and 16px-rounded so the component's own
+// rounded glass panel defines the whole surface. Applied via panelClass, so no
+// ::ng-deep is needed inside the components.
+.popup-glass {
+    .mat-mdc-dialog-container,
+    .mat-mdc-dialog-surface,
+    mat-dialog-container {
+        background: transparent;
+        box-shadow: none;
+        border-radius: 16px;
+        overflow: hidden;
+        padding: 0;
+    }
+}
+
 .col-greyed {
     color: rgba(229, 238, 255, .6);
 }

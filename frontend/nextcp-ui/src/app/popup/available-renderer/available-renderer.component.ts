@@ -19,8 +19,18 @@ export class AvailableRendererComponent {
   private readonly _matDialogRef: MatDialogRef<AvailableRendererComponent>;
   private readonly triggerElementRef: ElementRef;
 
-  rendererCount = computed(() => this.deviceService.mediaRendererList().length);
-  popupHeight = computed(() => this.rendererCount() * 30 + 120);
+  // Popup chrome that is not part of the scrollable row area:
+  // header (52px) + header border (1px) + list padding (2x8px) + panel borders (2px).
+  private readonly CHROME_HEIGHT = 71;
+  private readonly ROW_HEIGHT = 44;
+  private readonly MAX_HEIGHT = 560;
+
+  // Derive the exact popup height from the rendered rows so there is no
+  // empty gap for few devices and no clipping for many.
+  popupHeight = computed(() => {
+    const rows = this.filteredMediaRendererList().length;
+    return Math.min(rows * this.ROW_HEIGHT + this.CHROME_HEIGHT, this.MAX_HEIGHT);
+  });
 
   filteredMediaRendererList = computed(() => {
     const discovered = this.deviceService.mediaRendererList().filter((pl) => {
@@ -51,7 +61,7 @@ export class AvailableRendererComponent {
     this.popupService.configurePopupPosition(
       this._matDialogRef,
       this.triggerElementRef,
-      350,
+      360,
       this.popupHeight(),
     );
   }
@@ -63,12 +73,5 @@ export class AvailableRendererComponent {
   selectRenderer(udn: string): void {
     this.deviceService.setMediaRendererByUdn(udn);
     this.close();
-  }
-
-  getSelectedClass(udn: string): string {
-    if (this.deviceService.isMediaRendererSelected(udn)) {
-      return 'selected';
-    }
-    return '';
   }
 }

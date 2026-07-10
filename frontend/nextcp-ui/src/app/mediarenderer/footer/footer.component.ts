@@ -89,7 +89,7 @@ export class FooterComponent implements OnInit {
     const target = new ElementRef(event.currentTarget);
     const dialogRef = this.dialog.open(AvailableRendererComponent, {
       data: { trigger: target },
-      panelClass: 'popup',
+      panelClass: ['popup', 'popup-glass'],
     });
     dialogRef.afterClosed().subscribe((_res) => {
       console.log(_res);
@@ -100,7 +100,7 @@ export class FooterComponent implements OnInit {
     const target = new ElementRef(event.currentTarget);
     const dialogRef = this.dialog.open(AvailableServerComponent, {
       data: { trigger: target },
-      panelClass: 'popup',
+      panelClass: ['popup', 'popup-glass'],
     });
     dialogRef.afterClosed().subscribe((_res) => {
       console.log('server dialog closed');

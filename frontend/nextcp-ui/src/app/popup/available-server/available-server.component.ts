@@ -21,9 +21,18 @@ export class AvailableServerComponent {
   private readonly _matDialogRef: MatDialogRef<AvailableServerComponent>;
   private readonly triggerElementRef: ElementRef;
 
-  popupHeight = computed(
-    () => this.deviceService.mediaServerList().length * 30 + 120,
-  );
+  // Popup chrome that is not part of the scrollable row area:
+  // header (52px) + header border (1px) + list padding (2x8px) + panel borders (2px).
+  private readonly CHROME_HEIGHT = 71;
+  private readonly ROW_HEIGHT = 44;
+  private readonly MAX_HEIGHT = 560;
+
+  // Derive the exact popup height from the rendered rows so there is no
+  // empty gap for few servers and no clipping for many.
+  popupHeight = computed(() => {
+    const rows = this.filteredMediaServerList().length;
+    return Math.min(rows * this.ROW_HEIGHT + this.CHROME_HEIGHT, this.MAX_HEIGHT);
+  });
   filteredMediaServerList = computed(() => {
     return this.deviceService.mediaServerList().filter((pl) => {
       const serverConfig = this.configurationService.findServerConfig(pl.udn);
@@ -65,12 +74,5 @@ export class AvailableServerComponent {
     this.persistenceService.setNewMediaServerDevice(udn);
     this.deviceService.setMediaServerByUdn(udn);
     this.close();
-  }
-
-  getSelectedClass(udn: string): string {
-    if (this.deviceService.isMediaServerSelected(udn)) {
-      return 'selected';
-    }
-    return '';
   }
 }

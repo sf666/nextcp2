@@ -1,18 +1,31 @@
-<div class="panel border-0 rounded-xl" (mouseleave)="close()">
-  <div class="border-0 border-b-1 text-lg font-bold border-zinc-600 p-4">Media Server</div>
-  <div class="dialogItems flex flex-col flex-wrap mt-4 minWidth">
+<div class="dialog-root flex flex-col" (mouseleave)="close()">
+  <!-- Header -->
+  <div class="dialog-header flex items-center justify-between gap-3 px-4">
+    <span class="header-title">Media Server</span>
+    <span class="header-count">{{filteredMediaServerList().length}}</span>
+  </div>
+
+  <!-- Server list -->
+  <div class="dialog-list flex flex-col">
     @for (device of filteredMediaServerList(); track device.udn) {
-      <div class="element-item {{getSelectedClass(device.udn)}}"
+      <button type="button" class="device-item flex items-center gap-3"
+        [class.selected]="deviceService.isMediaServerSelected(device.udn)"
         (click)="selectServer(device.udn)">
-        <div class="renderer-icon-slot">
+        <span class="device-icon flex items-center justify-center">
           @if (device.img?.length > 0) {
-            <img class="renderer-icon" src="{{device.img}}" alt="{{device.friendlyName}}">
+            <img class="device-img" src="{{device.img}}" alt="{{device.friendlyName}}">
           } @else {
-            <div class="renderer-icon-placeholder"></div>
+            <span class="material-symbols-outlined device-fallback">dns</span>
           }
-        </div>
-        <div class="renderer-name" title="{{device.friendlyName}}">{{device.friendlyName}}</div>
-      </div>
+        </span>
+        <span class="device-text flex flex-col min-w-0">
+          <span class="device-name" title="{{device.friendlyName}}">{{device.friendlyName}}</span>
+          @if (device.extendedApi) {
+            <span class="device-sub">Extended API</span>
+          }
+        </span>
+        <span class="material-symbols-outlined check-icon">check</span>
+      </button>
     }
   </div>
 </div>

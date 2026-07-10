@@ -1,28 +1,41 @@
-<div class="panel border-0 rounded-xl" (mouseleave)="close()">
-  <div class="border-0 border-b-1 text-lg font-bold border-zinc-600 p-4">Media Renderer</div>
-  <div class="dialogItems flex flex-col flex-wrap mt-4 minWidth">
-  @for (device of filteredMediaRendererList(); track device) {
-        <div class="element-item {{getSelectedClass(device.udn)}}"
-          (click)="selectRenderer(device.udn)">
-          <div class="renderer-icon-slot">
-            @if (device.udn === deviceService.LOCAL_BROWSER_UDN) {
-              <svg class="renderer-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
-                aria-hidden="true">
-                <rect x="3" y="4" width="18" height="16" rx="2"></rect>
-                <line x1="3" y1="8.5" x2="21" y2="8.5"></line>
-                <circle cx="6" cy="6.25" r="0.6" fill="currentColor" stroke="none"></circle>
-                <circle cx="8.4" cy="6.25" r="0.6" fill="currentColor" stroke="none"></circle>
-                <circle cx="10.8" cy="6.25" r="0.6" fill="currentColor" stroke="none"></circle>
-              </svg>
-            } @else if (device.img?.length > 0) {
-              <img class="renderer-icon" src="{{device.img}}" alt="{{device.friendlyName}}">
-            } @else {
-              <div class="renderer-icon-placeholder"></div>
-            }
-          </div>
-          <div class="renderer-name" title="{{device.friendlyName}}">{{device.friendlyName}}</div>
-        </div>
-  }
+<div class="dialog-root flex flex-col" (mouseleave)="close()">
+  <!-- Header -->
+  <div class="dialog-header flex items-center justify-between gap-3 px-4">
+    <span class="header-title">Media Renderer</span>
+    <span class="header-count">{{filteredMediaRendererList().length}}</span>
+  </div>
+
+  <!-- Renderer list -->
+  <div class="dialog-list flex flex-col">
+    @for (device of filteredMediaRendererList(); track device.udn) {
+      <button type="button" class="device-item flex items-center gap-3"
+        [class.selected]="deviceService.isMediaRendererSelected(device.udn)"
+        (click)="selectRenderer(device.udn)">
+        <span class="device-icon flex items-center justify-center">
+          @if (device.udn === deviceService.LOCAL_BROWSER_UDN) {
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+              aria-hidden="true">
+              <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+              <line x1="3" y1="8.5" x2="21" y2="8.5"></line>
+              <circle cx="6" cy="6.25" r="0.6" fill="currentColor" stroke="none"></circle>
+              <circle cx="8.4" cy="6.25" r="0.6" fill="currentColor" stroke="none"></circle>
+              <circle cx="10.8" cy="6.25" r="0.6" fill="currentColor" stroke="none"></circle>
+            </svg>
+          } @else if (device.img?.length > 0) {
+            <img class="device-img" src="{{device.img}}" alt="{{device.friendlyName}}">
+          } @else {
+            <span class="material-symbols-outlined device-fallback">speaker</span>
+          }
+        </span>
+        <span class="device-text flex flex-col min-w-0">
+          <span class="device-name" title="{{device.friendlyName}}">{{device.friendlyName}}</span>
+          @if (device.udn === deviceService.LOCAL_BROWSER_UDN) {
+            <span class="device-sub">This device</span>
+          }
+        </span>
+        <span class="material-symbols-outlined check-icon">check</span>
+      </button>
+    }
   </div>
 </div>
