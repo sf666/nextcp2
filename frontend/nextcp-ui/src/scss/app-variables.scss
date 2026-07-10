@@ -60,6 +60,9 @@ $top-header-Vertical-Indent     : 120px;
     --chrome-bg   : rgba(14, 14, 19, 0.46);
     --chrome-blur : blur(34px) saturate(1.9);
     --chrome-hair : rgba(255, 255, 255, 0.08);
+    // Dominant colour of the current artwork (set by BackgroundImageService),
+    // used to tint the sidebar. Neutral dark by default / on CORS/greyscale.
+    --ambient-color: #17171d;
 
     --footer-height    : 5.4rem;
     --sidebar-width    : 250px;

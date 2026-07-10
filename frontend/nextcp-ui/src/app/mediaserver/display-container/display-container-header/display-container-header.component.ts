@@ -252,6 +252,8 @@ export class DisplayContainerHeaderComponent implements OnInit {
     this.backgroundImageService.setBackgroundImageMainScreen(
       this.currentContainer.albumartUri,
     );
+    // Extract the cover's dominant colour to reliably tint the sidebar.
+    this.backgroundImageService.applyAmbientTint(this.currentContainer.albumartUri);
     this.cdsBrowsePathService.scrollIntoViewID();
   }
 

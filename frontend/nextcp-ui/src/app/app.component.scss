@@ -36,12 +36,14 @@
     display         : flex;
 }
 
-// Frosted-glass sidebar — part of the "living canvas" chrome: translucent so
-// the album-art wash behind it bleeds through the blur.
+// Sidebar tint — the far-left edge sits over the darkest part of the album
+// wash, so instead of the (often grey) bleed it takes the extracted dominant
+// colour (--ambient-color) under a dark scrim: reliably tinted, still legible.
 #default-sidebar {
-    background     : var(--chrome-bg);
-    backdrop-filter: var(--chrome-blur);
-    border-right   : 1px solid var(--chrome-hair);
+    background  : linear-gradient(rgba(9, 9, 13, 0.58), rgba(9, 9, 13, 0.74)),
+                  var(--ambient-color);
+    border-right: 1px solid var(--chrome-hair);
+    transition  : background 0.4s ease;
 }
 
 .bg-img::before {
@@ -66,9 +68,10 @@
     display         : block;
     position        : absolute;
     width           : 100%;
-    // Zoom into the artwork's centre so its dominant colour fills the whole
-    // frame (incl. behind the sidebar), instead of exposing dark cover edges.
-    background-size    : 190%;
+    // Cover-fit (whole artwork), matching the browse header's backdrop so the
+    // header→content transition stays smooth. The sidebar gets its colour from
+    // the extracted dominant colour (--ambient-color) instead of this wash.
+    background-size    : cover;
     background-position: center;
     background-repeat  : no-repeat;
     background-color   : rgb(0, 0, 0);
