@@ -98,7 +98,7 @@
               </div>
               <div class="np-info-cell">
                 <span class="np-info-key">Bitrate</span>
-                <span class="np-info-val">{{ rendererService.trackInfo().bitrate }} bit/s</span>
+                <span class="np-info-val">{{ formatBitrate(rendererService.trackInfo().bitrate) }}</span>
               </div>
             </div>
           </div>
@@ -117,7 +117,7 @@
               </div>
               <div class="np-info-cell">
                 <span class="np-info-key">Bitrate</span>
-                <span class="np-info-val">{{ rendererService.bitrate() }} bit/s</span>
+                <span class="np-info-val">{{ formatBitrate(rendererService.bitrate()) }}</span>
               </div>
               <div class="np-info-cell">
                 <span class="np-info-key">Content Format</span>

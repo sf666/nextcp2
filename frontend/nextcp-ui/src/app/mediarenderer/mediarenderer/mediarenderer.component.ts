@@ -100,6 +100,16 @@ export class MediarendererComponent implements OnInit {
     return disp + ' kHz';
   }
 
+  // bit/s -> "2117 kbit/s". Audio bitrates in bit/s are unwieldy; kbit/s is the
+  // conventional unit.
+  formatBitrate(bitsPerSecond: number): string {
+    if (!bitsPerSecond) {
+      return 'N/A';
+    }
+    // Group thousands using the browser's locale (e.g. "1,411" / "1.411").
+    return Math.round(bitsPerSecond / 1000).toLocaleString() + ' kbit/s';
+  }
+
   public hasCurrentSongTitle(): boolean {
     if (this.rendererService.trackInfoAvailable()) {
       return true;
