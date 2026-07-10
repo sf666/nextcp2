@@ -10,21 +10,15 @@ import {
   computed,
   ChangeDetectionStrategy,
   ElementRef,
-  viewChild,
   inject,
   afterNextRender,
   DestroyRef,
+  HostListener,
 } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import {
-  MatOption,
-  MatSelect,
-  MatSelectModule,
-} from '@angular/material/select';
 import { Observable } from 'rxjs';
 import { ContentDirectoryService } from 'src/app/service/content-directory.service';
 import { MusicItemDto } from 'src/app/service/dto';
@@ -41,11 +35,8 @@ import { DisplayHeaderOptionsComponent } from '../../popup/display-header-option
   imports: [
     MatIconModule,
     MatButtonModule,
-    MatInputModule,
     FormsModule,
-    MatSelectModule,
     ReactiveFormsModule,
-    MatOption,
     MatDialogModule,
   ],
   templateUrl: './display-container-header.component.html',
@@ -60,7 +51,70 @@ export class DisplayContainerHeaderComponent implements OnInit {
   private timeDisplayService = inject(TimeDisplayService);
   private destroyRef = inject(DestroyRef);
 
-  readonly genresSelectbox = viewChild.required<MatSelect>('genresSelect');
+  //
+  // Tailwind filter dropdowns (sort / genres)
+  /////////////////////////////////////
+
+  // Which custom dropdown is open, if any.
+  openMenu = signal<'sort' | 'genres' | null>(null);
+
+  readonly sortOptions: ReadonlyArray<{ value: string; label: string }> = [
+    { value: 'NONE', label: 'None' },
+    { value: 'TITLE', label: 'Album Title' },
+    { value: 'ARTIST', label: 'Album Artist' },
+    { value: 'GENRE', label: 'Genre' },
+  ];
+
+  sortLabel = computed(
+    () =>
+      this.sortOptions.find((o) => o.value === this.sortCriteria())?.label ??
+      'None',
+  );
+
+  genresSummary = computed(() => {
+    const g = this.selectedGenres();
+    if (!g?.length) {
+      return 'Any';
+    }
+    return g.length === 1 ? g[0] : `${g.length} selected`;
+  });
+
+  toggleMenu(menu: 'sort' | 'genres', event: MouseEvent): void {
+    event.stopPropagation();
+    this.openMenu.update((cur) => (cur === menu ? null : menu));
+  }
+
+  closeMenu(): void {
+    if (this.openMenu() !== null) {
+      this.openMenu.set(null);
+    }
+  }
+
+  selectSort(value: string): void {
+    this.sortCriteria.set(value);
+    this.openMenu.set(null);
+  }
+
+  isGenreSelected(genre: string): boolean {
+    return this.selectedGenres()?.includes(genre) ?? false;
+  }
+
+  toggleGenre(genre: string, event: MouseEvent): void {
+    // Keep the menu open for multi-select.
+    event.stopPropagation();
+    const current = this.selectedGenres() ?? [];
+    this.selectedGenres.set(
+      current.includes(genre)
+        ? current.filter((g) => g !== genre)
+        : [...current, genre],
+    );
+  }
+
+  // Close any open dropdown when clicking outside this component.
+  @HostListener('document:click')
+  onDocumentClick(): void {
+    this.closeMenu();
+  }
 
   //
   // Collapsing sticky header
@@ -130,7 +184,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   shuffleClicked = output<ContainerDto>();
   addToPlaylistClicked = output<ContainerDto>();
 
-  genresList = signal<Array<String>>([]);
+  genresList = signal<Array<string>>([]);
   currentAlbumLiked = signal<boolean>(false);
   totalPlaytimeShort = computed(() =>
     this.calcTotalPlaytimeShort(this.contentDirectoryService().musicTracks_()),
@@ -187,7 +241,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   private fillGenres(): void {
     console.log('filling genres. Items size is ' + this.musicTracks?.length);
-    const mySet = new Set<String>();
+    const mySet = new Set<string>();
     this.musicTracks?.forEach((value) => {
       if (value?.genre) {
         console.log('reading genre music tracks : ' + value.genre);
@@ -263,10 +317,8 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   public clearGenres(event: MouseEvent): void {
-    this.genresSelectbox().options.forEach((item: MatOption) =>
-      item.deselect(),
-    );
     event.stopPropagation();
+    this.selectedGenres.set([]);
   }
 
   //

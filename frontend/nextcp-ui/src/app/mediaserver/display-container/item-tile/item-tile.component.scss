@@ -1,5 +1,14 @@
 @use "card-layout";
 
+// Sticky column header. Sits just below the collapsing browse header: the
+// offset is provided as --list-sticky-top by the display container (equal to
+// the collapsed header height), and falls back to 0 where no header is shown.
+.list-col-header {
+    position: sticky;
+    top     : var(--list-sticky-top, 0px);
+    z-index : 10;
+}
+
 .selectRow {
     background: linear-gradient(to right, rgba(0, 255, 255, 0.08), rgba(0, 200, 255, 0.04));
 }

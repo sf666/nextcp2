@@ -1,10 +1,10 @@
 @use "custom_variables"as cv;
 
 .footer {
-    // Single interactive accent for the whole bar. Reserved for meaning:
-    // progress fill, active toggles (shuffle/repeat) and the active output icon.
-    --accent      : #3b82f6;
-    --accent-soft : rgba(59, 130, 246, 0.15);
+    // Single interactive accent for the whole bar — the app-wide cyan. Reserved
+    // for meaning: progress fill, active toggles (shuffle/repeat), active output.
+    --accent      : var(--primary-color);
+    --accent-soft : var(--primary-color-reduced-2);
 
     height         : var(--footer-height);
     width          : 100%;
@@ -257,12 +257,12 @@
     &:active {
         &::-webkit-slider-thumb {
             opacity   : 1;
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.5);
+            box-shadow: 0 2px 8px rgba(0, 255, 255, 0.5);
         }
 
         &::-moz-range-thumb {
             opacity   : 1;
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.5);
+            box-shadow: 0 2px 8px rgba(0, 255, 255, 0.5);
         }
     }
 }

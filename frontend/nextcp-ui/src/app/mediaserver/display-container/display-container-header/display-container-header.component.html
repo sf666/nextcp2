@@ -80,56 +80,82 @@
             }
           }
         </div>
-        <!-- current content search box -->
+        <!-- Filter / sort tools -->
         @if (currentContainer.id?.length ?? 0 > 0) {
-          <div class="flex flex-wrap grow justify-end header-tools">
-            <div class="flex content-center me-3">
-              @if (hasAlbums()) {
-              <div class="relative flex w-48 hidden lg:block me-3 self-end" style="height: 56px;">
-                <mat-select [(ngModel)]="sortCriteria" id="sortAlbums" placeholder="sort albums" style="--mat-select-placeholder-text-color:var(--color-gray-400); --mat-select-enabled-arrow-color:var(--color-gray-400)" class="block w-48 grow p-4 pe-10 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 bg-zinc-700/40 border-zinc-600 placeholder-zinc-400 text-white focus:ring-gray-500 focus:border-zinc-500">
-                  <mat-option value="NONE">None</mat-option>
-                  <mat-option value="TITLE">Album Title</mat-option>
-                  <mat-option value="ARTIST">Album Artist</mat-option>
-                  <mat-option value="GENRE">Genre</mat-option>
-                </mat-select>
-              </div>
-              }
-              <div id="search_in_this_page" class="flex me-3 self-end" style="height: 56px;">
-                <label for="search" class="mb-2 text-sm font-medium sr-only text-white">filter this page</label>
-                <div class="relative flex w-64">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <svg class="w-4 h-4 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                        </svg>
-                    </div>
-                    <input [(ngModel)]="quickSearchString" (keyup)="keyUp($event)" type="text" id="search" class="block w-full p-2 ps-10 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 bg-zinc-700/40 border-zinc-600 placeholder-zinc-400 text-white focus:ring-gray-500 focus:border-zinc-500" placeholder="filter this page"/>
-                    <div class="absolute inset-y-0 end-0 flex items-center pe-3 cursor-pointer" (click)="clearSearch()">
-                      <mat-icon class="material-symbols-outlined thin md-light text-gray-400">close</mat-icon>
-                    </div>
-                </div>
-              </div>
-
-              @if (hasGenres()) {
-              <div class="relative flex w-64 hidden lg:block me-3 self-end" style="height: 56px;">
-                <mat-select #genresSelect multiple [(ngModel)]="selectedGenres" id="searchGenres" placeholder="search genres" style="--mat-select-placeholder-text-color:var(--color-gray-400); --mat-select-enabled-arrow-color:var(--color-gray-400)" class="block w-48 grow p-4 pe-10 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 bg-zinc-700/40 border-zinc-600 placeholder-zinc-400 text-white focus:ring-gray-500 focus:border-zinc-500">
-                  <mat-option value="NONE">NONE</mat-option>
-                  @for (genre of genresList(); track genre) {
-                    <mat-option [value]="genre">{{genre}}</mat-option>
-                  }
-                </mat-select>
-                <div class="absolute inset-y-0 end-0 flex items-center ps-3" (click)="clearGenres($event)">
-                  <mat-icon class="material-symbols-outlined thin md-light me-2">close</mat-icon>
-                </div>
-              </div>
-              }
-              @if(!hasSongs()) {
-              <div class="button-container self-end" style="height: 56px; width: 56px;">
-                <button id="options_button" type="button" style="width: 100%; height: 100%; padding: 0;" class="text-white focus:outline-none focus:ring-4 font-medium rounded-lg text-sm bg-zinc-300/10 bg-zinc-700/40 border border-zinc-600 hover:bg-zinc-600/40" (click)="openOptionsDialog($event)">
-                  <mat-icon class="material-symbols-sharp">more_vert</mat-icon>
+          <div class="header-tools flex flex-wrap items-center justify-end gap-3 grow self-end">
+            @if (hasAlbums()) {
+              <div class="filter-field tool-sort"
+                [class.active]="sortCriteria() && sortCriteria() !== 'NONE'">
+                <span class="filter-label">Sort</span>
+                <button type="button" class="field-trigger" (click)="toggleMenu('sort', $event)">
+                  <span class="material-symbols-outlined field-icon">swap_vert</span>
+                  <span class="field-value">{{sortLabel()}}</span>
+                  <span class="material-symbols-outlined field-chevron" [class.open]="openMenu() === 'sort'">expand_more</span>
                 </button>
+                @if (openMenu() === 'sort') {
+                  <div class="field-menu">
+                    @for (opt of sortOptions; track opt.value) {
+                      <button type="button" class="field-menu-item"
+                        [class.selected]="sortCriteria() === opt.value" (click)="selectSort(opt.value)">
+                        <span>{{opt.label}}</span>
+                        @if (sortCriteria() === opt.value) {
+                          <span class="material-symbols-outlined menu-check">check</span>
+                        }
+                      </button>
+                    }
+                  </div>
+                }
               </div>
+            }
+
+            <div class="filter-field tool-filter" [class.active]="quickSearchString()">
+              <span class="filter-label">Filter</span>
+              <span class="material-symbols-outlined field-icon">search</span>
+              <input [(ngModel)]="quickSearchString" (keyup)="keyUp($event)" type="text" id="search"
+                class="field-input" placeholder="Filter this page" />
+              @if (quickSearchString()) {
+                <button type="button" class="field-clear" (click)="clearSearch()" title="Clear filter">
+                  <span class="material-symbols-outlined">close</span>
+                </button>
               }
             </div>
+
+            @if (hasGenres()) {
+              <div class="filter-field tool-genres"
+                [class.active]="selectedGenres()?.length">
+                <span class="filter-label">Genres</span>
+                <button type="button" class="field-trigger" (click)="toggleMenu('genres', $event)">
+                  <span class="material-symbols-outlined field-icon">tune</span>
+                  <span class="field-value">{{genresSummary()}}</span>
+                  <span class="material-symbols-outlined field-chevron" [class.open]="openMenu() === 'genres'">expand_more</span>
+                </button>
+                @if (selectedGenres()?.length) {
+                  <button type="button" class="field-clear" (click)="clearGenres($event)" title="Clear genres">
+                    <span class="material-symbols-outlined">close</span>
+                  </button>
+                }
+                @if (openMenu() === 'genres') {
+                  <div class="field-menu field-menu-scroll">
+                    @for (genre of genresList(); track genre) {
+                      <button type="button" class="field-menu-item"
+                        [class.selected]="isGenreSelected(genre)" (click)="toggleGenre(genre, $event)">
+                        <span>{{genre}}</span>
+                        @if (isGenreSelected(genre)) {
+                          <span class="material-symbols-outlined menu-check">check</span>
+                        }
+                      </button>
+                    }
+                  </div>
+                }
+              </div>
+            }
+
+            @if (!hasSongs()) {
+              <button id="options_button" type="button" class="tool-icon-btn tool-options"
+                (click)="openOptionsDialog($event)" title="More options">
+                <span class="material-symbols-outlined">more_vert</span>
+              </button>
+            }
           </div>
         }
       </div>

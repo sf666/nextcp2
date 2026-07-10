@@ -37,9 +37,10 @@
 
 // area right to the image
 .right-section {
-    min-height: calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
-    max-height: calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
-    min-width : 0;
+    min-height   : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
+    max-height   : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
+    min-width    : 0;
+    padding-right: 2rem;
 }
 
 .plainText {
@@ -197,9 +198,10 @@
     width              : 100%;
     background-position: 0 -200px;
     height             : 100%;
-    // Fade the blurred album backdrop out as the header collapses; the solid
-    // glass bar background on #outer takes over.
-    opacity            : calc(1 - var(--collapse, 0));
+    // Keep the blurred album backdrop almost fully visible when collapsed, so
+    // the compact bar reads as a mini version of the hero gradient rather than
+    // going flat black (its dark overlay already keeps text legible).
+    opacity            : calc(1 - 0.1 * var(--collapse, 0));
 }
 
 
@@ -219,6 +221,244 @@
             'wght'300,
             'GRAD'-25,
             'opsz'24;
+    }
+}
+
+//
+// Header filter / sort tools — frosted-glass controls (Roon / Spotify feel).
+// Each field carries a small notch label so its purpose stays clear, and turns
+// to the app's cyan accent when it holds an active value.
+// =========================================================================
+.filter-field {
+    position       : relative;
+    display        : flex;
+    align-items    : center;
+    gap            : 8px;
+    height         : 44px;
+    padding        : 0 12px;
+    border         : 1px solid rgba(255, 255, 255, 0.12);
+    border-radius  : 10px;
+    background     : rgba(18, 18, 20, 0.55);
+    backdrop-filter: blur(12px);
+    color          : rgba(255, 255, 255, 0.75);
+    transition     : border-color 0.15s ease, background-color 0.15s ease;
+
+    &:hover,
+    &:focus-within {
+        border-color: rgba(255, 255, 255, 0.24);
+        background   : rgba(18, 18, 20, 0.72);
+    }
+
+    &.active {
+        border-color: var(--primary-color-reduced);
+    }
+}
+
+.filter-label {
+    position      : absolute;
+    top           : 0;
+    left          : 10px;
+    transform     : translateY(-52%);
+    padding       : 0 5px;
+    font-size     : 10px;
+    font-weight   : 600;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color         : rgba(255, 255, 255, 0.45);
+    background    : #141416;
+    border-radius : 4px;
+    pointer-events: none;
+    transition    : color 0.15s ease;
+}
+
+.filter-field.active .filter-label,
+.filter-field.active .field-icon {
+    color: var(--primary-color);
+}
+
+.field-icon {
+    flex-shrink            : 0;
+    font-size              : 18px;
+    color                  : rgba(255, 255, 255, 0.5);
+    font-variation-settings: 'wght'300, 'FILL'0, 'GRAD'-25, 'opsz'20;
+}
+
+.field-input {
+    width     : 150px;
+    background: transparent;
+    border    : none;
+    outline   : none;
+    color     : #fff;
+    font-size : 0.85rem;
+
+    &::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+    }
+}
+
+.field-clear {
+    display        : inline-flex;
+    align-items    : center;
+    justify-content: center;
+    padding        : 0;
+    border         : none;
+    background     : transparent;
+    color          : rgba(255, 255, 255, 0.5);
+    cursor         : pointer;
+
+    .material-symbols-outlined {
+        font-size: 18px;
+    }
+
+    &:hover {
+        color: #fff;
+    }
+}
+
+// Custom Tailwind-style dropdown (replaces mat-select) — trigger + menu.
+.field-trigger {
+    display    : flex;
+    align-items: center;
+    gap        : 8px;
+    flex       : 1 1 auto;
+    min-width  : 0;
+    padding    : 0;
+    border     : none;
+    background : transparent;
+    color      : inherit;
+    cursor     : pointer;
+    font-size  : 0.85rem;
+}
+
+.field-value {
+    flex         : 1 1 auto;
+    min-width    : 60px;
+    text-align   : left;
+    color        : rgba(255, 255, 255, 0.9);
+    white-space  : nowrap;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+}
+
+.field-chevron {
+    flex-shrink: 0;
+    font-size  : 18px;
+    color      : rgba(255, 255, 255, 0.5);
+    transition : transform 0.15s ease;
+
+    &.open {
+        transform: rotate(180deg);
+    }
+}
+
+.field-menu {
+    position       : absolute;
+    top            : calc(100% + 6px);
+    right          : 0;
+    left           : auto;
+    min-width      : 100%;
+    max-width      : 300px;
+    z-index        : 50;
+    display        : flex;
+    flex-direction : column;
+    gap            : 2px;
+    padding        : 6px;
+    border         : 1px solid rgba(255, 255, 255, 0.12);
+    border-radius  : 10px;
+    background     : rgba(24, 24, 27, 0.98);
+    backdrop-filter: blur(20px);
+    box-shadow     : 0 16px 40px rgba(0, 0, 0, 0.55);
+}
+
+.field-menu-scroll {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.field-menu-item {
+    display        : flex;
+    align-items    : center;
+    justify-content: space-between;
+    gap            : 16px;
+    width          : 100%;
+    padding        : 8px 10px;
+    border         : none;
+    border-radius  : 6px;
+    background     : transparent;
+    color          : rgba(255, 255, 255, 0.8);
+    font-size      : 0.85rem;
+    text-align     : left;
+    cursor         : pointer;
+    transition     : background-color 0.12s ease, color 0.12s ease;
+
+    span:first-child {
+        min-width    : 0;
+        overflow     : hidden;
+        text-overflow: ellipsis;
+        white-space  : nowrap;
+    }
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color     : #fff;
+    }
+
+    &.selected {
+        color: var(--primary-color);
+    }
+}
+
+.menu-check {
+    flex-shrink: 0;
+    font-size  : 16px;
+}
+
+// Sort / genres are secondary — only shown on wide screens.
+.tool-sort,
+.tool-genres {
+    display: none;
+}
+
+// Give the value room so long options ("Album Artist", genre names) aren't clipped.
+.tool-sort {
+    min-width: 158px;
+}
+
+.tool-genres {
+    min-width: 172px;
+}
+
+@media (min-width: 1024px) {
+
+    .tool-sort,
+    .tool-genres {
+        display: flex;
+    }
+}
+
+.tool-icon-btn {
+    display        : inline-flex;
+    align-items    : center;
+    justify-content: center;
+    width          : 44px;
+    height         : 44px;
+    flex-shrink    : 0;
+    border         : 1px solid rgba(255, 255, 255, 0.12);
+    border-radius  : 10px;
+    background     : rgba(18, 18, 20, 0.55);
+    backdrop-filter: blur(12px);
+    color          : rgba(255, 255, 255, 0.7);
+    cursor         : pointer;
+    transition     : border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+
+    .material-symbols-outlined {
+        font-size: 22px;
+    }
+
+    &:hover {
+        border-color: rgba(255, 255, 255, 0.24);
+        background   : rgba(18, 18, 20, 0.72);
+        color        : #fff;
     }
 }
 
@@ -255,8 +495,25 @@
     }
 
     // Keep only the primary context (title + album/artist) in the bar.
-    .meta-tracks,
+    .meta-tracks {
+        display: none;
+    }
+
+    // Compact mode drops the secondary controls; the primary filter and the
+    // options button stay reachable while browsing.
+    .tool-sort,
+    .tool-genres {
+        display: none;
+    }
+
+    // Vertically centre the remaining tools in the low bar.
     .header-tools {
+        align-self: center;
+    }
+
+    // Albums show the action buttons on the right (the 3-dot options is one of
+    // them), so the leftover filter tools would only collide — hide them.
+    &.has-actions .header-tools {
         display: none;
     }
 
@@ -273,5 +530,12 @@
     // Reserve room on the right so the title never slides under the buttons.
     &.has-actions .right-section {
         padding-right: 330px;
+    }
+}
+// On narrow screens the compact bar keeps only the options button; the filter
+// field is dropped to save width (it is reachable again by scrolling up).
+@media (max-width: 1023px) {
+    #outer.condensed .tool-filter {
+        display: none;
     }
 }

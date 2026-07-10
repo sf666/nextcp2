@@ -17,6 +17,23 @@
     padding-bottom: calc(206px * var(--collapse, 0));
 }
 
+// When the collapsing browse header is present, the sticky track-list column
+// header parks just below it. The offset tracks the header's *current* height
+// (same formula/constants as the header, driven by the inherited --collapse),
+// so it stays glued to the header bottom throughout the collapse instead of
+// being briefly hidden behind the still-tall header mid-transition.
+#display-container-main-content.with-sticky-header {
+    --dc-h-max       : 310px;
+    --dc-h-min       : 104px;
+    --list-sticky-top: calc(var(--dc-h-max) - (var(--dc-h-max) - var(--dc-h-min)) * var(--collapse, 0));
+}
+
+@media (max-height: 800px) {
+    #display-container-main-content.with-sticky-header {
+        --dc-h-max: 210px;
+    }
+}
+
 .title {
     font-size     : 2rem;
     font-weight   : 700;
