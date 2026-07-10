@@ -4,31 +4,42 @@
 @use "app-variables"as av;
 @use "app-icons";
 
-:host {
-    --top-header-Height         : 310px;
-    --top-header-Vertical-Indent: 120px;
+// Scroll-linked collapse progress (0 = full hero, 1 = compact bar) is set on
+// the scroll container (#mainContent) and inherited here, so the same value
+// also drives the compensating bottom spacer (see display-container.scss).
+// The size vars are declared on #outer so their var(--collapse) resolves
+// against #outer's own (inherited) value.
+#outer {
+    --h-max  : 310px;
+    --h-min  : 104px;
+    --ind-max: 120px;
+    --ind-min: 16px;
+
+    --top-header-Height         : calc(var(--h-max) - (var(--h-max) - var(--h-min)) * var(--collapse, 0));
+    --top-header-Vertical-Indent: calc(var(--ind-max) - (var(--ind-max) - var(--ind-min)) * var(--collapse, 0));
 }
 
-
 @media (max-height: 800px) {
-    :host {
-        --top-header-Height: 210px;
-        --top-header-Vertical-Indent: 80px;
+    #outer {
+        --h-max  : 210px;
+        --ind-max: 80px;
     }
 }
 
 .title {
-    font-size     : 2rem;
+    font-size     : calc(2rem - 0.85rem * var(--collapse, 0));
     font-weight   : 700;
     align-self    : flex-start;
-    padding-bottom: 0.7rem;
+    padding-bottom: calc(0.7rem - 0.55rem * var(--collapse, 0));
     color         : var(--snow-white);
+    max-width     : 100%;
 }
 
 // area right to the image
 .right-section {
     min-height: calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
     max-height: calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
+    min-width : 0;
 }
 
 .plainText {
@@ -58,13 +69,15 @@
 .img-top {
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter : drop-shadow(4px 4px 10px black);
+    border-radius   : calc(8px - 2px * var(--collapse, 0));
 
     min-width   : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
     min-height  : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
     max-width   : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
     max-height  : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
-    margin-left : 32px;
-    margin-right: 32px;
+    margin-left : calc(32px - 16px * var(--collapse, 0));
+    margin-right: calc(32px - 12px * var(--collapse, 0));
+    box-shadow  : 0 8px 28px rgba(0, 0, 0, 0.5);
 }
 
 .button-row {
@@ -89,13 +102,22 @@
 
 // Buttons
 
-// Button Group
+// Button group — its vertical centre sits exactly on the hero's bottom edge, so
+// the buttons straddle it "half-out" regardless of their height. It rides up as
+// the header collapses because top tracks the (shrinking) header height.
 .button-row {
-    position : absolute;
-    top      : calc(var(--top-header-Height) - 41px);
-    left     : 32px;
-    display  : table-cell;
-    max-width: 400px;
+    position  : absolute;
+    top       : var(--top-header-Height);
+    bottom    : auto;
+    left      : 32px;
+    transform : translateY(-50%);
+    display   : flex;
+    max-width : 400px;
+    margin-top: 0;
+    // Sit above the info column (#ID_SCROLL_TO_ELEMENT_STEP_IN is a flex item
+    // with z-index:1, so it would otherwise capture clicks on the buttons once
+    // they move over it in the collapsed state).
+    z-index   : 5;
 }
 
 .button-row .mat-mdc-button-base {
@@ -175,6 +197,9 @@
     width              : 100%;
     background-position: 0 -200px;
     height             : 100%;
+    // Fade the blurred album backdrop out as the header collapses; the solid
+    // glass bar background on #outer takes over.
+    opacity            : calc(1 - var(--collapse, 0));
 }
 
 
@@ -194,5 +219,59 @@
             'wght'300,
             'GRAD'-25,
             'opsz'24;
+    }
+}
+
+//
+// Solid glass background behind the (fading) album backdrop. Invisible while
+// the backdrop is opaque; revealed as the header collapses, so the list
+// scrolls cleanly under a frosted bar.
+// =========================================================================
+#outer {
+    background     : rgba(9, 9, 11, 0.9);
+    backdrop-filter: blur(24px);
+}
+
+//
+// Compact mode (Spotify-style). Toggled once, early in the scroll, by the
+// `condensed` class. It never changes header height (that is fully driven by
+// --collapse), so it cannot feed back into the scroll position.
+// =========================================================================
+#outer.condensed {
+    box-shadow   : 0 6px 24px rgba(0, 0, 0, 0.45);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    // Single-line title so it never wraps in the low bar.
+    .title {
+        white-space  : nowrap;
+        overflow     : hidden;
+        text-overflow: ellipsis;
+    }
+
+    #hasSongs,
+    #hasSongs > .flex,
+    #template_containerTitle {
+        min-width: 0;
+    }
+
+    // Keep only the primary context (title + album/artist) in the bar.
+    .meta-tracks,
+    .header-tools {
+        display: none;
+    }
+
+    // Re-anchor the action buttons to the vertical centre on the right edge
+    // so they stay reachable while browsing.
+    .button-row {
+        top      : 50%;
+        bottom   : auto;
+        left     : auto;
+        right    : 24px;
+        transform: translateY(-50%);
+    }
+
+    // Reserve room on the right so the title never slides under the buttons.
+    &.has-actions .right-section {
+        padding-right: 330px;
     }
 }

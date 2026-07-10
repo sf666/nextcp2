@@ -12,6 +12,8 @@ import {
   ElementRef,
   viewChild,
   inject,
+  afterNextRender,
+  DestroyRef,
 } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -56,8 +58,60 @@ export class DisplayContainerHeaderComponent implements OnInit {
   private backgroundImageService = inject(BackgroundImageService);
   private cdsBrowsePathService = inject(CdsBrowsePathService);
   private timeDisplayService = inject(TimeDisplayService);
+  private destroyRef = inject(DestroyRef);
 
   readonly genresSelectbox = viewChild.required<MatSelect>('genresSelect');
+
+  //
+  // Collapsing sticky header
+  /////////////////////////////////////
+
+  // Scroll-linked collapse progress, 0 (full hero) .. 1 (compact bar).
+  // Driven continuously by scroll position so the header shrinks gradually
+  // instead of snapping — a binary toggle fed back into layout height and
+  // caused flicker around the threshold.
+  collapse = signal<number>(0);
+  // Compact mode: buttons move to the right and the page-filter tools hide.
+  // Switched once, early in the scroll, so it never affects header height.
+  condensed = computed(() => this.collapse() > 0.06);
+
+  // Scroll distance (px) over which the header fully collapses.
+  private readonly COLLAPSE_RANGE = 150;
+  private scrollParent: HTMLElement | null = null;
+  private rafPending = false;
+
+  private readonly onScroll = (): void => {
+    if (this.rafPending) {
+      return;
+    }
+    this.rafPending = true;
+    requestAnimationFrame(() => {
+      this.rafPending = false;
+      const y = this.scrollParent?.scrollTop ?? 0;
+      const next =
+        Math.round(Math.min(1, Math.max(0, y / this.COLLAPSE_RANGE)) * 100) /
+        100;
+      if (next !== this.collapse()) {
+        this.collapse.set(next);
+        // Drive the CSS var on the scroll container so both the header and the
+        // compensating bottom spacer (in display-container) inherit it.
+        this.scrollParent?.style.setProperty('--collapse', String(next));
+      }
+    });
+  };
+
+  constructor() {
+    afterNextRender(() => {
+      this.scrollParent = document.getElementById('mainContent');
+      this.scrollParent?.addEventListener('scroll', this.onScroll, {
+        passive: true,
+      });
+      this.destroyRef.onDestroy(() => {
+        this.scrollParent?.removeEventListener('scroll', this.onScroll);
+        this.scrollParent?.style.removeProperty('--collapse');
+      });
+    });
+  }
 
   //
   // signals
@@ -115,6 +169,9 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   private cdsBrowseFinished() {
     console.log('cdsBrowseFinished ... ');
+    // A fresh browse result starts at the top, so show the full hero header.
+    this.collapse.set(0);
+    this.scrollParent?.style.setProperty('--collapse', '0');
     this.clearSearch();
     this.fillGenres();
     this.checkLikeStatus();
@@ -178,6 +235,13 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   hasSongs(): boolean {
     return this.musicTracks?.length > 0 ? true : false;
+  }
+
+  // True when the current container actually lists albums (e.g. "My Albums").
+  // The album sort/group control only makes sense then — not on a single
+  // album's track list or a plain folder.
+  hasAlbums(): boolean {
+    return this.albums?.length > 0 ? true : false;
   }
 
   hasGenres(): boolean {

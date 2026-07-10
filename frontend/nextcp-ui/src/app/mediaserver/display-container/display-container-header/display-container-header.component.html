@@ -1,7 +1,7 @@
 <!--                                                                -->
 <!-- display component header                                       -->
 <!-- ############################################################## -->
-<div id="outer" class="flex relative w-full grow shrink justify-items-center">
+<div id="outer" class="flex relative w-full grow shrink justify-items-center" [class.condensed]="condensed()" [class.has-actions]="hasSongs()">
   <div class="bg-img-header w-full" id="header-background"></div>
   <!-- Header Button group -->
   @if(hasSongs()) {
@@ -59,7 +59,7 @@
               } @else {
               <div class="highlight">Soundtracks</div>
               }
-              <div class="flex regular">
+              <div class="flex regular meta-tracks">
                 <div>{{musicItemsCount}} Tracks</div>
                 @if (totalPlaytime().length > 0) {
                 <div>&nbsp;-&nbsp;{{totalPlaytime()}}</div>
@@ -82,9 +82,9 @@
         </div>
         <!-- current content search box -->
         @if (currentContainer.id?.length ?? 0 > 0) {
-          <div class="flex flex-wrap grow justify-end">
+          <div class="flex flex-wrap grow justify-end header-tools">
             <div class="flex content-center me-3">
-              @if (enableAlbumSort()) {
+              @if (hasAlbums()) {
               <div class="relative flex w-48 hidden lg:block me-3 self-end" style="height: 56px;">
                 <mat-select [(ngModel)]="sortCriteria" id="sortAlbums" placeholder="sort albums" style="--mat-select-placeholder-text-color:var(--color-gray-400); --mat-select-enabled-arrow-color:var(--color-gray-400)" class="block w-48 grow p-4 pe-10 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 bg-zinc-700/40 border-zinc-600 placeholder-zinc-400 text-white focus:ring-gray-500 focus:border-zinc-500">
                   <mat-option value="NONE">None</mat-option>

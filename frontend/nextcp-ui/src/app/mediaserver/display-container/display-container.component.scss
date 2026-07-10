@@ -1,4 +1,22 @@
 
+// Pin the browse header to the top of the scroll area. Its parent
+// (#display-container-component-top-id) spans header + list, so it stays
+// pinned while the list scrolls underneath and collapses via its own state.
+.dc-header-sticky {
+    position: sticky;
+    top     : 0;
+    z-index : 30;
+}
+
+// Compensating spacer: grows by exactly the amount the sticky header shrinks
+// (--collapse is inherited from #mainContent). This keeps the total scrollable
+// height constant as the header collapses, so the scroll position can never be
+// clamped by the shrink — which is what caused the header to jitter during
+// macOS inertial (momentum) scrolling.
+#display-container-main-content {
+    padding-bottom: calc(206px * var(--collapse, 0));
+}
+
 .title {
     font-size     : 2rem;
     font-weight   : 700;

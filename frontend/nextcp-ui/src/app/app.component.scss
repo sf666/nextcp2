@@ -25,6 +25,10 @@
     overflow-x     : hidden;
     letter-spacing : 0.07rem;
     scrollbar-width: none;
+    // Prevent the browser from auto-adjusting scrollTop when the sticky
+    // browse header resizes — that compensation fed a resize/scroll loop
+    // that made the header oscillate on its own.
+    overflow-anchor: none;
 }
 
 .app-root {
