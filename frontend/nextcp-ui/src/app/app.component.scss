@@ -40,7 +40,7 @@
 // wash, so instead of the (often grey) bleed it takes the extracted dominant
 // colour (--ambient-color) under a dark scrim: reliably tinted, still legible.
 #default-sidebar {
-    background  : linear-gradient(rgba(9, 9, 13, 0.58), rgba(9, 9, 13, 0.74)),
+    background  : linear-gradient(rgba(9, 9, 13, 0.82), rgba(9, 9, 13, 0.9)),
                   var(--ambient-color);
     border-right: 1px solid var(--chrome-hair);
     transition  : background 0.4s ease;
