@@ -1,41 +1,124 @@
-.search-icon {
-    padding-top: 1px;
-    align-self : center;
-}
-
-input {
-    &.nav-search {
-        box-sizing : border-box;
-        appearance : textfield;
-        font-size  : 16px !important;
-        width      : 100%;
-        font-weight: 300;
-        height     : 36px;
-        margin     : 0 8px;
-        padding    : 0;
-        color      : #fff;
-        background : transparent;
-        border     : 0;
-    }
-}
-
+// Global search bar — frosted, Roon/Spotify-like, with the scope toggle in front
+// of the input and the app's cyan accent for the active (global) scope + focus.
 .nav-search-container {
     display           : flex;
+    align-items       : center;
     -webkit-app-region: no-drag;
     -moz-app-region   : no-drag;
 
     flex-grow : 1;
     width     : 100%;
-    max-width : 388px;
-    min-width : 200px;
-    min-height: 2.8rem;
+    max-width : 420px;
+    min-width : 220px;
+    height    : 2.6rem;
+    padding   : 0 6px 0 4px;
+    gap       : 2px;
 
-    align-self      : center;
-    align-items     : center;
-    background-color: rgba(57, 57, 64, 0.5);
+    align-self     : center;
+    border         : 1px solid rgba(255, 255, 255, 0.12);
+    border-radius  : 10px;
+    background     : rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+    cursor         : text;
+    transition     : border-color 0.15s ease, background-color 0.15s ease;
 
+    &:hover {
+        border-color: rgba(255, 255, 255, 0.2);
+        background   : rgba(255, 255, 255, 0.08);
+    }
 
-    border-radius: 8px;
-    cursor       : text;
-    transition   : background-color .2s ease-out;
+    &:focus-within {
+        border-color: var(--primary-color-reduced);
+        background   : rgba(255, 255, 255, 0.09);
+    }
+}
+
+// Scope toggle button (leading)
+.search-scope {
+    display        : inline-flex;
+    align-items    : center;
+    justify-content: center;
+    flex-shrink    : 0;
+    width          : 34px;
+    height         : 34px;
+    padding        : 0;
+    border         : none;
+    border-radius  : 8px;
+    background     : transparent;
+    color          : rgba(255, 255, 255, 0.6);
+    cursor         : pointer;
+    transition     : color 0.15s ease, background-color 0.15s ease;
+
+    .material-symbols-outlined {
+        font-size              : 20px;
+        font-variation-settings: 'wght'300, 'FILL'0, 'GRAD'-25, 'opsz'20;
+    }
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color     : #fff;
+    }
+}
+
+// Cyan accent when the wider "whole library" scope is active.
+.is-global .search-scope {
+    color: var(--primary-color);
+}
+
+.scope-divider {
+    flex-shrink: 0;
+    width      : 1px;
+    height     : 18px;
+    margin     : 0 4px;
+    background  : rgba(255, 255, 255, 0.14);
+}
+
+.nav-search {
+    box-sizing : border-box;
+    appearance : none;
+    flex-grow  : 1;
+    min-width  : 0;
+    height     : 34px;
+    margin     : 0 6px;
+    padding    : 0;
+    font-size  : 16px; // keep >=16px to avoid mobile Safari zoom-on-focus
+    font-weight: 300;
+    color      : #fff;
+    background : transparent;
+    border     : 0;
+    outline    : none;
+
+    &::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+    }
+}
+
+.search-clear {
+    display        : inline-flex;
+    align-items    : center;
+    justify-content: center;
+    flex-shrink    : 0;
+    width          : 28px;
+    height         : 28px;
+    padding        : 0;
+    border         : none;
+    border-radius  : 50%;
+    background     : transparent;
+    color          : rgba(255, 255, 255, 0.32);
+    cursor         : pointer;
+    transition     : color 0.15s ease, background-color 0.15s ease;
+
+    .material-symbols-outlined {
+        font-size: 18px;
+    }
+
+    // Brighter once there is text to clear.
+    &.has-text {
+        color: rgba(255, 255, 255, 0.65);
+    }
+
+    &:hover {
+        color     : #fff;
+        background: rgba(255, 255, 255, 0.08);
+    }
 }

@@ -1,9 +1,21 @@
-<div class="nav-search-container">
-    <span class="material-symbols-outlined thin md-light">search</span>
-    <input class="nav-search" [ngModel]="globalSearchService.quickSearchQueryString()" (ngModelChange)="globalSearchService.updateQuickSearchQueryString($event)" matInput [placeholder]="globalSearchService.globalSearch() ? 'global search' : 'search below this folder'" #searchInput
-      (keyup)="keyUp($event)" (focus)="focus()" (blur)="blur()" >
-    <span class="material-symbols-outlined thin md-light" (click)="toggleGlobalSearch()">change_circle</span>
-    <span class="material-symbols-outlined thin md-light" (click)="globalSearchService.clearSearch()">close</span>
+<div class="nav-search-container" [class.is-global]="globalSearchService.globalSearch()">
+    <!-- Search scope toggle (whole library vs. current folder) — sits before the input -->
+    <button type="button" class="search-scope" (click)="toggleGlobalSearch()"
+        [title]="globalSearchService.globalSearch() ? 'Searching the whole library — click to search the current folder and its subfolders' : 'Searching the current folder and its subfolders — click to search the whole library'">
+        <span class="material-symbols-outlined">{{globalSearchService.globalSearch() ? 'travel_explore' : 'account_tree'}}</span>
+    </button>
+
+    <span class="scope-divider"></span>
+
+    <input class="nav-search" [ngModel]="globalSearchService.quickSearchQueryString()"
+        (ngModelChange)="globalSearchService.updateQuickSearchQueryString($event)"
+        [placeholder]="globalSearchService.globalSearch() ? 'Search library' : 'Search below this folder'" #searchInput
+        (keyup)="keyUp($event)" (focus)="focus()" (blur)="blur()">
+
+    <button type="button" class="search-clear" (click)="globalSearchService.clearSearch()"
+        [class.has-text]="globalSearchService.quickSearchQueryString()" title="Clear search">
+        <span class="material-symbols-outlined">close</span>
+    </button>
 </div>
 
 @if (globalSearchService.quickSearchPanelVisible) {
