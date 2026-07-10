@@ -30,16 +30,20 @@
 Main Content
 ==========================================
 -->
-<div id="display-container-main-content" class="flex grow ms-3 mt-8" [class.with-sticky-header]="showTopHeader()">
+<div id="display-container-main-content" class="flex grow ms-3 me-6" [class.with-sticky-header]="showTopHeader()" [class.has-action-buttons]="musicTracks.length > 0">
   <div class="flex flex-col grow mb-4">
     <!--
   playlist elements on first position
   =================================================================
   -->
     @if (playlistList?.length > 0) {
-    <div id="head_browse_result_playlist_items_ID" class="flex w-full" tabindex="-1">
+    <div id="head_browse_result_playlist_items_ID" class="flex flex-col w-full" tabindex="-1">
+      <div class="section-heading">
+        <span class="section-label">Playlists</span>
+        <span class="section-count">{{playlistList.length}} items</span>
+      </div>
       <container-tile class="flex grow"
-        [smallIcons]="this.allMusicTracks.length > 0" 
+        [smallIcons]="this.allMusicTracks.length > 0"
         [container]="playlistList"
         [quickSearchString]="displayFilterString()"
         [selectedGenres]="selectedGenres()"
@@ -52,7 +56,11 @@ Main Content
     <!-- Template : Browse Result Album                                 -->
     <!-- ############################################################## -->
     @if (albumList?.length > 0) {
-    <div id="head_browse_result_album_ID" class="flex w-full">
+    <div id="head_browse_result_album_ID" class="flex flex-col w-full">
+      <div class="section-heading">
+        <span class="section-label">Albums</span>
+        <span class="section-count">{{albumList.length}} items</span>
+      </div>
       <container-tile class="flex grow"
         [smallIcons]="this.allMusicTracks.length > 0"
         [container]="albumList"
@@ -64,6 +72,7 @@ Main Content
     </div>
     }
 
+    @if (musicTracks.length > 0) {
     <div id="head_browse_result_items_ID" class="flex grow">
       <item-tile class="flex w-full"
         [isListView]="isListView()"
@@ -78,14 +87,19 @@ Main Content
       >
       </item-tile>
     </div>
+    }
     <!--                                -->
     <!-- General container section      -->
     <!--                                -->
 
     @if (container?.length > 0) {
-    <div id="head_browse_result_general_container_ID" class="flex grow">
+    <div id="head_browse_result_general_container_ID" class="flex flex-col grow">
+      <div class="section-heading">
+        <span class="section-label">Folders</span>
+        <span class="section-count">{{container.length}} items</span>
+      </div>
       <container-tile class="flex grow"
-        [smallIcons]="this.allMusicTracks.length > 0" 
+        [smallIcons]="this.allMusicTracks.length > 0"
         [container]="container"
         [selectedGenres]="selectedGenres()"
         [quickSearchString]="displayFilterString()"
@@ -100,7 +114,11 @@ Main Content
     <!--                                -->
 
     @if (otherItems_?.length > 0) {
-    <div id="head_browse_other_items_ID" class="flex grow">
+    <div id="head_browse_other_items_ID" class="flex flex-col grow">
+      <div class="section-heading">
+        <span class="section-label">Other items</span>
+        <span class="section-count">{{otherItems_.length}} items</span>
+      </div>
       <other-item-tile class="flex grow"
         [otherItems]="otherItems_"
         [quickSearchString]="displayFilterString()"

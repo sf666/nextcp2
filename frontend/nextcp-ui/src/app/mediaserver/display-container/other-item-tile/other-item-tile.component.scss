@@ -5,9 +5,66 @@
     color         : var(--primary-color);
     letter-spacing: 0.1rem;
     font-weight   : 600;
-    padding-bottom: 8px;
+    padding-bottom: 6px;
 }
 
 .album {
-    padding-bottom: 0.7rem;
+    padding-bottom: 0.4rem;
+}
+
+// Fluid grid — matches container-tile: columns grow with the viewport, tiles
+// fill their track (restores the old flex-wrap "use the space" behaviour).
+.tile-grid {
+    display              : grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap                  : 1rem;
+    // This grid is the component root inside a flex host, so force full width
+    // or it collapses to a single column (min-content).
+    width                : 100%;
+}
+
+// Rounded, frosted cards matching the container tiles (scoped to this component).
+.albumTile {
+    padding        : 0;
+    max-width      : none;
+    border-radius  : 14px;
+    overflow       : hidden;
+    background      : rgba(20, 20, 26, 0.42);
+    backdrop-filter : blur(8px);
+    border          : 1px solid rgba(255, 255, 255, 0.08);
+    cursor          : pointer;
+    transition      : transform 0.2s ease, border-color 0.2s ease,
+                      box-shadow 0.2s ease, background-color 0.2s ease;
+
+    &:hover {
+        transform    : translateY(-4px);
+        border-color : var(--primary-color-reduced);
+        background    : rgba(0, 255, 255, 0.07);
+        box-shadow    : 0 12px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    &:hover .otherItemTitle {
+        color: var(--snow-white);
+    }
+}
+
+.albumImageContainer {
+    background-color: transparent;
+    min-width       : 0;
+    max-width       : none;
+}
+
+.albumDesc {
+    background : transparent;
+    padding    : 12px 14px 14px;
+    min-height : auto;
+    min-width  : 0;
+}
+
+.otherItemTitle {
+    color        : var(--glas-white-1);
+    font-weight  : 600;
+    white-space  : nowrap;
+    overflow     : hidden;
+    text-overflow: ellipsis;
 }

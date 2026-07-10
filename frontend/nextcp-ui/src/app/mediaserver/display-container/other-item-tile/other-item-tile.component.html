@@ -1,4 +1,4 @@
-<div class="albumLayout">
+<div class="tile-grid">
     @for (item of items(); track item.objectID) {
     <div class="albumTile" id="{{item.objectID}}" tabindex="-1" (click)="playResource(item)">
       <div class="albumImageContainer">
@@ -6,7 +6,7 @@
       </div>
       <div class="flex flex-col albumDesc">
         <div class="playlistText">{{getOtherItemHeadline(item)}}</div>
-        <div class="albumTitle">{{item.title}}</div>
+        <div class="otherItemTitle">{{item.title}}</div>
       </div>
     </div>
     }

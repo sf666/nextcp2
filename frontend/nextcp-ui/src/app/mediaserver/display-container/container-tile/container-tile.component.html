@@ -3,7 +3,7 @@
   @if (group.key) {
     <div class="albumSectionHeader w-full block text-lg font-semibold text-gray-300 mt-6 mb-2 px-1">{{group.key}}</div>
   }
-  <div class="grid grid-cols-1 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-1 ">
+  <div class="tile-grid">
     @for (container of group.items; track container.id) {
     <div class="albumTile {{getSmallCss()}}" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)">
       <div class="albumImageContainer">

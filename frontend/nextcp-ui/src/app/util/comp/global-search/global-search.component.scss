@@ -60,11 +60,6 @@
     }
 }
 
-// Cyan accent when the wider "whole library" scope is active.
-.is-global .search-scope {
-    color: var(--primary-color);
-}
-
 .scope-divider {
     flex-shrink: 0;
     width      : 1px;
