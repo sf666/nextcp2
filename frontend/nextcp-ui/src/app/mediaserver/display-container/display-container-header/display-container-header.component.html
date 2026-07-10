@@ -65,11 +65,13 @@
           </div>
           } @else {
             @if (currentContainer.title?.length ?? 0 > 0) {
-            <div id="template_containerTitle" class="flex flex-col infobox self-start">
+            <div id="template_containerTitle" class="flex flex-col info-block self-start">
+              <div class="eyebrow">{{containerType()}}</div>
               <div class="title">{{currentContainer.title}}</div>
               @if (contentDirectoryService().currentContainerList().totalMatches > 0 || musicItemsCount > 0) {
-              <div class="regular"><span class="highlight pe-2">{{contentDirectoryService().currentContainerList().totalMatches}}</span> total elements
-              </div>
+                <div class="meta-line">
+                  <span>{{contentDirectoryService().currentContainerList().totalMatches}} items</span>
+                </div>
               }
             </div>
             }

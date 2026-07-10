@@ -545,16 +545,18 @@
         display: none;
     }
 
-    // Compact mode drops the secondary controls; the primary filter and the
-    // options button stay reachable while browsing.
+    // Compact mode: the primary filter + options always stay; the secondary
+    // sort/genres are hidden by default and reappear only when the viewport is
+    // wide enough (see the min-width rules below).
     .tool-sort,
     .tool-genres {
         display: none;
     }
 
-    // Vertically centre the remaining tools in the low bar.
+    // Keep the compact bar to a single row — never wrap the tools.
     .header-tools {
         align-self: center;
+        flex-wrap : nowrap;
     }
 
     // Albums show the action buttons on the right (the 3-dot options is one of
@@ -583,5 +585,20 @@
 @media (max-width: 1023px) {
     #outer.condensed .tool-filter {
         display: none;
+    }
+}
+
+// Progressively bring the secondary filters back into the compact bar as the
+// viewport gets wide enough to hold them next to the title (folders only —
+// album/playlist headers reserve the right side for the action buttons).
+@media (min-width: 1400px) {
+    #outer.condensed:not(.has-actions) .tool-sort {
+        display: flex;
+    }
+}
+
+@media (min-width: 1580px) {
+    #outer.condensed:not(.has-actions) .tool-genres {
+        display: flex;
     }
 }
