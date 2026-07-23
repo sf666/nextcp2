@@ -84,7 +84,7 @@ public class OhRadioBridge implements IRadioService, ITransport
         logIncomingMetadata(metadata);
 
         // Try three transports in order of preference, each falling through to the next on failure:
-        //   1) OpenHome Transport service (Transport.PlayAs, Mode "Radio").
+        //   1) OpenHome Transport service (Transport.PlayAs, Mode "single").
         //   2) Legacy OpenHome Radio service (SetChannel + Play).
         //   3) AVTransport (SetAVTransportURI + Play), as before.
         if (tryPlayViaTransport(uri, metadata))
@@ -111,7 +111,7 @@ public class OhRadioBridge implements IRadioService, ITransport
     }
 
     /**
-     * Attempt 1 (new firmware): Transport.PlayAs with Mode "Radio" and a JSON Command that carries
+     * Attempt 1 (new firmware): Transport.PlayAs with Mode "single" and a JSON Command that carries
      * both the stream URL and the DIDL-Lite metadata, e.g.
      * {@code {"url":"http://…","metadata":"<DIDL-Lite …></DIDL-Lite>"}}. This both loads and starts the
      * stream in one call.
@@ -127,28 +127,29 @@ public class OhRadioBridge implements IRadioService, ITransport
         }
         try
         {
-            // Include a <res> with the real protocolInfo in the metadata: "Action Failed" (501) with an
-            // otherwise-accepted request usually means the renderer found no playable resource.
-            String didl = buildRadioMetadata(metadata, uri);
+            // Send the original media-server DIDL verbatim (it carries album, cover art, the audio
+            // <res>, …) — richer metadata may be what "single" needs to not fail. Only synthesise a
+            // minimal DIDL when no source metadata is available.
+            String didl = (metadata != null && !metadata.isBlank()) ? metadata : buildRadioMetadata(metadata, uri);
             String command = buildPlayAsCommand(uri, didl);
             PlayAsInput inp = new PlayAsInput();
-            inp.Mode = "Radio";
+            inp.Mode = "single";
             inp.Command = command;
-            log.info("playStream: Transport.PlayAs Mode='Radio' url='{}' (command length={})", uri, command.length());
+            log.info("playStream: Transport.PlayAs Mode='single' url='{}' (command length={})", uri, command.length());
             log.debug("playStream: PlayAs command JSON = {}", command);
             device.getOhTransportService().playAs(inp);
-            log.info("playStream: Transport.PlayAs Mode='Radio' accepted");
+            log.info("playStream: Transport.PlayAs Mode='single' accepted");
             return true;
         }
         catch (GenActionException e)
         {
             // Device rejected the action: the UPnP SOAP fault (errorCode/description) is the useful part.
-            log.warn("playStream: Transport.PlayAs Mode='Radio' rejected for {} : {} ; falling back to Radio service", uri, describeThrowable(e));
+            log.warn("playStream: Transport.PlayAs Mode='single' rejected for {} : {} ; falling back to Radio service", uri, describeThrowable(e));
             return false;
         }
         catch (Exception e)
         {
-            log.warn("playStream: Transport.PlayAs Mode='Radio' errored for {} : {} ; falling back to Radio service", uri, describeThrowable(e), e);
+            log.warn("playStream: Transport.PlayAs Mode='single' errored for {} : {} ; falling back to Radio service", uri, describeThrowable(e), e);
             return false;
         }
     }
