@@ -547,6 +547,15 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     }
 
     /**
+     * Raw OpenHome Transport service (or {@code null} if the device has none). Exposed so callers can
+     * use {@code Transport.PlayAs} directly — the {@link ITransport} bridge doesn't surface it.
+     */
+    public TransportService getOhTransportService()
+    {
+        return oh_transportService;
+    }
+
+    /**
      * Diagnostic helper (temporary): logs the PlayAs Modes advertised by the OpenHome Transport
      * service, if the device has one. This tells us whether a future migration from the legacy
      * Radio service to Transport.PlayAs is viable on this renderer and which Mode string it would

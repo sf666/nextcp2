@@ -10,6 +10,16 @@ button {
 
 .sidebar {
      height         : calc(100dvh - var(--footer-height));
+
+     // Keep the nav list scrollable but hide the scrollbar — on macOS an
+     // unstyled overlay bar flashes in over the frosted sidebar and looks off.
+     // Matches #mainContent, which also hides its bar.
+     scrollbar-width: none;              // Firefox / modern engines
+
+     &::-webkit-scrollbar {              // WebKit (macOS Chrome & Safari)
+         width : 0;
+         height: 0;
+     }
 }
 
 .create-icon {
