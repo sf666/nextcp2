@@ -127,9 +127,9 @@ public class OhRadioBridge implements IRadioService, ITransport
         }
         try
         {
-            // Metadata is a minimal audioBroadcast DIDL (title + class); the URL travels in the JSON's
-            // "url" field, so no <res> element is needed here.
-            String didl = buildRadioMetadata(metadata, null);
+            // Include a <res> with the real protocolInfo in the metadata: "Action Failed" (501) with an
+            // otherwise-accepted request usually means the renderer found no playable resource.
+            String didl = buildRadioMetadata(metadata, uri);
             String command = buildPlayAsCommand(uri, didl);
             PlayAsInput inp = new PlayAsInput();
             inp.Mode = "single";
@@ -241,6 +241,24 @@ public class OhRadioBridge implements IRadioService, ITransport
 
     private static final Pattern TITLE_PATTERN = Pattern.compile("<dc:title>(.*?)</dc:title>", Pattern.DOTALL);
 
+    // First audio <res protocolInfo="..."> in the source DIDL, so the res we emit advertises the real
+    // content type (e.g. http-get:*:audio/mpeg:...) rather than a wildcard the renderer may reject.
+    private static final Pattern AUDIO_RES_PROTOCOL_PATTERN =
+        Pattern.compile("<res[^>]*protocolInfo=\"(http-get:[^\"]*?audio/[^\"]*?)\"", Pattern.DOTALL);
+
+    private static String extractAudioProtocolInfo(String sourceMetadata)
+    {
+        if (sourceMetadata != null)
+        {
+            Matcher m = AUDIO_RES_PROTOCOL_PATTERN.matcher(sourceMetadata);
+            if (m.find())
+            {
+                return m.group(1);
+            }
+        }
+        return "http-get:*:audio/mpeg:*";
+    }
+
     /**
      * Builds a minimal, well-formed DIDL-Lite metadata document carrying the title (taken from the
      * supplied metadata when present) and the audioBroadcast class. When {@code resUri} is non-null a
@@ -263,7 +281,8 @@ public class OhRadioBridge implements IRadioService, ITransport
         String resElement = "";
         if (resUri != null && !resUri.isBlank())
         {
-            resElement = "<res protocolInfo=\"http-get:*:*:*\">" + escapeXml(resUri) + "</res>";
+            String protocolInfo = extractAudioProtocolInfo(sourceMetadata);
+            resElement = "<res protocolInfo=\"" + escapeXml(protocolInfo) + "\">" + escapeXml(resUri) + "</res>";
         }
         return "<DIDL-Lite xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\""
             + " xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\""
