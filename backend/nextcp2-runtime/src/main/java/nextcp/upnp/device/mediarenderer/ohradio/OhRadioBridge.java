@@ -1,5 +1,6 @@
 package nextcp.upnp.device.mediarenderer.ohradio;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -119,26 +120,48 @@ public class OhRadioBridge implements IRadioService, ITransport
             log.debug("playStream: device has no OpenHome Transport service; skipping Transport.PlayAs");
             return false;
         }
-        try
+
+        // The exact Command format Transport.PlayAs(Mode="Radio") expects is undocumented and
+        // firmware-specific. The full media-server DIDL is rejected with "Invalid Argument" (800), so
+        // try a few progressively simpler candidates and use the first the device accepts. This is a
+        // diagnostic sweep — once we know the winning shape we collapse this to a single call.
+        List<String[]> candidates = new ArrayList<>(); // { label, command }
+        candidates.add(new String[] { "minimal-didl", buildRadioMetadata(metadata, uri) });
+        candidates.add(new String[] { "plain-uri", uri });
+        if (metadata != null && !metadata.isBlank())
         {
-            // Send the original media-server DIDL untouched; only synthesise one if it is missing.
-            String command = (metadata != null && !metadata.isBlank()) ? metadata : buildRadioMetadata(metadata, uri);
-            PlayAsInput inp = new PlayAsInput();
-            inp.Mode = "Radio";
-            inp.Command = command;
-            log.info("playStream: trying Transport.PlayAs Mode='Radio' Uri='{}' (command length={})", uri, command.length());
-            log.debug("playStream: PlayAs command DIDL = {}", command);
-            device.getOhTransportService().playAs(inp);
-            log.info("playStream: Transport.PlayAs accepted");
-            return true;
+            candidates.add(new String[] { "original-didl", metadata });
         }
-        catch (Exception e)
+
+        for (String[] candidate : candidates)
         {
-            // GenActionException carries the UPnP SOAP fault in its `description` (getMessage() is null),
-            // so surface that explicitly and log the full stacktrace for analysis.
-            log.warn("playStream: Transport.PlayAs failed for {} : {} ; falling back to Radio service", uri, describeThrowable(e), e);
-            return false;
+            String label = candidate[0];
+            String command = candidate[1];
+            try
+            {
+                PlayAsInput inp = new PlayAsInput();
+                inp.Mode = "Radio";
+                inp.Command = command;
+                log.info("playStream: trying Transport.PlayAs Mode='Radio' command='{}' (length={}) Uri='{}'", label, command.length(), uri);
+                log.debug("playStream: PlayAs [{}] command = {}", label, command);
+                device.getOhTransportService().playAs(inp);
+                log.info("playStream: Transport.PlayAs ACCEPTED with command='{}'", label);
+                return true;
+            }
+            catch (GenActionException e)
+            {
+                // Device rejected the action: the UPnP SOAP fault (errorCode/description) is the useful
+                // part; the stacktrace is just jUPnP plumbing, so skip it for these expected rejections.
+                log.warn("playStream: Transport.PlayAs [{}] rejected for {} : {}", label, uri, describeThrowable(e));
+            }
+            catch (Exception e)
+            {
+                // Unexpected (non-UPnP) failure: log with full stacktrace for analysis.
+                log.warn("playStream: Transport.PlayAs [{}] errored for {} : {}", label, uri, describeThrowable(e), e);
+            }
         }
+        log.warn("playStream: all Transport.PlayAs command variants failed for {}; falling back to Radio service", uri);
+        return false;
     }
 
     /**
