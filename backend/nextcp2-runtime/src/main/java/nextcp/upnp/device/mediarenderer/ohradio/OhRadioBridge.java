@@ -1,12 +1,16 @@
 package nextcp.upnp.device.mediarenderer.ohradio;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import nextcp.domainmodel.device.services.IRadioService;
 import nextcp.domainmodel.device.services.ITransport;
@@ -30,6 +34,8 @@ import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.PlayAsInput;
 public class OhRadioBridge implements IRadioService, ITransport
 {
     private static final Logger log = LoggerFactory.getLogger(OhRadioBridge.class.getName());
+
+    private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
     private RadioService radioService = null;
     private OpenHomeUtils ohUtil = null;
@@ -105,13 +111,12 @@ public class OhRadioBridge implements IRadioService, ITransport
     }
 
     /**
-     * Attempt 1: OpenHome Transport.PlayAs with Mode "Radio". PlayAs has no separate Uri argument, so
-     * the original DIDL-Lite metadata (which already carries the &lt;res&gt; stream URI) is sent
-     * verbatim as the Command. Only when no metadata is supplied do we fall back to a minimal,
-     * self-built DIDL that embeds the URI.
+     * Attempt 1 (new firmware): Transport.PlayAs with Mode "single" and a JSON Command that carries
+     * both the stream URL and the DIDL-Lite metadata, e.g.
+     * {@code {"url":"http://…","metadata":"<DIDL-Lite …></DIDL-Lite>"}}. This both loads and starts the
+     * stream in one call.
      *
-     * @return true if the action was accepted, false if unavailable or rejected (so the caller falls
-     *         through to the next transport).
+     * @return true if playback started, false if unavailable or rejected (so the caller falls through).
      */
     private boolean tryPlayViaTransport(String uri, String metadata)
     {
@@ -120,57 +125,49 @@ public class OhRadioBridge implements IRadioService, ITransport
             log.debug("playStream: device has no OpenHome Transport service; skipping Transport.PlayAs");
             return false;
         }
-
-        // The exact Command format Transport.PlayAs(Mode="Radio") expects is undocumented and
-        // firmware-specific. The full media-server DIDL is rejected with "Invalid Argument" (800).
-        // The firmware developer hinted the problem may be character escaping: jUPnP escapes the SOAP
-        // argument once and a device normally un-escapes once, but this parser may expect the Command
-        // itself to arrive already XML-escaped. So sweep raw vs. pre-escaped variants and use the first
-        // the device accepts. Diagnostic sweep — collapse to the winning shape once known.
-        String minimalDidl = buildRadioMetadata(metadata, uri);
-        List<String[]> candidates = new ArrayList<>(); // { label, command }
-        candidates.add(new String[] { "minimal-didl", minimalDidl });
-        candidates.add(new String[] { "minimal-didl-escaped", escapeXml(minimalDidl) });
-        if (metadata != null && !metadata.isBlank())
+        try
         {
-            candidates.add(new String[] { "original-didl", metadata });
-            candidates.add(new String[] { "original-didl-escaped", escapeXml(metadata) });
+            // Metadata is a minimal audioBroadcast DIDL (title + class); the URL travels in the JSON's
+            // "url" field, so no <res> element is needed here.
+            String didl = buildRadioMetadata(metadata, null);
+            String command = buildPlayAsCommand(uri, didl);
+            PlayAsInput inp = new PlayAsInput();
+            inp.Mode = "single";
+            inp.Command = command;
+            log.info("playStream: Transport.PlayAs Mode='single' url='{}' (command length={})", uri, command.length());
+            log.debug("playStream: PlayAs command JSON = {}", command);
+            device.getOhTransportService().playAs(inp);
+            log.info("playStream: Transport.PlayAs Mode='single' accepted");
+            return true;
         }
-        candidates.add(new String[] { "plain-uri", uri });
-
-        for (String[] candidate : candidates)
+        catch (GenActionException e)
         {
-            String label = candidate[0];
-            String command = candidate[1];
-            try
-            {
-                PlayAsInput inp = new PlayAsInput();
-                inp.Mode = "Radio";
-                inp.Command = command;
-                log.info("playStream: trying Transport.PlayAs Mode='Radio' command='{}' (length={}) Uri='{}'", label, command.length(), uri);
-                log.debug("playStream: PlayAs [{}] command = {}", label, command);
-                device.getOhTransportService().playAs(inp);
-                log.info("playStream: Transport.PlayAs ACCEPTED with command='{}'", label);
-                return true;
-            }
-            catch (GenActionException e)
-            {
-                // Device rejected the action: the UPnP SOAP fault (errorCode/description) is the useful
-                // part; the stacktrace is just jUPnP plumbing, so skip it for these expected rejections.
-                log.warn("playStream: Transport.PlayAs [{}] rejected for {} : {}", label, uri, describeThrowable(e));
-            }
-            catch (Exception e)
-            {
-                // Unexpected (non-UPnP) failure: log with full stacktrace for analysis.
-                log.warn("playStream: Transport.PlayAs [{}] errored for {} : {}", label, uri, describeThrowable(e), e);
-            }
+            // Device rejected the action: the UPnP SOAP fault (errorCode/description) is the useful part.
+            log.warn("playStream: Transport.PlayAs Mode='single' rejected for {} : {} ; falling back to Radio service", uri, describeThrowable(e));
+            return false;
         }
-        log.warn("playStream: all Transport.PlayAs command variants failed for {}; falling back to Radio service", uri);
-        return false;
+        catch (Exception e)
+        {
+            log.warn("playStream: Transport.PlayAs Mode='single' errored for {} : {} ; falling back to Radio service", uri, describeThrowable(e), e);
+            return false;
+        }
     }
 
     /**
-     * Attempt 2: legacy OpenHome Radio service (SetChannel + Play).
+     * Builds the PlayAs Command payload: a JSON object {@code {"url":…,"metadata":…}}. Jackson handles
+     * the JSON-escaping of the embedded DIDL; jUPnP later XML-escapes the whole Command for SOAP.
+     */
+    private static String buildPlayAsCommand(String uri, String didl) throws JsonProcessingException
+    {
+        Map<String, String> command = new LinkedHashMap<>();
+        command.put("url", uri);
+        command.put("metadata", didl);
+        return JSON_MAPPER.writeValueAsString(command);
+    }
+
+    /**
+     * Attempt 2 (legacy firmware): OpenHome Radio service — SetChannel + Radio.Play (rather than
+     * Transport.PlayAs).
      *
      * @return true if accepted, false if rejected (caller falls through to AVTransport).
      */
@@ -178,26 +175,38 @@ public class OhRadioBridge implements IRadioService, ITransport
     {
         try
         {
-            // Some OpenHome renderers reject SetChannel with empty or overly complex metadata, so send
-            // a minimal, well-formed audioBroadcast DIDL-Lite (title + class) instead of the full media
-            // server document.
-            String didl = buildRadioMetadata(metadata, null);
-            SetChannelInput inp = new SetChannelInput();
-            inp.Uri = uri;
-            inp.Metadata = didl;
-            log.info("playStream: calling Radio.SetChannel with Uri='{}' (metadata length={})", inp.Uri, didl.length());
-            log.debug("playStream: SetChannel metadata = {}", didl);
-            radioService.setChannel(inp);
-            log.info("playStream: Radio.SetChannel accepted; calling Radio.Play");
+            setRadioChannel(uri, metadata);
+            log.info("playStream: starting via Radio.Play");
             play();
             log.info("playStream: Radio.Play sent");
             return true;
         }
-        catch (Exception e)
+        catch (GenActionException e)
         {
-            log.warn("playStream: OpenHome Radio play failed for {} : {} ; falling back to AVTransport", uri, describeThrowable(e), e);
+            log.warn("playStream: OpenHome Radio (SetChannel + Play) rejected for {} : {} ; falling back to AVTransport", uri, describeThrowable(e));
             return false;
         }
+        catch (Exception e)
+        {
+            log.warn("playStream: OpenHome Radio errored for {} : {} ; falling back to AVTransport", uri, describeThrowable(e), e);
+            return false;
+        }
+    }
+
+    /**
+     * Loads a stream into the OpenHome Radio source via Radio.SetChannel. The raw (un-escaped) DIDL is
+     * passed as the Metadata argument — jUPnP XML-escapes it during SOAP serialisation, which is what
+     * the device expects on the wire.
+     */
+    private void setRadioChannel(String uri, String metadata)
+    {
+        String didl = buildRadioMetadata(metadata, uri);
+        SetChannelInput inp = new SetChannelInput();
+        inp.Uri = uri;
+        inp.Metadata = didl;
+        log.info("playStream: Radio.SetChannel Uri='{}' (metadata length={})", uri, didl.length());
+        log.debug("playStream: SetChannel metadata = {}", didl);
+        radioService.setChannel(inp);
     }
 
     /**
