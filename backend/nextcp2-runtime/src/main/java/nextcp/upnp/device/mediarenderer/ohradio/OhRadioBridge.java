@@ -12,6 +12,7 @@ import nextcp.domainmodel.device.services.ITransport;
 import nextcp.dto.MusicItemDto;
 import nextcp.dto.TransportServiceStateDto;
 import nextcp.rest.DtoBuilder;
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediarenderer.OpenHomeUtils;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.RadioService;
@@ -104,7 +105,9 @@ public class OhRadioBridge implements IRadioService, ITransport
 
     /**
      * Attempt 1: OpenHome Transport.PlayAs with Mode "Radio". PlayAs has no separate Uri argument, so
-     * the stream URI is carried inside the Command DIDL-Lite as a &lt;res&gt; element.
+     * the original DIDL-Lite metadata (which already carries the &lt;res&gt; stream URI) is sent
+     * verbatim as the Command. Only when no metadata is supplied do we fall back to a minimal,
+     * self-built DIDL that embeds the URI.
      *
      * @return true if the action was accepted, false if unavailable or rejected (so the caller falls
      *         through to the next transport).
@@ -118,19 +121,22 @@ public class OhRadioBridge implements IRadioService, ITransport
         }
         try
         {
-            String didl = buildRadioMetadata(metadata, uri);
+            // Send the original media-server DIDL untouched; only synthesise one if it is missing.
+            String command = (metadata != null && !metadata.isBlank()) ? metadata : buildRadioMetadata(metadata, uri);
             PlayAsInput inp = new PlayAsInput();
             inp.Mode = "Radio";
-            inp.Command = didl;
-            log.info("playStream: trying Transport.PlayAs Mode='Radio' Uri='{}' (command length={})", uri, didl.length());
-            log.debug("playStream: PlayAs command = {}", didl);
+            inp.Command = command;
+            log.info("playStream: trying Transport.PlayAs Mode='Radio' Uri='{}' (command length={})", uri, command.length());
+            log.debug("playStream: PlayAs command DIDL = {}", command);
             device.getOhTransportService().playAs(inp);
             log.info("playStream: Transport.PlayAs accepted");
             return true;
         }
         catch (Exception e)
         {
-            log.warn("playStream: Transport.PlayAs failed for {} ({}); falling back to Radio service", uri, e.getMessage());
+            // GenActionException carries the UPnP SOAP fault in its `description` (getMessage() is null),
+            // so surface that explicitly and log the full stacktrace for analysis.
+            log.warn("playStream: Transport.PlayAs failed for {} : {} ; falling back to Radio service", uri, describeThrowable(e), e);
             return false;
         }
     }
@@ -161,7 +167,7 @@ public class OhRadioBridge implements IRadioService, ITransport
         }
         catch (Exception e)
         {
-            log.warn("playStream: OpenHome Radio play failed for {} ({}); falling back to AVTransport", uri, e.getMessage());
+            log.warn("playStream: OpenHome Radio play failed for {} : {} ; falling back to AVTransport", uri, describeThrowable(e), e);
             return false;
         }
     }
@@ -180,6 +186,20 @@ public class OhRadioBridge implements IRadioService, ITransport
         {
             log.warn("playStream: device has neither a working Transport/Radio service nor AVTransport - cannot play stream {}", uri);
         }
+    }
+
+    /**
+     * Renders an exception into a concise, informative string. {@link GenActionException} keeps the
+     * UPnP SOAP fault in its {@code description} field (and leaves {@code getMessage()} null), so pull
+     * that out explicitly; anything else falls back to type + message.
+     */
+    private static String describeThrowable(Throwable t)
+    {
+        if (t instanceof GenActionException gae)
+        {
+            return "GenActionException[errorCode=" + gae.errorCode + ", description=" + gae.description + "]";
+        }
+        return t.getClass().getSimpleName() + ": " + t.getMessage();
     }
 
     private static final Pattern TITLE_PATTERN = Pattern.compile("<dc:title>(.*?)</dc:title>", Pattern.DOTALL);
