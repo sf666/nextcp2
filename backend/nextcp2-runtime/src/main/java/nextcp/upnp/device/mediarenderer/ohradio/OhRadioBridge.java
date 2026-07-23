@@ -122,16 +122,21 @@ public class OhRadioBridge implements IRadioService, ITransport
         }
 
         // The exact Command format Transport.PlayAs(Mode="Radio") expects is undocumented and
-        // firmware-specific. The full media-server DIDL is rejected with "Invalid Argument" (800), so
-        // try a few progressively simpler candidates and use the first the device accepts. This is a
-        // diagnostic sweep — once we know the winning shape we collapse this to a single call.
+        // firmware-specific. The full media-server DIDL is rejected with "Invalid Argument" (800).
+        // The firmware developer hinted the problem may be character escaping: jUPnP escapes the SOAP
+        // argument once and a device normally un-escapes once, but this parser may expect the Command
+        // itself to arrive already XML-escaped. So sweep raw vs. pre-escaped variants and use the first
+        // the device accepts. Diagnostic sweep — collapse to the winning shape once known.
+        String minimalDidl = buildRadioMetadata(metadata, uri);
         List<String[]> candidates = new ArrayList<>(); // { label, command }
-        candidates.add(new String[] { "minimal-didl", buildRadioMetadata(metadata, uri) });
-        candidates.add(new String[] { "plain-uri", uri });
+        candidates.add(new String[] { "minimal-didl", minimalDidl });
+        candidates.add(new String[] { "minimal-didl-escaped", escapeXml(minimalDidl) });
         if (metadata != null && !metadata.isBlank())
         {
             candidates.add(new String[] { "original-didl", metadata });
+            candidates.add(new String[] { "original-didl-escaped", escapeXml(metadata) });
         }
+        candidates.add(new String[] { "plain-uri", uri });
 
         for (String[] candidate : candidates)
         {
