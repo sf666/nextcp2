@@ -1,4 +1,4 @@
-<div class="flex flex-col" >
+<div class="flex flex-col grow w-full" >
 
   @if (layoutService.headerVisible()) {
       <nav-bar
@@ -18,11 +18,14 @@
   }
   
   <!-- display music library -->
-  
-  <mediaServer-display-container
-    [showTopHeader]="showTopHeader()"
-    [showGenre]="true"
-    [contentHandler]="getContentHandler()"
-  />
-  
+
+  <div class="flex w-full">
+    <mediaServer-display-container
+      class="flex grow flex-col w-full"
+      [showTopHeader]="showTopHeader()"
+      [showGenre]="true"
+      [contentHandler]="getContentHandler()"
+    />
+  </div>
+
 </div>
