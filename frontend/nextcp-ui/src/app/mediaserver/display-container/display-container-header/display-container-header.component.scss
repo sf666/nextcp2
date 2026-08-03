@@ -138,8 +138,7 @@
         // Scale the glyph with the (collapsing) tile.
         font-size     : calc((var(--top-header-Height) - var(--top-header-Vertical-Indent)) * 0.44);
         line-height   : 1;
-        color         : var(--primary-color);
-        opacity       : 0.9;
+        color         : rgba(255, 255, 255, 0.55);
         font-weight   : 200;
     }
 }
