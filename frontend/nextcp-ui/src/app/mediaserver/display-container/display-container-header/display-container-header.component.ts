@@ -213,8 +213,15 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   genresForm = new FormControl('');
 
+  // Search-result containers carry the search-icon placeholder as their artwork.
+  isSearchResult = computed(() =>
+    (this.currentContainer?.albumartUri ?? '').includes('search-icon.png'),
+  );
+
   containerType = computed(() => {
-    if (
+    if (this.isSearchResult()) {
+      return 'Search';
+    } else if (
       this.currentContainer.objectClass === 'object.container.playlistContainer'
     ) {
       return 'Playlist';
@@ -243,17 +250,17 @@ export class DisplayContainerHeaderComponent implements OnInit {
     this.clearSearch();
     this.fillGenres();
     this.checkLikeStatus();
-    this.backgroundImageService.setDisplayContainerHeaderImage(
-      this.currentContainer.albumartUri,
-    );
+    // Search results have no real cover — feed an empty url so the header image,
+    // the full-screen wash and the sidebar tint all stay neutral-dark instead of
+    // washing the whole page in the placeholder icon's colour.
+    const artUrl = this.isSearchResult() ? '' : this.currentContainer.albumartUri;
+    this.backgroundImageService.setDisplayContainerHeaderImage(artUrl);
     // Drive the full-screen "living canvas" wash from the item currently being
     // browsed (always present), so the frosted chrome reliably picks up the
     // colour you are looking at — instead of the often-dark now-playing art.
-    this.backgroundImageService.setBackgroundImageMainScreen(
-      this.currentContainer.albumartUri,
-    );
+    this.backgroundImageService.setBackgroundImageMainScreen(artUrl);
     // Extract the cover's dominant colour to reliably tint the sidebar.
-    this.backgroundImageService.applyAmbientTint(this.currentContainer.albumartUri);
+    this.backgroundImageService.applyAmbientTint(artUrl);
     this.cdsBrowsePathService.scrollIntoViewID();
   }
 

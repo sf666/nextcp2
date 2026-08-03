@@ -127,6 +127,23 @@
     box-shadow  : 0 8px 28px rgba(0, 0, 0, 0.5);
 }
 
+// Search results have no cover: show a calm frosted tile with a cyan line search
+// glyph (Roon-like) instead of the saturated placeholder image. Reuses .img-top for
+// size/position; overrides only the fill.
+.img-top.search-art {
+    background-color: rgba(255, 255, 255, 0.05);
+    border          : 1px solid rgba(255, 255, 255, 0.10);
+
+    .material-symbols-outlined {
+        // Scale the glyph with the (collapsing) tile.
+        font-size     : calc((var(--top-header-Height) - var(--top-header-Vertical-Indent)) * 0.44);
+        line-height   : 1;
+        color         : var(--primary-color);
+        opacity       : 0.9;
+        font-weight   : 200;
+    }
+}
+
 .button-row {
     display        : flex;
     justify-content: space-between;

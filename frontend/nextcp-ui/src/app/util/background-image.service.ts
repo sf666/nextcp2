@@ -10,7 +10,8 @@ export class BackgroundImageService {
   public setBackgroundImageMainScreen(url: string): void {
     const element = document.getElementById('main-screen');
     if (supportsBackdropFilter && element) {
-      element.style.backgroundImage = 'url("' + url + '")';
+      // Empty url clears the inline override so the base (neutral dark) shows through.
+      element.style.backgroundImage = url ? 'url("' + url + '")' : '';
     }
   }
 
@@ -25,7 +26,7 @@ export class BackgroundImageService {
     if (supportsBackdropFilter && document.getElementById('header-background')) {
       let element = document.getElementById('header-background');
       if (element) {
-        element.style.backgroundImage = 'url("' + url + '")';
+        element.style.backgroundImage = url ? 'url("' + url + '")' : '';
       }
     }
   }
@@ -38,7 +39,12 @@ export class BackgroundImageService {
    * sidebar falls back to neutral.
    */
   public applyAmbientTint(url: string): void {
-    if (!supportsBackdropFilter || !url) {
+    if (!supportsBackdropFilter) {
+      return;
+    }
+    if (!url) {
+      // No artwork (e.g. search results) — drop the tint so the sidebar goes neutral.
+      document.documentElement.style.removeProperty('--ambient-color');
       return;
     }
     const img = new Image();
