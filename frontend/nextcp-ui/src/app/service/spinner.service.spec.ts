@@ -4,14 +4,10 @@ import { SpinnerService } from './spinner.service';
 
 describe('SpinnerService', () => {
   let service: SpinnerService;
-  let latestVisibility: boolean | null = null;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(SpinnerService);
-    service.visibility.subscribe((visible) => {
-      latestVisibility = visible;
-    });
   });
 
   it('should be created', () => {
@@ -22,13 +18,13 @@ describe('SpinnerService', () => {
     service.requestStarted();
 
     tick(1499);
-    expect(latestVisibility).not.toBeTrue();
+    expect(service.isLoading()).toBe(false);
 
     tick(1);
-    expect(latestVisibility).toBeTrue();
+    expect(service.isLoading()).toBe(true);
 
     service.requestEnded();
-    expect(latestVisibility).toBeFalse();
+    expect(service.isLoading()).toBe(false);
   }));
 
   it('should not show spinner for quick requests', fakeAsync(() => {
@@ -38,7 +34,7 @@ describe('SpinnerService', () => {
     service.requestEnded();
 
     tick(2000);
-    expect(latestVisibility).not.toBeTrue();
+    expect(service.isLoading()).toBe(false);
   }));
 
   it('should stay visible until all requests are done', fakeAsync(() => {
@@ -46,12 +42,12 @@ describe('SpinnerService', () => {
     service.requestStarted();
 
     tick(1500);
-    expect(latestVisibility).toBeTrue();
+    expect(service.isLoading()).toBe(true);
 
     service.requestEnded();
-    expect(latestVisibility).toBeTrue();
+    expect(service.isLoading()).toBe(true);
 
     service.requestEnded();
-    expect(latestVisibility).toBeFalse();
+    expect(service.isLoading()).toBe(false);
   }));
 });

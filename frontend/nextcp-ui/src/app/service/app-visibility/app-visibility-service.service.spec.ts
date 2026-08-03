@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AppVisibilityServiceService } from './app-visibility-service.service';
+import { AppVisibilityService } from './app-visibility-service.service';
 
-describe('AppVisibilityServiceService', () => {
-  let service: AppVisibilityServiceService;
+describe('AppVisibilityService', () => {
+  let service: AppVisibilityService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(AppVisibilityServiceService);
+    service = TestBed.inject(AppVisibilityService);
   });
 
   it('should be created', () => {
