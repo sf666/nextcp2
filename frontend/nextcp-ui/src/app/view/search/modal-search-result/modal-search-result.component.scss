@@ -1,21 +1,41 @@
+// Global search results — living-glass popup (frosted chrome over the album wash),
+// section-label headers with a cyan tab-underline, and cyan-tinted hover rows.
 
 .search-container {
     display      : flex;
     flex-flow    : column nowrap;
-    border-radius: 8px;
 
     font-size  : 1rem;
     font-weight: 300;
 
-    position        : fixed;
-    height          : calc(var(--vh, 1vh) * 100 - 185px);
-    top             : 70px;
-    right           : 16px;
-    background-color: #242528;
-    z-index         : 70;
+    position: fixed;
+    height  : calc(var(--vh, 1vh) * 100 - 185px);
+    top     : 70px;
+    right   : 16px;
+    z-index : 70;
+
+    // Frosted "living glass" — darker and more heavily blurred than the footer/sidebar
+    // chrome, so the results stay readable and the content behind is only a faint wash.
+    background             : rgba(12, 12, 17, 0.82);
+    backdrop-filter        : blur(48px) saturate(1.4);
+    -webkit-backdrop-filter: blur(48px) saturate(1.4);
+    border                 : 1px solid var(--chrome-hair);
+    border-radius          : 16px;
+    box-shadow             : 0 24px 60px rgba(0, 0, 0, 0.5);
+
+    padding-top   : 0.25rem;
+    padding-bottom: 0.75rem;
 
     overflow  : hidden;
     overflow-y: auto;
+
+    // Hide the scrollbar (matches #mainContent / sidebar).
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        width : 0;
+        height: 0;
+    }
 
     transform-origin: 50% 0;
     transition      : all .2s ease;
@@ -32,50 +52,73 @@
 }
 
 .section-box {
-    margin-top   : 2 rem;
-    margin-bottom: 1.5rem;
+    margin-top   : 1.5rem;
+    margin-bottom: 1.25rem;
 
     &:first-child {
-        margin-top: 1rem;
+        margin-top: 0.75rem;
     }
 }
 
+// Section header: bold uppercase label with a cyan tab-underline on a faint rule,
+// and a cyan "show all (N)".
+.sec-head {
+    align-items   : flex-end;
+    padding-bottom: 0.5rem;
+    border-bottom : 1px solid rgba(255, 255, 255, 0.10);
+}
+
 .search-title {
-    font-size  : 1rem;
-    font-weight: 500;
+    font-size     : 0.86rem;
+    font-weight   : 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color         : var(--snow-white);
+    padding-bottom: 0.5rem;
+    margin-bottom : -0.5rem;
+    border-bottom : 2px solid var(--primary-color);
 }
 
 .search-show-all {
-    font-size  : 1rem;
-    font-weight: 300;
-    color      : rgba(229, 238, 255, .6);
+    font-size     : 0.74rem;
+    font-weight   : 600;
+    letter-spacing: 0.03em;
+    color         : var(--primary-color);
+    cursor        : pointer;
+    padding-bottom: 0.05rem;
+
+    &:hover {
+        color: var(--snow-white);
+    }
 }
 
 img {
     height       : 62px;
     width        : 62px;
     object-fit   : cover;
-    border-radius: 4px;
+    border-radius: 8px;
 }
 
 .title {
     @extend .no-wrap;
-    font-size     : 0.9rem;
-    font-weight   : 500;
+    font-size  : 0.9rem;
+    font-weight: 600;
+    color      : var(--glas-white-1);
 }
 
 .artist {
     @extend .no-wrap;
-    font-size  : 0.9rem;
+    font-size  : 0.8rem;
     font-weight: 300;
-    color      : rgba(229, 238, 255, .6);
-    padding-top: 1rem;
+    color      : rgba(229, 238, 255, .55);
+    margin-top : 0.15rem;
 }
 
 .no-match {
     font-size  : 0.8rem;
     font-weight: 300;
-    color      : rgba(229, 238, 255, .6);
+    color      : rgba(229, 238, 255, .5);
+    padding    : 0 0.25rem 0.25rem;
 }
 
 .no-wrap {
@@ -92,12 +135,26 @@ img {
 }
 
 .search-row {
-    padding-bottom: 16px;
+    padding-bottom: 4px;
+}
+
+// The clickable rows (title/album/playlist/artist and the kebab) get a rounded,
+// cyan-tinted hover highlight.
+.search-row.flex {
+    align-items   : center;
+    padding       : 8px 10px;
+    border-radius : 10px;
+    cursor        : pointer;
+    transition    : background-color .15s ease;
+
+    &:hover {
+        background: rgba(0, 255, 255, 0.08);
+    }
 }
 
 .row-text {
     display        : flex;
-    padding-left   : 1.5rem;
+    padding-left   : 0.9rem;
     justify-content: center;
     flex-direction : column;
     min-width      : 0;
