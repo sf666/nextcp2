@@ -45,15 +45,27 @@
 } 
 
 @if(!hasRadioStations()) {
-  @if(deviceService.selectedMediaRendererDevice().udn.length ?? 0 > 0) {
-    <div class="ms-8 p-4 max-w-lg mb-4 text-sm mt-8 rounded-lg bg-gray-800 text-red-400" role="alert">
-      {{deviceService.selectedMediaRendererDevice().friendlyName}} : Selected player provides no radio stations.
-    </div>          
+  @if((deviceService.selectedMediaRendererDevice().udn.length ?? 0) > 0) {
+    <div class="empty-state">
+      <div class="empty-state-art">
+        <span class="material-symbols-outlined">radio</span>
+      </div>
+      <p class="empty-state-text">No radio stations</p>
+      <p class="empty-state-hint">
+        {{deviceService.selectedMediaRendererDevice().friendlyName}} provides no radio stations.
+      </p>
+    </div>
   } @else {
-    <div class="inline-flex items-center ms-8 p-4 max-w-lg mb-4 text-sm mt-8 rounded-lg bg-gray-800 text-red-400" role="alert">
-      Please select a media renderer by clicking the 
-      <span class="material-symbols-outlined icon-main">speaker</span> button.
-    </div>          
+    <div class="empty-state">
+      <div class="empty-state-art">
+        <span class="material-symbols-outlined">speaker</span>
+      </div>
+      <p class="empty-state-text">No media renderer selected</p>
+      <p class="empty-state-hint">
+        Please select a media renderer by clicking the
+        <span class="material-symbols-outlined align-middle">speaker</span> button.
+      </p>
+    </div>
   }
 }
 

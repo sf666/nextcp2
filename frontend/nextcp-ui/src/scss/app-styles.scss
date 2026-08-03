@@ -121,6 +121,45 @@
 }
 
 
+// Shared "empty state" (Roon-like): big frosted icon tile centred over the
+// living-canvas wash, a headline and an optional hint. Used by "Now Listening"
+// (no track / no renderer) and "Radio" (no stations / no renderer).
+.empty-state {
+    display        : flex;
+    flex-direction : column;
+    align-items    : center;
+    justify-content: center;
+    text-align     : center;
+    min-height     : min(74vh, 680px);
+    gap            : 1rem;
+}
+
+.empty-state-art {
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    width          : 16rem;
+    height         : 16rem;
+    border-radius  : 20px;
+    background     : rgba(255, 255, 255, 0.05);
+    border         : 1px solid rgba(255, 255, 255, 0.08);
+
+    .material-symbols-outlined {
+        font-size: 7rem;
+        color    : rgba(255, 255, 255, 0.3);
+    }
+}
+
+.empty-state-text {
+    font-size: 1.5rem;
+    color    : rgba(255, 255, 255, 0.6);
+}
+
+.empty-state-hint {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+
 // Section
 .section {
     font-weight: 400;
