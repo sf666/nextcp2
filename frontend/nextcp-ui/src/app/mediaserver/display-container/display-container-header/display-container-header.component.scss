@@ -256,9 +256,11 @@
     // visible header instead of revealing a transparent border.
     transform          : scale(1.12);
 
-    // Fade the wash out toward the bottom so it melts into the list.
-    -webkit-mask-image : linear-gradient(to bottom, #000 62%, transparent 100%);
-    mask-image         : linear-gradient(to bottom, #000 62%, transparent 100%);
+    // Long, gentle fade of the cover wash toward the bottom so it dissolves into
+    // the frosted #outer glass (which shows the living canvas behind it) with no
+    // hard seam. Starts early and eases out well before the header edge.
+    -webkit-mask-image : linear-gradient(to bottom, #000 18%, rgba(0, 0, 0, 0.55) 62%, transparent 96%);
+    mask-image         : linear-gradient(to bottom, #000 18%, rgba(0, 0, 0, 0.55) 62%, transparent 96%);
 
     // Keep the blurred album backdrop almost fully visible when collapsed, so
     // the compact bar reads as a mini version of the hero gradient rather than
@@ -536,13 +538,21 @@
 }
 
 //
-// Solid glass background behind the (fading) album backdrop. Invisible while
-// the backdrop is opaque; revealed as the header collapses, so the list
-// scrolls cleanly under a frosted bar.
+// Frosted "living glass" behind the (fading) album backdrop. Instead of a flat
+// opaque slab — which produced a hard dark band where the cover wash faded out —
+// it is a gentle top→bottom darkening over the blurred living canvas showing
+// through (backdrop-filter). So the header bottom melts seamlessly into the
+// content: cover wash on top → frosted canvas below, no seam. Also keeps the
+// compact bar legible when collapsed.
 // =========================================================================
 #outer {
-    background     : rgba(9, 9, 11, 0.9);
-    backdrop-filter: blur(24px);
+    background: linear-gradient(
+        to bottom,
+        rgba(9, 9, 13, 0.28) 0%,
+        rgba(9, 9, 13, 0.42) 55%,
+        rgba(9, 9, 13, 0.62) 100%
+    );
+    backdrop-filter: blur(28px) saturate(1.4);
 }
 
 //
