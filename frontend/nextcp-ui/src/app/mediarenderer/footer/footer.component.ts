@@ -13,10 +13,12 @@ import {
   ElementRef,
   OnInit,
   computed,
+  effect,
   signal,
   inject,
 } from '@angular/core';
 import { QualityBadgeComponent } from '../../util/comp/quality-badge/quality-badge.component';
+import { BackgroundImageService } from '../../util/background-image.service';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
@@ -36,6 +38,7 @@ export class FooterComponent implements OnInit {
   playlistService = inject(PlaylistService);
   songOptionsServiceService = inject(SongOptionsServiceService);
   rendererService = inject(RendererService);
+  private backgroundImageService = inject(BackgroundImageService);
 
   currentMediaRendererName = signal<string>('');
   sliderPos = computed(() =>
@@ -51,6 +54,17 @@ export class FooterComponent implements OnInit {
     toObservable(this.deviceService.selectedMediaRendererDevice).subscribe(
       (data) => this.currentMediaRendererName.set(data.friendlyName),
     );
+
+    // Keep the frosted footer's album backdrop in sync with the now-playing
+    // artwork. Driven by the reactive imgSrc() signal (same source as the footer
+    // thumbnail) so it works for both UPnP renderers and the local "This device"
+    // browser player — the latter never fires the UPnP SSE metadata event that
+    // previously was the only thing setting this, leaving the footer glass black.
+    effect(() => {
+      this.backgroundImageService.setFooterBackgroundImage(
+        this.rendererService.imgSrc(),
+      );
+    });
   }
 
   ngOnInit(): void {
