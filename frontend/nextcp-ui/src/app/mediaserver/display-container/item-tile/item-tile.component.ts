@@ -4,7 +4,6 @@ import {
   computed,
   input,
   output,
-  signal,
   inject,
 } from '@angular/core';
 import { ContentDirectoryService } from 'src/app/service/content-directory.service';
@@ -13,8 +12,6 @@ import { SongOptionsServiceService } from '../../popup/song-options/song-options
 import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { StarRatingComponent } from 'src/app/view/star-rating/star-rating.component';
-import { SseService } from 'src/app/service/sse/sse.service';
-import { DeviceService } from 'src/app/service/device.service';
 import { QualityBadgeComponent } from 'src/app/util/comp/quality-badge/quality-badge.component';
 import { RendererService } from 'src/app/service/renderer.service';
 
@@ -30,8 +27,6 @@ export class ItemTileComponent {
   private songOptionsServiceService = inject(SongOptionsServiceService);
   private dtoGeneratorService = inject(DtoGeneratorService);
   private timeDisplayService = inject(TimeDisplayService);
-  private deviceService = inject(DeviceService);
-  private sseService = inject(SseService);
   private rendererService = inject(RendererService);
 
   isListView = input<boolean>(false);
@@ -67,33 +62,7 @@ export class ItemTileComponent {
         ?.id === 'search_result',
   );
 
-  currentUrl = signal<string>('');
-  currentObjectId = signal<string>('');
   lastDiscLabel = '';
-
-  constructor() {
-    const deviceService = this.deviceService;
-    const sseService = this.sseService;
-
-    const currentTrack = this.rendererService.currentTrack();
-    if (currentTrack?.streamingURL) {
-      this.currentUrl.set(currentTrack.streamingURL);
-    }
-    if (currentTrack?.objectID) {
-      this.currentObjectId.set(currentTrack.objectID);
-    }
-
-    sseService.mediaRendererTrackInfoChanged$.subscribe((data) => {
-      if (
-        data?.mediaRendererUdn &&
-        data?.currentTrack &&
-        deviceService.isMediaRendererSelected(data.mediaRendererUdn)
-      ) {
-        this.currentUrl.set(data.currentTrack.streamingURL);
-        this.currentObjectId.set(data.currentTrack.objectID);
-      }
-    });
-  }
 
   playItem(item: MusicItemDto) {
     console.log('playitem clicked : ' + item.title);
@@ -263,17 +232,27 @@ export class ItemTileComponent {
     return '';
   }
 
+  // Compares against the renderer's currently-playing track *reactively*. Using
+  // rendererService.currentTrack() (a signal that reflects the active player)
+  // instead of manually-maintained fields fed only by the UPnP SSE event — that
+  // never fires for the local "This device" browser player, so the indicator had
+  // stopped appearing for local playback. Reading the signal here keeps the row
+  // in sync for both UPnP renderers and the local player.
   public isPlayingItem(musicItemDto: MusicItemDto): boolean {
     if (!musicItemDto) {
+      return false;
+    }
+    const current = this.rendererService.currentTrack();
+    if (!current) {
       return false;
     }
 
     const matchByUrl =
       musicItemDto.streamingURL?.length > 0 &&
-      musicItemDto.streamingURL === this.currentUrl();
+      musicItemDto.streamingURL === current.streamingURL;
     const matchByObjectId =
       musicItemDto.objectID?.length > 0 &&
-      musicItemDto.objectID === this.currentObjectId();
+      musicItemDto.objectID === current.objectID;
 
     return matchByUrl || matchByObjectId;
   }

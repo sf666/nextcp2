@@ -91,11 +91,19 @@
         <!-- Row for Mixed Album View -->
         <div class="grid gap-4 items-center text-sm py-2.5 px-2 rounded-lg hover:bg-white/5 transition-all duration-200 group {{selectedRowClass(item)}}"
              [style.grid-template-columns]="gridColumns(false)">
-            <!-- Album Art -->
-            <div id="col_1_img_{{item.objectID}}">
-                <img class="w-14 h-14 rounded-md object-cover shadow-md cursor-pointer transition-all" 
-                     src="{{item.albumArtUrl}}" 
-                     (click)="playItem(item)">
+            <!-- Album Art (with now-playing overlay) -->
+            <div id="col_1_img_{{item.objectID}}" class="playing-art-wrap" (click)="playItem(item)">
+                <img class="w-14 h-14 rounded-md object-cover shadow-md cursor-pointer transition-all"
+                     src="{{item.albumArtUrl}}">
+                @if (isPlayingItem(item)) {
+                    <span class="playing-art-overlay" aria-label="Playing">
+                        <span class="playing-eq">
+                            <span class="playing-eq-bar"></span>
+                            <span class="playing-eq-bar"></span>
+                            <span class="playing-eq-bar"></span>
+                        </span>
+                    </span>
+                }
             </div>
 
             <!-- Title and Album -->
