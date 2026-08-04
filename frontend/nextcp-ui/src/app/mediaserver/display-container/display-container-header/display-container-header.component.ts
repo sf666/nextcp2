@@ -1,4 +1,3 @@
-import { CdsBrowsePathService } from 'src/app/util/cds-browse-path.service';
 import { ContainerDto, ContainerItemDto } from './../../../service/dto.d';
 import {
   Component,
@@ -47,7 +46,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
   private myMusicService = inject(MyMusicService);
   private dtoGeneratorService = inject(DtoGeneratorService);
   private backgroundImageService = inject(BackgroundImageService);
-  private cdsBrowsePathService = inject(CdsBrowsePathService);
   private timeDisplayService = inject(TimeDisplayService);
   private destroyRef = inject(DestroyRef);
 
@@ -261,7 +259,9 @@ export class DisplayContainerHeaderComponent implements OnInit {
     this.backgroundImageService.setBackgroundImageMainScreen(artUrl);
     // Extract the cover's dominant colour to reliably tint the sidebar.
     this.backgroundImageService.applyAmbientTint(artUrl);
-    this.cdsBrowsePathService.scrollIntoViewID();
+    // Scroll restore is centralized in DisplayContainerComponent (it must prefer
+    // the virtualized album grid, whose target may not be in the DOM). Do not
+    // trigger a competing getElementById-based restore here.
   }
 
   get albums(): ContainerDto[] {

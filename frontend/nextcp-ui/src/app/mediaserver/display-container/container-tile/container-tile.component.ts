@@ -1,4 +1,17 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  output,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { ContainerDto } from 'src/app/service/dto';
 
 @Component({
@@ -17,6 +30,9 @@ export class ContainerTileComponent {
   selectedGenres = input<Array<string>>([]);
   // Sort/group criteria: 'NONE' | 'TITLE' | 'ARTIST' | 'GENRE'
   sortCriteria = input<string>('NONE');
+  // Enable windowing (virtual scroll) for this grid. Only honoured for the flat
+  // single-section case (NONE/TITLE). Set true only on the (large) album grid.
+  virtualize = input<boolean>(false);
   containerList = computed(() => this.filteredContainer(this.container()));
 
   // Containers grouped into sections according to sortCriteria.
@@ -26,6 +42,241 @@ export class ContainerTileComponent {
   );
 
   browseClicked = output<ContainerDto>();
+
+  //
+  // Virtual scrolling (windowing)
+  // ============================================================================
+  // Only the visible rows are rendered into the DOM; a top and a bottom spacer
+  // preserve the total scroll height. Coupled to the page-level #mainContent
+  // scroll (NOT a nested scroller) so the collapsing header keeps working.
+  // Scoped to the flat single-section case — grouped views render fully.
+
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly BUFFER_ROWS = 3;
+  private readonly ROW_H_FALLBACK = 300; // px, until a real tile is measured
+  // Land a restored album this far below the top, clearing the collapsed header.
+  private readonly RESTORE_TOP_MARGIN = 120;
+
+  private vgrid = viewChild<ElementRef<HTMLElement>>('vgrid');
+  private vwrap = viewChild<ElementRef<HTMLElement>>('vwrap');
+
+  rowH = signal<number>(this.ROW_H_FALLBACK);
+  cols = signal<number>(1);
+  firstRow = signal<number>(0);
+  lastRow = signal<number>(0);
+
+  // Windowing is active only for a single flat section (no group headers).
+  virtualActive = computed(
+    () => this.virtualize() && this.groupedContainers().length === 1,
+  );
+  private flatItems = computed<ContainerDto[]>(() =>
+    this.virtualActive() ? this.groupedContainers()[0].items : [],
+  );
+  totalRows = computed(() =>
+    this.cols() > 0 ? Math.ceil(this.flatItems().length / this.cols()) : 0,
+  );
+  visibleItems = computed(() =>
+    this.flatItems().slice(
+      this.firstRow() * this.cols(),
+      this.lastRow() * this.cols(),
+    ),
+  );
+  spacerTopPx = computed(() => this.firstRow() * this.rowH());
+  spacerBottomPx = computed(() =>
+    Math.max(0, this.totalRows() - this.lastRow()) * this.rowH(),
+  );
+
+  private scrollParent: HTMLElement | null = null;
+  private resizeObs: ResizeObserver | null = null;
+  private rafScheduled = false;
+  private pendingFocusId: string | null = null;
+  private filterInitialized = false;
+
+  private readonly onScroll = () => this.scheduleUpdate();
+
+  constructor() {
+    // Attach the page scroll listener once the view exists.
+    afterNextRender(() => {
+      this.scrollParent = document.getElementById('mainContent');
+      this.scrollParent?.addEventListener('scroll', this.onScroll, {
+        passive: true,
+      });
+      this.scheduleUpdate();
+    });
+
+    // (Re)attach a ResizeObserver on the window grid whenever it appears —
+    // re-measures cols + rowH when the viewport width (column count) changes.
+    effect(() => {
+      const grid = this.vgrid()?.nativeElement;
+      if (grid && !this.resizeObs && typeof ResizeObserver !== 'undefined') {
+        this.resizeObs = new ResizeObserver(() => this.scheduleUpdate());
+        this.resizeObs.observe(grid);
+      }
+    });
+
+    // When the list (browse/filter) or the active flag changes, reset to the
+    // top and drop any pending restore from a previous list, then remeasure.
+    effect(() => {
+      this.flatItems().length; // track
+      this.virtualActive(); // track
+      this.pendingFocusId = null;
+      this.firstRow.set(0);
+      this.scheduleUpdate();
+    });
+
+    // When the filter / genre selection changes, scroll back to the top so the
+    // filtered results start from the beginning (not at the previous scroll
+    // position). Scroll to page top so the header — which holds the filter
+    // input — stays fully visible while typing.
+    effect(() => {
+      this.quickSearchString(); // track
+      this.selectedGenres(); // track
+      if (!this.filterInitialized) {
+        this.filterInitialized = true;
+        return;
+      }
+      if (!this.virtualActive()) {
+        return;
+      }
+      this.firstRow.set(0);
+      const parent = this.scrollParent ?? document.getElementById('mainContent');
+      if (parent) {
+        parent.scrollTop = 0;
+      }
+      this.scheduleUpdate();
+    });
+
+    this.destroyRef.onDestroy(() => {
+      this.scrollParent?.removeEventListener('scroll', this.onScroll);
+      this.resizeObs?.disconnect();
+    });
+  }
+
+  // Coalesce scroll/resize/data updates into one measurement per frame.
+  private scheduleUpdate(): void {
+    if (this.rafScheduled) {
+      return;
+    }
+    this.rafScheduled = true;
+    requestAnimationFrame(() => {
+      this.rafScheduled = false;
+      this.measureAndRecompute();
+    });
+  }
+
+  private measure(): void {
+    const grid = this.vgrid()?.nativeElement;
+    if (!grid) {
+      return;
+    }
+    const cs = getComputedStyle(grid);
+    // auto-fill columns resolve to a concrete list; count them (exact).
+    const template = cs.gridTemplateColumns;
+    if (template && template !== 'none') {
+      const c = template.split(' ').filter((s) => s.length > 0).length;
+      if (c > 0) {
+        this.cols.set(c);
+      }
+    }
+    // Row height from the first rendered tile (art has aspect-ratio, so its
+    // height is known before images load); include the grid's row gap.
+    const tile = grid.querySelector('.albumTile') as HTMLElement | null;
+    if (tile) {
+      const gap = parseFloat(cs.rowGap) || 0;
+      const h = tile.offsetHeight + gap;
+      if (h > 0) {
+        this.rowH.set(h);
+      }
+    }
+  }
+
+  private recomputeWindow(): void {
+    if (!this.virtualActive()) {
+      return;
+    }
+    const wrap = this.vwrap()?.nativeElement;
+    const parent =
+      this.scrollParent ?? document.getElementById('mainContent');
+    if (!wrap || !parent) {
+      return;
+    }
+    const rowH = this.rowH() || this.ROW_H_FALLBACK;
+    const total = this.totalRows();
+    const totalHeight = total * rowH;
+    // Distance scrolled past the top of this grid section. getBoundingClientRect
+    // already accounts for the current (collapsing) header height, so no offset
+    // arithmetic against --collapse is needed.
+    const startPx = Math.min(
+      Math.max(parent.getBoundingClientRect().top - wrap.getBoundingClientRect().top, 0),
+      Math.max(0, totalHeight),
+    );
+    const first = Math.max(0, Math.floor(startPx / rowH) - this.BUFFER_ROWS);
+    const visRows = Math.ceil(parent.clientHeight / rowH);
+    const last = Math.min(total, first + visRows + this.BUFFER_ROWS * 2);
+    this.firstRow.set(first);
+    this.lastRow.set(last);
+  }
+
+  private measureAndRecompute(): void {
+    if (!this.virtualActive()) {
+      return;
+    }
+    this.measure();
+    this.recomputeWindow();
+    // If a restore is pending, the target row should now be rendered — correct
+    // to the exact position using the real element on the next frame.
+    if (this.pendingFocusId) {
+      requestAnimationFrame(() => this.correctRestore());
+    }
+  }
+
+  private correctRestore(): void {
+    const id = this.pendingFocusId;
+    if (!id) {
+      return;
+    }
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ block: 'start' });
+      this.pendingFocusId = null;
+    }
+    // else: element not rendered yet — a later update() will retry.
+  }
+
+  /**
+   * Restore scroll to a specific container id even when it is not currently in
+   * the DOM (windowed). Estimates the scroll position to render the target row,
+   * then a follow-up correction snaps to the exact element. Returns false if the
+   * id is not part of this (virtualized) list, so the caller can fall back.
+   */
+  public scrollToId(id: string): boolean {
+    if (!this.virtualActive()) {
+      return false;
+    }
+    const idx = this.flatItems().findIndex((c) => c.id === id);
+    if (idx < 0) {
+      return false;
+    }
+    const wrap = this.vwrap()?.nativeElement;
+    const parent =
+      this.scrollParent ?? document.getElementById('mainContent');
+    if (!wrap || !parent) {
+      return false;
+    }
+    const rowH = this.rowH() || this.ROW_H_FALLBACK;
+    const rowIndex = Math.floor(idx / (this.cols() || 1));
+    // Absolute offset of this grid section within the scroll content.
+    const wrapOffset =
+      parent.scrollTop +
+      (wrap.getBoundingClientRect().top - parent.getBoundingClientRect().top);
+    parent.scrollTop = Math.max(
+      0,
+      wrapOffset + rowIndex * rowH - this.RESTORE_TOP_MARGIN,
+    );
+    this.pendingFocusId = id;
+    this.scheduleUpdate();
+    return true;
+  }
 
   private groupAndSort(
     items: ContainerDto[],

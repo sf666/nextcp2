@@ -16,9 +16,13 @@ import {
   ChangeDetectionStrategy,
   input,
   output,
-  afterRenderEffect,
+  effect,
+  viewChild,
   inject,
+  DestroyRef,
 } from '@angular/core';
+import { debounceTime, Subscription } from 'rxjs';
+import { ContentDirectoryService } from 'src/app/service/content-directory.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -77,12 +81,46 @@ export class DisplayContainerComponent {
   selectedGenres = signal<Array<string>>([]);
   sortCriteria = signal<string>('NONE');
 
+  // The (virtualized) album + folder grids — used to restore scroll to a
+  // specific entry even when it is not currently in the DOM.
+  private albumTile = viewChild<ContainerTileComponent>('albumTile');
+  private folderTile = viewChild<ContainerTileComponent>('folderTile');
+  private readonly destroyRef = inject(DestroyRef);
+  private subscribedCds: ContentDirectoryService | null = null;
+  private restoreSub?: Subscription;
+
   constructor() {
-    afterRenderEffect({
-      read: (writeResult) => {
-        this.cdsBrowsePathService.scrollIntoViewID();
-      },
+    // Restore scroll after a browse settles. browseFinished$ fires once per
+    // loaded page, so debounce until the last page has arrived — otherwise the
+    // restore target (e.g. a mid-list album) may not be loaded yet. Prefer the
+    // virtualized album/folder grids (target may not be in the DOM); fall back
+    // to DOM-id focus for the small non-virtualized lists (playlists / tracks).
+    //
+    // Subscribe ONCE per ContentDirectoryService instance: the ScrollLoadHandler
+    // wrapper is recreated on every change detection, so re-subscribing in the
+    // effect body would tear the pending debounce timer down before it fires.
+    effect(() => {
+      const cds = this.contentHandler()?.contentDirectoryService;
+      if (!cds || cds === this.subscribedCds) {
+        return;
+      }
+      this.restoreSub?.unsubscribe();
+      this.subscribedCds = cds;
+      this.restoreSub = cds.browseFinished$
+        .pipe(debounceTime(250))
+        .subscribe(() => {
+          const id = this.cdsBrowsePathService.scrollToID;
+          if (
+            this.albumTile()?.scrollToId(id) ||
+            this.folderTile()?.scrollToId(id)
+          ) {
+            return;
+          }
+          this.cdsBrowsePathService.scrollIntoViewID(id);
+        });
     });
+
+    this.destroyRef.onDestroy(() => this.restoreSub?.unsubscribe());
   }
 
   /**

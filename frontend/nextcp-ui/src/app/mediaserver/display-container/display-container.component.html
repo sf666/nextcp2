@@ -61,12 +61,13 @@ Main Content
         <span class="section-label">Albums</span>
         <span class="section-count">{{albumList.length}} items</span>
       </div>
-      <container-tile class="flex grow"
+      <container-tile #albumTile class="flex grow"
         [smallIcons]="this.allMusicTracks.length > 0"
         [container]="albumList"
         [quickSearchString]="displayFilterString()"
         [selectedGenres]="selectedGenres()"
         [sortCriteria]="sortCriteria()"
+        [virtualize]="true"
         (browseClicked)="browseTo($event)">
       </container-tile>
     </div>
@@ -98,11 +99,12 @@ Main Content
         <span class="section-label">Folders</span>
         <span class="section-count">{{container.length}} items</span>
       </div>
-      <container-tile class="flex grow"
+      <container-tile #folderTile class="flex grow"
         [smallIcons]="this.allMusicTracks.length > 0"
         [container]="container"
         [selectedGenres]="selectedGenres()"
         [quickSearchString]="displayFilterString()"
+        [virtualize]="true"
         (browseClicked)="browseTo($event)">
       </container-tile>
     </div>

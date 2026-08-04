@@ -41,6 +41,11 @@ $imgCardWidthSmall : 6rem;
     display        : flex;
     flex-direction : column;
 
+    // When scroll-restore focuses / scrollIntoView()s a tile (returning from a
+    // folder into a large virtualized list), keep it clear of the sticky
+    // collapsing browse header (~104px collapsed) instead of hiding under it.
+    scroll-margin-top: 120px;
+
     max-width      : none;
     padding        : 0;
     border-radius  : 14px;
