@@ -42,14 +42,18 @@ public class RatingService
 
     public void setRatingInStars(UpdateStarRatingRequest updateRequest, ExtendedApiMediaDevice device)
     {
-        // Send rating to device
+        // Send rating to device. The device only needs the objectID, so this works for
+        // any kind of resource : songs as well as containers like folders and playlists.
         if (device != null)
         {
             device.rateSong(updateRequest);
         }
-        
-        // send rating to musicBrainz
-        updateMusicBrainzBackend(updateRequest.musicItemIdDto.musicBrainzIdTrackId, updateRequest.newRating);
+
+        // send rating to musicBrainz. Only songs carry a MusicBrainz track id, containers do not.
+        if (updateRequest.musicItemIdDto != null && !StringUtils.isAllBlank(updateRequest.musicItemIdDto.musicBrainzIdTrackId))
+        {
+            updateMusicBrainzBackend(updateRequest.musicItemIdDto.musicBrainzIdTrackId, updateRequest.newRating);
+        }
     }
 
 

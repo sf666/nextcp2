@@ -4,9 +4,12 @@
 <div id="outer" class="flex relative w-full grow shrink justify-items-center" [class.condensed]="condensed()" [class.has-actions]="hasSongs()">
   <div class="bg-img-header w-full" id="header-background"></div>
   <!-- Header Button group -->
-  @if(hasSongs()) {
+  <!-- The button row stays visible inside any container, so the heart always
+       applies to the folder currently being browsed. Playback buttons only make
+       sense when the folder actually lists tracks. -->
   <div id="headButtonRow" class="button-row ">
     <div class="button-flex-container">
+      @if(hasSongs()) {
       <div class="button-container" (click)="playContainer()">
         <button class="btn-play" mat-mini-fab>
           <mat-icon class="material-symbols-sharp filled">play_arrow</mat-icon>
@@ -17,8 +20,9 @@
           <mat-icon class="material-symbols-sharp">shuffle</mat-icon>
         </button>
       </div>
+      }
       <div class="button-container">
-        <button class="{{getFavoriteCssBtnClass()}}" (click)="toggleLikeAlbum()" mat-mini-fab [disabled]="!likePossible()">
+        <button class="{{getFavoriteCssBtnClass()}}" (click)="toggleLike()" mat-mini-fab [disabled]="!likePossible()">
           <mat-icon class="material-symbols-sharp {{getFavoriteCssIconClass()}}">favorite</mat-icon>
         </button>
       </div>
@@ -34,7 +38,6 @@
       </div>
     </div>
   </div>
-  }
 
   <!-- Background image -->
   <div id="middle_wrapper" class="flex items-center grow shrink">

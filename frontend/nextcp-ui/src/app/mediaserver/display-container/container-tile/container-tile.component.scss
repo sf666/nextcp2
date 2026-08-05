@@ -22,3 +22,28 @@
 .albumTile:hover .album {
     color: var(--snow-white);
 }
+
+// Liked marker on a folder / album tile. Deliberately small and corner-anchored:
+// the grid stays a browsing surface, the badge only reports state. Rating itself
+// happens through the long-press sheet.
+.albumImageContainer .likeBadge {
+    position        : absolute;
+    right           : 8px;
+    bottom          : 8px;
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    width           : 28px;
+    height          : 28px;
+    border-radius   : 50%;
+    font-size       : 18px;
+    color           : #ffffff;
+    // Same frosted chrome as the rest of the living glass, so it reads as part of
+    // the surface instead of a sticker on top of the artwork.
+    background      : rgba(20, 20, 20, 0.55);
+    backdrop-filter : blur(8px);
+    border          : 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow      : 0 2px 8px rgba(0, 0, 0, 0.35);
+    pointer-events  : none;
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}

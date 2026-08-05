@@ -1,0 +1,77 @@
+// Frosted "living glass" sheet, same chrome as the header options popup so both
+// read as one system. The dialog wrapper itself is made transparent by the
+// `popup-glass` panelClass (see app-styles.scss).
+.dialog-root {
+    width: 320px;
+    max-width: 100%;
+    overflow: hidden;
+    background: rgba(30, 30, 30, 0.98);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+}
+
+.divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.rating-art {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.rating-title {
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 0.9375rem;
+}
+
+.rating-subtitle {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8125rem;
+}
+
+// Touch targets are deliberately taller than the mouse-driven menus : this sheet
+// is the tablet entry point for rating.
+.rating-item {
+    width: 100%;
+    min-height: 48px;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 400;
+    font-size: 0.9375rem;
+    text-align: left;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: #ffffff;
+    }
+
+    .active {
+        color: var(--aqua, #4fd1c5);
+    }
+}
+
+.material-symbols-outlined {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 300,
+        'GRAD' 0,
+        'opsz' 24;
+
+    &.filled {
+        font-variation-settings:
+            'FILL' 1,
+            'wght' 300,
+            'GRAD' 0,
+            'opsz' 24;
+    }
+}

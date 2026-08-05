@@ -21,7 +21,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
 import { ContentDirectoryService } from 'src/app/service/content-directory.service';
 import { MusicItemDto } from 'src/app/service/dto';
-import { MyMusicService } from 'src/app/service/my-music.service';
+import {
+  RATING_LIKED,
+  RatingServiceService,
+} from 'src/app/service/rating-service.service';
+import { DeviceService } from 'src/app/service/device.service';
 import { BackgroundImageService } from 'src/app/util/background-image.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
@@ -43,7 +47,8 @@ import { DisplayHeaderOptionsComponent } from '../../popup/display-header-option
 })
 export class DisplayContainerHeaderComponent implements OnInit {
   private dialog = inject(MatDialog);
-  private myMusicService = inject(MyMusicService);
+  private ratingService = inject(RatingServiceService);
+  private deviceService = inject(DeviceService);
   private dtoGeneratorService = inject(DtoGeneratorService);
   private backgroundImageService = inject(BackgroundImageService);
   private timeDisplayService = inject(TimeDisplayService);
@@ -197,7 +202,9 @@ export class DisplayContainerHeaderComponent implements OnInit {
   addToPlaylistClicked = output<ContainerDto>();
 
   genresList = signal<Array<string>>([]);
-  currentAlbumLiked = signal<boolean>(false);
+  // Rating of the container currently being browsed. 5 is a like, 0 a dislike,
+  // undefined means not rated.
+  currentContainerRating = signal<number | undefined>(undefined);
   totalPlaytimeShort = computed(() =>
     this.calcTotalPlaytimeShort(this.contentDirectoryService().musicTracks_()),
   );
@@ -205,7 +212,13 @@ export class DisplayContainerHeaderComponent implements OnInit {
     this.calcTotalPlaytimeLong(this.contentDirectoryService().musicTracks_()),
   );
 
-  likePossible = computed(() => this.contentDirectoryService().albumIdExists());
+  // Every container can be rated, not only albums carrying a MusicBrainz or
+  // Discogs id. The media server only needs the objectID.
+  likePossible = computed(
+    () =>
+      this.deviceService.selectedMediaServerDevice().extendedApi &&
+      (this.currentContainer?.id ?? '').length > 0,
+  );
   allTracksSameAlbum_ = signal<boolean>(false);
   mediaServerExists = signal<boolean>(false);
 
@@ -247,7 +260,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     this.scrollParent?.style.setProperty('--collapse', '0');
     this.clearSearch();
     this.fillGenres();
-    this.checkLikeStatus();
+    this.readContainerRating();
     // Search results have no real cover — feed an empty url so the header image,
     // the full-screen wash and the sidebar tint all stay neutral-dark instead of
     // washing the whole page in the placeholder icon's colour.
@@ -294,21 +307,12 @@ export class DisplayContainerHeaderComponent implements OnInit {
     this.genresList.set(Array.from(mySet.values()).sort());
   }
 
-  private checkLikeStatus() {
-    const albumIds = this.contentDirectoryService().getCurrentAlbumIds();
-
-    if (!albumIds) {
-      this.currentAlbumLiked.set(false);
-      return;
-    }
-
-    if (this.likePossible()) {
-      const likeStatusRequest = this.myMusicService.isAlbumLiked(albumIds);
-      likeStatusRequest?.subscribe((res) => {
-        console.log('current album liked : ' + res);
-        this.currentAlbumLiked.set(res);
-      });
-    }
+  /**
+   * The rating of the current container comes with the browse result, so no extra
+   * roundtrip is needed.
+   */
+  private readContainerRating() {
+    this.currentContainerRating.set(this.currentContainer?.rating ?? undefined);
   }
 
   get isContainerAlbum(): boolean {
@@ -371,38 +375,26 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   isLiked(): boolean {
-    return this.currentAlbumLiked();
+    return this.currentContainerRating() === RATING_LIKED;
   }
 
-  dislikeAlbum(): void {
-    const albumIds = this.contentDirectoryService().getCurrentAlbumIds();
-
-    if (this.likePossible() && albumIds != undefined) {
-      const deleteLikeRequest = this.myMusicService.deleteAlbumLike(albumIds);
-      deleteLikeRequest?.subscribe((d) => this.checkLikeStatus());
-    } else {
-      console.log('cannot dislike album, because no valid album ids found');
+  /**
+   * Toggles the like of the container currently being browsed. Removing a like
+   * clears the rating, it does not store a dislike.
+   */
+  toggleLike(): void {
+    if (!this.likePossible()) {
+      console.log('cannot rate the current container');
+      return;
     }
-  }
-
-  likeAlbum(): void {
-    const albumIds = this.contentDirectoryService().getCurrentAlbumIds();
-
-    if (this.likePossible() && albumIds != undefined) {
-      const likeAlbumRequest = this.myMusicService.likeAlbum(albumIds);
-      likeAlbumRequest?.subscribe((d) => this.checkLikeStatus());
-    } else {
-      console.log('cannot like album, because no valid album ids found');
-    }
-  }
-
-  toggleLikeAlbum(): void {
-    console.log('toggle like album ... ');
-    if (this.isLiked()) {
-      this.dislikeAlbum();
-    } else {
-      this.likeAlbum();
-    }
+    const previousRating = this.currentContainerRating();
+    const newRating = this.isLiked() ? undefined : RATING_LIKED;
+    this.ratingService
+      .setResourceRating(this.currentContainer.id, previousRating, newRating)
+      .subscribe({
+        next: () => this.currentContainerRating.set(newRating),
+        error: (err) => console.log('cannot rate container : ' + err),
+      });
   }
 
   toggleListView(): void {

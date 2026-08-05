@@ -176,6 +176,13 @@ public class DtoBuilder
             dto.albumartUri = uri.get().toString();
         }
 
+        // The user rating is supported by any kind of resource, containers as well as items.
+        Optional<Property<?>> rating = extractProperty("rating", container.getProperties());
+        if (rating.isPresent())
+        {
+            addRating(dto, rating.get().getValue().toString());
+        }
+
         // Add music album infos
         if (container instanceof MusicAlbum)
         {
@@ -478,6 +485,15 @@ public class DtoBuilder
         {
             itemDto.rating = Integer.parseInt(strRating);
             log.debug("rating : " + strRating);
+        }
+    }
+
+    private void addRating(ContainerDto containerDto, String strRating)
+    {
+        if (NumberUtils.isParsable(strRating))
+        {
+            containerDto.rating = Integer.parseInt(strRating);
+            log.debug("container rating : " + strRating);
         }
     }
 

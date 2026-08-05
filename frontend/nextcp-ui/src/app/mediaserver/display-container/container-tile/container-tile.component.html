@@ -7,9 +7,14 @@
     <div [style.height.px]="spacerTopPx()"></div>
     <div #vgrid class="tile-grid">
       @for (container of visibleItems(); track container.id) {
-        <div class="albumTile {{getSmallCss()}}" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)">
+        <div class="albumTile {{getSmallCss()}}" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)"
+             (pointerdown)="onPressStart($event, container)" (pointermove)="onPressMove($event)"
+             (pointerup)="onPressEnd()" (pointercancel)="onPressEnd()" (pointerleave)="onPressEnd()">
           <div class="albumImageContainer">
             <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
+            @if (isLiked(container)) {
+              <span class="likeBadge material-symbols-outlined" aria-label="Liked">favorite</span>
+            }
           </div>
           @if(isAlbum(container)) {
           <div class="flex flex-col albumDesc">
@@ -37,9 +42,14 @@
     }
     <div class="tile-grid">
       @for (container of group.items; track container.id) {
-      <div class="albumTile {{getSmallCss()}}" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)">
+      <div class="albumTile {{getSmallCss()}}" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)"
+           (pointerdown)="onPressStart($event, container)" (pointermove)="onPressMove($event)"
+           (pointerup)="onPressEnd()" (pointercancel)="onPressEnd()" (pointerleave)="onPressEnd()">
         <div class="albumImageContainer">
           <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
+          @if (isLiked(container)) {
+            <span class="likeBadge material-symbols-outlined" aria-label="Liked">favorite</span>
+          }
         </div>
         @if(isAlbum(container)) {
         <div class="flex flex-col albumDesc">

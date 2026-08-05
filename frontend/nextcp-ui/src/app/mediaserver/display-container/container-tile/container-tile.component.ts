@@ -12,7 +12,11 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ContainerDto } from 'src/app/service/dto';
+import { DeviceService } from 'src/app/service/device.service';
+import { RATING_LIKED } from 'src/app/service/rating-service.service';
+import { ContainerRatingComponent } from '../../popup/container-rating/container-rating.component';
 
 @Component({
   selector: 'container-tile',
@@ -42,6 +46,89 @@ export class ContainerTileComponent {
   );
 
   browseClicked = output<ContainerDto>();
+
+  //
+  // Rating by long press
+  // ============================================================================
+  // A tap on a tile navigates into the container, so the only spare gesture for
+  // rating is a long press. The press is cancelled as soon as the finger moves,
+  // otherwise it would fire while scrolling the grid.
+
+  private readonly dialog = inject(MatDialog);
+  private readonly deviceService = inject(DeviceService);
+  private readonly LONG_PRESS_MS = 500;
+  private readonly MOVE_TOLERANCE_PX = 10;
+
+  private pressTimer: ReturnType<typeof setTimeout> | undefined;
+  private pressStart: { x: number; y: number } | undefined;
+  private pressHandled = false;
+
+  ratingPossible(): boolean {
+    return this.deviceService.selectedMediaServerDevice().extendedApi;
+  }
+
+  // Ratings changed in this view. The browse result DTOs are plain objects, so
+  // mutating them would not repaint an OnPush component.
+  private ratingOverrides = signal<Map<string, number | undefined>>(new Map());
+
+  isLiked(container: ContainerDto): boolean {
+    const overrides = this.ratingOverrides();
+    const rating = overrides.has(container.id)
+      ? overrides.get(container.id)
+      : container.rating;
+    return rating === RATING_LIKED;
+  }
+
+  onPressStart(event: PointerEvent, container: ContainerDto): void {
+    if (!this.ratingPossible()) {
+      return;
+    }
+    this.cancelPress();
+    this.pressHandled = false;
+    this.pressStart = { x: event.clientX, y: event.clientY };
+    this.pressTimer = setTimeout(() => {
+      this.pressHandled = true;
+      this.openRatingDialog(container);
+    }, this.LONG_PRESS_MS);
+  }
+
+  onPressMove(event: PointerEvent): void {
+    if (!this.pressStart) {
+      return;
+    }
+    const dx = Math.abs(event.clientX - this.pressStart.x);
+    const dy = Math.abs(event.clientY - this.pressStart.y);
+    if (dx > this.MOVE_TOLERANCE_PX || dy > this.MOVE_TOLERANCE_PX) {
+      this.cancelPress();
+    }
+  }
+
+  onPressEnd(): void {
+    this.cancelPress();
+  }
+
+  private cancelPress(): void {
+    if (this.pressTimer !== undefined) {
+      clearTimeout(this.pressTimer);
+      this.pressTimer = undefined;
+    }
+    this.pressStart = undefined;
+  }
+
+  private openRatingDialog(container: ContainerDto): void {
+    const dialogRef = this.dialog.open(ContainerRatingComponent, {
+      data: { container: container },
+      panelClass: ['popup', 'popup-glass'],
+    });
+    dialogRef.afterClosed().subscribe((newRating) => {
+      if (newRating !== undefined) {
+        // Reflect the new state on the tile without re-browsing.
+        const next = new Map(this.ratingOverrides());
+        next.set(container.id, newRating === null ? undefined : newRating);
+        this.ratingOverrides.set(next);
+      }
+    });
+  }
 
   //
   // Virtual scrolling (windowing)
@@ -384,6 +471,12 @@ export class ContainerTileComponent {
   }
 
   public browseTo(containerDto: ContainerDto): void {
+    // Swallow the tap that follows a long press, so rating a tile does not also
+    // navigate into it.
+    if (this.pressHandled) {
+      this.pressHandled = false;
+      return;
+    }
     this.browseClicked.emit(containerDto);
   }
 

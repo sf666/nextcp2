@@ -1,0 +1,38 @@
+<div class="dialog-root flex flex-col">
+  <div class="rating-header flex items-center gap-3 px-4 py-3">
+    <img class="rating-art" src="{{container.albumartUri}}" alt="{{container.title}}">
+    <div class="flex flex-col min-w-0">
+      <div class="rating-title truncate">{{container.title}}</div>
+      @if (container.artist) {
+        <div class="rating-subtitle truncate">{{container.artist}}</div>
+      }
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="dialogItems flex flex-col py-1">
+    <button class="rating-item flex items-center gap-3 px-4 py-3" (click)="like()">
+      <span class="material-symbols-outlined text-lg" [class.filled]="isLiked()" [class.active]="isLiked()">favorite</span>
+      <span>Like</span>
+      @if (isLiked()) {
+        <span class="material-symbols-outlined ml-auto text-lg active">check</span>
+      }
+    </button>
+
+    <button class="rating-item flex items-center gap-3 px-4 py-3" (click)="dislike()">
+      <span class="material-symbols-outlined text-lg" [class.active]="isDisliked()">thumb_down</span>
+      <span>Dislike</span>
+      @if (isDisliked()) {
+        <span class="material-symbols-outlined ml-auto text-lg active">check</span>
+      }
+    </button>
+
+    <div class="divider my-1"></div>
+
+    <button class="rating-item flex items-center gap-3 px-4 py-3" (click)="clear()">
+      <span class="material-symbols-outlined text-lg opacity-70">backspace</span>
+      <span>Remove rating</span>
+    </button>
+  </div>
+</div>
