@@ -146,6 +146,9 @@ public class FileConfigPersistence
                 log.warn("[FileConfigPersistence] Supplied config file is broken. Generating default config ...", e);
                 config = getDefaultConfig();
             }
+            // Before applyDefaults(), so a blank value is filled with the data-directory location
+            // instead of the home-directory fallback in ConfigDefaults.
+            ensureLoggingConfig();
             configDefaults.applyDefaults(config);
             log.info("[FileConfigPersistence] Dump ... ");
             log.info(config.toString());
@@ -491,7 +494,82 @@ public class FileConfigPersistence
         return c;
     }
 
-    private void createDefaultLog(String loggingConfigFile, String logDir)
+    /**
+     * Makes sure the configured Logback configuration file actually exists.
+     * <p>
+     * A logback.xml is otherwise only written together with a brand-new default config. An
+     * existing config whose logging file was deleted, moved or never copied along (restore of the
+     * JSON alone, changed data directory, ...) would leave the application on Spring Boot's
+     * built-in console logging forever, because
+     * {@code NextcpApplicationStartup} skips a {@code logging.config} that does not exist. So:
+     * fill in a missing path, re-create a missing file, and fall back to the data directory if the
+     * configured location cannot be written.
+     */
+    private void ensureLoggingConfig()
+    {
+        if (config == null || config.applicationConfig == null)
+        {
+            return;
+        }
+
+        String loggingConfigFile = config.applicationConfig.loggingConfigFile;
+        boolean pathChanged = false;
+        if (loggingConfigFile == null || loggingConfigFile.isBlank())
+        {
+            loggingConfigFile = FilenameUtils.concat(getDefaultBaseDir(), "logback.xml");
+            log.info("no logging configuration file configured. Using : {}", loggingConfigFile);
+            pathChanged = true;
+        }
+        else if (new File(loggingConfigFile).isFile())
+        {
+            return;
+        }
+        else
+        {
+            log.warn("configured logging configuration file does not exist : {}. Generating a new one.", loggingConfigFile);
+        }
+
+        if (!createDefaultLog(loggingConfigFile, defaultLogDirFor(loggingConfigFile)))
+        {
+            // Configured location is not writable (read-only directory, stale path from another
+            // host, ...). Retry inside the data directory, which is always ours to write.
+            String fallback = FilenameUtils.concat(getDefaultBaseDir(), "logback.xml");
+            if (fallback.equals(loggingConfigFile) || !createDefaultLog(fallback, defaultLogDirFor(fallback)))
+            {
+                log.error("could not generate a logging configuration file. Application falls back to default logging.");
+                config.applicationConfig.loggingConfigFile = loggingConfigFile;
+                return;
+            }
+            log.warn("using fallback logging configuration file : {}", fallback);
+            loggingConfigFile = fallback;
+            pathChanged = true;
+        }
+
+        config.applicationConfig.loggingConfigFile = loggingConfigFile;
+        if (pathChanged)
+        {
+            // Persist the corrected path so the next start finds it without guessing again.
+            writeConfig();
+        }
+    }
+
+    /**
+     * @return the {@code logs} sub-directory next to the given logging configuration file, i.e. the
+     *         same layout a freshly generated default config uses.
+     */
+    private String defaultLogDirFor(String loggingConfigFile)
+    {
+        String parent = new File(loggingConfigFile).getParent();
+        String base = (parent != null && !parent.isBlank()) ? parent : getDefaultBaseDir();
+        return FilenameUtils.concat(base, "logs");
+    }
+
+    /**
+     * Writes a default Logback configuration to the given location.
+     *
+     * @return {@code true} if the file was written, {@code false} on any I/O error.
+     */
+    private boolean createDefaultLog(String loggingConfigFile, String logDir)
     {
         String basePath = logDir;
         if (basePath == null || basePath.isBlank())
@@ -571,10 +649,12 @@ public class FileConfigPersistence
         try
         {
             FileOpsNio.writeFile(loggingConfigFile, data.getBytes());
+            return new File(loggingConfigFile).isFile();
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            log.warn("could not write logging configuration file : " + loggingConfigFile, e);
+            return false;
         }
     }
 
