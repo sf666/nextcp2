@@ -202,8 +202,9 @@ export class DisplayContainerHeaderComponent implements OnInit {
   addToPlaylistClicked = output<ContainerDto>();
 
   genresList = signal<Array<string>>([]);
-  // Rating of the container currently being browsed. 5 is a like, 0 a dislike,
-  // undefined means not rated.
+  // Rating of the container currently being browsed. 5 is a like, undefined means
+  // not rated. The media server resolves an album folder to its release id on its
+  // own, so one code path covers albums, folders and playlists alike.
   currentContainerRating = signal<number | undefined>(undefined);
   totalPlaytimeShort = computed(() =>
     this.calcTotalPlaytimeShort(this.contentDirectoryService().musicTracks_()),
@@ -212,7 +213,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     this.calcTotalPlaytimeLong(this.contentDirectoryService().musicTracks_()),
   );
 
-  // Every container can be rated, not only albums carrying a MusicBrainz or
+  // Every container can be liked, not only albums carrying a MusicBrainz or
   // Discogs id. The media server only needs the objectID.
   likePossible = computed(
     () =>
@@ -315,6 +316,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     this.currentContainerRating.set(this.currentContainer?.rating ?? undefined);
   }
 
+
   get isContainerAlbum(): boolean {
     // TODO can/should also be identified by other means
     return this.likePossible();
@@ -379,8 +381,11 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }
 
   /**
-   * Toggles the like of the container currently being browsed. Removing a like
-   * clears the rating, it does not store a dislike.
+   * Toggles the like of the folder currently being browsed. The media server
+   * decides what the like belongs to: a folder holding exactly one release is
+   * rated as that album and shows up in My Albums, anything else is rated under
+   * its own resource key. Removing a like clears the rating, it does not store a
+   * dislike.
    */
   toggleLike(): void {
     if (!this.likePossible()) {
