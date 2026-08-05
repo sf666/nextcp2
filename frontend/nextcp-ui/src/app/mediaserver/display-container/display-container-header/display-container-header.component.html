@@ -4,12 +4,9 @@
 <div id="outer" class="flex relative w-full grow shrink justify-items-center" [class.condensed]="condensed()" [class.has-actions]="hasSongs()">
   <div class="bg-img-header w-full" id="header-background"></div>
   <!-- Header Button group -->
-  <!-- The button row stays visible inside any container, so the heart always
-       applies to the folder currently being browsed. Playback buttons only make
-       sense when the folder actually lists tracks. -->
+  @if(hasSongs()) {
   <div id="headButtonRow" class="button-row ">
     <div class="button-flex-container">
-      @if(hasSongs()) {
       <div class="button-container" (click)="playContainer()">
         <button class="btn-play" mat-mini-fab>
           <mat-icon class="material-symbols-sharp filled">play_arrow</mat-icon>
@@ -20,7 +17,6 @@
           <mat-icon class="material-symbols-sharp">shuffle</mat-icon>
         </button>
       </div>
-      }
       <div class="button-container">
         <button class="{{getFavoriteCssBtnClass()}}" (click)="toggleLike()" mat-mini-fab [disabled]="!likePossible()">
           <mat-icon class="material-symbols-sharp {{getFavoriteCssIconClass()}}">favorite</mat-icon>
@@ -38,6 +34,7 @@
       </div>
     </div>
   </div>
+  }
 
   <!-- Background image -->
   <div id="middle_wrapper" class="flex items-center grow shrink">
@@ -157,6 +154,15 @@
             }
 
             @if (!hasSongs()) {
+              <!-- Folder-only views have no big button row, so the like for the
+                   current folder sits next to the options button. -->
+              @if (likePossible()) {
+                <button id="like_button" type="button" class="tool-icon-btn tool-like"
+                  [class.liked]="isLiked()" (click)="toggleLike()"
+                  title="Like this folder">
+                  <span class="material-symbols-outlined" [class.filled]="isLiked()">favorite</span>
+                </button>
+              }
               <button id="options_button" type="button" class="tool-icon-btn tool-options"
                 (click)="openOptionsDialog($event)" title="More options">
                 <span class="material-symbols-outlined">more_vert</span>

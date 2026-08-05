@@ -535,6 +535,17 @@
         background   : rgba(18, 18, 20, 0.72);
         color        : #fff;
     }
+
+    // A liked folder keeps the frosted chrome but picks up the accent, so the
+    // state reads at a glance without a second icon.
+    &.tool-like.liked {
+        border-color: rgba(79, 209, 197, 0.45);
+        color       : var(--aqua, #4fd1c5);
+
+        &:hover {
+            color: var(--aqua, #4fd1c5);
+        }
+    }
 }
 
 //
