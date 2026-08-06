@@ -16,10 +16,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { ContainerDto } from 'src/app/service/dto';
 import { DeviceService } from 'src/app/service/device.service';
 import {
-  matchesRatingFilter,
   RATING_LIKED,
   RatingFilter,
 } from 'src/app/service/rating-service.service';
+import { filterContainers } from 'src/app/util/browse-filter';
 import { ContainerRatingComponent } from '../../popup/container-rating/container-rating.component';
 
 @Component({
@@ -424,59 +424,13 @@ export class ContainerTileComponent {
     return (a ?? '').localeCompare(b ?? '', undefined, { sensitivity: 'base' });
   }
 
-  private filteredContainer(container : ContainerDto[]): ContainerDto[] {
-    let tracks: Array<ContainerDto>;
-    if (this.quickSearchString()) {
-      tracks = container.filter((item) =>
-        this.doFilterText(item.title, this.quickSearchString())
-      );
-    } else {
-      tracks = container;
-    }
-    if (this?.selectedGenres()?.length > 0) {
-      tracks = tracks.filter((item) => this.doFilterGenreByContainer(item));
-    }
-    if (this.ratingFilter() !== 'ANY') {
-      tracks = tracks.filter((item) => matchesRatingFilter(item.rating, this.ratingFilter()));
-    }
-    return tracks;
-  }
-
-  /**
-   * Filter an album by genre
-   * @param container album container
-   * @returns
-   */
-  private doFilterGenreByContainer(container: ContainerDto): boolean {
-    let add = false;
-    this.selectedGenres()?.forEach((genre) => {
-      if (this.doFilterText(container.genre, genre)) {
-        add = true;
-      }
-    });
-    return add;
-  }
-
-  public containerFilter(filter?: string): ContainerDto[] {
-    if (filter) {
-      return this.container().filter((item) =>
-        this.doFilterText(item.title, filter)
-      );
-    } else {
-      return this.container();
-    }
-  }
-
-  private doFilterText(title: string, filter?: string): boolean {
-    if (!filter) {
-      return true;
-    }
-    if (!title && 'NONE' == filter) {
-      return true;
-    } else if (!title) {
-      return false;
-    }
-    return title.toLowerCase().includes(filter.toLowerCase());
+  private filteredContainer(container: ContainerDto[]): ContainerDto[] {
+    return filterContainers(
+      container,
+      this.quickSearchString(),
+      this.selectedGenres(),
+      this.ratingFilter()
+    );
   }
 
   public browseTo(containerDto: ContainerDto): void {

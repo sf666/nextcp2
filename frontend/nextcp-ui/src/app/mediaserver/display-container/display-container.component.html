@@ -41,7 +41,7 @@ Main Content
     <div id="head_browse_result_playlist_items_ID" class="flex flex-col w-full" tabindex="-1">
       <div class="section-heading">
         <span class="section-label">Playlists</span>
-        <span class="section-count">{{playlistList.length}} items</span>
+        <span class="section-count">{{countLabel(visiblePlaylists(), playlistList.length)}}</span>
       </div>
       <container-tile class="flex grow"
         [smallIcons]="this.allMusicTracks.length > 0"
@@ -61,7 +61,7 @@ Main Content
     <div id="head_browse_result_album_ID" class="flex flex-col w-full">
       <div class="section-heading">
         <span class="section-label">Albums</span>
-        <span class="section-count">{{albumList.length}} items</span>
+        <span class="section-count">{{countLabel(visibleAlbums(), albumList.length)}}</span>
       </div>
       <container-tile #albumTile class="flex grow"
         [smallIcons]="this.allMusicTracks.length > 0"
@@ -101,7 +101,7 @@ Main Content
     <div id="head_browse_result_general_container_ID" class="flex flex-col grow">
       <div class="section-heading">
         <span class="section-label">Folders</span>
-        <span class="section-count">{{container.length}} items</span>
+        <span class="section-count">{{countLabel(visibleFolders(), container.length)}}</span>
       </div>
       <container-tile #folderTile class="flex grow"
         [smallIcons]="this.allMusicTracks.length > 0"
@@ -124,7 +124,7 @@ Main Content
     <div id="head_browse_other_items_ID" class="flex flex-col grow">
       <div class="section-heading">
         <span class="section-label">Other items</span>
-        <span class="section-count">{{otherItems_.length}} items</span>
+        <span class="section-count">{{countLabel(visibleOtherItems(), otherItems_.length)}}</span>
       </div>
       <other-item-tile class="flex grow"
         [otherItems]="otherItems_"

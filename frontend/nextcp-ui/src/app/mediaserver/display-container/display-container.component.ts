@@ -12,7 +12,12 @@ import {
 } from './../../service/dto.d';
 import { RatingFilter } from 'src/app/service/rating-service.service';
 import {
+  filterContainers,
+  matchesTextFilter,
+} from 'src/app/util/browse-filter';
+import {
   Component,
+  computed,
   signal,
   ChangeDetectionStrategy,
   input,
@@ -83,10 +88,60 @@ export class DisplayContainerComponent {
   sortCriteria = signal<string>('NONE');
   ratingFilter = signal<RatingFilter>('ANY');
 
+  /**
+   * True while anything narrows the listing. Used to tell "3 items" from
+   * "1 of 3 items" — without it, a filtered section still claims the full count and
+   * the user cannot see that something is being held back.
+   */
+  filterActive = computed(
+    () =>
+      this.displayFilterString().length > 0 ||
+      this.selectedGenres().length > 0 ||
+      this.ratingFilter() !== 'ANY',
+  );
+
+  /**
+   * @param visible how many rows the section shows after filtering
+   * @param total how many the server delivered
+   */
+  countLabel(visible: number, total: number): string {
+    if (!this.filterActive() || visible === total) {
+      return `${total} items`;
+    }
+    return `${visible} of ${total} items`;
+  }
+
   // The (virtualized) album + folder grids — used to restore scroll to a
   // specific entry even when it is not currently in the DOM.
   private albumTile = viewChild<ContainerTileComponent>('albumTile');
   private folderTile = viewChild<ContainerTileComponent>('folderTile');
+
+  /**
+   * How many rows a section shows after filtering.
+   *
+   * Applies the same filter the tiles apply, so the heading cannot claim a number the
+   * grid does not show. Deliberately computed from our own lists instead of asking the
+   * tile components: the headings render before their tile, whose required `container`
+   * input is not bound at that point.
+   */
+  visibleAlbums = computed(() => this.narrowed(this.albumList).length);
+  visibleFolders = computed(() => this.narrowed(this.container).length);
+  visiblePlaylists = computed(() => this.narrowed(this.playlistList).length);
+  visibleOtherItems = computed(
+    () =>
+      this.otherItems_.filter((item) =>
+        matchesTextFilter(item.title, this.displayFilterString()),
+      ).length,
+  );
+
+  private narrowed(containers: ContainerDto[]): ContainerDto[] {
+    return filterContainers(
+      containers,
+      this.displayFilterString(),
+      this.selectedGenres(),
+      this.ratingFilter(),
+    );
+  }
   private readonly destroyRef = inject(DestroyRef);
   private subscribedCds: ContentDirectoryService | null = null;
   private restoreSub?: Subscription;
