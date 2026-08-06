@@ -12,6 +12,10 @@ import { SongOptionsServiceService } from '../../popup/song-options/song-options
 import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { StarRatingComponent } from 'src/app/view/star-rating/star-rating.component';
+import {
+  matchesRatingFilter,
+  RatingFilter,
+} from 'src/app/service/rating-service.service';
 import { QualityBadgeComponent } from 'src/app/util/comp/quality-badge/quality-badge.component';
 import { RendererService } from 'src/app/service/renderer.service';
 
@@ -33,6 +37,8 @@ export class ItemTileComponent {
   contentDirectoryService = input.required<ContentDirectoryService>();
   quickSearchString = input<string>('');
   selectedGenres = input<Array<string>>([]);
+  // Narrows the listing down by rating.
+  ratingFilter = input<RatingFilter>('ANY');
   extendedApi = input<boolean>(true);
   // When true, an additional "Genre" column (upnp:genre) is shown in list view.
   showGenre = input<boolean>(false);
@@ -132,6 +138,9 @@ export class ItemTileComponent {
     }
     if (this?.selectedGenres()?.length > 0) {
       tracks = tracks.filter((item) => this.doFilterGenre(item));
+    }
+    if (this.ratingFilter() !== 'ANY') {
+      tracks = tracks.filter((item) => matchesRatingFilter(item.rating, this.ratingFilter()));
     }
     return tracks;
   }

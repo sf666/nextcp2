@@ -10,6 +10,7 @@ import {
   ContainerDto,
   ContainerItemDto,
 } from './../../service/dto.d';
+import { RatingFilter } from 'src/app/service/rating-service.service';
 import {
   Component,
   signal,
@@ -80,6 +81,7 @@ export class DisplayContainerComponent {
   displayFilterString = signal<string>('');
   selectedGenres = signal<Array<string>>([]);
   sortCriteria = signal<string>('NONE');
+  ratingFilter = signal<RatingFilter>('ANY');
 
   // The (virtualized) album + folder grids — used to restore scroll to a
   // specific entry even when it is not currently in the DOM.

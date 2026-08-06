@@ -11,6 +11,29 @@ import { Injectable, inject } from '@angular/core';
 export const RATING_LIKED = 5;
 export const RATING_DISLIKED = 0;
 
+/**
+ * Values of the rating filter in the browse header. ANY switches the filter off, the
+ * others select one exact rating. A like is exactly RATING_LIKED, so '5' is the
+ * liked filter and no separate range entry is needed.
+ */
+export type RatingFilter = 'ANY' | '5' | '4' | '3' | '2' | '1' | '0';
+
+/**
+ * Applies the rating filter to one resource. Used for containers and for tracks so
+ * both react the same way.
+ */
+export function matchesRatingFilter(
+  rating: number | undefined | null,
+  filter: RatingFilter,
+): boolean {
+  switch (filter) {
+    case 'ANY':
+      return true;
+    default:
+      return rating === Number(filter);
+  }
+}
+
 @Injectable({
   providedIn: 'root',
 })

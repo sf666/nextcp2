@@ -17,11 +17,6 @@
           <mat-icon class="material-symbols-sharp">shuffle</mat-icon>
         </button>
       </div>
-      <div class="button-container">
-        <button class="{{getFavoriteCssBtnClass()}}" (click)="toggleLike()" mat-mini-fab [disabled]="!likePossible()">
-          <mat-icon class="material-symbols-sharp {{getFavoriteCssIconClass()}}">favorite</mat-icon>
-        </button>
-      </div>
       <div class="button-container" (click)="toggleListView()">
         <button color="" mat-mini-fab>
           <mat-icon class="material-symbols-sharp">dashboard_customize</mat-icon>
@@ -54,7 +49,16 @@
           <div id="hasSongs">
             <div class="flex flex-col info-block">
               <div class="eyebrow">{{containerType()}}</div>
-              <div class="title">{{currentContainer.title}}</div>
+              <div class="title-row">
+                <span class="title">{{currentContainer.title}}</span>
+                @if (likePossible()) {
+                  <button type="button" class="title-like" [class.liked]="isLiked()"
+                    (click)="toggleLike()" [attr.aria-pressed]="isLiked()"
+                    [title]="isLiked() ? 'Remove from favourites' : 'Add to favourites'">
+                    <span class="material-symbols-outlined" [class.filled]="isLiked()">favorite</span>
+                  </button>
+                }
+              </div>
               @if (musicItemsCount > 0) {
                 @if (isContainerAlbum && currentContainer.artist) {
                   <div class="subtitle">{{currentContainer.artist}}</div>
@@ -73,7 +77,16 @@
             @if (currentContainer.title?.length ?? 0 > 0) {
             <div id="template_containerTitle" class="flex flex-col info-block self-start">
               <div class="eyebrow">{{containerType()}}</div>
-              <div class="title">{{currentContainer.title}}</div>
+              <div class="title-row">
+                <span class="title">{{currentContainer.title}}</span>
+                @if (likePossible()) {
+                  <button type="button" class="title-like" [class.liked]="isLiked()"
+                    (click)="toggleLike()" [attr.aria-pressed]="isLiked()"
+                    [title]="isLiked() ? 'Remove from favourites' : 'Add to favourites'">
+                    <span class="material-symbols-outlined" [class.filled]="isLiked()">favorite</span>
+                  </button>
+                }
+              </div>
               @if (contentDirectoryService().currentContainerList().totalMatches > 0 || musicItemsCount > 0) {
                 <div class="meta-line">
                   <span>{{contentDirectoryService().currentContainerList().totalMatches}} items</span>
@@ -153,16 +166,42 @@
               </div>
             }
 
-            @if (!hasSongs()) {
-              <!-- Folder-only views have no big button row, so the like for the
-                   current folder sits next to the options button. -->
-              @if (likePossible()) {
-                <button id="like_button" type="button" class="tool-icon-btn tool-like"
-                  [class.liked]="isLiked()" (click)="toggleLike()"
-                  title="Like this folder">
-                  <span class="material-symbols-outlined" [class.filled]="isLiked()">favorite</span>
+            <!-- Sits with the other filters because that is what it is: it narrows the
+                 listing down to the favourites. -->
+            @if (likePossible()) {
+              <div class="filter-field tool-rating" [class.active]="ratingFilter() !== 'ANY'">
+                <span class="filter-label">Rating</span>
+                <button type="button" class="field-trigger rating-trigger"
+                  (click)="toggleMenu('rating', $event)" [title]="ratingOption().title">
+                  @if (ratingOption().icon) {
+                    <span class="material-symbols-outlined field-icon">{{ratingOption().icon}}</span>
+                  } @else {
+                    <span class="rating-digits">{{ratingOption().digits}}</span>
+                  }
+                  <span class="material-symbols-outlined field-chevron"
+                    [class.open]="openMenu() === 'rating'">expand_more</span>
                 </button>
-              }
+                @if (openMenu() === 'rating') {
+                  <div class="field-menu rating-menu">
+                    @for (opt of ratingOptions; track opt.value) {
+                      <button type="button" class="field-menu-item rating-menu-item"
+                        [class.selected]="ratingFilter() === opt.value"
+                        [title]="opt.title" (click)="selectRating(opt.value)">
+                        @if (opt.icon) {
+                          <span class="material-symbols-outlined rating-any">{{opt.icon}}</span>
+                        } @else {
+                          <span class="rating-digits">{{opt.digits}}</span>
+                        }
+                        @if (ratingFilter() === opt.value) {
+                          <span class="material-symbols-outlined menu-check">check</span>
+                        }
+                      </button>
+                    }
+                  </div>
+                }
+              </div>
+            }
+            @if (!hasSongs()) {
               <button id="options_button" type="button" class="tool-icon-btn tool-options"
                 (click)="openOptionsDialog($event)" title="More options">
                 <span class="material-symbols-outlined">more_vert</span>

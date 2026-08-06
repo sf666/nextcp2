@@ -23,6 +23,7 @@ import { ContentDirectoryService } from 'src/app/service/content-directory.servi
 import { MusicItemDto } from 'src/app/service/dto';
 import {
   RATING_LIKED,
+  RatingFilter,
   RatingServiceService,
 } from 'src/app/service/rating-service.service';
 import { DeviceService } from 'src/app/service/device.service';
@@ -59,7 +60,30 @@ export class DisplayContainerHeaderComponent implements OnInit {
   /////////////////////////////////////
 
   // Which custom dropdown is open, if any.
-  openMenu = signal<'sort' | 'genres' | null>(null);
+  openMenu = signal<'sort' | 'genres' | 'rating' | null>(null);
+
+  // Kept short on purpose: a digit plus the heart says it without a sentence. ANY
+  // has no digit, it is the switched-off state and carries an icon instead.
+  readonly ratingOptions: ReadonlyArray<{
+    value: RatingFilter;
+    digits?: string;
+    icon?: string;
+    title: string;
+  }> = [
+    { value: 'ANY', icon: 'filter_alt_off', title: 'Any rating' },
+    { value: '5', digits: '5', title: 'Liked, 5' },
+    { value: '4', digits: '4', title: '4' },
+    { value: '3', digits: '3', title: '3' },
+    { value: '2', digits: '2', title: '2' },
+    { value: '1', digits: '1', title: '1' },
+    { value: '0', digits: '0', title: 'Disliked, 0' },
+  ];
+
+  ratingOption = computed(
+    () =>
+      this.ratingOptions.find((o) => o.value === this.ratingFilter()) ??
+      this.ratingOptions[0],
+  );
 
   readonly sortOptions: ReadonlyArray<{ value: string; label: string }> = [
     { value: 'NONE', label: 'None' },
@@ -82,7 +106,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     return g.length === 1 ? g[0] : `${g.length} selected`;
   });
 
-  toggleMenu(menu: 'sort' | 'genres', event: MouseEvent): void {
+  toggleMenu(menu: 'sort' | 'genres' | 'rating', event: MouseEvent): void {
     event.stopPropagation();
     this.openMenu.update((cur) => (cur === menu ? null : menu));
   }
@@ -195,6 +219,9 @@ export class DisplayContainerHeaderComponent implements OnInit {
   selectedGenres = model<Array<string>>([]);
   // Album sort/group control (only shown when enableAlbumSort is true).
   sortCriteria = model<string>('NONE');
+  // Narrows the listing down by rating. A model so the container view can pass it
+  // on to the tiles, like the other filters.
+  ratingFilter = model<RatingFilter>('ANY');
   enableAlbumSort = input<boolean>(false);
 
   playClicked = output<ContainerDto>();
@@ -360,22 +387,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
   // Like section
   // ==============================================================================
 
-  getFavoriteCssBtnClass(): string {
-    if (this.isLiked()) {
-      return 'liked';
-    } else {
-      return 'disliked';
-    }
-  }
-
-  getFavoriteCssIconClass(): string {
-    if (this.isLiked()) {
-      return 'filled';
-    } else {
-      return '';
-    }
-  }
-
   isLiked(): boolean {
     return this.currentContainerRating() === RATING_LIKED;
   }
@@ -400,6 +411,11 @@ export class DisplayContainerHeaderComponent implements OnInit {
         next: () => this.currentContainerRating.set(newRating),
         error: (err) => console.log('cannot rate container : ' + err),
       });
+  }
+
+  selectRating(value: RatingFilter): void {
+    this.ratingFilter.set(value);
+    this.openMenu.set(null);
   }
 
   toggleListView(): void {

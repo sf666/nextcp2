@@ -15,7 +15,11 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { ContainerDto } from 'src/app/service/dto';
 import { DeviceService } from 'src/app/service/device.service';
-import { RATING_LIKED } from 'src/app/service/rating-service.service';
+import {
+  matchesRatingFilter,
+  RATING_LIKED,
+  RatingFilter,
+} from 'src/app/service/rating-service.service';
 import { ContainerRatingComponent } from '../../popup/container-rating/container-rating.component';
 
 @Component({
@@ -32,6 +36,8 @@ export class ContainerTileComponent {
   showPlayOverlay = input<boolean>(false);
   quickSearchString = input<string>("");
   selectedGenres = input<Array<string>>([]);
+  // Narrows the listing down by rating.
+  ratingFilter = input<RatingFilter>('ANY');
   // Sort/group criteria: 'NONE' | 'TITLE' | 'ARTIST' | 'GENRE'
   sortCriteria = input<string>('NONE');
   // Enable windowing (virtual scroll) for this grid. Only honoured for the flat
@@ -429,6 +435,9 @@ export class ContainerTileComponent {
     }
     if (this?.selectedGenres()?.length > 0) {
       tracks = tracks.filter((item) => this.doFilterGenreByContainer(item));
+    }
+    if (this.ratingFilter() !== 'ANY') {
+      tracks = tracks.filter((item) => matchesRatingFilter(item.rating, this.ratingFilter()));
     }
     return tracks;
   }

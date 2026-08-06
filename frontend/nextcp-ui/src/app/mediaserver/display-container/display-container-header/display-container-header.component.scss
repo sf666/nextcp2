@@ -26,6 +26,57 @@
     }
 }
 
+// Title and its favourite marker on one baseline. Roon puts the heart right next
+// to the name, so it belongs to the object rather than to the toolbar.
+.title-row {
+    display     : flex;
+    // centred, not baseline: an icon glyph has its own metrics and ends up looking
+    // lifted next to a large bold title when both sit on the text baseline.
+    align-items : center;
+    gap         : 0.5rem;
+    max-width   : 100%;
+    min-width   : 0;
+    // the spacing below the title moves here, so both children share one box
+    padding-bottom: calc(0.7rem - 0.55rem * var(--collapse, 0));
+
+    .title {
+        padding-bottom: 0;
+        align-self    : auto;
+    }
+}
+
+// No chrome of its own: the heart is part of the title, not a button in a bar. It
+// stays quiet until it means something, then it takes the accent colour.
+.title-like {
+    flex-shrink : 0;
+    display     : inline-flex;
+    align-items : center;
+    padding     : 0;
+    border      : none;
+    background  : none;
+    cursor      : pointer;
+    color       : rgba(255, 255, 255, 0.3);
+    // shrinks together with the title while the header collapses
+    font-size   : calc(1.5rem - 0.5rem * var(--collapse, 0));
+    transition  : color 0.15s ease, transform 0.15s ease;
+
+    .material-symbols-outlined {
+        font-size: inherit;
+    }
+
+    &:hover {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    &.liked {
+        color: var(--primary-color);
+    }
+
+    &.liked:hover {
+        transform: scale(1.08);
+    }
+}
+
 .title {
     font-size     : calc(2rem - 0.85rem * var(--collapse, 0));
     font-weight   : 700;
@@ -649,4 +700,48 @@
     #outer.condensed:not(.has-actions) .tool-genres {
         display: flex;
     }
+}
+
+// Rating filter: same chrome as the sort and genre dropdowns, but no sentence to
+// show, so no reserved text column. The width is driven by the floating label
+// instead: an outlined field must never be narrower than its own caption, or the
+// caption spills over the border. "RATING" at 10px with 0.09em tracking plus the
+// label padding and its 10px offset needs about 76px.
+.tool-rating {
+    min-width: 84px;
+    padding  : 0 8px;
+}
+
+// Centred, so the lone digit does not sit off to one side in the wider box.
+.rating-trigger {
+    gap            : 4px;
+    width          : 100%;
+    justify-content: center;
+}
+
+.rating-digits {
+    font-size     : 13px;
+    font-weight   : 600;
+    font-variant  : tabular-nums;
+    color         : rgba(255, 255, 255, 0.9);
+    white-space   : nowrap;
+}
+
+.rating-menu {
+    min-width: 0;
+}
+
+// The rows are narrow too, so the check mark must not push the pair apart.
+.rating-menu-item {
+    gap: 6px;
+
+    .menu-check {
+        margin-left: auto;
+    }
+}
+
+.rating-any {
+    font-size              : 16px;
+    color                  : rgba(255, 255, 255, 0.55);
+    font-variation-settings: 'wght'300, 'FILL'0, 'GRAD'-25, 'opsz'20;
 }
