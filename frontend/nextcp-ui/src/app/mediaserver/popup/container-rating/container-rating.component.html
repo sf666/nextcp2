@@ -12,7 +12,7 @@
   <div class="divider"></div>
 
   <div class="dialogItems flex flex-col py-1">
-    <button class="rating-item flex items-center gap-3 px-4 py-3" (click)="like()">
+    <button class="rating-item flex items-center gap-3 px-4 py-3" [disabled]="busy()" (click)="like()">
       <span class="material-symbols-outlined text-lg" [class.filled]="isLiked()" [class.active]="isLiked()">favorite</span>
       <span>Like</span>
       @if (isLiked()) {
@@ -20,7 +20,7 @@
       }
     </button>
 
-    <button class="rating-item flex items-center gap-3 px-4 py-3" (click)="dislike()">
+    <button class="rating-item flex items-center gap-3 px-4 py-3" [disabled]="busy()" (click)="dislike()">
       <span class="material-symbols-outlined text-lg" [class.active]="isDisliked()">thumb_down</span>
       <span>Dislike</span>
       @if (isDisliked()) {
@@ -30,9 +30,13 @@
 
     <div class="divider my-1"></div>
 
-    <button class="rating-item flex items-center gap-3 px-4 py-3" (click)="clear()">
+    <button class="rating-item flex items-center gap-3 px-4 py-3" [disabled]="busy()" (click)="clear()">
       <span class="material-symbols-outlined text-lg opacity-70">backspace</span>
       <span>Remove rating</span>
     </button>
   </div>
+
+  @if (error()) {
+    <div class="rating-error px-4 py-3">{{error()}}</div>
+  }
 </div>

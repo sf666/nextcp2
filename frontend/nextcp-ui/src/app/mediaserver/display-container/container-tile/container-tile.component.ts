@@ -12,6 +12,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { ContainerDto } from 'src/app/service/dto';
 import { DeviceService } from 'src/app/service/device.service';
@@ -26,7 +27,7 @@ import { ContainerRatingComponent } from '../../popup/container-rating/container
   selector: 'container-tile',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [],
+  imports: [NgTemplateOutlet],
   templateUrl: './container-tile.component.html',
   styleUrl: './container-tile.component.scss',
 })
@@ -77,12 +78,23 @@ export class ContainerTileComponent {
   // mutating them would not repaint an OnPush component.
   private ratingOverrides = signal<Map<string, number | undefined>>(new Map());
 
-  isLiked(container: ContainerDto): boolean {
+  /**
+   * What this container is rated right now, as far as this view knows.
+   *
+   * The browse DTO is only the state at load time; anything rated since then
+   * lives in the override map. The media server rejects an update whose stated
+   * previous value does not match its own, so this — not CONTAINER.RATING — is
+   * what must be sent along.
+   */
+  private effectiveRating(container: ContainerDto): number | undefined {
     const overrides = this.ratingOverrides();
-    const rating = overrides.has(container.id)
+    return overrides.has(container.id)
       ? overrides.get(container.id)
-      : container.rating;
-    return rating === RATING_LIKED;
+      : (container.rating ?? undefined);
+  }
+
+  isLiked(container: ContainerDto): boolean {
+    return this.effectiveRating(container) === RATING_LIKED;
   }
 
   onPressStart(event: PointerEvent, container: ContainerDto): void {
@@ -121,9 +133,20 @@ export class ContainerTileComponent {
     this.pressStart = undefined;
   }
 
+  /**
+   * Same sheet as the long press, reached by tapping the tile's options button.
+   * Stops the event so the tile does not also navigate into the container.
+   */
+  openOptions(event: Event, container: ContainerDto): void {
+    event.stopPropagation();
+    event.preventDefault();
+    this.cancelPress();
+    this.openRatingDialog(container);
+  }
+
   private openRatingDialog(container: ContainerDto): void {
     const dialogRef = this.dialog.open(ContainerRatingComponent, {
-      data: { container: container },
+      data: { container: container, rating: this.effectiveRating(container) },
       panelClass: ['popup', 'popup-glass'],
     });
     dialogRef.afterClosed().subscribe((newRating) => {

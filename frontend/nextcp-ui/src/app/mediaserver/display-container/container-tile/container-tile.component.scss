@@ -23,6 +23,51 @@
     color: var(--snow-white);
 }
 
+//
+// Options button on the artwork
+// ============================================================================
+// The rating sheet used to be reachable only by long press — a gesture nothing
+// on screen announced. This button says it is there. Same corner vocabulary and
+// frosted chrome as the like badge opposite it, so the two read as one family.
+// Kept quiet by default and lit on interaction: on a wall of 50 covers it has
+// to be findable without competing with the artwork.
+.albumImageContainer .tileOptions {
+    position        : absolute;
+    top             : 8px;
+    right           : 8px;
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    width           : 28px;
+    height          : 28px;
+    padding         : 0;
+    border-radius   : 50%;
+    color           : rgba(255, 255, 255, 0.75);
+    background      : rgba(20, 20, 20, 0.55);
+    backdrop-filter : blur(8px);
+    border          : 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow      : 0 2px 8px rgba(0, 0, 0, 0.35);
+    cursor          : pointer;
+    transition      : color 0.15s ease, background-color 0.15s ease,
+                      border-color 0.15s ease;
+
+    .material-symbols-outlined {
+        font-size  : 18px;
+        line-height: 1;
+    }
+
+    &:hover {
+        color       : #fff;
+        background  : rgba(20, 20, 20, 0.78);
+        border-color: var(--primary-color-reduced);
+    }
+
+    &:focus-visible {
+        outline       : 2px solid var(--primary-color-reduced);
+        outline-offset: 2px;
+    }
+}
+
 // Liked marker on a folder / album tile. Deliberately small and corner-anchored:
 // the grid stays a browsing surface, the badge only reports state. Rating itself
 // happens through the long-press sheet.

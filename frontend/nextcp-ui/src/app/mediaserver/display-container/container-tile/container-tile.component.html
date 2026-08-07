@@ -1,3 +1,48 @@
+<!--
+  One tile definition, used by both the windowed and the grouped branch below.
+  It used to be written out twice, which meant every tile change had to be made
+  in two places.
+-->
+<ng-template #tile let-container>
+  <div class="albumTile {{getSmallCss()}}" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)"
+       (pointerdown)="onPressStart($event, container)" (pointermove)="onPressMove($event)"
+       (pointerup)="onPressEnd()" (pointercancel)="onPressEnd()" (pointerleave)="onPressEnd()">
+    <div class="albumImageContainer">
+      <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
+      @if (isLiked(container)) {
+        <span class="likeBadge material-symbols-outlined" aria-label="Liked">favorite</span>
+      }
+      <!--
+        Makes the rating sheet findable. On the artwork, like Roon's overflow
+        menu — the biggest target on the tile, and it leaves the title its full
+        width. Unlike Roon it does not wait for hover: the main target here is a
+        tablet, where the long press was the only way in and nothing announced
+        it.
+      -->
+      @if (ratingPossible()) {
+        <button type="button" class="tileOptions" (click)="openOptions($event, container)"
+                (pointerdown)="$event.stopPropagation()"
+                [title]="'Rate ' + container.title"
+                [attr.aria-label]="'Rate ' + container.title">
+          <span class="material-symbols-outlined">more_horiz</span>
+        </button>
+      }
+    </div>
+    <div class="albumDesc">
+      @if (isAlbum(container)) {
+        <div class="album no-wrap">{{container.title}}</div>
+        <div class="albumSubheader no-wrap">{{container.artist}}</div>
+        <div class="albumYear no-wrap">{{container.media_date}}</div>
+      } @else {
+        @if (getOtherContainerHeadline(container)) {
+          <div class="playlistText">{{getOtherContainerHeadline(container)}}</div>
+        }
+        <div class="albumTitle">{{container.title}}</div>
+      }
+    </div>
+  </div>
+</ng-template>
+
 <div class="flex flex-col grow w-full">
 
 @if (virtualActive()) {
@@ -7,30 +52,7 @@
     <div [style.height.px]="spacerTopPx()"></div>
     <div #vgrid class="tile-grid">
       @for (container of visibleItems(); track container.id) {
-        <div class="albumTile {{getSmallCss()}}" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)"
-             (pointerdown)="onPressStart($event, container)" (pointermove)="onPressMove($event)"
-             (pointerup)="onPressEnd()" (pointercancel)="onPressEnd()" (pointerleave)="onPressEnd()">
-          <div class="albumImageContainer">
-            <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
-            @if (isLiked(container)) {
-              <span class="likeBadge material-symbols-outlined" aria-label="Liked">favorite</span>
-            }
-          </div>
-          @if(isAlbum(container)) {
-          <div class="flex flex-col albumDesc">
-            <div class="album no-wrap">{{container.title}}</div>
-            <div class="albumSubheader no-wrap">{{container.artist}}</div>
-            <div class="albumYear no-wrap">{{container.media_date}}</div>
-          </div>
-          } @else {
-          <div class="flex flex-col albumDesc">
-            @if(getOtherContainerHeadline(container)) {
-              <div class="playlistText">{{getOtherContainerHeadline(container)}}</div>
-            }
-            <div class="albumTitle">{{container.title}}</div>
-          </div>
-          }
-        </div>
+        <ng-container *ngTemplateOutlet="tile; context: { $implicit: container }"></ng-container>
       }
     </div>
     <div [style.height.px]="spacerBottomPx()"></div>
@@ -42,30 +64,7 @@
     }
     <div class="tile-grid">
       @for (container of group.items; track container.id) {
-      <div class="albumTile {{getSmallCss()}}" id="{{container.id}}" tabindex="-1" (click)="browseTo(container)"
-           (pointerdown)="onPressStart($event, container)" (pointermove)="onPressMove($event)"
-           (pointerup)="onPressEnd()" (pointercancel)="onPressEnd()" (pointerleave)="onPressEnd()">
-        <div class="albumImageContainer">
-          <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
-          @if (isLiked(container)) {
-            <span class="likeBadge material-symbols-outlined" aria-label="Liked">favorite</span>
-          }
-        </div>
-        @if(isAlbum(container)) {
-        <div class="flex flex-col albumDesc">
-          <div class="album no-wrap">{{container.title}}</div>
-          <div class="albumSubheader no-wrap">{{container.artist}}</div>
-          <div class="albumYear no-wrap">{{container.media_date}}</div>
-        </div>
-        } @else {
-        <div class="flex flex-col albumDesc">
-          @if(getOtherContainerHeadline(container)) {
-            <div class="playlistText">{{getOtherContainerHeadline(container)}}</div>
-          }
-          <div class="albumTitle">{{container.title}}</div>
-        </div>
-        }
-      </div>
+        <ng-container *ngTemplateOutlet="tile; context: { $implicit: container }"></ng-container>
       }
     </div>
   }

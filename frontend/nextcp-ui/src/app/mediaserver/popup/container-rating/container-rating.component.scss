@@ -75,3 +75,20 @@
             'opsz' 24;
     }
 }
+
+// Failure line. The sheet stays open on error: closing it would look like the
+// rating was saved.
+.rating-error {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color     : #ff9d9d;
+    font-size : 0.85rem;
+    line-height: 1.35;
+}
+
+// While a request is in flight the buttons are inert, so a slow server cannot
+// collect a queue of conflicting clicks.
+.rating-item:disabled {
+    opacity       : 0.45;
+    cursor        : default;
+    pointer-events: none;
+}
