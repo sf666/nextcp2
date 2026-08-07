@@ -56,7 +56,13 @@ export class MyAlbumComponent implements OnInit {
           '',
           this.deviceService.selectedMediaServerDevice().udn,
         )
-        .subscribe();
+        // This view's top level is the MyMusic node — register it so the
+        // breadcrumb shows just the home icon here instead of an ellipsis.
+        .subscribe((data) =>
+          this.contentDirectoryService.setBrowseRoot(
+            data?.currentContainer?.id,
+          ),
+        );
     }
   }
 

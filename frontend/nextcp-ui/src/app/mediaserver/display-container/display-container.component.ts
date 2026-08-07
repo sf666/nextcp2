@@ -317,6 +317,10 @@ export class DisplayContainerComponent {
             if (data?.currentContainer?.id) {
               if (stepIn) {
                 this.cdsBrowsePathService.stepIn(oid);
+              } else if (data.currentContainer.id === '0') {
+                // Home is not one step out — drop the whole trail, otherwise it
+                // keeps growing across navigations and points into stale views.
+                this.cdsBrowsePathService.clear();
               } else {
                 this.cdsBrowsePathService.stepOut();
               }

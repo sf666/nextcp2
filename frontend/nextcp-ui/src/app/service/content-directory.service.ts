@@ -31,6 +31,19 @@ import {
 } from '@angular/core';
 import { isAssigned } from '../global';
 
+/** One clickable step of the browse path shown in the nav bar. */
+export interface BrowseCrumb {
+  id: string;
+  title: string;
+}
+
+/**
+ * How far up the tree the breadcrumb will chase parent ids before giving up.
+ * A guard against a cyclic or absurdly deep tree, not a real depth limit —
+ * shares are rarely nested this far.
+ */
+const ANCESTOR_LOOKUP_LIMIT = 12;
+
 @Injectable()
 export class ContentDirectoryService {
   configService = inject(ConfigurationService);
@@ -67,6 +80,207 @@ export class ContentDirectoryService {
       this.currentContainerList().currentContainer.parentID === '0'
     );
   });
+
+  //
+  // Breadcrumb path
+  // ==========================================================
+  // The ancestors of the current container, root excluded (the home crumb is
+  // always rendered). A browse response only ever describes the container it
+  // returns plus its parent's title, so the chain is accumulated here as the
+  // user navigates rather than fetched.
+
+  public browsePath = signal<BrowseCrumb[]>([]);
+
+  /**
+   * The container this view treats as its top level. Each sidebar entry is its
+   * own tree — Radio Networks starts at the AudioAddict node, My Albums at the
+   * MyMusic node — so "root" cannot be hard-coded to object id 0. Views that
+   * start elsewhere register their root via SETBROWSEROOT.
+   */
+  private browseRootId = '0';
+
+  /**
+   * Container whose ancestors are currently being looked up, so a second browse
+   * of the same target does not start the walk again.
+   */
+  private ancestorLookupFor = '';
+
+  /**
+   * True when we could not reconstruct the whole chain — after a reload, a
+   * search hit or any other jump into the middle of the tree. The nav bar shows
+   * an ellipsis so the path does not claim to start at the root.
+   */
+  public browsePathTruncated = signal<boolean>(false);
+
+  /**
+   * Declares which container is this view's top level.
+   *
+   * Views resolve their root asynchronously (the id behind a `$DBID$…` alias is
+   * only known once the server answers), so this may arrive after the root page
+   * has already been folded into the path — hence it also corrects what is
+   * currently on screen instead of only affecting later browses.
+   */
+  public setBrowseRoot(id: string | undefined): void {
+    if (!id || id === this.browseRootId) {
+      return;
+    }
+    this.browseRootId = id;
+
+    if (this.currentContainerList().currentContainer?.id === id) {
+      this.browsePath.set([]);
+      this.browsePathTruncated.set(false);
+      return;
+    }
+    const at = this.browsePath().findIndex((crumb) => crumb.id === id);
+    if (at >= 0) {
+      this.browsePath.set(this.browsePath().slice(at + 1));
+      this.browsePathTruncated.set(false);
+    }
+  }
+
+  private isBrowseRoot(container: ContainerDto): boolean {
+    return (
+      container.id === this.browseRootId ||
+      container.id === '0' ||
+      container.parentID === '-1'
+    );
+  }
+
+  /**
+   * Folds a freshly browsed container into the path.
+   *
+   * Four cases: the root resets it, a container already on the path truncates
+   * back to it (stepping out), a child of the last crumb extends it, and
+   * anything else is a jump we cannot place — then we keep what the response
+   * tells us (parent title + current) and mark the path truncated.
+   */
+  private reconcileBrowsePath(data: ContainerItemDto): void {
+    const current = data?.currentContainer;
+    if (!current?.id) {
+      return;
+    }
+    if (this.isBrowseRoot(current)) {
+      this.browsePath.set([]);
+      this.browsePathTruncated.set(false);
+      return;
+    }
+
+    const path = this.browsePath();
+    const known = path.findIndex((crumb) => crumb.id === current.id);
+    if (known >= 0) {
+      if (known < path.length - 1) {
+        this.browsePath.set(path.slice(0, known + 1));
+      }
+      return;
+    }
+
+    const last = path[path.length - 1];
+    if (last && last.id === current.parentID) {
+      this.browsePath.set([...path, { id: current.id, title: current.title }]);
+      return;
+    }
+
+    // A jump we cannot place — a reload, a restored deep link, a search hit, or
+    // coming back to a view that was rebuilt. The response carries no ancestor
+    // titles (parentFolderTitle is a UI label like "back to music library" for
+    // some responses, not a folder name), so show where we are now and fetch
+    // the chain above it.
+    const parentId = current.parentID;
+    const parentIsRoot =
+      !parentId ||
+      parentId === '0' ||
+      parentId === '-1' ||
+      parentId === this.browseRootId;
+    this.browsePath.set([{ id: current.id, title: current.title }]);
+    this.browsePathTruncated.set(!parentIsRoot);
+    if (!parentIsRoot) {
+      this.resolveAncestors(current);
+    }
+  }
+
+  /**
+   * Walks parentID upwards and fills in the crumbs we could not derive.
+   *
+   * Without this the breadcrumb would show a lone "…" that opens an empty menu:
+   * the path looks navigable but nothing is clickable. One request per level,
+   * only after a jump, and capped so a cyclic or pathologically deep tree
+   * cannot spin.
+   */
+  private resolveAncestors(from: ContainerDto): void {
+    const anchorId = from.id;
+    if (this.ancestorLookupFor === anchorId) {
+      return;
+    }
+    this.ancestorLookupFor = anchorId;
+
+    const udn = from.mediaServerUDN || this.deviceService.selectedMediaServerDevice().udn;
+    const chain: BrowseCrumb[] = [];
+    const seen = new Set<string>([anchorId]);
+
+    const step = (parentId: string, depth: number): void => {
+      const done = (truncated: boolean) => {
+        // The user may have navigated on while the lookups were in flight;
+        // only publish if we are still describing the same container.
+        if (this.currentContainerList().currentContainer?.id !== anchorId) {
+          return;
+        }
+        this.browsePath.set([
+          ...chain,
+          { id: from.id, title: from.title },
+        ]);
+        this.browsePathTruncated.set(truncated);
+      };
+
+      if (depth >= ANCESTOR_LOOKUP_LIMIT || seen.has(parentId)) {
+        done(true);
+        return;
+      }
+      seen.add(parentId);
+
+      this.browseContainerMeta(parentId, udn).subscribe({
+        next: (data) => {
+          const container = data?.currentContainer;
+          if (!container?.id) {
+            done(true);
+            return;
+          }
+          chain.unshift({ id: container.id, title: container.title });
+          const next = container.parentID;
+          if (
+            !next ||
+            next === '0' ||
+            next === '-1' ||
+            next === this.browseRootId ||
+            this.isBrowseRoot(container)
+          ) {
+            done(false);
+            return;
+          }
+          step(next, depth + 1);
+        },
+        error: () => done(true),
+      });
+    };
+
+    step(from.parentID, 0);
+  }
+
+  /**
+   * Fetches just enough of a container to name it in the breadcrumb. Asks for a
+   * single child so a folder with thousands of entries stays cheap; the answer
+   * is never routed through UPDATECONTAINER, so it cannot disturb the view.
+   */
+  private browseContainerMeta(
+    objectID: string,
+    mediaServerUdn: string,
+  ): Observable<ContainerItemDto> {
+    const request = this.createBrowseRequest(objectID, '', mediaServerUdn);
+    return this.httpService.post<ContainerItemDto>(
+      this.baseUri,
+      '/browseChildren',
+      { ...request, start: 0, count: 1 },
+    );
+  }
 
   // result container split by types
   albumList_ = signal<ContainerDto[]>([]);
@@ -388,6 +602,7 @@ export class ContentDirectoryService {
           data.allTracksSameAlbumIds?.discogsReleaseId,
       );
       this.currentContainerList.set(data);
+      this.reconcileBrowsePath(data);
       this.updatePageTurnId(data);
       this.albumList_.set(data.albumDto);
       this.containerList_.set(

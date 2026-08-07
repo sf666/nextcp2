@@ -30,32 +30,31 @@ export class CdsBrowsePathService {
     this.stack.push(objectId);
   }
 
+  /**
+   * Leaves the current container and scrolls back to the entry we came from.
+   *
+   * An empty stack is a normal state, not an error: jumping home, following a
+   * search hit or restoring a deep link all land somewhere without a recorded
+   * way back. Scroll to the top in that case — popping would throw.
+   */
   public stepOut(): void {
     if (this.stack.isEmpty()) {
       this.setScrollId(baseId);
+      return;
     }
-    var previous = this.stack.pop();
-    if (previous?.length > 0) {
-      this.setScrollId(previous);
-    } else {
-      console.log('[ERROR] cannot step out');
-      this.setScrollId(baseId);
-    }
+    const previous = this.stack.pop();
+    this.setScrollId(previous?.length > 0 ? previous : baseId);
   }
 
   public peekCurrentPathID(): string {
-    try {
-      return this.stack.peek();
-    } catch (error) {
-      console.log('[CdsBrowsePathService] stack is already empty');
-      return '';
-    }
+    return this.stack.isEmpty() ? '' : this.stack.peek();
   }
 
   public clear(): void {
-    while (!this.stack.isEmpty) {
+    while (!this.stack.isEmpty()) {
       this.stack.pop();
     }
+    this.setScrollId(baseId);
   }
 
   get scrollToID(): string {

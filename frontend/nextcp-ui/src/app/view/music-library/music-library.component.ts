@@ -13,7 +13,10 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { ScrollLoadHandler } from 'src/app/mediaserver/display-container/defs';
-import { ContentDirectoryService } from 'src/app/service/content-directory.service';
+import {
+  BrowseCrumb,
+  ContentDirectoryService,
+} from 'src/app/service/content-directory.service';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { DisplayContainerComponent } from 'src/app/mediaserver/display-container/display-container.component';
 import { LayoutService } from 'src/app/service/layout.service';
@@ -252,6 +255,21 @@ export class MusicLibraryComponent implements AfterViewInit {
     this.globalSearchService.clearSearch();
     this.browseToOid(
       '0',
+      this.deviceService.selectedMediaServerDevice().udn,
+      false,
+      '',
+    );
+  }
+
+  /**
+   * Jump straight to an ancestor from the breadcrumb. Not a step out — the
+   * target may be several levels up — so the scroll stack is left to
+   * reconcile itself on the next browse.
+   */
+  crumbPressed(crumb: BrowseCrumb) {
+    this.globalSearchService.clearSearch();
+    this.browseToOid(
+      crumb.id,
       this.deviceService.selectedMediaServerDevice().udn,
       false,
       '',

@@ -2,7 +2,8 @@
   @if (layoutService.headerVisible()) {
   <nav-bar class="w-full" [parentTitle]="getParentTitle()" [homeButtonVisible]="true"
     [backButtonVisible]="backButtonVisible()" [contentHandler]="getContentHandler()"
-    (backButtonPressed)="backButtonPressed($event)" (homeButtonPressed)="homeButtonPressed($event)"></nav-bar>
+    (backButtonPressed)="backButtonPressed($event)" (homeButtonPressed)="homeButtonPressed($event)"
+    (crumbPressed)="crumbPressed($event)"></nav-bar>
   }
 
   @if(!mediaServerSelected()) {

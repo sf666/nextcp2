@@ -63,6 +63,9 @@ export class MyPlaylistsComponent implements OnInit {
   public browseToMyPlaylist(playlistId: string, mediaServerUdn: string) {
     if (mediaServerUdn.length > 0) {
       this.rootPlaylistId = playlistId;
+      // The selected playlist is this view's top level, so the breadcrumb must
+      // not present it as a child of something we never showed.
+      this.contentDirectoryService.setBrowseRoot(playlistId + '');
       this.contentDirectoryService.browseChildren(
         playlistId + '',
         '',

@@ -102,6 +102,10 @@ export class UmsAudioaddictComponent {
         data?.currentContainer?.id,
     );
     this.rootID = data.currentContainer.id;
+    // This view starts at the AudioAddict node, not at object id 0 — tell the
+    // breadcrumb so it does not render this page as a step below some unknown
+    // parent.
+    this.contentDirectoryService.setBrowseRoot(this.rootID);
     this.hasAudioAddictService.set((data.containerDto?.length ?? 0) > 0);
   }
 

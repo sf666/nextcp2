@@ -65,3 +65,135 @@
 .navFont {
     font-weight: 500;
 }
+
+//
+// Breadcrumb
+// ============================================================================
+// Ancestors are dimmed and the current container is bright, so the eye lands on
+// "where am I" first and "how did I get here" second.
+
+.crumbs {
+    gap      : 1px;
+    // The path is the only element allowed to shrink; the search box keeps its
+    // width. min-width:0 lets the flex child actually shrink below its content.
+    // No overflow:hidden here — it would clip the overflow menu, which hangs
+    // out of the bar. The current crumb truncates itself instead.
+    min-width: 0;
+}
+
+.crumb {
+    display      : inline-flex;
+    align-items  : center;
+    flex-shrink  : 0;
+    gap          : 4px;
+    padding      : 4px 8px;
+    border-radius: 8px;
+    font-size    : 1.05rem;
+    font-weight  : 500;
+    line-height  : 1.4;
+    color        : var(--glas-white-5);
+    background   : transparent;
+    border       : none;
+    cursor       : pointer;
+    white-space  : nowrap;
+    transition   : color .15s ease, background-color .15s ease;
+
+    &:hover {
+        color           : var(--glas-white-2);
+        background-color: var(--glas-white-9);
+    }
+
+    &:focus-visible {
+        outline       : 1px solid var(--primary-color-reduced);
+        outline-offset: -1px;
+    }
+}
+
+// The parent — the last and most-used crumb, one tap up. Brightest of the
+// chain, and the only one allowed to be cut off so the ones before it stay
+// readable.
+.crumb-parent {
+    color        : var(--glas-white-2);
+    flex-shrink  : 1;
+    min-width    : 0;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+    display      : block;
+}
+
+.crumb-home .material-symbols-sharp,
+.crumb-more .material-symbols-sharp {
+    font-size: 22px;
+}
+
+.crumb-sep {
+    flex-shrink: 0;
+    font-size  : 18px;
+    color      : var(--glas-white-7);
+    user-select: none;
+}
+
+//
+// Overflow ("…") — the folded-away start of the path
+//
+
+.crumb-overflow {
+    position   : relative;
+    flex-shrink: 0;
+}
+
+.crumb-more.is-open {
+    color           : var(--glas-white-1);
+    background-color: var(--glas-white-9);
+}
+
+.crumb-menu {
+    position        : absolute;
+    top             : calc(100% + 6px);
+    left            : 0;
+    z-index         : 20;
+    min-width       : 200px;
+    max-width       : 340px;
+    max-height      : 60vh;
+    overflow-y      : auto;
+    padding         : 6px;
+    display         : flex;
+    flex-direction  : column;
+    border-radius   : 14px;
+    background      : var(--chrome-bg);
+    backdrop-filter : var(--chrome-blur);
+    border          : 1px solid var(--chrome-hair);
+    box-shadow      : 0 12px 32px rgba(0, 0, 0, .45);
+}
+
+.crumb-menu-item {
+    display      : flex;
+    align-items  : center;
+    gap          : 10px;
+    width        : 100%;
+    padding      : 8px 10px;
+    border       : none;
+    border-radius: 9px;
+    background   : transparent;
+    color        : var(--glas-white-3);
+    font-size    : 0.95rem;
+    text-align   : left;
+    cursor       : pointer;
+
+    &:hover {
+        background-color: var(--glas-white-9);
+        color           : var(--glas-white-1);
+    }
+
+    .material-symbols-sharp {
+        font-size  : 20px;
+        flex-shrink: 0;
+        color      : var(--glas-white-6);
+    }
+}
+
+.crumb-menu-label {
+    overflow     : hidden;
+    text-overflow: ellipsis;
+    white-space  : nowrap;
+}
