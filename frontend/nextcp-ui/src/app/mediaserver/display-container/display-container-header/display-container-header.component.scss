@@ -714,6 +714,16 @@
     .header-tools {
         align-self: center;
         flex-wrap : nowrap;
+        // The expanded header lets the row claim its full width so it moves to
+        // its own line before being squeezed. Here that is exactly wrong: the
+        // bar IS one line, and a row that wraps drops out of it and lands on
+        // top of the grid. Ask only for what always stays visible.
+        flex-basis: 272px;
+    }
+
+    // ...and the bar itself must not wrap either, or the row still escapes.
+    .right-section {
+        flex-wrap: nowrap;
     }
 
     // Albums show the action buttons on the right (the 3-dot options is one of
