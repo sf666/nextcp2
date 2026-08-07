@@ -106,6 +106,21 @@ export class ContentDirectoryService {
   private ancestorLookupFor = '';
 
   /**
+   * Bumped by every direct write to the path. An ancestor lookup carries the
+   * value it started with and discards its result if it no longer matches, so a
+   * slow walk can never overwrite a newer, better-informed path — most notably
+   * the one SETBROWSEROOT writes once a view reports its own top level.
+   */
+  private pathGeneration = 0;
+
+  /** Single point of truth for writing the path, so nothing can race it. */
+  private setPath(crumbs: BrowseCrumb[], truncated: boolean): void {
+    this.pathGeneration++;
+    this.browsePath.set(crumbs);
+    this.browsePathTruncated.set(truncated);
+  }
+
+  /**
    * True when we could not reconstruct the whole chain — after a reload, a
    * search hit or any other jump into the middle of the tree. The nav bar shows
    * an ellipsis so the path does not claim to start at the root.
@@ -121,20 +136,44 @@ export class ContentDirectoryService {
    * currently on screen instead of only affecting later browses.
    */
   public setBrowseRoot(id: string | undefined): void {
-    if (!id || id === this.browseRootId) {
+    if (!id) {
       return;
     }
+    // Deliberately no early exit when the id is unchanged: a view re-announces
+    // its root on every (re)load, and the path it needs to correct is a fresh
+    // one each time.
     this.browseRootId = id;
+    // Any ancestor walk started before we knew the root would climb past it —
+    // into the media server's own tree — and report a parent this view should
+    // never show. Invalidate it.
+    this.ancestorLookupFor = '';
 
-    if (this.currentContainerList().currentContainer?.id === id) {
-      this.browsePath.set([]);
-      this.browsePathTruncated.set(false);
+    const current = this.currentContainerList().currentContainer;
+    if (!current?.id) {
+      // Nothing on screen yet; still void any walk in flight.
+      this.pathGeneration++;
       return;
     }
+
+    if (current.id === id) {
+      this.setPath([], false);
+      return;
+    }
+
     const at = this.browsePath().findIndex((crumb) => crumb.id === id);
     if (at >= 0) {
-      this.browsePath.set(this.browsePath().slice(at + 1));
-      this.browsePathTruncated.set(false);
+      this.setPath(this.browsePath().slice(at + 1), false);
+      return;
+    }
+
+    // The root is neither where we are nor on the path: the path was built
+    // without knowing it, so anything above the current container is suspect.
+    // Start over from here and, if needed, walk again — this time the walk
+    // knows where to stop.
+    const parentIsRoot = !current.parentID || current.parentID === id;
+    this.setPath([{ id: current.id, title: current.title }], !parentIsRoot);
+    if (!parentIsRoot) {
+      this.resolveAncestors(current);
     }
   }
 
@@ -160,8 +199,7 @@ export class ContentDirectoryService {
       return;
     }
     if (this.isBrowseRoot(current)) {
-      this.browsePath.set([]);
-      this.browsePathTruncated.set(false);
+      this.setPath([], false);
       return;
     }
 
@@ -169,14 +207,17 @@ export class ContentDirectoryService {
     const known = path.findIndex((crumb) => crumb.id === current.id);
     if (known >= 0) {
       if (known < path.length - 1) {
-        this.browsePath.set(path.slice(0, known + 1));
+        this.setPath(path.slice(0, known + 1), this.browsePathTruncated());
       }
       return;
     }
 
     const last = path[path.length - 1];
     if (last && last.id === current.parentID) {
-      this.browsePath.set([...path, { id: current.id, title: current.title }]);
+      this.setPath(
+        [...path, { id: current.id, title: current.title }],
+        this.browsePathTruncated(),
+      );
       return;
     }
 
@@ -191,8 +232,7 @@ export class ContentDirectoryService {
       parentId === '0' ||
       parentId === '-1' ||
       parentId === this.browseRootId;
-    this.browsePath.set([{ id: current.id, title: current.title }]);
-    this.browsePathTruncated.set(!parentIsRoot);
+    this.setPath([{ id: current.id, title: current.title }], !parentIsRoot);
     if (!parentIsRoot) {
       this.resolveAncestors(current);
     }
@@ -212,25 +252,34 @@ export class ContentDirectoryService {
       return;
     }
     this.ancestorLookupFor = anchorId;
+    const generation = this.pathGeneration;
 
     const udn = from.mediaServerUDN || this.deviceService.selectedMediaServerDevice().udn;
     const chain: BrowseCrumb[] = [];
     const seen = new Set<string>([anchorId]);
 
-    const step = (parentId: string, depth: number): void => {
-      const done = (truncated: boolean) => {
-        // The user may have navigated on while the lookups were in flight;
-        // only publish if we are still describing the same container.
-        if (this.currentContainerList().currentContainer?.id !== anchorId) {
-          return;
-        }
-        this.browsePath.set([
-          ...chain,
-          { id: from.id, title: from.title },
-        ]);
-        this.browsePathTruncated.set(truncated);
-      };
+    let finished = false;
+    const stale = () =>
+      // Someone wrote the path while we were fetching. That writer knew more
+      // than we did when we started — a view declaring its own root, or the
+      // user navigating on — so our result is obsolete either way.
+      finished ||
+      this.pathGeneration !== generation ||
+      this.ancestorLookupFor !== anchorId ||
+      this.currentContainerList().currentContainer?.id !== anchorId;
 
+    const done = (truncated: boolean) => {
+      if (stale()) {
+        return;
+      }
+      finished = true;
+      this.setPath([...chain, { id: from.id, title: from.title }], truncated);
+    };
+
+    const step = (parentId: string, depth: number): void => {
+      if (stale()) {
+        return;
+      }
       if (depth >= ANCESTOR_LOOKUP_LIMIT || seen.has(parentId)) {
         done(true);
         return;

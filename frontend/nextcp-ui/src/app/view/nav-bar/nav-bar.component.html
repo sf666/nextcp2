@@ -47,15 +47,6 @@
           <button type="button" class="crumb" [class.crumb-parent]="last"
                   (click)="gotoCrumb(crumb)">{{crumb.title}}</button>
         }
-
-        <!--
-          Views that do not feed a browse path (playlists, album view, AudioAddict)
-          keep the previous one-level-up button, so they navigate as before.
-        -->
-        @if (backButtonVisible() && visibleCrumbs().length === 0) {
-          <span class="crumb-sep material-symbols-sharp" aria-hidden="true">chevron_right</span>
-          <button type="button" class="crumb" (click)="gotoParent()">{{parentTitle()}}</button>
-        }
       </nav>
     </div>
 

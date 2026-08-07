@@ -42,15 +42,12 @@ export class NavBarComponent {
   );
   public readonly layoutService = inject(LayoutService);
 
-  parentTitle = input<string>();
   homeButtonVisible = input<boolean>(false);
-  backButtonVisible = input<boolean>(false);
   contentHandler = input.required<ScrollLoadHandler>();
 
   // Inform parent about actions
   executeSearch = output<string>();
   searchKeyUp = output<KeyboardEvent>();
-  backButtonPressed = output<any>();
   homeButtonPressed = output<any>();
   crumbPressed = output<BrowseCrumb>();
 
@@ -97,10 +94,6 @@ export class NavBarComponent {
 
   toggleOverflow(): void {
     this.overflowOpen.update((open) => !open);
-  }
-
-  gotoParent(): void {
-    this.backButtonPressed.emit('');
   }
 
   gotoRoot(): void {

@@ -6,7 +6,10 @@ import {
   MusicItemDto,
   MediaServerDto,
 } from './../../service/dto.d';
-import { ContentDirectoryService } from './../../service/content-directory.service';
+import {
+  BrowseCrumb,
+  ContentDirectoryService,
+} from './../../service/content-directory.service';
 import {
   Component,
   OnInit,
@@ -74,13 +77,17 @@ export class MyAlbumComponent implements OnInit {
   // Event
   //
 
-  getParentTitle(): string {
-    return this.contentDirectoryService.currentContainerList()
-      .parentFolderTitle;
-  }
-
   public homeButtonPressed(event: any) {
     this.loadMyAlbums();
+  }
+
+  /** Jump to an ancestor picked from the breadcrumb. */
+  public crumbPressed(crumb: BrowseCrumb) {
+    this.contentDirectoryService.browseChildren(
+      crumb.id,
+      '',
+      this.deviceService.selectedMediaServerDevice().udn,
+    );
   }
 
   //

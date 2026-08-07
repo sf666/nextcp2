@@ -33,7 +33,9 @@
     // centred, not baseline: an icon glyph has its own metrics and ends up looking
     // lifted next to a large bold title when both sit on the text baseline.
     align-items : center;
-    gap         : 0.5rem;
+    // Next to a large bold title a small gap reads as if the heart were part of
+    // the word. Shrinks with the header, like the heart itself.
+    gap         : calc(1.15rem - 0.35rem * var(--collapse, 0));
     max-width   : 100%;
     min-width   : 0;
     // the spacing below the title moves here, so both children share one box

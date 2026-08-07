@@ -246,11 +246,6 @@ export class MusicLibraryComponent implements AfterViewInit {
   //
   // Nav-Bar bindings
   //
-  getParentTitle(): string {
-    return this.contentDirectoryService.currentContainerList()
-      .parentFolderTitle;
-  }
-
   homeButtonPressed(event: any) {
     this.globalSearchService.clearSearch();
     this.browseToOid(
@@ -274,35 +269,6 @@ export class MusicLibraryComponent implements AfterViewInit {
       false,
       '',
     );
-  }
-
-  public backButtonPressed(event: any) {
-    this.globalSearchService.clearSearch();
-    const currentParent =
-      this.contentDirectoryService?.currentContainerList().currentContainer
-        ?.parentID;
-    if (currentParent) {
-      this.browseToOid(
-        currentParent,
-        this.deviceService.selectedMediaServerDevice().udn,
-        false,
-        '',
-      );
-    }
-  }
-
-  public backButtonVisible(): boolean {
-    const currentContainer =
-      this.contentDirectoryService.currentContainerList().currentContainer;
-    if (!isAssigned(currentContainer) || currentContainer.id?.length == 0) {
-      return false;
-    }
-
-    if (this.contentDirectoryService.isCurrentContainerRootOrHasParentRoot()) {
-      return false;
-    }
-
-    return true;
   }
 
   selectServer(udn: string): void {

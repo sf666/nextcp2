@@ -7,7 +7,10 @@ import {
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { ScrollLoadHandler } from 'src/app/mediaserver/display-container/defs';
 import { DisplayContainerComponent } from 'src/app/mediaserver/display-container/display-container.component';
-import { ContentDirectoryService } from 'src/app/service/content-directory.service';
+import {
+  BrowseCrumb,
+  ContentDirectoryService,
+} from 'src/app/service/content-directory.service';
 import { DeviceService } from 'src/app/service/device.service';
 import {
   ContainerDto,
@@ -25,6 +28,10 @@ import { NavBarComponent } from '../../nav-bar/nav-bar.component';
   styleUrl: './ums-audioaddict.component.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // Own instance, like every other browse view. Without this the component fell
+  // back to the application-wide service from main.ts, so its browse state —
+  // including the breadcrumb root — outlived the view and mixed with others.
+  providers: [ContentDirectoryService],
   imports: [NavBarComponent, DisplayContainerComponent],
 })
 export class UmsAudioaddictComponent {
@@ -113,32 +120,22 @@ export class UmsAudioaddictComponent {
   // Event
   //
 
-  getParentTitle(): string {
-    return this.contentDirectoryService.currentContainerList()
-      .parentFolderTitle;
-  }
-
   public homeButtonPressed(event: any) {
     this.loadRadioNetwork();
   }
 
-  public backButtonPressed(event: any) {
-    this.contentDirectoryService.browseToParent('');
+  /** Jump to an ancestor picked from the breadcrumb. */
+  public crumbPressed(crumb: BrowseCrumb) {
+    this.contentDirectoryService.browseChildren(
+      crumb.id,
+      '',
+      this.deviceService.selectedMediaServerDevice().udn,
+    );
   }
 
   //
   // bindings
   //
-  backButtonVisible(): boolean {
-    console.log(
-      this.contentDirectoryService.currentContainerList().currentContainer.id,
-    );
-    return (
-      this.contentDirectoryService.currentContainerList().currentContainer
-        .id !== this.rootID
-    );
-  }
-
   getContentHandler(): ScrollLoadHandler {
     return {
       contentDirectoryService: this.contentDirectoryService,

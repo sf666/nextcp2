@@ -4,7 +4,10 @@ import { MyPlaylistService } from './my-playlist.service';
 import { ContainerDto, MusicItemDto } from './../../service/dto.d';
 import { DeviceService } from 'src/app/service/device.service';
 import { LayoutService } from './../../service/layout.service';
-import { ContentDirectoryService } from './../../service/content-directory.service';
+import {
+  BrowseCrumb,
+  ContentDirectoryService,
+} from './../../service/content-directory.service';
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { DisplayContainerComponent } from '../../mediaserver/display-container/display-container.component';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
@@ -143,25 +146,13 @@ export class MyPlaylistsComponent implements OnInit {
     );
   }
 
-  public backButtonPressed(event: any) {
-    this.contentDirectoryService.browseToParent('');
+  /** Jump to an ancestor picked from the breadcrumb. */
+  public crumbPressed(crumb: BrowseCrumb) {
+    this.contentDirectoryService.browseChildren(
+      crumb.id,
+      '',
+      this.deviceService.selectedMediaServerDevice().udn,
+    );
   }
 
-  backButtonVisible(): boolean {
-    const currentContainer =
-      this.contentDirectoryService.currentContainerList().currentContainer;
-    if (
-      this.rootPlaylistId === '' ||
-      !currentContainer ||
-      currentContainer.id.length == 0
-    ) {
-      return false;
-    }
-    return this.rootPlaylistId != currentContainer.id;
-  }
-
-  getParentTitle(): string {
-    return this.contentDirectoryService.currentContainerList()
-      .parentFolderTitle;
-  }
 }
