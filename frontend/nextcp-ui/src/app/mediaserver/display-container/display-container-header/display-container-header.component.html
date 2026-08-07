@@ -98,7 +98,10 @@
         </div>
         <!-- Filter / sort tools -->
         @if (currentContainer.id?.length ?? 0 > 0) {
-          <div class="header-tools flex flex-wrap items-center justify-end gap-3 grow self-end">
+          <!-- Never wraps: tools drop out by priority instead (see the container
+               queries in the SCSS). Wrapping would pre-empt the shrinking that
+               keeps the filter usable. -->
+          <div class="header-tools flex items-center justify-end gap-3 grow self-end">
             @if (hasAlbums()) {
               <div class="filter-field tool-sort"
                 [class.active]="sortCriteria() && sortCriteria() !== 'NONE'">

@@ -541,7 +541,10 @@
     font-size  : 16px;
 }
 
-// Sort / genres are secondary — only shown on wide screens.
+// Sort / genres are secondary: they appear only when the tools row is actually
+// wide enough for them, and drop out again in that order. See the container
+// queries below — the viewport is the wrong yardstick here, because the row's
+// width also depends on the sidebar and on how much the title takes.
 .tool-sort,
 .tool-genres {
     display: none;
@@ -556,11 +559,64 @@
     min-width: 172px;
 }
 
-@media (min-width: 1024px) {
+// Widths measured in the running UI. The options button counts — it lives in
+// this row too — and the filter is allowed to shrink to 120px, so a tool only
+// has to go once it does not fit ALONGSIDE a squeezed filter:
+//   sort 158 | filter 202..120 | genres 172 | rating 84 | options 44 | gap 12
+//   filter(min) + rating + options            =  272px
+//   + genres                                  =  456px
+//   + sort                                    =  626px
+// The row is a size container, so hiding a tool cannot change the width being
+// queried — no feedback loop, no flicker.
+//
+// The options button is conditional (absent on track listings). We budget for
+// it either way: hiding 56px early is invisible, wrapping is not.
+.header-tools {
+    container-type: inline-size;
+    container-name: tools;
+    // Two jobs. Size containment drops the content's contribution to the flex
+    // base size, so without a basis the row collapses. And the parent
+    // (.right-section) wraps: asking for the full width up front makes the row
+    // move to its own line BEFORE it gets squeezed, instead of shrinking until
+    // a tool drops and then regaining the space on the next line — which made
+    // tools vanish and reappear as the window narrowed.
+    flex-basis: 626px;
+}
 
-    .tool-sort,
+@container tools (min-width: 456px) {
     .tool-genres {
         display: flex;
+    }
+}
+
+@container tools (min-width: 626px) {
+    .tool-sort {
+        display: flex;
+    }
+}
+
+// Once sort and genres are gone the row can still run out of width. The filter
+// gives way before the row wraps — a narrower text box still works, a second
+// line does not. Floor at 120px so the placeholder stays legible; below that
+// there is nothing left to give and the field goes too (rating + options need
+// 140px, which always fits).
+.tool-filter {
+    // Keeps its natural 202px when there is room and gives width back when
+    // there is not — but never grows into a search bar spanning the header.
+    flex     : 0 1 202px;
+    min-width: 120px;
+}
+
+.tool-filter .field-input {
+    flex     : 1 1 auto;
+    width    : auto;
+    // Without this the input's intrinsic width stops the field from shrinking.
+    min-width: 0;
+}
+
+@container tools (max-width: 271px) {
+    .tool-filter {
+        display: none;
     }
 }
 
