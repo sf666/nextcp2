@@ -219,7 +219,15 @@ export class PlaylistService implements OnInit {
     this.httpService.post(this.baseUri, uri, playRequestDto).subscribe();
   }
 
-  public addContainerToPlaylist(containerDto: ContainerDto): void {
+  /**
+   * @param musicItems the exact tracks to add. Pass them when a browse filter narrows
+   *        the listing — the filter only exists in the browser, so without the list the
+   *        server would re-browse and add the whole container. Omit to add everything.
+   */
+  public addContainerToPlaylist(
+    containerDto: ContainerDto,
+    musicItems?: MusicItemDto[],
+  ): void {
     const udn = this.getSelectedMediaRendererUdn();
     if (!udn) {
       return;
@@ -229,6 +237,7 @@ export class PlaylistService implements OnInit {
       containerDto: containerDto,
       shuffle: false,
       mediaRendererUdn: udn,
+      musicItemDto: musicItems ?? [],
     };
     this.httpService
       .postWithSuccessMessage(
@@ -242,9 +251,13 @@ export class PlaylistService implements OnInit {
       .subscribe();
   }
 
+  /**
+   * @param musicItems the exact tracks to play — see addContainerToPlaylist.
+   */
   public addContainerToPlaylistAndPlay(
     containerDto: ContainerDto,
     _shuffle: boolean,
+    musicItems?: MusicItemDto[],
   ): void {
     const udn = this.getSelectedMediaRendererUdn();
     if (!udn) {
@@ -255,6 +268,7 @@ export class PlaylistService implements OnInit {
       containerDto: containerDto,
       shuffle: _shuffle,
       mediaRendererUdn: udn,
+      musicItemDto: musicItems ?? [],
     };
 
     this.httpService

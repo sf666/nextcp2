@@ -13,6 +13,7 @@ import {
 import { RatingFilter } from 'src/app/service/rating-service.service';
 import {
   filterContainers,
+  filterMusicItems,
   matchesTextFilter,
 } from 'src/app/util/browse-filter';
 import {
@@ -252,21 +253,42 @@ export class DisplayContainerComponent {
   // ==============================================================================
 
   playPlaylist(container: ContainerDto): void {
-    // For the local browser player there is no server-side playlist; queue the currently displayed
-    // tracks and play them in the shown order.
-    if (this.deviceService.isLocalBrowserSelected()) {
-      this.localPlayer.playQueue(this.musicTracks, false);
-      return;
-    }
-    this.playlistService.addContainerToPlaylistAndPlay(container, false);
+    this.startPlayback(container, false);
   }
 
   shufflePlaylist(container: ContainerDto): void {
+    this.startPlayback(container, true);
+  }
+
+  /**
+   * The tracks the header's actions operate on: what the list currently shows.
+   * With a filter active that is a subset, and the buttons have to respect it —
+   * otherwise they play tracks the user has just filtered away.
+   */
+  private displayedMusicTracks(): MusicItemDto[] {
+    return filterMusicItems(
+      this.musicTracks,
+      this.displayFilterString(),
+      this.selectedGenres(),
+      this.ratingFilter(),
+    );
+  }
+
+  private startPlayback(container: ContainerDto, shuffle: boolean): void {
+    // For the local browser player there is no server-side playlist; queue the currently displayed
+    // tracks and play them in the shown order.
     if (this.deviceService.isLocalBrowserSelected()) {
-      this.localPlayer.playQueue(this.musicTracks, true);
+      this.localPlayer.playQueue(this.displayedMusicTracks(), shuffle);
       return;
     }
-    this.playlistService.addContainerToPlaylistAndPlay(container, true);
+    // Unfiltered, the renderer keeps browsing the container itself — that also covers
+    // containers whose tracks the browser has not loaded yet. Only a filter makes us
+    // spell out which tracks to take.
+    this.playlistService.addContainerToPlaylistAndPlay(
+      container,
+      shuffle,
+      this.filterActive() ? this.displayedMusicTracks() : undefined,
+    );
   }
 
   //
@@ -362,7 +384,10 @@ export class DisplayContainerComponent {
   }
 
   addPlaylist(container: ContainerDto): void {
-    this.playlistService.addContainerToPlaylist(container);
+    this.playlistService.addContainerToPlaylist(
+      container,
+      this.filterActive() ? this.displayedMusicTracks() : undefined,
+    );
   }
 
   addItemToPlaylist(item: MusicItemDto): void {
@@ -379,9 +404,9 @@ export class DisplayContainerComponent {
 
   playItem(musicItemDto: MusicItemDto): void {
     // For the local browser player, play the displayed track list starting at the clicked track, so
-    // the rest of the list keeps playing after it.
+    // the rest of the list keeps playing after it — the list as shown, filter included.
     if (this.deviceService.isLocalBrowserSelected()) {
-      this.localPlayer.playQueueFrom(this.musicTracks, musicItemDto);
+      this.localPlayer.playQueueFrom(this.displayedMusicTracks(), musicItemDto);
       return;
     }
     // Broadcast/streaming routing (Radio source vs Playlist/AVTransport) is handled centrally in

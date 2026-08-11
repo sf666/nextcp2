@@ -12,10 +12,8 @@ import { SongOptionsServiceService } from '../../popup/song-options/song-options
 import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { StarRatingComponent } from 'src/app/view/star-rating/star-rating.component';
-import {
-  matchesRatingFilter,
-  RatingFilter,
-} from 'src/app/service/rating-service.service';
+import { RatingFilter } from 'src/app/service/rating-service.service';
+import { filterMusicItems } from 'src/app/util/browse-filter';
 import { QualityBadgeComponent } from 'src/app/util/comp/quality-badge/quality-badge.component';
 import { RendererService } from 'src/app/service/renderer.service';
 
@@ -126,45 +124,16 @@ export class ItemTileComponent {
     return false;
   }
 
+  // Filtering lives in browse-filter.ts because the header's play / shuffle /
+  // add-to-queue actions have to narrow the listing exactly the same way — what
+  // reaches the renderer must be what this list shows.
   private filteredMusicTracks(data: MusicItemDto[]): MusicItemDto[] {
-    console.log('filteredMusicTracks');
-    let tracks: Array<MusicItemDto>;
-    if (this.quickSearchString()) {
-      tracks = data.filter((item) =>
-        this.doFilterText(item.title, this.quickSearchString()),
-      );
-    } else {
-      tracks = data;
-    }
-    if (this?.selectedGenres()?.length > 0) {
-      tracks = tracks.filter((item) => this.doFilterGenre(item));
-    }
-    if (this.ratingFilter() !== 'ANY') {
-      tracks = tracks.filter((item) => matchesRatingFilter(item.rating, this.ratingFilter()));
-    }
-    return tracks;
-  }
-
-  private doFilterGenre(item: MusicItemDto): boolean {
-    let add = false;
-    this.selectedGenres()?.forEach((genre) => {
-      if (this.doFilterText(item.genre, genre)) {
-        add = true;
-      }
-    });
-    return add;
-  }
-
-  private doFilterText(title: string, filter: string): boolean {
-    if (!filter) {
-      return true;
-    }
-    if (!title && 'NONE' == filter) {
-      return true;
-    } else if (!title) {
-      return false;
-    }
-    return title.toLowerCase().includes(filter.toLowerCase());
+    return filterMusicItems(
+      data,
+      this.quickSearchString(),
+      this.selectedGenres(),
+      this.ratingFilter(),
+    );
   }
 
   //

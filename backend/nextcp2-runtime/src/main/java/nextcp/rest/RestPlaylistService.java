@@ -153,9 +153,27 @@ public class RestPlaylistService extends BaseRestService
 
     private MediaRendererDevice addSongsToRenderDevice(PlaylistAddContainerRequest req, MediaRendererDevice rendererDevice)
     {
-        ContainerItemDto itemsToAdd = getChildElements(req.containerDto.mediaServerUDN, req.containerDto.id);
-        rendererDevice.getPlaylistServiceBridge().insertContainer(itemsToAdd);
+        rendererDevice.getPlaylistServiceBridge().insertContainer(getSongsToAdd(req));
         return rendererDevice;
+    }
+
+    /**
+     * Songs the request asks for.
+     *
+     * The UI may send an explicit track list — that is how an active browse filter reaches the
+     * renderer, since the filter only exists in the browser and this service would otherwise
+     * re-browse the full container. Without such a list, everything the container holds is used.
+     */
+    private ContainerItemDto getSongsToAdd(PlaylistAddContainerRequest req)
+    {
+        if (req.musicItemDto != null && !req.musicItemDto.isEmpty())
+        {
+            ContainerItemDto items = new ContainerItemDto();
+            items.currentContainer = req.containerDto;
+            items.musicItemDto = req.musicItemDto;
+            return items;
+        }
+        return getChildElements(req.containerDto.mediaServerUDN, req.containerDto.id);
     }
 
     private ContainerItemDto getChildElements(String udn, String containerID)
@@ -188,8 +206,7 @@ public class RestPlaylistService extends BaseRestService
             {
                 rendererDevice.getPlaylistServiceBridge().setShuffle(req.shuffle);
             }
-            ContainerItemDto itemsToAdd = getChildElements(req.containerDto.mediaServerUDN, req.containerDto.id);
-            rendererDevice.getPlaylistServiceBridge().insertAndPlayContainer(itemsToAdd);
+            rendererDevice.getPlaylistServiceBridge().insertAndPlayContainer(getSongsToAdd(req));
         }
         catch (Exception e)
         {

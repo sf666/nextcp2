@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-07-09 10:02:13.
+// Generated using typescript-generator version 4.1.1 on 2026-08-11 15:31:26.
 
 export interface AiConfig {
     aiEnabled: boolean;
@@ -365,6 +365,7 @@ export interface PlaylistAddContainerRequest {
     shuffle: boolean;
     containerDto: ContainerDto;
     mediaRendererUdn: string;
+    musicItemDto: MusicItemDto[];
 }
 
 export interface PlaylistState {

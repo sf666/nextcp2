@@ -1,4 +1,4 @@
-import { ContainerDto } from 'src/app/service/dto';
+import { ContainerDto, MusicItemDto } from 'src/app/service/dto';
 import {
   matchesRatingFilter,
   RatingFilter,
@@ -36,6 +36,34 @@ export function filterContainers(
   rating: RatingFilter,
 ): ContainerDto[] {
   let result = containers ?? [];
+  if (quickSearch) {
+    result = result.filter((item) => matchesTextFilter(item.title, quickSearch));
+  }
+  if (genres?.length) {
+    result = result.filter((item) =>
+      genres.some((genre) => matchesTextFilter(item.genre, genre)),
+    );
+  }
+  if (rating !== 'ANY') {
+    result = result.filter((item) => matchesRatingFilter(item.rating, rating));
+  }
+  return result;
+}
+
+/**
+ * Narrows a track listing by the criteria of the browse header.
+ *
+ * Shared by the track list and by the play / shuffle / add-to-queue actions of the
+ * header: what gets sent to the renderer has to be what the list shows, so both have
+ * to come out of the same function.
+ */
+export function filterMusicItems(
+  items: MusicItemDto[] | undefined,
+  quickSearch: string | undefined,
+  genres: string[] | undefined,
+  rating: RatingFilter,
+): MusicItemDto[] {
+  let result = items ?? [];
   if (quickSearch) {
     result = result.filter((item) => matchesTextFilter(item.title, quickSearch));
   }

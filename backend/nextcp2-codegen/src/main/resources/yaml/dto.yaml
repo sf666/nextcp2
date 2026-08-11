@@ -450,6 +450,10 @@ PlaylistAddContainerRequest:
    shuffle: Boolean
    containerDto: ContainerDto
    mediaRendererUdn : String
+   # Optional explicit track list. Set by the UI when a browse filter narrows the
+   # listing, so the renderer gets the tracks actually shown instead of the whole
+   # container. Empty means: take everything the container holds.
+   musicItemDto: List<MusicItemDto>
 
 BrowseRequestDto:
    mediaServerUDN: String
