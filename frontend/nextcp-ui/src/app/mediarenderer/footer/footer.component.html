@@ -82,16 +82,21 @@
       <span class="material-symbols-outlined">speaker</span>
     </button>
 
-    <button type="button" class="out-btn" (click)="serverClicked($event)" title="Media server">
-      <span class="material-symbols-outlined">dns</span>
-    </button>
-    @if (hasDeviceDriver()) {
-      <button type="button" class="out-btn {{getStandbyClass()}}" (click)="powerClicked()" title="Power">
-        <span class="material-symbols-outlined">power_settings_new</span>
+    <!-- Source, power and volume are one thing — what plays where — so they read
+         as one control instead of three loose icons at the edge. The renderer
+         stays outside: it is the compact form of the device chip, not a tool. -->
+    <div class="out-group">
+      <button type="button" class="out-btn" (click)="serverClicked($event)" title="Media server">
+        <span class="material-symbols-outlined">dns</span>
       </button>
-    }
-    <button type="button" class="out-btn" (click)="volumeClicked($event)" title="Volume">
-      <span class="material-symbols-outlined">volume_up</span>
-    </button>
+      @if (hasDeviceDriver()) {
+        <button type="button" class="out-btn {{getStandbyClass()}}" (click)="powerClicked()" title="Power">
+          <span class="material-symbols-outlined">power_settings_new</span>
+        </button>
+      }
+      <button type="button" class="out-btn" (click)="volumeClicked($event)" title="Volume">
+        <span class="material-symbols-outlined">volume_up</span>
+      </button>
+    </div>
   </div>
 </div>
