@@ -186,28 +186,49 @@
 //
 // Create pane
 // =========================================================================
+// The name field is the job here, so it leads and gets the width; the target
+// folder is a footnote under it, not a headline above it. The dialog itself
+// shrinks to this content (see applyDialogSize), so there is no dead space to
+// centre things in.
 .create-pane {
-    max-width : 26rem;
-    width     : 100%;
-    align-self: center;
-    margin    : auto 0;
-    padding   : 1rem 0;
+    width: 100%;
 }
 
-.create-label {
-    font-size     : 0.68rem;
-    font-weight   : 700;
-    text-transform: uppercase;
-    letter-spacing: 0.11em;
-    color         : var(--glas-white-5);
+.field-label {
+    font-size     : 0.75rem;
+    font-weight   : 600;
+    letter-spacing: 0.02em;
+    color         : var(--glas-white-4);
+    margin-bottom : 0.4rem;
 }
 
-.create-folder {
-    margin-top : 0.4rem;
-    margin-bottom: 1.75rem;
+.create-input {
+    // A touch larger than the search field: typing the name is the primary act.
     font-size  : 0.95rem;
-    font-weight: 600;
-    color      : var(--snow-white);
+    padding    : 0.8rem 1rem;
+    caret-color: var(--primary-color);
+}
+
+.field-hint {
+    margin-top : 0.6rem;
+    font-size  : 0.75rem;
+    font-weight: 400;
+    color      : var(--glas-white-5);
+    min-width  : 0;
+
+    .material-symbols-outlined {
+        font-size: 18px;
+        flex     : 0 0 auto;
+    }
+}
+
+.folder-name {
+    color      : var(--glas-white-2);
+    font-weight: 500;
+}
+
+.create-actions {
+    margin-top: 1.75rem;
 }
 
 // `.glass-btn` itself comes from the shared buttons.scss.

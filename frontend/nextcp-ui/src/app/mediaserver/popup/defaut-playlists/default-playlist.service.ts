@@ -19,11 +19,12 @@ export class DefaultPlaylistService {
   ): MatDialogRef<any, any> {
     this.dialogRef = this.dialog.open(AddPlaylistComponent, {
       hasBackdrop: false,
-      height: '500px',
-      width: '700px',
+      // Size is set by the component, which fits the dialog to the active mode.
+      maxWidth: '92vw',
+      maxHeight: '90vh',
       // Transparent, shadow-less wrapper — the component's glass panel is the
       // whole surface (see app-styles.scss).
-      panelClass: ['popup-glass'],
+      panelClass: ['popup-glass', 'popup-morph'],
       data: { item: item, container: folder },
     });
 
@@ -36,9 +37,9 @@ export class DefaultPlaylistService {
   ): MatDialogRef<any, any> {
     this.dialogRef = this.dialog.open(AddPlaylistComponent, {
       hasBackdrop: true,
-      height: '500px',
-      width: '700px',
-      panelClass: ['popup-glass'],
+      maxWidth: '92vw',
+      maxHeight: '90vh',
+      panelClass: ['popup-glass', 'popup-morph'],
       data: { item: item, container: folder },
     });
 

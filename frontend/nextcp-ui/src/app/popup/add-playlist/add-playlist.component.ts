@@ -43,6 +43,11 @@ export enum PlaylistMode {
   styleUrl: './add-playlist.component.scss',
 })
 export class AddPlaylistComponent {
+  /** One width for every mode — only the height follows the content. */
+  private static readonly DIALOG_WIDTH = 560;
+  private static readonly LIST_HEIGHT = 560;
+  private static readonly CREATE_HEIGHT = 284;
+
   serverPlaylistService = inject(ServerPlaylistService);
   private contentDirectoryService = inject(ContentDirectoryService);
   private dtoGeneratorService = inject(DtoGeneratorService);
@@ -110,11 +115,12 @@ export class AddPlaylistComponent {
     const dtoGeneratorService = this.dtoGeneratorService;
 
     this.addToContainer = data.container;
+    this.anchorDialog();
     if (data.item != undefined && data.item.objectID.length > 0) {
-      this.playlistMode.set(PlaylistMode.Add);
       this.musicItemToAdd.set(data.item);
+      this.setMode(PlaylistMode.Add);
     } else {
-      this.playlistMode.set(PlaylistMode.Create);
+      this.setMode(PlaylistMode.Create);
     }
     let sr = dtoGeneratorService.generateEmptySearchRequestDto();
     sr.searchRequest = '';
@@ -216,15 +222,55 @@ export class AddPlaylistComponent {
   }
 
   addPlaylistClick(): void {
-    this.playlistMode.set(PlaylistMode.Add);
+    this.setMode(PlaylistMode.Add);
   }
 
   newPlaylistClick(): void {
-    this.playlistMode.set(PlaylistMode.Create);
+    this.setMode(PlaylistMode.Create);
   }
 
   deletePlaylistClick(): void {
-    this.playlistMode.set(PlaylistMode.Delete);
+    this.setMode(PlaylistMode.Delete);
+  }
+
+  private setMode(mode: PlaylistMode): void {
+    this.playlistMode.set(mode);
+    this.applyDialogSize(mode);
+  }
+
+  /**
+   * The three modes hold very different amounts of content: browsing playlists
+   * needs a tall panel with room to scroll, naming a new one needs a small
+   * form. So the dialog follows the mode — but only on one axis. The width
+   * stays put and the top edge is pinned (see anchorDialog), so switching tabs
+   * grows or shrinks the panel downwards instead of resizing it in every
+   * direction at once.
+   *
+   * Heights are explicit pixels rather than `auto` on purpose: CSS cannot
+   * animate to or from `auto`, and the create form is a fixed set of
+   * single-line rows, so its height is known. If it ever outgrows the box the
+   * body scrolls.
+   */
+  private applyDialogSize(mode: PlaylistMode): void {
+    this.dialogRef.updateSize(
+      `${AddPlaylistComponent.DIALOG_WIDTH}px`,
+      mode === PlaylistMode.Create
+        ? `${AddPlaylistComponent.CREATE_HEIGHT}px`
+        : `${AddPlaylistComponent.LIST_HEIGHT}px`,
+    );
+  }
+
+  /**
+   * Pins the top edge where the tall variant would be centred, so the tab bar
+   * stays exactly where it is while the panel below it changes height.
+   */
+  private anchorDialog(): void {
+    const tall = Math.min(
+      AddPlaylistComponent.LIST_HEIGHT,
+      window.innerHeight * 0.9,
+    );
+    const top = Math.max(16, Math.round((window.innerHeight - tall) / 2));
+    this.dialogRef.updatePosition({ top: `${top}px` });
   }
 
   isPlaylistMode(mode: PlaylistMode): boolean {
@@ -237,6 +283,13 @@ export class AddPlaylistComponent {
 
   addDisabled(): boolean {
     return this.newPlaylistName().length == 0;
+  }
+
+  /** Enter in the name field creates the playlist, unless the name is empty. */
+  createOnEnter(): void {
+    if (!this.addDisabled()) {
+      this.createPlaylistClicked();
+    }
   }
 
   createPlaylistClicked(): void {

@@ -65,19 +65,23 @@
         } @else if (isPlaylistMode(PlaylistModeEnum.Create)) {
         <!-- create Playlist -->
         <div class="create-pane flex flex-col">
-            <div class="create-label">Playlist will be created in folder</div>
-            <div class="create-folder">{{addToContainer.title}}</div>
+            <label class="field-label" for="newPlaylistName">Playlist name</label>
+            <input id="newPlaylistName" [(ngModel)]="newPlaylistName" type="text"
+                class="glass-input create-input" placeholder="e.g. Late night listening"
+                (keyup.enter)="createOnEnter()" cdkFocusInitial/>
 
-            <input [(ngModel)]="newPlaylistName" type="text" class="glass-input create-input" placeholder="playlist name"/>
+            <div class="field-hint flex items-center gap-2">
+                <span class="material-symbols-outlined thin">folder</span>
+                <span class="truncate">Saved in <span class="folder-name">{{addToContainer.title}}</span></span>
+            </div>
 
-            <div class="flex gap-3 mt-8 justify-end">
+            <div class="create-actions flex gap-3 justify-end">
                 <button type="button" class="glass-btn" (click)="cancelClicked()">
-                    <span class="material-symbols-outlined thin">close</span>
                     <span>cancel</span>
                 </button>
                 <button type="button" class="glass-btn primary" (click)="createPlaylistClicked()" [disabled]="addDisabled()">
                     <span class="material-symbols-outlined thin">note_add</span>
-                    <span>create</span>
+                    <span>create playlist</span>
                 </button>
             </div>
         </div>

@@ -385,6 +385,21 @@ input {
     }
 }
 
+// Dialogs whose height follows their content (playlist management, where each
+// mode holds a different amount). Animating the change turns a jarring jump
+// into the panel growing; only the height moves, because these dialogs keep one
+// width across modes and pin their top edge.
+.popup-morph {
+    transition : height 220ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    will-change: height;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .popup-morph {
+        transition: none;
+    }
+}
+
 // Narrow popups (the volume column): `.popup` above pins the dialog to a
 // minimum/maximum width, which would stretch a 74px-wide popup. Released here
 // via panelClass so the pane keeps exactly the size PopupService gives it.
