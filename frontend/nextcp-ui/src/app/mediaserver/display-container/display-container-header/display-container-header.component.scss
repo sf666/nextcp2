@@ -12,7 +12,10 @@
 #outer {
     --h-max  : 310px;
     --h-min  : 104px;
-    --ind-max: 120px;
+    // Cover size (and the content band beside it) is the header height minus
+    // this indent. Kept small enough that the band has room for the metadata
+    // plus the action row, with air in between.
+    --ind-max: 100px;
     --ind-min: 16px;
 
     --top-header-Height         : calc(var(--h-max) - (var(--h-max) - var(--h-min)) * var(--collapse, 0));
@@ -135,11 +138,34 @@
 }
 
 // area right to the image
+// The content band next to the cover, exactly as tall as the cover. Stacked:
+// the info block on top, the action + tool row at the bottom edge — so that row
+// shares a line with the bottom of the cover.
 .right-section {
-    min-height   : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
-    max-height   : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
+    flex-direction: column;
+    flex-wrap     : nowrap;
+    min-height    : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
+    max-height    : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
+    min-width     : 0;
+    padding-right : 2rem;
+}
+
+.info-wrap {
+    margin-bottom: 1rem;
     min-width    : 0;
-    padding-right: 2rem;
+}
+
+// Pushed to the band's bottom edge by the auto margin, so the air between the
+// metadata and this row is whatever the header has left over.
+.header-bottom-row {
+    margin-top: auto;
+    min-width : 0;
+    // Never wraps. A second line would hand the tool row the full width back,
+    // and the container queries would answer by bringing dropped tools BACK as
+    // the window gets narrower — the filter field reappearing out of nowhere.
+    // Narrowing must only ever simplify, so the row shrinks and drops tools by
+    // priority instead (see the container queries below).
+    flex-wrap : nowrap;
 }
 
 .plainText {
@@ -218,66 +244,119 @@
 
 // Buttons
 
-// Button group — its vertical centre sits exactly on the hero's bottom edge, so
-// the buttons straddle it "half-out" regardless of their height. It rides up as
-// the header collapses because top tracks the (shrinking) header height.
+// The action group belongs to the block it acts on, so it sits in the content
+// band with the metadata rather than straddling the header's bottom edge —
+// which was a floating-action-button idiom, and a glass toolbar is not a FAB.
 .button-row {
-    position  : absolute;
-    top       : var(--top-header-Height);
-    bottom    : auto;
-    left      : 32px;
-    transform : translateY(-50%);
-    display   : flex;
-    max-width : 400px;
-    margin-top: 0;
+    display     : flex;
+    flex        : 0 0 auto;
+    max-width   : 400px;
     // Sit above the info column (#ID_SCROLL_TO_ELEMENT_STEP_IN is a flex item
     // with z-index:1, so it would otherwise capture clicks on the buttons once
     // they move over it in the collapsed state).
     z-index   : 5;
 }
 
-.button-row .mat-mdc-button-base {
-    margin-left : 8px;
-    margin-right: 8px;
+// Short viewports run a 210px header. Its band cannot hold the metadata plus a
+// full-height action row, so the capsules and the block's bottom margin give way
+// rather than the layout.
+@media (max-height: 800px) {
+    .info-wrap {
+        margin-bottom: 0;
+    }
+
+    .caps-action .caps-cell {
+        width : 52px;
+        height: 42px;
+    }
+
+    .caps-tools .caps-cell {
+        width : 42px;
+        height: 36px;
+    }
 }
 
 .button-flex-container {
+    display    : flex;
+    align-items: center;
+}
+
+// Two frosted capsules: the two actions (play, shuffle) in one, the two tools
+// (view, options) in the other. Neither carries a fill — the accent stays
+// reserved for hover, as everywhere else in the app. What separates actions from
+// tools is size and weight instead: the action capsule is taller and its glyphs
+// are larger and brighter.
+.action-caps {
+    display        : inline-flex;
+    align-items    : stretch;
+    border-radius  : 999px;
+    overflow       : hidden;
+    background     : rgba(14, 14, 19, 0.55);
+    backdrop-filter: var(--chrome-blur);
+    border         : 1px solid var(--chrome-hair);
+    box-shadow     : 0 10px 30px rgba(0, 0, 0, 0.45),
+                     inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+// The gap between the groups has to beat the hairline seam inside a capsule,
+// otherwise the grouping does not read.
+.action-caps + .action-caps {
+    margin-left: 1.1rem;
+}
+
+.caps-cell {
     display        : flex;
-    justify-content: space-between;
     align-items    : center;
-}
-
-.button-container {
-    display        : flex;
     justify-content: center;
-    width          : 60px;
-}
+    border         : none;
+    background     : transparent;
+    cursor         : pointer;
+    transition     : background-color 0.18s ease, color 0.18s ease;
 
-.mdc-fab {
-    &.liked {
-        background-color: rgb(248, 91, 167);
+    & + & {
+        border-left: 1px solid var(--chrome-hair);
     }
-
-    &.disliked {
-        background-color: rgb(66, 66, 66);
-    }
-}
-
-.btn-play-shuffle {
-    background-color: rgb(0, 160, 160);
 
     &:hover {
-        background-color: rgb(0, 190, 190);
+        color           : var(--primary-color);
+        background-color: rgba(255, 255, 255, 0.07);
+    }
+
+    &:focus-visible {
+        outline       : 2px solid var(--primary-color);
+        outline-offset: -2px;
     }
 }
 
-.btn-play {
-    background-color: rgb(0, 112, 239);
-    width           : 48px;
-    height          : 48px;
+.caps-action {
+    .caps-cell {
+        width : 58px;
+        height: 48px;
+        color : var(--glas-white-2);
 
-    &:hover {
-        background-color: rgb(0, 172, 225);
+        .material-symbols-sharp {
+            font-size: 24px;
+        }
+    }
+}
+
+.caps-tools {
+    align-self: center;
+
+    .caps-cell {
+        width : 46px;
+        height: 40px;
+        color : var(--glas-white-5);
+
+        .material-symbols-sharp {
+            font-size: 20px;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .caps-cell {
+        transition: none;
     }
 }
 
@@ -574,13 +653,22 @@
 .header-tools {
     container-type: inline-size;
     container-name: tools;
-    // Two jobs. Size containment drops the content's contribution to the flex
-    // base size, so without a basis the row collapses. And the parent
-    // (.right-section) wraps: asking for the full width up front makes the row
-    // move to its own line BEFORE it gets squeezed, instead of shrinking until
-    // a tool drops and then regaining the space on the next line — which made
-    // tools vanish and reappear as the window narrowed.
-    flex-basis: 626px;
+    // Size containment drops the content's contribution to the flex base size,
+    // so the row needs explicit numbers. It starts at its floor and grows into
+    // whatever width is free, up to the 626px at which every tool is shown —
+    // that way narrowing the window shrinks the row (and drops tools by
+    // priority, see the container queries below) instead of making it jump to a
+    // second line and back.
+    flex       : 1 1 44px;
+    max-width  : 626px;
+    // The floor is one icon button — the last tool standing. Size containment
+    // puts the intrinsic minimum at 0, so without this the row would shrink past
+    // its own children and they would spill over the action capsules.
+    min-width  : 44px;
+    // Free width goes to the left of the tools, so they stay on the right edge
+    // whether or not the header has an action group. On overflow the auto margin
+    // collapses and the row spills to the right, away from the cover.
+    margin-left: auto;
 }
 
 @container tools (min-width: 456px) {
@@ -616,6 +704,16 @@
 
 @container tools (max-width: 271px) {
     .tool-filter {
+        display: none;
+    }
+}
+
+// Last link in the priority chain. Once the filter is gone the row can still run
+// out of width — now that it shares its line with the action capsules, "rating +
+// options always fit" no longer holds. The rating gives way last, leaving the
+// icon buttons, so the row never has to overflow or wrap.
+@container tools (max-width: 139px) {
+    .tool-rating {
         display: none;
     }
 }
@@ -732,14 +830,33 @@
         display: none;
     }
 
+    // The compact bar is only 88px of band — not enough to stack anything. Back
+    // to a single row: title on the left, tools on the right.
+    .right-section {
+        flex-direction: row;
+        align-items   : center;
+    }
+
+    .info-wrap {
+        margin-bottom: 0;
+    }
+
+    .header-bottom-row {
+        margin-top: 0;
+        flex      : 1 1 auto;
+        align-items: center;
+    }
+
     // Re-anchor the action buttons to the vertical centre on the right edge
-    // so they stay reachable while browsing.
+    // so they stay reachable while browsing. Out of the flow here, because the
+    // collapsed band has no room for them next to the tools.
     .button-row {
-        top      : 50%;
-        bottom   : auto;
-        left     : auto;
-        right    : 24px;
-        transform: translateY(-50%);
+        position  : absolute;
+        top       : 50%;
+        bottom    : auto;
+        left      : auto;
+        right     : 24px;
+        transform : translateY(-50%);
     }
 
     // Reserve room on the right so the title never slides under the buttons.

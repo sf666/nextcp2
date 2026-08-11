@@ -15,9 +15,7 @@ import {
   HostListener,
 } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
 import { ContentDirectoryService } from 'src/app/service/content-directory.service';
 import { MusicItemDto } from 'src/app/service/dto';
@@ -36,13 +34,9 @@ import { DisplayHeaderOptionsComponent } from '../../popup/display-header-option
   selector: 'display-container-header',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    MatIconModule,
-    MatButtonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-  ],
+  // No Material components left in the template — the header buttons, filter
+  // dropdowns and inputs are all plain elements styled in the component's SCSS.
+  imports: [FormsModule, ReactiveFormsModule, MatDialogModule],
   templateUrl: './display-container-header.component.html',
   styleUrl: './display-container-header.component.scss',
 })

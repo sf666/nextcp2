@@ -3,33 +3,6 @@
 <!-- ############################################################## -->
 <div id="outer" class="flex relative w-full grow shrink justify-items-center" [class.condensed]="condensed()" [class.has-actions]="hasSongs()">
   <div class="bg-img-header w-full" id="header-background"></div>
-  <!-- Header Button group -->
-  @if(hasSongs()) {
-  <div id="headButtonRow" class="button-row ">
-    <div class="button-flex-container">
-      <div class="button-container" (click)="playContainer()">
-        <button class="btn-play" mat-mini-fab>
-          <mat-icon class="material-symbols-sharp filled">play_arrow</mat-icon>
-        </button>
-      </div>
-      <div class="button-container" (click)="shuffleContainer()">
-        <button class="btn-play-shuffle" mat-mini-fab>
-          <mat-icon class="material-symbols-sharp">shuffle</mat-icon>
-        </button>
-      </div>
-      <div class="button-container" (click)="toggleListView()">
-        <button color="" mat-mini-fab>
-          <mat-icon class="material-symbols-sharp">dashboard_customize</mat-icon>
-        </button>
-      </div>
-      <div class="button-container" (click)="openOptionsDialog($event)">
-        <button color="" mat-mini-fab>
-          <mat-icon class="material-symbols-sharp">more_vert</mat-icon>
-        </button>
-      </div>
-    </div>
-  </div>
-  }
 
   <!-- Background image -->
   <div id="middle_wrapper" class="flex items-center grow shrink">
@@ -43,8 +16,8 @@
       }
     </div>
     <div class="z-1 flex flex-col grow shrink" id="ID_SCROLL_TO_ELEMENT_STEP_IN" tabindex="-1">
-      <div class="flex right-section flex-wrap">
-        <div class="flex mb-4 me-4">
+      <div class="flex right-section">
+        <div class="flex me-4 info-wrap">
           @if (hasSongs()) {
           <div id="hasSongs">
             <div class="flex flex-col info-block">
@@ -96,12 +69,42 @@
             }
           }
         </div>
-        <!-- Filter / sort tools -->
+        <!--
+          Actions and tools share one row at the bottom of the header's content
+          band, so both line up with the bottom edge of the cover. Nothing here
+          wraps: the tools drop out by priority instead (see the container
+          queries in the SCSS), because a second line has nowhere to go.
+        -->
+        <div class="header-bottom-row flex items-end gap-3">
+        @if (hasSongs()) {
+          <div id="headButtonRow" class="button-row">
+            <div class="button-flex-container">
+              <!-- Play and shuffle are equals, so they share one capsule. -->
+              <div class="action-caps caps-action">
+                <button type="button" class="caps-cell" (click)="playContainer()" title="Play" aria-label="Play">
+                  <span class="material-symbols-sharp filled">play_arrow</span>
+                </button>
+                <button type="button" class="caps-cell" (click)="shuffleContainer()" title="Shuffle"
+                  aria-label="Shuffle">
+                  <span class="material-symbols-sharp">shuffle</span>
+                </button>
+              </div>
+              <!-- Tools, held apart from the actions. -->
+              <div class="action-caps caps-tools">
+                <button type="button" class="caps-cell" (click)="toggleListView()" title="Toggle view"
+                  aria-label="Toggle view">
+                  <span class="material-symbols-sharp">dashboard_customize</span>
+                </button>
+                <button type="button" class="caps-cell" (click)="openOptionsDialog($event)" title="More"
+                  aria-label="More options">
+                  <span class="material-symbols-sharp">more_vert</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        }
         @if (currentContainer.id?.length ?? 0 > 0) {
-          <!-- Never wraps: tools drop out by priority instead (see the container
-               queries in the SCSS). Wrapping would pre-empt the shrinking that
-               keeps the filter usable. -->
-          <div class="header-tools flex items-center justify-end gap-3 grow self-end">
+          <div class="header-tools flex items-center justify-end gap-3">
             @if (hasAlbums()) {
               <div class="filter-field tool-sort"
                 [class.active]="sortCriteria() && sortCriteria() !== 'NONE'">
@@ -212,6 +215,7 @@
             }
           </div>
         }
+        </div>
       </div>
       <div class="flex">
         <div class="middle-spacer"></div>
