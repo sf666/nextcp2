@@ -13,9 +13,7 @@ import {
   signal,
   inject,
 } from '@angular/core';
-import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { FormsModule } from '@angular/forms';
@@ -32,7 +30,7 @@ export enum PlaylistMode {
   selector: 'app-playlist-management',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatButton, MatIconModule, FormsModule, PlaylistContainerComponent],
+  imports: [FormsModule, PlaylistContainerComponent],
   templateUrl: './add-playlist.component.html',
   styleUrl: './add-playlist.component.scss',
 })
@@ -190,14 +188,6 @@ export class AddPlaylistComponent {
 
   deletePlaylistClick(): void {
     this.playlistMode.set(PlaylistMode.Delete);
-  }
-
-  playlistActiveClass(mode: PlaylistMode): string {
-    if (mode.valueOf() === this.playlistMode().valueOf()) {
-      return 'active';
-    } else {
-      return 'inactive';
-    }
   }
 
   isPlaylistMode(mode: PlaylistMode): boolean {

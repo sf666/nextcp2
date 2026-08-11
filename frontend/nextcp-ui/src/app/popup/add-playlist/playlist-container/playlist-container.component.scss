@@ -1,41 +1,105 @@
 @use "buttons";
-@use "./app-popup";
 
 .playlist-list {
     display       : flex;
     flex-direction: column;
+    gap           : 2px;
+}
+
+// One playlist. Hovering lights the row from the accent edge — same gesture as
+// the menu rows in the song options popup.
+.playlist-row {
+    padding      : 0.35rem 0.6rem;
+    border-radius: 12px;
+    transition   : background 0.18s ease, box-shadow 0.18s ease;
+
+    &:hover {
+        background: linear-gradient(90deg,
+                    var(--primary-color-reduced-2) 0%,
+                    rgba(255, 255, 255, 0.05) 45%,
+                    transparent 100%);
+        box-shadow: inset 3px 0 0 var(--primary-color);
+
+        .playlist-name {
+            color: var(--snow-white);
+        }
+
+        .playlist-img {
+            border-color: var(--primary-color-reduced);
+        }
+    }
 }
 
 .playlist-item {
-    display: flex;
+    min-width: 0;
+    flex     : 1 1 auto;
+    cursor   : pointer;
 }
 
 .playlist-img {
+    flex            : 0 0 auto;
     object-fit      : cover;
     background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 8px;
+    border-radius   : 8px;
+    border          : 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow      : 0 4px 14px rgba(0, 0, 0, 0.45);
+    transition      : border-color 0.18s ease;
 
-    width        : 4rem;
-    height       : 4rem;
-    margin-bottom: 0.5rem;
-    margin-top   : 0.5rem;
+    width : 3.25rem;
+    height: 3.25rem;
 }
-
 
 .playlist-item-text {
-    display        : flex;
-    flex-direction : column;
+    display       : flex;
+    flex-direction: column;
     justify-content: center;
-
-    margin-left  : 1rem;
-    margin-top   : 8px;
-    margin-bottom: 12px;
+    min-width     : 0;
+    margin-left   : 1rem;
 }
 
+.playlist-name {
+    font-size     : 0.9rem;
+    font-weight   : 500;
+    letter-spacing: 0.01rem;
+    color         : var(--glas-white-2);
+    white-space   : nowrap;
+    overflow      : hidden;
+    text-overflow : ellipsis;
+    transition    : color 0.18s ease;
+}
 
 .fineText {
+    margin-top : 2px;
     color      : var(--glas-white-5);
     font-weight: 300;
-    font-size  : smaller;
+    font-size  : 0.72rem;
 }
 
+// The row action stays quiet until the row is hovered or focused, so a long
+// list reads as a list instead of as a wall of buttons.
+.row-action {
+    flex      : 0 0 auto;
+    opacity   : 0;
+    transition: opacity 0.18s ease;
+}
+
+.playlist-row:hover .row-action,
+.row-action:focus-within {
+    opacity: 1;
+}
+
+@media (hover: none) {
+    .row-action {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .playlist-row,
+    .playlist-name,
+    .playlist-img,
+    .row-action {
+        transition: none;
+    }
+}

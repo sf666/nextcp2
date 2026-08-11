@@ -1,104 +1,272 @@
 @use "buttons";
 
-.popupHeader {
-    display      : flex;
-    align-self   : center;
-    color        : aqua;
-    font-size    : larger;
-    border-bottom: #999999;
-    margin       : 1rem;
-}
+// The transparent, rounded and shadow-less dialog wrapper is styled globally
+// via the `popup-glass` panelClass (see app-styles.scss), so no ::ng-deep is
+// needed here.
 
+//
+// Living glass surface
+// =========================================================================
+// Same material as the song options popup and the app chrome: translucent
+// enough for the album-art wash to come through, tinted by the artwork's
+// dominant colour, with a lit top edge that makes it read as glass.
 .popupFrame {
-    font-weight   : 600;
+    position       : relative;
+    isolation      : isolate;
+    width          : 100%;
+    height         : 100%;
+    overflow       : hidden;
+    border-radius  : 16px;
+    background     : rgba(14, 14, 19, 0.62);
+    backdrop-filter: var(--chrome-blur);
+    border         : 1px solid var(--chrome-hair);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55),
+                0 2px 10px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12);
+
+    font-weight   : 400;
     font-size     : 1rem;
     text-align    : left;
-    letter-spacing: 0.05rem;
-    background-color: rgba(30, 30, 30, 0.98);
-    overflow-y: scroll;
+    letter-spacing: 0.01rem;
+
+    // Ambient tint from --ambient-color (maintained by BackgroundImageService).
+    &::before {
+        content       : '';
+        position      : absolute;
+        inset         : 0;
+        pointer-events: none;
+        z-index       : 0;
+        border-radius : inherit;
+        background:
+            radial-gradient(120% 70% at 0% 0%,
+                color-mix(in srgb, var(--ambient-color) 45%, transparent) 0%,
+                transparent 60%),
+            linear-gradient(180deg,
+                rgba(255, 255, 255, 0.05) 0%,
+                transparent 30%);
+    }
+
+    >* {
+        position: relative;
+        z-index : 1;
+    }
 }
 
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .popupFrame {
+        background: rgba(20, 20, 26, 0.97);
+    }
+}
+
+//
+// Header — segmented tabs instead of three loose links
+// =========================================================================
+.dialog-header {
+    flex         : 0 0 auto;
+    border-bottom: 1px solid var(--chrome-hair);
+}
+
+.tab-bar {
+    padding      : 3px;
+    border-radius: 12px;
+    background   : rgba(255, 255, 255, 0.04);
+    border       : 1px solid var(--chrome-hair);
+}
+
+.tab {
+    padding       : 0.4rem 0.9rem;
+    border        : none;
+    border-radius : 9px;
+    background    : transparent;
+    color         : var(--glas-white-5);
+    font-size     : 0.8rem;
+    font-weight   : 500;
+    letter-spacing: 0.03rem;
+    white-space   : nowrap;
+    cursor        : pointer;
+    transition    : background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+
+    &:hover {
+        color: var(--glas-white-1);
+    }
+
+    // The selected mode is the one place cyan is spent in this header.
+    &.active {
+        color     : var(--primary-color);
+        background: var(--primary-color-reduced-2);
+        box-shadow: inset 0 0 0 1px var(--primary-color-reduced),
+                    0 2px 10px rgba(0, 0, 0, 0.35);
+    }
+
+    &:focus-visible {
+        outline       : 2px solid var(--primary-color);
+        outline-offset: 1px;
+    }
+}
+
+.icon-button {
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    flex           : 0 0 auto;
+    width          : 34px;
+    height         : 34px;
+    border-radius  : 50%;
+    border         : 1px solid var(--chrome-hair);
+    background     : rgba(255, 255, 255, 0.05);
+    color          : var(--glas-white-4);
+    cursor         : pointer;
+    transition     : background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+
+    &:hover {
+        background   : var(--primary-color-reduced-2);
+        border-color : var(--primary-color-reduced);
+        color        : var(--primary-color);
+    }
+
+    &:focus-visible {
+        outline       : 2px solid var(--primary-color);
+        outline-offset: 1px;
+    }
+}
+
+//
+// Body
+// =========================================================================
 .popupBody {
-    display        : flex;
-    flex-direction : column;
-    justify-content: center;
-    margin         : 1rem;
-    padding-left   : 1.5rem;
-    padding-right  : 1.5rem;
-    overflow-x     : hidden;
-    overflow-y     : auto;
+    flex      : 1 1 auto;
+    min-height: 0;
+    padding   : 1.25rem 1.5rem 1.5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    // Slim scrollbar so the pane keeps its calm edge.
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 999px;
+        background   : rgba(255, 255, 255, 0.16);
+    }
 }
 
-.popupElement {
-    margin: 8px;
-}
-
-.popupDivider {
-    font-size    : 1px;
-    border-bottom: 1px solid var(--grey-5);
-}
-
-.playlist-list {
-    display       : flex;
-    flex-direction: column;
-}
-
-.playlist-item {
-    display: flex;
-}
-
-.playlist-img {
-    object-fit      : cover;
-    background-color: rgba(0, 0, 0, 0.5);
-
-    width        : 4rem;
-    height       : 4rem;
-    margin-bottom: 0.5rem;
-    margin-top   : 0.5rem;
-}
-
-.playlist-item-text {
-    display        : flex;
-    flex-direction : column;
-    justify-content: space-between;
-
-    margin-left  : 1rem;
-    margin-top   : 8px;
-    margin-bottom: 12px;
-}
-
-.fineText {
-    color      : var(--glas-white-5);
-    font-weight: 300;
-    font-size  : smaller;
-}
-
+// Section label above a playlist group — matches the uppercase/hairline
+// language used by the section headings elsewhere in the app.
 .headline {
-    font-size     : 18px;
+    display       : flex;
+    align-items   : center;
+    gap           : 0.7rem;
+    margin        : 1.4rem 0 0.6rem;
+    padding-bottom: 0.4rem;
+    border-bottom : 1px solid rgba(255, 255, 255, 0.08);
+
+    font-size     : 0.68rem;
     font-weight   : 700;
-    color         : var(--glas-white-1);
-    padding-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.11em;
+    color         : var(--glas-white-4);
 }
 
-.searchInput {
-    display        : flex;
-    justify-content: center;
+.empty-hint {
+    font-size  : 0.85rem;
+    font-weight: 400;
+    color      : var(--glas-white-6);
+    padding    : 0.4rem 0 0.2rem;
 }
 
-.inactive {
-    color: var(--glas-white-3);
+//
+// Inputs
+// =========================================================================
+.search-field {
+    position: relative;
+    display : block;
+
+    .search-icon {
+        position      : absolute;
+        left          : 0.9rem;
+        top           : 50%;
+        transform     : translateY(-50%);
+        font-size     : 20px;
+        color         : var(--glas-white-6);
+        pointer-events: none;
+        transition    : color 0.18s ease;
+    }
+
+    .glass-input {
+        padding-left: 2.7rem;
+    }
+
+    &:focus-within .search-icon {
+        color: var(--primary-color);
+    }
 }
 
-.active {
-    color: cyan;
+.glass-input {
+    width          : 100%;
+    padding        : 0.75rem 1rem;
+    border-radius  : 12px;
+    border         : 1px solid var(--chrome-hair);
+    background     : rgba(255, 255, 255, 0.05);
+    color          : var(--snow-white);
+    font-size      : 0.875rem;
+    font-weight    : 400;
+    letter-spacing : 0.01rem;
+    transition     : border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+
+    &::placeholder {
+        color: var(--glas-white-6);
+    }
+
+    &:focus {
+        outline     : none;
+        background  : rgba(255, 255, 255, 0.07);
+        border-color: var(--primary-color-reduced);
+        box-shadow  : 0 0 0 3px var(--primary-color-reduced-2);
+    }
 }
 
-mat-form-field {
-    width: 100%;
-}
-
-/*
-    justify-self: center;
-    justify-items: center;
+//
+// Create pane
+// =========================================================================
+.create-pane {
+    max-width : 26rem;
+    width     : 100%;
     align-self: center;
-*/
+    margin    : auto 0;
+    padding   : 1rem 0;
+}
+
+.create-label {
+    font-size     : 0.68rem;
+    font-weight   : 700;
+    text-transform: uppercase;
+    letter-spacing: 0.11em;
+    color         : var(--glas-white-5);
+}
+
+.create-folder {
+    margin-top : 0.4rem;
+    margin-bottom: 1.75rem;
+    font-size  : 0.95rem;
+    font-weight: 600;
+    color      : var(--snow-white);
+}
+
+// `.glass-btn` itself comes from the shared buttons.scss.
+.glass-btn {
+    padding: 0.55rem 1.2rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .tab,
+    .icon-button,
+    .glass-input,
+    .search-icon {
+        transition: none;
+    }
+}

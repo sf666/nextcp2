@@ -22,6 +22,14 @@ export class SongOptionsServiceService {
       minWidth: '300px',
       width: '300px',
       hasBackdrop: true,
+      // Transparent, shadow-less dialog wrapper — the component's own glass
+      // panel is the whole surface. Without this the Material surface keeps its
+      // elevation shadow and, since the pane is taller than the menu, that
+      // shadow shows up as a dark block below the popup.
+      panelClass: ['popup-glass'],
+      // Soft frosted backdrop instead of the flat Material scrim, so the popup
+      // reads as glass floating over the app rather than over a grey sheet.
+      backdropClass: 'glass-backdrop',
       data: {
         trigger: target,
         item: item,

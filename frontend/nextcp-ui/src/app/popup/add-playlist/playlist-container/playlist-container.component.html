@@ -1,30 +1,25 @@
 <div class="playlist-list">
     @for (playlist of playlists(); track playlist.playlistId) {
-    <div class="flex justify-between">
-        <div class="playlist-item" (click)="addTo(playlist)">
+    <div class="playlist-row flex items-center justify-between gap-3">
+        <div class="playlist-item flex items-center" (click)="addTo(playlist)">
             <img src="{{playlist.albumArtUrl}}" class="playlist-img">
             <div class="playlist-item-text">
-                <div>{{playlist.playlistName}}</div>
-                <div class="fineText">
-                    @if(playlist.numberOfElements){
-                    <div class="flex">
-                        <div class="pe-2 pt-2">{{playlist.numberOfElements}}</div>
-                        <div class="pt-2"> music tracks</div>
-                    </div>
-                    }
-                </div>
+                <div class="playlist-name">{{playlist.playlistName}}</div>
+                @if(playlist.numberOfElements){
+                <div class="fineText">{{playlist.numberOfElements}} music tracks</div>
+                }
             </div>
         </div>
-        <div class="flex align-self-center me-3">
+        <div class="row-action flex align-self-center">
             @if(isPlaylistMode(PlaylistModeEnum.Add)) {
-            <button mat-stroked-button class="my-buttons light-font" (click)="addTo(playlist)">
-                <mat-icon class="material-symbols-outlined thin">playlist_add</mat-icon>
-                <span class="button button-text">add track</span>
+            <button type="button" class="glass-btn" (click)="addTo(playlist)">
+                <span class="material-symbols-outlined thin">playlist_add</span>
+                <span>add track</span>
             </button>
             } @else {
-            <button mat-stroked-button class="my-buttons light-font" (click)="deletePlaylist(playlist)">
-                <mat-icon class="material-symbols-outlined thin">delete</mat-icon>
-                <span class="button button-text">delete</span>
+            <button type="button" class="glass-btn danger" (click)="deletePlaylist(playlist)">
+                <span class="material-symbols-outlined thin">delete</span>
+                <span>delete</span>
             </button>
             }
         </div>

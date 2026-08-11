@@ -21,6 +21,9 @@ export class DefaultPlaylistService {
       hasBackdrop: false,
       height: '500px',
       width: '700px',
+      // Transparent, shadow-less wrapper — the component's glass panel is the
+      // whole surface (see app-styles.scss).
+      panelClass: ['popup-glass'],
       data: { item: item, container: folder },
     });
 
@@ -35,6 +38,8 @@ export class DefaultPlaylistService {
       hasBackdrop: true,
       height: '500px',
       width: '700px',
+      panelClass: ['popup-glass'],
+      backdropClass: 'glass-backdrop',
       data: { item: item, container: folder },
     });
 

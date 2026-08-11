@@ -1,32 +1,35 @@
-<div class="popupFrame">
-    <div class="popupHeader flex justify-between mx-4">
-        <div class="flex justify-between w-full px-4">
+<div class="popupFrame flex flex-col">
+    <div class="dialog-header flex items-center justify-between gap-4 px-5 py-3">
+        <div class="tab-bar flex items-center gap-1">
             @if(musicItemToAddExists) {
-                <div (click)="addPlaylistClick()" [class]="playlistActiveClass(PlaylistModeEnum.Add)">
+                <button type="button" class="tab" [class.active]="isPlaylistMode(PlaylistModeEnum.Add)" (click)="addPlaylistClick()">
                     add to playlist
-                </div>
+                </button>
             }
-            <div (click)="newPlaylistClick()" [class]="playlistActiveClass(PlaylistModeEnum.Create)">
+            <button type="button" class="tab" [class.active]="isPlaylistMode(PlaylistModeEnum.Create)" (click)="newPlaylistClick()">
                 create playlist
-            </div>
-            <div (click)="deletePlaylistClick()" [class]="playlistActiveClass(PlaylistModeEnum.Delete)">
+            </button>
+            <button type="button" class="tab" [class.active]="isPlaylistMode(PlaylistModeEnum.Delete)" (click)="deletePlaylistClick()">
                 delete playlist
-            </div>
+            </button>
         </div>
-        <div>
-            <span class="material-symbols-outlined thin md-light" (click)="close()">close</span>
-        </div>
+        <button type="button" class="icon-button" (click)="close()" aria-label="close">
+            <span class="material-symbols-outlined thin">close</span>
+        </button>
     </div>
-    <div class="popupDivider mt-2 mb-1">&nbsp;</div>
-    <div class="popupBody">
+
+    <div class="popupBody flex flex-col">
         @if (isPlaylistMode(PlaylistModeEnum.Add) || isPlaylistMode(PlaylistModeEnum.Delete)) {
-            <input [(ngModel)]="playlistFilter" type="text" class="font-light mb-4 self-center block w-4/5 p-4 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 bg-zinc-700/40 border-zinc-600 placeholder-zinc-400 text-white focus:ring-gray-500 focus:border-zinc-500" placeholder="search for playlist"/>
+            <div class="search-field">
+                <span class="material-symbols-outlined thin search-icon">search</span>
+                <input [(ngModel)]="playlistFilter" type="text" class="glass-input" placeholder="search for playlist"/>
+            </div>
 
             @if (getRecentPlaylistsCount() > 0) {
                 <div class="headline">
                     recently used
                 </div>
-                <playlist-container class="ml-4"
+                <playlist-container
                     [playlists]="filteredRecentPlaylists()"
                     [playlistMode]="playlistMode()"
                     (addClicked)="addTo($event)"
@@ -38,21 +41,21 @@
                 my playlists
             </div>
             @if (getServerPlaylistsCount() > 0) {
-                <playlist-container class="ml-4"
+                <playlist-container
                     [playlists]="filteredServerPlaylists()"
                     [playlistMode]="playlistMode()"
                     (addClicked)="addTo($event)"
                     (deleteClicked)="deletePlaylist($event)">
                 </playlist-container>
             } @else {
-                <div>no playlists found on server</div>                
+                <div class="empty-hint">no playlists found on server</div>
             }
-            <div class="mt-4 headline">
+
+            <div class="headline">
                 other playlists
             </div>
-
             @if (getOtherPlaylistsCount() > 0) {
-                <playlist-container class="ml-4"
+                <playlist-container
                     [playlists]="filteredOtherPlaylists()"
                     [playlistMode]="playlistMode()"
                     (addClicked)="addTo($event)"
@@ -61,21 +64,22 @@
             }
         } @else if (isPlaylistMode(PlaylistModeEnum.Create)) {
         <!-- create Playlist -->
-        <div class="flex flex-col mb-12 mt-8">
-            <div class="text-sm text-zinc-500 ">Playlist will be created in folder</div>
-            <div class="text-sm text-zinc-300 mt-4">{{addToContainer.title}}</div>
-        </div>
+        <div class="create-pane flex flex-col">
+            <div class="create-label">Playlist will be created in folder</div>
+            <div class="create-folder">{{addToContainer.title}}</div>
 
-        <input [(ngModel)]="newPlaylistName" type="text" class="font-light self-center block w-4/5 p-4 text-sm text-gray-900 border border-zinc-300 rounded-lg bg-zinc-300/10 bg-zinc-700/40 border-zinc-600 placeholder-zinc-400 text-white focus:ring-gray-500 focus:border-zinc-500" placeholder="playlist name"/>
-        <div class="flex mt-8 mb-4 mx-4 self-center justify-around">
-            <button mat-stroked-button class="mv-4 my-buttons m-4" (click)="cancelClicked()">
-                <mat-icon class="material-symbols-outlined thin">close</mat-icon>
-                <span class="button button-text">cancel</span>
-            </button>
-            <button mat-stroked-button class="mv-4 my-buttons m-4" (click)="createPlaylistClicked()" [disabled]="addDisabled()" >
-                <mat-icon class="material-symbols-outlined thin">note_add</mat-icon>
-                <span class="button button-text">create</span>
-            </button>
+            <input [(ngModel)]="newPlaylistName" type="text" class="glass-input create-input" placeholder="playlist name"/>
+
+            <div class="flex gap-3 mt-8 justify-end">
+                <button type="button" class="glass-btn" (click)="cancelClicked()">
+                    <span class="material-symbols-outlined thin">close</span>
+                    <span>cancel</span>
+                </button>
+                <button type="button" class="glass-btn primary" (click)="createPlaylistClicked()" [disabled]="addDisabled()">
+                    <span class="material-symbols-outlined thin">note_add</span>
+                    <span>create</span>
+                </button>
+            </div>
         </div>
         }
     </div>

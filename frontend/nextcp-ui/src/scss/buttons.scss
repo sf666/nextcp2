@@ -1,3 +1,67 @@
+// Glass button matching the frosted popups (song options, playlist management).
+// Neutral by default; `primary` carries the cyan accent for the confirming
+// action, `danger` warns without shouting.
+.glass-btn {
+    display        : inline-flex;
+    align-items    : center;
+    justify-content: center;
+    gap            : 0.5rem;
+    padding        : 0.5rem 1rem;
+    border-radius  : 12px;
+    border         : 1px solid var(--chrome-hair);
+    background     : rgba(255, 255, 255, 0.06);
+    color          : var(--glas-white-2);
+    font-size      : 0.82rem;
+    font-weight    : 500;
+    letter-spacing : 0.04em;
+    white-space    : nowrap;
+    cursor         : pointer;
+    transition     : background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+
+    .material-symbols-outlined {
+        font-size: 20px;
+    }
+
+    &:hover:not(:disabled) {
+        background: rgba(255, 255, 255, 0.1);
+        color     : var(--snow-white);
+    }
+
+    &.primary {
+        color       : var(--primary-color);
+        background  : var(--primary-color-reduced-2);
+        border-color: var(--primary-color-reduced);
+
+        &:hover:not(:disabled) {
+            background: color-mix(in srgb, var(--primary-color) 22%, transparent);
+        }
+    }
+
+    &.danger {
+        &:hover:not(:disabled) {
+            color       : var(--color-orange-reduced-3);
+            border-color: var(--color-orange-reduced-7);
+            background  : color-mix(in srgb, var(--color-orange-reduced-3) 18%, transparent);
+        }
+    }
+
+    &:disabled {
+        opacity: 0.35;
+        cursor : default;
+    }
+
+    &:focus-visible {
+        outline       : 2px solid var(--primary-color);
+        outline-offset: 2px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .glass-btn {
+        transition: none;
+    }
+}
+
 // Global buttons definitios
 .my-buttons {
     color           : var(--glas-white-3);
