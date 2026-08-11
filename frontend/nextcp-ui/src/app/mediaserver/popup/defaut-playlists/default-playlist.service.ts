@@ -39,7 +39,6 @@ export class DefaultPlaylistService {
       height: '500px',
       width: '700px',
       panelClass: ['popup-glass'],
-      backdropClass: 'glass-backdrop',
       data: { item: item, container: folder },
     });
 
@@ -68,6 +67,7 @@ export class DefaultPlaylistService {
     }
     this.dialogRef = this.dialog.open(DefautPlaylistsComponent, {
       hasBackdrop: false,
+      panelClass: ['popup', 'popup-glass'],
       data: { trigger: target, id: objectID, parentPanel: parent },
     });
 

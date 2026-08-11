@@ -1,10 +1,15 @@
 //
 // Attention:
 // ============
-// 
-// Material Dialog style is localted in the global app-styles.scss. It's not working in the component file!
-// class 'popup' is applied and located in app-styles.scss
 //
+// Material Dialog style is localted in the global app-styles.scss. It's not working in the component file!
+// classes 'popup' / 'popup-glass' are applied there, and the glass material of
+// the panel below comes from the shared '.glass-panel' class.
+//
+
+.panel {
+    padding-bottom: 0.5rem;
+}
 
 .dialogTitle {
     font-size     : 1rem;

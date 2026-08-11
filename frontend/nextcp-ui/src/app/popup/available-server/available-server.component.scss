@@ -1,14 +1,9 @@
-// The transparent, rounded dialog wrapper is styled globally via the
-// `popup-glass` panelClass (see app-styles.scss), so no ::ng-deep is needed here.
+// The glass material comes from the shared `.glass-panel` class and the
+// transparent, shadow-less wrapper from the `popup-glass` panelClass (both in
+// app-styles.scss), so no ::ng-deep is needed here.
 .dialog-root {
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    background: rgba(30, 30, 30, 0.98);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
     font-family: 'HK Grotesk';
 }
 

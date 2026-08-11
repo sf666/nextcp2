@@ -1,18 +1,24 @@
-<div class="flex flex-col items-center justify-between h-full m-1">
-    <div class="flex mb-2">
-        <span class="material-symbols-outlined icon-main">volume_up</span>
-    </div>
-    <div class="flex grow">
+<div class="volume-panel glass-panel flex flex-col items-center h-full">
+    <div class="readout">{{displayVolume()}}</div>
+
+    <button type="button" class="step-btn" (click)="stepUp()" aria-label="louder">
+        <span class="material-symbols-outlined">volume_up</span>
+    </button>
+
+    <div class="slider-shell">
         <input
             type="range"
-            class="volume-range-slider vertical-range"
-            [min]="minVal"
-            [max]="maxVal"
+            class="volume-range-slider"
+            [min]="0"
+            [max]="100"
             step="1"
             [formControl]="volControl"
+            (input)="onSliderInput($any($event.target).value)"
+            style="--value: {{sliderValue()}}%"
         />
     </div>
-    <div class="flex mt-2">
-        <span class="material-symbols-outlined icon-main">volume_mute</span>
-    </div>
+
+    <button type="button" class="step-btn" (click)="stepDown()" aria-label="quieter">
+        <span class="material-symbols-outlined">volume_down</span>
+    </button>
 </div>

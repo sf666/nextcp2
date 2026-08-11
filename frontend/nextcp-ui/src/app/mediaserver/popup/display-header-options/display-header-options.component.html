@@ -1,22 +1,22 @@
-<div class="dialog-root flex flex-col">
+<div class="dialog-root glass-panel flex flex-col">
   <!-- Menu items -->
   <div class="dialogItems flex flex-col py-1">
 
     @if(mediaPlayerService.mediaPlayerExists()) {
-      <div class="section-header px-4 py-2 text-xs font-semibold uppercase tracking-wider">
+      <div class="section-header px-4 py-2">
         Player actions
       </div>
 
       @if(isPlaylist()) {
         <div class="divider my-1"></div>
         <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="selectPlayerPlaylist()">
-            <span class="material-symbols-outlined text-lg opacity-70">save</span>
+            <span class="item-icon material-symbols-outlined text-lg">save</span>
             <span>Select player playlist</span>
         </button>
       }
       @if(isFolder()) {
         <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="selectPlayerFolder()">
-          <span class="material-symbols-outlined text-lg opacity-70">save</span>
+          <span class="item-icon material-symbols-outlined text-lg">save</span>
           <span>Select player folder</span>
         </button>
       }
@@ -27,11 +27,11 @@
           <div class="divider my-1"></div>
       }
 
-      <div class="section-header px-4 py-2 text-xs font-semibold uppercase tracking-wider">
+      <div class="section-header px-4 py-2">
         Sidebar actions
       </div>
       <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="selectPlayerFolderSidebar()">
-        <span class="material-symbols-outlined text-lg opacity-70">post_add</span>
+        <span class="item-icon material-symbols-outlined text-lg">post_add</span>
         <span>Set MY PLAYLISTS</span>
       </button>
     }
@@ -40,22 +40,22 @@
           <div class="divider my-1"></div>
     }
 
-    <div class="section-header px-4 py-2 text-xs font-semibold uppercase tracking-wider">
+    <div class="section-header px-4 py-2">
       General actions
     </div>
     <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="addToPlaylist()">
-      <span class="material-symbols-outlined text-lg opacity-70">playlist_add</span>
+      <span class="item-icon material-symbols-outlined text-lg">playlist_add</span>
       <span>Add to playlist</span>
     </button>
     
     <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="updateAlbumArt()">
-    <span class="material-symbols-outlined text-lg opacity-70">image</span>
+    <span class="item-icon material-symbols-outlined text-lg">image</span>
     <span>Update album art</span>
     </button>
 
     @if (deviceService.selectedMediaServerDevice().extendedApi) {
     <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="selectArtistFolder()">
-        <span class="material-symbols-outlined text-lg opacity-70">folder_shared</span>
+        <span class="item-icon material-symbols-outlined text-lg">folder_shared</span>
         <span>Set artist folder</span>
     </button>
     }

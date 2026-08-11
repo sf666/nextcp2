@@ -1,7 +1,7 @@
 <div class="playlist-list">
     @for (playlist of playlists(); track playlist.playlistId) {
     <div class="playlist-row flex items-center justify-between gap-3">
-        <div class="playlist-item flex items-center" (click)="addTo(playlist)">
+        <div class="playlist-item flex items-center" (click)="rowClicked(playlist)">
             <img src="{{playlist.albumArtUrl}}" class="playlist-img">
             <div class="playlist-item-text">
                 <div class="playlist-name">{{playlist.playlistName}}</div>

@@ -13,12 +13,20 @@ import {
   signal,
   inject,
 } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { FormsModule } from '@angular/forms';
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
 import { PlaylistContainerComponent } from './playlist-container/playlist-container.component';
+import {
+  ConfirmPopupComponent,
+  ConfirmPopupData,
+} from 'src/app/util/comp/confirm-popup/confirm-popup.component';
 
 export enum PlaylistMode {
   Add,
@@ -38,6 +46,7 @@ export class AddPlaylistComponent {
   serverPlaylistService = inject(ServerPlaylistService);
   private contentDirectoryService = inject(ContentDirectoryService);
   private dtoGeneratorService = inject(DtoGeneratorService);
+  private confirmDialog = inject(MatDialog);
   dialogRef = inject<MatDialogRef<AddPlaylistComponent>>(MatDialogRef);
 
   PlaylistModeEnum: typeof PlaylistMode = PlaylistMode;
@@ -156,7 +165,35 @@ export class AddPlaylistComponent {
     this.close();
   }
 
+  /**
+   * Deleting a playlist on the server cannot be undone, and a whole row is an
+   * easy mis-click — so ask first, naming the playlist.
+   */
   deletePlaylist(serverPlaylist: ServerPlaylistDto) {
+    const confirmData: ConfirmPopupData = {
+      title: 'Delete playlist',
+      message:
+        'This deletes the playlist on the media server. It cannot be undone.',
+      detail: serverPlaylist.playlistName,
+      confirmText: 'delete',
+      cancelText: 'cancel',
+      danger: true,
+    };
+    const dialogRef = this.confirmDialog.open(ConfirmPopupComponent, {
+      width: '420px',
+      maxWidth: '90vw',
+      panelClass: ['popup-glass'],
+      data: confirmData,
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed === true) {
+        this.doDeletePlaylist(serverPlaylist);
+      }
+    });
+  }
+
+  private doDeletePlaylist(serverPlaylist: ServerPlaylistDto) {
     this.serverPlaylistService
       .deleteObject(serverPlaylist.playlistId)
       .subscribe({

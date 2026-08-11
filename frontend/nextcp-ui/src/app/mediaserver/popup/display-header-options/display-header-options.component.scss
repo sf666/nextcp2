@@ -1,53 +1,74 @@
 
-// Override Material Dialog container to match rounded corners
-::ng-deep .mat-mdc-dialog-container {
-    border-radius: 16px !important;
-    overflow: hidden;
-    background: transparent !important;
-    box-shadow: none !important;
-}
-
-::ng-deep .mat-mdc-dialog-surface {
-    border-radius: 16px !important;
-    overflow: hidden;
-    background: transparent !important;
-}
-
+// The glass material comes from the shared `.glass-panel` class and the
+// transparent, shadow-less wrapper from the `popup-glass` panelClass (both in
+// app-styles.scss), so no ::ng-deep is needed here.
 .dialog-root {
     width: 320px;
     max-width: 100%;
-    overflow: hidden;
-    background: rgba(30, 30, 30, 0.98);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
 }
 
 .divider {
     height: 1px;
-    background: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.12) 18%,
+                rgba(255, 255, 255, 0.12) 82%,
+                transparent 100%);
 }
 
 .section-header {
-    color: rgba(255, 255, 255, 0.5);
-    letter-spacing: 0.06rem;
+    color         : var(--glas-white-6);
+    font-size     : 0.65rem;
+    font-weight   : 600;
+    text-transform: uppercase;
+    letter-spacing: 0.09rem;
 }
 
+// Same gesture as the song options menu: hover lights the row from the accent
+// edge instead of filling it with grey.
 .playlist-item {
-    width: 100%;
-    color: rgba(255, 255, 255, 0.7);
+    position   : relative;
+    width      : 100%;
+    color      : var(--glas-white-3);
     font-weight: 400;
-    font-size: 0.875rem;
-    text-align: left;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    font-size  : 0.875rem;
+    text-align : left;
+    border     : none;
+    background : transparent;
+    cursor     : pointer;
+    transition : background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
 
     &:hover {
-        background-color: rgba(255, 255, 255, 0.05);
-        color: #ffffff;
+        color     : var(--snow-white);
+        background: linear-gradient(90deg,
+                    var(--primary-color-reduced-2) 0%,
+                    rgba(255, 255, 255, 0.05) 45%,
+                    transparent 100%);
+        box-shadow: inset 3px 0 0 var(--primary-color);
+
+        .item-icon {
+            color  : var(--primary-color);
+            opacity: 1;
+        }
+    }
+
+    &:focus-visible {
+        outline       : 2px solid var(--primary-color);
+        outline-offset: -2px;
+        color         : var(--snow-white);
+    }
+}
+
+.item-icon {
+    opacity   : 0.55;
+    transition: color 0.18s ease, opacity 0.18s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .playlist-item,
+    .item-icon {
+        transition: none;
     }
 }
 

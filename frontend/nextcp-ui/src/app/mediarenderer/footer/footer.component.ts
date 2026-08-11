@@ -125,7 +125,7 @@ export class FooterComponent implements OnInit {
     const target = new ElementRef(event.currentTarget);
     const dialogRef = this.dialog.open(VolumeControlComponent, {
       data: { trigger: target },
-      panelClass: 'popup',
+      panelClass: ['popup', 'popup-glass', 'popup-narrow'],
     });
     dialogRef.afterClosed().subscribe((_res) => {
       console.log(_res);

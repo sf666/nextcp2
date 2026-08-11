@@ -1,0 +1,21 @@
+<div class="dialog-root glass-panel flex flex-col">
+  <div class="confirm-header flex items-center gap-3 px-5 pt-5">
+    <span class="confirm-icon material-symbols-outlined" [class.danger]="data.danger">
+      {{data.danger ? 'delete_forever' : 'help'}}
+    </span>
+    <div class="confirm-title">{{data.title}}</div>
+  </div>
+
+  <div class="confirm-body px-5">
+    <p class="confirm-message">{{data.message}}</p>
+    @if (data.detail) {
+      <div class="confirm-detail">{{data.detail}}</div>
+    }
+  </div>
+
+  <div class="confirm-actions flex justify-end gap-3 px-5 pb-5">
+    <button type="button" class="glass-btn" (click)="cancel()" cdkFocusInitial>{{data.cancelText}}</button>
+    <button type="button" class="glass-btn" [class.danger]="data.danger" [class.primary]="!data.danger"
+      (click)="confirm()">{{data.confirmText}}</button>
+  </div>
+</div>

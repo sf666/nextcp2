@@ -1,60 +1,9 @@
-// The transparent, rounded and shadow-less dialog wrapper is styled globally
-// via the `popup-glass` panelClass (see app-styles.scss), so no ::ng-deep is
-// needed here.
-//
-// Living glass surface
-// =========================================================================
-// The dialog is a real frosted pane, not a dark box: it is translucent enough
-// for the album-art wash behind it to come through, and it reuses the same
-// chrome tokens as sidebar / navbar / footer so all floating surfaces in the
-// app share one material.
+// The glass material comes from the shared `.glass-panel` class and the
+// transparent, shadow-less wrapper from the `popup-glass` panelClass (both in
+// app-styles.scss), so no ::ng-deep is needed here.
 .dialog-root {
-    position       : relative;
-    isolation      : isolate;
-    width          : 320px;
-    max-width      : 100%;
-    overflow       : hidden;
-    border-radius  : 16px;
-    background     : rgba(14, 14, 19, 0.62);
-    backdrop-filter: var(--chrome-blur);
-    border         : 1px solid var(--chrome-hair);
-    // Drop shadow lifts the pane off the page; the inset highlight is the lit
-    // top edge that makes it read as glass instead of as a flat overlay.
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55),
-                0 2px 10px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.12);
-
-    // Ambient tint: picks up the dominant colour of the current artwork
-    // (--ambient-color, maintained by BackgroundImageService) so the popup
-    // belongs to whatever is playing / browsed.
-    &::before {
-        content       : '';
-        position      : absolute;
-        inset         : 0;
-        pointer-events: none;
-        z-index       : 0;
-        border-radius : inherit;
-        background:
-            radial-gradient(120% 80% at 0% 0%,
-                color-mix(in srgb, var(--ambient-color) 45%, transparent) 0%,
-                transparent 62%),
-            linear-gradient(180deg,
-                rgba(255, 255, 255, 0.05) 0%,
-                transparent 38%);
-    }
-
-    >* {
-        position: relative;
-        z-index : 1;
-    }
-}
-
-// Browsers without backdrop-filter would show an almost transparent pane —
-// fall back to a solid dark surface there.
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .dialog-root {
-        background: rgba(20, 20, 26, 0.97);
-    }
+    width    : 320px;
+    max-width: 100%;
 }
 
 //

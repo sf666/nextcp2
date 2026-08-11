@@ -119,6 +119,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
     const dialogRef = this.inputDialog.open(InputPopupComponent, {
       width: '480px',
       maxWidth: '640px',
+      panelClass: ['popup-glass'],
       data: inputTextData,
     });
 

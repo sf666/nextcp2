@@ -1,20 +1,18 @@
-// Frosted "living glass" sheet, same chrome as the header options popup so both
-// read as one system. The dialog wrapper itself is made transparent by the
-// `popup-glass` panelClass (see app-styles.scss).
+// Frosted "living glass" sheet, same material as every other popup: the glass
+// comes from the shared `.glass-panel` class, the transparent wrapper from the
+// `popup-glass` panelClass (both in app-styles.scss).
 .dialog-root {
     width: 320px;
     max-width: 100%;
-    overflow: hidden;
-    background: rgba(30, 30, 30, 0.98);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
 }
 
 .divider {
     height: 1px;
-    background: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.12) 18%,
+                rgba(255, 255, 255, 0.12) 82%,
+                transparent 100%);
 }
 
 .rating-art {

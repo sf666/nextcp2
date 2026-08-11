@@ -29,6 +29,10 @@ import {
   InputPopupComponent,
   InputPopupData,
 } from 'src/app/util/comp/input-popup/input-popup/input-popup.component';
+import {
+  ConfirmPopupComponent,
+  ConfirmPopupData,
+} from 'src/app/util/comp/confirm-popup/confirm-popup.component';
 
 @Component({
   selector: 'app-song-options',
@@ -52,7 +56,7 @@ export class SongOptionsComponent implements OnInit {
   private playlistDialogOpen: boolean;
   private currentContainer: ContainerDto | undefined;
 
-  readonly inputDialog = inject(MatDialog);
+  readonly dialog = inject(MatDialog);
   readonly cdsUpdateService = inject(CdsUpdateService);
 
   constructor() {
@@ -112,9 +116,33 @@ export class SongOptionsComponent implements OnInit {
     }
   }
 
+  /**
+   * Removes the track from the server-side playlist — irreversible, so ask
+   * first and name the track. The menu stays open when the user cancels.
+   */
   deleteFromPlaylist(): void {
-    this.serverPlaylistService.deleteObject(this.item.objectID);
-    this.closeThisPopup({ type: 'delete', data: this.item });
+    const confirmData: ConfirmPopupData = {
+      title: 'Delete from playlist',
+      message:
+        'This removes the track from the playlist on the media server. It cannot be undone.',
+      detail: this.item.title,
+      confirmText: 'delete',
+      cancelText: 'cancel',
+      danger: true,
+    };
+    const dialogRef = this.dialog.open(ConfirmPopupComponent, {
+      width: '420px',
+      maxWidth: '90vw',
+      panelClass: ['popup-glass'],
+      data: confirmData,
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed === true) {
+        this.serverPlaylistService.deleteObject(this.item.objectID);
+        this.closeThisPopup({ type: 'delete', data: this.item });
+      }
+    });
   }
 
   closeThisPopup(result: SongOptionsEvent): void {
@@ -164,9 +192,10 @@ export class SongOptionsComponent implements OnInit {
       okText: 'update',
       title: 'Update album art',
     };
-    const dialogRef = this.inputDialog.open(InputPopupComponent, {
+    const dialogRef = this.dialog.open(InputPopupComponent, {
       width: '480px',
       maxWidth: '640px',
+      panelClass: ['popup-glass'],
       data: inputTextData,
     });
 

@@ -37,11 +37,17 @@
         }
     }
 
+    // Destructive actions carry the warning colour at rest too — a delete
+    // button should not look neutral until you are already hovering it.
     &.danger {
+        color       : var(--color-orange-reduced-3);
+        border-color: var(--color-orange-reduced-7);
+        background  : color-mix(in srgb, var(--color-orange-reduced-3) 10%, transparent);
+
         &:hover:not(:disabled) {
             color       : var(--color-orange-reduced-3);
-            border-color: var(--color-orange-reduced-7);
-            background  : color-mix(in srgb, var(--color-orange-reduced-3) 18%, transparent);
+            border-color: var(--color-orange-reduced-5);
+            background  : color-mix(in srgb, var(--color-orange-reduced-3) 22%, transparent);
         }
     }
 

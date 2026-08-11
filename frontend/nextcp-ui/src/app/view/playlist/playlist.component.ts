@@ -14,6 +14,11 @@ import { LayoutService } from 'src/app/service/layout.service';
 import { QualityBadgeComponent } from '../../util/comp/quality-badge/quality-badge.component';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import {
+  ConfirmPopupComponent,
+  ConfirmPopupData,
+} from 'src/app/util/comp/confirm-popup/confirm-popup.component';
 
 @Component({
   selector: 'playlist',
@@ -32,6 +37,7 @@ export class PlaylistComponent implements OnInit {
   private sseService = inject(SseService);
   private layoutService = inject(LayoutService);
   private backgroundImageService = inject(BackgroundImageService);
+  private confirmDialog = inject(MatDialog);
   playlistService = inject(PlaylistService);
 
   constructor() {
@@ -66,8 +72,29 @@ export class PlaylistComponent implements OnInit {
     this.playlistService.play();
   }
 
+  /** Clearing the whole queue in one click is worth a question. */
   delete(): void {
-    this.playlistService.deleteAll();
+    const count = this.playlistService.playlistItems().length;
+    const confirmData: ConfirmPopupData = {
+      title: 'Clear playlist',
+      message: 'This removes every track from the player playlist.',
+      detail: count === 1 ? '1 track' : `${count} tracks`,
+      confirmText: 'clear all',
+      cancelText: 'cancel',
+      danger: true,
+    };
+    const dialogRef = this.confirmDialog.open(ConfirmPopupComponent, {
+      width: '420px',
+      maxWidth: '90vw',
+      panelClass: ['popup-glass'],
+      data: confirmData,
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed === true) {
+        this.playlistService.deleteAll();
+      }
+    });
   }
 
   get hasPlaylistItems(): boolean {

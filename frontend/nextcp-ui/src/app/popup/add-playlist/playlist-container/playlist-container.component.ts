@@ -30,6 +30,18 @@ export class PlaylistContainerComponent {
     }
   }
 
+  /**
+   * Clicking the row itself runs whatever the dialog is currently for: adding
+   * the track in add mode, removing the playlist in delete mode.
+   */
+  rowClicked(serverPlaylist: ServerPlaylistDto) {
+    if (this.isPlaylistMode(PlaylistMode.Delete)) {
+      this.deletePlaylist(serverPlaylist);
+    } else {
+      this.addTo(serverPlaylist);
+    }
+  }
+
   addTo(serverPlaylist: ServerPlaylistDto) {
     this.addClicked.emit(serverPlaylist);
   }

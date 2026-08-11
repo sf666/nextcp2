@@ -499,6 +499,9 @@ export class DisplayContainerHeaderComponent implements OnInit {
     const target = new ElementRef(event.currentTarget);
     const dialogRef = this.dialog.open(DisplayHeaderOptionsComponent, {
       hasBackdrop: true,
+      // Transparent, shadow-less wrapper — the component's glass panel is the
+      // whole surface (see app-styles.scss).
+      panelClass: ['popup-glass'],
       data: {
         trigger: target,
         addToPlaylistOutput: this.addToPlaylistClicked,

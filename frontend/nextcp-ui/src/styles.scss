@@ -17,9 +17,12 @@ p, h1, h2, h3, h4, h5, h6, div {
     font-family    : 'HK Grotesk';
 }
 
-// Frosted scrim for glass popups (opt-in via `backdropClass: 'glass-backdrop'`).
-// Only a hint of blur: enough to push the page back and let the popup's own
-// backdrop-filter pick up a calm, still colourful backdrop.
+// Frosted scrim behind every dialog: the default Material dark scrim is a flat
+// grey sheet, this pushes the page back instead and lets the popup's own
+// backdrop-filter pick up a calm but still colourful backdrop. Applies to the
+// CDK default class as well, so all overlays share it without opting in;
+// `glass-backdrop` stays available as an explicit `backdropClass`.
+.cdk-overlay-dark-backdrop,
 .glass-backdrop {
     background     : rgba(0, 0, 0, 0.28);
     backdrop-filter: blur(2px) saturate(1.1);

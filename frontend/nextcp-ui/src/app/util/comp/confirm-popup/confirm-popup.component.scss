@@ -1,0 +1,55 @@
+@use "buttons";
+
+// The glass material comes from the shared `.glass-panel` class and the
+// transparent, shadow-less wrapper from the `popup-glass` panelClass (both in
+// app-styles.scss).
+.dialog-root {
+    width    : 100%;
+    max-width: 100%;
+}
+
+.confirm-icon {
+    flex                   : 0 0 auto;
+    font-size              : 26px;
+    color                  : var(--glas-white-4);
+    font-variation-settings : 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+
+    &.danger {
+        color: var(--color-orange-reduced-3);
+    }
+}
+
+.confirm-title {
+    font-size     : 1rem;
+    font-weight   : 600;
+    letter-spacing: 0.01rem;
+    color         : var(--snow-white);
+}
+
+.confirm-body {
+    padding-top   : 0.9rem;
+    padding-bottom: 1.4rem;
+}
+
+.confirm-message {
+    margin     : 0;
+    font-size  : 0.875rem;
+    font-weight: 400;
+    line-height: 1.45;
+    color      : var(--glas-white-4);
+}
+
+// The subject of the action — named explicitly so nobody confirms blind.
+.confirm-detail {
+    margin-top   : 0.9rem;
+    padding      : 0.55rem 0.8rem;
+    border-radius: 10px;
+    border       : 1px solid var(--chrome-hair);
+    background   : rgba(255, 255, 255, 0.05);
+    font-size    : 0.9rem;
+    font-weight  : 600;
+    color        : var(--snow-white);
+    overflow     : hidden;
+    text-overflow: ellipsis;
+    white-space  : nowrap;
+}
