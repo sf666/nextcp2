@@ -241,6 +241,13 @@ export class DisplayContainerHeaderComponent implements OnInit {
       this.deviceService.selectedMediaServerDevice().extendedApi &&
       (this.currentContainer?.id ?? '').length > 0,
   );
+  // An album wears its like next to the title — that is part of what the album
+  // is. A plain folder is a place, so liking it is housekeeping and lives in the
+  // options menu instead, where the other folder actions are.
+  showTitleLike = computed(
+    () => this.likePossible() && this.containerType() === 'Album',
+  );
+
   allTracksSameAlbum_ = signal<boolean>(false);
   mediaServerExists = signal<boolean>(false);
 
@@ -501,7 +508,18 @@ export class DisplayContainerHeaderComponent implements OnInit {
         addToPlaylistOutput: this.addToPlaylistClicked,
         event: event,
         currentContainer: this.currentContainer,
+        // The like only shows up here for containers that do not wear it next
+        // to their title (see showTitleLike).
+        canLike: this.likePossible() && !this.showTitleLike(),
+        isLiked: this.isLiked(),
       },
+    });
+    // The menu only reports the choice; the rating call stays here, where the
+    // container's rating state lives.
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'toggleLike') {
+        this.toggleLike();
+      }
     });
     return dialogRef.afterClosed();
   }

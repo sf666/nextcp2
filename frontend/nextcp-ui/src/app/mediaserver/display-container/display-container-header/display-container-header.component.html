@@ -24,7 +24,7 @@
               <div class="eyebrow">{{containerType()}}</div>
               <div class="title-row">
                 <span class="title">{{currentContainer.title}}</span>
-                @if (likePossible()) {
+                @if (showTitleLike()) {
                   <button type="button" class="title-like" [class.liked]="isLiked()"
                     (click)="toggleLike()" [attr.aria-pressed]="isLiked()"
                     [title]="isLiked() ? 'Remove from favourites' : 'Add to favourites'">
@@ -52,7 +52,7 @@
               <div class="eyebrow">{{containerType()}}</div>
               <div class="title-row">
                 <span class="title">{{currentContainer.title}}</span>
-                @if (likePossible()) {
+                @if (showTitleLike()) {
                   <button type="button" class="title-like" [class.liked]="isLiked()"
                     (click)="toggleLike()" [attr.aria-pressed]="isLiked()"
                     [title]="isLiked() ? 'Remove from favourites' : 'Add to favourites'">

@@ -47,6 +47,10 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   private triggerElementRef: ElementRef;
   private mediaPlayerConfigDto: MediaPlayerConfigDto;
 
+  /** Folders carry their like here instead of next to the title. */
+  canLike = false;
+  isLiked = false;
+
   constructor() {
     const _matDialogRef =
       inject<MatDialogRef<DisplayHeaderOptionsComponent>>(MatDialogRef);
@@ -56,11 +60,15 @@ export class DisplayHeaderOptionsComponent implements OnInit {
       viewContainerRef: ViewContainerRef;
       currentContainer: ContainerDto;
       addToPlaylistOutput: OutputEmitterRef<ContainerDto>;
+      canLike: boolean;
+      isLiked: boolean;
     }>(MAT_DIALOG_DATA);
 
     this._matDialogRef = _matDialogRef;
     this.addToPlaylistOutput = data.addToPlaylistOutput;
     this.currentContainer = data.currentContainer;
+    this.canLike = data.canLike ?? false;
+    this.isLiked = data.isLiked ?? false;
     this.triggerElementRef = data.trigger;
     this.mediaPlayerConfigDto =
       this.configurationService.mediaPlayerConfigDto();
@@ -93,6 +101,10 @@ export class DisplayHeaderOptionsComponent implements OnInit {
       height = height + 30; // for add to playlist option
     }
 
+    if (this.canLike) {
+      height = height + 30; // for the favourite toggle
+    }
+
     this.popupService.configurePopupPosition(
       this._matDialogRef,
       this.triggerElementRef,
@@ -104,6 +116,28 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   addToPlaylist(): void {
     this.addToPlaylistOutput.emit(this.currentContainer);
     this.close();
+  }
+
+  /**
+   * Names the action after what it acts on. Not "dislike": this app has a real
+   * disliked state (rating 0, see the rating filter), and removing a like only
+   * clears the rating — it does not store a dislike.
+   */
+  get likeLabel(): string {
+    const noun = this.isPlaylist()
+      ? 'playlist'
+      : this.isFolder()
+        ? 'folder'
+        : 'item';
+    return this.isLiked ? `Unlike ${noun}` : `Like ${noun}`;
+  }
+
+  /**
+   * Reports the choice back to the header, which owns the container's rating
+   * state and performs the call.
+   */
+  toggleLike(): void {
+    this._matDialogRef.close('toggleLike');
   }
 
   updateAlbumArt(): void {

@@ -43,6 +43,14 @@
     <div class="section-header px-4 py-2">
       General actions
     </div>
+    @if (canLike) {
+      <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="toggleLike()"
+        [attr.aria-pressed]="isLiked">
+        <span class="item-icon material-symbols-outlined text-lg" [class.filled]="isLiked"
+          [class.liked]="isLiked">favorite</span>
+        <span>{{likeLabel}}</span>
+      </button>
+    }
     <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="addToPlaylist()">
       <span class="item-icon material-symbols-outlined text-lg">playlist_add</span>
       <span>Add to playlist</span>
