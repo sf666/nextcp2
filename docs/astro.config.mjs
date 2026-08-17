@@ -63,6 +63,7 @@ export default defineConfig({
 				'user_interface/music_library',
 				'user_interface/player_queue',
 				'user_interface/now_listening',
+				'user_interface/player_bar',
 				'user_interface/radio',
 				'user_interface/my_albums',
 				'user_interface/app_settings',

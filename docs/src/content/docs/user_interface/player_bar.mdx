@@ -1,0 +1,102 @@
+---
+title: Player Bar
+order: 6
+---
+
+import { Image } from 'astro:assets';
+import playerBar from './img/player_bar.png';
+import thisDevice from './img/this_device.png';
+
+The player bar sits at the bottom of every page. It shows what is currently playing, controls playback and selects
+where the music is played — the media renderer, the media server, power and volume.
+
+<Image src={playerBar} alt="Player bar with now playing information, transport controls and output buttons" class="" />
+
+## Now playing
+
+The left part shows the track currently playing on the selected player.
+
+- **Cover** — click it to open the [song options](/nextcp2/user_interface/music_library/#song-options) dialog for the playing
+  track (rate it, add it to a playlist, show details). Available only for tracks coming from a media server.
+- **Title, artist and album** of the current track.
+- **Quality badge** — derived from the audio format: `CD` for 16 bit / 44.1 kHz, `HIFI` for more than 16 bit at
+  44.1 kHz and `Hi-Res` for sample rates above 44.1 kHz. Compressed material (up to 320 kbit/s) gets no badge.
+
+## Transport controls
+
+The middle part drives playback. Buttons a player does not support are shown greyed out.
+
+- <span class="material-symbols-outlined">shuffle</span> **Shuffle** — plays the queue in random order. The button is
+  highlighted while shuffle is active.
+- <span class="material-symbols-outlined">skip_previous</span> **Previous** — jumps to the previous track of the queue.
+- <span class="material-symbols-outlined">play_arrow</span> / <span class="material-symbols-outlined">pause</span>
+  **Play / Pause** — the large center button; it reflects the current transport state.
+- <span class="material-symbols-outlined">skip_next</span> **Next** — jumps to the next track.
+- <span class="material-symbols-outlined">repeat</span> **Repeat** — restarts the queue after the last track. The
+  button is highlighted while repeat is active.
+
+Below the buttons, the elapsed time, a seek slider and the track length are displayed. Drag the slider to seek within
+the track. Continuous streams such as radio have no known length — the slider is then inactive and no track length is
+shown.
+
+## Output controls
+
+The right part selects the devices used and controls the amplifier.
+
+- **Renderer** — the pill showing the name of the active player (on narrow screens just the
+  <span class="material-symbols-outlined">speaker</span> icon). It opens the list of available media renderers; the
+  entry marked with <span class="material-symbols-outlined">check</span> is the current one. Disabled renderers (see
+  [App Settings](/nextcp2/user_interface/app_settings/)) are not listed.
+- <span class="material-symbols-outlined">dns</span> **Media server** — selects the media server whose library is
+  browsed. Servers with the *Extended API* of the UMS fork are marked accordingly.
+- <span class="material-symbols-outlined">power_settings_new</span> **Power** — switches the amplifier on or off. Shown
+  only if a [device driver](/nextcp2/user_interface/app_settings/) is configured for the selected renderer. A green
+  icon means the device is on, a red one that it is in standby.
+- <span class="material-symbols-outlined">volume_up</span> **Volume** — opens a vertical volume slider with buttons for
+  louder and quieter and a numeric readout. The slider is scaled logarithmically, so small values can be set precisely.
+  If a device driver is configured, the volume is applied to the amplifier instead of the streamer.
+
+## Playing in the browser — This Device
+
+Besides your external UPnP media renderers, the renderer list contains **This Device** as its first entry. Selecting it
+plays the music directly in the browser you are currently using — the tab you are viewing becomes the player. This is
+handy for listening on a laptop, tablet or phone (or through headphones) without any dedicated streaming hardware. The
+player bar then shows *This Device*, and the selection is remembered for this browser.
+
+<Image src={thisDevice} alt="This Device selected as player in the player bar" class="" />
+
+Playback is started exactly as with a hardware renderer:
+
+- The <span class="material-symbols-outlined">play_arrow</span> and <span class="material-symbols-outlined">shuffle</span>
+  buttons on an album, playlist or folder page queue all tracks of that page in the browser — shuffled if you use the
+  shuffle button.
+- Clicking a single track starts with that track and continues with the remaining tracks of the displayed list.
+- All transport controls of the player bar — play/pause, previous/next, seek, repeat, shuffle and volume — control the
+  browser player.
+- Radio stations and web streams work as well: the browser simply fetches the stream URL.
+- Queue and playback position are stored in the browser, so a page reload resumes where playback left off.
+
+Differences to a UPnP renderer:
+
+- The queue is **local to the browser**. There is no server-side (OpenHome) playlist, so the
+  [Media Player Queue](/nextcp2/user_interface/player_queue/) page and the server playlist functions do not apply to
+  *This Device*.
+- The [Radio](/nextcp2/user_interface/radio/) page shows only your own stations from the nextCP/2 configuration;
+  stations offered by a renderer are not available.
+- Volume and mute affect this browser tab only, not any hardware device.
+- Playback ends when the tab is closed. Every browser has its own independent player, so several devices can play
+  different music at the same time.
+
+### Formats and transcoding
+
+Audio is not fetched from the media server directly, but through a proxy endpoint of the nextCP/2 backend. This avoids
+CORS and mixed-content problems when the UI is served over HTTPS, and it lets the media server apply a browser specific
+renderer profile: the proxy identifies itself with the user agent `next_cp_webplayer/1.0` (in UMS, a renderer profile
+matching `UserAgentSearch = next_cp_webplayer`). Formats the browser can play are passed through untouched, everything
+else is transcoded to MP3 by the media server.
+
+Because a transcoded stream is delivered without a known length, the browser can neither show the duration nor seek in
+it. nextCP/2 therefore transcodes such a track completely before playback starts and caches the result — the first play
+pays the transcoding delay, later plays and seeks are served from the cache. Pre-transcoding, cache directory, cache
+size and cache lifetime are configured in the *Browser Player* section of
+[App Settings](/nextcp2/user_interface/app_settings/).
