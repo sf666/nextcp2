@@ -11,12 +11,11 @@ import imgB2 from './img/browser_2.png';
 import imgB3 from './img/browser_3.png';
 
 import imgA1 from './img/album_view_01.png';
-import imgA2 from './img/album_view_02.png';
 
 import imgMD from './img/multiDiskSupport.png';
 import imgPV from './img/playlistView.png';
 import imgSO from './img/song_options.png';
-import imgButtonBar from './img/music_library_button_bar.png';
+import imgHeader from './img/browse_header.png';
 
 import imgMyPlaylist from './img/playlist_sidebar.gif';
 import imgMyPlaylistCreateAdd from './img/playlist_create_add.gif';
@@ -45,9 +44,14 @@ As you navigate through folders, the layout adapts based on the type of content 
 You can also filter the displayed content by entering text into the **Search in this page** box.
 
 
-## Control buttons
+## Browse header
 
-<Image src={imgButtonBar} alt="" class="size-64 shrink-0" />
+The header of every browse page carries the cover and title of the current container, the control buttons on the left
+and the filters on the right. Scrolling down collapses it into a slim sticky bar that keeps both groups reachable.
+
+<Image src={imgHeader} alt="Browse header with control buttons and filters" class="" />
+
+### Control buttons
 
 <div class="relative overflow-x-auto">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -67,16 +71,52 @@ You can also filter the displayed content by entering text into the **Search in 
                 <td class="px-6 py-4">Clears the current renderer playlist, adds all tracks and start random playback.</td>
             </tr>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">LIKE</td>
-                <td class="px-6 py-4">Likes an album. All tracks must belong to the same musicbrainz release id.</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">SWITCH VIEW</td>
                 <td class="px-6 py-4">Switches to a tiles based view. Pressing this button again will cycle back to a track based view.</td>
             </tr>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">OPTIONS</td>
                 <td class="px-6 py-4">Folder Options</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+The **like** button (heart) is not part of this bar — it sits next to the album title in the header and only appears if
+the album is identified by a MusicBrainz Release ID (all tracks must belong to the same release).
+
+### Filters
+
+The right side of the header narrows down what the page shows. The filters apply to everything on the current page —
+folders, playlists, albums and tracks — and they are combined: an item has to pass all of them to stay visible. The
+section headings count what is left, and **PLAY** / **SHUFFLE** send exactly the tracks the filtered list shows, so a
+filtered page plays as it reads. A filter that is in use is highlighted; clicking the <span class="material-symbols-outlined">close</span>
+icon resets it. Only the filters that make sense for the current page are displayed.
+
+<div class="relative overflow-x-auto">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">Filter</th>
+                <th scope="col" class="px-6 py-3">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">FILTER</td>
+                <td class="px-6 py-4">Free text search across the titles of the current page (case insensitive, matches anywhere in the title). Nothing is requested from the server — only the displayed content is narrowed down.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">GENRES</td>
+                <td class="px-6 py-4">Multi select of the genres occurring on this page; an item is kept if it matches any of the selected ones. The button shows <code>Any</code>, the genre name, or how many genres are selected. Only shown if the content carries genre information.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">RATING</td>
+                <td class="px-6 py-4">Keeps only entries with exactly the chosen star rating: <code>5</code> (liked) down to <code>0</code> (disliked), or <code>Any</code> to switch the filter off. Requires a media server with the extended API (UMS fork).</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">SORT</td>
+                <td class="px-6 py-4">Orders album tiles by <code>Album Title</code>, <code>Album Artist</code> or <code>Genre</code>; <code>None</code> keeps the order delivered by the media server. Appears only on pages that contain albums.</td>
             </tr>
         </tbody>
     </table>
@@ -149,7 +189,7 @@ When browsing server-based playlists, the display automatically switches to a tr
 
 ## Song Options
 
-<Image src={imgSO} class="size-64 shrink-0" alt="" />
+<Image src={imgSO} class="shrink-0" style="width:100%;max-width:19rem;height:auto" alt="" />
 
 Clicking the three-dot menu next to a song opens the **Song Options** dialog. Where you can choose between server side actions and media player actions.
 
@@ -165,7 +205,7 @@ export const Bullets = ({children, title}) => (
 
 <Bullets class="mt-8" title="Server side playlist actions">
     <li>Add to playlist</li>
-    <li>Delete from this playlist</li>
+    <li>Delete from playlist</li>
 </Bullets>
 
 Both actions will be executed on the server side, so the changes will be reflected in the playlist file itself. The playlist has to be a `m3u` or `m3u8` file.
@@ -174,18 +214,18 @@ Removing songs can only be done, if the current view displays a playlist file.
 
 <Bullets title="Player playlist actions">
     <li>Play next</li>
-    <li>Add at last position</li>
+    <li>Add to queue</li>
 </Bullets>
 
-When the current media player is in **playlist mode**, selecting **Play Next** will add the song to the playback queue in the next position, while **Add at Last Position** will place the song at the end of the current renderer playlist. If the media player is **not in playlist mode**, the selected song will play immediately, regardless of which action is chosen.
+When the current media player is in **playlist mode**, selecting **Play next** will add the song to the playback queue in the next position, while **Add to queue** will place the song at the end of the current renderer playlist. If the media player is **not in playlist mode**, the selected song will play immediately, regardless of which action is chosen.
 
 
 <Bullets title="Other server actions">
     <li>Download</li>
-    <li>Update Album Art</li>
+    <li>Update album art</li>
 </Bullets>
 
-You can `download` a resource, or `Update Album Art` on the server side.
+You can `download` a resource, or `Update album art` on the server side.
 
 
 ## UPnP Search
