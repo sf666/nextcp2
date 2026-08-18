@@ -77,6 +77,27 @@ Main Content
     </div>
     }
 
+    <!--                                                                -->
+    <!-- Template : Browse Result Artists                               -->
+    <!-- ############################################################## -->
+    @if (artists?.length > 0) {
+    <div id="head_browse_result_artists_ID" class="flex flex-col w-full">
+      <div class="section-heading">
+        <span class="section-label">Artists</span>
+        <span class="section-count">{{countLabel(visibleArtists(), artists.length)}}</span>
+      </div>
+      <container-tile #artistTile class="flex grow"
+        [smallIcons]="this.allMusicTracks.length > 0"
+        [container]="artists"
+        [quickSearchString]="displayFilterString()"
+        [selectedGenres]="selectedGenres()"
+        [ratingFilter]="ratingFilter()"
+        [virtualize]="true"
+        (browseClicked)="browseTo($event)">
+      </container-tile>
+    </div>
+    }
+
     @if (musicTracks.length > 0) {
     <div id="head_browse_result_items_ID" class="flex grow">
       <item-tile class="flex w-full"

@@ -477,6 +477,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     const cds = this.contentDirectoryService();
     const urls = [
       ...cds.albumList_().map((album) => album.albumartUri),
+      ...cds.artistList_().map((artist) => artist.albumartUri),
       ...cds.playlistList_().map((playlist) => playlist.albumartUri),
       ...cds.containerList_().map((container) => container.albumartUri),
       ...cds.musicTracks_().map((track) => track.albumArtUrl),

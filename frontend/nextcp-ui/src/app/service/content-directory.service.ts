@@ -56,6 +56,13 @@ const ANCESTOR_LOOKUP_LIMIT = 12;
 export const SEARCH_RESULT_CONTAINER_ID = 'search_result';
 
 /**
+ * Container classes that get a section of their own. Everything else in
+ * containerDto is shown as a folder.
+ */
+const PLAYLIST_CONTAINER_CLASS = 'object.container.playlistContainer';
+const ARTIST_CONTAINER_CLASS = 'object.container.person.musicArtist';
+
+/**
  * What the view is showing when it shows search hits instead of a folder.
  *
  * Search results are not a place in the media server's tree, so the breadcrumb
@@ -418,6 +425,7 @@ export class ContentDirectoryService {
   albumList_ = signal<ContainerDto[]>([]);
   containerList_ = signal<ContainerDto[]>([]);
   playlistList_ = signal<ContainerDto[]>([]);
+  artistList_ = signal<ContainerDto[]>([]);
 
   // item treatment
   musicTracks_ = signal<MusicItemDto[]>([]);
@@ -514,6 +522,7 @@ export class ContentDirectoryService {
   private isDisplayed(objectId: string): boolean {
     return (
       this.playlistList_().some((pl) => pl.id === objectId) ||
+      this.artistList_().some((artist) => artist.id === objectId) ||
       this.containerList_().some((c) => c.id === objectId) ||
       this.musicTracks_().some((item) => item.objectID === objectId) ||
       this.rawOtherItems_().some((item) => item.objectID === objectId)
@@ -793,14 +802,24 @@ export class ContentDirectoryService {
       this.reconcileBrowsePath(data);
       this.updatePageTurnId(data);
       this.albumList_.set(data.albumDto);
+      // Folders are what is left over once the classes with their own section
+      // have been taken out, so a new section only has to be added here and to
+      // addContainer below.
       this.containerList_.set(
         data.containerDto?.filter(
-          (item) => item.objectClass !== 'object.container.playlistContainer',
+          (item) =>
+            item.objectClass !== PLAYLIST_CONTAINER_CLASS &&
+            item.objectClass !== ARTIST_CONTAINER_CLASS,
         ),
       );
       this.playlistList_.set(
         data.containerDto?.filter(
-          (item) => item.objectClass === 'object.container.playlistContainer',
+          (item) => item.objectClass === PLAYLIST_CONTAINER_CLASS,
+        ),
+      );
+      this.artistList_.set(
+        data.containerDto?.filter(
+          (item) => item.objectClass === ARTIST_CONTAINER_CLASS,
         ),
       );
       this.musicTracks_.set(
@@ -837,7 +856,9 @@ export class ContentDirectoryService {
       this.containerList_.update((v) => {
         return v.concat(
           data.containerDto.filter(
-            (item) => item.objectClass !== 'object.container.playlistContainer',
+            (item) =>
+              item.objectClass !== PLAYLIST_CONTAINER_CLASS &&
+              item.objectClass !== ARTIST_CONTAINER_CLASS,
           ),
         );
       });
@@ -845,7 +866,15 @@ export class ContentDirectoryService {
       this.playlistList_.update((v) => {
         return v.concat(
           data.containerDto.filter(
-            (item) => item.objectClass === 'object.container.playlistContainer',
+            (item) => item.objectClass === PLAYLIST_CONTAINER_CLASS,
+          ),
+        );
+      });
+
+      this.artistList_.update((v) => {
+        return v.concat(
+          data.containerDto.filter(
+            (item) => item.objectClass === ARTIST_CONTAINER_CLASS,
           ),
         );
       });

@@ -123,10 +123,11 @@ export class DisplayContainerComponent {
     return `${visible} of ${total} items`;
   }
 
-  // The (virtualized) album + folder grids — used to restore scroll to a
-  // specific entry even when it is not currently in the DOM.
+  // The (virtualized) album, artist and folder grids — used to restore scroll to
+  // a specific entry even when it is not currently in the DOM.
   private albumTile = viewChild<ContainerTileComponent>('albumTile');
   private folderTile = viewChild<ContainerTileComponent>('folderTile');
+  private artistTile = viewChild<ContainerTileComponent>('artistTile');
 
   /**
    * How many rows a section shows after filtering.
@@ -139,6 +140,7 @@ export class DisplayContainerComponent {
   visibleAlbums = computed(() => this.narrowed(this.albumList).length);
   visibleFolders = computed(() => this.narrowed(this.container).length);
   visiblePlaylists = computed(() => this.narrowed(this.playlistList).length);
+  visibleArtists = computed(() => this.narrowed(this.artists).length);
   visibleOtherItems = computed(
     () =>
       this.otherItems_.filter((item) =>
@@ -181,6 +183,7 @@ export class DisplayContainerComponent {
           const id = this.cdsBrowsePathService.scrollToID;
           if (
             this.albumTile()?.scrollToId(id) ||
+            this.artistTile()?.scrollToId(id) ||
             this.folderTile()?.scrollToId(id)
           ) {
             return;
@@ -249,6 +252,14 @@ export class DisplayContainerComponent {
       return [];
     }
     return handler.contentDirectoryService.playlistList_();
+  }
+
+  get artists(): ContainerDto[] {
+    const handler = this.contentHandler();
+    if (!handler?.contentDirectoryService) {
+      return [];
+    }
+    return handler.contentDirectoryService.artistList_();
   }
 
   get container(): ContainerDto[] {

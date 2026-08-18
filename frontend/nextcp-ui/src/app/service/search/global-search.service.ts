@@ -240,20 +240,59 @@ export class GlobalSearchService {
     return id && id !== SEARCH_RESULT_CONTAINER_ID ? id : '0';
   }
 
+  /** Sort criteria the backend expects per search type. */
+  private static readonly SHOW_ALL_SORT: Record<ShowAllType, string> = {
+    items: '',
+    album: '-ums:likedAlbum',
+    artists: '',
+    playlists: '',
+  };
+
   showAllItem(): void {
-    this.requestShowAll('items', '');
+    this.showAllType('items');
   }
 
   showAllAlbum(): void {
-    this.requestShowAll('album', '-ums:likedAlbum');
+    this.showAllType('album');
   }
 
   showAllItemArtist(): void {
-    this.requestShowAll('artists', '');
+    this.showAllType('artists');
   }
 
   showAllPlaylist(): void {
-    this.requestShowAll('playlists', '');
+    this.showAllType('playlists');
+  }
+
+  /**
+   * Shows every hit of one type. Reached from the quick-search dropdown and from
+   * the result page's own type bar, which is why it is public: switching from
+   * albums to tracks used to mean reopening the dropdown.
+   */
+  public showAllType(type: ShowAllType): void {
+    this.requestShowAll(type, GlobalSearchService.SHOW_ALL_SORT[type]);
+  }
+
+  /**
+   * How many hits of a type the current query has.
+   *
+   * Comes from the quick search that filled the dropdown — one request already
+   * reports the totals for all four types, so the result page can label its type
+   * bar without asking again. Zero once the search is cleared, which is only
+   * after the result page has been left.
+   */
+  public resultTotal(type: ShowAllType): number {
+    const result = this.quickSearchResultList();
+    switch (type) {
+      case 'items':
+        return result.musicItemsTotal ?? 0;
+      case 'album':
+        return result.albumItemsTotal ?? 0;
+      case 'artists':
+        return result.artistItemsTotal ?? 0;
+      case 'playlists':
+        return result.playlistItemsTotal ?? 0;
+    }
   }
 
   /**
