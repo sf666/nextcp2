@@ -17,11 +17,6 @@ import imgPV from './img/playlistView.png';
 import imgSO from './img/song_options.png';
 import imgHeader from './img/browse_header.png';
 
-import imgMyPlaylist from './img/playlist_sidebar.gif';
-import imgMyPlaylistCreateAdd from './img/playlist_create_add.gif';
-
-import search from './img/search.gif';
-
 The **Music Library** serves as the main entry point to your entire music collection, providing a central place to browse, search, and play your audio content.
 
 <div id="carousel-album" class="relative w-full h-full" data-carousel="slide">
@@ -126,7 +121,9 @@ icon resets it. Only the filters that make sense for the current page are displa
 
 ### Configure MY PLAYLIST sidebar
 
-<Image src={imgMyPlaylist} alt="set my playlist video" />
+<video src="/nextcp2/anim/playlist_sidebar.mp4" poster="/nextcp2/anim/playlist_sidebar.poster.webp"
+       autoplay loop muted playsinline controls preload="metadata"
+       class="block w-full h-auto my-4 rounded-lg" aria-label="Configuring the MY PLAYLISTS sidebar"></video>
 
 To configure the quick access **MY PLAYLISTS** section, navigate to the folder containing your playlists, then click on the three dots in the header and select **Set MY PLAYLISTS**. The sidebar will be refreshed and the playlists are directly accessible.
 
@@ -156,7 +153,9 @@ Click the three-dot menu next to **MY PLAYLISTS** to open the options dialog. Sw
 
 ### Example usage
 
-<Image src={imgMyPlaylistCreateAdd} alt="create playlist and add song" />
+<video src="/nextcp2/anim/playlist_create_add.mp4" poster="/nextcp2/anim/playlist_create_add.poster.webp"
+       autoplay loop muted playsinline controls preload="metadata"
+       class="block w-full h-auto my-4 rounded-lg" aria-label="Creating a server side playlist, adding and removing songs, deleting it again"></video>
 
 The animation shows how to create a new playlist. Because we are working inside the folder that feeds the **MY PLAYLISTS** sidebar, the new playlist appears there right away. After creating it, two songs are added, one of them is removed again, and finally the playlist itself is deleted.
 
@@ -230,7 +229,9 @@ You can `download` a resource, or `Update album art` on the server side.
 
 ## UPnP Search
 
-<Image src={search} alt="" />
+<video src="/nextcp2/anim/search.mp4" poster="/nextcp2/anim/search.poster.webp"
+       autoplay loop muted playsinline controls preload="metadata"
+       class="block w-full h-auto my-4 rounded-lg" aria-label="Searching the whole library from the global search box"></video>
 
 If the selected media server supports UPnP search, entering text into the **Global Search** box will initiate a server-side search request.  
 
