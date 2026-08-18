@@ -121,6 +121,37 @@
     display      : block;
 }
 
+// Back out of a search result. Same weight and same "cut me off first" behaviour
+// as the parent crumb, but it cannot reuse .crumb-parent: that sets
+// display:block, which would break the icon + label row.
+.crumb-back {
+    color      : var(--glas-white-2);
+    flex-shrink: 1;
+    min-width  : 0;
+
+    .material-symbols-sharp {
+        font-size  : 20px;
+        flex-shrink: 0;
+    }
+}
+
+.crumb-back-label {
+    overflow     : hidden;
+    text-overflow: ellipsis;
+    white-space  : nowrap;
+}
+
+// The ellipsis with nothing behind it: information, not a control.
+.crumb-more-static {
+    color : var(--glas-white-7);
+    cursor: default;
+
+    &:hover {
+        color           : var(--glas-white-7);
+        background-color: transparent;
+    }
+}
+
 .crumb-home .material-symbols-sharp,
 .crumb-more .material-symbols-sharp {
     font-size: 22px;

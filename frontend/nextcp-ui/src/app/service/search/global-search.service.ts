@@ -2,7 +2,11 @@ import { Router } from '@angular/router';
 import { ConfigurationService } from './../configuration.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { DtoGeneratorService } from './../../util/dto-generator.service';
-import { ContentDirectoryService } from './../content-directory.service';
+import {
+  ContentDirectoryService,
+  SEARCH_RESULT_CONTAINER_ID,
+  ShowAllType,
+} from './../content-directory.service';
 import {
   SearchResultDto,
   ContainerDto,
@@ -13,6 +17,11 @@ import { Injectable, signal, inject } from '@angular/core';
 import { debounce } from 'src/app/global';
 import { Subject } from 'rxjs';
 import { MusicLibraryService } from '../music-library/music-library.service';
+
+export interface ShowAllRequest {
+  type: ShowAllType;
+  request: SearchRequestDto;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -34,14 +43,21 @@ export class GlobalSearchService {
   // User clicked on an quick search music item
   musicItemClicked$: Subject<MusicItemDto> = new Subject();
 
-  // User clicked on an quick search container like album, person or playlist
-  containerClicked$: Subject<ContainerDto> = new Subject();
-
-  // User clicked on a SHOW ALL button
-  showAllItemClicked$: Subject<SearchRequestDto> = new Subject();
-  showAllAlbumClicked$: Subject<SearchRequestDto> = new Subject();
-  showAllArtistClicked$: Subject<SearchRequestDto> = new Subject();
-  showAllPlaylistClicked$: Subject<SearchRequestDto> = new Subject();
+  /**
+   * The "show all" request waiting to be run, or undefined when there is none.
+   *
+   * Deliberately state and not an event: clicking "show all" navigates to the
+   * music library, and that navigation frequently destroys the view and builds a
+   * new one (`/music-library/:objectId` and `/music-library` are two routes).
+   * A Subject fired before the new view existed was simply lost, and the fresh
+   * view browsed the last folder instead — a signal is still there to be read
+   * whenever the view gets around to looking.
+   *
+   * Read it with consumePendingShowAll(), which clears it, so a view that
+   * initialises along several paths at once still runs the search exactly once.
+   */
+  private pendingShowAll_ = signal<ShowAllRequest | undefined>(undefined);
+  public pendingShowAll = this.pendingShowAll_.asReadonly();
 
   // QuickSearch Support (Global search)
   public quickSearchResultList = signal<SearchResultDto>(
@@ -199,72 +215,83 @@ export class GlobalSearchService {
   // show all clicked
   //
 
-  get currentContainerID(): string {
-    return this.contentDirectoryService.currentContainerList().currentContainer
-      .id;
+  /**
+   * How many result rows a "show all" asks for. The quick-search dropdown shows
+   * a handful; this is the full page.
+   */
+  private static readonly SHOW_ALL_COUNT = 100;
+
+  /**
+   * The container a "show all" searches in.
+   *
+   * The global-search toggle is the only thing that decides this: on, the whole
+   * library from the root; off, the folder the library view is showing. Three of
+   * the four sections used to read the container from the root
+   * ContentDirectoryService instead — an instance the library view never
+   * browses, so the id was usually empty and the toggle had no effect on them.
+   */
+  private showAllContainerId(): string {
+    if (this.globalSearch()) {
+      return '0';
+    }
+    const id = this.musicLibraryService.currentContainerId();
+    // Searching "in this folder" from a result page must not search inside the
+    // synthetic search container.
+    return id && id !== SEARCH_RESULT_CONTAINER_ID ? id : '0';
   }
 
   showAllItem(): void {
-    let containerId = '0';
-    if (!this.globalSearch()) {
-      containerId = this.musicLibraryService.currentContainerId();
-    }
-    const sr = this.dtoGeneratorService.generateQuickSearchDto(
-      this.quickSearchQueryString(),
-      this.deviceService.selectedMediaServerDevice().udn,
-      '',
-      containerId,
-      0,
-      100,
-    );
-    this.hideQuickSearchPanel();
-    this.router.navigateByUrl('/music-library');
-    console.log('show all item clicked ... ');
-    this.showAllItemClicked$.next(sr);
+    this.requestShowAll('items', '');
   }
 
   showAllAlbum(): void {
-    const sr = this.dtoGeneratorService.generateQuickSearchDto(
-      this.quickSearchQueryString(),
-      this.deviceService.selectedMediaServerDevice().udn,
-      '-ums:likedAlbum',
-      this.currentContainerID,
-      0,
-      100,
-    );
-    this.hideQuickSearchPanel();
-    this.router.navigateByUrl('/music-library');
-    console.log('show all album clicked ... ');
-    this.showAllAlbumClicked$.next(sr);
+    this.requestShowAll('album', '-ums:likedAlbum');
   }
 
   showAllItemArtist(): void {
-    const sr = this.dtoGeneratorService.generateQuickSearchDto(
-      this.quickSearchQueryString(),
-      this.deviceService.selectedMediaServerDevice().udn,
-      '',
-      this.currentContainerID,
-      0,
-      100,
-    );
-    this.hideQuickSearchPanel();
-    this.router.navigateByUrl('/music-library');
-    console.log('show all artists clicked ... ');
-    this.showAllArtistClicked$.next(sr);
+    this.requestShowAll('artists', '');
   }
 
   showAllPlaylist(): void {
-    const sr = this.dtoGeneratorService.generateQuickSearchDto(
+    this.requestShowAll('playlists', '');
+  }
+
+  /**
+   * Parks the request, then navigates. The order does not matter any more — the
+   * music library view picks the request up whenever it is ready, whether it was
+   * already on screen or is being built by this very navigation.
+   */
+  private requestShowAll(type: ShowAllType, sortCriteria: string): void {
+    const request = this.dtoGeneratorService.generateQuickSearchDto(
       this.quickSearchQueryString(),
       this.deviceService.selectedMediaServerDevice().udn,
-      '',
-      this.currentContainerID,
+      sortCriteria,
+      this.showAllContainerId(),
       0,
-      100,
+      GlobalSearchService.SHOW_ALL_COUNT,
     );
+    console.log('show all ' + type + ' clicked ... ');
+    this.pendingShowAll_.set({ type: type, request: request });
+    // Panel closed, but the query stays in the box: it labels the page you land
+    // on, and searching again from there should not start from nothing.
     this.hideQuickSearchPanel();
-    this.router.navigateByUrl('/music-library');
-    console.log('show all playlist clicked ... ');
-    this.showAllPlaylistClicked$.next(sr);
+    void this.router.navigateByUrl('/music-library').then((navigated) => {
+      if (!navigated) {
+        // We never arrived, so nobody will pick the request up. Dropping it
+        // keeps it from surprising the next visit to the music library.
+        this.pendingShowAll_.set(undefined);
+      }
+    });
+  }
+
+  /**
+   * Returns the waiting request and clears it, so it cannot be run twice.
+   */
+  public consumePendingShowAll(): ShowAllRequest | undefined {
+    const pending = this.pendingShowAll_();
+    if (pending) {
+      this.pendingShowAll_.set(undefined);
+    }
+    return pending;
   }
 }

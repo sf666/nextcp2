@@ -82,12 +82,33 @@ export class NavBarComponent {
     return p.length > VISIBLE_TAIL ? p.slice(p.length - VISIBLE_TAIL) : p;
   });
 
+  /** There are crumbs behind the ellipsis, so it is worth a click. */
+  overflowInteractive = computed(() => this.hiddenCrumbs().length > 0);
+
   /**
    * Show the ellipsis when crumbs are folded away, or when we never knew the
-   * start of the path — in both cases something precedes what is on screen.
+   * start of the path — in both cases something precedes what is on screen, but
+   * only the first case has a menu to open.
    */
   overflowVisible = computed(
-    () => this.hiddenCrumbs().length > 0 || this.pathTruncated(),
+    () => this.overflowInteractive() || this.pathTruncated(),
+  );
+
+  /**
+   * Set while search hits are shown instead of a folder; carries the folder to
+   * return to.
+   */
+  searchContext = computed(() =>
+    this.searchContentDirectoryService.searchContext(),
+  );
+
+  /**
+   * Label of the back crumb. The folder's own name when we know it — after a
+   * reload only its object id is known, and "music library" is then more honest
+   * than an empty button.
+   */
+  searchReturnLabel = computed(
+    () => this.searchContext()?.returnTitle || 'music library',
   );
 
   overflowOpen = signal(false);
@@ -104,5 +125,25 @@ export class NavBarComponent {
   gotoCrumb(crumb: BrowseCrumb): void {
     this.overflowOpen.set(false);
     this.crumbPressed.emit(crumb);
+  }
+
+  /**
+   * Leaves a search result for the folder it was started from.
+   *
+   * Deliberately the same output as any breadcrumb jump: the host already clears
+   * the search and browses the crumb it is handed, so there is nothing
+   * search-specific to add here — and the views embedding this bar need no new
+   * bindings.
+   */
+  gotoSearchOrigin(): void {
+    const context = this.searchContext();
+    if (!context) {
+      return;
+    }
+    this.overflowOpen.set(false);
+    this.crumbPressed.emit({
+      id: context.returnObjectId,
+      title: context.returnTitle,
+    });
   }
 }

@@ -29,6 +29,7 @@ import { BackgroundImageService } from 'src/app/util/background-image.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { DisplayHeaderOptionsComponent } from '../../popup/display-header-options/display-header-options.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'display-container-header',
@@ -253,9 +254,14 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   genresForm = new FormControl('');
 
-  // Search-result containers carry the search-icon placeholder as their artwork.
+  /**
+   * Reads explicit state instead of sniffing the placeholder artwork's file name.
+   * Deliberately the "is displayed" flag and not the search context: the context
+   * is set the moment the request goes out, and the header would then already
+   * claim "Search" while the previous folder is still on screen.
+   */
   isSearchResult = computed(() =>
-    (this.currentContainer?.albumartUri ?? '').includes('search-icon.png'),
+    this.contentDirectoryService().isSearchResultDisplayed(),
   );
 
   containerType = computed(() => {
@@ -276,9 +282,9 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.contentDirectoryService) {
-      this.contentDirectoryService().browseFinished$.subscribe((data) =>
-        this.cdsBrowseFinished(),
-      );
+      this.contentDirectoryService()
+        .browseFinished$.pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((data) => this.cdsBrowseFinished());
     }
   }
 
@@ -293,7 +299,9 @@ export class DisplayContainerHeaderComponent implements OnInit {
     // Search results have no real cover — feed an empty url so the header image,
     // the full-screen wash and the sidebar tint all stay neutral-dark instead of
     // washing the whole page in the placeholder icon's colour.
-    const artUrl = this.isSearchResult() ? '' : this.currentContainer.albumartUri;
+    const artUrl = this.isSearchResult()
+      ? ''
+      : this.currentContainer.albumartUri;
     this.backgroundImageService.setDisplayContainerHeaderImage(artUrl);
     // Drive the full-screen "living canvas" wash from the item currently being
     // browsed (always present), so the frosted chrome reliably picks up the
@@ -343,7 +351,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
   private readContainerRating() {
     this.currentContainerRating.set(this.currentContainer?.rating ?? undefined);
   }
-
 
   get isContainerAlbum(): boolean {
     // TODO can/should also be identified by other means

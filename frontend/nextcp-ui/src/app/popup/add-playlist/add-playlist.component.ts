@@ -124,8 +124,10 @@ export class AddPlaylistComponent {
     let sr = dtoGeneratorService.generateEmptySearchRequestDto();
     sr.searchRequest = '';
     sr.mediaServerUDN = deviceService.selectedMediaServerDevice().udn;
+    // Metadata only: the dialog wants the playlist list, it must not turn the
+    // browse view behind it into a search result.
     this.contentDirectoryService
-      .searchAllPlaylist(sr)
+      .searchPlaylistsMetadataOnly(sr)
       .subscribe((data) => this.updateOtherPlaylists(data));
   }
 

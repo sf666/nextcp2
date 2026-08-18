@@ -55,6 +55,49 @@ const ANCESTOR_LOOKUP_LIMIT = 12;
  */
 export const SEARCH_RESULT_CONTAINER_ID = 'search_result';
 
+/**
+ * What the view is showing when it shows search hits instead of a folder.
+ *
+ * Search results are not a place in the media server's tree, so the breadcrumb
+ * cannot describe them and cannot lead out of them either. This carries the one
+ * thing needed for a way back — the folder that was on screen when the search
+ * started — next to what the result actually is.
+ */
+export interface SearchContext {
+  /** What the user searched for. */
+  query: string;
+  /** Which of the four quick-search sections the hits came from. */
+  type: ShowAllType;
+  /** Object id of the folder to return to. */
+  returnObjectId: string;
+  /** Title of that folder, empty when it was never browsed in this view. */
+  returnTitle: string;
+}
+
+/**
+ * Which of the four quick-search sections a "show all" came from.
+ *
+ * Declared here rather than next to the search service: that service already
+ * imports this one, so the reverse direction would be a circular import.
+ */
+export type ShowAllType = 'items' | 'album' | 'artists' | 'playlists';
+
+/** Backend endpoint per search type. */
+const SEARCH_URI: Record<ShowAllType, string> = {
+  items: '/searchAllItems',
+  album: '/searchAllAlbum',
+  artists: '/searchAllArtists',
+  playlists: '/searchAllPlaylist',
+};
+
+/** Headline word per search type, e.g. "songs matching 'dark'". */
+const SEARCH_TYPE_LABEL: Record<ShowAllType, string> = {
+  items: 'songs',
+  album: 'album',
+  artists: 'artists',
+  playlists: 'playlists',
+};
+
 @Injectable()
 export class ContentDirectoryService {
   configService = inject(ConfigurationService);
@@ -66,9 +109,6 @@ export class ContentDirectoryService {
 
   baseUri = '/ContentDirectoryService';
 
-  // for parent navigation back to last CDS objectId
-  private lastBrowseRequest!: BrowseRequestDto;
-
   //
   // signals
   // ==========================================================
@@ -77,19 +117,30 @@ export class ContentDirectoryService {
     this.dtoGeneratorService.generateEmptyContainerItemDto(),
   );
 
+  /**
+   * Set while this view shows search hits, undefined while it shows a folder.
+   * This is the *intent*, set the moment the request goes out — the view needs
+   * to know not to browse long before the server answers.
+   */
+  public searchContext = signal<SearchContext | undefined>(undefined);
+
+  /**
+   * Whether what is actually rendered are search hits. This is the *fact*, so
+   * unlike searchContext it does not flip while the previous folder is still on
+   * screen — which is what anything describing the current content needs.
+   */
+  public isSearchResultDisplayed = computed(
+    () =>
+      this.currentContainerList().currentContainer?.id ===
+      SEARCH_RESULT_CONTAINER_ID,
+  );
+
   isCurrentContainerRoot = computed(() => {
     return (
       (isAssigned(this.currentContainerList().currentContainer) &&
         this.currentContainerList().currentContainer?.id === '0') ||
       this.currentContainerList().currentContainer?.parentID === '-1' ||
       this.currentContainerList().currentContainer?.id.length == 0
-    );
-  });
-
-  isCurrentContainerRootOrHasParentRoot = computed(() => {
-    return (
-      this.isCurrentContainerRoot() ||
-      this.currentContainerList().currentContainer.parentID === '0'
     );
   });
 
@@ -210,6 +261,15 @@ export class ContentDirectoryService {
     if (!current?.id) {
       return;
     }
+    // Search hits live in a synthetic container that exists only in the browser.
+    // It is not a place in the tree, so it has no ancestors to show — and left
+    // to the jump branch below, resolveAncestors would fire a dozen browse
+    // requests building a chain above a container the server never heard of.
+    // Resetting the path also bumps pathGeneration, voiding any walk in flight.
+    if (current.id === SEARCH_RESULT_CONTAINER_ID) {
+      this.setPath([], false);
+      return;
+    }
     if (this.isBrowseRoot(current)) {
       this.setPath([], false);
       return;
@@ -233,11 +293,9 @@ export class ContentDirectoryService {
       return;
     }
 
-    // A jump we cannot place — a reload, a restored deep link, a search hit, or
-    // coming back to a view that was rebuilt. The response carries no ancestor
-    // titles (parentFolderTitle is a UI label like "back to music library" for
-    // some responses, not a folder name), so show where we are now and fetch
-    // the chain above it.
+    // A jump we cannot place — a reload, a restored deep link, or coming back to
+    // a view that was rebuilt. The response carries no ancestor titles, so show
+    // where we are now and fetch the chain above it.
     const parentId = current.parentID;
     const parentIsRoot =
       !parentId ||
@@ -266,7 +324,8 @@ export class ContentDirectoryService {
     this.ancestorLookupFor = anchorId;
     const generation = this.pathGeneration;
 
-    const udn = from.mediaServerUDN || this.deviceService.selectedMediaServerDevice().udn;
+    const udn =
+      from.mediaServerUDN || this.deviceService.selectedMediaServerDevice().udn;
     const chain: BrowseCrumb[] = [];
     const seen = new Set<string>([anchorId]);
 
@@ -366,7 +425,6 @@ export class ContentDirectoryService {
 
   // notify other about content change
   browseFinished$: Subject<ContainerItemDto> = new Subject();
-  searchFinished$: Subject<ContainerItemDto> = new Subject();
 
   // to which page was browsed
 
@@ -375,12 +433,7 @@ export class ContentDirectoryService {
   private PAGE_REQUEST_CONCURRENCY = 4;
   private turn_page_id: string | undefined;
   private browseRequestAbort$ = new Subject<void>();
-
-  // search
-  private lastSearchObject = signal<SearchRequestDto>(
-    this.dtoGeneratorService.generateEmptySearchRequestDto(),
-  );
-  private lastSearchType = signal<string>('');
+  private searchRequestAbort$ = new Subject<void>();
 
   private id = 'id_' + Math.random().toString(16).slice(2);
   private destroyRef = inject(DestroyRef);
@@ -585,7 +638,12 @@ export class ContentDirectoryService {
 
     // Abort stale paging streams when a new browse request starts.
     this.browseRequestAbort$.next();
-    this.lastBrowseRequest = browseRequestDto;
+    // A real browse replaces whatever hits were shown, so there is nothing left
+    // to go back from. Done here — the single funnel for every browse that
+    // renders — and at request time rather than on the response, so the view
+    // never sees a stale search context while a browse is already on its way.
+    this.searchRequestAbort$.next();
+    this.searchContext.set(undefined);
     const browseStartedAt = performance.now();
 
     const firstPage$ = this.httpService.post<ContainerItemDto>(
@@ -896,108 +954,107 @@ export class ContentDirectoryService {
     this.httpService.post(this.baseUri, uri, mediaServerUdn).subscribe();
   }
 
-  public searchAllItems(quickSearchDto: SearchRequestDto): void {
-    console.log('CDS ' + this.id + ' : searchAllItems');
-    const uri = '/searchAllItems';
-    this.lastSearchObject.set(quickSearchDto);
-    this.lastSearchType.set('songs');
-    console.log(this.id + 'performing search for all matching items ...');
-    this.httpService
-      .post<SearchResultDto>(this.baseUri, uri, quickSearchDto)
-      .subscribe({
-        next: (data) => {
-          console.log(
-            'received ' +
-              data.musicItems.length +
-              ' items. Updating search result ...',
-          );
-          this.updateSearchResultItem(data.musicItems);
-        },
-        error: (error: any) => {
-          console.error(this.id + 'searchAllItems error : ', error);
-        },
-      });
-  }
+  /**
+   * Runs a "show all" search and makes its hits the displayed content.
+   *
+   * A search and a browse write the same signals, so they are made mutually
+   * exclusive here: whichever starts last cancels the other. Without that, the
+   * automatic browse of the last folder and a search started in the same tick
+   * both ran and the slower server answer won.
+   *
+   * @param returnTo the folder to offer as the way back. The view has to supply
+   *        it: this service is created per view and a freshly built one has not
+   *        browsed anything yet, so it cannot know where the user came from.
+   */
+  public searchAll(
+    type: ShowAllType,
+    request: SearchRequestDto,
+    returnTo: BrowseCrumb,
+  ): void {
+    this.browseRequestAbort$.next();
+    this.searchRequestAbort$.next();
 
-  public searchAllPlaylist(
-    quickSearchDto: SearchRequestDto,
-  ): Observable<SearchResultDto> {
-    console.log('CDS ' + this.id + ' : searchAllPlaylist');
-    const uri = '/searchAllPlaylist';
-    this.lastSearchObject.set(quickSearchDto);
-    this.lastSearchType.set('playlists');
-    let result = this.httpService.post<SearchResultDto>(
-      this.baseUri,
-      uri,
-      quickSearchDto,
-    );
-    result.subscribe((data) => {
-      this.updateSearchResultContainer(data.playlistItems);
+    // Set before the request goes out, not when it returns: the view reads this
+    // to decide that it must not browse its last folder, and it decides that
+    // now.
+    this.searchContext.set({
+      query: request.searchRequest,
+      type: type,
+      returnObjectId: returnTo.id || '0',
+      returnTitle: returnTo.title ?? '',
     });
-    return result;
-  }
 
-  public searchAllAlbum(quickSearchDto: SearchRequestDto): void {
-    console.log('CDS ' + this.id + ' : searchAllAlbum');
-    const uri = '/searchAllAlbum';
-    this.lastSearchObject.set(quickSearchDto);
-    this.lastSearchType.set('album');
-    this.httpService
-      .post<SearchResultDto>(this.baseUri, uri, quickSearchDto)
-      .subscribe((data) => {
-        this.updateSearchResultContainer(data.albumItems);
-      });
-  }
-
-  public searchAllArtists(quickSearchDto: SearchRequestDto): void {
-    console.log('CDS ' + this.id + ' : searchAllArtists');
-    const uri = '/searchAllArtists';
-    this.lastSearchObject.set(quickSearchDto);
-    this.lastSearchType.set('artists');
-    this.httpService
-      .post<SearchResultDto>(this.baseUri, uri, quickSearchDto)
-      .subscribe((data) => {
-        this.updateSearchResultContainer(data.artistItems);
-      });
-  }
-
-  private updateSearchResultContainer(searchResultContainer: ContainerDto[]) {
-    let ci = this.dtoGeneratorService.generateEmptyContainerItemDto();
-    ci.containerDto = searchResultContainer;
-    ci.currentContainer.parentID =
-      this.lastBrowseRequest?.objectID !== undefined
-        ? this.lastBrowseRequest.objectID
-        : '0';
-    ci.currentContainer.title =
-      this.lastSearchType() +
-      " matching '" +
-      this.lastSearchObject().searchRequest +
-      "'";
-    ci.currentContainer.id = SEARCH_RESULT_CONTAINER_ID;
-    ci.currentContainer.albumartUri = '/assets/images/search-icon.png';
-    ci.parentFolderTitle = 'back to music library';
-    this.updateContainer(ci);
-    this.searchFinished$.next(ci);
-  }
-
-  private updateSearchResultItem(searchResultItems: MusicItemDto[]) {
-    let ci = this.dtoGeneratorService.generateEmptyContainerItemDto();
-    ci.musicItemDto = searchResultItems;
-    ci.currentContainer.albumartUri = '/assets/images/search-icon.png';
-    ci.currentContainer.parentID = this.lastBrowseRequest.objectID;
-    ci.currentContainer.id = SEARCH_RESULT_CONTAINER_ID;
-    ci.currentContainer.title =
-      this.lastSearchType() +
-      " matching '" +
-      this.lastSearchObject().searchRequest +
-      "'";
-    ci.currentContainer.childCount = searchResultItems.length;
-    ci.parentFolderTitle = 'back to music library';
     console.log(
-      this.id + ' : updating current container with search result ...',
+      'CDS ' +
+        this.id +
+        ' : searchAll ' +
+        type +
+        " for '" +
+        request.searchRequest +
+        "'",
     );
+
+    this.httpService
+      .post<SearchResultDto>(this.baseUri, SEARCH_URI[type], request)
+      .pipe(
+        take(1),
+        takeUntil(this.searchRequestAbort$),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        next: (data) => this.applySearchResult(type, data),
+        error: (error: any) => {
+          console.error(this.id + ' : searchAll ' + type + ' failed', error);
+          // Nothing was found, so there is nothing to go back from either.
+          this.searchContext.set(undefined);
+          this.toastService.error('search failed', 'MediaLibrary');
+        },
+      });
+  }
+
+  /**
+   * Fetches playlists WITHOUT touching the displayed content — the same split as
+   * browseChildrenMetadataOnly versus browseChildren. Used by the "add to
+   * playlist" dialog, which only wants the data.
+   */
+  public searchPlaylistsMetadataOnly(
+    request: SearchRequestDto,
+  ): Observable<SearchResultDto> {
+    return this.httpService.post<SearchResultDto>(
+      this.baseUri,
+      SEARCH_URI.playlists,
+      request,
+    );
+  }
+
+  private applySearchResult(type: ShowAllType, data: SearchResultDto): void {
+    const ci = this.dtoGeneratorService.generateEmptyContainerItemDto();
+    if (type === 'items') {
+      ci.musicItemDto = data.musicItems ?? [];
+      ci.currentContainer.childCount = ci.musicItemDto.length;
+    } else {
+      ci.containerDto =
+        (type === 'album'
+          ? data.albumItems
+          : type === 'artists'
+            ? data.artistItems
+            : data.playlistItems) ?? [];
+      ci.currentContainer.childCount = ci.containerDto.length;
+    }
+    this.describeSearchResult(ci);
     this.updateContainer(ci);
-    this.searchFinished$.next(ci);
+  }
+
+  /** Dresses the synthetic container the hits are presented in. */
+  private describeSearchResult(ci: ContainerItemDto): void {
+    const context = this.searchContext();
+    ci.currentContainer.id = SEARCH_RESULT_CONTAINER_ID;
+    // Step-out target, so browseToParent lands where the user came from.
+    ci.currentContainer.parentID = context?.returnObjectId ?? '0';
+    ci.currentContainer.title = context
+      ? SEARCH_TYPE_LABEL[context.type] + " matching '" + context.query + "'"
+      : 'search result';
+    ci.currentContainer.albumartUri = '/assets/images/search-icon.png';
   }
 
   public deleteMusicTrack(item: MusicItemDto) {

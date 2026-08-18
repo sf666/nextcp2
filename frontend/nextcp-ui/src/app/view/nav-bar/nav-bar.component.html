@@ -21,25 +21,48 @@
           </button>
         }
 
+        <!--
+          A search result is not a place in the tree, so it gets no ancestor
+          chain (the browse path is empty while it is shown) — just one crumb
+          back to the folder the search was started from.
+        -->
+        @if (searchContext()) {
+          <span class="crumb-sep material-symbols-sharp" aria-hidden="true">chevron_right</span>
+          <button type="button" class="crumb crumb-back" (click)="gotoSearchOrigin()"
+                  [title]="'Back to ' + searchReturnLabel()">
+            <span class="material-symbols-sharp">arrow_back</span>
+            <span class="crumb-back-label">{{searchReturnLabel()}}</span>
+          </button>
+        }
+
         @if (overflowVisible()) {
           <span class="crumb-sep material-symbols-sharp" aria-hidden="true">chevron_right</span>
-          <div class="crumb-overflow">
-            <button type="button" class="crumb crumb-more" (click)="toggleOverflow()"
-                    [class.is-open]="overflowOpen()"
-                    [attr.aria-expanded]="overflowOpen()" title="Show full path">
+          @if (overflowInteractive()) {
+            <div class="crumb-overflow">
+              <button type="button" class="crumb crumb-more" (click)="toggleOverflow()"
+                      [class.is-open]="overflowOpen()"
+                      [attr.aria-expanded]="overflowOpen()" title="Show full path">
+                <span class="material-symbols-sharp">more_horiz</span>
+              </button>
+              @if (overflowOpen()) {
+                <div class="crumb-menu">
+                  @for (crumb of hiddenCrumbs(); track crumb.id) {
+                    <button type="button" class="crumb-menu-item" (click)="gotoCrumb(crumb)">
+                      <span class="material-symbols-sharp">folder</span>
+                      <span class="crumb-menu-label">{{crumb.title}}</span>
+                    </button>
+                  }
+                </div>
+              }
+            </div>
+          } @else {
+            <!-- The path does not start at the root but we have no crumbs to
+                 offer: say so without pretending to be clickable. -->
+            <span class="crumb crumb-more crumb-more-static" title="Path starts higher up"
+                  aria-hidden="true">
               <span class="material-symbols-sharp">more_horiz</span>
-            </button>
-            @if (overflowOpen() && hiddenCrumbs().length > 0) {
-              <div class="crumb-menu">
-                @for (crumb of hiddenCrumbs(); track crumb.id) {
-                  <button type="button" class="crumb-menu-item" (click)="gotoCrumb(crumb)">
-                    <span class="material-symbols-sharp">folder</span>
-                    <span class="crumb-menu-label">{{crumb.title}}</span>
-                  </button>
-                }
-              </div>
-            }
-          </div>
+            </span>
+          }
         }
 
         @for (crumb of visibleCrumbs(); track crumb.id; let last = $last) {
