@@ -60,17 +60,20 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 		try {
 			log.info("adding song id {} to playlist with id {}", addRequest.songObjectId, addRequest.playlistObjectId);
 			getExtendedMediaServerByUdn(addRequest.serverUdn).addSongToPlaylist(addRequest.songObjectId, addRequest.playlistObjectId);
-			toast.publishSuccessMessage(null, "playlist", "sond added to playlist");
+			toast.publishSuccessMessage(null, "playlist", "song added to playlist");
+			addPlaylistToRecent(addRequest.serverUdn, addRequest.playlistObjectId);
 			mediaServerSseEvents.mediaServerRecentPlaylistChanged(getRecentServerPlaylists(addRequest.serverUdn));
 		} catch (Exception e) {
 			String errorText = e.getMessage();
 			toast.publishErrorMessage(null, "playlist", errorText);
 			log.warn("adding song to server playlist", e);
-		} finally {
-			addPlaylistToRecent(addRequest.serverUdn, addRequest.playlistObjectId);
 		}
 	}
 
+	/**
+	 * Notes a playlist as recently used. Pushing the changed list to the clients is
+	 * left to the caller, which knows whether anything else changed too and can then get away with a single push.
+	 */
 	private void addPlaylistToRecent(String udn, String objectId) {
 		try {
 			if (!getRecentObjectIds(udn).contains(objectId)) {
@@ -78,11 +81,10 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 				log.debug("recent playlists : added objectId {} to server with udn {}", objectId, udn);
 				if (getRecentObjectIds(udn).size() > 3) {
 					String removed = getRecentObjectIds(udn).removeLast();
-					log.debug("removing last object from recent playlists with ID : ", removed);
+					log.debug("removing last object from recent playlists with ID : {}", removed);
 				}
-				mediaServerSseEvents.mediaServerRecentPlaylistChanged(getRecentServerPlaylists(udn));
 			} else {
-				log.debug("objectId {} already in recent playlists ... ");
+				log.debug("objectId {} already in recent playlists ... ", objectId);
 			}
 		} catch (Exception e) {
 			log.error("cannot add playlistid {} to current playlists on server with udn {}", objectId, udn);
@@ -168,10 +170,11 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 				createPlaylistVo.playlistName);
 			toast.publishSuccessMessage(null, "playlist", "playlist created : " + createPlaylistVo.playlistName);
 			addPlaylistToRecent(createPlaylistVo.mediaServerUdn, pi.getId());
+			mediaServerSseEvents.mediaServerRecentPlaylistChanged(getRecentServerPlaylists(createPlaylistVo.mediaServerUdn));
 			return pi.getId();
 		} catch (Exception e) {
 			log.warn("createPlaylist", e);
-			toast.publishErrorMessage(null, "playlist", "create playlis failed : " + e.getMessage());
+			toast.publishErrorMessage(null, "playlist", "create playlist failed : " + e.getMessage());
 			return "";
 		}
 	}

@@ -446,7 +446,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	@Override
 	public Container createPlaylist(String parentContainerId, String playlistName) throws Exception {
-		log.info("adding playlist with name {} to folder with id {} ...", parentContainerId, playlistName);
+		log.info("adding playlist with name {} to folder with id {} ...", playlistName, parentContainerId);
 		CreateObjectInput inp = new CreateObjectInput();
 		inp.ContainerID = parentContainerId;
 		PlaylistItem pi = new PlaylistItem();
@@ -502,7 +502,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		inp.ObjectID = objectId;
 		try {
 			getContentDirectoryService().destroyObject(inp);
-			log.error("deleteObject : failed for id {} ", objectId);
+			log.debug("deleteObject : destroyed object with id {} ", objectId);
 		} catch (GenActionException e) {
 			String errorText = errorHandler.extractErrorText(e.description);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
