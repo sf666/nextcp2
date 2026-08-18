@@ -22,6 +22,7 @@ import { BackgroundImageService } from '../../util/background-image.service';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { ImgFallbackDirective } from 'src/app/directive/img-fallback.directive';
 
 @Component({
   selector: 'renderer-footer',
@@ -29,7 +30,7 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
   styleUrls: ['./footer.component.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [QualityBadgeComponent, ReactiveFormsModule],
+  imports: [QualityBadgeComponent, ReactiveFormsModule, ImgFallbackDirective],
 })
 export class FooterComponent implements OnInit {
   private dialog = inject(MatDialog);

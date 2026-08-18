@@ -2,7 +2,7 @@
   <!-- Left: now playing -->
   <div id="left-section" class="now-playing flex items-center min-w-0 grow-3 basis-0">
     <button type="button" class="artwork-wrap" (click)="showSongPopup($event)" title="{{getCurrentSongTitle()}}">
-      <img class="artwork" src="{{rendererService.imgSrc()}}" alt="">
+      <img class="artwork" src="{{rendererService.imgSrc()}}" alt="" imgFallback>
     </button>
 
     <div class="track-meta flex flex-col justify-center min-w-0">

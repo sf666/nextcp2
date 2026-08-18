@@ -15,6 +15,7 @@ import {
 import { StarRatingComponent } from '../../view/star-rating/star-rating.component';
 import { MusicLibraryService } from 'src/app/service/music-library/music-library.service';
 import { BackgroundImageService } from '../../util/background-image.service';
+import { ImgFallbackDirective } from 'src/app/directive/img-fallback.directive';
 
 @Component({
   selector: 'app-mediarenderer',
@@ -22,7 +23,7 @@ import { BackgroundImageService } from '../../util/background-image.service';
   styleUrls: ['./mediarenderer.component.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [StarRatingComponent],
+  imports: [StarRatingComponent, ImgFallbackDirective],
 })
 export class MediarendererComponent implements OnInit {
   private defaultPlaylistService = inject(DefaultPlaylistService);
