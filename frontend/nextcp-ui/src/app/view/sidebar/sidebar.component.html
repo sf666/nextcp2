@@ -102,8 +102,12 @@
       }
     </div>
     @for (item of serverPlaylists; track item.playlistId) {
-    <button type="button" [routerLink]="'/myPlaylists'"
-      class="text-left ps-4 mx-2 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getPlaylistClass(item.playlistId)}}"
+    <!-- Playlist names are free text and regularly longer than the sidebar is
+         wide. Wrapping turns the list into uneven blocks that no longer read as
+         one column, so a long name is cut with an ellipsis and offered in full
+         as a tooltip. -->
+    <button type="button" [routerLink]="'/myPlaylists'" [title]="item.playlistName"
+      class="block truncate text-left ps-4 pe-2 mx-2 py-1.5 text-sm bg-transparent font-medium focus:outline-none rounded-xl hover:bg-cyan-700/15 {{getPlaylistClass(item.playlistId)}}"
       (click)="browseToPlaylist(item)">{{item.playlistName}}</button>
     }
     @if(deviceService.mediaServerSelected()) {

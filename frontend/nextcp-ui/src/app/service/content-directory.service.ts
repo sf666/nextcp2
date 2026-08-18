@@ -2,6 +2,10 @@ import { ConfigurationService } from './configuration.service';
 import { DeviceService } from './device.service';
 import { ToastService } from './toast/toast.service';
 import {
+  PlaylistStructureChange,
+  ServerPlaylistService,
+} from './server-playlist.service';
+import {
   map,
   mergeMap,
   Observable,
@@ -44,6 +48,13 @@ export interface BrowseCrumb {
  */
 const ANCESTOR_LOOKUP_LIMIT = 12;
 
+/**
+ * Object id of the synthetic container that holds search hits. It exists only in
+ * the browser, so it must never be handed back to the media server as a browse
+ * target.
+ */
+export const SEARCH_RESULT_CONTAINER_ID = 'search_result';
+
 @Injectable()
 export class ContentDirectoryService {
   configService = inject(ConfigurationService);
@@ -51,6 +62,7 @@ export class ContentDirectoryService {
   private dtoGeneratorService = inject(DtoGeneratorService);
   private deviceService = inject(DeviceService);
   private toastService = inject(ToastService);
+  private serverPlaylistService = inject(ServerPlaylistService);
 
   baseUri = '/ContentDirectoryService';
 
@@ -384,6 +396,63 @@ export class ContentDirectoryService {
     if (configService.applicationConfig.itemsPerPage) {
       this.MAX_REQUEST_ITEMS = configService.applicationConfig.itemsPerPage;
     }
+
+    this.serverPlaylistService.playlistStructureChanged$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((change) => this.afterPlaylistStructureChanged(change));
+  }
+
+  /**
+   * Creating or deleting a playlist happens outside any browse view — from the
+   * sidebar, from a song's context menu — so the list on screen still shows the
+   * state of the last browse. Browse again, but only in the view that is
+   * actually affected: every view has its own instance of this service, and a
+   * search result panel must not have its hits replaced by a browse.
+   */
+  private afterPlaylistStructureChanged(change: PlaylistStructureChange): void {
+    const current = this.currentContainerID;
+    // Nothing shown yet, or what is shown are search hits — a container the
+    // media server does not know, so it cannot be browsed again.
+    if (!current || current === SEARCH_RESULT_CONTAINER_ID) {
+      return;
+    }
+
+    // What is on screen is the playlist that was just deleted. Browsing it again
+    // would ask the server for an object it no longer has, so step out to the
+    // folder it was in — the only place left to show.
+    if (change.removedObjectId === current) {
+      this.browseToParent('');
+      return;
+    }
+
+    const createdHere = change.containerId === current;
+    const removedFromHere =
+      !!change.removedObjectId && this.isDisplayed(change.removedObjectId);
+    // The playlist folder holds exactly what just changed, so it is stale even
+    // when the id lookup above found nothing: the playlist dialog also lists
+    // playlists it found by search, and a search hit can carry a different
+    // object id than the same playlist has when browsed.
+    const showsPlaylistFolder = current === this.configuredPlaylistFolderId();
+
+    if (createdHere || removedFromHere || showsPlaylistFolder) {
+      this.refreshCurrentContainer();
+    }
+  }
+
+  /** Object id of the folder holding the user's playlists, '' if unconfigured. */
+  private configuredPlaylistFolderId(): string {
+    const udn = this.deviceService.selectedMediaServerDevice().udn;
+    return this.configService.findServerConfig(udn)?.playistObjectId ?? '';
+  }
+
+  /** True if the given object id is one of the rows currently on screen. */
+  private isDisplayed(objectId: string): boolean {
+    return (
+      this.playlistList_().some((pl) => pl.id === objectId) ||
+      this.containerList_().some((c) => c.id === objectId) ||
+      this.musicTracks_().some((item) => item.objectID === objectId) ||
+      this.rawOtherItems_().some((item) => item.objectID === objectId)
+    );
   }
 
   //
@@ -904,7 +973,7 @@ export class ContentDirectoryService {
       " matching '" +
       this.lastSearchObject().searchRequest +
       "'";
-    ci.currentContainer.id = 'search_result';
+    ci.currentContainer.id = SEARCH_RESULT_CONTAINER_ID;
     ci.currentContainer.albumartUri = '/assets/images/search-icon.png';
     ci.parentFolderTitle = 'back to music library';
     this.updateContainer(ci);
@@ -916,7 +985,7 @@ export class ContentDirectoryService {
     ci.musicItemDto = searchResultItems;
     ci.currentContainer.albumartUri = '/assets/images/search-icon.png';
     ci.currentContainer.parentID = this.lastBrowseRequest.objectID;
-    ci.currentContainer.id = 'search_result';
+    ci.currentContainer.id = SEARCH_RESULT_CONTAINER_ID;
     ci.currentContainer.title =
       this.lastSearchType() +
       " matching '" +

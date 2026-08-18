@@ -95,7 +95,6 @@ export class AddPlaylistComponent {
     return this.serverPlaylistService
       .recentServerPl()
       .serverPlaylists.filter((pl) => {
-        console.log('Playlist name : ' + pl.playlistName);
         if (this.playlistFilter().length > 0) {
           return pl.playlistName
             .toLowerCase()
@@ -204,12 +203,15 @@ export class AddPlaylistComponent {
       .deleteObject(serverPlaylist.playlistId)
       .subscribe({
         next: (data) => {
-          this.serverPlaylistService.serverPl().serverPlaylists =
-            this.serverPlaylistService
-              .serverPl()
-              .serverPlaylists.filter(
-                (pl) => pl.playlistId !== serverPlaylist.playlistId,
-              );
+          // Drop the row right away instead of waiting for the refetch. Has to
+          // be a new object: writing into the signal's current value leaves the
+          // computed lists untouched, so the deleted playlist stayed on screen.
+          this.serverPlaylistService.serverPl.update((pl) => ({
+            ...pl,
+            serverPlaylists: pl.serverPlaylists.filter(
+              (entry) => entry.playlistId !== serverPlaylist.playlistId,
+            ),
+          }));
         },
         error: (data) => {
           console.error(data);
@@ -295,7 +297,7 @@ export class AddPlaylistComponent {
   createPlaylistClicked(): void {
     this.serverPlaylistService
       .createPlaylist(this.newPlaylistName(), this.addToContainer.id)
-      .subscribe((newId) => this.newPlaylistId(newId));
+      .subscribe((newId) => this.playlistCreated(newId));
     this.close();
   }
 
@@ -303,15 +305,28 @@ export class AddPlaylistComponent {
     (this.newPlaylistName.set(''), this.close());
   }
 
-  private newPlaylistId(newId: string) {
-    this.addTo({
-      playlistId: newId,
-      albumArtUrl: '',
-      playlistName: '',
-      numberOfElements: 0,
-      totalPlaytime: '',
-    });
-    this.serverPlaylistService.updateServerAccessiblePlaylists();
+  /**
+   * The dialog reaches the create form two ways: from a song ("add to playlist"
+   * → "create playlist"), where the new playlist is meant to hold that song,
+   * and from the sidebar, where there is no song at all. Only the first case
+   * has something to file — filing the empty item id made the media server
+   * answer "The specified ObjectID is invalid" and raised an error toast on
+   * every plain create.
+   *
+   * The sidebar list is already refetched by the service, so nothing else is
+   * needed here.
+   */
+  private playlistCreated(newId: string): void {
+    if (!newId) {
+      // Create failed; the backend has already reported why.
+      return;
+    }
+    if (this.musicItemToAddExists) {
+      this.serverPlaylistService.addSongToServerPlaylist(
+        this.musicItemToAdd().objectID,
+        newId,
+      );
+    }
   }
 
   get musicItemToAddExists(): boolean {

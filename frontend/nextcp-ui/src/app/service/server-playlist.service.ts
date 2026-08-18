@@ -1,11 +1,23 @@
 import { ConfigurationService } from 'src/app/service/configuration.service';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { Injectable, computed, signal, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { CreateServerPlaylistVO, ServerDeleteObjectRequest, ServerPlaylistEntry, ServerPlaylists } from './dto';
 import { HttpService } from './http.service';
 import { SseService } from './sse/sse.service';
 import { DeviceService } from './device.service';
+
+/**
+ * What changed on the media server, so a listening view can tell whether it is
+ * showing it. Both fields are optional: on create we know the parent container,
+ * on destroy only the object that is gone.
+ */
+export interface PlaylistStructureChange {
+  /** Container a new playlist was created in. */
+  containerId?: string;
+  /** Object (playlist or playlist entry) that was destroyed. */
+  removedObjectId?: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +30,15 @@ export class ServerPlaylistService {
   baseUri = '/MediaServerPlaylistService';
 
   playlistLoading = signal<boolean>(true);
+
+  /**
+   * Fires whenever a playlist was created or an object destroyed on the media
+   * server. A browse result is a snapshot, so any view currently showing the
+   * affected container is stale from this moment on — it has to browse again to
+   * see the new playlist. Only the sidebar list is refetched here; the browse
+   * views listen for this (see ContentDirectoryService).
+   */
+  public playlistStructureChanged$ = new Subject<PlaylistStructureChange>();
 
   recentServerPl = signal<ServerPlaylists>({
     mediaServerUdn: '',
@@ -143,7 +164,15 @@ export class ServerPlaylistService {
     };
     const uri = '/createPlaylist';
     let ret = this.httpService.post<string>(this.baseUri, uri, createPL);
-    ret.subscribe(() => this.updateServerAccessiblePlaylists());
+    ret.subscribe((newId) => {
+      // An empty id means the server refused the create and already reported
+      // why — nothing changed, so nothing to refresh.
+      if (!newId) {
+        return;
+      }
+      this.updateServerAccessiblePlaylists();
+      this.playlistStructureChanged$.next({ containerId: containerId });
+    });
     return ret;
   }
 
@@ -162,20 +191,11 @@ export class ServerPlaylistService {
     return ret;
   }
 
-  public deletePlaylistFile(objectId: string): Observable<any> {
-    let ret = this.deleteObject(objectId);
-    ret.subscribe(() => this.updateServerAccessiblePlaylists());
-    return ret;
-  }
-
-  public deletePlaylistSongEntry(objectId: string): Observable<any> {
-    return this.deleteObject(objectId);
-  }
-
   /**
+   * Deletes an object on the media server device — a playlist, or a single entry
+   * within one.
    *
-   * @param songId This method deletes objects located on the media server device, like playlists or playlists entries.
-   * @param playlistId
+   * @param objectId object id as delivered by the content directory
    */
   public deleteObject(objectId: string): Observable<any> {
     const uri = '/deleteObject';
@@ -184,7 +204,10 @@ export class ServerPlaylistService {
       objectId: objectId,
     };
     let ret = this.httpService.post(this.baseUri, uri, req);
-    ret.subscribe(() => this.afterMediaServerChanged());
+    ret.subscribe(() => {
+      this.afterMediaServerChanged();
+      this.playlistStructureChanged$.next({ removedObjectId: objectId });
+    });
     return ret;
   }
 }
