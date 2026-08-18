@@ -83,6 +83,17 @@ export class DisplayContainerComponent {
   browseFinish = output<ContainerItemDto>();
   itemDeleted = output<MusicItemDto>();
 
+  /**
+   * True while search hits are on screen instead of a browsed folder. Drives the
+   * shorter hero, which has to be set here: this element spans both the header
+   * and the offsets that line up with its bottom edge.
+   */
+  isSearchResult = computed(
+    () =>
+      this.contentHandler()?.contentDirectoryService.isSearchResultDisplayed() ??
+      false,
+  );
+
   listView = signal<boolean>(true);
   displayFilterString = signal<string>('');
   selectedGenres = signal<Array<string>>([]);

@@ -1,4 +1,32 @@
 
+// The hero's height, declared once here because two things have to agree on it:
+// the header itself, and the offsets that stay glued to its bottom edge. When
+// only one of them knew the number, changing it left a gap the size of the
+// difference.
+#display-container-component-top-id {
+    --dc-hero-max   : 310px;
+    --dc-hero-min   : 104px;
+    --dc-hero-indent: 100px;
+}
+
+// Search results keep the full hero height — a shorter one read as cramped next
+// to every other page in the app. There is no cover to make room for, so the
+// indent only has to leave the band room for the query and the type bar.
+#display-container-component-top-id.is-search {
+    --dc-hero-indent: 44px;
+}
+
+@media (max-height: 800px) {
+    #display-container-component-top-id {
+        --dc-hero-max   : 210px;
+        --dc-hero-indent: 80px;
+    }
+
+    #display-container-component-top-id.is-search {
+        --dc-hero-indent: 28px;
+    }
+}
+
 // Pin the browse header to the top of the scroll area. Its parent
 // (#display-container-component-top-id) spans header + list, so it stays
 // pinned while the list scrolls underneath and collapses via its own state.
@@ -19,8 +47,8 @@
 // so it stays glued to the header bottom throughout the collapse instead of
 // being briefly hidden behind the still-tall header mid-transition.
 #display-container-main-content.with-sticky-header {
-    --dc-h-max       : 310px;
-    --dc-h-min       : 104px;
+    --dc-h-max       : var(--dc-hero-max);
+    --dc-h-min       : var(--dc-hero-min);
     --list-sticky-top: calc(var(--dc-h-max) - (var(--dc-h-max) - var(--dc-h-min)) * var(--collapse, 0));
 }
 
@@ -33,12 +61,6 @@
 
 #display-container-main-content.has-action-buttons {
     margin-top: 2.5rem;
-}
-
-@media (max-height: 800px) {
-    #display-container-main-content.with-sticky-header {
-        --dc-h-max: 210px;
-    }
 }
 
 .title {

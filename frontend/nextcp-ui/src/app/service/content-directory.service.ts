@@ -72,6 +72,12 @@ export interface SearchContext {
   returnObjectId: string;
   /** Title of that folder, empty when it was never browsed in this view. */
   returnTitle: string;
+  /**
+   * Folder the search was limited to, empty when it covered the whole library.
+   * The header names it, so "in Elektro-Klassiker" versus "in Music Library" is
+   * visible rather than something the user has to remember toggling.
+   */
+  scopeTitle: string;
 }
 
 /**
@@ -90,12 +96,18 @@ const SEARCH_URI: Record<ShowAllType, string> = {
   playlists: '/searchAllPlaylist',
 };
 
-/** Headline word per search type, e.g. "songs matching 'dark'". */
-const SEARCH_TYPE_LABEL: Record<ShowAllType, string> = {
-  items: 'songs',
-  album: 'album',
-  artists: 'artists',
-  playlists: 'playlists',
+/**
+ * What the hits are called, for "42 albums" / "1 album". Exported because the
+ * header names the result set and this is the only place the wording lives.
+ */
+export const SEARCH_TYPE_LABEL: Record<
+  ShowAllType,
+  { one: string; many: string }
+> = {
+  items: { one: 'track', many: 'tracks' },
+  album: { one: 'album', many: 'albums' },
+  artists: { one: 'artist', many: 'artists' },
+  playlists: { one: 'playlist', many: 'playlists' },
 };
 
 @Injectable()
@@ -977,11 +989,13 @@ export class ContentDirectoryService {
     // Set before the request goes out, not when it returns: the view reads this
     // to decide that it must not browse its last folder, and it decides that
     // now.
+    const scoped = !!request.parentObjectID && request.parentObjectID !== '0';
     this.searchContext.set({
       query: request.searchRequest,
       type: type,
       returnObjectId: returnTo.id || '0',
       returnTitle: returnTo.title ?? '',
+      scopeTitle: scoped ? (returnTo.title ?? '') : '',
     });
 
     console.log(
@@ -1029,18 +1043,33 @@ export class ContentDirectoryService {
 
   private applySearchResult(type: ShowAllType, data: SearchResultDto): void {
     const ci = this.dtoGeneratorService.generateEmptyContainerItemDto();
-    if (type === 'items') {
-      ci.musicItemDto = data.musicItems ?? [];
-      ci.currentContainer.childCount = ci.musicItemDto.length;
-    } else {
-      ci.containerDto =
-        (type === 'album'
-          ? data.albumItems
-          : type === 'artists'
-            ? data.artistItems
-            : data.playlistItems) ?? [];
-      ci.currentContainer.childCount = ci.containerDto.length;
+    // Each kind of hit goes into the list the display container renders it with.
+    // Albums in particular have to land in albumDto: everything in containerDto
+    // is shown as a folder, which is why album hits used to appear under a
+    // "Folders" heading and lost the album tiles and album sorting with it.
+    let count = 0;
+    switch (type) {
+      case 'items':
+        ci.musicItemDto = data.musicItems ?? [];
+        count = ci.musicItemDto.length;
+        break;
+      case 'album':
+        ci.albumDto = data.albumItems ?? [];
+        count = ci.albumDto.length;
+        break;
+      case 'artists':
+        ci.containerDto = data.artistItems ?? [];
+        count = ci.containerDto.length;
+        break;
+      case 'playlists':
+        // Playlist containers carry object.container.playlistContainer, which
+        // updateContainer picks out of containerDto into the playlist section.
+        ci.containerDto = data.playlistItems ?? [];
+        count = ci.containerDto.length;
+        break;
     }
+    ci.currentContainer.childCount = count;
+    ci.totalMatches = count;
     this.describeSearchResult(ci);
     this.updateContainer(ci);
   }
@@ -1051,10 +1080,13 @@ export class ContentDirectoryService {
     ci.currentContainer.id = SEARCH_RESULT_CONTAINER_ID;
     // Step-out target, so browseToParent lands where the user came from.
     ci.currentContainer.parentID = context?.returnObjectId ?? '0';
-    ci.currentContainer.title = context
-      ? SEARCH_TYPE_LABEL[context.type] + " matching '" + context.query + "'"
-      : 'search result';
-    ci.currentContainer.albumartUri = '/assets/images/search-icon.png';
+    // Just the query: it is the subject of the page, and the header sets the
+    // type and the count around it. The old "album matching 'dark'" read as a
+    // broken sentence and stayed singular for 42 hits.
+    ci.currentContainer.title = context?.query ?? 'search result';
+    // No artwork: the header draws a colour bloom from the hits instead of
+    // standing a placeholder cover where an album cover would be.
+    ci.currentContainer.albumartUri = '';
   }
 
   public deleteMusicTrack(item: MusicItemDto) {

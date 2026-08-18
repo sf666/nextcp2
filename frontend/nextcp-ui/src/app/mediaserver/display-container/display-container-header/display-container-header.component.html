@@ -1,24 +1,57 @@
 <!--                                                                -->
 <!-- display component header                                       -->
 <!-- ############################################################## -->
-<div id="outer" class="flex relative w-full grow shrink justify-items-center" [class.condensed]="condensed()" [class.has-actions]="hasSongs()">
+<div id="outer" class="flex relative w-full grow shrink justify-items-center" [class.condensed]="condensed()" [class.has-actions]="hasSongs()"
+  [class.is-search]="isSearchResult()">
   <div class="bg-img-header w-full" id="header-background"></div>
+
+  <!--
+    Search results have no cover, so instead of standing a placeholder where an
+    album cover would be, the hero is washed with the dominant colours of the
+    hits themselves. Empty when no colour could be read — then the hero is just
+    dark, never half-painted.
+  -->
+  @if (isSearchResult() && bloomBackground().length > 0) {
+    <div class="search-bloom" [style.backgroundImage]="bloomBackground()" aria-hidden="true"></div>
+  }
 
   <!-- Background image -->
   <div id="middle_wrapper" class="flex items-center grow shrink">
-    <div id="topImgContainer" class="flex top-img-container items-center">
-      @if (isSearchResult()) {
-        <div class="img-top search-art flex items-center justify-center">
-          <span class="material-symbols-outlined">search</span>
-        </div>
-      } @else {
+    @if (!isSearchResult()) {
+      <div id="topImgContainer" class="flex top-img-container items-center">
         <img src="{{currentContainer.albumartUri}}" class="img-top aspect-square object-cover">
-      }
-    </div>
+      </div>
+    }
     <div class="z-1 flex flex-col grow shrink" id="ID_SCROLL_TO_ELEMENT_STEP_IN" tabindex="-1">
       <div class="flex right-section">
         <div class="flex me-4 info-wrap">
-          @if (hasSongs()) {
+          @if (isSearchResult()) {
+          <div id="template_searchResult" class="flex flex-col info-block search-info self-start">
+            <div class="eyebrow">Search &middot; {{searchTypeLabel()}}</div>
+            <div class="title-row">
+              <span class="title search-query">{{currentContainer.title}}</span>
+            </div>
+            <div class="meta-line">{{searchSummary()}}</div>
+            <!--
+              Every kind of hit this query has, so another type is one click away.
+              A type with no hits stays visible but inert: "no playlists match" is
+              worth knowing, and a button that cannot do anything should not look
+              like one.
+            -->
+            <div class="search-tabs">
+              @for (tab of searchTabs(); track tab.type) {
+                <button type="button" class="search-tab"
+                  [class.active]="tab.active" [class.empty]="tab.count === 0"
+                  [disabled]="tab.count === 0"
+                  [attr.aria-current]="tab.active ? 'true' : null"
+                  (click)="selectSearchType(tab.type)">
+                  <span>{{tab.label}}</span>
+                  <span class="search-tab-count">{{tab.count}}</span>
+                </button>
+              }
+            </div>
+          </div>
+          } @else if (hasSongs()) {
           <div id="hasSongs">
             <div class="flex flex-col info-block">
               <div class="eyebrow">{{containerType()}}</div>

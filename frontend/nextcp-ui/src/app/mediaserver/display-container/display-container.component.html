@@ -7,7 +7,8 @@
 <!-- ############################################################## -->
 
 <!-- Top browsing element: Displays image and information about current container -->
-<div id="display-container-component-top-id" class="flex flex-col w-full">
+<div id="display-container-component-top-id" class="flex flex-col w-full"
+  [class.is-search]="isSearchResult()">
 @if (showTopHeader()) {
   <div class="flex w-full dc-header-sticky">
     <display-container-header class="flex grow"

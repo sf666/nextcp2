@@ -17,8 +17,13 @@ import {
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { ContentDirectoryService } from 'src/app/service/content-directory.service';
+import {
+  ContentDirectoryService,
+  SEARCH_TYPE_LABEL,
+  ShowAllType,
+} from 'src/app/service/content-directory.service';
 import { MusicItemDto } from 'src/app/service/dto';
+import { GlobalSearchService } from 'src/app/service/search/global-search.service';
 import {
   RATING_LIKED,
   RatingFilter,
@@ -49,6 +54,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   private backgroundImageService = inject(BackgroundImageService);
   private timeDisplayService = inject(TimeDisplayService);
   private destroyRef = inject(DestroyRef);
+  private globalSearchService = inject(GlobalSearchService);
 
   //
   // Tailwind filter dropdowns (sort / genres)
@@ -280,6 +286,126 @@ export class DisplayContainerHeaderComponent implements OnInit {
     }
   });
 
+  /**
+   * Dominant colours of the first few hits, feeding the hero's bloom.
+   *
+   * A result set has no cover of its own, and standing a placeholder where an
+   * album cover would be is what made this page a black void. So the page takes
+   * its colour from what it actually found — the same living-canvas idea the
+   * rest of the app applies to a single album, applied to a set.
+   */
+  private bloomColors = signal<string[]>([]);
+
+  /** Where the bloom's blobs sit, spread across the width of the hero. */
+  private static readonly BLOOM_SPOTS = [
+    { x: 12, y: 60 },
+    { x: 36, y: 45 },
+    { x: 62, y: 62 },
+    { x: 86, y: 44 },
+  ];
+
+  /** How many covers the bloom is mixed from. */
+  private static readonly BLOOM_SOURCES = 4;
+
+  searchContext = computed(() =>
+    this.contentDirectoryService().searchContext(),
+  );
+
+  /**
+   * Order of the type bar. Albums first because that is what most searches are
+   * aimed at, tracks after the two container kinds, playlists last — they are
+   * the rarest hit.
+   */
+  private static readonly SEARCH_TABS: ShowAllType[] = [
+    'album',
+    'artists',
+    'items',
+    'playlists',
+  ];
+
+  /**
+   * The result page's type bar: every kind of hit the current query has, so
+   * switching from albums to tracks is one click instead of reopening the
+   * quick-search dropdown.
+   */
+  searchTabs = computed(() => {
+    const context = this.searchContext();
+    if (!context) {
+      return [];
+    }
+    return DisplayContainerHeaderComponent.SEARCH_TABS.map((type) => {
+      const many = SEARCH_TYPE_LABEL[type].many;
+      return {
+        type: type,
+        label: many.charAt(0).toUpperCase() + many.slice(1),
+        count: this.globalSearchService.resultTotal(type),
+        active: type === context.type,
+      };
+    });
+  });
+
+  /** Runs the same query against another type. */
+  selectSearchType(type: ShowAllType): void {
+    if (this.searchContext()?.type === type) {
+      return;
+    }
+    this.globalSearchService.showAllType(type);
+  }
+
+  /** "Albums", "Tracks", … — the kind of hits, for the eyebrow. */
+  searchTypeLabel = computed(() => {
+    const context = this.searchContext();
+    if (!context) {
+      return '';
+    }
+    const many = SEARCH_TYPE_LABEL[context.type].many;
+    return many.charAt(0).toUpperCase() + many.slice(1);
+  });
+
+  /** "42 albums in Music Library" — what was found, and where. */
+  searchSummary = computed(() => {
+    const context = this.searchContext();
+    if (!context) {
+      return '';
+    }
+    const count =
+      this.contentDirectoryService().currentContainerList().currentContainer
+        .childCount;
+    const words = SEARCH_TYPE_LABEL[context.type];
+    const noun = count === 1 ? words.one : words.many;
+    const where = context.scopeTitle || 'Music Library';
+    return count + ' ' + noun + ' in ' + where;
+  });
+
+  /**
+   * The bloom as a stack of soft radial gradients, or '' while no colour could
+   * be read (greyscale covers, no artwork, a media server without CORS) — then
+   * the hero simply stays dark instead of showing a broken half-effect.
+   */
+  bloomBackground = computed(() => {
+    const colors = this.bloomColors();
+    if (colors.length === 0) {
+      return '';
+    }
+    return colors
+      .map((color, i) => {
+        const spot =
+          DisplayContainerHeaderComponent.BLOOM_SPOTS[
+            i % DisplayContainerHeaderComponent.BLOOM_SPOTS.length
+          ];
+        return (
+          'radial-gradient(38% 70% at ' +
+          spot.x +
+          '% ' +
+          spot.y +
+          '%, ' +
+          color +
+          ' 0%, transparent 70%)'
+        );
+      })
+      .join(', ');
+  });
+
   ngOnInit(): void {
     if (this.contentDirectoryService) {
       this.contentDirectoryService()
@@ -296,22 +422,68 @@ export class DisplayContainerHeaderComponent implements OnInit {
     this.clearSearch();
     this.fillGenres();
     this.readContainerRating();
-    // Search results have no real cover — feed an empty url so the header image,
-    // the full-screen wash and the sidebar tint all stay neutral-dark instead of
-    // washing the whole page in the placeholder icon's colour.
-    const artUrl = this.isSearchResult()
-      ? ''
-      : this.currentContainer.albumartUri;
+    // A result set has no cover of its own. Blowing one hit's artwork up behind
+    // the whole page would misrepresent the set, so the image washes stay empty
+    // here and the hero's bloom carries the colour instead.
+    const searching = this.isSearchResult();
+    const artUrl = searching ? '' : this.currentContainer.albumartUri;
     this.backgroundImageService.setDisplayContainerHeaderImage(artUrl);
     // Drive the full-screen "living canvas" wash from the item currently being
     // browsed (always present), so the frosted chrome reliably picks up the
     // colour you are looking at — instead of the often-dark now-playing art.
     this.backgroundImageService.setBackgroundImageMainScreen(artUrl);
-    // Extract the cover's dominant colour to reliably tint the sidebar.
-    this.backgroundImageService.applyAmbientTint(artUrl);
+    if (searching) {
+      this.updateSearchBloom();
+    } else {
+      this.bloomColors.set([]);
+      // Extract the cover's dominant colour to reliably tint the sidebar.
+      this.backgroundImageService.applyAmbientTint(artUrl);
+    }
     // Scroll restore is centralized in DisplayContainerComponent (it must prefer
     // the virtualized album grid, whose target may not be in the DOM). Do not
     // trigger a competing getElementById-based restore here.
+  }
+
+  /**
+   * Reads the dominant colour of the first few hits and hands the set to the
+   * bloom. Colours that cannot be read are dropped rather than substituted, so
+   * the bloom is always made of real artwork or is not drawn at all.
+   */
+  private updateSearchBloom(): void {
+    const urls = this.searchBloomSources();
+    if (urls.length === 0) {
+      this.bloomColors.set([]);
+      this.backgroundImageService.applyAmbientTint('');
+      return;
+    }
+    // The first hit also tints the chrome, so sidebar and footer belong to the
+    // same result the bloom does.
+    this.backgroundImageService.applyAmbientTint(urls[0]);
+    Promise.all(
+      urls.map((url) => this.backgroundImageService.extractTintColor(url)),
+    ).then((colors) => {
+      // Still the same result on screen? A fast second search must not repaint
+      // the new hero with the old hits' colours.
+      if (this.isSearchResult()) {
+        this.bloomColors.set(
+          colors.filter((color): color is string => !!color),
+        );
+      }
+    });
+  }
+
+  /** Artwork of the first few hits, whichever kind of hit this result holds. */
+  private searchBloomSources(): string[] {
+    const cds = this.contentDirectoryService();
+    const urls = [
+      ...cds.albumList_().map((album) => album.albumartUri),
+      ...cds.playlistList_().map((playlist) => playlist.albumartUri),
+      ...cds.containerList_().map((container) => container.albumartUri),
+      ...cds.musicTracks_().map((track) => track.albumArtUrl),
+    ];
+    return urls
+      .filter((url) => !!url)
+      .slice(0, DisplayContainerHeaderComponent.BLOOM_SOURCES);
   }
 
   get albums(): ContainerDto[] {

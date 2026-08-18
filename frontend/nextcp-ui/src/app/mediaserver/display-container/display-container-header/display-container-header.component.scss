@@ -9,24 +9,20 @@
 // also drives the compensating bottom spacer (see display-container.scss).
 // The size vars are declared on #outer so their var(--collapse) resolves
 // against #outer's own (inherited) value.
+// Heights come from the display container (--dc-hero-*), which is the one
+// element spanning both this header and the content offsets that have to line up
+// with its bottom edge. The fallbacks keep this component standalone-safe.
 #outer {
-    --h-max  : 310px;
-    --h-min  : 104px;
+    --h-max  : var(--dc-hero-max, 310px);
+    --h-min  : var(--dc-hero-min, 104px);
     // Cover size (and the content band beside it) is the header height minus
     // this indent. Kept small enough that the band has room for the metadata
     // plus the action row, with air in between.
-    --ind-max: 100px;
+    --ind-max: var(--dc-hero-indent, 100px);
     --ind-min: 16px;
 
     --top-header-Height         : calc(var(--h-max) - (var(--h-max) - var(--h-min)) * var(--collapse, 0));
     --top-header-Vertical-Indent: calc(var(--ind-max) - (var(--ind-max) - var(--ind-min)) * var(--collapse, 0));
-}
-
-@media (max-height: 800px) {
-    #outer {
-        --h-max  : 210px;
-        --ind-max: 80px;
-    }
 }
 
 // Title and its favourite marker on one baseline. Roon puts the heart right next
@@ -206,20 +202,116 @@
     box-shadow  : 0 8px 28px rgba(0, 0, 0, 0.5);
 }
 
-// Search results have no cover: show a calm frosted tile with a cyan line search
-// glyph (Roon-like) instead of the saturated placeholder image. Reuses .img-top for
-// size/position; overrides only the fill.
-.img-top.search-art {
-    background-color: rgba(255, 255, 255, 0.05);
-    border          : 1px solid rgba(255, 255, 255, 0.10);
+// Colour lifted from the covers that were actually found, blurred into a wash.
+// This replaces the placeholder cover tile: a result set has no artwork of its
+// own, and a 5%-white square on a black ground read as a hole in the page rather
+// than as the "calm frosted tile" it was meant to be.
+//
+// Sits under #middle_wrapper (which is not positioned, so it stacks below) and
+// above #outer's own gradient, which keeps the text legible on top of it.
+.search-bloom {
+    position         : absolute;
+    // Wider than the header so the blobs' soft edges never end mid-band, and
+    // masked at the bottom rather than clipped: #outer cannot use
+    // overflow:hidden, its action buttons deliberately hang out of it.
+    inset            : 0 -8% auto -8%;
+    height           : 100%;
+    filter           : blur(48px) saturate(1.3);
+    // Fades out as the header collapses, so the compact bar stays quiet.
+    opacity          : calc(0.5 - 0.3 * var(--collapse, 0));
+    pointer-events   : none;
+    transition        : opacity .25s ease;
+    background-repeat: no-repeat;
+    -webkit-mask-image: linear-gradient(to bottom, #000 30%, rgba(0, 0, 0, 0.5) 72%, transparent 100%);
+    mask-image        : linear-gradient(to bottom, #000 30%, rgba(0, 0, 0, 0.5) 72%, transparent 100%);
+}
 
-    .material-symbols-outlined {
-        // Scale the glyph with the (collapsing) tile.
-        font-size     : calc((var(--top-header-Height) - var(--top-header-Vertical-Indent)) * 0.44);
-        line-height   : 1;
-        color         : rgba(255, 255, 255, 0.55);
-        font-weight   : 200;
+// The query is the subject of the page, so it is set like a name rather than
+// like a sentence about one. With the full header height and no cover competing
+// for attention it can carry more weight than a folder title.
+.search-info {
+    .search-query {
+        font-size     : calc(3.25rem - 1.5rem * var(--collapse, 0));
+        letter-spacing: -0.04em;
+        line-height   : 1.02;
     }
+
+    .meta-line {
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+// Type bar. Same idiom as the section headings below it — a cyan underline marks
+// what you are looking at — so the page has one way of saying "this one".
+.search-tabs {
+    display    : flex;
+    align-items: stretch;
+    gap        : 0.35rem;
+    // Sits below the query with air above it, and fades out with the header so
+    // the compact bar keeps only the query.
+    margin-top : calc(1.6rem - 1.2rem * var(--collapse, 0));
+    opacity    : calc(1 - var(--collapse, 0) * 1.6);
+    overflow   : hidden;
+    max-height : calc(3rem - 3rem * var(--collapse, 0));
+    transition : opacity .2s ease;
+}
+
+.search-tab {
+    display       : flex;
+    align-items   : baseline;
+    gap           : 0.45rem;
+    padding       : 0.3rem 0.7rem 0.45rem;
+    background    : none;
+    border        : none;
+    border-bottom : 2px solid transparent;
+    color         : var(--glas-white-5);
+    font-family   : inherit;
+    font-size     : 0.95rem;
+    font-weight   : 500;
+    cursor        : pointer;
+    white-space   : nowrap;
+    transition    : color .15s ease, border-color .15s ease;
+
+    &:hover:not(:disabled):not(.active) {
+        color: var(--glas-white-2);
+    }
+
+    &:focus-visible {
+        outline       : 1px solid var(--primary-color-reduced);
+        outline-offset: -1px;
+    }
+
+    &.active {
+        color        : var(--snow-white);
+        border-bottom-color: var(--primary-color);
+    }
+
+    // Nothing found for this type: still listed, but not offered.
+    &.empty {
+        color : var(--glas-white-7);
+        cursor: default;
+    }
+}
+
+.search-tab-count {
+    font-size           : 0.82rem;
+    font-variant-numeric: tabular-nums;
+    color               : var(--glas-white-6);
+}
+
+.search-tab.active .search-tab-count {
+    color: var(--primary-color);
+}
+
+// With no cover, the query lines up with the results it describes instead of
+// sitting where the cover used to push it — same left edge as the section
+// headings and the first tile below (the content area's ms-3).
+// Positioned so it stacks above the bloom: an absolutely positioned sibling
+// would otherwise paint over static content.
+#outer.is-search #middle_wrapper {
+    position    : relative;
+    z-index     : 1;
+    padding-left: 0.75rem;
 }
 
 .button-row {

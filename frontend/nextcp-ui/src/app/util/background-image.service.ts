@@ -2,11 +2,9 @@ import { Injectable } from '@angular/core';
 import { supportsBackdropFilter } from './browser-capabilities';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BackgroundImageService {
-
-
   public setBackgroundImageMainScreen(url: string): void {
     const element = document.getElementById('main-screen');
     if (supportsBackdropFilter && element) {
@@ -23,7 +21,10 @@ export class BackgroundImageService {
   }
 
   public setDisplayContainerHeaderImage(url: string): void {
-    if (supportsBackdropFilter && document.getElementById('header-background')) {
+    if (
+      supportsBackdropFilter &&
+      document.getElementById('header-background')
+    ) {
       let element = document.getElementById('header-background');
       if (element) {
         element.style.backgroundImage = url ? 'url("' + url + '")' : '';
@@ -43,56 +44,73 @@ export class BackgroundImageService {
       return;
     }
     if (!url) {
-      // No artwork (e.g. search results) — drop the tint so the sidebar goes neutral.
+      // No artwork at all — drop the tint so the sidebar goes neutral.
       document.documentElement.style.removeProperty('--ambient-color');
       return;
     }
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      try {
-        const s = 16;
-        const canvas = document.createElement('canvas');
-        canvas.width = s;
-        canvas.height = s;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) {
-          return;
-        }
-        ctx.drawImage(img, 0, 0, s, s);
-        const data = ctx.getImageData(0, 0, s, s).data;
-        let r = 0;
-        let g = 0;
-        let b = 0;
-        let wsum = 0;
-        for (let i = 0; i < data.length; i += 4) {
-          const R = data[i];
-          const G = data[i + 1];
-          const B = data[i + 2];
-          const mx = Math.max(R, G, B);
-          const mn = Math.min(R, G, B);
-          const sat = mx === 0 ? 0 : (mx - mn) / mx;
-          // Weight vibrant, bright pixels so busy covers don't average to mud.
-          const weight = sat * sat * (mx / 255) + 0.03;
-          r += R * weight;
-          g += G * weight;
-          b += B * weight;
-          wsum += weight;
-        }
-        const tint = this.toTintColor(r / wsum, g / wsum, b / wsum);
-        if (tint) {
-          document.documentElement.style.setProperty('--ambient-color', tint);
-        } else {
-          document.documentElement.style.removeProperty('--ambient-color');
-        }
-      } catch {
-        // Cross-origin (tainted) canvas — leave the sidebar neutral.
+    this.extractTintColor(url).then((tint) => {
+      if (tint) {
+        document.documentElement.style.setProperty('--ambient-color', tint);
+      } else {
         document.documentElement.style.removeProperty('--ambient-color');
       }
-    };
-    img.onerror = () =>
-      document.documentElement.style.removeProperty('--ambient-color');
-    img.src = url;
+    });
+  }
+
+  /**
+   * Reads one artwork's dominant (vibrant-weighted) colour.
+   *
+   * Resolves to null rather than rejecting for every way this can come up empty
+   * — no url, a broken image, a cross-origin canvas, near-greyscale artwork — so
+   * callers can simply drop what they did not get. Needs a CORS-readable image.
+   */
+  public extractTintColor(url: string): Promise<string | null> {
+    if (!url) {
+      return Promise.resolve(null);
+    }
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        try {
+          const s = 16;
+          const canvas = document.createElement('canvas');
+          canvas.width = s;
+          canvas.height = s;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            resolve(null);
+            return;
+          }
+          ctx.drawImage(img, 0, 0, s, s);
+          const data = ctx.getImageData(0, 0, s, s).data;
+          let r = 0;
+          let g = 0;
+          let b = 0;
+          let wsum = 0;
+          for (let i = 0; i < data.length; i += 4) {
+            const R = data[i];
+            const G = data[i + 1];
+            const B = data[i + 2];
+            const mx = Math.max(R, G, B);
+            const mn = Math.min(R, G, B);
+            const sat = mx === 0 ? 0 : (mx - mn) / mx;
+            // Weight vibrant, bright pixels so busy covers don't average to mud.
+            const weight = sat * sat * (mx / 255) + 0.03;
+            r += R * weight;
+            g += G * weight;
+            b += B * weight;
+            wsum += weight;
+          }
+          resolve(this.toTintColor(r / wsum, g / wsum, b / wsum));
+        } catch {
+          // Cross-origin (tainted) canvas.
+          resolve(null);
+        }
+      };
+      img.onerror = () => resolve(null);
+      img.src = url;
+    });
   }
 
   // Normalise an averaged RGB to a clear, mid-lightness tint (hsl). Returns null
@@ -129,4 +147,3 @@ export class BackgroundImageService {
     return `hsl(${Math.round(h * 360)}, ${Math.round(outS * 100)}%, 50%)`;
   }
 }
-
