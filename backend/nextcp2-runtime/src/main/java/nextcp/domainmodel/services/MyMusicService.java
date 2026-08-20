@@ -34,24 +34,6 @@ public class MyMusicService
         return device.isAlbumLiked(albumIds);
     }
 
-    public void backupMyMusic(ExtendedApiMediaDevice device)
-    {
-        if (device == null)
-        {
-            throw new RuntimeException("device not supplied");
-        }
-        device.backupMyMusic();
-    }
-
-    public void restoreMyMusic(ExtendedApiMediaDevice device)
-    {
-        if (device == null)
-        {
-            throw new RuntimeException("device not supplied");
-        }
-        device.restoreMyMusic();
-    }
-    
     public void backupRatings(ExtendedApiMediaDevice device)
     {
         if (device == null)

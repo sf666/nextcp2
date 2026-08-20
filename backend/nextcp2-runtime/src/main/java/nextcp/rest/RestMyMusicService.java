@@ -61,34 +61,6 @@ public class RestMyMusicService extends BaseRestService
         return myMusicService.isAlbumLiked(albumIds, device);
     }
 
-    @GetMapping("/backupLikedAlbums/{deviceId}")
-    public void backupLikedAlbum(@PathVariable("deviceId") String deviceId)
-    {
-        try
-        {
-            myMusicService.backupMyMusic(getExtendedMediaServerByUdn(deviceId));
-            toast.publishSuccessMessage(null, "backup liked albums", "success");
-        }
-        catch (Exception e)
-        {
-            toast.publishErrorMessage(null, "backup liked albums", e.getMessage());
-        }
-    }
-    
-    @GetMapping("/restoreLikedAlbums/{deviceId}")
-    public void restoreLikedAlbum(@PathVariable("deviceId") String deviceId)
-    {
-        try
-        {
-            myMusicService.restoreMyMusic(getExtendedMediaServerByUdn(deviceId));
-            toast.publishSuccessMessage(null, "restore liked albums", "success");
-        }
-        catch (Exception e)
-        {
-            toast.publishErrorMessage(null, "restore liked albums", e.getMessage());
-        }
-    }
-    
     @GetMapping("/restoreRatings/{deviceId}")
     public void restoreRatings(@PathVariable("deviceId") String deviceId)
     {

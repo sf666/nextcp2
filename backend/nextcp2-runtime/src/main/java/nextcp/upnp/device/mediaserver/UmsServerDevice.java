@@ -338,16 +338,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	}
 
 	@Override
-	public void backupMyMusic() {
-		umsServices.backupAudioLikes();
-	}
-
-	@Override
-	public void restoreMyMusic() {
-		umsServices.restoreAudioLikes();
-	}
-
-	@Override
 	public void backupRatings() {
 		umsServices.backupRatings();
 	}

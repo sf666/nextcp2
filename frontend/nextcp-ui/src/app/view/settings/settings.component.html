@@ -222,13 +222,7 @@
     }
 
     <div class="config-panel mt-4">
-      <div class="subsection-title" style="margin-top:0">Album Actions</div>
-      <div class="actions-grid">
-        <button mat-stroked-button (click)="myMusicService.backupLikedAlbums()" [disabled]="extendedApiNotAvailable()">backup liked albums</button>
-        <button mat-stroked-button color="warn" (click)="myMusicService.restoreLikedAlbums()" [disabled]="extendedApiNotAvailable()">restore liked albums</button>
-      </div>
-
-      <div class="subsection-title">Rating Actions</div>
+      <div class="subsection-title" style="margin-top:0">Rating Actions</div>
       <div class="actions-grid">
         <button mat-stroked-button (click)="myMusicService.backupRatings()" [disabled]="extendedApiNotAvailable()">backup ratings</button>
         <button mat-stroked-button color="warn" (click)="myMusicService.restoreRatings()" [disabled]="extendedApiNotAvailable()">restore ratings</button>

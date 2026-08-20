@@ -65,31 +65,6 @@ export class MyMusicService {
     }
   }
 
-  public backupLikedAlbums(): void {
-    if (!this.deviceService.selectedMediaServerDevice().udn) {
-      this.toastService.error('select media server first', 'backup like album');
-      return;
-    }
-    const uri =
-      '/backupLikedAlbums/' +
-      this.deviceService.selectedMediaServerDevice().udn;
-    this.httpService.get(this.baseUri, uri, 'backup liked albums');
-  }
-
-  public restoreLikedAlbums(): void {
-    if (!this.deviceService.selectedMediaServerDevice().udn) {
-      this.toastService.error(
-        'select media server first',
-        'restore liked albums',
-      );
-      return;
-    }
-    const uri =
-      '/restoreLikedAlbums/' +
-      this.deviceService.selectedMediaServerDevice().udn;
-    this.httpService.get(this.baseUri, uri, 'restore liked albums');
-  }
-
   public backupRatings(): void {
     if (!this.deviceService.selectedMediaServerDevice().udn) {
       this.toastService.error('select media server first', 'backup ratings');

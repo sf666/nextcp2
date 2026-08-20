@@ -36,10 +36,6 @@ public interface ExtendedApiMediaDevice
     
     // Backup Services
     
-    public void backupMyMusic();
-
-    public void restoreMyMusic();
-
     public void backupRatings();
 
     public void restoreRatings();
