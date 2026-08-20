@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rm -rf backend/nextcp2-runtime/src/main/resources/static/
+
 if [ ! -d backend/nextcp2-runtime/src/main/resources/static ]; then
   echo "creating static folder ..."
   mkdir backend/nextcp2-runtime/src/main/resources/static
