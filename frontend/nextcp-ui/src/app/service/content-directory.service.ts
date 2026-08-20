@@ -850,7 +850,9 @@ export class ContentDirectoryService {
       this.updatePageTurnId(data);
 
       this.albumList_.update((v) => {
-        return [...v].concat(data.albumDto);
+        // concat already returns a new array — the extra spread copied the whole
+        // listing a second time on every page of a paged browse.
+        return v.concat(data.albumDto);
       });
 
       this.containerList_.update((v) => {

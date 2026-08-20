@@ -56,7 +56,7 @@ export class PlaylistComponent implements OnInit {
     this.layoutService.setFramedViewWithoutNavbar();
     this.playlistService.updatePlaylistItems();
     this.backgroundImageService.setBackgroundImageMainScreen(
-      '/assets/images/playlist_bg.png',
+      '/assets/images/playlist_bg.webp',
     );
   }
 

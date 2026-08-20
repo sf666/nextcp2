@@ -205,6 +205,11 @@ export class ContainerTileComponent {
   private scrollParent: HTMLElement | null = null;
   private resizeObs: ResizeObserver | null = null;
   private rafScheduled = false;
+  // Identity of the listing the window currently shows, so that a page being
+  // appended can be told apart from a different list being browsed.
+  private listAnchorId: string | undefined;
+  private listLength = 0;
+  private listCriteria = 'NONE';
   // Column count and row height only change when the grid is resized or the
   // list is swapped — never from scrolling. Measuring them reads computed style
   // and offsetHeight, which forces a synchronous layout, so it must not happen
@@ -235,13 +240,30 @@ export class ContainerTileComponent {
       }
     });
 
-    // When the list (browse/filter) or the active flag changes, reset to the
-    // top and drop any pending restore from a previous list, then remeasure.
+    // A different listing starts at the top again. An appended page does not:
+    // a browse loads its pages one after the other, and on a library-sized list
+    // the user is already scrolling while the rest still arrives. Resetting the
+    // window there yanked the view back to the first row on every page — which
+    // is also why the covers being looked at kept being re-fetched instead of
+    // the ones on screen.
     effect(() => {
-      this.flatItems().length; // track
+      const raw = this.container();
+      const criteria = this.sortCriteria();
       this.virtualActive(); // track
-      this.pendingFocusId = null;
-      this.firstRow.set(0);
+      // Pages are appended to the same listing, so its first entry stays put and
+      // its length only grows. Anything else is a new list.
+      const anchorId = raw.length > 0 ? raw[0].id : undefined;
+      const appended =
+        anchorId === this.listAnchorId &&
+        raw.length >= this.listLength &&
+        criteria === this.listCriteria;
+      this.listAnchorId = anchorId;
+      this.listLength = raw.length;
+      this.listCriteria = criteria;
+      if (!appended) {
+        this.pendingFocusId = null;
+        this.firstRow.set(0);
+      }
       this.scheduleUpdate(true);
     });
 
@@ -252,6 +274,7 @@ export class ContainerTileComponent {
     effect(() => {
       this.quickSearchString(); // track
       this.selectedGenres(); // track
+      this.ratingFilter(); // track
       if (!this.filterInitialized) {
         this.filterInitialized = true;
         return;
@@ -461,8 +484,16 @@ export class ContainerTileComponent {
     return '';
   }
 
+  // One collator for all comparisons. localeCompare with an options object builds
+  // a fresh collator per call, which on a sort over a whole library (tens of
+  // thousands of comparisons, repeated as each page comes in) cost far more than
+  // the comparison itself.
+  private static readonly COLLATOR = new Intl.Collator(undefined, {
+    sensitivity: 'base',
+  });
+
   private compareText(a?: string, b?: string): number {
-    return (a ?? '').localeCompare(b ?? '', undefined, { sensitivity: 'base' });
+    return ContainerTileComponent.COLLATOR.compare(a ?? '', b ?? '');
   }
 
   private filteredContainer(container: ContainerDto[]): ContainerDto[] {

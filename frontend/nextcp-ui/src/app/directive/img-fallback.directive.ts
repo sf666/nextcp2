@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 
 /** Stand-in artwork, used wherever a cover cannot be shown. */
-export const DEFAULT_ARTWORK = '/assets/images/folder-bg.png';
+export const DEFAULT_ARTWORK = '/assets/images/folder-bg.webp';
 
 @Directive({
   selector: 'img[imgFallback]',

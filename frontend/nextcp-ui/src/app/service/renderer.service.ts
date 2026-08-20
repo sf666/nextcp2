@@ -119,7 +119,7 @@ export class RendererService {
     if (this.trackInfo().currentTrack?.albumArtUrl) {
       return this.trackInfo().currentTrack?.albumArtUrl;
     } else {
-      return '/assets/images/folder-bg.png';
+      return '/assets/images/folder-bg.webp';
     }
   });
   isHifi = computed(() => {
