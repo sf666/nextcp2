@@ -8,7 +8,14 @@
        (pointerdown)="onPressStart($event, container)" (pointermove)="onPressMove($event)"
        (pointerup)="onPressEnd()" (pointercancel)="onPressEnd()" (pointerleave)="onPressEnd()">
     <div class="albumImageContainer">
-      <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer">
+      <!--
+        loading/decoding are what keep a wall of covers off the main thread:
+        the decode happens asynchronously (a synchronous one blocked frames
+        while scrolling), and rows that the windowing renders just outside the
+        viewport are not fetched until they come close to it.
+      -->
+      <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer"
+           loading="lazy" decoding="async">
       @if (isLiked(container)) {
         <span class="likeBadge material-symbols-outlined" aria-label="Liked">favorite</span>
       }

@@ -50,8 +50,13 @@ $imgCardWidthSmall : 6rem;
     padding        : 0;
     border-radius  : 14px;
     overflow       : hidden;
-    background     : rgba(20, 20, 26, 0.42);
-    backdrop-filter: blur(8px);
+    // No backdrop-filter here on purpose. A tile-level blur would force one
+    // compositing layer per tile, and a grid holds dozens of them at once —
+    // that showed up as ~80ms of "Layerize" plus a blur pass per tile on every
+    // scrolled frame. What sits behind the tiles is the full-screen album wash,
+    // which is already blurred by 110px, so an extra 8px changed nothing
+    // visible. The card keeps its glass look from the translucent fill alone.
+    background     : rgba(20, 20, 26, 0.52);
     border         : 1px solid rgba(255, 255, 255, 0.08);
     cursor         : pointer;
 

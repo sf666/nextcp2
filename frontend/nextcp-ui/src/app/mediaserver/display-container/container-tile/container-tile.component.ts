@@ -205,6 +205,11 @@ export class ContainerTileComponent {
   private scrollParent: HTMLElement | null = null;
   private resizeObs: ResizeObserver | null = null;
   private rafScheduled = false;
+  // Column count and row height only change when the grid is resized or the
+  // list is swapped — never from scrolling. Measuring them reads computed style
+  // and offsetHeight, which forces a synchronous layout, so it must not happen
+  // once per scrolled frame. Set here, consumed by the next update.
+  private needsMeasure = true;
   private pendingFocusId: string | null = null;
   private filterInitialized = false;
 
@@ -225,7 +230,7 @@ export class ContainerTileComponent {
     effect(() => {
       const grid = this.vgrid()?.nativeElement;
       if (grid && !this.resizeObs && typeof ResizeObserver !== 'undefined') {
-        this.resizeObs = new ResizeObserver(() => this.scheduleUpdate());
+        this.resizeObs = new ResizeObserver(() => this.scheduleUpdate(true));
         this.resizeObs.observe(grid);
       }
     });
@@ -237,7 +242,7 @@ export class ContainerTileComponent {
       this.virtualActive(); // track
       this.pendingFocusId = null;
       this.firstRow.set(0);
-      this.scheduleUpdate();
+      this.scheduleUpdate(true);
     });
 
     // When the filter / genre selection changes, scroll back to the top so the
@@ -268,8 +273,12 @@ export class ContainerTileComponent {
     });
   }
 
-  // Coalesce scroll/resize/data updates into one measurement per frame.
-  private scheduleUpdate(): void {
+  // Coalesce scroll/resize/data updates into one window recompute per frame.
+  // `remeasure` re-reads the grid geometry as well; scrolling must not.
+  private scheduleUpdate(remeasure = false): void {
+    if (remeasure) {
+      this.needsMeasure = true;
+    }
     if (this.rafScheduled) {
       return;
     }
@@ -280,10 +289,15 @@ export class ContainerTileComponent {
     });
   }
 
-  private measure(): void {
+  /**
+   * Reads column count and row height off the live grid. Returns false while the
+   * grid holds no tile yet (nothing to measure), so the caller keeps asking
+   * until the numbers are real instead of staying on the fallback row height.
+   */
+  private measure(): boolean {
     const grid = this.vgrid()?.nativeElement;
     if (!grid) {
-      return;
+      return false;
     }
     const cs = getComputedStyle(grid);
     // auto-fill columns resolve to a concrete list; count them (exact).
@@ -297,13 +311,15 @@ export class ContainerTileComponent {
     // Row height from the first rendered tile (art has aspect-ratio, so its
     // height is known before images load); include the grid's row gap.
     const tile = grid.querySelector('.albumTile') as HTMLElement | null;
-    if (tile) {
-      const gap = parseFloat(cs.rowGap) || 0;
-      const h = tile.offsetHeight + gap;
-      if (h > 0) {
-        this.rowH.set(h);
-      }
+    if (!tile) {
+      return false;
     }
+    const gap = parseFloat(cs.rowGap) || 0;
+    const h = tile.offsetHeight + gap;
+    if (h > 0) {
+      this.rowH.set(h);
+    }
+    return true;
   }
 
   private recomputeWindow(): void {
@@ -337,7 +353,9 @@ export class ContainerTileComponent {
     if (!this.virtualActive()) {
       return;
     }
-    this.measure();
+    if (this.needsMeasure && this.measure()) {
+      this.needsMeasure = false;
+    }
     this.recomputeWindow();
     // If a restore is pending, the target row should now be rendered — correct
     // to the exact position using the real element on the next frame.

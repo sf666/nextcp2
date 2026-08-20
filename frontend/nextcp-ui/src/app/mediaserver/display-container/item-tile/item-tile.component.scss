@@ -1,11 +1,13 @@
 @use "card-layout";
 
-// Sticky column header. Sits just below the collapsing browse header: the
-// offset is provided as --list-sticky-top by the display container (equal to
-// the collapsed header height), and falls back to 0 where no header is shown.
+// Sticky column header. Sits just below the collapsing browse header, which
+// publishes its expanded/collapsed heights as --dc-sticky-max/-min and writes
+// the current collapse progress (0..1) straight onto this element. Both bounds
+// default to 0, so without a browse header this simply sticks to the top.
 .list-col-header {
     position: sticky;
-    top     : var(--list-sticky-top, 0px);
+    top     : calc(var(--dc-sticky-max, 0px) -
+                   (var(--dc-sticky-max, 0px) - var(--dc-sticky-min, 0px)) * var(--collapse, 0));
     z-index : 10;
     // No fill — just bold labels over the living canvas with a thin bottom rule.
     // A colourless backdrop-blur softens the rows passing underneath so the
@@ -53,8 +55,9 @@
     align-items    : center;
     justify-content: center;
     border-radius  : 0.375rem; // matches the img's rounded-md
+    // A 1px blur was visually indistinguishable from the scrim alone but still
+    // promoted this overlay to its own compositing layer.
     background     : rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(1px);
 
     .playing-eq {
         width : 22px;

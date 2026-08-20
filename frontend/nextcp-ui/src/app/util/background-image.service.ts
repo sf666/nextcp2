@@ -72,45 +72,77 @@ export class BackgroundImageService {
       const img = new Image();
       img.crossOrigin = 'anonymous';
       img.onload = () => {
-        try {
-          const s = 16;
-          const canvas = document.createElement('canvas');
-          canvas.width = s;
-          canvas.height = s;
-          const ctx = canvas.getContext('2d');
-          if (!ctx) {
-            resolve(null);
-            return;
-          }
-          ctx.drawImage(img, 0, 0, s, s);
-          const data = ctx.getImageData(0, 0, s, s).data;
-          let r = 0;
-          let g = 0;
-          let b = 0;
-          let wsum = 0;
-          for (let i = 0; i < data.length; i += 4) {
-            const R = data[i];
-            const G = data[i + 1];
-            const B = data[i + 2];
-            const mx = Math.max(R, G, B);
-            const mn = Math.min(R, G, B);
-            const sat = mx === 0 ? 0 : (mx - mn) / mx;
-            // Weight vibrant, bright pixels so busy covers don't average to mud.
-            const weight = sat * sat * (mx / 255) + 0.03;
-            r += R * weight;
-            g += G * weight;
-            b += B * weight;
-            wsum += weight;
-          }
-          resolve(this.toTintColor(r / wsum, g / wsum, b / wsum));
-        } catch {
-          // Cross-origin (tainted) canvas.
-          resolve(null);
-        }
+        this.readTint(img).then(resolve, () => resolve(null));
       };
       img.onerror = () => resolve(null);
       img.src = url;
     });
+  }
+
+  // Covers are read down to this many pixels per side before they are averaged.
+  private static readonly SAMPLE_SIZE = 16;
+
+  /**
+   * Averages one already-loaded artwork down to a single tint.
+   *
+   * Scaling a full-size cover is the expensive half of this, and it used to run
+   * straight inside the image's load handler — tens of milliseconds of main
+   * thread right when the browse result wanted to paint its tiles. createImageBitmap
+   * does that resize off the main thread, which leaves only the average over a
+   * 16x16 buffer here. Where it is unavailable (or refuses the image) the old
+   * drawImage path still applies.
+   */
+  private async readTint(img: HTMLImageElement): Promise<string | null> {
+    const s = BackgroundImageService.SAMPLE_SIZE;
+    let source: HTMLImageElement | ImageBitmap = img;
+    if (typeof createImageBitmap === 'function') {
+      try {
+        source = await createImageBitmap(img, {
+          resizeWidth: s,
+          resizeHeight: s,
+          resizeQuality: 'low',
+        });
+      } catch {
+        source = img;
+      }
+    }
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = s;
+      canvas.height = s;
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+      if (!ctx) {
+        return null;
+      }
+      ctx.drawImage(source, 0, 0, s, s);
+      const data = ctx.getImageData(0, 0, s, s).data;
+      let r = 0;
+      let g = 0;
+      let b = 0;
+      let wsum = 0;
+      for (let i = 0; i < data.length; i += 4) {
+        const R = data[i];
+        const G = data[i + 1];
+        const B = data[i + 2];
+        const mx = Math.max(R, G, B);
+        const mn = Math.min(R, G, B);
+        const sat = mx === 0 ? 0 : (mx - mn) / mx;
+        // Weight vibrant, bright pixels so busy covers don't average to mud.
+        const weight = sat * sat * (mx / 255) + 0.03;
+        r += R * weight;
+        g += G * weight;
+        b += B * weight;
+        wsum += weight;
+      }
+      return this.toTintColor(r / wsum, g / wsum, b / wsum);
+    } catch {
+      // Cross-origin (tainted) canvas.
+      return null;
+    } finally {
+      if (source !== img) {
+        (source as ImageBitmap).close();
+      }
+    }
   }
 
   // Normalise an averaged RGB to a clear, mid-lightness tint (hsl). Returns null

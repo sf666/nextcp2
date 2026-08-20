@@ -4,9 +4,11 @@
 @use "app-variables"as av;
 @use "app-icons";
 
-// Scroll-linked collapse progress (0 = full hero, 1 = compact bar) is set on
-// the scroll container (#mainContent) and inherited here, so the same value
-// also drives the compensating bottom spacer (see display-container.scss).
+// Scroll-linked collapse progress (0 = full hero, 1 = compact bar) is written
+// by this component onto its own host element, so it is inherited by everything
+// below #outer and by nothing else. It used to be set on the scroll container
+// instead, which invalidated the computed style of every album tile on the page
+// once per scrolled frame.
 // The size vars are declared on #outer so their var(--collapse) resolves
 // against #outer's own (inherited) value.
 // Heights come from the display container (--dc-hero-*), which is the one

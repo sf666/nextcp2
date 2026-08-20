@@ -43,8 +43,10 @@
     padding         : 0;
     border-radius   : 50%;
     color           : rgba(255, 255, 255, 0.75);
-    background      : rgba(20, 20, 20, 0.55);
-    backdrop-filter : blur(8px);
+    // Solid scrim instead of a backdrop blur: this button exists on every tile
+    // in the grid, and a blur here means one compositing layer per tile. Over
+    // artwork a slightly deeper fill reads the same.
+    background      : rgba(20, 20, 20, 0.72);
     border          : 1px solid rgba(255, 255, 255, 0.18);
     box-shadow      : 0 2px 8px rgba(0, 0, 0, 0.35);
     cursor          : pointer;
@@ -83,10 +85,9 @@
     border-radius   : 50%;
     font-size       : 18px;
     color           : #ffffff;
-    // Same frosted chrome as the rest of the living glass, so it reads as part of
-    // the surface instead of a sticker on top of the artwork.
-    background      : rgba(20, 20, 20, 0.55);
-    backdrop-filter : blur(8px);
+    // Same chrome as the options button opposite it. No backdrop blur, for the
+    // same reason: per-tile blurs cost a compositing layer each.
+    background      : rgba(20, 20, 20, 0.72);
     border          : 1px solid rgba(255, 255, 255, 0.18);
     box-shadow      : 0 2px 8px rgba(0, 0, 0, 0.35);
     pointer-events  : none;

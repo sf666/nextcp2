@@ -36,20 +36,20 @@
     z-index : 30;
 }
 
-// Compensating spacer: grows by exactly the amount the sticky header shrinks
-// (--collapse is inherited from #mainContent). This keeps the total scrollable
-// height constant as the header collapses, so the scroll position can never be
-// clamped by the shrink — which is what caused the header to jitter during
-// macOS inertial (momentum) scrolling.
 // When the collapsing browse header is present, the sticky track-list column
-// header parks just below it. The offset tracks the header's *current* height
-// (same formula/constants as the header, driven by the inherited --collapse),
-// so it stays glued to the header bottom throughout the collapse instead of
-// being briefly hidden behind the still-tall header mid-transition.
+// header parks just below it, tracking the header's *current* height so it stays
+// glued to its bottom edge throughout the collapse instead of being briefly
+// hidden behind the still-tall header mid-transition.
+//
+// Only the two bounds are published here. The interpolation itself happens on
+// the sticky element (see item-tile.component.scss), because --collapse changes
+// on every scrolled frame and an inherited custom property set on *this*
+// element would invalidate the computed style of the whole list below it.
+// Outside a collapsing header both bounds stay 0 and the element sticks to the
+// top of the scroll area, as before.
 #display-container-main-content.with-sticky-header {
-    --dc-h-max       : var(--dc-hero-max);
-    --dc-h-min       : var(--dc-hero-min);
-    --list-sticky-top: calc(var(--dc-h-max) - (var(--dc-h-max) - var(--dc-h-min)) * var(--collapse, 0));
+    --dc-sticky-max: var(--dc-hero-max);
+    --dc-sticky-min: var(--dc-hero-min);
 }
 
 // Gap between the browse header and the content. Small for folder views, but

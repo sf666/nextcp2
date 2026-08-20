@@ -55,6 +55,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   private timeDisplayService = inject(TimeDisplayService);
   private destroyRef = inject(DestroyRef);
   private globalSearchService = inject(GlobalSearchService);
+  private hostRef: ElementRef<HTMLElement> = inject(ElementRef);
 
   //
   // Tailwind filter dropdowns (sort / genres)
@@ -163,6 +164,10 @@ export class DisplayContainerHeaderComponent implements OnInit {
   private readonly COLLAPSE_FREEZE_ZONE = 28;
   private scrollParent: HTMLElement | null = null;
   private rafPending = false;
+  // The sticky track-list column header, which parks below this one. Cached
+  // because it is written to on every scrolled frame; re-resolved whenever the
+  // cached node has left the document (a browse replaced the list).
+  private listColHeader: HTMLElement | null = null;
 
   private readonly onScroll = (): void => {
     if (this.rafPending) {
@@ -189,12 +194,36 @@ export class DisplayContainerHeaderComponent implements OnInit {
         100;
       if (next !== this.collapse()) {
         this.collapse.set(next);
-        // Drive the CSS var on the scroll container so the header (and the
-        // sticky column-header offset) inherit the current collapse.
-        el.style.setProperty('--collapse', String(next));
+        this.publishCollapse(next);
       }
     });
   };
+
+  /**
+   * Hands the current collapse value to the elements whose size depends on it.
+   *
+   * Deliberately NOT written on the scroll container: a custom property is
+   * inherited, so changing it there invalidated the computed style of every node
+   * on the page — with a few hundred album tiles in the list that was tens of
+   * milliseconds of style recalculation per scrolled frame. The only two
+   * consumers are this header and the sticky column header of a track list, so
+   * the value goes straight onto those instead.
+   */
+  private publishCollapse(value: number): void {
+    const collapse = String(value);
+    this.hostRef.nativeElement.style.setProperty('--collapse', collapse);
+    if (!this.listColHeader?.isConnected) {
+      // Only a track listing has one, so on an album or folder page this must
+      // not turn into a DOM query per scrolled frame. Once found it is kept
+      // until the node is replaced by the next browse.
+      this.listColHeader = this.hasSongs()
+        ? document.querySelector<HTMLElement>(
+            '#display-container-main-content.with-sticky-header .list-col-header',
+          )
+        : null;
+    }
+    this.listColHeader?.style.setProperty('--collapse', collapse);
+  }
 
   constructor() {
     afterNextRender(() => {
@@ -204,7 +233,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
       });
       this.destroyRef.onDestroy(() => {
         this.scrollParent?.removeEventListener('scroll', this.onScroll);
-        this.scrollParent?.style.removeProperty('--collapse');
       });
     });
   }
@@ -418,7 +446,9 @@ export class DisplayContainerHeaderComponent implements OnInit {
     console.log('cdsBrowseFinished ... ');
     // A fresh browse result starts at the top, so show the full hero header.
     this.collapse.set(0);
-    this.scrollParent?.style.setProperty('--collapse', '0');
+    // The list is being replaced — drop the cached node with it.
+    this.listColHeader = null;
+    this.publishCollapse(0);
     this.clearSearch();
     this.fillGenres();
     this.readContainerRating();
@@ -491,12 +521,13 @@ export class DisplayContainerHeaderComponent implements OnInit {
     return this.contentDirectoryService().albumList_();
   }
 
+  // Runs over the whole browse result, so it stays free of per-item logging: on a
+  // library with a few thousand albums those calls were a measurable part of the
+  // time between the browse response and the first painted tile.
   private fillGenres(): void {
-    console.log('filling genres. Items size is ' + this.musicTracks?.length);
     const mySet = new Set<string>();
     this.musicTracks?.forEach((value) => {
       if (value?.genre) {
-        console.log('reading genre music tracks : ' + value.genre);
         let aGenre = value.genre.split('/');
         aGenre?.forEach((gen) => {
           mySet.add(gen.trim());
@@ -505,7 +536,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
     });
     this.albums?.forEach((value) => {
       if (value?.genre) {
-        console.log('reading genre albums : ' + value.genre);
         let aGenre = value.genre.split('/');
         aGenre?.forEach((gen) => {
           mySet.add(gen.trim());
@@ -513,7 +543,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
       }
     });
 
-    console.log('sorting genres ... ');
     this.genresList.set(Array.from(mySet.values()).sort());
   }
 
