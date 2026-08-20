@@ -16,6 +16,36 @@
     backdrop-filter: blur(10px);
 }
 
+//
+// Off-screen track rows
+// ============================================================================
+// A folder or playlist can hold a few thousand tracks, and this list is not
+// windowed — every row stays in the DOM. The collapsing browse header changes
+// its height on every scrolled frame, which means the whole list below it gets
+// re-laid-out each time: a few hundred rows at ~8 grid children each. Skipping
+// layout and paint for the rows that are off screen removes that cost without
+// taking them out of the DOM, so find-in-page and scroll-restore keep working.
+//
+// The rows carry no absolutely positioned or scaled children, so the paint
+// containment this implies clips nothing.
+.track-row {
+    content-visibility: auto;
+}
+
+// `auto <height>` rather than a fixed size: the estimate only has to carry the
+// first render, after which the browser keeps the measured height and the
+// scrollbar stops shifting. Each variant is uniform in height, so one estimate
+// per variant is enough.
+.track-row-compact {
+    // two lines of text-sm inside py-2.5
+    contain-intrinsic-size: auto 40px;
+}
+
+.track-row-art {
+    // the same padding around a w-14/h-14 (56px) artwork thumbnail
+    contain-intrinsic-size: auto 76px;
+}
+
 .selectRow {
     background: linear-gradient(to right, rgba(0, 255, 255, 0.08), rgba(0, 200, 255, 0.04));
 }

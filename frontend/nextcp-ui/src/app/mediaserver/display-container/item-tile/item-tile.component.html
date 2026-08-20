@@ -37,7 +37,7 @@
 
         <!-- Row for Same Album View -->
         @if (allTracksSameAlbum()) {
-        <div class="grid gap-4 items-center text-sm py-2.5 px-2 rounded-lg hover:bg-white/5 transition-all duration-200 group {{selectedRowClass(item)}}"
+        <div class="track-row track-row-compact grid gap-4 items-center text-sm py-2.5 px-2 rounded-lg hover:bg-white/5 transition-all duration-200 group {{selectedRowClass(item)}}"
              [style.grid-template-columns]="gridColumns(true)">
             <!-- Track Number -->
             <div id="col_1_num_{{item.objectID}}" class="text-center text-gray-400 group-hover:text-white transition-colors">
@@ -89,7 +89,7 @@
         </div>
         } @else {
         <!-- Row for Mixed Album View -->
-        <div class="grid gap-4 items-center text-sm py-2.5 px-2 rounded-lg hover:bg-white/5 transition-all duration-200 group {{selectedRowClass(item)}}"
+        <div class="track-row track-row-art grid gap-4 items-center text-sm py-2.5 px-2 rounded-lg hover:bg-white/5 transition-all duration-200 group {{selectedRowClass(item)}}"
              [style.grid-template-columns]="gridColumns(false)">
             <!-- Album Art (with now-playing overlay) -->
             <div id="col_1_img_{{item.objectID}}" class="playing-art-wrap" (click)="playItem(item)">
@@ -158,17 +158,23 @@
                 <img class="w-full aspect-square object-cover" 
                      src="{{item.albumArtUrl}}" 
                      alt="{{item.title}}">
+                <!--
+                  The buttons carry a plain translucent fill, not a backdrop
+                  blur: they exist on every card in the grid, and a blur there
+                  means a compositing layer per card. The gradient behind them
+                  already separates them from the artwork.
+                -->
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <div class="flex gap-3">
                         <button class="p-3 bg-aqua hover:bg-aqua/80 rounded-full shadow-xl transition-all duration-200 hover:scale-110" 
                                 (click)="playItem(item)">
                             <span class="material-symbols-outlined text-white text-2xl">play_arrow</span>
                         </button>
-                        <button class="p-3 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full shadow-xl transition-all duration-200 hover:scale-110" 
+                        <button class="p-3 bg-white/25 hover:bg-white/40 rounded-full shadow-xl transition-all duration-200 hover:scale-110" 
                                 (click)="addItemToPlaylist(item)">
                             <span class="material-symbols-outlined text-white text-2xl">playlist_add</span>
                         </button>
-                        <button class="p-3 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full shadow-xl transition-all duration-200 hover:scale-110" 
+                        <button class="p-3 bg-white/25 hover:bg-white/40 rounded-full shadow-xl transition-all duration-200 hover:scale-110" 
                                 (click)="showSongPopup($event, item)">
                             <span class="material-symbols-outlined text-white text-2xl">more_vert</span>
                         </button>
