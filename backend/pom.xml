@@ -106,6 +106,8 @@
 						<nonFilteredFileExtension>ttf</nonFilteredFileExtension>
 						<nonFilteredFileExtension>otf</nonFilteredFileExtension>
 						<nonFilteredFileExtension>p12</nonFilteredFileExtension>
+						<nonFilteredFileExtension>webp</nonFilteredFileExtension>
+						<nonFilteredFileExtension>avif</nonFilteredFileExtension>
 					</nonFilteredFileExtensions>
 				</configuration>
 			</plugin>
