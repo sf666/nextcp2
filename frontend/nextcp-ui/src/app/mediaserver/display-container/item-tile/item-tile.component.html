@@ -37,7 +37,7 @@
 
         <!-- Row for Same Album View -->
         @if (allTracksSameAlbum()) {
-        <div class="track-row track-row-compact grid gap-4 items-center text-sm py-2.5 px-2 rounded-lg hover:bg-white/5 transition-all duration-200 group {{selectedRowClass(item)}}"
+        <div class="grid gap-4 items-center text-sm py-2.5 px-2 rounded-lg hover:bg-white/5 transition-all duration-200 group {{selectedRowClass(item)}}"
              [style.grid-template-columns]="gridColumns(true)">
             <!-- Track Number -->
             <div id="col_1_num_{{item.objectID}}" class="text-center text-gray-400 group-hover:text-white transition-colors">
@@ -89,7 +89,7 @@
         </div>
         } @else {
         <!-- Row for Mixed Album View -->
-        <div class="track-row track-row-art grid gap-4 items-center text-sm py-2.5 px-2 rounded-lg hover:bg-white/5 transition-all duration-200 group {{selectedRowClass(item)}}"
+        <div class="grid gap-4 items-center text-sm py-2.5 px-2 rounded-lg hover:bg-white/5 transition-all duration-200 group {{selectedRowClass(item)}}"
              [style.grid-template-columns]="gridColumns(false)">
             <!-- Album Art (with now-playing overlay) -->
             <div id="col_1_img_{{item.objectID}}" class="playing-art-wrap" (click)="playItem(item)">
