@@ -104,10 +104,13 @@ public class MediaServerDevice extends BaseDevice {
 			ContainerItemDto playlistFolder = browseChildren(folderId, 999);
 			for (ContainerDto pl : playlistFolder.containerDto) {
 				if ("object.container.playlistContainer".equalsIgnoreCase(pl.objectClass)) {
+					// No browse per playlist here. Asking a media server for the number of entries makes it
+					// read the playlist and resolve every track, so filling the sidebar cost one full
+					// playlist scan per entry - for a number the sidebar does not even show. The count is
+					// fetched where it is displayed, in the add to playlist dialog.
 					// strip extension if delivered
-					ContainerItemDto playlistChilds = browseChildren(pl.id, 0);
 					String title = pl.title.lastIndexOf(".") > -1 ? pl.title.substring(0, pl.title.lastIndexOf(".")) : pl.title;
-					ServerPlaylistDto dto = new ServerPlaylistDto(pl.albumartUri, title, pl.id, playlistChilds.totalMatches, null);
+					ServerPlaylistDto dto = new ServerPlaylistDto(pl.albumartUri, title, pl.id, null, null);
 					serverPlaylists.serverPlaylists.add(dto);
 					log.info("Found server based playlist name : {}", dto);
 				}

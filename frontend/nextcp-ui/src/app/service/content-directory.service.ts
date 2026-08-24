@@ -580,6 +580,33 @@ export class ContentDirectoryService {
   }
 
   /**
+   * Asks the media server only for the number of children of a container.
+   *
+   * A count is cheap to ask for but not cheap to answer: a server has to know its children to count
+   * them, which for a playlist means reading it and resolving every track. So this is called where
+   * the number is actually shown, never to build a list.
+   *
+   * @param objectID container to count
+   * @param mediaServerUdn media server to ask, defaults to the selected one
+   */
+  public browseChildCount(
+    objectID: string,
+    mediaServerUdn?: string,
+  ): Observable<number> {
+    if (!mediaServerUdn) {
+      mediaServerUdn = this.deviceService.selectedMediaServerDevice().udn;
+    }
+    const browseRequestDto = this.createBrowseRequest(objectID, '', mediaServerUdn);
+    return this.httpService
+      .post<ContainerItemDto>(this.baseUri, '/browseChildren', {
+        ...browseRequestDto,
+        start: 0,
+        count: 0,
+      })
+      .pipe(map((res) => res.totalMatches));
+  }
+
+  /**
    * Browse a container WITHOUT updating the displayed content signals.
    *
    * Use this to inspect a container (e.g. resolve the real root object id or

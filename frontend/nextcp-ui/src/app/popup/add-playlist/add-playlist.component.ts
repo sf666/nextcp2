@@ -23,6 +23,8 @@ import { DeviceService } from 'src/app/service/device.service';
 import { FormsModule } from '@angular/forms';
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
 import { PlaylistContainerComponent } from './playlist-container/playlist-container.component';
+import { concatMap, from, map } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   ConfirmPopupComponent,
   ConfirmPopupData,
@@ -58,6 +60,8 @@ export class AddPlaylistComponent {
   addToContainer: ContainerDto;
 
   otherPlaylists = signal<ServerPlaylistDto[]>([]);
+  /** Number of entries per playlist id, filled while the dialog is open. */
+  private playlistCounts = signal<Record<string, number>>({});
   playlistFilter = model<string>('');
   musicItemToAdd = signal<MusicItemDto>(
     this.dtoGeneratorService.emptyMusicItemDto(),
@@ -66,6 +70,7 @@ export class AddPlaylistComponent {
   playlistMode = signal<PlaylistMode>(PlaylistMode.Add);
 
   filteredServerPlaylists = computed(() => {
+    const counts = this.playlistCounts();
     return this.serverPlaylistService
       .serverPl()
       .serverPlaylists.filter((pl) => {
@@ -76,7 +81,12 @@ export class AddPlaylistComponent {
         } else {
           return true;
         }
-      });
+      })
+      .map((pl) =>
+        counts[pl.playlistId] === undefined
+          ? pl
+          : { ...pl, numberOfElements: counts[pl.playlistId] },
+      );
   });
 
   filteredOtherPlaylists = computed(() => {
@@ -129,6 +139,35 @@ export class AddPlaylistComponent {
     this.contentDirectoryService
       .searchPlaylistsMetadataOnly(sr)
       .subscribe((data) => this.updateOtherPlaylists(data));
+    this.loadPlaylistCounts(deviceService.selectedMediaServerDevice().udn);
+  }
+
+  /**
+   * Fetches the number of entries of every server playlist, one after another.
+   *
+   * The sidebar deliberately does not carry these numbers: a media server has to read a playlist and
+   * resolve all of its tracks to count them, so asking for all of them at startup stalls the server.
+   * Here the user opened the dialog that shows the numbers, and they arrive one by one.
+   */
+  private loadPlaylistCounts(mediaServerUdn: string) {
+    if (!mediaServerUdn) {
+      return;
+    }
+    const ids = this.serverPlaylistService
+      .serverPl()
+      .serverPlaylists.map((pl) => pl.playlistId);
+    from(ids)
+      .pipe(
+        concatMap((id) =>
+          this.contentDirectoryService
+            .browseChildCount(id, mediaServerUdn)
+            .pipe(map((count) => ({ id, count }))),
+        ),
+        takeUntilDestroyed(),
+      )
+      .subscribe(({ id, count }) =>
+        this.playlistCounts.update((counts) => ({ ...counts, [id]: count })),
+      );
   }
 
   private updateOtherPlaylists(data: SearchResultDto): void {
