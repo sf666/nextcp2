@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { MusicItemDto } from './dto';
 import { PersistenceService } from './persistence/persistence.service';
 
@@ -65,6 +65,13 @@ export class LocalPlayerService {
   public readonly repeat = signal<boolean>(false);
   // When true, the active queue is randomized.
   public readonly shuffle = signal<boolean>(false);
+  // True while an endless / live source is loaded (web radio). Consumed by RendererService so the
+  // footer knows there is no position to seek to.
+  public readonly live = computed<boolean>(() => {
+    const item = this.currentItem();
+    // "Nothing loaded" is not a live stream: it must not hide the (idle) seek slider.
+    return !!item && this.isLiveStream(item);
+  });
 
   constructor() {
     this.audio.addEventListener('play', () => { this.playing.set(true); this.persistState(); });
@@ -228,9 +235,17 @@ export class LocalPlayerService {
   }
 
   public seek(secondsAbsolute: number): void {
-    if (!isNaN(this.audio.duration)) {
-      this.audio.currentTime = secondsAbsolute;
+    // A live stream has an empty seekable range; assigning currentTime there kills playback instead
+    // of moving it. The previous guard missed this, because Infinity passes an isNaN() check.
+    if (this.live()) {
+      return;
     }
+    // A transcoded stream also reports a non-finite duration, but its length is known from the DIDL
+    // metadata and the backend proxy serves it with real range support - so it stays seekable.
+    if (!Number.isFinite(this.audio.duration) && this.duration() <= 0) {
+      return;
+    }
+    this.audio.currentTime = secondsAbsolute;
   }
 
   public setVolume(volumePercent: number): void {

@@ -55,10 +55,11 @@
             min="0"
             max="100"
             step="1"
-            [value]="trackTimePercent()"
-            (input)="trackTimePercentSeek($event.target.value)"
+            [value]="displayPercent()"
+            (input)="onSeekInput($event.target.value)"
+            (change)="onSeekCommit($event.target.value)"
             class="time-range-slider"
-            style="--value: {{trackTimePercent()}}%"
+            style="--value: {{displayPercent()}}%"
           />
         } @else {
           <div class="time-progress-static w-full"></div>

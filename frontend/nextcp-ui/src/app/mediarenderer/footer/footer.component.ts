@@ -100,6 +100,11 @@ export class FooterComponent implements OnInit {
     return 0;
   });
 
+  // Position the user is dragging the slider to, or null while not dragging. The displayed position
+  // advances every second, so without holding the dragged value the thumb would fight the finger.
+  private seekPreviewPercent = signal<number | null>(null);
+  displayPercent = computed(() => this.seekPreviewPercent() ?? this.trackTimePercent());
+
   public rendererClicked(event: Event): void {
     const target = new ElementRef(event.currentTarget);
     const dialogRef = this.dialog.open(AvailableRendererComponent, {
@@ -165,11 +170,20 @@ export class FooterComponent implements OnInit {
     return this.rendererService.finishTime();
   }
 
-  public trackTimePercentSeek(value: any) {
-    let timeAbs = Math.floor(
-      (this.rendererService.trackTime().duration * value) / 100,
+  /** While dragging: only move the thumb, no seek yet - "input" fires for every pixel. */
+  public onSeekInput(value: any): void {
+    this.seekPreviewPercent.set(Number(value));
+  }
+
+  /** On release (and on keyboard adjustment): seek once, to where the user let go. */
+  public onSeekCommit(value: any): void {
+    const timeAbs = Math.floor(
+      (this.rendererService.trackTime().duration * Number(value)) / 100,
     );
     this.transportService.seek(timeAbs);
+    // Show the target straight away instead of snapping back until the renderer reports it.
+    this.rendererService.anchorPosition(timeAbs);
+    this.seekPreviewPercent.set(null);
   }
 
   //

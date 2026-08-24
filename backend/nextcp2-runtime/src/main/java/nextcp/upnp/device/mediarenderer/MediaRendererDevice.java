@@ -634,9 +634,23 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     		log.trace("{}: skipping tick, because device is not enabled.", getFriendlyName());
     		return;
     	}
+        if (hasOhInfoService() || this.serviceOffline)
+        {
+            // OpenHome devices push their time via GENA events, nothing to poll here.
+            lastTickPlaying = false;
+            return;
+        }
         try
         {
-            if (tickWaitPeriodPassed(counter) && !hasOhInfoService() && transportIsPlaying() && !this.serviceOffline)
+            // Poll immediately when playback has just started instead of waiting for the next 5s
+            // slot, so the UI, which counts the seconds up between two samples, starts from a fresh
+            // position. transportIsPlaying() only reads the state cached from GENA events, so
+            // evaluating it on every tick costs no UPnP traffic.
+            boolean playing = transportIsPlaying();
+            boolean startedPlaying = playing && !lastTickPlaying;
+            lastTickPlaying = playing;
+
+            if ((tickWaitPeriodPassed(counter) || startedPlaying) && playing)
             {
             	// no OpenHome -> need to poll time and transport state information from AVTransport
             	
@@ -661,6 +675,9 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     private boolean tickWaitPeriodPassed(long counter) {
     	return counter % 5 == 0;
     }
+
+    /** Whether playback was running on the previous tick; used to detect the start of playback. */
+    private boolean lastTickPlaying = false;
     
     
     private boolean transportIsPlaying()
