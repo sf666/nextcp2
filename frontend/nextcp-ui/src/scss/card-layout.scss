@@ -46,7 +46,8 @@ $imgCardWidthSmall : 6rem;
 // Tablets in portrait — where the flat 13rem hurt most.
 @media only screen and (max-width: 1023px) {
     .tile-grid {
-        --tile-min: 8rem;
+        --tile-min     : 8rem;
+        --tile-text-pad: 8px 10px 10px;
     }
 }
 
@@ -56,6 +57,27 @@ $imgCardWidthSmall : 6rem;
 @media only screen and (max-width: 576px) {
     .tile-grid {
         --tile-min: 100%;
+    }
+}
+
+// Touch devices in landscape, where the width steps above do not apply because a tablet reports a
+// desktop-class width - yet it is held at arm's length and not a 27" monitor. pointer:coarse is what
+// separates the two, so a tablet gets the denser grid while a desktop of the same width does not.
+//
+// Deliberately staged, and deliberately not starting at 1024px: every iPad lands below 1440px in
+// landscape (mini 1133, Air/Pro 11" 1194, Pro 12.9" 1366) and those already looked right, so they
+// keep close to their previous look. Android tablets report the wider viewports, and that is where
+// the covers were still too big.
+@media only screen and (pointer: coarse) and (min-width: 1280px) {
+    .tile-grid {
+        --tile-min     : 10rem;
+        --tile-text-pad: 8px 10px 10px;
+    }
+}
+
+@media only screen and (pointer: coarse) and (min-width: 1440px) {
+    .tile-grid {
+        --tile-min: 8rem;
     }
 }
 
@@ -141,7 +163,8 @@ $imgCardWidthSmall : 6rem;
     flex-direction : column;
     justify-content: center;
 
-    padding         : 12px 14px 14px;
+    // Set from .tile-grid in the dense (tablet) modes below - it inherits down to here.
+    padding         : var(--tile-text-pad, 12px 14px 14px);
     min-width       : 0;
     width           : 100%;
     flex            : 1 1 auto;

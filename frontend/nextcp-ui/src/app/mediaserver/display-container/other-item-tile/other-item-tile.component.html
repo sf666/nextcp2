@@ -2,7 +2,7 @@
     @for (item of items(); track item.objectID) {
     <div class="albumTile" id="{{item.objectID}}" tabindex="-1" (click)="playResource(item)">
       <div class="albumImageContainer">
-        <img src="{{item.albumArtUrl}}" alt="{{item.title}}">
+        <img src="{{albumArt.tile(item.albumArtUrl, item.albumArtUrlMedium)}}" alt="{{item.title}}">
       </div>
       <div class="flex flex-col albumDesc">
         <div class="playlistText">{{getOtherItemHeadline(item)}}</div>

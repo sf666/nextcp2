@@ -21,6 +21,7 @@ import {
   RatingFilter,
 } from 'src/app/service/rating-service.service';
 import { filterContainers } from 'src/app/util/browse-filter';
+import { AlbumArtService } from 'src/app/util/album-art.service';
 import { ContainerRatingComponent } from '../../popup/container-rating/container-rating.component';
 
 @Component({
@@ -62,6 +63,7 @@ export class ContainerTileComponent {
   // otherwise it would fire while scrolling the grid.
 
   private readonly dialog = inject(MatDialog);
+  readonly albumArt = inject(AlbumArtService);
   private readonly deviceService = inject(DeviceService);
   private readonly LONG_PRESS_MS = 500;
   private readonly MOVE_TOLERANCE_PX = 10;

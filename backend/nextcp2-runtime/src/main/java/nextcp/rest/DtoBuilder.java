@@ -178,6 +178,7 @@ public class DtoBuilder
         {
             dto.albumartUri = uri.get().toString();
         }
+        dto.albumartUriMedium = selectMediumAlbumArtUri(container);
 
         // The user rating is supported by any kind of resource, containers as well as items.
         Optional<Property<?>> rating = extractProperty("rating", container.getProperties());
@@ -260,9 +261,11 @@ public class DtoBuilder
     private void extractKnownProperties(MusicItemDto itemDto, Item item)
     {
         itemDto.streamingURL = readStreamingUrl(item);
-        // The large variant is a separate field: browse grids show hundreds of tiles and keep using the
-        // small albumArtUrl, only the now playing view asks for the big cover.
+        // The bigger variants are separate fields: browse grids show hundreds of tiles and keep using
+        // the small albumArtUrl (the medium one only on high density displays), while the now playing
+        // view asks for the big cover.
         itemDto.albumArtUrlLarge = selectLargeAlbumArtUri(item);
+        itemDto.albumArtUrlMedium = selectMediumAlbumArtUri(item);
 
         for (Property<?> property : item.getProperties())
         {
@@ -503,15 +506,22 @@ public class DtoBuilder
         }
     }
 
-    /** DLNA image profiles from largest to smallest, used to rank the album art a server offers. */
-    private static final List<String> ALBUM_ART_PROFILES = List.of("JPEG_LRG", "JPEG_MED", "JPEG_SM", "JPEG_TN");
+    /** Preferred DLNA image profiles for the big cover of the now playing view. */
+    private static final List<String> LARGE_ART_PROFILES = List.of("JPEG_LRG", "JPEG_MED", "JPEG_SM", "JPEG_TN");
+
+    /**
+     * Preferred DLNA image profiles for a grid tile on a high density display. A tile is only ~130-250
+     * CSS px wide, so the mid sized profiles fit it best; a large one is still preferable to a 160x160
+     * thumbnail, which such a display would visibly upscale.
+     */
+    private static final List<String> MEDIUM_ART_PROFILES = List.of("JPEG_MED", "JPEG_SM", "JPEG_LRG", "JPEG_TN");
 
     /**
      * Matches the DLNA image profile inside a UMS thumbnail URL, e.g.
      * {@code http://host:5001/get/0$1$5/thumbnail0000JPEG_TN_cover.jpg}. UMS embeds the requested
      * profile in the path and renders that size on demand, so asking for a bigger one just works.
      */
-    private static final Pattern UMS_THUMBNAIL_PROFILE = Pattern.compile("(/thumbnail0000)JPEG_(?:TN|SM|MED)_");
+    private static final Pattern UMS_THUMBNAIL_PROFILE = Pattern.compile("(/thumbnail0000)JPEG_(?:TN|SM|MED|LRG)_");
 
     /**
      * Album art URI in the largest size available, or {@code null} when the object carries none. A media
@@ -521,6 +531,21 @@ public class DtoBuilder
      * {@code albumArtUrl}, which is what makes a listing of a thousand tiles cheap.
      */
     String selectLargeAlbumArtUri(DIDLObject didlObject)
+    {
+        return selectAlbumArtUri(didlObject, LARGE_ART_PROFILES, "JPEG_LRG");
+    }
+
+    /**
+     * Album art URI in a mid size, for grid tiles on displays with a device pixel ratio of 2 or more.
+     * Same selection as {@link #selectLargeAlbumArtUri(DIDLObject)}, only aiming at a smaller profile:
+     * a wall of a thousand tiles must not pull full size covers.
+     */
+    String selectMediumAlbumArtUri(DIDLObject didlObject)
+    {
+        return selectAlbumArtUri(didlObject, MEDIUM_ART_PROFILES, "JPEG_MED");
+    }
+
+    private String selectAlbumArtUri(DIDLObject didlObject, List<String> preference, String umsProfile)
     {
         String bestUri = null;
         int bestRank = Integer.MAX_VALUE;
@@ -538,8 +563,8 @@ public class DtoBuilder
             String profile = albumArtProfileOf(property);
             // An URI without a (known) profile ranks last, but is still used when it is all we get.
             // Note List.of() throws on indexOf(null), and a server may well omit the profile.
-            int rank = profile != null ? ALBUM_ART_PROFILES.indexOf(profile) : -1;
-            rank = rank < 0 ? ALBUM_ART_PROFILES.size() : rank;
+            int rank = profile != null ? preference.indexOf(profile) : -1;
+            rank = rank < 0 ? preference.size() : rank;
             if (bestUri == null || rank < bestRank)
             {
                 bestUri = uri;
@@ -547,7 +572,7 @@ public class DtoBuilder
             }
             log.trace("album art candidate: profile={}, uri={}", profile, uri);
         }
-        return upgradeUmsThumbnailProfile(bestUri);
+        return withUmsThumbnailProfile(bestUri, umsProfile);
     }
 
     /** Value of the {@code dlna:profileID} attribute of an albumArtURI property, or {@code null}. */
@@ -558,12 +583,13 @@ public class DtoBuilder
     }
 
     /**
-     * Raises a UMS thumbnail URL to the large image profile. UMS advertises the cover as a small
-     * thumbnail profile only, depending on which renderer profile matches, but it serves any profile
-     * named in the URL - so requesting JPEG_LRG yields the full size cover instead of a scaled up
-     * thumbnail. URLs of other servers do not match the pattern and are returned untouched.
+     * Rewrites a UMS thumbnail URL to the given DLNA image profile. UMS advertises the cover in one
+     * profile only, depending on which renderer profile matches, but it renders whatever profile the
+     * URL names - so asking for JPEG_LRG yields the full size cover instead of an upscaled thumbnail,
+     * and JPEG_MED a tile sized one. URLs of other servers do not match the pattern and are returned
+     * untouched.
      */
-    String upgradeUmsThumbnailProfile(String albumArtUri)
+    String withUmsThumbnailProfile(String albumArtUri, String profile)
     {
         if (albumArtUri == null)
         {
@@ -574,9 +600,12 @@ public class DtoBuilder
         {
             return albumArtUri;
         }
-        String upgraded = matcher.replaceFirst("$1JPEG_LRG_");
-        log.debug("raised album art to the large image profile: {} -> {}", albumArtUri, upgraded);
-        return upgraded;
+        String rewritten = matcher.replaceFirst("$1" + profile + "_");
+        if (!rewritten.equals(albumArtUri))
+        {
+            log.debug("album art rewritten to profile {}: {} -> {}", profile, albumArtUri, rewritten);
+        }
+        return rewritten;
     }
 
     private String getTextAndCheckForNull(Node n)

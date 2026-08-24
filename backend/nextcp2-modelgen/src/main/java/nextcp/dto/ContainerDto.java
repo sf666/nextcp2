@@ -24,6 +24,8 @@ public class ContainerDto
     public Boolean searchable;
     public String mediaServerUDN;
     public String albumartUri;
+    @nextcp.handcoded.Nullable
+    public String albumartUriMedium;
     public String artist;
     public Integer rating;
     public String creator;
@@ -34,7 +36,7 @@ public class ContainerDto
     {
     }
 
-    public ContainerDto(String id, String parentID, String title, String objectClass, String conductor, String composer, Integer childCount, String createClass, String searchClass, Boolean searchable, String mediaServerUDN, String albumartUri, String artist, Integer rating, String creator, String media_date, String genre)
+    public ContainerDto(String id, String parentID, String title, String objectClass, String conductor, String composer, Integer childCount, String createClass, String searchClass, Boolean searchable, String mediaServerUDN, String albumartUri, String albumartUriMedium, String artist, Integer rating, String creator, String media_date, String genre)
     {
         this.id = id;
         this.parentID = parentID;
@@ -48,6 +50,7 @@ public class ContainerDto
         this.searchable = searchable;
         this.mediaServerUDN = mediaServerUDN;
         this.albumartUri = albumartUri;
+        this.albumartUriMedium = albumartUriMedium;
         this.artist = artist;
         this.rating = rating;
         this.creator = creator;
@@ -72,6 +75,7 @@ public class ContainerDto
         sb.append("searchable=").append(this.searchable).append(", ");
         sb.append("mediaServerUDN=").append(this.mediaServerUDN).append(", ");
         sb.append("albumartUri=").append(this.albumartUri).append(", ");
+        sb.append("albumartUriMedium=").append(this.albumartUriMedium).append(", ");
         sb.append("artist=").append(this.artist).append(", ");
         sb.append("rating=").append(this.rating).append(", ");
         sb.append("creator=").append(this.creator).append(", ");

@@ -34,6 +34,8 @@ public class MusicItemDto
     public String albumArtUrl;
     @nextcp.handcoded.Nullable
     public String albumArtUrlLarge;
+    @nextcp.handcoded.Nullable
+    public String albumArtUrlMedium;
     public String genre;
     public Integer rating;
     public MusicBrainzId musicBrainzId;
@@ -50,7 +52,7 @@ public class MusicItemDto
     {
     }
 
-    public MusicItemDto(String mediaServerUDN, String streamingURL, String objectID, String objectClass, String parentId, String refId, MusicItemIdDto songId, String resourceId, String conductor, String composer, String currentTrackMetadata, String creator, String title, String artistName, String numberOfThisDisc, String originalTrackNumber, String album, String date, AudioFormat audioFormat, String albumArtUrl, String albumArtUrlLarge, String genre, Integer rating, MusicBrainzId musicBrainzId, DiscogsId discogsId, Integer audioAddictChannelId, String audioAddictNetwork, Integer audioAddictPlaylistId)
+    public MusicItemDto(String mediaServerUDN, String streamingURL, String objectID, String objectClass, String parentId, String refId, MusicItemIdDto songId, String resourceId, String conductor, String composer, String currentTrackMetadata, String creator, String title, String artistName, String numberOfThisDisc, String originalTrackNumber, String album, String date, AudioFormat audioFormat, String albumArtUrl, String albumArtUrlLarge, String albumArtUrlMedium, String genre, Integer rating, MusicBrainzId musicBrainzId, DiscogsId discogsId, Integer audioAddictChannelId, String audioAddictNetwork, Integer audioAddictPlaylistId)
     {
         this.mediaServerUDN = mediaServerUDN;
         this.streamingURL = streamingURL;
@@ -73,6 +75,7 @@ public class MusicItemDto
         this.audioFormat = audioFormat;
         this.albumArtUrl = albumArtUrl;
         this.albumArtUrlLarge = albumArtUrlLarge;
+        this.albumArtUrlMedium = albumArtUrlMedium;
         this.genre = genre;
         this.rating = rating;
         this.musicBrainzId = musicBrainzId;
@@ -108,6 +111,7 @@ public class MusicItemDto
         sb.append("audioFormat=").append(this.audioFormat).append(", ");
         sb.append("albumArtUrl=").append(this.albumArtUrl).append(", ");
         sb.append("albumArtUrlLarge=").append(this.albumArtUrlLarge).append(", ");
+        sb.append("albumArtUrlMedium=").append(this.albumArtUrlMedium).append(", ");
         sb.append("genre=").append(this.genre).append(", ");
         sb.append("rating=").append(this.rating).append(", ");
         sb.append("musicBrainzId=").append(this.musicBrainzId).append(", ");

@@ -33,6 +33,7 @@ import { DeviceService } from 'src/app/service/device.service';
 import { BackgroundImageService } from 'src/app/util/background-image.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
+import { AlbumArtService } from 'src/app/util/album-art.service';
 import { DisplayHeaderOptionsComponent } from '../../popup/display-header-options/display-header-options.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -53,6 +54,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   private dtoGeneratorService = inject(DtoGeneratorService);
   private backgroundImageService = inject(BackgroundImageService);
   private timeDisplayService = inject(TimeDisplayService);
+  readonly albumArt = inject(AlbumArtService);
   private destroyRef = inject(DestroyRef);
   private globalSearchService = inject(GlobalSearchService);
   private hostRef: ElementRef<HTMLElement> = inject(ElementRef);

@@ -14,7 +14,8 @@
         while scrolling), and rows that the windowing renders just outside the
         viewport are not fetched until they come close to it.
       -->
-      <img src="{{container.albumartUri}}" alt="{{container.title}}" class="imgContainer"
+      <img src="{{albumArt.tile(container.albumartUri, container.albumartUriMedium)}}"
+           alt="{{container.title}}" class="imgContainer"
            loading="lazy" decoding="async">
       @if (isLiked(container)) {
         <span class="likeBadge material-symbols-outlined" aria-label="Liked">favorite</span>

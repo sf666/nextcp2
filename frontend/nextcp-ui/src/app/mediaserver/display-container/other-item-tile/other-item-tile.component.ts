@@ -2,10 +2,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   input,
   output,
 } from '@angular/core';
 import { MusicItemDto } from 'src/app/service/dto';
+import { AlbumArtService } from 'src/app/util/album-art.service';
 
 @Component({
   selector: 'other-item-tile',
@@ -16,6 +18,8 @@ import { MusicItemDto } from 'src/app/service/dto';
   styleUrl: './other-item-tile.component.scss',
 })
 export class OtherItemTileComponent {
+  readonly albumArt = inject(AlbumArtService);
+
   otherItems = input<MusicItemDto[]>([]);
   quickSearchString = input<string>('');
   items = computed(() =>

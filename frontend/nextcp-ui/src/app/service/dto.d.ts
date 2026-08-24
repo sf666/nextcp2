@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-08-24 17:57:41.
+// Generated using typescript-generator version 4.1.1 on 2026-08-24 19:11:27.
 
 export interface AiConfig {
     aiEnabled: boolean;
@@ -145,6 +145,7 @@ export interface ContainerDto {
     searchable: boolean;
     mediaServerUDN: string;
     albumartUri: string;
+    albumartUriMedium?: string;
     artist: string;
     rating: number;
     creator: string;
@@ -326,6 +327,7 @@ export interface MusicItemDto {
     audioFormat: AudioFormat;
     albumArtUrl: string;
     albumArtUrlLarge?: string;
+    albumArtUrlMedium?: string;
     genre: string;
     rating: number;
     musicBrainzId: MusicBrainzId;

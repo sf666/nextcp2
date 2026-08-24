@@ -291,6 +291,8 @@ ContainerDto:
 
    mediaServerUDN: String
    albumartUri: String
+   # Mid sized variant of albumartUri, for grid tiles on high density displays (see MusicItemDto).
+   albumartUriMedium: String?
    artist: String
    rating: Integer
    creator: String
@@ -362,6 +364,10 @@ MusicItemDto:
    # Same cover in the largest size the media server offers. Only the now playing view uses it; browse
    # grids keep albumArtUrl, so a listing of a thousand tiles stays cheap.
    albumArtUrlLarge: String?
+   # Mid sized variant. A grid tile is only ~130-250 CSS px wide, but on a screen with a device pixel
+   # ratio of 2 or 3 that is 260-750 real pixels, which a 160x160 thumbnail cannot fill. The frontend
+   # picks this one over albumArtUrl on such displays.
+   albumArtUrlMedium: String?
    genre: String
    rating: Integer
    musicBrainzId: MusicBrainzId
