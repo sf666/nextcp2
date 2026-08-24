@@ -65,7 +65,9 @@ export class DisplayContainerHeaderComponent implements OnInit {
   openMenu = signal<'sort' | 'genres' | 'rating' | null>(null);
 
   // Kept short on purpose: a digit plus the heart says it without a sentence. ANY
-  // has no digit, it is the switched-off state and carries an icon instead.
+  // has no digit, it is the switched-off state and carries an icon instead. The
+  // trailing plus is what tells the reader the entry is a lower bound; 5 has none
+  // because there is nothing above it, and 0 is the disliked bucket, not a bound.
   readonly ratingOptions: ReadonlyArray<{
     value: RatingFilter;
     digits?: string;
@@ -74,10 +76,10 @@ export class DisplayContainerHeaderComponent implements OnInit {
   }> = [
     { value: 'ANY', icon: 'filter_alt_off', title: 'Any rating' },
     { value: '5', digits: '5', title: 'Liked, 5' },
-    { value: '4', digits: '4', title: '4' },
-    { value: '3', digits: '3', title: '3' },
-    { value: '2', digits: '2', title: '2' },
-    { value: '1', digits: '1', title: '1' },
+    { value: '4', digits: '4+', title: '4 and better' },
+    { value: '3', digits: '3+', title: '3 and better' },
+    { value: '2', digits: '2+', title: '2 and better' },
+    { value: '1', digits: '1+', title: '1 and better' },
     { value: '0', digits: '0', title: 'Disliked, 0' },
   ];
 

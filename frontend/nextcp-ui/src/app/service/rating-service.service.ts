@@ -13,14 +13,18 @@ export const RATING_DISLIKED = 0;
 
 /**
  * Values of the rating filter in the browse header. ANY switches the filter off, the
- * others select one exact rating. A like is exactly RATING_LIKED, so '5' is the
- * liked filter and no separate range entry is needed.
+ * others select a lower bound: '3' means three stars and better. A like is exactly
+ * RATING_LIKED, so '5' is the liked filter and no separate range entry is needed.
+ * '0' is the exception, it selects the disliked entries only, because everything is
+ * zero stars or better and a lower bound of zero would filter nothing.
  */
 export type RatingFilter = 'ANY' | '5' | '4' | '3' | '2' | '1' | '0';
 
 /**
  * Applies the rating filter to one resource. Used for containers and for tracks so
  * both react the same way.
+ *
+ * Unrated entries never match a rating filter: an absent rating is not a zero.
  */
 export function matchesRatingFilter(
   rating: number | undefined | null,
@@ -29,8 +33,10 @@ export function matchesRatingFilter(
   switch (filter) {
     case 'ANY':
       return true;
+    case '0':
+      return rating === RATING_DISLIKED;
     default:
-      return rating === Number(filter);
+      return rating != null && rating >= Number(filter);
   }
 }
 
