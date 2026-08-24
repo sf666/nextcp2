@@ -1,9 +1,15 @@
 package nextcp.rest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.net.URI;
 import org.junit.jupiter.api.Test;
+import org.jupnp.support.model.DIDLAttribute;
+import org.jupnp.support.model.DIDLObject.Property;
 import org.jupnp.support.model.ProtocolInfo;
 import org.jupnp.support.model.Res;
+import org.jupnp.support.model.item.MusicTrack;
 import nextcp.dto.AudioFormat;
 
 public class TestDtoBuilder
@@ -35,6 +41,55 @@ public class TestDtoBuilder
         res = buildResObject("12:4:59.0"); // 3*60 + 20 = 200L
         af = db.extractAudioFormatFromResourceField(res);
         assertTrue(af.durationInSeconds.equals(12 * 60 * 60L + 4 * 60L + 59L));
+    }
+
+    @Test
+    public void testSelectsLargestAlbumArtProfile()
+    {
+        DtoBuilder db = new DtoBuilder();
+        MusicTrack track = new MusicTrack();
+        track.addProperty(albumArtUri("http://ums:5001/get/0$1$5/thumbnail0000JPEG_TN_cover.jpg", "JPEG_TN"));
+        track.addProperty(albumArtUri("http://ums:5001/get/0$1$5/thumbnail0000JPEG_MED_cover.jpg", "JPEG_MED"));
+
+        // The largest advertised profile wins, no matter in which order the server lists them.
+        assertEquals("http://ums:5001/get/0$1$5/thumbnail0000JPEG_LRG_cover.jpg", db.selectLargeAlbumArtUri(track));
+    }
+
+    @Test
+    public void testKeepsSingleAlbumArtWithoutProfile()
+    {
+        DtoBuilder db = new DtoBuilder();
+        MusicTrack track = new MusicTrack();
+        String uri = "http://minim:9790/minimserver/*/music/album/$!picture-176-167405.jpg";
+        track.addProperty(albumArtUri(uri, null));
+
+        assertEquals(uri, db.selectLargeAlbumArtUri(track));
+        assertNull(db.selectLargeAlbumArtUri(new MusicTrack()));
+    }
+
+    @Test
+    public void testRaisesUmsThumbnailProfileOnly()
+    {
+        DtoBuilder db = new DtoBuilder();
+        assertEquals("http://ums:5001/get/0$1$5/thumbnail0000JPEG_LRG_a.jpg",
+                db.upgradeUmsThumbnailProfile("http://ums:5001/get/0$1$5/thumbnail0000JPEG_TN_a.jpg"));
+        // Already large, and URLs of other servers, must stay untouched.
+        assertEquals("http://ums:5001/get/0$1$5/thumbnail0000JPEG_LRG_a.jpg",
+                db.upgradeUmsThumbnailProfile("http://ums:5001/get/0$1$5/thumbnail0000JPEG_LRG_a.jpg"));
+        assertEquals("http://minim:9790/music/$!picture-1-2.jpg",
+                db.upgradeUmsThumbnailProfile("http://minim:9790/music/$!picture-1-2.jpg"));
+        assertNull(db.upgradeUmsThumbnailProfile(null));
+    }
+
+    private Property<URI> albumArtUri(String uri, String dlnaProfile)
+    {
+        Property<URI> property = new Property.UPNP.ALBUM_ART_URI(URI.create(uri));
+        if (dlnaProfile != null)
+        {
+            property.addAttribute(new Property.DLNA.PROFILE_ID(
+                    new DIDLAttribute(Property.DLNA.NAMESPACE.URI, "dlna", dlnaProfile)));
+        }
+        return property;
     }
 
     private Res buildResObject(String duration)

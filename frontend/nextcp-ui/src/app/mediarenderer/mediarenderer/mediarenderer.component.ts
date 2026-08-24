@@ -131,8 +131,9 @@ export class MediarendererComponent implements OnInit {
     return this.rendererService.isStreaming();
   }
 
+  /** The big cover of this view - the large variant, not the grid thumbnail. */
   public getImgSrc(): string {
-    return this.rendererService.imgSrc();
+    return this.rendererService.imgSrcLarge();
   }
 
   getStarSize(): string {

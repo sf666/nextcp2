@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -13,6 +15,7 @@ import org.jupnp.support.contentdirectory.DIDLParser;
 import org.jupnp.support.model.DIDLContent;
 import org.jupnp.support.model.DIDLObject;
 import org.jupnp.support.model.DIDLObject.Property;
+import org.jupnp.support.model.DIDLAttribute;
 import org.jupnp.support.model.DescMeta;
 import org.jupnp.support.model.PersonWithRole;
 import org.jupnp.support.model.Res;
@@ -257,6 +260,9 @@ public class DtoBuilder
     private void extractKnownProperties(MusicItemDto itemDto, Item item)
     {
         itemDto.streamingURL = readStreamingUrl(item);
+        // The large variant is a separate field: browse grids show hundreds of tiles and keep using the
+        // small albumArtUrl, only the now playing view asks for the big cover.
+        itemDto.albumArtUrlLarge = selectLargeAlbumArtUri(item);
 
         for (Property<?> property : item.getProperties())
         {
@@ -495,6 +501,82 @@ public class DtoBuilder
             containerDto.rating = Integer.parseInt(strRating);
             log.debug("container rating : " + strRating);
         }
+    }
+
+    /** DLNA image profiles from largest to smallest, used to rank the album art a server offers. */
+    private static final List<String> ALBUM_ART_PROFILES = List.of("JPEG_LRG", "JPEG_MED", "JPEG_SM", "JPEG_TN");
+
+    /**
+     * Matches the DLNA image profile inside a UMS thumbnail URL, e.g.
+     * {@code http://host:5001/get/0$1$5/thumbnail0000JPEG_TN_cover.jpg}. UMS embeds the requested
+     * profile in the path and renders that size on demand, so asking for a bigger one just works.
+     */
+    private static final Pattern UMS_THUMBNAIL_PROFILE = Pattern.compile("(/thumbnail0000)JPEG_(?:TN|SM|MED)_");
+
+    /**
+     * Album art URI in the largest size available, or {@code null} when the object carries none. A media
+     * server offers the same cover in several sizes, each as its own {@code upnp:albumArtURI} with a
+     * {@code dlna:profileID}; the small one leaves the now playing view scaling up a 160x160 JPEG_TN
+     * thumbnail. Only used for the single cover the now playing view shows - browse grids keep the small
+     * {@code albumArtUrl}, which is what makes a listing of a thousand tiles cheap.
+     */
+    String selectLargeAlbumArtUri(DIDLObject didlObject)
+    {
+        String bestUri = null;
+        int bestRank = Integer.MAX_VALUE;
+        for (Property<?> property : didlObject.getProperties())
+        {
+            if (!"albumArtURI".equals(property.getDescriptorName()) || property.getValue() == null)
+            {
+                continue;
+            }
+            String uri = property.getValue().toString();
+            if (StringUtils.isBlank(uri))
+            {
+                continue;
+            }
+            String profile = albumArtProfileOf(property);
+            // An URI without a (known) profile ranks last, but is still used when it is all we get.
+            // Note List.of() throws on indexOf(null), and a server may well omit the profile.
+            int rank = profile != null ? ALBUM_ART_PROFILES.indexOf(profile) : -1;
+            rank = rank < 0 ? ALBUM_ART_PROFILES.size() : rank;
+            if (bestUri == null || rank < bestRank)
+            {
+                bestUri = uri;
+                bestRank = rank;
+            }
+            log.trace("album art candidate: profile={}, uri={}", profile, uri);
+        }
+        return upgradeUmsThumbnailProfile(bestUri);
+    }
+
+    /** Value of the {@code dlna:profileID} attribute of an albumArtURI property, or {@code null}. */
+    private String albumArtProfileOf(Property<?> albumArtUri)
+    {
+        Property<DIDLAttribute> profile = albumArtUri.getAttribute("profileID");
+        return profile != null && profile.getValue() != null ? profile.getValue().getValue() : null;
+    }
+
+    /**
+     * Raises a UMS thumbnail URL to the large image profile. UMS advertises the cover as a small
+     * thumbnail profile only, depending on which renderer profile matches, but it serves any profile
+     * named in the URL - so requesting JPEG_LRG yields the full size cover instead of a scaled up
+     * thumbnail. URLs of other servers do not match the pattern and are returned untouched.
+     */
+    String upgradeUmsThumbnailProfile(String albumArtUri)
+    {
+        if (albumArtUri == null)
+        {
+            return null;
+        }
+        Matcher matcher = UMS_THUMBNAIL_PROFILE.matcher(albumArtUri);
+        if (!matcher.find())
+        {
+            return albumArtUri;
+        }
+        String upgraded = matcher.replaceFirst("$1JPEG_LRG_");
+        log.debug("raised album art to the large image profile: {} -> {}", albumArtUri, upgraded);
+        return upgraded;
     }
 
     private String getTextAndCheckForNull(Node n)

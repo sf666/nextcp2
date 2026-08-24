@@ -32,6 +32,8 @@ public class MusicItemDto
     public String date;
     public AudioFormat audioFormat;
     public String albumArtUrl;
+    @nextcp.handcoded.Nullable
+    public String albumArtUrlLarge;
     public String genre;
     public Integer rating;
     public MusicBrainzId musicBrainzId;
@@ -48,7 +50,7 @@ public class MusicItemDto
     {
     }
 
-    public MusicItemDto(String mediaServerUDN, String streamingURL, String objectID, String objectClass, String parentId, String refId, MusicItemIdDto songId, String resourceId, String conductor, String composer, String currentTrackMetadata, String creator, String title, String artistName, String numberOfThisDisc, String originalTrackNumber, String album, String date, AudioFormat audioFormat, String albumArtUrl, String genre, Integer rating, MusicBrainzId musicBrainzId, DiscogsId discogsId, Integer audioAddictChannelId, String audioAddictNetwork, Integer audioAddictPlaylistId)
+    public MusicItemDto(String mediaServerUDN, String streamingURL, String objectID, String objectClass, String parentId, String refId, MusicItemIdDto songId, String resourceId, String conductor, String composer, String currentTrackMetadata, String creator, String title, String artistName, String numberOfThisDisc, String originalTrackNumber, String album, String date, AudioFormat audioFormat, String albumArtUrl, String albumArtUrlLarge, String genre, Integer rating, MusicBrainzId musicBrainzId, DiscogsId discogsId, Integer audioAddictChannelId, String audioAddictNetwork, Integer audioAddictPlaylistId)
     {
         this.mediaServerUDN = mediaServerUDN;
         this.streamingURL = streamingURL;
@@ -70,6 +72,7 @@ public class MusicItemDto
         this.date = date;
         this.audioFormat = audioFormat;
         this.albumArtUrl = albumArtUrl;
+        this.albumArtUrlLarge = albumArtUrlLarge;
         this.genre = genre;
         this.rating = rating;
         this.musicBrainzId = musicBrainzId;
@@ -104,6 +107,7 @@ public class MusicItemDto
         sb.append("date=").append(this.date).append(", ");
         sb.append("audioFormat=").append(this.audioFormat).append(", ");
         sb.append("albumArtUrl=").append(this.albumArtUrl).append(", ");
+        sb.append("albumArtUrlLarge=").append(this.albumArtUrlLarge).append(", ");
         sb.append("genre=").append(this.genre).append(", ");
         sb.append("rating=").append(this.rating).append(", ");
         sb.append("musicBrainzId=").append(this.musicBrainzId).append(", ");

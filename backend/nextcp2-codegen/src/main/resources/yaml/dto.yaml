@@ -359,6 +359,9 @@ MusicItemDto:
    date: String
    audioFormat: AudioFormat
    albumArtUrl: String
+   # Same cover in the largest size the media server offers. Only the now playing view uses it; browse
+   # grids keep albumArtUrl, so a listing of a thousand tiles stays cheap.
+   albumArtUrlLarge: String?
    genre: String
    rating: Integer
    musicBrainzId: MusicBrainzId

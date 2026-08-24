@@ -20,11 +20,43 @@ $imgCardWidthSmall : 6rem;
 
 
 // Fluid tile grid — columns grow with the viewport, each tile fills its track.
+//
+// The minimum track width shrinks on narrower viewports. It used to be a flat
+// 13rem, which is right on a desktop but leaves a tablet showing two or three
+// oversized covers per row: the 13rem sidebar and the content margins eat ~244px
+// before the first tile, so a ~1000px viewport had room for exactly three tracks
+// and the second row never made it on screen. Fewer, bigger covers is not what a
+// library screen is for on a device that small.
 .tile-grid {
+    --tile-min: 13rem;
+
     display              : grid;
-    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(var(--tile-min), 1fr));
     gap                  : 1rem;
     width                : 100%;
+}
+
+// Small laptops and tablets in landscape.
+@media only screen and (max-width: 1279px) {
+    .tile-grid {
+        --tile-min: 10rem;
+    }
+}
+
+// Tablets in portrait — where the flat 13rem hurt most.
+@media only screen and (max-width: 1023px) {
+    .tile-grid {
+        --tile-min: 8rem;
+    }
+}
+
+// On a phone the .albumTile block below switches to a full-width row (cover left, text right).
+// Those rows read as a list, so the grid has to stay single column - a smaller minimum would
+// otherwise put two rows side by side.
+@media only screen and (max-width: 576px) {
+    .tile-grid {
+        --tile-min: 100%;
+    }
 }
 
 .albumImageContainer {

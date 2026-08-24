@@ -194,6 +194,13 @@ export class RendererService {
       return '/assets/images/folder-bg.webp';
     }
   });
+  /**
+   * Artwork for the one place that shows the cover big: the now playing view. Browse grids and the
+   * footer thumbnail keep imgSrc, so a listing of a thousand tiles still loads small images.
+   */
+  imgSrcLarge = computed(() => {
+    return this.trackInfo().currentTrack?.albumArtUrlLarge || this.imgSrc();
+  });
   isHifi = computed(() => {
     let bps = this.bitsPerSample();
     let sFreq = this.sampleFreq();
