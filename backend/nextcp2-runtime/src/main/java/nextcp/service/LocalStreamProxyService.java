@@ -84,6 +84,19 @@ public class LocalStreamProxyService {
 
 	private static final int COPY_BUFFER_SIZE = 64 * 1024;
 
+	private static final long GIBIBYTE = 1024L * 1024 * 1024;
+	private static final long EXBIBYTE = GIBIBYTE * GIBIBYTE;
+
+	/**
+	 * A resource this big is not a file. It is either a live stream (internet radio) or a server that
+	 * lies about the length, and neither is worth waiting for.
+	 */
+	private static final long ENDLESS_SIZE_THRESHOLD = EXBIBYTE;
+
+	/** Upper bounds for building one cache entry, so an endless stream can never fill the disk. */
+	private static final long CACHE_ENTRY_MAX_BYTES = 4 * GIBIBYTE;
+	private static final Duration CACHE_ENTRY_MAX_DURATION = Duration.ofMinutes(10);
+
 	private final DeviceRegistry deviceRegistry;
 	// General settings bean (produced by ConfigPersistence); read per-request so changes saved in the
 	// UI take effect without a restart. See config.applicationConfig.localPlayer* fields.
@@ -176,11 +189,11 @@ public class LocalStreamProxyService {
 	 */
 	@Scheduled(fixedDelay = 3600000L)
 	void sweepIdleCacheFiles() {
-		long ttlMillis = getCacheTtlMillis();
-		if (ttlMillis <= 0 || cacheDir == null) {
+		Duration ttl = getCacheTtl();
+		if (ttl.isZero() || cacheDir == null) {
 			return;
 		}
-		long cutoff = System.currentTimeMillis() - ttlMillis;
+		long cutoff = System.currentTimeMillis() - ttl.toMillis();
 		int deleted = 0;
 		try (var stream = Files.list(cacheDir)) {
 			for (Path p : (Iterable<Path>) stream::iterator) {
@@ -201,13 +214,13 @@ public class LocalStreamProxyService {
 		}
 	}
 
-	/** @return the idle time-to-live in milliseconds, or {@code -1} when disabled (config null / <= 0). */
-	private long getCacheTtlMillis() {
+	/** @return the idle time-to-live, or {@link Duration#ZERO} when disabled (config null / <= 0). */
+	private Duration getCacheTtl() {
 		Long hours = (config != null && config.applicationConfig != null) ? config.applicationConfig.localPlayerCacheTtlHours : null;
 		if (hours == null || hours <= 0) {
-			return -1;
+			return Duration.ZERO;
 		}
-		return hours * 3600000L;
+		return Duration.ofHours(hours);
 	}
 
 	/**
@@ -331,6 +344,12 @@ public class LocalStreamProxyService {
 
 		try (InputStream body = resp.body()) {
 			// Closing the body here cancels the transfer (and any UMS transcode started for the probe).
+			if (isEndlessStream(resp)) {
+				// Internet radio: it never ends, so there is nothing to buffer. Waiting for a complete
+				// download would download forever and the player would never receive a byte.
+				log.debug("endless stream, streaming it through instead of caching: {}", uri);
+				return false;
+			}
 			boolean honoredRange = resp.statusCode() == 206;
 			boolean knownLength = resp.headers().firstValue("Content-Length").isPresent();
 			boolean advertisesRanges = resp.headers().firstValue("Accept-Ranges")
@@ -339,6 +358,43 @@ public class LocalStreamProxyService {
 			boolean seekable = honoredRange || (knownLength && advertisesRanges);
 			return !seekable;
 		}
+	}
+
+	/**
+	 * Recognizes a stream that has no end: the server either refuses ranges outright or announces a
+	 * length no file can have.
+	 */
+	private static boolean isEndlessStream(HttpResponse<?> resp) {
+		boolean rangesRefused = resp.headers().firstValue("Accept-Ranges")
+			.map(v -> "none".equalsIgnoreCase(v.trim()))
+			.orElse(false);
+		if (rangesRefused) {
+			return true;
+		}
+		return announcedSize(resp) >= ENDLESS_SIZE_THRESHOLD;
+	}
+
+	/**
+	 * @return the size the response claims, from {@code Content-Length} or the total of
+	 *         {@code Content-Range}, or {@code -1} when it says nothing.
+	 */
+	private static long announcedSize(HttpResponse<?> resp) {
+		long contentLength = resp.headers().firstValueAsLong("Content-Length").orElse(-1);
+		if (contentLength > -1) {
+			return contentLength;
+		}
+		String contentRange = resp.headers().firstValue("Content-Range").orElse(null);
+		if (contentRange != null) {
+			int slash = contentRange.lastIndexOf('/');
+			if (slash > -1) {
+				try {
+					return Long.parseLong(contentRange.substring(slash + 1).trim());
+				} catch (NumberFormatException e) {
+					return -1;
+				}
+			}
+		}
+		return -1;
 	}
 
 	/**
@@ -375,10 +431,13 @@ public class LocalStreamProxyService {
 					throw new IOException("upstream returned status " + upstream.statusCode() + " while caching " + uri);
 				}
 
+				if (isEndlessStream(upstream)) {
+					throw new IOException("refusing to cache an endless stream: " + uri);
+				}
 				String contentType = upstream.headers().firstValue("Content-Type").orElse("application/octet-stream");
 				Path tmp = cacheDir.resolve(key + "." + UUID.randomUUID() + ".tmp");
 				try (InputStream in = upstream.body()) {
-					Files.copy(in, tmp, StandardCopyOption.REPLACE_EXISTING);
+					copyBounded(in, tmp, uri);
 				} catch (IOException e) {
 					deleteQuietly(tmp);
 					throw e;
@@ -392,6 +451,30 @@ public class LocalStreamProxyService {
 				evictIfNeeded();
 			} finally {
 				cacheBuildLocks.remove(key, lock);
+			}
+		}
+	}
+
+	/**
+	 * Copies the upstream body into {@code target}, but never more than {@link #CACHE_ENTRY_MAX_BYTES}
+	 * and never longer than {@link #CACHE_ENTRY_MAX_DURATION}. A stream that outgrows either bound is not
+	 * a file worth caching, and the caller falls back to streaming it through.
+	 */
+	private void copyBounded(InputStream in, Path target, URI uri) throws IOException {
+		long deadline = System.nanoTime() + CACHE_ENTRY_MAX_DURATION.toNanos();
+		long total = 0;
+		byte[] buffer = new byte[COPY_BUFFER_SIZE];
+		try (OutputStream out = Files.newOutputStream(target)) {
+			int read;
+			while ((read = in.read(buffer)) != -1) {
+				total += read;
+				if (total > CACHE_ENTRY_MAX_BYTES) {
+					throw new IOException("stopped caching " + uri + " after " + total + " bytes, it exceeds the entry limit");
+				}
+				if (System.nanoTime() - deadline > 0) {
+					throw new IOException("stopped caching " + uri + " after " + CACHE_ENTRY_MAX_DURATION.toSeconds() + " s, it does not end");
+				}
+				out.write(buffer, 0, read);
 			}
 		}
 	}
