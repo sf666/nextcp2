@@ -7,6 +7,7 @@ interface PersistedPlayerState {
   sourceQueue: MusicItemDto[];
   queue: MusicItemDto[];
   currentIndex: number;
+  /** Playback position in seconds; always 0 for live streams, which cannot be resumed at an offset. */
   position: number;
   playing: boolean;
   shuffle: boolean;
@@ -40,6 +41,13 @@ export class LocalPlayerService {
   // avoid auto-resuming local audio when a real UPnP renderer is the one selected after a reload.
   private static readonly LOCAL_BROWSER_UDN = 'nextcp-local-browser';
   private lastPersistMs = 0;
+
+  // Whether playback is *meant* to be running. Tracked explicitly rather than read from the audio
+  // element, because the browser fires "pause" while tearing the page down on a reload - persisting
+  // that state would bring the session back paused even though the user never paused anything.
+  private playIntent = false;
+  // Set while a one-shot "resume on next user gesture" listener is armed (see armResumeOnUserGesture).
+  private gestureResumeArmed = false;
 
   // Guards against advancing to the next track more than once for the same track: the "ended" event
   // and the near-end fallback (maybeAdvanceAtEnd) can both fire. Reset per track in playIndex().
@@ -195,14 +203,17 @@ export class LocalPlayerService {
   }
 
   public resume(): void {
+    this.playIntent = true;
     this.audio.play().catch((err) => console.error('local browser playback failed', err));
   }
 
   public pause(): void {
+    this.playIntent = false;
     this.audio.pause();
   }
 
   public stop(): void {
+    this.playIntent = false;
     this.audio.pause();
     this.audio.removeAttribute('src');
     this.audio.load();
@@ -232,6 +243,7 @@ export class LocalPlayerService {
     }
     this.currentIndex = index;
     this.trackEndHandled = false;
+    this.playIntent = true;
     const item = this.queue[index];
     this.currentItem.set(item);
     this.currentTime.set(0);
@@ -264,7 +276,9 @@ export class LocalPlayerService {
     } else if (this.repeat() && this.queue.length > 0) {
       this.playIndex(0);
     } else {
+      this.playIntent = false;
       this.playing.set(false);
+      this.persistState();
     }
   }
 
@@ -289,6 +303,25 @@ export class LocalPlayerService {
       });
       this.onEnded();
     }
+  }
+
+  /**
+   * True for endless / live sources (web radio such as SomaFM, AudioAddict channels): they have no
+   * meaningful playback position, so it is neither persisted nor restored. Seeking such a stream to a
+   * stored offset kills playback altogether, because its seekable range is empty. Also treats media
+   * without a known length as non-seekable, which is the safe assumption.
+   */
+  private isLiveStream(item: MusicItemDto | null | undefined): boolean {
+    if (!item) {
+      return true;
+    }
+    if (item.objectClass?.startsWith('object.item.audioItem.audioBroadcast')) {
+      return true;
+    }
+    if (item.audioFormat?.isStreaming === true) {
+      return true;
+    }
+    return !((item.audioFormat?.durationInSeconds ?? 0) > 0);
   }
 
   private updateDuration(): void {
@@ -324,12 +357,14 @@ export class LocalPlayerService {
         localStorage.removeItem(LocalPlayerService.STORAGE_KEY);
         return;
       }
+      const item = this.queue[this.currentIndex];
+      const seekable = !this.isLiveStream(item) && Number.isFinite(this.audio.currentTime);
       const state: PersistedPlayerState = {
         sourceQueue: this.sourceQueue,
         queue: this.queue,
         currentIndex: this.currentIndex,
-        position: Number.isFinite(this.audio.currentTime) ? this.audio.currentTime : 0,
-        playing: this.playing(),
+        position: seekable ? this.audio.currentTime : 0,
+        playing: this.playIntent,
         shuffle: this.shuffle(),
         repeat: this.repeat(),
       };
@@ -393,7 +428,9 @@ export class LocalPlayerService {
     const item = this.queue[this.currentIndex];
     this.currentItem.set(item);
 
-    const resumePosition = Number.isFinite(state.position) && state.position > 0 ? state.position : 0;
+    // A live stream always resumes at the live edge; only real tracks carry a position.
+    const resumePosition =
+      !this.isLiveStream(item) && Number.isFinite(state.position) && state.position > 0 ? state.position : 0;
     this.currentTime.set(resumePosition);
     // Show the metadata length straight away (transcoded streams report Infinity, see updateDuration()).
     const metaDuration = item?.audioFormat?.durationInSeconds ?? 0;
@@ -416,10 +453,37 @@ export class LocalPlayerService {
 
     const browserRendererSelected = this.persistenceService.isCurrentMediaRenderer(LocalPlayerService.LOCAL_BROWSER_UDN);
     if (state.playing && browserRendererSelected) {
-      this.audio.play().catch((err) =>
-        console.debug('[local-player] auto-resume after reload blocked; waiting for user gesture', err),
-      );
+      this.playIntent = true;
+      this.audio.play().catch((err) => {
+        console.debug('[local-player] auto-resume after reload blocked; waiting for user gesture', err);
+        this.armResumeOnUserGesture();
+      });
     }
+  }
+
+  /**
+   * Browsers refuse programmatic playback without a user gesture, and a reload does not carry one
+   * over (Chrome only lets it through for sites with a high media engagement score). When the
+   * auto-resume is rejected, the restored track is already cued - so arm a one-shot listener that
+   * starts it on the very next click or key press anywhere in the app, instead of making the user
+   * hunt for the play button.
+   */
+  private armResumeOnUserGesture(): void {
+    if (this.gestureResumeArmed) {
+      return;
+    }
+    this.gestureResumeArmed = true;
+    const armedItem = this.currentItem();
+    const events = ['pointerdown', 'keydown', 'touchstart'] as const;
+    const onGesture = () => {
+      events.forEach((evt) => window.removeEventListener(evt, onGesture, true));
+      this.gestureResumeArmed = false;
+      // Skip if the user's gesture was itself a transport action that already started something else.
+      if (!this.playing() && this.currentItem() === armedItem) {
+        this.resume();
+      }
+    };
+    events.forEach((evt) => window.addEventListener(evt, onGesture, true));
   }
 
   /** Fisher-Yates shuffle, returns a new array. */
