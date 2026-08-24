@@ -15,8 +15,8 @@ import {
 } from './../dto.d';
 import { Injectable, signal, inject } from '@angular/core';
 import { debounce } from 'src/app/global';
-import { Subject } from 'rxjs';
 import { MusicLibraryService } from '../music-library/music-library.service';
+import { TransportService } from '../transport.service';
 
 export interface ShowAllRequest {
   type: ShowAllType;
@@ -33,15 +33,9 @@ export class GlobalSearchService {
   private dtoGeneratorService = inject(DtoGeneratorService);
   private router = inject(Router);
   private configurationService = inject(ConfigurationService);
+  private transportService = inject(TransportService);
 
   public globalSearch = signal(true);
-
-  //
-  // Event publishing
-  //
-
-  // User clicked on an quick search music item
-  musicItemClicked$: Subject<MusicItemDto> = new Subject();
 
   /**
    * The "show all" request waiting to be run, or undefined when there is none.
@@ -197,11 +191,14 @@ export class GlobalSearchService {
   //
   // item or container selected
   //
+  /**
+   * A clicked search hit plays right away.
+   */
   musicItemSelected(musicItem: MusicItemDto): void {
-    console.debug('music item selected : ' + musicItem);
+    console.debug('music item selected : ' + musicItem.title);
     this.quickSearchPanelVisible = false;
     this.clearSearch();
-    this.musicItemClicked$.next(musicItem);
+    this.transportService.playResource(musicItem);
   }
 
   containerSelected(container: ContainerDto): void {

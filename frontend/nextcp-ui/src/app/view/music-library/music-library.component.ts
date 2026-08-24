@@ -58,9 +58,6 @@ export class MusicLibraryComponent implements AfterViewInit {
   constructor() {
     const globalSearchService = this.globalSearchService;
     console.log('constructor call : MusicLibraryComponent');
-    globalSearchService.musicItemClicked$
-      .pipe(takeUntilDestroyed())
-      .subscribe((musicItem) => this.musicItemClickedFromSearch(musicItem));
 
     // A "show all" parks its request on the service and navigates here. Reading
     // it as an observable covers both ways this view can be the target: a fresh
@@ -178,14 +175,6 @@ export class MusicLibraryComponent implements AfterViewInit {
       return;
     }
     this.musicLibraryService.updateCurrentContainer(data);
-  }
-
-  //
-  // Quick Search click on container or item
-  //
-  private musicItemClickedFromSearch(musicItem: MusicItemDto) {
-    // Just play
-    this.dispContainer()?.playItem(musicItem);
   }
 
   private initViewData(udn: string): void {
