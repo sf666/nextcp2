@@ -50,7 +50,11 @@ export class HttpService {
       .pipe(timeout(timeoutMs))
       .subscribe(
         (data) => {
-          return ret.next(data);
+          // A one shot request has exactly one answer. Without completing here, every
+          // consumer that waits for the end of the stream - concatMap, forkJoin, a
+          // throttle counting its free slots - waits forever.
+          ret.next(data);
+          ret.complete();
         },
         (err) => {
           this.genericResultService.displayHttpError(
@@ -103,7 +107,8 @@ export class HttpService {
       .pipe(timeout(timeoutMs))
       .subscribe({
         next: (data) => {
-          return ret.next(data);
+          ret.next(data);
+          ret.complete();
         },
         error: (err) => {
           this.genericResultService.displayHttpError(
@@ -136,7 +141,8 @@ export class HttpService {
             successHeader,
             successBody,
           );
-          return ret.next(data);
+          ret.next(data);
+          ret.complete();
         },
         error: (err) => {
           this.genericResultService.displayHttpError(

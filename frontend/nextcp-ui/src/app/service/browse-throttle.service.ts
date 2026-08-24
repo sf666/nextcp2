@@ -18,8 +18,11 @@ import { ToastService } from './toast/toast.service';
   providedIn: 'root',
 })
 export class BrowseThrottleService {
-  /** Leaves room for the event stream and for the calls that have to stay responsive. */
-  public static readonly MAX_CONCURRENT = 3;
+  /**
+   * Kept below what a browser grants per origin, so the event stream and the calls that have to stay
+   * responsive - play, pause, settings - always find a free connection.
+   */
+  public static readonly MAX_CONCURRENT = 5;
 
   private toastService = inject(ToastService);
 
