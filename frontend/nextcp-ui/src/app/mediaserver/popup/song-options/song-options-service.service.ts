@@ -17,10 +17,9 @@ export class SongOptionsServiceService {
   ): Observable<any> {
     const target = new ElementRef(event.currentTarget);
     const dialogRef = this.dialog.open(SongOptionsComponent, {
-      height: '400px',
-      minHeight: '400px',
-      minWidth: '300px',
-      width: '300px',
+      // No height here: the component measures itself and asks PopupService for
+      // the size it actually needs, so a shorter menu is not padded out with
+      // empty glass and a longer one is not cut off.
       hasBackdrop: true,
       // Transparent, shadow-less dialog wrapper — the component's own glass
       // panel is the whole surface. Without this the Material surface keeps its

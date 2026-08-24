@@ -9,6 +9,9 @@ import {
 } from '@angular/core';
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
 
+/** Popup width in px. Wide enough for the title's own minimum width. */
+const POPUP_WIDTH = 280;
+
 @Component({
   selector: 'defaut-playlists',
   templateUrl: './defaut-playlists.component.html',
@@ -42,13 +45,13 @@ export class DefautPlaylistsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const popupHeight =
-      this.serverPlaylistService.serverPl().serverPlaylists.length * 20 + 120;
-    this.popupService.configurePopupPosition(
+    // The row count used to be turned into a pixel height at 20px a row, half of
+    // what a row actually is, so every list past a couple of entries lost its
+    // bottom. The popup now measures itself.
+    this.popupService.configurePopupAtTrigger(
       this._matDialogRef,
       this.triggerElementRef,
-      250,
-      popupHeight,
+      POPUP_WIDTH,
     );
   }
 

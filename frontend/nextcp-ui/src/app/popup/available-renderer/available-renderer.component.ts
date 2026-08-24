@@ -19,18 +19,8 @@ export class AvailableRendererComponent {
   private readonly _matDialogRef: MatDialogRef<AvailableRendererComponent>;
   private readonly triggerElementRef: ElementRef;
 
-  // Popup chrome that is not part of the scrollable row area:
-  // header (52px) + header border (1px) + list padding (2x8px) + panel borders (2px).
-  private readonly CHROME_HEIGHT = 71;
-  private readonly ROW_HEIGHT = 44;
-  private readonly MAX_HEIGHT = 560;
-
-  // Derive the exact popup height from the rendered rows so there is no
-  // empty gap for few devices and no clipping for many.
-  popupHeight = computed(() => {
-    const rows = this.filteredMediaRendererList().length;
-    return Math.min(rows * this.ROW_HEIGHT + this.CHROME_HEIGHT, this.MAX_HEIGHT);
-  });
+  /** Popup width in px. */
+  private readonly POPUP_WIDTH = 360;
 
   filteredMediaRendererList = computed(() => {
     const discovered = this.deviceService.mediaRendererList().filter((pl) => {
@@ -58,11 +48,12 @@ export class AvailableRendererComponent {
 
     this.triggerElementRef = data.trigger;
     this._matDialogRef = _matDialogRef;
-    this.popupService.configurePopupPosition(
+    // Height comes from the rendered rows, capped by the list's own max-height
+    // (see the SCSS) - no row arithmetic to keep in step with the styling.
+    this.popupService.configurePopupAtTrigger(
       this._matDialogRef,
       this.triggerElementRef,
-      360,
-      this.popupHeight(),
+      this.POPUP_WIDTH,
     );
   }
 

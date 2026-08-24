@@ -1,13 +1,14 @@
 // The glass material comes from the shared `.glass-panel` class and the
 // transparent, shadow-less wrapper from the `popup-glass` panelClass (both in
 // app-styles.scss), so no ::ng-deep is needed here.
+// No height: the popup is as tall as header plus list, and PopupService places
+// it from the measured result.
 .dialog-root {
     width: 100%;
-    height: 100%;
     font-family: 'HK Grotesk';
 }
 
-// Fixed header — its height is part of the popup height formula in the component.
+// Fixed header — stays put while the list below it scrolls.
 .dialog-header {
     flex: 0 0 auto;
     height: 52px;
@@ -32,10 +33,13 @@
     background: rgba(255, 255, 255, 0.08);
 }
 
-// Scrollable list; grows to fill the remaining popup height.
+// Grows with its rows up to half the window, then scrolls. The cap is what keeps
+// a long device list from covering the screen; it never clips, because anything
+// above it is reachable by scrolling.
 .dialog-list {
     flex: 1 1 auto;
     min-height: 0;
+    max-height: 50vh;
     overflow-y: auto;
     padding: 8px;
 }

@@ -21,6 +21,13 @@
     color         : var(--glas-white-4);
 }
 
+// Grows with its rows up to half the window, then scrolls, so a server with many
+// playlists gets a reachable list instead of a popup running off the screen.
+.dialogItems {
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
 .playlist-item {
     color         : var(--glas-white-2);
     padding-top   : 8px !important;

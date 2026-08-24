@@ -7,7 +7,7 @@
       @for (playlist of serverPlaylistService.serverPl().serverPlaylists; track playlist.playlistId) {
         <div class="playlist-item"
           (click)="addToPlaylist(playlist.playlistName)">
-          {{playlist}}
+          {{playlist.playlistName}}
         </div>
       }
     </div>

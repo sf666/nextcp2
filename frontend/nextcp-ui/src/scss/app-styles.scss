@@ -331,7 +331,10 @@ input {
         background: transparent;
         box-shadow: none;
         border-radius: 16px;
-        overflow: hidden;
+        // Horizontally clipped so the rounded glass edge stays clean, vertically
+        // scrollable so a menu that is taller than the window can be reached at
+        // all instead of having its last rows cut off.
+        overflow: hidden auto;
         padding: 0;
     }
 }

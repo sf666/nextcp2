@@ -23,6 +23,9 @@ import {
 } from 'src/app/util/comp/input-popup/input-popup/input-popup.component';
 import { PopupService } from 'src/app/util/popup.service';
 
+/** Menu width in px. Keep in step with `.dialog-root` in the component's SCSS. */
+const MENU_WIDTH = 320;
+
 @Component({
   selector: 'app-display-header-options',
   standalone: true,
@@ -75,41 +78,12 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let height = 210;
-    if (this.isFolder()) {
-      height = height + 30; // for set MY PLAYLISTS option
-      height = height + 30; // for update album art option
-      if (this.deviceService.selectedMediaServerDevice().extendedApi) {
-        console.log(
-          'extended API supported, adding options for artist folder and player folder',
-        );
-        height = height + 30; // for set ARTIST FOLDER option (ums devices)
-        if (this.mediaPlayerService.mediaPlayerExists()) {
-          console.log('media player exists, adding option for player folder');
-          height = height + 30; // for select player folder option
-        }
-      }
-    }
-    if (this.mediaPlayerService.mediaPlayerExists() && this.isPlaylist()) {
-      height = height + 30; // for select player playlist option
-      console.log(
-        'playlist detected, adding option for select player playlist',
-      );
-    }
-
-    if (this.isPlaylist()) {
-      height = height + 30; // for add to playlist option
-    }
-
-    if (this.canLike) {
-      height = height + 30; // for the favourite toggle
-    }
-
-    this.popupService.configurePopupPosition(
+    // Width only - the menu shows a different set of rows per container type, so
+    // its height is whatever the rows add up to.
+    this.popupService.configurePopupAtTrigger(
       this._matDialogRef,
       this.triggerElementRef,
-      250,
-      height,
+      MENU_WIDTH,
     );
   }
 

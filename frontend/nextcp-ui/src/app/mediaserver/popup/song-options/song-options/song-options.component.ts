@@ -34,6 +34,9 @@ import {
   ConfirmPopupData,
 } from 'src/app/util/comp/confirm-popup/confirm-popup.component';
 
+/** Menu width in px. Keep in step with `.dialog-root` in the component's SCSS. */
+const MENU_WIDTH = 320;
+
 @Component({
   selector: 'app-song-options',
   templateUrl: './song-options.component.html',
@@ -83,11 +86,12 @@ export class SongOptionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.popupService.configurePopupPosition(
+    // Width only - the rows depend on whether the track has a server-side id and
+    // on where it is being shown from, so the height comes from the content.
+    this.popupService.configurePopupAtTrigger(
       this._matDialogRef,
       this.triggerElementRef,
-      300,
-      500,
+      MENU_WIDTH,
     );
   }
 
