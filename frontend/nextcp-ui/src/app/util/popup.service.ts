@@ -2,12 +2,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
 import { MatDialogRef } from '@angular/material/dialog';
-import { Injectable, ElementRef } from '@angular/core';
+import { Injectable, ElementRef, Injector, afterNextRender, inject } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PopupService {
+
+  private injector = inject(Injector);
 
   /**
    * Distance a popup keeps from the edges of the window.
@@ -32,31 +34,53 @@ export class PopupService {
     _matDialogRef.updateSize(`${popupWidth}px`, '');
     _matDialogRef.addPanelClass('popup');
 
-    // Material puts the dialog ref's id on the container element, and the pane
-    // around it is what carries the size we set above.
-    const container = document.getElementById(_matDialogRef.id);
-    const pane = container?.closest<HTMLElement>('.cdk-overlay-pane') ?? null;
-
-    const maxHeight = window.innerHeight - 2 * PopupService.VIEWPORT_MARGIN;
-    if (pane) {
-      pane.style.maxHeight = `${maxHeight}px`;
-    }
-
-    const place = (): void => {
-      const height = Math.min(pane?.offsetHeight ?? 0, maxHeight);
-      this.positionNextToTrigger(_matDialogRef, triggerElementRef, popupWidth, height);
-    };
-
-    // The menu's rows render after this runs, so the first placement is a guess
-    // that the observer below corrects as soon as there is something to measure
-    // - and again whenever the menu changes size while it is open.
-    place();
+    const pane = this.findOverlayPane(_matDialogRef);
     if (!pane) {
       return;
     }
-    const observer = new ResizeObserver(() => place());
-    observer.observe(pane);
-    _matDialogRef.afterClosed().subscribe(() => observer.disconnect());
+    const maxHeight = window.innerHeight - 2 * PopupService.VIEWPORT_MARGIN;
+    pane.style.maxHeight = `${maxHeight}px`;
+
+    const place = (): void => {
+      this.positionNextToTrigger(_matDialogRef, triggerElementRef, popupWidth, Math.min(pane.offsetHeight, maxHeight));
+    };
+
+    // Nothing to measure yet: callers run this from their constructor or their
+    // ngOnInit, and the popup's rows do not exist until the render after that.
+    // Placing it now would use an empty panel's height, and a popup triggered
+    // from the footer would end up hanging off the bottom of the window. So it
+    // stays invisible for that one frame rather than being placed twice, which
+    // would show as a jump from the middle of the screen.
+    pane.style.visibility = 'hidden';
+    afterNextRender(() => {
+      place();
+      pane.style.visibility = '';
+      // Rows can still come and go while the popup is open, so keep following it.
+      const observer = new ResizeObserver(() => place());
+      observer.observe(pane);
+      _matDialogRef.afterClosed().subscribe(() => observer.disconnect());
+    }, { injector: this.injector });
+  }
+
+  /**
+   * The overlay pane the dialog lives in - the element that carries the size and
+   * position we set, and the one to measure.
+   *
+   * Taken from the CDK ref behind the dialog, which knows its own overlay from
+   * the moment the dialog is created. The lookup by the container's id is the
+   * fallback: that id is a host binding, so it is only on the element once the
+   * container has been change-detected, which is too late for a caller that runs
+   * in its constructor.
+   */
+  private findOverlayPane(_matDialogRef: MatDialogRef<any>): HTMLElement | null {
+    const internals = _matDialogRef as unknown as {
+      _ref?: { overlayRef?: { overlayElement?: HTMLElement } };
+    };
+    const overlayElement = internals._ref?.overlayRef?.overlayElement;
+    if (overlayElement) {
+      return overlayElement;
+    }
+    return document.getElementById(_matDialogRef.id)?.closest<HTMLElement>('.cdk-overlay-pane') ?? null;
   }
 
   /**
