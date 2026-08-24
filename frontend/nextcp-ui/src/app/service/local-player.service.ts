@@ -65,6 +65,10 @@ export class LocalPlayerService {
   public readonly repeat = signal<boolean>(false);
   // When true, the active queue is randomized.
   public readonly shuffle = signal<boolean>(false);
+  // The active playback order and the position within it, mirrored as signals so the player queue
+  // view can render the browser queue the same way it renders a renderer's OpenHome playlist.
+  public readonly queueItems = signal<MusicItemDto[]>([]);
+  public readonly activeIndex = signal<number>(-1);
   // True while an endless / live source is loaded (web radio). Consumed by RendererService so the
   // footer knows there is no position to seek to.
   public readonly live = computed<boolean>(() => {
@@ -139,6 +143,7 @@ export class LocalPlayerService {
     this.sourceQueue = playable.slice();
     this.shuffle.set(shuffle);
     this.queue = shuffle ? this.shuffleArray(playable) : playable.slice();
+    this.publishQueue();
     this.playIndex(0);
   }
 
@@ -161,7 +166,61 @@ export class LocalPlayerService {
     this.sourceQueue = playable.slice();
     this.shuffle.set(false);
     this.queue = playable.slice();
+    this.publishQueue();
     this.playIndex(start);
+  }
+
+  /** Starts the queue entry at the given position (used by the player queue view). */
+  public playQueueIndex(index: number): void {
+    this.playIndex(index);
+  }
+
+  /**
+   * Removes one entry from the queue. Removing the track that is currently playing continues with
+   * the one that takes its place, or stops when the queue runs empty.
+   */
+  public removeQueueIndex(index: number): void {
+    if (index < 0 || index >= this.queue.length) {
+      return;
+    }
+    const removed = this.queue[index];
+    this.queue.splice(index, 1);
+    // Drop it from the unshuffled order too, or turning shuffle off would bring it back. After a
+    // reload the two arrays are deserialized separately, so identity alone is not enough to find it.
+    let sourceIndex = this.sourceQueue.indexOf(removed);
+    if (sourceIndex < 0) {
+      sourceIndex = this.sourceQueue.findIndex(
+        (item) => item.streamingURL === removed.streamingURL,
+      );
+    }
+    if (sourceIndex >= 0) {
+      this.sourceQueue.splice(sourceIndex, 1);
+    }
+    this.publishQueue();
+    if (index < this.currentIndex) {
+      this.currentIndex--;
+      this.activeIndex.set(this.currentIndex);
+      this.persistState();
+      return;
+    }
+    if (index > this.currentIndex) {
+      this.persistState();
+      return;
+    }
+    if (this.queue.length === 0) {
+      this.stop();
+      return;
+    }
+    this.playIndex(Math.min(index, this.queue.length - 1));
+  }
+
+  /** Drops the whole queue and stops playback. */
+  public clearQueue(): void {
+    this.stop();
+  }
+
+  private publishQueue(): void {
+    this.queueItems.set(this.queue.slice());
   }
 
   public next(): void {
@@ -206,6 +265,8 @@ export class LocalPlayerService {
       const idx = current ? this.queue.indexOf(current) : -1;
       this.currentIndex = idx >= 0 ? idx : 0;
     }
+    this.publishQueue();
+    this.activeIndex.set(this.currentIndex);
     this.persistState();
   }
 
@@ -226,7 +287,9 @@ export class LocalPlayerService {
     this.audio.load();
     this.sourceQueue = [];
     this.queue = [];
+    this.publishQueue();
     this.currentIndex = -1;
+    this.activeIndex.set(-1);
     this.currentItem.set(null);
     this.currentTime.set(0);
     this.duration.set(0);
@@ -257,6 +320,7 @@ export class LocalPlayerService {
       return;
     }
     this.currentIndex = index;
+    this.activeIndex.set(index);
     this.trackEndHandled = false;
     this.playIntent = true;
     const item = this.queue[index];
@@ -436,7 +500,9 @@ export class LocalPlayerService {
 
     this.sourceQueue = state.sourceQueue?.length ? state.sourceQueue : state.queue.slice();
     this.queue = state.queue;
+    this.publishQueue();
     this.currentIndex = state.currentIndex;
+    this.activeIndex.set(state.currentIndex);
     this.shuffle.set(!!state.shuffle);
     this.repeat.set(!!state.repeat);
 

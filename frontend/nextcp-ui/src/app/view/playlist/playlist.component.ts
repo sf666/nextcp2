@@ -60,12 +60,8 @@ export class PlaylistComponent implements OnInit {
     );
   }
 
-  getActiveClass(item: MusicItemDto): string {
-    const id: number = +item.objectID;
-    if (id === this.playlistService.playlistState().Id) {
-      return 'active';
-    }
-    return '';
+  isActive(item: MusicItemDto, index: number): boolean {
+    return this.playlistService.isActiveEntry(item, index);
   }
 
   play(): void {

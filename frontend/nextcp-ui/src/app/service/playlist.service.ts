@@ -13,7 +13,7 @@ import {
 import { DeviceService } from './device.service';
 import { LocalPlayerService } from './local-player.service';
 import { HttpService } from './http.service';
-import { Injectable, OnInit, signal, inject } from '@angular/core';
+import { Injectable, OnInit, computed, signal, inject } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 
 @Injectable({
@@ -38,8 +38,19 @@ export class PlaylistService implements OnInit {
     TransportState: 'unknown',
   });
 
-  // Playlist items of selected media renderer device
-  public playlistItems = signal<MusicItemDto[]>([]);
+  // Playlist items of the selected media renderer device (from the backend / OpenHome playlist).
+  private playlistItemsUpnp = signal<MusicItemDto[]>([]);
+
+  /**
+   * The queue currently shown in the player queue view: the renderer's own playlist, or - for the
+   * synthetic "This Device" renderer - the queue the browser player holds in memory, which the
+   * backend knows nothing about.
+   */
+  public playlistItems = computed<MusicItemDto[]>(() =>
+    this.deviceService.isLocalBrowserSelected()
+      ? this.localPlayer.queueItems()
+      : this.playlistItemsUpnp(),
+  );
 
   constructor() {
     const sseService = inject(SseService);
@@ -55,7 +66,7 @@ export class PlaylistService implements OnInit {
           'playlist-service mediaRendererPlaylistItemsChanged. Item count : ' +
             data.musicItemDto.length,
         );
-        this.playlistItems.set(data.musicItemDto);
+        this.playlistItemsUpnp.set(data.musicItemDto);
       }
     });
 
@@ -128,6 +139,36 @@ export class PlaylistService implements OnInit {
   // renderer playlist actions
   // ===========================================================================
 
+  /**
+   * Whether the given queue entry is the one playing. The renderer playlist identifies it by its
+   * playlist id, the browser player by its position in the queue (which also stays correct when the
+   * same track appears more than once).
+   */
+  public isActiveEntry(item: MusicItemDto, index: number): boolean {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      return index === this.localPlayer.activeIndex();
+    }
+    return +item.objectID === this.playlistState().Id;
+  }
+
+  /** Starts the clicked queue entry. */
+  public playEntry(item: MusicItemDto, index: number): void {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.playQueueIndex(index);
+      return;
+    }
+    this.seekId(item.objectID);
+  }
+
+  /** Removes the clicked queue entry. */
+  public removeEntry(item: MusicItemDto, index: number): void {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.removeQueueIndex(index);
+      return;
+    }
+    this.deleteSongFromRendererPlaylist(item.objectID);
+  }
+
   public seekId(id: string): void {
     const udn = this.getSelectedMediaRendererUdn();
     if (!udn) {
@@ -151,7 +192,7 @@ export class PlaylistService implements OnInit {
       this.httpService
         .post<MusicItemDto[]>(this.baseUri, uri, udn)
         .subscribe((data) => {
-          this.playlistItems.set(data);
+          this.playlistItemsUpnp.set(data);
           console.log(
             'playlist-service getPlaylistItems. Item count : ' + data.length,
           );
@@ -297,6 +338,10 @@ export class PlaylistService implements OnInit {
   }
 
   public pause(): void {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.pause();
+      return;
+    }
     const udn = this.getSelectedMediaRendererUdn();
     if (!udn) {
       return;
@@ -306,6 +351,10 @@ export class PlaylistService implements OnInit {
   }
 
   public deleteAll(): void {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.clearQueue();
+      return;
+    }
     const udn = this.getSelectedMediaRendererUdn();
     if (!udn) {
       return;
@@ -343,6 +392,10 @@ export class PlaylistService implements OnInit {
   }
 
   public play(): void {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.resume();
+      return;
+    }
     const udn = this.getSelectedMediaRendererUdn();
     if (!udn) {
       return;
