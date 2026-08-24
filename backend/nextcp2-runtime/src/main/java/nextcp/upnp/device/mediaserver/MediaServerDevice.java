@@ -253,7 +253,12 @@ public class MediaServerDevice extends BaseDevice {
 			return out;
 		} catch (Exception e) {
 			log.error("cannot browse to {}", inp.ObjectID, e);
-			return new BrowseOutput();
+			// An empty result with the counters left at null makes every caller do arithmetic on null.
+			BrowseOutput failed = new BrowseOutput();
+			failed.NumberReturned = 0L;
+			failed.TotalMatches = 0L;
+			failed.Result = "";
+			return failed;
 		}
 	}
 
@@ -280,11 +285,16 @@ public class MediaServerDevice extends BaseDevice {
 			result.mediaServerUDN = getUDN().getIdentifierString();
 			return result;
 		} catch (GenActionException e) {
-			e.printStackTrace();
-			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.description);
+			// Metadata only names the container in the breadcrumb. Failing the whole browse over it
+			// would throw away children that were fetched just fine, and leaves the client with an
+			// error instead of a usable folder.
+			log.warn("cannot read metadata of {} : {}", objectId, e.description);
+			log.debug("", e);
+			return result;
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage());
+			log.warn("cannot read metadata of {} : {}", objectId, e.getMessage());
+			log.debug("", e);
+			return result;
 		}
 	}
 

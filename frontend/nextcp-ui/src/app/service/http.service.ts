@@ -2,7 +2,7 @@ import { GenericResult } from './dto.d';
 import { GenericResultService } from './generic-result.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, timeout } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +12,17 @@ import { Subject } from 'rxjs';
  * Default HTTP communication implementation. Don't forget to subscribe, so the call goes out.
  */
 export class HttpService {
+  /**
+   * Upper bound for a single request.
+   *
+   * Without one a request that the server never answers keeps its connection open forever, and a
+   * browser allows only a handful of them per origin - a few stuck calls and the whole app looks
+   * dead. The value is deliberately generous: a media server browsing a large playlist for the first
+   * time has been measured at about a minute, and cutting that short would break a legitimate
+   * operation. Pass timeoutMs to override it where a call is known to be quick or slow.
+   */
+  public static readonly DEFAULT_TIMEOUT_MS = 90_000;
+
   private http = inject(HttpClient);
   private genericResultService = inject(GenericResultService);
 
@@ -27,20 +38,28 @@ export class HttpService {
    * @param base default get behaviour
    * @param path
    */
-  public get<T>(base: string, path: string, errorHeader?: string): Subject<T> {
+  public get<T>(
+    base: string,
+    path: string,
+    errorHeader?: string,
+    timeoutMs: number = HttpService.DEFAULT_TIMEOUT_MS,
+  ): Subject<T> {
     const ret = new Subject<T>();
-    this.http.get<T>(base + path).subscribe(
-      (data) => {
-        return ret.next(data);
-      },
-      (err) => {
-        this.genericResultService.displayHttpError(
-          err,
-          errorHeader == null ? 'communication error' : errorHeader,
-        );
-        console.log(err);
-      },
-    );
+    this.http
+      .get<T>(base + path)
+      .pipe(timeout(timeoutMs))
+      .subscribe(
+        (data) => {
+          return ret.next(data);
+        },
+        (err) => {
+          this.genericResultService.displayHttpError(
+            err,
+            errorHeader == null ? 'communication error' : errorHeader,
+          );
+          console.log(err);
+        },
+      );
     return ret;
   }
 
@@ -76,21 +95,25 @@ export class HttpService {
     path: string,
     payload: any,
     errorHeader?: string,
+    timeoutMs: number = HttpService.DEFAULT_TIMEOUT_MS,
   ): Subject<T> {
     const ret = new Subject<T>();
-    this.http.post<T>(base + path, payload).subscribe({
-      next: (data) => {
-        return ret.next(data);
-      },
-      error: (err) => {
-        this.genericResultService.displayHttpError(
-          err,
-          errorHeader == null ? 'communication error' : errorHeader,
-        );
-        console.log(err);
-        return ret.error(err);
-      },
-    });
+    this.http
+      .post<T>(base + path, payload)
+      .pipe(timeout(timeoutMs))
+      .subscribe({
+        next: (data) => {
+          return ret.next(data);
+        },
+        error: (err) => {
+          this.genericResultService.displayHttpError(
+            err,
+            errorHeader == null ? 'communication error' : errorHeader,
+          );
+          console.log(err);
+          return ret.error(err);
+        },
+      });
     return ret;
   }
 
@@ -101,24 +124,28 @@ export class HttpService {
     successHeader: string,
     successBody: string,
     errorHeader?: string,
+    timeoutMs: number = HttpService.DEFAULT_TIMEOUT_MS,
   ): Subject<T> {
     const ret = new Subject<T>();
-    this.http.post<T>(base + path, payload).subscribe({
-      next: (data) => {
-        this.genericResultService.displaySuccessMessage(
-          successHeader,
-          successBody,
-        );
-        return ret.next(data);
-      },
-      error: (err) => {
-        this.genericResultService.displayHttpError(
-          err,
-          errorHeader == null ? 'communication error' : errorHeader,
-        );
-        console.log(err);
-      },
-    });
+    this.http
+      .post<T>(base + path, payload)
+      .pipe(timeout(timeoutMs))
+      .subscribe({
+        next: (data) => {
+          this.genericResultService.displaySuccessMessage(
+            successHeader,
+            successBody,
+          );
+          return ret.next(data);
+        },
+        error: (err) => {
+          this.genericResultService.displayHttpError(
+            err,
+            errorHeader == null ? 'communication error' : errorHeader,
+          );
+          console.log(err);
+        },
+      });
     return ret;
   }
 }

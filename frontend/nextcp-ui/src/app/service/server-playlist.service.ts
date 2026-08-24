@@ -115,9 +115,14 @@ export class ServerPlaylistService {
           uri,
           this.selectedMediaServer().udn,
         )
-        .subscribe((data) => {
-          this.serverPl.set(data);
-          this.playlistLoading.set(false);
+        .subscribe({
+          next: (data) => {
+            this.serverPl.set(data);
+            this.playlistLoading.set(false);
+          },
+          // Without this the sidebar keeps saying "loading playlist ..." forever after a single
+          // failed request, and the app looks disconnected although nothing else is broken.
+          error: () => this.playlistLoading.set(false),
         });
     } else {
       console.log(
@@ -135,8 +140,11 @@ export class ServerPlaylistService {
           uri,
           this.selectedMediaServer().udn,
         )
-        .subscribe((data) => {
-          this.recentServerPl.set(data);
+        .subscribe({
+          next: (data) => this.recentServerPl.set(data),
+          // The toast from HttpService is the user facing part, this only keeps the failure from
+          // bubbling out as an unhandled rejection.
+          error: () => {},
         });
     } else {
       console.log(
