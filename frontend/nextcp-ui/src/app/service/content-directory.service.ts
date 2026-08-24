@@ -16,6 +16,7 @@ import {
 } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DtoGeneratorService } from './../util/dto-generator.service';
+import { BrowseThrottleService } from './browse-throttle.service';
 import { HttpService } from './http.service';
 import {
   ContainerItemDto,
@@ -121,6 +122,7 @@ export const SEARCH_TYPE_LABEL: Record<
 export class ContentDirectoryService {
   configService = inject(ConfigurationService);
   private httpService = inject(HttpService);
+  private browseThrottle = inject(BrowseThrottleService);
   private dtoGeneratorService = inject(DtoGeneratorService);
   private deviceService = inject(DeviceService);
   private toastService = inject(ToastService);
@@ -414,10 +416,14 @@ export class ContentDirectoryService {
     mediaServerUdn: string,
   ): Observable<ContainerItemDto> {
     const request = this.createBrowseRequest(objectID, '', mediaServerUdn);
-    return this.httpService.post<ContainerItemDto>(
-      this.baseUri,
-      '/browseChildren',
-      { ...request, start: 0, count: 1 },
+    return this.browseThrottle.schedule(
+      () =>
+        this.httpService.post<ContainerItemDto>(this.baseUri, '/browseChildren', {
+          ...request,
+          start: 0,
+          count: 1,
+        }),
+      'reading folder info',
     );
   }
 
@@ -541,7 +547,7 @@ export class ContentDirectoryService {
   public browseToParent(
     sortCriteria: string,
     mediaServerUdn?: string,
-  ): Subject<ContainerItemDto> {
+  ): Observable<ContainerItemDto> {
     if (!this.isCurrentContainerRoot()) {
       return this.browseChildren(
         this.currentContainerList().currentContainer.parentID,
@@ -562,7 +568,7 @@ export class ContentDirectoryService {
     objectID: string,
     sortCriteria: string,
     mediaServerUdn?: string,
-  ): Subject<ContainerItemDto> {
+  ): Observable<ContainerItemDto> {
     if (!mediaServerUdn) {
       if (!this.deviceService.selectedMediaServerDevice().udn) {
         this.toastService.error('select media server', 'MediaLibrary');
@@ -597,12 +603,16 @@ export class ContentDirectoryService {
       mediaServerUdn = this.deviceService.selectedMediaServerDevice().udn;
     }
     const browseRequestDto = this.createBrowseRequest(objectID, '', mediaServerUdn);
-    return this.httpService
-      .post<ContainerItemDto>(this.baseUri, '/browseChildren', {
-        ...browseRequestDto,
-        start: 0,
-        count: 0,
-      })
+    return this.browseThrottle
+      .schedule(
+        () =>
+          this.httpService.post<ContainerItemDto>(this.baseUri, '/browseChildren', {
+            ...browseRequestDto,
+            start: 0,
+            count: 0,
+          }),
+        'counting entries',
+      )
       .pipe(map((res) => res.totalMatches));
   }
 
@@ -621,7 +631,7 @@ export class ContentDirectoryService {
     objectID: string,
     sortCriteria: string,
     mediaServerUdn?: string,
-  ): Subject<ContainerItemDto> {
+  ): Observable<ContainerItemDto> {
     if (!mediaServerUdn) {
       mediaServerUdn = this.deviceService.selectedMediaServerDevice().udn;
     }
@@ -634,17 +644,21 @@ export class ContentDirectoryService {
       sortCriteria,
       mediaServerUdn,
     );
-    return this.httpService.post<ContainerItemDto>(
-      this.baseUri,
-      '/browseChildren',
-      { ...browseRequestDto, start: 0, count: this.MAX_REQUEST_ITEMS },
+    return this.browseThrottle.schedule(
+      () =>
+        this.httpService.post<ContainerItemDto>(this.baseUri, '/browseChildren', {
+          ...browseRequestDto,
+          start: 0,
+          count: this.MAX_REQUEST_ITEMS,
+        }),
+      'loading folder',
     );
   }
 
   public browseChildrenByContainer(
     containerDto: ContainerDto,
     sortCriteria?: string,
-  ): Subject<ContainerItemDto> {
+  ): Observable<ContainerItemDto> {
     return this.browseChildrenByOID(
       containerDto.id,
       containerDto.mediaServerUDN,
@@ -656,7 +670,7 @@ export class ContentDirectoryService {
     oid: string,
     udn: string,
     sortCriteria?: string,
-  ): Subject<ContainerItemDto> {
+  ): Observable<ContainerItemDto> {
     if (!oid) {
       oid = '0';
     }
@@ -664,7 +678,7 @@ export class ContentDirectoryService {
     return this.browseChildrenByRequest(browseRequestDto);
   }
 
-  public searchCurrentContainer(searchStr: string): Subject<ContainerItemDto> {
+  public searchCurrentContainer(searchStr: string): Observable<ContainerItemDto> {
     // At this time, we filter the content by posting a browse request and afterwards a manual filter (backend)
     return this.browseChildrenByRequest(
       this.createBrowseRequest(
@@ -678,7 +692,7 @@ export class ContentDirectoryService {
 
   private browseChildrenByRequest(
     browseRequestDto: BrowseRequestDto,
-  ): Subject<ContainerItemDto> {
+  ): Observable<ContainerItemDto> {
     if (browseRequestDto.mediaServerUDN?.length < 1) {
       console.log(this.id + ' UDN not set. Stop browsing.');
       return new Subject<ContainerItemDto>();
@@ -694,10 +708,14 @@ export class ContentDirectoryService {
     this.searchContext.set(undefined);
     const browseStartedAt = performance.now();
 
-    const firstPage$ = this.httpService.post<ContainerItemDto>(
-      this.baseUri,
-      '/browseChildren',
-      { ...browseRequestDto, start: 0, count: this.MAX_REQUEST_ITEMS },
+    const firstPage$ = this.browseThrottle.schedule(
+      () =>
+        this.httpService.post<ContainerItemDto>(this.baseUri, '/browseChildren', {
+          ...browseRequestDto,
+          start: 0,
+          count: this.MAX_REQUEST_ITEMS,
+        }),
+      'loading folder',
     );
 
     firstPage$
@@ -743,12 +761,20 @@ export class ContentDirectoryService {
             .pipe(
               mergeMap(
                 (page) =>
-                  this.httpService
-                    .post<ContainerItemDto>(this.baseUri, '/browseChildren', {
-                      ...browseRequestDto,
-                      start: page * this.MAX_REQUEST_ITEMS,
-                      count: this.MAX_REQUEST_ITEMS,
-                    })
+                  this.browseThrottle
+                    .schedule(
+                      () =>
+                        this.httpService.post<ContainerItemDto>(
+                          this.baseUri,
+                          '/browseChildren',
+                          {
+                            ...browseRequestDto,
+                            start: page * this.MAX_REQUEST_ITEMS,
+                            count: this.MAX_REQUEST_ITEMS,
+                          },
+                        ),
+                      'loading page ' + (page + 1),
+                    )
                     .pipe(
                       take(1),
                       map((data) => ({ page, data })),
@@ -800,7 +826,7 @@ export class ContentDirectoryService {
   }
 
   // Pagination is handled automatically in browseChildrenByRequest.
-  public browseToNextPage(): Subject<ContainerItemDto> {
+  public browseToNextPage(): Observable<ContainerItemDto> {
     return new Subject<ContainerItemDto>();
   }
 
