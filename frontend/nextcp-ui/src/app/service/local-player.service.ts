@@ -254,10 +254,53 @@ export class LocalPlayerService {
       return;
     }
     this.playbackErrorReported = true;
+    const item = this.currentItem();
     const code = this.audio.error?.code ?? 0;
-    const reason =
+    const fallback =
       LocalPlayerService.MEDIA_ERROR_TEXT[code] ?? 'the stream could not be played';
-    this.toastService.error(`${this.describe(this.currentItem())}: ${reason}.`, 'playback failed');
+    const source = this.audio.currentSrc;
+    // The audio element only reports "cannot play this format" even when the source answered with an
+    // error status, so ask the source itself what happened.
+    this.probeSourceFailure(source).then((httpReason) => {
+      const reason = httpReason ?? fallback;
+      this.toastService.error(`${this.describe(item)}: ${reason}.`, 'playback failed');
+    });
+  }
+
+  /** @returns why the source rejected the request, or null if it did not (or cannot be asked). */
+  private async probeSourceFailure(source: string): Promise<string | null> {
+    if (!source) {
+      return null;
+    }
+    try {
+      const response = await fetch(source, { headers: { Range: 'bytes=0-0' }, cache: 'no-store' });
+      if (response.ok || response.status === 206) {
+        return null;
+      }
+      const upstream = response.headers.get('X-Upstream-Status');
+      const detail = upstream && upstream !== String(response.status) ? ` (media server: ${upstream})` : '';
+      return `${LocalPlayerService.httpReason(response.status)}${detail}`;
+    } catch {
+      return null;
+    }
+  }
+
+  private static httpReason(status: number): string {
+    switch (status) {
+      case 401:
+      case 403:
+        return `the source refused access (HTTP ${status}), check the subscription or credentials`;
+      case 404:
+      case 410:
+        return `the source is gone (HTTP ${status})`;
+      case 502:
+      case 504:
+        return `the media server could not read the source (HTTP ${status})`;
+      case 503:
+        return 'the source is unavailable right now (HTTP 503)';
+      default:
+        return `the source answered HTTP ${status}`;
+    }
   }
 
   private describe(item: MusicItemDto | null | undefined): string {

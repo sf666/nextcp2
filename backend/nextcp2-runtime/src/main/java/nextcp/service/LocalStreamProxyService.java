@@ -305,6 +305,9 @@ public class LocalStreamProxyService {
 		}
 
 		response.setStatus(upstream.statusCode());
+		if (upstream.statusCode() >= 400) {
+			response.setHeader("X-Upstream-Status", Integer.toString(upstream.statusCode()));
+		}
 		relayHeader(upstream, response, "Content-Type");
 		relayHeader(upstream, response, "Content-Length");
 		relayHeader(upstream, response, "Content-Range");
