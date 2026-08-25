@@ -5,6 +5,7 @@ import java.util.Base64;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -301,14 +302,14 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	@Override
 	public void updateAlbumArtURI(UpdateAlbumArtUriRequest updateRequest) {
+		if (StringUtils.isBlank(updateRequest.newAlbumArtUri)) {
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, "no album art URL was given", null);
+		}
 		UpdateObjectInput inp = new UpdateObjectInput();
 		inp.ObjectID = updateRequest.musicItemIdDto.objectID;
-		inp.CurrentTagValue = updateRequest.previousAlbumArtUri != null ?
-			String.format("<upnp:albumArtURI>%s</upnp:albumArtURI>", updateRequest.previousAlbumArtUri) :
-			null;
-		inp.NewTagValue = updateRequest.previousAlbumArtUri != null ?
-			String.format("<upnp:albumArtURI>%s</upnp:albumArtURI>", updateRequest.newAlbumArtUri) :
-			null;
+		// the tag value is an XML fragment : an unescaped & in an URL makes the server drop the whole update.
+		inp.CurrentTagValue = albumArtUriTag(updateRequest.previousAlbumArtUri);
+		inp.NewTagValue = albumArtUriTag(updateRequest.newAlbumArtUri);
 		try {
 			getContentDirectoryService().updateObject(inp);
 		} catch (GenActionException e) {
@@ -317,6 +318,17 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
 		}
+	}
+
+	/**
+	 * An empty entry stands for "no current value", which is how an album art is added to an item
+	 * that had none.
+	 */
+	private String albumArtUriTag(String uri) {
+		if (StringUtils.isBlank(uri)) {
+			return "";
+		}
+		return String.format("<upnp:albumArtURI>%s</upnp:albumArtURI>", StringEscapeUtils.escapeXml10(uri));
 	}
 
 	@Override
