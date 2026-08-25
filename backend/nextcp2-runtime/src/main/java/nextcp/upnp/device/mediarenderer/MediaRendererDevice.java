@@ -2,7 +2,6 @@ package nextcp.upnp.device.mediarenderer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import org.apache.commons.lang3.StringUtils;
 import org.jupnp.model.meta.RemoteDevice;
 import org.slf4j.Logger;
@@ -93,7 +92,6 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
     private List<MediaRendererServicesDto> services = new ArrayList<>();
 
-    private AtomicBoolean servicesEnded = new AtomicBoolean(false);
     
     // private IDeviceDriverService
     private ServiceInitializer serviceInitializer = new ServiceInitializer();
@@ -163,7 +161,6 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     	}
     	
     	setServicesOffline(false);
-    	servicesEnded.set(false);
         initDeviceServices();
 
         if (hasUpnpAvTransport())
@@ -291,10 +288,6 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         updateDeviceDriver();
     }
 
-    public void setServicesEnded(boolean value) {
-    	log.debug("{} : serviceEnded : {}", getFriendlyName(), value);
-    	this.servicesEnded.set(value);;
-    }
     
     public void updateDeviceDriver()
     {
@@ -798,7 +791,6 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     
     // called when device was removed from registry
     public void removed() {
-    	setServicesEnded(true);
     	setServicesOffline(true);
     	physicalDriver.stop();
     }

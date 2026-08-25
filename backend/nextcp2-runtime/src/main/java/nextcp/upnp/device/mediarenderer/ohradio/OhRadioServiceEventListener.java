@@ -64,6 +64,5 @@ public class OhRadioServiceEventListener extends RadioServiceEventListenerImpl
     @Override
     public void ended(CancelReason reason, UpnpResponse responseStatus) {
     	super.ended(reason, responseStatus);
-        device.setServicesEnded(true);            	
     }
 }

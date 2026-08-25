@@ -96,12 +96,10 @@ public class OhProductServiceEventListener extends ProductServiceEventListenerIm
     @Override
     public void ended(CancelReason reason, UpnpResponse responseStatus) {
     	super.ended(reason, responseStatus);
-        device.setServicesEnded(true);            	
     }
     
     @Override
     public void failed(UpnpResponse responseStatus) {
     	super.failed(responseStatus);
-    	device.setServicesEnded(true);    	
     }
 }

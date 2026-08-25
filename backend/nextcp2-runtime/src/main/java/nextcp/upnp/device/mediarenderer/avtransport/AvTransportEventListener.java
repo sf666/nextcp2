@@ -293,7 +293,6 @@ public class AvTransportEventListener extends AVTransportServiceEventListenerImp
 		log.warn("Subscription ended for device {}. Reason: {}. StatusMessage: {}. Code: {}", getDevice().getFriendlyName(),
 			reason.toString(), responseStatus != null ? responseStatus.getStatusMessage() : "NULL",
 			responseStatus != null ? responseStatus.getStatusCode() : "response status is NULL");
-		device.setServicesEnded(true);
 		if (CancelReason.RENEWAL_FAILED.equals(reason) || CancelReason.DEVICE_WAS_REMOVED.equals(reason)) {
 			log.warn("{} : setting device services to offline ...", device.getFriendlyName());
 			device.setServicesOffline(true);
@@ -306,6 +305,5 @@ public class AvTransportEventListener extends AVTransportServiceEventListenerImp
 		log.warn("Subscription failed for device {}. StatusMessage: {}. Code: {}", getDevice().getFriendlyName(),
 			responseStatus != null ? responseStatus.getStatusMessage() : "NULL",
 			responseStatus != null ? responseStatus.getStatusCode() : "response status is NULL");
-		device.setServicesEnded(true);
 	}
 }

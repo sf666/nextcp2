@@ -66,6 +66,5 @@ public class OhTransportEventListener extends TransportServiceEventListenerImpl
     @Override
     public void failed(UpnpResponse responseStatus) {
     	super.failed(responseStatus);
-    	device.setServicesEnded(true);
     }
 }

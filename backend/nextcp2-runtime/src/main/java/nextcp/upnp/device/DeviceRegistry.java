@@ -41,7 +41,7 @@ public class DeviceRegistry {
 	}
 
 	@Autowired
-	public DeviceFactory deviceFactory = null;
+	private DeviceFactory deviceFactory = null;
 
 	@Autowired
 	private RendererConfig rendererConfigService = null;
@@ -86,9 +86,10 @@ public class DeviceRegistry {
 
 	public void removeMediaRendererDevice(RemoteDevice remoteDevice) {
 		log.info("device removed : {}", remoteFacade.getFriendlyName(remoteDevice));
-		MediaRendererDevice device = mediaRendererList.get(remoteFacade.getUDN(remoteDevice));
+		MediaRendererDevice device = mediaRendererList.remove(remoteFacade.getUDN(remoteDevice));
 		if (device != null) {
-			device.setServicesOffline(true);
+			device.removed();
+			eventPublisher.publishEvent(new MediaRendererListChanged(getAvailableMediaRenderer()));
 		} else {
 			log.debug("device not found in registry {}", remoteFacade.getFriendlyName(remoteDevice));
 		}
@@ -110,14 +111,23 @@ public class DeviceRegistry {
 	// Media Server
 	//
 	public void addMediaServerDevice(RemoteDevice remoteDevice) {
-		MediaServerDevice device = deviceFactory.mediaServerDeviceFactory(remoteDevice);
-		serverConfigService.addMediaServerDeviceConfig(remoteDevice, device);
-		MediaServerDevice oldDevice = mediaServerList.put(remoteFacade.getUDN(remoteDevice), device);
-		inactiveMediaServerList.remove(remoteDevice.getIdentity().getUdn());
-		if (oldDevice != null) {
-			log.debug("removed old media server device : {} ", oldDevice.getAsDto());
+		UDN udn = remoteFacade.getUDN(remoteDevice);
+		if (!initializingDevices.add(udn)) {
+			log.debug("media server device is already being initialized : {}", remoteFacade.getFriendlyName(remoteDevice));
+			return;
 		}
-		eventPublisher.publishEvent(new MediaServerListChanged(getAvailableMediaServer()));
+		try {
+			MediaServerDevice device = deviceFactory.mediaServerDeviceFactory(remoteDevice);
+			serverConfigService.addMediaServerDeviceConfig(remoteDevice, device);
+			MediaServerDevice oldDevice = mediaServerList.put(udn, device);
+			inactiveMediaServerList.remove(remoteDevice.getIdentity().getUdn());
+			if (oldDevice != null) {
+				log.debug("replaced old media server device : {} ", oldDevice.getAsDto());
+			}
+			eventPublisher.publishEvent(new MediaServerListChanged(getAvailableMediaServer()));
+		} finally {
+			initializingDevices.remove(udn);
+		}
 	}
 
 	public void removeMediaServerDevice(RemoteDevice remoteDevice) {
@@ -126,15 +136,12 @@ public class DeviceRegistry {
 			inactiveMediaServerList.put(device.getUDN(), device);
 			eventPublisher.publishEvent(new MediaServerListChanged(getAvailableMediaServer()));
 		} else {
-			log.debug("inknown device ... ");
+			log.debug("unknown device ... ");
 		}
 	}
 
 	public void updatedMediaRendererDevice(RemoteDevice remoteDevice) {
-		MediaRendererDevice device = mediaRendererList.get(remoteFacade.getUDN(remoteDevice));
-		if (device != null) {
-			device.setServicesEnded(true);
-		} else {
+		if (!mediaRendererList.containsKey(remoteFacade.getUDN(remoteDevice))) {
 			log.info("Updated renderer device unknown yet. Adding ... ");
 			addMediaRendererDevice(remoteDevice);
 		}
