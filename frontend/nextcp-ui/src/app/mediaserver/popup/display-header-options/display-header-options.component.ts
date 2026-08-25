@@ -119,7 +119,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
       cancelText: 'cancel',
       inputText: '',
       inputTextExplanation:
-        'Enter full album art URL. Reload parent container after update.',
+        'Enter full album art URL.',
       labelInputText: '',
       okText: 'update',
       title: 'Update album art',
@@ -143,6 +143,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
           musicItemId,
           this.currentContainer.albumartUri,
           result,
+          this.currentContainer.id,
         );
         this.close();
       }

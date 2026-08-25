@@ -191,7 +191,7 @@ export class SongOptionsComponent implements OnInit {
       cancelText: 'cancel',
       inputText: '',
       inputTextExplanation:
-        'Enter full album art URL. Reload parent container after update.',
+        'Enter full album art URL.',
       labelInputText: '',
       okText: 'update',
       title: 'Update album art',
@@ -217,6 +217,7 @@ export class SongOptionsComponent implements OnInit {
           mid,
           this.item.albumArtUrl,
           result,
+          this.currentContainer?.id,
         );
         this._matDialogRef.close();
       }

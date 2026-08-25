@@ -17,6 +17,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DtoGeneratorService } from './../util/dto-generator.service';
 import { BrowseThrottleService } from './browse-throttle.service';
+import { CdsUpdateService } from './cds-update.service';
 import { HttpService } from './http.service';
 import {
   ContainerItemDto,
@@ -127,6 +128,7 @@ export class ContentDirectoryService {
   private deviceService = inject(DeviceService);
   private toastService = inject(ToastService);
   private serverPlaylistService = inject(ServerPlaylistService);
+  private cdsUpdateService = inject(CdsUpdateService);
 
   baseUri = '/ContentDirectoryService';
 
@@ -479,6 +481,26 @@ export class ContentDirectoryService {
     this.serverPlaylistService.playlistStructureChanged$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((change) => this.afterPlaylistStructureChanged(change));
+
+    this.cdsUpdateService.containerContentChanged$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((containerId) => this.afterContainerContentChanged(containerId));
+  }
+
+  /**
+   * A cover is updated from a popup that knows nothing about the view behind
+   * it, and the item on screen still carries the picture of the last browse.
+   * Browse again, but only in the view that actually shows the container that
+   * changed - every view has its own instance of this service.
+   */
+  private afterContainerContentChanged(containerId: string): void {
+    const current = this.currentContainerID;
+    if (!current || current === SEARCH_RESULT_CONTAINER_ID) {
+      return;
+    }
+    if (containerId === current) {
+      this.refreshCurrentContainer();
+    }
   }
 
   /**

@@ -13,10 +13,18 @@ export class CdsUpdateService {
 
   baseUri = '/ContentDirectoryService';
 
+  /**
+   * Object id of a container whose content changed metadata the browse result
+   * carries - a new cover for one of its entries, for instance. The view
+   * showing that container has to browse again for the change to appear.
+   */
+  public containerContentChanged$ = new Subject<string>();
+
   public setNewAlbumArtUri(
     ids: MusicItemIdDto,
     oldAlbumArtURI: string,
     albumArtURI: string,
+    containerId?: string,
   ): Subject<void> {
     const uri = '/updateAlbumArtUri';
 
@@ -27,6 +35,15 @@ export class CdsUpdateService {
       mediaServerDevice: this.deviceSerice.selectedMediaServerDevice().udn,
     };
 
-    return this.httpService.post<void>(this.baseUri, uri, updateRequest);
+    const result = this.httpService.post<void>(this.baseUri, uri, updateRequest);
+    if (containerId) {
+      // The media server stores the picture before it answers, so the browse
+      // that follows already sees it.
+      result.subscribe({
+        next: () => this.containerContentChanged$.next(containerId),
+        error: () => {},
+      });
+    }
+    return result;
   }
 }
