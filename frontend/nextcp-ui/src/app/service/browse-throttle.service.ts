@@ -11,8 +11,11 @@ import { ToastService } from './toast/toast.service';
  * sent events, not a play command, not the settings. Browsing a media server can legitimately take
  * a while, so the answer is not a shorter timeout but fewer requests at once.
  *
- * When requests do pile up the user is told once, together with what the server is working on, so a
- * slow media server looks busy instead of broken.
+ * A queue that is merely working is not worth a message: paging through a container with a thousand
+ * folders keeps more than MAX_CONCURRENT requests in flight for a while, and every one of them is
+ * served promptly. Only when a single request cannot get a slot for REPORT_WAIT_MS - the server has
+ * become slow or stopped answering - is the user told once, so a stuck media server looks busy
+ * instead of broken.
  */
 @Injectable({
   providedIn: 'root',
@@ -24,6 +27,12 @@ export class BrowseThrottleService {
    */
   public static readonly MAX_CONCURRENT = 5;
 
+  /**
+   * How long a single request may sit in the queue before the user hears about it. As long as the
+   * pipeline keeps moving, no request waits anywhere near this long, however many are queued.
+   */
+  private static readonly REPORT_WAIT_MS = 8000;
+
   private toastService = inject(ToastService);
 
   /** Requests currently on the wire, for anybody who wants to show an indicator. */
@@ -34,6 +43,7 @@ export class BrowseThrottleService {
   private queue: QueuedBrowse[] = [];
   private runningLabels: string[] = [];
   private waitReported = false;
+  private waitTimer: ReturnType<typeof setTimeout> | undefined;
 
   /**
    * Runs the given request when a slot is free.
@@ -44,7 +54,7 @@ export class BrowseThrottleService {
    */
   public schedule<T>(work: () => Observable<T>, label = 'browsing'): Observable<T> {
     return new Observable<T>((subscriber) => {
-      const entry: QueuedBrowse = { cancelled: false, label, start: () => {} };
+      const entry: QueuedBrowse = { cancelled: false, label, queuedAtMs: 0, start: () => {} };
       let inner: Subscription | undefined;
       let released = false;
 
@@ -82,9 +92,10 @@ export class BrowseThrottleService {
       if (this.running() < BrowseThrottleService.MAX_CONCURRENT) {
         this.take(entry);
       } else {
+        entry.queuedAtMs = Date.now();
         this.queue.push(entry);
         this.queued.set(this.queue.length);
-        this.reportWaiting();
+        this.armWaitReport();
       }
 
       return () => {
@@ -96,6 +107,9 @@ export class BrowseThrottleService {
           // Still waiting for a slot: drop it, nothing was started and nothing has to be released.
           this.queue = this.queue.filter((queued) => queued !== entry);
           this.queued.set(this.queue.length);
+          if (this.queue.length === 0) {
+            this.cancelWaitReport();
+          }
         }
       };
     });
@@ -112,9 +126,49 @@ export class BrowseThrottleService {
     this.queued.set(this.queue.length);
     if (next) {
       this.take(next);
-    } else if (this.running() === 0) {
-      // Everything is through, so the next pile up is worth reporting again.
-      this.waitReported = false;
+    }
+    if (this.queue.length === 0) {
+      this.cancelWaitReport();
+      if (this.running() === 0) {
+        // Everything is through, so the next pile up is worth reporting again.
+        this.waitReported = false;
+      }
+    }
+  }
+
+  /**
+   * Watches the request that has been waiting longest and reports only if it is still stuck once
+   * REPORT_WAIT_MS have passed. A queue that keeps moving re-arms the check for the next request and
+   * never reports at all.
+   */
+  private armWaitReport() {
+    if (this.waitReported || this.waitTimer) {
+      return;
+    }
+    const oldest = this.queue[0];
+    if (!oldest) {
+      return;
+    }
+    const dueInMs = Math.max(0, BrowseThrottleService.REPORT_WAIT_MS - (Date.now() - oldest.queuedAtMs));
+    this.waitTimer = setTimeout(() => {
+      this.waitTimer = undefined;
+      const stillWaiting = this.queue[0];
+      if (!stillWaiting) {
+        return;
+      }
+      if (Date.now() - stillWaiting.queuedAtMs >= BrowseThrottleService.REPORT_WAIT_MS) {
+        this.reportWaiting();
+      } else {
+        // The one we watched got its slot in time; watch whoever is at the front now.
+        this.armWaitReport();
+      }
+    }, dueInMs);
+  }
+
+  private cancelWaitReport() {
+    if (this.waitTimer) {
+      clearTimeout(this.waitTimer);
+      this.waitTimer = undefined;
     }
   }
 
@@ -139,5 +193,7 @@ export class BrowseThrottleService {
 interface QueuedBrowse {
   cancelled: boolean;
   label: string;
+  /** When it went into the queue, so the wait for a slot can be measured. */
+  queuedAtMs: number;
   start: () => void;
 }

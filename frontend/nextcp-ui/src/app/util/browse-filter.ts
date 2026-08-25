@@ -77,3 +77,70 @@ export function filterMusicItems(
   }
   return result;
 }
+
+/** The four criteria of the browse header, kept together so they can be parked and restored as one. */
+export interface BrowseFilterState {
+  quickSearch: string;
+  genres: string[];
+  sort: string;
+  rating: RatingFilter;
+}
+
+/** Nothing narrowed: what a listing starts from when it is seen for the first time. */
+export const UNFILTERED: BrowseFilterState = {
+  quickSearch: '',
+  genres: [],
+  sort: 'NONE',
+  rating: 'ANY',
+};
+
+export function isUnfiltered(state: BrowseFilterState): boolean {
+  return (
+    state.quickSearch === UNFILTERED.quickSearch &&
+    state.genres.length === 0 &&
+    state.sort === UNFILTERED.sort &&
+    state.rating === UNFILTERED.rating
+  );
+}
+
+/**
+ * Remembers the narrowing per listing.
+ *
+ * One browse view shows the album list, the tracks of an album and the hits of a global search one
+ * after the other. A filter belongs to the listing it was set in: carrying it across them hides
+ * things nobody asked to hide - a "4+" rating matches albums, but the tracks inside them usually
+ * carry no rating of their own, so stepping into an album would show an empty track list. Dropping it
+ * instead would lose the narrowing the moment the user looks into one of the results, so it is parked
+ * and comes back when its listing does.
+ */
+export class BrowseFilterMemory {
+  private readonly byContainer = new Map<string, BrowseFilterState>();
+  private currentId: string | undefined;
+
+  /**
+   * Switches to another listing.
+   *
+   * @param containerId the listing now on screen
+   * @param current the filters currently in effect, which belong to the previous listing
+   * @returns the filters to apply, or undefined when this is still the same listing
+   */
+  public switchTo(
+    containerId: string,
+    current: BrowseFilterState,
+  ): BrowseFilterState | undefined {
+    if (containerId === this.currentId) {
+      return undefined;
+    }
+    const previousId = this.currentId;
+    this.currentId = containerId;
+    if (previousId !== undefined) {
+      // Only listings that are actually narrowed are worth remembering.
+      if (isUnfiltered(current)) {
+        this.byContainer.delete(previousId);
+      } else {
+        this.byContainer.set(previousId, current);
+      }
+    }
+    return this.byContainer.get(containerId) ?? UNFILTERED;
+  }
+}

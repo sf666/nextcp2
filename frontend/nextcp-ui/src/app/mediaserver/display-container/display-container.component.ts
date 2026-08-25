@@ -12,6 +12,8 @@ import {
 } from './../../service/dto.d';
 import { RatingFilter } from 'src/app/service/rating-service.service';
 import {
+  BrowseFilterMemory,
+  BrowseFilterState,
   filterContainers,
   filterMusicItems,
   matchesTextFilter,
@@ -100,6 +102,16 @@ export class DisplayContainerComponent {
   sortCriteria = signal<string>('NONE');
   ratingFilter = signal<RatingFilter>('ANY');
 
+  /** Keeps the narrowing of each listing apart; see the effect in the constructor. */
+  private readonly filterMemory = new BrowseFilterMemory();
+
+  /** Id of the listing on screen; changes when stepping into a folder or when search hits arrive. */
+  private currentContainerId = computed(
+    () =>
+      this.contentHandler()?.contentDirectoryService.currentContainerList()
+        .currentContainer?.id ?? '',
+  );
+
   /**
    * True while anything narrows the listing. Used to tell "3 items" from
    * "1 of 3 items" — without it, a filtered section still claims the full count and
@@ -141,6 +153,12 @@ export class DisplayContainerComponent {
   visibleFolders = computed(() => this.narrowed(this.container).length);
   visiblePlaylists = computed(() => this.narrowed(this.playlistList).length);
   visibleArtists = computed(() => this.narrowed(this.artists).length);
+  /**
+   * How many tracks survive the filter. The section itself is shown as long as the server delivered
+   * any, so a filter that matches none of them says "0 of 12 items" instead of leaving the album head
+   * standing over an empty space.
+   */
+  visibleTracks = computed(() => this.displayedMusicTracks().length);
   visibleOtherItems = computed(
     () =>
       this.otherItems_.filter((item) =>
@@ -192,7 +210,39 @@ export class DisplayContainerComponent {
         });
     });
 
+    // A filter belongs to the listing it was set in, not to the view. One view shows the album list,
+    // the tracks of an album and the hits of a global search one after the other, and carrying the
+    // narrowing across them hides things nobody asked to hide: a "4+" rating matches albums, but the
+    // tracks inside them usually carry no rating of their own, so stepping into an album showed an
+    // empty track list - and search hits were narrowed by a filter set for a folder. So the filters
+    // are parked per listing and come back when that listing does.
+    effect(() => {
+      const forNewListing = this.filterMemory.switchTo(
+        this.currentContainerId(),
+        this.currentFilterState(),
+      );
+      if (forNewListing) {
+        this.applyFilterState(forNewListing);
+      }
+    });
+
     this.destroyRef.onDestroy(() => this.restoreSub?.unsubscribe());
+  }
+
+  private currentFilterState(): BrowseFilterState {
+    return {
+      quickSearch: this.displayFilterString(),
+      genres: this.selectedGenres(),
+      sort: this.sortCriteria(),
+      rating: this.ratingFilter(),
+    };
+  }
+
+  private applyFilterState(state: BrowseFilterState): void {
+    this.displayFilterString.set(state.quickSearch);
+    this.selectedGenres.set(state.genres);
+    this.sortCriteria.set(state.sort);
+    this.ratingFilter.set(state.rating);
   }
 
   /**

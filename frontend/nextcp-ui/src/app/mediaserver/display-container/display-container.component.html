@@ -99,7 +99,11 @@ Main Content
     }
 
     @if (musicTracks.length > 0) {
-    <div id="head_browse_result_items_ID" class="flex grow">
+    <div id="head_browse_result_items_ID" class="flex flex-col grow w-full">
+      <div class="section-heading">
+        <span class="section-label">Tracks</span>
+        <span class="section-count">{{countLabel(visibleTracks(), musicTracks.length)}}</span>
+      </div>
       <item-tile class="flex w-full"
         [isListView]="isListView()"
         [contentDirectoryService]="contentHandler()!.contentDirectoryService"
