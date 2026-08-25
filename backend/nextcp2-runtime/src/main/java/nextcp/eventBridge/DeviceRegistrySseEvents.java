@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 
 import nextcp.dto.MediaRendererDto;
@@ -24,6 +25,10 @@ public class DeviceRegistrySseEvents
     @Autowired
     private DtoBuilder dtoBuilder = null;
 
+    // Async on purpose: the publisher is DeviceRegistry, which fires these events while holding its
+    // monitor. Writing SSE to every browser from there meant one slow client stalled every UPnP device
+    // update - measured 1.5 s per update, 32 s of blocked jupnp listener threads in 15 minutes.
+    @Async
     @EventListener
     public void mediaRendererChanged(MediaRendererListChanged event)
     {
@@ -31,6 +36,7 @@ public class DeviceRegistrySseEvents
         ssePublisher.sendObjectAsJson(DEVICE_MEDIARENDERER_LIST_CHANGED, mediaRenderer);
     }
 
+    @Async
     @EventListener
     public void mediaServerChanged(MediaServerListChanged event)
     {

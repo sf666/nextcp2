@@ -102,6 +102,34 @@ public class TestDtoBuilder
         assertNull(db.selectMediumAlbumArtUri(new MusicTrack()));
     }
 
+    @Test
+    public void testWebRadioEntryStaysPlayableWithoutAudioContentFormat()
+    {
+        DtoBuilder db = new DtoBuilder();
+
+        // A server side radio playlist regularly announces something generic instead of audio/*.
+        // Refusing that left the entry without a stream URL, and the UI could only do nothing.
+        assertEquals("http://radio.example/stream/piano",
+                db.extractXmlAsMusicItem(radioEntry("http-get:*:application/octet-stream:*")).streamingURL);
+        assertEquals("http://radio.example/stream/piano",
+                db.extractXmlAsMusicItem(radioEntry("http-get:*:audio/mpeg:*")).streamingURL);
+
+        // Without any resource there is nothing to fall back to.
+        String withoutRes = radioEntry("http-get:*:audio/mpeg:*").replaceAll("<res[^>]*>[^<]*</res>", "");
+        assertEquals("", db.extractXmlAsMusicItem(withoutRes).streamingURL);
+    }
+
+    private String radioEntry(String protocolInfo)
+    {
+        return "<DIDL-Lite xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\""
+                + " xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\">"
+                + "<item id=\"pl$3$1\" parentID=\"pl$3\" restricted=\"1\">"
+                + "<dc:title>Radio Art - Piano</dc:title>"
+                + "<upnp:class>object.item.audioItem.audioBroadcast</upnp:class>"
+                + "<res protocolInfo=\"" + protocolInfo + "\">http://radio.example/stream/piano</res>"
+                + "</item></DIDL-Lite>";
+    }
+
     private Property<URI> albumArtUri(String uri, String dlnaProfile)
     {
         Property<URI> property = new Property.UPNP.ALBUM_ART_URI(URI.create(uri));

@@ -644,32 +644,53 @@ public class DtoBuilder
     public String readStreamingUrl(Item item)
     {
         Optional<Res> resUrl = item.getResources().stream().filter(res -> isAudioResource(res)).findFirst();
-        if (!resUrl.isEmpty())
+        if (resUrl.isPresent())
         {
             return resUrl.get().getValue();
         }
-        else
-        {
-            log.debug(String.format("Empty URL for item : %s ", item.getTitle()));
-            item.getResources().stream()
-                    .forEach(res -> log.debug(String.format("  -> resource content format : %s,  Value : %s", res.getProtocolInfo().getContentFormat(), res.getValue())));
 
-            return "";
+        // Nothing the server declared as audio. Web radio entries of a server side playlist regularly
+        // announce something generic like application/octet-stream, and giving up here left the item
+        // without a stream URL - which the UI can only answer by doing nothing at all. The item is an
+        // audio item by its upnp:class, so its first resource is the audio; log what had to be
+        // accepted, because a wrong guess here is worth seeing.
+        Optional<Res> fallback = item.getResources().stream()
+                .filter(res -> StringUtils.isNotBlank(res.getValue()))
+                .findFirst();
+        if (fallback.isPresent())
+        {
+            log.info("no resource declared as audio for item '{}'; using its first resource instead (content format: {})",
+                    item.getTitle(), contentFormatOf(fallback.get()));
+            return fallback.get().getValue();
         }
+
+        log.debug(String.format("Empty URL for item : %s ", item.getTitle()));
+        return "";
     }
 
     private boolean isAudioResource(Res res)
     {
-        if (res.getProtocolInfo().getContentFormat().startsWith("audio"))
+        String contentFormat = contentFormatOf(res);
+        if (contentFormat == null)
+        {
+            return false;
+        }
+        if (contentFormat.startsWith("audio"))
         {
             return true;
         }
-        if (res.getProtocolInfo().getContentFormat().startsWith("MIMETYPE_AUTO"))
+        if (contentFormat.startsWith("MIMETYPE_AUTO"))
         {
             return true; // UMS unknown renderer ... maybe it should be fixed in UMS ?
         }
 
         return false;
+    }
+
+    /** Content format of a resource, or {@code null} when the server did not announce one. */
+    private String contentFormatOf(Res res)
+    {
+        return res.getProtocolInfo() != null ? res.getProtocolInfo().getContentFormat() : null;
     }
 
     public void addMusicTrack(MusicTrack item, MusicItemDto itemDto)

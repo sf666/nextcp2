@@ -1,6 +1,7 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { MusicItemDto } from './dto';
 import { PersistenceService } from './persistence/persistence.service';
+import { ToastService } from './toast/toast.service';
 
 /** Snapshot persisted to localStorage so the queue and playback position survive a page reload. */
 interface PersistedPlayerState {
@@ -32,6 +33,7 @@ export class LocalPlayerService {
   private currentIndex = -1;
 
   private readonly persistenceService = inject(PersistenceService);
+  private readonly toastService = inject(ToastService);
 
   // A hard page reload tears down the <audio> element, so playback cannot literally continue across
   // it. Instead the queue, current track and position are persisted here and restored on startup (and
@@ -54,6 +56,17 @@ export class LocalPlayerService {
   private trackEndHandled = false;
   // How close to the (metadata) duration counts as "reached the end" for the fallback advance.
   private static readonly END_EPSILON_SECONDS = 0.6;
+
+  /** What the HTMLMediaElement error codes mean, in words the user can act on. */
+  private static readonly MEDIA_ERROR_TEXT: Record<number, string> = {
+    1: 'playback was aborted',
+    2: 'the stream could not be reached or stopped sending',
+    3: 'the stream could not be decoded',
+    4: 'the stream was refused, or this browser cannot play its format',
+  };
+
+  // The error event can fire repeatedly for one source; the user needs to hear it once.
+  private playbackErrorReported = false;
 
   // Playback state, consumed by RendererService so the footer now-playing/transport reflects the
   // local browser player when the "This Device" renderer is selected.
@@ -89,6 +102,7 @@ export class LocalPlayerService {
         networkState: this.audio.networkState,
       });
       this.playing.set(false);
+      this.reportPlaybackError();
     });
     this.audio.addEventListener('ended', () => {
       // Diagnostic: auto-advance only works if the browser actually fires "ended". For streams with
@@ -138,6 +152,7 @@ export class LocalPlayerService {
   public playQueue(items: MusicItemDto[], shuffle: boolean): void {
     const playable = (items ?? []).filter((item) => !!item && !!item.streamingURL);
     if (playable.length === 0) {
+      this.reportNothingPlayable(items);
       return;
     }
     this.sourceQueue = playable.slice();
@@ -217,6 +232,36 @@ export class LocalPlayerService {
   /** Drops the whole queue and stops playback. */
   public clearQueue(): void {
     this.stop();
+  }
+
+  /**
+   * Says so when there is nothing to play. Silence is the worst answer here: the click looked like it
+   * did nothing at all. A missing stream URL means the media server offered this entry without a
+   * usable resource - typical for web radio entries whose content format it does not declare.
+   */
+  private reportNothingPlayable(items: MusicItemDto[]): void {
+    const requested = (items ?? []).find((item) => !!item);
+    console.warn('[local-player] nothing playable in request', items);
+    this.toastService.error(
+      `${this.describe(requested)} has no stream URL the player can use.`,
+      'cannot play',
+    );
+  }
+
+  /** Reports a source the browser refused - a dead stream, a codec it cannot decode, or a 401/403. */
+  private reportPlaybackError(): void {
+    if (this.playbackErrorReported || !this.currentItem()) {
+      return;
+    }
+    this.playbackErrorReported = true;
+    const code = this.audio.error?.code ?? 0;
+    const reason =
+      LocalPlayerService.MEDIA_ERROR_TEXT[code] ?? 'the stream could not be played';
+    this.toastService.error(`${this.describe(this.currentItem())}: ${reason}.`, 'playback failed');
+  }
+
+  private describe(item: MusicItemDto | null | undefined): string {
+    return item?.title ? `"${item.title}"` : 'This entry';
   }
 
   private publishQueue(): void {
@@ -322,6 +367,7 @@ export class LocalPlayerService {
     this.currentIndex = index;
     this.activeIndex.set(index);
     this.trackEndHandled = false;
+    this.playbackErrorReported = false;
     this.playIntent = true;
     const item = this.queue[index];
     this.currentItem.set(item);
