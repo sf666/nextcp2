@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.annotation.PostConstruct;
 import nextcp.config.ServerConfig;
 import nextcp.domainmodel.device.mediaserver.search.SearchSupport;
+import nextcp.dto.ToastrMessage;
 import nextcp.dto.ContainerDto;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MediaServerDto;
@@ -253,6 +254,11 @@ public class MediaServerDevice extends BaseDevice {
 			return out;
 		} catch (Exception e) {
 			log.error("cannot browse to {}", inp.ObjectID, e);
+			// A refused browse used to be indistinguishable from an empty folder: the UI rendered nothing
+			// and said nothing, which looks like nextCP lost the content. It regularly is the media server
+			// failing on its own (UMS has been seen answering a Browse with UPnP error 501 out of a
+			// NullPointerException in its own sort comparator), so say who refused what.
+			publishBrowseFailure(inp, e);
 			// An empty result with the counters left at null makes every caller do arithmetic on null.
 			BrowseOutput failed = new BrowseOutput();
 			failed.NumberReturned = 0L;
@@ -260,6 +266,32 @@ public class MediaServerDevice extends BaseDevice {
 			failed.Result = "";
 			return failed;
 		}
+	}
+
+	/** Object id of the last refused browse, to keep one failing click from raising several toasts. */
+	private volatile String lastBrowseFailureId = null;
+	private volatile long lastBrowseFailureAtMs = 0;
+
+	private static final long BROWSE_FAILURE_QUIET_MS = 5000;
+
+	private void publishBrowseFailure(BrowseInput inp, Exception e) {
+		if (getEventPublisher() == null) {
+			return;
+		}
+		// One click can trigger several browse requests for the same folder (a metadata probe, the
+		// listing itself, further pages); the user needs to hear about it once.
+		long now = System.currentTimeMillis();
+		if (StringUtils.equals(lastBrowseFailureId, inp.ObjectID)
+				&& now - lastBrowseFailureAtMs < BROWSE_FAILURE_QUIET_MS) {
+			return;
+		}
+		lastBrowseFailureId = inp.ObjectID;
+		lastBrowseFailureAtMs = now;
+
+		String reason = StringUtils.isNotBlank(e.getMessage()) ? e.getMessage() : e.getClass().getSimpleName();
+		String body = String.format("'%s' refused to list this folder (object %s): %s", getFriendlyName(),
+				inp.ObjectID, StringUtils.abbreviate(reason, 200));
+		getEventPublisher().publishEvent(new ToastrMessage(null, "error", "media server", body));
 	}
 
 	public ContainerDto browseMetadataMeta(String objectId) {
