@@ -3,7 +3,9 @@ package nextcp.upnp.device;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.types.UDN;
@@ -28,12 +30,13 @@ public class DeviceRegistry {
 
 	private RemoteDeviceFacade remoteFacade = new RemoteDeviceFacade();
 
-	private HashMap<UDN, MediaRendererDevice> mediaRendererList = new HashMap<>();
-	private HashMap<UDN, MediaServerDevice> mediaServerList = new HashMap<>();
-	private HashMap<UDN, IMediaServerExtendedSupport> mediaServerExtList = new HashMap<>();
-	private HashMap<UDN, MediaServerDevice> inactiveMediaServerList = new HashMap<>();
+	private Map<UDN, MediaRendererDevice> mediaRendererList = new ConcurrentHashMap<>();
+	private Map<UDN, MediaServerDevice> mediaServerList = new ConcurrentHashMap<>();
+	private Map<UDN, IMediaServerExtendedSupport> mediaServerExtList = new ConcurrentHashMap<>();
+	private Map<UDN, MediaServerDevice> inactiveMediaServerList = new ConcurrentHashMap<>();
+	private Set<UDN> initializingDevices = ConcurrentHashMap.newKeySet();
 
-	public HashMap<UDN, MediaServerDevice> getInactiveMediaServerList() {
+	public Map<UDN, MediaServerDevice> getInactiveMediaServerList() {
 		return inactiveMediaServerList;
 	}
 
@@ -60,18 +63,28 @@ public class DeviceRegistry {
 	//
 	// Media Renderer
 	//
-	public synchronized void addMediaRendererDevice(RemoteDevice remoteDevice) {
-		MediaRendererDevice device = deviceFactory.mediaRendererDeviceFactory(remoteDevice,
-			rendererConfigService.isMediaRendererActive(remoteFacade.getUdnAsString(remoteDevice)));
-		rendererConfigService.addMediaRendererDeviceConfig(device);
-		MediaRendererDevice oldDevice = mediaRendererList.put(remoteFacade.getUDN(remoteDevice), device);
-		if (oldDevice != null) {
-			log.debug("replaced old media renderer device : {} ", oldDevice.getAsDto());
+	public void addMediaRendererDevice(RemoteDevice remoteDevice) {
+		UDN udn = remoteFacade.getUDN(remoteDevice);
+		if (!initializingDevices.add(udn)) {
+			log.debug("media renderer device is already being initialized : {}", remoteFacade.getFriendlyName(remoteDevice));
+			return;
 		}
-		eventPublisher.publishEvent(new MediaRendererListChanged(getAvailableMediaRenderer()));
+		try {
+			MediaRendererDevice device = deviceFactory.mediaRendererDeviceFactory(remoteDevice,
+				rendererConfigService.isMediaRendererActive(remoteFacade.getUdnAsString(remoteDevice)));
+			rendererConfigService.addMediaRendererDeviceConfig(device);
+			MediaRendererDevice oldDevice = mediaRendererList.put(udn, device);
+			if (oldDevice != null) {
+				log.debug("replaced old media renderer device : {} ", oldDevice.getAsDto());
+				oldDevice.removed();
+			}
+			eventPublisher.publishEvent(new MediaRendererListChanged(getAvailableMediaRenderer()));
+		} finally {
+			initializingDevices.remove(udn);
+		}
 	}
 
-	public synchronized void removeMediaRendererDevice(RemoteDevice remoteDevice) {
+	public void removeMediaRendererDevice(RemoteDevice remoteDevice) {
 		log.info("device removed : {}", remoteFacade.getFriendlyName(remoteDevice));
 		MediaRendererDevice device = mediaRendererList.get(remoteFacade.getUDN(remoteDevice));
 		if (device != null) {
@@ -96,7 +109,7 @@ public class DeviceRegistry {
 	//
 	// Media Server
 	//
-	public synchronized void addMediaServerDevice(RemoteDevice remoteDevice) {
+	public void addMediaServerDevice(RemoteDevice remoteDevice) {
 		MediaServerDevice device = deviceFactory.mediaServerDeviceFactory(remoteDevice);
 		serverConfigService.addMediaServerDeviceConfig(remoteDevice, device);
 		MediaServerDevice oldDevice = mediaServerList.put(remoteFacade.getUDN(remoteDevice), device);
@@ -107,7 +120,7 @@ public class DeviceRegistry {
 		eventPublisher.publishEvent(new MediaServerListChanged(getAvailableMediaServer()));
 	}
 
-	public synchronized void removeMediaServerDevice(RemoteDevice remoteDevice) {
+	public void removeMediaServerDevice(RemoteDevice remoteDevice) {
 		MediaServerDevice device = mediaServerList.remove(remoteFacade.getUDN(remoteDevice));
 		if (device != null) {
 			inactiveMediaServerList.put(device.getUDN(), device);
@@ -117,7 +130,7 @@ public class DeviceRegistry {
 		}
 	}
 
-	public synchronized void updatedMediaRendererDevice(RemoteDevice remoteDevice) {
+	public void updatedMediaRendererDevice(RemoteDevice remoteDevice) {
 		MediaRendererDevice device = mediaRendererList.get(remoteFacade.getUDN(remoteDevice));
 		if (device != null) {
 			device.setServicesEnded(true);
@@ -127,7 +140,7 @@ public class DeviceRegistry {
 		}
 	}
 
-	public synchronized void updatedMediaServerDevice(RemoteDevice remoteDevice) {
+	public void updatedMediaServerDevice(RemoteDevice remoteDevice) {
 		MediaServerDevice device = mediaServerList.get(remoteFacade.getUDN(remoteDevice));
 		if (device == null) {
 			log.debug("Updated server device unknown yet. Adding ... ");
@@ -142,7 +155,7 @@ public class DeviceRegistry {
 	//
 	// Media Server Extended Support Devices
 	//
-	public synchronized void addMediaServerExtDevice(IMediaServerExtendedSupport device) {
+	public void addMediaServerExtDevice(IMediaServerExtendedSupport device) {
 		mediaServerExtList.put(device.getUdn(), device);
 	}
 
