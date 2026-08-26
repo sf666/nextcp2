@@ -37,6 +37,11 @@ public class AddRadioStationToPlaylist extends ActionCallback
 		} else {
     	    getActionInvocation().setInput("StationUuid", null);
 		}
+        if (input.Title != null) {
+	        getActionInvocation().setInput("Title", input.Title);
+		} else {
+    	    getActionInvocation().setInput("Title", null);
+		}
     }
 
     public AddRadioStationToPlaylistOutput executeAction()
