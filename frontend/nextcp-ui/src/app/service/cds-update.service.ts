@@ -4,7 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpService } from './http.service';
 import { DeviceService } from './device.service';
 import { SseService } from './sse/sse.service';
-import { Subject } from 'rxjs';
+import { auditTime, filter, groupBy, mergeMap, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -28,18 +28,23 @@ export class CdsUpdateService {
     // content changed after it was browsed - a web playlist whose streams were still resolving when
     // the browse was answered. Fed into the same subject, so the view that shows it browses again.
     this.sseService.mediaServerContainerUpdateIds$
-      .pipe(takeUntilDestroyed())
-      .subscribe((update) => {
-        if (
-          update.mediaServerUdn !==
-          this.deviceSerice.selectedMediaServerDevice().udn
-        ) {
-          return;
-        }
-        update.containerIds?.forEach((containerId) =>
-          this.containerContentChanged$.next(containerId),
-        );
-      });
+      .pipe(
+        filter(
+          (update) =>
+            update.mediaServerUdn ===
+            this.deviceSerice.selectedMediaServerDevice().udn,
+        ),
+        mergeMap((update) => update.containerIds ?? []),
+        // One change can bump the same container several times - the media server re-reads a
+        // playlist file more than once after it was written. Measured seven identical browses for a
+        // single delete. Collapse a burst per container into one.
+        groupBy((containerId) => containerId),
+        mergeMap((perContainer) => perContainer.pipe(auditTime(700))),
+        takeUntilDestroyed(),
+      )
+      .subscribe((containerId) =>
+        this.containerContentChanged$.next(containerId),
+      );
   }
 
   public setNewAlbumArtUri(
