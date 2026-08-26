@@ -61,6 +61,13 @@
     <span>Update album art</span>
     </button>
 
+    @if (isPlaylist() && deviceService.selectedMediaServerDevice().extendedApi) {
+    <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="addRadioStation()">
+        <span class="item-icon material-symbols-outlined text-lg">radio</span>
+        <span>Add radio station</span>
+    </button>
+    }
+
     @if (deviceService.selectedMediaServerDevice().extendedApi) {
     <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="selectArtistFolder()">
         <span class="item-icon material-symbols-outlined text-lg">folder_shared</span>

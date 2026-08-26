@@ -1,0 +1,328 @@
+@use "buttons";
+
+// The glass material comes from the shared `.glass-panel` class and the transparent, shadow-less
+// wrapper from the `popup-glass` panelClass (both in app-styles.scss).
+.popupFrame {
+    width         : 100%;
+    height        : 100%;
+    font-weight   : 400;
+    font-size     : 1rem;
+    text-align    : left;
+    letter-spacing: 0.01rem;
+}
+
+//
+// Header
+// =========================================================================
+.dialog-header {
+    flex         : 0 0 auto;
+    border-bottom: 1px solid var(--chrome-hair);
+}
+
+.header-title {
+    font-size     : 0.8rem;
+    font-weight   : 500;
+    letter-spacing: 0.03rem;
+    color         : var(--glas-white-5);
+    white-space   : nowrap;
+    overflow      : hidden;
+    text-overflow : ellipsis;
+
+    .playlist-name {
+        color: var(--glas-white-1);
+    }
+}
+
+.icon-button {
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    flex           : 0 0 auto;
+    width          : 34px;
+    height         : 34px;
+    border-radius  : 50%;
+    border         : 1px solid var(--chrome-hair);
+    background     : rgba(255, 255, 255, 0.05);
+    color          : var(--glas-white-4);
+    cursor         : pointer;
+    transition     : background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+
+    &:hover {
+        background  : var(--primary-color-reduced-2);
+        border-color: var(--primary-color-reduced);
+        color       : var(--primary-color);
+    }
+
+    &:focus-visible {
+        outline       : 2px solid var(--primary-color);
+        outline-offset: 1px;
+    }
+}
+
+//
+// Body
+// =========================================================================
+.popupBody {
+    flex      : 1 1 auto;
+    min-height: 0;
+    padding   : 1.25rem 1.5rem 1.5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 999px;
+        background   : rgba(255, 255, 255, 0.16);
+    }
+}
+
+.headline {
+    margin        : 1.4rem 0 0.6rem;
+    padding-bottom: 0.4rem;
+    border-bottom : 1px solid rgba(255, 255, 255, 0.08);
+
+    font-size     : 0.68rem;
+    font-weight   : 700;
+    text-transform: uppercase;
+    letter-spacing: 0.11em;
+    color         : var(--glas-white-4);
+}
+
+.hint,
+.no-match {
+    font-size  : 0.8rem;
+    color      : var(--glas-white-6);
+    padding    : 0.5rem 0 0.2rem;
+}
+
+//
+// Inputs
+// =========================================================================
+.search-field {
+    position: relative;
+    display : block;
+
+    .search-icon {
+        position      : absolute;
+        left          : 0.9rem;
+        top           : 50%;
+        transform     : translateY(-50%);
+        font-size     : 20px;
+        color         : var(--glas-white-6);
+        pointer-events: none;
+        transition    : color 0.18s ease;
+    }
+
+    .glass-input {
+        padding-left: 2.7rem;
+    }
+
+    &:focus-within .search-icon {
+        color: var(--primary-color);
+    }
+}
+
+.glass-input {
+    width         : 100%;
+    padding       : 0.75rem 1rem;
+    border-radius : 12px;
+    border        : 1px solid var(--chrome-hair);
+    background    : rgba(255, 255, 255, 0.05);
+    color         : var(--snow-white);
+    font-size     : 0.875rem;
+    font-weight   : 400;
+    letter-spacing: 0.01rem;
+    transition    : border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+
+    &::placeholder {
+        color: var(--glas-white-6);
+    }
+
+    &:focus {
+        outline     : none;
+        background  : rgba(255, 255, 255, 0.07);
+        border-color: var(--primary-color-reduced);
+        box-shadow  : 0 0 0 3px var(--primary-color-reduced-2);
+    }
+}
+
+.filter-row {
+    margin-top: 0.6rem;
+}
+
+.filter-select {
+    flex        : 1 1 0;
+    min-width   : 0;
+    padding     : 0.6rem 0.8rem;
+    // a native select paints its own list, so keep the option text readable there too
+    option {
+        background: #1b1d21;
+        color     : var(--snow-white);
+    }
+}
+
+//
+// Genre suggestions
+// =========================================================================
+.tag-suggestions {
+    margin-top: 0.5rem;
+}
+
+.tag-chip {
+    padding       : 0.3rem 0.7rem;
+    border-radius : 999px;
+    border        : 1px solid var(--chrome-hair);
+    background    : rgba(255, 255, 255, 0.04);
+    color         : var(--glas-white-3);
+    font-size     : 0.75rem;
+    cursor        : pointer;
+    transition    : background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+
+    &:hover {
+        background  : var(--primary-color-reduced-2);
+        border-color: var(--primary-color-reduced);
+        color       : var(--primary-color);
+    }
+
+    .tag-count {
+        margin-left: 0.35rem;
+        color      : var(--glas-white-6);
+    }
+}
+
+//
+// Result list
+// =========================================================================
+.station-list {
+    gap: 2px;
+}
+
+.station-row {
+    width        : 100%;
+    padding      : 0.55rem 0.6rem;
+    border       : none;
+    border-radius: 10px;
+    background   : transparent;
+    color        : inherit;
+    text-align   : left;
+    cursor       : pointer;
+    transition   : background 0.16s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.06);
+
+        .add-icon {
+            color: var(--primary-color);
+        }
+    }
+
+    &:focus-visible {
+        outline       : 2px solid var(--primary-color);
+        outline-offset: -2px;
+    }
+}
+
+.station-icon,
+.station-icon-fallback {
+    flex          : 0 0 auto;
+    width         : 34px;
+    height        : 34px;
+    border-radius : 8px;
+    object-fit    : cover;
+    background    : rgba(255, 255, 255, 0.06);
+}
+
+.station-icon-fallback {
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    font-size      : 20px;
+    color          : var(--glas-white-6);
+}
+
+// Names at radio-browser can be hundreds of characters of keywords, so the row shows one line.
+.station-name,
+.station-original {
+    font-size    : 0.875rem;
+    color        : var(--snow-white);
+    white-space  : nowrap;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+}
+
+.station-meta {
+    font-size    : 0.72rem;
+    color        : var(--glas-white-6);
+    white-space  : nowrap;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+}
+
+.add-icon {
+    flex      : 0 0 auto;
+    font-size : 20px;
+    color     : var(--glas-white-6);
+    transition: color 0.16s ease;
+}
+
+//
+// Confirm step
+// =========================================================================
+.confirm-station {
+    padding      : 0.6rem;
+    border-radius: 10px;
+    background   : rgba(255, 255, 255, 0.04);
+    margin-bottom: 0.9rem;
+}
+
+.confirm-actions {
+    margin-top: 1.2rem;
+}
+
+.ghost-button,
+.primary-button {
+    padding       : 0.5rem 1.1rem;
+    border-radius : 10px;
+    font-size     : 0.8rem;
+    font-weight   : 500;
+    letter-spacing: 0.02em;
+    cursor        : pointer;
+    transition    : background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+
+    &:focus-visible {
+        outline       : 2px solid var(--primary-color);
+        outline-offset: 1px;
+    }
+}
+
+.ghost-button {
+    border    : 1px solid var(--chrome-hair);
+    background: transparent;
+    color     : var(--glas-white-4);
+
+    &:hover {
+        color       : var(--glas-white-1);
+        border-color: var(--glas-white-6);
+    }
+
+    &.small {
+        padding  : 0.2rem 0.6rem;
+        font-size: 0.68rem;
+    }
+}
+
+.primary-button {
+    border    : 1px solid var(--primary-color-reduced);
+    background: var(--primary-color-reduced-2);
+    color     : var(--primary-color);
+
+    &:hover {
+        background: var(--primary-color-reduced);
+    }
+}

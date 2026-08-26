@@ -1,0 +1,115 @@
+<div class="popupFrame glass-panel flex flex-col">
+    <div class="dialog-header flex items-center justify-between gap-4 px-5 py-3">
+        <div class="header-title">
+            add radio station to <span class="playlist-name">{{ playlist.title }}</span>
+        </div>
+        <button type="button" class="icon-button" (click)="close()" aria-label="close">
+            <span class="material-symbols-outlined thin">close</span>
+        </button>
+    </div>
+
+    <div class="popupBody flex flex-col">
+        @if (selected(); as station) {
+            <!-- second step: the name radio-browser has is often a wall of keywords -->
+            <div class="confirm-step flex flex-col">
+                <div class="headline">name this entry</div>
+                <div class="confirm-station flex items-center gap-3">
+                    @if (station.favicon) {
+                        <img class="station-icon" [src]="station.favicon" alt=""/>
+                    } @else {
+                        <span class="material-symbols-outlined thin station-icon-fallback">radio</span>
+                    }
+                    <div class="flex flex-col min-w-0">
+                        <div class="station-original">{{ station.name }}</div>
+                        <div class="station-meta">{{ station.countryCode }} · {{ stationQuality(station) }}</div>
+                    </div>
+                </div>
+
+                <div class="search-field">
+                    <input [(ngModel)]="entryTitle" type="text" class="glass-input" placeholder="entry name"/>
+                </div>
+                <div class="hint">
+                    shortened from the name at radio-browser, change it to whatever you want to see
+                </div>
+
+                <div class="confirm-actions flex items-center justify-end gap-2">
+                    <button type="button" class="ghost-button" (click)="cancelSelection()">back</button>
+                    <button type="button" class="primary-button" (click)="confirmSelection()">add</button>
+                </div>
+            </div>
+        } @else {
+            <div class="search-field">
+                <span class="material-symbols-outlined thin search-icon">search</span>
+                <input [(ngModel)]="name" (ngModelChange)="filterChanged()" type="text" class="glass-input"
+                       placeholder="station name"/>
+            </div>
+
+            <div class="filter-row flex items-center gap-2">
+                <select class="glass-input filter-select" [(ngModel)]="countryCode" (ngModelChange)="filterChanged()">
+                    <option value="">any country</option>
+                    @for (c of countries(); track c.value) {
+                        <option [value]="c.code">{{ c.value }} ({{ c.stationCount }})</option>
+                    }
+                </select>
+
+                <select class="glass-input filter-select" [(ngModel)]="language" (ngModelChange)="filterChanged()">
+                    <option value="">any language</option>
+                    @for (l of languages(); track l.value) {
+                        <option [value]="l.value">{{ l.value }} ({{ l.stationCount }})</option>
+                    }
+                </select>
+            </div>
+
+            <div class="filter-row genre-row flex flex-col">
+                <input [(ngModel)]="tagQuery" (ngModelChange)="tagQueryChanged()" type="text"
+                       class="glass-input" placeholder="genre, for example electroswing"/>
+                @if (tagSuggestions().length > 0) {
+                    <div class="tag-suggestions flex flex-wrap gap-1">
+                        @for (t of tagSuggestions(); track t.value) {
+                            <button type="button" class="tag-chip" (click)="pickTag(t.value)">
+                                {{ t.value }} <span class="tag-count">{{ t.stationCount }}</span>
+                            </button>
+                        }
+                    </div>
+                }
+            </div>
+
+            <div class="headline flex items-center justify-between">
+                <span>
+                    @if (searching()) { searching … }
+                    @else if (stations().length > 0) { {{ stations().length }} stations }
+                    @else { stations }
+                </span>
+                @if (hasFilter()) {
+                    <button type="button" class="ghost-button small" (click)="clearFilters()">clear</button>
+                }
+            </div>
+
+            <div class="station-list flex flex-col">
+                @for (station of stations(); track station.uuid) {
+                    <button type="button" class="station-row flex items-center gap-3" (click)="selectStation(station)">
+                        @if (station.favicon) {
+                            <img class="station-icon" [src]="station.favicon" alt=""/>
+                        } @else {
+                            <span class="material-symbols-outlined thin station-icon-fallback">radio</span>
+                        }
+                        <div class="flex flex-col min-w-0 grow">
+                            <div class="station-name">{{ station.name }}</div>
+                            <div class="station-meta">
+                                {{ station.countryCode }}
+                                @if (stationQuality(station)) { · {{ stationQuality(station) }} }
+                            </div>
+                        </div>
+                        <span class="material-symbols-outlined thin add-icon">add</span>
+                    </button>
+                } @empty {
+                    <div class="no-match">
+                        @if (searching()) { searching … }
+                        @else if (searched()) { nothing found }
+                        @else { type a name or pick a genre }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

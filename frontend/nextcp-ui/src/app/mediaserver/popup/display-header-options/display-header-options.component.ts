@@ -6,6 +6,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { AddRadioStationComponent } from 'src/app/popup/add-radio-station/add-radio-station.component';
 import { CdsUpdateService } from 'src/app/service/cds-update.service';
 import { ConfigurationService } from 'src/app/service/configuration.service';
 import { DeviceService } from 'src/app/service/device.service';
@@ -148,6 +149,19 @@ export class DisplayHeaderOptionsComponent implements OnInit {
         this.close();
       }
     });
+  }
+
+  /** Picks a station from radio-browser and appends it to this playlist. */
+  addRadioStation(): void {
+    this.inputDialog.open(AddRadioStationComponent, {
+      width: '620px',
+      maxWidth: '92vw',
+      height: '640px',
+      maxHeight: '90vh',
+      panelClass: ['popup-glass'],
+      data: { playlist: this.currentContainer },
+    });
+    this.close();
   }
 
   selectArtistFolder(): void {
