@@ -130,6 +130,10 @@ ServerPlaylists:
    containerId: String
    serverPlaylists: List<ServerPlaylistDto>   
 
+ContainerUpdateIdsDto:
+   mediaServerUdn: String
+   containerIds: List<String>
+
 ServerConfigDto:
    serverDevices: List<ServerDeviceConfiguration>
 

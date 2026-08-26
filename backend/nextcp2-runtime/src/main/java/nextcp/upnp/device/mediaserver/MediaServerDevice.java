@@ -20,6 +20,7 @@ import nextcp.config.ServerConfig;
 import nextcp.domainmodel.device.mediaserver.search.SearchSupport;
 import nextcp.dto.ToastrMessage;
 import nextcp.dto.ContainerDto;
+import nextcp.dto.ContainerUpdateIdsDto;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MediaServerDto;
 import nextcp.dto.MusicAlbumIds;
@@ -31,6 +32,7 @@ import nextcp.dto.ServerPlaylistDto;
 import nextcp.dto.ServerPlaylists;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.device.BaseDevice;
+import nextcp.upnp.device.mediaserver.cds.ContentDirectoryEventListener;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.ContentDirectoryService;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseOutput;
@@ -60,11 +62,21 @@ public class MediaServerDevice extends BaseDevice {
 	@PostConstruct
 	private void init() {
 		this.contentDirectoryService = new ContentDirectoryService(getUpnpService(), getDevice());
+		// Tells us when a container changed after we already browsed it.
+		this.contentDirectoryService.addSubscriptionEventListener(new ContentDirectoryEventListener(getDevice(), this));
 		try {
 			searchSupportDelegate = new SearchSupport(contentDirectoryService, this);
 		} catch (Exception e) {
 			log.info("search support ...", e);
 		}
+	}
+
+	/**
+	 * Passes on the containers the server reported as changed, so the views showing one of them
+	 * browse again.
+	 */
+	public void containerContentChanged(List<String> containerIds) {
+		getEventPublisher().publishEvent(new ContainerUpdateIdsDto(getUDN().getIdentifierString(), containerIds));
 	}
 
 	public ContentDirectoryService getContentDirectoryService() {

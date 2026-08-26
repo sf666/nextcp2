@@ -533,6 +533,11 @@ export interface ServerPlaylists {
     serverPlaylists: ServerPlaylistDto[];
 }
 
+export interface ContainerUpdateIdsDto {
+    mediaServerUdn: string;
+    containerIds: string[];
+}
+
 export interface SpotifyConfigDto {
     accountConnected: boolean;
     clientId: string;
