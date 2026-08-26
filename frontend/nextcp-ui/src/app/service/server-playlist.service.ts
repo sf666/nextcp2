@@ -1,7 +1,7 @@
 import { ConfigurationService } from 'src/app/service/configuration.service';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { Injectable, computed, signal, inject } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, shareReplay, Subject } from 'rxjs';
 import { CreateServerPlaylistVO, ServerDeleteObjectRequest, ServerPlaylistEntry, ServerPlaylists } from './dto';
 import { HttpService } from './http.service';
 import { SseService } from './sse/sse.service';
@@ -211,7 +211,11 @@ export class ServerPlaylistService {
       serverUdn: this.selectedMediaServer().udn,
       objectId: objectId,
     };
-    let ret = this.httpService.post(this.baseUri, uri, req);
+    // Shared: this method subscribes below and hands the same stream to its caller. Cold, a caller
+    // that subscribed sent the delete a second time - add-playlist does exactly that.
+    const ret = this.httpService
+      .post(this.baseUri, uri, req)
+      .pipe(shareReplay({ bufferSize: 1, refCount: false }));
     ret.subscribe(() => {
       this.afterMediaServerChanged();
       this.playlistStructureChanged$.next({ removedObjectId: objectId });

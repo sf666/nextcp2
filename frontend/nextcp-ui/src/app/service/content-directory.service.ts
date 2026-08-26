@@ -527,16 +527,23 @@ export class ContentDirectoryService {
       return;
     }
 
+    // Something was removed and it was not the container on screen. Deliberately not asking whether
+    // the row is still displayed: the tile drops it optimistically, so that lookup would fail
+    // exactly when a refresh is needed and the screen would keep whatever it happened to have left.
+    // One browse per deletion is the price for the screen always matching the server.
+    if (change.removedObjectId) {
+      this.refreshCurrentContainer();
+      return;
+    }
+
     const createdHere = change.containerId === current;
-    const removedFromHere =
-      !!change.removedObjectId && this.isDisplayed(change.removedObjectId);
     // The playlist folder holds exactly what just changed, so it is stale even
     // when the id lookup above found nothing: the playlist dialog also lists
     // playlists it found by search, and a search hit can carry a different
     // object id than the same playlist has when browsed.
     const showsPlaylistFolder = current === this.configuredPlaylistFolderId();
 
-    if (createdHere || removedFromHere || showsPlaylistFolder) {
+    if (createdHere || showsPlaylistFolder) {
       this.refreshCurrentContainer();
     }
   }
@@ -545,17 +552,6 @@ export class ContentDirectoryService {
   private configuredPlaylistFolderId(): string {
     const udn = this.deviceService.selectedMediaServerDevice().udn;
     return this.configService.findServerConfig(udn)?.playistObjectId ?? '';
-  }
-
-  /** True if the given object id is one of the rows currently on screen. */
-  private isDisplayed(objectId: string): boolean {
-    return (
-      this.playlistList_().some((pl) => pl.id === objectId) ||
-      this.artistList_().some((artist) => artist.id === objectId) ||
-      this.containerList_().some((c) => c.id === objectId) ||
-      this.musicTracks_().some((item) => item.objectID === objectId) ||
-      this.rawOtherItems_().some((item) => item.objectID === objectId)
-    );
   }
 
   //
@@ -1201,9 +1197,18 @@ export class ContentDirectoryService {
     ci.currentContainer.albumartUri = '';
   }
 
+  /**
+   * Drops one track from the list on screen right away, before the browse that follows confirms it.
+   * Keyed on the object id: songId is a MusicItemIdDto, so comparing it compared object references -
+   * against a refreshed list nothing matched, and where the id fields were absent on both sides
+   * every row matched and the list emptied.
+   */
   public deleteMusicTrack(item: MusicItemDto) {
+    if (!item?.objectID) {
+      return;
+    }
     this.musicTracks_.update((v) =>
-      v.filter((listitem) => listitem.songId !== item.songId),
+      v.filter((listitem) => listitem.objectID !== item.objectID),
     );
   }
 

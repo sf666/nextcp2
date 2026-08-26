@@ -177,10 +177,9 @@ export class ItemTileComponent {
           if (result.type == 'add') {
             console.log('added song to playlist : ' + item); // check item
           } else if (result.type == 'delete') {
-            console.log('deleted song from playlist : ');
-            setTimeout(() => {
-              this.contentDirectoryService().deleteMusicTrack(result.data);
-            }, 200);
+            // Immediately, not on a timer: the delayed call used to land after the
+            // refresh browse had already replaced the list.
+            this.contentDirectoryService().deleteMusicTrack(result.data);
           } else if (result.type == 'download') {
             console.log('download song : ' + result.data.title);
           } else if (result.type == 'next') {

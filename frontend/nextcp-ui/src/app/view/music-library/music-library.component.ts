@@ -276,7 +276,9 @@ export class MusicLibraryComponent implements AfterViewInit {
   }
 
   itemDeleted(event: MusicItemDto) {
-    this.contentDirectoryService.deleteMusicTrack(event);
+    // The row is already gone locally (item-tile did that); browse again so the
+    // server has the last word - the playlist view does the same.
+    this.contentDirectoryService.refreshCurrentContainer();
   }
 
   //
