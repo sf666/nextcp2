@@ -620,7 +620,12 @@ export class DisplayContainerHeaderComponent implements OnInit {
     const previousRating = this.currentContainerRating();
     const newRating = this.isLiked() ? undefined : RATING_LIKED;
     this.ratingService
-      .setResourceRating(this.currentContainer.id, previousRating, newRating)
+      .setResourceRating(
+        this.currentContainer.id,
+        previousRating,
+        newRating,
+        this.currentContainer.id,
+      )
       .subscribe({
         next: () => this.currentContainerRating.set(newRating),
         error: (err) => console.log('cannot rate container : ' + err),

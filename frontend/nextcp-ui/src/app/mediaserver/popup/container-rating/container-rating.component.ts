@@ -78,7 +78,12 @@ export class ContainerRatingComponent {
 
     const previousRating = this.rating();
     this.ratingService
-      .setResourceRating(this.container.id, previousRating, newRating)
+      .setResourceRating(
+        this.container.id,
+        previousRating,
+        newRating,
+        this.container.parentID,
+      )
       .pipe(take(1), timeout(RATING_TIMEOUT_MS))
       .subscribe({
         next: () => {

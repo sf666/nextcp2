@@ -1,3 +1,4 @@
+import { CdsUpdateService } from './cds-update.service';
 import { DeviceService } from './device.service';
 import { Subject } from 'rxjs';
 import { MusicItemIdDto, UpdateStarRatingRequest } from './dto.d';
@@ -46,13 +47,30 @@ export function matchesRatingFilter(
 export class RatingServiceService {
   private httpService = inject(HttpService);
   private deviceSerice = inject(DeviceService);
+  private cdsUpdateService = inject(CdsUpdateService);
 
   private baseUri = '/RatingService';
+
+  /**
+   * The caller sets the new value on screen itself, which is enough for the star
+   * overlay. A browse is only needed so a sort or filter on rating takes the new
+   * value into account - hence the container that lists the rated entry.
+   */
+  private announceTo(result: Subject<void>, containerId?: string): Subject<void> {
+    if (containerId) {
+      result.subscribe({
+        next: () => this.cdsUpdateService.containerContentChanged$.next(containerId),
+        error: () => {},
+      });
+    }
+    return result;
+  }
 
   public setStarRating(
     ids: MusicItemIdDto,
     previousStars: number,
     stars: number,
+    containerId?: string,
   ): Subject<void> {
     const uri = `/setStarRating`;
 
@@ -63,7 +81,10 @@ export class RatingServiceService {
       mediaServerDevice: this.deviceSerice.selectedMediaServerDevice().udn,
     };
 
-    return this.httpService.post<void>(this.baseUri, uri, srr);
+    return this.announceTo(
+      this.httpService.post<void>(this.baseUri, uri, srr),
+      containerId,
+    );
   }
 
   /**
@@ -76,6 +97,7 @@ export class RatingServiceService {
     objectID: string,
     previousRating: number | undefined,
     newRating: number | undefined,
+    containerId?: string,
   ): Subject<void> {
     const uri = `/setStarRating`;
 
@@ -93,7 +115,10 @@ export class RatingServiceService {
       mediaServerDevice: this.deviceSerice.selectedMediaServerDevice().udn,
     } as unknown as UpdateStarRatingRequest;
 
-    return this.httpService.post<void>(this.baseUri, uri, srr);
+    return this.announceTo(
+      this.httpService.post<void>(this.baseUri, uri, srr),
+      containerId,
+    );
   }
 
   public syncRatingsFromMusicBrainzToBackend(): Subject<string> {

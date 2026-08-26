@@ -34,7 +34,12 @@ export class StarRatingComponent implements OnInit {
 
   starSelected(num: number): void {
     this.ratingServiceService
-      .setStarRating(this.currentSong().songId, this.rating(), num)
+      .setStarRating(
+        this.currentSong().songId,
+        this.rating(),
+        num,
+        this.currentSong().parentId,
+      )
       .subscribe({
         next: () => this.rating.set(num),
         error: (err) => console.log('error star selected : ' + err),
