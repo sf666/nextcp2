@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.types.UDN;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import nextcp.config.RendererConfig;
 import nextcp.config.ServerConfig;
@@ -157,6 +159,24 @@ public class DeviceRegistry {
 
 	public Collection<MediaServerDevice> getAvailableMediaServer() {
 		return Collections.unmodifiableCollection(mediaServerList.values());
+	}
+
+	/**
+	 * Keeps the content directory subscriptions alive.
+	 *
+	 * A subscription is created once, while the device is being added, and the periodic search does not
+	 * help: a device that is already known lands in updatedMediaServerDevice, which only adds when it is
+	 * unknown. So a subscription that never came up stayed down for the rest of the run.
+	 */
+	@Scheduled(fixedRate = 2, timeUnit = TimeUnit.MINUTES)
+	public void ensureMediaServerSubscriptions() {
+		for (MediaServerDevice device : mediaServerList.values()) {
+			try {
+				device.ensureContentDirectorySubscription();
+			} catch (Exception e) {
+				log.warn("could not subscribe to the content directory of {}", device.getFriendlyName(), e);
+			}
+		}
 	}
 
 	//

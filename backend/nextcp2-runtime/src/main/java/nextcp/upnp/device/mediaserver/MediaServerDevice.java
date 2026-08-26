@@ -47,6 +47,8 @@ public class MediaServerDevice extends BaseDevice {
 
 	private ContentDirectoryService contentDirectoryService;
 
+	private ContentDirectoryEventListener contentDirectoryEventListener;
+
 	private SearchSupport searchSupportDelegate = null;
 
     @Autowired
@@ -61,14 +63,35 @@ public class MediaServerDevice extends BaseDevice {
 
 	@PostConstruct
 	private void init() {
+		createContentDirectoryService();
+	}
+
+	private void createContentDirectoryService() {
 		this.contentDirectoryService = new ContentDirectoryService(getUpnpService(), getDevice());
 		// Tells us when a container changed after we already browsed it.
-		this.contentDirectoryService.addSubscriptionEventListener(new ContentDirectoryEventListener(getDevice(), this));
+		this.contentDirectoryEventListener = new ContentDirectoryEventListener(getDevice(), this);
+		this.contentDirectoryService.addSubscriptionEventListener(contentDirectoryEventListener);
 		try {
 			searchSupportDelegate = new SearchSupport(contentDirectoryService, this);
 		} catch (Exception e) {
 			log.info("search support ...", e);
 		}
+	}
+
+	/**
+	 * Subscribes to the content directory again when the subscription is not carrying events.
+	 *
+	 * The subscription is set up once, while the device is being added. If that attempt does not come up -
+	 * on startup the control point can reach the server before its own callback endpoint is listening -
+	 * nothing used to try again: a media server that was already running when we started never sent us a
+	 * single event, until it restarted and was discovered anew. Called periodically by the device registry.
+	 */
+	public void ensureContentDirectorySubscription() {
+		if (contentDirectoryEventListener != null && contentDirectoryEventListener.isSubscribed()) {
+			return;
+		}
+		log.info("content directory of {} is not subscribed, subscribing again", getFriendlyName());
+		createContentDirectoryService();
 	}
 
 	/**

@@ -2,6 +2,9 @@ package nextcp.upnp.device.mediaserver.cds;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import org.jupnp.model.gena.CancelReason;
+import org.jupnp.model.message.UpnpResponse;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.state.StateVariableValue;
@@ -25,13 +28,48 @@ public class ContentDirectoryEventListener extends ContentDirectoryServiceEventL
 
 	private final MediaServerDevice mediaServerDevice;
 
+	/**
+	 * Whether the GENA subscription is currently carrying events. False until the server confirms it, and
+	 * false again once it fails or ends, so a watchdog can subscribe again - nothing else retried, and a
+	 * subscription that never came up stayed down until the media server itself restarted.
+	 */
+	private final AtomicBoolean subscribed = new AtomicBoolean(false);
+
 	public ContentDirectoryEventListener(RemoteDevice device, MediaServerDevice mediaServerDevice) {
 		super(device);
 		this.mediaServerDevice = mediaServerDevice;
 	}
 
+	public boolean isSubscribed() {
+		return subscribed.get();
+	}
+
+	@Override
+	public void established() {
+		super.established();
+		subscribed.set(true);
+		log.info("content directory subscription established for {}", mediaServerDevice.getFriendlyName());
+	}
+
+	@Override
+	public void failed(UpnpResponse responseStatus) {
+		super.failed(responseStatus);
+		subscribed.set(false);
+		log.warn("content directory subscription failed for {} : {}", mediaServerDevice.getFriendlyName(), responseStatus);
+	}
+
+	@Override
+	public void ended(CancelReason reason, UpnpResponse responseStatus) {
+		super.ended(reason, responseStatus);
+		subscribed.set(false);
+		log.warn("content directory subscription ended for {} : reason {}, response {}",
+			mediaServerDevice.getFriendlyName(), reason, responseStatus);
+	}
+
 	@Override
 	public void eventReceived(String key, StateVariableValue<RemoteService> stateVar) {
+		// An event is proof that the subscription carries, whatever the callbacks reported.
+		subscribed.set(true);
 		if (!CONTAINER_UPDATE_IDS.equals(key)) {
 			return;
 		}
