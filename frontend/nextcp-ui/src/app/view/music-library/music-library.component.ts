@@ -7,12 +7,12 @@ import { GlobalSearchService } from './../../service/search/global-search.servic
 import {
   AfterViewInit,
   Component,
-  DestroyRef,
   inject,
   input,
   viewChild,
   ChangeDetectionStrategy,
 } from '@angular/core';
+import { combineLatest, distinctUntilChanged, map } from 'rxjs';
 import { ScrollLoadHandler } from 'src/app/mediaserver/display-container/defs';
 import {
   BrowseCrumb,
@@ -53,7 +53,6 @@ export class MusicLibraryComponent implements AfterViewInit {
   public readonly deviceService = inject(DeviceService);
   private readonly musicLibraryService = inject(MusicLibraryService);
   private readonly globalSearchService = inject(GlobalSearchService);
-  private readonly destroyRef = inject(DestroyRef);
 
   constructor() {
     const globalSearchService = this.globalSearchService;
@@ -70,16 +69,33 @@ export class MusicLibraryComponent implements AfterViewInit {
     this.getContentHandler()
       .contentDirectoryService.browseFinished$.pipe(takeUntilDestroyed())
       .subscribe((data) => this.browseFinished(data));
-    try {
-      toObservable(this.deviceService.selectedMediaServerDevice)
-        .pipe(takeUntilDestroyed())
-        .subscribe(() => {
-          let udn = this.deviceService.selectedMediaServerDevice().udn;
+    // The only place that starts a browse: one emission per change of media server or route
+    // parameter. There used to be four ways in - this subscription, the flush in ngAfterViewInit,
+    // a route.params subscription nested inside mediaServerInitiated$ (which also leaked one
+    // subscription per emission) and a bare initViewData at the end of ngAfterViewInit - and a
+    // single navigation browsed the root several times. Not an effect(): initViewData reads the
+    // very signals the browse writes, so it would loop.
+    combineLatest([
+      toObservable(this.deviceService.selectedMediaServerDevice),
+      this.route.params,
+    ])
+      .pipe(
+        map(([server, params]) => ({
+          udn: server.udn,
+          objectId: (params['objectId'] as string) ?? '',
+        })),
+        distinctUntilChanged(
+          (a, b) => a.udn === b.udn && a.objectId === b.objectId,
+        ),
+        takeUntilDestroyed(),
+      )
+      .subscribe(({ udn }) => {
+        if (udn?.length > 0) {
           this.initViewData(udn);
-        });
-    } catch (error) {
-      console.error('Caught an error:', error);
-    }
+        } else {
+          console.log('no media server device selected.');
+        }
+      });
   }
 
   /**
@@ -136,34 +152,8 @@ export class MusicLibraryComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.viewReady = true;
     this.layoutService.setFramedView();
+    // The browse that arrived before the view could run it.
     this.flushPendingBrowse();
-    // for first call of application wait till we know the devices ...
-    this.deviceService.mediaServerInitiated$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        let udn = this.deviceService.selectedMediaServerDevice().udn;
-        this.route.params
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe((val) => {
-            if (val.objectId) {
-              console.log(
-                'route parameter given at constructor time. Navigating to : ' +
-                  val.objectId,
-              );
-              this.browseToUid(udn, this.objectId() ?? '');
-            } else {
-              if (udn?.length > 0) {
-                this.initViewData(udn);
-              } else {
-                console.log('no media server device selected.');
-              }
-            }
-          });
-      });
-    let udn = this.deviceService.selectedMediaServerDevice().udn;
-    if (udn) {
-      this.initViewData(udn);
-    }
   }
 
   private browseFinished(data: ContainerItemDto): void {

@@ -10,6 +10,7 @@ import {
   mergeMap,
   Observable,
   range,
+  shareReplay,
   Subject,
   take,
   takeUntil,
@@ -730,15 +731,20 @@ export class ContentDirectoryService {
     this.searchContext.set(undefined);
     const browseStartedAt = performance.now();
 
-    const firstPage$ = this.browseThrottle.schedule(
-      () =>
-        this.httpService.post<ContainerItemDto>(this.baseUri, '/browseChildren', {
-          ...browseRequestDto,
-          start: 0,
-          count: this.MAX_REQUEST_ITEMS,
-        }),
-      'loading folder',
-    );
+    // Shared, because this method both subscribes below (to render the result and drive paging)
+    // and hands the same stream to its caller. Cold, every caller that subscribed sent the
+    // identical request a second time.
+    const firstPage$ = this.browseThrottle
+      .schedule(
+        () =>
+          this.httpService.post<ContainerItemDto>(this.baseUri, '/browseChildren', {
+            ...browseRequestDto,
+            start: 0,
+            count: this.MAX_REQUEST_ITEMS,
+          }),
+        'loading folder',
+      )
+      .pipe(shareReplay({ bufferSize: 1, refCount: false }));
 
     firstPage$
       .pipe(

@@ -1,4 +1,3 @@
-import { Subject } from 'rxjs';
 import { Injectable, signal, inject } from '@angular/core';
 import { LayoutService } from 'src/app/service/layout.service';
 
@@ -9,7 +8,6 @@ export class MyPlaylistService {
   private layoutService = inject(LayoutService);
 
   private activePlaylistId_ = signal<string>('');
-  public activePlaylistId$: Subject<string> = new Subject();
 
   constructor() {
     this.activePlaylistId_.set(localStorage.getItem('lastMyPlaylistId') ?? '');
@@ -17,7 +15,6 @@ export class MyPlaylistService {
 
   selectPlaylist(id: string) {
     this.activePlaylistId_.set(id);
-    this.activePlaylistId$.next(id);
     localStorage.setItem('lastMyPlaylistId', id.toString());
   }
 

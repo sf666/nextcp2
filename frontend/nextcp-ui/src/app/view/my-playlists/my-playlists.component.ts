@@ -8,10 +8,11 @@ import {
   BrowseCrumb,
   ContentDirectoryService,
 } from './../../service/content-directory.service';
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, computed } from '@angular/core';
+import { toObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { distinctUntilChanged } from 'rxjs';
 import { DisplayContainerComponent } from '../../mediaserver/display-container/display-container.component';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
-import { toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'my-playlists',
@@ -35,29 +36,28 @@ export class MyPlaylistsComponent implements OnInit {
   private rootPlaylistId = '';
 
   constructor() {
-    toObservable(this.deviceService.selectedMediaServerDevice).subscribe(
-      (server) =>
-        this.browseToMyPlaylist(
-          this.myPlaylistService.activePlaylistId,
-          server.udn,
+    // The only place that browses: once on creation and once per change of server or playlist.
+    // Before, the constructor subscription and the eager ngOnInit call both browsed the same id.
+    // Not an effect(): the browse reads the very signals it writes, which would loop.
+    toObservable(
+      computed(() => ({
+        playlistId: this.myPlaylistService.activePlaylistId,
+        udn: this.deviceService.selectedMediaServerDevice().udn,
+      })),
+    )
+      .pipe(
+        distinctUntilChanged(
+          (a, b) => a.playlistId === b.playlistId && a.udn === b.udn,
         ),
-    );
+        takeUntilDestroyed(),
+      )
+      .subscribe(({ playlistId, udn }) =>
+        this.browseToMyPlaylist(playlistId, udn),
+      );
   }
 
   ngOnInit(): void {
     this.layoutService.setFramedView();
-    if (this.deviceService.selectedMediaServerDevice().udn) {
-      this.browseToMyPlaylist(
-        this.myPlaylistService.activePlaylistId,
-        this.deviceService.selectedMediaServerDevice().udn,
-      );
-    }
-    this.myPlaylistService.activePlaylistId$.subscribe((id) =>
-      this.browseToMyPlaylist(
-        id,
-        this.deviceService.selectedMediaServerDevice().udn,
-      ),
-    );
   }
 
   /**
