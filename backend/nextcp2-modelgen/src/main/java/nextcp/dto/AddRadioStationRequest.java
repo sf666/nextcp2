@@ -15,16 +15,18 @@ public class AddRadioStationRequest
     public String serverUdn;
     public String playlistObjectId;
     public String stationUuid;
+    public String title;
 
     public AddRadioStationRequest()
     {
     }
 
-    public AddRadioStationRequest(String serverUdn, String playlistObjectId, String stationUuid)
+    public AddRadioStationRequest(String serverUdn, String playlistObjectId, String stationUuid, String title)
     {
         this.serverUdn = serverUdn;
         this.playlistObjectId = playlistObjectId;
         this.stationUuid = stationUuid;
+        this.title = title;
     }
     
     @Override
@@ -35,6 +37,7 @@ public class AddRadioStationRequest
         sb.append("serverUdn=").append(this.serverUdn).append(", ");
         sb.append("playlistObjectId=").append(this.playlistObjectId).append(", ");
         sb.append("stationUuid=").append(this.stationUuid).append(", ");
+        sb.append("title=").append(this.title).append(", ");
         sb.append("]");
         return sb.toString();
     }

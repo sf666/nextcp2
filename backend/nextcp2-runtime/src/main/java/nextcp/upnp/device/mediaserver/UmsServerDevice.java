@@ -338,10 +338,11 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	}
 
 	@Override
-	public String addRadioStationToPlaylist(String playlistObjectId, String stationUuid) {
+	public String addRadioStationToPlaylist(String playlistObjectId, String stationUuid, String title) {
 		AddRadioStationToPlaylistInput inp = new AddRadioStationToPlaylistInput();
 		inp.ObjectID = playlistObjectId;
 		inp.StationUuid = stationUuid;
+		inp.Title = trimToNull(title);
 		try {
 			AddRadioStationToPlaylistOutput out = umsServices.addRadioStationToPlaylist(inp);
 			return out != null ? StringUtils.trimToEmpty(out.Result) : "";

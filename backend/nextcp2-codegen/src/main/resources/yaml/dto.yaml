@@ -479,6 +479,7 @@ AddRadioStationRequest:
    serverUdn : String
    playlistObjectId : String
    stationUuid : String
+   title : String
 
 GenericNumberRequest:
    deviceUDN: String

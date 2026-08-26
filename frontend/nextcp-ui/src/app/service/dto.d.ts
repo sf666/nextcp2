@@ -1,11 +1,12 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-08-26 12:03:32.
+// Generated using typescript-generator version 4.1.1 on 2026-08-26 13:01:14.
 
 export interface AddRadioStationRequest {
     serverUdn: string;
     playlistObjectId: string;
     stationUuid: string;
+    title: string;
 }
 
 export interface AiConfig {

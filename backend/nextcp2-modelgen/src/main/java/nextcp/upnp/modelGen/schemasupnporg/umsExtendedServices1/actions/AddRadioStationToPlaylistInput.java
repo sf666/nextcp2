@@ -11,5 +11,6 @@ public class AddRadioStationToPlaylistInput
 
     public String ObjectID = null;
     public String StationUuid = null;
+    public String Title = null;
 
 }

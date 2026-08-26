@@ -103,5 +103,5 @@ public interface ExtendedApiMediaDevice
 	 *
 	 * @return the name of the station that was added
 	 */
-	public String addRadioStationToPlaylist(String playlistObjectId, String stationUuid);
+	public String addRadioStationToPlaylist(String playlistObjectId, String stationUuid, String title);
 }

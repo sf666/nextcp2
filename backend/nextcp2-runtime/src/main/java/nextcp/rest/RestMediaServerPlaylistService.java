@@ -92,7 +92,7 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 	public void addRadioStationToPlaylist(@RequestBody AddRadioStationRequest request) {
 		try {
 			String name = getExtendedMediaServerByUdn(request.serverUdn)
-					.addRadioStationToPlaylist(request.playlistObjectId, request.stationUuid);
+					.addRadioStationToPlaylist(request.playlistObjectId, request.stationUuid, request.title);
 			toast.publishSuccessMessage(null, "playlist", name + " added to playlist");
 		} catch (Exception e) {
 			log.error("addRadioStationToPlaylist failed : {}", request, e);
