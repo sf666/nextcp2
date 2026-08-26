@@ -1,6 +1,12 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-08-24 19:11:27.
+// Generated using typescript-generator version 4.1.1 on 2026-08-26 12:03:32.
+
+export interface AddRadioStationRequest {
+    serverUdn: string;
+    playlistObjectId: string;
+    stationUuid: string;
+}
 
 export interface AiConfig {
     aiEnabled: boolean;
@@ -379,6 +385,41 @@ export interface PlaylistState {
     TransportState: string;
     ProtocolInfo: string;
     Id: number;
+}
+
+export interface RadioBrowserFilterRequest {
+    serverUdn: string;
+    kind: string;
+    search: string;
+}
+
+export interface RadioBrowserFilterValueDto {
+    value: string;
+    code: string;
+    stationCount: number;
+}
+
+export interface RadioBrowserSearchRequest {
+    serverUdn: string;
+    name: string;
+    countryCode: string;
+    language: string;
+    tag: string;
+    offset: number;
+    limit: number;
+}
+
+export interface RadioBrowserStationDto {
+    uuid: string;
+    name: string;
+    url: string;
+    favicon: string;
+    countryCode: string;
+    language: string;
+    tags: string;
+    codec: string;
+    bitrate: number;
+    votes: number;
 }
 
 export interface RadioNetwork {

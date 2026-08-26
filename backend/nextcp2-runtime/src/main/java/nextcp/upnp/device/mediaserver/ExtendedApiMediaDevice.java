@@ -5,6 +5,11 @@ import org.jupnp.support.model.container.Container;
 import org.jupnp.support.model.item.Item;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import java.util.List;
+import nextcp.dto.RadioBrowserFilterRequest;
+import nextcp.dto.RadioBrowserFilterValueDto;
+import nextcp.dto.RadioBrowserSearchRequest;
+import nextcp.dto.RadioBrowserStationDto;
 import nextcp.dto.MusicAlbumIds;
 import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.ServerPlaylists;
@@ -79,4 +84,24 @@ public interface ExtendedApiMediaDevice
 	 * when that playlist is not being streamed by this server right now.
 	 */
 	public AudioAddictPlaylistNowPlaying getPlaylistNowPlaying(int playlistId);
+
+	// radio-browser.info station picker
+
+	/**
+	 * Searches radio-browser.info for stations matching the request. All filters are optional.
+	 */
+	public List<RadioBrowserStationDto> searchRadioStations(RadioBrowserSearchRequest request);
+
+	/**
+	 * Values for one filter field. A genre search term is required for tags : the full tag list is
+	 * far too long to offer at once.
+	 */
+	public List<RadioBrowserFilterValueDto> getRadioFilterValues(RadioBrowserFilterRequest request);
+
+	/**
+	 * Adds a station to a playlist on the media server.
+	 *
+	 * @return the name of the station that was added
+	 */
+	public String addRadioStationToPlaylist(String playlistObjectId, String stationUuid);
 }

@@ -1,6 +1,19 @@
 package nextcp.upnp.device.mediaserver;
 
 import java.io.File;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SearchRadioStationsOutput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SearchRadioStationsInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetRadioFilterValuesOutput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetRadioFilterValuesInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.AddRadioStationToPlaylistOutput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.AddRadioStationToPlaylistInput;
+import nextcp.dto.RadioBrowserStationDto;
+import nextcp.dto.RadioBrowserSearchRequest;
+import nextcp.dto.RadioBrowserFilterValueDto;
+import nextcp.dto.RadioBrowserFilterRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -266,6 +279,91 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		}
 	}
 	
+	@Override
+	public List<RadioBrowserStationDto> searchRadioStations(RadioBrowserSearchRequest request) {
+		SearchRadioStationsInput inp = new SearchRadioStationsInput();
+		inp.Name = trimToNull(request.name);
+		inp.CountryCode = trimToNull(request.countryCode);
+		inp.Language = trimToNull(request.language);
+		inp.Tag = trimToNull(request.tag);
+		inp.Offset = request.offset != null ? request.offset.longValue() : null;
+		inp.Limit = request.limit != null ? request.limit.longValue() : null;
+		try {
+			SearchRadioStationsOutput out = umsServices.searchRadioStations(inp);
+			List<RadioBrowserStationDto> result = new ArrayList<>();
+			for (JsonNode node : readArray(out == null ? null : out.Result)) {
+				RadioBrowserStationDto dto = new RadioBrowserStationDto();
+				dto.uuid = node.path("uuid").asText("");
+				dto.name = node.path("name").asText("");
+				dto.url = node.path("url").asText("");
+				dto.favicon = node.path("favicon").asText("");
+				dto.countryCode = node.path("countryCode").asText("");
+				dto.language = node.path("language").asText("");
+				dto.tags = node.path("tags").asText("");
+				dto.codec = node.path("codec").asText("");
+				dto.bitrate = node.path("bitrate").asInt(0);
+				dto.votes = node.path("votes").asInt(0);
+				result.add(dto);
+			}
+			return result;
+		} catch (GenActionException e) {
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorHandler.extractErrorText(e.description), e);
+		} catch (Exception e) {
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public List<RadioBrowserFilterValueDto> getRadioFilterValues(RadioBrowserFilterRequest request) {
+		GetRadioFilterValuesInput inp = new GetRadioFilterValuesInput();
+		inp.Kind = trimToNull(request.kind);
+		inp.Search = trimToNull(request.search);
+		try {
+			GetRadioFilterValuesOutput out = umsServices.getRadioFilterValues(inp);
+			List<RadioBrowserFilterValueDto> result = new ArrayList<>();
+			for (JsonNode node : readArray(out == null ? null : out.Result)) {
+				RadioBrowserFilterValueDto dto = new RadioBrowserFilterValueDto();
+				dto.value = node.path("value").asText("");
+				// only countries carry one; the search filters by code, the user picks the name
+				dto.code = node.path("code").asText(null);
+				dto.stationCount = node.path("stationCount").asInt(0);
+				result.add(dto);
+			}
+			return result;
+		} catch (GenActionException e) {
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorHandler.extractErrorText(e.description), e);
+		} catch (Exception e) {
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public String addRadioStationToPlaylist(String playlistObjectId, String stationUuid) {
+		AddRadioStationToPlaylistInput inp = new AddRadioStationToPlaylistInput();
+		inp.ObjectID = playlistObjectId;
+		inp.StationUuid = stationUuid;
+		try {
+			AddRadioStationToPlaylistOutput out = umsServices.addRadioStationToPlaylist(inp);
+			return out != null ? StringUtils.trimToEmpty(out.Result) : "";
+		} catch (GenActionException e) {
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorHandler.extractErrorText(e.description), e);
+		} catch (Exception e) {
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
+		}
+	}
+
+	/** The actions carry their payload as a JSON string, so an empty answer is an empty list. */
+	private JsonNode readArray(String json) throws JsonProcessingException {
+		if (StringUtils.isBlank(json)) {
+			return OBJECT_MAPPER.createArrayNode();
+		}
+		return OBJECT_MAPPER.readTree(json);
+	}
+
+	private static String trimToNull(String value) {
+		return StringUtils.isBlank(value) ? null : value.trim();
+	}
+
 	@Override
 	public void likeAlbum(MusicAlbumIds albumIds) {
 		log.debug("likeAlbum : musicBrainzId {} / discogsId {} ", albumIds.musicBrainzAlbumId, albumIds.discogsReleaseId);

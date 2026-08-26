@@ -443,6 +443,43 @@ ServerPlaylistEntry:
    playlistObjectId : String
    songObjectId : String
 
+# radio-browser.info station picker
+RadioBrowserStationDto:
+   uuid : String
+   name : String
+   url : String
+   favicon : String
+   countryCode : String
+   language : String
+   tags : String
+   codec : String
+   bitrate : Integer
+   votes : Integer
+
+RadioBrowserFilterValueDto:
+   value : String
+   code : String
+   stationCount : Integer
+
+RadioBrowserSearchRequest:
+   serverUdn : String
+   name : String
+   countryCode : String
+   language : String
+   tag : String
+   offset : Integer
+   limit : Integer
+
+RadioBrowserFilterRequest:
+   serverUdn : String
+   kind : String
+   search : String
+
+AddRadioStationRequest:
+   serverUdn : String
+   playlistObjectId : String
+   stationUuid : String
+
 GenericNumberRequest:
    deviceUDN: String
    value : Long

@@ -2,6 +2,11 @@ package nextcp.rest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import nextcp.dto.RadioBrowserStationDto;
+import nextcp.dto.RadioBrowserSearchRequest;
+import nextcp.dto.RadioBrowserFilterValueDto;
+import nextcp.dto.RadioBrowserFilterRequest;
+import nextcp.dto.AddRadioStationRequest;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
@@ -48,6 +53,51 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 	private HashMap<String, LinkedList<String>> recentPlaylistsIds = new HashMap<>();
 
 	public RestMediaServerPlaylistService() {
+	}
+
+	/**
+	 * Searches radio-browser.info through the media server, so a station can be picked without
+	 * browsing a folder that holds every station there is.
+	 */
+	@PostMapping("/searchRadioStations")
+	public List<RadioBrowserStationDto> searchRadioStations(@RequestBody RadioBrowserSearchRequest request) {
+		try {
+			return getExtendedMediaServerByUdn(request.serverUdn).searchRadioStations(request);
+		} catch (Exception e) {
+			log.error("searchRadioStations failed : {}", request, e);
+			toast.publishErrorMessage(null, "radio search", e.getMessage());
+			return new ArrayList<>();
+		}
+	}
+
+	/**
+	 * Values for one filter field of the station picker.
+	 */
+	@PostMapping("/getRadioFilterValues")
+	public List<RadioBrowserFilterValueDto> getRadioFilterValues(@RequestBody RadioBrowserFilterRequest request) {
+		try {
+			return getExtendedMediaServerByUdn(request.serverUdn).getRadioFilterValues(request);
+		} catch (Exception e) {
+			log.error("getRadioFilterValues failed : {}", request, e);
+			toast.publishErrorMessage(null, "radio filter", e.getMessage());
+			return new ArrayList<>();
+		}
+	}
+
+	/**
+	 * Adds a station to a playlist. The media server reads the station itself, the client only says
+	 * which one.
+	 */
+	@PostMapping("/addRadioStationToPlaylist")
+	public void addRadioStationToPlaylist(@RequestBody AddRadioStationRequest request) {
+		try {
+			String name = getExtendedMediaServerByUdn(request.serverUdn)
+					.addRadioStationToPlaylist(request.playlistObjectId, request.stationUuid);
+			toast.publishSuccessMessage(null, "playlist", name + " added to playlist");
+		} catch (Exception e) {
+			log.error("addRadioStationToPlaylist failed : {}", request, e);
+			toast.publishErrorMessage(null, "playlist", e.getMessage());
+		}
 	}
 
 	/**
