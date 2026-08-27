@@ -65,7 +65,7 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 			return getExtendedMediaServerByUdn(request.serverUdn).searchRadioStations(request);
 		} catch (Exception e) {
 			log.error("searchRadioStations failed : {}", request, e);
-			throw failed("The radio station search failed : " + e.getMessage(), e);
+			throw failed("The radio station search failed", e);
 		}
 	}
 
@@ -78,7 +78,7 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 			return getExtendedMediaServerByUdn(request.serverUdn).getRadioFilterValues(request);
 		} catch (Exception e) {
 			log.error("getRadioFilterValues failed : {}", request, e);
-			throw failed("Cannot read the radio filter values : " + e.getMessage(), e);
+			throw failed("Cannot read the radio filter values", e);
 		}
 	}
 
@@ -94,7 +94,7 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 			toast.publishSuccessMessage(null, "playlist", name + " added to playlist");
 		} catch (Exception e) {
 			log.error("addRadioStationToPlaylist failed : {}", request, e);
-			throw failed("Cannot add the station to the playlist : " + e.getMessage(), e);
+			throw failed("Cannot add the station to the playlist", e);
 		}
 	}
 
@@ -113,7 +113,7 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 			mediaServerSseEvents.mediaServerRecentPlaylistChanged(getRecentServerPlaylists(addRequest.serverUdn));
 		} catch (Exception e) {
 			log.warn("adding song to server playlist", e);
-			throw failed("Cannot add the song to the playlist : " + e.getMessage(), e);
+			throw failed("Cannot add the song to the playlist", e);
 		}
 	}
 
@@ -167,7 +167,12 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 			return getMediaServerByUdn(serverUdn).getServerPlaylists();
 		} catch (Exception e) {
 			log.warn("getServerPlaylists", e);
-			return new ServerPlaylists();
+			// An initialised list, not null : a client that iterates the answer must not have to
+			// guard against it (the same hole getRecentServerPlaylists had).
+			ServerPlaylists empty = new ServerPlaylists();
+			empty.mediaServerUdn = serverUdn;
+			empty.serverPlaylists = new ArrayList<>();
+			return empty;
 		}
 	}
 
@@ -234,7 +239,7 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 			return pi.getId();
 		} catch (Exception e) {
 			log.warn("createPlaylist", e);
-			throw failed("Cannot create the playlist : " + e.getMessage(), e);
+			throw failed("Cannot create the playlist", e);
 		}
 	}
 
@@ -251,7 +256,7 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 			removePlaylistFromRecent(deleteRequest.serverUdn, deleteRequest.objectId);
 		} catch (Exception e) {
 			log.warn("removing song from server playlist", e);
-			throw failed("Cannot remove the object from the media server : " + e.getMessage(), e);
+			throw failed("Cannot remove the object from the media server", e);
 		}
 	}
 

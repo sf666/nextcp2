@@ -120,11 +120,27 @@ public class BaseRestService
      * Status reads are the exception : they degrade to an empty answer instead, because an absent
      * device is a normal state there and must not report on every poll.
      */
-    protected BackendException failed(String message, Exception cause)
+    protected BackendException failed(String whatFailed, Exception cause)
     {
-        return cause == null ?
-            new BackendException(BackendException.GENERIC_ERROR, message) :
-            new BackendException(BackendException.GENERIC_ERROR, message, cause);
+        if (cause == null)
+        {
+            return new BackendException(BackendException.GENERIC_ERROR, whatFailed);
+        }
+        return new BackendException(BackendException.GENERIC_ERROR, whatFailed + " : " + reasonOf(cause), cause);
+    }
+
+    /**
+     * The reason out of an exception, without the wrapping a status carries. Plain getMessage() on a
+     * ResponseStatusException reads 417 EXPECTATION_FAILED "Media-Renderer not found : ..." and that
+     * whole string used to end up in the toast the user sees.
+     */
+    private String reasonOf(Exception cause)
+    {
+        if (cause instanceof ResponseStatusException statusException && statusException.getReason() != null)
+        {
+            return statusException.getReason();
+        }
+        return cause.getMessage();
     }
 
     protected DeviceRegistry getDeviceRegistry()

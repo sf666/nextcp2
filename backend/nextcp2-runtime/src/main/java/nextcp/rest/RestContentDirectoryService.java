@@ -51,40 +51,42 @@ public class RestContentDirectoryService extends BaseRestService {
 			device.rescan();
 		} catch (Exception e) {
 			log.error("rescan content :", e);
-			publisher.publishEvent(new ToastrMessage(null, "error", "rescan content", e.getMessage()));
+			throw failed("Cannot start the rescan", e);
 		}
 	}
 
+	/**
+	 * A failed browse answers with an error instead of an empty container : the two are
+	 * indistinguishable to the caller, and a view that renders "empty" for a server that is merely
+	 * absent is the confusion this used to produce.
+	 */
 	@PostMapping("/browseChildren")
 	public ContainerItemDto browse(@RequestBody BrowseRequestDto browseRequest) {
-		try {
-			checkUdn(browseRequest);
-			UDN udn = new UDN(browseRequest.mediaServerUDN);
-			MediaServerDevice device = deviceRegistry.getMediaServerByUDN(udn);
-			if (device == null) {
-				device = deviceRegistry.getInactiveMediaServerList().get(udn);
-				if (device != null) {
-					publisher.publishEvent(
-						new ToastrMessage(null, "error", "browse children", "media server '" + device.getFriendlyName() + "' is inactive. Please select a media server from the current active list!"));
-				} else {
-					publisher.publishEvent(new ToastrMessage(null, "error", "server", "media server is unknown "));
-				}
-				return new ContainerItemDto();
+		checkUdn(browseRequest);
+		UDN udn = new UDN(browseRequest.mediaServerUDN);
+		MediaServerDevice device = deviceRegistry.getMediaServerByUDN(udn);
+		if (device == null) {
+			// Resolved before the try so this diagnosis reaches the client as it is, instead of being
+			// wrapped in the generic browse message below.
+			MediaServerDevice inactive = deviceRegistry.getInactiveMediaServerList().get(udn);
+			if (inactive != null) {
+				throw failed("Media server '" + inactive.getFriendlyName() + "' is inactive. Please select one from the active list.", null);
 			}
-			checkDeviceAvailability(browseRequest, device);
+			throw failed("Unknown media server : " + browseRequest.mediaServerUDN, null);
+		}
+		checkDeviceAvailability(browseRequest, device);
+		try {
 			BrowseInput inp = new BrowseInput();
 			inp.ObjectID = browseRequest.objectID != null ? browseRequest.objectID : "0";
 			inp.SortCriteria = browseRequest.sortCriteria;
 			inp.StartingIndex = browseRequest.start;
 			inp.RequestedCount = browseRequest.count;
 			inp.Filter = browseRequest.filter;
-			ContainerItemDto resultContainer = device.browseChildren(inp); 
-			return resultContainer;
+			return device.browseChildren(inp);
 		} catch (Exception e) {
 			log.error("cannot browse children : " + browseRequest.toString(), e);
-			publisher.publishEvent(new ToastrMessage(null, "error", "browse server", e.getMessage()));
+			throw failed("Cannot browse the media server", e);
 		}
-		return new ContainerItemDto();
 	}
 
 	@PostMapping("/quickSearch")
@@ -101,9 +103,8 @@ public class RestContentDirectoryService extends BaseRestService {
 			return device.quickSearch(searchRequest);
 		} catch (Exception e) {
 			log.error("quick search : " + searchRequest.toString(), e);
-			publisher.publishEvent(new ToastrMessage(null, "error", "quick search server", e.getMessage()));
+			throw failed("The search failed", e);
 		}
-		return new SearchResultDto();
 	}
 
 	@PostMapping("/searchAllItems")
@@ -119,9 +120,8 @@ public class RestContentDirectoryService extends BaseRestService {
 			return device.searchAllItems(searchRequest);
 		} catch (Exception e) {
 			log.error("search all items : " + searchRequest.toString(), e);
-			publisher.publishEvent(new ToastrMessage(null, "error", "search all  items", e.getMessage()));
+			throw failed("The item search failed", e);
 		}
-		return new SearchResultDto();
 	}
 
 	@PostMapping("/searchAllPlaylist")
@@ -137,9 +137,8 @@ public class RestContentDirectoryService extends BaseRestService {
 			return device.searchAllPlaylist(searchRequest);
 		} catch (Exception e) {
 			log.error("search all playlists : " + searchRequest.toString(), e);
-			publisher.publishEvent(new ToastrMessage(null, "error", "search all playlists", e.getMessage()));
+			throw failed("The playlist search failed", e);
 		}
-		return new SearchResultDto();
 	}
 
 	@PostMapping("/searchAllAlbum")
@@ -155,9 +154,8 @@ public class RestContentDirectoryService extends BaseRestService {
 			return device.searchAllAlbum(searchRequest);
 		} catch (Exception e) {
 			log.error("search all album : " + searchRequest.toString(), e);
-			publisher.publishEvent(new ToastrMessage(null, "error", "search all  album", e.getMessage()));
+			throw failed("The album search failed", e);
 		}
-		return new SearchResultDto();
 	}
 
 	@PostMapping("/searchAllArtists")
@@ -173,9 +171,8 @@ public class RestContentDirectoryService extends BaseRestService {
 			return device.searchAllArtists(searchRequest);
 		} catch (Exception e) {
 			log.error("search all artists : " + searchRequest.toString(), e);
-			publisher.publishEvent(new ToastrMessage(null, "error", "search all artists", e.getMessage()));
+			throw failed("The artist search failed", e);
 		}
-		return new SearchResultDto();
 	}
 
 	@PostMapping("/updateAlbumArtUri")
@@ -186,7 +183,7 @@ public class RestContentDirectoryService extends BaseRestService {
 			publisher.publishEvent(new ToastrMessage(null, "success", "album cover", "The album cover was updated. Reload the container to see it."));
 		} catch (Exception e) {
 			log.error("updateAlbumArtUri failed : {}", updateRequest, e);
-			publisher.publishEvent(new ToastrMessage(null, "error", "update album cover failed", e.getMessage()));
+			throw failed("Cannot update the album cover", e);
 		}
 	}
 	
@@ -198,7 +195,7 @@ public class RestContentDirectoryService extends BaseRestService {
 			publisher.publishEvent(new ToastrMessage(null, "info", "Artist Directory", "Update of album artist directory was successful."));
 		} catch (Exception e) {
 			log.error("updateUmsAlbumArtistDirectory failed : {}", objectcId, e);
-			publisher.publishEvent(new ToastrMessage(null, "error", "Artist Directory", "update album artist directory failed :\n" + e.getMessage()));
+			throw failed("Cannot set the album artist directory", e);
 		}
 	}
 }

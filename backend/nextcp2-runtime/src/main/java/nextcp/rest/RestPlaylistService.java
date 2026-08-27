@@ -91,7 +91,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("seekId", e);
-            throw failed("Cannot jump to playlist entry #" + req.value + " : " + e.getMessage(), e);
+            throw failed("Cannot jump to playlist entry #" + req.value, e);
         }
     }
 
@@ -110,7 +110,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("insert", e);
-            throw failed("Cannot add " + req.streamUrl + " : " + e.getMessage(), e);
+            throw failed("Cannot add " + req.streamUrl, e);
         }
     }
     
@@ -130,7 +130,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("insertNext", e);
-            throw failed("Cannot add " + req.streamUrl + " as the next entry : " + e.getMessage(), e);
+            throw failed("Cannot add " + req.streamUrl + " as the next entry", e);
         }
     }
 
@@ -146,7 +146,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("insertContainer", e);
-            throw failed("Adding the folder to the renderer playlist failed : " + e.getMessage(), e);
+            throw failed("Adding the folder to the renderer playlist failed", e);
         }
     }
 
@@ -208,7 +208,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("insertAndPlayContainer", e);
-            throw failed("Cannot play the folder : " + e.getMessage(), e);
+            throw failed("Cannot play the folder", e);
         }
     }
 
@@ -224,7 +224,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("pause", e);
-            throw failed("Cannot pause : " + e.getMessage(), e);
+            throw failed("Cannot pause", e);
         }
     }
 
@@ -240,7 +240,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("deleteAll", e);
-            throw failed("Cannot clear the playlist : " + e.getMessage(), e);
+            throw failed("Cannot clear the playlist", e);
         }
     }
 
@@ -264,7 +264,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("setRepeat", e);
-            throw failed("Cannot change repeat : " + e.getMessage(), e);
+            throw failed("Cannot change repeat", e);
         }
     }
 
@@ -280,7 +280,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("delete", e);
-            throw failed("Cannot remove the playlist entry : " + e.getMessage(), e);
+            throw failed("Cannot remove the playlist entry", e);
         }
     }
 
@@ -296,7 +296,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("/play", e);
-            throw failed("Cannot start playback : " + e.getMessage(), e);
+            throw failed("Cannot start playback", e);
         }
     }
 
@@ -312,7 +312,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("next", e);
-            throw failed("Cannot skip to the next entry : " + e.getMessage(), e);
+            throw failed("Cannot skip to the next entry", e);
         }
     }
 
@@ -328,7 +328,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("previous", e);
-            throw failed("Cannot skip to the previous entry : " + e.getMessage(), e);
+            throw failed("Cannot skip to the previous entry", e);
         }
     }
 }
