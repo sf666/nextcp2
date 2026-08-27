@@ -456,6 +456,12 @@ export class DisplayContainerComponent {
   }
 
   addPlaylist(container: ContainerDto): void {
+    // Same split as startPlayback: the browser player has no server-side queue, so it gets the
+    // displayed tracks. A renderer browses the container itself unless a filter narrows it.
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.enqueue(this.displayedMusicTracks());
+      return;
+    }
     this.playlistService.addContainerToPlaylist(
       container,
       this.filterActive() ? this.displayedMusicTracks() : undefined,
@@ -471,7 +477,8 @@ export class DisplayContainerComponent {
   }
 
   playAlbum(container: ContainerDto): void {
-    this.playlistService.addContainerToPlaylistAndPlay(container, false);
+    // Through startPlayback, so the browser player is handled here too.
+    this.startPlayback(container, false);
   }
 
   playItem(musicItemDto: MusicItemDto): void {

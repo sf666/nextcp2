@@ -99,12 +99,38 @@ export class DisplayHeaderOptionsComponent implements OnInit {
    * clears the rating — it does not store a dislike.
    */
   get likeLabel(): string {
-    const noun = this.isPlaylist()
-      ? 'playlist'
-      : this.isFolder()
-        ? 'folder'
-        : 'item';
+    const noun = this.containerNoun();
     return this.isLiked ? `Unlike ${noun}` : `Like ${noun}`;
+  }
+
+  /** What the menu calls the container it was opened on. */
+  private containerNoun(): string {
+    return this.isPlaylist() ? 'playlist' : this.isFolder() ? 'folder' : 'item';
+  }
+
+  /** Player rows exist for playlists and folders only - no header without rows. */
+  showPlayerSection(): boolean {
+    return (
+      this.mediaPlayerService.mediaPlayerExists() &&
+      (this.isPlaylist() || this.isFolder())
+    );
+  }
+
+  showSidebarSection(): boolean {
+    return this.isFolder();
+  }
+
+  /** Playlists only - a folder's like belongs under "General actions". */
+  showPlaylistSection(): boolean {
+    return this.isPlaylist() && (this.canLike || this.showAddRadioStation());
+  }
+
+  showAddRadioStation(): boolean {
+    return this.isPlaylist() && this.showExtendedApi();
+  }
+
+  showExtendedApi(): boolean {
+    return !!this.deviceService.selectedMediaServerDevice().extendedApi;
   }
 
   /**
@@ -200,12 +226,6 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   }
 
   isFolder(): boolean {
-    console.log(
-      'is folder : ' +
-        this.currentContainer.objectClass.startsWith(
-          'object.container.storageFolder',
-        ),
-    );
     return this.currentContainer.objectClass.startsWith(
       'object.container.storageFolder',
     );

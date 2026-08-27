@@ -185,6 +185,65 @@ export class LocalPlayerService {
     this.playIndex(start);
   }
 
+  /**
+   * Appends tracks to the queue without disturbing what is playing - the local counterpart of a
+   * renderer's Playlist::Insert. Playback only starts when the queue was empty, so "add" never
+   * hijacks the current track.
+   */
+  public enqueue(items: MusicItemDto[]): void {
+    const playable = (items ?? []).filter((item) => !!item && !!item.streamingURL);
+    if (playable.length === 0) {
+      this.reportNothingPlayable(items);
+      return;
+    }
+    const wasEmpty = this.queue.length === 0;
+    // Both arrays get the same tracks, so `queue` stays a permutation of `sourceQueue` and
+    // switching shuffle off later still yields the full set in server order.
+    this.sourceQueue = this.sourceQueue.concat(playable);
+    this.queue = this.queue.concat(
+      this.shuffle() ? this.shuffleArray(playable) : playable,
+    );
+    this.publishQueue();
+    if (wasEmpty) {
+      this.playIndex(0);
+      return;
+    }
+    this.persistState();
+  }
+
+  /**
+   * Puts tracks directly after the one playing (Playlist::InsertNext). Falls back to appending
+   * while nothing is loaded.
+   */
+  public enqueueNext(items: MusicItemDto[]): void {
+    if (this.currentIndex < 0 || this.queue.length === 0) {
+      this.enqueue(items);
+      return;
+    }
+    const playable = (items ?? []).filter((item) => !!item && !!item.streamingURL);
+    if (playable.length === 0) {
+      this.reportNothingPlayable(items);
+      return;
+    }
+    const current = this.queue[this.currentIndex];
+    this.queue.splice(this.currentIndex + 1, 0, ...playable);
+    // Keep the unshuffled order in step. After a reload the two arrays are deserialized
+    // separately, so identity alone does not find the current track (see removeQueueIndex).
+    let sourceIndex = this.sourceQueue.indexOf(current);
+    if (sourceIndex < 0) {
+      sourceIndex = this.sourceQueue.findIndex(
+        (item) => item.streamingURL === current.streamingURL,
+      );
+    }
+    this.sourceQueue.splice(
+      sourceIndex < 0 ? this.sourceQueue.length : sourceIndex + 1,
+      0,
+      ...playable,
+    );
+    this.publishQueue();
+    this.persistState();
+  }
+
   /** Starts the queue entry at the given position (used by the player queue view). */
   public playQueueIndex(index: number): void {
     this.playIndex(index);

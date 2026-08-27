@@ -2,19 +2,17 @@
   <!-- Menu items -->
   <div class="dialogItems flex flex-col py-1">
 
-    @if(mediaPlayerService.mediaPlayerExists()) {
+    @if (showPlayerSection()) {
       <div class="section-header px-4 py-2">
         Player actions
       </div>
-
-      @if(isPlaylist()) {
-        <div class="divider my-1"></div>
+      @if (isPlaylist()) {
         <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="selectPlayerPlaylist()">
             <span class="item-icon material-symbols-outlined text-lg">save</span>
             <span>Select player playlist</span>
         </button>
       }
-      @if(isFolder()) {
+      @if (isFolder()) {
         <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="selectPlayerFolder()">
           <span class="item-icon material-symbols-outlined text-lg">save</span>
           <span>Select player folder</span>
@@ -22,11 +20,10 @@
       }
     }
 
-    @if(isFolder()) {
-      @if(mediaPlayerService.mediaPlayerExists()) {
-          <div class="divider my-1"></div>
+    @if (showSidebarSection()) {
+      @if (showPlayerSection()) {
+        <div class="divider my-1"></div>
       }
-
       <div class="section-header px-4 py-2">
         Sidebar actions
       </div>
@@ -36,14 +33,38 @@
       </button>
     }
 
-    @if(isFolder() || mediaPlayerService.mediaPlayerExists()) {
-          <div class="divider my-1"></div>
+    <!-- Acts on the playlist itself. A folder's like stays under "General actions". -->
+    @if (showPlaylistSection()) {
+      @if (showPlayerSection() || showSidebarSection()) {
+        <div class="divider my-1"></div>
+      }
+      <div class="section-header px-4 py-2">
+        Playlist actions
+      </div>
+      @if (canLike) {
+        <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="toggleLike()"
+          [attr.aria-pressed]="isLiked">
+          <span class="item-icon material-symbols-outlined text-lg" [class.filled]="isLiked"
+            [class.liked]="isLiked">favorite</span>
+          <span>{{likeLabel}}</span>
+        </button>
+      }
+      @if (showAddRadioStation()) {
+        <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="addRadioStation()">
+            <span class="item-icon material-symbols-outlined text-lg">radio</span>
+            <span>Add radio station</span>
+        </button>
+      }
+    }
+
+    @if (showPlayerSection() || showSidebarSection() || showPlaylistSection()) {
+      <div class="divider my-1"></div>
     }
 
     <div class="section-header px-4 py-2">
       General actions
     </div>
-    @if (canLike) {
+    @if (canLike && !isPlaylist()) {
       <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="toggleLike()"
         [attr.aria-pressed]="isLiked">
         <span class="item-icon material-symbols-outlined text-lg" [class.filled]="isLiked"
@@ -55,24 +76,17 @@
       <span class="item-icon material-symbols-outlined text-lg">playlist_add</span>
       <span>Add to playlist</span>
     </button>
-    
+
     <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="updateAlbumArt()">
-    <span class="item-icon material-symbols-outlined text-lg">image</span>
-    <span>Update album art</span>
+      <span class="item-icon material-symbols-outlined text-lg">image</span>
+      <span>Update album art</span>
     </button>
 
-    @if (isPlaylist() && deviceService.selectedMediaServerDevice().extendedApi) {
-    <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="addRadioStation()">
-        <span class="item-icon material-symbols-outlined text-lg">radio</span>
-        <span>Add radio station</span>
-    </button>
-    }
-
-    @if (deviceService.selectedMediaServerDevice().extendedApi) {
-    <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="selectArtistFolder()">
-        <span class="item-icon material-symbols-outlined text-lg">folder_shared</span>
-        <span>Set artist folder</span>
-    </button>
+    @if (showExtendedApi()) {
+      <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="selectArtistFolder()">
+          <span class="item-icon material-symbols-outlined text-lg">folder_shared</span>
+          <span>Set artist folder</span>
+      </button>
     }
   </div>
 </div>

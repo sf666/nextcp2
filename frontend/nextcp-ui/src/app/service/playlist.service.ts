@@ -229,6 +229,10 @@ export class PlaylistService implements OnInit {
   }
 
   public addToPlaylist(musicItemDto: MusicItemDto): void {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.enqueue([musicItemDto]);
+      return;
+    }
     const udn = this.getSelectedMediaRendererUdn();
     if (!udn) {
       return;
@@ -245,6 +249,10 @@ export class PlaylistService implements OnInit {
   }
 
   public addToPlaylistNext(musicItemDto: MusicItemDto): void {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      this.localPlayer.enqueueNext([musicItemDto]);
+      return;
+    }
     const udn = this.getSelectedMediaRendererUdn();
     if (!udn) {
       return;
@@ -269,6 +277,15 @@ export class PlaylistService implements OnInit {
     containerDto: ContainerDto,
     musicItems?: MusicItemDto[],
   ): void {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      // Container actions for the browser player belong to the view, which knows the displayed
+      // tracks (DisplayContainerComponent.addPlaylist / startPlayback). Getting here means a
+      // caller skipped that - do not send the sentinel udn to the backend, it answers 417.
+      console.warn(
+        '[playlist] container action for the browser player must be queued by the view',
+      );
+      return;
+    }
     const udn = this.getSelectedMediaRendererUdn();
     if (!udn) {
       return;
@@ -300,6 +317,15 @@ export class PlaylistService implements OnInit {
     _shuffle: boolean,
     musicItems?: MusicItemDto[],
   ): void {
+    if (this.deviceService.isLocalBrowserSelected()) {
+      // Container actions for the browser player belong to the view, which knows the displayed
+      // tracks (DisplayContainerComponent.addPlaylist / startPlayback). Getting here means a
+      // caller skipped that - do not send the sentinel udn to the backend, it answers 417.
+      console.warn(
+        '[playlist] container action for the browser player must be queued by the view',
+      );
+      return;
+    }
     const udn = this.getSelectedMediaRendererUdn();
     if (!udn) {
       return;
