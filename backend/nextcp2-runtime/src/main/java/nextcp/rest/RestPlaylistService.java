@@ -5,7 +5,6 @@ import org.jupnp.model.types.UDN;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +19,6 @@ import nextcp.dto.MusicItemDto;
 import nextcp.dto.PlayRequestDto;
 import nextcp.dto.PlaylistAddContainerRequest;
 import nextcp.dto.PlaylistState;
-import nextcp.dto.ToastrMessage;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
@@ -38,13 +36,15 @@ public class RestPlaylistService extends BaseRestService
     @Autowired
     private DeviceRegistry deviceRegistry = null;
 
-    @Autowired
-    private ApplicationEventPublisher publisher = null;
-
     //
     // UPnP playlist service
     // =======================================================================
 
+    /**
+     * A polled status read, so it degrades to null instead of failing the request the way the action
+     * endpoints below do : an absent renderer is a normal state here, not something to report on
+     * every poll. The client treats null as "no state" already.
+     */
     @PostMapping("/getState")
     public PlaylistState getState(@RequestBody String rendererUdn)
     {
@@ -80,8 +80,7 @@ public class RestPlaylistService extends BaseRestService
     {
         if (req.value == null)
         {
-            publisher.publishEvent(new ToastrMessage(null, "error", "seekId", "shall not be null"));
-            return;
+            throw failed("No playlist entry given to jump to.", null);
         }
         try
         {
@@ -92,7 +91,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("seekId", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "seekId #" + req.value, e.getMessage()));
+            throw failed("Cannot jump to playlist entry #" + req.value + " : " + e.getMessage(), e);
         }
     }
 
@@ -110,8 +109,8 @@ public class RestPlaylistService extends BaseRestService
         }
         catch (Exception e)
         {
-            log.warn("seekId", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "insert ", req.streamUrl + "failed. Message" + e.getMessage()));
+            log.warn("insert", e);
+            throw failed("Cannot add " + req.streamUrl + " : " + e.getMessage(), e);
         }
     }
     
@@ -130,8 +129,8 @@ public class RestPlaylistService extends BaseRestService
         }
         catch (Exception e)
         {
-            log.warn("seekId", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "insert ", req.streamUrl + "failed. Message" + e.getMessage()));
+            log.warn("insertNext", e);
+            throw failed("Cannot add " + req.streamUrl + " as the next entry : " + e.getMessage(), e);
         }
     }
 
@@ -147,7 +146,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("insertContainer", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "adding songs ", "Adding folder to current renderer playlist failed. Message : " + e.getMessage()));
+            throw failed("Adding the folder to the renderer playlist failed : " + e.getMessage(), e);
         }
     }
 
@@ -196,9 +195,7 @@ public class RestPlaylistService extends BaseRestService
             checkDevice(rendererDevice);
             if (rendererDevice.getPlaylistServiceBridge() == null) {
                 log.warn("{} no playlist service bridge available", rendererDevice.getFriendlyName());
-                publisher.publishEvent(new ToastrMessage(null, "error", "adding songs ", 
-                	"Device " + rendererDevice.getFriendlyName() + " has no playlist implementation set."));
-                return;
+                throw failed("Device " + rendererDevice.getFriendlyName() + " has no playlist implementation set.", null);
             }
             	
             rendererDevice.getPlaylistServiceBridge().deleteAll();
@@ -211,8 +208,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("insertAndPlayContainer", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "adding songs ", 
-            	getMediaRendererByUdn(req.mediaRendererUdn).getFriendlyName() + ": Cannot play folder. Message : " + e.getMessage()));
+            throw failed("Cannot play the folder : " + e.getMessage(), e);
         }
     }
 
@@ -228,7 +224,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("pause", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "pause ", "failed. Message : " + e.getMessage()));
+            throw failed("Cannot pause : " + e.getMessage(), e);
         }
     }
 
@@ -244,7 +240,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("deleteAll", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "deleteAll ", "Failed. Message : " + e.getMessage()));
+            throw failed("Cannot clear the playlist : " + e.getMessage(), e);
         }
     }
 
@@ -268,7 +264,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("setRepeat", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "setRepeat", "Failed. Message : " + e.getMessage()));
+            throw failed("Cannot change repeat : " + e.getMessage(), e);
         }
     }
 
@@ -284,7 +280,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("delete", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "delete ", "Failed. Message : " + e.getMessage()));
+            throw failed("Cannot remove the playlist entry : " + e.getMessage(), e);
         }
     }
 
@@ -300,7 +296,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("/play", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "/play ", "Failed. Message : " + e.getMessage()));
+            throw failed("Cannot start playback : " + e.getMessage(), e);
         }
     }
 
@@ -316,7 +312,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("next", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "next ", "Failed. Message : " + e.getMessage()));
+            throw failed("Cannot skip to the next entry : " + e.getMessage(), e);
         }
     }
 
@@ -332,7 +328,7 @@ public class RestPlaylistService extends BaseRestService
         catch (Exception e)
         {
             log.warn("previous", e);
-            publisher.publishEvent(new ToastrMessage(null, "error", "previous ", "Failed. Message : " + e.getMessage()));
+            throw failed("Cannot skip to the previous entry : " + e.getMessage(), e);
         }
     }
 }

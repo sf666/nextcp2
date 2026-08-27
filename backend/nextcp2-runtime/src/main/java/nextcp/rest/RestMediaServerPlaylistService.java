@@ -65,8 +65,7 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 			return getExtendedMediaServerByUdn(request.serverUdn).searchRadioStations(request);
 		} catch (Exception e) {
 			log.error("searchRadioStations failed : {}", request, e);
-			toast.publishErrorMessage(null, "radio search", e.getMessage());
-			return new ArrayList<>();
+			throw failed("The radio station search failed : " + e.getMessage(), e);
 		}
 	}
 
@@ -79,8 +78,7 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 			return getExtendedMediaServerByUdn(request.serverUdn).getRadioFilterValues(request);
 		} catch (Exception e) {
 			log.error("getRadioFilterValues failed : {}", request, e);
-			toast.publishErrorMessage(null, "radio filter", e.getMessage());
-			return new ArrayList<>();
+			throw failed("Cannot read the radio filter values : " + e.getMessage(), e);
 		}
 	}
 
@@ -96,7 +94,7 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 			toast.publishSuccessMessage(null, "playlist", name + " added to playlist");
 		} catch (Exception e) {
 			log.error("addRadioStationToPlaylist failed : {}", request, e);
-			toast.publishErrorMessage(null, "playlist", e.getMessage());
+			throw failed("Cannot add the station to the playlist : " + e.getMessage(), e);
 		}
 	}
 
@@ -114,9 +112,8 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 			addPlaylistToRecent(addRequest.serverUdn, addRequest.playlistObjectId);
 			mediaServerSseEvents.mediaServerRecentPlaylistChanged(getRecentServerPlaylists(addRequest.serverUdn));
 		} catch (Exception e) {
-			String errorText = e.getMessage();
-			toast.publishErrorMessage(null, "playlist", errorText);
 			log.warn("adding song to server playlist", e);
+			throw failed("Cannot add the song to the playlist : " + e.getMessage(), e);
 		}
 	}
 
@@ -160,6 +157,10 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 	 * @param serverUdn
 	 * @return
 	 */
+	/**
+	 * A status read : a device-selection change reloads this on its own, so an absent server is a
+	 * normal state here and degrades to an empty list instead of failing the request.
+	 */
 	@PostMapping("/getServerPlaylists")
 	public ServerPlaylists getServerPlaylists(@RequestBody String serverUdn) {
 		try {
@@ -174,6 +175,11 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 	 * 
 	 * @param serverUdn
 	 * @return
+	 */
+	/**
+	 * A status read, and one the actions above call themselves to push their SSE update. It must
+	 * therefore never fail : a throw here would report an error for an add or create that already
+	 * succeeded.
 	 */
 	@PostMapping("/getRecentServerPlaylists")
 	public ServerPlaylists getRecentServerPlaylists(@RequestBody String serverUdn) {
@@ -201,10 +207,14 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 			return all;
 
 		} catch (Exception e) {
-			log.warn("getServerPlaylists", e);
-			ServerPlaylists spl = new ServerPlaylists();
-			spl.serverPlaylists = new ArrayList<>();
-			return new ServerPlaylists();
+			log.warn("getRecentServerPlaylists", e);
+			ServerPlaylists empty = new ServerPlaylists();
+			empty.mediaServerUdn = serverUdn;
+			empty.containerId = "-1";
+			// An initialised list, not null : the old code built one into a local and then returned a
+			// different, empty instance whose serverPlaylists stayed null.
+			empty.serverPlaylists = new ArrayList<>();
+			return empty;
 		}
 	}
 
@@ -224,8 +234,7 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 			return pi.getId();
 		} catch (Exception e) {
 			log.warn("createPlaylist", e);
-			toast.publishErrorMessage(null, "playlist", "create playlist failed : " + e.getMessage());
-			return "";
+			throw failed("Cannot create the playlist : " + e.getMessage(), e);
 		}
 	}
 
@@ -242,7 +251,7 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 			removePlaylistFromRecent(deleteRequest.serverUdn, deleteRequest.objectId);
 		} catch (Exception e) {
 			log.warn("removing song from server playlist", e);
-			toast.publishErrorMessage(null, "playlist", "Removing song failed. Message : " + e.getMessage());
+			throw failed("Cannot remove the object from the media server : " + e.getMessage(), e);
 		}
 	}
 

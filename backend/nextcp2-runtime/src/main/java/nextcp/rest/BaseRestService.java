@@ -12,6 +12,7 @@ import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
+import nextcp.util.BackendException;
 
 @Component
 public class BaseRestService
@@ -108,6 +109,22 @@ public class BaseRestService
             return extended;
         }
         return null;
+    }
+
+    /**
+     * Turns a failed action into something the client can show. Endpoints used to swallow the
+     * exception and push a toast instead, which left the request answering 200 - so the client
+     * reported success and contradicted its own error toast. BackendExceptionAdvice maps this to 417
+     * with the message, and HttpService shows it exactly once.
+     *
+     * Status reads are the exception : they degrade to an empty answer instead, because an absent
+     * device is a normal state there and must not report on every poll.
+     */
+    protected BackendException failed(String message, Exception cause)
+    {
+        return cause == null ?
+            new BackendException(BackendException.GENERIC_ERROR, message) :
+            new BackendException(BackendException.GENERIC_ERROR, message, cause);
     }
 
     protected DeviceRegistry getDeviceRegistry()

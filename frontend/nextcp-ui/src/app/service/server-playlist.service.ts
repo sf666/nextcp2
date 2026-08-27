@@ -173,8 +173,9 @@ export class ServerPlaylistService {
     const uri = '/createPlaylist';
     let ret = this.httpService.post<string>(this.baseUri, uri, createPL);
     ret.subscribe((newId) => {
-      // An empty id means the server refused the create and already reported
-      // why — nothing changed, so nothing to refresh.
+      // A refused create now answers with an error status, so this callback does not even run.
+      // The guard stays for an id that arrives empty for any other reason: nothing was created,
+      // so there is nothing to refresh.
       if (!newId) {
         return;
       }

@@ -55,6 +55,19 @@ export class GenericResultService {
     this.displaySuccessMessage(header, body);
   }
 
+  /**
+   * The reason out of an error response, whatever shape the backend gave it: a plain string body
+   * (BackendExceptionAdvice returns one), Spring's ProblemDetail for a ResponseStatusException
+   * (`detail`), or an object with `message`. Reading only one of these left the toast empty.
+   */
+  private httpErrorText(err: any): string {
+    const body = err?.error;
+    if (typeof body === 'string' && body.length > 0) {
+      return body;
+    }
+    return body?.message ?? body?.detail ?? body?.error ?? err?.message ?? String(err);
+  }
+
   public displayHttpError(err: any, toastrMessage: string): void {
     if (err.status == 504) {
       this.displayErrorMessage(
@@ -62,17 +75,9 @@ export class GenericResultService {
         'gateway error',
       );
     } else if (err.status == 417) {
-      this.toastr.error(err.error.message, 'invalid request');
+      this.toastr.error(this.httpErrorText(err), 'invalid request');
     } else {
-      if (err.error?.message) {
-        this.toastr.error(err.error.message, toastrMessage);
-      } else if (err.error) {
-        this.toastr.error(err.error, toastrMessage);
-      } else if (err.message) {
-        this.toastr.error(err.message, toastrMessage);
-      } else {
-        this.toastr.error(err, toastrMessage);
-      }
+      this.toastr.error(this.httpErrorText(err), toastrMessage);
     }
     return console.error(err);
   }
