@@ -730,6 +730,9 @@ export class DisplayContainerHeaderComponent implements OnInit {
         // to their title (see showTitleLike).
         canLike: this.likePossible() && !this.showTitleLike(),
         isLiked: this.isLiked(),
+        // Child folders only (albums live in albumDto) - "Set artist folder" needs a folder
+        // that holds artist folders, so the menu decides from this count.
+        childFolderCount: this.currentContainerItem().containerDto?.length ?? 0,
       },
     });
     // The menu only reports the choice; the rating call stays here, where the

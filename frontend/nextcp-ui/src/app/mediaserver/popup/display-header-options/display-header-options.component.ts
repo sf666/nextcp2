@@ -54,6 +54,8 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   /** Folders carry their like here instead of next to the title. */
   canLike = false;
   isLiked = false;
+  /** How many folders this container holds; albums and tracks do not count. */
+  private childFolderCount = 0;
 
   constructor() {
     const _matDialogRef =
@@ -66,6 +68,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
       addToPlaylistOutput: OutputEmitterRef<ContainerDto>;
       canLike: boolean;
       isLiked: boolean;
+      childFolderCount: number;
     }>(MAT_DIALOG_DATA);
 
     this._matDialogRef = _matDialogRef;
@@ -73,6 +76,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
     this.currentContainer = data.currentContainer;
     this.canLike = data.canLike ?? false;
     this.isLiked = data.isLiked ?? false;
+    this.childFolderCount = data.childFolderCount ?? 0;
     this.triggerElementRef = data.trigger;
     this.mediaPlayerConfigDto =
       this.configurationService.mediaPlayerConfigDto();
@@ -131,6 +135,16 @@ export class DisplayHeaderOptionsComponent implements OnInit {
 
   showExtendedApi(): boolean {
     return !!this.deviceService.selectedMediaServerDevice().extendedApi;
+  }
+
+  /**
+   * The album-artist folder is the one that holds the artist folders, so the row only makes sense
+   * on a folder that has folders of its own - not on a playlist and not on a folder of tracks.
+   */
+  showArtistFolderRow(): boolean {
+    return (
+      this.showExtendedApi() && this.isFolder() && this.childFolderCount > 2
+    );
   }
 
   /**
