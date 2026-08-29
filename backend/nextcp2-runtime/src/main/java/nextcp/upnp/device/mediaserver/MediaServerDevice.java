@@ -288,7 +288,11 @@ public class MediaServerDevice extends BaseDevice {
 			}
 			return out;
 		} catch (Exception e) {
-			log.error("cannot browse to {}", inp.ObjectID, e);
+			// No stack trace : ActionCallback already logged the device and the SOAP fault, and the trace
+			// is always the same fixed chain (ActionCallback -> Browse -> requestContent). It cost 66 log
+			// lines per refused browse for nothing.
+			log.warn("cannot browse to {} ({})", inp.ObjectID, e.getClass().getSimpleName());
+			log.debug("browse failure detail", e);
 			// A refused browse used to be indistinguishable from an empty folder: the UI rendered nothing
 			// and said nothing, which looks like nextCP lost the content. It regularly is the media server
 			// failing on its own (UMS has been seen answering a Browse with UPnP error 501 out of a
