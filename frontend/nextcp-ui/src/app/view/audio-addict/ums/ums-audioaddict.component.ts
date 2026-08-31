@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  OnInit,
   signal,
   inject,
 } from '@angular/core';
@@ -34,7 +35,7 @@ import { NavBarComponent } from '../../nav-bar/nav-bar.component';
   providers: [ContentDirectoryService],
   imports: [NavBarComponent, DisplayContainerComponent],
 })
-export class UmsAudioaddictComponent {
+export class UmsAudioaddictComponent implements OnInit {
   layoutService = inject(LayoutService);
   private deviceService = inject(DeviceService);
   private persistenceService = inject(PersistenceService);
@@ -62,6 +63,13 @@ export class UmsAudioaddictComponent {
     toObservable(this.deviceService.selectedMediaServerDevice).subscribe(
       (data) => this.mediaServerChanged(data),
     );
+  }
+
+  ngOnInit(): void {
+    // This view renders its own nav bar, so it must claim the framed layout.
+    // Without it the flags of the previously shown view stay active (e.g. the
+    // Radio view hides the nav bar) and the nav bar would remain invisible.
+    this.layoutService.setFramedView();
   }
 
   mediaServerChanged(data: MediaServerDto): void {
