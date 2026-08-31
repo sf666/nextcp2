@@ -177,6 +177,14 @@ export class DisplayContainerComponent {
   private readonly destroyRef = inject(DestroyRef);
   private subscribedCds: ContentDirectoryService | null = null;
   private restoreSub?: Subscription;
+  /**
+   * Scroll offset of the page at the moment an in-place refresh started, null while
+   * no such browse is pending. A like, a new cover or an update id from the media
+   * server browses the container again without the user having navigated anywhere,
+   * and the list is rebuilt page by page — which drops the position unless it is
+   * put back once the last page has arrived.
+   */
+  private keepScrollTop: number | null = null;
 
   constructor() {
     // Restore scroll after a browse settles. browseFinished$ fires once per
@@ -195,9 +203,20 @@ export class DisplayContainerComponent {
       }
       this.restoreSub?.unsubscribe();
       this.subscribedCds = cds;
-      this.restoreSub = cds.browseFinished$
-        .pipe(debounceTime(250))
-        .subscribe(() => {
+      // Record where the page stands before the refresh replaces the list.
+      this.restoreSub = cds.inPlaceRefreshStarted$.subscribe(() => {
+        this.keepScrollTop = this.scrollParent()?.scrollTop ?? null;
+      });
+      this.restoreSub.add(
+        cds.browseFinished$.pipe(debounceTime(250)).subscribe(() => {
+          // Nothing was navigated to, so the recorded offset is the target — not the
+          // entry this view was entered from, which would jump the list back to it.
+          const keepAt = this.keepScrollTop;
+          this.keepScrollTop = null;
+          if (keepAt !== null && cds.isInPlaceRefresh()) {
+            this.restoreScrollTop(keepAt);
+            return;
+          }
           const id = this.cdsBrowsePathService.scrollToID;
           if (
             this.albumTile()?.scrollToId(id) ||
@@ -207,7 +226,8 @@ export class DisplayContainerComponent {
             return;
           }
           this.cdsBrowsePathService.scrollIntoViewID(id);
-        });
+        }),
+      );
     });
 
     // A filter belongs to the listing it was set in, not to the view. One view shows the album list,
@@ -243,6 +263,23 @@ export class DisplayContainerComponent {
     this.selectedGenres.set(state.genres);
     this.sortCriteria.set(state.sort);
     this.ratingFilter.set(state.rating);
+  }
+
+  /** The page's scroll container; every browse view lives inside it. */
+  private scrollParent(): HTMLElement | null {
+    return document.getElementById('mainContent');
+  }
+
+  private restoreScrollTop(top: number): void {
+    const parent = this.scrollParent();
+    if (!parent) {
+      return;
+    }
+    // The refreshed listing can be shorter than the one that was on screen — a
+    // track that a rating filter now hides, an entry that was deleted — so the
+    // recorded offset may sit past its end by now.
+    const maxTop = Math.max(0, parent.scrollHeight - parent.clientHeight);
+    parent.scrollTop = Math.min(top, maxTop);
   }
 
   /**

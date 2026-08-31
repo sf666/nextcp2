@@ -455,6 +455,17 @@ export class ContentDirectoryService {
   // notify other about content change
   browseFinished$: Subject<ContainerItemDto> = new Subject();
 
+  /**
+   * Emitted when the listing on screen is about to be browsed again in place - a
+   * rating was set, a cover replaced, the media server bumped its update id. The
+   * user did not navigate anywhere, so the view has to keep the position it is at;
+   * it records it on this signal, before the result replaces the list.
+   */
+  inPlaceRefreshStarted$: Subject<void> = new Subject();
+
+  // Whether the browse currently running replaces the listing in place.
+  private inPlaceRefresh = false;
+
   // to which page was browsed
 
   private TURN_PAGE_AFTER = 60;
@@ -709,12 +720,25 @@ export class ContentDirectoryService {
     );
   }
 
+  /**
+   * @param inPlace true when this browse re-reads the container already on screen,
+   *                so the view restores its scroll offset instead of the entry it
+   *                navigated from.
+   */
   private browseChildrenByRequest(
     browseRequestDto: BrowseRequestDto,
+    inPlace = false,
   ): Observable<ContainerItemDto> {
     if (browseRequestDto.mediaServerUDN?.length < 1) {
       console.log(this.id + ' UDN not set. Stop browsing.');
       return new Subject<ContainerItemDto>();
+    }
+
+    // Set before the request goes out: a navigation started while a refresh was
+    // still running has to win, and it clears the flag by coming through here.
+    this.inPlaceRefresh = inPlace;
+    if (inPlace) {
+      this.inPlaceRefreshStarted$.next();
     }
 
     // Abort stale paging streams when a new browse request starts.
@@ -860,7 +884,12 @@ export class ContentDirectoryService {
       '',
       this.deviceService.selectedMediaServerDevice().udn,
     );
-    this.browseChildrenByRequest(browseRequestDto);
+    this.browseChildrenByRequest(browseRequestDto, true);
+  }
+
+  /** True while the browse that is running re-reads the container already on screen. */
+  public isInPlaceRefresh(): boolean {
+    return this.inPlaceRefresh;
   }
 
   /**
