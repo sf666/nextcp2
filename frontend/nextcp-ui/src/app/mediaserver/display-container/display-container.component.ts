@@ -113,6 +113,16 @@ export class DisplayContainerComponent {
   );
 
   /**
+   * The hero only makes sense once there is a listing to describe. Without a
+   * selected media server (or before the first browse returns) the container is
+   * the empty DTO, and the header would stand an empty band with a black cover
+   * placeholder over an otherwise blank page.
+   */
+  headerVisible = computed(
+    () => this.showTopHeader() && this.currentContainerId().length > 0,
+  );
+
+  /**
    * True while anything narrows the listing. Used to tell "3 items" from
    * "1 of 3 items" — without it, a filtered section still claims the full count and
    * the user cannot see that something is being held back.

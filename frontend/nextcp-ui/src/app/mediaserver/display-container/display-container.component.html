@@ -9,7 +9,7 @@
 <!-- Top browsing element: Displays image and information about current container -->
 <div id="display-container-component-top-id" class="flex flex-col w-full"
   [class.is-search]="isSearchResult()">
-@if (showTopHeader()) {
+@if (headerVisible()) {
   <div class="flex w-full dc-header-sticky">
     <display-container-header class="flex grow"
     [contentDirectoryService]="contentHandler()!.contentDirectoryService"
@@ -32,7 +32,7 @@
 Main Content
 ==========================================
 -->
-<div id="display-container-main-content" class="flex grow ms-3 me-6" [class.with-sticky-header]="showTopHeader()" [class.has-action-buttons]="musicTracks.length > 0">
+<div id="display-container-main-content" class="flex grow ms-3 me-6" [class.with-sticky-header]="headerVisible()" [class.has-action-buttons]="musicTracks.length > 0">
   <div class="flex flex-col grow mb-4">
     <!--
   playlist elements on first position
