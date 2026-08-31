@@ -625,12 +625,34 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		log.debug("container countainer count : " + resultContainer.containerDto.size());
 		for (MusicItemDto item : resultContainer.musicItemDto) {
 			log.debug("music item found named : {} ", item.title);
-			if (item.title.equalsIgnoreCase(title)) {
+			if (title.equalsIgnoreCase(item.title)) {
 				log.info("browseChildrenSearchItem : returning folderID {}", item.objectID);
 				return item.objectID;
 			}
 		}
+		// A freshly created item is a stub of a few bytes that the server cannot read as audio yet. If it was imported, it
+		// may lay in other containers
+		String id = findByTitle(resultContainer.containerDto, title);
+		if (id == null) {
+			id = findByTitle(resultContainer.albumDto, title);
+		}
+		if (id != null) {
+			log.info("browseChildrenSearchItem : found {} outside the music items, returning id {}", title, id);
+			return id;
+		}
 		log.info("no objects found in container {} for title {}", objectId, title);
+		return null;
+	}
+
+	private String findByTitle(List<ContainerDto> candidates, String title) {
+		if (candidates == null) {
+			return null;
+		}
+		for (ContainerDto candidate : candidates) {
+			if (candidate != null && title.equalsIgnoreCase(candidate.title)) {
+				return candidate.id;
+			}
+		}
 		return null;
 	}
 
