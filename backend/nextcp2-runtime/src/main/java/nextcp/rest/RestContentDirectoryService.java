@@ -180,7 +180,7 @@ public class RestContentDirectoryService extends BaseRestService {
 		try {
 			ExtendedApiMediaDevice device = getExtendedMediaServerByUdn(updateRequest.mediaServerDevice);
 			device.updateAlbumArtURI(updateRequest);
-			publisher.publishEvent(new ToastrMessage(null, "success", "album cover", "The album cover was updated. Reload the container to see it."));
+			publisher.publishEvent(new ToastrMessage(null, "success", "album cover", "The album cover was updated."));
 		} catch (Exception e) {
 			log.error("updateAlbumArtUri failed : {}", updateRequest, e);
 			throw failed("Cannot update the album cover", e);
