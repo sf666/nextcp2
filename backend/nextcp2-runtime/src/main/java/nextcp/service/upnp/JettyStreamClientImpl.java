@@ -19,7 +19,9 @@ package nextcp.service.upnp;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 import org.eclipse.jetty.client.BytesRequestContent;
+import org.eclipse.jetty.client.CompletableResponseListener;
 import org.eclipse.jetty.client.ContentResponse;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.Request;
@@ -59,6 +61,9 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
 	private static final Logger LOGGER = LoggerFactory.getLogger(JettyStreamClientImpl.class);
 
 	protected final StreamClientConfigurationImpl configuration;
+
+	/** A DIDL answer for a large folder is several MiB; Jetty's own default of 2 MiB is too small. */
+	private static final int MAX_RESPONSE_BYTES = 64 * 1024 * 1024;
 	protected final HttpClient httpClient;
 
 	public JettyStreamClientImpl(StreamClientConfigurationImpl configuration) throws InitializationException {
@@ -158,7 +163,12 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
 				StreamsLoggerHelper.logStreamClientRequestMessage(requestMessage);
 			}
 			try {
-				final ContentResponse httpResponse = request.send();
+				// Not request.send(): that buffers through Jetty's 2 MiB default, and a browse of a
+				// folder with a few hundred entries goes past it. Jetty then aborts the exchange -
+				// the server logs a broken pipe - and the browse comes back empty with no error.
+				final ContentResponse httpResponse = new CompletableResponseListener(request, MAX_RESPONSE_BYTES)
+						.send()
+						.get(configuration.getTimeoutSeconds(), TimeUnit.SECONDS);
 
 				LOGGER.trace("Received HTTP response: {}", httpResponse.getReason());
 
