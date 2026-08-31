@@ -93,13 +93,19 @@ public class UpnpDeviceDiscovery implements RegistryListener {
 	public void remoteDeviceRemoved(Registry registry, RemoteDevice device) {
 		log.debug("remoteDeviceRemoved : {}", device.getDetails().getFriendlyName());
 
-		if (device.getType().getType().equals(MEDIA_SERVER_TYPE)) {
-			deviceRegistry.removeMediaServerDevice(device);
-		} else if (isMediaRenderer(device)) {
-			deviceRegistry.removeMediaRendererDevice(device);
-		} else if (device.getType().getType().equals(JMINIM_MONITOR_TYPE) &&
-			device.getType().getNamespace().equalsIgnoreCase("jminim-org")) {
-			deviceRegistry.removeMediaServerExtDevice(device);
+		// jupnp calls this on its own thread. An exception here would kill that thread with the
+		// removal half done, and the device stays in the registry while nothing reaches it any more.
+		try {
+			if (device.getType().getType().equals(MEDIA_SERVER_TYPE)) {
+				deviceRegistry.removeMediaServerDevice(device);
+			} else if (isMediaRenderer(device)) {
+				deviceRegistry.removeMediaRendererDevice(device);
+			} else if (device.getType().getType().equals(JMINIM_MONITOR_TYPE) &&
+				device.getType().getNamespace().equalsIgnoreCase("jminim-org")) {
+				deviceRegistry.removeMediaServerExtDevice(device);
+			}
+		} catch (Exception e) {
+			log.warn("removing device failed : {}", device.getDetails().getFriendlyName(), e);
 		}
 	}
 

@@ -792,7 +792,13 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     // called when device was removed from registry
     public void removed() {
     	setServicesOffline(true);
-    	physicalDriver.stop();
+    	// A device can be removed before it ever got a driver - it went away while it was still
+    	// being set up, which is what a media server restart looks like from here. Throwing at
+    	// this point killed the jupnp listener thread and left the device half removed: still
+    	// listed in the registry, but no action reaching it any more.
+    	if (physicalDriver != null) {
+    		physicalDriver.stop();
+    	}
     }
     
 	public void checkServicesOnline() {
