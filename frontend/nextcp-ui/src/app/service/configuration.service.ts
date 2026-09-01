@@ -222,19 +222,6 @@ export class ConfigurationService {
     );
   }
 
-  public updateServerPlaylistId(udn: string, playlistId: string) {
-    if (!udn) {
-      return '';
-    }
-    var sc = this.findServerConfig(udn);
-    if (sc) {
-      sc.playistObjectId = playlistId;
-      this.saveMediaServerConfig(sc);
-    } else {
-      console.log('[updateServerPlaylistId] : no server udn given.');
-    }
-  }
-
   public getServerConfig() {
     return this.serverConfigDto();
   }

@@ -83,6 +83,7 @@ export class ContainerRatingComponent {
         previousRating,
         newRating,
         this.container.parentID,
+        this.container.objectClass,
       )
       .pipe(take(1), timeout(RATING_TIMEOUT_MS))
       .subscribe({

@@ -625,6 +625,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
         previousRating,
         newRating,
         this.currentContainer.id,
+        this.currentContainer.objectClass,
       )
       .subscribe({
         next: () => this.currentContainerRating.set(newRating),

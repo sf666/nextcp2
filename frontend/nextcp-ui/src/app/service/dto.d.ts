@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-08-26 13:15:21.
+// Generated using typescript-generator version 4.1.1 on 2026-09-01 15:18:54.
 
 export interface AddRadioStationRequest {
     serverUdn: string;
@@ -175,6 +175,11 @@ export interface ContainerItemDto {
     allTracksSameAlbumIds: MusicAlbumIds;
     totalMatches: number;
     resourceId: string;
+}
+
+export interface ContainerUpdateIdsDto {
+    mediaServerUdn: string;
+    containerIds: string[];
 }
 
 export interface CreateServerPlaylistVO {
@@ -509,7 +514,6 @@ export interface ServerDeviceConfiguration {
     displayString: string;
     enabled: boolean;
     mediaServer: MediaServerDto;
-    playistObjectId: string;
     updateRatingInFile: boolean;
 }
 
@@ -531,11 +535,6 @@ export interface ServerPlaylists {
     mediaServerUdn: string;
     containerId: string;
     serverPlaylists: ServerPlaylistDto[];
-}
-
-export interface ContainerUpdateIdsDto {
-    mediaServerUdn: string;
-    containerIds: string[];
 }
 
 export interface SpotifyConfigDto {

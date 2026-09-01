@@ -16,20 +16,18 @@ public class ServerDeviceConfiguration
     public String displayString;
     public Boolean enabled;
     public MediaServerDto mediaServer;
-    public String playistObjectId;
     public Boolean updateRatingInFile;
 
     public ServerDeviceConfiguration()
     {
     }
 
-    public ServerDeviceConfiguration(String ip, String displayString, Boolean enabled, MediaServerDto mediaServer, String playistObjectId, Boolean updateRatingInFile)
+    public ServerDeviceConfiguration(String ip, String displayString, Boolean enabled, MediaServerDto mediaServer, Boolean updateRatingInFile)
     {
         this.ip = ip;
         this.displayString = displayString;
         this.enabled = enabled;
         this.mediaServer = mediaServer;
-        this.playistObjectId = playistObjectId;
         this.updateRatingInFile = updateRatingInFile;
     }
     
@@ -42,7 +40,6 @@ public class ServerDeviceConfiguration
         sb.append("displayString=").append(this.displayString).append(", ");
         sb.append("enabled=").append(this.enabled).append(", ");
         sb.append("mediaServer=").append(this.mediaServer).append(", ");
-        sb.append("playistObjectId=").append(this.playistObjectId).append(", ");
         sb.append("updateRatingInFile=").append(this.updateRatingInFile).append(", ");
         sb.append("]");
         return sb.toString();

@@ -142,7 +142,6 @@ ServerDeviceConfiguration:
    displayString: String
    enabled: Boolean
    mediaServer: MediaServerDto
-   playistObjectId: String
    updateRatingInFile: Boolean
 
 MusicbrainzSupport:

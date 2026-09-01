@@ -17,7 +17,6 @@ import {
   MusicItemIdDto,
 } from 'src/app/service/dto';
 import { MediaPlayerService } from 'src/app/service/media-player/media-player.service';
-import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
 import {
   InputPopupComponent,
   InputPopupData,
@@ -37,7 +36,6 @@ const MENU_WIDTH = 320;
 })
 export class DisplayHeaderOptionsComponent implements OnInit {
   mediaPlayerService = inject(MediaPlayerService);
-  serverPlaylistService = inject(ServerPlaylistService);
   private configurationService = inject(ConfigurationService);
   deviceService = inject(DeviceService);
   private popupService = inject(PopupService);
@@ -118,10 +116,6 @@ export class DisplayHeaderOptionsComponent implements OnInit {
       this.mediaPlayerService.mediaPlayerExists() &&
       (this.isPlaylist() || this.isFolder())
     );
-  }
-
-  showSidebarSection(): boolean {
-    return this.isFolder();
   }
 
   /** Playlists only - a folder's like belongs under "General actions". */
@@ -215,15 +209,6 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   selectPlayerFolder(): void {
     this.mediaPlayerConfigDto.addToFolderId = this.getCurrentContainerIdDto();
     this.configurationService.saveMediaPlayerConfig(this.mediaPlayerConfigDto);
-    this.close();
-  }
-
-  selectPlayerFolderSidebar(): void {
-    this.configurationService.updateServerPlaylistId(
-      this.deviceService.selectedMediaServerDevice().udn,
-      this.getCurrentContainerIdDto().id,
-    );
-    this.serverPlaylistService.updateServerAccessiblePlaylists();
     this.close();
   }
 

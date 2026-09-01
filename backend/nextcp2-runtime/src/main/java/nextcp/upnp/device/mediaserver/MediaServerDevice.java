@@ -2,6 +2,7 @@ package nextcp.upnp.device.mediaserver;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.jupnp.model.meta.RemoteDevice;
@@ -45,15 +46,14 @@ public class MediaServerDevice extends BaseDevice {
 
 	private static final Logger log = LoggerFactory.getLogger(MediaServerDevice.class.getName());
 
+	private static final long PLAYLIST_SEARCH_LIMIT = 999;
+
 	private ContentDirectoryService contentDirectoryService;
 
 	private ContentDirectoryEventListener contentDirectoryEventListener;
 
 	private SearchSupport searchSupportDelegate = null;
 
-    @Autowired
-    private ServerConfig serverConfigService = null;
-	
 	@Autowired
 	private ServerConfig serverConfig = null;
 
@@ -127,30 +127,25 @@ public class MediaServerDevice extends BaseDevice {
 	}
 
 	/**
-	 * Read playlist from given folder
-	 * 
-	 * @param folderId
-	 * @return
+	 * All liked playlists, sorted by display name. This is what the sidebar shows.
 	 */
-	public ServerPlaylists searchMyPlaylistsItems(String folderId) {
+	public ServerPlaylists searchLikedPlaylists() {
 		ServerPlaylists serverPlaylists = new ServerPlaylists();
+		serverPlaylists.mediaServerUdn = getUdnAsString();
+		serverPlaylists.serverPlaylists = new ArrayList<>();
 		try {
-			serverPlaylists.mediaServerUdn = getUdnAsString();
-			serverPlaylists.serverPlaylists = new ArrayList<>();
-			ContainerItemDto playlistFolder = browseChildren(folderId, 999);
-			for (ContainerDto pl : playlistFolder.containerDto) {
-				if ("object.container.playlistContainer".equalsIgnoreCase(pl.objectClass)) {
-					// No browse per playlist here. Asking a media server for the number of entries makes it
-					// read the playlist and resolve every track, so filling the sidebar cost one full
-					// playlist scan per entry - for a number the sidebar does not even show. The count is
-					// fetched where it is displayed, in the add to playlist dialog.
-					// strip extension if delivered
-					String title = pl.title.lastIndexOf(".") > -1 ? pl.title.substring(0, pl.title.lastIndexOf(".")) : pl.title;
-					ServerPlaylistDto dto = new ServerPlaylistDto(pl.albumartUri, title, pl.id, null, null);
-					serverPlaylists.serverPlaylists.add(dto);
-					log.info("Found server based playlist name : {}", dto);
-				}
+			for (ContainerDto pl : searchSupportDelegate.searchLikedPlaylists(PLAYLIST_SEARCH_LIMIT)) {
+				// No browse per playlist here. Asking a media server for the number of entries makes it
+				// read the playlist and resolve every track, so filling the sidebar cost one full
+				// playlist scan per entry - for a number the sidebar does not even show. The count is
+				// fetched where it is displayed, in the add to playlist dialog.
+				// strip extension if delivered
+				String title = pl.title.lastIndexOf(".") > -1 ? pl.title.substring(0, pl.title.lastIndexOf(".")) : pl.title;
+				ServerPlaylistDto dto = new ServerPlaylistDto(pl.albumartUri, title, pl.id, null, null);
+				serverPlaylists.serverPlaylists.add(dto);
+				log.debug("Found liked server playlist : {}", dto);
 			}
+			serverPlaylists.serverPlaylists.sort(Comparator.comparing(dto -> dto.playlistName, String.CASE_INSENSITIVE_ORDER));
 		} catch (Exception e) {
 			log.error("search exception", e);
 		}
@@ -191,9 +186,7 @@ public class MediaServerDevice extends BaseDevice {
 	}
 	
 	public ServerPlaylists getServerPlaylists() throws JsonMappingException, JsonProcessingException {
-		ServerDeviceConfiguration sc = serverConfigService.getMediaServerConfig(getUdnAsString());
-		ServerPlaylists spl = searchMyPlaylistsItems(sc.playistObjectId);
-		return spl;
+		return searchLikedPlaylists();
 	}
 
 	private ContainerItemDto fillResultStructureExtracted(BrowseInput inp, DIDLContent didl, ContainerItemDto result) {

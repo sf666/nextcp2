@@ -547,22 +547,10 @@ export class ContentDirectoryService {
       return;
     }
 
-    const createdHere = change.containerId === current;
-    // The playlist folder holds exactly what just changed, so it is stale even
-    // when the id lookup above found nothing: the playlist dialog also lists
-    // playlists it found by search, and a search hit can carry a different
-    // object id than the same playlist has when browsed.
-    const showsPlaylistFolder = current === this.configuredPlaylistFolderId();
-
-    if (createdHere || showsPlaylistFolder) {
+    // A playlist is created in the container that is on screen, so that is the only one to refresh.
+    if (change.containerId === current) {
       this.refreshCurrentContainer();
     }
-  }
-
-  /** Object id of the folder holding the user's playlists, '' if unconfigured. */
-  private configuredPlaylistFolderId(): string {
-    const udn = this.deviceService.selectedMediaServerDevice().udn;
-    return this.configService.findServerConfig(udn)?.playistObjectId ?? '';
   }
 
   //

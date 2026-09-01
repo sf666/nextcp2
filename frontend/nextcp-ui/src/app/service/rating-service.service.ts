@@ -1,5 +1,6 @@
 import { CdsUpdateService } from './cds-update.service';
 import { DeviceService } from './device.service';
+import { ServerPlaylistService } from './server-playlist.service';
 import { Subject } from 'rxjs';
 import { MusicItemIdDto, UpdateStarRatingRequest } from './dto.d';
 import { HttpService } from './http.service';
@@ -11,6 +12,9 @@ import { Injectable, inject } from '@angular/core';
  */
 export const RATING_LIKED = 5;
 export const RATING_DISLIKED = 0;
+
+/** upnp:class of a playlist container. */
+const PLAYLIST_CONTAINER_CLASS = 'object.container.playlistContainer';
 
 /**
  * Values of the rating filter in the browse header. ANY switches the filter off, the
@@ -48,6 +52,7 @@ export class RatingServiceService {
   private httpService = inject(HttpService);
   private deviceSerice = inject(DeviceService);
   private cdsUpdateService = inject(CdsUpdateService);
+  private serverPlaylistService = inject(ServerPlaylistService);
 
   private baseUri = '/RatingService';
 
@@ -98,6 +103,7 @@ export class RatingServiceService {
     previousRating: number | undefined,
     newRating: number | undefined,
     containerId?: string,
+    objectClass?: string,
   ): Subject<void> {
     const uri = `/setStarRating`;
 
@@ -115,10 +121,18 @@ export class RatingServiceService {
       mediaServerDevice: this.deviceSerice.selectedMediaServerDevice().udn,
     } as unknown as UpdateStarRatingRequest;
 
-    return this.announceTo(
+    const result = this.announceTo(
       this.httpService.post<void>(this.baseUri, uri, srr),
       containerId,
     );
+    // The sidebar lists the liked playlists, so a like on one changes it.
+    if (objectClass?.startsWith(PLAYLIST_CONTAINER_CLASS)) {
+      result.subscribe({
+        next: () => this.serverPlaylistService.updateServerAccessiblePlaylists(),
+        error: () => {},
+      });
+    }
+    return result;
   }
 
   public syncRatingsFromMusicBrainzToBackend(): Subject<string> {

@@ -27,6 +27,11 @@ public class SearchSupport
 {
     private static final Logger log = LoggerFactory.getLogger(SearchSupport.class.getName());
 
+    /** A like is five stars, a dislike is zero, unrated is a third state. */
+    private static final int RATING_LIKED = 5;
+
+    private static final String UPNP_RATING = "upnp:rating";
+
     private ContentDirectoryService contentDirectoryService = null;
     private DidlContent didlContent = new DidlContent();
     private MediaServerDevice mediaServerDevice = null;
@@ -54,6 +59,29 @@ public class SearchSupport
     public String getSearchCaps()
     {
         return searchCaps;
+    }
+
+    /** Whether this media server accepts the user rating as a search criterion. */
+    public boolean supportsRatingSearch()
+    {
+        return searchCaps != null && searchCaps.toLowerCase().contains(UPNP_RATING);
+    }
+
+    /**
+     * All liked playlists, wherever they live on the server. Empty if the server cannot search on the rating.
+     */
+    public List<ContainerDto> searchLikedPlaylists(long requestCount)
+    {
+        List<ContainerDto> container = new ArrayList<>();
+        if (!supportsRatingSearch())
+        {
+            log.warn("media server does not offer {} as a search criterion, so it has no liked playlists. SearchCaps : {}", UPNP_RATING, searchCaps);
+            return container;
+        }
+        // No SortCriteria : dc:title resolves to the full file path there. The caller sorts by display name.
+        String searchCriteria = String.format("( upnp:class derivedfrom \"object.container.playlistContainer\" and %s = \"%d\" )", UPNP_RATING, RATING_LIKED);
+        searchContainer(searchCriteria, "", container, requestCount, null);
+        return container;
     }
 
     /**
@@ -107,13 +135,21 @@ public class SearchSupport
 
     private int searchAndAddContainer(String quickSearch, String sortCriteria, List<ContainerDto> container, String upnpClass, long requestCount, String parentObjectID)
     {
+        String searchCriteria;
+        if (!StringUtils.isAllBlank(quickSearch)) {
+        	searchCriteria = String.format("( upnp:class derivedfrom \"%s\" and dc:title contains \"%s\")", upnpClass, quickSearch);
+        } else {
+        	searchCriteria = String.format("( upnp:class derivedfrom \"%s\"  )", upnpClass);
+        }
+        return searchContainer(searchCriteria, sortCriteria, container, requestCount, parentObjectID);
+    }
+
+    /** Container search with a ready made criteria string. Returns the server's total match count. */
+    private int searchContainer(String searchCriteria, String sortCriteria, List<ContainerDto> container, long requestCount, String parentObjectID)
+    {
         SearchInput searchInput = new SearchInput();
         searchInput.ContainerID = getContainerId(parentObjectID);
-        if (!StringUtils.isAllBlank(quickSearch)) {
-        	searchInput.SearchCriteria = String.format("( upnp:class derivedfrom \"%s\" and dc:title contains \"%s\")", upnpClass, quickSearch);
-        } else {
-        	searchInput.SearchCriteria = String.format("( upnp:class derivedfrom \"%s\"  )", upnpClass);
-        }
+        searchInput.SearchCriteria = searchCriteria;
         searchInput.StartingIndex = 0L;
         searchInput.Filter = "*";
         searchInput.RequestedCount = requestCount;

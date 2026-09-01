@@ -139,22 +139,6 @@ export class SidebarComponent {
     return 'button-text';
   }
 
-  public get myFolderConfigured(): boolean {
-    if (this.deviceService.mediaServerSelected()) {
-      var sc = this.configurationService.findServerConfig(
-        this.deviceService.selectedMediaServerDevice().udn,
-      );
-      console.log(
-        this.deviceService.selectedMediaServerDevice().friendlyName +
-          ' : configures playlist folder id ' +
-          sc?.playistObjectId,
-      );
-      return (sc?.playistObjectId?.length ?? 0) > 0;
-    } else {
-      return false;
-    }
-  }
-
   public showPlaylistDialog(): void {
     this.defaultPlaylistService.openAddGlobalPlaylistDialogWithBackdrop(
       undefined,

@@ -56,12 +56,6 @@
             <div class="kv-key">IP</div>
             <div class="kv-val">{{serverConfig.ip}}</div>
 
-            <div class="kv-key">My Playlist</div>
-            <div class="kv-val">
-              <input [(ngModel)]="serverConfig.playistObjectId" type="text" name="MY_PLAYLISTID_2" id="MY_PLAYLISTID_2"
-                class="inline-input" placeholder="enter playlist object-id" />
-            </div>
-
             @if (serverConfig.mediaServer.extendedApi) {
               <div class="kv-key">ID3 Rating</div>
               <div class="kv-val checkbox-row">

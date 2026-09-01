@@ -20,22 +20,9 @@
       }
     }
 
-    @if (showSidebarSection()) {
-      @if (showPlayerSection()) {
-        <div class="divider my-1"></div>
-      }
-      <div class="section-header px-4 py-2">
-        Sidebar actions
-      </div>
-      <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (click)="selectPlayerFolderSidebar()">
-        <span class="item-icon material-symbols-outlined text-lg">post_add</span>
-        <span>Set MY PLAYLISTS</span>
-      </button>
-    }
-
     <!-- Acts on the playlist itself. A folder's like stays under "General actions". -->
     @if (showPlaylistSection()) {
-      @if (showPlayerSection() || showSidebarSection()) {
+      @if (showPlayerSection()) {
         <div class="divider my-1"></div>
       }
       <div class="section-header px-4 py-2">
@@ -57,7 +44,7 @@
       }
     }
 
-    @if (showPlayerSection() || showSidebarSection() || showPlaylistSection()) {
+    @if (showPlayerSection() || showPlaylistSection()) {
       <div class="divider my-1"></div>
     }
 
