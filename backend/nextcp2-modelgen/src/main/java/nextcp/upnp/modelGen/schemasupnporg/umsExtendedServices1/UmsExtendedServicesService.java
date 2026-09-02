@@ -15,15 +15,15 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RestoreRatings;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioArtistDir;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioArtistDirInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.AddRadioStationToPlaylist;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.AddRadioStationToPlaylistOutput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.AddRadioStationToPlaylistInput;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetPlaylistLoop;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetPlaylistLoopInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioArtistDir;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioArtistDirInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetAudioArtistDir;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetAudioArtistDirOutput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetPlaylistLoop;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetPlaylistLoopInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetPreferEuropeanServer;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetPreferEuropeanServerInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictUser;
@@ -35,6 +35,9 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudio
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioAddictPassInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAnonymousDevicesWrite;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAnonymousDevicesWriteInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetWebStreamNowPlaying;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetWebStreamNowPlayingOutput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetWebStreamNowPlayingInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetPlaylistNowPlaying;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetPlaylistNowPlayingOutput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetPlaylistNowPlayingInput;
@@ -46,18 +49,18 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMe
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.RescanMediaStoreFolderInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.DislikeAlbum;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.DislikeAlbumInput;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioUpdateRatingTag;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioUpdateRatingTagInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SearchRadioStations;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SearchRadioStationsOutput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SearchRadioStationsInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioUpdateRatingTag;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioUpdateRatingTagInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLiked;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedOutput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedInput;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbum;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioLikesVisibleRoot;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudioLikesVisibleRootInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbum;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.LikeAlbumInput;
 
 
 /**
@@ -151,12 +154,6 @@ public class UmsExtendedServicesService
         restoreRatings.executeAction();
     }
 
-    public void setAudioArtistDir(SetAudioArtistDirInput inp)
-    {
-        SetAudioArtistDir setAudioArtistDir = new SetAudioArtistDir(umsExtendedServicesService, inp, upnpService.getControlPoint());
-        setAudioArtistDir.executeAction();
-    }
-
     public AddRadioStationToPlaylistOutput addRadioStationToPlaylist(AddRadioStationToPlaylistInput inp)
     {
         AddRadioStationToPlaylist addRadioStationToPlaylist = new AddRadioStationToPlaylist(umsExtendedServicesService, inp, upnpService.getControlPoint());
@@ -164,10 +161,10 @@ public class UmsExtendedServicesService
         return res;        
     }
 
-    public void setPlaylistLoop(SetPlaylistLoopInput inp)
+    public void setAudioArtistDir(SetAudioArtistDirInput inp)
     {
-        SetPlaylistLoop setPlaylistLoop = new SetPlaylistLoop(umsExtendedServicesService, inp, upnpService.getControlPoint());
-        setPlaylistLoop.executeAction();
+        SetAudioArtistDir setAudioArtistDir = new SetAudioArtistDir(umsExtendedServicesService, inp, upnpService.getControlPoint());
+        setAudioArtistDir.executeAction();
     }
 
     public GetAudioArtistDirOutput getAudioArtistDir()
@@ -175,6 +172,12 @@ public class UmsExtendedServicesService
         GetAudioArtistDir getAudioArtistDir = new GetAudioArtistDir(umsExtendedServicesService,  upnpService.getControlPoint());
         GetAudioArtistDirOutput res = getAudioArtistDir.executeAction();
         return res;        
+    }
+
+    public void setPlaylistLoop(SetPlaylistLoopInput inp)
+    {
+        SetPlaylistLoop setPlaylistLoop = new SetPlaylistLoop(umsExtendedServicesService, inp, upnpService.getControlPoint());
+        setPlaylistLoop.executeAction();
     }
 
     public void setPreferEuropeanServer(SetPreferEuropeanServerInput inp)
@@ -213,6 +216,13 @@ public class UmsExtendedServicesService
         setAnonymousDevicesWrite.executeAction();
     }
 
+    public GetWebStreamNowPlayingOutput getWebStreamNowPlaying(GetWebStreamNowPlayingInput inp)
+    {
+        GetWebStreamNowPlaying getWebStreamNowPlaying = new GetWebStreamNowPlaying(umsExtendedServicesService, inp, upnpService.getControlPoint());
+        GetWebStreamNowPlayingOutput res = getWebStreamNowPlaying.executeAction();
+        return res;        
+    }
+
     public GetPlaylistNowPlayingOutput getPlaylistNowPlaying(GetPlaylistNowPlayingInput inp)
     {
         GetPlaylistNowPlaying getPlaylistNowPlaying = new GetPlaylistNowPlaying(umsExtendedServicesService, inp, upnpService.getControlPoint());
@@ -245,17 +255,17 @@ public class UmsExtendedServicesService
         dislikeAlbum.executeAction();
     }
 
-    public void setAudioUpdateRatingTag(SetAudioUpdateRatingTagInput inp)
-    {
-        SetAudioUpdateRatingTag setAudioUpdateRatingTag = new SetAudioUpdateRatingTag(umsExtendedServicesService, inp, upnpService.getControlPoint());
-        setAudioUpdateRatingTag.executeAction();
-    }
-
     public SearchRadioStationsOutput searchRadioStations(SearchRadioStationsInput inp)
     {
         SearchRadioStations searchRadioStations = new SearchRadioStations(umsExtendedServicesService, inp, upnpService.getControlPoint());
         SearchRadioStationsOutput res = searchRadioStations.executeAction();
         return res;        
+    }
+
+    public void setAudioUpdateRatingTag(SetAudioUpdateRatingTagInput inp)
+    {
+        SetAudioUpdateRatingTag setAudioUpdateRatingTag = new SetAudioUpdateRatingTag(umsExtendedServicesService, inp, upnpService.getControlPoint());
+        setAudioUpdateRatingTag.executeAction();
     }
 
     public IsAlbumLikedOutput isAlbumLiked(IsAlbumLikedInput inp)
@@ -265,15 +275,15 @@ public class UmsExtendedServicesService
         return res;        
     }
 
-    public void likeAlbum(LikeAlbumInput inp)
-    {
-        LikeAlbum likeAlbum = new LikeAlbum(umsExtendedServicesService, inp, upnpService.getControlPoint());
-        likeAlbum.executeAction();
-    }
-
     public void setAudioLikesVisibleRoot(SetAudioLikesVisibleRootInput inp)
     {
         SetAudioLikesVisibleRoot setAudioLikesVisibleRoot = new SetAudioLikesVisibleRoot(umsExtendedServicesService, inp, upnpService.getControlPoint());
         setAudioLikesVisibleRoot.executeAction();
+    }
+
+    public void likeAlbum(LikeAlbumInput inp)
+    {
+        LikeAlbum likeAlbum = new LikeAlbum(umsExtendedServicesService, inp, upnpService.getControlPoint());
+        likeAlbum.executeAction();
     }
 }

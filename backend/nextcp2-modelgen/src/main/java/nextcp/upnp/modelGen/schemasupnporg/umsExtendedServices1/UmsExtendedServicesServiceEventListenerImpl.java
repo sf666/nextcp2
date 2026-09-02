@@ -134,6 +134,24 @@ public class UmsExtendedServicesServiceEventListenerImpl implements IUmsExtended
         }
     }
     
+    public void upnpCdsWriteChange(Boolean value)
+    {
+        stateVariable.UpnpCdsWrite = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "UpnpCdsWrite", value));
+        }
+    }
+    
+    public void audioUpdateRatingChange(Boolean value)
+    {
+        stateVariable.AudioUpdateRating = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "AudioUpdateRating", value));
+        }
+    }
+    
     public void preferEuropeanServerChange(Boolean value)
     {
         stateVariable.PreferEuropeanServer = value;
@@ -152,15 +170,6 @@ public class UmsExtendedServicesServiceEventListenerImpl implements IUmsExtended
         }
     }
     
-    public void upnpCdsWriteChange(Boolean value)
-    {
-        stateVariable.UpnpCdsWrite = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "UpnpCdsWrite", value));
-        }
-    }
-    
     public void playlistLoopChange(Boolean value)
     {
         stateVariable.PlaylistLoop = value;
@@ -170,12 +179,12 @@ public class UmsExtendedServicesServiceEventListenerImpl implements IUmsExtended
         }
     }
     
-    public void audioUpdateRatingChange(Boolean value)
+    public void webStreamNowPlayingChange(String value)
     {
-        stateVariable.AudioUpdateRating = value;
+        stateVariable.WebStreamNowPlaying = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "AudioUpdateRating", value));
+            log.debug(String.format("StateVariable : %s: %s", "WebStreamNowPlaying", value));
         }
     }
     

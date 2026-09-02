@@ -99,6 +99,12 @@ public interface ExtendedApiMediaDevice
 	public List<RadioBrowserFilterValueDto> getRadioFilterValues(RadioBrowserFilterRequest request);
 
 	/**
+	 * @return the JSON payload describing the live ICY title of the given web radio, or an empty
+	 * string when that stream is not being served right now.
+	 */
+	public String getWebStreamNowPlaying(String objectId);
+
+	/**
 	 * Adds a station to a playlist on the media server.
 	 *
 	 * @return the name of the station that was added

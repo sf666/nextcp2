@@ -22,4 +22,10 @@ public class UmsExtendedServicesServiceEventListener extends UmsExtendedServices
 	public void eventProcessed() {
 		umsServerDevice.newUmsConfig();
 	}
+
+	@Override
+	public void webStreamNowPlayingChange(String value) {
+		super.webStreamNowPlayingChange(value);
+		umsServerDevice.webStreamNowPlaying(value);
+	}
 }

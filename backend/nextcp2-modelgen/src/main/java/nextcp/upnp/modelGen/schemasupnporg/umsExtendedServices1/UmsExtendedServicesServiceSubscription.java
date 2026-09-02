@@ -117,6 +117,22 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
                     		anonymousDevicesWriteChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
                         break;
+                    case "UpnpCdsWrite":
+                    	try {
+                    		upnpCdsWriteChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[upnpCdsWrite] unexpected value : " + stateVar.getValue());
+                    		upnpCdsWriteChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
+                        break;
+                    case "AudioUpdateRating":
+                    	try {
+                    		audioUpdateRatingChange((Boolean) stateVar.getValue());
+                    	} catch (Exception e) {
+                    		log.warn("[audioUpdateRating] unexpected value : " + stateVar.getValue());
+                    		audioUpdateRatingChange(Boolean.valueOf(stateVar.getValue().toString()));
+						}
+                        break;
                     case "PreferEuropeanServer":
                     	try {
                     		preferEuropeanServerChange((Boolean) stateVar.getValue());
@@ -133,14 +149,6 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
                     		audioLikesVisibleRootChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
                         break;
-                    case "UpnpCdsWrite":
-                    	try {
-                    		upnpCdsWriteChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[upnpCdsWrite] unexpected value : " + stateVar.getValue());
-                    		upnpCdsWriteChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
                     case "PlaylistLoop":
                     	try {
                     		playlistLoopChange((Boolean) stateVar.getValue());
@@ -149,13 +157,8 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
                     		playlistLoopChange(Boolean.valueOf(stateVar.getValue().toString()));
 						}
                         break;
-                    case "AudioUpdateRating":
-                    	try {
-                    		audioUpdateRatingChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[audioUpdateRating] unexpected value : " + stateVar.getValue());
-                    		audioUpdateRatingChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
+                    case "WebStreamNowPlaying":
+                        webStreamNowPlayingChange((String) stateVar.getValue());
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -185,6 +188,22 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
         }
     }    
 
+    private void upnpCdsWriteChange(Boolean value)
+    {
+        for (IUmsExtendedServicesServiceEventListener listener : eventListener)
+        {
+            listener.upnpCdsWriteChange(value);
+        }
+    }    
+
+    private void audioUpdateRatingChange(Boolean value)
+    {
+        for (IUmsExtendedServicesServiceEventListener listener : eventListener)
+        {
+            listener.audioUpdateRatingChange(value);
+        }
+    }    
+
     private void preferEuropeanServerChange(Boolean value)
     {
         for (IUmsExtendedServicesServiceEventListener listener : eventListener)
@@ -201,14 +220,6 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
         }
     }    
 
-    private void upnpCdsWriteChange(Boolean value)
-    {
-        for (IUmsExtendedServicesServiceEventListener listener : eventListener)
-        {
-            listener.upnpCdsWriteChange(value);
-        }
-    }    
-
     private void playlistLoopChange(Boolean value)
     {
         for (IUmsExtendedServicesServiceEventListener listener : eventListener)
@@ -217,11 +228,11 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
         }
     }    
 
-    private void audioUpdateRatingChange(Boolean value)
+    private void webStreamNowPlayingChange(String value)
     {
         for (IUmsExtendedServicesServiceEventListener listener : eventListener)
         {
-            listener.audioUpdateRatingChange(value);
+            listener.webStreamNowPlayingChange(value);
         }
     }    
 }

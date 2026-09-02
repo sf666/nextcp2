@@ -82,6 +82,9 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetPrefe
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWriteInput;
 import nextcp.util.BackendException;
 import nextcp.util.UpnpErrorDescriptionHandler;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetWebStreamNowPlayingInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetWebStreamNowPlayingOutput;
+import nextcp.service.WebRadioNowPlayingService;
 
 public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMediaDevice {
 
@@ -103,6 +106,9 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 
 	@Autowired
 	private ToastEventPublisher toast = null;
+
+	@Autowired
+	private WebRadioNowPlayingService webRadioNowPlayingService = null;
 
 	private UpnpErrorDescriptionHandler errorHandler = new UpnpErrorDescriptionHandler();
 
@@ -202,6 +208,27 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			}
 		} else {
 			log.debug("[AudioAddict Config] disabled. Please set username & password to activate AudioAddict network support.");
+		}
+	}
+
+	/**
+	 * The live title a web radio served by this UMS is announcing, pushed as a GENA event.
+	 */
+	public void webStreamNowPlaying(String nowPlaying) {
+		webRadioNowPlayingService.onWebStreamNowPlaying(nowPlaying);
+	}
+
+	@Override
+	public String getWebStreamNowPlaying(String objectId) {
+		GetWebStreamNowPlayingInput inp = new GetWebStreamNowPlayingInput();
+		inp.ObjectID = objectId;
+		try {
+			GetWebStreamNowPlayingOutput out = umsServices.getWebStreamNowPlaying(inp);
+			return out != null ? StringUtils.trimToEmpty(out.NowPlaying) : "";
+		} catch (GenActionException e) {
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorHandler.extractErrorText(e.description), e);
+		} catch (Exception e) {
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
 		}
 	}
 
