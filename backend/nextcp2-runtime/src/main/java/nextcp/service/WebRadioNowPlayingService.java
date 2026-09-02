@@ -79,7 +79,7 @@ public class WebRadioNowPlayingService
             }
             return;
         }
-        StreamContext ctx = new StreamContext(track.objectID, track.title, event);
+        StreamContext ctx = new StreamContext(track.objectID, track.title, track.artistName, event);
         activeStreams.put(udn, ctx);
         log.debug("web radio now-playing enabled for {} ({})", udn, track.objectID);
     }
@@ -142,15 +142,14 @@ public class WebRadioNowPlayingService
         {
             ct.title = ctx.stationName;
             ct.album = "";
+            ct.artistName = ctx.stationArtist;
         }
         else
         {
             ct.album = ctx.stationName;
             ct.title = StringUtils.defaultIfBlank(info.title, info.streamTitle);
-            if (info.artist != null)
-            {
-                ct.artistName = info.artist;
-            }
+            // A line without an artist - a jingle, an ad - must not keep the artist of the last track.
+            ct.artistName = info.artist != null ? info.artist : ctx.stationArtist;
             if (info.artUrl != null)
             {
                 ct.albumArtUrl = info.artUrl;
@@ -183,13 +182,16 @@ public class WebRadioNowPlayingService
         private final String objectId;
         // The station name as the media server announced it, kept as context once a title arrives.
         private final String stationName;
+        // What the media server announced as the artist, restored whenever a live title has none.
+        private final String stationArtist;
         private volatile TrackInfoDto baseInfo;
         private volatile NowPlaying lastInfo;
 
-        private StreamContext(String objectId, String stationName, TrackInfoDto baseInfo)
+        private StreamContext(String objectId, String stationName, String stationArtist, TrackInfoDto baseInfo)
         {
             this.objectId = objectId;
             this.stationName = stationName;
+            this.stationArtist = stationArtist;
             this.baseInfo = baseInfo;
         }
     }
