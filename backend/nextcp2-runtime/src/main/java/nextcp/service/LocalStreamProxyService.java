@@ -48,16 +48,10 @@ import nextcp.upnp.device.mediaserver.MediaServerDevice;
  * <p>
  * The browser cannot set a custom {@code User-Agent} on an {@code <audio src>}, so it cannot make
  * UMS recognize a browser-specific renderer profile. This proxy fetches the media on the browser's
- * behalf and tags every request with a User-Agent the UMS web player renderer profiles match. UMS
- * then streams browser-native formats untouched and transcodes the rest to MP3. It also sidesteps
- * CORS / mixed-content issues when the UI is served over HTTPS.
- * <p>
- * <b>Two renderer profiles.</b> Browsers do not agree on what they can decode: Chromium plays FLAC,
- * WebKit (Safari, and therefore every browser on iOS/iPadOS) does not. The caller says which kind of
- * client it is and the proxy picks the matching User-Agent - {@link #PROXY_USER_AGENT} for
- * {@code nextcp2webplayer.conf} (FLAC native) or {@link #PROXY_USER_AGENT_LOSSY} for
- * {@code nextcp2webplayer-lossy.conf} (FLAC transcoded to MP3). The choice is part of the cache key,
- * so the two never share a cached file.
+ * behalf and tags every request with {@link #PROXY_USER_AGENT}, which the UMS
+ * {@code nextcp2webplayer.conf} renderer profile matches. UMS then streams browser-native formats
+ * untouched and transcodes the rest to MP3. It also sidesteps CORS / mixed-content issues when the
+ * UI is served over HTTPS.
  * <p>
  * <b>Two delivery modes (adaptive):</b>
  * <ul>
@@ -89,24 +83,10 @@ public class LocalStreamProxyService {
 	 */
 	public static final String PROXY_USER_AGENT = "next_cp_webplayer/1.0";
 
-	/**
-	 * Sent instead of {@link #PROXY_USER_AGENT} for clients that cannot decode lossless audio; matched by
-	 * the UMS {@code nextcp2webplayer-lossy.conf} profile, which has no FLAC in its supported list and so
-	 * makes UMS transcode it to MP3. The trailing distinction matters: {@code nextcp2webplayer.conf}
-	 * searches for "next_cp_webplayer/" with the slash, so this token does not also match it.
-	 */
 	public static final String PROXY_USER_AGENT_LOSSY = "next_cp_webplayer_lossy/1.0";
 
 	private static final int COPY_BUFFER_SIZE = 64 * 1024;
 
-	/**
-	 * Legacy "x-" audio MIME types rewritten to the registered name before the browser sees them.
-	 * <p>
-	 * UMS labels FLAC as {@code audio/x-flac}. Chromium treats that as an alias and plays it; WebKit
-	 * (Safari, and every browser on iOS/iPadOS) does not recognize it and rejects the source outright,
-	 * which surfaces as MEDIA_ERR_SRC_NOT_SUPPORTED even though the bytes are perfectly playable. The
-	 * bytes are untouched - only the label changes.
-	 */
 	private static final Map<String, String> CONTENT_TYPE_ALIASES = Map.of(
 		"audio/x-flac", "audio/flac",
 		"audio/x-m4a", "audio/mp4",
@@ -258,7 +238,6 @@ public class LocalStreamProxyService {
 	 * with a known length and range support.
 	 *
 	 * @param targetUrl the media server resource URL (must belong to a discovered media server)
-	 * @param lossy     {@code true} when the client cannot decode lossless audio, so UMS must transcode it
 	 * @param request   the incoming browser request (used for the {@code Range} header)
 	 * @param response  the response the media bytes are written to
 	 */
@@ -597,12 +576,6 @@ public class LocalStreamProxyService {
 		}
 	}
 
-	/**
-	 * Maps a legacy {@code audio/x-*} label to its registered equivalent, leaving any parameters
-	 * ({@code ;charset=...}) and every other type untouched.
-	 *
-	 * @see #CONTENT_TYPE_ALIASES
-	 */
 	static String normalizeContentType(String contentType) {
 		if (StringUtils.isBlank(contentType)) {
 			return contentType;
@@ -644,7 +617,6 @@ public class LocalStreamProxyService {
 		return "application/octet-stream";
 	}
 
-	/** The User-Agent is part of the key: the same URL yields FLAC or MP3 depending on the profile. */
 	private static String cacheKey(URI uri, String userAgent) {
 		try {
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");

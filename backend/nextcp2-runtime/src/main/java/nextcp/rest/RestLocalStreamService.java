@@ -18,10 +18,6 @@ import nextcp.service.LocalStreamProxyService;
  * The browser points an HTML5 {@code <audio>} element at {@code /LocalStream/stream?url=<mediaUrl>};
  * the actual pass-through, User-Agent tagging and format negotiation with the media server live in
  * {@link LocalStreamProxyService}. This controller only wires the HTTP request through.
- * <p>
- * The optional {@code lossy} parameter tells the proxy that this browser cannot decode lossless
- * audio (WebKit / iOS), so the media server has to transcode it. The client decides that, because
- * only it knows what its decoder accepts.
  */
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
