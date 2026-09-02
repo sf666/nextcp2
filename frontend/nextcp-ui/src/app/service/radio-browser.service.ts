@@ -15,6 +15,12 @@ import {
 export type RadioFilterKind = 'countries' | 'languages' | 'tags';
 
 /**
+ * Which half of an ICY stream title carries the artist. Most stations announce "Artist - Title",
+ * some announce "Track - Station", and the media server guesses per station unless told.
+ */
+export type IcyOrder = 'auto' | 'artist-first' | 'title-first';
+
+/**
  * Searches radio-browser.info through the media server and adds a station to one of its playlists.
  * The media server holds the radio-browser client, so the station is read there rather than here.
  */
@@ -27,6 +33,28 @@ export class RadioBrowserService {
   private cdsUpdateService = inject(CdsUpdateService);
 
   private baseUri = '/MediaServerPlaylistService';
+
+  /**
+   * The setting belongs to the station, not to a renderer - the media server keeps it in the
+   * playlist the station is listed in.
+   */
+  public icyOrder(objectId: string): Subject<{ icyOrder: string }> {
+    const udn = this.deviceService.selectedMediaServerDevice().udn;
+    return this.httpService.get<{ icyOrder: string }>(
+      this.baseUri,
+      `/getWebStreamIcyOrder/${udn}/${encodeURIComponent(objectId)}`,
+      'web radio',
+    );
+  }
+
+  public setIcyOrder(objectId: string, order: IcyOrder): Subject<void> {
+    const udn = this.deviceService.selectedMediaServerDevice().udn;
+    return this.httpService.get<void>(
+      this.baseUri,
+      `/setWebStreamIcyOrder/${udn}/${encodeURIComponent(objectId)}/${order}`,
+      'web radio',
+    );
+  }
 
   public searchStations(
     criteria: Partial<RadioBrowserSearchRequest>,

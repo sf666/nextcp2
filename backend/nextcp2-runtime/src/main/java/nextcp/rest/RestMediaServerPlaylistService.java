@@ -9,11 +9,14 @@ import nextcp.dto.RadioBrowserFilterRequest;
 import nextcp.dto.AddRadioStationRequest;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import org.jupnp.support.model.container.Container;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -85,6 +88,35 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 		} catch (Exception e) {
 			log.error("addRadioStationToPlaylist failed : {}", request, e);
 			throw failed("Cannot add the station to the playlist", e);
+		}
+	}
+
+	/**
+	 * Which half of an ICY stream title the station behind that object puts the artist in: "auto",
+	 * "artist-first" or "title-first". The setting belongs to the station, the media server keeps it
+	 * in the playlist the station is listed in.
+	 */
+	@GetMapping("/getWebStreamIcyOrder/{serverUdn}/{objectId}")
+	public Map<String, String> getWebStreamIcyOrder(@PathVariable("serverUdn") String serverUdn, @PathVariable("objectId") String objectId) {
+		try {
+			// A bare String would go out as text/plain, which the browser side cannot read as json.
+			String order = getExtendedMediaServerByUdn(serverUdn).getWebStreamIcyOrder(objectId);
+			return Map.of("icyOrder", order != null ? order : "auto");
+		} catch (Exception e) {
+			log.error("getWebStreamIcyOrder failed for object {}", objectId, e);
+			throw failed("Cannot read the title order of that station", e);
+		}
+	}
+
+	@GetMapping("/setWebStreamIcyOrder/{serverUdn}/{objectId}/{icyOrder}")
+	public void setWebStreamIcyOrder(@PathVariable("serverUdn") String serverUdn, @PathVariable("objectId") String objectId,
+			@PathVariable("icyOrder") String icyOrder) {
+		try {
+			getExtendedMediaServerByUdn(serverUdn).setWebStreamIcyOrder(objectId, icyOrder);
+			toast.publishSuccessMessage(null, "web radio", "title order set to " + icyOrder);
+		} catch (Exception e) {
+			log.error("setWebStreamIcyOrder {} failed for object {}", icyOrder, objectId, e);
+			throw failed("Cannot set the title order of that station", e);
 		}
 	}
 

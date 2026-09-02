@@ -55,5 +55,24 @@
         <span>Update album art</span>
       </button>
     }
+
+    @if (isWebRadio()) {
+      <div class="divider my-1"></div>
+      <div class="section-header px-4 py-2">
+        Live title of this station
+      </div>
+      <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (mouseover)="closeAllDialogs()" (click)="setIcyOrder('auto')">
+        <span class="item-icon material-symbols-outlined text-lg">{{ icyOrder() === 'auto' ? 'radio_button_checked' : 'radio_button_unchecked' }}</span>
+        <span>Detect automatically</span>
+      </button>
+      <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (mouseover)="closeAllDialogs()" (click)="setIcyOrder('artist-first')">
+        <span class="item-icon material-symbols-outlined text-lg">{{ icyOrder() === 'artist-first' ? 'radio_button_checked' : 'radio_button_unchecked' }}</span>
+        <span>Artist &ndash; Title</span>
+      </button>
+      <button class="playlist-item flex items-center gap-3 px-4 py-2.5" (mouseover)="closeAllDialogs()" (click)="setIcyOrder('title-first')">
+        <span class="item-icon material-symbols-outlined text-lg">{{ icyOrder() === 'title-first' ? 'radio_button_checked' : 'radio_button_unchecked' }}</span>
+        <span>Title &ndash; Station</span>
+      </button>
+    }
   </div>
 </div>

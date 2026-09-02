@@ -44,6 +44,16 @@ public interface ExtendedApiMediaDevice
     public void backupRatings();
 
     public void restoreRatings();
+
+    // Web radio
+
+    /**
+     * Which half of an ICY stream title a station puts the artist in: "auto", "artist-first" or
+     * "title-first".
+     */
+    public String getWebStreamIcyOrder(String objectId);
+
+    public void setWebStreamIcyOrder(String objectId, String icyOrder);
     
     public void backupFilesStatus();
 

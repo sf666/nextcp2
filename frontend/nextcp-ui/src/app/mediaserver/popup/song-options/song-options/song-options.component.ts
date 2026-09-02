@@ -19,7 +19,12 @@ import {
   ViewContainerRef,
   ChangeDetectionStrategy,
   inject,
+  signal,
 } from '@angular/core';
+import {
+  IcyOrder,
+  RadioBrowserService,
+} from 'src/app/service/radio-browser.service';
 import { DefaultPlaylistService } from '../../defaut-playlists/default-playlist.service';
 import { TransportService } from 'src/app/service/transport.service';
 import { StarRatingComponent } from '../../../../view/star-rating/star-rating.component';
@@ -61,6 +66,10 @@ export class SongOptionsComponent implements OnInit {
 
   readonly dialog = inject(MatDialog);
   readonly cdsUpdateService = inject(CdsUpdateService);
+  private radioBrowserService = inject(RadioBrowserService);
+
+  /** What the media server currently assumes for this station. */
+  readonly icyOrder = signal<string>('auto');
 
   constructor() {
     const _matDialogRef =
@@ -93,6 +102,43 @@ export class SongOptionsComponent implements OnInit {
       this.triggerElementRef,
       MENU_WIDTH,
     );
+    this.loadIcyOrder();
+  }
+
+  /**
+   * A station announces one line of text and the media server splits it. Which half is the artist
+   * differs per station, so the choice belongs here, at the station itself.
+   */
+  public isWebRadio(): boolean {
+    return (
+      this.item?.objectClass?.startsWith(
+        'object.item.audioItem.audioBroadcast',
+      ) === true
+    );
+  }
+
+  private loadIcyOrder(): void {
+    if (!this.isWebRadio() || !this.item?.objectID) {
+      return;
+    }
+    this.radioBrowserService.icyOrder(this.item.objectID).subscribe({
+      next: (res) => this.icyOrder.set(res?.icyOrder ?? 'auto'),
+      // The menu stays usable without it, it just shows the default as selected.
+      error: () => {},
+    });
+  }
+
+  public setIcyOrder(order: IcyOrder): void {
+    if (!this.item?.objectID || this.icyOrder() === order) {
+      return;
+    }
+    this.icyOrder.set(order);
+    this.radioBrowserService.setIcyOrder(this.item.objectID, order).subscribe({
+      next: () => {},
+      // The toast from HttpService is the user facing part. Read the stored value again, so the
+      // menu does not keep showing a choice the media server did not accept.
+      error: () => this.loadIcyOrder(),
+    });
   }
 
   public hasValidSongId(): boolean {

@@ -1,6 +1,9 @@
 package nextcp.upnp.device.mediaserver;
 
 import java.io.File;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetWebStreamIcyOrderInput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetWebStreamIcyOrderOutput;
+import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetWebStreamIcyOrderInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SearchRadioStationsOutput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SearchRadioStationsInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetRadioFilterValuesOutput;
@@ -465,6 +468,22 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	@Override
 	public void restoreRatings() {
 		umsServices.restoreRatings();
+	}
+
+	@Override
+	public String getWebStreamIcyOrder(String objectId) {
+		GetWebStreamIcyOrderInput inp = new GetWebStreamIcyOrderInput();
+		inp.ObjectID = objectId;
+		GetWebStreamIcyOrderOutput out = umsServices.getWebStreamIcyOrder(inp);
+		return out != null ? out.IcyOrder : null;
+	}
+
+	@Override
+	public void setWebStreamIcyOrder(String objectId, String icyOrder) {
+		SetWebStreamIcyOrderInput inp = new SetWebStreamIcyOrderInput();
+		inp.ObjectID = objectId;
+		inp.IcyOrder = icyOrder;
+		umsServices.setWebStreamIcyOrder(inp);
 	}
 
 	private String browseChildrenSearchFolder(long start, String objectId, String foldername, int retryCount) {
