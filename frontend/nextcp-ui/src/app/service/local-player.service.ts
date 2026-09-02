@@ -69,6 +69,14 @@ export class LocalPlayerService {
   // The error event can fire repeatedly for one source; the user needs to hear it once.
   private playbackErrorReported = false;
 
+  // Remembers, per browser, that this client could not play the media server's native stream, so
+  // every later request asks for the transcoded (lossy) renderer profile straight away.
+  private static readonly LOSSY_STORAGE_KEY = 'nextcp.localPlayer.lossy.v1';
+  // Whether to ask the proxy for the lossy renderer profile. Starts from what the browser claims it
+  // can decode, but browsers claim wrong in both directions - the authoritative signal is a real
+  // playback error, which flips this permanently (see retryAsLossy).
+  private lossyPlayback = this.detectLossyPlayback();
+
   // Playback state, consumed by RendererService so the footer now-playing/transport reflects the
   // local browser player when the "This Device" renderer is selected.
   public readonly playing = signal<boolean>(false);
@@ -103,6 +111,9 @@ export class LocalPlayerService {
         networkState: this.audio.networkState,
       });
       this.playing.set(false);
+      if (this.retryAsLossy()) {
+        return;
+      }
       this.reportPlaybackError();
     });
     this.audio.addEventListener('ended', () => {
@@ -486,9 +497,64 @@ export class LocalPlayerService {
    * server directly. The proxy tags the request as a browser renderer so the media server (UMS,
    * via nextcp2webplayer.conf) transcodes formats the browser cannot decode, and it avoids CORS /
    * mixed-content problems when the UI is served over HTTPS.
+   * "lossy=true" selects the second UMS profile (nextcp2webplayer-lossy.conf), which lists no
+   * lossless format as supported and therefore delivers everything transcoded.
    */
   private toProxyUrl(streamingURL: string): string {
-    return '/LocalStream/stream?url=' + encodeURIComponent(streamingURL);
+    const url = '/LocalStream/stream?url=' + encodeURIComponent(streamingURL);
+    return this.lossyPlayback ? url + '&lossy=true' : url;
+  }
+
+  /**
+   * @returns whether to start out asking for transcoded audio: either this browser already failed on
+   *          a native stream in an earlier session, or it says outright that it cannot decode FLAC.
+   */
+  private detectLossyPlayback(): boolean {
+    try {
+      if (localStorage.getItem(LocalPlayerService.LOSSY_STORAGE_KEY) === 'true') {
+        return true;
+      }
+    } catch {
+      // Private mode / storage disabled: fall through to the codec probe.
+    }
+    // An empty string is the only unambiguous answer canPlayType gives ("definitely not"); "maybe"
+    // and "probably" are both treated as yes, and a wrong yes is corrected by retryAsLossy().
+    return this.audio.canPlayType('audio/flac') === '';
+  }
+
+  /**
+   * Reacts to the browser refusing the native stream: switches this client to the transcoded profile
+   * for good and replays the current track through it. Only decode / unsupported-format errors
+   * qualify - a network error would just fail again - and only once, since the retry itself cannot
+   * downgrade any further.
+   *
+   * @returns true when a retry was started, so the caller must not report the error yet
+   */
+  private retryAsLossy(): boolean {
+    const code = this.audio.error?.code ?? 0;
+    // 3 = MEDIA_ERR_DECODE, 4 = MEDIA_ERR_SRC_NOT_SUPPORTED
+    if (this.lossyPlayback || this.currentIndex < 0 || (code !== 3 && code !== 4)) {
+      return false;
+    }
+    console.warn('[local-player] browser refused the native stream (code ' + code +
+      '), switching to the transcoded profile', this.audio.currentSrc);
+    this.setLossyPlayback(true);
+    // Nothing was decoded, so there is no position worth keeping - start the track over.
+    this.playIndex(this.currentIndex);
+    return true;
+  }
+
+  /**
+   * Forces this browser to the transcoded (or native) renderer profile from now on. Exposed so the
+   * choice can be corrected by hand when a browser's own codec report cannot be trusted.
+   */
+  public setLossyPlayback(lossy: boolean): void {
+    this.lossyPlayback = lossy;
+    try {
+      localStorage.setItem(LocalPlayerService.LOSSY_STORAGE_KEY, String(lossy));
+    } catch {
+      // Storage unavailable: the choice then lasts for this page session only.
+    }
   }
 
   private onEnded(): void {

@@ -47,10 +47,16 @@ import nextcp.upnp.device.mediaserver.MediaServerDevice;
  * <p>
  * The browser cannot set a custom {@code User-Agent} on an {@code <audio src>}, so it cannot make
  * UMS recognize a browser-specific renderer profile. This proxy fetches the media on the browser's
- * behalf and tags every request with {@link #PROXY_USER_AGENT}, which the UMS
- * {@code nextcp2webplayer.conf} renderer profile matches. UMS then streams browser-native formats
- * untouched and transcodes the rest to MP3. It also sidesteps CORS / mixed-content issues when the
- * UI is served over HTTPS.
+ * behalf and tags every request with a User-Agent the UMS web player renderer profiles match. UMS
+ * then streams browser-native formats untouched and transcodes the rest to MP3. It also sidesteps
+ * CORS / mixed-content issues when the UI is served over HTTPS.
+ * <p>
+ * <b>Two renderer profiles.</b> Browsers do not agree on what they can decode: Chromium plays FLAC,
+ * WebKit (Safari, and therefore every browser on iOS/iPadOS) does not. The caller says which kind of
+ * client it is and the proxy picks the matching User-Agent - {@link #PROXY_USER_AGENT} for
+ * {@code nextcp2webplayer.conf} (FLAC native) or {@link #PROXY_USER_AGENT_LOSSY} for
+ * {@code nextcp2webplayer-lossy.conf} (FLAC transcoded to MP3). The choice is part of the cache key,
+ * so the two never share a cached file.
  * <p>
  * <b>Two delivery modes (adaptive):</b>
  * <ul>
@@ -81,6 +87,14 @@ public class LocalStreamProxyService {
 	 * "nextcp" so it does not also match the nextCP control-point renderer profile (Nextcp2.conf).
 	 */
 	public static final String PROXY_USER_AGENT = "next_cp_webplayer/1.0";
+
+	/**
+	 * Sent instead of {@link #PROXY_USER_AGENT} for clients that cannot decode lossless audio; matched by
+	 * the UMS {@code nextcp2webplayer-lossy.conf} profile, which has no FLAC in its supported list and so
+	 * makes UMS transcode it to MP3. The trailing distinction matters: {@code nextcp2webplayer.conf}
+	 * searches for "next_cp_webplayer/" with the slash, so this token does not also match it.
+	 */
+	public static final String PROXY_USER_AGENT_LOSSY = "next_cp_webplayer_lossy/1.0";
 
 	private static final int COPY_BUFFER_SIZE = 64 * 1024;
 
@@ -229,18 +243,20 @@ public class LocalStreamProxyService {
 	 * with a known length and range support.
 	 *
 	 * @param targetUrl the media server resource URL (must belong to a discovered media server)
+	 * @param lossy     {@code true} when the client cannot decode lossless audio, so UMS must transcode it
 	 * @param request   the incoming browser request (used for the {@code Range} header)
 	 * @param response  the response the media bytes are written to
 	 */
-	public void proxy(String targetUrl, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void proxy(String targetUrl, boolean lossy, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		URI uri = validateTarget(targetUrl);
+		String userAgent = lossy ? PROXY_USER_AGENT_LOSSY : PROXY_USER_AGENT;
 
 		if (!isPreTranscodeEnabled() || getCacheDir() == null) {
-			passThrough(uri, request, response);
+			passThrough(uri, userAgent, request, response);
 			return;
 		}
 
-		String key = cacheKey(uri);
+		String key = cacheKey(uri, userAgent);
 		if (Files.isRegularFile(cacheFile(key))) {
 			serveFromCache(key, request, response);
 			return;
@@ -248,24 +264,24 @@ public class LocalStreamProxyService {
 
 		boolean needsTranscode;
 		try {
-			needsTranscode = probeNeedsTranscode(uri);
+			needsTranscode = probeNeedsTranscode(uri, userAgent);
 		} catch (IOException e) {
 			log.debug("range probe failed for {}, falling back to pass-through: {}", uri, e.getMessage());
-			passThrough(uri, request, response);
+			passThrough(uri, userAgent, request, response);
 			return;
 		}
 
 		if (!needsTranscode) {
 			// Native / seekable resource: UMS already provides length + ranges, no need to buffer.
-			passThrough(uri, request, response);
+			passThrough(uri, userAgent, request, response);
 			return;
 		}
 
 		try {
-			ensureCached(key, uri);
+			ensureCached(key, uri, userAgent);
 		} catch (IOException e) {
 			log.warn("pre-transcode caching failed for {}, falling back to pass-through: {}", uri, e.getMessage());
-			passThrough(uri, request, response);
+			passThrough(uri, userAgent, request, response);
 			return;
 		}
 		serveFromCache(key, request, response);
@@ -276,9 +292,9 @@ public class LocalStreamProxyService {
 	 * relaying the upstream status and relevant headers unchanged. Used for resources UMS serves with a
 	 * known length (native formats).
 	 */
-	private void passThrough(URI uri, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private void passThrough(URI uri, String userAgent, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpRequest.Builder upstreamRequest = HttpRequest.newBuilder(uri)
-			.header("User-Agent", PROXY_USER_AGENT)
+			.header("User-Agent", userAgent)
 			.GET();
 		String range = request.getHeader("Range");
 		if (StringUtils.isNotBlank(range)) {
@@ -330,9 +346,9 @@ public class LocalStreamProxyService {
 	 *
 	 * @return {@code true} if the resource must be pre-transcoded (not natively seekable)
 	 */
-	private boolean probeNeedsTranscode(URI uri) throws IOException {
+	private boolean probeNeedsTranscode(URI uri, String userAgent) throws IOException {
 		HttpRequest probe = HttpRequest.newBuilder(uri)
-			.header("User-Agent", PROXY_USER_AGENT)
+			.header("User-Agent", userAgent)
 			.header("Range", "bytes=0-0")
 			.GET()
 			.build();
@@ -404,7 +420,7 @@ public class LocalStreamProxyService {
 	 * Ensures the resource is fully buffered into the cache, transcoding it via UMS exactly once even
 	 * under concurrent requests.
 	 */
-	private void ensureCached(String key, URI uri) throws IOException {
+	private void ensureCached(String key, URI uri, String userAgent) throws IOException {
 		Path target = cacheFile(key);
 		if (Files.isRegularFile(target)) {
 			touch(target);
@@ -420,7 +436,7 @@ public class LocalStreamProxyService {
 				}
 
 				HttpRequest request = HttpRequest.newBuilder(uri)
-					.header("User-Agent", PROXY_USER_AGENT)
+					.header("User-Agent", userAgent)
 					.GET()
 					.build();
 				HttpResponse<InputStream> upstream;
@@ -592,10 +608,11 @@ public class LocalStreamProxyService {
 		return "application/octet-stream";
 	}
 
-	private static String cacheKey(URI uri) {
+	/** The User-Agent is part of the key: the same URL yields FLAC or MP3 depending on the profile. */
+	private static String cacheKey(URI uri, String userAgent) {
 		try {
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
-			byte[] hash = digest.digest(uri.toString().getBytes(StandardCharsets.UTF_8));
+			byte[] hash = digest.digest((userAgent + " " + uri).getBytes(StandardCharsets.UTF_8));
 			return HexFormat.of().formatHex(hash);
 		} catch (NoSuchAlgorithmException e) {
 			// SHA-256 is guaranteed to be present on every JVM.
