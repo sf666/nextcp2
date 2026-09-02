@@ -11,6 +11,7 @@ import org.jupnp.support.model.ProtocolInfo;
 import org.jupnp.support.model.Res;
 import org.jupnp.support.model.item.MusicTrack;
 import nextcp.dto.AudioFormat;
+import nextcp.dto.MusicItemDto;
 
 public class TestDtoBuilder
 {
@@ -119,12 +120,32 @@ public class TestDtoBuilder
         assertEquals("", db.extractXmlAsMusicItem(withoutRes).streamingURL);
     }
 
+    @Test
+    public void testWebRadioIsMarkedAsStreamingAndKeepsStationMetadata()
+    {
+        DtoBuilder db = new DtoBuilder();
+
+        // A live stream announces neither a size nor a duration, so the size heuristic cannot decide.
+        // The audioBroadcast class can, and the station tags arrive as upnp:genre.
+        MusicItemDto item = db.extractXmlAsMusicItem(radioEntry("http-get:*:audio/mpeg:*"));
+        assertTrue(item.audioFormat.isStreaming);
+        assertNull(item.audioFormat.durationInSeconds);
+        assertEquals("classic rock / oldies", item.genre);
+        assertEquals(Integer.valueOf(4), item.rating);
+
+        // A server that does not even announce an audio content format still yields the flag.
+        item = db.extractXmlAsMusicItem(radioEntry("http-get:*:application/octet-stream:*"));
+        assertTrue(item.audioFormat.isStreaming);
+    }
+
     private String radioEntry(String protocolInfo)
     {
         return "<DIDL-Lite xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\""
                 + " xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\">"
                 + "<item id=\"pl$3$1\" parentID=\"pl$3\" restricted=\"1\">"
                 + "<dc:title>Radio Art - Piano</dc:title>"
+                + "<upnp:genre>classic rock / oldies</upnp:genre>"
+                + "<upnp:rating>4</upnp:rating>"
                 + "<upnp:class>object.item.audioItem.audioBroadcast</upnp:class>"
                 + "<res protocolInfo=\"" + protocolInfo + "\">http://radio.example/stream/piano</res>"
                 + "</item></DIDL-Lite>";

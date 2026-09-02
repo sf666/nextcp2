@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { MusicItemDto } from 'src/app/service/dto';
 import { AlbumArtService } from 'src/app/util/album-art.service';
+import { isBroadcastItem } from 'src/app/util/broadcast-item';
 
 @Component({
   selector: 'other-item-tile',
@@ -54,7 +55,7 @@ export class OtherItemTileComponent {
   getOtherItemHeadline(item: MusicItemDto): string {
     // object.item.audioItem
     if (item.objectClass?.startsWith('object.item.audioItem')) {
-      if (item?.audioFormat?.isStreaming) {
+      if (isBroadcastItem(item)) {
         return 'RADIO';
       }
       return 'IMAGE';

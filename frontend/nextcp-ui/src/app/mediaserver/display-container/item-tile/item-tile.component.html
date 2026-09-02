@@ -59,8 +59,9 @@
             </div>
 
             <!-- Artist -->
-            <div id="OPT_ARTIST_{{item.objectID}}" (click)="playItem(item)" class="hidden md:block truncate text-gray-400 cursor-pointer hover:text-white transition-colors">
-                {{item.artistName}}
+            <div id="OPT_ARTIST_{{item.objectID}}" (click)="playItem(item)" class="hidden md:block truncate text-gray-400 cursor-pointer hover:text-white transition-colors"
+                 [class.italic]="isSubstituteArtist(item)" [class.text-gray-500]="isSubstituteArtist(item)">
+                {{artistLabel(item)}}
             </div>
 
             <!-- Genre -->
@@ -78,8 +79,12 @@
             }
 
             <!-- Duration -->
-            <div id="OPT_TIME_{{item.objectID}}" class="text-right text-gray-400 font-mono text-xs">
-                {{getDuration(item)}}
+            <div id="OPT_TIME_{{item.objectID}}" class="flex justify-end text-gray-400 font-mono text-xs">
+                @if (isBroadcast(item)) {
+                    <live-badge [playing]="isPlayingItem(item)"></live-badge>
+                } @else {
+                    {{getDuration(item)}}
+                }
             </div>
 
             <!-- Options Menu -->
@@ -118,8 +123,9 @@
             </div>
             
             <!-- Artist -->
-            <div id="OPT_ARTIST_{{item.objectID}}" (click)="playItem(item)" class="hidden md:block truncate text-gray-400 cursor-pointer transition-colors">
-                {{item.artistName}}
+            <div id="OPT_ARTIST_{{item.objectID}}" (click)="playItem(item)" class="hidden md:block truncate text-gray-400 cursor-pointer transition-colors"
+                 [class.italic]="isSubstituteArtist(item)" [class.text-gray-500]="isSubstituteArtist(item)">
+                {{artistLabel(item)}}
             </div>
 
             <!-- Genre -->
@@ -137,8 +143,12 @@
             }
 
             <!-- Duration -->
-            <div id="OPT_TIME_{{item.objectID}}" class="text-right text-gray-400 font-mono text-xs">
-                {{getDuration(item)}}
+            <div id="OPT_TIME_{{item.objectID}}" class="flex justify-end text-gray-400 font-mono text-xs">
+                @if (isBroadcast(item)) {
+                    <live-badge [playing]="isPlayingItem(item)"></live-badge>
+                } @else {
+                    {{getDuration(item)}}
+                }
             </div>
 
             <!-- Options Menu -->
@@ -183,8 +193,8 @@
             </div>
             <div class="mt-3 px-1">
                 <h3 class="text-white font-medium text-sm truncate group-hover:text-aqua transition-colors">{{item.title}}</h3>
-                @if (item.artistName) {
-                    <p class="text-gray-400 text-xs truncate mt-1">{{item.artistName}}</p>
+                @if (artistLabel(item)) {
+                    <p class="text-gray-400 text-xs truncate mt-1" [class.italic]="isSubstituteArtist(item)">{{artistLabel(item)}}</p>
                 }
             </div>
         </div>

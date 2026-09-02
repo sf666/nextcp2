@@ -465,3 +465,37 @@ input {
     text-transform: uppercase;
     color         : rgb(255, 190, 125);
 }
+
+.app-badge--live {
+    margin-left : 0;
+    gap         : 5px;
+    border-color: var(--primary-color-reduced);
+    background  : var(--primary-color-reduced-2);
+}
+
+.app-badge--live .app-badge-text {
+    color: var(--primary-color);
+}
+
+.app-badge-dot {
+    flex-shrink  : 0;
+    width        : 5px;
+    height       : 5px;
+    border-radius: 50%;
+    background   : var(--primary-color);
+}
+
+.app-badge-dot--pulsing {
+    animation: live-badge-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes live-badge-pulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.25; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .app-badge-dot--pulsing {
+        animation: none;
+    }
+}

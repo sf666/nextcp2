@@ -1,5 +1,6 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { MusicItemDto } from './dto';
+import { isBroadcastItem } from 'src/app/util/broadcast-item';
 import { PersistenceService } from './persistence/persistence.service';
 import { ToastService } from './toast/toast.service';
 
@@ -542,10 +543,7 @@ export class LocalPlayerService {
     if (!item) {
       return true;
     }
-    if (item.objectClass?.startsWith('object.item.audioItem.audioBroadcast')) {
-      return true;
-    }
-    if (item.audioFormat?.isStreaming === true) {
+    if (isBroadcastItem(item)) {
       return true;
     }
     return !((item.audioFormat?.durationInSeconds ?? 0) > 0);

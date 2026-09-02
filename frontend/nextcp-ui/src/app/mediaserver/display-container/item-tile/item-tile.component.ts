@@ -15,13 +15,15 @@ import { StarRatingComponent } from 'src/app/view/star-rating/star-rating.compon
 import { RatingFilter } from 'src/app/service/rating-service.service';
 import { filterMusicItems } from 'src/app/util/browse-filter';
 import { QualityBadgeComponent } from 'src/app/util/comp/quality-badge/quality-badge.component';
+import { LiveBadgeComponent } from 'src/app/util/comp/live-badge/live-badge.component';
+import { isBroadcastItem } from 'src/app/util/broadcast-item';
 import { RendererService } from 'src/app/service/renderer.service';
 
 @Component({
   selector: 'item-tile',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [StarRatingComponent, QualityBadgeComponent],
+  imports: [StarRatingComponent, QualityBadgeComponent, LiveBadgeComponent],
   templateUrl: './item-tile.component.html',
   styleUrl: './item-tile.component.scss',
 })
@@ -156,6 +158,24 @@ export class ItemTileComponent {
     const firstAndTitle = sameAlbum ? '48px 2fr' : '64px minmax(100px, 2fr)';
     const genre = this.showGenre() ? ' minmax(120px, 1fr)' : '';
     return `${firstAndTitle} minmax(150px, 1fr)${genre} 128px 80px 48px`;
+  }
+
+  isBroadcast(item: MusicItemDto): boolean {
+    return isBroadcastItem(item);
+  }
+
+  artistLabel(item: MusicItemDto): string {
+    if (item.artistName) {
+      return item.artistName;
+    }
+    if (this.isBroadcast(item) && !this.showGenre()) {
+      return item.genre ?? '';
+    }
+    return '';
+  }
+
+  isSubstituteArtist(item: MusicItemDto): boolean {
+    return !item.artistName && this.artistLabel(item).length > 0;
   }
 
   getDuration(item: MusicItemDto): string {

@@ -639,6 +639,23 @@ public class DtoBuilder
                 itemDto.streamingURL = url;
             }
         }
+        markLiveBroadcast(itemDto);
+    }
+
+    private void markLiveBroadcast(MusicItemDto itemDto)
+    {
+        if (!StringUtils.startsWith(itemDto.objectClass, "object.item.audioItem.audioBroadcast"))
+        {
+            return;
+        }
+        if (itemDto.audioFormat == null)
+        {
+            itemDto.audioFormat = new AudioFormat();
+        }
+        if (itemDto.audioFormat.isStreaming == null)
+        {
+            itemDto.audioFormat.isStreaming = true;
+        }
     }
 
     public String readStreamingUrl(Item item)
