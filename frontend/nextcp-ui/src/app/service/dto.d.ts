@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-09-02 15:11:00.
+// Generated using typescript-generator version 4.1.1 on 2026-09-02 16:49:15.
 
 export interface AddRadioStationRequest {
     serverUdn: string;
@@ -70,6 +70,7 @@ export interface ApplicationConfig {
     behindReverseProxy: boolean;
     sseHeartbeatSeconds: number;
     localPlayerPreTranscodeEnabled: boolean;
+    mediaPlayerEnabled: boolean;
     localPlayerCacheDir: string;
     localPlayerCacheMaxMb: number;
     localPlayerCacheTtlHours: number;

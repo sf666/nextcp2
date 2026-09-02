@@ -95,6 +95,7 @@ export class ConfigurationService {
     behindReverseProxy: false,
     sseHeartbeatSeconds: 30,
     localPlayerPreTranscodeEnabled: true,
+    mediaPlayerEnabled: true,
     localPlayerCacheDir: '',
     localPlayerCacheMaxMb: 2048,
     localPlayerCacheTtlHours: 24,

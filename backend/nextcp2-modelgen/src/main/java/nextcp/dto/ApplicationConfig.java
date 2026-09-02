@@ -31,6 +31,7 @@ public class ApplicationConfig
     public Boolean behindReverseProxy;
     public Integer sseHeartbeatSeconds;
     public Boolean localPlayerPreTranscodeEnabled;
+    public Boolean mediaPlayerEnabled;
     public String localPlayerCacheDir;
     public Long localPlayerCacheMaxMb;
     public Long localPlayerCacheTtlHours;
@@ -41,7 +42,7 @@ public class ApplicationConfig
     {
     }
 
-    public ApplicationConfig(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Integer embeddedServerSslPort, String embeddedServerSslP12Keystore, String embeddedServerSslP12KeystorePassword, Long sseEmitterTimeout, String loggingConfigFile, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript, String upnpBindInterface, Integer chatHistorySize, Boolean behindReverseProxy, Integer sseHeartbeatSeconds, Boolean localPlayerPreTranscodeEnabled, String localPlayerCacheDir, Long localPlayerCacheMaxMb, Long localPlayerCacheTtlHours, String localPlayerFormatMode, Boolean showImageItems)
+    public ApplicationConfig(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Integer embeddedServerSslPort, String embeddedServerSslP12Keystore, String embeddedServerSslP12KeystorePassword, Long sseEmitterTimeout, String loggingConfigFile, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript, String upnpBindInterface, Integer chatHistorySize, Boolean behindReverseProxy, Integer sseHeartbeatSeconds, Boolean localPlayerPreTranscodeEnabled, Boolean mediaPlayerEnabled, String localPlayerCacheDir, Long localPlayerCacheMaxMb, Long localPlayerCacheTtlHours, String localPlayerFormatMode, Boolean showImageItems)
     {
         this.generateUpnpCode = generateUpnpCode;
         this.generateUpnpCodePath = generateUpnpCodePath;
@@ -62,6 +63,7 @@ public class ApplicationConfig
         this.behindReverseProxy = behindReverseProxy;
         this.sseHeartbeatSeconds = sseHeartbeatSeconds;
         this.localPlayerPreTranscodeEnabled = localPlayerPreTranscodeEnabled;
+        this.mediaPlayerEnabled = mediaPlayerEnabled;
         this.localPlayerCacheDir = localPlayerCacheDir;
         this.localPlayerCacheMaxMb = localPlayerCacheMaxMb;
         this.localPlayerCacheTtlHours = localPlayerCacheTtlHours;
@@ -93,6 +95,7 @@ public class ApplicationConfig
         sb.append("behindReverseProxy=").append(this.behindReverseProxy).append(", ");
         sb.append("sseHeartbeatSeconds=").append(this.sseHeartbeatSeconds).append(", ");
         sb.append("localPlayerPreTranscodeEnabled=").append(this.localPlayerPreTranscodeEnabled).append(", ");
+        sb.append("mediaPlayerEnabled=").append(this.mediaPlayerEnabled).append(", ");
         sb.append("localPlayerCacheDir=").append(this.localPlayerCacheDir).append(", ");
         sb.append("localPlayerCacheMaxMb=").append(this.localPlayerCacheMaxMb).append(", ");
         sb.append("localPlayerCacheTtlHours=").append(this.localPlayerCacheTtlHours).append(", ");

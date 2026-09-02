@@ -126,6 +126,12 @@ public class ConfigDefaults
             log.info("adding new configuration value 'localPlayerPreTranscodeEnabled = true'");
             config.applicationConfig.localPlayerPreTranscodeEnabled = true;
         }
+
+        if (config.applicationConfig.mediaPlayerEnabled == null)
+        {
+            log.info("adding new configuration value 'mediaPlayerEnabled = true'");
+            config.applicationConfig.mediaPlayerEnabled = true;
+        }
         if (config.applicationConfig.localPlayerCacheDir == null)
         {
             log.info("adding new configuration value 'localPlayerCacheDir' (empty = system temp dir)");

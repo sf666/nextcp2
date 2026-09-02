@@ -98,6 +98,8 @@ ApplicationConfig:
    behindReverseProxy: Boolean
    sseHeartbeatSeconds: Integer
    localPlayerPreTranscodeEnabled: Boolean
+   # Hides the media player in the UI even when an mp-*.jar is present and loaded.
+   mediaPlayerEnabled: Boolean
    localPlayerCacheDir: String
    localPlayerCacheMaxMb: Long
    localPlayerCacheTtlHours: Long

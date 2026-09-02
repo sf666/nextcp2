@@ -56,6 +56,31 @@ Two generators live in `backend/nextcp2-codegen/`:
 
 Never edit anything under `nextcp2-modelgen/src/main/java/nextcp/dto/` or `frontend/nextcp-ui/src/app/service/dto.d.ts` directly — the next generator run overwrites it. Change `dto.yaml` and regenerate.
 
+### Changing `dto.yaml` takes two generator runs, in this order
+
+`mvn process-classes` alone is **not** enough: it reads the *existing* Java classes and only writes
+`dto.d.ts`. Skip step 1 and nothing happens — silently, without an error.
+
+```bash
+cd backend
+# 1. dto.yaml -> Java DTOs
+mvn -o -pl nextcp2-codegen -am install -DskipTests
+mvn -q -o -pl nextcp2-codegen dependency:build-classpath -Dmdep.outputFile=/tmp/cg-cp.txt
+java -cp "nextcp2-codegen/target/classes:$(cat /tmp/cg-cp.txt)" codegen.DtoModelGen \
+     "$PWD/nextcp2-modelgen/src/main/java/nextcp/dto"
+
+# 2. Java DTOs -> dto.d.ts
+mvn -o -pl nextcp2-modelgen process-classes
+```
+
+Step 1 is spelled out rather than run through `exec:java`, because `exec-maven-plugin` is not in the
+local repository and the call fails offline with a `PluginVersionResolutionException`.
+
+A new **mandatory** field then breaks every frontend object literal that initialises the type in
+full — for `ApplicationConfig` that is `applicationConfig` in
+`frontend/nextcp-ui/src/app/service/configuration.service.ts` (TS2741). Either add the field there
+with a default, or mark it optional in `dto.yaml` with a trailing `?`.
+
 ## Notes
 
 - `GEMINI.md` and `.ai/context.md` exist for other AI assistants and are gitignored / partially in-repo respectively — they overlap with this file; treat this file as authoritative for Claude Code.

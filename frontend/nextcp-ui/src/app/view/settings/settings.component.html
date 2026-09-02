@@ -296,6 +296,13 @@
           <label for="FORM_behind_proxy" class="text-sm text-gray-400">Behind reverse proxy (trust X-Forwarded-* headers)</label>
         </div>
         <div class="relative z-0 w-full mb-5 group flex items-center gap-3 py-2.5">
+          <input type="checkbox" name="FORM_media_player" id="FORM_media_player"
+            class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
+            [ngModel]="configService.applicationConfig.mediaPlayerEnabled ?? true"
+            (ngModelChange)="configService.applicationConfig.mediaPlayerEnabled = $event">
+          <label for="FORM_media_player" class="text-sm text-gray-400">Offer the media player (uncheck to hide it even when a driver is loaded)</label>
+        </div>
+        <div class="relative z-0 w-full mb-5 group flex items-center gap-3 py-2.5">
           <input type="checkbox" name="FORM_show_images" id="FORM_show_images"
             class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
             [ngModel]="configService.showImageItems()"

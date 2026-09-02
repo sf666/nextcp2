@@ -31,6 +31,7 @@ import nextcp2.upnp.localdevice.IMediaPlayerFactory;
 import nextcp2.upnp.localdevice.ISongPlayedCallback;
 import nextcp2.upnp.localdevice.MediaPlayerConfigService;
 import nextcp2.upnp.localdevice.Nextcp2Renderer;
+import nextcp.dto.Config;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
@@ -52,6 +53,9 @@ public class RestMediaRendererService implements ISongPlayedCallback {
 
 	@Autowired
 	MediaPlayerDiscoveryService mediaPlayerDiscoveryService = null;
+
+	@Autowired
+	private Config config = null;
 
 	@Autowired
 	private MediaPlayerConfigService mediaPlayerConfigService = null;
@@ -100,9 +104,14 @@ public class RestMediaRendererService implements ISongPlayedCallback {
 		mrs.start();
 	}
 
+	/**
+	 * The UI hangs everything media player related off this: the sidebar entry and the actions in the
+	 * song options. Reporting the player as absent therefore switches all of it off at once, which is
+	 * what the configuration flag is for - the jar stays loaded, it just is not offered any more.
+	 */
 	@GetMapping("/mediaPlayerExists")
 	public boolean getMediaPlayerExists() {
-		return mpf != null;
+		return mpf != null && !Boolean.FALSE.equals(config.applicationConfig.mediaPlayerEnabled);
 	}
 
 	@GetMapping("/startPlayScreening")
