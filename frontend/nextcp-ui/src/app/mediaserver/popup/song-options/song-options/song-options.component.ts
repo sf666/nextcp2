@@ -110,11 +110,17 @@ export class SongOptionsComponent implements OnInit {
    * differs per station, so the choice belongs here, at the station itself.
    */
   public isWebRadio(): boolean {
-    return (
+    if (
       this.item?.objectClass?.startsWith(
         'object.item.audioItem.audioBroadcast',
-      ) === true
-    );
+      ) !== true
+    ) {
+      return false;
+    }
+    // An AudioAddict channel is a broadcast as well, but its titles come from that API with artist
+    // and title already apart - there is no line to split, and the media server keeps the setting
+    // in a playlist file, which such a channel does not live in.
+    return !this.item.audioAddictChannelId && !this.item.audioAddictPlaylistId;
   }
 
   private loadIcyOrder(): void {
