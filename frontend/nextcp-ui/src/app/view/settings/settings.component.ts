@@ -32,6 +32,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AlertComponent } from 'src/app/comp/alert/alert.component';
 import { AppVisibilityService } from 'src/app/service/app-visibility/app-visibility-service.service';
+import { MatDialog } from '@angular/material/dialog';
+import {
+  DeviceDriverConfigComponent,
+  DeviceDriverConfigData,
+} from 'src/app/popup/device-driver-config/device-driver-config.component';
 
 interface SettingsFormModel {
   spotifyCode: string;
@@ -74,8 +79,13 @@ export class SettingsComponent implements OnInit {
   private appVisibilityService = inject(AppVisibilityService);
   configService = inject(ConfigurationService);
   dtoGeneratorService = inject(DtoGeneratorService);
+  private dialog = inject(MatDialog);
 
   amplifierInfoRendererUdn: string | null = null;
+
+  // Renderers whose driver settings were changed in the dialog but not saved to the server yet.
+  // A signal, because the dialog answers asynchronously and OnPush would not notice a plain field.
+  private pendingDriverSave = signal<ReadonlySet<string>>(new Set<string>());
 
   // Open state of the AI model combobox (free text + full clickable list).
   modelDropdownOpen = signal(false);
@@ -135,6 +145,47 @@ export class SettingsComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  /**
+   * A driver without a connection string cannot reach the amplifier, so the card says so instead of
+   * letting the setting look complete.
+   */
+  driverNeedsConfiguration(
+    rendererConfig: RendererDeviceConfiguration,
+  ): boolean {
+    return (
+      this.showAdvancedRendererSettings(rendererConfig) &&
+      !rendererConfig.connectionString?.trim()
+    );
+  }
+
+  /** True once the dialog was applied and the card still has to be saved. */
+  driverSavePending(rendererConfig: RendererDeviceConfiguration): boolean {
+    return this.pendingDriverSave().has(rendererConfig.mediaRenderer.udn);
+  }
+
+  openDriverConfig(rendererConfig: RendererDeviceConfiguration): void {
+    const dialogRef = this.dialog.open(DeviceDriverConfigComponent, {
+      width: '520px',
+      maxWidth: '92vw',
+      panelClass: ['popup-glass'],
+      data: rendererConfig,
+    });
+    dialogRef.afterClosed().subscribe((result: DeviceDriverConfigData) => {
+      if (!result) {
+        return;
+      }
+      rendererConfig.connectionString = result.connectionString;
+      rendererConfig.powerOnVolPercent = result.powerOnVolPercent;
+      rendererConfig.powerOnBalance = result.powerOnBalance;
+      rendererConfig.setCoveredUpnpDeviceToMaxVolume =
+        result.setCoveredUpnpDeviceToMaxVolume;
+      this.pendingDriverSave.update(
+        (pending) =>
+          new Set<string>([...pending, rendererConfig.mediaRenderer.udn]),
+      );
+    });
   }
 
   toggleAmplifierInfo(rendererUdn: string): void {
@@ -368,15 +419,17 @@ export class SettingsComponent implements OnInit {
 
   saveRendererConfig(rendererConfig: RendererDeviceConfiguration): void {
     this.configService.saveMediaRendererConfig(rendererConfig);
+    this.pendingDriverSave.update((pending) => {
+      const next = new Set<string>(pending);
+      next.delete(rendererConfig.mediaRenderer.udn);
+      return next;
+    });
   }
 
   deleteRendererConfig(rendererConfig: RendererDeviceConfiguration): void {
     this.configService.deleteMediaRendererConfig(rendererConfig);
   }
 
-  initServices(rendererConfig: RendererDeviceConfiguration): void {
-    this.rendererService.initServices(rendererConfig.mediaRenderer.udn);
-  }
 
   saveServerConfig(rendererConfig: ServerDeviceConfiguration): void {
     this.configService.saveMediaServerConfig(rendererConfig);

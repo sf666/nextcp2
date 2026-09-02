@@ -1,0 +1,100 @@
+@use "buttons";
+
+.driver-dialog {
+    width: 100%;
+}
+
+.dialog-header {
+    border-bottom: 1px solid var(--chrome-hair);
+}
+
+.dialog-title {
+    font-size     : 0.95rem;
+    font-weight   : 600;
+    color         : var(--snow-white);
+    letter-spacing: 0.03em;
+}
+
+.dialog-subtitle {
+    font-size  : 0.75rem;
+    font-weight: 400;
+    color      : var(--bg-grey-6);
+}
+
+.driver-body {
+    gap          : 0.35rem;
+    padding-left : 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.field-label {
+    margin-top : 0.9rem;
+    font-size  : 0.78rem;
+    font-weight: 500;
+    color      : var(--bg-grey-4);
+}
+
+// Same field look as the cards in the settings page, so the dialog does not
+// read as a different kind of form.
+.driver-input {
+    width        : 100%;
+    font-size    : 0.85rem;
+    font-weight  : 300;
+    color        : #fff;
+    background   : #09090b;
+    border       : 1px solid var(--chrome-hair);
+    border-radius: 0.5rem;
+    padding      : 0.4rem 0.6rem;
+    transition   : border-color 0.15s ease;
+
+    &::placeholder { color: #52525b; }
+
+    &:focus {
+        outline     : none;
+        border-color: var(--primary-color-reduced);
+        box-shadow  : 0 0 0 2px var(--primary-color-reduced-2);
+    }
+}
+
+.field-error {
+    margin-top : 0.3rem;
+    font-size  : 0.75rem;
+    font-weight: 400;
+    color      : var(--color-orange-reduced-3);
+}
+
+.checkbox-row {
+    display    : flex;
+    align-items: center;
+    gap        : 0.5rem;
+    margin-top : 1rem;
+
+    label {
+        font-size  : 0.8rem;
+        font-weight: 300;
+        color      : var(--bg-grey-4);
+    }
+}
+
+.driver-actions {
+    margin-top   : 1.6rem;
+    margin-bottom: 0.4rem;
+}
+
+.icon-button {
+    display      : inline-flex;
+    align-items  : center;
+    justify-content: center;
+    width        : 32px;
+    height       : 32px;
+    border-radius: 8px;
+    border       : none;
+    background   : transparent;
+    color        : var(--bg-grey-4);
+    cursor       : pointer;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color     : var(--snow-white);
+    }
+}

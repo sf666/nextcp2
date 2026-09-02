@@ -1,0 +1,45 @@
+<div class="popupFrame glass-panel flex flex-col driver-dialog">
+  <div class="dialog-header flex items-center justify-between gap-4 px-5 py-3">
+    <div class="flex flex-col">
+      <span class="dialog-title">Device driver configuration</span>
+      <span class="dialog-subtitle">{{driverType}}</span>
+    </div>
+    <button type="button" class="icon-button" (click)="cancel()" aria-label="close">
+      <span class="material-symbols-outlined thin">close</span>
+    </button>
+  </div>
+
+  <div class="popupBody driver-body flex flex-col">
+    <label class="field-label" for="dd-connection">Connection string</label>
+    <input id="dd-connection" [(ngModel)]="connectionString" type="text"
+           class="driver-input" placeholder="ip:port" cdkFocusInitial />
+    @if (applyDisabled()) {
+      <div class="field-error">A connection string is required to reach the amplifier.</div>
+    }
+
+    <label class="field-label" for="dd-volume">Amp default volume</label>
+    <input id="dd-volume" [(ngModel)]="powerOnVolPercent" type="number"
+           class="driver-input" placeholder="volume applied on power on" />
+
+    <label class="field-label" for="dd-balance">Amp default balance</label>
+    <input id="dd-balance" [(ngModel)]="powerOnBalance" type="number"
+           class="driver-input" placeholder="balance applied on power on" />
+
+    <div class="checkbox-row">
+      <input id="dd-maxvol" type="checkbox"
+             class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
+             [(ngModel)]="setCoveredUpnpDeviceToMaxVolume" />
+      <label for="dd-maxvol">set streamer to max volume</label>
+    </div>
+
+    <div class="driver-actions flex gap-3 justify-end">
+      <button type="button" class="glass-btn" (click)="cancel()">
+        <span>cancel</span>
+      </button>
+      <button type="button" class="glass-btn primary" (click)="apply()" [disabled]="applyDisabled()">
+        <span class="material-symbols-outlined thin">check</span>
+        <span>apply</span>
+      </button>
+    </div>
+  </div>
+</div>

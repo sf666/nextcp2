@@ -1,4 +1,4 @@
-@use '@angular/material' as mat;
+@use "buttons";
 
 :host {
     // Settings is a config surface, not a browse view — give it a calm solid
@@ -221,6 +221,14 @@ p, h1, h2, h3, h4, h5, h6, div {
         padding       : 0.9rem 1.25rem;
         border-top    : 1px solid var(--set-card-border);
         margin-top    : auto;
+        // Two actions of equal weight, pushed to the card edges.
+        justify-content: space-between;
+
+        // One width for both, a little past what the longer label needs, so the pair reads as a
+        // matched set instead of two differently sized pills.
+        .glass-btn {
+            min-width: 5.5rem;
+        }
     }
 }
 
@@ -312,10 +320,92 @@ p, h1, h2, h3, h4, h5, h6, div {
     }
 }
 
-.driver-config {
-    margin-top    : 1rem;
-    padding-top   : 1rem;
-    border-top    : 1px dashed var(--set-card-border);
+.driver-select-row {
+    display    : flex;
+    align-items: center;
+    gap        : 0.5rem;
+
+    select {
+        flex: 1 1 auto;
+    }
+}
+
+// Icon only: the label lived in the row next to a dropdown that already carries the driver name,
+// so the word added width without adding meaning. The help popup names the icon instead.
+.driver-config-button {
+    display        : inline-flex;
+    align-items    : center;
+    justify-content: center;
+    flex           : 0 0 auto;
+    padding        : 0.35rem 0.5rem;
+    border-radius  : 0.5rem;
+    border         : 1px solid var(--set-card-border);
+    background     : transparent;
+    color          : var(--set-muted);
+    font-size      : 0.78rem;
+    white-space    : nowrap;
+    cursor         : pointer;
+    transition     : color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+
+    .mat-icon {
+        width    : 18px;
+        height   : 18px;
+        font-size: 18px;
+    }
+
+    &:hover {
+        color       : var(--primary-color);
+        border-color: var(--primary-color-reduced);
+        background  : var(--primary-color-reduced-2);
+    }
+}
+
+// Not a fault: the settings are complete, they just have not reached the server yet. Carries the
+// accent colour instead of the warning colour so it does not read as a second error.
+.driver-config-hint {
+    display    : flex;
+    align-items: center;
+    gap        : 0.4rem;
+    font-size  : 0.78rem;
+    font-weight: 400;
+    color      : var(--primary-color);
+
+    .mat-icon {
+        width    : 18px;
+        height   : 18px;
+        font-size: 18px;
+    }
+}
+
+.amplifier-info-lead {
+    display      : flex;
+    align-items  : center;
+    gap          : 0.35rem;
+    flex-wrap    : wrap;
+    margin-bottom: 0.5rem;
+
+    .mat-icon {
+        width         : 18px;
+        height        : 18px;
+        font-size     : 18px;
+        vertical-align: middle;
+        color         : var(--primary-color);
+    }
+}
+
+.driver-config-warning {
+    display    : flex;
+    align-items: center;
+    gap        : 0.4rem;
+    font-size  : 0.78rem;
+    font-weight: 400;
+    color      : var(--color-orange-reduced-3);
+
+    .mat-icon {
+        width    : 18px;
+        height   : 18px;
+        font-size: 18px;
+    }
 }
 
 /* ---------- Config panels (forms) ---------- */
@@ -344,15 +434,6 @@ p, h1, h2, h3, h4, h5, h6, div {
     color         : var(--set-online);
     font-size     : 0.85rem;
     margin-top    : 0.5rem;
-}
-
-/* ---------- existing overrides retained ---------- */
-.init-services-button {
-  @include mat.button-overrides((
-    outlined-label-text-color: #f59e0b,
-    outlined-state-layer-color: #f59e0b,
-    outlined-ripple-color: #f59e0b
-  ));
 }
 
 .amp-help-button {
