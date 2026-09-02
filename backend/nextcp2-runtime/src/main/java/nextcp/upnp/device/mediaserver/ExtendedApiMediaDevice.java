@@ -83,7 +83,7 @@ public interface ExtendedApiMediaDevice
 	 * @return the track currently playing on the given AudioAddict curated playlist, or {@code null}
 	 * when that playlist is not being streamed by this server right now.
 	 */
-	public AudioAddictPlaylistNowPlaying getPlaylistNowPlaying(int playlistId);
+
 
 	// radio-browser.info station picker
 

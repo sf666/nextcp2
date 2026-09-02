@@ -1,6 +1,7 @@
 package nextcp.service;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -14,9 +15,10 @@ import nextcp.dto.MusicItemDto;
 import nextcp.dto.TrackInfoDto;
 
 /**
- * Shows the live title a web radio announces via ICY. Unlike the AudioAddict enrichment this needs
- * no polling: UMS reads the ICY blocks while it serves the stream and pushes every change as a GENA
- * event, which {@link nextcp.upnp.device.mediaserver.UmsServerDevice} hands over here.
+ * Shows what a continuous stream served by UMS is playing right now. Where UMS gets that from
+ * differs per stream - ICY blocks for a plain internet radio, the AudioAddict API for a channel,
+ * its own playback state for a curated playlist - but all of them arrive here the same way: as a
+ * GENA event that {@link nextcp.upnp.device.mediaserver.UmsServerDevice} hands over. No polling.
  */
 @Component
 public class WebRadioNowPlayingService
@@ -71,9 +73,9 @@ public class WebRadioNowPlayingService
             // Genuine renderer update for the same stream: keep the last live title so the display
             // does not fall back to the station name.
             existing.baseInfo = event;
-            if (existing.lastTitle != null)
+            if (existing.lastInfo != null)
             {
-                publishEnriched(udn, existing, existing.lastTitle);
+                publishEnriched(udn, existing, existing.lastInfo);
             }
             return;
         }
@@ -92,16 +94,20 @@ public class WebRadioNowPlayingService
             return;
         }
         String objectId;
-        String streamTitle;
+        NowPlaying info;
         try
         {
             JsonNode node = OBJECT_MAPPER.readTree(nowPlaying);
             objectId = node.path("objectID").asText("");
-            streamTitle = node.path("streamTitle").asText("");
+            info = new NowPlaying(
+                StringUtils.trimToNull(node.path("artist").asText("")),
+                StringUtils.trimToNull(node.path("title").asText("")),
+                StringUtils.trimToNull(node.path("artUrl").asText("")),
+                StringUtils.trimToNull(node.path("streamTitle").asText("")));
         }
         catch (Exception e)
         {
-            log.warn("cannot parse web stream now-playing event : {}", nowPlaying, e);
+            log.warn("cannot parse now-playing event : {}", nowPlaying, e);
             return;
         }
         if (StringUtils.isBlank(objectId))
@@ -111,20 +117,20 @@ public class WebRadioNowPlayingService
         for (Map.Entry<String, StreamContext> entry : activeStreams.entrySet())
         {
             StreamContext ctx = entry.getValue();
-            if (!StringUtils.equals(ctx.objectId, objectId) || StringUtils.equals(ctx.lastTitle, streamTitle))
+            if (!StringUtils.equals(ctx.objectId, objectId) || Objects.equals(ctx.lastInfo, info))
             {
                 continue;
             }
-            ctx.lastTitle = StringUtils.trimToNull(streamTitle);
-            publishEnriched(entry.getKey(), ctx, ctx.lastTitle);
+            ctx.lastInfo = info.isEmpty() ? null : info;
+            publishEnriched(entry.getKey(), ctx, ctx.lastInfo);
         }
     }
 
     /**
-     * ICY carries a single unstructured string, so it becomes the title while the station name moves
-     * to the album - the same shape the AudioAddict enrichment uses.
+     * The station or channel name moves to the album so the context stays visible, and the live
+     * track takes the title. A source that only knows one line (ICY) leaves artist and cover alone.
      */
-    private void publishEnriched(String udn, StreamContext ctx, String streamTitle)
+    private void publishEnriched(String udn, StreamContext ctx, NowPlaying info)
     {
         TrackInfoDto base = ctx.baseInfo;
         if (base == null || base.currentTrack == null)
@@ -132,30 +138,39 @@ public class WebRadioNowPlayingService
             return;
         }
         MusicItemDto ct = base.currentTrack;
-        if (StringUtils.isBlank(streamTitle))
+        if (info == null)
         {
             ct.title = ctx.stationName;
             ct.album = "";
         }
         else
         {
-            ct.title = streamTitle;
             ct.album = ctx.stationName;
+            ct.title = StringUtils.defaultIfBlank(info.title, info.streamTitle);
+            if (info.artist != null)
+            {
+                ct.artistName = info.artist;
+            }
+            if (info.artUrl != null)
+            {
+                ct.albumArtUrl = info.artUrl;
+            }
         }
         selfPublished.put(udn, base);
         publisher.publishEvent(base);
     }
 
+    private record NowPlaying(String artist, String title, String artUrl, String streamTitle)
+    {
+        private boolean isEmpty()
+        {
+            return StringUtils.isAllBlank(artist, title, streamTitle);
+        }
+    }
+
     private static boolean isBroadcast(MusicItemDto track)
     {
         if (track == null || StringUtils.isBlank(track.objectID))
-        {
-            return false;
-        }
-        // An AudioAddict channel is an audioBroadcast too, but its live track comes from the
-        // AudioAddict API - leave those to AudioAddictNowPlayingPoller so the two do not overwrite
-        // each other's TrackInfoDto.
-        if (track.audioAddictChannelId != null || track.audioAddictPlaylistId != null)
         {
             return false;
         }
@@ -169,7 +184,7 @@ public class WebRadioNowPlayingService
         // The station name as the media server announced it, kept as context once a title arrives.
         private final String stationName;
         private volatile TrackInfoDto baseInfo;
-        private volatile String lastTitle;
+        private volatile NowPlaying lastInfo;
 
         private StreamContext(String objectId, String stationName, TrackInfoDto baseInfo)
         {
