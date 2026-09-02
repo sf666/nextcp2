@@ -443,6 +443,13 @@ export class DisplayContainerHeaderComponent implements OnInit {
       this.contentDirectoryService()
         .browseFinished$.pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((data) => this.cdsBrowseFinished());
+      // browseFinished$ is a plain Subject, and this header only enters the DOM once a container
+      // has been browsed - so on a reload straight into a container the emission has already been
+      // and gone before there was anyone to hear it, and the page kept the black background until
+      // the next browse. Apply what is on screen once, which is what the subscription would have.
+      if ((this.currentContainer?.id ?? '').length > 0) {
+        this.cdsBrowseFinished();
+      }
     }
   }
 
