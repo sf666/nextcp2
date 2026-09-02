@@ -4,16 +4,17 @@
 @use "app-variables"as av;
 @use "app-icons";
 
-// Scroll-linked collapse progress (0 = full hero, 1 = compact bar) is written
-// by this component onto its own host element, so it is inherited by everything
-// below #outer and by nothing else. It used to be set on the scroll container
-// instead, which invalidated the computed style of every album tile on the page
-// once per scrolled frame.
-// The size vars are declared on #outer so their var(--collapse) resolves
-// against #outer's own (inherited) value.
-// Heights come from the display container (--dc-hero-*), which is the one
-// element spanning both this header and the content offsets that have to line up
-// with its bottom edge. The fallbacks keep this component standalone-safe.
+// The host generates no box of its own, so the hero and the pinned bar become layout children of
+// the display container - which spans header AND list. That is what lets the bar stay stuck while
+// the list scrolls under it; inside a box of its own it would leave with the hero.
+:host {
+    display: contents;
+}
+
+// The hero has one size. It scrolls away like any other content; the pinned bar below takes over
+// once it is gone, so nothing here is scroll linked any more.
+// Heights come from the display container (--dc-hero-*). The fallbacks keep this component
+// standalone-safe.
 #outer {
     --h-max  : var(--dc-hero-max, 310px);
     --h-min  : var(--dc-hero-min, 104px);
@@ -23,8 +24,8 @@
     --ind-max: var(--dc-hero-indent, 100px);
     --ind-min: 16px;
 
-    --top-header-Height         : calc(var(--h-max) - (var(--h-max) - var(--h-min)) * var(--collapse, 0));
-    --top-header-Vertical-Indent: calc(var(--ind-max) - (var(--ind-max) - var(--ind-min)) * var(--collapse, 0));
+    --top-header-Height         : var(--h-max);
+    --top-header-Vertical-Indent: var(--ind-max);
 }
 
 // Title and its favourite marker on one baseline. Roon puts the heart right next
@@ -36,11 +37,11 @@
     align-items : center;
     // Next to a large bold title a small gap reads as if the heart were part of
     // the word. Shrinks with the header, like the heart itself.
-    gap         : calc(1.15rem - 0.35rem * var(--collapse, 0));
+    gap         : 1.15rem;
     max-width   : 100%;
     min-width   : 0;
     // the spacing below the title moves here, so both children share one box
-    padding-bottom: calc(0.7rem - 0.55rem * var(--collapse, 0));
+    padding-bottom: 0.7rem;
 
     .title {
         padding-bottom: 0;
@@ -60,7 +61,7 @@
     cursor      : pointer;
     color       : rgba(255, 255, 255, 0.3);
     // shrinks together with the title while the header collapses
-    font-size   : calc(1.5rem - 0.5rem * var(--collapse, 0));
+    font-size   : 1.5rem;
     transition  : color 0.15s ease, transform 0.15s ease;
 
     .material-symbols-outlined {
@@ -81,10 +82,10 @@
 }
 
 .title {
-    font-size     : calc(2rem - 0.85rem * var(--collapse, 0));
+    font-size     : 2rem;
     font-weight   : 700;
     align-self    : flex-start;
-    padding-bottom: calc(0.7rem - 0.55rem * var(--collapse, 0));
+    padding-bottom: 0.7rem;
     color         : var(--snow-white);
     max-width     : 100%;
 }
@@ -101,17 +102,17 @@
 }
 
 .eyebrow {
-    font-size     : calc(0.72rem - 0.02rem * var(--collapse, 0));
+    font-size     : 0.72rem;
     font-weight   : 600;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color         : rgba(255, 255, 255, 0.5);
-    margin-bottom : calc(0.5rem - 0.35rem * var(--collapse, 0));
+    margin-bottom : 0.5rem;
 }
 
 .subtitle {
-    margin-top   : calc(0.45rem - 0.3rem * var(--collapse, 0));
-    font-size    : calc(1.05rem - 0.15rem * var(--collapse, 0));
+    margin-top   : 0.45rem;
+    font-size    : 1.05rem;
     font-weight  : 500;
     color        : rgba(255, 255, 255, 0.88);
     max-width    : 100%;
@@ -193,14 +194,14 @@
 .img-top {
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter : drop-shadow(4px 4px 10px black);
-    border-radius   : calc(8px - 2px * var(--collapse, 0));
+    border-radius   : 8px;
 
     min-width   : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
     min-height  : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
     max-width   : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
     max-height  : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
-    margin-left : calc(32px - 16px * var(--collapse, 0));
-    margin-right: calc(32px - 12px * var(--collapse, 0));
+    margin-left : 32px;
+    margin-right: 32px;
     box-shadow  : 0 8px 28px rgba(0, 0, 0, 0.5);
 }
 
@@ -220,7 +221,7 @@
     height           : 100%;
     filter           : blur(48px) saturate(1.3);
     // Fades out as the header collapses, so the compact bar stays quiet.
-    opacity          : calc(0.5 - 0.3 * var(--collapse, 0));
+    opacity          : 0.5;
     pointer-events   : none;
     transition        : opacity .25s ease;
     background-repeat: no-repeat;
@@ -233,7 +234,7 @@
 // for attention it can carry more weight than a folder title.
 .search-info {
     .search-query {
-        font-size     : calc(3.25rem - 1.5rem * var(--collapse, 0));
+        font-size     : 3.25rem;
         letter-spacing: -0.04em;
         line-height   : 1.02;
     }
@@ -251,10 +252,10 @@
     gap        : 0.35rem;
     // Sits below the query with air above it, and fades out with the header so
     // the compact bar keeps only the query.
-    margin-top : calc(1.6rem - 1.2rem * var(--collapse, 0));
-    opacity    : calc(1 - var(--collapse, 0) * 1.6);
+    margin-top : 1.6rem;
+    opacity    : 1;
     overflow   : hidden;
-    max-height : calc(3rem - 3rem * var(--collapse, 0));
+    max-height : 3rem;
     transition : opacity .2s ease;
 }
 
@@ -491,7 +492,7 @@
     // Keep the blurred album backdrop almost fully visible when collapsed, so
     // the compact bar reads as a mini version of the hero gradient rather than
     // going flat black (its dark overlay already keeps text legible).
-    opacity            : calc(1 - 0.1 * var(--collapse, 0));
+    opacity            : 1;
 }
 
 // Plain dark scrim over the blurred cover for text legibility (no
@@ -1023,4 +1024,78 @@
     font-size              : 16px;
     color                  : rgba(255, 255, 255, 0.55);
     font-variation-settings: 'wght'300, 'FILL'0, 'GRAD'-25, 'opsz'20;
+}
+
+// ---------- Pinned compact bar ----------
+// This is the header in its collapsed form. It reuses the hero's own classes, so cover, eyebrow and
+// title keep their type and treatment; only the size vars are the collapsed ones. Height 0 in flow,
+// so it never shifts the list - the inner band is absolutely positioned over the rows.
+.dc-compact-bar {
+    position: sticky;
+    // Zero height, sitting at the hero's bottom edge, with the band spanning upwards from it. So
+    // the band covers the hero's last 104px and ends exactly where the hero ends - it never stands
+    // below it, and never lies over the list. Pinning at the band's own height keeps it at 0..104
+    // once the hero is gone, which is the same place it already occupied.
+    top     : var(--dc-hero-min, 104px);
+    height  : 0;
+    z-index : 30;
+}
+
+.dc-compact-bar .bar-inner {
+    // The collapsed bounds the interpolation used to end at.
+    --top-header-Height         : var(--dc-hero-min, 104px);
+    --top-header-Vertical-Indent: 16px;
+
+    position       : absolute;
+    bottom         : 0;
+    left           : 0;
+    right          : 0;
+    height         : var(--top-header-Height);
+    padding-right  : 2rem;
+    gap            : 0;
+    background     : var(--chrome-bg);
+    backdrop-filter: var(--chrome-blur);
+    border-bottom  : 1px solid var(--chrome-hair);
+    // Fades in where it is - sliding it down from above reads as a second element arriving.
+    opacity        : 0;
+    visibility     : hidden;
+    transition     : opacity 0.32s ease, visibility 0s linear 0.32s;
+}
+
+.dc-compact-bar.visible .bar-inner {
+    opacity   : 1;
+    visibility: visible;
+    transition: opacity 0.32s ease, visibility 0s;
+}
+
+.dc-compact-bar .bar-info {
+    flex     : 1 1 auto;
+    min-width: 0;
+}
+
+// Type sizes the collapse used to arrive at.
+.dc-compact-bar .eyebrow {
+    font-size    : 0.7rem;
+    margin-bottom: 0.15rem;
+}
+
+.dc-compact-bar .title-row {
+    gap           : 0.8rem;
+    padding-bottom: 0;
+}
+
+.dc-compact-bar .title {
+    font-size     : 1.15rem;
+    padding-bottom: 0;
+}
+
+.dc-compact-bar .bar-actions {
+    flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dc-compact-bar .bar-inner,
+    .dc-compact-bar.visible .bar-inner {
+        transition: none;
+    }
 }

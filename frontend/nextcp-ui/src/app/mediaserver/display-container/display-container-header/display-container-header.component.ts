@@ -36,6 +36,7 @@ import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { AlbumArtService } from 'src/app/util/album-art.service';
 import { DisplayHeaderOptionsComponent } from '../../popup/display-header-options/display-header-options.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'display-container-header',
@@ -43,7 +44,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   changeDetection: ChangeDetectionStrategy.OnPush,
   // No Material components left in the template — the header buttons, filter
   // dropdowns and inputs are all plain elements styled in the component's SCSS.
-  imports: [FormsModule, ReactiveFormsModule, MatDialogModule],
+  imports: [NgTemplateOutlet, FormsModule, ReactiveFormsModule, MatDialogModule],
   templateUrl: './display-container-header.component.html',
   styleUrl: './display-container-header.component.scss',
 })
@@ -153,25 +154,28 @@ export class DisplayContainerHeaderComponent implements OnInit {
   // Collapsing sticky header
   /////////////////////////////////////
 
-  // Scroll-linked collapse progress, 0 (full hero) .. 1 (compact bar).
-  // Driven continuously by scroll position so the header shrinks gradually
-  // instead of snapping — a binary toggle fed back into layout height and
-  // caused flicker around the threshold.
-  collapse = signal<number>(0);
-  // Compact mode: buttons move to the right and the page-filter tools hide.
-  // Switched once, early in the scroll, so it never affects header height.
-  condensed = computed(() => this.collapse() > 0.06);
+  // The hero scrolls away like any other content; once it is gone a compact bar takes the top.
+  // A threshold rather than a scroll-linked size: resizing the header while scrolling fed its own
+  // height back into the scroll position, and the in-between sizes were never a state worth seeing.
+  condensed = signal<boolean>(false);
 
-  // Scroll distance (px) over which the header fully collapses.
-  private readonly COLLAPSE_RANGE = 150;
-  // Bottom zone (px) where collapse is frozen to avoid macOS overscroll wobble.
-  private readonly COLLAPSE_FREEZE_ZONE = 28;
+  // Height of the band - the collapsed header. It already sits on the hero's last 104px, so it
+  // only has to become visible at the moment it pins.
+  private readonly COMPACT_BAR_HEIGHT = 104;
+  // Hysteresis, so a scroll resting exactly on the threshold cannot flip the bar back and forth.
+  private readonly CONDENSE_HYSTERESIS = 24;
   private scrollParent: HTMLElement | null = null;
   private rafPending = false;
-  // The sticky track-list column header, which parks below this one. Cached
-  // because it is written to on every scrolled frame; re-resolved whenever the
-  // cached node has left the document (a browse replaced the list).
-  private listColHeader: HTMLElement | null = null;
+
+  private heroNode: HTMLElement | null = null;
+
+  private heroEl(): HTMLElement | null {
+    if (!this.heroNode?.isConnected) {
+      this.heroNode =
+        this.hostRef.nativeElement.querySelector<HTMLElement>('#outer');
+    }
+    return this.heroNode;
+  }
 
   private readonly onScroll = (): void => {
     if (this.rafPending) {
@@ -184,50 +188,23 @@ export class DisplayContainerHeaderComponent implements OnInit {
       if (!el) {
         return;
       }
-      const y = el.scrollTop;
-      // Near the very bottom, macOS inertial overscroll makes scrollTop jitter.
-      // Because the collapsing header changes the scrollable height, that jitter
-      // would feed back and wobble the header. Hold the collapse value in this
-      // bottom zone (the header shouldn't keep changing there anyway) to break
-      // the loop — without needing a bottom spacer.
-      if (el.scrollHeight - el.clientHeight - y < this.COLLAPSE_FREEZE_ZONE) {
+      // The host has no box (display: contents), so the hero is measured on its own element.
+      const hero = this.heroEl();
+      if (!hero) {
         return;
       }
-      const next =
-        Math.round(Math.min(1, Math.max(0, y / this.COLLAPSE_RANGE)) * 100) /
-        100;
-      if (next !== this.collapse()) {
-        this.collapse.set(next);
-        this.publishCollapse(next);
+      const heroHeight = hero.offsetHeight;
+      // Exactly the scroll position at which the band pins, so it fades in as it stops moving.
+      const on = heroHeight - this.COMPACT_BAR_HEIGHT;
+      const y = el.scrollTop;
+      const next = this.condensed()
+        ? y > on - this.CONDENSE_HYSTERESIS
+        : y >= on;
+      if (next !== this.condensed()) {
+        this.condensed.set(next);
       }
     });
   };
-
-  /**
-   * Hands the current collapse value to the elements whose size depends on it.
-   *
-   * Deliberately NOT written on the scroll container: a custom property is
-   * inherited, so changing it there invalidated the computed style of every node
-   * on the page — with a few hundred album tiles in the list that was tens of
-   * milliseconds of style recalculation per scrolled frame. The only two
-   * consumers are this header and the sticky column header of a track list, so
-   * the value goes straight onto those instead.
-   */
-  private publishCollapse(value: number): void {
-    const collapse = String(value);
-    this.hostRef.nativeElement.style.setProperty('--collapse', collapse);
-    if (!this.listColHeader?.isConnected) {
-      // Only a track listing has one, so on an album or folder page this must
-      // not turn into a DOM query per scrolled frame. Once found it is kept
-      // until the node is replaced by the next browse.
-      this.listColHeader = this.hasSongs()
-        ? document.querySelector<HTMLElement>(
-            '#display-container-main-content.with-sticky-header .list-col-header',
-          )
-        : null;
-    }
-    this.listColHeader?.style.setProperty('--collapse', collapse);
-  }
 
   constructor() {
     afterNextRender(() => {
@@ -456,10 +433,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   private cdsBrowseFinished() {
     console.log('cdsBrowseFinished ... ');
     // A fresh browse result starts at the top, so show the full hero header.
-    this.collapse.set(0);
-    // The list is being replaced — drop the cached node with it.
-    this.listColHeader = null;
-    this.publishCollapse(0);
+    this.condensed.set(false);
     this.clearSearch();
     this.fillGenres();
     this.readContainerRating();

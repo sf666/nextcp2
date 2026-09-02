@@ -6,8 +6,9 @@
 // default to 0, so without a browse header this simply sticks to the top.
 .list-col-header {
     position: sticky;
-    top     : calc(var(--dc-sticky-max, 0px) -
-                   (var(--dc-sticky-max, 0px) - var(--dc-sticky-min, 0px)) * var(--collapse, 0));
+    // Parks under the pinned browse bar, whose height is fixed. The hero above is not sticky, so by
+    // the time these labels reach the top the bar is the only thing there.
+    top     : var(--dc-sticky-top, 0px);
     z-index : 10;
     // No fill — just bold labels over the living canvas with a thin bottom rule.
     // A colourless backdrop-blur softens the rows passing underneath so the

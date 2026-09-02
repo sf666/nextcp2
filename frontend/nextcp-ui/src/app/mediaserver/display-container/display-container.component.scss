@@ -27,29 +27,10 @@
     }
 }
 
-// Pin the browse header to the top of the scroll area. Its parent
-// (#display-container-component-top-id) spans header + list, so it stays
-// pinned while the list scrolls underneath and collapses via its own state.
-.dc-header-sticky {
-    position: sticky;
-    top     : 0;
-    z-index : 30;
-}
-
-// When the collapsing browse header is present, the sticky track-list column
-// header parks just below it, tracking the header's *current* height so it stays
-// glued to its bottom edge throughout the collapse instead of being briefly
-// hidden behind the still-tall header mid-transition.
-//
-// Only the two bounds are published here. The interpolation itself happens on
-// the sticky element (see item-tile.component.scss), because --collapse changes
-// on every scrolled frame and an inherited custom property set on *this*
-// element would invalidate the computed style of the whole list below it.
-// Outside a collapsing header both bounds stay 0 and the element sticks to the
-// top of the scroll area, as before.
+// The browse header is not pinned - it scrolls away and a compact bar inside it takes the top.
+// The sticky track-list column header therefore parks under that bar, whose height is constant.
 #display-container-main-content.with-sticky-header {
-    --dc-sticky-max: var(--dc-hero-max);
-    --dc-sticky-min: var(--dc-hero-min);
+    --dc-sticky-top: var(--dc-hero-min, 104px);
 }
 
 // Gap between the browse header and the content. Small for folder views, but

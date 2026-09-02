@@ -1,7 +1,7 @@
 <!--                                                                -->
 <!-- display component header                                       -->
 <!-- ############################################################## -->
-<div id="outer" class="flex relative w-full grow shrink justify-items-center" [class.condensed]="condensed()" [class.has-actions]="hasSongs()"
+<div id="outer" class="flex relative w-full grow shrink justify-items-center" [class.has-actions]="hasSongs()"
   [class.is-search]="isSearchResult()">
   <div class="bg-img-header w-full" id="header-background"></div>
 
@@ -110,8 +110,45 @@
           queries in the SCSS), because a second line has nowhere to go.
         -->
         <div class="header-bottom-row flex items-end gap-3">
+          <ng-container [ngTemplateOutlet]="headerActions"></ng-container>
+          <ng-container [ngTemplateOutlet]="headerFilters"></ng-container>
+        </div>
+      </div>
+      <div class="flex">
+        <div class="middle-spacer"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--
+  The pinned bar: what the header used to look like once it was fully collapsed. Height 0 in flow so
+  it never shifts the list; its content is absolutely positioned and lies over the rows. It sticks
+  the moment the hero above it has scrolled out.
+-->
+<div class="dc-compact-bar" [class.visible]="condensed()">
+  <div class="bar-inner flex items-center">
+    @if (!isSearchResult()) {
+      <div class="flex top-img-container items-center">
+        <img src="{{albumArt.detail(currentContainer.albumartUri, currentContainer.albumartUriMedium)}}"
+             class="img-top aspect-square object-cover">
+      </div>
+    }
+    <div class="flex flex-col info-block bar-info">
+      <div class="eyebrow">{{containerType()}}</div>
+      <div class="title-row">
+        <span class="title truncate">{{currentContainer.title}}</span>
+      </div>
+    </div>
+    <div class="bar-actions flex items-center">
+      <ng-container [ngTemplateOutlet]="headerActions"></ng-container>
+    </div>
+  </div>
+</div>
+
+<ng-template #headerActions>
         @if (hasSongs()) {
-          <div id="headButtonRow" class="button-row">
+          <div class="button-row">
             <div class="button-flex-container">
               <!-- Play and shuffle are equals, so they share one capsule. -->
               <div class="action-caps caps-action">
@@ -137,6 +174,9 @@
             </div>
           </div>
         }
+</ng-template>
+
+<ng-template #headerFilters>
         @if (currentContainer.id?.length ?? 0 > 0) {
           <div class="header-tools flex items-center justify-end gap-3">
             @if (hasAlbums()) {
@@ -167,7 +207,7 @@
             <div class="filter-field tool-filter" [class.active]="quickSearchString()">
               <span class="filter-label">Filter</span>
               <span class="material-symbols-outlined field-icon">search</span>
-              <input [(ngModel)]="quickSearchString" (keyup)="keyUp($event)" type="text" id="search"
+              <input [(ngModel)]="quickSearchString" (keyup)="keyUp($event)" type="text"
                 class="field-input" placeholder="Filter this page" />
               @if (quickSearchString()) {
                 <button type="button" class="field-clear" (click)="clearSearch()" title="Clear filter">
@@ -242,18 +282,11 @@
               </div>
             }
             @if (!hasSongs()) {
-              <button id="options_button" type="button" class="tool-icon-btn tool-options"
+              <button type="button" class="tool-icon-btn tool-options"
                 (click)="openOptionsDialog($event)" title="More options">
                 <span class="material-symbols-outlined">more_vert</span>
               </button>
             }
           </div>
         }
-        </div>
-      </div>
-      <div class="flex">
-        <div class="middle-spacer"></div>
-      </div>
-    </div>
-  </div>
-</div>
+</ng-template>

@@ -10,8 +10,7 @@
 <div id="display-container-component-top-id" class="flex flex-col w-full"
   [class.is-search]="isSearchResult()">
 @if (headerVisible()) {
-  <div class="flex w-full dc-header-sticky">
-    <display-container-header class="flex grow"
+    <display-container-header
     [contentDirectoryService]="contentHandler()!.contentDirectoryService"
 
     [(listView)]="listView"
@@ -25,7 +24,6 @@
     (shuffleClicked)="shufflePlaylist($event)"
     (addToPlaylistClicked)="addPlaylist($event)"
   />
-  </div>
 }
 
 <!--
