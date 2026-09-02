@@ -468,17 +468,27 @@ export class DisplayContainerHeaderComponent implements OnInit {
     // here and the hero's bloom carries the colour instead.
     const searching = this.isSearchResult();
     const artUrl = searching ? '' : this.currentContainer.albumartUri;
-    this.backgroundImageService.setDisplayContainerHeaderImage(artUrl);
-    // Drive the full-screen "living canvas" wash from the item currently being
-    // browsed (always present), so the frosted chrome reliably picks up the
-    // colour you are looking at — instead of the often-dark now-playing art.
-    this.backgroundImageService.setBackgroundImageMainScreen(artUrl);
+    // A container that was re-read because the server said it changed is still the same container,
+    // so a reply without a cover means "not reported this time", not "has none". Clearing on that
+    // drops the wash to black for a moment and it flickers back - keep what is up instead. Only a
+    // real navigation may clear, because there the empty genuinely belongs to the new container.
+    const keepLastImage =
+      !artUrl && this.contentDirectoryService().isInPlaceRefresh();
+    if (!keepLastImage) {
+      this.backgroundImageService.setDisplayContainerHeaderImage(artUrl);
+      // Drive the full-screen "living canvas" wash from the item currently being
+      // browsed (always present), so the frosted chrome reliably picks up the
+      // colour you are looking at — instead of the often-dark now-playing art.
+      this.backgroundImageService.setBackgroundImageMainScreen(artUrl);
+    }
     if (searching) {
       this.updateSearchBloom();
     } else {
       this.bloomColors.set([]);
       // Extract the cover's dominant colour to reliably tint the sidebar.
-      this.backgroundImageService.applyAmbientTint(artUrl);
+      if (!keepLastImage) {
+        this.backgroundImageService.applyAmbientTint(artUrl);
+      }
     }
     // Scroll restore is centralized in DisplayContainerComponent (it must prefer
     // the virtualized album grid, whose target may not be in the DOM). Do not

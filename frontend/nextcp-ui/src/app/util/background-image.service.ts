@@ -5,31 +5,39 @@ import { supportsBackdropFilter } from './browser-capabilities';
   providedIn: 'root',
 })
 export class BackgroundImageService {
-  public setBackgroundImageMainScreen(url: string): void {
-    const element = document.getElementById('main-screen');
-    if (supportsBackdropFilter && element) {
-      // Empty url clears the inline override so the base (neutral dark) shows through.
-      element.style.backgroundImage = url ? 'url("' + url + '")' : '';
+  // What each target currently carries. Re-reading a container reports the same artwork, and
+  // reassigning the identical background makes the browser decode and repaint it again - which
+  // is visible as a flicker. Nothing else writes these elements, so remembering it here is safe.
+  private applied = new Map<string, string>();
+
+  /**
+   * @return false when the element already carries this url, so the caller can skip the work that
+   * would follow.
+   */
+  private apply(elementId: string, url: string): boolean {
+    const element = document.getElementById(elementId);
+    if (!supportsBackdropFilter || !element) {
+      return false;
     }
+    if (this.applied.get(elementId) === url) {
+      return false;
+    }
+    this.applied.set(elementId, url);
+    // Empty url clears the inline override so the base (neutral dark) shows through.
+    element.style.backgroundImage = url ? 'url("' + url + '")' : '';
+    return true;
+  }
+
+  public setBackgroundImageMainScreen(url: string): void {
+    this.apply('main-screen', url);
   }
 
   public setFooterBackgroundImage(url: string): void {
-    const element = document.getElementById('footer-background');
-    if (supportsBackdropFilter && element) {
-      element.style.backgroundImage = 'url("' + url + '")';
-    }
+    this.apply('footer-background', url);
   }
 
   public setDisplayContainerHeaderImage(url: string): void {
-    if (
-      supportsBackdropFilter &&
-      document.getElementById('header-background')
-    ) {
-      let element = document.getElementById('header-background');
-      if (element) {
-        element.style.backgroundImage = url ? 'url("' + url + '")' : '';
-      }
-    }
+    this.apply('header-background', url);
   }
 
   /**
