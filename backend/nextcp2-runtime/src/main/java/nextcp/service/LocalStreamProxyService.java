@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HexFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -97,6 +98,20 @@ public class LocalStreamProxyService {
 	public static final String PROXY_USER_AGENT_LOSSY = "next_cp_webplayer_lossy/1.0";
 
 	private static final int COPY_BUFFER_SIZE = 64 * 1024;
+
+	/**
+	 * Legacy "x-" audio MIME types rewritten to the registered name before the browser sees them.
+	 * <p>
+	 * UMS labels FLAC as {@code audio/x-flac}. Chromium treats that as an alias and plays it; WebKit
+	 * (Safari, and every browser on iOS/iPadOS) does not recognize it and rejects the source outright,
+	 * which surfaces as MEDIA_ERR_SRC_NOT_SUPPORTED even though the bytes are perfectly playable. The
+	 * bytes are untouched - only the label changes.
+	 */
+	private static final Map<String, String> CONTENT_TYPE_ALIASES = Map.of(
+		"audio/x-flac", "audio/flac",
+		"audio/x-m4a", "audio/mp4",
+		"audio/x-wav", "audio/wav",
+		"audio/x-aiff", "audio/aiff");
 
 	private static final long GIBIBYTE = 1024L * 1024 * 1024;
 	private static final long EXBIBYTE = GIBIBYTE * GIBIBYTE;
@@ -324,7 +339,8 @@ public class LocalStreamProxyService {
 		if (upstream.statusCode() >= 400) {
 			response.setHeader("X-Upstream-Status", Integer.toString(upstream.statusCode()));
 		}
-		relayHeader(upstream, response, "Content-Type");
+		upstream.headers().firstValue("Content-Type")
+			.ifPresent(type -> response.setHeader("Content-Type", normalizeContentType(type)));
 		relayHeader(upstream, response, "Content-Length");
 		relayHeader(upstream, response, "Content-Range");
 		relayHeader(upstream, response, "Accept-Ranges");
@@ -453,7 +469,8 @@ public class LocalStreamProxyService {
 				if (isEndlessStream(upstream)) {
 					throw new IOException("refusing to cache an endless stream: " + uri);
 				}
-				String contentType = upstream.headers().firstValue("Content-Type").orElse("application/octet-stream");
+				String contentType = normalizeContentType(
+					upstream.headers().firstValue("Content-Type").orElse("application/octet-stream"));
 				Path tmp = cacheDir.resolve(key + "." + UUID.randomUUID() + ".tmp");
 				try (InputStream in = upstream.body()) {
 					copyBounded(in, tmp, uri);
@@ -578,6 +595,25 @@ public class LocalStreamProxyService {
 			out.write(buffer, 0, read);
 			remaining -= read;
 		}
+	}
+
+	/**
+	 * Maps a legacy {@code audio/x-*} label to its registered equivalent, leaving any parameters
+	 * ({@code ;charset=...}) and every other type untouched.
+	 *
+	 * @see #CONTENT_TYPE_ALIASES
+	 */
+	static String normalizeContentType(String contentType) {
+		if (StringUtils.isBlank(contentType)) {
+			return contentType;
+		}
+		int semicolon = contentType.indexOf(';');
+		String type = (semicolon > -1 ? contentType.substring(0, semicolon) : contentType).trim();
+		String canonical = CONTENT_TYPE_ALIASES.get(type.toLowerCase(java.util.Locale.ROOT));
+		if (canonical == null) {
+			return contentType;
+		}
+		return semicolon > -1 ? canonical + contentType.substring(semicolon) : canonical;
 	}
 
 	private void relayHeader(HttpResponse<InputStream> upstream, HttpServletResponse response, String name) {

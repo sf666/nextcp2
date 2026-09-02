@@ -71,7 +71,9 @@ export class LocalPlayerService {
 
   // Remembers, per browser, that this client could not play the media server's native stream, so
   // every later request asks for the transcoded (lossy) renderer profile straight away.
-  private static readonly LOSSY_STORAGE_KEY = 'nextcp.localPlayer.lossy.v1';
+  // v2: the v1 flag was set on browsers that only ever failed because of a legacy "audio/x-flac"
+  // label, which the backend proxy now rewrites - so that verdict has to be re-taken.
+  private static readonly LOSSY_STORAGE_KEY = 'nextcp.localPlayer.lossy.v2';
   // Whether to ask the proxy for the lossy renderer profile. Starts from what the browser claims it
   // can decode, but browsers claim wrong in both directions - the authoritative signal is a real
   // playback error, which flips this permanently (see retryAsLossy).
