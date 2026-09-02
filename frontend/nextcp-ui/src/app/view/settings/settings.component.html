@@ -372,6 +372,19 @@
             UPnP code path</label>
         </div>
         <div class="subsection-title sm:col-span-2">Browser Player</div>
+        <div class="relative z-0 w-full mb-5 group sm:col-span-2">
+          <select [ngModel]="configService.applicationConfig.localPlayerFormatMode ?? 'auto'"
+            (ngModelChange)="configService.applicationConfig.localPlayerFormatMode = $event"
+            name="FORM_lp_formatmode" id="FORM_lp_formatmode"
+            class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer">
+            <option class="text-black" value="auto">Automatic (stream lossless where the browser supports it)</option>
+            <option class="text-black" value="lossless">Always lossless</option>
+            <option class="text-black" value="lossy">Always transcoded (saves bandwidth)</option>
+          </select>
+          <label for="FORM_lp_formatmode"
+            class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Audio
+            format for the browser player</label>
+        </div>
         <div class="relative z-0 w-full mb-5 group flex items-center gap-3 py-2.5 sm:col-span-2">
           <input type="checkbox" name="FORM_lp_pretranscode" id="FORM_lp_pretranscode"
             class="text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"

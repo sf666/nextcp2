@@ -34,13 +34,14 @@ public class ApplicationConfig
     public String localPlayerCacheDir;
     public Long localPlayerCacheMaxMb;
     public Long localPlayerCacheTtlHours;
+    public String localPlayerFormatMode;
     public Boolean showImageItems;
 
     public ApplicationConfig()
     {
     }
 
-    public ApplicationConfig(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Integer embeddedServerSslPort, String embeddedServerSslP12Keystore, String embeddedServerSslP12KeystorePassword, Long sseEmitterTimeout, String loggingConfigFile, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript, String upnpBindInterface, Integer chatHistorySize, Boolean behindReverseProxy, Integer sseHeartbeatSeconds, Boolean localPlayerPreTranscodeEnabled, String localPlayerCacheDir, Long localPlayerCacheMaxMb, Long localPlayerCacheTtlHours, Boolean showImageItems)
+    public ApplicationConfig(Boolean generateUpnpCode, String generateUpnpCodePath, String libraryPath, Integer embeddedServerPort, Integer embeddedServerSslPort, String embeddedServerSslP12Keystore, String embeddedServerSslP12KeystorePassword, Long sseEmitterTimeout, String loggingConfigFile, Long globalSearchDelay, String databaseFilename, Long itemsPerPage, Long nextPageAfter, String pathToRestartScript, String upnpBindInterface, Integer chatHistorySize, Boolean behindReverseProxy, Integer sseHeartbeatSeconds, Boolean localPlayerPreTranscodeEnabled, String localPlayerCacheDir, Long localPlayerCacheMaxMb, Long localPlayerCacheTtlHours, String localPlayerFormatMode, Boolean showImageItems)
     {
         this.generateUpnpCode = generateUpnpCode;
         this.generateUpnpCodePath = generateUpnpCodePath;
@@ -64,6 +65,7 @@ public class ApplicationConfig
         this.localPlayerCacheDir = localPlayerCacheDir;
         this.localPlayerCacheMaxMb = localPlayerCacheMaxMb;
         this.localPlayerCacheTtlHours = localPlayerCacheTtlHours;
+        this.localPlayerFormatMode = localPlayerFormatMode;
         this.showImageItems = showImageItems;
     }
     
@@ -94,6 +96,7 @@ public class ApplicationConfig
         sb.append("localPlayerCacheDir=").append(this.localPlayerCacheDir).append(", ");
         sb.append("localPlayerCacheMaxMb=").append(this.localPlayerCacheMaxMb).append(", ");
         sb.append("localPlayerCacheTtlHours=").append(this.localPlayerCacheTtlHours).append(", ");
+        sb.append("localPlayerFormatMode=").append(this.localPlayerFormatMode).append(", ");
         sb.append("showImageItems=").append(this.showImageItems).append(", ");
         sb.append("]");
         return sb.toString();

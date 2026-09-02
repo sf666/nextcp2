@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-09-02 11:54:12.
+// Generated using typescript-generator version 4.1.1 on 2026-09-02 15:11:00.
 
 export interface AddRadioStationRequest {
     serverUdn: string;
@@ -73,6 +73,7 @@ export interface ApplicationConfig {
     localPlayerCacheDir: string;
     localPlayerCacheMaxMb: number;
     localPlayerCacheTtlHours: number;
+    localPlayerFormatMode: string;
     showImageItems: boolean;
 }
 

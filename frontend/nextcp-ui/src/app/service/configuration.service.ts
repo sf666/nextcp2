@@ -98,6 +98,7 @@ export class ConfigurationService {
     localPlayerCacheDir: '',
     localPlayerCacheMaxMb: 2048,
     localPlayerCacheTtlHours: 24,
+    localPlayerFormatMode: 'auto',
     showImageItems: false,
   };
 

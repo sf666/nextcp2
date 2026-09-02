@@ -1,6 +1,7 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { MusicItemDto } from './dto';
 import { isBroadcastItem } from 'src/app/util/broadcast-item';
+import { ConfigurationService } from './configuration.service';
 import { PersistenceService } from './persistence/persistence.service';
 import { ToastService } from './toast/toast.service';
 
@@ -33,6 +34,7 @@ export class LocalPlayerService {
   private queue: MusicItemDto[] = [];
   private currentIndex = -1;
 
+  private readonly configurationService = inject(ConfigurationService);
   private readonly persistenceService = inject(PersistenceService);
   private readonly toastService = inject(ToastService);
 
@@ -70,7 +72,7 @@ export class LocalPlayerService {
   private playbackErrorReported = false;
 
   private static readonly LOSSY_STORAGE_KEY = 'nextcp.localPlayer.lossy.v2';
-  private lossyPlayback = this.detectLossyPlayback();
+  private autoLossy = this.detectLossyPlayback();
 
   // Playback state, consumed by RendererService so the footer now-playing/transport reflects the
   // local browser player when the "This Device" renderer is selected.
@@ -327,8 +329,11 @@ export class LocalPlayerService {
     const source = this.audio.currentSrc;
     // The audio element only reports "cannot play this format" even when the source answered with an
     // error status, so ask the source itself what happened.
-    this.probeSourceFailure(source).then((httpReason) => {
-      const reason = httpReason ?? fallback;
+    const codecFailure = code === 3 || code === 4;
+    this.probeSourceFailure(source).then(async (httpReason) => {
+      const reason = httpReason
+        ?? (codecFailure ? await this.probeUnplayableFlac(source) : null)
+        ?? fallback;
       this.toastService.error(`${this.describe(item)}: ${reason}.`, 'playback failed');
     });
   }
@@ -346,6 +351,37 @@ export class LocalPlayerService {
       const upstream = response.headers.get('X-Upstream-Status');
       const detail = upstream && upstream !== String(response.status) ? ` (media server: ${upstream})` : '';
       return `${LocalPlayerService.httpReason(response.status)}${detail}`;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Reads the 12-byte FLAC header to tell a file this browser cannot decode from a generic codec
+   * failure. A STREAMINFO whose minimum and maximum block size differ is a variable-block-size
+   * stream: legal FLAC, played by Chromium, rejected outright by WebKit.
+   *
+   * @returns the reason, or null if the source is not such a file (or cannot be read)
+   */
+  private async probeUnplayableFlac(source: string): Promise<string | null> {
+    if (!source) {
+      return null;
+    }
+    try {
+      const response = await fetch(source, { headers: { Range: 'bytes=0-11' }, cache: 'no-store' });
+      // Only a partial response is safe to read; a server ignoring Range would hand us the whole file.
+      if (response.status !== 206) {
+        return null;
+      }
+      const head = new DataView(await response.arrayBuffer());
+      if (head.byteLength < 12 || head.getUint32(0) !== 0x664c6143) {
+        return null;
+      }
+      if (head.getUint16(8) === head.getUint16(10)) {
+        return null;
+      }
+      return 'this FLAC has a variable block size, which this browser cannot decode. Re-encoding the '
+        + 'file fixes it: ffmpeg -i in.flac -map 0 -c:a flac -c:v copy out.flac';
     } catch {
       return null;
     }
@@ -498,6 +534,18 @@ export class LocalPlayerService {
     return this.lossyPlayback ? url + '&lossy=true' : url;
   }
 
+  private get formatMode(): string {
+    return this.configurationService.applicationConfig?.localPlayerFormatMode ?? 'auto';
+  }
+
+  private get lossyPlayback(): boolean {
+    switch (this.formatMode) {
+      case 'lossy': return true;
+      case 'lossless': return false;
+      default: return this.autoLossy;
+    }
+  }
+
   private detectLossyPlayback(): boolean {
     try {
       if (localStorage.getItem(LocalPlayerService.LOSSY_STORAGE_KEY) === 'true') {
@@ -511,7 +559,7 @@ export class LocalPlayerService {
 
   private retryAsLossy(): boolean {
     const code = this.audio.error?.code ?? 0;
-    if (this.lossyPlayback || this.currentIndex < 0 || (code !== 3 && code !== 4)) {
+    if (this.formatMode !== 'auto' || this.autoLossy || this.currentIndex < 0 || (code !== 3 && code !== 4)) {
       return false;
     }
     console.warn('[local-player] browser refused the native stream (code ' + code +
@@ -522,7 +570,7 @@ export class LocalPlayerService {
   }
 
   public setLossyPlayback(lossy: boolean): void {
-    this.lossyPlayback = lossy;
+    this.autoLossy = lossy;
     try {
       localStorage.setItem(LocalPlayerService.LOSSY_STORAGE_KEY, String(lossy));
     } catch {

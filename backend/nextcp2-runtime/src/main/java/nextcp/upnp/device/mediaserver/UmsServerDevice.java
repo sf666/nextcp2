@@ -156,8 +156,10 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	private void updateServerConfig() {
 		ServerDeviceConfiguration sd = serverConfig.getMediaServerConfig(getUdnAsString());
 
-		if (umsServiceEventListener.getStateVariable().AudioUpdateRating != null &&
-			!umsServiceEventListener.getStateVariable().AudioUpdateRating) {
+		// UMS owns this setting, so its value is adopted in both directions. Only ever copying a
+		// false back used to pin the stored value to false: a true never returned, and any later
+		// event re-applied the stale false over what the user had just enabled.
+		if (umsServiceEventListener.getStateVariable().AudioUpdateRating != null) {
 			sd.updateRatingInFile = umsServiceEventListener.getStateVariable().AudioUpdateRating;
 		}
 
