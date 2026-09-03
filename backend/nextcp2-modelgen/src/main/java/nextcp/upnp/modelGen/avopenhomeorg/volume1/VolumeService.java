@@ -14,32 +14,32 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
 
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetBalance;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetBalanceInput;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.FadeInc;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Balance;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.BalanceOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.BalanceDec;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.FadeDec;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.BalanceInc;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.VolumeInc;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.VolumeLimit;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.VolumeLimitOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Characteristics;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.CharacteristicsOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Fade;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.FadeOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.FadeDec;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.FadeInc;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Mute;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.MuteOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetBalance;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetBalanceInput;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetFade;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetFadeInput;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetMute;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetMuteInput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetVolume;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetVolumeInput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Volume;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.VolumeOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetFade;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetFadeInput;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Balance;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.BalanceOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Fade;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.FadeOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetMute;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.SetMuteInput;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Mute;
-import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.MuteOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.VolumeDec;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.VolumeInc;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.VolumeLimit;
+import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.VolumeLimitOutput;
 
 
 /**
@@ -142,16 +142,11 @@ public class VolumeService
 
 
 
-    public void setBalance(SetBalanceInput inp)
+    public BalanceOutput balance()
     {
-        SetBalance setBalance = new SetBalance(volumeService, inp, upnpService.getControlPoint());
-        setBalance.executeAction();
-    }
-
-    public void fadeInc()
-    {
-        FadeInc fadeInc = new FadeInc(volumeService,  upnpService.getControlPoint());
-        fadeInc.executeAction();
+        Balance balance = new Balance(volumeService,  upnpService.getControlPoint());
+        BalanceOutput res = balance.executeAction();
+        return res;        
     }
 
     public void balanceDec()
@@ -160,29 +155,10 @@ public class VolumeService
         balanceDec.executeAction();
     }
 
-    public void fadeDec()
-    {
-        FadeDec fadeDec = new FadeDec(volumeService,  upnpService.getControlPoint());
-        fadeDec.executeAction();
-    }
-
     public void balanceInc()
     {
         BalanceInc balanceInc = new BalanceInc(volumeService,  upnpService.getControlPoint());
         balanceInc.executeAction();
-    }
-
-    public void volumeInc()
-    {
-        VolumeInc volumeInc = new VolumeInc(volumeService,  upnpService.getControlPoint());
-        volumeInc.executeAction();
-    }
-
-    public VolumeLimitOutput volumeLimit()
-    {
-        VolumeLimit volumeLimit = new VolumeLimit(volumeService,  upnpService.getControlPoint());
-        VolumeLimitOutput res = volumeLimit.executeAction();
-        return res;        
     }
 
     public CharacteristicsOutput characteristics()
@@ -190,6 +166,50 @@ public class VolumeService
         Characteristics characteristics = new Characteristics(volumeService,  upnpService.getControlPoint());
         CharacteristicsOutput res = characteristics.executeAction();
         return res;        
+    }
+
+    public FadeOutput fade()
+    {
+        Fade fade = new Fade(volumeService,  upnpService.getControlPoint());
+        FadeOutput res = fade.executeAction();
+        return res;        
+    }
+
+    public void fadeDec()
+    {
+        FadeDec fadeDec = new FadeDec(volumeService,  upnpService.getControlPoint());
+        fadeDec.executeAction();
+    }
+
+    public void fadeInc()
+    {
+        FadeInc fadeInc = new FadeInc(volumeService,  upnpService.getControlPoint());
+        fadeInc.executeAction();
+    }
+
+    public MuteOutput mute()
+    {
+        Mute mute = new Mute(volumeService,  upnpService.getControlPoint());
+        MuteOutput res = mute.executeAction();
+        return res;        
+    }
+
+    public void setBalance(SetBalanceInput inp)
+    {
+        SetBalance setBalance = new SetBalance(volumeService, inp, upnpService.getControlPoint());
+        setBalance.executeAction();
+    }
+
+    public void setFade(SetFadeInput inp)
+    {
+        SetFade setFade = new SetFade(volumeService, inp, upnpService.getControlPoint());
+        setFade.executeAction();
+    }
+
+    public void setMute(SetMuteInput inp)
+    {
+        SetMute setMute = new SetMute(volumeService, inp, upnpService.getControlPoint());
+        setMute.executeAction();
     }
 
     public void setVolume(SetVolumeInput inp)
@@ -205,42 +225,22 @@ public class VolumeService
         return res;        
     }
 
-    public void setFade(SetFadeInput inp)
-    {
-        SetFade setFade = new SetFade(volumeService, inp, upnpService.getControlPoint());
-        setFade.executeAction();
-    }
-
-    public BalanceOutput balance()
-    {
-        Balance balance = new Balance(volumeService,  upnpService.getControlPoint());
-        BalanceOutput res = balance.executeAction();
-        return res;        
-    }
-
-    public FadeOutput fade()
-    {
-        Fade fade = new Fade(volumeService,  upnpService.getControlPoint());
-        FadeOutput res = fade.executeAction();
-        return res;        
-    }
-
-    public void setMute(SetMuteInput inp)
-    {
-        SetMute setMute = new SetMute(volumeService, inp, upnpService.getControlPoint());
-        setMute.executeAction();
-    }
-
-    public MuteOutput mute()
-    {
-        Mute mute = new Mute(volumeService,  upnpService.getControlPoint());
-        MuteOutput res = mute.executeAction();
-        return res;        
-    }
-
     public void volumeDec()
     {
         VolumeDec volumeDec = new VolumeDec(volumeService,  upnpService.getControlPoint());
         volumeDec.executeAction();
+    }
+
+    public void volumeInc()
+    {
+        VolumeInc volumeInc = new VolumeInc(volumeService,  upnpService.getControlPoint());
+        volumeInc.executeAction();
+    }
+
+    public VolumeLimitOutput volumeLimit()
+    {
+        VolumeLimit volumeLimit = new VolumeLimit(volumeService,  upnpService.getControlPoint());
+        VolumeLimitOutput res = volumeLimit.executeAction();
+        return res;        
     }
 }

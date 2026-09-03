@@ -9,13 +9,13 @@ package nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions;
 public class GetPositionInfoOutput
 {
 
+    public Integer AbsCount = null;
+    public String AbsTime = null;
+    public Integer RelCount = null;
+    public String RelTime = null;
     public Long Track = null;
     public String TrackDuration = null;
     public String TrackMetaData = null;
     public String TrackURI = null;
-    public String RelTime = null;
-    public String AbsTime = null;
-    public Integer RelCount = null;
-    public Integer AbsCount = null;
 
 }

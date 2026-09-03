@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class Login extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("Login"), new NextcpClientInfo()), cp);
 		
-        if (input.Id != null) {
-	        getActionInvocation().setInput("Id", input.Id);
-		} else {
-    	    getActionInvocation().setInput("Id", null);
-		}
+        getActionInvocation().setInput("Id", UpnpValue.forInput(getActionInvocation(), "Id", input.Id));
     }
 
     public LoginOutput executeAction()
@@ -40,14 +37,7 @@ public class Login extends ActionCallback
 
         LoginOutput result = new LoginOutput();
 
-  		if (invocation.getOutput("Token").getValue() != null)
-  		{
-	        result.Token = invocation.getOutput("Token").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Token = "";
-  		}
+        result.Token = UpnpValue.toTextOrEmpty(invocation.getOutput("Token").getValue());
 
         return result;
     }

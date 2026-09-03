@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,14 +36,7 @@ public class GetIds extends ActionCallback
 
         GetIdsOutput result = new GetIdsOutput();
 
-  		if (invocation.getOutput("Ids").getValue() != null)
-  		{
-	        result.Ids = invocation.getOutput("Ids").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Ids = "";
-  		}
+        result.Ids = UpnpValue.toTextOrEmpty(invocation.getOutput("Ids").getValue());
 
         return result;
     }

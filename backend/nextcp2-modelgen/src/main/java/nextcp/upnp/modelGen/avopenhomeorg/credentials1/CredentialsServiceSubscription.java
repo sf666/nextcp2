@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
  * Last Change : 08.09.2025
@@ -109,14 +110,14 @@ public class CredentialsServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
+                    case "Ids":
+                        idsChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
                     case "PublicKey":
-                        publicKeyChange((String) stateVar.getValue());
+                        publicKeyChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "SequenceNumber":
-                        sequenceNumberChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "Ids":
-                        idsChange((String) stateVar.getValue());
+                        sequenceNumberChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -138,6 +139,14 @@ public class CredentialsServiceSubscription extends RemoteGENASubscription
         }
     }
 
+    private void idsChange(String value)
+    {
+        for (ICredentialsServiceEventListener listener : eventListener)
+        {
+            listener.idsChange(value);
+        }
+    }    
+
     private void publicKeyChange(String value)
     {
         for (ICredentialsServiceEventListener listener : eventListener)
@@ -151,14 +160,6 @@ public class CredentialsServiceSubscription extends RemoteGENASubscription
         for (ICredentialsServiceEventListener listener : eventListener)
         {
             listener.sequenceNumberChange(value);
-        }
-    }    
-
-    private void idsChange(String value)
-    {
-        for (ICredentialsServiceEventListener listener : eventListener)
-        {
-            listener.idsChange(value);
         }
     }    
 }

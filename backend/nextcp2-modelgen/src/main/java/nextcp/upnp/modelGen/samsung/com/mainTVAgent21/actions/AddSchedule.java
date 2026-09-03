@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,9 +27,9 @@ public class AddSchedule extends ActionCallback
     public AddSchedule(Service service, AddScheduleInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("AddSchedule"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("ReservationType", input.ReservationType);
-        getActionInvocation().setInput("RemindInfo", input.RemindInfo);
+		
+        getActionInvocation().setInput("RemindInfo", UpnpValue.forInput(getActionInvocation(), "RemindInfo", input.RemindInfo));
+        getActionInvocation().setInput("ReservationType", UpnpValue.forInput(getActionInvocation(), "ReservationType", input.ReservationType));
     }
 
     public AddScheduleOutput executeAction()
@@ -37,30 +38,9 @@ public class AddSchedule extends ActionCallback
 
         AddScheduleOutput result = new AddScheduleOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("ConflictRemindInfo").getValue() != null)
-  		{
-	        result.ConflictRemindInfo = invocation.getOutput("ConflictRemindInfo").getValue().toString();
-  		}
-  		else
-  		{
-	        result.ConflictRemindInfo = "";
-  		}
-  		if (invocation.getOutput("ConflictRemindInfoURL").getValue() != null)
-  		{
-	        result.ConflictRemindInfoURL = invocation.getOutput("ConflictRemindInfoURL").getValue().toString();
-  		}
-  		else
-  		{
-	        result.ConflictRemindInfoURL = "";
-  		}
+        result.ConflictRemindInfo = UpnpValue.toTextOrEmpty(invocation.getOutput("ConflictRemindInfo").getValue());
+        result.ConflictRemindInfoURL = UpnpValue.toTextOrEmpty(invocation.getOutput("ConflictRemindInfoURL").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,22 +36,8 @@ public class Sender extends ActionCallback
 
         SenderOutput result = new SenderOutput();
 
-  		if (invocation.getOutput("Uri").getValue() != null)
-  		{
-	        result.Uri = invocation.getOutput("Uri").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Uri = "";
-  		}
-  		if (invocation.getOutput("Metadata").getValue() != null)
-  		{
-	        result.Metadata = invocation.getOutput("Metadata").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Metadata = "";
-  		}
+        result.Metadata = UpnpValue.toTextOrEmpty(invocation.getOutput("Metadata").getValue());
+        result.Uri = UpnpValue.toTextOrEmpty(invocation.getOutput("Uri").getValue());
 
         return result;
     }

@@ -2,12 +2,17 @@ package codegen;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import jakarta.annotation.PostConstruct;
 import org.apache.commons.io.FilenameUtils;
@@ -29,6 +34,11 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import codegen.model.ActionModel;
+import codegen.model.ServiceModel;
+import codegen.model.ServiceModelStore;
+import codegen.model.VariableModel;
+
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
@@ -44,11 +54,18 @@ public class UpnpModelGen implements RegistryListener {
 
 	private Configuration configuration;
 
+	private final ServiceModelStore modelStore = new ServiceModelStore();
+
 	@Autowired
 	private UpnpService upnpService = null;
 
 	@Autowired
 	private ICodegenConfig config = null;
+
+	public UpnpModelGen(ICodegenConfig config) {
+		this();
+		this.config = config;
+	}
 
 	public UpnpModelGen() {
 		configuration = new Configuration(Configuration.VERSION_2_3_30);
@@ -58,6 +75,37 @@ public class UpnpModelGen implements RegistryListener {
 		configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 		configuration.setLogTemplateExceptions(true);
 		configuration.setWrapUncheckedExceptions(true);
+	}
+
+	/**
+	 * Renders every generated artifact again from the stored models, without touching the network.
+	 * Needed whenever a template changes: the generated code is a function of the model, so it must
+	 * be possible to reproduce all of it without waiting for every device to show up again.
+	 *
+	 * @return number of services that were regenerated.
+	 */
+	public int regenerateAll() {
+		Path root = Path.of(config.getGenerateUpnpCodePath(), basePackage.replace(".", File.separator));
+		if (!Files.isDirectory(root)) {
+			log.error("[UpnpModelGen] no generated code at {}", root);
+			return 0;
+		}
+		int count = 0;
+		try (Stream<Path> files = Files.walk(root)) {
+			for (Path file : files.filter(f -> f.getFileName().toString().equals(ServiceModelStore.FILE_NAME)).toList()) {
+				ServiceModel model = modelStore.read(file.getParent().toFile());
+				if (model == null) {
+					log.error("[UpnpModelGen] cannot read {}", file);
+					continue;
+				}
+				generate(model);
+				count++;
+			}
+		} catch (IOException e) {
+			log.error("[UpnpModelGen] cannot walk {}", root, e);
+		}
+		log.info("[UpnpModelGen] regenerated {} services.", count);
+		return count;
 	}
 
 	@EventListener
@@ -81,239 +129,255 @@ public class UpnpModelGen implements RegistryListener {
 		log.info("[UpnpModelGen]  available services :");
 		for (RemoteService service : device.getServices()) {
 			log.info(String.format("[UpnpModelGen]    - %s", service.getServiceType()));
-
-			for (Action<?> action : service.getActions()) {
-				log.info(String.format("[UpnpModelGen]      * %s", action.getName()));
-
-				genParamClass(action, true);
-				genParamClass(action, false);
-				genActionClass(action);
-			}
-
-			genServiceClass(service);
-			genStateVariableClass(service);
+			mergeAndGenerate(toModel(service));
 		}
 	}
 
-	private void genServiceClass(RemoteService service) {
-		String className = service.getServiceType().getType() + "Service";
+	/**
+	 * Reads what a device announces into a model of its own.
+	 */
+	private ServiceModel toModel(RemoteService service) {
+		ServiceModel model = new ServiceModel(service.getServiceType().getNamespace(), service.getServiceType().getType(),
+			service.getServiceType().getVersion());
+		model.setEvents(service.getEventSubscriptionURI() != null);
+
+		for (StateVariable<?> state : service.getStateVariables()) {
+			log.info("[UpnpModelGen]    " + state.getName() + " : " + state.getTypeDetails().getDatatype().getDisplayString());
+			if (!state.getName().startsWith("A_ARG_TYPE_")) {
+				model.addStateVariable(toModel(new Variable(state)));
+			}
+		}
+		for (Action<?> action : service.getActions()) {
+			log.info(String.format("[UpnpModelGen]      * %s", action.getName()));
+			ActionModel actionModel = model.action(action.getName());
+			for (ActionArgument<?> argument : action.getInputArguments()) {
+				actionModel.add(true, toModel(new Variable(argument)));
+			}
+			for (ActionArgument<?> argument : action.getOutputArguments()) {
+				actionModel.add(false, toModel(new Variable(argument)));
+			}
+		}
+		return model;
+	}
+
+	private VariableModel toModel(Variable variable) {
+		return new VariableModel(variable.getName(), variable.getType(), variable.getUpnpType());
+	}
+
+	/**
+	 * Adds what this device can do to what the model already knows and regenerates from the union.
+	 * The stored model wins on a type conflict - the generated code converts incoming values instead
+	 * of casting them, so a disagreement is worth reporting but does not need a decision here.
+	 */
+	private synchronized void mergeAndGenerate(ServiceModel discovered) {
+		// Devices are announced on several threads at once, and two of them offering the same service
+		// type would otherwise read and write the same model file concurrently: a torn read looks
+		// like "no model yet" and would rebuild the union from that single device.
+		File directory = new File(getDirectory(discovered));
+		ServiceModel model = modelStore.read(directory);
+		if (model == null) {
+			model = new ServiceModel(discovered.getNamespace(), discovered.getServiceType(), discovered.getVersion());
+		}
+
+		ServiceModel.MergeResult result = model.mergeFrom(discovered);
+		for (String conflict : result.conflicts()) {
+			log.error("[UpnpModelGen] {}:{} announces a conflicting type - keeping the known one : {}",
+				discovered.getServiceType(), discovered.getVersion(), conflict);
+		}
+		if (result.changed()) {
+			log.info("[UpnpModelGen] {}:{} gained new elements.", discovered.getServiceType(), discovered.getVersion());
+		}
+
+		modelStore.write(directory, model);
+		generate(model);
+	}
+
+	/**
+	 * Writes every generated artifact of one service from the model.
+	 */
+	private void generate(ServiceModel model) {
+		genServiceClass(model);
+		genStateVariableClass(model);
+		for (ActionModel action : model.getActions().values()) {
+			genParamClass(model, action, true);
+			genParamClass(model, action, false);
+			genActionClass(model, action);
+		}
+	}
+
+	private void genServiceClass(ServiceModel model) {
+		String className = identifier(model.getServiceType()) + "Service";
 		Map<String, Object> root = new HashMap<>();
 		root.put("className", className);
-		root.put("upnpSchema", service.getServiceType().getNamespace());
-		root.put("upnpService", service.getServiceType().getType());
-		root.put("packageName", getPackage(service));
+		root.put("upnpSchema", model.getNamespace());
+		root.put("upnpService", model.getServiceType());
+		root.put("packageName", getPackage(model));
 		List<String> inputClasses = new ArrayList<>();
 		List<String> outputClasses = new ArrayList<>();
 		List<String> importClasses = new ArrayList<>();
 		root.put("inputClasses", inputClasses);
 		root.put("outputClasses", outputClasses);
 		root.put("importClasses", importClasses);
-		root.put("stateVariableClassName", getStateVariableClassname(service));
-		root.put("stateVariables", getStateVariableList(service));
+		root.put("stateVariableClassName", getStateVariableClassname(model));
+		root.put("stateVariables", toVariables(model.getStateVariableList()));
 
 		List<String> actionNames = new ArrayList<>();
 		root.put("actionNames", actionNames);
-		for (Action action : service.getActions()) {
+		String actionPackage = getActionPackage(model);
+		for (ActionModel action : model.getActions().values()) {
 			actionNames.add(action.getName());
-			importClasses.add(getPackage(action) + "." + action.getName());
-			if (action.getOutputArguments().length > 0) {
+			importClasses.add(actionPackage + "." + action.getName());
+			if (!action.getOutput().isEmpty()) {
 				outputClasses.add(action.getName() + "Output");
-				importClasses.add(getPackage(action) + "." + action.getName() + "Output");
+				importClasses.add(actionPackage + "." + action.getName() + "Output");
 			}
-			if (action.getInputArguments().length > 0) {
+			if (!action.getInput().isEmpty()) {
 				inputClasses.add(action.getName() + "Input");
-				importClasses.add(getPackage(action) + "." + action.getName() + "Input");
+				importClasses.add(actionPackage + "." + action.getName() + "Input");
 			}
 		}
 
-		// Write Class
-		String fn = getFilename(service, className);
-		writeCode(root, fn, "service.ftl");
-
-		// Write SubscriptionInterface
-		fn = getFilename(service, "I" + className + "EventListener");
-		writeCode(root, fn, "serviceEventInterace.ftl");
-
-		// Write SubscriptionInterface Implementation
-		fn = getFilename(service, className + "EventListenerImpl");
-		writeCode(root, fn, "serviceEventImpl.ftl");
-
-		// Generate event subscription class
-		if (service.getEventSubscriptionURI() != null) {
-			fn = getFilename(service, className + "Subscription");
-			writeCode(root, fn, "serviceSubscription.ftl");
+		writeCode(root, getFilename(model, className), "service.ftl");
+		writeCode(root, getFilename(model, "I" + className + "EventListener"), "serviceEventInterace.ftl");
+		writeCode(root, getFilename(model, className + "EventListenerImpl"), "serviceEventImpl.ftl");
+		if (model.hasEvents()) {
+			writeCode(root, getFilename(model, className + "Subscription"), "serviceSubscription.ftl");
 		} else {
-			log.debug("Service has no subscription : " + service.getServiceType().getType().toString());
+			log.debug("Service has no subscription : " + model.getServiceType());
 		}
 	}
 
-	private String getPackage(Service service) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(this.basePackage).append(".").append(getNamespace(service)).append(".");
-		sb.append(toLowerFirstCap(getServiceType(service))).append(service.getServiceType().getVersion());
-		return sb.toString();
+	private List<Variable> toVariables(List<VariableModel> variables) {
+		List<Variable> result = new ArrayList<>();
+		for (VariableModel variable : variables) {
+			result.add(new Variable(variable.getName(), variable.getJavaType(), variable.getUpnpType()));
+		}
+		return result;
 	}
 
-	public String getServiceType(Service service) {
-		return service.getServiceType().getType();
-	}
-
-	public String getServiceType(Action<?> action) {
-		return getServiceType(action.getService());
-	}
-
-	private void genActionClass(Action<?> action) {
-		String className = action.getName();
+	private void genActionClass(ServiceModel model, ActionModel action) {
 		Map<String, Object> root = new HashMap<>();
-		List<Variable> varOutList = new LinkedList<>();
-		List<Variable> varInList = new LinkedList<>();
-		root.put("className", className);
-		root.put("varOutList", varOutList);
-		root.put("varInList", varInList);
-		root.put("packageName", getPackage(action));
+		root.put("className", action.getName());
+		root.put("varOutList", toVariables(action.getOutputList()));
+		root.put("varInList", toVariables(action.getInputList()));
+		root.put("packageName", getActionPackage(model));
 
-		for (ActionArgument<?> argument : action.getOutputArguments()) {
-			varOutList.add(new Variable(argument));
-		}
-		for (ActionArgument<?> argument : action.getInputArguments()) {
-			varInList.add(new Variable(argument));
-		}
-
-		writeCode(root, getFilename(action, ""), "action.ftl");
+		writeCode(root, getActionFilename(model, action.getName(), ""), "action.ftl");
 	}
 
-	protected String getPackage(Action<?> action) {
+	private String getPackage(ServiceModel model) {
+		return String.format("%s.%s.%s%d", basePackage, getNamespace(model),
+			toLowerFirstCap(identifier(model.getServiceType())), model.getVersion());
+	}
+
+	private String getActionPackage(ServiceModel model) {
+		return getPackage(model) + ".actions";
+	}
+
+	private String getNamespace(ServiceModel model) {
+		return model.getNamespace().replaceAll("-", "").toLowerCase();
+	}
+
+	private String getStateVariableClassname(ServiceModel model) {
+		return String.format("%sServiceStateVariable", identifier(model.getServiceType()));
+	}
+
+	protected String getDirectory(ServiceModel model) {
+		String replacedPackagename = getPackage(model).replaceAll("\\.", File.separator);
+		return FilenameUtils.concat(config.getGenerateUpnpCodePath(), replacedPackagename);
+	}
+
+	protected String getFilename(ServiceModel model, String className) {
+		return FilenameUtils.concat(getDirectory(model), className + ".java");
+	}
+
+	protected String getActionFilename(ServiceModel model, String actionName, String postFix) {
+		String path = FilenameUtils.concat(getDirectory(model), "actions");
+		return FilenameUtils.concat(path, actionName + postFix + ".java");
+	}
+
+	/**
+	 * A service type is free to contain characters that a java identifier cannot (webos-second-screen
+	 * on an LG TV). Separators are dropped and the following letter capitalised, which leaves every
+	 * conventional type untouched. The raw type is still what the generated code hands to
+	 * ServiceType, so lookups keep working.
+	 */
+	private String identifier(String serviceType) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(this.basePackage).append(".").append(getNamespace(action)).append(".");
-		sb.append(toLowerFirstCap(action.getService().getServiceType().getType())).append(action.getService().getServiceType().getVersion())
-			.append(".actions");
+		boolean capitalizeNext = false;
+		for (char c : serviceType.toCharArray()) {
+			if (Character.isLetterOrDigit(c) || c == '_') {
+				sb.append(capitalizeNext ? Character.toUpperCase(c) : c);
+				capitalizeNext = false;
+			} else {
+				capitalizeNext = sb.length() > 0;
+			}
+		}
 		return sb.toString();
-	}
-
-	protected String getFilename(String packageName, String className) {
-		String replacedPackagename = packageName.replaceAll("\\.", File.separator);
-		String path = FilenameUtils.concat(config.getGenerateUpnpCodePath(), replacedPackagename);
-		path = FilenameUtils.concat(path, className + ".java");
-		return path;
-	}
-
-	protected String getFilename(Action<?> action, String postFix) {
-		String path = FilenameUtils.concat(getDirectory(action.getService()), "actions");
-		path = FilenameUtils.concat(path, action.getName() + postFix + ".java");
-		return path;
-	}
-
-	protected String getFilename(Service service, String className) {
-		String path = FilenameUtils.concat(getDirectory(service), className + ".java");
-		return path;
-	}
-
-	protected String getDirectory(Service service) {
-		String packageName = getPackage(service);
-		String replacedPackagename = packageName.replaceAll("\\.", File.separator);
-		String path = FilenameUtils.concat(config.getGenerateUpnpCodePath(), replacedPackagename);
-		return path;
-	}
-
-	private String getNamespace(Action<?> action) {
-		String ns = getNamespace(action.getService());
-		return ns;
-	}
-
-	private String getNamespace(Service service) {
-		String ns = service.getServiceType().getNamespace().replaceAll("-", "").toLowerCase();
-		return ns;
 	}
 
 	private String toLowerFirstCap(String string) {
 		return Character.toLowerCase(string.charAt(0)) + string.substring(1);
 	}
 
-	private void genParamClass(Action<?> action, boolean isInput) {
-		ActionArgument<?>[] args = null;
-		String postfix = null;
-		if (isInput) {
-			postfix = "Input";
-			args = action.getInputArguments();
-			log.info("        INPUT");
-		} else {
-			args = action.getOutputArguments();
-			postfix = "Output";
-			log.info("        OUTPUT");
+	private void genParamClass(ServiceModel model, ActionModel action, boolean isInput) {
+		List<VariableModel> args = isInput ? action.getInputList() : action.getOutputList();
+		if (args.isEmpty()) {
+			return;
 		}
+		String postfix = isInput ? "Input" : "Output";
+		Map<String, Object> root = new HashMap<>();
+		root.put("className", action.getName() + postfix);
+		root.put("varList", toVariables(args));
+		root.put("packageName", getActionPackage(model));
 
-		if (args.length > 0) {
-			String className = action.getName() + postfix;
-			Map<String, Object> root = new HashMap<>();
-			List<Variable> varList = new LinkedList<>();
-			root.put("className", className);
-			root.put("varList", varList);
-			root.put("packageName", getPackage(action));
-
-			for (ActionArgument<?> argument : args) {
-				log.info(String.format("        %s : %s.", argument.getName(), argument.getDatatype().toString()));
-				varList.add(new Variable(argument));
-			}
-
-			writeCode(root, getFilename(action, postfix), "actionParam.ftl");
-		}
+		writeCode(root, getActionFilename(model, action.getName(), postfix), "actionParam.ftl");
 	}
 
-	private String getStateVariableClassname(Service service) {
-		String className = String.format("%sServiceStateVariable", service.getServiceType().getType());
-		return className;
-	}
-
-	private void genStateVariableClass(Service service) {
-		log.info("[UpnpModelGen] State Variables");
-		log.info("[UpnpModelGen] ==========================================================================");
-
-		List<Variable> vars = getStateVariableList(service);
-
+	private void genStateVariableClass(ServiceModel model) {
 		// The class is written even without variables: the generated event listener implementation
 		// references it unconditionally, so skipping it leaves a package that does not compile. A
 		// service whose evented variables are all A_ARG_TYPE_* (QPlay:2) hits exactly that case.
-		String packageName = getPackage(service);
-		String className = getStateVariableClassname(service);
-
 		Map<String, Object> root = new HashMap<>();
-		root.put("className", className);
-		root.put("varList", vars);
-		root.put("packageName", packageName);
+		root.put("className", getStateVariableClassname(model));
+		root.put("varList", toVariables(model.getStateVariableList()));
+		root.put("packageName", getPackage(model));
 
-		writeCode(root, getFilename(packageName, className), "actionParam.ftl");
-	}
-
-	private List<Variable> getStateVariableList(Service service) {
-		List<Variable> varList = new LinkedList<>();
-		for (StateVariable<?> state : service.getStateVariables()) {
-			log.info("[UpnpModelGen]    " + state.getName() + " : " + state.getTypeDetails().getDatatype().getDisplayString());
-			if (!state.getName().startsWith("A_ARG_TYPE_")) {
-				varList.add(new Variable(state));
-			}
-		}
-		return varList;
+		writeCode(root, getFilename(model, getStateVariableClassname(model)), "actionParam.ftl");
 	}
 
 	private void writeCode(Map<String, Object> input, String filename, String templatePath) {
-		Template template;
 		try {
-			template = configuration.getTemplate(templatePath);
+			Template template = configuration.getTemplate(templatePath);
+			StringWriter rendered = new StringWriter();
+			template.process(input, rendered);
+
 			File genFile = new File(filename);
-			if (!genFile.getParentFile().exists()) {
-				if (!genFile.getParentFile().mkdirs()) {
-					log.info("[UpnpModelGen] mkdirs failed!");					
-				}
+			if (isUnchanged(genFile, rendered.toString())) {
+				log.debug("[UpnpModelGen] unchanged : {}", genFile.getAbsolutePath());
+				return;
+			}
+			if (!genFile.getParentFile().exists() && !genFile.getParentFile().mkdirs()) {
+				log.warn("[UpnpModelGen] mkdirs failed for {}", genFile.getParentFile().getAbsolutePath());
 			}
 			log.info("[UpnpModelGen] Generate file at path : {} ", genFile.getAbsolutePath());
-			Writer fileWriter = new FileWriter(new File(filename));
-			try {
-				template.process(input, fileWriter);
-			} finally {
-				fileWriter.close();
+			try (Writer fileWriter = new FileWriter(genFile)) {
+				fileWriter.write(rendered.toString());
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("[UpnpModelGen] cannot generate {}", filename, e);
+		}
+	}
+
+	/**
+	 * Rewriting identical content would mark every generated file as touched on each run and bury
+	 * the actual gain in the diff.
+	 */
+	private boolean isUnchanged(File file, String content) {
+		try {
+			return file.isFile() && Files.readString(file.toPath()).equals(content);
+		} catch (IOException e) {
+			return false;
 		}
 	}
 

@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemastencentcom.qPlay1.actions;
 public class SetNetworkInput
 {
 
-    public String SSID = null;
     public String Key = null;
+    public String SSID = null;
 
 }

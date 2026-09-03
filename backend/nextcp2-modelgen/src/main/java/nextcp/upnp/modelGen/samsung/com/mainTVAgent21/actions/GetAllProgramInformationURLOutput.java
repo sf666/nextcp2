@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class GetAllProgramInformationURLOutput
 {
 
-    public String Result = null;
     public String AllProgramInformationURL = null;
+    public String Result = null;
 
 }

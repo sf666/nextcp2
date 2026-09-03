@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions;
 public class X_UpdateAudioSelectionInput
 {
 
-    public Long InstanceID = null;
-    public Long AudioPID = null;
     public String AudioEncoding = null;
+    public Long AudioPID = null;
+    public Long InstanceID = null;
 
 }

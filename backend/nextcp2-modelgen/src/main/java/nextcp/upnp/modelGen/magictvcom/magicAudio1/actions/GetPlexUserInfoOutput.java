@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.magictvcom.magicAudio1.actions;
 public class GetPlexUserInfoOutput
 {
 
-    public String Username = null;
-    public String FriendlyName = null;
     public String Email = null;
+    public String FriendlyName = null;
+    public String Username = null;
 
 }

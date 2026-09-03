@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions;
 public class SetContrastInput
 {
 
-    public Long InstanceID = null;
     public Long DesiredContrast = null;
+    public Long InstanceID = null;
 
 }

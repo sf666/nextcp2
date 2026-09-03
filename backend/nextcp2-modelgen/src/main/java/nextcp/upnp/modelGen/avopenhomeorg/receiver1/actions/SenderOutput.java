@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions;
 public class SenderOutput
 {
 
-    public String Uri = null;
     public String Metadata = null;
+    public String Uri = null;
 
 }

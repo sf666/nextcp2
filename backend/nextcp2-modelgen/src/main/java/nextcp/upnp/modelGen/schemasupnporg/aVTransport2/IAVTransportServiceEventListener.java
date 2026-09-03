@@ -12,68 +12,68 @@ import nextcp.upnp.ISubscriptionEventListener;
  */
 public interface IAVTransportServiceEventListener extends ISubscriptionEventListener 
 {
-    public void x_DLNA_RelativeBytePositionChange(String value);
-    
-    public void x_DLNA_CurrentTrackSizeChange(String value);
-    
-    public void x_DLNA_AbsoluteBytePositionChange(String value);
-    
-    public void currentMediaCategoryChange(String value);
-    
-    public void absoluteTimePositionChange(String value);
-    
-    public void currentTrackURIChange(String value);
-    
-    public void currentTrackMetaDataChange(String value);
-    
-    public void relativeCounterPositionChange(Integer value);
+    public void aVTransportURIChange(String value);
     
     public void aVTransportURIMetaDataChange(String value);
     
-    public void transportStatusChange(String value);
+    public void absoluteCounterPositionChange(Integer value);
     
-    public void transportStateChange(String value);
+    public void absoluteTimePositionChange(String value);
+    
+    public void currentMediaCategoryChange(String value);
+    
+    public void currentMediaDurationChange(String value);
+    
+    public void currentPlayModeChange(String value);
+    
+    public void currentRecordQualityModeChange(String value);
     
     public void currentTrackChange(Long value);
     
-    public void possibleRecordQualityModesChange(String value);
+    public void currentTrackDurationChange(String value);
     
-    public void playbackStorageMediumChange(String value);
+    public void currentTrackMetaDataChange(String value);
+    
+    public void currentTrackURIChange(String value);
+    
+    public void currentTransportActionsChange(String value);
+    
+    public void dRMStateChange(String value);
+    
+    public void lastChangeChange(String value);
+    
+    public void nextAVTransportURIChange(String value);
     
     public void nextAVTransportURIMetaDataChange(String value);
     
     public void numberOfTracksChange(Long value);
     
-    public void currentMediaDurationChange(String value);
-    
-    public void nextAVTransportURIChange(String value);
-    
-    public void recordStorageMediumChange(String value);
-    
-    public void aVTransportURIChange(String value);
-    
-    public void transportPlaySpeedChange(String value);
-    
-    public void absoluteCounterPositionChange(Integer value);
-    
-    public void relativeTimePositionChange(String value);
-    
-    public void dRMStateChange(String value);
-    
-    public void currentTrackDurationChange(String value);
-    
-    public void currentPlayModeChange(String value);
+    public void playbackStorageMediumChange(String value);
     
     public void possiblePlaybackStorageMediaChange(String value);
     
-    public void currentRecordQualityModeChange(String value);
-    
-    public void recordMediumWriteStatusChange(String value);
-    
-    public void currentTransportActionsChange(String value);
+    public void possibleRecordQualityModesChange(String value);
     
     public void possibleRecordStorageMediaChange(String value);
     
-    public void lastChangeChange(String value);
+    public void recordMediumWriteStatusChange(String value);
+    
+    public void recordStorageMediumChange(String value);
+    
+    public void relativeCounterPositionChange(Integer value);
+    
+    public void relativeTimePositionChange(String value);
+    
+    public void transportPlaySpeedChange(String value);
+    
+    public void transportStateChange(String value);
+    
+    public void transportStatusChange(String value);
+    
+    public void x_DLNA_AbsoluteBytePositionChange(String value);
+    
+    public void x_DLNA_CurrentTrackSizeChange(String value);
+    
+    public void x_DLNA_RelativeBytePositionChange(String value);
     
 }

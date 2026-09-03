@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions;
 public class SetVolumeInput
 {
 
-    public Long InstanceID = null;
     public String Channel = null;
     public Long DesiredVolume = null;
+    public Long InstanceID = null;
 
 }

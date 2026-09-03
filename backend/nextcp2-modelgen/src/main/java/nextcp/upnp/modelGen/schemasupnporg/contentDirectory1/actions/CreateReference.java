@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,16 +28,8 @@ public class CreateReference extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("CreateReference"), new NextcpClientInfo()), cp);
 		
-        if (input.ContainerID != null) {
-	        getActionInvocation().setInput("ContainerID", input.ContainerID);
-		} else {
-    	    getActionInvocation().setInput("ContainerID", null);
-		}
-        if (input.ObjectID != null) {
-	        getActionInvocation().setInput("ObjectID", input.ObjectID);
-		} else {
-    	    getActionInvocation().setInput("ObjectID", null);
-		}
+        getActionInvocation().setInput("ContainerID", UpnpValue.forInput(getActionInvocation(), "ContainerID", input.ContainerID));
+        getActionInvocation().setInput("ObjectID", UpnpValue.forInput(getActionInvocation(), "ObjectID", input.ObjectID));
     }
 
     public CreateReferenceOutput executeAction()
@@ -45,14 +38,7 @@ public class CreateReference extends ActionCallback
 
         CreateReferenceOutput result = new CreateReferenceOutput();
 
-  		if (invocation.getOutput("NewID").getValue() != null)
-  		{
-	        result.NewID = invocation.getOutput("NewID").getValue().toString();
-  		}
-  		else
-  		{
-	        result.NewID = "";
-  		}
+        result.NewID = UpnpValue.toTextOrEmpty(invocation.getOutput("NewID").getValue());
 
         return result;
     }

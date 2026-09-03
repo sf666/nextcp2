@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,9 +36,9 @@ public class Time extends ActionCallback
 
         TimeOutput result = new TimeOutput();
 
-        result.TrackCount = ((UnsignedIntegerFourBytes) invocation.getOutput("TrackCount").getValue()).getValue();
-        result.Duration = ((UnsignedIntegerFourBytes) invocation.getOutput("Duration").getValue()).getValue();
-        result.Seconds = ((UnsignedIntegerFourBytes) invocation.getOutput("Seconds").getValue()).getValue();
+        result.Duration = UpnpValue.toLong(invocation.getOutput("Duration").getValue());
+        result.Seconds = UpnpValue.toLong(invocation.getOutput("Seconds").getValue());
+        result.TrackCount = UpnpValue.toLong(invocation.getOutput("TrackCount").getValue());
 
         return result;
     }

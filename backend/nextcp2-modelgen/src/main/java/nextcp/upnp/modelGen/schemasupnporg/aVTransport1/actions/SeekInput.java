@@ -10,7 +10,7 @@ public class SeekInput
 {
 
     public Long InstanceID = null;
-    public String Unit = null;
     public String Target = null;
+    public String Unit = null;
 
 }

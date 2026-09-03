@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
  * Last Change : 08.09.2025
@@ -110,13 +111,13 @@ public class TimeServiceSubscription extends RemoteGENASubscription
                 switch (key)
                 {
                     case "Duration":
-                        durationChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        durationChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     case "Seconds":
-                        secondsChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        secondsChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     case "TrackCount":
-                        trackCountChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        trackCountChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);

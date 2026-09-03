@@ -9,9 +9,9 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class StartExtSourceViewInput
 {
 
-    public String Source = null;
-    public Long ID = null;
-    public String ForcedFlag = null;
     public String DRMType = null;
+    public String ForcedFlag = null;
+    public Long ID = null;
+    public String Source = null;
 
 }

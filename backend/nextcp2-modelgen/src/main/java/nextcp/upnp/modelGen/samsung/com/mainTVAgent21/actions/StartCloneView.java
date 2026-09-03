@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,9 +27,9 @@ public class StartCloneView extends ActionCallback
     public StartCloneView(Service service, StartCloneViewInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("StartCloneView"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("ForcedFlag", input.ForcedFlag);
-        getActionInvocation().setInput("DRMType", input.DRMType);
+		
+        getActionInvocation().setInput("DRMType", UpnpValue.forInput(getActionInvocation(), "DRMType", input.DRMType));
+        getActionInvocation().setInput("ForcedFlag", UpnpValue.forInput(getActionInvocation(), "ForcedFlag", input.ForcedFlag));
     }
 
     public StartCloneViewOutput executeAction()
@@ -37,22 +38,8 @@ public class StartCloneView extends ActionCallback
 
         StartCloneViewOutput result = new StartCloneViewOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("CloneViewURL").getValue() != null)
-  		{
-	        result.CloneViewURL = invocation.getOutput("CloneViewURL").getValue().toString();
-  		}
-  		else
-  		{
-	        result.CloneViewURL = "";
-  		}
+        result.CloneViewURL = UpnpValue.toTextOrEmpty(invocation.getOutput("CloneViewURL").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

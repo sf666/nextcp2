@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class X_Get3DFormatter extends ActionCallback
     public X_Get3DFormatter(Service service, X_Get3DFormatterInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("X_Get3DFormatter"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
     }
 
     public X_Get3DFormatterOutput executeAction()
@@ -36,22 +37,8 @@ public class X_Get3DFormatter extends ActionCallback
 
         X_Get3DFormatterOutput result = new X_Get3DFormatterOutput();
 
-  		if (invocation.getOutput("Current3DFormatter").getValue() != null)
-  		{
-	        result.Current3DFormatter = invocation.getOutput("Current3DFormatter").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Current3DFormatter = "";
-  		}
-  		if (invocation.getOutput("Possible3DFormatter").getValue() != null)
-  		{
-	        result.Possible3DFormatter = invocation.getOutput("Possible3DFormatter").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Possible3DFormatter = "";
-  		}
+        result.Current3DFormatter = UpnpValue.toTextOrEmpty(invocation.getOutput("Current3DFormatter").getValue());
+        result.Possible3DFormatter = UpnpValue.toTextOrEmpty(invocation.getOutput("Possible3DFormatter").getValue());
 
         return result;
     }

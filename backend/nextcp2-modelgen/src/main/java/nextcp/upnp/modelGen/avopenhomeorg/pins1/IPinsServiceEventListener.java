@@ -12,12 +12,12 @@ import nextcp.upnp.ISubscriptionEventListener;
  */
 public interface IPinsServiceEventListener extends ISubscriptionEventListener 
 {
-    public void idArrayChange(String value);
-    
-    public void modesChange(String value);
-    
     public void accountMaxChange(Long value);
     
     public void deviceMaxChange(Long value);
+    
+    public void idArrayChange(String value);
+    
+    public void modesChange(String value);
     
 }

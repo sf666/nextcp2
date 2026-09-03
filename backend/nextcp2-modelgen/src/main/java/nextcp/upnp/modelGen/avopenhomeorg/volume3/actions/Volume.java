@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class Volume extends ActionCallback
     public Volume(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Volume"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public VolumeOutput executeAction()
@@ -35,7 +36,7 @@ public class Volume extends ActionCallback
 
         VolumeOutput result = new VolumeOutput();
 
-        result.Value = ((UnsignedIntegerFourBytes) invocation.getOutput("Value").getValue()).getValue();
+        result.Value = UpnpValue.toLong(invocation.getOutput("Value").getValue());
 
         return result;
     }

@@ -9,9 +9,9 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class GetCurrentExternalSourceOutput
 {
 
-    public String Result = null;
     public String CurrentExternalSource = null;
-    public Long ID = null;
     public Long CurrentMBRActivityIndex = null;
+    public Long ID = null;
+    public String Result = null;
 
 }

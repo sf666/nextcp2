@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,9 +36,9 @@ public class Counters extends ActionCallback
 
         CountersOutput result = new CountersOutput();
 
-        result.TrackCount = ((UnsignedIntegerFourBytes) invocation.getOutput("TrackCount").getValue()).getValue();
-        result.DetailsCount = ((UnsignedIntegerFourBytes) invocation.getOutput("DetailsCount").getValue()).getValue();
-        result.MetatextCount = ((UnsignedIntegerFourBytes) invocation.getOutput("MetatextCount").getValue()).getValue();
+        result.DetailsCount = UpnpValue.toLong(invocation.getOutput("DetailsCount").getValue());
+        result.MetatextCount = UpnpValue.toLong(invocation.getOutput("MetatextCount").getValue());
+        result.TrackCount = UpnpValue.toLong(invocation.getOutput("TrackCount").getValue());
 
         return result;
     }

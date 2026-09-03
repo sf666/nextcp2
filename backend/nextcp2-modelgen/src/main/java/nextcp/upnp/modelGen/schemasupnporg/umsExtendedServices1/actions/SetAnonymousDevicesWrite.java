@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class SetAnonymousDevicesWrite extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SetAnonymousDevicesWrite"), new NextcpClientInfo()), cp);
 		
-        if (input.AnonymousDevicesWrite != null) {
-        	getActionInvocation().setInput("AnonymousDevicesWrite", input.AnonymousDevicesWrite);
-		} else {
-    	    getActionInvocation().setInput("AnonymousDevicesWrite", null);
-		}
+        getActionInvocation().setInput("AnonymousDevicesWrite", UpnpValue.forInput(getActionInvocation(), "AnonymousDevicesWrite", input.AnonymousDevicesWrite));
     }
 
     public void executeAction()

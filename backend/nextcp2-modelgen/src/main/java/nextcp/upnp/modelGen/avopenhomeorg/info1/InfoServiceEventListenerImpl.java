@@ -125,12 +125,75 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
+    public void bitDepthChange(Long value)
+    {
+        stateVariable.BitDepth = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "BitDepth", value));
+        }
+    }
+    
+    public void bitRateChange(Long value)
+    {
+        stateVariable.BitRate = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "BitRate", value));
+        }
+    }
+    
+    public void codecNameChange(String value)
+    {
+        stateVariable.CodecName = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "CodecName", value));
+        }
+    }
+    
     public void detailsCountChange(Long value)
     {
         stateVariable.DetailsCount = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "DetailsCount", value));
+        }
+    }
+    
+    public void durationChange(Long value)
+    {
+        stateVariable.Duration = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Duration", value));
+        }
+    }
+    
+    public void losslessChange(Boolean value)
+    {
+        stateVariable.Lossless = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Lossless", value));
+        }
+    }
+    
+    public void metadataChange(String value)
+    {
+        stateVariable.Metadata = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Metadata", value));
+        }
+    }
+    
+    public void metatextChange(String value)
+    {
+        stateVariable.Metatext = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Metatext", value));
         }
     }
     
@@ -152,24 +215,6 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
-    public void metadataChange(String value)
-    {
-        stateVariable.Metadata = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Metadata", value));
-        }
-    }
-    
-    public void durationChange(Long value)
-    {
-        stateVariable.Duration = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Duration", value));
-        }
-    }
-    
     public void trackCountChange(Long value)
     {
         stateVariable.TrackCount = value;
@@ -179,57 +224,12 @@ public class InfoServiceEventListenerImpl implements IInfoServiceEventListener
         }
     }
     
-    public void bitRateChange(Long value)
-    {
-        stateVariable.BitRate = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "BitRate", value));
-        }
-    }
-    
     public void uriChange(String value)
     {
         stateVariable.Uri = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "Uri", value));
-        }
-    }
-    
-    public void bitDepthChange(Long value)
-    {
-        stateVariable.BitDepth = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "BitDepth", value));
-        }
-    }
-    
-    public void losslessChange(Boolean value)
-    {
-        stateVariable.Lossless = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Lossless", value));
-        }
-    }
-    
-    public void codecNameChange(String value)
-    {
-        stateVariable.CodecName = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "CodecName", value));
-        }
-    }
-    
-    public void metatextChange(String value)
-    {
-        stateVariable.Metatext = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Metatext", value));
         }
     }
     

@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.avopenhomeorg.transport1.actions;
 public class SeekSecondAbsoluteInput
 {
 
-    public Long StreamId = null;
     public Long SecondAbsolute = null;
+    public Long StreamId = null;
 
 }

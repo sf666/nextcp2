@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class SetMainTVSourceInput
 {
 
-    public String Source = null;
     public Long ID = null;
+    public String Source = null;
     public Long UiID = null;
 
 }

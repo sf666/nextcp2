@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class GetTransportInfo extends ActionCallback
     public GetTransportInfo(Service service, GetTransportInfoInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetTransportInfo"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
     }
 
     public GetTransportInfoOutput executeAction()
@@ -36,30 +37,9 @@ public class GetTransportInfo extends ActionCallback
 
         GetTransportInfoOutput result = new GetTransportInfoOutput();
 
-  		if (invocation.getOutput("CurrentTransportState").getValue() != null)
-  		{
-	        result.CurrentTransportState = invocation.getOutput("CurrentTransportState").getValue().toString();
-  		}
-  		else
-  		{
-	        result.CurrentTransportState = "";
-  		}
-  		if (invocation.getOutput("CurrentTransportStatus").getValue() != null)
-  		{
-	        result.CurrentTransportStatus = invocation.getOutput("CurrentTransportStatus").getValue().toString();
-  		}
-  		else
-  		{
-	        result.CurrentTransportStatus = "";
-  		}
-  		if (invocation.getOutput("CurrentSpeed").getValue() != null)
-  		{
-	        result.CurrentSpeed = invocation.getOutput("CurrentSpeed").getValue().toString();
-  		}
-  		else
-  		{
-	        result.CurrentSpeed = "";
-  		}
+        result.CurrentSpeed = UpnpValue.toTextOrEmpty(invocation.getOutput("CurrentSpeed").getValue());
+        result.CurrentTransportState = UpnpValue.toTextOrEmpty(invocation.getOutput("CurrentTransportState").getValue());
+        result.CurrentTransportStatus = UpnpValue.toTextOrEmpty(invocation.getOutput("CurrentTransportStatus").getValue());
 
         return result;
     }

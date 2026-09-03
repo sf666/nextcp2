@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,30 +36,9 @@ public class GetPlexUserInfo extends ActionCallback
 
         GetPlexUserInfoOutput result = new GetPlexUserInfoOutput();
 
-  		if (invocation.getOutput("Username").getValue() != null)
-  		{
-	        result.Username = invocation.getOutput("Username").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Username = "";
-  		}
-  		if (invocation.getOutput("FriendlyName").getValue() != null)
-  		{
-	        result.FriendlyName = invocation.getOutput("FriendlyName").getValue().toString();
-  		}
-  		else
-  		{
-	        result.FriendlyName = "";
-  		}
-  		if (invocation.getOutput("Email").getValue() != null)
-  		{
-	        result.Email = invocation.getOutput("Email").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Email = "";
-  		}
+        result.Email = UpnpValue.toTextOrEmpty(invocation.getOutput("Email").getValue());
+        result.FriendlyName = UpnpValue.toTextOrEmpty(invocation.getOutput("FriendlyName").getValue());
+        result.Username = UpnpValue.toTextOrEmpty(invocation.getOutput("Username").getValue());
 
         return result;
     }

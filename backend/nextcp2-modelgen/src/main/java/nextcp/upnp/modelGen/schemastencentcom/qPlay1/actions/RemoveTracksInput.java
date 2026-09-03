@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.schemastencentcom.qPlay1.actions;
 public class RemoveTracksInput
 {
 
+    public String NumberOfTracks = null;
     public String QueueID = null;
     public String StartingIndex = null;
-    public String NumberOfTracks = null;
 
 }

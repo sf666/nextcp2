@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,10 +27,10 @@ public class SendMBRIRKey extends ActionCallback
     public SendMBRIRKey(Service service, SendMBRIRKeyInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SendMBRIRKey"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("ActivityIndex", new UnsignedIntegerFourBytes(input.ActivityIndex));
-        getActionInvocation().setInput("MBRDevice", input.MBRDevice);
-        getActionInvocation().setInput("MBRIRKey", input.MBRIRKey);
+		
+        getActionInvocation().setInput("ActivityIndex", UpnpValue.forInput(getActionInvocation(), "ActivityIndex", input.ActivityIndex));
+        getActionInvocation().setInput("MBRDevice", UpnpValue.forInput(getActionInvocation(), "MBRDevice", input.MBRDevice));
+        getActionInvocation().setInput("MBRIRKey", UpnpValue.forInput(getActionInvocation(), "MBRIRKey", input.MBRIRKey));
     }
 
     public SendMBRIRKeyOutput executeAction()
@@ -38,14 +39,7 @@ public class SendMBRIRKey extends ActionCallback
 
         SendMBRIRKeyOutput result = new SendMBRIRKeyOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

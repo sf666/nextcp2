@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions;
 public class SetAVTransportURIInput
 {
 
-    public Long InstanceID = null;
     public String CurrentURI = null;
     public String CurrentURIMetaData = null;
+    public Long InstanceID = null;
 
 }

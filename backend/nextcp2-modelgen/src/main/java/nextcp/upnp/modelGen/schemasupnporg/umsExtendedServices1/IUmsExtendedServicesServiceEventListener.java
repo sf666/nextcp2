@@ -14,15 +14,15 @@ public interface IUmsExtendedServicesServiceEventListener extends ISubscriptionE
 {
     public void anonymousDevicesWriteChange(Boolean value);
     
-    public void upnpCdsWriteChange(Boolean value);
+    public void audioLikesVisibleRootChange(Boolean value);
     
     public void audioUpdateRatingChange(Boolean value);
     
+    public void playlistLoopChange(Boolean value);
+    
     public void preferEuropeanServerChange(Boolean value);
     
-    public void audioLikesVisibleRootChange(Boolean value);
-    
-    public void playlistLoopChange(Boolean value);
+    public void upnpCdsWriteChange(Boolean value);
     
     public void webStreamNowPlayingChange(String value);
     

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetSortExtensionCapabilities extends ActionCallback
     public GetSortExtensionCapabilities(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetSortExtensionCapabilities"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetSortExtensionCapabilitiesOutput executeAction()
@@ -35,14 +36,7 @@ public class GetSortExtensionCapabilities extends ActionCallback
 
         GetSortExtensionCapabilitiesOutput result = new GetSortExtensionCapabilitiesOutput();
 
-  		if (invocation.getOutput("SortExtensionCaps").getValue() != null)
-  		{
-	        result.SortExtensionCaps = invocation.getOutput("SortExtensionCaps").getValue().toString();
-  		}
-  		else
-  		{
-	        result.SortExtensionCaps = "";
-  		}
+        result.SortExtensionCaps = UpnpValue.toTextOrEmpty(invocation.getOutput("SortExtensionCaps").getValue());
 
         return result;
     }

@@ -9,9 +9,9 @@ package nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions;
 public class X_SetBookmarkInput
 {
 
+    public String CategoryType = null;
     public String ObjectID = null;
     public Long PosSecond = null;
-    public String CategoryType = null;
     public String RID = null;
 
 }

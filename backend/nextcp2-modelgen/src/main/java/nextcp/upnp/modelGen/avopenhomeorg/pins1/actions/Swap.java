@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,9 +27,9 @@ public class Swap extends ActionCallback
     public Swap(Service service, SwapInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Swap"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Index1", new UnsignedIntegerFourBytes(input.Index1));
-        getActionInvocation().setInput("Index2", new UnsignedIntegerFourBytes(input.Index2));
+		
+        getActionInvocation().setInput("Index1", UpnpValue.forInput(getActionInvocation(), "Index1", input.Index1));
+        getActionInvocation().setInput("Index2", UpnpValue.forInput(getActionInvocation(), "Index2", input.Index2));
     }
 
     public void executeAction()

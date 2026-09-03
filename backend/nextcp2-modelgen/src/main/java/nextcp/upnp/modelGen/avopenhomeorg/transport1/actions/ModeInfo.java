@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,14 +36,10 @@ public class ModeInfo extends ActionCallback
 
         ModeInfoOutput result = new ModeInfoOutput();
 
-        BooleanDatatype data_CanSkipNext = new BooleanDatatype();
-        result.CanSkipNext = data_CanSkipNext.valueOf(invocation.getOutput("CanSkipNext").getValue().toString());
-        BooleanDatatype data_CanSkipPrevious = new BooleanDatatype();
-        result.CanSkipPrevious = data_CanSkipPrevious.valueOf(invocation.getOutput("CanSkipPrevious").getValue().toString());
-        BooleanDatatype data_CanRepeat = new BooleanDatatype();
-        result.CanRepeat = data_CanRepeat.valueOf(invocation.getOutput("CanRepeat").getValue().toString());
-        BooleanDatatype data_CanShuffle = new BooleanDatatype();
-        result.CanShuffle = data_CanShuffle.valueOf(invocation.getOutput("CanShuffle").getValue().toString());
+        result.CanRepeat = UpnpValue.toBoolean(invocation.getOutput("CanRepeat").getValue());
+        result.CanShuffle = UpnpValue.toBoolean(invocation.getOutput("CanShuffle").getValue());
+        result.CanSkipNext = UpnpValue.toBoolean(invocation.getOutput("CanSkipNext").getValue());
+        result.CanSkipPrevious = UpnpValue.toBoolean(invocation.getOutput("CanSkipPrevious").getValue());
 
         return result;
     }

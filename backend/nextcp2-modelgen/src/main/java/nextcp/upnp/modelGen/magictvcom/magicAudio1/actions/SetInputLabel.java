@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,16 +28,8 @@ public class SetInputLabel extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SetInputLabel"), new NextcpClientInfo()), cp);
 		
-        if (input.Index != null) {
-    	    getActionInvocation().setInput("Index", new UnsignedIntegerFourBytes(input.Index));
-		} else {
-    	    getActionInvocation().setInput("Index", null);
-		}
-        if (input.Label != null) {
-	        getActionInvocation().setInput("Label", input.Label);
-		} else {
-    	    getActionInvocation().setInput("Label", null);
-		}
+        getActionInvocation().setInput("Index", UpnpValue.forInput(getActionInvocation(), "Index", input.Index));
+        getActionInvocation().setInput("Label", UpnpValue.forInput(getActionInvocation(), "Label", input.Label));
     }
 
     public void executeAction()

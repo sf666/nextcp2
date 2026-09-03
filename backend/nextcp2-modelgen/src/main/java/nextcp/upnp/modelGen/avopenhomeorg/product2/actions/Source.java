@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class Source extends ActionCallback
     public Source(Service service, SourceInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Source"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Index", new UnsignedIntegerFourBytes(input.Index));
+		
+        getActionInvocation().setInput("Index", UpnpValue.forInput(getActionInvocation(), "Index", input.Index));
     }
 
     public SourceOutput executeAction()
@@ -36,32 +37,10 @@ public class Source extends ActionCallback
 
         SourceOutput result = new SourceOutput();
 
-  		if (invocation.getOutput("SystemName").getValue() != null)
-  		{
-	        result.SystemName = invocation.getOutput("SystemName").getValue().toString();
-  		}
-  		else
-  		{
-	        result.SystemName = "";
-  		}
-  		if (invocation.getOutput("Type").getValue() != null)
-  		{
-	        result.Type = invocation.getOutput("Type").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Type = "";
-  		}
-  		if (invocation.getOutput("Name").getValue() != null)
-  		{
-	        result.Name = invocation.getOutput("Name").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Name = "";
-  		}
-        BooleanDatatype data_Visible = new BooleanDatatype();
-        result.Visible = data_Visible.valueOf(invocation.getOutput("Visible").getValue().toString());
+        result.Name = UpnpValue.toTextOrEmpty(invocation.getOutput("Name").getValue());
+        result.SystemName = UpnpValue.toTextOrEmpty(invocation.getOutput("SystemName").getValue());
+        result.Type = UpnpValue.toTextOrEmpty(invocation.getOutput("Type").getValue());
+        result.Visible = UpnpValue.toBoolean(invocation.getOutput("Visible").getValue());
 
         return result;
     }

@@ -193,10 +193,16 @@ public class Nextcp2DefaultUpnpServiceConfiguration implements UpnpServiceConfig
 		return new JUPnPExecutor(name);
 	}
     
+    /**
+     * The code generator only discovers devices and reads their descriptions, both of which go out
+     * over the stream client. A stream server would only be needed to receive GENA callbacks, and
+     * jUPnP is happy without one - the default implementation still binds jetty's javax servlet
+     * transport, which is not on the classpath since the rest of the project moved to jakarta.
+     */
     @Override
     @SuppressWarnings("rawtypes")
     public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
-        return transportConfiguration.createStreamServer(networkAddressFactory.getStreamListenPort());
+        return null;
     }
 
     @Override

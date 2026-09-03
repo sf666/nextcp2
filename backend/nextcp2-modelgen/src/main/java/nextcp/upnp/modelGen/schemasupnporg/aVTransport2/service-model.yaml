@@ -1,0 +1,360 @@
+namespace: schemas-upnp-org
+serviceType: AVTransport
+version: 2
+events: true
+stateVariables:
+  AVTransportURI:
+    java: String
+    upnp: string
+  AVTransportURIMetaData:
+    java: String
+    upnp: string
+  AbsoluteCounterPosition:
+    java: Integer
+    upnp: i4
+  AbsoluteTimePosition:
+    java: String
+    upnp: string
+  CurrentMediaCategory:
+    java: String
+    upnp: string
+  CurrentMediaDuration:
+    java: String
+    upnp: string
+  CurrentPlayMode:
+    java: String
+    upnp: string
+  CurrentRecordQualityMode:
+    java: String
+    upnp: string
+  CurrentTrack:
+    java: Long
+    upnp: ui4
+  CurrentTrackDuration:
+    java: String
+    upnp: string
+  CurrentTrackMetaData:
+    java: String
+    upnp: string
+  CurrentTrackURI:
+    java: String
+    upnp: string
+  CurrentTransportActions:
+    java: String
+    upnp: string
+  DRMState:
+    java: String
+  LastChange:
+    java: String
+    upnp: string
+  NextAVTransportURI:
+    java: String
+    upnp: string
+  NextAVTransportURIMetaData:
+    java: String
+    upnp: string
+  NumberOfTracks:
+    java: Long
+    upnp: ui4
+  PlaybackStorageMedium:
+    java: String
+    upnp: string
+  PossiblePlaybackStorageMedia:
+    java: String
+    upnp: string
+  PossibleRecordQualityModes:
+    java: String
+    upnp: string
+  PossibleRecordStorageMedia:
+    java: String
+    upnp: string
+  RecordMediumWriteStatus:
+    java: String
+    upnp: string
+  RecordStorageMedium:
+    java: String
+    upnp: string
+  RelativeCounterPosition:
+    java: Integer
+    upnp: i4
+  RelativeTimePosition:
+    java: String
+    upnp: string
+  TransportPlaySpeed:
+    java: String
+    upnp: string
+  TransportState:
+    java: String
+    upnp: string
+  TransportStatus:
+    java: String
+    upnp: string
+  X_DLNA_AbsoluteBytePosition:
+    java: String
+    upnp: string
+  X_DLNA_CurrentTrackSize:
+    java: String
+    upnp: string
+  X_DLNA_RelativeBytePosition:
+    java: String
+    upnp: string
+actions:
+  GetCurrentTransportActions:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output:
+      Actions:
+        java: String
+        upnp: string
+  GetDRMState:
+    input:
+      InstanceID:
+        java: Long
+    output:
+      CurrentDRMState:
+        java: String
+  GetDeviceCapabilities:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output:
+      PlayMedia:
+        java: String
+        upnp: string
+      RecMedia:
+        java: String
+        upnp: string
+      RecQualityModes:
+        java: String
+        upnp: string
+  GetMediaInfo:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output:
+      CurrentURI:
+        java: String
+        upnp: string
+      CurrentURIMetaData:
+        java: String
+        upnp: string
+      MediaDuration:
+        java: String
+        upnp: string
+      NextURI:
+        java: String
+        upnp: string
+      NextURIMetaData:
+        java: String
+        upnp: string
+      NrTracks:
+        java: Long
+        upnp: ui4
+      PlayMedium:
+        java: String
+        upnp: string
+      RecordMedium:
+        java: String
+        upnp: string
+      WriteStatus:
+        java: String
+        upnp: string
+  GetMediaInfo_Ext:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output:
+      CurrentType:
+        java: String
+        upnp: string
+      CurrentURI:
+        java: String
+        upnp: string
+      CurrentURIMetaData:
+        java: String
+        upnp: string
+      MediaDuration:
+        java: String
+        upnp: string
+      NextURI:
+        java: String
+        upnp: string
+      NextURIMetaData:
+        java: String
+        upnp: string
+      NrTracks:
+        java: Long
+        upnp: ui4
+      PlayMedium:
+        java: String
+        upnp: string
+      RecordMedium:
+        java: String
+        upnp: string
+      WriteStatus:
+        java: String
+        upnp: string
+  GetPositionInfo:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output:
+      AbsCount:
+        java: Integer
+        upnp: i4
+      AbsTime:
+        java: String
+        upnp: string
+      RelCount:
+        java: Integer
+        upnp: i4
+      RelTime:
+        java: String
+        upnp: string
+      Track:
+        java: Long
+        upnp: ui4
+      TrackDuration:
+        java: String
+        upnp: string
+      TrackMetaData:
+        java: String
+        upnp: string
+      TrackURI:
+        java: String
+        upnp: string
+  GetTransportInfo:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output:
+      CurrentSpeed:
+        java: String
+        upnp: string
+      CurrentTransportState:
+        java: String
+        upnp: string
+      CurrentTransportStatus:
+        java: String
+        upnp: string
+  GetTransportSettings:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output:
+      PlayMode:
+        java: String
+        upnp: string
+      RecQualityMode:
+        java: String
+        upnp: string
+  Next:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  Pause:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  Play:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+      Speed:
+        java: String
+        upnp: string
+    output: {
+      }
+  Previous:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  Seek:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+      Target:
+        java: String
+        upnp: string
+      Unit:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetAVTransportURI:
+    input:
+      CurrentURI:
+        java: String
+        upnp: string
+      CurrentURIMetaData:
+        java: String
+        upnp: string
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  SetNextAVTransportURI:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+      NextURI:
+        java: String
+        upnp: string
+      NextURIMetaData:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetPlayMode:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+      NewPlayMode:
+        java: String
+        upnp: string
+    output: {
+      }
+  Stop:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  X_DLNA_GetBytePositionInfo:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output:
+      AbsByte:
+        java: String
+        upnp: string
+      RelByte:
+        java: String
+        upnp: string
+      TrackSize:
+        java: String
+        upnp: string

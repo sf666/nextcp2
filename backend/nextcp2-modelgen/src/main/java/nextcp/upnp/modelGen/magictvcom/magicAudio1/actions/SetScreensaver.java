@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,16 +28,8 @@ public class SetScreensaver extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SetScreensaver"), new NextcpClientInfo()), cp);
 		
-        if (input.Mode != null) {
-    	    getActionInvocation().setInput("Mode", new UnsignedIntegerFourBytes(input.Mode));
-		} else {
-    	    getActionInvocation().setInput("Mode", null);
-		}
-        if (input.Timeout != null) {
-    	    getActionInvocation().setInput("Timeout", new UnsignedIntegerFourBytes(input.Timeout));
-		} else {
-    	    getActionInvocation().setInput("Timeout", null);
-		}
+        getActionInvocation().setInput("Mode", UpnpValue.forInput(getActionInvocation(), "Mode", input.Mode));
+        getActionInvocation().setInput("Timeout", UpnpValue.forInput(getActionInvocation(), "Timeout", input.Timeout));
     }
 
     public void executeAction()

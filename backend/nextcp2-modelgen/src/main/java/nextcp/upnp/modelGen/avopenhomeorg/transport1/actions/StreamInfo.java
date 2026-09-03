@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,11 +36,9 @@ public class StreamInfo extends ActionCallback
 
         StreamInfoOutput result = new StreamInfoOutput();
 
-        result.StreamId = ((UnsignedIntegerFourBytes) invocation.getOutput("StreamId").getValue()).getValue();
-        BooleanDatatype data_CanSeek = new BooleanDatatype();
-        result.CanSeek = data_CanSeek.valueOf(invocation.getOutput("CanSeek").getValue().toString());
-        BooleanDatatype data_CanPause = new BooleanDatatype();
-        result.CanPause = data_CanPause.valueOf(invocation.getOutput("CanPause").getValue().toString());
+        result.CanPause = UpnpValue.toBoolean(invocation.getOutput("CanPause").getValue());
+        result.CanSeek = UpnpValue.toBoolean(invocation.getOutput("CanSeek").getValue());
+        result.StreamId = UpnpValue.toLong(invocation.getOutput("StreamId").getValue());
 
         return result;
     }

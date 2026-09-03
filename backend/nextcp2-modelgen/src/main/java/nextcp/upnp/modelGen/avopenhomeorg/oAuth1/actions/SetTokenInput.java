@@ -9,11 +9,11 @@ package nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions;
 public class SetTokenInput
 {
 
-    public String ServiceId = null;
-    public String TokenId = null;
     public byte[] AesKeyRsaEncrypted = null;
     public byte[] InitVectorRsaEncrypted = null;
-    public byte[] TokenAesEncrypted = null;
     public Boolean IsLongLived = null;
+    public String ServiceId = null;
+    public byte[] TokenAesEncrypted = null;
+    public String TokenId = null;
 
 }

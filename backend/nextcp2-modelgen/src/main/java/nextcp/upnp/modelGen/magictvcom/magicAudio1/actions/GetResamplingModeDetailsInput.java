@@ -9,9 +9,9 @@ package nextcp.upnp.modelGen.magictvcom.magicAudio1.actions;
 public class GetResamplingModeDetailsInput
 {
 
-    public String ResamplingTag = null;
-    public String Mode = null;
     public String FileType = null;
+    public String Mode = null;
+    public String ResamplingTag = null;
     public String SrcSamplingRate = null;
 
 }

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class EnableServer extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("EnableServer"), new NextcpClientInfo()), cp);
 		
-        if (input.Enable != null) {
-        	getActionInvocation().setInput("Enable", input.Enable);
-		} else {
-    	    getActionInvocation().setInput("Enable", null);
-		}
+        getActionInvocation().setInput("Enable", UpnpValue.forInput(getActionInvocation(), "Enable", input.Enable));
     }
 
     public void executeAction()

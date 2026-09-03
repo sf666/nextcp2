@@ -1,0 +1,10 @@
+namespace: lge-com
+serviceType: webos-second-screen
+version: 1
+events: true
+stateVariables:
+  X_PlaceHolder:
+    java: String
+    upnp: string
+actions: {
+  }

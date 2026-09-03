@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class StopView extends ActionCallback
     public StopView(Service service, StopViewInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("StopView"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("ViewURL", input.ViewURL);
+		
+        getActionInvocation().setInput("ViewURL", UpnpValue.forInput(getActionInvocation(), "ViewURL", input.ViewURL));
     }
 
     public StopViewOutput executeAction()
@@ -36,14 +37,7 @@ public class StopView extends ActionCallback
 
         StopViewOutput result = new StopViewOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

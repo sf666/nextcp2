@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
  * Last Change : 08.09.2025
@@ -109,46 +110,41 @@ public class InfoServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "DetailsCount":
-                        detailsCountChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "MetatextCount":
-                        metatextCountChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "SampleRate":
-                        sampleRateChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "Metadata":
-                        metadataChange((String) stateVar.getValue());
-                        break;
-                    case "Duration":
-                        durationChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "TrackCount":
-                        trackCountChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                    case "BitDepth":
+                        bitDepthChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     case "BitRate":
-                        bitRateChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "Uri":
-                        uriChange((String) stateVar.getValue());
-                        break;
-                    case "BitDepth":
-                        bitDepthChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "Lossless":
-                    	try {
-                    		losslessChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[lossless] unexpected value : " + stateVar.getValue());
-                    		losslessChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
+                        bitRateChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     case "CodecName":
-                        codecNameChange((String) stateVar.getValue());
+                        codecNameChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "DetailsCount":
+                        detailsCountChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "Duration":
+                        durationChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "Lossless":
+                        losslessChange(UpnpValue.toBoolean(stateVar.getValue()));
+                        break;
+                    case "Metadata":
+                        metadataChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "Metatext":
-                        metatextChange((String) stateVar.getValue());
+                        metatextChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "MetatextCount":
+                        metatextCountChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "SampleRate":
+                        sampleRateChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "TrackCount":
+                        trackCountChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "Uri":
+                        uriChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -170,11 +166,67 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         }
     }
 
+    private void bitDepthChange(Long value)
+    {
+        for (IInfoServiceEventListener listener : eventListener)
+        {
+            listener.bitDepthChange(value);
+        }
+    }    
+
+    private void bitRateChange(Long value)
+    {
+        for (IInfoServiceEventListener listener : eventListener)
+        {
+            listener.bitRateChange(value);
+        }
+    }    
+
+    private void codecNameChange(String value)
+    {
+        for (IInfoServiceEventListener listener : eventListener)
+        {
+            listener.codecNameChange(value);
+        }
+    }    
+
     private void detailsCountChange(Long value)
     {
         for (IInfoServiceEventListener listener : eventListener)
         {
             listener.detailsCountChange(value);
+        }
+    }    
+
+    private void durationChange(Long value)
+    {
+        for (IInfoServiceEventListener listener : eventListener)
+        {
+            listener.durationChange(value);
+        }
+    }    
+
+    private void losslessChange(Boolean value)
+    {
+        for (IInfoServiceEventListener listener : eventListener)
+        {
+            listener.losslessChange(value);
+        }
+    }    
+
+    private void metadataChange(String value)
+    {
+        for (IInfoServiceEventListener listener : eventListener)
+        {
+            listener.metadataChange(value);
+        }
+    }    
+
+    private void metatextChange(String value)
+    {
+        for (IInfoServiceEventListener listener : eventListener)
+        {
+            listener.metatextChange(value);
         }
     }    
 
@@ -194,22 +246,6 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void metadataChange(String value)
-    {
-        for (IInfoServiceEventListener listener : eventListener)
-        {
-            listener.metadataChange(value);
-        }
-    }    
-
-    private void durationChange(Long value)
-    {
-        for (IInfoServiceEventListener listener : eventListener)
-        {
-            listener.durationChange(value);
-        }
-    }    
-
     private void trackCountChange(Long value)
     {
         for (IInfoServiceEventListener listener : eventListener)
@@ -218,51 +254,11 @@ public class InfoServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void bitRateChange(Long value)
-    {
-        for (IInfoServiceEventListener listener : eventListener)
-        {
-            listener.bitRateChange(value);
-        }
-    }    
-
     private void uriChange(String value)
     {
         for (IInfoServiceEventListener listener : eventListener)
         {
             listener.uriChange(value);
-        }
-    }    
-
-    private void bitDepthChange(Long value)
-    {
-        for (IInfoServiceEventListener listener : eventListener)
-        {
-            listener.bitDepthChange(value);
-        }
-    }    
-
-    private void losslessChange(Boolean value)
-    {
-        for (IInfoServiceEventListener listener : eventListener)
-        {
-            listener.losslessChange(value);
-        }
-    }    
-
-    private void codecNameChange(String value)
-    {
-        for (IInfoServiceEventListener listener : eventListener)
-        {
-            listener.codecNameChange(value);
-        }
-    }    
-
-    private void metatextChange(String value)
-    {
-        for (IInfoServiceEventListener listener : eventListener)
-        {
-            listener.metatextChange(value);
         }
     }    
 }

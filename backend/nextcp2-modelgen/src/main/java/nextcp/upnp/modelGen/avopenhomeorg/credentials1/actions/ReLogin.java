@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,16 +28,8 @@ public class ReLogin extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("ReLogin"), new NextcpClientInfo()), cp);
 		
-        if (input.Id != null) {
-	        getActionInvocation().setInput("Id", input.Id);
-		} else {
-    	    getActionInvocation().setInput("Id", null);
-		}
-        if (input.CurrentToken != null) {
-	        getActionInvocation().setInput("CurrentToken", input.CurrentToken);
-		} else {
-    	    getActionInvocation().setInput("CurrentToken", null);
-		}
+        getActionInvocation().setInput("CurrentToken", UpnpValue.forInput(getActionInvocation(), "CurrentToken", input.CurrentToken));
+        getActionInvocation().setInput("Id", UpnpValue.forInput(getActionInvocation(), "Id", input.Id));
     }
 
     public ReLoginOutput executeAction()
@@ -45,14 +38,7 @@ public class ReLogin extends ActionCallback
 
         ReLoginOutput result = new ReLoginOutput();
 
-  		if (invocation.getOutput("NewToken").getValue() != null)
-  		{
-	        result.NewToken = invocation.getOutput("NewToken").getValue().toString();
-  		}
-  		else
-  		{
-	        result.NewToken = "";
-  		}
+        result.NewToken = UpnpValue.toTextOrEmpty(invocation.getOutput("NewToken").getValue());
 
         return result;
     }

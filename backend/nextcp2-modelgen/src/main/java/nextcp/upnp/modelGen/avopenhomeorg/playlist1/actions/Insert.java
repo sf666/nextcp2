@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,21 +28,9 @@ public class Insert extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("Insert"), new NextcpClientInfo()), cp);
 		
-        if (input.AfterId != null) {
-    	    getActionInvocation().setInput("AfterId", new UnsignedIntegerFourBytes(input.AfterId));
-		} else {
-    	    getActionInvocation().setInput("AfterId", null);
-		}
-        if (input.Uri != null) {
-	        getActionInvocation().setInput("Uri", input.Uri);
-		} else {
-    	    getActionInvocation().setInput("Uri", null);
-		}
-        if (input.Metadata != null) {
-	        getActionInvocation().setInput("Metadata", input.Metadata);
-		} else {
-    	    getActionInvocation().setInput("Metadata", null);
-		}
+        getActionInvocation().setInput("AfterId", UpnpValue.forInput(getActionInvocation(), "AfterId", input.AfterId));
+        getActionInvocation().setInput("Metadata", UpnpValue.forInput(getActionInvocation(), "Metadata", input.Metadata));
+        getActionInvocation().setInput("Uri", UpnpValue.forInput(getActionInvocation(), "Uri", input.Uri));
     }
 
     public InsertOutput executeAction()
@@ -50,7 +39,7 @@ public class Insert extends ActionCallback
 
         InsertOutput result = new InsertOutput();
 
-        result.NewId = ((UnsignedIntegerFourBytes) invocation.getOutput("NewId").getValue()).getValue();
+        result.NewId = UpnpValue.toLong(invocation.getOutput("NewId").getValue());
 
         return result;
     }

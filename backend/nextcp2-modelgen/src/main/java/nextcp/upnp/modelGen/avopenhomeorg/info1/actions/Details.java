@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,20 +36,12 @@ public class Details extends ActionCallback
 
         DetailsOutput result = new DetailsOutput();
 
-        result.Duration = ((UnsignedIntegerFourBytes) invocation.getOutput("Duration").getValue()).getValue();
-        result.BitRate = ((UnsignedIntegerFourBytes) invocation.getOutput("BitRate").getValue()).getValue();
-        result.BitDepth = ((UnsignedIntegerFourBytes) invocation.getOutput("BitDepth").getValue()).getValue();
-        result.SampleRate = ((UnsignedIntegerFourBytes) invocation.getOutput("SampleRate").getValue()).getValue();
-        BooleanDatatype data_Lossless = new BooleanDatatype();
-        result.Lossless = data_Lossless.valueOf(invocation.getOutput("Lossless").getValue().toString());
-  		if (invocation.getOutput("CodecName").getValue() != null)
-  		{
-	        result.CodecName = invocation.getOutput("CodecName").getValue().toString();
-  		}
-  		else
-  		{
-	        result.CodecName = "";
-  		}
+        result.BitDepth = UpnpValue.toLong(invocation.getOutput("BitDepth").getValue());
+        result.BitRate = UpnpValue.toLong(invocation.getOutput("BitRate").getValue());
+        result.CodecName = UpnpValue.toTextOrEmpty(invocation.getOutput("CodecName").getValue());
+        result.Duration = UpnpValue.toLong(invocation.getOutput("Duration").getValue());
+        result.Lossless = UpnpValue.toBoolean(invocation.getOutput("Lossless").getValue());
+        result.SampleRate = UpnpValue.toLong(invocation.getOutput("SampleRate").getValue());
 
         return result;
     }

@@ -1,0 +1,434 @@
+namespace: samsung.com
+serviceType: MainTVAgent2
+version: 1
+events: true
+stateVariables: {}
+actions:
+  AddSchedule:
+    input:
+      RemindInfo:
+        java: String
+      ReservationType:
+        java: String
+    output:
+      ConflictRemindInfo:
+        java: String
+      ConflictRemindInfoURL:
+        java: String
+      Result:
+        java: String
+  ChangeSchedule:
+    input:
+      RemindInfo:
+        java: String
+      ReservationType:
+        java: String
+    output:
+      ConflictRemindInfo:
+        java: String
+      ConflictRemindInfoURL:
+        java: String
+      Result:
+        java: String
+  DeleteRecordedItem:
+    input:
+      UID:
+        java: String
+    output:
+      Result:
+        java: String
+  DeleteSchedule:
+    input:
+      UID:
+        java: String
+    output:
+      Result:
+        java: String
+  DestoryGroupOwner:
+    input: {}
+    output:
+      Result:
+        java: String
+  EnforceAKE:
+    input: {}
+    output:
+      Result:
+        java: String
+  GetACRCurrentChannelName:
+    input: {}
+    output:
+      ChannelName:
+        java: String
+      Result:
+        java: String
+  GetACRCurrentProgramName:
+    input: {}
+    output:
+      ProgramName:
+        java: String
+      Result:
+        java: String
+  GetACRMessage:
+    input: {}
+    output:
+      Message:
+        java: String
+      Result:
+        java: String
+  GetAPInformation:
+    input: {}
+    output:
+      APInformation:
+        java: String
+      Result:
+        java: String
+  GetAllProgramInformationURL:
+    input:
+      AntennaMode:
+        java: Long
+      Channel:
+        java: String
+    output:
+      AllProgramInformationURL:
+        java: String
+      Result:
+        java: String
+  GetAvailableActions:
+    input: {}
+    output:
+      AvailableActions:
+        java: String
+      Result:
+        java: String
+  GetBannerInformation:
+    input: {}
+    output:
+      BannerInformation:
+        java: String
+      Result:
+        java: String
+  GetChannelListURL:
+    input: {}
+    output:
+      ChannelListType:
+        java: String
+      ChannelListURL:
+        java: String
+      ChannelListVersion:
+        java: Long
+      Result:
+        java: String
+      SatelliteID:
+        java: Long
+      SupportChannelList:
+        java: String
+  GetCurrentBrowserMode:
+    input: {}
+    output:
+      BrowserMode:
+        java: String
+      Result:
+        java: String
+  GetCurrentBrowserURL:
+    input: {}
+    output:
+      BrowserURL:
+        java: String
+      Result:
+        java: String
+  GetCurrentExternalSource:
+    input: {}
+    output:
+      CurrentExternalSource:
+        java: String
+      CurrentMBRActivityIndex:
+        java: Long
+      ID:
+        java: Long
+      Result:
+        java: String
+  GetCurrentHTSSpeakerLayout:
+    input: {}
+    output:
+      Result:
+        java: String
+      SpeakerLayout:
+        java: String
+  GetCurrentMainTVChannel:
+    input: {}
+    output:
+      CurrentChannel:
+        java: String
+      Result:
+        java: String
+  GetCurrentProgramInformationURL:
+    input: {}
+    output:
+      CurrentProgInfoURL:
+        java: String
+      Result:
+        java: String
+  GetDTVInformation:
+    input: {}
+    output:
+      DTVInformation:
+        java: String
+      Result:
+        java: String
+  GetDetailProgramInformation:
+    input:
+      AntennaMode:
+        java: Long
+      Channel:
+        java: String
+      StartTime:
+        java: String
+    output:
+      DetailProgramInformation:
+        java: String
+      Result:
+        java: String
+  GetFilteredProgarmURL:
+    input:
+      Keyword:
+        java: String
+    output:
+      FilteredProgramURL:
+        java: String
+      Result:
+        java: String
+  GetHTSAllSpeakerDistance:
+    input: {}
+    output:
+      AllSpeakerDistance:
+        java: String
+      MaxDistance:
+        java: Long
+      Result:
+        java: String
+  GetHTSAllSpeakerLevel:
+    input: {}
+    output:
+      AllSpeakerLevel:
+        java: String
+      MaxLevel:
+        java: Long
+      Result:
+        java: String
+  GetHTSSoundEffect:
+    input: {}
+    output:
+      Result:
+        java: String
+      SoundEffect:
+        java: String
+      SoundEffectList:
+        java: String
+  GetHTSSpeakerConfig:
+    input: {}
+    output:
+      Result:
+        java: String
+      SpeakerChannel:
+        java: Long
+      SpeakerLFE:
+        java: Long
+  GetMBRDeviceList:
+    input: {}
+    output:
+      MBRDeviceList:
+        java: String
+      Result:
+        java: String
+  GetMBRDongleStatus:
+    input: {}
+    output:
+      MBRDongleStatus:
+        java: String
+      Result:
+        java: String
+  GetRecordChannel:
+    input: {}
+    output:
+      RecordChannel:
+        java: String
+      RecordChannel2:
+        java: String
+      Result:
+        java: String
+  GetScheduleListURL:
+    input: {}
+    output:
+      Result:
+        java: String
+      ScheduleListURL:
+        java: String
+  GetSourceList:
+    input: {}
+    output:
+      Result:
+        java: String
+      SourceList:
+        java: String
+  PlayRecordedItem:
+    input:
+      UID:
+        java: Long
+    output:
+      Result:
+        java: String
+  RunBrowser:
+    input:
+      BrowserURL:
+        java: String
+    output:
+      Result:
+        java: String
+  SendBrowserCommand:
+    input:
+      BrowserCommand:
+        java: String
+    output:
+      Result:
+        java: String
+  SendMBRIRKey:
+    input:
+      ActivityIndex:
+        java: Long
+      MBRDevice:
+        java: String
+      MBRIRKey:
+        java: String
+    output:
+      Result:
+        java: String
+  SetAntennaMode:
+    input:
+      AntennaMode:
+        java: Long
+    output:
+      Result:
+        java: String
+  SetHTSAllSpeakerDistance:
+    input:
+      AllSpeakerDistance:
+        java: String
+    output:
+      Result:
+        java: String
+  SetHTSAllSpeakerLevel:
+    input:
+      AllSpeakerLevel:
+        java: String
+    output:
+      Result:
+        java: String
+  SetHTSSoundEffect:
+    input:
+      SoundEffect:
+        java: String
+    output:
+      Result:
+        java: String
+  SetMainTVChannel:
+    input:
+      Channel:
+        java: String
+      ChannelListType:
+        java: String
+      SatelliteID:
+        java: Long
+    output:
+      Result:
+        java: String
+  SetMainTVSource:
+    input:
+      ID:
+        java: Long
+      Source:
+        java: String
+      UiID:
+        java: Long
+    output:
+      Result:
+        java: String
+  SetRecordDuration:
+    input:
+      Channel:
+        java: String
+      RecordDuration:
+        java: Long
+    output:
+      Result:
+        java: String
+  StartCloneView:
+    input:
+      DRMType:
+        java: String
+      ForcedFlag:
+        java: String
+    output:
+      CloneViewURL:
+        java: String
+      Result:
+        java: String
+  StartExtSourceView:
+    input:
+      DRMType:
+        java: String
+      ForcedFlag:
+        java: String
+      ID:
+        java: Long
+      Source:
+        java: String
+    output:
+      ExtSourceViewURL:
+        java: String
+      Result:
+        java: String
+  StartInstantRecording:
+    input:
+      Channel:
+        java: String
+    output:
+      Result:
+        java: String
+  StartSecondTVView:
+    input:
+      AntennaMode:
+        java: Long
+      Channel:
+        java: String
+      ChannelListType:
+        java: String
+      DRMType:
+        java: String
+      ForcedFlag:
+        java: String
+      SatelliteID:
+        java: Long
+    output:
+      Result:
+        java: String
+      SecondTVURL:
+        java: String
+  StopBrowser:
+    input: {}
+    output:
+      Result:
+        java: String
+  StopRecord:
+    input:
+      Channel:
+        java: String
+    output:
+      Result:
+        java: String
+  StopView:
+    input:
+      ViewURL:
+        java: String
+    output:
+      Result:
+        java: String

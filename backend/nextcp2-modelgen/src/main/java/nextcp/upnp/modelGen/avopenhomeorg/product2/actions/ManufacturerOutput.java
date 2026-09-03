@@ -9,9 +9,9 @@ package nextcp.upnp.modelGen.avopenhomeorg.product2.actions;
 public class ManufacturerOutput
 {
 
-    public String Name = null;
-    public String Info = null;
-    public String Url = null;
     public String ImageUri = null;
+    public String Info = null;
+    public String Name = null;
+    public String Url = null;
 
 }

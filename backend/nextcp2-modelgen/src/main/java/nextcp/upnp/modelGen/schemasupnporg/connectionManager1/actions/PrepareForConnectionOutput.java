@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.schemasupnporg.connectionManager1.actions;
 public class PrepareForConnectionOutput
 {
 
-    public Integer ConnectionID = null;
     public Integer AVTransportID = null;
+    public Integer ConnectionID = null;
     public Integer RcsID = null;
 
 }

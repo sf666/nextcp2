@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions;
 public class GetVolumeDBInput
 {
 
-    public Long InstanceID = null;
     public String Channel = null;
+    public Long InstanceID = null;
 
 }

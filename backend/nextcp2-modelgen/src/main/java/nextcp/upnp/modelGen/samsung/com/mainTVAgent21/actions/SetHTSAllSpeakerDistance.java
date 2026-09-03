@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class SetHTSAllSpeakerDistance extends ActionCallback
     public SetHTSAllSpeakerDistance(Service service, SetHTSAllSpeakerDistanceInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetHTSAllSpeakerDistance"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("AllSpeakerDistance", input.AllSpeakerDistance);
+		
+        getActionInvocation().setInput("AllSpeakerDistance", UpnpValue.forInput(getActionInvocation(), "AllSpeakerDistance", input.AllSpeakerDistance));
     }
 
     public SetHTSAllSpeakerDistanceOutput executeAction()
@@ -36,14 +37,7 @@ public class SetHTSAllSpeakerDistance extends ActionCallback
 
         SetHTSAllSpeakerDistanceOutput result = new SetHTSAllSpeakerDistanceOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

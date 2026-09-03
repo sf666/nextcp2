@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class GetDRMState extends ActionCallback
     public GetDRMState(Service service, GetDRMStateInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetDRMState"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
     }
 
     public GetDRMStateOutput executeAction()
@@ -36,14 +37,7 @@ public class GetDRMState extends ActionCallback
 
         GetDRMStateOutput result = new GetDRMStateOutput();
 
-  		if (invocation.getOutput("CurrentDRMState").getValue() != null)
-  		{
-	        result.CurrentDRMState = invocation.getOutput("CurrentDRMState").getValue().toString();
-  		}
-  		else
-  		{
-	        result.CurrentDRMState = "";
-  		}
+        result.CurrentDRMState = UpnpValue.toTextOrEmpty(invocation.getOutput("CurrentDRMState").getValue());
 
         return result;
     }

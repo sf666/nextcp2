@@ -52,9 +52,46 @@ yarn start -c dev         # uses proxy.config.json (alias: ng serve --proxy-conf
 Two generators live in `backend/nextcp2-codegen/`:
 
 - **DTOs** — `codegen.DtoModelGen` reads `backend/nextcp2-codegen/src/main/resources/yaml/dto.yaml` and writes Java DTOs into `nextcp2-modelgen/src/main/java/nextcp/dto/`. The Maven `process-classes` phase of `nextcp2-modelgen` then derives `frontend/nextcp-ui/src/app/service/dto.d.ts` from those Java classes. To regenerate TS only: `cd backend/nextcp2-modelgen && mvn process-classes` (or run `gen_typescript.sh`).
-- **UPnP services** — `codegen.UpnpModelGen` can generate Java service/event classes for any discovered UPnP service (controlled by config flags).
+- **UPnP services** — `codegen.UpnpModelGen` generates Java service/event/action classes for discovered UPnP services (controlled by config flags). See below.
 
 Never edit anything under `nextcp2-modelgen/src/main/java/nextcp/dto/` or `frontend/nextcp-ui/src/app/service/dto.d.ts` directly — the next generator run overwrites it. Change `dto.yaml` and regenerate.
+
+### The UPnP service model is accumulated, not overwritten
+
+Every device offering the same service type writes into the same generated package. Devices differ
+in what they implement — the standard marks most actions optional and vendors add their own — so
+generating from whichever device was seen last used to *remove* capabilities again.
+
+Each generated package therefore carries a `service-model.yaml`: the union of everything ever
+discovered for that service type, sorted by name. The Java is a pure function of that file, and the
+generator only ever adds to it. On a type conflict the stored type wins and the run logs an ERROR —
+the generated code converts incoming values (`nextcp.upnp.UpnpValue`) instead of casting them, so a
+disagreement is worth reporting but is not fatal.
+
+```bash
+cd backend
+# regenerate all classes from the stored models (after a template change, no device needed)
+mvn -q -o -pl nextcp2-codegen dependency:build-classpath -Dmdep.outputFile=/tmp/cg-cp.txt
+java -cp "nextcp2-codegen/target/classes:$(cat /tmp/cg-cp.txt)" codegen.RegenerateFromModel \
+     "$PWD/nextcp2-modelgen/src/main/java"
+
+# search the LAN, merge what every device announces into the models, regenerate
+java -cp "nextcp2-codegen/target/classes:$(cat /tmp/cg-cp.txt)" codegen.HarvestFromNetwork \
+     "$PWD/nextcp2-modelgen/src/main/java" 150
+```
+
+The last argument is how long to keep listening. Running it again later can only add, so a short run
+is never wrong. (`main.CodegenStandaloneStartup` does the same inside a Spring context, but brings
+up a servlet container for it.)
+
+A long-running installation with `generateUpnpCode` enabled writes into its `upnp_code` directory
+and sees more devices over time — copy both the `.java` and the `service-model.yaml` files back,
+they belong together.
+
+`nextcp.upnp.UpnpValue` (hand-written, in `nextcp2-modelgen`) is why a firmware update that turns a
+`ui4` into a `string` no longer silently drops the value: jUPnP has already converted an incoming
+value using the datatype the device announces *now*, so the generated code converts towards its own
+type instead of casting, and outgoing arguments are built from the datatype the device declares.
 
 ### Changing `dto.yaml` takes two generator runs, in this order
 

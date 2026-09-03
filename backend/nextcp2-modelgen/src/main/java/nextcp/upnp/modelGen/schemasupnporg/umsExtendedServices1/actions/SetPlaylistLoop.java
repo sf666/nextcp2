@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class SetPlaylistLoop extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SetPlaylistLoop"), new NextcpClientInfo()), cp);
 		
-        if (input.PlaylistLoop != null) {
-        	getActionInvocation().setInput("PlaylistLoop", input.PlaylistLoop);
-		} else {
-    	    getActionInvocation().setInput("PlaylistLoop", null);
-		}
+        getActionInvocation().setInput("PlaylistLoop", UpnpValue.forInput(getActionInvocation(), "PlaylistLoop", input.PlaylistLoop));
     }
 
     public void executeAction()

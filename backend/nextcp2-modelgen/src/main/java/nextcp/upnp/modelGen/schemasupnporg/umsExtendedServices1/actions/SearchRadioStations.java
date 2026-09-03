@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,36 +28,12 @@ public class SearchRadioStations extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SearchRadioStations"), new NextcpClientInfo()), cp);
 		
-        if (input.Name != null) {
-	        getActionInvocation().setInput("Name", input.Name);
-		} else {
-    	    getActionInvocation().setInput("Name", null);
-		}
-        if (input.CountryCode != null) {
-	        getActionInvocation().setInput("CountryCode", input.CountryCode);
-		} else {
-    	    getActionInvocation().setInput("CountryCode", null);
-		}
-        if (input.Language != null) {
-	        getActionInvocation().setInput("Language", input.Language);
-		} else {
-    	    getActionInvocation().setInput("Language", null);
-		}
-        if (input.Tag != null) {
-	        getActionInvocation().setInput("Tag", input.Tag);
-		} else {
-    	    getActionInvocation().setInput("Tag", null);
-		}
-        if (input.Offset != null) {
-    	    getActionInvocation().setInput("Offset", new UnsignedIntegerFourBytes(input.Offset));
-		} else {
-    	    getActionInvocation().setInput("Offset", null);
-		}
-        if (input.Limit != null) {
-    	    getActionInvocation().setInput("Limit", new UnsignedIntegerFourBytes(input.Limit));
-		} else {
-    	    getActionInvocation().setInput("Limit", null);
-		}
+        getActionInvocation().setInput("CountryCode", UpnpValue.forInput(getActionInvocation(), "CountryCode", input.CountryCode));
+        getActionInvocation().setInput("Language", UpnpValue.forInput(getActionInvocation(), "Language", input.Language));
+        getActionInvocation().setInput("Limit", UpnpValue.forInput(getActionInvocation(), "Limit", input.Limit));
+        getActionInvocation().setInput("Name", UpnpValue.forInput(getActionInvocation(), "Name", input.Name));
+        getActionInvocation().setInput("Offset", UpnpValue.forInput(getActionInvocation(), "Offset", input.Offset));
+        getActionInvocation().setInput("Tag", UpnpValue.forInput(getActionInvocation(), "Tag", input.Tag));
     }
 
     public SearchRadioStationsOutput executeAction()
@@ -65,14 +42,7 @@ public class SearchRadioStations extends ActionCallback
 
         SearchRadioStationsOutput result = new SearchRadioStationsOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

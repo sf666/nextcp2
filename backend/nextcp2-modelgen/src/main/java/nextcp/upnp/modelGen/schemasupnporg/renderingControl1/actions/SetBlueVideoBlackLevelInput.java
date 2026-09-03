@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions;
 public class SetBlueVideoBlackLevelInput
 {
 
-    public Long InstanceID = null;
     public Long DesiredBlueVideoBlackLevel = null;
+    public Long InstanceID = null;
 
 }

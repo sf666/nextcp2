@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions;
 public class SetBrightnessInput
 {
 
-    public Long InstanceID = null;
     public Long DesiredBrightness = null;
+    public Long InstanceID = null;
 
 }

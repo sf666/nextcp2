@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,26 +28,10 @@ public class X_SetBookmark extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("X_SetBookmark"), new NextcpClientInfo()), cp);
 		
-        if (input.ObjectID != null) {
-	        getActionInvocation().setInput("ObjectID", input.ObjectID);
-		} else {
-    	    getActionInvocation().setInput("ObjectID", null);
-		}
-        if (input.PosSecond != null) {
-    	    getActionInvocation().setInput("PosSecond", new UnsignedIntegerFourBytes(input.PosSecond));
-		} else {
-    	    getActionInvocation().setInput("PosSecond", null);
-		}
-        if (input.CategoryType != null) {
-	        getActionInvocation().setInput("CategoryType", input.CategoryType);
-		} else {
-    	    getActionInvocation().setInput("CategoryType", null);
-		}
-        if (input.RID != null) {
-	        getActionInvocation().setInput("RID", input.RID);
-		} else {
-    	    getActionInvocation().setInput("RID", null);
-		}
+        getActionInvocation().setInput("CategoryType", UpnpValue.forInput(getActionInvocation(), "CategoryType", input.CategoryType));
+        getActionInvocation().setInput("ObjectID", UpnpValue.forInput(getActionInvocation(), "ObjectID", input.ObjectID));
+        getActionInvocation().setInput("PosSecond", UpnpValue.forInput(getActionInvocation(), "PosSecond", input.PosSecond));
+        getActionInvocation().setInput("RID", UpnpValue.forInput(getActionInvocation(), "RID", input.RID));
     }
 
     public void executeAction()

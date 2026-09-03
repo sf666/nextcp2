@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class GetColorTemperature extends ActionCallback
     public GetColorTemperature(Service service, GetColorTemperatureInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetColorTemperature"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
     }
 
     public GetColorTemperatureOutput executeAction()
@@ -36,7 +37,7 @@ public class GetColorTemperature extends ActionCallback
 
         GetColorTemperatureOutput result = new GetColorTemperatureOutput();
 
-        result.CurrentColorTemperature = ((UnsignedIntegerFourBytes) invocation.getOutput("CurrentColorTemperature").getValue()).getValue();
+        result.CurrentColorTemperature = UpnpValue.toLong(invocation.getOutput("CurrentColorTemperature").getValue());
 
         return result;
     }

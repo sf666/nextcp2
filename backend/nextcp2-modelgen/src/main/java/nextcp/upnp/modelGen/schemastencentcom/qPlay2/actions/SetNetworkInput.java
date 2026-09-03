@@ -9,9 +9,9 @@ package nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions;
 public class SetNetworkInput
 {
 
-    public String SSID = null;
-    public String Key = null;
     public String AuthAlgo = null;
     public String CipherAlgo = null;
+    public String Key = null;
+    public String SSID = null;
 
 }

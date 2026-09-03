@@ -1,0 +1,28 @@
+namespace: av-openhome-org
+serviceType: Time
+version: 1
+events: true
+stateVariables:
+  Duration:
+    java: Long
+    upnp: ui4
+  Seconds:
+    java: Long
+    upnp: ui4
+  TrackCount:
+    java: Long
+    upnp: ui4
+actions:
+  Time:
+    input: {
+      }
+    output:
+      Duration:
+        java: Long
+        upnp: ui4
+      Seconds:
+        java: Long
+        upnp: ui4
+      TrackCount:
+        java: Long
+        upnp: ui4

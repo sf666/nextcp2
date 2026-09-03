@@ -12,8 +12,8 @@ import nextcp.upnp.ISubscriptionEventListener;
  */
 public interface IMainServiceEventListener extends ISubscriptionEventListener 
 {
-    public void versionInfoChange(String value);
-    
     public void baseLanURLChange(String value);
+    
+    public void versionInfoChange(String value);
     
 }

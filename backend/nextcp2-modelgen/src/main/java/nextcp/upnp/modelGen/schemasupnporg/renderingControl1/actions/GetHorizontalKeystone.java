@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class GetHorizontalKeystone extends ActionCallback
     public GetHorizontalKeystone(Service service, GetHorizontalKeystoneInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetHorizontalKeystone"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
     }
 
     public GetHorizontalKeystoneOutput executeAction()
@@ -36,7 +37,7 @@ public class GetHorizontalKeystone extends ActionCallback
 
         GetHorizontalKeystoneOutput result = new GetHorizontalKeystoneOutput();
 
-        result.CurrentHorizontalKeystone = Integer.valueOf(invocation.getOutput("CurrentHorizontalKeystone").getValue().toString());
+        result.CurrentHorizontalKeystone = UpnpValue.toInteger(invocation.getOutput("CurrentHorizontalKeystone").getValue());
 
         return result;
     }

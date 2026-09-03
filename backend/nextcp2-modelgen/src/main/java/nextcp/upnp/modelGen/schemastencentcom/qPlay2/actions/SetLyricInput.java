@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions;
 public class SetLyricInput
 {
 
-    public String SongID = null;
-    public String LyricType = null;
     public String Lyric = null;
+    public String LyricType = null;
+    public String SongID = null;
 
 }

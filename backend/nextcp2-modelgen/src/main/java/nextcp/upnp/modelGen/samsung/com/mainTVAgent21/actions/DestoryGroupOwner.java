@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class DestoryGroupOwner extends ActionCallback
     public DestoryGroupOwner(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("DestoryGroupOwner"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public DestoryGroupOwnerOutput executeAction()
@@ -35,14 +36,7 @@ public class DestoryGroupOwner extends ActionCallback
 
         DestoryGroupOwnerOutput result = new DestoryGroupOwnerOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

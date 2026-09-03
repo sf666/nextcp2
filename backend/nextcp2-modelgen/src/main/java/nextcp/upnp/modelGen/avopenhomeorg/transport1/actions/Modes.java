@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,14 +36,7 @@ public class Modes extends ActionCallback
 
         ModesOutput result = new ModesOutput();
 
-  		if (invocation.getOutput("Modes").getValue() != null)
-  		{
-	        result.Modes = invocation.getOutput("Modes").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Modes = "";
-  		}
+        result.Modes = UpnpValue.toTextOrEmpty(invocation.getOutput("Modes").getValue());
 
         return result;
     }

@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class GetRecordChannelOutput
 {
 
-    public String Result = null;
     public String RecordChannel = null;
     public String RecordChannel2 = null;
+    public String Result = null;
 
 }

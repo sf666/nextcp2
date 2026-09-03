@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class GetPositionInfo extends ActionCallback
     public GetPositionInfo(Service service, GetPositionInfoInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetPositionInfo"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
     }
 
     public GetPositionInfoOutput executeAction()
@@ -36,49 +37,14 @@ public class GetPositionInfo extends ActionCallback
 
         GetPositionInfoOutput result = new GetPositionInfoOutput();
 
-        result.Track = ((UnsignedIntegerFourBytes) invocation.getOutput("Track").getValue()).getValue();
-  		if (invocation.getOutput("TrackDuration").getValue() != null)
-  		{
-	        result.TrackDuration = invocation.getOutput("TrackDuration").getValue().toString();
-  		}
-  		else
-  		{
-	        result.TrackDuration = "";
-  		}
-  		if (invocation.getOutput("TrackMetaData").getValue() != null)
-  		{
-	        result.TrackMetaData = invocation.getOutput("TrackMetaData").getValue().toString();
-  		}
-  		else
-  		{
-	        result.TrackMetaData = "";
-  		}
-  		if (invocation.getOutput("TrackURI").getValue() != null)
-  		{
-	        result.TrackURI = invocation.getOutput("TrackURI").getValue().toString();
-  		}
-  		else
-  		{
-	        result.TrackURI = "";
-  		}
-  		if (invocation.getOutput("RelTime").getValue() != null)
-  		{
-	        result.RelTime = invocation.getOutput("RelTime").getValue().toString();
-  		}
-  		else
-  		{
-	        result.RelTime = "";
-  		}
-  		if (invocation.getOutput("AbsTime").getValue() != null)
-  		{
-	        result.AbsTime = invocation.getOutput("AbsTime").getValue().toString();
-  		}
-  		else
-  		{
-	        result.AbsTime = "";
-  		}
-        result.RelCount = Integer.valueOf(invocation.getOutput("RelCount").getValue().toString());
-        result.AbsCount = Integer.valueOf(invocation.getOutput("AbsCount").getValue().toString());
+        result.AbsCount = UpnpValue.toInteger(invocation.getOutput("AbsCount").getValue());
+        result.AbsTime = UpnpValue.toTextOrEmpty(invocation.getOutput("AbsTime").getValue());
+        result.RelCount = UpnpValue.toInteger(invocation.getOutput("RelCount").getValue());
+        result.RelTime = UpnpValue.toTextOrEmpty(invocation.getOutput("RelTime").getValue());
+        result.Track = UpnpValue.toLong(invocation.getOutput("Track").getValue());
+        result.TrackDuration = UpnpValue.toTextOrEmpty(invocation.getOutput("TrackDuration").getValue());
+        result.TrackMetaData = UpnpValue.toTextOrEmpty(invocation.getOutput("TrackMetaData").getValue());
+        result.TrackURI = UpnpValue.toTextOrEmpty(invocation.getOutput("TrackURI").getValue());
 
         return result;
     }

@@ -12,26 +12,26 @@ import nextcp.upnp.ISubscriptionEventListener;
  */
 public interface ITransportServiceEventListener extends ISubscriptionEventListener 
 {
-    public void modesChange(String value);
-    
-    public void streamIdChange(Long value);
-    
-    public void shuffleChange(Boolean value);
-    
-    public void repeatChange(String value);
-    
-    public void canSkipNextChange(Boolean value);
-    
-    public void canShuffleChange(Boolean value);
-    
-    public void transportStateChange(String value);
+    public void canPauseChange(Boolean value);
     
     public void canRepeatChange(Boolean value);
     
-    public void canPauseChange(Boolean value);
-    
     public void canSeekChange(Boolean value);
     
+    public void canShuffleChange(Boolean value);
+    
+    public void canSkipNextChange(Boolean value);
+    
     public void canSkipPreviousChange(Boolean value);
+    
+    public void modesChange(String value);
+    
+    public void repeatChange(String value);
+    
+    public void shuffleChange(Boolean value);
+    
+    public void streamIdChange(Long value);
+    
+    public void transportStateChange(String value);
     
 }

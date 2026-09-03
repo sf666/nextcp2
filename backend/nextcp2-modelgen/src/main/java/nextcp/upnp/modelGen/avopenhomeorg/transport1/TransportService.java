@@ -14,35 +14,35 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
 
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Modes;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.ModesOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SetShuffle;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SetShuffleInput;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.StreamId;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.StreamIdOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Pause;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Shuffle;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.ShuffleOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.PlayAs;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.PlayAsInput;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Stop;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SkipNext;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Repeat;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.RepeatOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.TransportState;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.TransportStateOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SeekSecondAbsolute;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SeekSecondAbsoluteInput;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Play;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.ModeInfo;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.ModeInfoOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SetRepeat;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SetRepeatInput;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.StreamInfo;
-import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.StreamInfoOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Modes;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.ModesOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Pause;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Play;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.PlayAs;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.PlayAsInput;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Repeat;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.RepeatOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SeekSecondAbsolute;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SeekSecondAbsoluteInput;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SeekSecondRelative;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SeekSecondRelativeInput;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SetRepeat;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SetRepeatInput;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SetShuffle;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SetShuffleInput;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Shuffle;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.ShuffleOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SkipNext;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.SkipPrevious;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.Stop;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.StreamId;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.StreamIdOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.StreamInfo;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.StreamInfoOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.TransportState;
+import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.TransportStateOutput;
 
 
 /**
@@ -145,23 +145,17 @@ public class TransportService
 
 
 
+    public ModeInfoOutput modeInfo()
+    {
+        ModeInfo modeInfo = new ModeInfo(transportService,  upnpService.getControlPoint());
+        ModeInfoOutput res = modeInfo.executeAction();
+        return res;        
+    }
+
     public ModesOutput modes()
     {
         Modes modes = new Modes(transportService,  upnpService.getControlPoint());
         ModesOutput res = modes.executeAction();
-        return res;        
-    }
-
-    public void setShuffle(SetShuffleInput inp)
-    {
-        SetShuffle setShuffle = new SetShuffle(transportService, inp, upnpService.getControlPoint());
-        setShuffle.executeAction();
-    }
-
-    public StreamIdOutput streamId()
-    {
-        StreamId streamId = new StreamId(transportService,  upnpService.getControlPoint());
-        StreamIdOutput res = streamId.executeAction();
         return res;        
     }
 
@@ -171,29 +165,16 @@ public class TransportService
         pause.executeAction();
     }
 
-    public ShuffleOutput shuffle()
+    public void play()
     {
-        Shuffle shuffle = new Shuffle(transportService,  upnpService.getControlPoint());
-        ShuffleOutput res = shuffle.executeAction();
-        return res;        
+        Play play = new Play(transportService,  upnpService.getControlPoint());
+        play.executeAction();
     }
 
     public void playAs(PlayAsInput inp)
     {
         PlayAs playAs = new PlayAs(transportService, inp, upnpService.getControlPoint());
         playAs.executeAction();
-    }
-
-    public void stop()
-    {
-        Stop stop = new Stop(transportService,  upnpService.getControlPoint());
-        stop.executeAction();
-    }
-
-    public void skipNext()
-    {
-        SkipNext skipNext = new SkipNext(transportService,  upnpService.getControlPoint());
-        skipNext.executeAction();
     }
 
     public RepeatOutput repeat()
@@ -203,36 +184,60 @@ public class TransportService
         return res;        
     }
 
-    public TransportStateOutput transportState()
-    {
-        TransportState transportState = new TransportState(transportService,  upnpService.getControlPoint());
-        TransportStateOutput res = transportState.executeAction();
-        return res;        
-    }
-
     public void seekSecondAbsolute(SeekSecondAbsoluteInput inp)
     {
         SeekSecondAbsolute seekSecondAbsolute = new SeekSecondAbsolute(transportService, inp, upnpService.getControlPoint());
         seekSecondAbsolute.executeAction();
     }
 
-    public void play()
+    public void seekSecondRelative(SeekSecondRelativeInput inp)
     {
-        Play play = new Play(transportService,  upnpService.getControlPoint());
-        play.executeAction();
-    }
-
-    public ModeInfoOutput modeInfo()
-    {
-        ModeInfo modeInfo = new ModeInfo(transportService,  upnpService.getControlPoint());
-        ModeInfoOutput res = modeInfo.executeAction();
-        return res;        
+        SeekSecondRelative seekSecondRelative = new SeekSecondRelative(transportService, inp, upnpService.getControlPoint());
+        seekSecondRelative.executeAction();
     }
 
     public void setRepeat(SetRepeatInput inp)
     {
         SetRepeat setRepeat = new SetRepeat(transportService, inp, upnpService.getControlPoint());
         setRepeat.executeAction();
+    }
+
+    public void setShuffle(SetShuffleInput inp)
+    {
+        SetShuffle setShuffle = new SetShuffle(transportService, inp, upnpService.getControlPoint());
+        setShuffle.executeAction();
+    }
+
+    public ShuffleOutput shuffle()
+    {
+        Shuffle shuffle = new Shuffle(transportService,  upnpService.getControlPoint());
+        ShuffleOutput res = shuffle.executeAction();
+        return res;        
+    }
+
+    public void skipNext()
+    {
+        SkipNext skipNext = new SkipNext(transportService,  upnpService.getControlPoint());
+        skipNext.executeAction();
+    }
+
+    public void skipPrevious()
+    {
+        SkipPrevious skipPrevious = new SkipPrevious(transportService,  upnpService.getControlPoint());
+        skipPrevious.executeAction();
+    }
+
+    public void stop()
+    {
+        Stop stop = new Stop(transportService,  upnpService.getControlPoint());
+        stop.executeAction();
+    }
+
+    public StreamIdOutput streamId()
+    {
+        StreamId streamId = new StreamId(transportService,  upnpService.getControlPoint());
+        StreamIdOutput res = streamId.executeAction();
+        return res;        
     }
 
     public StreamInfoOutput streamInfo()
@@ -242,15 +247,10 @@ public class TransportService
         return res;        
     }
 
-    public void seekSecondRelative(SeekSecondRelativeInput inp)
+    public TransportStateOutput transportState()
     {
-        SeekSecondRelative seekSecondRelative = new SeekSecondRelative(transportService, inp, upnpService.getControlPoint());
-        seekSecondRelative.executeAction();
-    }
-
-    public void skipPrevious()
-    {
-        SkipPrevious skipPrevious = new SkipPrevious(transportService,  upnpService.getControlPoint());
-        skipPrevious.executeAction();
+        TransportState transportState = new TransportState(transportService,  upnpService.getControlPoint());
+        TransportStateOutput res = transportState.executeAction();
+        return res;        
     }
 }

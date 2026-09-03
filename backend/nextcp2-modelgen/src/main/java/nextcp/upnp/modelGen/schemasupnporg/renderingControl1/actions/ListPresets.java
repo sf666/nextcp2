@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class ListPresets extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("ListPresets"), new NextcpClientInfo()), cp);
 		
-        if (input.InstanceID != null) {
-    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-		} else {
-    	    getActionInvocation().setInput("InstanceID", null);
-		}
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
     }
 
     public ListPresetsOutput executeAction()
@@ -40,14 +37,7 @@ public class ListPresets extends ActionCallback
 
         ListPresetsOutput result = new ListPresetsOutput();
 
-  		if (invocation.getOutput("CurrentPresetNameList").getValue() != null)
-  		{
-	        result.CurrentPresetNameList = invocation.getOutput("CurrentPresetNameList").getValue().toString();
-  		}
-  		else
-  		{
-	        result.CurrentPresetNameList = "";
-  		}
+        result.CurrentPresetNameList = UpnpValue.toTextOrEmpty(invocation.getOutput("CurrentPresetNameList").getValue());
 
         return result;
     }

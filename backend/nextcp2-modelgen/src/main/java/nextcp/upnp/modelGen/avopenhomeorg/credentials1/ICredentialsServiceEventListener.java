@@ -12,10 +12,10 @@ import nextcp.upnp.ISubscriptionEventListener;
  */
 public interface ICredentialsServiceEventListener extends ISubscriptionEventListener 
 {
+    public void idsChange(String value);
+    
     public void publicKeyChange(String value);
     
     public void sequenceNumberChange(Long value);
-    
-    public void idsChange(String value);
     
 }

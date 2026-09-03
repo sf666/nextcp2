@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class GetWebStreamNowPlaying extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("GetWebStreamNowPlaying"), new NextcpClientInfo()), cp);
 		
-        if (input.ObjectID != null) {
-	        getActionInvocation().setInput("ObjectID", input.ObjectID);
-		} else {
-    	    getActionInvocation().setInput("ObjectID", null);
-		}
+        getActionInvocation().setInput("ObjectID", UpnpValue.forInput(getActionInvocation(), "ObjectID", input.ObjectID));
     }
 
     public GetWebStreamNowPlayingOutput executeAction()
@@ -40,14 +37,7 @@ public class GetWebStreamNowPlaying extends ActionCallback
 
         GetWebStreamNowPlayingOutput result = new GetWebStreamNowPlayingOutput();
 
-  		if (invocation.getOutput("NowPlaying").getValue() != null)
-  		{
-	        result.NowPlaying = invocation.getOutput("NowPlaying").getValue().toString();
-  		}
-  		else
-  		{
-	        result.NowPlaying = "";
-  		}
+        result.NowPlaying = UpnpValue.toTextOrEmpty(invocation.getOutput("NowPlaying").getValue());
 
         return result;
     }

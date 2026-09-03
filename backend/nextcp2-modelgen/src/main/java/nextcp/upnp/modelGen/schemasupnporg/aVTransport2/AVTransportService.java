@@ -14,48 +14,48 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
 
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.Pause;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.PauseInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.Stop;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.StopInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetPositionInfo;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetPositionInfoOutput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetPositionInfoInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetCurrentTransportActions;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetCurrentTransportActionsOutput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetCurrentTransportActionsInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetDRMState;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetDRMStateOutput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetDRMStateInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.SetNextAVTransportURI;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.SetNextAVTransportURIInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.Play;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.PlayInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetDeviceCapabilities;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetDeviceCapabilitiesOutput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetDeviceCapabilitiesInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetMediaInfo;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetMediaInfoOutput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetMediaInfoInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.Next;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.NextInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetTransportInfo;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetTransportInfoOutput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetTransportInfoInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.Previous;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.PreviousInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.SetAVTransportURI;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.SetAVTransportURIInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetTransportSettings;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetTransportSettingsOutput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetTransportSettingsInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetMediaInfo_Ext;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetMediaInfo_ExtOutput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetMediaInfo_ExtInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetPositionInfo;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetPositionInfoOutput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetPositionInfoInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetTransportInfo;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetTransportInfoOutput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetTransportInfoInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetTransportSettings;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetTransportSettingsOutput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetTransportSettingsInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.Next;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.NextInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.Pause;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.PauseInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.Play;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.PlayInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.Previous;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.PreviousInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.Seek;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.SeekInput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetCurrentTransportActions;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetCurrentTransportActionsOutput;
-import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetCurrentTransportActionsInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.SetAVTransportURI;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.SetAVTransportURIInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.SetNextAVTransportURI;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.SetNextAVTransportURIInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.SetPlayMode;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.SetPlayModeInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.Stop;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.StopInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.X_DLNA_GetBytePositionInfo;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.X_DLNA_GetBytePositionInfoOutput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.X_DLNA_GetBytePositionInfoInput;
@@ -161,35 +161,10 @@ public class AVTransportService
 
 
 
-    public X_DLNA_GetBytePositionInfoOutput x_DLNA_GetBytePositionInfo(X_DLNA_GetBytePositionInfoInput inp)
+    public GetCurrentTransportActionsOutput getCurrentTransportActions(GetCurrentTransportActionsInput inp)
     {
-        X_DLNA_GetBytePositionInfo x_DLNA_GetBytePositionInfo = new X_DLNA_GetBytePositionInfo(aVTransportService, inp, upnpService.getControlPoint());
-        X_DLNA_GetBytePositionInfoOutput res = x_DLNA_GetBytePositionInfo.executeAction();
-        return res;        
-    }
-
-    public void setPlayMode(SetPlayModeInput inp)
-    {
-        SetPlayMode setPlayMode = new SetPlayMode(aVTransportService, inp, upnpService.getControlPoint());
-        setPlayMode.executeAction();
-    }
-
-    public void pause(PauseInput inp)
-    {
-        Pause pause = new Pause(aVTransportService, inp, upnpService.getControlPoint());
-        pause.executeAction();
-    }
-
-    public void stop(StopInput inp)
-    {
-        Stop stop = new Stop(aVTransportService, inp, upnpService.getControlPoint());
-        stop.executeAction();
-    }
-
-    public GetPositionInfoOutput getPositionInfo(GetPositionInfoInput inp)
-    {
-        GetPositionInfo getPositionInfo = new GetPositionInfo(aVTransportService, inp, upnpService.getControlPoint());
-        GetPositionInfoOutput res = getPositionInfo.executeAction();
+        GetCurrentTransportActions getCurrentTransportActions = new GetCurrentTransportActions(aVTransportService, inp, upnpService.getControlPoint());
+        GetCurrentTransportActionsOutput res = getCurrentTransportActions.executeAction();
         return res;        
     }
 
@@ -198,18 +173,6 @@ public class AVTransportService
         GetDRMState getDRMState = new GetDRMState(aVTransportService, inp, upnpService.getControlPoint());
         GetDRMStateOutput res = getDRMState.executeAction();
         return res;        
-    }
-
-    public void setNextAVTransportURI(SetNextAVTransportURIInput inp)
-    {
-        SetNextAVTransportURI setNextAVTransportURI = new SetNextAVTransportURI(aVTransportService, inp, upnpService.getControlPoint());
-        setNextAVTransportURI.executeAction();
-    }
-
-    public void play(PlayInput inp)
-    {
-        Play play = new Play(aVTransportService, inp, upnpService.getControlPoint());
-        play.executeAction();
     }
 
     public GetDeviceCapabilitiesOutput getDeviceCapabilities(GetDeviceCapabilitiesInput inp)
@@ -226,10 +189,18 @@ public class AVTransportService
         return res;        
     }
 
-    public void next(NextInput inp)
+    public GetMediaInfo_ExtOutput getMediaInfo_Ext(GetMediaInfo_ExtInput inp)
     {
-        Next next = new Next(aVTransportService, inp, upnpService.getControlPoint());
-        next.executeAction();
+        GetMediaInfo_Ext getMediaInfo_Ext = new GetMediaInfo_Ext(aVTransportService, inp, upnpService.getControlPoint());
+        GetMediaInfo_ExtOutput res = getMediaInfo_Ext.executeAction();
+        return res;        
+    }
+
+    public GetPositionInfoOutput getPositionInfo(GetPositionInfoInput inp)
+    {
+        GetPositionInfo getPositionInfo = new GetPositionInfo(aVTransportService, inp, upnpService.getControlPoint());
+        GetPositionInfoOutput res = getPositionInfo.executeAction();
+        return res;        
     }
 
     public GetTransportInfoOutput getTransportInfo(GetTransportInfoInput inp)
@@ -239,18 +210,6 @@ public class AVTransportService
         return res;        
     }
 
-    public void previous(PreviousInput inp)
-    {
-        Previous previous = new Previous(aVTransportService, inp, upnpService.getControlPoint());
-        previous.executeAction();
-    }
-
-    public void setAVTransportURI(SetAVTransportURIInput inp)
-    {
-        SetAVTransportURI setAVTransportURI = new SetAVTransportURI(aVTransportService, inp, upnpService.getControlPoint());
-        setAVTransportURI.executeAction();
-    }
-
     public GetTransportSettingsOutput getTransportSettings(GetTransportSettingsInput inp)
     {
         GetTransportSettings getTransportSettings = new GetTransportSettings(aVTransportService, inp, upnpService.getControlPoint());
@@ -258,11 +217,28 @@ public class AVTransportService
         return res;        
     }
 
-    public GetMediaInfo_ExtOutput getMediaInfo_Ext(GetMediaInfo_ExtInput inp)
+    public void next(NextInput inp)
     {
-        GetMediaInfo_Ext getMediaInfo_Ext = new GetMediaInfo_Ext(aVTransportService, inp, upnpService.getControlPoint());
-        GetMediaInfo_ExtOutput res = getMediaInfo_Ext.executeAction();
-        return res;        
+        Next next = new Next(aVTransportService, inp, upnpService.getControlPoint());
+        next.executeAction();
+    }
+
+    public void pause(PauseInput inp)
+    {
+        Pause pause = new Pause(aVTransportService, inp, upnpService.getControlPoint());
+        pause.executeAction();
+    }
+
+    public void play(PlayInput inp)
+    {
+        Play play = new Play(aVTransportService, inp, upnpService.getControlPoint());
+        play.executeAction();
+    }
+
+    public void previous(PreviousInput inp)
+    {
+        Previous previous = new Previous(aVTransportService, inp, upnpService.getControlPoint());
+        previous.executeAction();
     }
 
     public void seek(SeekInput inp)
@@ -271,10 +247,34 @@ public class AVTransportService
         seek.executeAction();
     }
 
-    public GetCurrentTransportActionsOutput getCurrentTransportActions(GetCurrentTransportActionsInput inp)
+    public void setAVTransportURI(SetAVTransportURIInput inp)
     {
-        GetCurrentTransportActions getCurrentTransportActions = new GetCurrentTransportActions(aVTransportService, inp, upnpService.getControlPoint());
-        GetCurrentTransportActionsOutput res = getCurrentTransportActions.executeAction();
+        SetAVTransportURI setAVTransportURI = new SetAVTransportURI(aVTransportService, inp, upnpService.getControlPoint());
+        setAVTransportURI.executeAction();
+    }
+
+    public void setNextAVTransportURI(SetNextAVTransportURIInput inp)
+    {
+        SetNextAVTransportURI setNextAVTransportURI = new SetNextAVTransportURI(aVTransportService, inp, upnpService.getControlPoint());
+        setNextAVTransportURI.executeAction();
+    }
+
+    public void setPlayMode(SetPlayModeInput inp)
+    {
+        SetPlayMode setPlayMode = new SetPlayMode(aVTransportService, inp, upnpService.getControlPoint());
+        setPlayMode.executeAction();
+    }
+
+    public void stop(StopInput inp)
+    {
+        Stop stop = new Stop(aVTransportService, inp, upnpService.getControlPoint());
+        stop.executeAction();
+    }
+
+    public X_DLNA_GetBytePositionInfoOutput x_DLNA_GetBytePositionInfo(X_DLNA_GetBytePositionInfoInput inp)
+    {
+        X_DLNA_GetBytePositionInfo x_DLNA_GetBytePositionInfo = new X_DLNA_GetBytePositionInfo(aVTransportService, inp, upnpService.getControlPoint());
+        X_DLNA_GetBytePositionInfoOutput res = x_DLNA_GetBytePositionInfo.executeAction();
         return res;        
     }
 }

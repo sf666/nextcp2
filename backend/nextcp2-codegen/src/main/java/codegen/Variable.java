@@ -31,6 +31,13 @@ public class Variable
         initTypes();
     }
 
+    public Variable(String name, String javaType, String upnpType)
+    {
+        this.name = name;
+        this.type = javaType;
+        this.upnpType = upnpType;
+    }
+
     public Variable(StateVariable<?> argument)
     {
         this.name = argument.getName();
@@ -82,6 +89,36 @@ public class Variable
     public void setUpnpDataType(Datatype<?> upnpDataType)
     {
         this.upnpDataType = upnpDataType;
+    }
+
+    /**
+     * Name of the {@code nextcp.upnp.UpnpValue} method that reads an incoming value towards this
+     * variable's java type. The generated code converts instead of casting, because the datatype
+     * seen at generation time is only a snapshot of what the device announced back then.
+     */
+    public String getCoercion()
+    {
+        switch (type)
+        {
+            case "Integer":
+                return "toInteger";
+            case "Boolean":
+                return "toBoolean";
+            case "byte[]":
+                return "toBytes";
+            case "Long":
+                return "toLong";
+            default:
+                return "toText";
+        }
+    }
+
+    /**
+     * Same for action outputs, where a missing string has always been handed out as "" and not null.
+     */
+    public String getOutputCoercion()
+    {
+        return "String".equals(type) ? "toTextOrEmpty" : getCoercion();
     }
 
     protected String getJavaType(Builtin builtin)

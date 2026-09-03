@@ -14,10 +14,10 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
 
-import nextcp.upnp.modelGen.bubblesoftappscom.main1.actions.GetVersionInfo;
-import nextcp.upnp.modelGen.bubblesoftappscom.main1.actions.GetVersionInfoOutput;
 import nextcp.upnp.modelGen.bubblesoftappscom.main1.actions.GetBaseLanURL;
 import nextcp.upnp.modelGen.bubblesoftappscom.main1.actions.GetBaseLanURLOutput;
+import nextcp.upnp.modelGen.bubblesoftappscom.main1.actions.GetVersionInfo;
+import nextcp.upnp.modelGen.bubblesoftappscom.main1.actions.GetVersionInfoOutput;
 
 
 /**
@@ -36,7 +36,7 @@ public class MainService
 
     private UpnpService upnpService = null;
 
-    private MainServiceStateVariable mainServiceStateVariable = new MainServiceStateVariable();
+//    private MainServiceStateVariable mainServiceStateVariable = new MainServiceStateVariable();
     
     private MainServiceSubscription subscription = null;
     
@@ -120,17 +120,17 @@ public class MainService
 
 
 
-    public GetVersionInfoOutput getVersionInfo()
-    {
-        GetVersionInfo getVersionInfo = new GetVersionInfo(mainService,  upnpService.getControlPoint());
-        GetVersionInfoOutput res = getVersionInfo.executeAction();
-        return res;        
-    }
-
     public GetBaseLanURLOutput getBaseLanURL()
     {
         GetBaseLanURL getBaseLanURL = new GetBaseLanURL(mainService,  upnpService.getControlPoint());
         GetBaseLanURLOutput res = getBaseLanURL.executeAction();
+        return res;        
+    }
+
+    public GetVersionInfoOutput getVersionInfo()
+    {
+        GetVersionInfo getVersionInfo = new GetVersionInfo(mainService,  upnpService.getControlPoint());
+        GetVersionInfoOutput res = getVersionInfo.executeAction();
         return res;        
     }
 }

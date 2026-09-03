@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions;
 public class SetEnabledInput
 {
 
-    public String Id = null;
     public Boolean Enabled = null;
+    public String Id = null;
 
 }

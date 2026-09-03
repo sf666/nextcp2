@@ -5,7 +5,9 @@ import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.types.ServiceType;
 import org.jupnp.protocol.ProtocolCreationException;
+import org.jupnp.protocol.sync.SendingRenewal;
 import org.jupnp.protocol.sync.SendingSubscribe;
+import org.jupnp.protocol.sync.SendingUnsubscribe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +22,7 @@ import nextcp.upnp.ISubscriptionEventListener;
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchroniously.  
+ * Generated UPnP Service class for calling Actions synchronously.  
  */
 public class virtualSvcService
 {
@@ -30,7 +32,7 @@ public class virtualSvcService
 
     private UpnpService upnpService = null;
 
-    private virtualSvcServiceStateVariable virtualSvcServiceStateVariable = new virtualSvcServiceStateVariable();
+//    private virtualSvcServiceStateVariable virtualSvcServiceStateVariable = new virtualSvcServiceStateVariable();
     
     private virtualSvcServiceSubscription subscription = null;
     
@@ -73,20 +75,44 @@ public class virtualSvcService
 	        log.warn(String.format("initialized service 'virtualSvc' failed for device %s [%s]", device.getIdentity().getUdn(), device.getDetails().getFriendlyName()));
 	    }
     }
-    
+
+    public void unsubscribeService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingUnsubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingUnsubscribe(subscription);
+        protocol.run();
+    }
+
+    public void renewService(UpnpService upnpService, RemoteDevice device)
+    {
+        SendingRenewal protocol = upnpService.getControlPoint().getProtocolFactory().createSendingRenewal(subscription);
+        protocol.run();
+    }
+
     public void addSubscriptionEventListener(IvirtualSvcServiceEventListener listener)
     {
-        subscription.addSubscriptionEventListener(listener);
+    	if (subscription != null) {
+            subscription.addSubscriptionEventListener(listener);
+    	}
     }
     
     public boolean removeSubscriptionEventListener(IvirtualSvcServiceEventListener listener)
     {
-        return subscription.removeSubscriptionEventListener(listener);
+    	if (subscription != null) {
+    		return subscription.removeSubscriptionEventListener(listener);
+    	}
+    	return false;
     }    
 
     public RemoteService getvirtualSvcService()
     {
         return virtualSvcService;
     }    
+
+
+//
+// Actions
+// =========================================================================
+//
+
 
 }

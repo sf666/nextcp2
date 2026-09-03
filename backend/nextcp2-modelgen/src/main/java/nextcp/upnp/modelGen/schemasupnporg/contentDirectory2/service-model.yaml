@@ -1,0 +1,98 @@
+namespace: schemas-upnp-org
+serviceType: ContentDirectory
+version: 2
+events: true
+stateVariables:
+  ContainerUpdateIDs:
+    java: String
+  FeatureList:
+    java: String
+  SearchCapabilities:
+    java: String
+  SortCapabilities:
+    java: String
+  SortExtensionCapabilities:
+    java: String
+  SystemUpdateID:
+    java: Long
+  TransferIDs:
+    java: String
+  X_FeatureList:
+    java: String
+actions:
+  Browse:
+    input:
+      BrowseFlag:
+        java: String
+      Filter:
+        java: String
+      ObjectID:
+        java: String
+      RequestedCount:
+        java: Long
+      SortCriteria:
+        java: String
+      StartingIndex:
+        java: Long
+    output:
+      NumberReturned:
+        java: Long
+      Result:
+        java: String
+      TotalMatches:
+        java: Long
+      UpdateID:
+        java: Long
+  GetFeatureList:
+    input: {}
+    output:
+      FeatureList:
+        java: String
+  GetSearchCapabilities:
+    input: {}
+    output:
+      SearchCaps:
+        java: String
+  GetSortCapabilities:
+    input: {}
+    output:
+      SortCaps:
+        java: String
+  GetSortExtensionCapabilities:
+    input: {}
+    output:
+      SortExtensionCaps:
+        java: String
+  GetSystemUpdateID:
+    input: {}
+    output:
+      Id:
+        java: Long
+  Search:
+    input:
+      ContainerID:
+        java: String
+      Filter:
+        java: String
+      RequestedCount:
+        java: Long
+      SearchCriteria:
+        java: String
+      SortCriteria:
+        java: String
+      StartingIndex:
+        java: Long
+    output:
+      NumberReturned:
+        java: Long
+      Result:
+        java: String
+      TotalMatches:
+        java: Long
+      UpdateID:
+        java: Long
+  X_GetFeatureList:
+    input: {}
+    output:
+      FeatureList:
+        java: String

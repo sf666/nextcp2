@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.avopenhomeorg.info1.actions;
 public class TrackOutput
 {
 
-    public String Uri = null;
     public String Metadata = null;
+    public String Uri = null;
 
 }

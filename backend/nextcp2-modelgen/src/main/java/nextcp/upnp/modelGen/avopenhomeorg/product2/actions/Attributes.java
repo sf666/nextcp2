@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class Attributes extends ActionCallback
     public Attributes(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Attributes"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public AttributesOutput executeAction()
@@ -35,14 +36,7 @@ public class Attributes extends ActionCallback
 
         AttributesOutput result = new AttributesOutput();
 
-  		if (invocation.getOutput("Value").getValue() != null)
-  		{
-	        result.Value = invocation.getOutput("Value").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Value = "";
-  		}
+        result.Value = UpnpValue.toTextOrEmpty(invocation.getOutput("Value").getValue());
 
         return result;
     }

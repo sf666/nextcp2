@@ -14,10 +14,10 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
 
-import nextcp.upnp.modelGen.avopenhomeorg.info1.actions.Details;
-import nextcp.upnp.modelGen.avopenhomeorg.info1.actions.DetailsOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.info1.actions.Counters;
 import nextcp.upnp.modelGen.avopenhomeorg.info1.actions.CountersOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.info1.actions.Details;
+import nextcp.upnp.modelGen.avopenhomeorg.info1.actions.DetailsOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.info1.actions.Metatext;
 import nextcp.upnp.modelGen.avopenhomeorg.info1.actions.MetatextOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.info1.actions.Track;
@@ -124,17 +124,17 @@ public class InfoService
 
 
 
-    public DetailsOutput details()
-    {
-        Details details = new Details(infoService,  upnpService.getControlPoint());
-        DetailsOutput res = details.executeAction();
-        return res;        
-    }
-
     public CountersOutput counters()
     {
         Counters counters = new Counters(infoService,  upnpService.getControlPoint());
         CountersOutput res = counters.executeAction();
+        return res;        
+    }
+
+    public DetailsOutput details()
+    {
+        Details details = new Details(infoService,  upnpService.getControlPoint());
+        DetailsOutput res = details.executeAction();
         return res;        
     }
 

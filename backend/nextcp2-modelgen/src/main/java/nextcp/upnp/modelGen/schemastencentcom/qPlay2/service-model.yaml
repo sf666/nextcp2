@@ -1,0 +1,132 @@
+namespace: schemas-tencent-com
+serviceType: QPlay
+version: 2
+events: true
+stateVariables: {
+  }
+actions:
+  GetLyricSupportType:
+    input: {
+      }
+    output:
+      LyricType:
+        java: String
+        upnp: string
+  GetMaxTracks:
+    input: {
+      }
+    output:
+      MaxTracks:
+        java: String
+        upnp: string
+  GetTracksCount:
+    input: {
+      }
+    output:
+      NrTracks:
+        java: String
+        upnp: string
+  GetTracksInfo:
+    input:
+      NumberOfTracks:
+        java: String
+        upnp: string
+      StartingIndex:
+        java: String
+        upnp: string
+    output:
+      TracksMetaData:
+        java: String
+        upnp: string
+  InsertTracks:
+    input:
+      QueueID:
+        java: String
+        upnp: string
+      StartingIndex:
+        java: String
+        upnp: string
+      TracksMetaData:
+        java: String
+        upnp: string
+    output:
+      NumberOfSuccess:
+        java: String
+        upnp: string
+  QPlayAuth:
+    input:
+      Seed:
+        java: String
+        upnp: string
+    output:
+      Code:
+        java: String
+        upnp: string
+      DID:
+        java: String
+        upnp: string
+      MID:
+        java: String
+        upnp: string
+  RemoveTracks:
+    input:
+      NumberOfTracks:
+        java: String
+        upnp: string
+      QueueID:
+        java: String
+        upnp: string
+      StartingIndex:
+        java: String
+        upnp: string
+    output:
+      NumberOfSuccess:
+        java: String
+        upnp: string
+  SetLyric:
+    input:
+      Lyric:
+        java: String
+        upnp: string
+      LyricType:
+        java: String
+        upnp: string
+      SongID:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetNetwork:
+    input:
+      AuthAlgo:
+        java: String
+        upnp: string
+      CipherAlgo:
+        java: String
+        upnp: string
+      Key:
+        java: String
+        upnp: string
+      SSID:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetTracksInfo:
+    input:
+      NextIndex:
+        java: String
+        upnp: string
+      QueueID:
+        java: String
+        upnp: string
+      StartingIndex:
+        java: String
+        upnp: string
+      TracksMetaData:
+        java: String
+        upnp: string
+    output:
+      NumberOfSuccess:
+        java: String
+        upnp: string

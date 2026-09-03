@@ -1,0 +1,432 @@
+namespace: schemas-upnp-org
+serviceType: RenderingControl
+version: 1
+events: true
+stateVariables:
+  LastChange:
+    java: String
+    upnp: string
+  Loudness:
+    java: Boolean
+    upnp: boolean
+  MaxVolumeDB:
+    java: Integer
+    upnp: i2
+  MinVolumeDB:
+    java: Integer
+    upnp: i2
+  Mute:
+    java: Boolean
+    upnp: boolean
+  PresetNameList:
+    java: String
+    upnp: string
+  Volume:
+    java: Long
+    upnp: ui2
+  VolumeDB:
+    java: Integer
+    upnp: i2
+  X_Current3DFormatter:
+    java: String
+    upnp: string
+  X_Possible3DFormatter:
+    java: String
+    upnp: string
+  X_Subtitle:
+    java: String
+    upnp: string
+actions:
+  GetBlueVideoBlackLevel:
+    input:
+      InstanceID:
+        java: Long
+    output:
+      CurrentBlueVideoBlackLevel:
+        java: Long
+  GetBlueVideoGain:
+    input:
+      InstanceID:
+        java: Long
+    output:
+      CurrentBlueVideoGain:
+        java: Long
+  GetBrightness:
+    input:
+      InstanceID:
+        java: Long
+    output:
+      CurrentBrightness:
+        java: Long
+  GetColorTemperature:
+    input:
+      InstanceID:
+        java: Long
+    output:
+      CurrentColorTemperature:
+        java: Long
+  GetContrast:
+    input:
+      InstanceID:
+        java: Long
+    output:
+      CurrentContrast:
+        java: Long
+  GetGreenVideoBlackLevel:
+    input:
+      InstanceID:
+        java: Long
+    output:
+      CurrentGreenVideoBlackLevel:
+        java: Long
+  GetGreenVideoGain:
+    input:
+      InstanceID:
+        java: Long
+    output:
+      CurrentGreenVideoGain:
+        java: Long
+  GetHorizontalKeystone:
+    input:
+      InstanceID:
+        java: Long
+    output:
+      CurrentHorizontalKeystone:
+        java: Integer
+  GetLoudness:
+    input:
+      Channel:
+        java: String
+        upnp: string
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output:
+      CurrentLoudness:
+        java: Boolean
+        upnp: boolean
+  GetMute:
+    input:
+      Channel:
+        java: String
+        upnp: string
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output:
+      CurrentMute:
+        java: Boolean
+        upnp: boolean
+  GetRedVideoBlackLevel:
+    input:
+      InstanceID:
+        java: Long
+    output:
+      CurrentRedVideoBlackLevel:
+        java: Long
+  GetRedVideoGain:
+    input:
+      InstanceID:
+        java: Long
+    output:
+      CurrentRedVideoGain:
+        java: Long
+  GetSharpness:
+    input:
+      InstanceID:
+        java: Long
+    output:
+      CurrentSharpness:
+        java: Long
+  GetVerticalKeystone:
+    input:
+      InstanceID:
+        java: Long
+    output:
+      CurrentVerticalKeystone:
+        java: Integer
+  GetVolume:
+    input:
+      Channel:
+        java: String
+        upnp: string
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output:
+      CurrentVolume:
+        java: Long
+        upnp: ui2
+  GetVolumeDB:
+    input:
+      Channel:
+        java: String
+        upnp: string
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output:
+      CurrentVolume:
+        java: Integer
+        upnp: i2
+  GetVolumeDBRange:
+    input:
+      Channel:
+        java: String
+        upnp: string
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output:
+      MaxValue:
+        java: Integer
+        upnp: i2
+      MinValue:
+        java: Integer
+        upnp: i2
+  ListPresets:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output:
+      CurrentPresetNameList:
+        java: String
+        upnp: string
+  SelectPreset:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+      PresetName:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetBlueVideoBlackLevel:
+    input:
+      DesiredBlueVideoBlackLevel:
+        java: Long
+      InstanceID:
+        java: Long
+    output: {
+      }
+  SetBlueVideoGain:
+    input:
+      DesiredBlueVideoGain:
+        java: Long
+      InstanceID:
+        java: Long
+    output: {
+      }
+  SetBrightness:
+    input:
+      DesiredBrightness:
+        java: Long
+      InstanceID:
+        java: Long
+    output: {
+      }
+  SetColorTemperature:
+    input:
+      DesiredColorTemperature:
+        java: Long
+      InstanceID:
+        java: Long
+    output: {
+      }
+  SetContrast:
+    input:
+      DesiredContrast:
+        java: Long
+      InstanceID:
+        java: Long
+    output: {
+      }
+  SetGreenVideoBlackLevel:
+    input:
+      DesiredGreenVideoBlackLevel:
+        java: Long
+      InstanceID:
+        java: Long
+    output: {
+      }
+  SetGreenVideoGain:
+    input:
+      DesiredGreenVideoGain:
+        java: Long
+      InstanceID:
+        java: Long
+    output: {
+      }
+  SetHorizontalKeystone:
+    input:
+      DesiredHorizontalKeystone:
+        java: Integer
+      InstanceID:
+        java: Long
+    output: {
+      }
+  SetLoudness:
+    input:
+      Channel:
+        java: String
+        upnp: string
+      DesiredLoudness:
+        java: Boolean
+        upnp: boolean
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  SetMute:
+    input:
+      Channel:
+        java: String
+        upnp: string
+      DesiredMute:
+        java: Boolean
+        upnp: boolean
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  SetRedVideoBlackLevel:
+    input:
+      DesiredRedVideoBlackLevel:
+        java: Long
+      InstanceID:
+        java: Long
+    output: {
+      }
+  SetRedVideoGain:
+    input:
+      DesiredRedVideoGain:
+        java: Long
+      InstanceID:
+        java: Long
+    output: {
+      }
+  SetSharpness:
+    input:
+      DesiredSharpness:
+        java: Long
+      InstanceID:
+        java: Long
+    output: {
+      }
+  SetVerticalKeystone:
+    input:
+      DesiredVerticalKeystone:
+        java: Integer
+      InstanceID:
+        java: Long
+    output: {
+      }
+  SetVolume:
+    input:
+      Channel:
+        java: String
+        upnp: string
+      DesiredVolume:
+        java: Long
+        upnp: ui2
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  SetVolumeDB:
+    input:
+      Channel:
+        java: String
+        upnp: string
+      DesiredVolume:
+        java: Integer
+        upnp: i2
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  X_Get3DFormatter:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output:
+      Current3DFormatter:
+        java: String
+        upnp: string
+      Possible3DFormatter:
+        java: String
+        upnp: string
+  X_GetAudioSelection:
+    input:
+      InstanceID:
+        java: Long
+    output:
+      AudioEncoding:
+        java: String
+      AudioPID:
+        java: Long
+  X_GetSubtitle:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output:
+      CurrentSubtitle:
+        java: String
+        upnp: string
+  X_GetVideoSelection:
+    input:
+      InstanceID:
+        java: Long
+    output:
+      VideoEncoding:
+        java: String
+      VideoPID:
+        java: Long
+  X_Set3DFormatter:
+    input:
+      Desired3DFormatter:
+        java: String
+        upnp: string
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  X_SetSubtitle:
+    input:
+      DesiredSubtitle:
+        java: String
+        upnp: string
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  X_UpdateAudioSelection:
+    input:
+      AudioEncoding:
+        java: String
+      AudioPID:
+        java: Long
+      InstanceID:
+        java: Long
+    output: {
+      }
+  X_UpdateVideoSelection:
+    input:
+      InstanceID:
+        java: Long
+      VideoEncoding:
+        java: String
+      VideoPID:
+        java: Long
+    output: {
+      }

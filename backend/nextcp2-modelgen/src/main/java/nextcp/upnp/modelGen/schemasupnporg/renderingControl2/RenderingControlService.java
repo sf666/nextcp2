@@ -14,21 +14,21 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
 
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.SelectPreset;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.SelectPresetInput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.SetVolume;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.SetVolumeInput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.ListPresets;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.ListPresetsOutput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.ListPresetsInput;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.SetMute;
-import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.SetMuteInput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.GetMute;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.GetMuteOutput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.GetMuteInput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.GetVolume;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.GetVolumeOutput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.GetVolumeInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.ListPresets;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.ListPresetsOutput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.ListPresetsInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.SelectPreset;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.SelectPresetInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.SetMute;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.SetMuteInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.SetVolume;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.SetVolumeInput;
 
 
 /**
@@ -131,13 +131,6 @@ public class RenderingControlService
 
 
 
-    public GetVolumeOutput getVolume(GetVolumeInput inp)
-    {
-        GetVolume getVolume = new GetVolume(renderingControlService, inp, upnpService.getControlPoint());
-        GetVolumeOutput res = getVolume.executeAction();
-        return res;        
-    }
-
     public GetMuteOutput getMute(GetMuteInput inp)
     {
         GetMute getMute = new GetMute(renderingControlService, inp, upnpService.getControlPoint());
@@ -145,16 +138,11 @@ public class RenderingControlService
         return res;        
     }
 
-    public void selectPreset(SelectPresetInput inp)
+    public GetVolumeOutput getVolume(GetVolumeInput inp)
     {
-        SelectPreset selectPreset = new SelectPreset(renderingControlService, inp, upnpService.getControlPoint());
-        selectPreset.executeAction();
-    }
-
-    public void setVolume(SetVolumeInput inp)
-    {
-        SetVolume setVolume = new SetVolume(renderingControlService, inp, upnpService.getControlPoint());
-        setVolume.executeAction();
+        GetVolume getVolume = new GetVolume(renderingControlService, inp, upnpService.getControlPoint());
+        GetVolumeOutput res = getVolume.executeAction();
+        return res;        
     }
 
     public ListPresetsOutput listPresets(ListPresetsInput inp)
@@ -164,9 +152,21 @@ public class RenderingControlService
         return res;        
     }
 
+    public void selectPreset(SelectPresetInput inp)
+    {
+        SelectPreset selectPreset = new SelectPreset(renderingControlService, inp, upnpService.getControlPoint());
+        selectPreset.executeAction();
+    }
+
     public void setMute(SetMuteInput inp)
     {
         SetMute setMute = new SetMute(renderingControlService, inp, upnpService.getControlPoint());
         setMute.executeAction();
+    }
+
+    public void setVolume(SetVolumeInput inp)
+    {
+        SetVolume setVolume = new SetVolume(renderingControlService, inp, upnpService.getControlPoint());
+        setVolume.executeAction();
     }
 }

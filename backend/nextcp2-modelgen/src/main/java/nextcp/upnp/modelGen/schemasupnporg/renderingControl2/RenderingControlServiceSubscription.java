@@ -16,9 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
- * Last Change : 05.09.2025
+ * Last Change : 08.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -109,59 +110,59 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "Loudness":
-                        loudnessChange((Boolean) stateVar.getValue());
-                        break;
-                    case "Brightness":
-                        brightnessChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "GreenVideoBlackLevel":
-                        greenVideoBlackLevelChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "ColorTemperature":
-                        colorTemperatureChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "HorizontalKeystone":
-                        horizontalKeystoneChange((Integer) stateVar.getValue());
+                    case "BlueVideoBlackLevel":
+                        blueVideoBlackLevelChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     case "BlueVideoGain":
-                        blueVideoGainChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        blueVideoGainChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
-                    case "RedVideoGain":
-                        redVideoGainChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                    case "Brightness":
+                        brightnessChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
-                    case "VerticalKeystone":
-                        verticalKeystoneChange((Integer) stateVar.getValue());
-                        break;
-                    case "RedVideoBlackLevel":
-                        redVideoBlackLevelChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "Mute":
-                        muteChange((Boolean) stateVar.getValue());
-                        break;
-                    case "VolumeDB":
-                        volumeDBChange((Integer) stateVar.getValue());
-                        break;
-                    case "BlueVideoBlackLevel":
-                        blueVideoBlackLevelChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "PresetNameList":
-                        presetNameListChange((String) stateVar.getValue());
+                    case "ColorTemperature":
+                        colorTemperatureChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     case "Contrast":
-                        contrastChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        contrastChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "GreenVideoBlackLevel":
+                        greenVideoBlackLevelChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     case "GreenVideoGain":
-                        greenVideoGainChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        greenVideoGainChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
-                    case "Sharpness":
-                        sharpnessChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "Volume":
-                        volumeChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                    case "HorizontalKeystone":
+                        horizontalKeystoneChange(UpnpValue.toInteger(stateVar.getValue()));
                         break;
                     case "LastChange":
-                        lastChangeChange((String) stateVar.getValue());
+                        lastChangeChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "Loudness":
+                        loudnessChange(UpnpValue.toBoolean(stateVar.getValue()));
+                        break;
+                    case "Mute":
+                        muteChange(UpnpValue.toBoolean(stateVar.getValue()));
+                        break;
+                    case "PresetNameList":
+                        presetNameListChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "RedVideoBlackLevel":
+                        redVideoBlackLevelChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "RedVideoGain":
+                        redVideoGainChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "Sharpness":
+                        sharpnessChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "VerticalKeystone":
+                        verticalKeystoneChange(UpnpValue.toInteger(stateVar.getValue()));
+                        break;
+                    case "Volume":
+                        volumeChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "VolumeDB":
+                        volumeDBChange(UpnpValue.toInteger(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -183,43 +184,11 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
         }
     }
 
-    private void loudnessChange(Boolean value)
+    private void blueVideoBlackLevelChange(Long value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
-            listener.loudnessChange(value);
-        }
-    }    
-
-    private void brightnessChange(Long value)
-    {
-        for (IRenderingControlServiceEventListener listener : eventListener)
-        {
-            listener.brightnessChange(value);
-        }
-    }    
-
-    private void greenVideoBlackLevelChange(Long value)
-    {
-        for (IRenderingControlServiceEventListener listener : eventListener)
-        {
-            listener.greenVideoBlackLevelChange(value);
-        }
-    }    
-
-    private void colorTemperatureChange(Long value)
-    {
-        for (IRenderingControlServiceEventListener listener : eventListener)
-        {
-            listener.colorTemperatureChange(value);
-        }
-    }    
-
-    private void horizontalKeystoneChange(Integer value)
-    {
-        for (IRenderingControlServiceEventListener listener : eventListener)
-        {
-            listener.horizontalKeystoneChange(value);
+            listener.blueVideoBlackLevelChange(value);
         }
     }    
 
@@ -231,59 +200,19 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void redVideoGainChange(Long value)
+    private void brightnessChange(Long value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
-            listener.redVideoGainChange(value);
+            listener.brightnessChange(value);
         }
     }    
 
-    private void verticalKeystoneChange(Integer value)
+    private void colorTemperatureChange(Long value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
-            listener.verticalKeystoneChange(value);
-        }
-    }    
-
-    private void redVideoBlackLevelChange(Long value)
-    {
-        for (IRenderingControlServiceEventListener listener : eventListener)
-        {
-            listener.redVideoBlackLevelChange(value);
-        }
-    }    
-
-    private void muteChange(Boolean value)
-    {
-        for (IRenderingControlServiceEventListener listener : eventListener)
-        {
-            listener.muteChange(value);
-        }
-    }    
-
-    private void volumeDBChange(Integer value)
-    {
-        for (IRenderingControlServiceEventListener listener : eventListener)
-        {
-            listener.volumeDBChange(value);
-        }
-    }    
-
-    private void blueVideoBlackLevelChange(Long value)
-    {
-        for (IRenderingControlServiceEventListener listener : eventListener)
-        {
-            listener.blueVideoBlackLevelChange(value);
-        }
-    }    
-
-    private void presetNameListChange(String value)
-    {
-        for (IRenderingControlServiceEventListener listener : eventListener)
-        {
-            listener.presetNameListChange(value);
+            listener.colorTemperatureChange(value);
         }
     }    
 
@@ -295,11 +224,75 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void greenVideoBlackLevelChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.greenVideoBlackLevelChange(value);
+        }
+    }    
+
     private void greenVideoGainChange(Long value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
             listener.greenVideoGainChange(value);
+        }
+    }    
+
+    private void horizontalKeystoneChange(Integer value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.horizontalKeystoneChange(value);
+        }
+    }    
+
+    private void lastChangeChange(String value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.lastChangeChange(value);
+        }
+    }    
+
+    private void loudnessChange(Boolean value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.loudnessChange(value);
+        }
+    }    
+
+    private void muteChange(Boolean value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.muteChange(value);
+        }
+    }    
+
+    private void presetNameListChange(String value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.presetNameListChange(value);
+        }
+    }    
+
+    private void redVideoBlackLevelChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.redVideoBlackLevelChange(value);
+        }
+    }    
+
+    private void redVideoGainChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.redVideoGainChange(value);
         }
     }    
 
@@ -311,6 +304,14 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void verticalKeystoneChange(Integer value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.verticalKeystoneChange(value);
+        }
+    }    
+
     private void volumeChange(Long value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
@@ -319,11 +320,11 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void lastChangeChange(String value)
+    private void volumeDBChange(Integer value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
-            listener.lastChangeChange(value);
+            listener.volumeDBChange(value);
         }
     }    
 }

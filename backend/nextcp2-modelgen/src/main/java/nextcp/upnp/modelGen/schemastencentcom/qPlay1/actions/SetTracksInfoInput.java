@@ -9,9 +9,9 @@ package nextcp.upnp.modelGen.schemastencentcom.qPlay1.actions;
 public class SetTracksInfoInput
 {
 
+    public String NextIndex = null;
     public String QueueID = null;
     public String StartingIndex = null;
-    public String NextIndex = null;
     public String TracksMetaData = null;
 
 }

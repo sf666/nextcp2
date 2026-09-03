@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class QPlayAuth extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("QPlayAuth"), new NextcpClientInfo()), cp);
 		
-        if (input.Seed != null) {
-	        getActionInvocation().setInput("Seed", input.Seed);
-		} else {
-    	    getActionInvocation().setInput("Seed", null);
-		}
+        getActionInvocation().setInput("Seed", UpnpValue.forInput(getActionInvocation(), "Seed", input.Seed));
     }
 
     public QPlayAuthOutput executeAction()
@@ -40,30 +37,9 @@ public class QPlayAuth extends ActionCallback
 
         QPlayAuthOutput result = new QPlayAuthOutput();
 
-  		if (invocation.getOutput("Code").getValue() != null)
-  		{
-	        result.Code = invocation.getOutput("Code").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Code = "";
-  		}
-  		if (invocation.getOutput("MID").getValue() != null)
-  		{
-	        result.MID = invocation.getOutput("MID").getValue().toString();
-  		}
-  		else
-  		{
-	        result.MID = "";
-  		}
-  		if (invocation.getOutput("DID").getValue() != null)
-  		{
-	        result.DID = invocation.getOutput("DID").getValue().toString();
-  		}
-  		else
-  		{
-	        result.DID = "";
-  		}
+        result.Code = UpnpValue.toTextOrEmpty(invocation.getOutput("Code").getValue());
+        result.DID = UpnpValue.toTextOrEmpty(invocation.getOutput("DID").getValue());
+        result.MID = UpnpValue.toTextOrEmpty(invocation.getOutput("MID").getValue());
 
         return result;
     }

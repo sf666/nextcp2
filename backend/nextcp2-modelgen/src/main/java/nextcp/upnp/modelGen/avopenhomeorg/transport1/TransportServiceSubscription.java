@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
  * Last Change : 08.09.2025
@@ -109,73 +110,38 @@ public class TransportServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "Modes":
-                        modesChange((String) stateVar.getValue());
-                        break;
-                    case "StreamId":
-                        streamIdChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "Shuffle":
-                    	try {
-                    		shuffleChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[shuffle] unexpected value : " + stateVar.getValue());
-                    		shuffleChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
-                    case "Repeat":
-                        repeatChange((String) stateVar.getValue());
-                        break;
-                    case "CanSkipNext":
-                    	try {
-                    		canSkipNextChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[canSkipNext] unexpected value : " + stateVar.getValue());
-                    		canSkipNextChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
-                    case "CanShuffle":
-                    	try {
-                    		canShuffleChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[canShuffle] unexpected value : " + stateVar.getValue());
-                    		canShuffleChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
-                    case "TransportState":
-                        transportStateChange((String) stateVar.getValue());
+                    case "CanPause":
+                        canPauseChange(UpnpValue.toBoolean(stateVar.getValue()));
                         break;
                     case "CanRepeat":
-                    	try {
-                    		canRepeatChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[canRepeat] unexpected value : " + stateVar.getValue());
-                    		canRepeatChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
-                    case "CanPause":
-                    	try {
-                    		canPauseChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[canPause] unexpected value : " + stateVar.getValue());
-                    		canPauseChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
+                        canRepeatChange(UpnpValue.toBoolean(stateVar.getValue()));
                         break;
                     case "CanSeek":
-                    	try {
-                    		canSeekChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[canSeek] unexpected value : " + stateVar.getValue());
-                    		canSeekChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
+                        canSeekChange(UpnpValue.toBoolean(stateVar.getValue()));
+                        break;
+                    case "CanShuffle":
+                        canShuffleChange(UpnpValue.toBoolean(stateVar.getValue()));
+                        break;
+                    case "CanSkipNext":
+                        canSkipNextChange(UpnpValue.toBoolean(stateVar.getValue()));
                         break;
                     case "CanSkipPrevious":
-                    	try {
-                    		canSkipPreviousChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[canSkipPrevious] unexpected value : " + stateVar.getValue());
-                    		canSkipPreviousChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
+                        canSkipPreviousChange(UpnpValue.toBoolean(stateVar.getValue()));
+                        break;
+                    case "Modes":
+                        modesChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "Repeat":
+                        repeatChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "Shuffle":
+                        shuffleChange(UpnpValue.toBoolean(stateVar.getValue()));
+                        break;
+                    case "StreamId":
+                        streamIdChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "TransportState":
+                        transportStateChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -197,59 +163,11 @@ public class TransportServiceSubscription extends RemoteGENASubscription
         }
     }
 
-    private void modesChange(String value)
+    private void canPauseChange(Boolean value)
     {
         for (ITransportServiceEventListener listener : eventListener)
         {
-            listener.modesChange(value);
-        }
-    }    
-
-    private void streamIdChange(Long value)
-    {
-        for (ITransportServiceEventListener listener : eventListener)
-        {
-            listener.streamIdChange(value);
-        }
-    }    
-
-    private void shuffleChange(Boolean value)
-    {
-        for (ITransportServiceEventListener listener : eventListener)
-        {
-            listener.shuffleChange(value);
-        }
-    }    
-
-    private void repeatChange(String value)
-    {
-        for (ITransportServiceEventListener listener : eventListener)
-        {
-            listener.repeatChange(value);
-        }
-    }    
-
-    private void canSkipNextChange(Boolean value)
-    {
-        for (ITransportServiceEventListener listener : eventListener)
-        {
-            listener.canSkipNextChange(value);
-        }
-    }    
-
-    private void canShuffleChange(Boolean value)
-    {
-        for (ITransportServiceEventListener listener : eventListener)
-        {
-            listener.canShuffleChange(value);
-        }
-    }    
-
-    private void transportStateChange(String value)
-    {
-        for (ITransportServiceEventListener listener : eventListener)
-        {
-            listener.transportStateChange(value);
+            listener.canPauseChange(value);
         }
     }    
 
@@ -261,14 +179,6 @@ public class TransportServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void canPauseChange(Boolean value)
-    {
-        for (ITransportServiceEventListener listener : eventListener)
-        {
-            listener.canPauseChange(value);
-        }
-    }    
-
     private void canSeekChange(Boolean value)
     {
         for (ITransportServiceEventListener listener : eventListener)
@@ -277,11 +187,67 @@ public class TransportServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void canShuffleChange(Boolean value)
+    {
+        for (ITransportServiceEventListener listener : eventListener)
+        {
+            listener.canShuffleChange(value);
+        }
+    }    
+
+    private void canSkipNextChange(Boolean value)
+    {
+        for (ITransportServiceEventListener listener : eventListener)
+        {
+            listener.canSkipNextChange(value);
+        }
+    }    
+
     private void canSkipPreviousChange(Boolean value)
     {
         for (ITransportServiceEventListener listener : eventListener)
         {
             listener.canSkipPreviousChange(value);
+        }
+    }    
+
+    private void modesChange(String value)
+    {
+        for (ITransportServiceEventListener listener : eventListener)
+        {
+            listener.modesChange(value);
+        }
+    }    
+
+    private void repeatChange(String value)
+    {
+        for (ITransportServiceEventListener listener : eventListener)
+        {
+            listener.repeatChange(value);
+        }
+    }    
+
+    private void shuffleChange(Boolean value)
+    {
+        for (ITransportServiceEventListener listener : eventListener)
+        {
+            listener.shuffleChange(value);
+        }
+    }    
+
+    private void streamIdChange(Long value)
+    {
+        for (ITransportServiceEventListener listener : eventListener)
+        {
+            listener.streamIdChange(value);
+        }
+    }    
+
+    private void transportStateChange(String value)
+    {
+        for (ITransportServiceEventListener listener : eventListener)
+        {
+            listener.transportStateChange(value);
         }
     }    
 }

@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
  * Last Change : 08.09.2025
@@ -109,49 +110,44 @@ public class RadioServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "Relative":
-                        relativeChange((Integer) stateVar.getValue());
-                        break;
-                    case "IdArrayChanged":
-                    	try {
-                    		idArrayChangedChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[idArrayChanged] unexpected value : " + stateVar.getValue());
-                    		idArrayChangedChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
-                    case "Metadata":
-                        metadataChange((String) stateVar.getValue());
-                        break;
-                    case "IdArray":
-                        idArrayChange((byte[]) stateVar.getValue());
-                        break;
-                    case "TransportState":
-                        transportStateChange((String) stateVar.getValue());
-                        break;
                     case "Absolute":
-                        absoluteChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "Uri":
-                        uriChange((String) stateVar.getValue());
-                        break;
-                    case "IdList":
-                        idListChange((String) stateVar.getValue());
-                        break;
-                    case "IdArrayToken":
-                        idArrayTokenChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "ProtocolInfo":
-                        protocolInfoChange((String) stateVar.getValue());
-                        break;
-                    case "ChannelsMax":
-                        channelsMaxChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "Id":
-                        idChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        absoluteChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     case "ChannelList":
-                        channelListChange((String) stateVar.getValue());
+                        channelListChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ChannelsMax":
+                        channelsMaxChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "Id":
+                        idChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "IdArray":
+                        idArrayChange(UpnpValue.toBytes(stateVar.getValue()));
+                        break;
+                    case "IdArrayChanged":
+                        idArrayChangedChange(UpnpValue.toBoolean(stateVar.getValue()));
+                        break;
+                    case "IdArrayToken":
+                        idArrayTokenChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "IdList":
+                        idListChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "Metadata":
+                        metadataChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ProtocolInfo":
+                        protocolInfoChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "Relative":
+                        relativeChange(UpnpValue.toInteger(stateVar.getValue()));
+                        break;
+                    case "TransportState":
+                        transportStateChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "Uri":
+                        uriChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -173,46 +169,6 @@ public class RadioServiceSubscription extends RemoteGENASubscription
         }
     }
 
-    private void relativeChange(Integer value)
-    {
-        for (IRadioServiceEventListener listener : eventListener)
-        {
-            listener.relativeChange(value);
-        }
-    }    
-
-    private void idArrayChangedChange(Boolean value)
-    {
-        for (IRadioServiceEventListener listener : eventListener)
-        {
-            listener.idArrayChangedChange(value);
-        }
-    }    
-
-    private void metadataChange(String value)
-    {
-        for (IRadioServiceEventListener listener : eventListener)
-        {
-            listener.metadataChange(value);
-        }
-    }    
-
-    private void idArrayChange(byte[] value)
-    {
-        for (IRadioServiceEventListener listener : eventListener)
-        {
-            listener.idArrayChange(value);
-        }
-    }    
-
-    private void transportStateChange(String value)
-    {
-        for (IRadioServiceEventListener listener : eventListener)
-        {
-            listener.transportStateChange(value);
-        }
-    }    
-
     private void absoluteChange(Long value)
     {
         for (IRadioServiceEventListener listener : eventListener)
@@ -221,35 +177,11 @@ public class RadioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void uriChange(String value)
+    private void channelListChange(String value)
     {
         for (IRadioServiceEventListener listener : eventListener)
         {
-            listener.uriChange(value);
-        }
-    }    
-
-    private void idListChange(String value)
-    {
-        for (IRadioServiceEventListener listener : eventListener)
-        {
-            listener.idListChange(value);
-        }
-    }    
-
-    private void idArrayTokenChange(Long value)
-    {
-        for (IRadioServiceEventListener listener : eventListener)
-        {
-            listener.idArrayTokenChange(value);
-        }
-    }    
-
-    private void protocolInfoChange(String value)
-    {
-        for (IRadioServiceEventListener listener : eventListener)
-        {
-            listener.protocolInfoChange(value);
+            listener.channelListChange(value);
         }
     }    
 
@@ -269,11 +201,75 @@ public class RadioServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void channelListChange(String value)
+    private void idArrayChange(byte[] value)
     {
         for (IRadioServiceEventListener listener : eventListener)
         {
-            listener.channelListChange(value);
+            listener.idArrayChange(value);
+        }
+    }    
+
+    private void idArrayChangedChange(Boolean value)
+    {
+        for (IRadioServiceEventListener listener : eventListener)
+        {
+            listener.idArrayChangedChange(value);
+        }
+    }    
+
+    private void idArrayTokenChange(Long value)
+    {
+        for (IRadioServiceEventListener listener : eventListener)
+        {
+            listener.idArrayTokenChange(value);
+        }
+    }    
+
+    private void idListChange(String value)
+    {
+        for (IRadioServiceEventListener listener : eventListener)
+        {
+            listener.idListChange(value);
+        }
+    }    
+
+    private void metadataChange(String value)
+    {
+        for (IRadioServiceEventListener listener : eventListener)
+        {
+            listener.metadataChange(value);
+        }
+    }    
+
+    private void protocolInfoChange(String value)
+    {
+        for (IRadioServiceEventListener listener : eventListener)
+        {
+            listener.protocolInfoChange(value);
+        }
+    }    
+
+    private void relativeChange(Integer value)
+    {
+        for (IRadioServiceEventListener listener : eventListener)
+        {
+            listener.relativeChange(value);
+        }
+    }    
+
+    private void transportStateChange(String value)
+    {
+        for (IRadioServiceEventListener listener : eventListener)
+        {
+            listener.transportStateChange(value);
+        }
+    }    
+
+    private void uriChange(String value)
+    {
+        for (IRadioServiceEventListener listener : eventListener)
+        {
+            listener.uriChange(value);
         }
     }    
 }

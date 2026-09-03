@@ -1,0 +1,13 @@
+namespace: samsung.com
+serviceType: MultiScreenService
+version: 1
+events: true
+stateVariables: {}
+actions:
+  SendKeyCode:
+    input:
+      KeyCode:
+        java: Long
+      KeyDescription:
+        java: String
+    output: {}

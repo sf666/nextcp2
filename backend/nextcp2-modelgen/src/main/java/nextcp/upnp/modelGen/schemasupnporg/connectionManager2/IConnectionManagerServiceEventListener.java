@@ -12,9 +12,9 @@ import nextcp.upnp.ISubscriptionEventListener;
  */
 public interface IConnectionManagerServiceEventListener extends ISubscriptionEventListener 
 {
-    public void sinkProtocolInfoChange(String value);
-    
     public void currentConnectionIDsChange(String value);
+    
+    public void sinkProtocolInfoChange(String value);
     
     public void sourceProtocolInfoChange(String value);
     

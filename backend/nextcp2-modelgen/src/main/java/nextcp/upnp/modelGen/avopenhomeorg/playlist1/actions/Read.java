@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class Read extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("Read"), new NextcpClientInfo()), cp);
 		
-        if (input.Id != null) {
-    	    getActionInvocation().setInput("Id", new UnsignedIntegerFourBytes(input.Id));
-		} else {
-    	    getActionInvocation().setInput("Id", null);
-		}
+        getActionInvocation().setInput("Id", UpnpValue.forInput(getActionInvocation(), "Id", input.Id));
     }
 
     public ReadOutput executeAction()
@@ -40,22 +37,8 @@ public class Read extends ActionCallback
 
         ReadOutput result = new ReadOutput();
 
-  		if (invocation.getOutput("Uri").getValue() != null)
-  		{
-	        result.Uri = invocation.getOutput("Uri").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Uri = "";
-  		}
-  		if (invocation.getOutput("Metadata").getValue() != null)
-  		{
-	        result.Metadata = invocation.getOutput("Metadata").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Metadata = "";
-  		}
+        result.Metadata = UpnpValue.toTextOrEmpty(invocation.getOutput("Metadata").getValue());
+        result.Uri = UpnpValue.toTextOrEmpty(invocation.getOutput("Uri").getValue());
 
         return result;
     }

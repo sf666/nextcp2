@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetACRCurrentProgramName extends ActionCallback
     public GetACRCurrentProgramName(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetACRCurrentProgramName"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetACRCurrentProgramNameOutput executeAction()
@@ -35,22 +36,8 @@ public class GetACRCurrentProgramName extends ActionCallback
 
         GetACRCurrentProgramNameOutput result = new GetACRCurrentProgramNameOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("ProgramName").getValue() != null)
-  		{
-	        result.ProgramName = invocation.getOutput("ProgramName").getValue().toString();
-  		}
-  		else
-  		{
-	        result.ProgramName = "";
-  		}
+        result.ProgramName = UpnpValue.toTextOrEmpty(invocation.getOutput("ProgramName").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

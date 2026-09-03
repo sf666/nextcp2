@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetMBRDongleStatus extends ActionCallback
     public GetMBRDongleStatus(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetMBRDongleStatus"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetMBRDongleStatusOutput executeAction()
@@ -35,22 +36,8 @@ public class GetMBRDongleStatus extends ActionCallback
 
         GetMBRDongleStatusOutput result = new GetMBRDongleStatusOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("MBRDongleStatus").getValue() != null)
-  		{
-	        result.MBRDongleStatus = invocation.getOutput("MBRDongleStatus").getValue().toString();
-  		}
-  		else
-  		{
-	        result.MBRDongleStatus = "";
-  		}
+        result.MBRDongleStatus = UpnpValue.toTextOrEmpty(invocation.getOutput("MBRDongleStatus").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

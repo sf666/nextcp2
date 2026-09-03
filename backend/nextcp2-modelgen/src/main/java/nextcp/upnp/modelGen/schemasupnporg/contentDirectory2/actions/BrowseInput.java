@@ -9,11 +9,11 @@ package nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions;
 public class BrowseInput
 {
 
-    public String ObjectID = null;
     public String BrowseFlag = null;
     public String Filter = null;
-    public Long StartingIndex = null;
+    public String ObjectID = null;
     public Long RequestedCount = null;
     public String SortCriteria = null;
+    public Long StartingIndex = null;
 
 }

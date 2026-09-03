@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetSearchCapabilities extends ActionCallback
     public GetSearchCapabilities(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetSearchCapabilities"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetSearchCapabilitiesOutput executeAction()
@@ -35,14 +36,7 @@ public class GetSearchCapabilities extends ActionCallback
 
         GetSearchCapabilitiesOutput result = new GetSearchCapabilitiesOutput();
 
-  		if (invocation.getOutput("SearchCaps").getValue() != null)
-  		{
-	        result.SearchCaps = invocation.getOutput("SearchCaps").getValue().toString();
-  		}
-  		else
-  		{
-	        result.SearchCaps = "";
-  		}
+        result.SearchCaps = UpnpValue.toTextOrEmpty(invocation.getOutput("SearchCaps").getValue());
 
         return result;
     }

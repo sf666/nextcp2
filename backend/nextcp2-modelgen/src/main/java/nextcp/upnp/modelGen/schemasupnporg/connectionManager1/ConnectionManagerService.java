@@ -14,13 +14,18 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
 
+import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.actions.ConnectionComplete;
+import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.actions.ConnectionCompleteInput;
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.actions.GetCurrentConnectionIDs;
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.actions.GetCurrentConnectionIDsOutput;
-import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.actions.GetProtocolInfo;
-import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.actions.GetProtocolInfoOutput;
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.actions.GetCurrentConnectionInfo;
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.actions.GetCurrentConnectionInfoOutput;
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.actions.GetCurrentConnectionInfoInput;
+import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.actions.GetProtocolInfo;
+import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.actions.GetProtocolInfoOutput;
+import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.actions.PrepareForConnection;
+import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.actions.PrepareForConnectionOutput;
+import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.actions.PrepareForConnectionInput;
 
 
 /**
@@ -123,10 +128,23 @@ public class ConnectionManagerService
 
 
 
+    public void connectionComplete(ConnectionCompleteInput inp)
+    {
+        ConnectionComplete connectionComplete = new ConnectionComplete(connectionManagerService, inp, upnpService.getControlPoint());
+        connectionComplete.executeAction();
+    }
+
     public GetCurrentConnectionIDsOutput getCurrentConnectionIDs()
     {
         GetCurrentConnectionIDs getCurrentConnectionIDs = new GetCurrentConnectionIDs(connectionManagerService,  upnpService.getControlPoint());
         GetCurrentConnectionIDsOutput res = getCurrentConnectionIDs.executeAction();
+        return res;        
+    }
+
+    public GetCurrentConnectionInfoOutput getCurrentConnectionInfo(GetCurrentConnectionInfoInput inp)
+    {
+        GetCurrentConnectionInfo getCurrentConnectionInfo = new GetCurrentConnectionInfo(connectionManagerService, inp, upnpService.getControlPoint());
+        GetCurrentConnectionInfoOutput res = getCurrentConnectionInfo.executeAction();
         return res;        
     }
 
@@ -137,10 +155,10 @@ public class ConnectionManagerService
         return res;        
     }
 
-    public GetCurrentConnectionInfoOutput getCurrentConnectionInfo(GetCurrentConnectionInfoInput inp)
+    public PrepareForConnectionOutput prepareForConnection(PrepareForConnectionInput inp)
     {
-        GetCurrentConnectionInfo getCurrentConnectionInfo = new GetCurrentConnectionInfo(connectionManagerService, inp, upnpService.getControlPoint());
-        GetCurrentConnectionInfoOutput res = getCurrentConnectionInfo.executeAction();
+        PrepareForConnection prepareForConnection = new PrepareForConnection(connectionManagerService, inp, upnpService.getControlPoint());
+        PrepareForConnectionOutput res = prepareForConnection.executeAction();
         return res;        
     }
 }

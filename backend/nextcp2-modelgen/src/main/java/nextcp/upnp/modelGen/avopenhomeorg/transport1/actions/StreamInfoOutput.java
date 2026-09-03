@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.avopenhomeorg.transport1.actions;
 public class StreamInfoOutput
 {
 
-    public Long StreamId = null;
-    public Boolean CanSeek = null;
     public Boolean CanPause = null;
+    public Boolean CanSeek = null;
+    public Long StreamId = null;
 
 }

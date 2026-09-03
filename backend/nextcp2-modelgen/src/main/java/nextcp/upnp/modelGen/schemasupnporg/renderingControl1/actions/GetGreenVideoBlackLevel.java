@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class GetGreenVideoBlackLevel extends ActionCallback
     public GetGreenVideoBlackLevel(Service service, GetGreenVideoBlackLevelInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetGreenVideoBlackLevel"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
     }
 
     public GetGreenVideoBlackLevelOutput executeAction()
@@ -36,7 +37,7 @@ public class GetGreenVideoBlackLevel extends ActionCallback
 
         GetGreenVideoBlackLevelOutput result = new GetGreenVideoBlackLevelOutput();
 
-        result.CurrentGreenVideoBlackLevel = ((UnsignedIntegerFourBytes) invocation.getOutput("CurrentGreenVideoBlackLevel").getValue()).getValue();
+        result.CurrentGreenVideoBlackLevel = UpnpValue.toLong(invocation.getOutput("CurrentGreenVideoBlackLevel").getValue());
 
         return result;
     }

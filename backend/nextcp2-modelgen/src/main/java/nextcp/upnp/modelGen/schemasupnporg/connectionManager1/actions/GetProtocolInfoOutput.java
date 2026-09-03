@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemasupnporg.connectionManager1.actions;
 public class GetProtocolInfoOutput
 {
 
-    public String Source = null;
     public String Sink = null;
+    public String Source = null;
 
 }

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetChannelListURL extends ActionCallback
     public GetChannelListURL(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetChannelListURL"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetChannelListURLOutput executeAction()
@@ -35,40 +36,12 @@ public class GetChannelListURL extends ActionCallback
 
         GetChannelListURLOutput result = new GetChannelListURLOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-        result.ChannelListVersion = ((UnsignedIntegerFourBytes) invocation.getOutput("ChannelListVersion").getValue()).getValue();
-  		if (invocation.getOutput("SupportChannelList").getValue() != null)
-  		{
-	        result.SupportChannelList = invocation.getOutput("SupportChannelList").getValue().toString();
-  		}
-  		else
-  		{
-	        result.SupportChannelList = "";
-  		}
-  		if (invocation.getOutput("ChannelListURL").getValue() != null)
-  		{
-	        result.ChannelListURL = invocation.getOutput("ChannelListURL").getValue().toString();
-  		}
-  		else
-  		{
-	        result.ChannelListURL = "";
-  		}
-  		if (invocation.getOutput("ChannelListType").getValue() != null)
-  		{
-	        result.ChannelListType = invocation.getOutput("ChannelListType").getValue().toString();
-  		}
-  		else
-  		{
-	        result.ChannelListType = "";
-  		}
-        result.SatelliteID = ((UnsignedIntegerFourBytes) invocation.getOutput("SatelliteID").getValue()).getValue();
+        result.ChannelListType = UpnpValue.toTextOrEmpty(invocation.getOutput("ChannelListType").getValue());
+        result.ChannelListURL = UpnpValue.toTextOrEmpty(invocation.getOutput("ChannelListURL").getValue());
+        result.ChannelListVersion = UpnpValue.toLong(invocation.getOutput("ChannelListVersion").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
+        result.SatelliteID = UpnpValue.toLong(invocation.getOutput("SatelliteID").getValue());
+        result.SupportChannelList = UpnpValue.toTextOrEmpty(invocation.getOutput("SupportChannelList").getValue());
 
         return result;
     }

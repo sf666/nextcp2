@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetLanguageIDList extends ActionCallback
     public GetLanguageIDList(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetLanguageIDList"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetLanguageIDListOutput executeAction()
@@ -35,14 +36,7 @@ public class GetLanguageIDList extends ActionCallback
 
         GetLanguageIDListOutput result = new GetLanguageIDListOutput();
 
-  		if (invocation.getOutput("IDList").getValue() != null)
-  		{
-	        result.IDList = invocation.getOutput("IDList").getValue().toString();
-  		}
-  		else
-  		{
-	        result.IDList = "";
-  		}
+        result.IDList = UpnpValue.toTextOrEmpty(invocation.getOutput("IDList").getValue());
 
         return result;
     }

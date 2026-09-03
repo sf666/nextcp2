@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetCurrentExternalSource extends ActionCallback
     public GetCurrentExternalSource(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetCurrentExternalSource"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetCurrentExternalSourceOutput executeAction()
@@ -35,24 +36,10 @@ public class GetCurrentExternalSource extends ActionCallback
 
         GetCurrentExternalSourceOutput result = new GetCurrentExternalSourceOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("CurrentExternalSource").getValue() != null)
-  		{
-	        result.CurrentExternalSource = invocation.getOutput("CurrentExternalSource").getValue().toString();
-  		}
-  		else
-  		{
-	        result.CurrentExternalSource = "";
-  		}
-        result.ID = ((UnsignedIntegerFourBytes) invocation.getOutput("ID").getValue()).getValue();
-        result.CurrentMBRActivityIndex = ((UnsignedIntegerFourBytes) invocation.getOutput("CurrentMBRActivityIndex").getValue()).getValue();
+        result.CurrentExternalSource = UpnpValue.toTextOrEmpty(invocation.getOutput("CurrentExternalSource").getValue());
+        result.CurrentMBRActivityIndex = UpnpValue.toLong(invocation.getOutput("CurrentMBRActivityIndex").getValue());
+        result.ID = UpnpValue.toLong(invocation.getOutput("ID").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

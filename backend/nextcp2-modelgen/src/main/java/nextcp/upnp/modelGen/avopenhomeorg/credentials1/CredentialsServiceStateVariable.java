@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.avopenhomeorg.credentials1;
 public class CredentialsServiceStateVariable
 {
 
+    public String Ids = null;
     public String PublicKey = null;
     public Long SequenceNumber = null;
-    public String Ids = null;
 
 }

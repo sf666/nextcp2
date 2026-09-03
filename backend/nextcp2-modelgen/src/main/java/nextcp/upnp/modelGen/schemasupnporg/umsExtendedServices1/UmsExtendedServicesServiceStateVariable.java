@@ -10,11 +10,11 @@ public class UmsExtendedServicesServiceStateVariable
 {
 
     public Boolean AnonymousDevicesWrite = null;
-    public Boolean UpnpCdsWrite = null;
-    public Boolean AudioUpdateRating = null;
-    public Boolean PreferEuropeanServer = null;
     public Boolean AudioLikesVisibleRoot = null;
+    public Boolean AudioUpdateRating = null;
     public Boolean PlaylistLoop = null;
+    public Boolean PreferEuropeanServer = null;
+    public Boolean UpnpCdsWrite = null;
     public String WebStreamNowPlaying = null;
 
 }

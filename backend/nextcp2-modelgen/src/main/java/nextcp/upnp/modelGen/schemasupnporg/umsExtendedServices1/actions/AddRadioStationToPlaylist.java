@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,21 +28,9 @@ public class AddRadioStationToPlaylist extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("AddRadioStationToPlaylist"), new NextcpClientInfo()), cp);
 		
-        if (input.ObjectID != null) {
-	        getActionInvocation().setInput("ObjectID", input.ObjectID);
-		} else {
-    	    getActionInvocation().setInput("ObjectID", null);
-		}
-        if (input.StationUuid != null) {
-	        getActionInvocation().setInput("StationUuid", input.StationUuid);
-		} else {
-    	    getActionInvocation().setInput("StationUuid", null);
-		}
-        if (input.Title != null) {
-	        getActionInvocation().setInput("Title", input.Title);
-		} else {
-    	    getActionInvocation().setInput("Title", null);
-		}
+        getActionInvocation().setInput("ObjectID", UpnpValue.forInput(getActionInvocation(), "ObjectID", input.ObjectID));
+        getActionInvocation().setInput("StationUuid", UpnpValue.forInput(getActionInvocation(), "StationUuid", input.StationUuid));
+        getActionInvocation().setInput("Title", UpnpValue.forInput(getActionInvocation(), "Title", input.Title));
     }
 
     public AddRadioStationToPlaylistOutput executeAction()
@@ -50,14 +39,7 @@ public class AddRadioStationToPlaylist extends ActionCallback
 
         AddRadioStationToPlaylistOutput result = new AddRadioStationToPlaylistOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

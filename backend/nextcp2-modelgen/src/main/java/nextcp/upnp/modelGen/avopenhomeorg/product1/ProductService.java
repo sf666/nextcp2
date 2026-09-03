@@ -14,35 +14,35 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
 
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceCount;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceCountOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Attributes;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.AttributesOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Product;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.ProductOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceXml;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceXmlOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndex;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexInput;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexByName;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexByNameInput;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Standby;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.StandbyOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Source;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceInput;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetProductRoom;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetProductRoomInput;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetStandby;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetStandbyInput;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceIndex;
-import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceIndexOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Manufacturer;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.ManufacturerOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Model;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.ModelOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Product;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.ProductOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetProductRoom;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetProductRoomInput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndex;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexInput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexByName;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetSourceIndexByNameInput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetStandby;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SetStandbyInput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Source;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceInput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceCount;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceCountOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceIndex;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceIndexOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceXml;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceXmlOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceXmlChangeCount;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.SourceXmlChangeCountOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Standby;
+import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.StandbyOutput;
 
 
 /**
@@ -145,76 +145,10 @@ public class ProductService
 
 
 
-    public SourceCountOutput sourceCount()
-    {
-        SourceCount sourceCount = new SourceCount(productService,  upnpService.getControlPoint());
-        SourceCountOutput res = sourceCount.executeAction();
-        return res;        
-    }
-
     public AttributesOutput attributes()
     {
         Attributes attributes = new Attributes(productService,  upnpService.getControlPoint());
         AttributesOutput res = attributes.executeAction();
-        return res;        
-    }
-
-    public ProductOutput product()
-    {
-        Product product = new Product(productService,  upnpService.getControlPoint());
-        ProductOutput res = product.executeAction();
-        return res;        
-    }
-
-    public SourceXmlOutput sourceXml()
-    {
-        SourceXml sourceXml = new SourceXml(productService,  upnpService.getControlPoint());
-        SourceXmlOutput res = sourceXml.executeAction();
-        return res;        
-    }
-
-    public void setSourceIndex(SetSourceIndexInput inp)
-    {
-        SetSourceIndex setSourceIndex = new SetSourceIndex(productService, inp, upnpService.getControlPoint());
-        setSourceIndex.executeAction();
-    }
-
-    public void setSourceIndexByName(SetSourceIndexByNameInput inp)
-    {
-        SetSourceIndexByName setSourceIndexByName = new SetSourceIndexByName(productService, inp, upnpService.getControlPoint());
-        setSourceIndexByName.executeAction();
-    }
-
-    public StandbyOutput standby()
-    {
-        Standby standby = new Standby(productService,  upnpService.getControlPoint());
-        StandbyOutput res = standby.executeAction();
-        return res;        
-    }
-
-    public SourceOutput source(SourceInput inp)
-    {
-        Source source = new Source(productService, inp, upnpService.getControlPoint());
-        SourceOutput res = source.executeAction();
-        return res;        
-    }
-
-    public void setProductRoom(SetProductRoomInput inp)
-    {
-        SetProductRoom setProductRoom = new SetProductRoom(productService, inp, upnpService.getControlPoint());
-        setProductRoom.executeAction();
-    }
-
-    public void setStandby(SetStandbyInput inp)
-    {
-        SetStandby setStandby = new SetStandby(productService, inp, upnpService.getControlPoint());
-        setStandby.executeAction();
-    }
-
-    public SourceIndexOutput sourceIndex()
-    {
-        SourceIndex sourceIndex = new SourceIndex(productService,  upnpService.getControlPoint());
-        SourceIndexOutput res = sourceIndex.executeAction();
         return res;        
     }
 
@@ -232,10 +166,76 @@ public class ProductService
         return res;        
     }
 
+    public ProductOutput product()
+    {
+        Product product = new Product(productService,  upnpService.getControlPoint());
+        ProductOutput res = product.executeAction();
+        return res;        
+    }
+
+    public void setProductRoom(SetProductRoomInput inp)
+    {
+        SetProductRoom setProductRoom = new SetProductRoom(productService, inp, upnpService.getControlPoint());
+        setProductRoom.executeAction();
+    }
+
+    public void setSourceIndex(SetSourceIndexInput inp)
+    {
+        SetSourceIndex setSourceIndex = new SetSourceIndex(productService, inp, upnpService.getControlPoint());
+        setSourceIndex.executeAction();
+    }
+
+    public void setSourceIndexByName(SetSourceIndexByNameInput inp)
+    {
+        SetSourceIndexByName setSourceIndexByName = new SetSourceIndexByName(productService, inp, upnpService.getControlPoint());
+        setSourceIndexByName.executeAction();
+    }
+
+    public void setStandby(SetStandbyInput inp)
+    {
+        SetStandby setStandby = new SetStandby(productService, inp, upnpService.getControlPoint());
+        setStandby.executeAction();
+    }
+
+    public SourceOutput source(SourceInput inp)
+    {
+        Source source = new Source(productService, inp, upnpService.getControlPoint());
+        SourceOutput res = source.executeAction();
+        return res;        
+    }
+
+    public SourceCountOutput sourceCount()
+    {
+        SourceCount sourceCount = new SourceCount(productService,  upnpService.getControlPoint());
+        SourceCountOutput res = sourceCount.executeAction();
+        return res;        
+    }
+
+    public SourceIndexOutput sourceIndex()
+    {
+        SourceIndex sourceIndex = new SourceIndex(productService,  upnpService.getControlPoint());
+        SourceIndexOutput res = sourceIndex.executeAction();
+        return res;        
+    }
+
+    public SourceXmlOutput sourceXml()
+    {
+        SourceXml sourceXml = new SourceXml(productService,  upnpService.getControlPoint());
+        SourceXmlOutput res = sourceXml.executeAction();
+        return res;        
+    }
+
     public SourceXmlChangeCountOutput sourceXmlChangeCount()
     {
         SourceXmlChangeCount sourceXmlChangeCount = new SourceXmlChangeCount(productService,  upnpService.getControlPoint());
         SourceXmlChangeCountOutput res = sourceXmlChangeCount.executeAction();
+        return res;        
+    }
+
+    public StandbyOutput standby()
+    {
+        Standby standby = new Standby(productService,  upnpService.getControlPoint());
+        StandbyOutput res = standby.executeAction();
         return res;        
     }
 }

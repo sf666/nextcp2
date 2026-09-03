@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions;
 public class SetWebStreamIcyOrderInput
 {
 
-    public String ObjectID = null;
     public String IcyOrder = null;
+    public String ObjectID = null;
 
 }

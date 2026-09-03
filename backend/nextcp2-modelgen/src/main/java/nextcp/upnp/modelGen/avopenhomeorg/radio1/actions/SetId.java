@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,16 +28,8 @@ public class SetId extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SetId"), new NextcpClientInfo()), cp);
 		
-        if (input.Value != null) {
-    	    getActionInvocation().setInput("Value", new UnsignedIntegerFourBytes(input.Value));
-		} else {
-    	    getActionInvocation().setInput("Value", null);
-		}
-        if (input.Uri != null) {
-	        getActionInvocation().setInput("Uri", input.Uri);
-		} else {
-    	    getActionInvocation().setInput("Uri", null);
-		}
+        getActionInvocation().setInput("Uri", UpnpValue.forInput(getActionInvocation(), "Uri", input.Uri));
+        getActionInvocation().setInput("Value", UpnpValue.forInput(getActionInvocation(), "Value", input.Value));
     }
 
     public void executeAction()

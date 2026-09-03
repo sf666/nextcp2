@@ -10,10 +10,10 @@ public class SearchInput
 {
 
     public String ContainerID = null;
-    public String SearchCriteria = null;
     public String Filter = null;
-    public Long StartingIndex = null;
     public Long RequestedCount = null;
+    public String SearchCriteria = null;
     public String SortCriteria = null;
+    public Long StartingIndex = null;
 
 }

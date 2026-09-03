@@ -1,0 +1,62 @@
+namespace: av-openhome-org
+serviceType: Receiver
+version: 1
+events: true
+stateVariables:
+  Metadata:
+    java: String
+    upnp: string
+  ProtocolInfo:
+    java: String
+    upnp: string
+  TransportState:
+    java: String
+    upnp: string
+  Uri:
+    java: String
+    upnp: string
+actions:
+  Play:
+    input: {
+      }
+    output: {
+      }
+  ProtocolInfo:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  Sender:
+    input: {
+      }
+    output:
+      Metadata:
+        java: String
+        upnp: string
+      Uri:
+        java: String
+        upnp: string
+  SetSender:
+    input:
+      Metadata:
+        java: String
+        upnp: string
+      Uri:
+        java: String
+        upnp: string
+    output: {
+      }
+  Stop:
+    input: {
+      }
+    output: {
+      }
+  TransportState:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string

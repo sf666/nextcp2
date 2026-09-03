@@ -125,21 +125,21 @@ public class MainServiceEventListenerImpl implements IMainServiceEventListener
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void versionInfoChange(String value)
-    {
-        stateVariable.VersionInfo = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "VersionInfo", value));
-        }
-    }
-    
     public void baseLanURLChange(String value)
     {
         stateVariable.BaseLanURL = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "BaseLanURL", value));
+        }
+    }
+    
+    public void versionInfoChange(String value)
+    {
+        stateVariable.VersionInfo = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "VersionInfo", value));
         }
     }
     

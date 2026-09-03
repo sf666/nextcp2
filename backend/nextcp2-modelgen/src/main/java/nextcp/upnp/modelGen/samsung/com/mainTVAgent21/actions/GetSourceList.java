@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetSourceList extends ActionCallback
     public GetSourceList(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetSourceList"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetSourceListOutput executeAction()
@@ -35,22 +36,8 @@ public class GetSourceList extends ActionCallback
 
         GetSourceListOutput result = new GetSourceListOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("SourceList").getValue() != null)
-  		{
-	        result.SourceList = invocation.getOutput("SourceList").getValue().toString();
-  		}
-  		else
-  		{
-	        result.SourceList = "";
-  		}
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
+        result.SourceList = UpnpValue.toTextOrEmpty(invocation.getOutput("SourceList").getValue());
 
         return result;
     }

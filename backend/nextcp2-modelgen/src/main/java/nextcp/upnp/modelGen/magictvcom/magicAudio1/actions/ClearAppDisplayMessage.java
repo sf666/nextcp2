@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class ClearAppDisplayMessage extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("ClearAppDisplayMessage"), new NextcpClientInfo()), cp);
 		
-        if (input.Tag != null) {
-    	    getActionInvocation().setInput("Tag", new UnsignedIntegerFourBytes(input.Tag));
-		} else {
-    	    getActionInvocation().setInput("Tag", null);
-		}
+        getActionInvocation().setInput("Tag", UpnpValue.forInput(getActionInvocation(), "Tag", input.Tag));
     }
 
     public void executeAction()

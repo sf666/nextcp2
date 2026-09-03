@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,31 +28,11 @@ public class SetResamplingModeDetails extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SetResamplingModeDetails"), new NextcpClientInfo()), cp);
 		
-        if (input.Mode != null) {
-	        getActionInvocation().setInput("Mode", input.Mode);
-		} else {
-    	    getActionInvocation().setInput("Mode", null);
-		}
-        if (input.FileType != null) {
-	        getActionInvocation().setInput("FileType", input.FileType);
-		} else {
-    	    getActionInvocation().setInput("FileType", null);
-		}
-        if (input.SrcSamplingRate != null) {
-	        getActionInvocation().setInput("SrcSamplingRate", input.SrcSamplingRate);
-		} else {
-    	    getActionInvocation().setInput("SrcSamplingRate", null);
-		}
-        if (input.NewSamplingRate != null) {
-	        getActionInvocation().setInput("NewSamplingRate", input.NewSamplingRate);
-		} else {
-    	    getActionInvocation().setInput("NewSamplingRate", null);
-		}
-        if (input.NewBitDepth != null) {
-	        getActionInvocation().setInput("NewBitDepth", input.NewBitDepth);
-		} else {
-    	    getActionInvocation().setInput("NewBitDepth", null);
-		}
+        getActionInvocation().setInput("FileType", UpnpValue.forInput(getActionInvocation(), "FileType", input.FileType));
+        getActionInvocation().setInput("Mode", UpnpValue.forInput(getActionInvocation(), "Mode", input.Mode));
+        getActionInvocation().setInput("NewBitDepth", UpnpValue.forInput(getActionInvocation(), "NewBitDepth", input.NewBitDepth));
+        getActionInvocation().setInput("NewSamplingRate", UpnpValue.forInput(getActionInvocation(), "NewSamplingRate", input.NewSamplingRate));
+        getActionInvocation().setInput("SrcSamplingRate", UpnpValue.forInput(getActionInvocation(), "SrcSamplingRate", input.SrcSamplingRate));
     }
 
     public void executeAction()

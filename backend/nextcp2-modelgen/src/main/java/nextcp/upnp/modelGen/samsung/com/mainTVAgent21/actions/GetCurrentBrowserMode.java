@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetCurrentBrowserMode extends ActionCallback
     public GetCurrentBrowserMode(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetCurrentBrowserMode"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetCurrentBrowserModeOutput executeAction()
@@ -35,22 +36,8 @@ public class GetCurrentBrowserMode extends ActionCallback
 
         GetCurrentBrowserModeOutput result = new GetCurrentBrowserModeOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("BrowserMode").getValue() != null)
-  		{
-	        result.BrowserMode = invocation.getOutput("BrowserMode").getValue().toString();
-  		}
-  		else
-  		{
-	        result.BrowserMode = "";
-  		}
+        result.BrowserMode = UpnpValue.toTextOrEmpty(invocation.getOutput("BrowserMode").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

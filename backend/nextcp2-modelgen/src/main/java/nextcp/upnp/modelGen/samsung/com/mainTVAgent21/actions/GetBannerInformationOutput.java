@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class GetBannerInformationOutput
 {
 
-    public String Result = null;
     public String BannerInformation = null;
+    public String Result = null;
 
 }

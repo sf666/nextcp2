@@ -1,0 +1,94 @@
+namespace: av-openhome-org
+serviceType: Info
+version: 1
+events: true
+stateVariables:
+  BitDepth:
+    java: Long
+    upnp: ui4
+  BitRate:
+    java: Long
+    upnp: ui4
+  CodecName:
+    java: String
+    upnp: string
+  DetailsCount:
+    java: Long
+    upnp: ui4
+  Duration:
+    java: Long
+    upnp: ui4
+  Lossless:
+    java: Boolean
+    upnp: boolean
+  Metadata:
+    java: String
+    upnp: string
+  Metatext:
+    java: String
+    upnp: string
+  MetatextCount:
+    java: Long
+    upnp: ui4
+  SampleRate:
+    java: Long
+    upnp: ui4
+  TrackCount:
+    java: Long
+    upnp: ui4
+  Uri:
+    java: String
+    upnp: string
+actions:
+  Counters:
+    input: {
+      }
+    output:
+      DetailsCount:
+        java: Long
+        upnp: ui4
+      MetatextCount:
+        java: Long
+        upnp: ui4
+      TrackCount:
+        java: Long
+        upnp: ui4
+  Details:
+    input: {
+      }
+    output:
+      BitDepth:
+        java: Long
+        upnp: ui4
+      BitRate:
+        java: Long
+        upnp: ui4
+      CodecName:
+        java: String
+        upnp: string
+      Duration:
+        java: Long
+        upnp: ui4
+      Lossless:
+        java: Boolean
+        upnp: boolean
+      SampleRate:
+        java: Long
+        upnp: ui4
+  Metatext:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  Track:
+    input: {
+      }
+    output:
+      Metadata:
+        java: String
+        upnp: string
+      Uri:
+        java: String
+        upnp: string

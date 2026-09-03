@@ -1,0 +1,73 @@
+namespace: microsoft.com
+serviceType: X_MS_MediaReceiverRegistrar
+version: 1
+events: true
+stateVariables:
+  AuthorizationDeniedUpdateID:
+    java: Long
+    upnp: ui4
+  AuthorizationGrantedUpdateID:
+    java: Long
+    upnp: ui4
+  ValidationRevokedUpdateID:
+    java: Long
+    upnp: ui4
+  ValidationSucceededUpdateID:
+    java: Long
+    upnp: ui4
+actions:
+  GetAuthorizationDeniedUpdateID:
+    input: {
+      }
+    output:
+      AuthorizationDeniedUpdateID:
+        java: Long
+        upnp: ui4
+  GetAuthorizationGrantedUpdateID:
+    input: {
+      }
+    output:
+      AuthorizationGrantedUpdateID:
+        java: Long
+        upnp: ui4
+  GetValidationRevokedUpdateID:
+    input: {
+      }
+    output:
+      ValidationRevokedUpdateID:
+        java: Long
+        upnp: ui4
+  GetValidationSucceededUpdateID:
+    input: {
+      }
+    output:
+      ValidationSucceededUpdateID:
+        java: Long
+        upnp: ui4
+  IsAuthorized:
+    input:
+      DeviceID:
+        java: String
+        upnp: string
+    output:
+      Result:
+        java: Integer
+        upnp: int
+  IsValidated:
+    input:
+      DeviceID:
+        java: String
+        upnp: string
+    output:
+      Result:
+        java: Integer
+        upnp: int
+  RegisterDevice:
+    input:
+      RegistrationReqMsg:
+        java: byte[]
+        upnp: bin.base64
+    output:
+      RegistrationRespMsg:
+        java: byte[]
+        upnp: bin.base64

@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
  * Last Change : 08.09.2025
@@ -110,55 +111,25 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
                 switch (key)
                 {
                     case "AnonymousDevicesWrite":
-                    	try {
-                    		anonymousDevicesWriteChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[anonymousDevicesWrite] unexpected value : " + stateVar.getValue());
-                    		anonymousDevicesWriteChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
-                    case "UpnpCdsWrite":
-                    	try {
-                    		upnpCdsWriteChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[upnpCdsWrite] unexpected value : " + stateVar.getValue());
-                    		upnpCdsWriteChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
-                    case "AudioUpdateRating":
-                    	try {
-                    		audioUpdateRatingChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[audioUpdateRating] unexpected value : " + stateVar.getValue());
-                    		audioUpdateRatingChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
-                    case "PreferEuropeanServer":
-                    	try {
-                    		preferEuropeanServerChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[preferEuropeanServer] unexpected value : " + stateVar.getValue());
-                    		preferEuropeanServerChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
+                        anonymousDevicesWriteChange(UpnpValue.toBoolean(stateVar.getValue()));
                         break;
                     case "AudioLikesVisibleRoot":
-                    	try {
-                    		audioLikesVisibleRootChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[audioLikesVisibleRoot] unexpected value : " + stateVar.getValue());
-                    		audioLikesVisibleRootChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
+                        audioLikesVisibleRootChange(UpnpValue.toBoolean(stateVar.getValue()));
+                        break;
+                    case "AudioUpdateRating":
+                        audioUpdateRatingChange(UpnpValue.toBoolean(stateVar.getValue()));
                         break;
                     case "PlaylistLoop":
-                    	try {
-                    		playlistLoopChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[playlistLoop] unexpected value : " + stateVar.getValue());
-                    		playlistLoopChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
+                        playlistLoopChange(UpnpValue.toBoolean(stateVar.getValue()));
+                        break;
+                    case "PreferEuropeanServer":
+                        preferEuropeanServerChange(UpnpValue.toBoolean(stateVar.getValue()));
+                        break;
+                    case "UpnpCdsWrite":
+                        upnpCdsWriteChange(UpnpValue.toBoolean(stateVar.getValue()));
                         break;
                     case "WebStreamNowPlaying":
-                        webStreamNowPlayingChange((String) stateVar.getValue());
+                        webStreamNowPlayingChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -188,11 +159,11 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
         }
     }    
 
-    private void upnpCdsWriteChange(Boolean value)
+    private void audioLikesVisibleRootChange(Boolean value)
     {
         for (IUmsExtendedServicesServiceEventListener listener : eventListener)
         {
-            listener.upnpCdsWriteChange(value);
+            listener.audioLikesVisibleRootChange(value);
         }
     }    
 
@@ -204,6 +175,14 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
         }
     }    
 
+    private void playlistLoopChange(Boolean value)
+    {
+        for (IUmsExtendedServicesServiceEventListener listener : eventListener)
+        {
+            listener.playlistLoopChange(value);
+        }
+    }    
+
     private void preferEuropeanServerChange(Boolean value)
     {
         for (IUmsExtendedServicesServiceEventListener listener : eventListener)
@@ -212,19 +191,11 @@ public class UmsExtendedServicesServiceSubscription extends RemoteGENASubscripti
         }
     }    
 
-    private void audioLikesVisibleRootChange(Boolean value)
+    private void upnpCdsWriteChange(Boolean value)
     {
         for (IUmsExtendedServicesServiceEventListener listener : eventListener)
         {
-            listener.audioLikesVisibleRootChange(value);
-        }
-    }    
-
-    private void playlistLoopChange(Boolean value)
-    {
-        for (IUmsExtendedServicesServiceEventListener listener : eventListener)
-        {
-            listener.playlistLoopChange(value);
+            listener.upnpCdsWriteChange(value);
         }
     }    
 

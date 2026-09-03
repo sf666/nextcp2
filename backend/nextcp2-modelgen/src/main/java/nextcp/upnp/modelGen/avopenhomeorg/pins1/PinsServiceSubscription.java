@@ -16,8 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
+ * Last Change : 08.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -108,17 +110,17 @@ public class PinsServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "IdArray":
-                        idArrayChange((String) stateVar.getValue());
-                        break;
-                    case "Modes":
-                        modesChange((String) stateVar.getValue());
-                        break;
                     case "AccountMax":
-                        accountMaxChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        accountMaxChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     case "DeviceMax":
-                        deviceMaxChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        deviceMaxChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "IdArray":
+                        idArrayChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "Modes":
+                        modesChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -140,22 +142,6 @@ public class PinsServiceSubscription extends RemoteGENASubscription
         }
     }
 
-    private void idArrayChange(String value)
-    {
-        for (IPinsServiceEventListener listener : eventListener)
-        {
-            listener.idArrayChange(value);
-        }
-    }    
-
-    private void modesChange(String value)
-    {
-        for (IPinsServiceEventListener listener : eventListener)
-        {
-            listener.modesChange(value);
-        }
-    }    
-
     private void accountMaxChange(Long value)
     {
         for (IPinsServiceEventListener listener : eventListener)
@@ -169,6 +155,22 @@ public class PinsServiceSubscription extends RemoteGENASubscription
         for (IPinsServiceEventListener listener : eventListener)
         {
             listener.deviceMaxChange(value);
+        }
+    }    
+
+    private void idArrayChange(String value)
+    {
+        for (IPinsServiceEventListener listener : eventListener)
+        {
+            listener.idArrayChange(value);
+        }
+    }    
+
+    private void modesChange(String value)
+    {
+        for (IPinsServiceEventListener listener : eventListener)
+        {
+            listener.modesChange(value);
         }
     }    
 }

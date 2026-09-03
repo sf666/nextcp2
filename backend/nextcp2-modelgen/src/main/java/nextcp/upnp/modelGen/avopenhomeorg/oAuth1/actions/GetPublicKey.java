@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetPublicKey extends ActionCallback
     public GetPublicKey(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetPublicKey"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetPublicKeyOutput executeAction()
@@ -35,14 +36,7 @@ public class GetPublicKey extends ActionCallback
 
         GetPublicKeyOutput result = new GetPublicKeyOutput();
 
-  		if (invocation.getOutput("PublicKey").getValue() != null)
-  		{
-	        result.PublicKey = invocation.getOutput("PublicKey").getValue().toString();
-  		}
-  		else
-  		{
-	        result.PublicKey = "";
-  		}
+        result.PublicKey = UpnpValue.toTextOrEmpty(invocation.getOutput("PublicKey").getValue());
 
         return result;
     }

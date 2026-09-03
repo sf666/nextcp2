@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,21 +28,9 @@ public class RemoveTracks extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("RemoveTracks"), new NextcpClientInfo()), cp);
 		
-        if (input.QueueID != null) {
-	        getActionInvocation().setInput("QueueID", input.QueueID);
-		} else {
-    	    getActionInvocation().setInput("QueueID", null);
-		}
-        if (input.StartingIndex != null) {
-	        getActionInvocation().setInput("StartingIndex", input.StartingIndex);
-		} else {
-    	    getActionInvocation().setInput("StartingIndex", null);
-		}
-        if (input.NumberOfTracks != null) {
-	        getActionInvocation().setInput("NumberOfTracks", input.NumberOfTracks);
-		} else {
-    	    getActionInvocation().setInput("NumberOfTracks", null);
-		}
+        getActionInvocation().setInput("NumberOfTracks", UpnpValue.forInput(getActionInvocation(), "NumberOfTracks", input.NumberOfTracks));
+        getActionInvocation().setInput("QueueID", UpnpValue.forInput(getActionInvocation(), "QueueID", input.QueueID));
+        getActionInvocation().setInput("StartingIndex", UpnpValue.forInput(getActionInvocation(), "StartingIndex", input.StartingIndex));
     }
 
     public RemoveTracksOutput executeAction()
@@ -50,14 +39,7 @@ public class RemoveTracks extends ActionCallback
 
         RemoveTracksOutput result = new RemoveTracksOutput();
 
-  		if (invocation.getOutput("NumberOfSuccess").getValue() != null)
-  		{
-	        result.NumberOfSuccess = invocation.getOutput("NumberOfSuccess").getValue().toString();
-  		}
-  		else
-  		{
-	        result.NumberOfSuccess = "";
-  		}
+        result.NumberOfSuccess = UpnpValue.toTextOrEmpty(invocation.getOutput("NumberOfSuccess").getValue());
 
         return result;
     }

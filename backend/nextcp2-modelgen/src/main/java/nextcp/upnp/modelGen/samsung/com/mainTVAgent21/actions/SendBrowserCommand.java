@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class SendBrowserCommand extends ActionCallback
     public SendBrowserCommand(Service service, SendBrowserCommandInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SendBrowserCommand"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("BrowserCommand", input.BrowserCommand);
+		
+        getActionInvocation().setInput("BrowserCommand", UpnpValue.forInput(getActionInvocation(), "BrowserCommand", input.BrowserCommand));
     }
 
     public SendBrowserCommandOutput executeAction()
@@ -36,14 +37,7 @@ public class SendBrowserCommand extends ActionCallback
 
         SendBrowserCommandOutput result = new SendBrowserCommandOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

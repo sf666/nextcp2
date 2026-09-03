@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class GetMBRDeviceListOutput
 {
 
-    public String Result = null;
     public String MBRDeviceList = null;
+    public String Result = null;
 
 }

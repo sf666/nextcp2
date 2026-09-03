@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.bubblesoftappscom.main1;
 public class MainServiceStateVariable
 {
 
-    public String VersionInfo = null;
     public String BaseLanURL = null;
+    public String VersionInfo = null;
 
 }

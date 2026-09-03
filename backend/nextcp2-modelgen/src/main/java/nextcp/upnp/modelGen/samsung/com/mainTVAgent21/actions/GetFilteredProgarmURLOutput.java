@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class GetFilteredProgarmURLOutput
 {
 
-    public String Result = null;
     public String FilteredProgramURL = null;
+    public String Result = null;
 
 }

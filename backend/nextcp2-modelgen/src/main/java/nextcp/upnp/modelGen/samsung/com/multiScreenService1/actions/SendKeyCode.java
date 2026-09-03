@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,9 +27,9 @@ public class SendKeyCode extends ActionCallback
     public SendKeyCode(Service service, SendKeyCodeInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SendKeyCode"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("KeyCode", new UnsignedIntegerFourBytes(input.KeyCode));
-        getActionInvocation().setInput("KeyDescription", input.KeyDescription);
+		
+        getActionInvocation().setInput("KeyCode", UpnpValue.forInput(getActionInvocation(), "KeyCode", input.KeyCode));
+        getActionInvocation().setInput("KeyDescription", UpnpValue.forInput(getActionInvocation(), "KeyDescription", input.KeyDescription));
     }
 
     public void executeAction()

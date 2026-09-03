@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,26 +28,10 @@ public class SetNetwork extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SetNetwork"), new NextcpClientInfo()), cp);
 		
-        if (input.SSID != null) {
-	        getActionInvocation().setInput("SSID", input.SSID);
-		} else {
-    	    getActionInvocation().setInput("SSID", null);
-		}
-        if (input.Key != null) {
-	        getActionInvocation().setInput("Key", input.Key);
-		} else {
-    	    getActionInvocation().setInput("Key", null);
-		}
-        if (input.AuthAlgo != null) {
-	        getActionInvocation().setInput("AuthAlgo", input.AuthAlgo);
-		} else {
-    	    getActionInvocation().setInput("AuthAlgo", null);
-		}
-        if (input.CipherAlgo != null) {
-	        getActionInvocation().setInput("CipherAlgo", input.CipherAlgo);
-		} else {
-    	    getActionInvocation().setInput("CipherAlgo", null);
-		}
+        getActionInvocation().setInput("AuthAlgo", UpnpValue.forInput(getActionInvocation(), "AuthAlgo", input.AuthAlgo));
+        getActionInvocation().setInput("CipherAlgo", UpnpValue.forInput(getActionInvocation(), "CipherAlgo", input.CipherAlgo));
+        getActionInvocation().setInput("Key", UpnpValue.forInput(getActionInvocation(), "Key", input.Key));
+        getActionInvocation().setInput("SSID", UpnpValue.forInput(getActionInvocation(), "SSID", input.SSID));
     }
 
     public void executeAction()

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class SetQobuzQuality extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SetQobuzQuality"), new NextcpClientInfo()), cp);
 		
-        if (input.Quality != null) {
-	        getActionInvocation().setInput("Quality", input.Quality);
-		} else {
-    	    getActionInvocation().setInput("Quality", null);
-		}
+        getActionInvocation().setInput("Quality", UpnpValue.forInput(getActionInvocation(), "Quality", input.Quality));
     }
 
     public void executeAction()

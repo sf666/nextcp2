@@ -125,66 +125,12 @@ public class TransportServiceEventListenerImpl implements ITransportServiceEvent
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void modesChange(String value)
+    public void canPauseChange(Boolean value)
     {
-        stateVariable.Modes = value;
+        stateVariable.CanPause = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "Modes", value));
-        }
-    }
-    
-    public void streamIdChange(Long value)
-    {
-        stateVariable.StreamId = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "StreamId", value));
-        }
-    }
-    
-    public void shuffleChange(Boolean value)
-    {
-        stateVariable.Shuffle = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Shuffle", value));
-        }
-    }
-    
-    public void repeatChange(String value)
-    {
-        stateVariable.Repeat = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Repeat", value));
-        }
-    }
-    
-    public void canSkipNextChange(Boolean value)
-    {
-        stateVariable.CanSkipNext = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "CanSkipNext", value));
-        }
-    }
-    
-    public void canShuffleChange(Boolean value)
-    {
-        stateVariable.CanShuffle = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "CanShuffle", value));
-        }
-    }
-    
-    public void transportStateChange(String value)
-    {
-        stateVariable.TransportState = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "TransportState", value));
+            log.debug(String.format("StateVariable : %s: %s", "CanPause", value));
         }
     }
     
@@ -197,15 +143,6 @@ public class TransportServiceEventListenerImpl implements ITransportServiceEvent
         }
     }
     
-    public void canPauseChange(Boolean value)
-    {
-        stateVariable.CanPause = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "CanPause", value));
-        }
-    }
-    
     public void canSeekChange(Boolean value)
     {
         stateVariable.CanSeek = value;
@@ -215,12 +152,75 @@ public class TransportServiceEventListenerImpl implements ITransportServiceEvent
         }
     }
     
+    public void canShuffleChange(Boolean value)
+    {
+        stateVariable.CanShuffle = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "CanShuffle", value));
+        }
+    }
+    
+    public void canSkipNextChange(Boolean value)
+    {
+        stateVariable.CanSkipNext = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "CanSkipNext", value));
+        }
+    }
+    
     public void canSkipPreviousChange(Boolean value)
     {
         stateVariable.CanSkipPrevious = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "CanSkipPrevious", value));
+        }
+    }
+    
+    public void modesChange(String value)
+    {
+        stateVariable.Modes = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Modes", value));
+        }
+    }
+    
+    public void repeatChange(String value)
+    {
+        stateVariable.Repeat = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Repeat", value));
+        }
+    }
+    
+    public void shuffleChange(Boolean value)
+    {
+        stateVariable.Shuffle = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Shuffle", value));
+        }
+    }
+    
+    public void streamIdChange(Long value)
+    {
+        stateVariable.StreamId = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "StreamId", value));
+        }
+    }
+    
+    public void transportStateChange(String value)
+    {
+        stateVariable.TransportState = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "TransportState", value));
         }
     }
     

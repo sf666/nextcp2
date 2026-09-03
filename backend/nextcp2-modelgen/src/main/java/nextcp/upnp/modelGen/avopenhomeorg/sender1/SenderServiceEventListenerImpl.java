@@ -125,30 +125,21 @@ public class SenderServiceEventListenerImpl implements ISenderServiceEventListen
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void statusChange(String value)
-    {
-        stateVariable.Status = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Status", value));
-        }
-    }
-    
-    public void presentationUrlChange(String value)
-    {
-        stateVariable.PresentationUrl = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "PresentationUrl", value));
-        }
-    }
-    
     public void attributesChange(String value)
     {
         stateVariable.Attributes = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "Attributes", value));
+        }
+    }
+    
+    public void audioChange(Boolean value)
+    {
+        stateVariable.Audio = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Audio", value));
         }
     }
     
@@ -161,12 +152,21 @@ public class SenderServiceEventListenerImpl implements ISenderServiceEventListen
         }
     }
     
-    public void audioChange(Boolean value)
+    public void presentationUrlChange(String value)
     {
-        stateVariable.Audio = value;
+        stateVariable.PresentationUrl = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "Audio", value));
+            log.debug(String.format("StateVariable : %s: %s", "PresentationUrl", value));
+        }
+    }
+    
+    public void statusChange(String value)
+    {
+        stateVariable.Status = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Status", value));
         }
     }
     

@@ -1,0 +1,1229 @@
+namespace: magictv-com
+serviceType: MagicAudio
+version: 1
+events: true
+stateVariables:
+  AboutString:
+    java: String
+    upnp: string
+  AmazonMusicEnable:
+    java: Boolean
+    upnp: boolean
+  AmazonMusicSupport:
+    java: Boolean
+    upnp: boolean
+  AnalogBalance:
+    java: Integer
+    upnp: i2
+  AnalogBalanceSupport:
+    java: Boolean
+    upnp: boolean
+  AnalogOutLvl:
+    java: String
+    upnp: string
+  AppDisplayMessageId:
+    java: Long
+    upnp: ui4
+  AppDisplayMessageString:
+    java: String
+    upnp: string
+  AppDisplayMessageTag:
+    java: Long
+    upnp: ui4
+  AutoPlay:
+    java: Boolean
+    upnp: boolean
+  BitDepth:
+    java: String
+    upnp: string
+  Brightness:
+    java: String
+    upnp: string
+  Control4Enable:
+    java: Integer
+    upnp: i2
+  Control4Support:
+    java: Boolean
+    upnp: boolean
+  CustomCode:
+    java: String
+    upnp: string
+  DAEnable:
+    java: String
+    upnp: string
+  DSDtoPCM_type:
+    java: String
+    upnp: string
+  Deemphasis:
+    java: Boolean
+    upnp: boolean
+  DefaultRadioEnable:
+    java: Boolean
+    upnp: boolean
+  DefaultRadioSupport:
+    java: Boolean
+    upnp: boolean
+  ExternalClockSupport:
+    java: String
+    upnp: string
+  FPMode:
+    java: String
+    upnp: string
+  FileType:
+    java: String
+    upnp: string
+  FirmwareCommand:
+    java: String
+    upnp: string
+  FirmwareDownloadProgress:
+    java: Integer
+    upnp: i2
+  FirmwareResult:
+    java: String
+    upnp: string
+  FormatConversion:
+    java: String
+    upnp: string
+  HDMICECEnable:
+    java: Long
+    upnp: ui4
+  HDMICECSupport:
+    java: Boolean
+    upnp: boolean
+  InputLabelSupport:
+    java: Boolean
+    upnp: boolean
+  InvertPhase:
+    java: Boolean
+    upnp: boolean
+  KKBOXEnable:
+    java: Boolean
+    upnp: boolean
+  KKBOXSupport:
+    java: Boolean
+    upnp: boolean
+  LUFS:
+    java: Integer
+    upnp: i2
+  LUFSSupport:
+    java: Boolean
+    upnp: boolean
+  LangID:
+    java: Long
+    upnp: ui4
+  LeedhVolumeEnable:
+    java: Boolean
+    upnp: boolean
+  LeedhVolumeSupport:
+    java: Boolean
+    upnp: boolean
+  MQAAuthenticity:
+    java: String
+    upnp: string
+  MQACreatorId:
+    java: Long
+    upnp: ui4
+  MQAMode:
+    java: String
+    upnp: string
+  MQAProvenance:
+    java: String
+    upnp: string
+  MQASampleRate:
+    java: Long
+    upnp: ui4
+  MQASupport:
+    java: String
+    upnp: string
+  MagicAudioVer:
+    java: String
+    upnp: string
+  MagicPlay:
+    java: Boolean
+    upnp: boolean
+  MaxVolume:
+    java: Long
+    upnp: ui4
+  NetworkLED:
+    java: Boolean
+    upnp: boolean
+  NetworkLEDControl:
+    java: Boolean
+    upnp: boolean
+  NewBitDepth:
+    java: String
+    upnp: string
+  NewSamplingRate:
+    java: String
+    upnp: string
+  OutputBitDepth:
+    java: Long
+    upnp: ui4
+  OutputClockSource:
+    java: String
+    upnp: string
+  OutputDeemphasis:
+    java: Boolean
+    upnp: boolean
+  OutputInvertPhase:
+    java: Boolean
+    upnp: boolean
+  OutputSampleRate:
+    java: Long
+    upnp: ui4
+  PlaybackClockSource:
+    java: String
+    upnp: string
+  PlexCode:
+    java: String
+    upnp: string
+  PlexEmail:
+    java: String
+    upnp: string
+  PlexEnable:
+    java: Boolean
+    upnp: boolean
+  PlexFriendlyName:
+    java: String
+    upnp: string
+  PlexSupport:
+    java: Boolean
+    upnp: boolean
+  PlexUsername:
+    java: String
+    upnp: string
+  Port:
+    java: Long
+    upnp: ui4
+  PublicDNS:
+    java: Boolean
+    upnp: boolean
+  PublicKey:
+    java: String
+    upnp: string
+  QobuzConnectEnable:
+    java: Boolean
+    upnp: boolean
+  QobuzConnectSupport:
+    java: Boolean
+    upnp: boolean
+  QobuzQuality:
+    java: String
+    upnp: string
+  RAATEnable:
+    java: Boolean
+    upnp: boolean
+  RAATVer:
+    java: String
+    upnp: string
+  ReplayGain:
+    java: String
+    upnp: string
+  ResamplingMode:
+    java: String
+    upnp: string
+  ResamplingTag:
+    java: String
+    upnp: string
+  SamplingRate:
+    java: String
+    upnp: string
+  ScreensaverMode:
+    java: Long
+    upnp: ui4
+  ScreensaverTimeout:
+    java: Long
+    upnp: ui4
+  ServerEnabled:
+    java: Boolean
+    upnp: boolean
+  ServiceId:
+    java: String
+    upnp: string
+  SongcastMode:
+    java: Boolean
+    upnp: boolean
+  SongcastSupport:
+    java: Boolean
+    upnp: boolean
+  SourceIndex:
+    java: Long
+    upnp: ui4
+  SourceName:
+    java: String
+    upnp: string
+  SpotifyEnable:
+    java: Boolean
+    upnp: boolean
+  SpotifyNormalization:
+    java: Boolean
+    upnp: boolean
+  SpotifyVer:
+    java: String
+    upnp: string
+  TidalAccessExpiry:
+    java: Long
+    upnp: ui4
+  TidalAccessToken:
+    java: byte[]
+    upnp: bin.base64
+  TidalClientId:
+    java: byte[]
+    upnp: bin.base64
+  TidalClientSecret:
+    java: byte[]
+    upnp: bin.base64
+  TidalConnectEnable:
+    java: Boolean
+    upnp: boolean
+  TidalConnectSupport:
+    java: Boolean
+    upnp: boolean
+  TidalQuality:
+    java: String
+    upnp: string
+  TidalRefreshToken:
+    java: byte[]
+    upnp: bin.base64
+  TidalUserName:
+    java: String
+    upnp: string
+  TuneInUserName:
+    java: String
+    upnp: string
+  USBSPDIFMode:
+    java: Boolean
+    upnp: boolean
+  USFilterDSD:
+    java: String
+    upnp: string
+  VolumeControl:
+    java: String
+    upnp: string
+  VolumeControlSupport:
+    java: Boolean
+    upnp: boolean
+actions:
+  ClearAppDisplayMessage:
+    input:
+      Tag:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  DSDtoPCM:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  DSDtoPCMEnable:
+    input:
+      Value:
+        java: String
+        upnp: string
+    output: {
+      }
+  EnableServer:
+    input:
+      Enable:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  Firmware:
+    input:
+      Command:
+        java: String
+        upnp: string
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetAboutString:
+    input:
+      Lang:
+        java: Long
+        upnp: ui4
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetAmazonMusicEnable:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetAmazonMusicSupport:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetAnalogBalance:
+    input: {
+      }
+    output:
+      Value:
+        java: Integer
+        upnp: i2
+  GetAnalogBalanceSupport:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetAnalogOutLvl:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetAppDisplayMessage:
+    input: {
+      }
+    output:
+      Id:
+        java: Long
+        upnp: ui4
+      String:
+        java: String
+        upnp: string
+      Tag:
+        java: Long
+        upnp: ui4
+  GetAutoPlay:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetControl4Enable:
+    input: {
+      }
+    output:
+      Value:
+        java: Integer
+        upnp: i2
+  GetControl4Support:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetCustomCode:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetDeemphasis:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetDefaultRadioEnable:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetDefaultRadioSupport:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetDetailsEx:
+    input: {
+      }
+    output:
+      FormatConversion:
+        java: String
+        upnp: string
+      MQAAuthenticity:
+        java: String
+        upnp: string
+      MQACreatorId:
+        java: Long
+        upnp: ui4
+      MQAProvenance:
+        java: String
+        upnp: string
+      MQASampleRate:
+        java: Long
+        upnp: ui4
+      OutputBitDepth:
+        java: Long
+        upnp: ui4
+      OutputDeemphasis:
+        java: Boolean
+        upnp: boolean
+      OutputInvertPhase:
+        java: Boolean
+        upnp: boolean
+      OutputSampleRate:
+        java: Long
+        upnp: ui4
+      ReplayGain:
+        java: String
+        upnp: string
+  GetDigitalAudioEnable:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetExternalClockSupport:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetFPBrightness:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetFPMode:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetHDMICECEnable:
+    input: {
+      }
+    output:
+      Value:
+        java: Long
+        upnp: ui4
+  GetHDMICECSupport:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetInputLabelSupport:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetInvertPhase:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetKKBOXEnable:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetKKBOXSupport:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetLUFS:
+    input: {
+      }
+    output:
+      Value:
+        java: Integer
+        upnp: i2
+  GetLUFSSupport:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetLeedhVolumeEnable:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetLeedhVolumeSupport:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetMQAMode:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetMQASupport:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetMagicAudioVer:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetMagicPlay:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetMaxVolume:
+    input: {
+      }
+    output:
+      Value:
+        java: Long
+        upnp: ui4
+  GetNetworkLED:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetNetworkLEDControl:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetOutputClockSource:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetOutputEnable:
+    input:
+      Port:
+        java: Long
+        upnp: ui4
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetPlaybackClockSource:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetPlexCode:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetPlexEnable:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetPlexSupport:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetPlexUserInfo:
+    input: {
+      }
+    output:
+      Email:
+        java: String
+        upnp: string
+      FriendlyName:
+        java: String
+        upnp: string
+      Username:
+        java: String
+        upnp: string
+  GetPublicDNS:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetPublicKey:
+    input: {
+      }
+    output:
+      PublicKey:
+        java: String
+        upnp: string
+  GetQPlayEnable:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+  GetQPlaySupport:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+  GetQobuzConnectEnable:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetQobuzConnectSupport:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetQobuzQuality:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetRAATEnable:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetRAATVer:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetResamplingMode:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetResamplingModeDetails:
+    input:
+      FileType:
+        java: String
+        upnp: string
+      Mode:
+        java: String
+        upnp: string
+      ResamplingTag:
+        java: String
+        upnp: string
+      SrcSamplingRate:
+        java: String
+        upnp: string
+    output:
+      NewBitDepth:
+        java: String
+        upnp: string
+      NewSamplingRate:
+        java: String
+        upnp: string
+      ResamplingTag:
+        java: String
+        upnp: string
+  GetScreensaver:
+    input: {
+      }
+    output:
+      Mode:
+        java: Long
+        upnp: ui4
+      Timeout:
+        java: Long
+        upnp: ui4
+  GetSongcastMode:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetSongcastSupport:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetSpotifyEnable:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetSpotifyNormalization:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetSpotifyVer:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetTidalConnectEnable:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetTidalConnectSupport:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetTidalQuality:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetTuneInDetails:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetUSBSPDIFMode:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  GetUltraSonicFilterDSD:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetVolumeControl:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  GetVolumeControlSupport:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  LogoutPlex:
+    input: {
+      }
+    output: {
+      }
+  SetAmazonMusicEnable:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetAnalogBalance:
+    input:
+      Value:
+        java: Integer
+        upnp: i2
+    output: {
+      }
+  SetAnalogOutLvl:
+    input:
+      Value:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetAutoPlay:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetControl4Enable:
+    input:
+      Value:
+        java: Integer
+        upnp: i2
+    output: {
+      }
+  SetCustomCode:
+    input:
+      Value:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetDeemphasis:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetDefaultRadioEnable:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetDigitalAudioEnable:
+    input:
+      Value:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetFPBrightness:
+    input:
+      Value:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetFPMode:
+    input:
+      Value:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetHDMICECEnable:
+    input:
+      Value:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  SetInputLabel:
+    input:
+      Index:
+        java: Long
+        upnp: ui4
+      Label:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetInvertPhase:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetKKBOXEnable:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetLUFS:
+    input:
+      Value:
+        java: Integer
+        upnp: i2
+    output: {
+      }
+  SetLeedhVolumeEnable:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetMQAMode:
+    input:
+      Value:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetMagicPlay:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetMaxVolume:
+    input:
+      Value:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  SetNetworkLED:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetOauth:
+    input:
+      AccessExpiry:
+        java: Long
+        upnp: ui4
+      AccessToken:
+        java: byte[]
+        upnp: bin.base64
+      ClientId:
+        java: byte[]
+        upnp: bin.base64
+      ClientSecret:
+        java: byte[]
+        upnp: bin.base64
+      RefreshToken:
+        java: byte[]
+        upnp: bin.base64
+      ServiceId:
+        java: String
+        upnp: string
+      UserName:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetOutputClockSource:
+    input:
+      Value:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetOutputEnable:
+    input:
+      Port:
+        java: Long
+        upnp: ui4
+      Value:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetPlaybackClockSource:
+    input:
+      Value:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetPlexEnable:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetPublicDNS:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetQPlayEnable:
+    input:
+      Value:
+        java: Boolean
+    output: {
+      }
+  SetQobuzConnectEnable:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetQobuzQuality:
+    input:
+      Quality:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetRAATEnable:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetResamplingMode:
+    input:
+      Value:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetResamplingModeDetails:
+    input:
+      FileType:
+        java: String
+        upnp: string
+      Mode:
+        java: String
+        upnp: string
+      NewBitDepth:
+        java: String
+        upnp: string
+      NewSamplingRate:
+        java: String
+        upnp: string
+      SrcSamplingRate:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetScreensaver:
+    input:
+      Mode:
+        java: Long
+        upnp: ui4
+      Timeout:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  SetSongcastMode:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetSpotifyEnable:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetSpotifyNormalization:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetTidalConnectEnable:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetTidalQuality:
+    input:
+      Quality:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetTuneInDetails:
+    input:
+      UserName:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetTuneInLogin:
+    input: {
+      }
+    output: {
+      }
+  SetUSBSPDIFMode:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetUltraSonicFilterDSD:
+    input:
+      Value:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetVolumeControl:
+    input:
+      Value:
+        java: String
+        upnp: string
+    output: {
+      }

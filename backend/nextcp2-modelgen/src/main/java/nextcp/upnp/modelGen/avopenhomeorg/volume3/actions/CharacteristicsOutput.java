@@ -9,11 +9,11 @@ package nextcp.upnp.modelGen.avopenhomeorg.volume3.actions;
 public class CharacteristicsOutput
 {
 
-    public Long VolumeMax = null;
-    public Long VolumeUnity = null;
-    public Long VolumeSteps = null;
-    public Long VolumeMilliDbPerStep = null;
     public Long BalanceMax = null;
     public Long FadeMax = null;
+    public Long VolumeMax = null;
+    public Long VolumeMilliDbPerStep = null;
+    public Long VolumeSteps = null;
+    public Long VolumeUnity = null;
 
 }

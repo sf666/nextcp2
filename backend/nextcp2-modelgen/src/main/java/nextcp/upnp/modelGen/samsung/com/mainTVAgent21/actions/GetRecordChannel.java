@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetRecordChannel extends ActionCallback
     public GetRecordChannel(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetRecordChannel"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetRecordChannelOutput executeAction()
@@ -35,30 +36,9 @@ public class GetRecordChannel extends ActionCallback
 
         GetRecordChannelOutput result = new GetRecordChannelOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("RecordChannel").getValue() != null)
-  		{
-	        result.RecordChannel = invocation.getOutput("RecordChannel").getValue().toString();
-  		}
-  		else
-  		{
-	        result.RecordChannel = "";
-  		}
-  		if (invocation.getOutput("RecordChannel2").getValue() != null)
-  		{
-	        result.RecordChannel2 = invocation.getOutput("RecordChannel2").getValue().toString();
-  		}
-  		else
-  		{
-	        result.RecordChannel2 = "";
-  		}
+        result.RecordChannel = UpnpValue.toTextOrEmpty(invocation.getOutput("RecordChannel").getValue());
+        result.RecordChannel2 = UpnpValue.toTextOrEmpty(invocation.getOutput("RecordChannel2").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

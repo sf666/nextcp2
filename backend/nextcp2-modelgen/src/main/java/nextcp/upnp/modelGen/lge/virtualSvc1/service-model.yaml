@@ -1,0 +1,10 @@
+namespace: lge
+serviceType: virtualSvc
+version: 1
+events: true
+stateVariables:
+  X_PlaceHolder:
+    java: String
+    upnp: string
+actions: {
+  }

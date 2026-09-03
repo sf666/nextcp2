@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class GetCurrentMainTVChannelOutput
 {
 
-    public String Result = null;
     public String CurrentChannel = null;
+    public String Result = null;
 
 }

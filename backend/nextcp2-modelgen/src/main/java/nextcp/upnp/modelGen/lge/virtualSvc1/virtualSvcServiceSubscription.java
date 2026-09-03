@@ -16,8 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
+ * Last Change : 08.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -69,7 +71,7 @@ public class virtualSvcServiceSubscription extends RemoteGENASubscription
     @Override
     public void ended(CancelReason reason, UpnpResponse responseStatus)
     {
-        log.warn("ended");
+        log.debug("ended");
         for (ISubscriptionEventListener listener : eventListener)
         {
             listener.ended(reason, responseStatus);
@@ -109,7 +111,7 @@ public class virtualSvcServiceSubscription extends RemoteGENASubscription
                 switch (key)
                 {
                     case "X_PlaceHolder":
-                        x_PlaceHolderChange((String) stateVar.getValue());
+                        x_PlaceHolderChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);

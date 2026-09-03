@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class GetCurrentTransportActions extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("GetCurrentTransportActions"), new NextcpClientInfo()), cp);
 		
-        if (input.InstanceID != null) {
-    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-		} else {
-    	    getActionInvocation().setInput("InstanceID", null);
-		}
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
     }
 
     public GetCurrentTransportActionsOutput executeAction()
@@ -40,14 +37,7 @@ public class GetCurrentTransportActions extends ActionCallback
 
         GetCurrentTransportActionsOutput result = new GetCurrentTransportActionsOutput();
 
-  		if (invocation.getOutput("Actions").getValue() != null)
-  		{
-	        result.Actions = invocation.getOutput("Actions").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Actions = "";
-  		}
+        result.Actions = UpnpValue.toTextOrEmpty(invocation.getOutput("Actions").getValue());
 
         return result;
     }

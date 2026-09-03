@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.avopenhomeorg.info1.actions;
 public class CountersOutput
 {
 
-    public Long TrackCount = null;
     public Long DetailsCount = null;
     public Long MetatextCount = null;
+    public Long TrackCount = null;
 
 }

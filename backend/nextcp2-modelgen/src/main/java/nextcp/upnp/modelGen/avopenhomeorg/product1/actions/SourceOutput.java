@@ -9,9 +9,9 @@ package nextcp.upnp.modelGen.avopenhomeorg.product1.actions;
 public class SourceOutput
 {
 
+    public String Name = null;
     public String SystemName = null;
     public String Type = null;
-    public String Name = null;
     public Boolean Visible = null;
 
 }

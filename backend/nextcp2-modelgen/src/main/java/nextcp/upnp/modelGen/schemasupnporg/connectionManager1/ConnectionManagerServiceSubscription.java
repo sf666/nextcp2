@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
  * Last Change : 08.09.2025
@@ -109,14 +110,14 @@ public class ConnectionManagerServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "SinkProtocolInfo":
-                        sinkProtocolInfoChange((String) stateVar.getValue());
-                        break;
                     case "CurrentConnectionIDs":
-                        currentConnectionIDsChange((String) stateVar.getValue());
+                        currentConnectionIDsChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "SinkProtocolInfo":
+                        sinkProtocolInfoChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "SourceProtocolInfo":
-                        sourceProtocolInfoChange((String) stateVar.getValue());
+                        sourceProtocolInfoChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -138,19 +139,19 @@ public class ConnectionManagerServiceSubscription extends RemoteGENASubscription
         }
     }
 
-    private void sinkProtocolInfoChange(String value)
-    {
-        for (IConnectionManagerServiceEventListener listener : eventListener)
-        {
-            listener.sinkProtocolInfoChange(value);
-        }
-    }    
-
     private void currentConnectionIDsChange(String value)
     {
         for (IConnectionManagerServiceEventListener listener : eventListener)
         {
             listener.currentConnectionIDsChange(value);
+        }
+    }    
+
+    private void sinkProtocolInfoChange(String value)
+    {
+        for (IConnectionManagerServiceEventListener listener : eventListener)
+        {
+            listener.sinkProtocolInfoChange(value);
         }
     }    
 

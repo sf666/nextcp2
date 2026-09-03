@@ -125,21 +125,21 @@ public class RenderingControlServiceEventListenerImpl implements IRenderingContr
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void minVolumeDBChange(Integer value)
+    public void lastChangeChange(String value)
     {
-        stateVariable.MinVolumeDB = value;
+        stateVariable.LastChange = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "MinVolumeDB", value));
+            log.debug(String.format("StateVariable : %s: %s", "LastChange", value));
         }
     }
     
-    public void volumeChange(Long value)
+    public void loudnessChange(Boolean value)
     {
-        stateVariable.Volume = value;
+        stateVariable.Loudness = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "Volume", value));
+            log.debug(String.format("StateVariable : %s: %s", "Loudness", value));
         }
     }
     
@@ -152,21 +152,12 @@ public class RenderingControlServiceEventListenerImpl implements IRenderingContr
         }
     }
     
-    public void lastChangeChange(String value)
+    public void minVolumeDBChange(Integer value)
     {
-        stateVariable.LastChange = value;
+        stateVariable.MinVolumeDB = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "LastChange", value));
-        }
-    }
-    
-    public void presetNameListChange(String value)
-    {
-        stateVariable.PresetNameList = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "PresetNameList", value));
+            log.debug(String.format("StateVariable : %s: %s", "MinVolumeDB", value));
         }
     }
     
@@ -179,12 +170,57 @@ public class RenderingControlServiceEventListenerImpl implements IRenderingContr
         }
     }
     
+    public void presetNameListChange(String value)
+    {
+        stateVariable.PresetNameList = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "PresetNameList", value));
+        }
+    }
+    
+    public void volumeChange(Long value)
+    {
+        stateVariable.Volume = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Volume", value));
+        }
+    }
+    
     public void volumeDBChange(Integer value)
     {
         stateVariable.VolumeDB = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "VolumeDB", value));
+        }
+    }
+    
+    public void x_Current3DFormatterChange(String value)
+    {
+        stateVariable.X_Current3DFormatter = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "X_Current3DFormatter", value));
+        }
+    }
+    
+    public void x_Possible3DFormatterChange(String value)
+    {
+        stateVariable.X_Possible3DFormatter = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "X_Possible3DFormatter", value));
+        }
+    }
+    
+    public void x_SubtitleChange(String value)
+    {
+        stateVariable.X_Subtitle = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "X_Subtitle", value));
         }
     }
     

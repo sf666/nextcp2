@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class Get extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("Get"), new NextcpClientInfo()), cp);
 		
-        if (input.Id != null) {
-	        getActionInvocation().setInput("Id", input.Id);
-		} else {
-    	    getActionInvocation().setInput("Id", null);
-		}
+        getActionInvocation().setInput("Id", UpnpValue.forInput(getActionInvocation(), "Id", input.Id));
     }
 
     public GetOutput executeAction()
@@ -40,33 +37,11 @@ public class Get extends ActionCallback
 
         GetOutput result = new GetOutput();
 
-  		if (invocation.getOutput("UserName").getValue() != null)
-  		{
-	        result.UserName = invocation.getOutput("UserName").getValue().toString();
-  		}
-  		else
-  		{
-	        result.UserName = "";
-  		}
-        result.Password = (byte[]) invocation.getOutput("Password").getValue();
-        BooleanDatatype data_Enabled = new BooleanDatatype();
-        result.Enabled = data_Enabled.valueOf(invocation.getOutput("Enabled").getValue().toString());
-  		if (invocation.getOutput("Status").getValue() != null)
-  		{
-	        result.Status = invocation.getOutput("Status").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Status = "";
-  		}
-  		if (invocation.getOutput("Data").getValue() != null)
-  		{
-	        result.Data = invocation.getOutput("Data").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Data = "";
-  		}
+        result.Data = UpnpValue.toTextOrEmpty(invocation.getOutput("Data").getValue());
+        result.Enabled = UpnpValue.toBoolean(invocation.getOutput("Enabled").getValue());
+        result.Password = UpnpValue.toBytes(invocation.getOutput("Password").getValue());
+        result.Status = UpnpValue.toTextOrEmpty(invocation.getOutput("Status").getValue());
+        result.UserName = UpnpValue.toTextOrEmpty(invocation.getOutput("UserName").getValue());
 
         return result;
     }

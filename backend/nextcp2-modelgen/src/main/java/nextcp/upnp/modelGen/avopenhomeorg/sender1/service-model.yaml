@@ -1,0 +1,41 @@
+namespace: av-openhome-org
+serviceType: Sender
+version: 1
+events: true
+stateVariables:
+  Attributes:
+    java: String
+  Audio:
+    java: Boolean
+  Metadata:
+    java: String
+  PresentationUrl:
+    java: String
+  Status:
+    java: String
+actions:
+  Attributes:
+    input: {}
+    output:
+      Value:
+        java: String
+  Audio:
+    input: {}
+    output:
+      Value:
+        java: Boolean
+  Metadata:
+    input: {}
+    output:
+      Value:
+        java: String
+  PresentationUrl:
+    input: {}
+    output:
+      Value:
+        java: String
+  Status:
+    input: {}
+    output:
+      Value:
+        java: String

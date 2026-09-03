@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,16 +36,9 @@ public class GetAppDisplayMessage extends ActionCallback
 
         GetAppDisplayMessageOutput result = new GetAppDisplayMessageOutput();
 
-        result.Id = ((UnsignedIntegerFourBytes) invocation.getOutput("Id").getValue()).getValue();
-  		if (invocation.getOutput("String").getValue() != null)
-  		{
-	        result.String = invocation.getOutput("String").getValue().toString();
-  		}
-  		else
-  		{
-	        result.String = "";
-  		}
-        result.Tag = ((UnsignedIntegerFourBytes) invocation.getOutput("Tag").getValue()).getValue();
+        result.Id = UpnpValue.toLong(invocation.getOutput("Id").getValue());
+        result.String = UpnpValue.toTextOrEmpty(invocation.getOutput("String").getValue());
+        result.Tag = UpnpValue.toLong(invocation.getOutput("Tag").getValue());
 
         return result;
     }

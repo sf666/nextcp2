@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,16 +28,8 @@ public class CreateObject extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("CreateObject"), new NextcpClientInfo()), cp);
 		
-        if (input.ContainerID != null) {
-	        getActionInvocation().setInput("ContainerID", input.ContainerID);
-		} else {
-    	    getActionInvocation().setInput("ContainerID", null);
-		}
-        if (input.Elements != null) {
-	        getActionInvocation().setInput("Elements", input.Elements);
-		} else {
-    	    getActionInvocation().setInput("Elements", null);
-		}
+        getActionInvocation().setInput("ContainerID", UpnpValue.forInput(getActionInvocation(), "ContainerID", input.ContainerID));
+        getActionInvocation().setInput("Elements", UpnpValue.forInput(getActionInvocation(), "Elements", input.Elements));
     }
 
     public CreateObjectOutput executeAction()
@@ -45,22 +38,8 @@ public class CreateObject extends ActionCallback
 
         CreateObjectOutput result = new CreateObjectOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("ObjectID").getValue() != null)
-  		{
-	        result.ObjectID = invocation.getOutput("ObjectID").getValue().toString();
-  		}
-  		else
-  		{
-	        result.ObjectID = "";
-  		}
+        result.ObjectID = UpnpValue.toTextOrEmpty(invocation.getOutput("ObjectID").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

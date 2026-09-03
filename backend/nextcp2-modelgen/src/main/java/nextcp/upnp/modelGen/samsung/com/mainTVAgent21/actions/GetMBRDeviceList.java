@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetMBRDeviceList extends ActionCallback
     public GetMBRDeviceList(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetMBRDeviceList"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetMBRDeviceListOutput executeAction()
@@ -35,22 +36,8 @@ public class GetMBRDeviceList extends ActionCallback
 
         GetMBRDeviceListOutput result = new GetMBRDeviceListOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("MBRDeviceList").getValue() != null)
-  		{
-	        result.MBRDeviceList = invocation.getOutput("MBRDeviceList").getValue().toString();
-  		}
-  		else
-  		{
-	        result.MBRDeviceList = "";
-  		}
+        result.MBRDeviceList = UpnpValue.toTextOrEmpty(invocation.getOutput("MBRDeviceList").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

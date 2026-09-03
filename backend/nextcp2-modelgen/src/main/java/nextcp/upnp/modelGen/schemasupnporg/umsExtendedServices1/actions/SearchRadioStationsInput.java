@@ -9,11 +9,11 @@ package nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions;
 public class SearchRadioStationsInput
 {
 
-    public String Name = null;
     public String CountryCode = null;
     public String Language = null;
-    public String Tag = null;
-    public Long Offset = null;
     public Long Limit = null;
+    public String Name = null;
+    public Long Offset = null;
+    public String Tag = null;
 
 }

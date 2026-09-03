@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,16 +28,8 @@ public class SeekSecondRelative extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SeekSecondRelative"), new NextcpClientInfo()), cp);
 		
-        if (input.StreamId != null) {
-    	    getActionInvocation().setInput("StreamId", new UnsignedIntegerFourBytes(input.StreamId));
-		} else {
-    	    getActionInvocation().setInput("StreamId", null);
-		}
-        if (input.SecondRelative != null) {
-	        getActionInvocation().setInput("SecondRelative", new IntegerDatatype(input.SecondRelative));
-		} else {
-    	    getActionInvocation().setInput("SecondRelative", null);
-		}
+        getActionInvocation().setInput("SecondRelative", UpnpValue.forInput(getActionInvocation(), "SecondRelative", input.SecondRelative));
+        getActionInvocation().setInput("StreamId", UpnpValue.forInput(getActionInvocation(), "StreamId", input.StreamId));
     }
 
     public void executeAction()

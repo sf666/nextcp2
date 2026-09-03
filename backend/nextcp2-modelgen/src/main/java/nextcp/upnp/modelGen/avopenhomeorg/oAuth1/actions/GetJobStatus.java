@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetJobStatus extends ActionCallback
     public GetJobStatus(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetJobStatus"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetJobStatusOutput executeAction()
@@ -35,14 +36,7 @@ public class GetJobStatus extends ActionCallback
 
         GetJobStatusOutput result = new GetJobStatusOutput();
 
-  		if (invocation.getOutput("JobStatusJson").getValue() != null)
-  		{
-	        result.JobStatusJson = invocation.getOutput("JobStatusJson").getValue().toString();
-  		}
-  		else
-  		{
-	        result.JobStatusJson = "";
-  		}
+        result.JobStatusJson = UpnpValue.toTextOrEmpty(invocation.getOutput("JobStatusJson").getValue());
 
         return result;
     }

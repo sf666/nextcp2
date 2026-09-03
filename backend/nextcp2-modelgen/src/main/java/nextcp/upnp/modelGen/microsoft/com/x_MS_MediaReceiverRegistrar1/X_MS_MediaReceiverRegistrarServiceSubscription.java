@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
  * Last Change : 08.09.2025
@@ -109,17 +110,17 @@ public class X_MS_MediaReceiverRegistrarServiceSubscription extends RemoteGENASu
             {
                 switch (key)
                 {
-                    case "ValidationRevokedUpdateID":
-                        validationRevokedUpdateIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "ValidationSucceededUpdateID":
-                        validationSucceededUpdateIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                    case "AuthorizationDeniedUpdateID":
+                        authorizationDeniedUpdateIDChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     case "AuthorizationGrantedUpdateID":
-                        authorizationGrantedUpdateIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        authorizationGrantedUpdateIDChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
-                    case "AuthorizationDeniedUpdateID":
-                        authorizationDeniedUpdateIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                    case "ValidationRevokedUpdateID":
+                        validationRevokedUpdateIDChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "ValidationSucceededUpdateID":
+                        validationSucceededUpdateIDChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -141,6 +142,22 @@ public class X_MS_MediaReceiverRegistrarServiceSubscription extends RemoteGENASu
         }
     }
 
+    private void authorizationDeniedUpdateIDChange(Long value)
+    {
+        for (IX_MS_MediaReceiverRegistrarServiceEventListener listener : eventListener)
+        {
+            listener.authorizationDeniedUpdateIDChange(value);
+        }
+    }    
+
+    private void authorizationGrantedUpdateIDChange(Long value)
+    {
+        for (IX_MS_MediaReceiverRegistrarServiceEventListener listener : eventListener)
+        {
+            listener.authorizationGrantedUpdateIDChange(value);
+        }
+    }    
+
     private void validationRevokedUpdateIDChange(Long value)
     {
         for (IX_MS_MediaReceiverRegistrarServiceEventListener listener : eventListener)
@@ -154,22 +171,6 @@ public class X_MS_MediaReceiverRegistrarServiceSubscription extends RemoteGENASu
         for (IX_MS_MediaReceiverRegistrarServiceEventListener listener : eventListener)
         {
             listener.validationSucceededUpdateIDChange(value);
-        }
-    }    
-
-    private void authorizationGrantedUpdateIDChange(Long value)
-    {
-        for (IX_MS_MediaReceiverRegistrarServiceEventListener listener : eventListener)
-        {
-            listener.authorizationGrantedUpdateIDChange(value);
-        }
-    }    
-
-    private void authorizationDeniedUpdateIDChange(Long value)
-    {
-        for (IX_MS_MediaReceiverRegistrarServiceEventListener listener : eventListener)
-        {
-            listener.authorizationDeniedUpdateIDChange(value);
         }
     }    
 }

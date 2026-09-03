@@ -1,0 +1,230 @@
+namespace: av-openhome-org
+serviceType: Playlist
+version: 1
+events: true
+stateVariables:
+  Absolute:
+    java: Long
+    upnp: ui4
+  Id:
+    java: Long
+    upnp: ui4
+  IdArray:
+    java: byte[]
+    upnp: bin.base64
+  IdArrayChanged:
+    java: Boolean
+    upnp: boolean
+  IdArrayToken:
+    java: Long
+    upnp: ui4
+  IdList:
+    java: String
+    upnp: string
+  Index:
+    java: Long
+    upnp: ui4
+  Metadata:
+    java: String
+    upnp: string
+  ProtocolInfo:
+    java: String
+    upnp: string
+  Relative:
+    java: Integer
+    upnp: i4
+  Repeat:
+    java: Boolean
+    upnp: boolean
+  Shuffle:
+    java: Boolean
+    upnp: boolean
+  TrackList:
+    java: String
+    upnp: string
+  TracksMax:
+    java: Long
+    upnp: ui4
+  TransportState:
+    java: String
+    upnp: string
+  Uri:
+    java: String
+    upnp: string
+actions:
+  DeleteAll:
+    input: {
+      }
+    output: {
+      }
+  DeleteId:
+    input:
+      Value:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  Id:
+    input: {
+      }
+    output:
+      Value:
+        java: Long
+        upnp: ui4
+  IdArray:
+    input: {
+      }
+    output:
+      Array:
+        java: byte[]
+        upnp: bin.base64
+      Token:
+        java: Long
+        upnp: ui4
+  IdArrayChanged:
+    input:
+      Token:
+        java: Long
+        upnp: ui4
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  Insert:
+    input:
+      AfterId:
+        java: Long
+        upnp: ui4
+      Metadata:
+        java: String
+        upnp: string
+      Uri:
+        java: String
+        upnp: string
+    output:
+      NewId:
+        java: Long
+        upnp: ui4
+  Next:
+    input: {
+      }
+    output: {
+      }
+  Pause:
+    input: {
+      }
+    output: {
+      }
+  Play:
+    input: {
+      }
+    output: {
+      }
+  Previous:
+    input: {
+      }
+    output: {
+      }
+  ProtocolInfo:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  Read:
+    input:
+      Id:
+        java: Long
+        upnp: ui4
+    output:
+      Metadata:
+        java: String
+        upnp: string
+      Uri:
+        java: String
+        upnp: string
+  ReadList:
+    input:
+      IdList:
+        java: String
+        upnp: string
+    output:
+      TrackList:
+        java: String
+        upnp: string
+  Repeat:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  SeekId:
+    input:
+      Value:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  SeekIndex:
+    input:
+      Value:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  SeekSecondAbsolute:
+    input:
+      Value:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  SeekSecondRelative:
+    input:
+      Value:
+        java: Integer
+        upnp: i4
+    output: {
+      }
+  SetRepeat:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetShuffle:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  Shuffle:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  Stop:
+    input: {
+      }
+    output: {
+      }
+  TracksMax:
+    input: {
+      }
+    output:
+      Value:
+        java: Long
+        upnp: ui4
+  TransportState:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string

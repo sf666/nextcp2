@@ -1,0 +1,172 @@
+namespace: av-openhome-org
+serviceType: Transport
+version: 1
+events: true
+stateVariables:
+  CanPause:
+    java: Boolean
+    upnp: boolean
+  CanRepeat:
+    java: Boolean
+    upnp: boolean
+  CanSeek:
+    java: Boolean
+    upnp: boolean
+  CanShuffle:
+    java: Boolean
+    upnp: boolean
+  CanSkipNext:
+    java: Boolean
+    upnp: boolean
+  CanSkipPrevious:
+    java: Boolean
+    upnp: boolean
+  Modes:
+    java: String
+    upnp: string
+  Repeat:
+    java: String
+    upnp: string
+  Shuffle:
+    java: Boolean
+    upnp: boolean
+  StreamId:
+    java: Long
+    upnp: ui4
+  TransportState:
+    java: String
+    upnp: string
+actions:
+  ModeInfo:
+    input: {
+      }
+    output:
+      CanRepeat:
+        java: Boolean
+        upnp: boolean
+      CanShuffle:
+        java: Boolean
+        upnp: boolean
+      CanSkipNext:
+        java: Boolean
+        upnp: boolean
+      CanSkipPrevious:
+        java: Boolean
+        upnp: boolean
+  Modes:
+    input: {
+      }
+    output:
+      Modes:
+        java: String
+        upnp: string
+  Pause:
+    input: {
+      }
+    output: {
+      }
+  Play:
+    input: {
+      }
+    output: {
+      }
+  PlayAs:
+    input:
+      Command:
+        java: String
+        upnp: string
+      Mode:
+        java: String
+        upnp: string
+    output: {
+      }
+  Repeat:
+    input: {
+      }
+    output:
+      Repeat:
+        java: String
+        upnp: string
+  SeekSecondAbsolute:
+    input:
+      SecondAbsolute:
+        java: Long
+        upnp: ui4
+      StreamId:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  SeekSecondRelative:
+    input:
+      SecondRelative:
+        java: Integer
+        upnp: i4
+      StreamId:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  SetRepeat:
+    input:
+      Repeat:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetShuffle:
+    input:
+      Shuffle:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  Shuffle:
+    input: {
+      }
+    output:
+      Shuffle:
+        java: Boolean
+        upnp: boolean
+  SkipNext:
+    input: {
+      }
+    output: {
+      }
+  SkipPrevious:
+    input: {
+      }
+    output: {
+      }
+  Stop:
+    input: {
+      }
+    output: {
+      }
+  StreamId:
+    input: {
+      }
+    output:
+      StreamId:
+        java: Long
+        upnp: ui4
+  StreamInfo:
+    input: {
+      }
+    output:
+      CanPause:
+        java: Boolean
+        upnp: boolean
+      CanSeek:
+        java: Boolean
+        upnp: boolean
+      StreamId:
+        java: Long
+        upnp: ui4
+  TransportState:
+    input: {
+      }
+    output:
+      State:
+        java: String
+        upnp: string

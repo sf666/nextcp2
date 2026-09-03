@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
  * Last Change : 08.09.2025
@@ -109,68 +110,53 @@ public class PlaylistServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "Relative":
-                        relativeChange((Integer) stateVar.getValue());
-                        break;
-                    case "IdArrayChanged":
-                    	try {
-                    		idArrayChangedChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[idArrayChanged] unexpected value : " + stateVar.getValue());
-                    		idArrayChangedChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
-                    case "TracksMax":
-                        tracksMaxChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "Shuffle":
-                    	try {
-                    		shuffleChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[shuffle] unexpected value : " + stateVar.getValue());
-                    		shuffleChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
-                    case "TrackList":
-                        trackListChange((String) stateVar.getValue());
-                        break;
-                    case "Metadata":
-                        metadataChange((String) stateVar.getValue());
-                        break;
-                    case "Repeat":
-                    	try {
-                    		repeatChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[repeat] unexpected value : " + stateVar.getValue());
-                    		repeatChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
-                    case "Index":
-                        indexChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "IdArray":
-                        idArrayChange((byte[]) stateVar.getValue());
-                        break;
-                    case "TransportState":
-                        transportStateChange((String) stateVar.getValue());
-                        break;
                     case "Absolute":
-                        absoluteChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "Uri":
-                        uriChange((String) stateVar.getValue());
-                        break;
-                    case "IdList":
-                        idListChange((String) stateVar.getValue());
-                        break;
-                    case "IdArrayToken":
-                        idArrayTokenChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "ProtocolInfo":
-                        protocolInfoChange((String) stateVar.getValue());
+                        absoluteChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     case "Id":
-                        idChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        idChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "IdArray":
+                        idArrayChange(UpnpValue.toBytes(stateVar.getValue()));
+                        break;
+                    case "IdArrayChanged":
+                        idArrayChangedChange(UpnpValue.toBoolean(stateVar.getValue()));
+                        break;
+                    case "IdArrayToken":
+                        idArrayTokenChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "IdList":
+                        idListChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "Index":
+                        indexChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "Metadata":
+                        metadataChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ProtocolInfo":
+                        protocolInfoChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "Relative":
+                        relativeChange(UpnpValue.toInteger(stateVar.getValue()));
+                        break;
+                    case "Repeat":
+                        repeatChange(UpnpValue.toBoolean(stateVar.getValue()));
+                        break;
+                    case "Shuffle":
+                        shuffleChange(UpnpValue.toBoolean(stateVar.getValue()));
+                        break;
+                    case "TrackList":
+                        trackListChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "TracksMax":
+                        tracksMaxChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "TransportState":
+                        transportStateChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "Uri":
+                        uriChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -192,11 +178,27 @@ public class PlaylistServiceSubscription extends RemoteGENASubscription
         }
     }
 
-    private void relativeChange(Integer value)
+    private void absoluteChange(Long value)
     {
         for (IPlaylistServiceEventListener listener : eventListener)
         {
-            listener.relativeChange(value);
+            listener.absoluteChange(value);
+        }
+    }    
+
+    private void idChange(Long value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.idChange(value);
+        }
+    }    
+
+    private void idArrayChange(byte[] value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.idArrayChange(value);
         }
     }    
 
@@ -208,11 +210,59 @@ public class PlaylistServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void tracksMaxChange(Long value)
+    private void idArrayTokenChange(Long value)
     {
         for (IPlaylistServiceEventListener listener : eventListener)
         {
-            listener.tracksMaxChange(value);
+            listener.idArrayTokenChange(value);
+        }
+    }    
+
+    private void idListChange(String value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.idListChange(value);
+        }
+    }    
+
+    private void indexChange(Long value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.indexChange(value);
+        }
+    }    
+
+    private void metadataChange(String value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.metadataChange(value);
+        }
+    }    
+
+    private void protocolInfoChange(String value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.protocolInfoChange(value);
+        }
+    }    
+
+    private void relativeChange(Integer value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.relativeChange(value);
+        }
+    }    
+
+    private void repeatChange(Boolean value)
+    {
+        for (IPlaylistServiceEventListener listener : eventListener)
+        {
+            listener.repeatChange(value);
         }
     }    
 
@@ -232,35 +282,11 @@ public class PlaylistServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void metadataChange(String value)
+    private void tracksMaxChange(Long value)
     {
         for (IPlaylistServiceEventListener listener : eventListener)
         {
-            listener.metadataChange(value);
-        }
-    }    
-
-    private void repeatChange(Boolean value)
-    {
-        for (IPlaylistServiceEventListener listener : eventListener)
-        {
-            listener.repeatChange(value);
-        }
-    }    
-
-    private void indexChange(Long value)
-    {
-        for (IPlaylistServiceEventListener listener : eventListener)
-        {
-            listener.indexChange(value);
-        }
-    }    
-
-    private void idArrayChange(byte[] value)
-    {
-        for (IPlaylistServiceEventListener listener : eventListener)
-        {
-            listener.idArrayChange(value);
+            listener.tracksMaxChange(value);
         }
     }    
 
@@ -272,51 +298,11 @@ public class PlaylistServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void absoluteChange(Long value)
-    {
-        for (IPlaylistServiceEventListener listener : eventListener)
-        {
-            listener.absoluteChange(value);
-        }
-    }    
-
     private void uriChange(String value)
     {
         for (IPlaylistServiceEventListener listener : eventListener)
         {
             listener.uriChange(value);
-        }
-    }    
-
-    private void idListChange(String value)
-    {
-        for (IPlaylistServiceEventListener listener : eventListener)
-        {
-            listener.idListChange(value);
-        }
-    }    
-
-    private void idArrayTokenChange(Long value)
-    {
-        for (IPlaylistServiceEventListener listener : eventListener)
-        {
-            listener.idArrayTokenChange(value);
-        }
-    }    
-
-    private void protocolInfoChange(String value)
-    {
-        for (IPlaylistServiceEventListener listener : eventListener)
-        {
-            listener.protocolInfoChange(value);
-        }
-    }    
-
-    private void idChange(Long value)
-    {
-        for (IPlaylistServiceEventListener listener : eventListener)
-        {
-            listener.idChange(value);
         }
     }    
 }

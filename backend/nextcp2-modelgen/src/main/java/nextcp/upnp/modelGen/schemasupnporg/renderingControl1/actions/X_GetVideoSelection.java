@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class X_GetVideoSelection extends ActionCallback
     public X_GetVideoSelection(Service service, X_GetVideoSelectionInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("X_GetVideoSelection"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
     }
 
     public X_GetVideoSelectionOutput executeAction()
@@ -36,15 +37,8 @@ public class X_GetVideoSelection extends ActionCallback
 
         X_GetVideoSelectionOutput result = new X_GetVideoSelectionOutput();
 
-        result.VideoPID = ((UnsignedIntegerTwoBytes) invocation.getOutput("VideoPID").getValue()).getValue();
-  		if (invocation.getOutput("VideoEncoding").getValue() != null)
-  		{
-	        result.VideoEncoding = invocation.getOutput("VideoEncoding").getValue().toString();
-  		}
-  		else
-  		{
-	        result.VideoEncoding = "";
-  		}
+        result.VideoEncoding = UpnpValue.toTextOrEmpty(invocation.getOutput("VideoEncoding").getValue());
+        result.VideoPID = UpnpValue.toLong(invocation.getOutput("VideoPID").getValue());
 
         return result;
     }

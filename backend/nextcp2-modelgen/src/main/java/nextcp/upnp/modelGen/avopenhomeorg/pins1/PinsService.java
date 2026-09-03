@@ -14,27 +14,27 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
 
-import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.SetDevice;
-import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.SetDeviceInput;
+import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.Clear;
+import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.ClearInput;
+import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.GetDeviceAccountMax;
+import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.GetDeviceAccountMaxOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.GetIdArray;
 import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.GetIdArrayOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.Swap;
-import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.SwapInput;
+import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.GetModes;
+import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.GetModesOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.InvokeId;
+import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.InvokeIdInput;
+import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.InvokeIndex;
+import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.InvokeIndexInput;
 import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.ReadList;
 import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.ReadListOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.ReadListInput;
-import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.InvokeIndex;
-import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.InvokeIndexInput;
-import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.GetModes;
-import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.GetModesOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.SetAccount;
 import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.SetAccountInput;
-import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.InvokeId;
-import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.InvokeIdInput;
-import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.GetDeviceAccountMax;
-import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.GetDeviceAccountMaxOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.Clear;
-import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.ClearInput;
+import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.SetDevice;
+import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.SetDeviceInput;
+import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.Swap;
+import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.SwapInput;
 
 
 /**
@@ -137,55 +137,10 @@ public class PinsService
 
 
 
-    public void setDevice(SetDeviceInput inp)
+    public void clear(ClearInput inp)
     {
-        SetDevice setDevice = new SetDevice(pinsService, inp, upnpService.getControlPoint());
-        setDevice.executeAction();
-    }
-
-    public GetIdArrayOutput getIdArray()
-    {
-        GetIdArray getIdArray = new GetIdArray(pinsService,  upnpService.getControlPoint());
-        GetIdArrayOutput res = getIdArray.executeAction();
-        return res;        
-    }
-
-    public void swap(SwapInput inp)
-    {
-        Swap swap = new Swap(pinsService, inp, upnpService.getControlPoint());
-        swap.executeAction();
-    }
-
-    public ReadListOutput readList(ReadListInput inp)
-    {
-        ReadList readList = new ReadList(pinsService, inp, upnpService.getControlPoint());
-        ReadListOutput res = readList.executeAction();
-        return res;        
-    }
-
-    public void invokeIndex(InvokeIndexInput inp)
-    {
-        InvokeIndex invokeIndex = new InvokeIndex(pinsService, inp, upnpService.getControlPoint());
-        invokeIndex.executeAction();
-    }
-
-    public GetModesOutput getModes()
-    {
-        GetModes getModes = new GetModes(pinsService,  upnpService.getControlPoint());
-        GetModesOutput res = getModes.executeAction();
-        return res;        
-    }
-
-    public void setAccount(SetAccountInput inp)
-    {
-        SetAccount setAccount = new SetAccount(pinsService, inp, upnpService.getControlPoint());
-        setAccount.executeAction();
-    }
-
-    public void invokeId(InvokeIdInput inp)
-    {
-        InvokeId invokeId = new InvokeId(pinsService, inp, upnpService.getControlPoint());
-        invokeId.executeAction();
+        Clear clear = new Clear(pinsService, inp, upnpService.getControlPoint());
+        clear.executeAction();
     }
 
     public GetDeviceAccountMaxOutput getDeviceAccountMax()
@@ -195,9 +150,54 @@ public class PinsService
         return res;        
     }
 
-    public void clear(ClearInput inp)
+    public GetIdArrayOutput getIdArray()
     {
-        Clear clear = new Clear(pinsService, inp, upnpService.getControlPoint());
-        clear.executeAction();
+        GetIdArray getIdArray = new GetIdArray(pinsService,  upnpService.getControlPoint());
+        GetIdArrayOutput res = getIdArray.executeAction();
+        return res;        
+    }
+
+    public GetModesOutput getModes()
+    {
+        GetModes getModes = new GetModes(pinsService,  upnpService.getControlPoint());
+        GetModesOutput res = getModes.executeAction();
+        return res;        
+    }
+
+    public void invokeId(InvokeIdInput inp)
+    {
+        InvokeId invokeId = new InvokeId(pinsService, inp, upnpService.getControlPoint());
+        invokeId.executeAction();
+    }
+
+    public void invokeIndex(InvokeIndexInput inp)
+    {
+        InvokeIndex invokeIndex = new InvokeIndex(pinsService, inp, upnpService.getControlPoint());
+        invokeIndex.executeAction();
+    }
+
+    public ReadListOutput readList(ReadListInput inp)
+    {
+        ReadList readList = new ReadList(pinsService, inp, upnpService.getControlPoint());
+        ReadListOutput res = readList.executeAction();
+        return res;        
+    }
+
+    public void setAccount(SetAccountInput inp)
+    {
+        SetAccount setAccount = new SetAccount(pinsService, inp, upnpService.getControlPoint());
+        setAccount.executeAction();
+    }
+
+    public void setDevice(SetDeviceInput inp)
+    {
+        SetDevice setDevice = new SetDevice(pinsService, inp, upnpService.getControlPoint());
+        setDevice.executeAction();
+    }
+
+    public void swap(SwapInput inp)
+    {
+        Swap swap = new Swap(pinsService, inp, upnpService.getControlPoint());
+        swap.executeAction();
     }
 }

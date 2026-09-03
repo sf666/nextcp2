@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,8 +36,7 @@ public class GetNetworkLED extends ActionCallback
 
         GetNetworkLEDOutput result = new GetNetworkLEDOutput();
 
-        BooleanDatatype data_Value = new BooleanDatatype();
-        result.Value = data_Value.valueOf(invocation.getOutput("Value").getValue().toString());
+        result.Value = UpnpValue.toBoolean(invocation.getOutput("Value").getValue());
 
         return result;
     }

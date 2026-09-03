@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetHTSSoundEffect extends ActionCallback
     public GetHTSSoundEffect(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetHTSSoundEffect"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetHTSSoundEffectOutput executeAction()
@@ -35,30 +36,9 @@ public class GetHTSSoundEffect extends ActionCallback
 
         GetHTSSoundEffectOutput result = new GetHTSSoundEffectOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("SoundEffect").getValue() != null)
-  		{
-	        result.SoundEffect = invocation.getOutput("SoundEffect").getValue().toString();
-  		}
-  		else
-  		{
-	        result.SoundEffect = "";
-  		}
-  		if (invocation.getOutput("SoundEffectList").getValue() != null)
-  		{
-	        result.SoundEffectList = invocation.getOutput("SoundEffectList").getValue().toString();
-  		}
-  		else
-  		{
-	        result.SoundEffectList = "";
-  		}
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
+        result.SoundEffect = UpnpValue.toTextOrEmpty(invocation.getOutput("SoundEffect").getValue());
+        result.SoundEffectList = UpnpValue.toTextOrEmpty(invocation.getOutput("SoundEffectList").getValue());
 
         return result;
     }

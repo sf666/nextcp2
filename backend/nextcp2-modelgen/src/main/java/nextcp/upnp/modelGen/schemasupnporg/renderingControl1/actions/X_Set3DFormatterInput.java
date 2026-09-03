@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions;
 public class X_Set3DFormatterInput
 {
 
-    public Long InstanceID = null;
     public String Desired3DFormatter = null;
+    public Long InstanceID = null;
 
 }

@@ -9,12 +9,16 @@ package nextcp.upnp.modelGen.schemasupnporg.renderingControl1;
 public class RenderingControlServiceStateVariable
 {
 
-    public Integer MinVolumeDB = null;
-    public Long Volume = null;
-    public Integer MaxVolumeDB = null;
     public String LastChange = null;
-    public String PresetNameList = null;
+    public Boolean Loudness = null;
+    public Integer MaxVolumeDB = null;
+    public Integer MinVolumeDB = null;
     public Boolean Mute = null;
+    public String PresetNameList = null;
+    public Long Volume = null;
     public Integer VolumeDB = null;
+    public String X_Current3DFormatter = null;
+    public String X_Possible3DFormatter = null;
+    public String X_Subtitle = null;
 
 }

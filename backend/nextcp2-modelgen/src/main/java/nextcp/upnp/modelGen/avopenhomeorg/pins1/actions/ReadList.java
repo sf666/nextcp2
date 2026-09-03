@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class ReadList extends ActionCallback
     public ReadList(Service service, ReadListInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("ReadList"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Ids", input.Ids);
+		
+        getActionInvocation().setInput("Ids", UpnpValue.forInput(getActionInvocation(), "Ids", input.Ids));
     }
 
     public ReadListOutput executeAction()
@@ -36,14 +37,7 @@ public class ReadList extends ActionCallback
 
         ReadListOutput result = new ReadListOutput();
 
-  		if (invocation.getOutput("List").getValue() != null)
-  		{
-	        result.List = invocation.getOutput("List").getValue().toString();
-  		}
-  		else
-  		{
-	        result.List = "";
-  		}
+        result.List = UpnpValue.toTextOrEmpty(invocation.getOutput("List").getValue());
 
         return result;
     }

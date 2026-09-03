@@ -125,39 +125,12 @@ public class VolumeServiceEventListenerImpl implements IVolumeServiceEventListen
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void volumeStepsChange(Long value)
+    public void balanceChange(Integer value)
     {
-        stateVariable.VolumeSteps = value;
+        stateVariable.Balance = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "VolumeSteps", value));
-        }
-    }
-    
-    public void fadeMaxChange(Long value)
-    {
-        stateVariable.FadeMax = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "FadeMax", value));
-        }
-    }
-    
-    public void volumeLimitChange(Long value)
-    {
-        stateVariable.VolumeLimit = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "VolumeLimit", value));
-        }
-    }
-    
-    public void volumeChange(Long value)
-    {
-        stateVariable.Volume = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Volume", value));
+            log.debug(String.format("StateVariable : %s: %s", "Balance", value));
         }
     }
     
@@ -170,21 +143,21 @@ public class VolumeServiceEventListenerImpl implements IVolumeServiceEventListen
         }
     }
     
-    public void volumeMilliDbPerStepChange(Long value)
+    public void fadeChange(Integer value)
     {
-        stateVariable.VolumeMilliDbPerStep = value;
+        stateVariable.Fade = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "VolumeMilliDbPerStep", value));
+            log.debug(String.format("StateVariable : %s: %s", "Fade", value));
         }
     }
     
-    public void volumeMaxChange(Long value)
+    public void fadeMaxChange(Long value)
     {
-        stateVariable.VolumeMax = value;
+        stateVariable.FadeMax = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "VolumeMax", value));
+            log.debug(String.format("StateVariable : %s: %s", "FadeMax", value));
         }
     }
     
@@ -197,21 +170,48 @@ public class VolumeServiceEventListenerImpl implements IVolumeServiceEventListen
         }
     }
     
-    public void balanceChange(Integer value)
+    public void volumeChange(Long value)
     {
-        stateVariable.Balance = value;
+        stateVariable.Volume = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "Balance", value));
+            log.debug(String.format("StateVariable : %s: %s", "Volume", value));
         }
     }
     
-    public void fadeChange(Integer value)
+    public void volumeLimitChange(Long value)
     {
-        stateVariable.Fade = value;
+        stateVariable.VolumeLimit = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "Fade", value));
+            log.debug(String.format("StateVariable : %s: %s", "VolumeLimit", value));
+        }
+    }
+    
+    public void volumeMaxChange(Long value)
+    {
+        stateVariable.VolumeMax = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "VolumeMax", value));
+        }
+    }
+    
+    public void volumeMilliDbPerStepChange(Long value)
+    {
+        stateVariable.VolumeMilliDbPerStep = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "VolumeMilliDbPerStep", value));
+        }
+    }
+    
+    public void volumeStepsChange(Long value)
+    {
+        stateVariable.VolumeSteps = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "VolumeSteps", value));
         }
     }
     

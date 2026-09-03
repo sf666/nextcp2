@@ -14,20 +14,20 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
 
-import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.VolumeInc;
-import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.VolumeLimit;
-import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.VolumeLimitOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.Characteristics;
 import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.CharacteristicsOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.Mute;
+import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.MuteOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.SetMute;
+import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.SetMuteInput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.SetVolume;
 import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.SetVolumeInput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.Volume;
 import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.VolumeOutput;
-import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.SetMute;
-import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.SetMuteInput;
-import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.Mute;
-import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.MuteOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.VolumeDec;
+import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.VolumeInc;
+import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.VolumeLimit;
+import nextcp.upnp.modelGen.avopenhomeorg.volume3.actions.VolumeLimitOutput;
 
 
 /**
@@ -130,24 +130,24 @@ public class VolumeService
 
 
 
-    public void volumeInc()
-    {
-        VolumeInc volumeInc = new VolumeInc(volumeService,  upnpService.getControlPoint());
-        volumeInc.executeAction();
-    }
-
-    public VolumeLimitOutput volumeLimit()
-    {
-        VolumeLimit volumeLimit = new VolumeLimit(volumeService,  upnpService.getControlPoint());
-        VolumeLimitOutput res = volumeLimit.executeAction();
-        return res;        
-    }
-
     public CharacteristicsOutput characteristics()
     {
         Characteristics characteristics = new Characteristics(volumeService,  upnpService.getControlPoint());
         CharacteristicsOutput res = characteristics.executeAction();
         return res;        
+    }
+
+    public MuteOutput mute()
+    {
+        Mute mute = new Mute(volumeService,  upnpService.getControlPoint());
+        MuteOutput res = mute.executeAction();
+        return res;        
+    }
+
+    public void setMute(SetMuteInput inp)
+    {
+        SetMute setMute = new SetMute(volumeService, inp, upnpService.getControlPoint());
+        setMute.executeAction();
     }
 
     public void setVolume(SetVolumeInput inp)
@@ -163,22 +163,22 @@ public class VolumeService
         return res;        
     }
 
-    public void setMute(SetMuteInput inp)
-    {
-        SetMute setMute = new SetMute(volumeService, inp, upnpService.getControlPoint());
-        setMute.executeAction();
-    }
-
-    public MuteOutput mute()
-    {
-        Mute mute = new Mute(volumeService,  upnpService.getControlPoint());
-        MuteOutput res = mute.executeAction();
-        return res;        
-    }
-
     public void volumeDec()
     {
         VolumeDec volumeDec = new VolumeDec(volumeService,  upnpService.getControlPoint());
         volumeDec.executeAction();
+    }
+
+    public void volumeInc()
+    {
+        VolumeInc volumeInc = new VolumeInc(volumeService,  upnpService.getControlPoint());
+        volumeInc.executeAction();
+    }
+
+    public VolumeLimitOutput volumeLimit()
+    {
+        VolumeLimit volumeLimit = new VolumeLimit(volumeService,  upnpService.getControlPoint());
+        VolumeLimitOutput res = volumeLimit.executeAction();
+        return res;        
     }
 }

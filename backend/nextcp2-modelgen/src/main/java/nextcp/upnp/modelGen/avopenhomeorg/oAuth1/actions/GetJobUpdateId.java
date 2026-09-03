@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class GetJobUpdateId extends ActionCallback
     public GetJobUpdateId(Service service, GetJobUpdateIdInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetJobUpdateId"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("ServiceId", input.ServiceId);
+		
+        getActionInvocation().setInput("ServiceId", UpnpValue.forInput(getActionInvocation(), "ServiceId", input.ServiceId));
     }
 
     public GetJobUpdateIdOutput executeAction()
@@ -36,7 +37,7 @@ public class GetJobUpdateId extends ActionCallback
 
         GetJobUpdateIdOutput result = new GetJobUpdateIdOutput();
 
-        result.JobUpdateId = ((UnsignedIntegerFourBytes) invocation.getOutput("JobUpdateId").getValue()).getValue();
+        result.JobUpdateId = UpnpValue.toLong(invocation.getOutput("JobUpdateId").getValue());
 
         return result;
     }

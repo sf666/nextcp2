@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
  * Last Change : 08.09.2025
@@ -110,16 +111,16 @@ public class ReceiverServiceSubscription extends RemoteGENASubscription
                 switch (key)
                 {
                     case "Metadata":
-                        metadataChange((String) stateVar.getValue());
+                        metadataChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "ProtocolInfo":
-                        protocolInfoChange((String) stateVar.getValue());
+                        protocolInfoChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "TransportState":
-                        transportStateChange((String) stateVar.getValue());
+                        transportStateChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "Uri":
-                        uriChange((String) stateVar.getValue());
+                        uriChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);

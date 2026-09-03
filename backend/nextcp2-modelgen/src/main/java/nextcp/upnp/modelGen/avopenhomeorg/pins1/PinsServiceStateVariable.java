@@ -9,9 +9,9 @@ package nextcp.upnp.modelGen.avopenhomeorg.pins1;
 public class PinsServiceStateVariable
 {
 
-    public String IdArray = null;
-    public String Modes = null;
     public Long AccountMax = null;
     public Long DeviceMax = null;
+    public String IdArray = null;
+    public String Modes = null;
 
 }

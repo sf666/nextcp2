@@ -14,14 +14,14 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
 
-import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.Sender;
-import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.SenderOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.Play;
-import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.Stop;
-import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.SetSender;
-import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.SetSenderInput;
 import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.ProtocolInfo;
 import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.ProtocolInfoOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.Sender;
+import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.SenderOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.SetSender;
+import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.SetSenderInput;
+import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.Stop;
 import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.TransportState;
 import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.TransportStateOutput;
 
@@ -126,23 +126,24 @@ public class ReceiverService
 
 
 
-    public SenderOutput sender()
-    {
-        Sender sender = new Sender(receiverService,  upnpService.getControlPoint());
-        SenderOutput res = sender.executeAction();
-        return res;        
-    }
-
     public void play()
     {
         Play play = new Play(receiverService,  upnpService.getControlPoint());
         play.executeAction();
     }
 
-    public void stop()
+    public ProtocolInfoOutput protocolInfo()
     {
-        Stop stop = new Stop(receiverService,  upnpService.getControlPoint());
-        stop.executeAction();
+        ProtocolInfo protocolInfo = new ProtocolInfo(receiverService,  upnpService.getControlPoint());
+        ProtocolInfoOutput res = protocolInfo.executeAction();
+        return res;        
+    }
+
+    public SenderOutput sender()
+    {
+        Sender sender = new Sender(receiverService,  upnpService.getControlPoint());
+        SenderOutput res = sender.executeAction();
+        return res;        
     }
 
     public void setSender(SetSenderInput inp)
@@ -151,11 +152,10 @@ public class ReceiverService
         setSender.executeAction();
     }
 
-    public ProtocolInfoOutput protocolInfo()
+    public void stop()
     {
-        ProtocolInfo protocolInfo = new ProtocolInfo(receiverService,  upnpService.getControlPoint());
-        ProtocolInfoOutput res = protocolInfo.executeAction();
-        return res;        
+        Stop stop = new Stop(receiverService,  upnpService.getControlPoint());
+        stop.executeAction();
     }
 
     public TransportStateOutput transportState()

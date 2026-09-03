@@ -16,8 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
+ * Last Change : 08.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -109,13 +111,13 @@ public class OAuthServiceSubscription extends RemoteGENASubscription
                 switch (key)
                 {
                     case "PublicKey":
-                        publicKeyChange((String) stateVar.getValue());
+                        publicKeyChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "SupportedServices":
-                        supportedServicesChange((String) stateVar.getValue());
+                        supportedServicesChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "UpdateId":
-                        updateIdChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        updateIdChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);

@@ -9,12 +9,12 @@ package nextcp.upnp.modelGen.magictvcom.magicAudio1.actions;
 public class SetOauthInput
 {
 
-    public String ServiceId = null;
+    public Long AccessExpiry = null;
+    public byte[] AccessToken = null;
     public byte[] ClientId = null;
     public byte[] ClientSecret = null;
-    public byte[] AccessToken = null;
     public byte[] RefreshToken = null;
-    public Long AccessExpiry = null;
+    public String ServiceId = null;
     public String UserName = null;
 
 }

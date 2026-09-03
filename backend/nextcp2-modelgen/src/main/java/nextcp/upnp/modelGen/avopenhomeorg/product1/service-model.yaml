@@ -1,0 +1,211 @@
+namespace: av-openhome-org
+serviceType: Product
+version: 1
+events: true
+stateVariables:
+  Attributes:
+    java: String
+    upnp: string
+  ManufacturerImageUri:
+    java: String
+    upnp: string
+  ManufacturerInfo:
+    java: String
+    upnp: string
+  ManufacturerName:
+    java: String
+    upnp: string
+  ManufacturerUrl:
+    java: String
+    upnp: string
+  ModelImageUri:
+    java: String
+    upnp: string
+  ModelInfo:
+    java: String
+    upnp: string
+  ModelName:
+    java: String
+    upnp: string
+  ModelUrl:
+    java: String
+    upnp: string
+  ProductImageUri:
+    java: String
+    upnp: string
+  ProductInfo:
+    java: String
+    upnp: string
+  ProductName:
+    java: String
+    upnp: string
+  ProductRoom:
+    java: String
+    upnp: string
+  ProductUrl:
+    java: String
+    upnp: string
+  SourceCount:
+    java: Long
+    upnp: ui4
+  SourceIndex:
+    java: Long
+    upnp: ui4
+  SourceName:
+    java: String
+    upnp: string
+  SourceType:
+    java: String
+    upnp: string
+  SourceVisible:
+    java: Boolean
+    upnp: boolean
+  SourceXml:
+    java: String
+    upnp: string
+  SourceXmlChangeCount:
+    java: Long
+    upnp: ui4
+  Standby:
+    java: Boolean
+    upnp: boolean
+actions:
+  Attributes:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  Manufacturer:
+    input: {
+      }
+    output:
+      ImageUri:
+        java: String
+        upnp: string
+      Info:
+        java: String
+        upnp: string
+      Name:
+        java: String
+        upnp: string
+      Url:
+        java: String
+        upnp: string
+  Model:
+    input: {
+      }
+    output:
+      ImageUri:
+        java: String
+        upnp: string
+      Info:
+        java: String
+        upnp: string
+      Name:
+        java: String
+        upnp: string
+      Url:
+        java: String
+        upnp: string
+  Product:
+    input: {
+      }
+    output:
+      ImageUri:
+        java: String
+        upnp: string
+      Info:
+        java: String
+        upnp: string
+      Name:
+        java: String
+        upnp: string
+      Room:
+        java: String
+        upnp: string
+      Url:
+        java: String
+        upnp: string
+  SetProductRoom:
+    input:
+      Room:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetSourceIndex:
+    input:
+      Value:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  SetSourceIndexByName:
+    input:
+      Value:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetStandby:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  Source:
+    input:
+      Index:
+        java: Long
+        upnp: ui4
+    output:
+      Name:
+        java: String
+        upnp: string
+      SystemName:
+        java: String
+        upnp: string
+      Type:
+        java: String
+        upnp: string
+      Visible:
+        java: Boolean
+        upnp: boolean
+  SourceCount:
+    input: {
+      }
+    output:
+      Value:
+        java: Long
+        upnp: ui4
+  SourceIndex:
+    input: {
+      }
+    output:
+      Value:
+        java: Long
+        upnp: ui4
+  SourceXml:
+    input: {
+      }
+    output:
+      Value:
+        java: String
+        upnp: string
+  SourceXmlChangeCount:
+    input: {
+      }
+    output:
+      Value:
+        java: Long
+        upnp: ui4
+  Standby:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean

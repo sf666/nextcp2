@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,16 +28,8 @@ public class GetRadioFilterValues extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("GetRadioFilterValues"), new NextcpClientInfo()), cp);
 		
-        if (input.Kind != null) {
-	        getActionInvocation().setInput("Kind", input.Kind);
-		} else {
-    	    getActionInvocation().setInput("Kind", null);
-		}
-        if (input.Search != null) {
-	        getActionInvocation().setInput("Search", input.Search);
-		} else {
-    	    getActionInvocation().setInput("Search", null);
-		}
+        getActionInvocation().setInput("Kind", UpnpValue.forInput(getActionInvocation(), "Kind", input.Kind));
+        getActionInvocation().setInput("Search", UpnpValue.forInput(getActionInvocation(), "Search", input.Search));
     }
 
     public GetRadioFilterValuesOutput executeAction()
@@ -45,14 +38,7 @@ public class GetRadioFilterValues extends ActionCallback
 
         GetRadioFilterValuesOutput result = new GetRadioFilterValuesOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

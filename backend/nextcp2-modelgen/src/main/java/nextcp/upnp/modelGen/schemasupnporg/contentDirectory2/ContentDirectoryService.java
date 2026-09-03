@@ -17,21 +17,21 @@ import nextcp.upnp.ISubscriptionEventListener;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.Browse;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.BrowseOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.BrowseInput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.GetFeatureList;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.GetFeatureListOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.GetSearchCapabilities;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.GetSearchCapabilitiesOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.GetSortCapabilities;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.GetSortCapabilitiesOutput;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.X_GetFeatureList;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.X_GetFeatureListOutput;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.Search;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.SearchOutput;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.SearchInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.GetSortExtensionCapabilities;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.GetSortExtensionCapabilitiesOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.GetSystemUpdateID;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.GetSystemUpdateIDOutput;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.GetFeatureList;
-import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.GetFeatureListOutput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.Search;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.SearchOutput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.SearchInput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.X_GetFeatureList;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.X_GetFeatureListOutput;
 
 
 /**
@@ -141,6 +141,13 @@ public class ContentDirectoryService
         return res;        
     }
 
+    public GetFeatureListOutput getFeatureList()
+    {
+        GetFeatureList getFeatureList = new GetFeatureList(contentDirectoryService,  upnpService.getControlPoint());
+        GetFeatureListOutput res = getFeatureList.executeAction();
+        return res;        
+    }
+
     public GetSearchCapabilitiesOutput getSearchCapabilities()
     {
         GetSearchCapabilities getSearchCapabilities = new GetSearchCapabilities(contentDirectoryService,  upnpService.getControlPoint());
@@ -152,20 +159,6 @@ public class ContentDirectoryService
     {
         GetSortCapabilities getSortCapabilities = new GetSortCapabilities(contentDirectoryService,  upnpService.getControlPoint());
         GetSortCapabilitiesOutput res = getSortCapabilities.executeAction();
-        return res;        
-    }
-
-    public X_GetFeatureListOutput x_GetFeatureList()
-    {
-        X_GetFeatureList x_GetFeatureList = new X_GetFeatureList(contentDirectoryService,  upnpService.getControlPoint());
-        X_GetFeatureListOutput res = x_GetFeatureList.executeAction();
-        return res;        
-    }
-
-    public SearchOutput search(SearchInput inp)
-    {
-        Search search = new Search(contentDirectoryService, inp, upnpService.getControlPoint());
-        SearchOutput res = search.executeAction();
         return res;        
     }
 
@@ -183,10 +176,17 @@ public class ContentDirectoryService
         return res;        
     }
 
-    public GetFeatureListOutput getFeatureList()
+    public SearchOutput search(SearchInput inp)
     {
-        GetFeatureList getFeatureList = new GetFeatureList(contentDirectoryService,  upnpService.getControlPoint());
-        GetFeatureListOutput res = getFeatureList.executeAction();
+        Search search = new Search(contentDirectoryService, inp, upnpService.getControlPoint());
+        SearchOutput res = search.executeAction();
+        return res;        
+    }
+
+    public X_GetFeatureListOutput x_GetFeatureList()
+    {
+        X_GetFeatureList x_GetFeatureList = new X_GetFeatureList(contentDirectoryService,  upnpService.getControlPoint());
+        X_GetFeatureListOutput res = x_GetFeatureList.executeAction();
         return res;        
     }
 }

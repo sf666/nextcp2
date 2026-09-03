@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class X_DLNA_GetBytePositionInfo extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("X_DLNA_GetBytePositionInfo"), new NextcpClientInfo()), cp);
 		
-        if (input.InstanceID != null) {
-    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-		} else {
-    	    getActionInvocation().setInput("InstanceID", null);
-		}
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
     }
 
     public X_DLNA_GetBytePositionInfoOutput executeAction()
@@ -40,30 +37,9 @@ public class X_DLNA_GetBytePositionInfo extends ActionCallback
 
         X_DLNA_GetBytePositionInfoOutput result = new X_DLNA_GetBytePositionInfoOutput();
 
-  		if (invocation.getOutput("TrackSize").getValue() != null)
-  		{
-	        result.TrackSize = invocation.getOutput("TrackSize").getValue().toString();
-  		}
-  		else
-  		{
-	        result.TrackSize = "";
-  		}
-  		if (invocation.getOutput("RelByte").getValue() != null)
-  		{
-	        result.RelByte = invocation.getOutput("RelByte").getValue().toString();
-  		}
-  		else
-  		{
-	        result.RelByte = "";
-  		}
-  		if (invocation.getOutput("AbsByte").getValue() != null)
-  		{
-	        result.AbsByte = invocation.getOutput("AbsByte").getValue().toString();
-  		}
-  		else
-  		{
-	        result.AbsByte = "";
-  		}
+        result.AbsByte = UpnpValue.toTextOrEmpty(invocation.getOutput("AbsByte").getValue());
+        result.RelByte = UpnpValue.toTextOrEmpty(invocation.getOutput("RelByte").getValue());
+        result.TrackSize = UpnpValue.toTextOrEmpty(invocation.getOutput("TrackSize").getValue());
 
         return result;
     }

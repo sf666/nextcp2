@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class GetHTSAllSpeakerLevelOutput
 {
 
-    public String Result = null;
-    public Long MaxLevel = null;
     public String AllSpeakerLevel = null;
+    public Long MaxLevel = null;
+    public String Result = null;
 
 }

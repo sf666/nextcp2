@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,16 +28,8 @@ public class SetOutputEnable extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SetOutputEnable"), new NextcpClientInfo()), cp);
 		
-        if (input.Port != null) {
-    	    getActionInvocation().setInput("Port", new UnsignedIntegerFourBytes(input.Port));
-		} else {
-    	    getActionInvocation().setInput("Port", null);
-		}
-        if (input.Value != null) {
-	        getActionInvocation().setInput("Value", input.Value);
-		} else {
-    	    getActionInvocation().setInput("Value", null);
-		}
+        getActionInvocation().setInput("Port", UpnpValue.forInput(getActionInvocation(), "Port", input.Port));
+        getActionInvocation().setInput("Value", UpnpValue.forInput(getActionInvocation(), "Value", input.Value));
     }
 
     public void executeAction()

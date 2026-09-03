@@ -125,57 +125,21 @@ public class ContentDirectoryServiceEventListenerImpl implements IContentDirecto
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void transferIDsChange(String value)
-    {
-        stateVariable.TransferIDs = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "TransferIDs", value));
-        }
-    }
-    
-    public void systemUpdateIDChange(Long value)
-    {
-        stateVariable.SystemUpdateID = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "SystemUpdateID", value));
-        }
-    }
-    
-    public void sortCapabilitiesChange(String value)
-    {
-        stateVariable.SortCapabilities = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "SortCapabilities", value));
-        }
-    }
-    
-    public void x_FeatureListChange(String value)
-    {
-        stateVariable.X_FeatureList = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "X_FeatureList", value));
-        }
-    }
-    
-    public void sortExtensionCapabilitiesChange(String value)
-    {
-        stateVariable.SortExtensionCapabilities = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "SortExtensionCapabilities", value));
-        }
-    }
-    
     public void containerUpdateIDsChange(String value)
     {
         stateVariable.ContainerUpdateIDs = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "ContainerUpdateIDs", value));
+        }
+    }
+    
+    public void featureListChange(String value)
+    {
+        stateVariable.FeatureList = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "FeatureList", value));
         }
     }
     
@@ -188,12 +152,48 @@ public class ContentDirectoryServiceEventListenerImpl implements IContentDirecto
         }
     }
     
-    public void featureListChange(String value)
+    public void sortCapabilitiesChange(String value)
     {
-        stateVariable.FeatureList = value;
+        stateVariable.SortCapabilities = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "FeatureList", value));
+            log.debug(String.format("StateVariable : %s: %s", "SortCapabilities", value));
+        }
+    }
+    
+    public void sortExtensionCapabilitiesChange(String value)
+    {
+        stateVariable.SortExtensionCapabilities = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "SortExtensionCapabilities", value));
+        }
+    }
+    
+    public void systemUpdateIDChange(Long value)
+    {
+        stateVariable.SystemUpdateID = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "SystemUpdateID", value));
+        }
+    }
+    
+    public void transferIDsChange(String value)
+    {
+        stateVariable.TransferIDs = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "TransferIDs", value));
+        }
+    }
+    
+    public void x_FeatureListChange(String value)
+    {
+        stateVariable.X_FeatureList = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "X_FeatureList", value));
         }
     }
     

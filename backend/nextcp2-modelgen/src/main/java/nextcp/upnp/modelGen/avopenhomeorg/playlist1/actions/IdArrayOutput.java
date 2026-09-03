@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions;
 public class IdArrayOutput
 {
 
-    public Long Token = null;
     public byte[] Array = null;
+    public Long Token = null;
 
 }

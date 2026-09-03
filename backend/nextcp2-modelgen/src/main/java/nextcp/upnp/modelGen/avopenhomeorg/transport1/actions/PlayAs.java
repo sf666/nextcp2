@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,16 +28,8 @@ public class PlayAs extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("PlayAs"), new NextcpClientInfo()), cp);
 		
-        if (input.Mode != null) {
-	        getActionInvocation().setInput("Mode", input.Mode);
-		} else {
-    	    getActionInvocation().setInput("Mode", null);
-		}
-        if (input.Command != null) {
-	        getActionInvocation().setInput("Command", input.Command);
-		} else {
-    	    getActionInvocation().setInput("Command", null);
-		}
+        getActionInvocation().setInput("Command", UpnpValue.forInput(getActionInvocation(), "Command", input.Command));
+        getActionInvocation().setInput("Mode", UpnpValue.forInput(getActionInvocation(), "Mode", input.Mode));
     }
 
     public void executeAction()

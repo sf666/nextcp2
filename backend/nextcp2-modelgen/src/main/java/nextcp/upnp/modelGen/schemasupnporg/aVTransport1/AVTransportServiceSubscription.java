@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
  * Last Change : 08.09.2025
@@ -109,86 +110,86 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "AbsoluteTimePosition":
-                        absoluteTimePositionChange((String) stateVar.getValue());
-                        break;
-                    case "CurrentTrackURI":
-                        currentTrackURIChange((String) stateVar.getValue());
-                        break;
-                    case "CurrentTrackMetaData":
-                        currentTrackMetaDataChange((String) stateVar.getValue());
-                        break;
-                    case "RelativeCounterPosition":
-                        relativeCounterPositionChange((Integer) stateVar.getValue());
-                        break;
-                    case "TransportStatus":
-                        transportStatusChange((String) stateVar.getValue());
+                    case "AVTransportURI":
+                        aVTransportURIChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "AVTransportURIMetaData":
-                        aVTransportURIMetaDataChange((String) stateVar.getValue());
-                        break;
-                    case "TransportState":
-                        transportStateChange((String) stateVar.getValue());
-                        break;
-                    case "CurrentTrack":
-                        currentTrackChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "PlaybackStorageMedium":
-                        playbackStorageMediumChange((String) stateVar.getValue());
-                        break;
-                    case "PossibleRecordQualityModes":
-                        possibleRecordQualityModesChange((String) stateVar.getValue());
-                        break;
-                    case "NextAVTransportURIMetaData":
-                        nextAVTransportURIMetaDataChange((String) stateVar.getValue());
-                        break;
-                    case "NumberOfTracks":
-                        numberOfTracksChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "CurrentMediaDuration":
-                        currentMediaDurationChange((String) stateVar.getValue());
-                        break;
-                    case "NextAVTransportURI":
-                        nextAVTransportURIChange((String) stateVar.getValue());
-                        break;
-                    case "RecordStorageMedium":
-                        recordStorageMediumChange((String) stateVar.getValue());
-                        break;
-                    case "AVTransportURI":
-                        aVTransportURIChange((String) stateVar.getValue());
-                        break;
-                    case "TransportPlaySpeed":
-                        transportPlaySpeedChange((String) stateVar.getValue());
+                        aVTransportURIMetaDataChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "AbsoluteCounterPosition":
-                        absoluteCounterPositionChange((Integer) stateVar.getValue());
+                        absoluteCounterPositionChange(UpnpValue.toInteger(stateVar.getValue()));
                         break;
-                    case "RelativeTimePosition":
-                        relativeTimePositionChange((String) stateVar.getValue());
+                    case "AbsoluteTimePosition":
+                        absoluteTimePositionChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "CurrentMediaDuration":
+                        currentMediaDurationChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "CurrentPlayMode":
-                        currentPlayModeChange((String) stateVar.getValue());
-                        break;
-                    case "CurrentTrackDuration":
-                        currentTrackDurationChange((String) stateVar.getValue());
-                        break;
-                    case "PossiblePlaybackStorageMedia":
-                        possiblePlaybackStorageMediaChange((String) stateVar.getValue());
+                        currentPlayModeChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "CurrentRecordQualityMode":
-                        currentRecordQualityModeChange((String) stateVar.getValue());
+                        currentRecordQualityModeChange(UpnpValue.toText(stateVar.getValue()));
                         break;
-                    case "RecordMediumWriteStatus":
-                        recordMediumWriteStatusChange((String) stateVar.getValue());
+                    case "CurrentTrack":
+                        currentTrackChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "CurrentTrackDuration":
+                        currentTrackDurationChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "CurrentTrackMetaData":
+                        currentTrackMetaDataChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "CurrentTrackURI":
+                        currentTrackURIChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "CurrentTransportActions":
-                        currentTransportActionsChange((String) stateVar.getValue());
-                        break;
-                    case "PossibleRecordStorageMedia":
-                        possibleRecordStorageMediaChange((String) stateVar.getValue());
+                        currentTransportActionsChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "LastChange":
-                        lastChangeChange((String) stateVar.getValue());
+                        lastChangeChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "NextAVTransportURI":
+                        nextAVTransportURIChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "NextAVTransportURIMetaData":
+                        nextAVTransportURIMetaDataChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "NumberOfTracks":
+                        numberOfTracksChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "PlaybackStorageMedium":
+                        playbackStorageMediumChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "PossiblePlaybackStorageMedia":
+                        possiblePlaybackStorageMediaChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "PossibleRecordQualityModes":
+                        possibleRecordQualityModesChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "PossibleRecordStorageMedia":
+                        possibleRecordStorageMediaChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "RecordMediumWriteStatus":
+                        recordMediumWriteStatusChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "RecordStorageMedium":
+                        recordStorageMediumChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "RelativeCounterPosition":
+                        relativeCounterPositionChange(UpnpValue.toInteger(stateVar.getValue()));
+                        break;
+                    case "RelativeTimePosition":
+                        relativeTimePositionChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "TransportPlaySpeed":
+                        transportPlaySpeedChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "TransportState":
+                        transportStateChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "TransportStatus":
+                        transportStatusChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -210,43 +211,11 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
         }
     }
 
-    private void absoluteTimePositionChange(String value)
+    private void aVTransportURIChange(String value)
     {
         for (IAVTransportServiceEventListener listener : eventListener)
         {
-            listener.absoluteTimePositionChange(value);
-        }
-    }    
-
-    private void currentTrackURIChange(String value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.currentTrackURIChange(value);
-        }
-    }    
-
-    private void currentTrackMetaDataChange(String value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.currentTrackMetaDataChange(value);
-        }
-    }    
-
-    private void relativeCounterPositionChange(Integer value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.relativeCounterPositionChange(value);
-        }
-    }    
-
-    private void transportStatusChange(String value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.transportStatusChange(value);
+            listener.aVTransportURIChange(value);
         }
     }    
 
@@ -258,11 +227,43 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void transportStateChange(String value)
+    private void absoluteCounterPositionChange(Integer value)
     {
         for (IAVTransportServiceEventListener listener : eventListener)
         {
-            listener.transportStateChange(value);
+            listener.absoluteCounterPositionChange(value);
+        }
+    }    
+
+    private void absoluteTimePositionChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.absoluteTimePositionChange(value);
+        }
+    }    
+
+    private void currentMediaDurationChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.currentMediaDurationChange(value);
+        }
+    }    
+
+    private void currentPlayModeChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.currentPlayModeChange(value);
+        }
+    }    
+
+    private void currentRecordQualityModeChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.currentRecordQualityModeChange(value);
         }
     }    
 
@@ -274,19 +275,51 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void playbackStorageMediumChange(String value)
+    private void currentTrackDurationChange(String value)
     {
         for (IAVTransportServiceEventListener listener : eventListener)
         {
-            listener.playbackStorageMediumChange(value);
+            listener.currentTrackDurationChange(value);
         }
     }    
 
-    private void possibleRecordQualityModesChange(String value)
+    private void currentTrackMetaDataChange(String value)
     {
         for (IAVTransportServiceEventListener listener : eventListener)
         {
-            listener.possibleRecordQualityModesChange(value);
+            listener.currentTrackMetaDataChange(value);
+        }
+    }    
+
+    private void currentTrackURIChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.currentTrackURIChange(value);
+        }
+    }    
+
+    private void currentTransportActionsChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.currentTransportActionsChange(value);
+        }
+    }    
+
+    private void lastChangeChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.lastChangeChange(value);
+        }
+    }    
+
+    private void nextAVTransportURIChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.nextAVTransportURIChange(value);
         }
     }    
 
@@ -306,75 +339,11 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void currentMediaDurationChange(String value)
+    private void playbackStorageMediumChange(String value)
     {
         for (IAVTransportServiceEventListener listener : eventListener)
         {
-            listener.currentMediaDurationChange(value);
-        }
-    }    
-
-    private void nextAVTransportURIChange(String value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.nextAVTransportURIChange(value);
-        }
-    }    
-
-    private void recordStorageMediumChange(String value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.recordStorageMediumChange(value);
-        }
-    }    
-
-    private void aVTransportURIChange(String value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.aVTransportURIChange(value);
-        }
-    }    
-
-    private void transportPlaySpeedChange(String value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.transportPlaySpeedChange(value);
-        }
-    }    
-
-    private void absoluteCounterPositionChange(Integer value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.absoluteCounterPositionChange(value);
-        }
-    }    
-
-    private void relativeTimePositionChange(String value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.relativeTimePositionChange(value);
-        }
-    }    
-
-    private void currentPlayModeChange(String value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.currentPlayModeChange(value);
-        }
-    }    
-
-    private void currentTrackDurationChange(String value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.currentTrackDurationChange(value);
+            listener.playbackStorageMediumChange(value);
         }
     }    
 
@@ -386,27 +355,11 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void currentRecordQualityModeChange(String value)
+    private void possibleRecordQualityModesChange(String value)
     {
         for (IAVTransportServiceEventListener listener : eventListener)
         {
-            listener.currentRecordQualityModeChange(value);
-        }
-    }    
-
-    private void recordMediumWriteStatusChange(String value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.recordMediumWriteStatusChange(value);
-        }
-    }    
-
-    private void currentTransportActionsChange(String value)
-    {
-        for (IAVTransportServiceEventListener listener : eventListener)
-        {
-            listener.currentTransportActionsChange(value);
+            listener.possibleRecordQualityModesChange(value);
         }
     }    
 
@@ -418,11 +371,59 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void lastChangeChange(String value)
+    private void recordMediumWriteStatusChange(String value)
     {
         for (IAVTransportServiceEventListener listener : eventListener)
         {
-            listener.lastChangeChange(value);
+            listener.recordMediumWriteStatusChange(value);
+        }
+    }    
+
+    private void recordStorageMediumChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.recordStorageMediumChange(value);
+        }
+    }    
+
+    private void relativeCounterPositionChange(Integer value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.relativeCounterPositionChange(value);
+        }
+    }    
+
+    private void relativeTimePositionChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.relativeTimePositionChange(value);
+        }
+    }    
+
+    private void transportPlaySpeedChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.transportPlaySpeedChange(value);
+        }
+    }    
+
+    private void transportStateChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.transportStateChange(value);
+        }
+    }    
+
+    private void transportStatusChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.transportStatusChange(value);
         }
     }    
 }

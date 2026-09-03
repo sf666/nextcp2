@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class X_GetRemoteSharingStatus extends ActionCallback
     public X_GetRemoteSharingStatus(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("X_GetRemoteSharingStatus"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public X_GetRemoteSharingStatusOutput executeAction()
@@ -35,8 +36,7 @@ public class X_GetRemoteSharingStatus extends ActionCallback
 
         X_GetRemoteSharingStatusOutput result = new X_GetRemoteSharingStatusOutput();
 
-        BooleanDatatype data_Status = new BooleanDatatype();
-        result.Status = data_Status.valueOf(invocation.getOutput("Status").getValue().toString());
+        result.Status = UpnpValue.toBoolean(invocation.getOutput("Status").getValue());
 
         return result;
     }

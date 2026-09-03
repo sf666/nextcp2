@@ -1,0 +1,108 @@
+namespace: av-openhome-org
+serviceType: Credentials
+version: 1
+events: true
+stateVariables:
+  Ids:
+    java: String
+    upnp: string
+  PublicKey:
+    java: String
+    upnp: string
+  SequenceNumber:
+    java: Long
+    upnp: ui4
+actions:
+  Clear:
+    input:
+      Id:
+        java: String
+        upnp: string
+    output: {
+      }
+  Get:
+    input:
+      Id:
+        java: String
+        upnp: string
+    output:
+      Data:
+        java: String
+        upnp: string
+      Enabled:
+        java: Boolean
+        upnp: boolean
+      Password:
+        java: byte[]
+        upnp: bin.base64
+      Status:
+        java: String
+        upnp: string
+      UserName:
+        java: String
+        upnp: string
+  GetIds:
+    input: {
+      }
+    output:
+      Ids:
+        java: String
+        upnp: string
+  GetPublicKey:
+    input: {
+      }
+    output:
+      PublicKey:
+        java: String
+        upnp: string
+  GetSequenceNumber:
+    input: {
+      }
+    output:
+      SequenceNumber:
+        java: Long
+        upnp: ui4
+  Login:
+    input:
+      Id:
+        java: String
+        upnp: string
+    output:
+      Token:
+        java: String
+        upnp: string
+  ReLogin:
+    input:
+      CurrentToken:
+        java: String
+        upnp: string
+      Id:
+        java: String
+        upnp: string
+    output:
+      NewToken:
+        java: String
+        upnp: string
+  Set:
+    input:
+      Id:
+        java: String
+        upnp: string
+      Password:
+        java: byte[]
+        upnp: bin.base64
+      UserName:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetEnabled:
+    input:
+      Enabled:
+        java: Boolean
+        upnp: boolean
+      Id:
+        java: String
+        upnp: string
+    output: {
+      }

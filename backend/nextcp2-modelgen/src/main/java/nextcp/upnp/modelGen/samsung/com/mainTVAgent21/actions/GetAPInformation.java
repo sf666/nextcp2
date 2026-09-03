@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetAPInformation extends ActionCallback
     public GetAPInformation(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetAPInformation"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetAPInformationOutput executeAction()
@@ -35,22 +36,8 @@ public class GetAPInformation extends ActionCallback
 
         GetAPInformationOutput result = new GetAPInformationOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("APInformation").getValue() != null)
-  		{
-	        result.APInformation = invocation.getOutput("APInformation").getValue().toString();
-  		}
-  		else
-  		{
-	        result.APInformation = "";
-  		}
+        result.APInformation = UpnpValue.toTextOrEmpty(invocation.getOutput("APInformation").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

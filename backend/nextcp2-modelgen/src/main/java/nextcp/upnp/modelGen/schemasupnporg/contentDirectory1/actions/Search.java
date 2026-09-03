@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,36 +28,12 @@ public class Search extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("Search"), new NextcpClientInfo()), cp);
 		
-        if (input.ContainerID != null) {
-	        getActionInvocation().setInput("ContainerID", input.ContainerID);
-		} else {
-    	    getActionInvocation().setInput("ContainerID", null);
-		}
-        if (input.SearchCriteria != null) {
-	        getActionInvocation().setInput("SearchCriteria", input.SearchCriteria);
-		} else {
-    	    getActionInvocation().setInput("SearchCriteria", null);
-		}
-        if (input.Filter != null) {
-	        getActionInvocation().setInput("Filter", input.Filter);
-		} else {
-    	    getActionInvocation().setInput("Filter", null);
-		}
-        if (input.StartingIndex != null) {
-    	    getActionInvocation().setInput("StartingIndex", new UnsignedIntegerFourBytes(input.StartingIndex));
-		} else {
-    	    getActionInvocation().setInput("StartingIndex", null);
-		}
-        if (input.RequestedCount != null) {
-    	    getActionInvocation().setInput("RequestedCount", new UnsignedIntegerFourBytes(input.RequestedCount));
-		} else {
-    	    getActionInvocation().setInput("RequestedCount", null);
-		}
-        if (input.SortCriteria != null) {
-	        getActionInvocation().setInput("SortCriteria", input.SortCriteria);
-		} else {
-    	    getActionInvocation().setInput("SortCriteria", null);
-		}
+        getActionInvocation().setInput("ContainerID", UpnpValue.forInput(getActionInvocation(), "ContainerID", input.ContainerID));
+        getActionInvocation().setInput("Filter", UpnpValue.forInput(getActionInvocation(), "Filter", input.Filter));
+        getActionInvocation().setInput("RequestedCount", UpnpValue.forInput(getActionInvocation(), "RequestedCount", input.RequestedCount));
+        getActionInvocation().setInput("SearchCriteria", UpnpValue.forInput(getActionInvocation(), "SearchCriteria", input.SearchCriteria));
+        getActionInvocation().setInput("SortCriteria", UpnpValue.forInput(getActionInvocation(), "SortCriteria", input.SortCriteria));
+        getActionInvocation().setInput("StartingIndex", UpnpValue.forInput(getActionInvocation(), "StartingIndex", input.StartingIndex));
     }
 
     public SearchOutput executeAction()
@@ -65,17 +42,10 @@ public class Search extends ActionCallback
 
         SearchOutput result = new SearchOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-        result.NumberReturned = ((UnsignedIntegerFourBytes) invocation.getOutput("NumberReturned").getValue()).getValue();
-        result.TotalMatches = ((UnsignedIntegerFourBytes) invocation.getOutput("TotalMatches").getValue()).getValue();
-        result.UpdateID = ((UnsignedIntegerFourBytes) invocation.getOutput("UpdateID").getValue()).getValue();
+        result.NumberReturned = UpnpValue.toLong(invocation.getOutput("NumberReturned").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
+        result.TotalMatches = UpnpValue.toLong(invocation.getOutput("TotalMatches").getValue());
+        result.UpdateID = UpnpValue.toLong(invocation.getOutput("UpdateID").getValue());
 
         return result;
     }

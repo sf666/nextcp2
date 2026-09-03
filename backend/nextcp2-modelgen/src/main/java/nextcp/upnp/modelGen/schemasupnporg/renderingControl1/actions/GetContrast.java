@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class GetContrast extends ActionCallback
     public GetContrast(Service service, GetContrastInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetContrast"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
     }
 
     public GetContrastOutput executeAction()
@@ -36,7 +37,7 @@ public class GetContrast extends ActionCallback
 
         GetContrastOutput result = new GetContrastOutput();
 
-        result.CurrentContrast = ((UnsignedIntegerFourBytes) invocation.getOutput("CurrentContrast").getValue()).getValue();
+        result.CurrentContrast = UpnpValue.toLong(invocation.getOutput("CurrentContrast").getValue());
 
         return result;
     }

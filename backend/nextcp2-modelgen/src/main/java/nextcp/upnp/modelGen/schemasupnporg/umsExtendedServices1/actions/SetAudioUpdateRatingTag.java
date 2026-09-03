@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class SetAudioUpdateRatingTag extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SetAudioUpdateRatingTag"), new NextcpClientInfo()), cp);
 		
-        if (input.AudioUpdateRating != null) {
-        	getActionInvocation().setInput("AudioUpdateRating", input.AudioUpdateRating);
-		} else {
-    	    getActionInvocation().setInput("AudioUpdateRating", null);
-		}
+        getActionInvocation().setInput("AudioUpdateRating", UpnpValue.forInput(getActionInvocation(), "AudioUpdateRating", input.AudioUpdateRating));
     }
 
     public void executeAction()

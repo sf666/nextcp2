@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetModes extends ActionCallback
     public GetModes(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetModes"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetModesOutput executeAction()
@@ -35,14 +36,7 @@ public class GetModes extends ActionCallback
 
         GetModesOutput result = new GetModesOutput();
 
-  		if (invocation.getOutput("Modes").getValue() != null)
-  		{
-	        result.Modes = invocation.getOutput("Modes").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Modes = "";
-  		}
+        result.Modes = UpnpValue.toTextOrEmpty(invocation.getOutput("Modes").getValue());
 
         return result;
     }

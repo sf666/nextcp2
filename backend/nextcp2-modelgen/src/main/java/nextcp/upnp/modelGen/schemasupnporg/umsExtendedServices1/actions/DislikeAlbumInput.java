@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions;
 public class DislikeAlbumInput
 {
 
-    public String MusicBrainzId = null;
     public Long DiscogsId = null;
+    public String MusicBrainzId = null;
 
 }

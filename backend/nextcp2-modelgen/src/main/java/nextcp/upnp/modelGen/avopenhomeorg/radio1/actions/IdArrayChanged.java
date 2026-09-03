@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class IdArrayChanged extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("IdArrayChanged"), new NextcpClientInfo()), cp);
 		
-        if (input.Token != null) {
-    	    getActionInvocation().setInput("Token", new UnsignedIntegerFourBytes(input.Token));
-		} else {
-    	    getActionInvocation().setInput("Token", null);
-		}
+        getActionInvocation().setInput("Token", UpnpValue.forInput(getActionInvocation(), "Token", input.Token));
     }
 
     public IdArrayChangedOutput executeAction()
@@ -40,8 +37,7 @@ public class IdArrayChanged extends ActionCallback
 
         IdArrayChangedOutput result = new IdArrayChangedOutput();
 
-        BooleanDatatype data_Value = new BooleanDatatype();
-        result.Value = data_Value.valueOf(invocation.getOutput("Value").getValue().toString());
+        result.Value = UpnpValue.toBoolean(invocation.getOutput("Value").getValue());
 
         return result;
     }

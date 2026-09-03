@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class GetCurrentBrowserModeOutput
 {
 
-    public String Result = null;
     public String BrowserMode = null;
+    public String Result = null;
 
 }

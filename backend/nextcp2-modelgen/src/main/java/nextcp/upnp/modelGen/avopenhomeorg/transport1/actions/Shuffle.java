@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,8 +36,7 @@ public class Shuffle extends ActionCallback
 
         ShuffleOutput result = new ShuffleOutput();
 
-        BooleanDatatype data_Shuffle = new BooleanDatatype();
-        result.Shuffle = data_Shuffle.valueOf(invocation.getOutput("Shuffle").getValue().toString());
+        result.Shuffle = UpnpValue.toBoolean(invocation.getOutput("Shuffle").getValue());
 
         return result;
     }

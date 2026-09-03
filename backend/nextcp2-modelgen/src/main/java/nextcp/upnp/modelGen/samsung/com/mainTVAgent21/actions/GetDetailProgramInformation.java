@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,10 +27,10 @@ public class GetDetailProgramInformation extends ActionCallback
     public GetDetailProgramInformation(Service service, GetDetailProgramInformationInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetDetailProgramInformation"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("AntennaMode", new UnsignedIntegerFourBytes(input.AntennaMode));
-        getActionInvocation().setInput("Channel", input.Channel);
-        getActionInvocation().setInput("StartTime", input.StartTime);
+		
+        getActionInvocation().setInput("AntennaMode", UpnpValue.forInput(getActionInvocation(), "AntennaMode", input.AntennaMode));
+        getActionInvocation().setInput("Channel", UpnpValue.forInput(getActionInvocation(), "Channel", input.Channel));
+        getActionInvocation().setInput("StartTime", UpnpValue.forInput(getActionInvocation(), "StartTime", input.StartTime));
     }
 
     public GetDetailProgramInformationOutput executeAction()
@@ -38,22 +39,8 @@ public class GetDetailProgramInformation extends ActionCallback
 
         GetDetailProgramInformationOutput result = new GetDetailProgramInformationOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("DetailProgramInformation").getValue() != null)
-  		{
-	        result.DetailProgramInformation = invocation.getOutput("DetailProgramInformation").getValue().toString();
-  		}
-  		else
-  		{
-	        result.DetailProgramInformation = "";
-  		}
+        result.DetailProgramInformation = UpnpValue.toTextOrEmpty(invocation.getOutput("DetailProgramInformation").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

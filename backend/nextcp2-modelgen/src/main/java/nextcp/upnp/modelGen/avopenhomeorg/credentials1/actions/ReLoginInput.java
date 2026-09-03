@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions;
 public class ReLoginInput
 {
 
-    public String Id = null;
     public String CurrentToken = null;
+    public String Id = null;
 
 }

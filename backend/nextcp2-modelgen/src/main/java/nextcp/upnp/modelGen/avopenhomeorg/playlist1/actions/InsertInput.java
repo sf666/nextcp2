@@ -10,7 +10,7 @@ public class InsertInput
 {
 
     public Long AfterId = null;
-    public String Uri = null;
     public String Metadata = null;
+    public String Uri = null;
 
 }

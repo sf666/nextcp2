@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions;
 public class SetSharpnessInput
 {
 
-    public Long InstanceID = null;
     public Long DesiredSharpness = null;
+    public Long InstanceID = null;
 
 }

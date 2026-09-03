@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class X_GetAudioSelection extends ActionCallback
     public X_GetAudioSelection(Service service, X_GetAudioSelectionInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("X_GetAudioSelection"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
     }
 
     public X_GetAudioSelectionOutput executeAction()
@@ -36,15 +37,8 @@ public class X_GetAudioSelection extends ActionCallback
 
         X_GetAudioSelectionOutput result = new X_GetAudioSelectionOutput();
 
-        result.AudioPID = ((UnsignedIntegerTwoBytes) invocation.getOutput("AudioPID").getValue()).getValue();
-  		if (invocation.getOutput("AudioEncoding").getValue() != null)
-  		{
-	        result.AudioEncoding = invocation.getOutput("AudioEncoding").getValue().toString();
-  		}
-  		else
-  		{
-	        result.AudioEncoding = "";
-  		}
+        result.AudioEncoding = UpnpValue.toTextOrEmpty(invocation.getOutput("AudioEncoding").getValue());
+        result.AudioPID = UpnpValue.toLong(invocation.getOutput("AudioPID").getValue());
 
         return result;
     }

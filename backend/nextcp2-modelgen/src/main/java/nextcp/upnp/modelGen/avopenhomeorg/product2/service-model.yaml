@@ -1,0 +1,140 @@
+namespace: av-openhome-org
+serviceType: Product
+version: 2
+events: true
+stateVariables:
+  Attributes:
+    java: String
+  ManufacturerImageUri:
+    java: String
+  ManufacturerInfo:
+    java: String
+  ManufacturerName:
+    java: String
+  ManufacturerUrl:
+    java: String
+  ModelImageUri:
+    java: String
+  ModelInfo:
+    java: String
+  ModelName:
+    java: String
+  ModelUrl:
+    java: String
+  ProductImageUri:
+    java: String
+  ProductInfo:
+    java: String
+  ProductName:
+    java: String
+  ProductRoom:
+    java: String
+  ProductUrl:
+    java: String
+  SourceCount:
+    java: Long
+  SourceIndex:
+    java: Long
+  SourceXml:
+    java: String
+  Standby:
+    java: Boolean
+actions:
+  Attributes:
+    input: {}
+    output:
+      Value:
+        java: String
+  Manufacturer:
+    input: {}
+    output:
+      ImageUri:
+        java: String
+      Info:
+        java: String
+      Name:
+        java: String
+      Url:
+        java: String
+  Model:
+    input: {}
+    output:
+      ImageUri:
+        java: String
+      Info:
+        java: String
+      Name:
+        java: String
+      Url:
+        java: String
+  Product:
+    input: {}
+    output:
+      ImageUri:
+        java: String
+      Info:
+        java: String
+      Name:
+        java: String
+      Room:
+        java: String
+      Url:
+        java: String
+  SetSourceBySystemName:
+    input:
+      Value:
+        java: String
+    output: {}
+  SetSourceIndex:
+    input:
+      Value:
+        java: Long
+    output: {}
+  SetSourceIndexByName:
+    input:
+      Value:
+        java: String
+    output: {}
+  SetStandby:
+    input:
+      Value:
+        java: Boolean
+    output: {}
+  Source:
+    input:
+      Index:
+        java: Long
+    output:
+      Name:
+        java: String
+      SystemName:
+        java: String
+      Type:
+        java: String
+      Visible:
+        java: Boolean
+  SourceCount:
+    input: {}
+    output:
+      Value:
+        java: Long
+  SourceIndex:
+    input: {}
+    output:
+      Value:
+        java: Long
+  SourceXml:
+    input: {}
+    output:
+      Value:
+        java: String
+  SourceXmlChangeCount:
+    input: {}
+    output:
+      Value:
+        java: Long
+  Standby:
+    input: {}
+    output:
+      Value:
+        java: Boolean

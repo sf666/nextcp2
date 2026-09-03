@@ -14,31 +14,31 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
 
-import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.GetTracksCount;
-import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.GetTracksCountOutput;
-import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.RemoveTracks;
-import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.RemoveTracksOutput;
-import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.RemoveTracksInput;
 import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.GetLyricSupportType;
 import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.GetLyricSupportTypeOutput;
 import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.GetMaxTracks;
 import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.GetMaxTracksOutput;
+import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.GetTracksCount;
+import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.GetTracksCountOutput;
 import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.GetTracksInfo;
 import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.GetTracksInfoOutput;
 import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.GetTracksInfoInput;
-import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.SetTracksInfo;
-import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.SetTracksInfoOutput;
-import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.SetTracksInfoInput;
-import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.QPlayAuth;
-import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.QPlayAuthOutput;
-import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.QPlayAuthInput;
-import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.SetNetwork;
-import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.SetNetworkInput;
-import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.SetLyric;
-import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.SetLyricInput;
 import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.InsertTracks;
 import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.InsertTracksOutput;
 import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.InsertTracksInput;
+import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.QPlayAuth;
+import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.QPlayAuthOutput;
+import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.QPlayAuthInput;
+import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.RemoveTracks;
+import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.RemoveTracksOutput;
+import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.RemoveTracksInput;
+import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.SetLyric;
+import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.SetLyricInput;
+import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.SetNetwork;
+import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.SetNetworkInput;
+import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.SetTracksInfo;
+import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.SetTracksInfoOutput;
+import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.SetTracksInfoInput;
 
 
 /**
@@ -141,20 +141,6 @@ public class QPlayService
 
 
 
-    public GetTracksCountOutput getTracksCount()
-    {
-        GetTracksCount getTracksCount = new GetTracksCount(qPlayService,  upnpService.getControlPoint());
-        GetTracksCountOutput res = getTracksCount.executeAction();
-        return res;        
-    }
-
-    public RemoveTracksOutput removeTracks(RemoveTracksInput inp)
-    {
-        RemoveTracks removeTracks = new RemoveTracks(qPlayService, inp, upnpService.getControlPoint());
-        RemoveTracksOutput res = removeTracks.executeAction();
-        return res;        
-    }
-
     public GetLyricSupportTypeOutput getLyricSupportType()
     {
         GetLyricSupportType getLyricSupportType = new GetLyricSupportType(qPlayService,  upnpService.getControlPoint());
@@ -169,6 +155,13 @@ public class QPlayService
         return res;        
     }
 
+    public GetTracksCountOutput getTracksCount()
+    {
+        GetTracksCount getTracksCount = new GetTracksCount(qPlayService,  upnpService.getControlPoint());
+        GetTracksCountOutput res = getTracksCount.executeAction();
+        return res;        
+    }
+
     public GetTracksInfoOutput getTracksInfo(GetTracksInfoInput inp)
     {
         GetTracksInfo getTracksInfo = new GetTracksInfo(qPlayService, inp, upnpService.getControlPoint());
@@ -176,10 +169,10 @@ public class QPlayService
         return res;        
     }
 
-    public SetTracksInfoOutput setTracksInfo(SetTracksInfoInput inp)
+    public InsertTracksOutput insertTracks(InsertTracksInput inp)
     {
-        SetTracksInfo setTracksInfo = new SetTracksInfo(qPlayService, inp, upnpService.getControlPoint());
-        SetTracksInfoOutput res = setTracksInfo.executeAction();
+        InsertTracks insertTracks = new InsertTracks(qPlayService, inp, upnpService.getControlPoint());
+        InsertTracksOutput res = insertTracks.executeAction();
         return res;        
     }
 
@@ -190,10 +183,11 @@ public class QPlayService
         return res;        
     }
 
-    public void setNetwork(SetNetworkInput inp)
+    public RemoveTracksOutput removeTracks(RemoveTracksInput inp)
     {
-        SetNetwork setNetwork = new SetNetwork(qPlayService, inp, upnpService.getControlPoint());
-        setNetwork.executeAction();
+        RemoveTracks removeTracks = new RemoveTracks(qPlayService, inp, upnpService.getControlPoint());
+        RemoveTracksOutput res = removeTracks.executeAction();
+        return res;        
     }
 
     public void setLyric(SetLyricInput inp)
@@ -202,10 +196,16 @@ public class QPlayService
         setLyric.executeAction();
     }
 
-    public InsertTracksOutput insertTracks(InsertTracksInput inp)
+    public void setNetwork(SetNetworkInput inp)
     {
-        InsertTracks insertTracks = new InsertTracks(qPlayService, inp, upnpService.getControlPoint());
-        InsertTracksOutput res = insertTracks.executeAction();
+        SetNetwork setNetwork = new SetNetwork(qPlayService, inp, upnpService.getControlPoint());
+        setNetwork.executeAction();
+    }
+
+    public SetTracksInfoOutput setTracksInfo(SetTracksInfoInput inp)
+    {
+        SetTracksInfo setTracksInfo = new SetTracksInfo(qPlayService, inp, upnpService.getControlPoint());
+        SetTracksInfoOutput res = setTracksInfo.executeAction();
         return res;        
     }
 }

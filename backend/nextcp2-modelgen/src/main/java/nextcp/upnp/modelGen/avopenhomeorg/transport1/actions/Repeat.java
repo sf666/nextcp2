@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,14 +36,7 @@ public class Repeat extends ActionCallback
 
         RepeatOutput result = new RepeatOutput();
 
-  		if (invocation.getOutput("Repeat").getValue() != null)
-  		{
-	        result.Repeat = invocation.getOutput("Repeat").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Repeat = "";
-  		}
+        result.Repeat = UpnpValue.toTextOrEmpty(invocation.getOutput("Repeat").getValue());
 
         return result;
     }

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,10 +27,10 @@ public class X_UpdateVideoSelection extends ActionCallback
     public X_UpdateVideoSelection(Service service, X_UpdateVideoSelectionInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("X_UpdateVideoSelection"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("VideoPID", new UnsignedIntegerTwoBytes(input.VideoPID));
-        getActionInvocation().setInput("VideoEncoding", input.VideoEncoding);
+		
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
+        getActionInvocation().setInput("VideoEncoding", UpnpValue.forInput(getActionInvocation(), "VideoEncoding", input.VideoEncoding));
+        getActionInvocation().setInput("VideoPID", UpnpValue.forInput(getActionInvocation(), "VideoPID", input.VideoPID));
     }
 
     public void executeAction()

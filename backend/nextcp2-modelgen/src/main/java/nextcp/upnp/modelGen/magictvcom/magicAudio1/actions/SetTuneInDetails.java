@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class SetTuneInDetails extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SetTuneInDetails"), new NextcpClientInfo()), cp);
 		
-        if (input.UserName != null) {
-	        getActionInvocation().setInput("UserName", input.UserName);
-		} else {
-    	    getActionInvocation().setInput("UserName", null);
-		}
+        getActionInvocation().setInput("UserName", UpnpValue.forInput(getActionInvocation(), "UserName", input.UserName));
     }
 
     public void executeAction()

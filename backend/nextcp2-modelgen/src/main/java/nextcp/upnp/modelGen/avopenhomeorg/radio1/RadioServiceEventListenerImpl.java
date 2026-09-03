@@ -125,51 +125,6 @@ public class RadioServiceEventListenerImpl implements IRadioServiceEventListener
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void relativeChange(Integer value)
-    {
-        stateVariable.Relative = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Relative", value));
-        }
-    }
-    
-    public void idArrayChangedChange(Boolean value)
-    {
-        stateVariable.IdArrayChanged = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "IdArrayChanged", value));
-        }
-    }
-    
-    public void metadataChange(String value)
-    {
-        stateVariable.Metadata = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Metadata", value));
-        }
-    }
-    
-    public void idArrayChange(byte[] value)
-    {
-        stateVariable.IdArray = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "IdArray", value));
-        }
-    }
-    
-    public void transportStateChange(String value)
-    {
-        stateVariable.TransportState = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "TransportState", value));
-        }
-    }
-    
     public void absoluteChange(Long value)
     {
         stateVariable.Absolute = value;
@@ -179,39 +134,12 @@ public class RadioServiceEventListenerImpl implements IRadioServiceEventListener
         }
     }
     
-    public void uriChange(String value)
+    public void channelListChange(String value)
     {
-        stateVariable.Uri = value;
+        stateVariable.ChannelList = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "Uri", value));
-        }
-    }
-    
-    public void idListChange(String value)
-    {
-        stateVariable.IdList = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "IdList", value));
-        }
-    }
-    
-    public void idArrayTokenChange(Long value)
-    {
-        stateVariable.IdArrayToken = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "IdArrayToken", value));
-        }
-    }
-    
-    public void protocolInfoChange(String value)
-    {
-        stateVariable.ProtocolInfo = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "ProtocolInfo", value));
+            log.debug(String.format("StateVariable : %s: %s", "ChannelList", value));
         }
     }
     
@@ -233,12 +161,84 @@ public class RadioServiceEventListenerImpl implements IRadioServiceEventListener
         }
     }
     
-    public void channelListChange(String value)
+    public void idArrayChange(byte[] value)
     {
-        stateVariable.ChannelList = value;
+        stateVariable.IdArray = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "ChannelList", value));
+            log.debug(String.format("StateVariable : %s: %s", "IdArray", value));
+        }
+    }
+    
+    public void idArrayChangedChange(Boolean value)
+    {
+        stateVariable.IdArrayChanged = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "IdArrayChanged", value));
+        }
+    }
+    
+    public void idArrayTokenChange(Long value)
+    {
+        stateVariable.IdArrayToken = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "IdArrayToken", value));
+        }
+    }
+    
+    public void idListChange(String value)
+    {
+        stateVariable.IdList = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "IdList", value));
+        }
+    }
+    
+    public void metadataChange(String value)
+    {
+        stateVariable.Metadata = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Metadata", value));
+        }
+    }
+    
+    public void protocolInfoChange(String value)
+    {
+        stateVariable.ProtocolInfo = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "ProtocolInfo", value));
+        }
+    }
+    
+    public void relativeChange(Integer value)
+    {
+        stateVariable.Relative = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Relative", value));
+        }
+    }
+    
+    public void transportStateChange(String value)
+    {
+        stateVariable.TransportState = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "TransportState", value));
+        }
+    }
+    
+    public void uriChange(String value)
+    {
+        stateVariable.Uri = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Uri", value));
         }
     }
     

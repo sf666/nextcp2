@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class PlayRecordedItem extends ActionCallback
     public PlayRecordedItem(Service service, PlayRecordedItemInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("PlayRecordedItem"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("UID", new UnsignedIntegerFourBytes(input.UID));
+		
+        getActionInvocation().setInput("UID", UpnpValue.forInput(getActionInvocation(), "UID", input.UID));
     }
 
     public PlayRecordedItemOutput executeAction()
@@ -36,14 +37,7 @@ public class PlayRecordedItem extends ActionCallback
 
         PlayRecordedItemOutput result = new PlayRecordedItemOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

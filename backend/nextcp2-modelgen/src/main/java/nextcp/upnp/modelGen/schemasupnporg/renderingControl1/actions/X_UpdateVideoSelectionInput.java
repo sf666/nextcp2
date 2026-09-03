@@ -10,7 +10,7 @@ public class X_UpdateVideoSelectionInput
 {
 
     public Long InstanceID = null;
-    public Long VideoPID = null;
     public String VideoEncoding = null;
+    public Long VideoPID = null;
 
 }

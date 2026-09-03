@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,7 +36,7 @@ public class GetValidationRevokedUpdateID extends ActionCallback
 
         GetValidationRevokedUpdateIDOutput result = new GetValidationRevokedUpdateIDOutput();
 
-        result.ValidationRevokedUpdateID = ((UnsignedIntegerFourBytes) invocation.getOutput("ValidationRevokedUpdateID").getValue()).getValue();
+        result.ValidationRevokedUpdateID = UpnpValue.toLong(invocation.getOutput("ValidationRevokedUpdateID").getValue());
 
         return result;
     }

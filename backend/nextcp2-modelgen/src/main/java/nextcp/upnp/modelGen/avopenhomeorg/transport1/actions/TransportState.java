@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,14 +36,7 @@ public class TransportState extends ActionCallback
 
         TransportStateOutput result = new TransportStateOutput();
 
-  		if (invocation.getOutput("State").getValue() != null)
-  		{
-	        result.State = invocation.getOutput("State").getValue().toString();
-  		}
-  		else
-  		{
-	        result.State = "";
-  		}
+        result.State = UpnpValue.toTextOrEmpty(invocation.getOutput("State").getValue());
 
         return result;
     }

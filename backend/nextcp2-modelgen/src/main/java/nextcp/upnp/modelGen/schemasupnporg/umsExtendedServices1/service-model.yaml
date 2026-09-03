@@ -1,0 +1,249 @@
+namespace: schemas-upnp-org
+serviceType: UmsExtendedServices
+version: 1
+events: true
+stateVariables:
+  AnonymousDevicesWrite:
+    java: Boolean
+    upnp: boolean
+  AudioLikesVisibleRoot:
+    java: Boolean
+    upnp: boolean
+  AudioUpdateRating:
+    java: Boolean
+    upnp: boolean
+  PlaylistLoop:
+    java: Boolean
+    upnp: boolean
+  PreferEuropeanServer:
+    java: Boolean
+    upnp: boolean
+  UpnpCdsWrite:
+    java: Boolean
+    upnp: boolean
+  WebStreamNowPlaying:
+    java: String
+    upnp: string
+actions:
+  AddRadioStationToPlaylist:
+    input:
+      ObjectID:
+        java: String
+        upnp: string
+      StationUuid:
+        java: String
+        upnp: string
+      Title:
+        java: String
+        upnp: string
+    output:
+      Result:
+        java: String
+        upnp: string
+  BackupAudioLikes:
+    input: {
+      }
+    output: {
+      }
+  BackupRatings:
+    input: {
+      }
+    output: {
+      }
+  DislikeAlbum:
+    input:
+      DiscogsId:
+        java: Long
+        upnp: ui4
+      MusicBrainzId:
+        java: String
+        upnp: string
+    output: {
+      }
+  GetAudioArtistDir:
+    input: {
+      }
+    output:
+      ObjectID:
+        java: String
+        upnp: string
+  GetPlaylistNowPlaying:
+    input:
+      PlaylistId:
+        java: Long
+        upnp: ui4
+    output:
+      NowPlaying:
+        java: String
+        upnp: string
+  GetRadioFilterValues:
+    input:
+      Kind:
+        java: String
+        upnp: string
+      Search:
+        java: String
+        upnp: string
+    output:
+      Result:
+        java: String
+        upnp: string
+  GetWebStreamIcyOrder:
+    input:
+      ObjectID:
+        java: String
+        upnp: string
+    output:
+      IcyOrder:
+        java: String
+        upnp: string
+  GetWebStreamNowPlaying:
+    input:
+      ObjectID:
+        java: String
+        upnp: string
+    output:
+      NowPlaying:
+        java: String
+        upnp: string
+  IsAlbumLiked:
+    input:
+      DiscogsId:
+        java: Long
+        upnp: ui4
+      MusicBrainzId:
+        java: String
+        upnp: string
+    output:
+      AlbumLikedValue:
+        java: Boolean
+        upnp: boolean
+  LikeAlbum:
+    input:
+      DiscogsId:
+        java: Long
+        upnp: ui4
+      MusicBrainzId:
+        java: String
+        upnp: string
+    output: {
+      }
+  RescanMediaStore:
+    input: {
+      }
+    output: {
+      }
+  RescanMediaStoreFolder:
+    input:
+      ObjectID:
+        java: String
+        upnp: string
+    output: {
+      }
+  RestoreAudioLikes:
+    input: {
+      }
+    output: {
+      }
+  RestoreRatings:
+    input: {
+      }
+    output: {
+      }
+  SearchRadioStations:
+    input:
+      CountryCode:
+        java: String
+        upnp: string
+      Language:
+        java: String
+        upnp: string
+      Limit:
+        java: Long
+        upnp: ui4
+      Name:
+        java: String
+        upnp: string
+      Offset:
+        java: Long
+        upnp: ui4
+      Tag:
+        java: String
+        upnp: string
+    output:
+      Result:
+        java: String
+        upnp: string
+  SetAnonymousDevicesWrite:
+    input:
+      AnonymousDevicesWrite:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetAudioAddictPass:
+    input:
+      AudioAddictPass:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetAudioAddictUser:
+    input:
+      AudioAddictUser:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetAudioArtistDir:
+    input:
+      ObjectID:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetAudioLikesVisibleRoot:
+    input:
+      AudioLikesVisibleRoot:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetAudioUpdateRatingTag:
+    input:
+      AudioUpdateRating:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetPlaylistLoop:
+    input:
+      PlaylistLoop:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetPreferEuropeanServer:
+    input:
+      PreferEuropeanServer:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetUpnpCdsWrite:
+    input:
+      UpnpCdsWrite:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetWebStreamIcyOrder:
+    input:
+      IcyOrder:
+        java: String
+        upnp: string
+      ObjectID:
+        java: String
+        upnp: string
+    output: {
+      }

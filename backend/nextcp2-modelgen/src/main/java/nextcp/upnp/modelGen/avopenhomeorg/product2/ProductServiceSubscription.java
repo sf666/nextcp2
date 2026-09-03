@@ -16,8 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
+ * Last Change : 08.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -108,59 +110,59 @@ public class ProductServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "ManufacturerUrl":
-                        manufacturerUrlChange((String) stateVar.getValue());
-                        break;
-                    case "ModelImageUri":
-                        modelImageUriChange((String) stateVar.getValue());
-                        break;
-                    case "ModelInfo":
-                        modelInfoChange((String) stateVar.getValue());
-                        break;
-                    case "ManufacturerInfo":
-                        manufacturerInfoChange((String) stateVar.getValue());
-                        break;
-                    case "ProductName":
-                        productNameChange((String) stateVar.getValue());
-                        break;
-                    case "SourceCount":
-                        sourceCountChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
                     case "Attributes":
-                        attributesChange((String) stateVar.getValue());
-                        break;
-                    case "ProductRoom":
-                        productRoomChange((String) stateVar.getValue());
-                        break;
-                    case "ModelUrl":
-                        modelUrlChange((String) stateVar.getValue());
-                        break;
-                    case "ProductImageUri":
-                        productImageUriChange((String) stateVar.getValue());
-                        break;
-                    case "ProductInfo":
-                        productInfoChange((String) stateVar.getValue());
-                        break;
-                    case "ManufacturerName":
-                        manufacturerNameChange((String) stateVar.getValue());
-                        break;
-                    case "ModelName":
-                        modelNameChange((String) stateVar.getValue());
-                        break;
-                    case "SourceXml":
-                        sourceXmlChange((String) stateVar.getValue());
-                        break;
-                    case "Standby":
-                        standbyChange((Boolean) stateVar.getValue());
+                        attributesChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "ManufacturerImageUri":
-                        manufacturerImageUriChange((String) stateVar.getValue());
+                        manufacturerImageUriChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ManufacturerInfo":
+                        manufacturerInfoChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ManufacturerName":
+                        manufacturerNameChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ManufacturerUrl":
+                        manufacturerUrlChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ModelImageUri":
+                        modelImageUriChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ModelInfo":
+                        modelInfoChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ModelName":
+                        modelNameChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ModelUrl":
+                        modelUrlChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ProductImageUri":
+                        productImageUriChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ProductInfo":
+                        productInfoChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ProductName":
+                        productNameChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ProductRoom":
+                        productRoomChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "ProductUrl":
-                        productUrlChange((String) stateVar.getValue());
+                        productUrlChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "SourceCount":
+                        sourceCountChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     case "SourceIndex":
-                        sourceIndexChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        sourceIndexChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "SourceXml":
+                        sourceXmlChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "Standby":
+                        standbyChange(UpnpValue.toBoolean(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -181,6 +183,38 @@ public class ProductServiceSubscription extends RemoteGENASubscription
             listener.eventProcessed();
         }
     }
+
+    private void attributesChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.attributesChange(value);
+        }
+    }    
+
+    private void manufacturerImageUriChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.manufacturerImageUriChange(value);
+        }
+    }    
+
+    private void manufacturerInfoChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.manufacturerInfoChange(value);
+        }
+    }    
+
+    private void manufacturerNameChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.manufacturerNameChange(value);
+        }
+    }    
 
     private void manufacturerUrlChange(String value)
     {
@@ -206,43 +240,11 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void manufacturerInfoChange(String value)
+    private void modelNameChange(String value)
     {
         for (IProductServiceEventListener listener : eventListener)
         {
-            listener.manufacturerInfoChange(value);
-        }
-    }    
-
-    private void productNameChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.productNameChange(value);
-        }
-    }    
-
-    private void sourceCountChange(Long value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.sourceCountChange(value);
-        }
-    }    
-
-    private void attributesChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.attributesChange(value);
-        }
-    }    
-
-    private void productRoomChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.productRoomChange(value);
+            listener.modelNameChange(value);
         }
     }    
 
@@ -270,19 +272,43 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void manufacturerNameChange(String value)
+    private void productNameChange(String value)
     {
         for (IProductServiceEventListener listener : eventListener)
         {
-            listener.manufacturerNameChange(value);
+            listener.productNameChange(value);
         }
     }    
 
-    private void modelNameChange(String value)
+    private void productRoomChange(String value)
     {
         for (IProductServiceEventListener listener : eventListener)
         {
-            listener.modelNameChange(value);
+            listener.productRoomChange(value);
+        }
+    }    
+
+    private void productUrlChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.productUrlChange(value);
+        }
+    }    
+
+    private void sourceCountChange(Long value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.sourceCountChange(value);
+        }
+    }    
+
+    private void sourceIndexChange(Long value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.sourceIndexChange(value);
         }
     }    
 
@@ -299,30 +325,6 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         for (IProductServiceEventListener listener : eventListener)
         {
             listener.standbyChange(value);
-        }
-    }    
-
-    private void manufacturerImageUriChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.manufacturerImageUriChange(value);
-        }
-    }    
-
-    private void productUrlChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.productUrlChange(value);
-        }
-    }    
-
-    private void sourceIndexChange(Long value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.sourceIndexChange(value);
         }
     }    
 }

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,14 +36,7 @@ public class GetCurrentConnectionIDs extends ActionCallback
 
         GetCurrentConnectionIDsOutput result = new GetCurrentConnectionIDsOutput();
 
-  		if (invocation.getOutput("ConnectionIDs").getValue() != null)
-  		{
-	        result.ConnectionIDs = invocation.getOutput("ConnectionIDs").getValue().toString();
-  		}
-  		else
-  		{
-	        result.ConnectionIDs = "";
-  		}
+        result.ConnectionIDs = UpnpValue.toTextOrEmpty(invocation.getOutput("ConnectionIDs").getValue());
 
         return result;
     }

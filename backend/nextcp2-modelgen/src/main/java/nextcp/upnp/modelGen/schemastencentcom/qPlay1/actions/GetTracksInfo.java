@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,16 +28,8 @@ public class GetTracksInfo extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("GetTracksInfo"), new NextcpClientInfo()), cp);
 		
-        if (input.StartingIndex != null) {
-	        getActionInvocation().setInput("StartingIndex", input.StartingIndex);
-		} else {
-    	    getActionInvocation().setInput("StartingIndex", null);
-		}
-        if (input.NumberOfTracks != null) {
-	        getActionInvocation().setInput("NumberOfTracks", input.NumberOfTracks);
-		} else {
-    	    getActionInvocation().setInput("NumberOfTracks", null);
-		}
+        getActionInvocation().setInput("NumberOfTracks", UpnpValue.forInput(getActionInvocation(), "NumberOfTracks", input.NumberOfTracks));
+        getActionInvocation().setInput("StartingIndex", UpnpValue.forInput(getActionInvocation(), "StartingIndex", input.StartingIndex));
     }
 
     public GetTracksInfoOutput executeAction()
@@ -45,14 +38,7 @@ public class GetTracksInfo extends ActionCallback
 
         GetTracksInfoOutput result = new GetTracksInfoOutput();
 
-  		if (invocation.getOutput("TracksMetaData").getValue() != null)
-  		{
-	        result.TracksMetaData = invocation.getOutput("TracksMetaData").getValue().toString();
-  		}
-  		else
-  		{
-	        result.TracksMetaData = "";
-  		}
+        result.TracksMetaData = UpnpValue.toTextOrEmpty(invocation.getOutput("TracksMetaData").getValue());
 
         return result;
     }

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetScheduleListURL extends ActionCallback
     public GetScheduleListURL(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetScheduleListURL"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetScheduleListURLOutput executeAction()
@@ -35,22 +36,8 @@ public class GetScheduleListURL extends ActionCallback
 
         GetScheduleListURLOutput result = new GetScheduleListURLOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("ScheduleListURL").getValue() != null)
-  		{
-	        result.ScheduleListURL = invocation.getOutput("ScheduleListURL").getValue().toString();
-  		}
-  		else
-  		{
-	        result.ScheduleListURL = "";
-  		}
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
+        result.ScheduleListURL = UpnpValue.toTextOrEmpty(invocation.getOutput("ScheduleListURL").getValue());
 
         return result;
     }

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetBannerInformation extends ActionCallback
     public GetBannerInformation(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetBannerInformation"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetBannerInformationOutput executeAction()
@@ -35,22 +36,8 @@ public class GetBannerInformation extends ActionCallback
 
         GetBannerInformationOutput result = new GetBannerInformationOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("BannerInformation").getValue() != null)
-  		{
-	        result.BannerInformation = invocation.getOutput("BannerInformation").getValue().toString();
-  		}
-  		else
-  		{
-	        result.BannerInformation = "";
-  		}
+        result.BannerInformation = UpnpValue.toTextOrEmpty(invocation.getOutput("BannerInformation").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

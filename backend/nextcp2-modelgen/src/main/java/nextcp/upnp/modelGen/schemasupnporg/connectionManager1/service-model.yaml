@@ -1,0 +1,82 @@
+namespace: schemas-upnp-org
+serviceType: ConnectionManager
+version: 1
+events: true
+stateVariables:
+  CurrentConnectionIDs:
+    java: String
+    upnp: string
+  SinkProtocolInfo:
+    java: String
+    upnp: string
+  SourceProtocolInfo:
+    java: String
+    upnp: string
+actions:
+  ConnectionComplete:
+    input:
+      ConnectionID:
+        java: Integer
+    output: {
+      }
+  GetCurrentConnectionIDs:
+    input: {
+      }
+    output:
+      ConnectionIDs:
+        java: String
+        upnp: string
+  GetCurrentConnectionInfo:
+    input:
+      ConnectionID:
+        java: Integer
+        upnp: i4
+    output:
+      AVTransportID:
+        java: Integer
+        upnp: i4
+      Direction:
+        java: String
+        upnp: string
+      PeerConnectionID:
+        java: Integer
+        upnp: i4
+      PeerConnectionManager:
+        java: String
+        upnp: string
+      ProtocolInfo:
+        java: String
+        upnp: string
+      RcsID:
+        java: Integer
+        upnp: i4
+      Status:
+        java: String
+        upnp: string
+  GetProtocolInfo:
+    input: {
+      }
+    output:
+      Sink:
+        java: String
+        upnp: string
+      Source:
+        java: String
+        upnp: string
+  PrepareForConnection:
+    input:
+      Direction:
+        java: String
+      PeerConnectionID:
+        java: Integer
+      PeerConnectionManager:
+        java: String
+      RemoteProtocolInfo:
+        java: String
+    output:
+      AVTransportID:
+        java: Integer
+      ConnectionID:
+        java: Integer
+      RcsID:
+        java: Integer

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,12 +36,12 @@ public class Characteristics extends ActionCallback
 
         CharacteristicsOutput result = new CharacteristicsOutput();
 
-        result.VolumeMax = ((UnsignedIntegerFourBytes) invocation.getOutput("VolumeMax").getValue()).getValue();
-        result.VolumeUnity = ((UnsignedIntegerFourBytes) invocation.getOutput("VolumeUnity").getValue()).getValue();
-        result.VolumeSteps = ((UnsignedIntegerFourBytes) invocation.getOutput("VolumeSteps").getValue()).getValue();
-        result.VolumeMilliDbPerStep = ((UnsignedIntegerFourBytes) invocation.getOutput("VolumeMilliDbPerStep").getValue()).getValue();
-        result.BalanceMax = ((UnsignedIntegerFourBytes) invocation.getOutput("BalanceMax").getValue()).getValue();
-        result.FadeMax = ((UnsignedIntegerFourBytes) invocation.getOutput("FadeMax").getValue()).getValue();
+        result.BalanceMax = UpnpValue.toLong(invocation.getOutput("BalanceMax").getValue());
+        result.FadeMax = UpnpValue.toLong(invocation.getOutput("FadeMax").getValue());
+        result.VolumeMax = UpnpValue.toLong(invocation.getOutput("VolumeMax").getValue());
+        result.VolumeMilliDbPerStep = UpnpValue.toLong(invocation.getOutput("VolumeMilliDbPerStep").getValue());
+        result.VolumeSteps = UpnpValue.toLong(invocation.getOutput("VolumeSteps").getValue());
+        result.VolumeUnity = UpnpValue.toLong(invocation.getOutput("VolumeUnity").getValue());
 
         return result;
     }

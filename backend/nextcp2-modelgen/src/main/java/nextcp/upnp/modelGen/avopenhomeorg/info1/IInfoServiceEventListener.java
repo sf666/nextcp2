@@ -12,28 +12,28 @@ import nextcp.upnp.ISubscriptionEventListener;
  */
 public interface IInfoServiceEventListener extends ISubscriptionEventListener 
 {
+    public void bitDepthChange(Long value);
+    
+    public void bitRateChange(Long value);
+    
+    public void codecNameChange(String value);
+    
     public void detailsCountChange(Long value);
+    
+    public void durationChange(Long value);
+    
+    public void losslessChange(Boolean value);
+    
+    public void metadataChange(String value);
+    
+    public void metatextChange(String value);
     
     public void metatextCountChange(Long value);
     
     public void sampleRateChange(Long value);
     
-    public void metadataChange(String value);
-    
-    public void durationChange(Long value);
-    
     public void trackCountChange(Long value);
     
-    public void bitRateChange(Long value);
-    
     public void uriChange(String value);
-    
-    public void bitDepthChange(Long value);
-    
-    public void losslessChange(Boolean value);
-    
-    public void codecNameChange(String value);
-    
-    public void metatextChange(String value);
     
 }

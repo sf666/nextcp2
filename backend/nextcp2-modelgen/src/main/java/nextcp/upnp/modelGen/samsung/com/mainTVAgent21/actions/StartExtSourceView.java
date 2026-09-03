@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,11 +27,11 @@ public class StartExtSourceView extends ActionCallback
     public StartExtSourceView(Service service, StartExtSourceViewInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("StartExtSourceView"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Source", input.Source);
-        getActionInvocation().setInput("ID", new UnsignedIntegerFourBytes(input.ID));
-        getActionInvocation().setInput("ForcedFlag", input.ForcedFlag);
-        getActionInvocation().setInput("DRMType", input.DRMType);
+		
+        getActionInvocation().setInput("DRMType", UpnpValue.forInput(getActionInvocation(), "DRMType", input.DRMType));
+        getActionInvocation().setInput("ForcedFlag", UpnpValue.forInput(getActionInvocation(), "ForcedFlag", input.ForcedFlag));
+        getActionInvocation().setInput("ID", UpnpValue.forInput(getActionInvocation(), "ID", input.ID));
+        getActionInvocation().setInput("Source", UpnpValue.forInput(getActionInvocation(), "Source", input.Source));
     }
 
     public StartExtSourceViewOutput executeAction()
@@ -39,22 +40,8 @@ public class StartExtSourceView extends ActionCallback
 
         StartExtSourceViewOutput result = new StartExtSourceViewOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("ExtSourceViewURL").getValue() != null)
-  		{
-	        result.ExtSourceViewURL = invocation.getOutput("ExtSourceViewURL").getValue().toString();
-  		}
-  		else
-  		{
-	        result.ExtSourceViewURL = "";
-  		}
+        result.ExtSourceViewURL = UpnpValue.toTextOrEmpty(invocation.getOutput("ExtSourceViewURL").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

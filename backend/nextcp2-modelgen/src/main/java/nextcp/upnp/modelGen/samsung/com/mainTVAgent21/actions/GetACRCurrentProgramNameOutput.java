@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class GetACRCurrentProgramNameOutput
 {
 
-    public String Result = null;
     public String ProgramName = null;
+    public String Result = null;
 
 }

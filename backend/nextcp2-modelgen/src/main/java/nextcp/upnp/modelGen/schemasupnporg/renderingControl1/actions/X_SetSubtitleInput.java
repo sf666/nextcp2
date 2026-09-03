@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions;
 public class X_SetSubtitleInput
 {
 
-    public Long InstanceID = null;
     public String DesiredSubtitle = null;
+    public Long InstanceID = null;
 
 }

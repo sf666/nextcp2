@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class GetACRMessageOutput
 {
 
-    public String Result = null;
     public String Message = null;
+    public String Result = null;
 
 }

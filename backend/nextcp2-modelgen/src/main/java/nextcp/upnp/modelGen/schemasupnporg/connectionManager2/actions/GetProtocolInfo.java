@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetProtocolInfo extends ActionCallback
     public GetProtocolInfo(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetProtocolInfo"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetProtocolInfoOutput executeAction()
@@ -35,22 +36,8 @@ public class GetProtocolInfo extends ActionCallback
 
         GetProtocolInfoOutput result = new GetProtocolInfoOutput();
 
-  		if (invocation.getOutput("Source").getValue() != null)
-  		{
-	        result.Source = invocation.getOutput("Source").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Source = "";
-  		}
-  		if (invocation.getOutput("Sink").getValue() != null)
-  		{
-	        result.Sink = invocation.getOutput("Sink").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Sink = "";
-  		}
+        result.Sink = UpnpValue.toTextOrEmpty(invocation.getOutput("Sink").getValue());
+        result.Source = UpnpValue.toTextOrEmpty(invocation.getOutput("Source").getValue());
 
         return result;
     }

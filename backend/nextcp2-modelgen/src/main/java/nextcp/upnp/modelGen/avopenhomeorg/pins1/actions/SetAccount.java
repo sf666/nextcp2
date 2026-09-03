@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,15 +27,15 @@ public class SetAccount extends ActionCallback
     public SetAccount(Service service, SetAccountInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetAccount"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Index", new UnsignedIntegerFourBytes(input.Index));
-        getActionInvocation().setInput("Mode", input.Mode);
-        getActionInvocation().setInput("Type", input.Type);
-        getActionInvocation().setInput("Uri", input.Uri);
-        getActionInvocation().setInput("Title", input.Title);
-        getActionInvocation().setInput("Description", input.Description);
-        getActionInvocation().setInput("ArtworkUri", input.ArtworkUri);
-        getActionInvocation().setInput("Shuffle", input.Shuffle);
+		
+        getActionInvocation().setInput("ArtworkUri", UpnpValue.forInput(getActionInvocation(), "ArtworkUri", input.ArtworkUri));
+        getActionInvocation().setInput("Description", UpnpValue.forInput(getActionInvocation(), "Description", input.Description));
+        getActionInvocation().setInput("Index", UpnpValue.forInput(getActionInvocation(), "Index", input.Index));
+        getActionInvocation().setInput("Mode", UpnpValue.forInput(getActionInvocation(), "Mode", input.Mode));
+        getActionInvocation().setInput("Shuffle", UpnpValue.forInput(getActionInvocation(), "Shuffle", input.Shuffle));
+        getActionInvocation().setInput("Title", UpnpValue.forInput(getActionInvocation(), "Title", input.Title));
+        getActionInvocation().setInput("Type", UpnpValue.forInput(getActionInvocation(), "Type", input.Type));
+        getActionInvocation().setInput("Uri", UpnpValue.forInput(getActionInvocation(), "Uri", input.Uri));
     }
 
     public void executeAction()

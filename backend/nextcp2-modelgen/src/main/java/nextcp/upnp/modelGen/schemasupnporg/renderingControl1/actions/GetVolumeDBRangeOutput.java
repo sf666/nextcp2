@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions;
 public class GetVolumeDBRangeOutput
 {
 
-    public Integer MinValue = null;
     public Integer MaxValue = null;
+    public Integer MinValue = null;
 
 }

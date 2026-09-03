@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,21 +28,9 @@ public class SetLyric extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SetLyric"), new NextcpClientInfo()), cp);
 		
-        if (input.SongID != null) {
-	        getActionInvocation().setInput("SongID", input.SongID);
-		} else {
-    	    getActionInvocation().setInput("SongID", null);
-		}
-        if (input.LyricType != null) {
-	        getActionInvocation().setInput("LyricType", input.LyricType);
-		} else {
-    	    getActionInvocation().setInput("LyricType", null);
-		}
-        if (input.Lyric != null) {
-	        getActionInvocation().setInput("Lyric", input.Lyric);
-		} else {
-    	    getActionInvocation().setInput("Lyric", null);
-		}
+        getActionInvocation().setInput("Lyric", UpnpValue.forInput(getActionInvocation(), "Lyric", input.Lyric));
+        getActionInvocation().setInput("LyricType", UpnpValue.forInput(getActionInvocation(), "LyricType", input.LyricType));
+        getActionInvocation().setInput("SongID", UpnpValue.forInput(getActionInvocation(), "SongID", input.SongID));
     }
 
     public void executeAction()

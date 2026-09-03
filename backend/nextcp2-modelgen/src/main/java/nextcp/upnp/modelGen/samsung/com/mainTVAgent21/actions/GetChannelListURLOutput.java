@@ -9,11 +9,11 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class GetChannelListURLOutput
 {
 
-    public String Result = null;
-    public Long ChannelListVersion = null;
-    public String SupportChannelList = null;
-    public String ChannelListURL = null;
     public String ChannelListType = null;
+    public String ChannelListURL = null;
+    public Long ChannelListVersion = null;
+    public String Result = null;
     public Long SatelliteID = null;
+    public String SupportChannelList = null;
 
 }

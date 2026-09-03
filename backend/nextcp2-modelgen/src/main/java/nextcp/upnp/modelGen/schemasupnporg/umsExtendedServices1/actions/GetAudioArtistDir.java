@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,14 +36,7 @@ public class GetAudioArtistDir extends ActionCallback
 
         GetAudioArtistDirOutput result = new GetAudioArtistDirOutput();
 
-  		if (invocation.getOutput("ObjectID").getValue() != null)
-  		{
-	        result.ObjectID = invocation.getOutput("ObjectID").getValue().toString();
-  		}
-  		else
-  		{
-	        result.ObjectID = "";
-  		}
+        result.ObjectID = UpnpValue.toTextOrEmpty(invocation.getOutput("ObjectID").getValue());
 
         return result;
     }

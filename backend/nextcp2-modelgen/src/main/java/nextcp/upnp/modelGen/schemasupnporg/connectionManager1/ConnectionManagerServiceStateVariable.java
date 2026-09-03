@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.schemasupnporg.connectionManager1;
 public class ConnectionManagerServiceStateVariable
 {
 
-    public String SinkProtocolInfo = null;
     public String CurrentConnectionIDs = null;
+    public String SinkProtocolInfo = null;
     public String SourceProtocolInfo = null;
 
 }

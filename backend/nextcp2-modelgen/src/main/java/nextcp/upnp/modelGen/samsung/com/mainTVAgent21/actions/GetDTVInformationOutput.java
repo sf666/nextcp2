@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class GetDTVInformationOutput
 {
 
-    public String Result = null;
     public String DTVInformation = null;
+    public String Result = null;
 
 }

@@ -1,0 +1,98 @@
+namespace: av-openhome-org
+serviceType: Pins
+version: 1
+events: true
+stateVariables:
+  AccountMax:
+    java: Long
+  DeviceMax:
+    java: Long
+  IdArray:
+    java: String
+  Modes:
+    java: String
+actions:
+  Clear:
+    input:
+      Id:
+        java: Long
+    output: {}
+  GetDeviceAccountMax:
+    input: {}
+    output:
+      AccountMax:
+        java: Long
+      DeviceMax:
+        java: Long
+  GetIdArray:
+    input: {}
+    output:
+      IdArray:
+        java: String
+  GetModes:
+    input: {}
+    output:
+      Modes:
+        java: String
+  InvokeId:
+    input:
+      Id:
+        java: Long
+    output: {}
+  InvokeIndex:
+    input:
+      Index:
+        java: Long
+    output: {}
+  ReadList:
+    input:
+      Ids:
+        java: String
+    output:
+      List:
+        java: String
+  SetAccount:
+    input:
+      ArtworkUri:
+        java: String
+      Description:
+        java: String
+      Index:
+        java: Long
+      Mode:
+        java: String
+      Shuffle:
+        java: Boolean
+      Title:
+        java: String
+      Type:
+        java: String
+      Uri:
+        java: String
+    output: {}
+  SetDevice:
+    input:
+      ArtworkUri:
+        java: String
+      Description:
+        java: String
+      Index:
+        java: Long
+      Mode:
+        java: String
+      Shuffle:
+        java: Boolean
+      Title:
+        java: String
+      Type:
+        java: String
+      Uri:
+        java: String
+    output: {}
+  Swap:
+    input:
+      Index1:
+        java: Long
+      Index2:
+        java: Long
+    output: {}

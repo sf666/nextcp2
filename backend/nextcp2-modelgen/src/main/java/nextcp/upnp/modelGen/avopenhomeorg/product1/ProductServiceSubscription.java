@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
  * Last Change : 08.09.2025
@@ -109,81 +110,71 @@ public class ProductServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "ManufacturerUrl":
-                        manufacturerUrlChange((String) stateVar.getValue());
-                        break;
-                    case "ModelImageUri":
-                        modelImageUriChange((String) stateVar.getValue());
-                        break;
-                    case "ProductInfo":
-                        productInfoChange((String) stateVar.getValue());
-                        break;
-                    case "ModelInfo":
-                        modelInfoChange((String) stateVar.getValue());
-                        break;
-                    case "ManufacturerName":
-                        manufacturerNameChange((String) stateVar.getValue());
-                        break;
-                    case "ManufacturerInfo":
-                        manufacturerInfoChange((String) stateVar.getValue());
-                        break;
-                    case "ModelName":
-                        modelNameChange((String) stateVar.getValue());
-                        break;
-                    case "SourceVisible":
-                    	try {
-                    		sourceVisibleChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[sourceVisible] unexpected value : " + stateVar.getValue());
-                    		sourceVisibleChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
-                    case "ProductName":
-                        productNameChange((String) stateVar.getValue());
-                        break;
-                    case "SourceCount":
-                        sourceCountChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "SourceType":
-                        sourceTypeChange((String) stateVar.getValue());
-                        break;
                     case "Attributes":
-                        attributesChange((String) stateVar.getValue());
-                        break;
-                    case "SourceName":
-                        sourceNameChange((String) stateVar.getValue());
-                        break;
-                    case "ProductRoom":
-                        productRoomChange((String) stateVar.getValue());
-                        break;
-                    case "SourceXml":
-                        sourceXmlChange((String) stateVar.getValue());
-                        break;
-                    case "Standby":
-                    	try {
-                    		standbyChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[standby] unexpected value : " + stateVar.getValue());
-                    		standbyChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
+                        attributesChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "ManufacturerImageUri":
-                        manufacturerImageUriChange((String) stateVar.getValue());
+                        manufacturerImageUriChange(UpnpValue.toText(stateVar.getValue()));
                         break;
-                    case "ProductUrl":
-                        productUrlChange((String) stateVar.getValue());
+                    case "ManufacturerInfo":
+                        manufacturerInfoChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ManufacturerName":
+                        manufacturerNameChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ManufacturerUrl":
+                        manufacturerUrlChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ModelImageUri":
+                        modelImageUriChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ModelInfo":
+                        modelInfoChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ModelName":
+                        modelNameChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "ModelUrl":
-                        modelUrlChange((String) stateVar.getValue());
-                        break;
-                    case "SourceIndex":
-                        sourceIndexChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        modelUrlChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "ProductImageUri":
-                        productImageUriChange((String) stateVar.getValue());
+                        productImageUriChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ProductInfo":
+                        productInfoChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ProductName":
+                        productNameChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ProductRoom":
+                        productRoomChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "ProductUrl":
+                        productUrlChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "SourceCount":
+                        sourceCountChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "SourceIndex":
+                        sourceIndexChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "SourceName":
+                        sourceNameChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "SourceType":
+                        sourceTypeChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "SourceVisible":
+                        sourceVisibleChange(UpnpValue.toBoolean(stateVar.getValue()));
+                        break;
+                    case "SourceXml":
+                        sourceXmlChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "SourceXmlChangeCount":
-                        sourceXmlChangeCountChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        sourceXmlChangeCountChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "Standby":
+                        standbyChange(UpnpValue.toBoolean(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -205,6 +196,38 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         }
     }
 
+    private void attributesChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.attributesChange(value);
+        }
+    }    
+
+    private void manufacturerImageUriChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.manufacturerImageUriChange(value);
+        }
+    }    
+
+    private void manufacturerInfoChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.manufacturerInfoChange(value);
+        }
+    }    
+
+    private void manufacturerNameChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.manufacturerNameChange(value);
+        }
+    }    
+
     private void manufacturerUrlChange(String value)
     {
         for (IProductServiceEventListener listener : eventListener)
@@ -221,35 +244,11 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void productInfoChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.productInfoChange(value);
-        }
-    }    
-
     private void modelInfoChange(String value)
     {
         for (IProductServiceEventListener listener : eventListener)
         {
             listener.modelInfoChange(value);
-        }
-    }    
-
-    private void manufacturerNameChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.manufacturerNameChange(value);
-        }
-    }    
-
-    private void manufacturerInfoChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.manufacturerInfoChange(value);
         }
     }    
 
@@ -261,107 +260,11 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void sourceVisibleChange(Boolean value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.sourceVisibleChange(value);
-        }
-    }    
-
-    private void productNameChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.productNameChange(value);
-        }
-    }    
-
-    private void sourceCountChange(Long value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.sourceCountChange(value);
-        }
-    }    
-
-    private void sourceTypeChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.sourceTypeChange(value);
-        }
-    }    
-
-    private void attributesChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.attributesChange(value);
-        }
-    }    
-
-    private void sourceNameChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.sourceNameChange(value);
-        }
-    }    
-
-    private void productRoomChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.productRoomChange(value);
-        }
-    }    
-
-    private void sourceXmlChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.sourceXmlChange(value);
-        }
-    }    
-
-    private void standbyChange(Boolean value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.standbyChange(value);
-        }
-    }    
-
-    private void manufacturerImageUriChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.manufacturerImageUriChange(value);
-        }
-    }    
-
-    private void productUrlChange(String value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.productUrlChange(value);
-        }
-    }    
-
     private void modelUrlChange(String value)
     {
         for (IProductServiceEventListener listener : eventListener)
         {
             listener.modelUrlChange(value);
-        }
-    }    
-
-    private void sourceIndexChange(Long value)
-    {
-        for (IProductServiceEventListener listener : eventListener)
-        {
-            listener.sourceIndexChange(value);
         }
     }    
 
@@ -373,11 +276,99 @@ public class ProductServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void productInfoChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.productInfoChange(value);
+        }
+    }    
+
+    private void productNameChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.productNameChange(value);
+        }
+    }    
+
+    private void productRoomChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.productRoomChange(value);
+        }
+    }    
+
+    private void productUrlChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.productUrlChange(value);
+        }
+    }    
+
+    private void sourceCountChange(Long value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.sourceCountChange(value);
+        }
+    }    
+
+    private void sourceIndexChange(Long value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.sourceIndexChange(value);
+        }
+    }    
+
+    private void sourceNameChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.sourceNameChange(value);
+        }
+    }    
+
+    private void sourceTypeChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.sourceTypeChange(value);
+        }
+    }    
+
+    private void sourceVisibleChange(Boolean value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.sourceVisibleChange(value);
+        }
+    }    
+
+    private void sourceXmlChange(String value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.sourceXmlChange(value);
+        }
+    }    
+
     private void sourceXmlChangeCountChange(Long value)
     {
         for (IProductServiceEventListener listener : eventListener)
         {
             listener.sourceXmlChangeCountChange(value);
+        }
+    }    
+
+    private void standbyChange(Boolean value)
+    {
+        for (IProductServiceEventListener listener : eventListener)
+        {
+            listener.standbyChange(value);
         }
     }    
 }

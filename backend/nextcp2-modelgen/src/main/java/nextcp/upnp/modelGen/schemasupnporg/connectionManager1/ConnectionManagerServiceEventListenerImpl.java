@@ -125,21 +125,21 @@ public class ConnectionManagerServiceEventListenerImpl implements IConnectionMan
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void sinkProtocolInfoChange(String value)
-    {
-        stateVariable.SinkProtocolInfo = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "SinkProtocolInfo", value));
-        }
-    }
-    
     public void currentConnectionIDsChange(String value)
     {
         stateVariable.CurrentConnectionIDs = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "CurrentConnectionIDs", value));
+        }
+    }
+    
+    public void sinkProtocolInfoChange(String value)
+    {
+        stateVariable.SinkProtocolInfo = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "SinkProtocolInfo", value));
         }
     }
     

@@ -14,15 +14,15 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
 
-import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.SetEnabled;
-import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.SetEnabledInput;
-import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.Set;
-import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.SetInput;
-import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.GetPublicKey;
-import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.GetPublicKeyOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.Clear;
+import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.ClearInput;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.Get;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.GetOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.GetInput;
+import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.GetIds;
+import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.GetIdsOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.GetPublicKey;
+import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.GetPublicKeyOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.GetSequenceNumber;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.GetSequenceNumberOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.Login;
@@ -31,10 +31,10 @@ import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.LoginInput;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.ReLogin;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.ReLoginOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.ReLoginInput;
-import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.Clear;
-import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.ClearInput;
-import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.GetIds;
-import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.GetIdsOutput;
+import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.Set;
+import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.SetInput;
+import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.SetEnabled;
+import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.SetEnabledInput;
 
 
 /**
@@ -137,29 +137,30 @@ public class CredentialsService
 
 
 
-    public void setEnabled(SetEnabledInput inp)
+    public void clear(ClearInput inp)
     {
-        SetEnabled setEnabled = new SetEnabled(credentialsService, inp, upnpService.getControlPoint());
-        setEnabled.executeAction();
-    }
-
-    public void set(SetInput inp)
-    {
-        Set set = new Set(credentialsService, inp, upnpService.getControlPoint());
-        set.executeAction();
-    }
-
-    public GetPublicKeyOutput getPublicKey()
-    {
-        GetPublicKey getPublicKey = new GetPublicKey(credentialsService,  upnpService.getControlPoint());
-        GetPublicKeyOutput res = getPublicKey.executeAction();
-        return res;        
+        Clear clear = new Clear(credentialsService, inp, upnpService.getControlPoint());
+        clear.executeAction();
     }
 
     public GetOutput get(GetInput inp)
     {
         Get get = new Get(credentialsService, inp, upnpService.getControlPoint());
         GetOutput res = get.executeAction();
+        return res;        
+    }
+
+    public GetIdsOutput getIds()
+    {
+        GetIds getIds = new GetIds(credentialsService,  upnpService.getControlPoint());
+        GetIdsOutput res = getIds.executeAction();
+        return res;        
+    }
+
+    public GetPublicKeyOutput getPublicKey()
+    {
+        GetPublicKey getPublicKey = new GetPublicKey(credentialsService,  upnpService.getControlPoint());
+        GetPublicKeyOutput res = getPublicKey.executeAction();
         return res;        
     }
 
@@ -184,16 +185,15 @@ public class CredentialsService
         return res;        
     }
 
-    public void clear(ClearInput inp)
+    public void set(SetInput inp)
     {
-        Clear clear = new Clear(credentialsService, inp, upnpService.getControlPoint());
-        clear.executeAction();
+        Set set = new Set(credentialsService, inp, upnpService.getControlPoint());
+        set.executeAction();
     }
 
-    public GetIdsOutput getIds()
+    public void setEnabled(SetEnabledInput inp)
     {
-        GetIds getIds = new GetIds(credentialsService,  upnpService.getControlPoint());
-        GetIdsOutput res = getIds.executeAction();
-        return res;        
+        SetEnabled setEnabled = new SetEnabled(credentialsService, inp, upnpService.getControlPoint());
+        setEnabled.executeAction();
     }
 }

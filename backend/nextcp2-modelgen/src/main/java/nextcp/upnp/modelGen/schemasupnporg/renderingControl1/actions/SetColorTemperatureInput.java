@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions;
 public class SetColorTemperatureInput
 {
 
-    public Long InstanceID = null;
     public Long DesiredColorTemperature = null;
+    public Long InstanceID = null;
 
 }

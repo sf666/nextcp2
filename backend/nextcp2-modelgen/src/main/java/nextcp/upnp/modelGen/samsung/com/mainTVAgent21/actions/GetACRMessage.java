@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetACRMessage extends ActionCallback
     public GetACRMessage(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetACRMessage"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetACRMessageOutput executeAction()
@@ -35,22 +36,8 @@ public class GetACRMessage extends ActionCallback
 
         GetACRMessageOutput result = new GetACRMessageOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("Message").getValue() != null)
-  		{
-	        result.Message = invocation.getOutput("Message").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Message = "";
-  		}
+        result.Message = UpnpValue.toTextOrEmpty(invocation.getOutput("Message").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

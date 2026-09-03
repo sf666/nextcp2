@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,10 +27,10 @@ public class SetMainTVChannel extends ActionCallback
     public SetMainTVChannel(Service service, SetMainTVChannelInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetMainTVChannel"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("ChannelListType", input.ChannelListType);
-        getActionInvocation().setInput("SatelliteID", new UnsignedIntegerFourBytes(input.SatelliteID));
-        getActionInvocation().setInput("Channel", input.Channel);
+		
+        getActionInvocation().setInput("Channel", UpnpValue.forInput(getActionInvocation(), "Channel", input.Channel));
+        getActionInvocation().setInput("ChannelListType", UpnpValue.forInput(getActionInvocation(), "ChannelListType", input.ChannelListType));
+        getActionInvocation().setInput("SatelliteID", UpnpValue.forInput(getActionInvocation(), "SatelliteID", input.SatelliteID));
     }
 
     public SetMainTVChannelOutput executeAction()
@@ -38,14 +39,7 @@ public class SetMainTVChannel extends ActionCallback
 
         SetMainTVChannelOutput result = new SetMainTVChannelOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

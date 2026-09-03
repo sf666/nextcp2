@@ -134,12 +134,12 @@ public class UmsExtendedServicesServiceEventListenerImpl implements IUmsExtended
         }
     }
     
-    public void upnpCdsWriteChange(Boolean value)
+    public void audioLikesVisibleRootChange(Boolean value)
     {
-        stateVariable.UpnpCdsWrite = value;
+        stateVariable.AudioLikesVisibleRoot = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "UpnpCdsWrite", value));
+            log.debug(String.format("StateVariable : %s: %s", "AudioLikesVisibleRoot", value));
         }
     }
     
@@ -152,6 +152,15 @@ public class UmsExtendedServicesServiceEventListenerImpl implements IUmsExtended
         }
     }
     
+    public void playlistLoopChange(Boolean value)
+    {
+        stateVariable.PlaylistLoop = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "PlaylistLoop", value));
+        }
+    }
+    
     public void preferEuropeanServerChange(Boolean value)
     {
         stateVariable.PreferEuropeanServer = value;
@@ -161,21 +170,12 @@ public class UmsExtendedServicesServiceEventListenerImpl implements IUmsExtended
         }
     }
     
-    public void audioLikesVisibleRootChange(Boolean value)
+    public void upnpCdsWriteChange(Boolean value)
     {
-        stateVariable.AudioLikesVisibleRoot = value;
+        stateVariable.UpnpCdsWrite = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "AudioLikesVisibleRoot", value));
-        }
-    }
-    
-    public void playlistLoopChange(Boolean value)
-    {
-        stateVariable.PlaylistLoop = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "PlaylistLoop", value));
+            log.debug(String.format("StateVariable : %s: %s", "UpnpCdsWrite", value));
         }
     }
     

@@ -9,10 +9,10 @@ package nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions;
 public class GetOutput
 {
 
-    public String UserName = null;
-    public byte[] Password = null;
-    public Boolean Enabled = null;
-    public String Status = null;
     public String Data = null;
+    public Boolean Enabled = null;
+    public byte[] Password = null;
+    public String Status = null;
+    public String UserName = null;
 
 }

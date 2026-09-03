@@ -1,0 +1,115 @@
+namespace: schemas-upnp-org
+serviceType: RenderingControl
+version: 2
+events: true
+stateVariables:
+  BlueVideoBlackLevel:
+    java: Long
+  BlueVideoGain:
+    java: Long
+  Brightness:
+    java: Long
+  ColorTemperature:
+    java: Long
+  Contrast:
+    java: Long
+  GreenVideoBlackLevel:
+    java: Long
+  GreenVideoGain:
+    java: Long
+  HorizontalKeystone:
+    java: Integer
+  LastChange:
+    java: String
+    upnp: string
+  Loudness:
+    java: Boolean
+  Mute:
+    java: Boolean
+    upnp: boolean
+  PresetNameList:
+    java: String
+    upnp: string
+  RedVideoBlackLevel:
+    java: Long
+  RedVideoGain:
+    java: Long
+  Sharpness:
+    java: Long
+  VerticalKeystone:
+    java: Integer
+  Volume:
+    java: Long
+    upnp: ui2
+  VolumeDB:
+    java: Integer
+actions:
+  GetMute:
+    input:
+      Channel:
+        java: String
+        upnp: string
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output:
+      CurrentMute:
+        java: Boolean
+        upnp: boolean
+  GetVolume:
+    input:
+      Channel:
+        java: String
+        upnp: string
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output:
+      CurrentVolume:
+        java: Long
+        upnp: ui2
+  ListPresets:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output:
+      CurrentPresetNameList:
+        java: String
+        upnp: string
+  SelectPreset:
+    input:
+      InstanceID:
+        java: Long
+        upnp: ui4
+      PresetName:
+        java: String
+        upnp: string
+    output: {
+      }
+  SetMute:
+    input:
+      Channel:
+        java: String
+        upnp: string
+      DesiredMute:
+        java: Boolean
+        upnp: boolean
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  SetVolume:
+    input:
+      Channel:
+        java: String
+        upnp: string
+      DesiredVolume:
+        java: Long
+        upnp: ui2
+      InstanceID:
+        java: Long
+        upnp: ui4
+    output: {
+      }

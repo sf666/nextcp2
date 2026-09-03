@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,10 +27,10 @@ public class X_UpdateAudioSelection extends ActionCallback
     public X_UpdateAudioSelection(Service service, X_UpdateAudioSelectionInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("X_UpdateAudioSelection"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("AudioPID", new UnsignedIntegerTwoBytes(input.AudioPID));
-        getActionInvocation().setInput("AudioEncoding", input.AudioEncoding);
+		
+        getActionInvocation().setInput("AudioEncoding", UpnpValue.forInput(getActionInvocation(), "AudioEncoding", input.AudioEncoding));
+        getActionInvocation().setInput("AudioPID", UpnpValue.forInput(getActionInvocation(), "AudioPID", input.AudioPID));
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
     }
 
     public void executeAction()

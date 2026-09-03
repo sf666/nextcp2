@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class StartExtSourceViewOutput
 {
 
-    public String Result = null;
     public String ExtSourceViewURL = null;
+    public String Result = null;
 
 }

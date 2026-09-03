@@ -125,75 +125,12 @@ public class AVTransportServiceEventListenerImpl implements IAVTransportServiceE
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void x_DLNA_RelativeBytePositionChange(String value)
+    public void aVTransportURIChange(String value)
     {
-        stateVariable.X_DLNA_RelativeBytePosition = value;
+        stateVariable.AVTransportURI = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "X_DLNA_RelativeBytePosition", value));
-        }
-    }
-    
-    public void x_DLNA_CurrentTrackSizeChange(String value)
-    {
-        stateVariable.X_DLNA_CurrentTrackSize = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "X_DLNA_CurrentTrackSize", value));
-        }
-    }
-    
-    public void x_DLNA_AbsoluteBytePositionChange(String value)
-    {
-        stateVariable.X_DLNA_AbsoluteBytePosition = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "X_DLNA_AbsoluteBytePosition", value));
-        }
-    }
-    
-    public void currentMediaCategoryChange(String value)
-    {
-        stateVariable.CurrentMediaCategory = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "CurrentMediaCategory", value));
-        }
-    }
-    
-    public void absoluteTimePositionChange(String value)
-    {
-        stateVariable.AbsoluteTimePosition = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "AbsoluteTimePosition", value));
-        }
-    }
-    
-    public void currentTrackURIChange(String value)
-    {
-        stateVariable.CurrentTrackURI = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "CurrentTrackURI", value));
-        }
-    }
-    
-    public void currentTrackMetaDataChange(String value)
-    {
-        stateVariable.CurrentTrackMetaData = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "CurrentTrackMetaData", value));
-        }
-    }
-    
-    public void relativeCounterPositionChange(Integer value)
-    {
-        stateVariable.RelativeCounterPosition = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "RelativeCounterPosition", value));
+            log.debug(String.format("StateVariable : %s: %s", "AVTransportURI", value));
         }
     }
     
@@ -206,21 +143,57 @@ public class AVTransportServiceEventListenerImpl implements IAVTransportServiceE
         }
     }
     
-    public void transportStatusChange(String value)
+    public void absoluteCounterPositionChange(Integer value)
     {
-        stateVariable.TransportStatus = value;
+        stateVariable.AbsoluteCounterPosition = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "TransportStatus", value));
+            log.debug(String.format("StateVariable : %s: %s", "AbsoluteCounterPosition", value));
         }
     }
     
-    public void transportStateChange(String value)
+    public void absoluteTimePositionChange(String value)
     {
-        stateVariable.TransportState = value;
+        stateVariable.AbsoluteTimePosition = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "TransportState", value));
+            log.debug(String.format("StateVariable : %s: %s", "AbsoluteTimePosition", value));
+        }
+    }
+    
+    public void currentMediaCategoryChange(String value)
+    {
+        stateVariable.CurrentMediaCategory = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "CurrentMediaCategory", value));
+        }
+    }
+    
+    public void currentMediaDurationChange(String value)
+    {
+        stateVariable.CurrentMediaDuration = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "CurrentMediaDuration", value));
+        }
+    }
+    
+    public void currentPlayModeChange(String value)
+    {
+        stateVariable.CurrentPlayMode = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "CurrentPlayMode", value));
+        }
+    }
+    
+    public void currentRecordQualityModeChange(String value)
+    {
+        stateVariable.CurrentRecordQualityMode = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "CurrentRecordQualityMode", value));
         }
     }
     
@@ -233,21 +206,66 @@ public class AVTransportServiceEventListenerImpl implements IAVTransportServiceE
         }
     }
     
-    public void possibleRecordQualityModesChange(String value)
+    public void currentTrackDurationChange(String value)
     {
-        stateVariable.PossibleRecordQualityModes = value;
+        stateVariable.CurrentTrackDuration = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "PossibleRecordQualityModes", value));
+            log.debug(String.format("StateVariable : %s: %s", "CurrentTrackDuration", value));
         }
     }
     
-    public void playbackStorageMediumChange(String value)
+    public void currentTrackMetaDataChange(String value)
     {
-        stateVariable.PlaybackStorageMedium = value;
+        stateVariable.CurrentTrackMetaData = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "PlaybackStorageMedium", value));
+            log.debug(String.format("StateVariable : %s: %s", "CurrentTrackMetaData", value));
+        }
+    }
+    
+    public void currentTrackURIChange(String value)
+    {
+        stateVariable.CurrentTrackURI = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "CurrentTrackURI", value));
+        }
+    }
+    
+    public void currentTransportActionsChange(String value)
+    {
+        stateVariable.CurrentTransportActions = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "CurrentTransportActions", value));
+        }
+    }
+    
+    public void dRMStateChange(String value)
+    {
+        stateVariable.DRMState = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "DRMState", value));
+        }
+    }
+    
+    public void lastChangeChange(String value)
+    {
+        stateVariable.LastChange = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "LastChange", value));
+        }
+    }
+    
+    public void nextAVTransportURIChange(String value)
+    {
+        stateVariable.NextAVTransportURI = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "NextAVTransportURI", value));
         }
     }
     
@@ -269,93 +287,12 @@ public class AVTransportServiceEventListenerImpl implements IAVTransportServiceE
         }
     }
     
-    public void currentMediaDurationChange(String value)
+    public void playbackStorageMediumChange(String value)
     {
-        stateVariable.CurrentMediaDuration = value;
+        stateVariable.PlaybackStorageMedium = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "CurrentMediaDuration", value));
-        }
-    }
-    
-    public void nextAVTransportURIChange(String value)
-    {
-        stateVariable.NextAVTransportURI = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "NextAVTransportURI", value));
-        }
-    }
-    
-    public void recordStorageMediumChange(String value)
-    {
-        stateVariable.RecordStorageMedium = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "RecordStorageMedium", value));
-        }
-    }
-    
-    public void aVTransportURIChange(String value)
-    {
-        stateVariable.AVTransportURI = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "AVTransportURI", value));
-        }
-    }
-    
-    public void transportPlaySpeedChange(String value)
-    {
-        stateVariable.TransportPlaySpeed = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "TransportPlaySpeed", value));
-        }
-    }
-    
-    public void absoluteCounterPositionChange(Integer value)
-    {
-        stateVariable.AbsoluteCounterPosition = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "AbsoluteCounterPosition", value));
-        }
-    }
-    
-    public void relativeTimePositionChange(String value)
-    {
-        stateVariable.RelativeTimePosition = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "RelativeTimePosition", value));
-        }
-    }
-    
-    public void dRMStateChange(String value)
-    {
-        stateVariable.DRMState = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "DRMState", value));
-        }
-    }
-    
-    public void currentTrackDurationChange(String value)
-    {
-        stateVariable.CurrentTrackDuration = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "CurrentTrackDuration", value));
-        }
-    }
-    
-    public void currentPlayModeChange(String value)
-    {
-        stateVariable.CurrentPlayMode = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "CurrentPlayMode", value));
+            log.debug(String.format("StateVariable : %s: %s", "PlaybackStorageMedium", value));
         }
     }
     
@@ -368,30 +305,12 @@ public class AVTransportServiceEventListenerImpl implements IAVTransportServiceE
         }
     }
     
-    public void currentRecordQualityModeChange(String value)
+    public void possibleRecordQualityModesChange(String value)
     {
-        stateVariable.CurrentRecordQualityMode = value;
+        stateVariable.PossibleRecordQualityModes = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "CurrentRecordQualityMode", value));
-        }
-    }
-    
-    public void recordMediumWriteStatusChange(String value)
-    {
-        stateVariable.RecordMediumWriteStatus = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "RecordMediumWriteStatus", value));
-        }
-    }
-    
-    public void currentTransportActionsChange(String value)
-    {
-        stateVariable.CurrentTransportActions = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "CurrentTransportActions", value));
+            log.debug(String.format("StateVariable : %s: %s", "PossibleRecordQualityModes", value));
         }
     }
     
@@ -404,12 +323,93 @@ public class AVTransportServiceEventListenerImpl implements IAVTransportServiceE
         }
     }
     
-    public void lastChangeChange(String value)
+    public void recordMediumWriteStatusChange(String value)
     {
-        stateVariable.LastChange = value;
+        stateVariable.RecordMediumWriteStatus = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "LastChange", value));
+            log.debug(String.format("StateVariable : %s: %s", "RecordMediumWriteStatus", value));
+        }
+    }
+    
+    public void recordStorageMediumChange(String value)
+    {
+        stateVariable.RecordStorageMedium = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "RecordStorageMedium", value));
+        }
+    }
+    
+    public void relativeCounterPositionChange(Integer value)
+    {
+        stateVariable.RelativeCounterPosition = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "RelativeCounterPosition", value));
+        }
+    }
+    
+    public void relativeTimePositionChange(String value)
+    {
+        stateVariable.RelativeTimePosition = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "RelativeTimePosition", value));
+        }
+    }
+    
+    public void transportPlaySpeedChange(String value)
+    {
+        stateVariable.TransportPlaySpeed = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "TransportPlaySpeed", value));
+        }
+    }
+    
+    public void transportStateChange(String value)
+    {
+        stateVariable.TransportState = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "TransportState", value));
+        }
+    }
+    
+    public void transportStatusChange(String value)
+    {
+        stateVariable.TransportStatus = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "TransportStatus", value));
+        }
+    }
+    
+    public void x_DLNA_AbsoluteBytePositionChange(String value)
+    {
+        stateVariable.X_DLNA_AbsoluteBytePosition = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "X_DLNA_AbsoluteBytePosition", value));
+        }
+    }
+    
+    public void x_DLNA_CurrentTrackSizeChange(String value)
+    {
+        stateVariable.X_DLNA_CurrentTrackSize = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "X_DLNA_CurrentTrackSize", value));
+        }
+    }
+    
+    public void x_DLNA_RelativeBytePositionChange(String value)
+    {
+        stateVariable.X_DLNA_RelativeBytePosition = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "X_DLNA_RelativeBytePosition", value));
         }
     }
     

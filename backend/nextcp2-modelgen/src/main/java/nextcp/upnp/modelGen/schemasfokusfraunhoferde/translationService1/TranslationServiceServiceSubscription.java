@@ -16,8 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
+ * Last Change : 08.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -69,7 +71,7 @@ public class TranslationServiceServiceSubscription extends RemoteGENASubscriptio
     @Override
     public void ended(CancelReason reason, UpnpResponse responseStatus)
     {
-        log.warn("ended");
+        log.debug("ended");
         for (ISubscriptionEventListener listener : eventListener)
         {
             listener.ended(reason, responseStatus);
@@ -109,10 +111,10 @@ public class TranslationServiceServiceSubscription extends RemoteGENASubscriptio
                 switch (key)
                 {
                     case "LanguageIDList":
-                        languageIDListChange((String) stateVar.getValue());
+                        languageIDListChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "UpdateID":
-                        updateIDChange((String) stateVar.getValue());
+                        updateIDChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);

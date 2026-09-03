@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions;
 public class GetMuteInput
 {
 
-    public Long InstanceID = null;
     public String Channel = null;
+    public Long InstanceID = null;
 
 }

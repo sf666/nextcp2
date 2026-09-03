@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
  * Last Change : 08.09.2025
@@ -110,7 +111,7 @@ public class QPlayServiceSubscription extends RemoteGENASubscription
                 switch (key)
                 {
                     case "FakeState":
-                        fakeStateChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        fakeStateChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);

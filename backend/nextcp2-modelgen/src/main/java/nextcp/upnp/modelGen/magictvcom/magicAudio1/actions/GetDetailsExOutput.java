@@ -10,13 +10,14 @@ public class GetDetailsExOutput
 {
 
     public String FormatConversion = null;
+    public String MQAAuthenticity = null;
+    public Long MQACreatorId = null;
+    public String MQAProvenance = null;
+    public Long MQASampleRate = null;
     public Long OutputBitDepth = null;
-    public Long OutputSampleRate = null;
     public Boolean OutputDeemphasis = null;
     public Boolean OutputInvertPhase = null;
-    public Long MQASampleRate = null;
-    public String MQAAuthenticity = null;
-    public String MQAProvenance = null;
-    public Long MQACreatorId = null;
+    public Long OutputSampleRate = null;
+    public String ReplayGain = null;
 
 }

@@ -16,8 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
+ * Last Change : 08.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -108,20 +110,20 @@ public class SenderServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "Status":
-                        statusChange((String) stateVar.getValue());
-                        break;
-                    case "PresentationUrl":
-                        presentationUrlChange((String) stateVar.getValue());
-                        break;
                     case "Attributes":
-                        attributesChange((String) stateVar.getValue());
-                        break;
-                    case "Metadata":
-                        metadataChange((String) stateVar.getValue());
+                        attributesChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "Audio":
-                        audioChange((Boolean) stateVar.getValue());
+                        audioChange(UpnpValue.toBoolean(stateVar.getValue()));
+                        break;
+                    case "Metadata":
+                        metadataChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "PresentationUrl":
+                        presentationUrlChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "Status":
+                        statusChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -143,27 +145,19 @@ public class SenderServiceSubscription extends RemoteGENASubscription
         }
     }
 
-    private void statusChange(String value)
-    {
-        for (ISenderServiceEventListener listener : eventListener)
-        {
-            listener.statusChange(value);
-        }
-    }    
-
-    private void presentationUrlChange(String value)
-    {
-        for (ISenderServiceEventListener listener : eventListener)
-        {
-            listener.presentationUrlChange(value);
-        }
-    }    
-
     private void attributesChange(String value)
     {
         for (ISenderServiceEventListener listener : eventListener)
         {
             listener.attributesChange(value);
+        }
+    }    
+
+    private void audioChange(Boolean value)
+    {
+        for (ISenderServiceEventListener listener : eventListener)
+        {
+            listener.audioChange(value);
         }
     }    
 
@@ -175,11 +169,19 @@ public class SenderServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void audioChange(Boolean value)
+    private void presentationUrlChange(String value)
     {
         for (ISenderServiceEventListener listener : eventListener)
         {
-            listener.audioChange(value);
+            listener.presentationUrlChange(value);
+        }
+    }    
+
+    private void statusChange(String value)
+    {
+        for (ISenderServiceEventListener listener : eventListener)
+        {
+            listener.statusChange(value);
         }
     }    
 }

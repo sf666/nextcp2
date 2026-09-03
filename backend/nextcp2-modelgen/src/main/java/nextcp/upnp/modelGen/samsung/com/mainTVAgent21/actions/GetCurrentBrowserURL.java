@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetCurrentBrowserURL extends ActionCallback
     public GetCurrentBrowserURL(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetCurrentBrowserURL"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetCurrentBrowserURLOutput executeAction()
@@ -35,22 +36,8 @@ public class GetCurrentBrowserURL extends ActionCallback
 
         GetCurrentBrowserURLOutput result = new GetCurrentBrowserURLOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("BrowserURL").getValue() != null)
-  		{
-	        result.BrowserURL = invocation.getOutput("BrowserURL").getValue().toString();
-  		}
-  		else
-  		{
-	        result.BrowserURL = "";
-  		}
+        result.BrowserURL = UpnpValue.toTextOrEmpty(invocation.getOutput("BrowserURL").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

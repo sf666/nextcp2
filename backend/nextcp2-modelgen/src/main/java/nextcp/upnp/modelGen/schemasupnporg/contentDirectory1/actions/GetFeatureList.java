@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetFeatureList extends ActionCallback
     public GetFeatureList(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetFeatureList"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetFeatureListOutput executeAction()
@@ -35,14 +36,7 @@ public class GetFeatureList extends ActionCallback
 
         GetFeatureListOutput result = new GetFeatureListOutput();
 
-  		if (invocation.getOutput("FeatureList").getValue() != null)
-  		{
-	        result.FeatureList = invocation.getOutput("FeatureList").getValue().toString();
-  		}
-  		else
-  		{
-	        result.FeatureList = "";
-  		}
+        result.FeatureList = UpnpValue.toTextOrEmpty(invocation.getOutput("FeatureList").getValue());
 
         return result;
     }

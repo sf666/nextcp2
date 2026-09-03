@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions;
 public class GetTransportInfoOutput
 {
 
+    public String CurrentSpeed = null;
     public String CurrentTransportState = null;
     public String CurrentTransportStatus = null;
-    public String CurrentSpeed = null;
 
 }

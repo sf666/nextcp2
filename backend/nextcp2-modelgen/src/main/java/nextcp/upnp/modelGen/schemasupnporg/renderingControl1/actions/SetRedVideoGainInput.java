@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions;
 public class SetRedVideoGainInput
 {
 
-    public Long InstanceID = null;
     public Long DesiredRedVideoGain = null;
+    public Long InstanceID = null;
 
 }

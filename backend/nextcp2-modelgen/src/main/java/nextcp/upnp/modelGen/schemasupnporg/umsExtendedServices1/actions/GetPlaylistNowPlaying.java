@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class GetPlaylistNowPlaying extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("GetPlaylistNowPlaying"), new NextcpClientInfo()), cp);
 		
-        if (input.PlaylistId != null) {
-    	    getActionInvocation().setInput("PlaylistId", new UnsignedIntegerFourBytes(input.PlaylistId));
-		} else {
-    	    getActionInvocation().setInput("PlaylistId", null);
-		}
+        getActionInvocation().setInput("PlaylistId", UpnpValue.forInput(getActionInvocation(), "PlaylistId", input.PlaylistId));
     }
 
     public GetPlaylistNowPlayingOutput executeAction()
@@ -40,14 +37,7 @@ public class GetPlaylistNowPlaying extends ActionCallback
 
         GetPlaylistNowPlayingOutput result = new GetPlaylistNowPlayingOutput();
 
-  		if (invocation.getOutput("NowPlaying").getValue() != null)
-  		{
-	        result.NowPlaying = invocation.getOutput("NowPlaying").getValue().toString();
-  		}
-  		else
-  		{
-	        result.NowPlaying = "";
-  		}
+        result.NowPlaying = UpnpValue.toTextOrEmpty(invocation.getOutput("NowPlaying").getValue());
 
         return result;
     }

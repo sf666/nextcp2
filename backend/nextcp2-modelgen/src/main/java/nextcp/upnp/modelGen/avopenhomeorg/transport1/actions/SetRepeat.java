@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class SetRepeat extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SetRepeat"), new NextcpClientInfo()), cp);
 		
-        if (input.Repeat != null) {
-	        getActionInvocation().setInput("Repeat", input.Repeat);
-		} else {
-    	    getActionInvocation().setInput("Repeat", null);
-		}
+        getActionInvocation().setInput("Repeat", UpnpValue.forInput(getActionInvocation(), "Repeat", input.Repeat));
     }
 
     public void executeAction()

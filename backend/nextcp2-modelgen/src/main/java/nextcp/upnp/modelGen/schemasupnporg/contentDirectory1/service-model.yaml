@@ -1,0 +1,199 @@
+namespace: schemas-upnp-org
+serviceType: ContentDirectory
+version: 1
+events: true
+stateVariables:
+  A_ARG_Type_TransferID:
+    java: String
+    upnp: uri
+  A_ARG_Type_TransferStatus:
+    java: String
+    upnp: string
+  ContainerUpdateIDs:
+    java: String
+    upnp: string
+  SearchCapabilities:
+    java: String
+    upnp: string
+  SortCapabilities:
+    java: String
+    upnp: string
+  SystemUpdateID:
+    java: Long
+    upnp: ui4
+actions:
+  Browse:
+    input:
+      BrowseFlag:
+        java: String
+        upnp: string
+      Filter:
+        java: String
+        upnp: string
+      ObjectID:
+        java: String
+        upnp: string
+      RequestedCount:
+        java: Long
+        upnp: ui4
+      SortCriteria:
+        java: String
+        upnp: string
+      StartingIndex:
+        java: Long
+        upnp: ui4
+    output:
+      NumberReturned:
+        java: Long
+        upnp: ui4
+      Result:
+        java: String
+        upnp: string
+      TotalMatches:
+        java: Long
+        upnp: ui4
+      UpdateID:
+        java: Long
+        upnp: ui4
+  CreateObject:
+    input:
+      ContainerID:
+        java: String
+        upnp: string
+      Elements:
+        java: String
+        upnp: string
+    output:
+      ObjectID:
+        java: String
+        upnp: string
+      Result:
+        java: String
+        upnp: string
+  CreateReference:
+    input:
+      ContainerID:
+        java: String
+        upnp: string
+      ObjectID:
+        java: String
+        upnp: string
+    output:
+      NewID:
+        java: String
+        upnp: string
+  DestroyObject:
+    input:
+      ObjectID:
+        java: String
+        upnp: string
+    output: {
+      }
+  GetFeatureList:
+    input: {
+      }
+    output:
+      FeatureList:
+        java: String
+  GetSearchCapabilities:
+    input: {
+      }
+    output:
+      SearchCaps:
+        java: String
+        upnp: string
+  GetSortCapabilities:
+    input: {
+      }
+    output:
+      SortCaps:
+        java: String
+        upnp: string
+  GetSortExtensionCapabilities:
+    input: {
+      }
+    output:
+      SortExtensionCaps:
+        java: String
+  GetSystemUpdateID:
+    input: {
+      }
+    output:
+      Id:
+        java: Long
+        upnp: ui4
+  Search:
+    input:
+      ContainerID:
+        java: String
+        upnp: string
+      Filter:
+        java: String
+        upnp: string
+      RequestedCount:
+        java: Long
+        upnp: ui4
+      SearchCriteria:
+        java: String
+        upnp: string
+      SortCriteria:
+        java: String
+        upnp: string
+      StartingIndex:
+        java: Long
+        upnp: ui4
+    output:
+      NumberReturned:
+        java: Long
+        upnp: ui4
+      Result:
+        java: String
+        upnp: string
+      TotalMatches:
+        java: Long
+        upnp: ui4
+      UpdateID:
+        java: Long
+        upnp: ui4
+  UpdateObject:
+    input:
+      CurrentTagValue:
+        java: String
+        upnp: string
+      NewTagValue:
+        java: String
+        upnp: string
+      ObjectID:
+        java: String
+        upnp: string
+    output: {
+      }
+  X_GetFeatureList:
+    input: {
+      }
+    output:
+      FeatureList:
+        java: String
+        upnp: string
+  X_GetRemoteSharingStatus:
+    input: {
+      }
+    output:
+      Status:
+        java: Boolean
+  X_SetBookmark:
+    input:
+      CategoryType:
+        java: String
+        upnp: string
+      ObjectID:
+        java: String
+        upnp: string
+      PosSecond:
+        java: Long
+        upnp: ui4
+      RID:
+        java: String
+        upnp: string
+    output: {
+      }

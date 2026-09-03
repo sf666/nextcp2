@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,38 +36,10 @@ public class Model extends ActionCallback
 
         ModelOutput result = new ModelOutput();
 
-  		if (invocation.getOutput("Name").getValue() != null)
-  		{
-	        result.Name = invocation.getOutput("Name").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Name = "";
-  		}
-  		if (invocation.getOutput("Info").getValue() != null)
-  		{
-	        result.Info = invocation.getOutput("Info").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Info = "";
-  		}
-  		if (invocation.getOutput("Url").getValue() != null)
-  		{
-	        result.Url = invocation.getOutput("Url").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Url = "";
-  		}
-  		if (invocation.getOutput("ImageUri").getValue() != null)
-  		{
-	        result.ImageUri = invocation.getOutput("ImageUri").getValue().toString();
-  		}
-  		else
-  		{
-	        result.ImageUri = "";
-  		}
+        result.ImageUri = UpnpValue.toTextOrEmpty(invocation.getOutput("ImageUri").getValue());
+        result.Info = UpnpValue.toTextOrEmpty(invocation.getOutput("Info").getValue());
+        result.Name = UpnpValue.toTextOrEmpty(invocation.getOutput("Name").getValue());
+        result.Url = UpnpValue.toTextOrEmpty(invocation.getOutput("Url").getValue());
 
         return result;
     }

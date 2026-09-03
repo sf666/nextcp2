@@ -1,0 +1,106 @@
+namespace: av-openhome-org
+serviceType: OAuth
+version: 1
+events: true
+stateVariables:
+  PublicKey:
+    java: String
+  SupportedServices:
+    java: String
+  UpdateId:
+    java: Long
+actions:
+  BeginLimitedInputFlow:
+    input:
+      ServiceId:
+        java: String
+    output:
+      JobId:
+        java: String
+      LoginUrl:
+        java: String
+      UserCode:
+        java: String
+  ClearAllTokens:
+    input:
+      ServiceId:
+        java: String
+    output: {}
+  ClearLonglivedLivedToken:
+    input:
+      ServiceId:
+        java: String
+      TokenId:
+        java: String
+    output: {}
+  ClearLonglivedLivedTokens:
+    input:
+      ServiceId:
+        java: String
+    output: {}
+  ClearShortLivedToken:
+    input:
+      ServiceId:
+        java: String
+      TokenId:
+        java: String
+    output: {}
+  ClearShortLivedTokens:
+    input:
+      ServiceId:
+        java: String
+    output: {}
+  ClearToken:
+    input:
+      ServiceId:
+        java: String
+      TokenId:
+        java: String
+    output: {}
+  GetJobStatus:
+    input: {}
+    output:
+      JobStatusJson:
+        java: String
+  GetJobUpdateId:
+    input:
+      ServiceId:
+        java: String
+    output:
+      JobUpdateId:
+        java: Long
+  GetPublicKey:
+    input: {}
+    output:
+      PublicKey:
+        java: String
+  GetServiceStatus:
+    input: {}
+    output:
+      ServiceStatusJson:
+        java: String
+  GetSupportedServices:
+    input: {}
+    output:
+      SupportedServices:
+        java: String
+  GetUpdateId:
+    input: {}
+    output:
+      UpdateId:
+        java: Long
+  SetToken:
+    input:
+      AesKeyRsaEncrypted:
+        java: byte[]
+      InitVectorRsaEncrypted:
+        java: byte[]
+      IsLongLived:
+        java: Boolean
+      ServiceId:
+        java: String
+      TokenAesEncrypted:
+        java: byte[]
+      TokenId:
+        java: String
+    output: {}

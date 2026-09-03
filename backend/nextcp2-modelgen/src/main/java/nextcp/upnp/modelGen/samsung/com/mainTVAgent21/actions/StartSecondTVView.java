@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,13 +27,13 @@ public class StartSecondTVView extends ActionCallback
     public StartSecondTVView(Service service, StartSecondTVViewInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("StartSecondTVView"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("AntennaMode", new UnsignedIntegerFourBytes(input.AntennaMode));
-        getActionInvocation().setInput("ChannelListType", input.ChannelListType);
-        getActionInvocation().setInput("SatelliteID", new UnsignedIntegerFourBytes(input.SatelliteID));
-        getActionInvocation().setInput("Channel", input.Channel);
-        getActionInvocation().setInput("ForcedFlag", input.ForcedFlag);
-        getActionInvocation().setInput("DRMType", input.DRMType);
+		
+        getActionInvocation().setInput("AntennaMode", UpnpValue.forInput(getActionInvocation(), "AntennaMode", input.AntennaMode));
+        getActionInvocation().setInput("Channel", UpnpValue.forInput(getActionInvocation(), "Channel", input.Channel));
+        getActionInvocation().setInput("ChannelListType", UpnpValue.forInput(getActionInvocation(), "ChannelListType", input.ChannelListType));
+        getActionInvocation().setInput("DRMType", UpnpValue.forInput(getActionInvocation(), "DRMType", input.DRMType));
+        getActionInvocation().setInput("ForcedFlag", UpnpValue.forInput(getActionInvocation(), "ForcedFlag", input.ForcedFlag));
+        getActionInvocation().setInput("SatelliteID", UpnpValue.forInput(getActionInvocation(), "SatelliteID", input.SatelliteID));
     }
 
     public StartSecondTVViewOutput executeAction()
@@ -41,22 +42,8 @@ public class StartSecondTVView extends ActionCallback
 
         StartSecondTVViewOutput result = new StartSecondTVViewOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("SecondTVURL").getValue() != null)
-  		{
-	        result.SecondTVURL = invocation.getOutput("SecondTVURL").getValue().toString();
-  		}
-  		else
-  		{
-	        result.SecondTVURL = "";
-  		}
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
+        result.SecondTVURL = UpnpValue.toTextOrEmpty(invocation.getOutput("SecondTVURL").getValue());
 
         return result;
     }

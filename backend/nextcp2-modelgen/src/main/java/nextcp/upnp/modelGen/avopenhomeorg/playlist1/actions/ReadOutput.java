@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions;
 public class ReadOutput
 {
 
-    public String Uri = null;
     public String Metadata = null;
+    public String Uri = null;
 
 }

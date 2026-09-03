@@ -1,0 +1,154 @@
+namespace: av-openhome-org
+serviceType: Volume
+version: 1
+events: true
+stateVariables:
+  Balance:
+    java: Integer
+    upnp: i4
+  BalanceMax:
+    java: Long
+    upnp: ui4
+  Fade:
+    java: Integer
+    upnp: i4
+  FadeMax:
+    java: Long
+    upnp: ui4
+  Mute:
+    java: Boolean
+    upnp: boolean
+  Volume:
+    java: Long
+    upnp: ui4
+  VolumeLimit:
+    java: Long
+    upnp: ui4
+  VolumeMax:
+    java: Long
+    upnp: ui4
+  VolumeMilliDbPerStep:
+    java: Long
+    upnp: ui4
+  VolumeSteps:
+    java: Long
+    upnp: ui4
+  VolumeUnity:
+    java: Long
+    upnp: ui4
+actions:
+  Balance:
+    input: {
+      }
+    output:
+      Value:
+        java: Integer
+        upnp: i4
+  BalanceDec:
+    input: {
+      }
+    output: {
+      }
+  BalanceInc:
+    input: {
+      }
+    output: {
+      }
+  Characteristics:
+    input: {
+      }
+    output:
+      BalanceMax:
+        java: Long
+        upnp: ui4
+      FadeMax:
+        java: Long
+        upnp: ui4
+      VolumeMax:
+        java: Long
+        upnp: ui4
+      VolumeMilliDbPerStep:
+        java: Long
+        upnp: ui4
+      VolumeSteps:
+        java: Long
+        upnp: ui4
+      VolumeUnity:
+        java: Long
+        upnp: ui4
+  Fade:
+    input: {
+      }
+    output:
+      Value:
+        java: Integer
+        upnp: i4
+  FadeDec:
+    input: {
+      }
+    output: {
+      }
+  FadeInc:
+    input: {
+      }
+    output: {
+      }
+  Mute:
+    input: {
+      }
+    output:
+      Value:
+        java: Boolean
+        upnp: boolean
+  SetBalance:
+    input:
+      Value:
+        java: Integer
+        upnp: i4
+    output: {
+      }
+  SetFade:
+    input:
+      Value:
+        java: Integer
+        upnp: i4
+    output: {
+      }
+  SetMute:
+    input:
+      Value:
+        java: Boolean
+        upnp: boolean
+    output: {
+      }
+  SetVolume:
+    input:
+      Value:
+        java: Long
+        upnp: ui4
+    output: {
+      }
+  Volume:
+    input: {
+      }
+    output:
+      Value:
+        java: Long
+        upnp: ui4
+  VolumeDec:
+    input: {
+      }
+    output: {
+      }
+  VolumeInc:
+    input: {
+      }
+    output: {
+      }
+  VolumeLimit:
+    input: {
+      }
+    output:
+      Value:
+        java: Long
+        upnp: ui4

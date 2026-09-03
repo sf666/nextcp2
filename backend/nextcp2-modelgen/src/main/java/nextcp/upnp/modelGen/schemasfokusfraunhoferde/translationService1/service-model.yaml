@@ -1,0 +1,36 @@
+namespace: schemas-fokus-fraunhofer-de
+serviceType: TranslationService
+version: 1
+events: true
+stateVariables:
+  LanguageIDList:
+    java: String
+  UpdateID:
+    java: String
+actions:
+  GetLanguageIDList:
+    input: {}
+    output:
+      IDList:
+        java: String
+  GetTranslation:
+    input:
+      Language:
+        java: String
+      Text:
+        java: String
+    output:
+      Translation:
+        java: String
+  GetTranslationList:
+    input:
+      Language:
+        java: String
+    output:
+      Result:
+        java: String
+  GetUpdateID:
+    input: {}
+    output:
+      ID:
+        java: String

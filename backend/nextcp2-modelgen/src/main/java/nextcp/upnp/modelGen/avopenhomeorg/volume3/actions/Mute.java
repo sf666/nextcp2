@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class Mute extends ActionCallback
     public Mute(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("Mute"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public MuteOutput executeAction()
@@ -35,8 +36,7 @@ public class Mute extends ActionCallback
 
         MuteOutput result = new MuteOutput();
 
-        BooleanDatatype data_Value = new BooleanDatatype();
-        result.Value = data_Value.valueOf(invocation.getOutput("Value").getValue().toString());
+        result.Value = UpnpValue.toBoolean(invocation.getOutput("Value").getValue());
 
         return result;
     }

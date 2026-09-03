@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.avopenhomeorg.radio1.actions;
 public class SetIdInput
 {
 
-    public Long Value = null;
     public String Uri = null;
+    public Long Value = null;
 
 }

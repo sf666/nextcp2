@@ -10,10 +10,10 @@ public class StartSecondTVViewInput
 {
 
     public Long AntennaMode = null;
-    public String ChannelListType = null;
-    public Long SatelliteID = null;
     public String Channel = null;
-    public String ForcedFlag = null;
+    public String ChannelListType = null;
     public String DRMType = null;
+    public String ForcedFlag = null;
+    public Long SatelliteID = null;
 
 }

@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemasfokusfraunhoferde.translationService1.action
 public class GetTranslationInput
 {
 
-    public String Text = null;
     public String Language = null;
+    public String Text = null;
 
 }

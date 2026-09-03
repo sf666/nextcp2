@@ -16,8 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
+ * Last Change : 08.09.2025
  *
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN.
  *
@@ -108,11 +110,11 @@ public class MainServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "VersionInfo":
-                        versionInfoChange((String) stateVar.getValue());
-                        break;
                     case "BaseLanURL":
-                        baseLanURLChange((String) stateVar.getValue());
+                        baseLanURLChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "VersionInfo":
+                        versionInfoChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -134,19 +136,19 @@ public class MainServiceSubscription extends RemoteGENASubscription
         }
     }
 
-    private void versionInfoChange(String value)
-    {
-        for (IMainServiceEventListener listener : eventListener)
-        {
-            listener.versionInfoChange(value);
-        }
-    }    
-
     private void baseLanURLChange(String value)
     {
         for (IMainServiceEventListener listener : eventListener)
         {
             listener.baseLanURLChange(value);
+        }
+    }    
+
+    private void versionInfoChange(String value)
+    {
+        for (IMainServiceEventListener listener : eventListener)
+        {
+            listener.versionInfoChange(value);
         }
     }    
 }

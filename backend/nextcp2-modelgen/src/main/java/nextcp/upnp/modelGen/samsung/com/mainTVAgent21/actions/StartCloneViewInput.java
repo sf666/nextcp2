@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class StartCloneViewInput
 {
 
-    public String ForcedFlag = null;
     public String DRMType = null;
+    public String ForcedFlag = null;
 
 }

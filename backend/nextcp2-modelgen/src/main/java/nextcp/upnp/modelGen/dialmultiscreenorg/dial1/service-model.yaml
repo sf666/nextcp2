@@ -1,0 +1,8 @@
+namespace: dial-multiscreen-org
+serviceType: dial
+version: 1
+events: true
+stateVariables: {
+  }
+actions: {
+  }

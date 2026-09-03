@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions;
 public class GetTracksInfoInput
 {
 
-    public String StartingIndex = null;
     public String NumberOfTracks = null;
+    public String StartingIndex = null;
 
 }

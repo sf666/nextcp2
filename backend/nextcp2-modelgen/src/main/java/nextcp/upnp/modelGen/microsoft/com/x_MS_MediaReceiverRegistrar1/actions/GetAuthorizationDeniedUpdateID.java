@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,7 +36,7 @@ public class GetAuthorizationDeniedUpdateID extends ActionCallback
 
         GetAuthorizationDeniedUpdateIDOutput result = new GetAuthorizationDeniedUpdateIDOutput();
 
-        result.AuthorizationDeniedUpdateID = ((UnsignedIntegerFourBytes) invocation.getOutput("AuthorizationDeniedUpdateID").getValue()).getValue();
+        result.AuthorizationDeniedUpdateID = UpnpValue.toLong(invocation.getOutput("AuthorizationDeniedUpdateID").getValue());
 
         return result;
     }

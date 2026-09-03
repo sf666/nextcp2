@@ -9,12 +9,12 @@ package nextcp.upnp.modelGen.schemasupnporg.connectionManager2.actions;
 public class GetCurrentConnectionInfoOutput
 {
 
-    public Integer RcsID = null;
     public Integer AVTransportID = null;
-    public String ProtocolInfo = null;
-    public String PeerConnectionManager = null;
-    public Integer PeerConnectionID = null;
     public String Direction = null;
+    public Integer PeerConnectionID = null;
+    public String PeerConnectionManager = null;
+    public String ProtocolInfo = null;
+    public Integer RcsID = null;
     public String Status = null;
 
 }

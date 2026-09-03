@@ -9,9 +9,9 @@ package nextcp.upnp.modelGen.schemasupnporg.connectionManager1.actions;
 public class PrepareForConnectionInput
 {
 
-    public String RemoteProtocolInfo = null;
-    public String PeerConnectionManager = null;
-    public Integer PeerConnectionID = null;
     public String Direction = null;
+    public Integer PeerConnectionID = null;
+    public String PeerConnectionManager = null;
+    public String RemoteProtocolInfo = null;
 
 }

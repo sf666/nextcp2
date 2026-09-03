@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class AddScheduleInput
 {
 
-    public String ReservationType = null;
     public String RemindInfo = null;
+    public String ReservationType = null;
 
 }

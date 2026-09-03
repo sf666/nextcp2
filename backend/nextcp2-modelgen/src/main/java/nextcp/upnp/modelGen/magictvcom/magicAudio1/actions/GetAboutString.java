@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class GetAboutString extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("GetAboutString"), new NextcpClientInfo()), cp);
 		
-        if (input.Lang != null) {
-    	    getActionInvocation().setInput("Lang", new UnsignedIntegerFourBytes(input.Lang));
-		} else {
-    	    getActionInvocation().setInput("Lang", null);
-		}
+        getActionInvocation().setInput("Lang", UpnpValue.forInput(getActionInvocation(), "Lang", input.Lang));
     }
 
     public GetAboutStringOutput executeAction()
@@ -40,14 +37,7 @@ public class GetAboutString extends ActionCallback
 
         GetAboutStringOutput result = new GetAboutStringOutput();
 
-  		if (invocation.getOutput("Value").getValue() != null)
-  		{
-	        result.Value = invocation.getOutput("Value").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Value = "";
-  		}
+        result.Value = UpnpValue.toTextOrEmpty(invocation.getOutput("Value").getValue());
 
         return result;
     }

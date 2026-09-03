@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,14 +36,7 @@ public class GetMaxTracks extends ActionCallback
 
         GetMaxTracksOutput result = new GetMaxTracksOutput();
 
-  		if (invocation.getOutput("MaxTracks").getValue() != null)
-  		{
-	        result.MaxTracks = invocation.getOutput("MaxTracks").getValue().toString();
-  		}
-  		else
-  		{
-	        result.MaxTracks = "";
-  		}
+        result.MaxTracks = UpnpValue.toTextOrEmpty(invocation.getOutput("MaxTracks").getValue());
 
         return result;
     }

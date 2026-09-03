@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,9 +27,9 @@ public class SetRecordDuration extends ActionCallback
     public SetRecordDuration(Service service, SetRecordDurationInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetRecordDuration"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Channel", input.Channel);
-        getActionInvocation().setInput("RecordDuration", new UnsignedIntegerFourBytes(input.RecordDuration));
+		
+        getActionInvocation().setInput("Channel", UpnpValue.forInput(getActionInvocation(), "Channel", input.Channel));
+        getActionInvocation().setInput("RecordDuration", UpnpValue.forInput(getActionInvocation(), "RecordDuration", input.RecordDuration));
     }
 
     public SetRecordDurationOutput executeAction()
@@ -37,14 +38,7 @@ public class SetRecordDuration extends ActionCallback
 
         SetRecordDurationOutput result = new SetRecordDurationOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

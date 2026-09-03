@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,38 +36,16 @@ public class GetDetailsEx extends ActionCallback
 
         GetDetailsExOutput result = new GetDetailsExOutput();
 
-  		if (invocation.getOutput("FormatConversion").getValue() != null)
-  		{
-	        result.FormatConversion = invocation.getOutput("FormatConversion").getValue().toString();
-  		}
-  		else
-  		{
-	        result.FormatConversion = "";
-  		}
-        result.OutputBitDepth = ((UnsignedIntegerFourBytes) invocation.getOutput("OutputBitDepth").getValue()).getValue();
-        result.OutputSampleRate = ((UnsignedIntegerFourBytes) invocation.getOutput("OutputSampleRate").getValue()).getValue();
-        BooleanDatatype data_OutputDeemphasis = new BooleanDatatype();
-        result.OutputDeemphasis = data_OutputDeemphasis.valueOf(invocation.getOutput("OutputDeemphasis").getValue().toString());
-        BooleanDatatype data_OutputInvertPhase = new BooleanDatatype();
-        result.OutputInvertPhase = data_OutputInvertPhase.valueOf(invocation.getOutput("OutputInvertPhase").getValue().toString());
-        result.MQASampleRate = ((UnsignedIntegerFourBytes) invocation.getOutput("MQASampleRate").getValue()).getValue();
-  		if (invocation.getOutput("MQAAuthenticity").getValue() != null)
-  		{
-	        result.MQAAuthenticity = invocation.getOutput("MQAAuthenticity").getValue().toString();
-  		}
-  		else
-  		{
-	        result.MQAAuthenticity = "";
-  		}
-  		if (invocation.getOutput("MQAProvenance").getValue() != null)
-  		{
-	        result.MQAProvenance = invocation.getOutput("MQAProvenance").getValue().toString();
-  		}
-  		else
-  		{
-	        result.MQAProvenance = "";
-  		}
-        result.MQACreatorId = ((UnsignedIntegerFourBytes) invocation.getOutput("MQACreatorId").getValue()).getValue();
+        result.FormatConversion = UpnpValue.toTextOrEmpty(invocation.getOutput("FormatConversion").getValue());
+        result.MQAAuthenticity = UpnpValue.toTextOrEmpty(invocation.getOutput("MQAAuthenticity").getValue());
+        result.MQACreatorId = UpnpValue.toLong(invocation.getOutput("MQACreatorId").getValue());
+        result.MQAProvenance = UpnpValue.toTextOrEmpty(invocation.getOutput("MQAProvenance").getValue());
+        result.MQASampleRate = UpnpValue.toLong(invocation.getOutput("MQASampleRate").getValue());
+        result.OutputBitDepth = UpnpValue.toLong(invocation.getOutput("OutputBitDepth").getValue());
+        result.OutputDeemphasis = UpnpValue.toBoolean(invocation.getOutput("OutputDeemphasis").getValue());
+        result.OutputInvertPhase = UpnpValue.toBoolean(invocation.getOutput("OutputInvertPhase").getValue());
+        result.OutputSampleRate = UpnpValue.toLong(invocation.getOutput("OutputSampleRate").getValue());
+        result.ReplayGain = UpnpValue.toTextOrEmpty(invocation.getOutput("ReplayGain").getValue());
 
         return result;
     }

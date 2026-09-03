@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,7 +36,7 @@ public class Balance extends ActionCallback
 
         BalanceOutput result = new BalanceOutput();
 
-        result.Value = Integer.valueOf(invocation.getOutput("Value").getValue().toString());
+        result.Value = UpnpValue.toInteger(invocation.getOutput("Value").getValue());
 
         return result;
     }

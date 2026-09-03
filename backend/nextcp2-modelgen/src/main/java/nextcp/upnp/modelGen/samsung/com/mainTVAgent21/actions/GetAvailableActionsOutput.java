@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class GetAvailableActionsOutput
 {
 
-    public String Result = null;
     public String AvailableActions = null;
+    public String Result = null;
 
 }

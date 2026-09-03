@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,14 +36,7 @@ public class GetLyricSupportType extends ActionCallback
 
         GetLyricSupportTypeOutput result = new GetLyricSupportTypeOutput();
 
-  		if (invocation.getOutput("LyricType").getValue() != null)
-  		{
-	        result.LyricType = invocation.getOutput("LyricType").getValue().toString();
-  		}
-  		else
-  		{
-	        result.LyricType = "";
-  		}
+        result.LyricType = UpnpValue.toTextOrEmpty(invocation.getOutput("LyricType").getValue());
 
         return result;
     }

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class IsValidated extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("IsValidated"), new NextcpClientInfo()), cp);
 		
-        if (input.DeviceID != null) {
-	        getActionInvocation().setInput("DeviceID", input.DeviceID);
-		} else {
-    	    getActionInvocation().setInput("DeviceID", null);
-		}
+        getActionInvocation().setInput("DeviceID", UpnpValue.forInput(getActionInvocation(), "DeviceID", input.DeviceID));
     }
 
     public IsValidatedOutput executeAction()
@@ -40,7 +37,7 @@ public class IsValidated extends ActionCallback
 
         IsValidatedOutput result = new IsValidatedOutput();
 
-        result.Result = Integer.valueOf(invocation.getOutput("Result").getValue().toString());
+        result.Result = UpnpValue.toInteger(invocation.getOutput("Result").getValue());
 
         return result;
     }

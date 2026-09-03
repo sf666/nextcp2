@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,11 +27,11 @@ public class PrepareForConnection extends ActionCallback
     public PrepareForConnection(Service service, PrepareForConnectionInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("PrepareForConnection"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("RemoteProtocolInfo", input.RemoteProtocolInfo);
-        getActionInvocation().setInput("PeerConnectionManager", input.PeerConnectionManager);
-        getActionInvocation().setInput("PeerConnectionID", new IntegerDatatype(input.PeerConnectionID));
-        getActionInvocation().setInput("Direction", input.Direction);
+		
+        getActionInvocation().setInput("Direction", UpnpValue.forInput(getActionInvocation(), "Direction", input.Direction));
+        getActionInvocation().setInput("PeerConnectionID", UpnpValue.forInput(getActionInvocation(), "PeerConnectionID", input.PeerConnectionID));
+        getActionInvocation().setInput("PeerConnectionManager", UpnpValue.forInput(getActionInvocation(), "PeerConnectionManager", input.PeerConnectionManager));
+        getActionInvocation().setInput("RemoteProtocolInfo", UpnpValue.forInput(getActionInvocation(), "RemoteProtocolInfo", input.RemoteProtocolInfo));
     }
 
     public PrepareForConnectionOutput executeAction()
@@ -39,9 +40,9 @@ public class PrepareForConnection extends ActionCallback
 
         PrepareForConnectionOutput result = new PrepareForConnectionOutput();
 
-        result.ConnectionID = Integer.valueOf(invocation.getOutput("ConnectionID").getValue().toString());
-        result.AVTransportID = Integer.valueOf(invocation.getOutput("AVTransportID").getValue().toString());
-        result.RcsID = Integer.valueOf(invocation.getOutput("RcsID").getValue().toString());
+        result.AVTransportID = UpnpValue.toInteger(invocation.getOutput("AVTransportID").getValue());
+        result.ConnectionID = UpnpValue.toInteger(invocation.getOutput("ConnectionID").getValue());
+        result.RcsID = UpnpValue.toInteger(invocation.getOutput("RcsID").getValue());
 
         return result;
     }

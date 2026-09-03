@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,26 +28,10 @@ public class GetResamplingModeDetails extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("GetResamplingModeDetails"), new NextcpClientInfo()), cp);
 		
-        if (input.ResamplingTag != null) {
-	        getActionInvocation().setInput("ResamplingTag", input.ResamplingTag);
-		} else {
-    	    getActionInvocation().setInput("ResamplingTag", null);
-		}
-        if (input.Mode != null) {
-	        getActionInvocation().setInput("Mode", input.Mode);
-		} else {
-    	    getActionInvocation().setInput("Mode", null);
-		}
-        if (input.FileType != null) {
-	        getActionInvocation().setInput("FileType", input.FileType);
-		} else {
-    	    getActionInvocation().setInput("FileType", null);
-		}
-        if (input.SrcSamplingRate != null) {
-	        getActionInvocation().setInput("SrcSamplingRate", input.SrcSamplingRate);
-		} else {
-    	    getActionInvocation().setInput("SrcSamplingRate", null);
-		}
+        getActionInvocation().setInput("FileType", UpnpValue.forInput(getActionInvocation(), "FileType", input.FileType));
+        getActionInvocation().setInput("Mode", UpnpValue.forInput(getActionInvocation(), "Mode", input.Mode));
+        getActionInvocation().setInput("ResamplingTag", UpnpValue.forInput(getActionInvocation(), "ResamplingTag", input.ResamplingTag));
+        getActionInvocation().setInput("SrcSamplingRate", UpnpValue.forInput(getActionInvocation(), "SrcSamplingRate", input.SrcSamplingRate));
     }
 
     public GetResamplingModeDetailsOutput executeAction()
@@ -55,30 +40,9 @@ public class GetResamplingModeDetails extends ActionCallback
 
         GetResamplingModeDetailsOutput result = new GetResamplingModeDetailsOutput();
 
-  		if (invocation.getOutput("NewSamplingRate").getValue() != null)
-  		{
-	        result.NewSamplingRate = invocation.getOutput("NewSamplingRate").getValue().toString();
-  		}
-  		else
-  		{
-	        result.NewSamplingRate = "";
-  		}
-  		if (invocation.getOutput("NewBitDepth").getValue() != null)
-  		{
-	        result.NewBitDepth = invocation.getOutput("NewBitDepth").getValue().toString();
-  		}
-  		else
-  		{
-	        result.NewBitDepth = "";
-  		}
-  		if (invocation.getOutput("ResamplingTag").getValue() != null)
-  		{
-	        result.ResamplingTag = invocation.getOutput("ResamplingTag").getValue().toString();
-  		}
-  		else
-  		{
-	        result.ResamplingTag = "";
-  		}
+        result.NewBitDepth = UpnpValue.toTextOrEmpty(invocation.getOutput("NewBitDepth").getValue());
+        result.NewSamplingRate = UpnpValue.toTextOrEmpty(invocation.getOutput("NewSamplingRate").getValue());
+        result.ResamplingTag = UpnpValue.toTextOrEmpty(invocation.getOutput("ResamplingTag").getValue());
 
         return result;
     }

@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions;
 public class BrowseOutput
 {
 
-    public String Result = null;
     public Long NumberReturned = null;
+    public String Result = null;
     public Long TotalMatches = null;
     public Long UpdateID = null;
 

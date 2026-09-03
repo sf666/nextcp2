@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -35,8 +36,8 @@ public class IdArray extends ActionCallback
 
         IdArrayOutput result = new IdArrayOutput();
 
-        result.Token = ((UnsignedIntegerFourBytes) invocation.getOutput("Token").getValue()).getValue();
-        result.Array = (byte[]) invocation.getOutput("Array").getValue();
+        result.Array = UpnpValue.toBytes(invocation.getOutput("Array").getValue());
+        result.Token = UpnpValue.toLong(invocation.getOutput("Token").getValue());
 
         return result;
     }

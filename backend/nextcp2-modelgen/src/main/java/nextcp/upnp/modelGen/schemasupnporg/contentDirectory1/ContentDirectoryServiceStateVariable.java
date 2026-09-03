@@ -9,11 +9,11 @@ package nextcp.upnp.modelGen.schemasupnporg.contentDirectory1;
 public class ContentDirectoryServiceStateVariable
 {
 
-    public Long SystemUpdateID = null;
-    public String SortCapabilities = null;
-    public String A_ARG_Type_TransferStatus = null;
     public String A_ARG_Type_TransferID = null;
-    public String SearchCapabilities = null;
+    public String A_ARG_Type_TransferStatus = null;
     public String ContainerUpdateIDs = null;
+    public String SearchCapabilities = null;
+    public String SortCapabilities = null;
+    public Long SystemUpdateID = null;
 
 }

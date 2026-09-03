@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions;
 public class UpdateObjectInput
 {
 
-    public String ObjectID = null;
     public String CurrentTagValue = null;
     public String NewTagValue = null;
+    public String ObjectID = null;
 
 }

@@ -12,14 +12,14 @@ import nextcp.upnp.ISubscriptionEventListener;
  */
 public interface ISenderServiceEventListener extends ISubscriptionEventListener 
 {
-    public void statusChange(String value);
-    
-    public void presentationUrlChange(String value);
-    
     public void attributesChange(String value);
+    
+    public void audioChange(Boolean value);
     
     public void metadataChange(String value);
     
-    public void audioChange(Boolean value);
+    public void presentationUrlChange(String value);
+    
+    public void statusChange(String value);
     
 }

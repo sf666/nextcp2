@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetAvailableActions extends ActionCallback
     public GetAvailableActions(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetAvailableActions"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetAvailableActionsOutput executeAction()
@@ -35,22 +36,8 @@ public class GetAvailableActions extends ActionCallback
 
         GetAvailableActionsOutput result = new GetAvailableActionsOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("AvailableActions").getValue() != null)
-  		{
-	        result.AvailableActions = invocation.getOutput("AvailableActions").getValue().toString();
-  		}
-  		else
-  		{
-	        result.AvailableActions = "";
-  		}
+        result.AvailableActions = UpnpValue.toTextOrEmpty(invocation.getOutput("AvailableActions").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

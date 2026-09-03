@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetDeviceAccountMax extends ActionCallback
     public GetDeviceAccountMax(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetDeviceAccountMax"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetDeviceAccountMaxOutput executeAction()
@@ -35,8 +36,8 @@ public class GetDeviceAccountMax extends ActionCallback
 
         GetDeviceAccountMaxOutput result = new GetDeviceAccountMaxOutput();
 
-        result.DeviceMax = ((UnsignedIntegerFourBytes) invocation.getOutput("DeviceMax").getValue()).getValue();
-        result.AccountMax = ((UnsignedIntegerFourBytes) invocation.getOutput("AccountMax").getValue()).getValue();
+        result.AccountMax = UpnpValue.toLong(invocation.getOutput("AccountMax").getValue());
+        result.DeviceMax = UpnpValue.toLong(invocation.getOutput("DeviceMax").getValue());
 
         return result;
     }

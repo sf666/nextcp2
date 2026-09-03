@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetCurrentMainTVChannel extends ActionCallback
     public GetCurrentMainTVChannel(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetCurrentMainTVChannel"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetCurrentMainTVChannelOutput executeAction()
@@ -35,22 +36,8 @@ public class GetCurrentMainTVChannel extends ActionCallback
 
         GetCurrentMainTVChannelOutput result = new GetCurrentMainTVChannelOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("CurrentChannel").getValue() != null)
-  		{
-	        result.CurrentChannel = invocation.getOutput("CurrentChannel").getValue().toString();
-  		}
-  		else
-  		{
-	        result.CurrentChannel = "";
-  		}
+        result.CurrentChannel = UpnpValue.toTextOrEmpty(invocation.getOutput("CurrentChannel").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

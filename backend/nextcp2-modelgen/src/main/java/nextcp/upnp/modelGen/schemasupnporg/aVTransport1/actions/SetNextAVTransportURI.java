@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,21 +28,9 @@ public class SetNextAVTransportURI extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SetNextAVTransportURI"), new NextcpClientInfo()), cp);
 		
-        if (input.InstanceID != null) {
-    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-		} else {
-    	    getActionInvocation().setInput("InstanceID", null);
-		}
-        if (input.NextURI != null) {
-	        getActionInvocation().setInput("NextURI", input.NextURI);
-		} else {
-    	    getActionInvocation().setInput("NextURI", null);
-		}
-        if (input.NextURIMetaData != null) {
-	        getActionInvocation().setInput("NextURIMetaData", input.NextURIMetaData);
-		} else {
-    	    getActionInvocation().setInput("NextURIMetaData", null);
-		}
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
+        getActionInvocation().setInput("NextURI", UpnpValue.forInput(getActionInvocation(), "NextURI", input.NextURI));
+        getActionInvocation().setInput("NextURIMetaData", UpnpValue.forInput(getActionInvocation(), "NextURIMetaData", input.NextURIMetaData));
     }
 
     public void executeAction()

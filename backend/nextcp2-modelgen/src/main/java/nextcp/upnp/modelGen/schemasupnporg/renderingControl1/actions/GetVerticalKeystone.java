@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class GetVerticalKeystone extends ActionCallback
     public GetVerticalKeystone(Service service, GetVerticalKeystoneInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetVerticalKeystone"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
+		
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
     }
 
     public GetVerticalKeystoneOutput executeAction()
@@ -36,7 +37,7 @@ public class GetVerticalKeystone extends ActionCallback
 
         GetVerticalKeystoneOutput result = new GetVerticalKeystoneOutput();
 
-        result.CurrentVerticalKeystone = Integer.valueOf(invocation.getOutput("CurrentVerticalKeystone").getValue().toString());
+        result.CurrentVerticalKeystone = UpnpValue.toInteger(invocation.getOutput("CurrentVerticalKeystone").getValue());
 
         return result;
     }

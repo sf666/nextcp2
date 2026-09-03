@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.avopenhomeorg.transport1.actions;
 public class PlayAsInput
 {
 
-    public String Mode = null;
     public String Command = null;
+    public String Mode = null;
 
 }

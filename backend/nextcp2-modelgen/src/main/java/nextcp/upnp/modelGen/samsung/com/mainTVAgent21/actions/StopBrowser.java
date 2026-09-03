@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class StopBrowser extends ActionCallback
     public StopBrowser(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("StopBrowser"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public StopBrowserOutput executeAction()
@@ -35,14 +36,7 @@ public class StopBrowser extends ActionCallback
 
         StopBrowserOutput result = new StopBrowserOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

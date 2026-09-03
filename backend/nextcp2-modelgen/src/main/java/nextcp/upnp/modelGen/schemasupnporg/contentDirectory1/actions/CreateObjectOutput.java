@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions;
 public class CreateObjectOutput
 {
 
-    public String Result = null;
     public String ObjectID = null;
+    public String Result = null;
 
 }

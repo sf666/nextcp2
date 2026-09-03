@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class GetCurrentBrowserURLOutput
 {
 
-    public String Result = null;
     public String BrowserURL = null;
+    public String Result = null;
 
 }

@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.avopenhomeorg.pins1.actions;
 public class GetDeviceAccountMaxOutput
 {
 
-    public Long DeviceMax = null;
     public Long AccountMax = null;
+    public Long DeviceMax = null;
 
 }

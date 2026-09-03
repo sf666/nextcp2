@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class SetMainTVChannelInput
 {
 
+    public String Channel = null;
     public String ChannelListType = null;
     public Long SatelliteID = null;
-    public String Channel = null;
 
 }

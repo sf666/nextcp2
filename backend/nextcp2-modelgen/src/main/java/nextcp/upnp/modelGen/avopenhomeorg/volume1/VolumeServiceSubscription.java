@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
  * Last Change : 08.09.2025
@@ -109,43 +110,38 @@ public class VolumeServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "VolumeSteps":
-                        volumeStepsChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "FadeMax":
-                        fadeMaxChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "VolumeLimit":
-                        volumeLimitChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "Volume":
-                        volumeChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                    case "Balance":
+                        balanceChange(UpnpValue.toInteger(stateVar.getValue()));
                         break;
                     case "BalanceMax":
-                        balanceMaxChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "VolumeMilliDbPerStep":
-                        volumeMilliDbPerStepChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "VolumeMax":
-                        volumeMaxChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "Mute":
-                    	try {
-                    		muteChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[mute] unexpected value : " + stateVar.getValue());
-                    		muteChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
-                        break;
-                    case "Balance":
-                        balanceChange((Integer) stateVar.getValue());
+                        balanceMaxChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     case "Fade":
-                        fadeChange((Integer) stateVar.getValue());
+                        fadeChange(UpnpValue.toInteger(stateVar.getValue()));
+                        break;
+                    case "FadeMax":
+                        fadeMaxChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "Mute":
+                        muteChange(UpnpValue.toBoolean(stateVar.getValue()));
+                        break;
+                    case "Volume":
+                        volumeChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "VolumeLimit":
+                        volumeLimitChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "VolumeMax":
+                        volumeMaxChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "VolumeMilliDbPerStep":
+                        volumeMilliDbPerStepChange(UpnpValue.toLong(stateVar.getValue()));
+                        break;
+                    case "VolumeSteps":
+                        volumeStepsChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     case "VolumeUnity":
-                        volumeUnityChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                        volumeUnityChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -167,35 +163,11 @@ public class VolumeServiceSubscription extends RemoteGENASubscription
         }
     }
 
-    private void volumeStepsChange(Long value)
+    private void balanceChange(Integer value)
     {
         for (IVolumeServiceEventListener listener : eventListener)
         {
-            listener.volumeStepsChange(value);
-        }
-    }    
-
-    private void fadeMaxChange(Long value)
-    {
-        for (IVolumeServiceEventListener listener : eventListener)
-        {
-            listener.fadeMaxChange(value);
-        }
-    }    
-
-    private void volumeLimitChange(Long value)
-    {
-        for (IVolumeServiceEventListener listener : eventListener)
-        {
-            listener.volumeLimitChange(value);
-        }
-    }    
-
-    private void volumeChange(Long value)
-    {
-        for (IVolumeServiceEventListener listener : eventListener)
-        {
-            listener.volumeChange(value);
+            listener.balanceChange(value);
         }
     }    
 
@@ -207,19 +179,19 @@ public class VolumeServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void volumeMilliDbPerStepChange(Long value)
+    private void fadeChange(Integer value)
     {
         for (IVolumeServiceEventListener listener : eventListener)
         {
-            listener.volumeMilliDbPerStepChange(value);
+            listener.fadeChange(value);
         }
     }    
 
-    private void volumeMaxChange(Long value)
+    private void fadeMaxChange(Long value)
     {
         for (IVolumeServiceEventListener listener : eventListener)
         {
-            listener.volumeMaxChange(value);
+            listener.fadeMaxChange(value);
         }
     }    
 
@@ -231,19 +203,43 @@ public class VolumeServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void balanceChange(Integer value)
+    private void volumeChange(Long value)
     {
         for (IVolumeServiceEventListener listener : eventListener)
         {
-            listener.balanceChange(value);
+            listener.volumeChange(value);
         }
     }    
 
-    private void fadeChange(Integer value)
+    private void volumeLimitChange(Long value)
     {
         for (IVolumeServiceEventListener listener : eventListener)
         {
-            listener.fadeChange(value);
+            listener.volumeLimitChange(value);
+        }
+    }    
+
+    private void volumeMaxChange(Long value)
+    {
+        for (IVolumeServiceEventListener listener : eventListener)
+        {
+            listener.volumeMaxChange(value);
+        }
+    }    
+
+    private void volumeMilliDbPerStepChange(Long value)
+    {
+        for (IVolumeServiceEventListener listener : eventListener)
+        {
+            listener.volumeMilliDbPerStepChange(value);
+        }
+    }    
+
+    private void volumeStepsChange(Long value)
+    {
+        for (IVolumeServiceEventListener listener : eventListener)
+        {
+            listener.volumeStepsChange(value);
         }
     }    
 

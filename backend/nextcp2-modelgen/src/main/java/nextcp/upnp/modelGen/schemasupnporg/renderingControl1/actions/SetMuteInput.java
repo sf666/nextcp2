@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions;
 public class SetMuteInput
 {
 
-    public Long InstanceID = null;
     public String Channel = null;
     public Boolean DesiredMute = null;
+    public Long InstanceID = null;
 
 }

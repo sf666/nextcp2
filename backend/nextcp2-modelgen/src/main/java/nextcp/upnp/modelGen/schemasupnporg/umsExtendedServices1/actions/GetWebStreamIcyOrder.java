@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class GetWebStreamIcyOrder extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("GetWebStreamIcyOrder"), new NextcpClientInfo()), cp);
 		
-        if (input.ObjectID != null) {
-	        getActionInvocation().setInput("ObjectID", input.ObjectID);
-		} else {
-    	    getActionInvocation().setInput("ObjectID", null);
-		}
+        getActionInvocation().setInput("ObjectID", UpnpValue.forInput(getActionInvocation(), "ObjectID", input.ObjectID));
     }
 
     public GetWebStreamIcyOrderOutput executeAction()
@@ -40,14 +37,7 @@ public class GetWebStreamIcyOrder extends ActionCallback
 
         GetWebStreamIcyOrderOutput result = new GetWebStreamIcyOrderOutput();
 
-  		if (invocation.getOutput("IcyOrder").getValue() != null)
-  		{
-	        result.IcyOrder = invocation.getOutput("IcyOrder").getValue().toString();
-  		}
-  		else
-  		{
-	        result.IcyOrder = "";
-  		}
+        result.IcyOrder = UpnpValue.toTextOrEmpty(invocation.getOutput("IcyOrder").getValue());
 
         return result;
     }

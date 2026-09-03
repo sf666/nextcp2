@@ -1,0 +1,20 @@
+namespace: bubblesoftapps-com
+serviceType: Main
+version: 1
+events: true
+stateVariables:
+  BaseLanURL:
+    java: String
+  VersionInfo:
+    java: String
+actions:
+  GetBaseLanURL:
+    input: {}
+    output:
+      BaseLanURL:
+        java: String
+  GetVersionInfo:
+    input: {}
+    output:
+      VersionInfo:
+        java: String

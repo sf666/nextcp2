@@ -125,6 +125,15 @@ public class CredentialsServiceEventListenerImpl implements ICredentialsServiceE
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
+    public void idsChange(String value)
+    {
+        stateVariable.Ids = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Ids", value));
+        }
+    }
+    
     public void publicKeyChange(String value)
     {
         stateVariable.PublicKey = value;
@@ -140,15 +149,6 @@ public class CredentialsServiceEventListenerImpl implements ICredentialsServiceE
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "SequenceNumber", value));
-        }
-    }
-    
-    public void idsChange(String value)
-    {
-        stateVariable.Ids = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Ids", value));
         }
     }
     

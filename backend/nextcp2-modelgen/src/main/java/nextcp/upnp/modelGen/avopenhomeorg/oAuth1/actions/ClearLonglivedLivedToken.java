@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,9 +27,9 @@ public class ClearLonglivedLivedToken extends ActionCallback
     public ClearLonglivedLivedToken(Service service, ClearLonglivedLivedTokenInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("ClearLonglivedLivedToken"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("ServiceId", input.ServiceId);
-        getActionInvocation().setInput("TokenId", input.TokenId);
+		
+        getActionInvocation().setInput("ServiceId", UpnpValue.forInput(getActionInvocation(), "ServiceId", input.ServiceId));
+        getActionInvocation().setInput("TokenId", UpnpValue.forInput(getActionInvocation(), "TokenId", input.TokenId));
     }
 
     public void executeAction()

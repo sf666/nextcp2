@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,16 +28,8 @@ public class SeekSecondAbsolute extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SeekSecondAbsolute"), new NextcpClientInfo()), cp);
 		
-        if (input.StreamId != null) {
-    	    getActionInvocation().setInput("StreamId", new UnsignedIntegerFourBytes(input.StreamId));
-		} else {
-    	    getActionInvocation().setInput("StreamId", null);
-		}
-        if (input.SecondAbsolute != null) {
-    	    getActionInvocation().setInput("SecondAbsolute", new UnsignedIntegerFourBytes(input.SecondAbsolute));
-		} else {
-    	    getActionInvocation().setInput("SecondAbsolute", null);
-		}
+        getActionInvocation().setInput("SecondAbsolute", UpnpValue.forInput(getActionInvocation(), "SecondAbsolute", input.SecondAbsolute));
+        getActionInvocation().setInput("StreamId", UpnpValue.forInput(getActionInvocation(), "StreamId", input.StreamId));
     }
 
     public void executeAction()

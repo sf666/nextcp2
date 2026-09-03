@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,9 +27,9 @@ public class SetBlueVideoGain extends ActionCallback
     public SetBlueVideoGain(Service service, SetBlueVideoGainInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetBlueVideoGain"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("DesiredBlueVideoGain", new UnsignedIntegerFourBytes(input.DesiredBlueVideoGain));
+		
+        getActionInvocation().setInput("DesiredBlueVideoGain", UpnpValue.forInput(getActionInvocation(), "DesiredBlueVideoGain", input.DesiredBlueVideoGain));
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
     }
 
     public void executeAction()

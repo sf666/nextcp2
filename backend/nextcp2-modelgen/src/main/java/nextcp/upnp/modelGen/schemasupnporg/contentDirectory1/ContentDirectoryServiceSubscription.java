@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
  * Last Change : 08.09.2025
@@ -109,23 +110,23 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "SystemUpdateID":
-                        systemUpdateIDChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
-                        break;
-                    case "SortCapabilities":
-                        sortCapabilitiesChange((String) stateVar.getValue());
+                    case "A_ARG_Type_TransferID":
+                        a_ARG_Type_TransferIDChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "A_ARG_Type_TransferStatus":
-                        a_ARG_Type_TransferStatusChange((String) stateVar.getValue());
-                        break;
-                    case "A_ARG_Type_TransferID":
-                        a_ARG_Type_TransferIDChange((String) stateVar.getValue());
-                        break;
-                    case "SearchCapabilities":
-                        searchCapabilitiesChange((String) stateVar.getValue());
+                        a_ARG_Type_TransferStatusChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     case "ContainerUpdateIDs":
-                        containerUpdateIDsChange((String) stateVar.getValue());
+                        containerUpdateIDsChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "SearchCapabilities":
+                        searchCapabilitiesChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "SortCapabilities":
+                        sortCapabilitiesChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "SystemUpdateID":
+                        systemUpdateIDChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -147,27 +148,11 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
         }
     }
 
-    private void containerUpdateIDsChange(String value)
+    private void a_ARG_Type_TransferIDChange(String value)
     {
         for (IContentDirectoryServiceEventListener listener : eventListener)
         {
-            listener.containerUpdateIDsChange(value);
-        }
-    }    
-
-    private void systemUpdateIDChange(Long value)
-    {
-        for (IContentDirectoryServiceEventListener listener : eventListener)
-        {
-            listener.systemUpdateIDChange(value);
-        }
-    }    
-
-    private void sortCapabilitiesChange(String value)
-    {
-        for (IContentDirectoryServiceEventListener listener : eventListener)
-        {
-            listener.sortCapabilitiesChange(value);
+            listener.a_ARG_Type_TransferIDChange(value);
         }
     }    
 
@@ -179,11 +164,11 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void a_ARG_Type_TransferIDChange(String value)
+    private void containerUpdateIDsChange(String value)
     {
         for (IContentDirectoryServiceEventListener listener : eventListener)
         {
-            listener.a_ARG_Type_TransferIDChange(value);
+            listener.containerUpdateIDsChange(value);
         }
     }    
 
@@ -192,6 +177,22 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
         for (IContentDirectoryServiceEventListener listener : eventListener)
         {
             listener.searchCapabilitiesChange(value);
+        }
+    }    
+
+    private void sortCapabilitiesChange(String value)
+    {
+        for (IContentDirectoryServiceEventListener listener : eventListener)
+        {
+            listener.sortCapabilitiesChange(value);
+        }
+    }    
+
+    private void systemUpdateIDChange(Long value)
+    {
+        for (IContentDirectoryServiceEventListener listener : eventListener)
+        {
+            listener.systemUpdateIDChange(value);
         }
     }    
 }

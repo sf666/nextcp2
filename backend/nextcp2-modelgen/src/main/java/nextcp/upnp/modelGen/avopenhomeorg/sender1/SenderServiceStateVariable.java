@@ -9,10 +9,10 @@ package nextcp.upnp.modelGen.avopenhomeorg.sender1;
 public class SenderServiceStateVariable
 {
 
-    public String Status = null;
-    public String PresentationUrl = null;
     public String Attributes = null;
-    public String Metadata = null;
     public Boolean Audio = null;
+    public String Metadata = null;
+    public String PresentationUrl = null;
+    public String Status = null;
 
 }

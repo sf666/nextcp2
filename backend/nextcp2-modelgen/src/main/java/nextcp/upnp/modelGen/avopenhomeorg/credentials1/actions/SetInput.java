@@ -10,7 +10,7 @@ public class SetInput
 {
 
     public String Id = null;
-    public String UserName = null;
     public byte[] Password = null;
+    public String UserName = null;
 
 }

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class SetAudioAddictPass extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SetAudioAddictPass"), new NextcpClientInfo()), cp);
 		
-        if (input.AudioAddictPass != null) {
-	        getActionInvocation().setInput("AudioAddictPass", input.AudioAddictPass);
-		} else {
-    	    getActionInvocation().setInput("AudioAddictPass", null);
-		}
+        getActionInvocation().setInput("AudioAddictPass", UpnpValue.forInput(getActionInvocation(), "AudioAddictPass", input.AudioAddictPass));
     }
 
     public void executeAction()

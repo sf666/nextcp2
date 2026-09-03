@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class Clear extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("Clear"), new NextcpClientInfo()), cp);
 		
-        if (input.Id != null) {
-	        getActionInvocation().setInput("Id", input.Id);
-		} else {
-    	    getActionInvocation().setInput("Id", null);
-		}
+        getActionInvocation().setInput("Id", UpnpValue.forInput(getActionInvocation(), "Id", input.Id));
     }
 
     public void executeAction()

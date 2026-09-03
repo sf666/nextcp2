@@ -14,16 +14,16 @@ import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
 
-import nextcp.upnp.modelGen.schemasfokusfraunhoferde.translationService1.actions.GetTranslationList;
-import nextcp.upnp.modelGen.schemasfokusfraunhoferde.translationService1.actions.GetTranslationListOutput;
-import nextcp.upnp.modelGen.schemasfokusfraunhoferde.translationService1.actions.GetTranslationListInput;
-import nextcp.upnp.modelGen.schemasfokusfraunhoferde.translationService1.actions.GetUpdateID;
-import nextcp.upnp.modelGen.schemasfokusfraunhoferde.translationService1.actions.GetUpdateIDOutput;
 import nextcp.upnp.modelGen.schemasfokusfraunhoferde.translationService1.actions.GetLanguageIDList;
 import nextcp.upnp.modelGen.schemasfokusfraunhoferde.translationService1.actions.GetLanguageIDListOutput;
 import nextcp.upnp.modelGen.schemasfokusfraunhoferde.translationService1.actions.GetTranslation;
 import nextcp.upnp.modelGen.schemasfokusfraunhoferde.translationService1.actions.GetTranslationOutput;
 import nextcp.upnp.modelGen.schemasfokusfraunhoferde.translationService1.actions.GetTranslationInput;
+import nextcp.upnp.modelGen.schemasfokusfraunhoferde.translationService1.actions.GetTranslationList;
+import nextcp.upnp.modelGen.schemasfokusfraunhoferde.translationService1.actions.GetTranslationListOutput;
+import nextcp.upnp.modelGen.schemasfokusfraunhoferde.translationService1.actions.GetTranslationListInput;
+import nextcp.upnp.modelGen.schemasfokusfraunhoferde.translationService1.actions.GetUpdateID;
+import nextcp.upnp.modelGen.schemasfokusfraunhoferde.translationService1.actions.GetUpdateIDOutput;
 
 
 /**
@@ -32,7 +32,7 @@ import nextcp.upnp.modelGen.schemasfokusfraunhoferde.translationService1.actions
  *
  * Template: service.ftl
  * 
- * Generated UPnP Service class for calling Actions synchroniously.  
+ * Generated UPnP Service class for calling Actions synchronously.  
  */
 public class TranslationServiceService
 {
@@ -42,7 +42,7 @@ public class TranslationServiceService
 
     private UpnpService upnpService = null;
 
-    private TranslationServiceServiceStateVariable translationServiceServiceStateVariable = new TranslationServiceServiceStateVariable();
+//    private TranslationServiceServiceStateVariable translationServiceServiceStateVariable = new TranslationServiceServiceStateVariable();
     
     private TranslationServiceServiceSubscription subscription = null;
     
@@ -100,12 +100,17 @@ public class TranslationServiceService
 
     public void addSubscriptionEventListener(ITranslationServiceServiceEventListener listener)
     {
-        subscription.addSubscriptionEventListener(listener);
+    	if (subscription != null) {
+            subscription.addSubscriptionEventListener(listener);
+    	}
     }
     
     public boolean removeSubscriptionEventListener(ITranslationServiceServiceEventListener listener)
     {
-        return subscription.removeSubscriptionEventListener(listener);
+    	if (subscription != null) {
+    		return subscription.removeSubscriptionEventListener(listener);
+    	}
+    	return false;
     }    
 
     public RemoteService getTranslationServiceService()
@@ -121,20 +126,6 @@ public class TranslationServiceService
 
 
 
-    public GetTranslationListOutput getTranslationList(GetTranslationListInput inp)
-    {
-        GetTranslationList getTranslationList = new GetTranslationList(translationServiceService, inp, upnpService.getControlPoint());
-        GetTranslationListOutput res = getTranslationList.executeAction();
-        return res;        
-    }
-
-    public GetUpdateIDOutput getUpdateID()
-    {
-        GetUpdateID getUpdateID = new GetUpdateID(translationServiceService,  upnpService.getControlPoint());
-        GetUpdateIDOutput res = getUpdateID.executeAction();
-        return res;        
-    }
-
     public GetLanguageIDListOutput getLanguageIDList()
     {
         GetLanguageIDList getLanguageIDList = new GetLanguageIDList(translationServiceService,  upnpService.getControlPoint());
@@ -146,6 +137,20 @@ public class TranslationServiceService
     {
         GetTranslation getTranslation = new GetTranslation(translationServiceService, inp, upnpService.getControlPoint());
         GetTranslationOutput res = getTranslation.executeAction();
+        return res;        
+    }
+
+    public GetTranslationListOutput getTranslationList(GetTranslationListInput inp)
+    {
+        GetTranslationList getTranslationList = new GetTranslationList(translationServiceService, inp, upnpService.getControlPoint());
+        GetTranslationListOutput res = getTranslationList.executeAction();
+        return res;        
+    }
+
+    public GetUpdateIDOutput getUpdateID()
+    {
+        GetUpdateID getUpdateID = new GetUpdateID(translationServiceService,  upnpService.getControlPoint());
+        GetUpdateIDOutput res = getUpdateID.executeAction();
         return res;        
     }
 }

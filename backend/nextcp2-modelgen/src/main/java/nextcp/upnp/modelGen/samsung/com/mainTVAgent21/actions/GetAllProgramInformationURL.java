@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,9 +27,9 @@ public class GetAllProgramInformationURL extends ActionCallback
     public GetAllProgramInformationURL(Service service, GetAllProgramInformationURLInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetAllProgramInformationURL"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("AntennaMode", new UnsignedIntegerFourBytes(input.AntennaMode));
-        getActionInvocation().setInput("Channel", input.Channel);
+		
+        getActionInvocation().setInput("AntennaMode", UpnpValue.forInput(getActionInvocation(), "AntennaMode", input.AntennaMode));
+        getActionInvocation().setInput("Channel", UpnpValue.forInput(getActionInvocation(), "Channel", input.Channel));
     }
 
     public GetAllProgramInformationURLOutput executeAction()
@@ -37,22 +38,8 @@ public class GetAllProgramInformationURL extends ActionCallback
 
         GetAllProgramInformationURLOutput result = new GetAllProgramInformationURLOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("AllProgramInformationURL").getValue() != null)
-  		{
-	        result.AllProgramInformationURL = invocation.getOutput("AllProgramInformationURL").getValue().toString();
-  		}
-  		else
-  		{
-	        result.AllProgramInformationURL = "";
-  		}
+        result.AllProgramInformationURL = UpnpValue.toTextOrEmpty(invocation.getOutput("AllProgramInformationURL").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

@@ -125,12 +125,30 @@ public class PlaylistServiceEventListenerImpl implements IPlaylistServiceEventLi
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void relativeChange(Integer value)
+    public void absoluteChange(Long value)
     {
-        stateVariable.Relative = value;
+        stateVariable.Absolute = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "Relative", value));
+            log.debug(String.format("StateVariable : %s: %s", "Absolute", value));
+        }
+    }
+    
+    public void idChange(Long value)
+    {
+        stateVariable.Id = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Id", value));
+        }
+    }
+    
+    public void idArrayChange(byte[] value)
+    {
+        stateVariable.IdArray = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "IdArray", value));
         }
     }
     
@@ -143,12 +161,66 @@ public class PlaylistServiceEventListenerImpl implements IPlaylistServiceEventLi
         }
     }
     
-    public void tracksMaxChange(Long value)
+    public void idArrayTokenChange(Long value)
     {
-        stateVariable.TracksMax = value;
+        stateVariable.IdArrayToken = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "TracksMax", value));
+            log.debug(String.format("StateVariable : %s: %s", "IdArrayToken", value));
+        }
+    }
+    
+    public void idListChange(String value)
+    {
+        stateVariable.IdList = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "IdList", value));
+        }
+    }
+    
+    public void indexChange(Long value)
+    {
+        stateVariable.Index = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Index", value));
+        }
+    }
+    
+    public void metadataChange(String value)
+    {
+        stateVariable.Metadata = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Metadata", value));
+        }
+    }
+    
+    public void protocolInfoChange(String value)
+    {
+        stateVariable.ProtocolInfo = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "ProtocolInfo", value));
+        }
+    }
+    
+    public void relativeChange(Integer value)
+    {
+        stateVariable.Relative = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Relative", value));
+        }
+    }
+    
+    public void repeatChange(Boolean value)
+    {
+        stateVariable.Repeat = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Repeat", value));
         }
     }
     
@@ -170,39 +242,12 @@ public class PlaylistServiceEventListenerImpl implements IPlaylistServiceEventLi
         }
     }
     
-    public void metadataChange(String value)
+    public void tracksMaxChange(Long value)
     {
-        stateVariable.Metadata = value;
+        stateVariable.TracksMax = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "Metadata", value));
-        }
-    }
-    
-    public void repeatChange(Boolean value)
-    {
-        stateVariable.Repeat = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Repeat", value));
-        }
-    }
-    
-    public void indexChange(Long value)
-    {
-        stateVariable.Index = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Index", value));
-        }
-    }
-    
-    public void idArrayChange(byte[] value)
-    {
-        stateVariable.IdArray = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "IdArray", value));
+            log.debug(String.format("StateVariable : %s: %s", "TracksMax", value));
         }
     }
     
@@ -215,57 +260,12 @@ public class PlaylistServiceEventListenerImpl implements IPlaylistServiceEventLi
         }
     }
     
-    public void absoluteChange(Long value)
-    {
-        stateVariable.Absolute = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Absolute", value));
-        }
-    }
-    
     public void uriChange(String value)
     {
         stateVariable.Uri = value;
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "Uri", value));
-        }
-    }
-    
-    public void idListChange(String value)
-    {
-        stateVariable.IdList = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "IdList", value));
-        }
-    }
-    
-    public void idArrayTokenChange(Long value)
-    {
-        stateVariable.IdArrayToken = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "IdArrayToken", value));
-        }
-    }
-    
-    public void protocolInfoChange(String value)
-    {
-        stateVariable.ProtocolInfo = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "ProtocolInfo", value));
-        }
-    }
-    
-    public void idChange(Long value)
-    {
-        stateVariable.Id = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Id", value));
         }
     }
     

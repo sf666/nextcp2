@@ -10,7 +10,7 @@ public class QPlayAuthOutput
 {
 
     public String Code = null;
-    public String MID = null;
     public String DID = null;
+    public String MID = null;
 
 }

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetVersionInfo extends ActionCallback
     public GetVersionInfo(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetVersionInfo"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetVersionInfoOutput executeAction()
@@ -35,14 +36,7 @@ public class GetVersionInfo extends ActionCallback
 
         GetVersionInfoOutput result = new GetVersionInfoOutput();
 
-  		if (invocation.getOutput("VersionInfo").getValue() != null)
-  		{
-	        result.VersionInfo = invocation.getOutput("VersionInfo").getValue().toString();
-  		}
-  		else
-  		{
-	        result.VersionInfo = "";
-  		}
+        result.VersionInfo = UpnpValue.toTextOrEmpty(invocation.getOutput("VersionInfo").getValue());
 
         return result;
     }

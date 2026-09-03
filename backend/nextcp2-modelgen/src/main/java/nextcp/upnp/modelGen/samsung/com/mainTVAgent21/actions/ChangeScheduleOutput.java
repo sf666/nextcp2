@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class ChangeScheduleOutput
 {
 
-    public String Result = null;
     public String ConflictRemindInfo = null;
     public String ConflictRemindInfoURL = null;
+    public String Result = null;
 
 }

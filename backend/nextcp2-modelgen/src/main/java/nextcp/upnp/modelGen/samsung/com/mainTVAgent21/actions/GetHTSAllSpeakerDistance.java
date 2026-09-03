@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetHTSAllSpeakerDistance extends ActionCallback
     public GetHTSAllSpeakerDistance(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetHTSAllSpeakerDistance"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetHTSAllSpeakerDistanceOutput executeAction()
@@ -35,23 +36,9 @@ public class GetHTSAllSpeakerDistance extends ActionCallback
 
         GetHTSAllSpeakerDistanceOutput result = new GetHTSAllSpeakerDistanceOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-        result.MaxDistance = ((UnsignedIntegerFourBytes) invocation.getOutput("MaxDistance").getValue()).getValue();
-  		if (invocation.getOutput("AllSpeakerDistance").getValue() != null)
-  		{
-	        result.AllSpeakerDistance = invocation.getOutput("AllSpeakerDistance").getValue().toString();
-  		}
-  		else
-  		{
-	        result.AllSpeakerDistance = "";
-  		}
+        result.AllSpeakerDistance = UpnpValue.toTextOrEmpty(invocation.getOutput("AllSpeakerDistance").getValue());
+        result.MaxDistance = UpnpValue.toLong(invocation.getOutput("MaxDistance").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

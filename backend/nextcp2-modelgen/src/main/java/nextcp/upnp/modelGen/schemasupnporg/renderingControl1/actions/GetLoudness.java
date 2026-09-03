@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,9 +27,9 @@ public class GetLoudness extends ActionCallback
     public GetLoudness(Service service, GetLoudnessInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetLoudness"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-        getActionInvocation().setInput("Channel", input.Channel);
+		
+        getActionInvocation().setInput("Channel", UpnpValue.forInput(getActionInvocation(), "Channel", input.Channel));
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
     }
 
     public GetLoudnessOutput executeAction()
@@ -37,8 +38,7 @@ public class GetLoudness extends ActionCallback
 
         GetLoudnessOutput result = new GetLoudnessOutput();
 
-        BooleanDatatype data_CurrentLoudness = new BooleanDatatype();
-        result.CurrentLoudness = data_CurrentLoudness.valueOf(invocation.getOutput("CurrentLoudness").getValue().toString());
+        result.CurrentLoudness = UpnpValue.toBoolean(invocation.getOutput("CurrentLoudness").getValue());
 
         return result;
     }

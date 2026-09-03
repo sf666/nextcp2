@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetCurrentProgramInformationURL extends ActionCallback
     public GetCurrentProgramInformationURL(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetCurrentProgramInformationURL"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetCurrentProgramInformationURLOutput executeAction()
@@ -35,22 +36,8 @@ public class GetCurrentProgramInformationURL extends ActionCallback
 
         GetCurrentProgramInformationURLOutput result = new GetCurrentProgramInformationURLOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("CurrentProgInfoURL").getValue() != null)
-  		{
-	        result.CurrentProgInfoURL = invocation.getOutput("CurrentProgInfoURL").getValue().toString();
-  		}
-  		else
-  		{
-	        result.CurrentProgInfoURL = "";
-  		}
+        result.CurrentProgInfoURL = UpnpValue.toTextOrEmpty(invocation.getOutput("CurrentProgInfoURL").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

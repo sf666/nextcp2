@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,16 +28,8 @@ public class SelectPreset extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SelectPreset"), new NextcpClientInfo()), cp);
 		
-        if (input.InstanceID != null) {
-    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-		} else {
-    	    getActionInvocation().setInput("InstanceID", null);
-		}
-        if (input.PresetName != null) {
-	        getActionInvocation().setInput("PresetName", input.PresetName);
-		} else {
-    	    getActionInvocation().setInput("PresetName", null);
-		}
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
+        getActionInvocation().setInput("PresetName", UpnpValue.forInput(getActionInvocation(), "PresetName", input.PresetName));
     }
 
     public void executeAction()

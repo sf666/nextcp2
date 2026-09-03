@@ -1,0 +1,74 @@
+namespace: av-openhome-org
+serviceType: Volume
+version: 3
+events: true
+stateVariables:
+  Balance:
+    java: Integer
+  BalanceMax:
+    java: Long
+  Fade:
+    java: Integer
+  FadeMax:
+    java: Long
+  Mute:
+    java: Boolean
+  Volume:
+    java: Long
+  VolumeLimit:
+    java: Long
+  VolumeMax:
+    java: Long
+  VolumeMilliDbPerStep:
+    java: Long
+  VolumeSteps:
+    java: Long
+  VolumeUnity:
+    java: Long
+actions:
+  Characteristics:
+    input: {}
+    output:
+      BalanceMax:
+        java: Long
+      FadeMax:
+        java: Long
+      VolumeMax:
+        java: Long
+      VolumeMilliDbPerStep:
+        java: Long
+      VolumeSteps:
+        java: Long
+      VolumeUnity:
+        java: Long
+  Mute:
+    input: {}
+    output:
+      Value:
+        java: Boolean
+  SetMute:
+    input:
+      Value:
+        java: Boolean
+    output: {}
+  SetVolume:
+    input:
+      Value:
+        java: Long
+    output: {}
+  Volume:
+    input: {}
+    output:
+      Value:
+        java: Long
+  VolumeDec:
+    input: {}
+    output: {}
+  VolumeInc:
+    input: {}
+    output: {}
+  VolumeLimit:
+    input: {}
+    output:
+      Value:
+        java: Long

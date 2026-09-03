@@ -125,30 +125,12 @@ public class ContentDirectoryServiceEventListenerImpl implements IContentDirecto
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void containerUpdateIDsChange(String value)
+    public void a_ARG_Type_TransferIDChange(String value)
     {
-        stateVariable.ContainerUpdateIDs = value;
+        stateVariable.A_ARG_Type_TransferID = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "ContainerUpdateIDs", value));
-        }
-    }
-    
-    public void systemUpdateIDChange(Long value)
-    {
-        stateVariable.SystemUpdateID = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "SystemUpdateID", value));
-        }
-    }
-    
-    public void sortCapabilitiesChange(String value)
-    {
-        stateVariable.SortCapabilities = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "SortCapabilities", value));
+            log.debug(String.format("StateVariable : %s: %s", "A_ARG_Type_TransferID", value));
         }
     }
     
@@ -161,12 +143,12 @@ public class ContentDirectoryServiceEventListenerImpl implements IContentDirecto
         }
     }
     
-    public void a_ARG_Type_TransferIDChange(String value)
+    public void containerUpdateIDsChange(String value)
     {
-        stateVariable.A_ARG_Type_TransferID = value;
+        stateVariable.ContainerUpdateIDs = value;
         if (log.isDebugEnabled())
         {
-            log.debug(String.format("StateVariable : %s: %s", "A_ARG_Type_TransferID", value));
+            log.debug(String.format("StateVariable : %s: %s", "ContainerUpdateIDs", value));
         }
     }
     
@@ -176,6 +158,24 @@ public class ContentDirectoryServiceEventListenerImpl implements IContentDirecto
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "SearchCapabilities", value));
+        }
+    }
+    
+    public void sortCapabilitiesChange(String value)
+    {
+        stateVariable.SortCapabilities = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "SortCapabilities", value));
+        }
+    }
+    
+    public void systemUpdateIDChange(Long value)
+    {
+        stateVariable.SystemUpdateID = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "SystemUpdateID", value));
         }
     }
     

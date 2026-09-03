@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,16 +28,8 @@ public class IsAlbumLiked extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("IsAlbumLiked"), new NextcpClientInfo()), cp);
 		
-        if (input.MusicBrainzId != null) {
-	        getActionInvocation().setInput("MusicBrainzId", input.MusicBrainzId);
-		} else {
-    	    getActionInvocation().setInput("MusicBrainzId", null);
-		}
-        if (input.DiscogsId != null) {
-    	    getActionInvocation().setInput("DiscogsId", new UnsignedIntegerFourBytes(input.DiscogsId));
-		} else {
-    	    getActionInvocation().setInput("DiscogsId", null);
-		}
+        getActionInvocation().setInput("DiscogsId", UpnpValue.forInput(getActionInvocation(), "DiscogsId", input.DiscogsId));
+        getActionInvocation().setInput("MusicBrainzId", UpnpValue.forInput(getActionInvocation(), "MusicBrainzId", input.MusicBrainzId));
     }
 
     public IsAlbumLikedOutput executeAction()
@@ -45,8 +38,7 @@ public class IsAlbumLiked extends ActionCallback
 
         IsAlbumLikedOutput result = new IsAlbumLikedOutput();
 
-        BooleanDatatype data_AlbumLikedValue = new BooleanDatatype();
-        result.AlbumLikedValue = data_AlbumLikedValue.valueOf(invocation.getOutput("AlbumLikedValue").getValue().toString());
+        result.AlbumLikedValue = UpnpValue.toBoolean(invocation.getOutput("AlbumLikedValue").getValue());
 
         return result;
     }

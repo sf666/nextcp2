@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,16 +28,8 @@ public class GetVolumeDBRange extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("GetVolumeDBRange"), new NextcpClientInfo()), cp);
 		
-        if (input.InstanceID != null) {
-    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-		} else {
-    	    getActionInvocation().setInput("InstanceID", null);
-		}
-        if (input.Channel != null) {
-	        getActionInvocation().setInput("Channel", input.Channel);
-		} else {
-    	    getActionInvocation().setInput("Channel", null);
-		}
+        getActionInvocation().setInput("Channel", UpnpValue.forInput(getActionInvocation(), "Channel", input.Channel));
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
     }
 
     public GetVolumeDBRangeOutput executeAction()
@@ -45,8 +38,8 @@ public class GetVolumeDBRange extends ActionCallback
 
         GetVolumeDBRangeOutput result = new GetVolumeDBRangeOutput();
 
-        result.MinValue = Integer.valueOf(invocation.getOutput("MinValue").getValue().toString());
-        result.MaxValue = Integer.valueOf(invocation.getOutput("MaxValue").getValue().toString());
+        result.MaxValue = UpnpValue.toInteger(invocation.getOutput("MaxValue").getValue());
+        result.MinValue = UpnpValue.toInteger(invocation.getOutput("MinValue").getValue());
 
         return result;
     }

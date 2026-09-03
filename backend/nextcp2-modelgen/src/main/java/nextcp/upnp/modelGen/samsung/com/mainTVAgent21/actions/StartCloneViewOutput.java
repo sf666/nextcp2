@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class StartCloneViewOutput
 {
 
-    public String Result = null;
     public String CloneViewURL = null;
+    public String Result = null;
 
 }

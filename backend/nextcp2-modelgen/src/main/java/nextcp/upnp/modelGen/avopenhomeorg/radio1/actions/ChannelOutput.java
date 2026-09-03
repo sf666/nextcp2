@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.avopenhomeorg.radio1.actions;
 public class ChannelOutput
 {
 
-    public String Uri = null;
     public String Metadata = null;
+    public String Uri = null;
 
 }

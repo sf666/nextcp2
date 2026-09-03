@@ -125,24 +125,6 @@ public class PinsServiceEventListenerImpl implements IPinsServiceEventListener
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
-    public void idArrayChange(String value)
-    {
-        stateVariable.IdArray = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "IdArray", value));
-        }
-    }
-    
-    public void modesChange(String value)
-    {
-        stateVariable.Modes = value;
-        if (log.isDebugEnabled())
-        {
-            log.debug(String.format("StateVariable : %s: %s", "Modes", value));
-        }
-    }
-    
     public void accountMaxChange(Long value)
     {
         stateVariable.AccountMax = value;
@@ -158,6 +140,24 @@ public class PinsServiceEventListenerImpl implements IPinsServiceEventListener
         if (log.isDebugEnabled())
         {
             log.debug(String.format("StateVariable : %s: %s", "DeviceMax", value));
+        }
+    }
+    
+    public void idArrayChange(String value)
+    {
+        stateVariable.IdArray = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "IdArray", value));
+        }
+    }
+    
+    public void modesChange(String value)
+    {
+        stateVariable.Modes = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "Modes", value));
         }
     }
     

@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions;
 public class SetHorizontalKeystoneInput
 {
 
-    public Long InstanceID = null;
     public Integer DesiredHorizontalKeystone = null;
+    public Long InstanceID = null;
 
 }

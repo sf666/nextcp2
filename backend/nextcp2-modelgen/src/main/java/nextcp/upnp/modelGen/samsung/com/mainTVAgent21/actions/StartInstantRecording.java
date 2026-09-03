@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class StartInstantRecording extends ActionCallback
     public StartInstantRecording(Service service, StartInstantRecordingInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("StartInstantRecording"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Channel", input.Channel);
+		
+        getActionInvocation().setInput("Channel", UpnpValue.forInput(getActionInvocation(), "Channel", input.Channel));
     }
 
     public StartInstantRecordingOutput executeAction()
@@ -36,14 +37,7 @@ public class StartInstantRecording extends ActionCallback
 
         StartInstantRecordingOutput result = new StartInstantRecordingOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

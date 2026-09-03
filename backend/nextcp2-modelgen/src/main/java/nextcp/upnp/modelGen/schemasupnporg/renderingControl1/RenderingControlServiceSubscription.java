@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.upnp.ISubscriptionEventListener;
+import nextcp.upnp.UpnpValue;
 
 /**
  * Last Change : 08.09.2025
@@ -109,31 +110,38 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
             {
                 switch (key)
                 {
-                    case "MinVolumeDB":
-                        minVolumeDBChange((Integer) stateVar.getValue());
+                    case "LastChange":
+                        lastChangeChange(UpnpValue.toText(stateVar.getValue()));
                         break;
-                    case "Volume":
-                        volumeChange(((UnsignedVariableInteger) stateVar.getValue()).getValue());
+                    case "Loudness":
+                        loudnessChange(UpnpValue.toBoolean(stateVar.getValue()));
                         break;
                     case "MaxVolumeDB":
-                        maxVolumeDBChange((Integer) stateVar.getValue());
+                        maxVolumeDBChange(UpnpValue.toInteger(stateVar.getValue()));
                         break;
-                    case "LastChange":
-                        lastChangeChange((String) stateVar.getValue());
-                        break;
-                    case "PresetNameList":
-                        presetNameListChange((String) stateVar.getValue());
+                    case "MinVolumeDB":
+                        minVolumeDBChange(UpnpValue.toInteger(stateVar.getValue()));
                         break;
                     case "Mute":
-                    	try {
-                    		muteChange((Boolean) stateVar.getValue());
-                    	} catch (Exception e) {
-                    		log.warn("[mute] unexpected value : " + stateVar.getValue());
-                    		muteChange(Boolean.valueOf(stateVar.getValue().toString()));
-						}
+                        muteChange(UpnpValue.toBoolean(stateVar.getValue()));
+                        break;
+                    case "PresetNameList":
+                        presetNameListChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "Volume":
+                        volumeChange(UpnpValue.toLong(stateVar.getValue()));
                         break;
                     case "VolumeDB":
-                        volumeDBChange((Integer) stateVar.getValue());
+                        volumeDBChange(UpnpValue.toInteger(stateVar.getValue()));
+                        break;
+                    case "X_Current3DFormatter":
+                        x_Current3DFormatterChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "X_Possible3DFormatter":
+                        x_Possible3DFormatterChange(UpnpValue.toText(stateVar.getValue()));
+                        break;
+                    case "X_Subtitle":
+                        x_SubtitleChange(UpnpValue.toText(stateVar.getValue()));
                         break;
                     default:
                         log.warn("unknown state variable : " + key);
@@ -155,19 +163,19 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
         }
     }
 
-    private void minVolumeDBChange(Integer value)
+    private void lastChangeChange(String value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
-            listener.minVolumeDBChange(value);
+            listener.lastChangeChange(value);
         }
     }    
 
-    private void volumeChange(Long value)
+    private void loudnessChange(Boolean value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
-            listener.volumeChange(value);
+            listener.loudnessChange(value);
         }
     }    
 
@@ -179,19 +187,11 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
         }
     }    
 
-    private void lastChangeChange(String value)
+    private void minVolumeDBChange(Integer value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
-            listener.lastChangeChange(value);
-        }
-    }    
-
-    private void presetNameListChange(String value)
-    {
-        for (IRenderingControlServiceEventListener listener : eventListener)
-        {
-            listener.presetNameListChange(value);
+            listener.minVolumeDBChange(value);
         }
     }    
 
@@ -203,11 +203,51 @@ public class RenderingControlServiceSubscription extends RemoteGENASubscription
         }
     }    
 
+    private void presetNameListChange(String value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.presetNameListChange(value);
+        }
+    }    
+
+    private void volumeChange(Long value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.volumeChange(value);
+        }
+    }    
+
     private void volumeDBChange(Integer value)
     {
         for (IRenderingControlServiceEventListener listener : eventListener)
         {
             listener.volumeDBChange(value);
+        }
+    }    
+
+    private void x_Current3DFormatterChange(String value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.x_Current3DFormatterChange(value);
+        }
+    }    
+
+    private void x_Possible3DFormatterChange(String value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.x_Possible3DFormatterChange(value);
+        }
+    }    
+
+    private void x_SubtitleChange(String value)
+    {
+        for (IRenderingControlServiceEventListener listener : eventListener)
+        {
+            listener.x_SubtitleChange(value);
         }
     }    
 }

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetDTVInformation extends ActionCallback
     public GetDTVInformation(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetDTVInformation"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetDTVInformationOutput executeAction()
@@ -35,22 +36,8 @@ public class GetDTVInformation extends ActionCallback
 
         GetDTVInformationOutput result = new GetDTVInformationOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("DTVInformation").getValue() != null)
-  		{
-	        result.DTVInformation = invocation.getOutput("DTVInformation").getValue().toString();
-  		}
-  		else
-  		{
-	        result.DTVInformation = "";
-  		}
+        result.DTVInformation = UpnpValue.toTextOrEmpty(invocation.getOutput("DTVInformation").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

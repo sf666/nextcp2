@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class GetFilteredProgarmURL extends ActionCallback
     public GetFilteredProgarmURL(Service service, GetFilteredProgarmURLInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetFilteredProgarmURL"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Keyword", input.Keyword);
+		
+        getActionInvocation().setInput("Keyword", UpnpValue.forInput(getActionInvocation(), "Keyword", input.Keyword));
     }
 
     public GetFilteredProgarmURLOutput executeAction()
@@ -36,22 +37,8 @@ public class GetFilteredProgarmURL extends ActionCallback
 
         GetFilteredProgarmURLOutput result = new GetFilteredProgarmURLOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-  		if (invocation.getOutput("FilteredProgramURL").getValue() != null)
-  		{
-	        result.FilteredProgramURL = invocation.getOutput("FilteredProgramURL").getValue().toString();
-  		}
-  		else
-  		{
-	        result.FilteredProgramURL = "";
-  		}
+        result.FilteredProgramURL = UpnpValue.toTextOrEmpty(invocation.getOutput("FilteredProgramURL").getValue());
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
 
         return result;
     }

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,16 +28,8 @@ public class GetVolume extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("GetVolume"), new NextcpClientInfo()), cp);
 		
-        if (input.InstanceID != null) {
-    	    getActionInvocation().setInput("InstanceID", new UnsignedIntegerFourBytes(input.InstanceID));
-		} else {
-    	    getActionInvocation().setInput("InstanceID", null);
-		}
-        if (input.Channel != null) {
-	        getActionInvocation().setInput("Channel", input.Channel);
-		} else {
-    	    getActionInvocation().setInput("Channel", null);
-		}
+        getActionInvocation().setInput("Channel", UpnpValue.forInput(getActionInvocation(), "Channel", input.Channel));
+        getActionInvocation().setInput("InstanceID", UpnpValue.forInput(getActionInvocation(), "InstanceID", input.InstanceID));
     }
 
     public GetVolumeOutput executeAction()
@@ -45,7 +38,7 @@ public class GetVolume extends ActionCallback
 
         GetVolumeOutput result = new GetVolumeOutput();
 
-        result.CurrentVolume = ((UnsignedIntegerTwoBytes) invocation.getOutput("CurrentVolume").getValue()).getValue();
+        result.CurrentVolume = UpnpValue.toLong(invocation.getOutput("CurrentVolume").getValue());
 
         return result;
     }

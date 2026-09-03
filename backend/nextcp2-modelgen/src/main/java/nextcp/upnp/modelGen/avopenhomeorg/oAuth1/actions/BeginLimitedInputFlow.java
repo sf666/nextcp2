@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class BeginLimitedInputFlow extends ActionCallback
     public BeginLimitedInputFlow(Service service, BeginLimitedInputFlowInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("BeginLimitedInputFlow"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("ServiceId", input.ServiceId);
+		
+        getActionInvocation().setInput("ServiceId", UpnpValue.forInput(getActionInvocation(), "ServiceId", input.ServiceId));
     }
 
     public BeginLimitedInputFlowOutput executeAction()
@@ -36,30 +37,9 @@ public class BeginLimitedInputFlow extends ActionCallback
 
         BeginLimitedInputFlowOutput result = new BeginLimitedInputFlowOutput();
 
-  		if (invocation.getOutput("JobId").getValue() != null)
-  		{
-	        result.JobId = invocation.getOutput("JobId").getValue().toString();
-  		}
-  		else
-  		{
-	        result.JobId = "";
-  		}
-  		if (invocation.getOutput("LoginUrl").getValue() != null)
-  		{
-	        result.LoginUrl = invocation.getOutput("LoginUrl").getValue().toString();
-  		}
-  		else
-  		{
-	        result.LoginUrl = "";
-  		}
-  		if (invocation.getOutput("UserCode").getValue() != null)
-  		{
-	        result.UserCode = invocation.getOutput("UserCode").getValue().toString();
-  		}
-  		else
-  		{
-	        result.UserCode = "";
-  		}
+        result.JobId = UpnpValue.toTextOrEmpty(invocation.getOutput("JobId").getValue());
+        result.LoginUrl = UpnpValue.toTextOrEmpty(invocation.getOutput("LoginUrl").getValue());
+        result.UserCode = UpnpValue.toTextOrEmpty(invocation.getOutput("UserCode").getValue());
 
         return result;
     }

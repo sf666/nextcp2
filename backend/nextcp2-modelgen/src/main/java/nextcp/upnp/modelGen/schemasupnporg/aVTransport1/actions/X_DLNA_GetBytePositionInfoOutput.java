@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.schemasupnporg.aVTransport1.actions;
 public class X_DLNA_GetBytePositionInfoOutput
 {
 
-    public String TrackSize = null;
-    public String RelByte = null;
     public String AbsByte = null;
+    public String RelByte = null;
+    public String TrackSize = null;
 
 }

@@ -9,7 +9,7 @@ package nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions;
 public class X_GetAudioSelectionOutput
 {
 
-    public Long AudioPID = null;
     public String AudioEncoding = null;
+    public Long AudioPID = null;
 
 }

@@ -10,12 +10,12 @@ public class GetMediaInfo_ExtOutput
 {
 
     public String CurrentType = null;
-    public Long NrTracks = null;
-    public String MediaDuration = null;
     public String CurrentURI = null;
     public String CurrentURIMetaData = null;
+    public String MediaDuration = null;
     public String NextURI = null;
     public String NextURIMetaData = null;
+    public Long NrTracks = null;
     public String PlayMedium = null;
     public String RecordMedium = null;
     public String WriteStatus = null;

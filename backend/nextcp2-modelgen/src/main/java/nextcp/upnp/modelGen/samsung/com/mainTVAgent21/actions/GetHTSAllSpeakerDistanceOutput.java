@@ -9,8 +9,8 @@ package nextcp.upnp.modelGen.samsung.com.mainTVAgent21.actions;
 public class GetHTSAllSpeakerDistanceOutput
 {
 
-    public String Result = null;
-    public Long MaxDistance = null;
     public String AllSpeakerDistance = null;
+    public Long MaxDistance = null;
+    public String Result = null;
 
 }

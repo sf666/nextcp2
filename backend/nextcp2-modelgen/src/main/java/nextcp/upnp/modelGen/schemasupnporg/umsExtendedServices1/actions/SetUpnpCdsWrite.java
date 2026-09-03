@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -27,11 +28,7 @@ public class SetUpnpCdsWrite extends ActionCallback
     {
         super(new ActionInvocation(service.getAction("SetUpnpCdsWrite"), new NextcpClientInfo()), cp);
 		
-        if (input.UpnpCdsWrite != null) {
-        	getActionInvocation().setInput("UpnpCdsWrite", input.UpnpCdsWrite);
-		} else {
-    	    getActionInvocation().setInput("UpnpCdsWrite", null);
-		}
+        getActionInvocation().setInput("UpnpCdsWrite", UpnpValue.forInput(getActionInvocation(), "UpnpCdsWrite", input.UpnpCdsWrite));
     }
 
     public void executeAction()

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,8 +27,8 @@ public class SetMute extends ActionCallback
     public SetMute(Service service, SetMuteInput input, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("SetMute"), new NextcpClientInfo()), cp);
-
-        getActionInvocation().setInput("Value", input.Value);
+		
+        getActionInvocation().setInput("Value", UpnpValue.forInput(getActionInvocation(), "Value", input.Value));
     }
 
     public void executeAction()

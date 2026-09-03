@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import nextcp.upnp.ActionCallback;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.NextcpClientInfo;
+import nextcp.upnp.UpnpValue;
 
 /**
  * ATTENTION: DO NOT MODIFY THIS CLASS. CLASS IS GENERATED AND WILL BE OVERWRITTEN
@@ -26,7 +27,7 @@ public class GetHTSSpeakerConfig extends ActionCallback
     public GetHTSSpeakerConfig(Service service, ControlPoint cp)
     {
         super(new ActionInvocation(service.getAction("GetHTSSpeakerConfig"), new NextcpClientInfo()), cp);
-
+		
     }
 
     public GetHTSSpeakerConfigOutput executeAction()
@@ -35,16 +36,9 @@ public class GetHTSSpeakerConfig extends ActionCallback
 
         GetHTSSpeakerConfigOutput result = new GetHTSSpeakerConfigOutput();
 
-  		if (invocation.getOutput("Result").getValue() != null)
-  		{
-	        result.Result = invocation.getOutput("Result").getValue().toString();
-  		}
-  		else
-  		{
-	        result.Result = "";
-  		}
-        result.SpeakerChannel = ((UnsignedIntegerFourBytes) invocation.getOutput("SpeakerChannel").getValue()).getValue();
-        result.SpeakerLFE = ((UnsignedIntegerFourBytes) invocation.getOutput("SpeakerLFE").getValue()).getValue();
+        result.Result = UpnpValue.toTextOrEmpty(invocation.getOutput("Result").getValue());
+        result.SpeakerChannel = UpnpValue.toLong(invocation.getOutput("SpeakerChannel").getValue());
+        result.SpeakerLFE = UpnpValue.toLong(invocation.getOutput("SpeakerLFE").getValue());
 
         return result;
     }

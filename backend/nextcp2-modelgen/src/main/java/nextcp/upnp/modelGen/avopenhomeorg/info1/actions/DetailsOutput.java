@@ -9,11 +9,11 @@ package nextcp.upnp.modelGen.avopenhomeorg.info1.actions;
 public class DetailsOutput
 {
 
-    public Long Duration = null;
-    public Long BitRate = null;
     public Long BitDepth = null;
-    public Long SampleRate = null;
-    public Boolean Lossless = null;
+    public Long BitRate = null;
     public String CodecName = null;
+    public Long Duration = null;
+    public Boolean Lossless = null;
+    public Long SampleRate = null;
 
 }
