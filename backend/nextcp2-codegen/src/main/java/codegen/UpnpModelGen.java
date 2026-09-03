@@ -270,18 +270,18 @@ public class UpnpModelGen implements RegistryListener {
 
 		List<Variable> vars = getStateVariableList(service);
 
-		if (vars.size() > 0) {
-			String packageName = getPackage(service);
-			String className = getStateVariableClassname(service);
+		// The class is written even without variables: the generated event listener implementation
+		// references it unconditionally, so skipping it leaves a package that does not compile. A
+		// service whose evented variables are all A_ARG_TYPE_* (QPlay:2) hits exactly that case.
+		String packageName = getPackage(service);
+		String className = getStateVariableClassname(service);
 
-			Map<String, Object> root = new HashMap<>();
-			List<Variable> varList = new LinkedList<>();
-			root.put("className", className);
-			root.put("varList", vars);
-			root.put("packageName", packageName);
+		Map<String, Object> root = new HashMap<>();
+		root.put("className", className);
+		root.put("varList", vars);
+		root.put("packageName", packageName);
 
-			writeCode(root, getFilename(packageName, className), "actionParam.ftl");
-		}
+		writeCode(root, getFilename(packageName, className), "actionParam.ftl");
 	}
 
 	private List<Variable> getStateVariableList(Service service) {

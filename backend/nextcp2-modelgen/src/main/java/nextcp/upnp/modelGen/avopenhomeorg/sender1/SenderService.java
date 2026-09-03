@@ -48,11 +48,26 @@ public class SenderService
     
     public SenderService(UpnpService upnpService, RemoteDevice device)
     {
+        this(upnpService, device, null);
+    }
+
+    /**
+     * The listener is attached before the subscription request leaves, because jUPnP publishes the
+     * subscription inside protocol.run(): the initial event carrying every state variable can be
+     * dispatched while the caller has not yet had a chance to register its listener, and would then
+     * be dropped silently. A device only ever learns those values again when one of them changes.
+     */
+    public SenderService(UpnpService upnpService, RemoteDevice device, ISenderServiceEventListener listener)
+    {
         this.upnpService = upnpService;
         senderService = device.findService(new ServiceType("av-openhome-org", "Sender"));
         if (senderService != null)
         {
 	        subscription = new SenderServiceSubscription(senderService, 600);
+	        if (listener != null)
+	        {
+	            subscription.addSubscriptionEventListener(listener);
+	        }
 	        try
 	        {
 	            SendingSubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingSubscribe(subscription);

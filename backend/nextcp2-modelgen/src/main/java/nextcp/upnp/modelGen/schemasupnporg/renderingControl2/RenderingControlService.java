@@ -23,6 +23,12 @@ import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.ListPresets
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.ListPresetsInput;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.SetMute;
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.SetMuteInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.GetMute;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.GetMuteOutput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.GetMuteInput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.GetVolume;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.GetVolumeOutput;
+import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.GetVolumeInput;
 
 
 /**
@@ -47,11 +53,26 @@ public class RenderingControlService
     
     public RenderingControlService(UpnpService upnpService, RemoteDevice device)
     {
+        this(upnpService, device, null);
+    }
+
+    /**
+     * The listener is attached before the subscription request leaves, because jUPnP publishes the
+     * subscription inside protocol.run(): the initial event carrying every state variable can be
+     * dispatched while the caller has not yet had a chance to register its listener, and would then
+     * be dropped silently. A device only ever learns those values again when one of them changes.
+     */
+    public RenderingControlService(UpnpService upnpService, RemoteDevice device, IRenderingControlServiceEventListener listener)
+    {
         this.upnpService = upnpService;
         renderingControlService = device.findService(new ServiceType("schemas-upnp-org", "RenderingControl"));
         if (renderingControlService != null)
         {
 	        subscription = new RenderingControlServiceSubscription(renderingControlService, 600);
+	        if (listener != null)
+	        {
+	            subscription.addSubscriptionEventListener(listener);
+	        }
 	        try
 	        {
 	            SendingSubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingSubscribe(subscription);
@@ -109,6 +130,20 @@ public class RenderingControlService
 //
 
 
+
+    public GetVolumeOutput getVolume(GetVolumeInput inp)
+    {
+        GetVolume getVolume = new GetVolume(renderingControlService, inp, upnpService.getControlPoint());
+        GetVolumeOutput res = getVolume.executeAction();
+        return res;        
+    }
+
+    public GetMuteOutput getMute(GetMuteInput inp)
+    {
+        GetMute getMute = new GetMute(renderingControlService, inp, upnpService.getControlPoint());
+        GetMuteOutput res = getMute.executeAction();
+        return res;        
+    }
 
     public void selectPreset(SelectPresetInput inp)
     {

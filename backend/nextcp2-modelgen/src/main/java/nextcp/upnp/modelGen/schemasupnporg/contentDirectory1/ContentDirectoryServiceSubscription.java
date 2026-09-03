@@ -124,6 +124,9 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
                     case "SearchCapabilities":
                         searchCapabilitiesChange((String) stateVar.getValue());
                         break;
+                    case "ContainerUpdateIDs":
+                        containerUpdateIDsChange((String) stateVar.getValue());
+                        break;
                     default:
                         log.warn("unknown state variable : " + key);
                 }
@@ -143,6 +146,14 @@ public class ContentDirectoryServiceSubscription extends RemoteGENASubscription
             listener.eventProcessed();
         }
     }
+
+    private void containerUpdateIDsChange(String value)
+    {
+        for (IContentDirectoryServiceEventListener listener : eventListener)
+        {
+            listener.containerUpdateIDsChange(value);
+        }
+    }    
 
     private void systemUpdateIDChange(Long value)
     {

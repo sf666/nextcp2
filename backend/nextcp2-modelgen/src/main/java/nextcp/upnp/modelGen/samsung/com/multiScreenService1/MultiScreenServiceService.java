@@ -38,11 +38,26 @@ public class MultiScreenServiceService
     
     public MultiScreenServiceService(UpnpService upnpService, RemoteDevice device)
     {
+        this(upnpService, device, null);
+    }
+
+    /**
+     * The listener is attached before the subscription request leaves, because jUPnP publishes the
+     * subscription inside protocol.run(): the initial event carrying every state variable can be
+     * dispatched while the caller has not yet had a chance to register its listener, and would then
+     * be dropped silently. A device only ever learns those values again when one of them changes.
+     */
+    public MultiScreenServiceService(UpnpService upnpService, RemoteDevice device, IMultiScreenServiceServiceEventListener listener)
+    {
         this.upnpService = upnpService;
         multiScreenServiceService = device.findService(new ServiceType("samsung.com", "MultiScreenService"));
         if (multiScreenServiceService != null)
         {
 	        subscription = new MultiScreenServiceServiceSubscription(multiScreenServiceService, 600);
+	        if (listener != null)
+	        {
+	            subscription.addSubscriptionEventListener(listener);
+	        }
 	        try
 	        {
 	            SendingSubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingSubscribe(subscription);

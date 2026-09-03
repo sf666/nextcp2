@@ -125,6 +125,33 @@ public class AVTransportServiceEventListenerImpl implements IAVTransportServiceE
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
+    public void x_DLNA_RelativeBytePositionChange(String value)
+    {
+        stateVariable.X_DLNA_RelativeBytePosition = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "X_DLNA_RelativeBytePosition", value));
+        }
+    }
+    
+    public void x_DLNA_CurrentTrackSizeChange(String value)
+    {
+        stateVariable.X_DLNA_CurrentTrackSize = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "X_DLNA_CurrentTrackSize", value));
+        }
+    }
+    
+    public void x_DLNA_AbsoluteBytePositionChange(String value)
+    {
+        stateVariable.X_DLNA_AbsoluteBytePosition = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "X_DLNA_AbsoluteBytePosition", value));
+        }
+    }
+    
     public void currentMediaCategoryChange(String value)
     {
         stateVariable.CurrentMediaCategory = value;

@@ -12,6 +12,12 @@ import nextcp.upnp.ISubscriptionEventListener;
  */
 public interface IAVTransportServiceEventListener extends ISubscriptionEventListener 
 {
+    public void x_DLNA_RelativeBytePositionChange(String value);
+    
+    public void x_DLNA_CurrentTrackSizeChange(String value);
+    
+    public void x_DLNA_AbsoluteBytePositionChange(String value);
+    
     public void currentMediaCategoryChange(String value);
     
     public void absoluteTimePositionChange(String value);

@@ -196,6 +196,15 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
                     case "LastChange":
                         lastChangeChange((String) stateVar.getValue());
                         break;
+                    case "X_DLNA_AbsoluteBytePosition":
+                        x_DLNA_AbsoluteBytePositionChange((String) stateVar.getValue());
+                        break;
+                    case "X_DLNA_CurrentTrackSize":
+                        x_DLNA_CurrentTrackSizeChange((String) stateVar.getValue());
+                        break;
+                    case "X_DLNA_RelativeBytePosition":
+                        x_DLNA_RelativeBytePositionChange((String) stateVar.getValue());
+                        break;
                     default:
                         log.warn("unknown state variable : " + key);
                 }
@@ -215,6 +224,30 @@ public class AVTransportServiceSubscription extends RemoteGENASubscription
             listener.eventProcessed();
         }
     }
+
+    private void x_DLNA_RelativeBytePositionChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.x_DLNA_RelativeBytePositionChange(value);
+        }
+    }    
+
+    private void x_DLNA_CurrentTrackSizeChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.x_DLNA_CurrentTrackSizeChange(value);
+        }
+    }    
+
+    private void x_DLNA_AbsoluteBytePositionChange(String value)
+    {
+        for (IAVTransportServiceEventListener listener : eventListener)
+        {
+            listener.x_DLNA_AbsoluteBytePositionChange(value);
+        }
+    }    
 
     private void currentMediaCategoryChange(String value)
     {

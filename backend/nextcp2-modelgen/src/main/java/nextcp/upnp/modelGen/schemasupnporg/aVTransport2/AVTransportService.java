@@ -54,6 +54,11 @@ import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.SeekInput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetCurrentTransportActions;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetCurrentTransportActionsOutput;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetCurrentTransportActionsInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.SetPlayMode;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.SetPlayModeInput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.X_DLNA_GetBytePositionInfo;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.X_DLNA_GetBytePositionInfoOutput;
+import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.X_DLNA_GetBytePositionInfoInput;
 
 
 /**
@@ -78,11 +83,26 @@ public class AVTransportService
     
     public AVTransportService(UpnpService upnpService, RemoteDevice device)
     {
+        this(upnpService, device, null);
+    }
+
+    /**
+     * The listener is attached before the subscription request leaves, because jUPnP publishes the
+     * subscription inside protocol.run(): the initial event carrying every state variable can be
+     * dispatched while the caller has not yet had a chance to register its listener, and would then
+     * be dropped silently. A device only ever learns those values again when one of them changes.
+     */
+    public AVTransportService(UpnpService upnpService, RemoteDevice device, IAVTransportServiceEventListener listener)
+    {
         this.upnpService = upnpService;
         aVTransportService = device.findService(new ServiceType("schemas-upnp-org", "AVTransport"));
         if (aVTransportService != null)
         {
 	        subscription = new AVTransportServiceSubscription(aVTransportService, 600);
+	        if (listener != null)
+	        {
+	            subscription.addSubscriptionEventListener(listener);
+	        }
 	        try
 	        {
 	            SendingSubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingSubscribe(subscription);
@@ -140,6 +160,19 @@ public class AVTransportService
 //
 
 
+
+    public X_DLNA_GetBytePositionInfoOutput x_DLNA_GetBytePositionInfo(X_DLNA_GetBytePositionInfoInput inp)
+    {
+        X_DLNA_GetBytePositionInfo x_DLNA_GetBytePositionInfo = new X_DLNA_GetBytePositionInfo(aVTransportService, inp, upnpService.getControlPoint());
+        X_DLNA_GetBytePositionInfoOutput res = x_DLNA_GetBytePositionInfo.executeAction();
+        return res;        
+    }
+
+    public void setPlayMode(SetPlayModeInput inp)
+    {
+        SetPlayMode setPlayMode = new SetPlayMode(aVTransportService, inp, upnpService.getControlPoint());
+        setPlayMode.executeAction();
+    }
 
     public void pause(PauseInput inp)
     {

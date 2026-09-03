@@ -55,11 +55,26 @@ public class X_MS_MediaReceiverRegistrarService
     
     public X_MS_MediaReceiverRegistrarService(UpnpService upnpService, RemoteDevice device)
     {
+        this(upnpService, device, null);
+    }
+
+    /**
+     * The listener is attached before the subscription request leaves, because jUPnP publishes the
+     * subscription inside protocol.run(): the initial event carrying every state variable can be
+     * dispatched while the caller has not yet had a chance to register its listener, and would then
+     * be dropped silently. A device only ever learns those values again when one of them changes.
+     */
+    public X_MS_MediaReceiverRegistrarService(UpnpService upnpService, RemoteDevice device, IX_MS_MediaReceiverRegistrarServiceEventListener listener)
+    {
         this.upnpService = upnpService;
         x_MS_MediaReceiverRegistrarService = device.findService(new ServiceType("microsoft.com", "X_MS_MediaReceiverRegistrar"));
         if (x_MS_MediaReceiverRegistrarService != null)
         {
 	        subscription = new X_MS_MediaReceiverRegistrarServiceSubscription(x_MS_MediaReceiverRegistrarService, 600);
+	        if (listener != null)
+	        {
+	            subscription.addSubscriptionEventListener(listener);
+	        }
 	        try
 	        {
 	            SendingSubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingSubscribe(subscription);

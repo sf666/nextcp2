@@ -59,11 +59,26 @@ public class RenderingControlService
     
     public RenderingControlService(UpnpService upnpService, RemoteDevice device)
     {
+        this(upnpService, device, null);
+    }
+
+    /**
+     * The listener is attached before the subscription request leaves, because jUPnP publishes the
+     * subscription inside protocol.run(): the initial event carrying every state variable can be
+     * dispatched while the caller has not yet had a chance to register its listener, and would then
+     * be dropped silently. A device only ever learns those values again when one of them changes.
+     */
+    public RenderingControlService(UpnpService upnpService, RemoteDevice device, IRenderingControlServiceEventListener listener)
+    {
         this.upnpService = upnpService;
         renderingControlService = device.findService(new ServiceType("schemas-upnp-org", "RenderingControl"));
         if (renderingControlService != null)
         {
 	        subscription = new RenderingControlServiceSubscription(renderingControlService, 600);
+	        if (listener != null)
+	        {
+	            subscription.addSubscriptionEventListener(listener);
+	        }
 	        try
 	        {
 	            SendingSubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingSubscribe(subscription);

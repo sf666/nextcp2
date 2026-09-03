@@ -125,6 +125,15 @@ public class ContentDirectoryServiceEventListenerImpl implements IContentDirecto
     //
     //    Service specific event callbacks 
     // =============================================================================================================================================================================
+    public void containerUpdateIDsChange(String value)
+    {
+        stateVariable.ContainerUpdateIDs = value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(String.format("StateVariable : %s: %s", "ContainerUpdateIDs", value));
+        }
+    }
+    
     public void systemUpdateIDChange(Long value)
     {
         stateVariable.SystemUpdateID = value;

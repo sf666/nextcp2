@@ -38,5 +38,8 @@ public class AVTransportServiceStateVariable
     public String CurrentTransportActions = null;
     public String PossibleRecordStorageMedia = null;
     public String LastChange = null;
+    public String X_DLNA_AbsoluteBytePosition = null;
+    public String X_DLNA_CurrentTrackSize = null;
+    public String X_DLNA_RelativeBytePosition = null;
 
 }

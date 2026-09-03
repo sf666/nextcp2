@@ -14,5 +14,6 @@ public class ContentDirectoryServiceStateVariable
     public String A_ARG_Type_TransferStatus = null;
     public String A_ARG_Type_TransferID = null;
     public String SearchCapabilities = null;
+    public String ContainerUpdateIDs = null;
 
 }
