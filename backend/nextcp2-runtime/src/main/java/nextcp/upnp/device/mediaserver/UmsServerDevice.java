@@ -129,11 +129,10 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		}
 
 		try {
-			umsServices = new UmsExtendedServicesService(getUpnpService(), getDevice());
-			if (umsServices.getUmsExtendedServicesService() != null) {
-				umsServiceEventListener = new UmsExtendedServicesServiceEventListener(getDevice(), this);
-				umsServices.addSubscriptionEventListener(umsServiceEventListener);
-			} else {
+			umsServiceEventListener = new UmsExtendedServicesServiceEventListener(getDevice(), this);
+			umsServices = new UmsExtendedServicesService(getUpnpService(), getDevice(), umsServiceEventListener);
+			if (umsServices.getUmsExtendedServicesService() == null) {
+				umsServiceEventListener = null;
 				log.warn(
 					"This UMS version has no UPnP extended UMS services. Please use the fork from https://github.com/ik666/UniversalMediaServer or you can try a current version of UMS.");
 			}
@@ -158,12 +157,14 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	 */
 	private void updateServerConfig() {
 		ServerDeviceConfiguration sd = serverConfig.getMediaServerConfig(getUdnAsString());
+		if (sd == null) {
+			log.debug("[UmsServerDevice-{}] no configuration entry yet. Skipping update.", getFriendlyName());
+			return;
+		}
 
-		// UMS owns this setting, so its value is adopted in both directions. Only ever copying a
-		// false back used to pin the stored value to false: a true never returned, and any later
-		// event re-applied the stale false over what the user had just enabled.
-		if (umsServiceEventListener.getStateVariable().AudioUpdateRating != null) {
-			sd.updateRatingInFile = umsServiceEventListener.getStateVariable().AudioUpdateRating;
+		Boolean updateRatingInFile = getUpdateRatingInFile();
+		if (updateRatingInFile != null) {
+			sd.updateRatingInFile = updateRatingInFile;
 		}
 
 		serverConfig.updateServerDevice(sd);
@@ -775,24 +776,28 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		}
 	}
 
-	public boolean isUpdateRatingInFile() {
-		if (umsServiceEventListener.getStateVariable().AudioUpdateRating != null) {
-			return umsServiceEventListener.getStateVariable().AudioUpdateRating;
-		} else {
-			return false;
+	/**
+	 * @return the rating tag setting as reported by UMS, or null as long as UMS has not reported it.
+	 */
+	public Boolean getUpdateRatingInFile() {
+		if (umsServiceEventListener == null) {
+			return null;
 		}
+		return umsServiceEventListener.getStateVariable().AudioUpdateRating;
 	}
 
 	public ServerDeviceConfiguration getNewServerConfig() {
 		ServerDeviceConfiguration c = super.getNewServerConfig();
-		c.updateRatingInFile = isUpdateRatingInFile();
+		c.updateRatingInFile = getUpdateRatingInFile();
 		return c;
 	}
 
 	public void updateCurrentConfigState(ServerDeviceConfiguration c) {
+		Boolean updateRatingInFile = getUpdateRatingInFile();
+		if (updateRatingInFile != null) {
+			c.updateRatingInFile = updateRatingInFile;
+		}
 		super.updateCurrentConfigState(c);
-		c.updateRatingInFile = isUpdateRatingInFile();
-		serverConfig.updateServerDevice(c);
 	}
 
 	@Override
@@ -801,12 +806,14 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			log.debug("[UmsServerDevice-{}] do not change config. No configuration.", getFriendlyName());
 			return;
 		}
-		if (umsServiceEventListener.getStateVariable().AudioUpdateRating != null) {
-			log.info("[UmsServerDevice-{}] setting AudioUpdateRatingTag to {} ", getFriendlyName(), serverDeviceConfig.updateRatingInFile);
-			SetAudioUpdateRatingTagInput inp = new SetAudioUpdateRatingTagInput();
-			inp.AudioUpdateRating = serverDeviceConfig.updateRatingInFile;
-			umsServices.setAudioUpdateRatingTag(inp);
+		if (serverDeviceConfig.updateRatingInFile == null || umsServices.getUmsExtendedServicesService() == null) {
+			log.debug("[UmsServerDevice-{}] do not change AudioUpdateRatingTag. No value set.", getFriendlyName());
+			return;
 		}
+		log.info("[UmsServerDevice-{}] setting AudioUpdateRatingTag to {} ", getFriendlyName(), serverDeviceConfig.updateRatingInFile);
+		SetAudioUpdateRatingTagInput inp = new SetAudioUpdateRatingTagInput();
+		inp.AudioUpdateRating = serverDeviceConfig.updateRatingInFile;
+		umsServices.setAudioUpdateRatingTag(inp);
 	}
 
 	@Override

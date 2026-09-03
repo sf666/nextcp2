@@ -41,11 +41,26 @@ public class ${className}
     
     public ${className}(UpnpService upnpService, RemoteDevice device)
     {
+        this(upnpService, device, null);
+    }
+
+    /**
+     * The listener is attached before the subscription request leaves, because jUPnP publishes the
+     * subscription inside protocol.run(): the initial event carrying every state variable can be
+     * dispatched while the caller has not yet had a chance to register its listener, and would then
+     * be dropped silently. A device only ever learns those values again when one of them changes.
+     */
+    public ${className}(UpnpService upnpService, RemoteDevice device, I${className}EventListener listener)
+    {
         this.upnpService = upnpService;
         ${className?uncap_first} = device.findService(new ServiceType("${upnpSchema}", "${upnpService}"));
         if (${className?uncap_first} != null)
         {
 	        subscription = new ${className}Subscription(${className?uncap_first}, 600);
+	        if (listener != null)
+	        {
+	            subscription.addSubscriptionEventListener(listener);
+	        }
 	        try
 	        {
 	            SendingSubscribe protocol = upnpService.getControlPoint().getProtocolFactory().createSendingSubscribe(subscription);
