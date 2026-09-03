@@ -382,6 +382,20 @@
           <label for="FORM_lp_formatmode"
             class="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Audio
             format for the browser player</label>
+          @if (localPlayerService.isAutoTranscoding()) {
+            <div class="flex items-start gap-2 mt-2 text-sm text-amber-400">
+              <mat-icon class="material-symbols-outlined" style="font-size:18px;width:18px;height:18px">info</mat-icon>
+              @if (localPlayerService.browserLacksLosslessSupport()) {
+                <span>Automatic is streaming transcoded audio: this browser cannot decode FLAC.</span>
+              } @else {
+                <span class="flex flex-wrap items-center gap-2">
+                  <span>Automatic switched to transcoded audio for this browser after a playback failure.</span>
+                  <button type="button" class="underline text-blue-400 hover:text-blue-300"
+                    (click)="localPlayerService.resetAutoTranscoding()">Try lossless again</button>
+                </span>
+              }
+            </div>
+          }
         </div>
         <div class="relative z-0 w-full mb-5 group flex items-center gap-3 py-2.5 sm:col-span-2">
           <input type="checkbox" name="FORM_lp_pretranscode" id="FORM_lp_pretranscode"

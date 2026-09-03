@@ -22,6 +22,7 @@ import {
 } from '@angular/core';
 import { form, FormField } from '@angular/forms/signals';
 import { LayoutService } from 'src/app/service/layout.service';
+import { LocalPlayerService } from 'src/app/service/local-player.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -79,6 +80,7 @@ export class SettingsComponent implements OnInit {
   private appVisibilityService = inject(AppVisibilityService);
   configService = inject(ConfigurationService);
   dtoGeneratorService = inject(DtoGeneratorService);
+  localPlayerService = inject(LocalPlayerService);
   private dialog = inject(MatDialog);
 
   amplifierInfoRendererUdn: string | null = null;

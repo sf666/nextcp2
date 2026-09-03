@@ -72,7 +72,8 @@ export class LocalPlayerService {
   private playbackErrorReported = false;
 
   private static readonly LOSSY_STORAGE_KEY = 'nextcp.localPlayer.lossy.v2';
-  private autoLossy = this.detectLossyPlayback();
+  // A signal, so the settings view notices when the automatic mode switches while it is open.
+  private readonly autoLossy = signal<boolean>(this.detectLossyPlayback());
 
   // Playback state, consumed by RendererService so the footer now-playing/transport reflects the
   // local browser player when the "This Device" renderer is selected.
@@ -542,7 +543,31 @@ export class LocalPlayerService {
     switch (this.formatMode) {
       case 'lossy': return true;
       case 'lossless': return false;
-      default: return this.autoLossy;
+      default: return this.autoLossy();
+    }
+  }
+
+  /**
+   * True while the automatic mode has settled on the transcoded profile. The setting itself only
+   * says "automatic", and the decision lives in this browser's local storage rather than in the
+   * server configuration, so without asking here it is invisible.
+   */
+  public isAutoTranscoding(): boolean {
+    return this.formatMode === 'auto' && this.autoLossy();
+  }
+
+  /** True when this browser cannot decode FLAC at all, which no reset can change. */
+  public browserLacksLosslessSupport(): boolean {
+    return this.audio.canPlayType('audio/flac') === '';
+  }
+
+  /** Lets the automatic mode try the lossless stream again after a one-off failure. */
+  public resetAutoTranscoding(): void {
+    this.autoLossy.set(false);
+    try {
+      localStorage.removeItem(LocalPlayerService.LOSSY_STORAGE_KEY);
+    } catch {
+      // ignored
     }
   }
 
@@ -557,20 +582,66 @@ export class LocalPlayerService {
     return this.audio.canPlayType('audio/flac') === '';
   }
 
+  /**
+   * Decides whether a failed native stream should make this browser switch to the transcoded
+   * profile. Only a format problem justifies it - the switch is remembered, so a transport hiccup
+   * must not pin the browser to transcoded audio for good.
+   *
+   * @return true when the error is being handled here and must not be reported to the user (yet).
+   */
   private retryAsLossy(): boolean {
     const code = this.audio.error?.code ?? 0;
-    if (this.formatMode !== 'auto' || this.autoLossy || this.currentIndex < 0 || (code !== 3 && code !== 4)) {
+    if (this.formatMode !== 'auto' || this.autoLossy() || this.currentIndex < 0) {
       return false;
     }
-    console.warn('[local-player] browser refused the native stream (code ' + code +
-      '), switching to the transcoded profile', this.audio.currentSrc);
+    // MEDIA_ERR_DECODE: the bytes arrived and could not be decoded. That is precisely what the
+    // transcoded profile exists for.
+    if (code === 3) {
+      this.switchToTranscoded('the browser could not decode it');
+      return true;
+    }
+    // MEDIA_ERR_SRC_NOT_SUPPORTED also covers a source that never arrived - a 404 or a dropped
+    // connection looks the same from here and says nothing about the format. Ask the server first.
+    if (code === 4) {
+      const source = this.audio.currentSrc;
+      this.wasSourceDelivered(source).then((delivered) => {
+        if (delivered) {
+          this.switchToTranscoded('the browser refused the format the server delivered');
+        } else {
+          console.warn('[local-player] native stream did not arrive; keeping the lossless profile', source);
+          this.reportPlaybackError();
+        }
+      });
+      return true;
+    }
+    return false;
+  }
+
+  private switchToTranscoded(reason: string): void {
+    console.warn('[local-player] switching to the transcoded profile: ' + reason, this.audio.currentSrc);
     this.setLossyPlayback(true);
     this.playIndex(this.currentIndex);
-    return true;
+  }
+
+  /**
+   * Asks for the first byte of the source to tell a format problem from a transport problem. The
+   * proxy relays the media server's status and only adds X-Upstream-Status when that status was an
+   * error, so a plain successful response means the bytes were there.
+   */
+  private async wasSourceDelivered(source: string): Promise<boolean> {
+    if (!source) {
+      return false;
+    }
+    try {
+      const response = await fetch(source, { headers: { Range: 'bytes=0-0' }, cache: 'no-store' });
+      return response.ok && response.headers.get('X-Upstream-Status') === null;
+    } catch {
+      return false;
+    }
   }
 
   public setLossyPlayback(lossy: boolean): void {
-    this.autoLossy = lossy;
+    this.autoLossy.set(lossy);
     try {
       localStorage.setItem(LocalPlayerService.LOSSY_STORAGE_KEY, String(lossy));
     } catch {
