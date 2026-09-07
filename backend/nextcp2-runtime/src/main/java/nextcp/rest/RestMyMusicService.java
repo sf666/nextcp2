@@ -87,6 +87,12 @@ public class RestMyMusicService extends BaseRestService
             myMusicService.backupRatings(getExtendedMediaServerByUdn(deviceId));
             toast.publishSuccessMessage(null, "backup liked albums", "success");
         }
+        catch (GenActionException e)
+        {
+            // The reason a UPnP action refused is in its description, not in getMessage() - which is
+            // empty here, so the toast used to appear without any text at all.
+            toast.publishErrorMessage(null, "backup liked albums", errorHandler.extractErrorText(e.description));
+        }
         catch (Exception e)
         {
             toast.publishErrorMessage(null, "backup liked albums", e.getMessage());
