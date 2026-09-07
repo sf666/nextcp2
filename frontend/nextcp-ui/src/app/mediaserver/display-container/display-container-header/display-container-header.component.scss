@@ -16,6 +16,12 @@
 // Heights come from the display container (--dc-hero-*). The fallbacks keep this component
 // standalone-safe.
 #outer {
+    // The frosted look (backdrop-filter, further down) makes this a stacking context, and with
+    // z-index:auto the whole header paints in the same layer as the positioned tiles of the
+    // content column - which comes later in the document, so covers were drawn over the open
+    // filter menus. A z-index here lifts the header as a unit; raising it on anything inside
+    // cannot help, because the sorting happens between this context and the content.
+    z-index  : 20;
     --h-max  : var(--dc-hero-max, 310px);
     --h-min  : var(--dc-hero-min, 104px);
     // Cover size (and the content band beside it) is the header height minus
