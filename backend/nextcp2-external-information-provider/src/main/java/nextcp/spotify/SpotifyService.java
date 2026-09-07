@@ -174,4 +174,15 @@ public class SpotifyService
     {
         return spotifyApi;
     }
+
+    /**
+     * Whether a request can succeed at all. The api object exists as soon as a client id is
+     * configured, so it says nothing about the account: after a refused token renewal every call is
+     * a wasted round trip until the user links the account again. renewToken() already records that
+     * state, this only makes it readable for callers whose work is optional.
+     */
+    public boolean isAuthorized()
+    {
+        return spotifyApi != null && config.userIsAuthorized();
+    }
 }
