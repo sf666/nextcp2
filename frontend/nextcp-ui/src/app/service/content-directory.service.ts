@@ -37,6 +37,11 @@ import {
   signal,
 } from '@angular/core';
 import { isAssigned } from '../global';
+import {
+  deepEquals,
+  mergeKeyedList,
+  reuseKeyedEntries,
+} from '../util/list-merge';
 
 /** One clickable step of the browse path shown in the nav bar. */
 export interface BrowseCrumb {
@@ -64,6 +69,10 @@ export const SEARCH_RESULT_CONTAINER_ID = 'search_result';
  */
 const PLAYLIST_CONTAINER_CLASS = 'object.container.playlistContainer';
 const ARTIST_CONTAINER_CLASS = 'object.container.person.musicArtist';
+
+/** What identifies a browse entry across two reads of the same listing. */
+const CONTAINER_KEY = (container: ContainerDto): string => container.id;
+const ITEM_KEY = (item: MusicItemDto): string => item.objectID;
 
 /**
  * What the view is showing when it shows search hits instead of a folder.
@@ -466,6 +475,15 @@ export class ContentDirectoryService {
   // Whether the browse currently running replaces the listing in place.
   private inPlaceRefresh = false;
 
+  /**
+   * The entries held when the running in-place refresh started, by object id.
+   *
+   * The first page can compare against the lists themselves - it arrives before they are replaced.
+   * Every page after it appends to a list the first page has already replaced, so it needs this to
+   * find the object that stood for the same entry.
+   */
+  private refreshReuse: Map<string, unknown> | undefined;
+
   // to which page was browsed
 
   private TURN_PAGE_AFTER = 60;
@@ -515,6 +533,31 @@ export class ContentDirectoryService {
    * arrays are therefore returned unchanged unless the entry is actually in them: an untouched
    * reference leaves the signal quiet and those views do not re-render at all.
    */
+  /**
+   * Everything currently listed, by object id, for the pages of a refresh to compare against.
+   * The ids are unique across the sections, so one map covers all of them.
+   */
+  private snapshotLoadedEntries(): Map<string, unknown> {
+    const byKey = new Map<string, unknown>();
+    for (const item of this.musicTracks_()) {
+      byKey.set(ITEM_KEY(item), item);
+    }
+    for (const item of this.rawOtherItems_()) {
+      byKey.set(ITEM_KEY(item), item);
+    }
+    for (const list of [
+      this.albumList_(),
+      this.containerList_(),
+      this.playlistList_(),
+      this.artistList_(),
+    ]) {
+      for (const container of list) {
+        byKey.set(CONTAINER_KEY(container), container);
+      }
+    }
+    return byKey;
+  }
+
   private applyRating(change: RatingChange): void {
     if (!change?.objectID) {
       return;
@@ -769,6 +812,7 @@ export class ContentDirectoryService {
     // Set before the request goes out: a navigation started while a refresh was
     // still running has to win, and it clears the flag by coming through here.
     this.inPlaceRefresh = inPlace;
+    this.refreshReuse = inPlace ? this.snapshotLoadedEntries() : undefined;
     if (inPlace) {
       this.inPlaceRefreshStarted$.next();
     }
@@ -936,40 +980,69 @@ export class ContentDirectoryService {
           ' / ' +
           data.allTracksSameAlbumIds?.discogsReleaseId,
       );
-      this.currentContainerList.set(data);
+      // Only a refresh of the listing on screen can find the whole thing unchanged, and comparing
+      // the container costs a walk over everything in it - so a navigation does not even try.
+      this.currentContainerList.update((current) =>
+        this.inPlaceRefresh && deepEquals(current, data) ? current : data,
+      );
       this.reconcileBrowsePath(data);
       this.updatePageTurnId(data);
-      this.albumList_.set(data.albumDto);
+      // update() rather than set(): the lists still hold what was on screen, which is what the
+      // answer is compared against. Where it matches, the reference is kept and the signal never
+      // notifies - see mergeKeyedList.
+      this.albumList_.update((current) =>
+        mergeKeyedList(current, data.albumDto, CONTAINER_KEY),
+      );
       // Folders are what is left over once the classes with their own section
       // have been taken out, so a new section only has to be added here and to
       // addContainer below.
-      this.containerList_.set(
-        data.containerDto?.filter(
-          (item) =>
-            item.objectClass !== PLAYLIST_CONTAINER_CLASS &&
-            item.objectClass !== ARTIST_CONTAINER_CLASS,
+      this.containerList_.update((current) =>
+        mergeKeyedList(
+          current,
+          data.containerDto?.filter(
+            (item) =>
+              item.objectClass !== PLAYLIST_CONTAINER_CLASS &&
+              item.objectClass !== ARTIST_CONTAINER_CLASS,
+          ),
+          CONTAINER_KEY,
         ),
       );
-      this.playlistList_.set(
-        data.containerDto?.filter(
-          (item) => item.objectClass === PLAYLIST_CONTAINER_CLASS,
+      this.playlistList_.update((current) =>
+        mergeKeyedList(
+          current,
+          data.containerDto?.filter(
+            (item) => item.objectClass === PLAYLIST_CONTAINER_CLASS,
+          ),
+          CONTAINER_KEY,
         ),
       );
-      this.artistList_.set(
-        data.containerDto?.filter(
-          (item) => item.objectClass === ARTIST_CONTAINER_CLASS,
+      this.artistList_.update((current) =>
+        mergeKeyedList(
+          current,
+          data.containerDto?.filter(
+            (item) => item.objectClass === ARTIST_CONTAINER_CLASS,
+          ),
+          CONTAINER_KEY,
         ),
       );
-      this.musicTracks_.set(
-        data.musicItemDto?.filter(
-          (item) =>
-            item.objectClass.lastIndexOf('object.item.audioItem', 0) === 0,
+      this.musicTracks_.update((current) =>
+        mergeKeyedList(
+          current,
+          data.musicItemDto?.filter(
+            (item) =>
+              item.objectClass.lastIndexOf('object.item.audioItem', 0) === 0,
+          ),
+          ITEM_KEY,
         ),
       );
-      this.rawOtherItems_.set(
-        data.musicItemDto?.filter(
-          (item) =>
-            item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0,
+      this.rawOtherItems_.update((current) =>
+        mergeKeyedList(
+          current,
+          data.musicItemDto?.filter(
+            (item) =>
+              item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0,
+          ),
+          ITEM_KEY,
         ),
       );
       this.browseFinished$.next(data);
@@ -987,52 +1060,70 @@ export class ContentDirectoryService {
       this.currentContainerList.set(data);
       this.updatePageTurnId(data);
 
+      // Appending always makes a new array, so this list notifies either way. What is worth keeping
+      // is the identity of each entry: a tile whose entry is still the same object does not render
+      // again. Outside a refresh the snapshot is empty and this hands the page straight through.
+      const keepItems = (items: MusicItemDto[] | undefined) =>
+        reuseKeyedEntries(items, this.refreshReuse, ITEM_KEY);
+      const keepContainers = (containers: ContainerDto[] | undefined) =>
+        reuseKeyedEntries(containers, this.refreshReuse, CONTAINER_KEY);
+
       this.albumList_.update((v) => {
         // concat already returns a new array — the extra spread copied the whole
         // listing a second time on every page of a paged browse.
-        return v.concat(data.albumDto);
+        return v.concat(keepContainers(data.albumDto));
       });
 
       this.containerList_.update((v) => {
         return v.concat(
-          data.containerDto.filter(
-            (item) =>
-              item.objectClass !== PLAYLIST_CONTAINER_CLASS &&
-              item.objectClass !== ARTIST_CONTAINER_CLASS,
+          keepContainers(
+            data.containerDto.filter(
+              (item) =>
+                item.objectClass !== PLAYLIST_CONTAINER_CLASS &&
+                item.objectClass !== ARTIST_CONTAINER_CLASS,
+            ),
           ),
         );
       });
 
       this.playlistList_.update((v) => {
         return v.concat(
-          data.containerDto.filter(
-            (item) => item.objectClass === PLAYLIST_CONTAINER_CLASS,
+          keepContainers(
+            data.containerDto.filter(
+              (item) => item.objectClass === PLAYLIST_CONTAINER_CLASS,
+            ),
           ),
         );
       });
 
       this.artistList_.update((v) => {
         return v.concat(
-          data.containerDto.filter(
-            (item) => item.objectClass === ARTIST_CONTAINER_CLASS,
+          keepContainers(
+            data.containerDto.filter(
+              (item) => item.objectClass === ARTIST_CONTAINER_CLASS,
+            ),
           ),
         );
       });
 
       this.musicTracks_.update((v) => {
         return v.concat(
-          data.musicItemDto.filter(
-            (item) =>
-              item.objectClass.lastIndexOf('object.item.audioItem', 0) === 0,
+          keepItems(
+            data.musicItemDto.filter(
+              (item) =>
+                item.objectClass.lastIndexOf('object.item.audioItem', 0) === 0,
+            ),
           ),
         );
       });
 
       this.rawOtherItems_.update((v) => {
         return v.concat(
-          data.musicItemDto.filter(
-            (item) =>
-              item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0,
+          keepItems(
+            data.musicItemDto.filter(
+              (item) =>
+                item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0,
+            ),
           ),
         );
       });
