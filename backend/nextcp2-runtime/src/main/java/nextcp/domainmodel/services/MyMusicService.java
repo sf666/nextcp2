@@ -66,9 +66,12 @@ public class MyMusicService
     }
 
     /**
-     * The sidebar list is a search on the liked rating, so a restore changes it. Nothing on the
-     * media server announces that - it sends no ContainerUpdateIDs for a rating - and the list was
-     * only refetched when the selected server changed, which is why it took a browser reload.
+     * The sidebar list is a search on the liked rating, so a restore changes it. No event can
+     * announce that: a media server reports a changed container through ContainerUpdateIDs, and the
+     * liked list is a search result, which belongs to no container. (UMS does bump the update ids of
+     * the rated entry and its ancestors, but that only tells a browse view to re-read a listing.)
+     * The list was otherwise only refetched when the selected server changed, which is why it took a
+     * browser reload.
      */
     private void publishLikedPlaylists(ExtendedApiMediaDevice device)
     {

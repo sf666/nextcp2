@@ -6,6 +6,17 @@ import { DeviceService } from './device.service';
 import { SseService } from './sse/sse.service';
 import { auditTime, filter, groupBy, mergeMap, Subject } from 'rxjs';
 
+/**
+ * One entry whose rating was just written from this browser, so a view holding that entry can
+ * update the value in place instead of reading the whole container again.
+ */
+export interface RatingChange {
+  objectID: string;
+  rating: number | undefined;
+  /** The container listing the entry, used to recognise the media server's echo of this change. */
+  containerId?: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -22,6 +33,27 @@ export class CdsUpdateService {
    * showing that container has to browse again for the change to appear.
    */
   public containerContentChanged$ = new Subject<string>();
+
+  /**
+   * A rating this browser has just written. Carries the new value, so the views patch the entry
+   * they already hold - the rating is the only thing that changed, and both the rating filter and
+   * the sort work on the arrays already loaded.
+   */
+  public itemRatingChanged$ = new Subject<RatingChange>();
+
+  /**
+   * Containers this browser has changed itself, with the time it did.
+   *
+   * UMS reports a rating back through ContainerUpdateIDs - StoreResourceRatings.setRating bumps the
+   * update id of the entry and of every ancestor - and acting on that echo would replace the listing
+   * that was just patched, which is the flicker this avoids. Media servers that push nothing send no
+   * echo, so nothing is lost there; they are also the ones that cannot store a rating in the first
+   * place.
+   */
+  private readonly selfInflicted = new Map<string, number>();
+
+  /** How long an incoming change is still attributed to this browser. */
+  private static readonly ECHO_WINDOW_MS = 5000;
 
   constructor() {
     // The same thing, reported by the media server instead of caused by us: a container whose
@@ -40,11 +72,48 @@ export class CdsUpdateService {
         // single delete. Collapse a burst per container into one.
         groupBy((containerId) => containerId),
         mergeMap((perContainer) => perContainer.pipe(auditTime(700))),
+        // Decided here rather than before auditTime, so the window is measured against the moment
+        // the refresh would actually happen.
+        filter((containerId) => !this.isOwnChange(containerId)),
         takeUntilDestroyed(),
       )
       .subscribe((containerId) =>
         this.containerContentChanged$.next(containerId),
       );
+  }
+
+  /**
+   * Announces a rating this browser has written: records the container as self-changed so the media
+   * server's echo is ignored, then hands the new value to every view that shows the entry.
+   */
+  public announceRatingChange(change: RatingChange): void {
+    if (change.containerId) {
+      this.pruneExpired();
+      this.selfInflicted.set(change.containerId, Date.now());
+    }
+    this.itemRatingChanged$.next(change);
+  }
+
+  private isOwnChange(containerId: string): boolean {
+    const changedAt = this.selfInflicted.get(containerId);
+    if (changedAt === undefined) {
+      return false;
+    }
+    if (Date.now() - changedAt > CdsUpdateService.ECHO_WINDOW_MS) {
+      this.selfInflicted.delete(containerId);
+      return false;
+    }
+    return true;
+  }
+
+  /** An echo that never arrived would otherwise keep its entry forever. */
+  private pruneExpired(): void {
+    const deadline = Date.now() - CdsUpdateService.ECHO_WINDOW_MS;
+    for (const [containerId, changedAt] of this.selfInflicted) {
+      if (changedAt < deadline) {
+        this.selfInflicted.delete(containerId);
+      }
+    }
   }
 
   public setNewAlbumArtUri(

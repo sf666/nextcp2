@@ -57,17 +57,32 @@ export class RatingServiceService {
   private baseUri = '/RatingService';
 
   /**
-   * The caller sets the new value on screen itself, which is enough for the star
-   * overlay. A browse is only needed so a sort or filter on rating takes the new
-   * value into account - hence the container that lists the rated entry.
+   * The caller sets the new value on screen itself, which is enough for the star overlay of the row
+   * it owns. Everything else showing the same entry - another view, the rating filter, the sort - is
+   * served by handing the new value to the views, which patch what they already hold.
+   *
+   * This used to announce a content change instead, which made every view holding the container
+   * browse it again. Nothing about that browse was needed: filter and sort both run over the loaded
+   * arrays, so the new value reaches them from the patch alone. It also collided with UMS, which
+   * reports a rating back through ContainerUpdateIDs, so a single click rebuilt the listing twice -
+   * once right away and once about 700ms later - and that is what flickered and lost the scroll
+   * position. Announcing it here also marks the container as changed by us, so that echo is ignored.
    */
-  private announceTo(result: Subject<void>, containerId?: string): Subject<void> {
-    if (containerId) {
-      result.subscribe({
-        next: () => this.cdsUpdateService.containerContentChanged$.next(containerId),
-        error: () => {},
-      });
-    }
+  private announceRating(
+    result: Subject<void>,
+    objectID: string,
+    rating: number | undefined,
+    containerId?: string,
+  ): Subject<void> {
+    result.subscribe({
+      next: () =>
+        this.cdsUpdateService.announceRatingChange({
+          objectID,
+          rating,
+          containerId,
+        }),
+      error: () => {},
+    });
     return result;
   }
 
@@ -86,8 +101,10 @@ export class RatingServiceService {
       mediaServerDevice: this.deviceSerice.selectedMediaServerDevice().udn,
     };
 
-    return this.announceTo(
+    return this.announceRating(
       this.httpService.post<void>(this.baseUri, uri, srr),
+      ids.objectID,
+      stars,
       containerId,
     );
   }
@@ -121,8 +138,10 @@ export class RatingServiceService {
       mediaServerDevice: this.deviceSerice.selectedMediaServerDevice().udn,
     } as unknown as UpdateStarRatingRequest;
 
-    const result = this.announceTo(
+    const result = this.announceRating(
       this.httpService.post<void>(this.baseUri, uri, srr),
+      objectID,
+      newRating,
       containerId,
     );
     // The sidebar lists the liked playlists, so a like on one changes it.

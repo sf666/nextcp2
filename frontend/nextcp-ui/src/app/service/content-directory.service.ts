@@ -18,7 +18,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DtoGeneratorService } from './../util/dto-generator.service';
 import { BrowseThrottleService } from './browse-throttle.service';
-import { CdsUpdateService } from './cds-update.service';
+import { CdsUpdateService, RatingChange } from './cds-update.service';
 import { HttpService } from './http.service';
 import {
   ContainerItemDto,
@@ -497,6 +497,50 @@ export class ContentDirectoryService {
     this.cdsUpdateService.containerContentChanged$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((containerId) => this.afterContainerContentChanged(containerId));
+
+    this.cdsUpdateService.itemRatingChanged$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((change) => this.applyRating(change));
+  }
+
+  /**
+   * Writes a new rating into the listing on screen instead of browsing again.
+   *
+   * The rating is the only thing that changed, and both the rating filter and the sort run over the
+   * arrays already loaded, so patching the entry is all they need to follow. Re-reading the whole
+   * container for it replaced the list under the user and cost the scroll position - the flicker
+   * this replaces. Keyed on the object id, like deleteMusicTrack.
+   *
+   * Every view has its own instance of this service, so most of them hold nothing that matches. The
+   * arrays are therefore returned unchanged unless the entry is actually in them: an untouched
+   * reference leaves the signal quiet and those views do not re-render at all.
+   */
+  private applyRating(change: RatingChange): void {
+    if (!change?.objectID) {
+      return;
+    }
+    const rating = change.rating as number;
+    const patchItems = (items: MusicItemDto[]): MusicItemDto[] =>
+      items?.some((item) => item.objectID === change.objectID)
+        ? items.map((item) =>
+            item.objectID === change.objectID ? { ...item, rating } : item,
+          )
+        : items;
+    const patchContainers = (containers: ContainerDto[]): ContainerDto[] =>
+      containers?.some((container) => container.id === change.objectID)
+        ? containers.map((container) =>
+            container.id === change.objectID
+              ? { ...container, rating }
+              : container,
+          )
+        : containers;
+
+    this.musicTracks_.update(patchItems);
+    this.rawOtherItems_.update(patchItems);
+    this.albumList_.update(patchContainers);
+    this.containerList_.update(patchContainers);
+    this.playlistList_.update(patchContainers);
+    this.artistList_.update(patchContainers);
   }
 
   /**
