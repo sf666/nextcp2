@@ -64,7 +64,8 @@ public abstract class ActionCallback
 
             if (actionInvocation.getFailure() != null)
             {
-                throw new GenActionException(GenActionException.ACTION_ERROR, "error on action : " + actionInvocation.getFailure());
+                throw new GenActionException(GenActionException.ACTION_ERROR, "action " + actionInvocation.getAction().getName()
+                        + " failed : " + actionInvocation.getFailure());
             }
         }
         else if (service instanceof RemoteService)
@@ -93,16 +94,35 @@ public abstract class ActionCallback
 
             if (response == null)
             {
-                throw new GenActionException(GenActionException.ACTION_ERROR, "error on action : " + actionInvocation.getFailure());
+                // No HTTP response at all: the device is unreachable (powered off / standby) while
+                // jUPnP still holds it in its registry until the SSDP lease expires.
+                String msg = "device " + deviceName(remoteService) + " did not respond to action "
+                    + actionInvocation.getAction().getName() + " (no HTTP response from " + controLURL
+                    + ") - device may be switched off or in standby"
+                    + (actionInvocation.getFailure() != null ? " : " + actionInvocation.getFailure().getMessage() : "");
+                log.warn("{}", msg);
+                throw new GenActionException(GenActionException.ACTION_ERROR, msg);
             }
             else if (response.getOperation().isFailed())
             {
             	log.error("UPnP error for device {} : {}" , remoteService.getDevice().getDisplayString(), response.getBodyString());
-                throw new GenActionException(GenActionException.ACTION_FAILED, response.getBodyString());
+                throw new GenActionException(GenActionException.ACTION_FAILED, "device " + deviceName(remoteService)
+                    + " rejected action " + actionInvocation.getAction().getName() + " : " + response.getBodyString());
             }
         }
 
         return actionInvocation;
+    }
+
+    /** Friendly name of the device behind a service, falling back to the UDN based display string. */
+    private static String deviceName(RemoteService service)
+    {
+        if (service.getDevice() != null && service.getDevice().getDetails() != null
+                && service.getDevice().getDetails().getFriendlyName() != null)
+        {
+            return service.getDevice().getDetails().getFriendlyName();
+        }
+        return service.getDevice() != null ? service.getDevice().getDisplayString() : "<unknown>";
     }
 
     protected String createDefaultFailureMessage(ActionInvocation invocation, UpnpResponse operation)

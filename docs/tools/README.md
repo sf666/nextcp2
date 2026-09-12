@@ -53,7 +53,13 @@ frames via ffmpeg, packing via `img2webp`.
 
 ```bash
 ./anim2webp.sh ~/Desktop/recording.mov ../public/anim/search.webp --fps 12 --width 1100
+./anim2webp.sh ~/Desktop/recording.mov ../public/anim/search.webp --min-size   # final run
 ```
+
+The packing stage is single threaded and prints nothing until it is finished, so the script
+shows the elapsed seconds while it runs. `--min-size` (plus `--effort 6`) is worth roughly one
+percent of file size and twenty times the encoding time - a 16 s clip goes from half a minute
+to well over five, so keep it for the run that actually ships.
 
 Measured on the three clips of the Music Library page (1100 px): h264 was 3–4× smaller than
 animated WebP *and* ran at 25 fps instead of 12 — hence the video route for the docs.

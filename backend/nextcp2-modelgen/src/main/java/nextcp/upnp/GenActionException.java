@@ -19,14 +19,14 @@ public class GenActionException extends RuntimeException
 
     public GenActionException(int errorCode, String description, Exception e)
     {
-        super(e);
+        super(description, e);
         this.errorCode = errorCode;
         this.description = description;
     }
 
     public GenActionException(int errorCode, String description)
     {
-        super();
+        super(description);
         this.errorCode = errorCode;
         this.description = description;
     }

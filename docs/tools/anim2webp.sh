@@ -23,7 +23,15 @@
 #   --t <sec>        keep only this many seconds
 #   --q <n>          WebP quality 0..100 (default 75)
 #   --crop <W:H:X:Y> crop before scaling, e.g. to drop the window shadow
+#   --effort <0..6>  img2webp compression effort (default 4)
+#   --min-size       squeeze the last few percent out of the file, very slow
 #   --keep-frames    do not delete the temporary PNG directory
+#
+# Almost all of the runtime is step 2, and img2webp is single threaded and silent
+# until it is done. "-min_size -m 6" costs roughly twenty times the encoding time of
+# the default "-m 4" and buys about one percent of file size, so it is opt in - use it
+# for a clip that goes into the docs for good, not while trying out crop and speed.
+# The line "encoding ... 42s" is the progress display; nothing is stuck.
 #
 # If the file gets too big, lower --fps first, then --width, then --q.
 
@@ -43,6 +51,8 @@ SS=""
 T=""
 Q=75
 CROP=""
+EFFORT=4
+MIN_SIZE=0
 KEEP=0
 
 while [[ $# -gt 0 ]]; do
@@ -54,6 +64,8 @@ while [[ $# -gt 0 ]]; do
     --t)     T="$2"; shift 2 ;;
     --q)     Q="$2"; shift 2 ;;
     --crop)  CROP="$2"; shift 2 ;;
+    --effort) EFFORT="$2"; shift 2 ;;
+    --min-size) MIN_SIZE=1; shift ;;
     --keep-frames) KEEP=1; shift ;;
     *) echo "unknown option: $1" >&2; exit 1 ;;
   esac
@@ -78,18 +90,32 @@ FILTER="setpts=PTS/${SPEED},fps=${FPS},scale=${WIDTH}:-1:flags=lanczos"
 [[ -n "$CROP" ]] && FILTER="crop=${CROP},${FILTER}"
 
 echo "==> extracting frames (${FPS} fps, ${WIDTH}px, speed ${SPEED}x)"
-ffmpeg -hide_banner -loglevel error \
+ffmpeg -hide_banner -loglevel error -nostdin \
   ${SS:+-ss "$SS"} ${T:+-t "$T"} -i "$IN" \
-  -vf "$FILTER" -vsync 0 "$TMP/f_%05d.png"
+  -vf "$FILTER" -fps_mode passthrough "$TMP/f_%05d.png"
 
-COUNT=$(ls "$TMP"/f_*.png | wc -l | tr -d ' ')
-echo "==> encoding ${COUNT} frames to animated WebP (q=${Q}, delay=${DELAY}ms)"
+COUNT=$(ls "$TMP"/f_*.png 2>/dev/null | wc -l | tr -d ' ')
+[[ "$COUNT" -gt 0 ]] || { echo "ffmpeg produced no frames from $IN" >&2; exit 1; }
+
 # File level flags first, then per frame flags, then the frames themselves.
 #   -mixed      picks lossy or lossless per frame, which suits UI clips
-#   -min_size   optimizes for file size instead of seek friendliness
 #   -sharp_yuv  keeps text edges clean
-img2webp -loop 0 -min_size -mixed -sharp_yuv \
-  -d "$DELAY" -q "$Q" -m 6 "$TMP"/f_*.png -o "$OUT" >/dev/null
+#   -min_size   optimizes for file size instead of seek friendliness
+ARGS=(-loop 0 -mixed -sharp_yuv)
+[[ $MIN_SIZE -eq 1 ]] && ARGS=(-loop 0 -min_size -mixed -sharp_yuv)
+
+echo "==> encoding ${COUNT} frames to animated WebP (q=${Q}, delay=${DELAY}ms, -m ${EFFORT}$([[ $MIN_SIZE -eq 1 ]] && echo ' -min_size'))"
+img2webp "${ARGS[@]}" -d "$DELAY" -q "$Q" -m "$EFFORT" "$TMP"/f_*.png -o "$OUT" >"$TMP/encode.log" 2>&1 &
+ENC=$!
+# img2webp says nothing until the very end, so show the elapsed time instead. Without
+# it a long run looks exactly like a hang.
+T0=$SECONDS
+while kill -0 "$ENC" 2>/dev/null; do
+  printf '\r    encoding ... %ss' "$((SECONDS - T0))"
+  sleep 2
+done
+printf '\r    encoding ... %ss\n' "$((SECONDS - T0))"
+wait "$ENC" || { cat "$TMP/encode.log" >&2; exit 1; }
 
 echo "==> $OUT"
 webpmux -info "$OUT" | head -3
