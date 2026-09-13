@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import jakarta.annotation.PostConstruct;
+import nextcp.dto.ContainerDto;
+import nextcp.dto.ContainerIdDto;
 import nextcp.dto.MediaPlayerConfigDto;
 import nextcp.dto.ToastrMessage;
 import nextcp.mediaplayer.MediaPlayerDiscoveryService;
@@ -172,6 +174,15 @@ public class RestMediaRendererService implements ISongPlayedCallback {
 		if (!StringUtils.isBlank(mpc.addToFolderId.id)) {
 			ExtendedApiMediaDevice device = getExtendedMediaServerByUdn(mpc.mediaServerUdn);
 			try {
+				String renamed = renamedTarget(device, mpc.addToFolderId);
+				if (renamed != null) {
+					String message = String.format(
+						"not importing %s : the target folder is not \"%s\" any more, id %s is \"%s\" on the media server today. Pick the folder again in the media player settings.",
+						theFile.getName(), mpc.addToFolderId.title, mpc.addToFolderId.id, renamed);
+					log.error(message);
+					publisher.publishEvent(new ToastrMessage(null, "error", "upload file", message));
+					return;
+				}
 				int startPathAt = new File(mpc.workdir).toPath().getNameCount();
 				String targetId = mpc.addToFolderId.id;
 				while (startPathAt < theFilePath.getNameCount() - 1) {
@@ -190,6 +201,15 @@ public class RestMediaRendererService implements ISongPlayedCallback {
 				if (mpc.addToPlaylist) {
 					log.debug ("adding song to playist ... ");
 		            if (itemId != null && !StringUtils.isBlank(mpc.addToPlaylistId.id)) {
+		            	String renamedPlaylist = renamedTarget(device, mpc.addToPlaylistId);
+		            	if (renamedPlaylist != null) {
+		            		String message = String.format(
+		            			"not adding to a playlist : id %s is \"%s\" today, not \"%s\". Pick the playlist again in the media player settings.",
+		            			mpc.addToPlaylistId.id, renamedPlaylist, mpc.addToPlaylistId.title);
+		            		log.error(message);
+		            		publisher.publishEvent(new ToastrMessage(null, "error", "playlist", message));
+		            		return;
+		            	}
 		            	log.info("Adding song with id {} to playlist with id {} ", itemId, mpc.addToPlaylistId.id);
 		            	try {
 			            	device.addSongToPlaylist(itemId, mpc.addToPlaylistId.id);
@@ -219,5 +239,34 @@ public class RestMediaRendererService implements ISongPlayedCallback {
 		} else {
 			log.info("no folder defined");
 		}
+	}
+
+	/**
+	 * Whether a configured target - the import folder, the playlist - is still the one that was
+	 * picked.
+	 *
+	 * A media server's object ids are its own database keys, and UMS hands out new ones when it
+	 * rebuilds its media store, so an id stored here can come to stand for an entirely different
+	 * container. Only the id was ever used and nothing compared it against anything, so imports went
+	 * on landing in a stranger's folder without a word. The title is picked together with the id and
+	 * is what the user recognises, so comparing the two catches exactly that drift.
+	 *
+	 * A lookup that fails says nothing about the target and must not stop an import - only a title
+	 * that came back and differs counts.
+	 *
+	 * @return what the id stands for now, or null when it still matches or could not be read
+	 */
+	private String renamedTarget(ExtendedApiMediaDevice device, ContainerIdDto configured) {
+		if (configured == null || StringUtils.isBlank(configured.id) || StringUtils.isBlank(configured.title)) {
+			return null;
+		}
+		if (!(device instanceof MediaServerDevice server)) {
+			return null;
+		}
+		ContainerDto current = server.browseMetadataMeta(configured.id);
+		if (current == null || StringUtils.isBlank(current.title)) {
+			return null;
+		}
+		return configured.title.equals(current.title) ? null : current.title;
 	}
 }
