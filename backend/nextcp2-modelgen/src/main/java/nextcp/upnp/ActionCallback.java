@@ -18,6 +18,9 @@ import org.slf4j.LoggerFactory;
 public abstract class ActionCallback
 {
 	private static final Logger log = LoggerFactory.getLogger(ActionCallback.class.getName());
+
+	/** Thread safe: it builds a parser per call and only the factories are shared. */
+	private static final UpnpErrorDescriptionHandler FAULT_READER = new UpnpErrorDescriptionHandler();
 	
     protected final ActionInvocation actionInvocation;
 
@@ -105,9 +108,15 @@ public abstract class ActionCallback
             }
             else if (response.getOperation().isFailed())
             {
-            	log.error("UPnP error for device {} : {}" , remoteService.getDevice().getDisplayString(), response.getBodyString());
+                String faultBody = response.getBodyString();
+            	log.error("UPnP error for device {} : {}" , remoteService.getDevice().getDisplayString(), faultBody);
+                // What goes into the exception is what a caller may show a user, and a whole SOAP
+                // envelope is not that - a toast cut it off mid-XML. The device's own error code and
+                // description say the same thing in one line; the envelope stays in the log above.
+                String reason = FAULT_READER.summarize(faultBody);
                 throw new GenActionException(GenActionException.ACTION_FAILED, "device " + deviceName(remoteService)
-                    + " rejected action " + actionInvocation.getAction().getName() + " : " + response.getBodyString());
+                    + " rejected action " + actionInvocation.getAction().getName() + " : "
+                    + (reason.isBlank() ? faultBody : reason));
             }
         }
 

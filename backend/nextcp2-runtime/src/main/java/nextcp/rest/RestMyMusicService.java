@@ -14,7 +14,7 @@ import nextcp.dto.MusicAlbumIds;
 import nextcp.service.ToastEventPublisher;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
-import nextcp.util.UpnpErrorDescriptionHandler;
+import nextcp.upnp.UpnpErrorDescriptionHandler;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController

@@ -82,7 +82,7 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudio
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetPreferEuropeanServerInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWriteInput;
 import nextcp.util.BackendException;
-import nextcp.util.UpnpErrorDescriptionHandler;
+import nextcp.upnp.UpnpErrorDescriptionHandler;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetWebStreamNowPlayingInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetWebStreamNowPlayingOutput;
 import nextcp.service.WebRadioNowPlayingService;

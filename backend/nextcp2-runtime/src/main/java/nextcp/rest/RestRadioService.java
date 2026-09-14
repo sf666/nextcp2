@@ -99,9 +99,9 @@ public class RestRadioService extends BaseRestService
                 // their Radio source (SetChannel -> UPnP error 708 "Unsupported action"). Remember
                 // this per device so we don't retry on every play, and fall back to AVTransport.
                 device.setRadioPlayUnsupported(true);
-                // GenActionException carries the full SOAP fault (incl. the UPnP errorCode /
-                // errorDescription) in its 'description' field, while getMessage() is null. Log the
-                // full fault at WARN so the exact reason for the 708 is not lost.
+                // GenActionException carries the device's own errorCode and errorDescription in its
+                // 'description' field. Log it at WARN so the exact reason for the 708 is not lost -
+                // the full SOAP envelope is in the ERROR line that ActionCallback wrote.
                 log.warn("OpenHome Radio play failed for {} ({}); using AVTransport for this device from now on",
                     playRequest.streamUrl, describeActionError(e));
             }
@@ -118,10 +118,9 @@ public class RestRadioService extends BaseRestService
     }
 
     /**
-     * Extracts the most informative message from a failed UPnP action. For a
-     * {@link GenActionException} the full SOAP fault body (including the UPnP errorCode /
-     * errorDescription) is carried in its {@code description} field, whereas {@code getMessage()}
-     * is null. Falls back to the exception message / class for other exception types.
+     * Extracts the most informative message from a failed UPnP action. A {@link GenActionException}
+     * carries the device's UPnP errorCode and errorDescription in its {@code description} field.
+     * Falls back to the exception message / class for other exception types.
      */
     private static String describeActionError(Throwable e)
     {

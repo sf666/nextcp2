@@ -1,4 +1,4 @@
-package nextcp.util;
+package nextcp.upnp;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -26,7 +26,8 @@ public class UpnpErrorDescriptionHandler {
 
 	private static final Logger log = LoggerFactory.getLogger(UpnpErrorDescriptionHandler.class.getName());
 
-	private static final String XPATH_ERROR_DESCRIPTION = "//*/errorDescription/text()";
+	private static final String XPATH_ERROR_DESCRIPTION = "//*/errorDescription";
+	private static final String XPATH_ERROR_CODE = "//*/errorCode";
 
 	/**
 	 * Standard UPnP wording that prefixes a device's own message. Stripped so the
@@ -73,7 +74,7 @@ public class UpnpErrorDescriptionHandler {
 
 			for (int i = 0; i < nodes.getLength(); i++) {
 				Node node = nodes.item(i);
-				String text = node == null ? null : node.getNodeValue();
+				String text = node == null ? null : node.getTextContent();
 				if (text == null || text.isBlank()) {
 					continue;
 				}
@@ -87,6 +88,53 @@ public class UpnpErrorDescriptionHandler {
 			log.warn("cannot extract error message", e);
 		}
 		return "";
+	}
+
+	/**
+	 * @param description SOAP fault body, may be null or not XML at all
+	 * @return the UPnP error code, or an empty string if none could be read
+	 */
+	public String extractErrorCode(String description) {
+		return firstText(description, XPATH_ERROR_CODE);
+	}
+
+	private String firstText(String description, String xpathExpression) {
+		if (description == null || description.isBlank()) {
+			return "";
+		}
+		try {
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			builder.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
+			XPathExpression expr = xpathfactory.newXPath().compile(xpathExpression);
+			NodeList nodes = (NodeList) expr.evaluate(builder.parse(new InputSource(new StringReader(description))),
+					XPathConstants.NODESET);
+			for (int i = 0; i < nodes.getLength(); i++) {
+				Node node = nodes.item(i);
+				String text = node == null ? null : node.getTextContent();
+				if (text != null && !text.isBlank()) {
+					return text.trim();
+				}
+			}
+		} catch (SAXException | IOException | XPathExpressionException | ParserConfigurationException e) {
+			log.warn("cannot extract {}", xpathExpression, e);
+		}
+		return "";
+	}
+
+	/**
+	 * The device's own words about a failed action, short enough to show a user: the error code and
+	 * the description, without the SOAP envelope they arrived in.
+	 *
+	 * @return "501 : the device's message", one of the two when only one could be read, or an empty
+	 *         string when the body held neither
+	 */
+	public String summarize(String faultBody) {
+		String code = extractErrorCode(faultBody);
+		String text = extractErrorText(faultBody);
+		if (code.isBlank()) {
+			return text;
+		}
+		return text.isBlank() ? code : code + " : " + text;
 	}
 
 }
