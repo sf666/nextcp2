@@ -110,13 +110,16 @@ public abstract class ActionCallback
             {
                 String faultBody = response.getBodyString();
             	log.error("UPnP error for device {} : {}" , remoteService.getDevice().getDisplayString(), faultBody);
-                // What goes into the exception is what a caller may show a user, and a whole SOAP
-                // envelope is not that - a toast cut it off mid-XML. The device's own error code and
-                // description say the same thing in one line; the envelope stays in the log above.
+                // Two readings of the same failure, because they have different readers. The log
+                // wants to know which device refused which action and with what code; a user wants
+                // to know that the entry is already in the playlist, and everything else in that
+                // sentence only buries it. The whole SOAP envelope is in the log above either way -
+                // it never belonged in an exception message, a toast cut it off mid-XML.
                 String reason = FAULT_READER.summarize(faultBody);
                 throw new GenActionException(GenActionException.ACTION_FAILED, "device " + deviceName(remoteService)
                     + " rejected action " + actionInvocation.getAction().getName() + " : "
-                    + (reason.isBlank() ? faultBody : reason));
+                    + (reason.isBlank() ? faultBody : reason),
+                    FAULT_READER.extractErrorText(faultBody));
             }
         }
 

@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import nextcp.domainmodel.services.MyMusicService;
 import nextcp.dto.MusicAlbumIds;
 import nextcp.service.ToastEventPublisher;
-import nextcp.upnp.GenActionException;
+import nextcp.util.FailureReason;
 import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
-import nextcp.upnp.UpnpErrorDescriptionHandler;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
@@ -28,7 +27,6 @@ public class RestMyMusicService extends BaseRestService
 	@Autowired
 	private ToastEventPublisher toast = null;
 	
-	private UpnpErrorDescriptionHandler errorHandler = new UpnpErrorDescriptionHandler();
 	
 	
     public RestMyMusicService()
@@ -69,13 +67,9 @@ public class RestMyMusicService extends BaseRestService
             myMusicService.restoreRatings(getExtendedMediaServerByUdn(deviceId));
             toast.publishSuccessMessage(null, "restore audio ratings", "success");
         }
-        catch (GenActionException e)
-        {
-            toast.publishErrorMessage(null, "restore audio ratings", errorHandler.extractErrorText(e.description));
-        }
         catch (Exception e)
         {
-            toast.publishErrorMessage(null, "restore audio ratings", e.getMessage());
+            toast.publishErrorMessage(null, "restore audio ratings", FailureReason.of(e));
         }
     }
     
@@ -87,15 +81,12 @@ public class RestMyMusicService extends BaseRestService
             myMusicService.backupRatings(getExtendedMediaServerByUdn(deviceId));
             toast.publishSuccessMessage(null, "backup liked albums", "success");
         }
-        catch (GenActionException e)
-        {
-            // The reason a UPnP action refused is in its description, not in getMessage() - which is
-            // empty here, so the toast used to appear without any text at all.
-            toast.publishErrorMessage(null, "backup liked albums", errorHandler.extractErrorText(e.description));
-        }
+        // One catch, because FailureReason already knows the difference: it prefers a device's own
+        // words over anything nextcp wrapped around them, and falls back to getMessage() - which is
+        // empty for a UPnP action failure, so the toast used to appear without any text at all.
         catch (Exception e)
         {
-            toast.publishErrorMessage(null, "backup liked albums", e.getMessage());
+            toast.publishErrorMessage(null, "backup liked albums", FailureReason.of(e));
         }
     }
     

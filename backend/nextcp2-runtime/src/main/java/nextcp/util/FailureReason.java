@@ -89,8 +89,15 @@ public final class FailureReason {
 
 	private static String reasonOfFrame(Throwable frame) {
 		if (frame instanceof GenActionException genAction) {
-			// Produced once, where the fault arrived. Run it through the extractor anyway: a device
-			// that answered outside ActionCallback still gets its envelope unwrapped here.
+			if (StringUtils.isNotBlank(genAction.deviceReason)) {
+				// The device said something of its own. Everything we wrapped around it - which
+				// device, which action, the UPnP code - the user already knows or cannot act on,
+				// and it pushed the one new sentence out of sight at the end of the toast.
+				return genAction.deviceReason;
+			}
+			// Nothing more precise available : the wrapped sentence is all there is. Run it through
+			// the extractor anyway, since a device that answered outside ActionCallback still gets
+			// its envelope unwrapped here.
 			return FAULT.extractErrorText(genAction.description);
 		}
 		if (frame instanceof BackendException backend) {
