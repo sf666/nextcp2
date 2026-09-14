@@ -432,9 +432,15 @@ export class DisplayContainerHeaderComponent implements OnInit {
 
   private cdsBrowseFinished() {
     console.log('cdsBrowseFinished ... ');
-    // A fresh browse result starts at the top, so show the full hero header.
-    this.condensed.set(false);
-    this.clearSearch();
+    // The listing on screen was re-read where it stands - nobody navigated anywhere. Everything
+    // below that belongs to arriving at a container has to stay put for it, or the header pops back
+    // open and the quick search empties itself while the user is looking at it.
+    const inPlace = this.contentDirectoryService().isInPlaceRefresh();
+    if (!inPlace) {
+      // A fresh browse result starts at the top, so show the full hero header.
+      this.condensed.set(false);
+      this.clearSearch();
+    }
     this.fillGenres();
     this.readContainerRating();
     // A result set has no cover of its own. Blowing one hit's artwork up behind
@@ -446,8 +452,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     // so a reply without a cover means "not reported this time", not "has none". Clearing on that
     // drops the wash to black for a moment and it flickers back - keep what is up instead. Only a
     // real navigation may clear, because there the empty genuinely belongs to the new container.
-    const keepLastImage =
-      !artUrl && this.contentDirectoryService().isInPlaceRefresh();
+    const keepLastImage = !artUrl && inPlace;
     if (!keepLastImage) {
       this.backgroundImageService.setDisplayContainerHeaderImage(artUrl);
       // Drive the full-screen "living canvas" wash from the item currently being

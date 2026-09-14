@@ -88,10 +88,28 @@ export class CdsUpdateService {
    */
   public announceRatingChange(change: RatingChange): void {
     if (change.containerId) {
-      this.pruneExpired();
-      this.selfInflicted.set(change.containerId, Date.now());
+      this.markOwnChange(change.containerId);
     }
     this.itemRatingChanged$.next(change);
+  }
+
+  /**
+   * Announces content this browser has written into a container - a radio station appended to a
+   * playlist, a cover replaced. The view showing it browses again once, here; the media server's
+   * echo of the same write is ignored, so the listing is not replaced another six times while the
+   * server re-reads the file it was just told to change.
+   */
+  public announceContainerChange(containerId: string): void {
+    if (!containerId) {
+      return;
+    }
+    this.markOwnChange(containerId);
+    this.containerContentChanged$.next(containerId);
+  }
+
+  private markOwnChange(containerId: string): void {
+    this.pruneExpired();
+    this.selfInflicted.set(containerId, Date.now());
   }
 
   private isOwnChange(containerId: string): boolean {
@@ -136,7 +154,7 @@ export class CdsUpdateService {
       // The media server stores the picture before it answers, so the browse
       // that follows already sees it.
       result.subscribe({
-        next: () => this.containerContentChanged$.next(containerId),
+        next: () => this.announceContainerChange(containerId),
         error: () => {},
       });
     }
