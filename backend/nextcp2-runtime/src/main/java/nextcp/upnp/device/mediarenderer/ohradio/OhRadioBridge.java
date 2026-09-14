@@ -18,6 +18,7 @@ import nextcp.dto.MusicItemDto;
 import nextcp.dto.TransportServiceStateDto;
 import nextcp.rest.DtoBuilder;
 import nextcp.upnp.GenActionException;
+import nextcp.util.FailureReason;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediarenderer.OpenHomeUtils;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.RadioService;
@@ -144,12 +145,12 @@ public class OhRadioBridge implements IRadioService, ITransport
         catch (GenActionException e)
         {
             // Device rejected the action: the UPnP SOAP fault (errorCode/description) is the useful part.
-            log.warn("playStream: Transport.PlayAs Mode='single' rejected for {} : {} ; falling back to Radio service", uri, describeThrowable(e));
+            log.warn("playStream: Transport.PlayAs Mode='single' rejected for {} : {} ; falling back to Radio service", uri, FailureReason.of(e));
             return false;
         }
         catch (Exception e)
         {
-            log.warn("playStream: Transport.PlayAs Mode='single' errored for {} : {} ; falling back to Radio service", uri, describeThrowable(e), e);
+            log.warn("playStream: Transport.PlayAs Mode='single' errored for {} : {} ; falling back to Radio service", uri, FailureReason.of(e), e);
             return false;
         }
     }
@@ -184,12 +185,12 @@ public class OhRadioBridge implements IRadioService, ITransport
         }
         catch (GenActionException e)
         {
-            log.warn("playStream: OpenHome Radio (SetChannel + Play) rejected for {} : {} ; falling back to AVTransport", uri, describeThrowable(e));
+            log.warn("playStream: OpenHome Radio (SetChannel + Play) rejected for {} : {} ; falling back to AVTransport", uri, FailureReason.of(e));
             return false;
         }
         catch (Exception e)
         {
-            log.warn("playStream: OpenHome Radio errored for {} : {} ; falling back to AVTransport", uri, describeThrowable(e), e);
+            log.warn("playStream: OpenHome Radio errored for {} : {} ; falling back to AVTransport", uri, FailureReason.of(e), e);
             return false;
         }
     }
@@ -226,19 +227,6 @@ public class OhRadioBridge implements IRadioService, ITransport
         }
     }
 
-    /**
-     * Renders an exception into a concise, informative string. {@link GenActionException} keeps the
-     * UPnP SOAP fault in its {@code description} field (and leaves {@code getMessage()} null), so pull
-     * that out explicitly; anything else falls back to type + message.
-     */
-    private static String describeThrowable(Throwable t)
-    {
-        if (t instanceof GenActionException gae)
-        {
-            return "GenActionException[errorCode=" + gae.errorCode + ", description=" + gae.description + "]";
-        }
-        return t.getClass().getSimpleName() + ": " + t.getMessage();
-    }
 
     private static final Pattern TITLE_PATTERN = Pattern.compile("<dc:title>(.*?)</dc:title>", Pattern.DOTALL);
 

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import nextcp.upnp.GenActionException;
 import nextcp.util.BackendException;
+import nextcp.util.FailureReason;
 
 @RestControllerAdvice
 public class BackendExceptionAdvice {
@@ -31,8 +32,7 @@ public class BackendExceptionAdvice {
 	@ExceptionHandler(value = { GenActionException.class })
 	@ResponseStatus(value = HttpStatus.BAD_GATEWAY)
 	public String mapUpnpActionError(GenActionException ex) {
-		String message = ex.description != null && !ex.description.isBlank() ? ex.description
-				: "UPnP action failed with error code " + ex.errorCode;
+		String message = FailureReason.of(ex);
 		log.warn("UPnP action failed [errorCode={}] : {}", ex.errorCode, message);
 		return message;
 	}

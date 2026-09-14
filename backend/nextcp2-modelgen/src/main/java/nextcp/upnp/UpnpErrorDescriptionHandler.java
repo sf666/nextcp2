@@ -54,12 +54,19 @@ public class UpnpErrorDescriptionHandler {
 	}
 
 	/**
-	 * @param description SOAP fault body, may be null or not XML at all
+	 * @param description SOAP fault body, may be null, already-extracted text, or not XML at all
 	 * @return the device's error text, or an empty string if none could be read
 	 */
 	public String extractErrorText(String description) {
 		if (description == null || description.isBlank()) {
 			return "";
+		}
+		if (!looksLikeFaultBody(description)) {
+			// Someone handed us a reason that had already been pulled out of a fault. Parsing that as
+			// XML threw, and the caller was left with an empty message - which is how "entry already
+			// in Playlist." never reached anyone. Idempotent instead: a reason passed in is a reason
+			// passed back, so it no longer matters how often this runs on the way to the toast.
+			return stripStandardPrefix(description.trim());
 		}
 		try {
 			// DocumentBuilder and XPath are not thread safe and this handler is
@@ -78,11 +85,10 @@ public class UpnpErrorDescriptionHandler {
 				if (text == null || text.isBlank()) {
 					continue;
 				}
-				text = text.trim();
 				// Report the device's message whether or not it carries the
 				// standard prefix. Returning nothing for an unexpected wording
 				// left the caller with an empty error.
-				return text.startsWith(PRE_TEXT) ? text.substring(PRE_TEXT.length()).trim() : text;
+				return stripStandardPrefix(text.trim());
 			}
 		} catch (SAXException | IOException | XPathExpressionException | ParserConfigurationException e) {
 			log.warn("cannot extract error message", e);
@@ -98,8 +104,19 @@ public class UpnpErrorDescriptionHandler {
 		return firstText(description, XPATH_ERROR_CODE);
 	}
 
+	private static final String SEPARATOR = " : ";
+
+	/** A fault body starts with its XML declaration or an element; a reason pulled out of one does not. */
+	private static boolean looksLikeFaultBody(String candidate) {
+		return candidate.stripLeading().startsWith("<");
+	}
+
+	private static String stripStandardPrefix(String text) {
+		return text.startsWith(PRE_TEXT) ? text.substring(PRE_TEXT.length()).trim() : text;
+	}
+
 	private String firstText(String description, String xpathExpression) {
-		if (description == null || description.isBlank()) {
+		if (description == null || description.isBlank() || !looksLikeFaultBody(description)) {
 			return "";
 		}
 		try {
@@ -131,10 +148,14 @@ public class UpnpErrorDescriptionHandler {
 	public String summarize(String faultBody) {
 		String code = extractErrorCode(faultBody);
 		String text = extractErrorText(faultBody);
+		// Already summarized once : do not put the code in front of it a second time.
+		if (!code.isBlank() && text.startsWith(code + SEPARATOR)) {
+			return text;
+		}
 		if (code.isBlank()) {
 			return text;
 		}
-		return text.isBlank() ? code : code + " : " + text;
+		return text.isBlank() ? code : code + SEPARATOR + text;
 	}
 
 }

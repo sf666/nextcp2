@@ -12,6 +12,7 @@ import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
 import nextcp.util.BackendException;
+import nextcp.util.FailureReason;
 
 @Component
 public class BaseRestService
@@ -125,21 +126,7 @@ public class BaseRestService
         {
             return new BackendException(BackendException.GENERIC_ERROR, whatFailed);
         }
-        return new BackendException(BackendException.GENERIC_ERROR, whatFailed + " : " + reasonOf(cause), cause);
-    }
-
-    /**
-     * The reason out of an exception, without the wrapping a status carries. Plain getMessage() on a
-     * ResponseStatusException reads 417 EXPECTATION_FAILED "Media-Renderer not found : ..." and that
-     * whole string used to end up in the toast the user sees.
-     */
-    private String reasonOf(Exception cause)
-    {
-        if (cause instanceof ResponseStatusException statusException && statusException.getReason() != null)
-        {
-            return statusException.getReason();
-        }
-        return cause.getMessage();
+        return new BackendException(BackendException.GENERIC_ERROR, FailureReason.describe(whatFailed, cause), cause);
     }
 
     protected DeviceRegistry getDeviceRegistry()

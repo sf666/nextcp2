@@ -38,6 +38,7 @@ import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.ContentDirectorySer
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseOutput;
 import nextcp.util.BackendException;
+import nextcp.util.FailureReason;
 
 /**
  * This class controls an av media server device
@@ -320,9 +321,8 @@ public class MediaServerDevice extends BaseDevice {
 		lastBrowseFailureId = inp.ObjectID;
 		lastBrowseFailureAtMs = now;
 
-		String reason = StringUtils.isNotBlank(e.getMessage()) ? e.getMessage() : e.getClass().getSimpleName();
 		String body = String.format("'%s' refused to list this folder (object %s): %s", getFriendlyName(),
-				inp.ObjectID, StringUtils.abbreviate(reason, 200));
+				inp.ObjectID, FailureReason.of(e));
 		getEventPublisher().publishEvent(new ToastrMessage(null, "error", "media server", body));
 	}
 

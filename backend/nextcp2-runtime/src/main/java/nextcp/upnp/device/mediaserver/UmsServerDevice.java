@@ -82,7 +82,7 @@ import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetAudio
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetPreferEuropeanServerInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetUpnpCdsWriteInput;
 import nextcp.util.BackendException;
-import nextcp.upnp.UpnpErrorDescriptionHandler;
+import nextcp.util.FailureReason;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetWebStreamNowPlayingInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetWebStreamNowPlayingOutput;
 import nextcp.service.WebRadioNowPlayingService;
@@ -111,7 +111,6 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	@Autowired
 	private WebRadioNowPlayingService webRadioNowPlayingService = null;
 
-	private UpnpErrorDescriptionHandler errorHandler = new UpnpErrorDescriptionHandler();
 
 	private volatile boolean initialConfigUpdateDone = false;
 
@@ -230,7 +229,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			GetWebStreamNowPlayingOutput out = umsServices.getWebStreamNowPlaying(inp);
 			return out != null ? StringUtils.trimToEmpty(out.NowPlaying) : "";
 		} catch (GenActionException e) {
-			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorHandler.extractErrorText(e.description), e);
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, FailureReason.of(e), e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
 		}
@@ -320,7 +319,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			}
 			return result;
 		} catch (GenActionException e) {
-			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorHandler.extractErrorText(e.description), e);
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, FailureReason.of(e), e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
 		}
@@ -344,7 +343,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			}
 			return result;
 		} catch (GenActionException e) {
-			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorHandler.extractErrorText(e.description), e);
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, FailureReason.of(e), e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
 		}
@@ -360,7 +359,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			AddRadioStationToPlaylistOutput out = umsServices.addRadioStationToPlaylist(inp);
 			return out != null ? StringUtils.trimToEmpty(out.Result) : "";
 		} catch (GenActionException e) {
-			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorHandler.extractErrorText(e.description), e);
+			throw new BackendException(BackendException.DIDL_PARSE_ERROR, FailureReason.of(e), e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
 		}
@@ -425,7 +424,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		try {
 			getContentDirectoryService().updateObject(inp);
 		} catch (GenActionException e) {
-			String errorText = errorHandler.extractErrorText(e.description);
+			String errorText = FailureReason.of(e);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
@@ -454,7 +453,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		try {
 			getContentDirectoryService().updateObject(inp);
 		} catch (GenActionException e) {
-			String errorText = errorHandler.extractErrorText(e.description);
+			String errorText = FailureReason.of(e);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
@@ -567,7 +566,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			log.info("new folder created with object id : " + newPL.getId());
 			return newPL;
 		} catch (GenActionException e) {
-			String errorText = errorHandler.extractErrorText(e.description);
+			String errorText = FailureReason.of(e);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
@@ -596,7 +595,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			Container newPL = content.getFirstContainer();
 			return newPL;
 		} catch (GenActionException e) {
-			String errorText = errorHandler.extractErrorText(e.description);
+			String errorText = FailureReason.of(e);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
@@ -614,7 +613,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			log.debug("song added. returned object id : {} ", out.NewID);
 			return out.NewID;
 		} catch (GenActionException e) {
-			String errorText = errorHandler.extractErrorText(e.description);
+			String errorText = FailureReason.of(e);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
@@ -634,7 +633,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			getContentDirectoryService().destroyObject(inp);
 			log.debug("deleteObject : destroyed object with id {} ", objectId);
 		} catch (GenActionException e) {
-			String errorText = errorHandler.extractErrorText(e.description);
+			String errorText = FailureReason.of(e);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
@@ -730,7 +729,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 				return null;
 			}
 		} catch (GenActionException e) {
-			String errorText = errorHandler.extractErrorText(e.description);
+			String errorText = FailureReason.of(e);
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, errorText, e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);

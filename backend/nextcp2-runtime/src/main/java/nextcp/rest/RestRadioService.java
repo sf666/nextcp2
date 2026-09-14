@@ -19,7 +19,7 @@ import nextcp.dto.MusicItemDto;
 import nextcp.dto.PlayOpenHomeRadioDto;
 import nextcp.dto.PlayRequestDto;
 import nextcp.dto.RadioStation;
-import nextcp.upnp.GenActionException;
+import nextcp.util.FailureReason;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -103,7 +103,7 @@ public class RestRadioService extends BaseRestService
                 // 'description' field. Log it at WARN so the exact reason for the 708 is not lost -
                 // the full SOAP envelope is in the ERROR line that ActionCallback wrote.
                 log.warn("OpenHome Radio play failed for {} ({}); using AVTransport for this device from now on",
-                    playRequest.streamUrl, describeActionError(e));
+                    playRequest.streamUrl, FailureReason.of(e));
             }
         }
         log.debug("playing stream via AVTransport: {}", playRequest.streamUrl);
@@ -117,17 +117,4 @@ public class RestRadioService extends BaseRestService
         }
     }
 
-    /**
-     * Extracts the most informative message from a failed UPnP action. A {@link GenActionException}
-     * carries the device's UPnP errorCode and errorDescription in its {@code description} field.
-     * Falls back to the exception message / class for other exception types.
-     */
-    private static String describeActionError(Throwable e)
-    {
-        if (e instanceof GenActionException ge && ge.description != null && !ge.description.isBlank())
-        {
-            return ge.description;
-        }
-        return e.getMessage() != null ? e.getMessage() : e.toString();
-    }
 }
