@@ -38,11 +38,7 @@ import {
   signal,
 } from '@angular/core';
 import { isAssigned } from '../global';
-import {
-  deepEquals,
-  mergeKeyedList,
-  reuseKeyedEntries,
-} from '../util/list-merge';
+import { deepEquals, mergeKeyedList } from '../util/list-merge';
 
 /** One clickable step of the browse path shown in the nav bar. */
 export interface BrowseCrumb {
@@ -476,15 +472,6 @@ export class ContentDirectoryService {
   // Whether the browse currently running replaces the listing in place.
   private inPlaceRefresh = false;
 
-  /**
-   * The entries held when the running in-place refresh started, by object id.
-   *
-   * The first page can compare against the lists themselves - it arrives before they are replaced.
-   * Every page after it appends to a list the first page has already replaced, so it needs this to
-   * find the object that stood for the same entry.
-   */
-  private refreshReuse: Map<string, unknown> | undefined;
-
   // to which page was browsed
 
   private TURN_PAGE_AFTER = 60;
@@ -543,31 +530,6 @@ export class ContentDirectoryService {
    * arrays are therefore returned unchanged unless the entry is actually in them: an untouched
    * reference leaves the signal quiet and those views do not re-render at all.
    */
-  /**
-   * Everything currently listed, by object id, for the pages of a refresh to compare against.
-   * The ids are unique across the sections, so one map covers all of them.
-   */
-  private snapshotLoadedEntries(): Map<string, unknown> {
-    const byKey = new Map<string, unknown>();
-    for (const item of this.musicTracks_()) {
-      byKey.set(ITEM_KEY(item), item);
-    }
-    for (const item of this.rawOtherItems_()) {
-      byKey.set(ITEM_KEY(item), item);
-    }
-    for (const list of [
-      this.albumList_(),
-      this.containerList_(),
-      this.playlistList_(),
-      this.artistList_(),
-    ]) {
-      for (const container of list) {
-        byKey.set(CONTAINER_KEY(container), container);
-      }
-    }
-    return byKey;
-  }
-
   private applyRating(change: RatingChange): void {
     if (!change?.objectID) {
       return;
@@ -886,13 +848,11 @@ export class ContentDirectoryService {
     // Set before the request goes out: a navigation started while a refresh was
     // still running has to win, and it clears the flag by coming through here.
     this.inPlaceRefresh = inPlace;
-    this.refreshReuse = inPlace ? this.snapshotLoadedEntries() : undefined;
-    if (!inPlace) {
-      // Another listing is being read; what was noted for this one is not in it.
-      this.changedEntries.clear();
-    }
     if (inPlace) {
       this.inPlaceRefreshStarted$.next();
+    } else {
+      // Another listing is being read; what was noted for this one is not in it.
+      this.changedEntries.clear();
     }
 
     // Abort stale paging streams when a new browse request starts.
@@ -928,7 +888,31 @@ export class ContentDirectoryService {
       )
       .subscribe({
         next: (firstPage) => {
-          this.updateContainer(firstPage);
+          // A refresh re-reads a listing the user is looking at. Applying it page by page would cut
+          // the list down to the first page and grow it again, and everything below the fold moves
+          // twice while that happens - the jump. So its pages are collected and swapped in as one
+          // listing, where the entries that did not change keep their identity and their DOM.
+          const collected: ContainerItemDto[] = [];
+          const applyPage = (data: ContainerItemDto, first: boolean): void => {
+            if (inPlace) {
+              collected.push(data);
+              return;
+            }
+            if (first) {
+              this.updateContainer(data);
+            } else {
+              this.addContainer(data);
+            }
+          };
+          // Nothing to hand over before the last page has arrived; a browse that is abandoned
+          // half way - the user navigates on, a page fails - leaves the listing as it stands.
+          const applyCollected = (): void => {
+            if (inPlace && collected.length > 0) {
+              this.updateContainer(this.joinPages(collected));
+            }
+          };
+
+          applyPage(firstPage, true);
 
           const firstPageDuration = Math.round(
             performance.now() - browseStartedAt,
@@ -943,6 +927,7 @@ export class ContentDirectoryService {
             'total items: ' + totalItems + ', total pages: ' + totalPages,
           );
           if (totalPages <= 1) {
+            applyCollected();
             console.log(
               this.id +
                 ' : browse finished in ' +
@@ -990,12 +975,13 @@ export class ContentDirectoryService {
               next: ({ page, data }) => {
                 bufferedPages.set(page, data);
                 while (bufferedPages.has(nextPageToApply)) {
-                  this.addContainer(bufferedPages.get(nextPageToApply)!);
+                  applyPage(bufferedPages.get(nextPageToApply)!, false);
                   bufferedPages.delete(nextPageToApply);
                   nextPageToApply++;
                 }
 
                 if (nextPageToApply >= totalPages) {
+                  applyCollected();
                   const totalDuration = Math.round(
                     performance.now() - browseStartedAt,
                   );
@@ -1017,6 +1003,22 @@ export class ContentDirectoryService {
       });
 
     return firstPage$;
+  }
+
+  /**
+   * The pages of one browse as a single listing: the entries of all of them, and everything the
+   * answer says about the container itself from the first - the pages only differ in their entries.
+   */
+  private joinPages(pages: ContainerItemDto[]): ContainerItemDto {
+    if (pages.length === 1) {
+      return pages[0];
+    }
+    return {
+      ...pages[0],
+      albumDto: pages.flatMap((page) => page.albumDto ?? []),
+      containerDto: pages.flatMap((page) => page.containerDto ?? []),
+      musicItemDto: pages.flatMap((page) => page.musicItemDto ?? []),
+    };
   }
 
   private getPageItemCount(data: ContainerItemDto): number {
@@ -1139,71 +1141,56 @@ export class ContentDirectoryService {
       this.bustChangedArt(data);
       this.currentContainerList.set(data);
       this.updatePageTurnId(data);
-
-      // Appending always makes a new array, so this list notifies either way. What is worth keeping
-      // is the identity of each entry: a tile whose entry is still the same object does not render
-      // again. Outside a refresh the snapshot is empty and this hands the page straight through.
-      const keepItems = (items: MusicItemDto[] | undefined) =>
-        reuseKeyedEntries(items, this.refreshReuse, ITEM_KEY);
-      const keepContainers = (containers: ContainerDto[] | undefined) =>
-        reuseKeyedEntries(containers, this.refreshReuse, CONTAINER_KEY);
+      // Only a browse that navigates somewhere appends: it arrives at an empty listing and fills
+      // it up. A refresh of the listing on screen hands all of its pages to updateContainer at
+      // once instead, so there is nothing here to keep the identity of.
 
       this.albumList_.update((v) => {
         // concat already returns a new array — the extra spread copied the whole
         // listing a second time on every page of a paged browse.
-        return v.concat(keepContainers(data.albumDto));
+        return v.concat(data.albumDto ?? []);
       });
 
       this.containerList_.update((v) => {
         return v.concat(
-          keepContainers(
-            data.containerDto.filter(
-              (item) =>
-                item.objectClass !== PLAYLIST_CONTAINER_CLASS &&
-                item.objectClass !== ARTIST_CONTAINER_CLASS,
-            ),
+          data.containerDto.filter(
+            (item) =>
+              item.objectClass !== PLAYLIST_CONTAINER_CLASS &&
+              item.objectClass !== ARTIST_CONTAINER_CLASS,
           ),
         );
       });
 
       this.playlistList_.update((v) => {
         return v.concat(
-          keepContainers(
-            data.containerDto.filter(
-              (item) => item.objectClass === PLAYLIST_CONTAINER_CLASS,
-            ),
+          data.containerDto.filter(
+            (item) => item.objectClass === PLAYLIST_CONTAINER_CLASS,
           ),
         );
       });
 
       this.artistList_.update((v) => {
         return v.concat(
-          keepContainers(
-            data.containerDto.filter(
-              (item) => item.objectClass === ARTIST_CONTAINER_CLASS,
-            ),
+          data.containerDto.filter(
+            (item) => item.objectClass === ARTIST_CONTAINER_CLASS,
           ),
         );
       });
 
       this.musicTracks_.update((v) => {
         return v.concat(
-          keepItems(
-            data.musicItemDto.filter(
-              (item) =>
-                item.objectClass.lastIndexOf('object.item.audioItem', 0) === 0,
-            ),
+          data.musicItemDto.filter(
+            (item) =>
+              item.objectClass.lastIndexOf('object.item.audioItem', 0) === 0,
           ),
         );
       });
 
       this.rawOtherItems_.update((v) => {
         return v.concat(
-          keepItems(
-            data.musicItemDto.filter(
-              (item) =>
-                item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0,
-            ),
+          data.musicItemDto.filter(
+            (item) =>
+              item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0,
           ),
         );
       });

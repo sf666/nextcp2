@@ -76,26 +76,3 @@ export function mergeKeyedList<T>(
   });
   return changed ? merged : before;
 }
-
-/**
- * The incoming page with its unchanged entries replaced by the objects held before the refresh
- * started.
- *
- * Every page after the first appends to a list the first page has already replaced, so there is
- * nothing left to compare against - hence the snapshot taken when the refresh began. The array is
- * new either way while paging, but a tile whose entry kept its identity does not re-render.
- */
-export function reuseKeyedEntries<T>(
-  incoming: T[] | undefined,
-  reusable: ReadonlyMap<string, unknown> | undefined,
-  keyOf: (entry: T) => string,
-): T[] {
-  const next = incoming ?? [];
-  if (!reusable?.size) {
-    return next;
-  }
-  return next.map((entry) => {
-    const kept = reusable.get(keyOf(entry)) as T | undefined;
-    return kept !== undefined && deepEquals(kept, entry) ? kept : entry;
-  });
-}

@@ -1,4 +1,4 @@
-import { deepEquals, mergeKeyedList, reuseKeyedEntries } from './list-merge';
+import { deepEquals, mergeKeyedList } from './list-merge';
 
 interface Entry {
   id: string;
@@ -80,26 +80,5 @@ describe('mergeKeyedList', () => {
   it('copes with an empty or absent answer', () => {
     expect(mergeKeyedList(listing(), undefined, KEY)).toEqual([]);
     expect(mergeKeyedList(undefined, listing(), KEY).length).toBe(3);
-  });
-});
-
-describe('reuseKeyedEntries', () => {
-  it('replaces unchanged entries with the ones held before the refresh', () => {
-    const held = listing();
-    const snapshot = new Map<string, unknown>(held.map((e) => [KEY(e), e]));
-    const incoming = listing();
-    incoming[2] = { id: 'c', title: 'Gamma', rating: 3 };
-
-    const result = reuseKeyedEntries(incoming, snapshot, KEY);
-
-    expect(result[0]).toBe(held[0]);
-    expect(result[1]).toBe(held[1]);
-    expect(result[2]).toBe(incoming[2]);
-  });
-
-  it('hands the page straight through when nothing was snapshotted', () => {
-    const incoming = listing();
-    expect(reuseKeyedEntries(incoming, undefined, KEY)).toBe(incoming);
-    expect(reuseKeyedEntries(incoming, new Map(), KEY)).toBe(incoming);
   });
 });
