@@ -1,9 +1,249 @@
+// The queue is a list, not a stack of cards: hairlines carry the structure so the
+// rows stay dense and the eye can run down the numbers and the times as two rails.
+// The only colour in here belongs to the track that is playing.
 
-// Minimal custom styles - most styling is done via Tailwind
-img {
-  transition: transform 0.2s ease;
-  
-  &:hover {
-    transform: scale(1.05);
-  }
+:host {
+    --queue-rail : 2.25rem;
+    --queue-hair : var(--chrome-hair, rgba(255, 255, 255, 0.08));
+    --queue-accent: var(--aqua, #4fd1c5);
+}
+
+// One measure for the header and the list, so the time and remove controls stay a rail
+// beside the titles instead of drifting to the far edge of a wide display.
+.queue-header,
+.queue-list {
+    max-width: 68rem;
+}
+
+.queue-header {
+    display        : flex;
+    flex-wrap      : wrap;
+    align-items    : flex-end;
+    justify-content: space-between;
+    gap            : 1rem;
+    padding-bottom : 1rem;
+    border-bottom  : 1px solid var(--queue-hair);
+}
+
+// Frosted chrome, like the rest of the app's controls. The primary action is the
+// only one that carries the accent.
+.queue-action {
+    display        : inline-flex;
+    align-items    : center;
+    gap            : 0.5rem;
+    padding        : 0.55rem 1.1rem;
+    border-radius  : 999px;
+    border         : 1px solid var(--queue-hair);
+    background     : rgba(255, 255, 255, 0.05);
+    color          : rgba(255, 255, 255, 0.82);
+    font-size      : 0.875rem;
+    font-weight    : 500;
+    letter-spacing : 0.02em;
+    cursor         : pointer;
+    transition     : background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+
+    &:hover:not(:disabled) {
+        background  : rgba(255, 255, 255, 0.1);
+        color       : #fff;
+        border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    &:disabled {
+        opacity: 0.35;
+        cursor : default;
+    }
+
+    &--primary {
+        background  : color-mix(in srgb, var(--queue-accent) 18%, transparent);
+        border-color: color-mix(in srgb, var(--queue-accent) 45%, transparent);
+        color       : var(--queue-accent);
+
+        &:hover:not(:disabled) {
+            background  : color-mix(in srgb, var(--queue-accent) 28%, transparent);
+            border-color: var(--queue-accent);
+            color       : #fff;
+        }
+    }
+}
+
+.queue-list {
+    margin    : 0;
+    padding   : 0;
+    list-style: none;
+}
+
+.queue-row {
+    position     : relative;
+    display      : flex;
+    align-items  : center;
+    gap          : 0.875rem;
+    padding      : 0.5rem 0.75rem 0.5rem 0.5rem;
+    border-bottom: 1px solid var(--queue-hair);
+    cursor       : pointer;
+    // Keep a row clear of the sticky chrome when it is scrolled to.
+    scroll-margin-top: 120px;
+    transition   : background-color 0.15s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.045);
+    }
+
+    &:focus-visible {
+        outline       : none;
+        box-shadow    : inset 0 0 0 2px color-mix(in srgb, var(--queue-accent) 70%, transparent);
+        border-radius : 8px;
+    }
+
+    // The accent moment of this screen: a bar down the left edge of what is playing.
+    &--playing::before {
+        content      : '';
+        position     : absolute;
+        left         : 0;
+        top          : 0.35rem;
+        bottom       : 0.35rem;
+        width        : 3px;
+        border-radius: 999px;
+        background   : var(--queue-accent);
+    }
+
+    &--playing {
+        background: color-mix(in srgb, var(--queue-accent) 7%, transparent);
+    }
+}
+
+// Position at rest, play glyph when the row is pointed at, level meter while playing.
+.queue-lead {
+    position       : relative;
+    flex           : 0 0 var(--queue-rail);
+    width          : var(--queue-rail);
+    display        : grid;
+    place-items    : center;
+    font-variant-numeric: tabular-nums;
+    font-size      : 0.8125rem;
+    color          : rgba(255, 255, 255, 0.35);
+
+    &__index,
+    &__play {
+        grid-area : 1 / 1;
+        transition: opacity 0.15s ease;
+    }
+
+    &__play {
+        opacity  : 0;
+        font-size: 20px;
+        color    : #fff;
+    }
+
+    &__playing {
+        font-size: 20px;
+        color    : var(--queue-accent);
+        animation: queue-pulse 2s ease-in-out infinite;
+    }
+}
+
+.queue-row:hover .queue-lead__index { opacity: 0; }
+.queue-row:hover .queue-lead__play  { opacity: 1; }
+
+@keyframes queue-pulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.55; }
+}
+
+.queue-art {
+    flex         : 0 0 auto;
+    width        : 3rem;
+    height       : 3rem;
+    border-radius: 6px;
+    object-fit   : cover;
+    background   : rgba(255, 255, 255, 0.06);
+}
+
+.queue-title {
+    display      : block;
+    min-width    : 0;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+    white-space  : nowrap;
+    font-size    : 0.95rem;
+    font-weight  : 500;
+    color        : rgba(255, 255, 255, 0.92);
+}
+
+.queue-row--playing .queue-title {
+    color: var(--queue-accent);
+}
+
+.queue-sub {
+    margin       : 0.1rem 0 0;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+    white-space  : nowrap;
+    font-size    : 0.8125rem;
+    color        : rgba(255, 255, 255, 0.45);
+}
+
+.queue-time {
+    flex                : 0 0 auto;
+    font-variant-numeric: tabular-nums;
+    font-size           : 0.8125rem;
+    color               : rgba(255, 255, 255, 0.4);
+}
+
+// Always there, just quiet. Hiding it until hover put it out of reach on a tablet,
+// where there is no hover at all.
+.queue-remove {
+    flex         : 0 0 auto;
+    display      : grid;
+    place-items  : center;
+    width        : 2rem;
+    height       : 2rem;
+    border       : 0;
+    border-radius: 999px;
+    background   : transparent;
+    color        : rgba(255, 255, 255, 0.4);
+    opacity      : 0.55;
+    cursor       : pointer;
+    transition   : opacity 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+
+    &:hover,
+    &:focus-visible {
+        opacity   : 1;
+        color     : #ffb4b4;
+        background: rgba(255, 120, 120, 0.12);
+    }
+
+    &:focus-visible {
+        outline: 2px solid color-mix(in srgb, var(--queue-accent) 70%, transparent);
+    }
+}
+
+.queue-empty {
+    display        : flex;
+    flex-direction : column;
+    align-items    : center;
+    justify-content: center;
+    padding        : 5rem 1rem;
+    text-align     : center;
+
+    &__icon {
+        font-size    : 3.5rem;
+        color        : rgba(255, 255, 255, 0.16);
+        margin-bottom: 1rem;
+    }
+}
+
+// Narrow screens drop the time rail before anything else; the title has to survive.
+@media (max-width: 640px) {
+    .queue-time { display: none; }
+    .queue-art  { width: 2.5rem; height: 2.5rem; }
+    .queue-lead { --queue-rail: 1.75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .queue-row,
+    .queue-action,
+    .queue-remove,
+    .queue-lead__index,
+    .queue-lead__play { transition: none; }
+    .queue-lead__playing { animation: none; }
 }

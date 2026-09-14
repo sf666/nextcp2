@@ -160,12 +160,21 @@ export class PlaylistService implements OnInit {
     this.seekId(item.objectID);
   }
 
-  /** Removes the clicked queue entry. */
+  /**
+   * Removes the clicked queue entry.
+   *
+   * The row disappears right away rather than waiting for the renderer to report its new queue: an
+   * OpenHome player answers with a playlist event a moment later and that is what finally stands, but
+   * a removal that only happens once the network has been around reads as a click that did nothing.
+   */
   public removeEntry(item: MusicItemDto, index: number): void {
     if (this.deviceService.isLocalBrowserSelected()) {
       this.localPlayer.removeQueueIndex(index);
       return;
     }
+    this.playlistItemsUpnp.update((items) =>
+      items.filter((entry) => entry.objectID !== item.objectID),
+    );
     this.deleteSongFromRendererPlaylist(item.objectID);
   }
 
