@@ -4,11 +4,13 @@
     <p>{{data.inputTextExplanation}}</p>
     <mat-form-field>
       <mat-label>{{data.labelInputText}}</mat-label>
-      <input matInput [(ngModel)]="data.inputText" />
+      <!-- The dialog exists to have something typed into it, so that is where it opens - and
+           finishing the typing is what confirms it, without reaching for the button. -->
+      <input matInput [(ngModel)]="data.inputText" cdkFocusInitial (keydown.enter)="onYesClick()" />
     </mat-form-field>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-stroked-button color="warn" (click)="onNoClick()">{{data.cancelText}}</button>
-    <button mat-button (click)="onYesClick()" cdkFocusInitial>{{data.okText}}</button>
+    <button mat-button (click)="onYesClick()">{{data.okText}}</button>
   </mat-dialog-actions>
 </div>
