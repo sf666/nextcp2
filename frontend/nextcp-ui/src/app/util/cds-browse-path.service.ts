@@ -64,16 +64,23 @@ export class CdsBrowsePathService {
   public persistPathToRoot(): void {}
 
   /**
-   * @param elementID ATTENTION: elementID needs to have tabindex set to '-1': <div id="elementID" tabindex="-1">
+   * Brings the element with this id to the top of the browse view.
+   *
+   * It used to get there by focusing the element, because focus() scrolls its target into view. That
+   * also left the focus parked on the element - and every dialog opened afterwards handed the focus
+   * back to it when it closed (MatDialog restores focus in ngOnDestroy), which scrolled the listing
+   * to the top again. In a long list that is a jump from wherever the user was to the very first row,
+   * on closing the song options, the rating sheet or the playlist picker. Scrolling directly moves
+   * the listing and nothing else, so there is no focus left behind to come back to.
    */
   public scrollIntoViewID(elementID?: string): void {
     if (!elementID) {
       elementID = this.scrollId();
     }
     console.log('[scroll] to ID : ' + elementID);
-    const targetElement = document.getElementById(elementID); // querySelector('#someElementId');
+    const targetElement = document.getElementById(elementID);
     if (targetElement) {
-      targetElement.focus();
+      targetElement.scrollIntoView({ block: 'start' });
     } else {
       console.log('[scroll] id not found : ' + elementID);
     }

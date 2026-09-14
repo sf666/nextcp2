@@ -293,12 +293,14 @@ export class DisplayContainerComponent {
   }
 
   /**
-   * @param elementID ATTENTION: elementID needs to have tabindex set to '-1': <div id="elementID" tabindex="-1">
+   * Scrolls the element with this id to the top. Like CdsBrowsePathService.scrollIntoViewID, this
+   * scrolls rather than focuses: a focused anchor is handed the focus back by every dialog that
+   * closes afterwards, and the listing jumped to the top with it.
    */
   public scrollIntoViewID(elementID: string): boolean {
-    const targetElement = document.getElementById(elementID); // querySelector('#someElementId');
+    const targetElement = document.getElementById(elementID);
     if (targetElement) {
-      targetElement.focus();
+      targetElement.scrollIntoView({ block: 'start' });
       console.log('scrolled to element ID : ' + elementID);
       return true;
     }
