@@ -1,6 +1,9 @@
 package nextcp.service;
 
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -15,6 +18,7 @@ import nextcp.dto.ToastrMessage;
 import nextcp.dto.UpdateStarRatingRequest;
 import nextcp.musicbrainz.MusicBrainzService;
 import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
+import jakarta.annotation.PreDestroy;
 
 /**
  * Rating logic. This service tries to keep song rating information local to this control point.
@@ -25,6 +29,26 @@ import nextcp.upnp.device.mediaserver.ExtendedApiMediaDevice;
 public class RatingService
 {
     private static final Logger log = LoggerFactory.getLogger(RatingService.class.getName());
+
+    /** A MusicBrainz id is a UUID. The web service refuses anything else with "400 : Invalid mbid.". */
+    private static final Pattern MUSICBRAINZ_ID = Pattern
+            .compile("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}");
+
+    /**
+     * One thread on purpose - musicbrainz.org asks callers to stay at one request per second, and a
+     * queue of one keeps that promise without any rate limiting of its own.
+     */
+    private final ExecutorService musicBrainzExecutor = Executors.newSingleThreadExecutor(runnable -> {
+        Thread thread = new Thread(runnable, "musicbrainz-rating");
+        thread.setDaemon(true);
+        return thread;
+    });
+
+    @PreDestroy
+    public void shutdown()
+    {
+        musicBrainzExecutor.shutdown();
+    }
     
     @Autowired
     private Config config = null;
@@ -78,20 +102,33 @@ public class RatingService
 
     private void updateMusicBrainzBackend(String musicBrainzID, Integer rating)
     {
+        if (StringUtils.isAllBlank(config.musicbrainzSupport.username))
+        {
+            log.trace("musicbrainz.org username not set in config. musicbrainz.org update is disabled.");
+            return;
+        }
+        if (!MUSICBRAINZ_ID.matcher(musicBrainzID).matches())
+        {
+            log.warn("not rating on musicbrainz.org, '{}' is not a MusicBrainz id", musicBrainzID);
+            return;
+        }
+        musicBrainzExecutor.execute(() -> sendRatingToMusicBrainz(musicBrainzID, rating));
+    }
+
+    /** Runs on {@link #musicBrainzExecutor}, never on the thread that served the rating request. */
+    private void sendRatingToMusicBrainz(String musicBrainzID, Integer rating)
+    {
         try
         {
-            if (!StringUtils.isAllBlank(config.musicbrainzSupport.username))
-            {
-                musicBrainzService.setRating(musicBrainzID, rating);
-                this.publisher.publishEvent(new ToastrMessage("", "sucess", "MusicBrainz Rating", "successfully send to musicbrainz.org"));
-            } else {
-                log.trace("musicbrainz.org username not set in config. musicbrainz.orgupdate is disabled.");
-            }
+            musicBrainzService.setRating(musicBrainzID, rating);
+            publisher.publishEvent(new ToastrMessage("", "sucess", "MusicBrainz Rating", "successfully send to musicbrainz.org"));
         }
         catch (Exception e)
         {
-        	log.warn("cannot update", e);
-            this.publisher.publishEvent(new ToastrMessage("", "error", "MusicBrainz Rating", "couldn't save : " + e.getMessage()));
+            // Which recording failed is the first thing worth knowing, and it used to be missing.
+            log.warn("cannot rate {} on musicbrainz.org", musicBrainzID, e);
+            publisher.publishEvent(new ToastrMessage("", "error", "MusicBrainz Rating",
+                    "couldn't save " + musicBrainzID + " : " + e.getMessage()));
         }
     }
 
