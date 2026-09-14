@@ -1417,18 +1417,32 @@ export class ContentDirectoryService {
   }
 
   /**
-   * Drops one track from the list on screen right away, before the browse that follows confirms it.
-   * Keyed on the object id: songId is a MusicItemIdDto, so comparing it compared object references -
-   * against a refreshed list nothing matched, and where the id fields were absent on both sides
-   * every row matched and the list emptied.
+   * Drops the track the user just deleted from the list on screen, before the browse that follows
+   * confirms it - and exactly that one row.
+   *
+   * A playlist may list the same track twice, and the media server gives both entries the same
+   * object id: filtering by the id took both rows off the screen while the server had removed one
+   * of them, and the row came back with the next browse. The row acted on is the object itself, so
+   * that is what is looked for first; the id finds it in a list that was replaced since.
+   *
+   * Not keyed on songId - that is a MusicItemIdDto, so comparing it compared object references, and
+   * where its id fields were absent on both sides every row matched and the list emptied.
    */
   public deleteMusicTrack(item: MusicItemDto) {
     if (!item?.objectID) {
       return;
     }
-    this.musicTracks_.update((v) =>
-      v.filter((listitem) => listitem.objectID !== item.objectID),
-    );
+    this.musicTracks_.update((v) => {
+      const byReference = v.indexOf(item);
+      const at =
+        byReference >= 0
+          ? byReference
+          : v.findIndex((listitem) => listitem.objectID === item.objectID);
+      if (at < 0) {
+        return v;
+      }
+      return v.slice(0, at).concat(v.slice(at + 1));
+    });
   }
 
   public getCurrentAlbumIds(): MusicAlbumIds | undefined {
