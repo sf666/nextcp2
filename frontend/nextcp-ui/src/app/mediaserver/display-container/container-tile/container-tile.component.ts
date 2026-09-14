@@ -19,10 +19,11 @@ import { DeviceService } from 'src/app/service/device.service';
 import {
   RATING_LIKED,
   RatingFilter,
+  RatingServiceService,
 } from 'src/app/service/rating-service.service';
 import { filterContainers } from 'src/app/util/browse-filter';
 import { AlbumArtService } from 'src/app/util/album-art.service';
-import { ContainerRatingComponent } from '../../popup/container-rating/container-rating.component';
+import { DisplayHeaderOptionsComponent } from '../../popup/display-header-options/display-header-options.component';
 
 @Component({
   selector: 'container-tile',
@@ -54,17 +55,20 @@ export class ContainerTileComponent {
   );
 
   browseClicked = output<ContainerDto>();
+  /** Handed to the options menu, which emits on it - the tile itself has no queue to add to. */
+  addToPlaylistClicked = output<ContainerDto>();
 
   //
-  // Rating by long press
+  // Options menu, by long press or by the tile's options button
   // ============================================================================
   // A tap on a tile navigates into the container, so the only spare gesture for
-  // rating is a long press. The press is cancelled as soon as the finger moves,
+  // the menu is a long press. The press is cancelled as soon as the finger moves,
   // otherwise it would fire while scrolling the grid.
 
   private readonly dialog = inject(MatDialog);
   readonly albumArt = inject(AlbumArtService);
   private readonly deviceService = inject(DeviceService);
+  private readonly ratingService = inject(RatingServiceService);
   private readonly LONG_PRESS_MS = 500;
   private readonly MOVE_TOLERANCE_PX = 10;
 
@@ -72,7 +76,12 @@ export class ContainerTileComponent {
   private pressStart: { x: number; y: number } | undefined;
   private pressHandled = false;
 
-  ratingPossible(): boolean {
+  /**
+   * Everything the menu offers - the like, the radio station, the album art - is an extension of
+   * the standard the media server either has or has not. Without it the button would open a menu
+   * with nothing in it that works.
+   */
+  optionsPossible(): boolean {
     return this.deviceService.selectedMediaServerDevice().extendedApi;
   }
 
@@ -100,15 +109,16 @@ export class ContainerTileComponent {
   }
 
   onPressStart(event: PointerEvent, container: ContainerDto): void {
-    if (!this.ratingPossible()) {
+    if (!this.optionsPossible()) {
       return;
     }
     this.cancelPress();
     this.pressHandled = false;
     this.pressStart = { x: event.clientX, y: event.clientY };
+    const trigger = event.currentTarget;
     this.pressTimer = setTimeout(() => {
       this.pressHandled = true;
-      this.openRatingDialog(container);
+      this.openOptionsMenu(container, trigger);
     }, this.LONG_PRESS_MS);
   }
 
@@ -136,29 +146,76 @@ export class ContainerTileComponent {
   }
 
   /**
-   * Same sheet as the long press, reached by tapping the tile's options button.
+   * Same menu as the long press, reached by tapping the tile's options button.
    * Stops the event so the tile does not also navigate into the container.
    */
   openOptions(event: Event, container: ContainerDto): void {
     event.stopPropagation();
     event.preventDefault();
     this.cancelPress();
-    this.openRatingDialog(container);
+    this.openOptionsMenu(container, event.currentTarget);
   }
 
-  private openRatingDialog(container: ContainerDto): void {
-    const dialogRef = this.dialog.open(ContainerRatingComponent, {
-      data: { container: container, rating: this.effectiveRating(container) },
-      panelClass: ['popup', 'popup-glass'],
+  /**
+   * The menu the header opens for the container being browsed, on the tile of one that is not -
+   * the two offer the same actions, so there is one component for both.
+   *
+   * The menu places itself next to what it came out of, so the trigger goes along: the options
+   * button for a tap, the tile for a long press.
+   */
+  private openOptionsMenu(container: ContainerDto, trigger: EventTarget | null): void {
+    const dialogRef = this.dialog.open(DisplayHeaderOptionsComponent, {
+      hasBackdrop: true,
+      panelClass: ['popup-glass'],
+      data: {
+        trigger: new ElementRef(trigger),
+        addToPlaylistOutput: this.addToPlaylistClicked,
+        currentContainer: container,
+        // What is on screen is the container this one is listed in, so that is what a change here
+        // has to re-read.
+        listingContainerId: container.parentID,
+        canLike: this.optionsPossible(),
+        isLiked: this.isLiked(container),
+        // A tile knows the container, not what is in it - and "Set artist folder" is decided by the
+        // number of folders inside. It stays with the header of the folder itself.
+        childFolderCount: 0,
+      },
     });
-    dialogRef.afterClosed().subscribe((newRating) => {
-      if (newRating !== undefined) {
-        // Reflect the new state on the tile without re-browsing.
-        const next = new Map(this.ratingOverrides());
-        next.set(container.id, newRating === null ? undefined : newRating);
-        this.ratingOverrides.set(next);
+    // The menu only reports the choice; the rating call stays with the view that holds the entry.
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'toggleLike') {
+        this.toggleLike(container);
       }
     });
+  }
+
+  /**
+   * Likes the container, or takes the like back - which clears the rating rather than storing a
+   * dislike. Same two states as everywhere else in the app.
+   */
+  private toggleLike(container: ContainerDto): void {
+    if (!this.optionsPossible()) {
+      return;
+    }
+    const previousRating = this.effectiveRating(container);
+    const newRating = this.isLiked(container) ? undefined : RATING_LIKED;
+    this.ratingService
+      .setResourceRating(
+        container.id,
+        previousRating,
+        newRating,
+        container.parentID,
+        container.objectClass,
+      )
+      .subscribe({
+        next: () => {
+          // Reflect the new state on the tile without re-browsing.
+          const next = new Map(this.ratingOverrides());
+          next.set(container.id, newRating);
+          this.ratingOverrides.set(next);
+        },
+        error: (err) => console.error('cannot rate container', err),
+      });
   }
 
   //

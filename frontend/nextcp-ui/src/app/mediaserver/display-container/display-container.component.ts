@@ -517,6 +517,15 @@ export class DisplayContainerComponent {
     );
   }
 
+  /**
+   * Adds a container from the listing - not the one on screen - to the renderer's queue. It goes as
+   * it stands on the server: the quick filter narrows the tracks of the container being browsed,
+   * which says nothing about what belongs in another one.
+   */
+  addContainerToPlaylist(container: ContainerDto): void {
+    this.playlistService.addContainerToPlaylist(container);
+  }
+
   addItemToPlaylist(item: MusicItemDto): void {
     this.playlistService.addToPlaylist(item);
   }

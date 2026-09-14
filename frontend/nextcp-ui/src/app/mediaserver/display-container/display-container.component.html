@@ -48,7 +48,8 @@ Main Content
         [quickSearchString]="displayFilterString()"
         [selectedGenres]="selectedGenres()"
         [ratingFilter]="ratingFilter()"
-        (browseClicked)="browseTo($event)">
+        (browseClicked)="browseTo($event)"
+        (addToPlaylistClicked)="addContainerToPlaylist($event)">
       </container-tile>
     </div>
     }
@@ -70,7 +71,8 @@ Main Content
         [ratingFilter]="ratingFilter()"
         [sortCriteria]="sortCriteria()"
         [virtualize]="true"
-        (browseClicked)="browseTo($event)">
+        (browseClicked)="browseTo($event)"
+        (addToPlaylistClicked)="addContainerToPlaylist($event)">
       </container-tile>
     </div>
     }
@@ -91,7 +93,8 @@ Main Content
         [selectedGenres]="selectedGenres()"
         [ratingFilter]="ratingFilter()"
         [virtualize]="true"
-        (browseClicked)="browseTo($event)">
+        (browseClicked)="browseTo($event)"
+        (addToPlaylistClicked)="addContainerToPlaylist($event)">
       </container-tile>
     </div>
     }
@@ -134,7 +137,8 @@ Main Content
         [ratingFilter]="ratingFilter()"
         [quickSearchString]="displayFilterString()"
         [virtualize]="true"
-        (browseClicked)="browseTo($event)">
+        (browseClicked)="browseTo($event)"
+        (addToPlaylistClicked)="addContainerToPlaylist($event)">
       </container-tile>
     </div>
     }

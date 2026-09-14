@@ -21,17 +21,17 @@
         <span class="likeBadge material-symbols-outlined" aria-label="Liked">favorite</span>
       }
       <!--
-        Makes the rating sheet findable. On the artwork, like Roon's overflow
+        Makes the options menu findable. On the artwork, like Roon's overflow
         menu — the biggest target on the tile, and it leaves the title its full
         width. Unlike Roon it does not wait for hover: the main target here is a
         tablet, where the long press was the only way in and nothing announced
         it.
       -->
-      @if (ratingPossible()) {
+      @if (optionsPossible()) {
         <button type="button" class="tileOptions" (click)="openOptions($event, container)"
                 (pointerdown)="$event.stopPropagation()"
-                [title]="'Rate ' + container.title"
-                [attr.aria-label]="'Rate ' + container.title">
+                [title]="'Options for ' + container.title"
+                [attr.aria-label]="'Options for ' + container.title">
           <span class="material-symbols-outlined">more_horiz</span>
         </button>
       }

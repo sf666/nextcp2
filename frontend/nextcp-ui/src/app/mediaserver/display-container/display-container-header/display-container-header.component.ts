@@ -70,7 +70,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   // Kept short on purpose: a digit plus the heart says it without a sentence. ANY
   // has no digit, it is the switched-off state and carries an icon instead. The
   // trailing plus is what tells the reader the entry is a lower bound; 5 has none
-  // because there is nothing above it, and 0 is the disliked bucket, not a bound.
+  // because there is nothing above it, and 0 is what carries no rating, not a bound.
   readonly ratingOptions: ReadonlyArray<{
     value: RatingFilter;
     digits?: string;
@@ -83,7 +83,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     { value: '3', digits: '3+', title: '3 and better' },
     { value: '2', digits: '2+', title: '2 and better' },
     { value: '1', digits: '1+', title: '1 and better' },
-    { value: '0', digits: '0', title: 'Disliked, 0' },
+    { value: '0', digits: '0', title: 'Not rated' },
   ];
 
   ratingOption = computed(
@@ -721,7 +721,6 @@ export class DisplayContainerHeaderComponent implements OnInit {
       data: {
         trigger: target,
         addToPlaylistOutput: this.addToPlaylistClicked,
-        event: event,
         currentContainer: this.currentContainer,
         // The like only shows up here for containers that do not wear it next
         // to their title (see showTitleLike).

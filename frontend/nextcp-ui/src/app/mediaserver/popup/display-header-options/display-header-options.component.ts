@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OutputEmitterRef, ViewContainerRef, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OutputEmitterRef, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MAT_DIALOG_DATA,
@@ -46,6 +46,8 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   private readonly _matDialogRef: MatDialogRef<DisplayHeaderOptionsComponent>;
   private addToPlaylistOutput: OutputEmitterRef<ContainerDto>;
   private currentContainer: ContainerDto;
+  /** The container whose listing this menu was opened from - see the data below. */
+  private listingContainerId: string;
   private triggerElementRef: ElementRef;
   private mediaPlayerConfigDto: MediaPlayerConfigDto;
 
@@ -60,18 +62,24 @@ export class DisplayHeaderOptionsComponent implements OnInit {
       inject<MatDialogRef<DisplayHeaderOptionsComponent>>(MatDialogRef);
     const data = inject<{
       trigger: ElementRef;
-      event: PointerEvent;
-      viewContainerRef: ViewContainerRef;
       currentContainer: ContainerDto;
       addToPlaylistOutput: OutputEmitterRef<ContainerDto>;
       canLike: boolean;
       isLiked: boolean;
       childFolderCount: number;
+      /**
+       * The container that is on screen. The header opens this menu on the container it is the
+       * header of, a tile on one that is merely listed there - and what has to be re-read after a
+       * change is the listing, not the entry. Defaults to the container itself.
+       */
+      listingContainerId?: string;
     }>(MAT_DIALOG_DATA);
 
     this._matDialogRef = _matDialogRef;
     this.addToPlaylistOutput = data.addToPlaylistOutput;
     this.currentContainer = data.currentContainer;
+    this.listingContainerId =
+      data.listingContainerId ?? data.currentContainer.id;
     this.canLike = data.canLike ?? false;
     this.isLiked = data.isLiked ?? false;
     this.childFolderCount = data.childFolderCount ?? 0;
@@ -96,9 +104,8 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   }
 
   /**
-   * Names the action after what it acts on. Not "dislike": this app has a real
-   * disliked state (rating 0, see the rating filter), and removing a like only
-   * clears the rating — it does not store a dislike.
+   * Names the action after what it acts on. Taking a like back clears the rating,
+   * which is all there is to it - the app knows liked and not liked, nothing else.
    */
   get likeLabel(): string {
     const noun = this.containerNoun();
@@ -107,7 +114,13 @@ export class DisplayHeaderOptionsComponent implements OnInit {
 
   /** What the menu calls the container it was opened on. */
   private containerNoun(): string {
-    return this.isPlaylist() ? 'playlist' : this.isFolder() ? 'folder' : 'item';
+    if (this.isPlaylist()) {
+      return 'playlist';
+    }
+    if (this.isFolder()) {
+      return 'folder';
+    }
+    return this.isAlbum() ? 'album' : 'item';
   }
 
   /** Player rows exist for playlists and folders only - no header without rows. */
@@ -178,7 +191,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
           musicItemId,
           this.currentContainer.albumartUri,
           result,
-          this.currentContainer.id,
+          this.listingContainerId,
         );
         this.close();
       }
@@ -227,6 +240,12 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   isFolder(): boolean {
     return this.currentContainer.objectClass.startsWith(
       'object.container.storageFolder',
+    );
+  }
+
+  isAlbum(): boolean {
+    return this.currentContainer.objectClass.startsWith(
+      'object.container.album',
     );
   }
 

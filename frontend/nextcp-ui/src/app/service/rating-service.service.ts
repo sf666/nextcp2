@@ -7,11 +7,12 @@ import { HttpService } from './http.service';
 import { Injectable, inject } from '@angular/core';
 
 /**
- * A like is stored as 5 stars, a dislike as 0. Removing a rating clears it, which
- * is a third state and must stay distinguishable from a dislike.
+ * A like is stored as 5 stars, taking it back clears the rating - those are the only two states the
+ * app writes. Zero stars is not a dislike, it is the same as no rating at all: nothing sets it any
+ * more, and entries that still carry it are filtered as unrated.
  */
 export const RATING_LIKED = 5;
-export const RATING_DISLIKED = 0;
+const RATING_ZERO_STARS = 0;
 
 /** upnp:class of a playlist container. */
 const PLAYLIST_CONTAINER_CLASS = 'object.container.playlistContainer';
@@ -20,8 +21,8 @@ const PLAYLIST_CONTAINER_CLASS = 'object.container.playlistContainer';
  * Values of the rating filter in the browse header. ANY switches the filter off, the
  * others select a lower bound: '3' means three stars and better. A like is exactly
  * RATING_LIKED, so '5' is the liked filter and no separate range entry is needed.
- * '0' is the exception, it selects the disliked entries only, because everything is
- * zero stars or better and a lower bound of zero would filter nothing.
+ * '0' is the exception, it selects what carries no rating, because everything is zero
+ * stars or better and a lower bound of zero would filter nothing.
  */
 export type RatingFilter = 'ANY' | '5' | '4' | '3' | '2' | '1' | '0';
 
@@ -29,7 +30,9 @@ export type RatingFilter = 'ANY' | '5' | '4' | '3' | '2' | '1' | '0';
  * Applies the rating filter to one resource. Used for containers and for tracks so
  * both react the same way.
  *
- * Unrated entries never match a rating filter: an absent rating is not a zero.
+ * An entry with no rating at all and one rated zero stars are the same thing here - nothing rated
+ * it, one media server says so with a null and another with a zero. They share the '0' bucket, and
+ * neither matches a lower bound.
  */
 export function matchesRatingFilter(
   rating: number | undefined | null,
@@ -39,7 +42,7 @@ export function matchesRatingFilter(
     case 'ANY':
       return true;
     case '0':
-      return rating === RATING_DISLIKED;
+      return rating == null || rating === RATING_ZERO_STARS;
     default:
       return rating != null && rating >= Number(filter);
   }
@@ -113,7 +116,7 @@ export class RatingServiceService {
    * Rates any resource that is not a song, for example a folder, a playlist or an
    * album container. The media server only needs the objectID.
    *
-   * A rating of 5 is a like, 0 is a dislike and undefined removes the rating.
+   * A rating of 5 is a like, undefined removes the rating.
    */
   public setResourceRating(
     objectID: string,

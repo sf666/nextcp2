@@ -6,6 +6,7 @@ import {
   ServerPlaylistService,
 } from './server-playlist.service';
 import {
+  auditTime,
   map,
   mergeMap,
   Observable,
@@ -516,6 +517,15 @@ export class ContentDirectoryService {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((containerId) => this.afterContainerContentChanged(containerId));
 
+    // One browse for the whole burst: a tagger works through a folder and the media server reports
+    // every entry in it, each one of them a reason to read the same listing again.
+    this.listedEntryChanged$
+      .pipe(
+        auditTime(ContentDirectoryService.LISTED_ENTRY_AUDIT_MS),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => this.refreshCurrentContainer());
+
     this.cdsUpdateService.itemRatingChanged$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((change) => this.applyRating(change));
@@ -586,6 +596,12 @@ export class ContentDirectoryService {
     this.artistList_.update(patchContainers);
   }
 
+  /** An entry of the listing on screen changed; collapses a burst of them into one browse. */
+  private listedEntryChanged$ = new Subject<void>();
+
+  /** How long changed entries are collected before the listing is read again. */
+  private static readonly LISTED_ENTRY_AUDIT_MS = 1000;
+
   /**
    * A cover is updated from a popup that knows nothing about the view behind
    * it, and the item on screen still carries the picture of the last browse.
@@ -599,7 +615,65 @@ export class ContentDirectoryService {
     }
     if (containerId === current) {
       this.refreshCurrentContainer();
+      return;
     }
+    // Not the container on screen, but something listed in it - the album whose cover a tagger just
+    // replaced. What is displayed of that entry (its picture, its title, its rating) comes from the
+    // browse of the listing, so the change only arrives by reading the listing again. Without this
+    // the tile kept the old cover until the user walked into the album and back out.
+    if (this.listsEntry(containerId)) {
+      this.changedEntries.add(containerId);
+      this.listedEntryChanged$.next();
+    }
+  }
+
+  /**
+   * Entries the media server reported as changed, waiting for the browse that fetches them.
+   *
+   * A media server names its artwork after the resource, not after the picture, so a cover that was
+   * replaced keeps the URL it had - and the browser, which has that URL in its cache, would go on
+   * showing the picture it already has however often the listing is read again. These entries
+   * therefore get their art asked for once with a query the URL did not have before.
+   */
+  private readonly changedEntries = new Set<string>();
+
+  /** The incoming listing, with the art of every entry reported as changed asked for afresh. */
+  private bustChangedArt(data: ContainerItemDto): void {
+    if (this.changedEntries.size === 0 || !data) {
+      return;
+    }
+    const version = Date.now();
+    const bust = (url: string | undefined): string | undefined =>
+      url ? url + (url.includes('?') ? '&' : '?') + 'nextcpArt=' + version : url;
+    for (const list of [data.albumDto, data.containerDto]) {
+      for (const container of list ?? []) {
+        if (this.changedEntries.delete(CONTAINER_KEY(container))) {
+          container.albumartUri = bust(container.albumartUri) as string;
+          container.albumartUriMedium = bust(container.albumartUriMedium);
+        }
+      }
+    }
+    for (const item of data.musicItemDto ?? []) {
+      if (this.changedEntries.delete(ITEM_KEY(item))) {
+        item.albumArtUrl = bust(item.albumArtUrl) as string;
+        item.albumArtUrlMedium = bust(item.albumArtUrlMedium);
+        item.albumArtUrlLarge = bust(item.albumArtUrlLarge);
+      }
+    }
+  }
+
+  /** Whether the listing on screen shows this object - as a container of its own or as an item. */
+  private listsEntry(objectId: string): boolean {
+    const inContainers = (containers: ContainerDto[]): boolean =>
+      containers.some((container) => CONTAINER_KEY(container) === objectId);
+    return (
+      inContainers(this.albumList_()) ||
+      inContainers(this.containerList_()) ||
+      inContainers(this.playlistList_()) ||
+      inContainers(this.artistList_()) ||
+      this.musicTracks_().some((item) => ITEM_KEY(item) === objectId) ||
+      this.rawOtherItems_().some((item) => ITEM_KEY(item) === objectId)
+    );
   }
 
   /**
@@ -813,6 +887,10 @@ export class ContentDirectoryService {
     // still running has to win, and it clears the flag by coming through here.
     this.inPlaceRefresh = inPlace;
     this.refreshReuse = inPlace ? this.snapshotLoadedEntries() : undefined;
+    if (!inPlace) {
+      // Another listing is being read; what was noted for this one is not in it.
+      this.changedEntries.clear();
+    }
     if (inPlace) {
       this.inPlaceRefreshStarted$.next();
     }
@@ -974,6 +1052,7 @@ export class ContentDirectoryService {
   public updateContainer(data: ContainerItemDto): void {
     //    console.log("CDS " + this.id + " : updating container with " + data.musicItemDto.length + " items.");
     if (data) {
+      this.bustChangedArt(data);
       console.log(
         'Album ids MBID / discogs : ' +
           data.allTracksSameAlbumIds?.musicBrainzAlbumId +
@@ -1057,6 +1136,7 @@ export class ContentDirectoryService {
    */
   public addContainer(data: ContainerItemDto): void {
     if (data) {
+      this.bustChangedArt(data);
       this.currentContainerList.set(data);
       this.updatePageTurnId(data);
 
