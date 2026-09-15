@@ -526,7 +526,14 @@ export class ContentDirectoryService {
         auditTime(ContentDirectoryService.LISTED_ENTRY_AUDIT_MS),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe(() => this.refreshCurrentContainer());
+      .subscribe(() => {
+        // A refresh that ran in the meantime has already fetched them - bustChangedArt takes every
+        // entry it handled out of the set. Browsing again would cost a second pass over a listing
+        // that is already up to date, and a long one loses the scroll position over it.
+        if (this.changedEntries.size > 0) {
+          this.refreshCurrentContainer();
+        }
+      });
 
     this.cdsUpdateService.itemRatingChanged$
       .pipe(takeUntilDestroyed(this.destroyRef))
