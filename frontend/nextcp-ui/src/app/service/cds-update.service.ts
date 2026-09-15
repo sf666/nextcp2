@@ -150,14 +150,20 @@ export class CdsUpdateService {
     };
 
     const result = this.httpService.post<void>(this.baseUri, uri, updateRequest);
-    if (containerId) {
-      // The media server stores the picture before it answers, so the browse
-      // that follows already sees it.
-      result.subscribe({
-        next: () => this.announceContainerChange(containerId),
-        error: () => {},
-      });
-    }
+    // The media server stores the picture before it answers, so the browse
+    // that follows already sees it.
+    result.subscribe({
+      next: () => {
+        // The entry whose picture was replaced, so the views holding it invalidate its art instead
+        // of trusting the URL: a media server keeps the URL and only changes the picture behind it.
+        this.announceContainerChange(ids.objectID);
+        // The listing it is shown in, so that listing is read again.
+        if (containerId && containerId !== ids.objectID) {
+          this.announceContainerChange(containerId);
+        }
+      },
+      error: () => {},
+    });
     return result;
   }
 }

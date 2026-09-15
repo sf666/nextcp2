@@ -591,6 +591,9 @@ export class ContentDirectoryService {
       return;
     }
     if (containerId === current) {
+      // The folder on screen itself: its own picture is what the header shows, so it is invalidated
+      // like any other entry - keepShownArt would otherwise hand the old URL straight back.
+      this.changedEntries.add(containerId);
       this.refreshCurrentContainer();
       return;
     }
@@ -683,6 +686,11 @@ export class ContentDirectoryService {
     const version = Date.now();
     const bust = (url: string | undefined): string | undefined =>
       url ? url + (url.includes('?') ? '&' : '?') + 'nextcpArt=' + version : url;
+    const shown = data.currentContainer;
+    if (shown && this.changedEntries.delete(CONTAINER_KEY(shown))) {
+      shown.albumartUri = bust(shown.albumartUri) as string;
+      shown.albumartUriMedium = bust(shown.albumartUriMedium);
+    }
     for (const list of [data.albumDto, data.containerDto]) {
       for (const container of list ?? []) {
         if (this.changedEntries.delete(CONTAINER_KEY(container))) {
