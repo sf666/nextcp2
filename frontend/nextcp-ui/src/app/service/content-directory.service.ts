@@ -38,7 +38,11 @@ import {
   signal,
 } from '@angular/core';
 import { isAssigned } from '../global';
-import { deepEquals, mergeKeyedList } from '../util/list-merge';
+import {
+  carryOverArtUrls,
+  deepEquals,
+  mergeKeyedList,
+} from '../util/list-merge';
 
 /** One clickable step of the browse path shown in the nav bar. */
 export interface BrowseCrumb {
@@ -70,6 +74,17 @@ const ARTIST_CONTAINER_CLASS = 'object.container.person.musicArtist';
 /** What identifies a browse entry across two reads of the same listing. */
 const CONTAINER_KEY = (container: ContainerDto): string => container.id;
 const ITEM_KEY = (item: MusicItemDto): string => item.objectID;
+
+/** The artwork URLs of an entry, i.e. the fields keepShownArt carries over. */
+const CONTAINER_ART_FIELDS: (keyof ContainerDto)[] = [
+  'albumartUri',
+  'albumartUriMedium',
+];
+const ITEM_ART_FIELDS: (keyof MusicItemDto)[] = [
+  'albumArtUrl',
+  'albumArtUrlMedium',
+  'albumArtUrlLarge',
+];
 
 /**
  * What the view is showing when it shows search hits instead of a folder.
@@ -599,6 +614,67 @@ export class ContentDirectoryService {
    */
   private readonly changedEntries = new Set<string>();
 
+  /**
+   * The incoming listing, with every entry that is already on screen keeping the artwork URL it was
+   * drawn with.
+   *
+   * UMS versions its artwork URLs (".../cover.jpg?update=144320") and bumps that counter whenever it
+   * touches the resource - browsing a folder is enough to make it do so for the folder and for every
+   * entry in it. The picture behind the URL is the same one, but the changed URL made the entry
+   * compare as changed, so mergeKeyedList handed on a new object, every <img> got a new src and the
+   * browser reloaded every thumbnail on screen: the flicker about a second after entering a folder,
+   * for a listing where nothing had actually changed. Whether a cover really was replaced is not
+   * something the URL can say - that is announced through changedEntries, and bustChangedArt below
+   * forces those reloads deliberately, which is why this runs first.
+   */
+  private keepShownArt(data: ContainerItemDto): void {
+    if (!data) {
+      return;
+    }
+    const shownContainer = this.currentContainerList().currentContainer;
+    if (
+      data.currentContainer &&
+      shownContainer?.id === data.currentContainer.id
+    ) {
+      carryOverArtUrls(
+        shownContainer,
+        data.currentContainer,
+        CONTAINER_ART_FIELDS,
+      );
+    }
+
+    const shownContainers = new Map<string, ContainerDto>();
+    for (const list of [
+      this.albumList_(),
+      this.containerList_(),
+      this.playlistList_(),
+      this.artistList_(),
+    ]) {
+      for (const container of list) {
+        shownContainers.set(CONTAINER_KEY(container), container);
+      }
+    }
+    for (const list of [data.albumDto, data.containerDto]) {
+      for (const container of list ?? []) {
+        carryOverArtUrls(
+          shownContainers.get(CONTAINER_KEY(container)),
+          container,
+          CONTAINER_ART_FIELDS,
+        );
+      }
+    }
+
+    const shownItems = new Map<string, MusicItemDto>();
+    for (const list of [this.musicTracks_(), this.rawOtherItems_()]) {
+      for (const item of list) {
+        shownItems.set(ITEM_KEY(item), item);
+      }
+    }
+    for (const item of data.musicItemDto ?? []) {
+      carryOverArtUrls(shownItems.get(ITEM_KEY(item)), item, ITEM_ART_FIELDS);
+    }
+  }
+
   /** The incoming listing, with the art of every entry reported as changed asked for afresh. */
   private bustChangedArt(data: ContainerItemDto): void {
     if (this.changedEntries.size === 0 || !data) {
@@ -1054,6 +1130,7 @@ export class ContentDirectoryService {
   public updateContainer(data: ContainerItemDto): void {
     //    console.log("CDS " + this.id + " : updating container with " + data.musicItemDto.length + " items.");
     if (data) {
+      this.keepShownArt(data);
       this.bustChangedArt(data);
       console.log(
         'Album ids MBID / discogs : ' +

@@ -76,3 +76,41 @@ export function mergeKeyedList<T>(
   });
   return changed ? merged : before;
 }
+
+/**
+ * Whether two artwork URLs name the same picture.
+ *
+ * A media server versions the URL rather than the picture: UMS answers with
+ * ".../cover.jpg?update=144320" and bumps that counter whenever it touches the resource - browsing
+ * the folder is enough. Only what is left of the query decides here, so an entry does not count as
+ * changed just because it was read again.
+ */
+export function sameArtResource(
+  a: string | undefined,
+  b: string | undefined,
+): boolean {
+  return !!a && !!b && a !== b && a.split('?')[0] === b.split('?')[0];
+}
+
+/**
+ * Gives an incoming entry back the artwork URLs the one on screen was drawn with, wherever both name
+ * the same picture - so an unchanged entry stays equal to the one it replaces and no <img> reloads.
+ *
+ * A cover that really was replaced is not recognised here (the URL cannot say), it is announced by
+ * the media server as a changed entry and asked for afresh with a query of its own.
+ */
+export function carryOverArtUrls<T extends object>(
+  shown: T | undefined,
+  incoming: T,
+  fields: readonly (keyof T)[],
+): void {
+  if (!shown) {
+    return;
+  }
+  for (const field of fields) {
+    const before = shown[field] as string | undefined;
+    if (sameArtResource(before, incoming[field] as string | undefined)) {
+      incoming[field] = before as T[keyof T];
+    }
+  }
+}

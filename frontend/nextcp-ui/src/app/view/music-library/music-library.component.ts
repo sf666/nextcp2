@@ -8,7 +8,6 @@ import {
   AfterViewInit,
   Component,
   inject,
-  input,
   viewChild,
   ChangeDetectionStrategy,
 } from '@angular/core';
@@ -42,7 +41,6 @@ import { isAssigned } from 'src/app/global';
 })
 export class MusicLibraryComponent implements AfterViewInit {
   readonly dispContainer = viewChild(DisplayContainerComponent);
-  readonly objectId = input<string>();
   private viewReady = false;
   private pendingBrowse: { udn: string; objectId: string } | null = null;
 
@@ -89,9 +87,9 @@ export class MusicLibraryComponent implements AfterViewInit {
         ),
         takeUntilDestroyed(),
       )
-      .subscribe(({ udn }) => {
+      .subscribe(({ udn, objectId }) => {
         if (udn?.length > 0) {
-          this.initViewData(udn);
+          this.initViewData(udn, objectId);
         } else {
           console.log('no media server device selected.');
         }
@@ -167,7 +165,14 @@ export class MusicLibraryComponent implements AfterViewInit {
     this.musicLibraryService.updateCurrentContainer(data);
   }
 
-  private initViewData(udn: string): void {
+  /**
+   * @param objectId the container the route asks for, taken from the route parameter this call was
+   *        triggered by. Deliberately not read from a component input bound to the same parameter:
+   *        clicking a second search hit reuses this component, and the input still held the id of
+   *        the previous one when the params subscription ran - so the second hit browsed the folder
+   *        of the first (looked like nothing happened) and the third showed the second.
+   */
+  private initViewData(udn: string, objectId: string): void {
     console.log('Music Library : initViewData ...');
     this.layoutService.setFramedView();
 
@@ -185,7 +190,6 @@ export class MusicLibraryComponent implements AfterViewInit {
       return;
     }
 
-    const objectId = this.objectId();
     if (objectId) {
       console.log('browse to injected OID : ' + objectId);
       this.browseToUid(udn, objectId);

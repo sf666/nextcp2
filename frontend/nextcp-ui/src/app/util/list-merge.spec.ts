@@ -1,4 +1,9 @@
-import { deepEquals, mergeKeyedList } from './list-merge';
+import {
+  carryOverArtUrls,
+  deepEquals,
+  mergeKeyedList,
+  sameArtResource,
+} from './list-merge';
 
 interface Entry {
   id: string;
@@ -80,5 +85,111 @@ describe('mergeKeyedList', () => {
   it('copes with an empty or absent answer', () => {
     expect(mergeKeyedList(listing(), undefined, KEY)).toEqual([]);
     expect(mergeKeyedList(undefined, listing(), KEY).length).toBe(3);
+  });
+});
+
+interface Art {
+  id: string;
+  title: string;
+  albumartUri?: string;
+  albumartUriMedium?: string;
+}
+
+const ART_FIELDS: (keyof Art)[] = ['albumartUri', 'albumartUriMedium'];
+
+describe('sameArtResource', () => {
+  it('is true when only the query differs', () => {
+    expect(
+      sameArtResource(
+        'http://s/cover.jpg?update=1',
+        'http://s/cover.jpg?update=2',
+      ),
+    ).toBe(true);
+  });
+
+  it('is false for another picture, and for URLs that are already equal', () => {
+    expect(sameArtResource('http://s/a.jpg?u=1', 'http://s/b.jpg?u=1')).toBe(
+      false,
+    );
+    expect(sameArtResource('http://s/a.jpg', 'http://s/a.jpg')).toBe(false);
+  });
+
+  it('is false when either side is missing', () => {
+    expect(sameArtResource(undefined, 'http://s/a.jpg')).toBe(false);
+    expect(sameArtResource('http://s/a.jpg', '')).toBe(false);
+  });
+});
+
+describe('carryOverArtUrls', () => {
+  it('keeps the URL on screen when the media server only bumped its version', () => {
+    const shown: Art = {
+      id: 'a',
+      title: 'Alpha',
+      albumartUri: 'http://s/cover.jpg?update=1',
+      albumartUriMedium: 'http://s/cover_m.jpg?update=1',
+    };
+    const incoming: Art = {
+      id: 'a',
+      title: 'Alpha',
+      albumartUri: 'http://s/cover.jpg?update=2',
+      albumartUriMedium: 'http://s/cover_m.jpg?update=2',
+    };
+
+    carryOverArtUrls(shown, incoming, ART_FIELDS);
+
+    // The whole entry is equal again, so mergeKeyedList hands back the object already rendered
+    // and no <img> gets a new src.
+    expect(deepEquals(shown, incoming)).toBe(true);
+    expect(mergeKeyedList([shown], [incoming], (e: Art) => e.id)[0]).toBe(
+      shown,
+    );
+  });
+
+  it('leaves a picture that really changed alone', () => {
+    const shown: Art = {
+      id: 'a',
+      title: 'Alpha',
+      albumartUri: 'http://s/old.jpg?update=1',
+    };
+    const incoming: Art = {
+      id: 'a',
+      title: 'Alpha',
+      albumartUri: 'http://s/new.jpg?update=1',
+    };
+
+    carryOverArtUrls(shown, incoming, ART_FIELDS);
+
+    expect(incoming.albumartUri).toBe('http://s/new.jpg?update=1');
+  });
+
+  it('leaves the reload a changed entry was given alone', () => {
+    // bustChangedArt appends its own query to force the browser past its cache.
+    const shown: Art = {
+      id: 'a',
+      title: 'Alpha',
+      albumartUri: 'http://s/cover.jpg?update=1',
+    };
+    const incoming: Art = {
+      id: 'a',
+      title: 'Alpha',
+      albumartUri: 'http://s/cover.jpg?update=2',
+    };
+
+    carryOverArtUrls(shown, incoming, ART_FIELDS);
+    incoming.albumartUri += '&nextcpArt=123';
+
+    expect(deepEquals(shown, incoming)).toBe(false);
+  });
+
+  it('does nothing when the entry is new on screen', () => {
+    const incoming: Art = {
+      id: 'a',
+      title: 'Alpha',
+      albumartUri: 'http://s/cover.jpg?update=2',
+    };
+
+    carryOverArtUrls(undefined, incoming, ART_FIELDS);
+
+    expect(incoming.albumartUri).toBe('http://s/cover.jpg?update=2');
   });
 });
