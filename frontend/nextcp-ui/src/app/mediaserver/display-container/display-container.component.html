@@ -145,17 +145,32 @@ Main Content
 
     
     <!--                                -->
-    <!-- Other items                    -->
+    <!-- Videos and other items         -->
     <!--                                -->
 
-    @if (otherItems_?.length > 0) {
+    @if (videoItems_?.length > 0) {
+    <div id="head_browse_video_items_ID" class="flex flex-col grow">
+      <div class="section-heading">
+        <span class="section-label">Videos</span>
+        <span class="section-count">{{countLabel(visibleVideoItems(), videoItems_.length)}}</span>
+      </div>
+      <other-item-tile class="flex grow"
+        [otherItems]="videoItems_"
+        [showKind]="false"
+        [quickSearchString]="displayFilterString()"
+        (playItemClicked)="playItem($event)"
+      ></other-item-tile>
+    </div>
+    }
+
+    @if (nonVideoItems_?.length > 0) {
     <div id="head_browse_other_items_ID" class="flex flex-col grow">
       <div class="section-heading">
         <span class="section-label">Other items</span>
-        <span class="section-count">{{countLabel(visibleOtherItems(), otherItems_.length)}}</span>
+        <span class="section-count">{{countLabel(visibleOtherItems(), nonVideoItems_.length)}}</span>
       </div>
       <other-item-tile class="flex grow"
-        [otherItems]="otherItems_"
+        [otherItems]="nonVideoItems_"
         [quickSearchString]="displayFilterString()"
         (playItemClicked)="playItem($event)"
       ></other-item-tile>

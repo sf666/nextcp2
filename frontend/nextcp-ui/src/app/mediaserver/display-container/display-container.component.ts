@@ -173,7 +173,13 @@ export class DisplayContainerComponent {
   visibleTracks = computed(() => this.displayedMusicTracks().length);
   visibleOtherItems = computed(
     () =>
-      this.otherItems_.filter((item) =>
+      this.nonVideoItems_.filter((item) =>
+        matchesTextFilter(item.title, this.displayFilterString()),
+      ).length,
+  );
+  visibleVideoItems = computed(
+    () =>
+      this.videoItems_.filter((item) =>
         matchesTextFilter(item.title, this.displayFilterString()),
       ).length,
   );
@@ -337,6 +343,18 @@ export class DisplayContainerComponent {
       return [];
     }
     return handler.contentDirectoryService.otherItems_();
+  }
+
+  /**
+   * Videos get their own section. The server delivers them in the same bucket as bookmarks and text
+   * items, but they are the one kind in there this player can actually show.
+   */
+  get videoItems_() {
+    return this.otherItems_.filter((item) => LocalVideoPlayerService.isVideoItem(item));
+  }
+
+  get nonVideoItems_() {
+    return this.otherItems_.filter((item) => !LocalVideoPlayerService.isVideoItem(item));
   }
 
   get albums(): ContainerDto[] {

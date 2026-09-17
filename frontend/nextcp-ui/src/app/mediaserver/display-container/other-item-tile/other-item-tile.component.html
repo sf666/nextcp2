@@ -5,7 +5,9 @@
         <img src="{{albumArt.tile(item.albumArtUrl, item.albumArtUrlMedium)}}" alt="{{item.title}}">
       </div>
       <div class="flex flex-col albumDesc">
+        @if (showKind()) {
         <div class="playlistText">{{getOtherItemHeadline(item)}}</div>
+        }
         <div class="otherItemTitle">{{item.title}}</div>
       </div>
     </div>

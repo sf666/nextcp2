@@ -23,6 +23,8 @@ export class OtherItemTileComponent {
 
   otherItems = input<MusicItemDto[]>([]);
   quickSearchString = input<string>('');
+  /** Off where the section heading already says what these are, e.g. the Videos section. */
+  showKind = input<boolean>(true);
   items = computed(() =>
     this.getOtherItemsFilter(this.otherItems(), this.quickSearchString())
   );
