@@ -2,6 +2,7 @@ import { SpinnerService } from './service/spinner.service';
 import { LayoutService } from './service/layout.service';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FooterComponent } from './mediarenderer/footer/footer.component';
+import { LocalVideoPlayerComponent } from './mediaserver/local-video-player/local-video-player.component';
 import { SidebarComponent } from './view/sidebar/sidebar.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { RouterOutlet } from '@angular/router';
@@ -19,6 +20,7 @@ import { supportsBackdropFilter } from './util/browser-capabilities';
     MatProgressSpinner,
     SidebarComponent,
     FooterComponent,
+    LocalVideoPlayerComponent,
   ],
 })
 export class AppComponent {

@@ -31,6 +31,9 @@
   </div>
 </div>
 
+<!-- Above the footer: a video fills the screen and the footer must not sit on top of it. -->
+<local-video-player></local-video-player>
+
 @if (layoutService.footerVisible()) {
 <renderer-footer class="z-1000"></renderer-footer>
 }

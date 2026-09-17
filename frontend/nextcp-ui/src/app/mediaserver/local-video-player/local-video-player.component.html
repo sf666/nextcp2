@@ -1,0 +1,11 @@
+@if (videoPlayer.currentItem(); as item) {
+<div class="fixed inset-0 z-2000 flex flex-col bg-black/95"
+     tabindex="0"
+     (keydown)="onOverlayKeydown($event)">
+  <div class="flex items-center gap-4 px-4 py-2 text-white">
+    <span class="grow truncate text-lg">{{item.title}}</span>
+    <button type="button" class="shrink-0 px-3 py-1 text-2xl leading-none" aria-label="close" (click)="close()">&times;</button>
+  </div>
+  <video #video class="min-h-0 grow bg-black" controls playsinline></video>
+</div>
+}

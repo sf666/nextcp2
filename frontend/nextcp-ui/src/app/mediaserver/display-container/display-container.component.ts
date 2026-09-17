@@ -4,6 +4,7 @@ import { TransportService } from 'src/app/service/transport.service';
 import { PlaylistService } from './../../service/playlist.service';
 import { DeviceService } from './../../service/device.service';
 import { LocalPlayerService } from './../../service/local-player.service';
+import { LocalVideoPlayerService } from 'src/app/service/local-video-player.service';
 import { TrackQualityService } from './../../util/track-quality.service';
 import {
   MusicItemDto,
@@ -69,6 +70,7 @@ export class DisplayContainerComponent {
   transportService = inject(TransportService);
   private deviceService = inject(DeviceService);
   private localPlayer = inject(LocalPlayerService);
+  private localVideoPlayer = inject(LocalVideoPlayerService);
   private configurationService = inject(ConfigurationService);
   private cdsBrowsePathService = inject(CdsBrowsePathService);
   trackQualityService = inject(TrackQualityService);
@@ -540,9 +542,14 @@ export class DisplayContainerComponent {
   }
 
   playItem(musicItemDto: MusicItemDto): void {
-    // For the local browser player, play the displayed track list starting at the clicked track, so
-    // the rest of the list keeps playing after it — the list as shown, filter included.
     if (this.deviceService.isLocalBrowserSelected()) {
+      // A video needs a picture, so it opens the overlay instead of joining the audio queue.
+      if (LocalVideoPlayerService.isVideoItem(musicItemDto)) {
+        this.localVideoPlayer.open(musicItemDto);
+        return;
+      }
+      // Play the displayed track list starting at the clicked track, so the rest of the list keeps
+      // playing after it — the list as shown, filter included.
       this.localPlayer.playQueueFrom(this.displayedMusicTracks(), musicItemDto);
       return;
     }

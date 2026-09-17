@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -26,6 +27,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -86,6 +89,11 @@ public class LocalStreamProxyService {
 	public static final String PROXY_USER_AGENT_LOSSY = "next_cp_webplayer_lossy/1.0";
 
 	private static final int COPY_BUFFER_SIZE = 64 * 1024;
+
+	private static final String HLS_CONTENT_TYPE = "application/vnd.apple.mpegurl";
+
+	/** The URI="..." attribute HLS tags use to point at renditions, keys and subtitle playlists. */
+	private static final Pattern HLS_URI_ATTRIBUTE = Pattern.compile("URI=\"([^\"]*)\"");
 
 	private static final Map<String, String> CONTENT_TYPE_ALIASES = Map.of(
 		"audio/x-flac", "audio/flac",
@@ -244,6 +252,16 @@ public class LocalStreamProxyService {
 	public void proxy(String targetUrl, boolean lossy, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		URI uri = validateTarget(targetUrl);
 		String userAgent = lossy ? PROXY_USER_AGENT_LOSSY : PROXY_USER_AGENT;
+
+		if (isHlsPlaylist(uri)) {
+			proxyHlsPlaylist(uri, userAgent, lossy, response);
+			return;
+		}
+		if (isHlsPart(uri)) {
+			// Segments are short and already transcoded; caching them would only add latency.
+			passThrough(uri, userAgent, request, response);
+			return;
+		}
 
 		if (!isPreTranscodeEnabled() || getCacheDir() == null) {
 			passThrough(uri, userAgent, request, response);
@@ -587,6 +605,103 @@ public class LocalStreamProxyService {
 			return contentType;
 		}
 		return semicolon > -1 ? canonical + contentType.substring(semicolon) : canonical;
+	}
+
+	private static boolean isHlsPlaylist(URI uri) {
+		return StringUtils.endsWithIgnoreCase(uri.getPath(), ".m3u8");
+	}
+
+	private static boolean isHlsPart(URI uri) {
+		return StringUtils.contains(uri.getPath(), "/hls/");
+	}
+
+	/**
+	 * Fetches an HLS playlist and rewrites every URL in it back through this proxy.
+	 * <p>
+	 * UMS writes absolute URLs into the playlist, so a browser would fetch the renditions and segments
+	 * straight from UMS - with its own User-Agent, which resolves to a different renderer profile than
+	 * the one this proxy asks for. Every reference therefore has to come back here.
+	 */
+	private void proxyHlsPlaylist(URI uri, String userAgent, boolean lossy, HttpServletResponse response) throws IOException {
+		HttpRequest request = HttpRequest.newBuilder(uri)
+			.header("User-Agent", userAgent)
+			.GET()
+			.build();
+		HttpResponse<String> upstream;
+		try {
+			upstream = httpClient.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			throw new IOException("proxied playlist request was interrupted", e);
+		}
+
+		response.setStatus(upstream.statusCode());
+		if (upstream.statusCode() >= 400) {
+			response.setHeader("X-Upstream-Status", Integer.toString(upstream.statusCode()));
+			log.warn("HLS playlist request failed with status {}: {}", upstream.statusCode(), uri);
+			return;
+		}
+
+		String playlist = rewriteHlsPlaylist(upstream.body(), uri, lossy);
+		byte[] body = playlist.getBytes(StandardCharsets.UTF_8);
+		response.setHeader("Content-Type", HLS_CONTENT_TYPE);
+		response.setHeader("Content-Length", Integer.toString(body.length));
+		// The playlist is generated per request and the segment URLs carry no version, so it must not
+		// be reused after a track change.
+		response.setHeader("Cache-Control", "no-store");
+		try (OutputStream out = response.getOutputStream()) {
+			out.write(body);
+			out.flush();
+		} catch (IOException e) {
+			log.debug("HLS playlist closed by client: {}", e.getMessage());
+		}
+	}
+
+	/**
+	 * Replaces the media URLs of an HLS playlist with proxy URLs. Rewrites both bare URI lines and the
+	 * {@code URI="..."} attributes of tags such as EXT-X-MEDIA, EXT-X-KEY and EXT-X-I-FRAME-STREAM-INF.
+	 */
+	String rewriteHlsPlaylist(String playlist, URI playlistUri, boolean lossy) {
+		StringBuilder sb = new StringBuilder(playlist.length() + 512);
+		for (String line : playlist.split("\n", -1)) {
+			String trimmed = line.strip();
+			if (trimmed.isEmpty()) {
+				sb.append(line).append('\n');
+			} else if (trimmed.startsWith("#")) {
+				sb.append(rewriteHlsUriAttributes(line, playlistUri, lossy)).append('\n');
+			} else {
+				sb.append(toProxyUrl(trimmed, playlistUri, lossy)).append('\n');
+			}
+		}
+		// split() with a negative limit keeps the trailing empty field of a newline-terminated body,
+		// which would otherwise become an extra blank line here.
+		if (playlist.endsWith("\n") && sb.length() > 0) {
+			sb.setLength(sb.length() - 1);
+		}
+		return sb.toString();
+	}
+
+	private String rewriteHlsUriAttributes(String line, URI playlistUri, boolean lossy) {
+		Matcher matcher = HLS_URI_ATTRIBUTE.matcher(line);
+		StringBuilder sb = new StringBuilder();
+		while (matcher.find()) {
+			String replacement = "URI=\"" + toProxyUrl(matcher.group(1), playlistUri, lossy) + "\"";
+			matcher.appendReplacement(sb, Matcher.quoteReplacement(replacement));
+		}
+		matcher.appendTail(sb);
+		return sb.toString();
+	}
+
+	private String toProxyUrl(String reference, URI playlistUri, boolean lossy) {
+		String absolute;
+		try {
+			absolute = playlistUri.resolve(reference).toString();
+		} catch (IllegalArgumentException e) {
+			log.debug("leaving unparsable HLS reference untouched: {}", reference);
+			return reference;
+		}
+		String proxyUrl = "/LocalStream/stream?url=" + URLEncoder.encode(absolute, StandardCharsets.UTF_8);
+		return lossy ? proxyUrl + "&lossy=true" : proxyUrl;
 	}
 
 	private void relayHeader(HttpResponse<InputStream> upstream, HttpServletResponse response, String name) {
