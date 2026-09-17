@@ -17,12 +17,20 @@
 
   <!-- Background image -->
   <div id="middle_wrapper" class="flex items-center grow shrink">
-    @if (!isSearchResult()) {
-      <div id="topImgContainer" class="flex top-img-container items-center">
+    <div id="topImgContainer" class="flex top-img-container items-center">
+      @if (isSearchResult()) {
+        <!--
+          A result set has no cover. The tile keeps the place one would take, so the query does not
+          start at the very edge of the page, and carries the icon of the kind of hit being listed.
+        -->
+        <div class="img-top search-symbol" aria-hidden="true">
+          <span class="material-symbols-outlined">{{searchSymbol()}}</span>
+        </div>
+      } @else {
         <img src="{{albumArt.detail(currentContainer.albumartUri, currentContainer.albumartUriMedium)}}"
              class="img-top aspect-square object-cover">
-      </div>
-    }
+      }
+    </div>
     <div class="z-1 flex flex-col grow shrink" id="ID_SCROLL_TO_ELEMENT_STEP_IN" tabindex="-1">
       <div class="flex right-section">
         <div class="flex me-4 info-wrap">
@@ -128,12 +136,16 @@
 -->
 <div class="dc-compact-bar" [class.visible]="condensed()">
   <div class="bar-inner flex items-center">
-    @if (!isSearchResult()) {
-      <div class="flex top-img-container items-center">
+    <div class="flex top-img-container items-center">
+      @if (isSearchResult()) {
+        <div class="img-top search-symbol" aria-hidden="true">
+          <span class="material-symbols-outlined">{{searchSymbol()}}</span>
+        </div>
+      } @else {
         <img src="{{albumArt.detail(currentContainer.albumartUri, currentContainer.albumartUriMedium)}}"
              class="img-top aspect-square object-cover">
-      </div>
-    }
+      }
+    </div>
     <div class="flex flex-col info-block bar-info">
       <div class="eyebrow">{{containerType()}}</div>
       <div class="title-row">

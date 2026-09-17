@@ -211,6 +211,50 @@
     box-shadow  : 0 8px 28px rgba(0, 0, 0, 0.5);
 }
 
+// The tile in the cover's place on a result page. Same box as .img-top, so the query lines up with
+// an album title one navigation later instead of jumping left. A flat 5%-white square read as a
+// hole in the page, which is why this is a frosted surface with a hairline and its own inner glow:
+// it is a plate carrying a symbol, not a cover that failed to load.
+.search-symbol {
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    background     : linear-gradient(150deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03) 55%, rgba(0, 0, 0, 0.25));
+    backdrop-filter: blur(14px) saturate(1.2);
+    border         : 1px solid rgba(255, 255, 255, 0.14);
+    // The inset highlight is what keeps the plate from looking painted on.
+    box-shadow     : 0 8px 28px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+
+    .material-symbols-outlined {
+        // Scales with the tile, so it stays right through the header's collapse.
+        font-size       : calc((var(--top-header-Height) - var(--top-header-Vertical-Indent)) * 0.42);
+        font-variation-settings: 'wght' 200, 'opsz' 48, 'GRAD' -25;
+        color           : var(--primary-color);
+        // Lets the icon sit on the plate rather than lie flat on it.
+        text-shadow     : 0 2px 12px rgba(0, 0, 0, 0.45);
+        line-height     : 1;
+        user-select     : none;
+    }
+}
+
+// A narrow window still has to fit the four-item type bar beside the tile, and the bar is the part
+// that carries information. So the tile gives way first rather than the bar being clipped - it is a
+// symbol, and a smaller one says the same thing.
+@media (max-width: 1000px) {
+    #outer.is-search .search-symbol {
+        min-width   : 132px;
+        max-width   : 132px;
+        min-height  : 132px;
+        max-height  : 132px;
+        margin-left : 16px;
+        margin-right: 20px;
+
+        .material-symbols-outlined {
+            font-size: 56px;
+        }
+    }
+}
+
 // Colour lifted from the covers that were actually found, blurred into a wash.
 // This replaces the placeholder cover tile: a result set has no artwork of its
 // own, and a 5%-white square on a black ground read as a hole in the page rather
@@ -236,13 +280,20 @@
 }
 
 // The query is the subject of the page, so it is set like a name rather than
-// like a sentence about one. With the full header height and no cover competing
-// for attention it can carry more weight than a folder title.
+// like a sentence about one - still heavier than a folder title (2rem), but no
+// longer the 3.25rem it carried when it had the whole width to itself: the
+// symbol tile now takes the cover's place beside it.
 .search-info {
     .search-query {
-        font-size     : 3.25rem;
+        font-size     : 2.6rem;
         letter-spacing: -0.04em;
         line-height   : 1.02;
+        // A long query must not push the type bar off the band. It is a flex item of .title-row,
+        // so it is blockified - but it still needs min-width:0 to be allowed to shrink.
+        min-width     : 0;
+        overflow      : hidden;
+        text-overflow : ellipsis;
+        white-space   : nowrap;
     }
 
     .meta-line {
@@ -312,15 +363,12 @@
     color: var(--primary-color);
 }
 
-// With no cover, the query lines up with the results it describes instead of
-// sitting where the cover used to push it — same left edge as the section
-// headings and the first tile below (the content area's ms-3).
 // Positioned so it stacks above the bloom: an absolutely positioned sibling
-// would otherwise paint over static content.
+// would otherwise paint over static content. No padding of its own — the symbol
+// tile occupies the cover's place, so the query starts where an album title does.
 #outer.is-search #middle_wrapper {
-    position    : relative;
-    z-index     : 1;
-    padding-left: 0.75rem;
+    position: relative;
+    z-index : 1;
 }
 
 .button-row {

@@ -371,6 +371,24 @@ export class DisplayContainerHeaderComponent implements OnInit {
     return many.charAt(0).toUpperCase() + many.slice(1);
   });
 
+  /**
+   * Icon for the tile that stands where an album cover would. A result set has no artwork of its
+   * own, so the tile says what kind of hit is listed instead.
+   */
+  private static readonly SEARCH_SYMBOL: Record<ShowAllType, string> = {
+    items: 'music_note',
+    album: 'album',
+    artists: 'artist',
+    playlists: 'queue_music',
+  };
+
+  searchSymbol = computed(() => {
+    const context = this.searchContext();
+    return context
+      ? DisplayContainerHeaderComponent.SEARCH_SYMBOL[context.type]
+      : 'search';
+  });
+
   /** "42 albums in Music Library" — what was found, and where. */
   searchSummary = computed(() => {
     const context = this.searchContext();
