@@ -519,11 +519,12 @@ export class LocalPlayerService {
     this.playIntent = true;
     const item = this.queue[index];
     this.currentItem.set(item);
-    this.webStreamNowPlaying.ensureKnown(item);
     this.currentTime.set(0);
     this.duration.set(0);
     this.audio.src = this.toProxyUrl(item.streamingURL);
     this.audio.play().catch((err) => console.error('local browser playback failed', err));
+    // Only the display depends on this, so it happens after playback has been started.
+    this.webStreamNowPlaying.ensureKnown(item);
     this.persistState();
   }
 

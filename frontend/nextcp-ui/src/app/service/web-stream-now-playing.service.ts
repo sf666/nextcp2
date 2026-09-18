@@ -58,22 +58,27 @@ export class WebStreamNowPlayingService {
    * would show the station name until the next track begins.
    */
   public ensureKnown(track: MusicItemDto | null | undefined): void {
-    const objectId = track?.objectID;
-    if (!objectId || this.requested.has(objectId) || this.byObjectId()[objectId]) {
-      return;
+    // Nothing here is worth breaking a caller for - this only fills in a title.
+    try {
+      const objectId = track?.objectID;
+      if (!objectId || this.requested.has(objectId) || this.byObjectId()[objectId]) {
+        return;
+      }
+      const udn = track.mediaServerUDN || this.deviceService.selectedMediaServerDevice()?.udn;
+      if (!udn) {
+        return;
+      }
+      this.requested.add(objectId);
+      this.httpService
+        .get<WebStreamNowPlayingDto>(
+          this.baseUri,
+          `/getWebStreamNowPlaying/${udn}/${encodeURIComponent(objectId)}`,
+          'web radio',
+        )
+        .subscribe((info) => this.remember(info));
+    } catch (err) {
+      console.warn('[web-stream-now-playing] cannot ask what the stream is playing', err);
     }
-    const udn = track.mediaServerUDN || this.deviceService.selectedMediaServerDevice()?.udn;
-    if (!udn) {
-      return;
-    }
-    this.requested.add(objectId);
-    this.httpService
-      .get<WebStreamNowPlayingDto>(
-        this.baseUri,
-        `/getWebStreamNowPlaying/${udn}/${encodeURIComponent(objectId)}`,
-        'web radio',
-      )
-      .subscribe((info) => this.remember(info));
   }
 
   private remember(info: WebStreamNowPlayingDto): void {

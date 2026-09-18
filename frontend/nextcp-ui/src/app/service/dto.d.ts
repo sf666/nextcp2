@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-09-18 13:06:23.
+// Generated using typescript-generator version 4.1.1 on 2026-09-18 13:28:03.
 
 export interface AddRadioStationRequest {
     serverUdn: string;

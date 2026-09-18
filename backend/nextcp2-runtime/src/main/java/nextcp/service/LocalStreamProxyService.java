@@ -376,6 +376,12 @@ public class LocalStreamProxyService {
 
 		try (InputStream body = resp.body()) {
 			// Closing the body here cancels the transfer (and any UMS transcode started for the probe).
+			if (resp.statusCode() >= 300) {
+				// Nothing to decide on an error page: caching it would only turn the media server's
+				// answer into a misleading "caching failed" of ours. The player gets the answer as it is.
+				log.debug("probe for {} answered with status {}, streaming it through", uri, resp.statusCode());
+				return false;
+			}
 			if (isEndlessStream(resp)) {
 				// Internet radio: it never ends, so there is nothing to buffer. Waiting for a complete
 				// download would download forever and the player would never receive a byte.
