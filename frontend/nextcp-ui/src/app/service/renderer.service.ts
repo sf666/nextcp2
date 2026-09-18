@@ -6,6 +6,7 @@ import { DeviceDriverState, MediaRendererSwitchPower, MediaRendererSetVolume, Me
 import { SseService } from './sse/sse.service';
 import { Injectable, computed, effect, signal, inject } from '@angular/core';
 import { GenericResultService } from './generic-result.service';
+import { WebStreamNowPlayingService } from './web-stream-now-playing.service';
 import { LocalPlayerService } from './local-player.service';
 import { TimeDisplayService } from './../util/time-display.service';
 import { AppVisibilityService } from './app-visibility/app-visibility-service.service';
@@ -40,6 +41,7 @@ export class RendererService {
   private genericResultService = inject(GenericResultService);
   private httpService = inject(HttpService);
   private localPlayer = inject(LocalPlayerService);
+  private webStreamNowPlaying = inject(WebStreamNowPlayingService);
   private timeDisplayService = inject(TimeDisplayService);
   private appVisibilityService = inject(AppVisibilityService);
 
@@ -144,8 +146,12 @@ export class RendererService {
   });
 
   // Public state: the local browser player when "This Device" is selected, else the UPnP renderer.
+  // A continuous stream announces its track through the media server, by objectID - so the live
+  // title is put in here, where both the renderer and the browser player pass through.
   trackInfo = computed<TrackInfoDto>(() =>
-    this.deviceService.isLocalBrowserSelected() ? this.localTrackInfo() : this.trackInfoUpnp(),
+    this.webStreamNowPlaying.withLiveTitle(
+      this.deviceService.isLocalBrowserSelected() ? this.localTrackInfo() : this.trackInfoUpnp(),
+    ),
   );
   trackTime = computed<TrackTimeDto>(() =>
     this.deviceService.isLocalBrowserSelected() ? this.localTrackTime() : this.trackTimeUpnp(),
@@ -269,6 +275,7 @@ export class RendererService {
           this.nowMs.set(Date.now());
         }
         this.trackInfoUpnp.set(data);
+        this.webStreamNowPlaying.ensureKnown(data.currentTrack);
       }
     });
 
@@ -398,6 +405,7 @@ export class RendererService {
             this.deviceService.isMediaRendererSelected(data.mediaRendererUdn)
           ) {
             this.trackInfoUpnp.set(data);
+            this.webStreamNowPlaying.ensureKnown(data.currentTrack);
           }
         });
     }

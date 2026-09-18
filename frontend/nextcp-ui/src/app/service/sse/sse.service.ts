@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { MediaRendererDto, PlaylistState } from '../dto';
-import { MediaServerDto, UpnpAvTransportState, Config, DeviceDriverState, TrackTimeDto, TrackInfoDto, RendererConfigDto, RendererPlaylist, ToastrMessage, ServerConfigDto, ServerPlaylists, ContainerUpdateIdsDto, InputSourceChangeDto, TransportServiceStateDto, ChatHistoryDto } from './../dto.d';
+import { MediaServerDto, UpnpAvTransportState, Config, DeviceDriverState, TrackTimeDto, TrackInfoDto, RendererConfigDto, RendererPlaylist, ToastrMessage, ServerConfigDto, ServerPlaylists, ContainerUpdateIdsDto, InputSourceChangeDto, WebStreamNowPlayingDto, TransportServiceStateDto, ChatHistoryDto } from './../dto.d';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +33,9 @@ export class SseService {
   mediaServerRecentPlaylistChanged$: Subject<ServerPlaylists> = new Subject();
   // Containers whose content changed after they were browsed (late playlist entries, new covers).
   mediaServerContainerUpdateIds$: Subject<ContainerUpdateIdsDto> = new Subject();
+  // What a continuous stream is playing right now, by objectID. Sent for every listener, also for
+  // the browser player, which has no renderer here that an update could be addressed to.
+  webStreamNowPlaying$: Subject<WebStreamNowPlayingDto> = new Subject();
 
   // Playlist Events [ playlist items removed or added. repeat / shuffle states ]
   mediaRendererPlaylistStateChanged$: Subject<PlaylistState> = new Subject();
@@ -72,6 +75,7 @@ export class SseService {
     eventSource.addEventListener('DEVICE_MEDIASERVER_PLAYLIST_STATE', m => { this.sendNotification(this.mediaServerPlaylistChanged$, m) }, false);
     eventSource.addEventListener('DEVICE_MEDIASERVER_RECENT_PLAYLIST_STATE', m => { this.sendNotification(this.mediaServerRecentPlaylistChanged$, m) }, false);
     eventSource.addEventListener('DEVICE_MEDIASERVER_CONTAINER_UPDATE_IDS', m => { this.sendNotification(this.mediaServerContainerUpdateIds$, m) }, false);
+    eventSource.addEventListener('DEVICE_MEDIASERVER_WEB_STREAM_NOW_PLAYING', m => { this.sendNotification(this.webStreamNowPlaying$, m) }, false);
 
     eventSource.addEventListener('CHAT_HISTORY_CHANGED', m => { this.sendNotification(this.chatHistoryChanged$, m) }, false);
 

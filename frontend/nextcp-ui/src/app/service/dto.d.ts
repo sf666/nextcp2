@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-09-14 07:46:24.
+// Generated using typescript-generator version 4.1.1 on 2026-09-18 13:06:23.
 
 export interface AddRadioStationRequest {
     serverUdn: string;
@@ -647,4 +647,12 @@ export interface UpnpAvTransportState {
     RecordMediumWriteStatus: string;
     CurrentTransportActions: string;
     PossibleRecordStorageMedia: string;
+}
+
+export interface WebStreamNowPlayingDto {
+    objectID: string;
+    streamTitle: string;
+    artist: string;
+    title: string;
+    artUrl: string;
 }

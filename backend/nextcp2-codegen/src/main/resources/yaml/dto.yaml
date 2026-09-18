@@ -436,6 +436,13 @@ InputSourceChangeDto:
    udn: String
    inputSource: InputSourceDto
 
+WebStreamNowPlayingDto:
+   objectID: String
+   streamTitle: String
+   artist: String
+   title: String
+   artUrl: String
+
  #
  # Client Request classes
  #

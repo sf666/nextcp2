@@ -28,7 +28,9 @@ import nextcp.dto.ServerDeleteObjectRequest;
 import nextcp.dto.ServerPlaylistDto;
 import nextcp.dto.ServerPlaylistEntry;
 import nextcp.dto.ServerPlaylists;
+import nextcp.dto.WebStreamNowPlayingDto;
 import nextcp.service.ToastEventPublisher;
+import nextcp.service.WebRadioNowPlayingService;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
@@ -42,6 +44,9 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 
 	@Autowired
 	nextcp.eventBridge.MediaServerSseEvents mediaServerSseEvents = null;
+
+	@Autowired
+	private WebRadioNowPlayingService webRadioNowPlayingService = null;
 
 	private HashMap<String, LinkedList<String>> recentPlaylistsIds = new HashMap<>();
 
@@ -88,6 +93,23 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 		} catch (Exception e) {
 			log.error("addRadioStationToPlaylist failed : {}", request, e);
 			throw failed("Cannot add the station to the playlist", e);
+		}
+	}
+
+	/**
+	 * What the continuous stream behind that object is playing right now. The media server pushes
+	 * every change, so this is only for a display that starts showing a stream in the middle of a
+	 * track - after a reload, or when a renderer is selected while it is already running.
+	 */
+	@GetMapping("/getWebStreamNowPlaying/{serverUdn}/{objectId}")
+	public WebStreamNowPlayingDto getWebStreamNowPlaying(@PathVariable("serverUdn") String serverUdn, @PathVariable("objectId") String objectId) {
+		try {
+			String json = getExtendedMediaServerByUdn(serverUdn).getWebStreamNowPlaying(objectId);
+			WebStreamNowPlayingDto nowPlaying = webRadioNowPlayingService.parseNowPlaying(json);
+			return nowPlaying != null ? nowPlaying : new WebStreamNowPlayingDto(objectId, "", "", "", "");
+		} catch (Exception e) {
+			log.error("getWebStreamNowPlaying failed for object {}", objectId, e);
+			throw failed("Cannot read what that station is playing", e);
 		}
 	}
 

@@ -4,6 +4,7 @@ import { isBroadcastItem } from 'src/app/util/broadcast-item';
 import { ConfigurationService } from './configuration.service';
 import { PersistenceService } from './persistence/persistence.service';
 import { ToastService } from './toast/toast.service';
+import { WebStreamNowPlayingService } from './web-stream-now-playing.service';
 
 /** Snapshot persisted to localStorage so the queue and playback position survive a page reload. */
 interface PersistedPlayerState {
@@ -37,6 +38,7 @@ export class LocalPlayerService {
   private readonly configurationService = inject(ConfigurationService);
   private readonly persistenceService = inject(PersistenceService);
   private readonly toastService = inject(ToastService);
+  private readonly webStreamNowPlaying = inject(WebStreamNowPlayingService);
 
   // A hard page reload tears down the <audio> element, so playback cannot literally continue across
   // it. Instead the queue, current track and position are persisted here and restored on startup (and
@@ -517,6 +519,7 @@ export class LocalPlayerService {
     this.playIntent = true;
     const item = this.queue[index];
     this.currentItem.set(item);
+    this.webStreamNowPlaying.ensureKnown(item);
     this.currentTime.set(0);
     this.duration.set(0);
     this.audio.src = this.toProxyUrl(item.streamingURL);
