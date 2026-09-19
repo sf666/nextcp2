@@ -13,6 +13,9 @@ import {
 import { DeviceService } from './device.service';
 import { LocalPlayerService } from './local-player.service';
 import { HttpService } from './http.service';
+import { RadioService } from './radio.service';
+import { ToastService } from './toast/toast.service';
+import { isBroadcastItem } from 'src/app/util/broadcast-item';
 import { Injectable, OnInit, computed, signal, inject } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 
@@ -25,6 +28,8 @@ export class PlaylistService implements OnInit {
   private genericResultService = inject(GenericResultService);
   private deviceService = inject(DeviceService);
   private localPlayer = inject(LocalPlayerService);
+  private radioService = inject(RadioService);
+  private toastr = inject(ToastService);
 
   private baseUri = '/PlaylistService';
 
@@ -242,6 +247,16 @@ export class PlaylistService implements OnInit {
       this.localPlayer.enqueue([musicItemDto]);
       return;
     }
+    // A continuous stream has no end, so a renderer queue cannot hold it: the insert goes
+    // through and nothing plays. Send it down the Radio source instead, like playResource does.
+    if (isBroadcastItem(musicItemDto)) {
+      this.radioService.playStream(musicItemDto);
+      this.toastr.info(
+        'a continuous stream cannot be queued - playing it now',
+        musicItemDto.title,
+      );
+      return;
+    }
     const udn = this.getSelectedMediaRendererUdn();
     if (!udn) {
       return;
@@ -260,6 +275,16 @@ export class PlaylistService implements OnInit {
   public addToPlaylistNext(musicItemDto: MusicItemDto): void {
     if (this.deviceService.isLocalBrowserSelected()) {
       this.localPlayer.enqueueNext([musicItemDto]);
+      return;
+    }
+    // A continuous stream has no end, so a renderer queue cannot hold it: the insert goes
+    // through and nothing plays. Send it down the Radio source instead, like playResource does.
+    if (isBroadcastItem(musicItemDto)) {
+      this.radioService.playStream(musicItemDto);
+      this.toastr.info(
+        'a continuous stream cannot be queued - playing it now',
+        musicItemDto.title,
+      );
       return;
     }
     const udn = this.getSelectedMediaRendererUdn();

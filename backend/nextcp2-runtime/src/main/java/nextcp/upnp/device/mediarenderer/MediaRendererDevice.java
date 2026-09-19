@@ -69,6 +69,9 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
     private boolean deviceIsEnabledByUser;
     private boolean serviceOffline = false;
+
+    /** Ticks between two attempts to reach a device that was marked offline (one per minute). */
+    private static final long OFFLINE_RETRY_TICKS = 60;
     
     @Autowired
     private MediaRendererFactories factories = null;
@@ -501,6 +504,16 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         return upnp_avTransportService != null;
     }
 
+    /**
+     * The AVTransport service as it stands now. {@link #checkServicesOnline()} replaces the service
+     * objects when the device was marked offline, so a caller that kept the one it was handed at
+     * construction time would keep talking to a service that is no longer registered.
+     */
+    public AVTransportService getUpnpAvTransportService()
+    {
+        return upnp_avTransportService;
+    }
+
     public boolean hasOhTransport()
     {
         return oh_transportService != null;
@@ -627,7 +640,18 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     		log.trace("{}: skipping tick, because device is not enabled.", getFriendlyName());
     		return;
     	}
-        if (hasOhInfoService() || this.serviceOffline)
+        if (this.serviceOffline)
+        {
+            // Not every tick: a device that is really gone should not be hammered, but one that
+            // answers again has to be picked up without waiting for the user to press play.
+            if (counter % OFFLINE_RETRY_TICKS == 0)
+            {
+                checkServicesOnline();
+            }
+            lastTickPlaying = false;
+            return;
+        }
+        if (hasOhInfoService())
         {
             // OpenHome devices push their time via GENA events, nothing to poll here.
             lastTickPlaying = false;
@@ -801,9 +825,21 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     	}
     }
     
+	/**
+	 * Rebuilds the services of a device that was marked offline, and takes the mark off again when
+	 * that worked. Without clearing it the device stayed offline for good: the tick below stops
+	 * polling an offline device, so nothing ever tried the device again, and every command rebuilt
+	 * the services anew.
+	 */
 	public void checkServicesOnline() {
-		if (serviceOffline) {
+		if (!serviceOffline) {
+			return;
+		}
+		try {
 			initDeviceServices();
+			setServicesOffline(false);
+		} catch (Exception e) {
+			log.debug("{}: services are still not reachable", getFriendlyName(), e);
 		}
 	}
 

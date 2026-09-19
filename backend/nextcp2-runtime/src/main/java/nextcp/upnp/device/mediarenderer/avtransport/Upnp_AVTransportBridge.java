@@ -30,6 +30,7 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
 {
     private static final Logger log = LoggerFactory.getLogger(Upnp_AVTransportBridge.class.getName());
 
+    /** Only the fallback: {@link #avTransport()} asks the device for the service it holds now. */
     private AVTransportService avTransportService = null;
     private MediaRendererDevice device = null;
     private AvTransportState currentAvTransportState = new AvTransportState(); // Init with empty state object 
@@ -39,6 +40,18 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
     {
         this.avTransportService = upnp_avTransportService;
         this.device = device;
+    }
+
+    /**
+     * The AVTransport service to talk to right now. A device that went offline and came back gets
+     * fresh service objects from checkServicesOnline(); the one handed to this bridge when it was
+     * built then points at a service jUPnP no longer knows, and every action on it dies instantly
+     * with "no HTTP response" although the device answers fine.
+     */
+    private AVTransportService avTransport()
+    {
+        AVTransportService current = device.getUpnpAvTransportService();
+        return current != null ? current : avTransportService;
     }
 
     public void seek(long secondsAbsolute)
@@ -66,7 +79,7 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
         PlayInput inp = new PlayInput();
         inp.InstanceID = 0L;
         inp.Speed = "1";
-        avTransportService.play(inp);
+        avTransport().play(inp);
         device.setServicesOffline(false);
     }
 
@@ -83,6 +96,7 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
 
     public void setUrl(String currentUri, String metadata)
     {
+        device.checkServicesOnline();
         SetAVTransportURIInput uri = new SetAVTransportURIInput();
         uri.InstanceID = 0L;
         uri.CurrentURI = currentUri;
@@ -92,41 +106,45 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
         {
             log.debug(String.format("Playing '%s' with Metadata: >%s<", currentUri, metadata));
         }
-        avTransportService.setAVTransportURI(uri);
+        avTransport().setAVTransportURI(uri);
     }
 
     @Override
     public void pause()
     {
+        device.checkServicesOnline();
         PauseInput pi = new PauseInput();
         pi.InstanceID = 0L;
-        avTransportService.pause(pi);
+        avTransport().pause(pi);
     }
 
     @Override
     public void stop()
     {
+        device.checkServicesOnline();
         StopInput inp = new StopInput();
         inp.InstanceID = 0L;
-        avTransportService.stop(inp);
+        avTransport().stop(inp);
         device.getPlaylist().stop();
     }
 
     public void setNextUrl(String streamingURL, String trackMetadata)
     {
+        device.checkServicesOnline();
         SetNextAVTransportURIInput inp = new SetNextAVTransportURIInput();
         inp.InstanceID = 0L;
         inp.NextURI = streamingURL;
         inp.NextURIMetaData = trackMetadata;
-        avTransportService.setNextAVTransportURI(inp);
+        avTransport().setNextAVTransportURI(inp);
     }
 
     @Override
     public void next()
     {
+        device.checkServicesOnline();
         NextInput inp = new NextInput();
         inp.InstanceID = 0L;
-        avTransportService.next(inp);
+        avTransport().next(inp);
     }
 
     public TrackTimeDto generateTractTimeDto()
@@ -136,7 +154,7 @@ public class Upnp_AVTransportBridge extends BaseAvTransportChangeEventImpl imple
 
         GetPositionInfoInput inp = new GetPositionInfoInput();
         inp.InstanceID = 0L;
-        GetPositionInfoOutput out = avTransportService.getPositionInfo(inp);
+        GetPositionInfoOutput out = avTransport().getPositionInfo(inp);
 
         dto.duration = getAsSeconds(out.TrackDuration);
         dto.seconds = getAsSeconds(out.RelTime);

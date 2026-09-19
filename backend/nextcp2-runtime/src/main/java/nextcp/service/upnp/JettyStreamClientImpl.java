@@ -202,7 +202,10 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
 					StreamsLoggerHelper.logStreamClientResponseMessage(responseMessage, requestMessage);
 				}
 				return responseMessage;
-			} catch (final RuntimeException e) {
+			} catch (final Exception e) {
+				// Everything, not just RuntimeException: a timeout or a broken connection arrives as
+				// a checked exception, and jUPnP turns a failed call into a bare "no HTTP response".
+				// Swallowing the cause here left the only trace of why a device went silent nowhere.
 				LOGGER.error("Request: {} failed", request, e);
 				throw e;
 			}
