@@ -78,11 +78,26 @@ export class CdsBrowsePathService {
       elementID = this.scrollId();
     }
     console.log('[scroll] to ID : ' + elementID);
+    if (elementID === baseId) {
+      // Stepping into a container means the top of the page, not the top of an element. The marker
+      // sits on the info column beside the cover, and that column is centred against a tall cover,
+      // so scrolling it to the top pushed the page down by the difference and cut off the header.
+      this.scrollPageToTop();
+      return;
+    }
     const targetElement = document.getElementById(elementID);
     if (targetElement) {
       targetElement.scrollIntoView({ block: 'start' });
     } else {
       console.log('[scroll] id not found : ' + elementID);
+    }
+  }
+
+  /** The page's scroll container; every browse view lives inside it. */
+  private scrollPageToTop(): void {
+    const parent = document.getElementById('mainContent');
+    if (parent) {
+      parent.scrollTop = 0;
     }
   }
 }
