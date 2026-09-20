@@ -400,9 +400,9 @@
     display     : flex;
     flex        : 0 0 auto;
     max-width   : 400px;
-    // Sit above the info column (#ID_SCROLL_TO_ELEMENT_STEP_IN is a flex item
-    // with z-index:1, so it would otherwise capture clicks on the buttons once
-    // they move over it in the collapsed state).
+    // Sit above the info column (a flex item with z-index:1, so it would
+    // otherwise capture clicks on the buttons once they move over it in the
+    // collapsed state).
     z-index   : 5;
 }
 

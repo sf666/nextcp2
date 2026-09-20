@@ -236,10 +236,12 @@ export class DisplayContainerComponent {
             return;
           }
           const id = this.cdsBrowsePathService.scrollToID;
+          // Stepping in has no entry to return to, so the grids have nothing to look up.
           if (
-            this.albumTile()?.scrollToId(id) ||
-            this.artistTile()?.scrollToId(id) ||
-            this.folderTile()?.scrollToId(id)
+            !this.cdsBrowsePathService.isScrollToTop(id) &&
+            (this.albumTile()?.scrollToId(id) ||
+              this.artistTile()?.scrollToId(id) ||
+              this.folderTile()?.scrollToId(id))
           ) {
             return;
           }

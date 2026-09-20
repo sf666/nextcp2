@@ -2,7 +2,15 @@ import { Injectable, signal, inject } from '@angular/core';
 import { PersistenceService } from '../service/persistence/persistence.service';
 import Stack from './stack';
 
-const baseId = 'ID_SCROLL_TO_ELEMENT_STEP_IN';
+/**
+ * Stepping into a container scrolls to the top of the page. This used to be an element id on the
+ * header's info column, scrolled into view - but that column is centred against a tall cover, so it
+ * starts below the top of the page and dragged the header out of view with it.
+ */
+const SCROLL_TO_TOP = 'SCROLL_TO_TOP';
+
+/** What the marker above was called while it was a real element id; may still sit in storage. */
+const LEGACY_TOP_ID = 'ID_SCROLL_TO_ELEMENT_STEP_IN';
 
 @Injectable()
 export class CdsBrowsePathService {
@@ -10,13 +18,15 @@ export class CdsBrowsePathService {
 
   stack = new Stack<string>();
 
-  scrollId = signal<string>(baseId);
+  scrollId = signal<string>(SCROLL_TO_TOP);
 
   constructor() {
     console.log('[CdsBrowsePathService] constructor call');
     var lastFocusId = this.persistenceService.getLastFocusId();
     if (lastFocusId) {
-      this.scrollId.set(lastFocusId);
+      this.scrollId.set(
+        lastFocusId === LEGACY_TOP_ID ? SCROLL_TO_TOP : lastFocusId,
+      );
     }
   }
 
@@ -26,7 +36,7 @@ export class CdsBrowsePathService {
   }
 
   public stepIn(objectId: string): void {
-    this.setScrollId(baseId);
+    this.setScrollId(SCROLL_TO_TOP);
     this.stack.push(objectId);
   }
 
@@ -39,11 +49,11 @@ export class CdsBrowsePathService {
    */
   public stepOut(): void {
     if (this.stack.isEmpty()) {
-      this.setScrollId(baseId);
+      this.setScrollId(SCROLL_TO_TOP);
       return;
     }
     const previous = this.stack.pop();
-    this.setScrollId(previous?.length > 0 ? previous : baseId);
+    this.setScrollId(previous?.length > 0 ? previous : SCROLL_TO_TOP);
   }
 
   public peekCurrentPathID(): string {
@@ -54,7 +64,7 @@ export class CdsBrowsePathService {
     while (!this.stack.isEmpty()) {
       this.stack.pop();
     }
-    this.setScrollId(baseId);
+    this.setScrollId(SCROLL_TO_TOP);
   }
 
   get scrollToID(): string {
@@ -78,10 +88,7 @@ export class CdsBrowsePathService {
       elementID = this.scrollId();
     }
     console.log('[scroll] to ID : ' + elementID);
-    if (elementID === baseId) {
-      // Stepping into a container means the top of the page, not the top of an element. The marker
-      // sits on the info column beside the cover, and that column is centred against a tall cover,
-      // so scrolling it to the top pushed the page down by the difference and cut off the header.
+    if (this.isScrollToTop(elementID)) {
       this.scrollPageToTop();
       return;
     }
@@ -91,6 +98,11 @@ export class CdsBrowsePathService {
     } else {
       console.log('[scroll] id not found : ' + elementID);
     }
+  }
+
+  /** Whether this target means the top of the page rather than an element to scroll to. */
+  public isScrollToTop(elementID?: string): boolean {
+    return !elementID || elementID === SCROLL_TO_TOP;
   }
 
   /** The page's scroll container; every browse view lives inside it. */
