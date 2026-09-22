@@ -27,7 +27,7 @@ import {
   ContainerDto,
   SearchRequestDto,
   SearchResultDto,
-  MusicItemDto,
+  ItemDto,
   MusicAlbumIds,
 } from './dto.d';
 import {
@@ -73,14 +73,14 @@ const ARTIST_CONTAINER_CLASS = 'object.container.person.musicArtist';
 
 /** What identifies a browse entry across two reads of the same listing. */
 const CONTAINER_KEY = (container: ContainerDto): string => container.id;
-const ITEM_KEY = (item: MusicItemDto): string => item.objectID;
+const ITEM_KEY = (item: ItemDto): string => item.objectID;
 
 /** The artwork URLs of an entry, i.e. the fields keepShownArt carries over. */
 const CONTAINER_ART_FIELDS: (keyof ContainerDto)[] = [
   'albumartUri',
   'albumartUriMedium',
 ];
-const ITEM_ART_FIELDS: (keyof MusicItemDto)[] = [
+const ITEM_ART_FIELDS: (keyof ItemDto)[] = [
   'albumArtUrl',
   'albumArtUrlMedium',
   'albumArtUrlLarge',
@@ -458,9 +458,9 @@ export class ContentDirectoryService {
   artistList_ = signal<ContainerDto[]>([]);
 
   // item treatment
-  musicTracks_ = signal<MusicItemDto[]>([]);
+  musicTracks_ = signal<ItemDto[]>([]);
   // Raw (unfiltered) non-audio items of the current browse result, accumulated across pages.
-  private rawOtherItems_ = signal<MusicItemDto[]>([]);
+  private rawOtherItems_ = signal<ItemDto[]>([]);
   // Displayed non-audio items. Reactive: re-filters instantly when the browse result changes OR
   // the "show image items" setting is toggled - no re-browsing needed. Image items are hidden
   // unless the user enabled them (default off).
@@ -557,7 +557,7 @@ export class ContentDirectoryService {
       return;
     }
     const rating = change.rating as number;
-    const patchItems = (items: MusicItemDto[]): MusicItemDto[] =>
+    const patchItems = (items: ItemDto[]): ItemDto[] =>
       items?.some((item) => item.objectID === change.objectID)
         ? items.map((item) =>
             item.objectID === change.objectID ? { ...item, rating } : item,
@@ -674,13 +674,13 @@ export class ContentDirectoryService {
       }
     }
 
-    const shownItems = new Map<string, MusicItemDto>();
+    const shownItems = new Map<string, ItemDto>();
     for (const list of [this.musicTracks_(), this.rawOtherItems_()]) {
       for (const item of list) {
         shownItems.set(ITEM_KEY(item), item);
       }
     }
-    for (const item of data.musicItemDto ?? []) {
+    for (const item of data.items ?? []) {
       carryOverArtUrls(shownItems.get(ITEM_KEY(item)), item, ITEM_ART_FIELDS);
     }
   }
@@ -706,7 +706,7 @@ export class ContentDirectoryService {
         }
       }
     }
-    for (const item of data.musicItemDto ?? []) {
+    for (const item of data.items ?? []) {
       if (this.changedEntries.delete(ITEM_KEY(item))) {
         item.albumArtUrl = bust(item.albumArtUrl) as string;
         item.albumArtUrlMedium = bust(item.albumArtUrlMedium);
@@ -1108,7 +1108,7 @@ export class ContentDirectoryService {
       ...pages[0],
       albumDto: pages.flatMap((page) => page.albumDto ?? []),
       containerDto: pages.flatMap((page) => page.containerDto ?? []),
-      musicItemDto: pages.flatMap((page) => page.musicItemDto ?? []),
+      items: pages.flatMap((page) => page.items ?? []),
     };
   }
 
@@ -1116,7 +1116,7 @@ export class ContentDirectoryService {
     return (
       (data.albumDto?.length ?? 0) +
       (data.containerDto?.length ?? 0) +
-      (data.musicItemDto?.length ?? 0)
+      (data.items?.length ?? 0)
     );
   }
 
@@ -1143,7 +1143,7 @@ export class ContentDirectoryService {
    * @param data Gets called after a browse request returns ...
    */
   public updateContainer(data: ContainerItemDto): void {
-    //    console.log("CDS " + this.id + " : updating container with " + data.musicItemDto.length + " items.");
+    //    console.log("CDS " + this.id + " : updating container with " + data.items.length + " items.");
     if (data) {
       this.keepShownArt(data);
       this.bustChangedArt(data);
@@ -1201,7 +1201,7 @@ export class ContentDirectoryService {
       this.musicTracks_.update((current) =>
         mergeKeyedList(
           current,
-          data.musicItemDto?.filter(
+          data.items?.filter(
             (item) =>
               item.objectClass.lastIndexOf('object.item.audioItem', 0) === 0,
           ),
@@ -1211,7 +1211,7 @@ export class ContentDirectoryService {
       this.rawOtherItems_.update((current) =>
         mergeKeyedList(
           current,
-          data.musicItemDto?.filter(
+          data.items?.filter(
             (item) =>
               item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0,
           ),
@@ -1271,7 +1271,7 @@ export class ContentDirectoryService {
 
       this.musicTracks_.update((v) => {
         return v.concat(
-          data.musicItemDto.filter(
+          data.items.filter(
             (item) =>
               item.objectClass.lastIndexOf('object.item.audioItem', 0) === 0,
           ),
@@ -1280,7 +1280,7 @@ export class ContentDirectoryService {
 
       this.rawOtherItems_.update((v) => {
         return v.concat(
-          data.musicItemDto.filter(
+          data.items.filter(
             (item) =>
               item.objectClass.lastIndexOf('object.item.audioItem', 0) !== 0,
           ),
@@ -1317,10 +1317,10 @@ export class ContentDirectoryService {
       return;
     }
 
-    idxObj = idxObj - data.musicItemDto?.length;
+    idxObj = idxObj - data.items?.length;
     if (idxObj <= 0) {
       this.turn_page_id =
-        data.musicItemDto[data.musicItemDto.length + idxObj - 1].objectID;
+        data.items[data.items.length + idxObj - 1].objectID;
       return;
     }
 
@@ -1469,8 +1469,8 @@ export class ContentDirectoryService {
     let count = 0;
     switch (type) {
       case 'items':
-        ci.musicItemDto = data.musicItems ?? [];
-        count = ci.musicItemDto.length;
+        ci.items = data.musicItems ?? [];
+        count = ci.items.length;
         break;
       case 'album':
         ci.albumDto = data.albumItems ?? [];
@@ -1520,7 +1520,7 @@ export class ContentDirectoryService {
    * Not keyed on songId - that is a MusicItemIdDto, so comparing it compared object references, and
    * where its id fields were absent on both sides every row matched and the list emptied.
    */
-  public deleteMusicTrack(item: MusicItemDto) {
+  public deleteMusicTrack(item: ItemDto) {
     if (!item?.objectID) {
       return;
     }

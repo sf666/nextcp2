@@ -17,7 +17,7 @@ import {
   ContainerDto,
   ContainerItemDto,
   MediaServerDto,
-  MusicItemDto,
+  ItemDto,
 } from 'src/app/service/dto';
 import { LayoutService } from 'src/app/service/layout.service';
 import { PersistenceService } from 'src/app/service/persistence/persistence.service';
@@ -159,11 +159,11 @@ export class UmsAudioaddictComponent implements OnInit {
     return this.contentDirectoryService.currentContainerList().currentContainer;
   }
 
-  musicTracks(): MusicItemDto[] {
+  musicTracks(): ItemDto[] {
     return this.contentDirectoryService.musicTracks_();
   }
 
-  otherItems_(): MusicItemDto[] {
+  otherItems_(): ItemDto[] {
     return this.contentDirectoryService.otherItems_();
   }
 

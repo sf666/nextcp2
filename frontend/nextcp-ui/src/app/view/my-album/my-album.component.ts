@@ -3,7 +3,7 @@ import { DeviceService } from 'src/app/service/device.service';
 import { LayoutService } from './../../service/layout.service';
 import {
   ContainerDto,
-  MusicItemDto,
+  ItemDto,
   MediaServerDto,
 } from './../../service/dto.d';
 import {
@@ -108,11 +108,11 @@ export class MyAlbumComponent implements OnInit {
     return this.contentDirectoryService.currentContainerList().currentContainer;
   }
 
-  musicTracks(): MusicItemDto[] {
+  musicTracks(): ItemDto[] {
     return this.contentDirectoryService.musicTracks_();
   }
 
-  otherItems_(): MusicItemDto[] {
+  otherItems_(): ItemDto[] {
     return this.contentDirectoryService.otherItems_();
   }
 

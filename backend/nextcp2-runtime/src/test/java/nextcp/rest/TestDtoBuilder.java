@@ -11,7 +11,7 @@ import org.jupnp.support.model.ProtocolInfo;
 import org.jupnp.support.model.Res;
 import org.jupnp.support.model.item.MusicTrack;
 import nextcp.dto.AudioFormat;
-import nextcp.dto.MusicItemDto;
+import nextcp.dto.ItemDto;
 
 public class TestDtoBuilder
 {
@@ -127,7 +127,7 @@ public class TestDtoBuilder
 
         // A live stream announces neither a size nor a duration, so the size heuristic cannot decide.
         // The audioBroadcast class can, and the station tags arrive as upnp:genre.
-        MusicItemDto item = db.extractXmlAsMusicItem(radioEntry("http-get:*:audio/mpeg:*"));
+        ItemDto item = db.extractXmlAsMusicItem(radioEntry("http-get:*:audio/mpeg:*"));
         assertTrue(item.audioFormat.isStreaming);
         assertNull(item.audioFormat.durationInSeconds);
         assertEquals("classic rock / oldies", item.genre);

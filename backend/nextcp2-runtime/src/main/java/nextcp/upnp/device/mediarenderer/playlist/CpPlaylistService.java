@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import nextcp.domainmodel.device.services.IPlaylistService;
 import nextcp.dto.ContainerItemDto;
-import nextcp.dto.MusicItemDto;
+import nextcp.dto.ItemDto;
 import nextcp.dto.PlaylistState;
 import nextcp.dto.RendererPlaylist;
 import nextcp.rest.DtoBuilder;
@@ -45,7 +45,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 	private PlaylistState state = new PlaylistState();
 
 	// Playlist with songs
-	private LinkedList<MusicItemDto> playlistItems = new LinkedList<>();
+	private LinkedList<ItemDto> playlistItems = new LinkedList<>();
 
 	// Index list : intention is to define play order. Songs will be played from
 	// start to end of this list.
@@ -141,7 +141,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 		if (!hasNextUriSupport()) {
 			log.debug("device has no nextUriSupport. Proceeding to next song ... ");
 			if (isPlaylistPlaying()) {
-				MusicItemDto nextSong = moveToNextTrack();
+				ItemDto nextSong = moveToNextTrack();
 				if (nextSong != null) {
 					log.info(String.format("proceedToNextSongToPlayNoNextUriSupport : set URL to %s", nextSong.streamingURL));
 					getDevice().getAvTransportBridge().setUrl(nextSong.streamingURL, nextSong.currentTrackMetadata);
@@ -207,7 +207,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 
 	private void updateSongUrls() {
 		songUrls.clear();
-		for (MusicItemDto song : playlistItems) {
+		for (ItemDto song : playlistItems) {
 			songUrls.add(song.streamingURL);
 		}
 	}
@@ -255,11 +255,11 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 		getDevice().getEventPublisher().publishEvent(state);
 	}
 
-	public List<MusicItemDto> getPlaylist() {
+	public List<ItemDto> getPlaylist() {
 		return Collections.unmodifiableList(playlistItems);
 	}
 
-	public MusicItemDto getCurrentTrack() {
+	public ItemDto getCurrentTrack() {
 		if (playlistItems.isEmpty()) {
 			log.debug("getCurrentTrack is Empty.");
 			return null;
@@ -272,16 +272,16 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 	 * 
 	 * @param songs
 	 */
-	public void setPlaylist(LinkedList<MusicItemDto> playlist) {
+	public void setPlaylist(LinkedList<ItemDto> playlist) {
 		this.playlistItems = playlist;
 		getEventPublisher().publishEvent(createPlaylistEventObject());
 	}
 
-	public void addSongToPlaylist(MusicItemDto song) {
+	public void addSongToPlaylist(ItemDto song) {
 		addSongToPlaylist(song, playbackItems.size());
 	}
 
-	public void addSongToPlaylist(MusicItemDto song, int position) {
+	public void addSongToPlaylist(ItemDto song, int position) {
 		if (!playlistItems.contains(song)) {
 			log.debug("adding song to playlist : {}", song != null ? song.toString() : "NULL");
 			playlistItems.addLast(song);
@@ -293,7 +293,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 		}
 	}
 
-	public int addAllSongToPlaylist(List<MusicItemDto> songsToAdd) {
+	public int addAllSongToPlaylist(List<ItemDto> songsToAdd) {
 		log.debug("addAllSongToPlaylist. Number of songs given : {}", songsToAdd.size());
 		// remove double entries ...
 		songsToAdd.removeAll(playlistItems);
@@ -316,7 +316,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 		return 0;
 	}
 
-	public void removeSongFromPlaylist(MusicItemDto song) {
+	public void removeSongFromPlaylist(ItemDto song) {
 		if (playlistItems.remove(song)) {
 			getEventPublisher().publishEvent(createPlaylistEventObject());
 		}
@@ -358,7 +358,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 		return peekSongIdx;
 	}
 
-	private MusicItemDto peekNextSongItem() {
+	private ItemDto peekNextSongItem() {
 		if (peekNextSongIndex() != null) {
 			return playlistItems.get(playbackItems.get(peekNextSongIndex()));
 		} else {
@@ -372,7 +372,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 	 * 
 	 * @return current selected track
 	 */
-	public MusicItemDto moveToNextTrack() {
+	public ItemDto moveToNextTrack() {
 
 		Integer nextSongIdx = peekNextSongIndex();
 
@@ -396,7 +396,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 	 * 
 	 * @return
 	 */
-	public MusicItemDto peekNextTrack() {
+	public ItemDto peekNextTrack() {
 		if (playbackItems.peekFirst() != null) {
 			return playlistItems.get(playbackItems.peekFirst());
 		} else {
@@ -410,15 +410,15 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 	 * 
 	 * @param currentSong
 	 */
-	public void consume(MusicItemDto currentSong) {
+	public void consume(ItemDto currentSong) {
 		// Maybe later ... check user experience first.
 	}
 
 	/**
 	 * Removes top song;
 	 */
-	public MusicItemDto consumeHead() {
-		MusicItemDto headSong = null;
+	public ItemDto consumeHead() {
+		ItemDto headSong = null;
 		if (!playbackItems.isEmpty()) {
 			headSong = playlistItems.get(playbackItems.removeFirst());
 			String consumedUrl = headSong.streamingURL;
@@ -431,10 +431,10 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 		return headSong;
 	}
 
-	public MusicItemDto getFileDtoFromURI(String newCurrentTrackURI) {
-		for (MusicItemDto MusicItemDto : playlistItems) {
-			if (MusicItemDto.streamingURL.equals(newCurrentTrackURI)) {
-				return MusicItemDto;
+	public ItemDto getFileDtoFromURI(String newCurrentTrackURI) {
+		for (ItemDto ItemDto : playlistItems) {
+			if (ItemDto.streamingURL.equals(newCurrentTrackURI)) {
+				return ItemDto;
 			}
 		}
 		return null;
@@ -478,7 +478,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 
 	@Override
 	public void deleteId(long id) {
-		Optional<MusicItemDto> item = playlistItems.stream().filter(musicItem -> musicItem.objectID.equals(Long.toString(id))).findFirst();
+		Optional<ItemDto> item = playlistItems.stream().filter(musicItem -> musicItem.objectID.equals(Long.toString(id))).findFirst();
 		if (item.isPresent()) {
 			removeSongFromPlaylist(item.get());
 		}
@@ -489,7 +489,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 		device.checkServicesOnline();
 		setPlaylistTransportState(TransportState.Playing);
 
-		MusicItemDto song = getCurrentTrack();
+		ItemDto song = getCurrentTrack();
 		if (song == null) {
 			log.info("cannot play playlist. playlist is empty.");
 			return;
@@ -520,7 +520,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 	 */
 	private void setNextSongFromQueue() {
 		if (hasNextUriSupport()) {
-			MusicItemDto nextSong = peekNextSongItem();
+			ItemDto nextSong = peekNextSongItem();
 			if (nextSong != null) {
 				nextSongUrl = nextSong.streamingURL;
 				log.info("setting nextUrl to song : {} ", nextSong.title);
@@ -557,9 +557,9 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 	@Override
 	public boolean seekId(String streamUrl) {
 		log.info("seeking to url {} ", streamUrl);
-		Optional<MusicItemDto> item = playlistItems.stream().filter(musicItem -> musicItem.streamingURL.equals(streamUrl)).findFirst();
+		Optional<ItemDto> item = playlistItems.stream().filter(musicItem -> musicItem.streamingURL.equals(streamUrl)).findFirst();
 		if (item.isPresent()) {
-			MusicItemDto dto = item.get();
+			ItemDto dto = item.get();
 			int idxSong = playlistItems.indexOf(dto);
 			log.info("found song with title {} at index {} ", dto.title, idxSong);
 			if (state.Shuffle) {
@@ -580,7 +580,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 		return false;
 	}
 
-	public long insert(MusicItemDto song) {
+	public long insert(ItemDto song) {
 		// TODO : handle inp.AfterId
 		addSongToPlaylist(song);
 		return 0;
@@ -602,7 +602,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 	}
 
 	@Override
-	public List<MusicItemDto> getPlaylistItems() {
+	public List<ItemDto> getPlaylistItems() {
 		return playlistItems;
 	}
 
@@ -616,12 +616,12 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 
 	@Override
 	public void insertContainer(ContainerItemDto items) {
-		addAllSongToPlaylist(items.musicItemDto);
+		addAllSongToPlaylist(items.items);
 	}
 
 	@Override
 	public long insertLast(InsertInput inp) {
-		MusicItemDto song = getDtoBuilder().extractXmlAsMusicItem(inp.Metadata);
+		ItemDto song = getDtoBuilder().extractXmlAsMusicItem(inp.Metadata);
 		song.streamingURL = inp.Uri;
 		song.currentTrackMetadata = inp.Metadata;
 
@@ -634,7 +634,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 	public void insertAndPlayContainer(ContainerItemDto items) {
 		reset();
 		log.info("inserting container {} to current playlist. Container has {} entries.", items.currentContainer.title,
-			items.musicItemDto.size());
+			items.items.size());
 		insertContainer(items);
 		try {
 			Thread.sleep(200);
@@ -646,7 +646,7 @@ public class CpPlaylistService extends BaseAvTransportChangeEventImpl implements
 	
 	@Override
 	synchronized public void insertNext(InsertInput inp) {
-		MusicItemDto song = getDtoBuilder().extractXmlAsMusicItem(inp.Metadata);
+		ItemDto song = getDtoBuilder().extractXmlAsMusicItem(inp.Metadata);
 		song.streamingURL = inp.Uri;
 		song.currentTrackMetadata = inp.Metadata;
 		int nextsongIndex = currentSongIdx +1;

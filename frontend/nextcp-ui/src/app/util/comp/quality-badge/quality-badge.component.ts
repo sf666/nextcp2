@@ -1,4 +1,4 @@
-import { MusicItemDto } from './../../../service/dto.d';
+import { ItemDto } from './../../../service/dto.d';
 import { TrackQualityService } from './../../track-quality.service';
 import {
   Component,
@@ -18,7 +18,7 @@ import {
 export class QualityBadgeComponent implements OnInit {
   trackQualityService = inject(TrackQualityService);
 
-  readonly item = input.required<MusicItemDto>();
+  readonly item = input.required<ItemDto>();
 
   ngOnInit(): void {}
 

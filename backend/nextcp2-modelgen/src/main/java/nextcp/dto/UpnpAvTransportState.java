@@ -15,10 +15,10 @@ public class UpnpAvTransportState
     public MediaRendererDto mediaRenderer;
     public String AbsoluteTimePosition;
     public String CurrentTrackURI;
-    public MusicItemDto CurrentTrackMetaData;
+    public ItemDto CurrentTrackMetaData;
     public Integer RelativeCounterPosition;
     public String TransportStatus;
-    public MusicItemDto AVTransportURIMetaData;
+    public ItemDto AVTransportURIMetaData;
     public String TransportState;
     public Long CurrentTrack;
     public String PlaybackStorageMedium;
@@ -44,7 +44,7 @@ public class UpnpAvTransportState
     {
     }
 
-    public UpnpAvTransportState(MediaRendererDto mediaRenderer, String AbsoluteTimePosition, String CurrentTrackURI, MusicItemDto CurrentTrackMetaData, Integer RelativeCounterPosition, String TransportStatus, MusicItemDto AVTransportURIMetaData, String TransportState, Long CurrentTrack, String PlaybackStorageMedium, String PossibleRecordQualityModes, String NextAVTransportURIMetaData, Long NumberOfTracks, String CurrentMediaDuration, String NextAVTransportURI, String RecordStorageMedium, String AVTransportURI, String TransportPlaySpeed, Integer AbsoluteCounterPosition, String RelativeTimePosition, String CurrentPlayMode, String CurrentTrackDuration, String PossiblePlaybackStorageMedia, String CurrentRecordQualityMode, String RecordMediumWriteStatus, String CurrentTransportActions, String PossibleRecordStorageMedia)
+    public UpnpAvTransportState(MediaRendererDto mediaRenderer, String AbsoluteTimePosition, String CurrentTrackURI, ItemDto CurrentTrackMetaData, Integer RelativeCounterPosition, String TransportStatus, ItemDto AVTransportURIMetaData, String TransportState, Long CurrentTrack, String PlaybackStorageMedium, String PossibleRecordQualityModes, String NextAVTransportURIMetaData, Long NumberOfTracks, String CurrentMediaDuration, String NextAVTransportURI, String RecordStorageMedium, String AVTransportURI, String TransportPlaySpeed, Integer AbsoluteCounterPosition, String RelativeTimePosition, String CurrentPlayMode, String CurrentTrackDuration, String PossiblePlaybackStorageMedia, String CurrentRecordQualityMode, String RecordMediumWriteStatus, String CurrentTransportActions, String PossibleRecordStorageMedia)
     {
         this.mediaRenderer = mediaRenderer;
         this.AbsoluteTimePosition = AbsoluteTimePosition;

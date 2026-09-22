@@ -4,7 +4,7 @@ import { GenericResultService } from './generic-result.service';
 import {
   GenericBooleanRequest,
   GenericNumberRequest,
-  MusicItemDto,
+  ItemDto,
   PlayRequestDto,
   PlaylistState,
   ContainerDto,
@@ -44,14 +44,14 @@ export class PlaylistService implements OnInit {
   });
 
   // Playlist items of the selected media renderer device (from the backend / OpenHome playlist).
-  private playlistItemsUpnp = signal<MusicItemDto[]>([]);
+  private playlistItemsUpnp = signal<ItemDto[]>([]);
 
   /**
    * The queue currently shown in the player queue view: the renderer's own playlist, or - for the
    * synthetic "This Device" renderer - the queue the browser player holds in memory, which the
    * backend knows nothing about.
    */
-  public playlistItems = computed<MusicItemDto[]>(() =>
+  public playlistItems = computed<ItemDto[]>(() =>
     this.deviceService.isLocalBrowserSelected()
       ? this.localPlayer.queueItems()
       : this.playlistItemsUpnp(),
@@ -69,9 +69,9 @@ export class PlaylistService implements OnInit {
       if (deviceService.isMediaRendererSelected(data.udn)) {
         console.log(
           'playlist-service mediaRendererPlaylistItemsChanged. Item count : ' +
-            data.musicItemDto.length,
+            data.items.length,
         );
-        this.playlistItemsUpnp.set(data.musicItemDto);
+        this.playlistItemsUpnp.set(data.items);
       }
     });
 
@@ -149,7 +149,7 @@ export class PlaylistService implements OnInit {
    * playlist id, the browser player by its position in the queue (which also stays correct when the
    * same track appears more than once).
    */
-  public isActiveEntry(item: MusicItemDto, index: number): boolean {
+  public isActiveEntry(item: ItemDto, index: number): boolean {
     if (this.deviceService.isLocalBrowserSelected()) {
       return index === this.localPlayer.activeIndex();
     }
@@ -157,7 +157,7 @@ export class PlaylistService implements OnInit {
   }
 
   /** Starts the clicked queue entry. */
-  public playEntry(item: MusicItemDto, index: number): void {
+  public playEntry(item: ItemDto, index: number): void {
     if (this.deviceService.isLocalBrowserSelected()) {
       this.localPlayer.playQueueIndex(index);
       return;
@@ -172,7 +172,7 @@ export class PlaylistService implements OnInit {
    * OpenHome player answers with a playlist event a moment later and that is what finally stands, but
    * a removal that only happens once the network has been around reads as a click that did nothing.
    */
-  public removeEntry(item: MusicItemDto, index: number): void {
+  public removeEntry(item: ItemDto, index: number): void {
     if (this.deviceService.isLocalBrowserSelected()) {
       this.localPlayer.removeQueueIndex(index);
       return;
@@ -204,7 +204,7 @@ export class PlaylistService implements OnInit {
     const uri = '/getPlaylistItems';
     if (udn !== '') {
       this.httpService
-        .post<MusicItemDto[]>(this.baseUri, uri, udn)
+        .post<ItemDto[]>(this.baseUri, uri, udn)
         .subscribe((data) => {
           this.playlistItemsUpnp.set(data);
           console.log(
@@ -242,7 +242,7 @@ export class PlaylistService implements OnInit {
     this.httpService.post(this.baseUri, uri, udn).subscribe();
   }
 
-  public addToPlaylist(musicItemDto: MusicItemDto): void {
+  public addToPlaylist(musicItemDto: ItemDto): void {
     if (this.deviceService.isLocalBrowserSelected()) {
       this.localPlayer.enqueue([musicItemDto]);
       return;
@@ -272,7 +272,7 @@ export class PlaylistService implements OnInit {
     this.httpService.post(this.baseUri, uri, playRequestDto).subscribe();
   }
 
-  public addToPlaylistNext(musicItemDto: MusicItemDto): void {
+  public addToPlaylistNext(musicItemDto: ItemDto): void {
     if (this.deviceService.isLocalBrowserSelected()) {
       this.localPlayer.enqueueNext([musicItemDto]);
       return;
@@ -309,7 +309,7 @@ export class PlaylistService implements OnInit {
    */
   public addContainerToPlaylist(
     containerDto: ContainerDto,
-    musicItems?: MusicItemDto[],
+    musicItems?: ItemDto[],
   ): void {
     if (this.deviceService.isLocalBrowserSelected()) {
       // Container actions for the browser player belong to the view, which knows the displayed
@@ -329,7 +329,7 @@ export class PlaylistService implements OnInit {
       containerDto: containerDto,
       shuffle: false,
       mediaRendererUdn: udn,
-      musicItemDto: musicItems ?? [],
+      items: musicItems ?? [],
     };
     this.httpService
       .postWithSuccessMessage(
@@ -349,7 +349,7 @@ export class PlaylistService implements OnInit {
   public addContainerToPlaylistAndPlay(
     containerDto: ContainerDto,
     _shuffle: boolean,
-    musicItems?: MusicItemDto[],
+    musicItems?: ItemDto[],
   ): void {
     if (this.deviceService.isLocalBrowserSelected()) {
       // Container actions for the browser player belong to the view, which knows the displayed
@@ -369,7 +369,7 @@ export class PlaylistService implements OnInit {
       containerDto: containerDto,
       shuffle: _shuffle,
       mediaRendererUdn: udn,
-      musicItemDto: musicItems ?? [],
+      items: musicItems ?? [],
     };
 
     this.httpService

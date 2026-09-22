@@ -1,6 +1,6 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 
-import { MusicItemDto } from 'src/app/service/dto';
+import { ItemDto } from 'src/app/service/dto';
 import { ToastService } from 'src/app/service/toast/toast.service';
 
 /**
@@ -16,19 +16,27 @@ export class LocalVideoPlayerService {
   private readonly toastService = inject(ToastService);
 
   /** The item on screen, or NULL while the overlay is closed. */
-  public readonly currentItem = signal<MusicItemDto | null>(null);
+  public readonly currentItem = signal<ItemDto | null>(null);
 
   /** HLS playlist URL of the current item, routed through the backend stream proxy. */
   public readonly sourceUrl = computed<string | null>(() => {
     const item = this.currentItem();
-    return item ? LocalVideoPlayerService.toHlsProxyUrl(item.streamingURL) : null;
+    if (!item) {
+      return null;
+    }
+    // The media server announces the HLS rendition as a resource of its own. Only a server that
+    // does not falls back to deriving the URL from the streaming one.
+    const hlsUrl = item.video?.hlsUrl?.length
+      ? item.video.hlsUrl
+      : LocalVideoPlayerService.toHlsUrl(item.streamingURL);
+    return '/LocalStream/stream?url=' + encodeURIComponent(hlsUrl);
   });
 
-  public static isVideoItem(item: MusicItemDto | null | undefined): boolean {
+  public static isVideoItem(item: ItemDto | null | undefined): boolean {
     return item?.objectClass?.startsWith('object.item.videoItem') === true;
   }
 
-  public open(item: MusicItemDto): void {
+  public open(item: ItemDto): void {
     if (!item?.streamingURL) {
       this.toastService.error(item?.title ?? 'video', 'no stream url');
       return;
@@ -44,15 +52,8 @@ export class LocalVideoPlayerService {
     this.toastService.error(`${this.currentItem()?.title ?? 'video'}: ${message}.`, 'playback failed');
   }
 
-  /**
-   * Turns a media server URL into the HLS variant of the same resource, routed through the proxy.
-   *
-   * UMS picks the delivery format from the renderer profile, and the browse that produced this URL
-   * ran under the control point's profile, not the web player's. The media servlet keys its HLS
-   * branch off the file name, so asking for the HLS rendition means replacing the transcode suffix.
-   */
-  private static toHlsProxyUrl(streamingURL: string): string {
-    const hlsUrl = streamingURL.replace(/_transcoded_to\.[a-z0-9]+$/i, '') + '_transcoded_to.m3u8';
-    return '/LocalStream/stream?url=' + encodeURIComponent(hlsUrl);
+  /** Fallback for a media server that announces no HLS resource: the servlet keys HLS off this suffix. */
+  private static toHlsUrl(streamingURL: string): string {
+    return streamingURL.replace(/_transcoded_to\.[a-z0-9]+$/i, '') + '_transcoded_to.m3u8';
   }
 }

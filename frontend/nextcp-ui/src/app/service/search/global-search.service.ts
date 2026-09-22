@@ -10,7 +10,7 @@ import {
 import {
   SearchResultDto,
   ContainerDto,
-  MusicItemDto,
+  ItemDto,
   SearchRequestDto,
 } from './../dto.d';
 import { Injectable, signal, inject } from '@angular/core';
@@ -194,7 +194,7 @@ export class GlobalSearchService {
   /**
    * A clicked search hit plays right away.
    */
-  musicItemSelected(musicItem: MusicItemDto): void {
+  musicItemSelected(musicItem: ItemDto): void {
     console.debug('music item selected : ' + musicItem.title);
     this.quickSearchPanelVisible = false;
     this.clearSearch();

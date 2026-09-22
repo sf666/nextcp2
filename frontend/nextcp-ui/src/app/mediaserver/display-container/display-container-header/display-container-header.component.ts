@@ -22,7 +22,7 @@ import {
   SEARCH_TYPE_LABEL,
   ShowAllType,
 } from 'src/app/service/content-directory.service';
-import { MusicItemDto } from 'src/app/service/dto';
+import { ItemDto } from 'src/app/service/dto';
 import { GlobalSearchService } from 'src/app/service/search/global-search.service';
 import {
   RATING_LIKED,
@@ -662,7 +662,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   //
   // Accessor
   //
-  get musicTracks(): MusicItemDto[] {
+  get musicTracks(): ItemDto[] {
     return this.contentDirectoryService().musicTracks_();
   }
 
@@ -678,7 +678,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     }
   }
 
-  private calcTotalPlaytimeLong(tracks: MusicItemDto[]): string {
+  private calcTotalPlaytimeLong(tracks: ItemDto[]): string {
     const completeTime = this.getTotalTimeSeconds(tracks);
     if (completeTime) {
       return this.timeDisplayService.convertLongToDateString(completeTime);
@@ -686,7 +686,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     return '';
   }
 
-  private calcTotalPlaytimeShort(tracks: MusicItemDto[]): string {
+  private calcTotalPlaytimeShort(tracks: ItemDto[]): string {
     const completeTime = this.getTotalTimeSeconds(tracks);
     if (completeTime) {
       return this.timeDisplayService.convertLongToDateStringShort(completeTime);
@@ -695,7 +695,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
     }
   }
 
-  private getTotalTimeSeconds(tracks: MusicItemDto[]): number {
+  private getTotalTimeSeconds(tracks: ItemDto[]): number {
     let completeTime: number;
     completeTime = 0;
     if (tracks.length > 0) {

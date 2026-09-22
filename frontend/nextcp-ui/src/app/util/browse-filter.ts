@@ -1,4 +1,4 @@
-import { ContainerDto, MusicItemDto } from 'src/app/service/dto';
+import { ContainerDto, ItemDto } from 'src/app/service/dto';
 import {
   matchesRatingFilter,
   RatingFilter,
@@ -58,11 +58,11 @@ export function filterContainers(
  * to come out of the same function.
  */
 export function filterMusicItems(
-  items: MusicItemDto[] | undefined,
+  items: ItemDto[] | undefined,
   quickSearch: string | undefined,
   genres: string[] | undefined,
   rating: RatingFilter,
-): MusicItemDto[] {
+): ItemDto[] {
   let result = items ?? [];
   if (quickSearch) {
     result = result.filter((item) => matchesTextFilter(item.title, quickSearch));

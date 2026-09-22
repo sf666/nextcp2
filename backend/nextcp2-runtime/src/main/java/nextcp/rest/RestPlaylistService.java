@@ -15,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.GenericBooleanRequest;
 import nextcp.dto.GenericNumberRequest;
-import nextcp.dto.MusicItemDto;
+import nextcp.dto.ItemDto;
 import nextcp.dto.PlayRequestDto;
 import nextcp.dto.PlaylistAddContainerRequest;
 import nextcp.dto.PlaylistState;
@@ -60,7 +60,7 @@ public class RestPlaylistService extends BaseRestService
     }
 
     @PostMapping("/getPlaylistItems")
-    public List<MusicItemDto> getPlaylistItems(@RequestBody String rendererUdn)
+    public List<ItemDto> getPlaylistItems(@RequestBody String rendererUdn)
     {
         MediaRendererDevice device = getMediaRendererByUdn(rendererUdn);
         checkDevice(device);
@@ -165,11 +165,11 @@ public class RestPlaylistService extends BaseRestService
      */
     private ContainerItemDto getSongsToAdd(PlaylistAddContainerRequest req)
     {
-        if (req.musicItemDto != null && !req.musicItemDto.isEmpty())
+        if (req.items != null && !req.items.isEmpty())
         {
             ContainerItemDto items = new ContainerItemDto();
             items.currentContainer = req.containerDto;
-            items.musicItemDto = req.musicItemDto;
+            items.items = req.items;
             return items;
         }
         return getChildElements(req.containerDto.mediaServerUDN, req.containerDto.id);

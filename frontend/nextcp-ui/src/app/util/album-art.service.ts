@@ -3,7 +3,7 @@ import { Injectable, signal } from '@angular/core';
 /**
  * Picks which of the album art variants a view should load.
  *
- * The media server offers the same cover in several sizes (see MusicItemDto.albumArtUrl /
+ * The media server offers the same cover in several sizes (see ItemDto.albumArtUrl /
  * albumArtUrlMedium / albumArtUrlLarge). A grid tile is only ~130-250 CSS px wide, so the small
  * variant is the right one - but a display with a device pixel ratio of 2 or 3 turns those into
  * 260-750 real pixels, which a 160x160 thumbnail cannot fill and visibly upscales. On such screens

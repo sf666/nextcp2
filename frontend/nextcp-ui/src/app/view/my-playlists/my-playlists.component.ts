@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { ScrollLoadHandler } from './../../mediaserver/display-container/defs.d';
 import { MyPlaylistService } from './my-playlist.service';
-import { ContainerDto, MusicItemDto } from './../../service/dto.d';
+import { ContainerDto, ItemDto } from './../../service/dto.d';
 import { DeviceService } from 'src/app/service/device.service';
 import { LayoutService } from './../../service/layout.service';
 import {
@@ -84,7 +84,7 @@ export class MyPlaylistsComponent implements OnInit {
   //
   containerSelected(event: ContainerDto) {}
 
-  itemDeleted(event: MusicItemDto) {
+  itemDeleted(event: ItemDto) {
     this.contentDirectoryService.refreshCurrentContainer();
   }
 
@@ -115,11 +115,11 @@ export class MyPlaylistsComponent implements OnInit {
     return this.contentDirectoryService.currentContainerList().currentContainer;
   }
 
-  musicTracks(): MusicItemDto[] {
+  musicTracks(): ItemDto[] {
     return this.contentDirectoryService.musicTracks_();
   }
 
-  otherItems_(): MusicItemDto[] {
+  otherItems_(): ItemDto[] {
     return this.contentDirectoryService.otherItems_();
   }
 

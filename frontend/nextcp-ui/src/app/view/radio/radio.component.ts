@@ -2,7 +2,7 @@ import { DeviceService } from 'src/app/service/device.service';
 import { BackgroundImageService } from './../../util/background-image.service';
 import { RadioService } from './../../service/radio.service';
 import { TransportService } from '../../service/transport.service';
-import { RadioStation, MusicItemDto } from './../../service/dto.d';
+import { RadioStation, ItemDto } from './../../service/dto.d';
 import { ConfigurationService } from './../../service/configuration.service';
 import {
   ChangeDetectionStrategy,
@@ -40,7 +40,7 @@ export class RadioComponent implements OnInit {
     this.transportService.playRadio(radio);
   }
 
-  playOh(radioStation: MusicItemDto) {
+  playOh(radioStation: ItemDto) {
     this.backgroundImageService.setBackgroundImageMainScreen(
       radioStation.albumArtUrl,
     );

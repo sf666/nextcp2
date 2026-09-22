@@ -1,4 +1,4 @@
-import { ContainerDto, SearchResultDto, ContainerItemDto, SearchRequestDto, MusicItemDto, AudioFormat, MusicBrainzId, TrackTimeDto, TrackInfoDto, SystemInformationDto, MusicItemIdDto, InputSourceDto, TransportServiceStateDto, DeviceDriverState, UpnpAvTransportState, MediaRendererDto, AudioAddictConfig, ServerConfigDto, RendererConfigDto, DiscogsId } from './../service/dto.d';
+import { ContainerDto, SearchResultDto, ContainerItemDto, SearchRequestDto, ItemDto, AudioFormat, MusicBrainzId, TrackTimeDto, TrackInfoDto, SystemInformationDto, MusicItemIdDto, InputSourceDto, TransportServiceStateDto, DeviceDriverState, UpnpAvTransportState, MediaRendererDto, AudioAddictConfig, ServerConfigDto, RendererConfigDto, DiscogsId } from './../service/dto.d';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -33,13 +33,13 @@ export class DtoGeneratorService {
       AbsoluteCounterPosition: 0,
       AbsoluteTimePosition: '',
       AVTransportURI: '',
-      AVTransportURIMetaData: this.emptyMusicItemDto(),
+      AVTransportURIMetaData: this.emptyItemDto(),
       CurrentMediaDuration: '',
       CurrentPlayMode: '',
       CurrentRecordQualityMode: '',
       CurrentTrack: 0,
       CurrentTrackDuration: '',
-      CurrentTrackMetaData: this.emptyMusicItemDto(),
+      CurrentTrackMetaData: this.emptyItemDto(),
       CurrentTrackURI: '',
       CurrentTransportActions: '',
       mediaRenderer: this.emptyMediaRendererDto(),
@@ -71,7 +71,7 @@ export class DtoGeneratorService {
     }
   }
 
-  public emptyMusicItemDto(): MusicItemDto {
+  public emptyItemDto(): ItemDto {
     return {
       album: '',
       albumArtUrl: '',
@@ -166,7 +166,7 @@ export class DtoGeneratorService {
       currentContainer: this.generateEmptyContainerDto(),
       containerDto: [],
       minimServerSupportTags: [],
-      musicItemDto: [],
+      items: [],
       albumDto: [],
       totalMatches: 0,
       resourceId: '',
@@ -197,7 +197,7 @@ export class DtoGeneratorService {
     }
   }
 
-  emptyMusicItem(): MusicItemDto {
+  emptyMusicItem(): ItemDto {
     return {
       album: '',
       albumArtUrl: '/assets/images/folder-bg.webp',

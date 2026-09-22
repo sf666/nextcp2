@@ -1,7 +1,7 @@
 import { DeviceService } from 'src/app/service/device.service';
 import { DefaultPlaylistService } from './../../mediaserver/popup/defaut-playlists/default-playlist.service';
 import { LayoutService } from './../../service/layout.service';
-import { MusicItemDto } from './../../service/dto.d';
+import { ItemDto } from './../../service/dto.d';
 import { RendererService } from './../../service/renderer.service';
 import {
   ChangeDetectionStrategy,
@@ -123,7 +123,7 @@ export class MediarendererComponent implements OnInit {
     return this.rendererService.currentSongTitle();
   }
 
-  public getCurrentTrack(): MusicItemDto {
+  public getCurrentTrack(): ItemDto {
     return this.rendererService.currentTrack();
   }
 

@@ -9,11 +9,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Template: javadataclass.ftl
  *   
  */
-public class MusicItemDto
+public class ItemDto
 {
 
     public String mediaServerUDN;
     public String streamingURL;
+    @nextcp.handcoded.Nullable
+    public VideoItemDto video;
     public String objectID;
     public String objectClass;
     public String parentId;
@@ -48,14 +50,15 @@ public class MusicItemDto
     @nextcp.handcoded.Nullable
     public Integer audioAddictPlaylistId;
 
-    public MusicItemDto()
+    public ItemDto()
     {
     }
 
-    public MusicItemDto(String mediaServerUDN, String streamingURL, String objectID, String objectClass, String parentId, String refId, MusicItemIdDto songId, String resourceId, String conductor, String composer, String currentTrackMetadata, String creator, String title, String artistName, String numberOfThisDisc, String originalTrackNumber, String album, String date, AudioFormat audioFormat, String albumArtUrl, String albumArtUrlLarge, String albumArtUrlMedium, String genre, Integer rating, MusicBrainzId musicBrainzId, DiscogsId discogsId, Integer audioAddictChannelId, String audioAddictNetwork, Integer audioAddictPlaylistId)
+    public ItemDto(String mediaServerUDN, String streamingURL, VideoItemDto video, String objectID, String objectClass, String parentId, String refId, MusicItemIdDto songId, String resourceId, String conductor, String composer, String currentTrackMetadata, String creator, String title, String artistName, String numberOfThisDisc, String originalTrackNumber, String album, String date, AudioFormat audioFormat, String albumArtUrl, String albumArtUrlLarge, String albumArtUrlMedium, String genre, Integer rating, MusicBrainzId musicBrainzId, DiscogsId discogsId, Integer audioAddictChannelId, String audioAddictNetwork, Integer audioAddictPlaylistId)
     {
         this.mediaServerUDN = mediaServerUDN;
         this.streamingURL = streamingURL;
+        this.video = video;
         this.objectID = objectID;
         this.objectClass = objectClass;
         this.parentId = parentId;
@@ -89,9 +92,10 @@ public class MusicItemDto
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("MusicItemDto [");
+        sb.append("ItemDto [");
         sb.append("mediaServerUDN=").append(this.mediaServerUDN).append(", ");
         sb.append("streamingURL=").append(this.streamingURL).append(", ");
+        sb.append("video=").append(this.video).append(", ");
         sb.append("objectID=").append(this.objectID).append(", ");
         sb.append("objectClass=").append(this.objectClass).append(", ");
         sb.append("parentId=").append(this.parentId).append(", ");

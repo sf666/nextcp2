@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import nextcp.domainmodel.device.services.IRadioService;
 import nextcp.domainmodel.device.services.ITransport;
-import nextcp.dto.MusicItemDto;
+import nextcp.dto.ItemDto;
 import nextcp.dto.TransportServiceStateDto;
 import nextcp.rest.DtoBuilder;
 import nextcp.upnp.GenActionException;
@@ -70,7 +70,7 @@ public class OhRadioBridge implements IRadioService, ITransport
     }
 
     @Override
-    public void play(MusicItemDto radioStation)
+    public void play(ItemDto radioStation)
     {
         SetIdInput inp = new SetIdInput();
         inp.Value = Long.parseLong(radioStation.objectID);
@@ -306,7 +306,7 @@ public class OhRadioBridge implements IRadioService, ITransport
      * 
      * @return
      */
-    public List<MusicItemDto> getRadioStations()
+    public List<ItemDto> getRadioStations()
     {
     	log.info("Requesting radio stations ... ");
         byte[] ba = radioService.idArray().Array;

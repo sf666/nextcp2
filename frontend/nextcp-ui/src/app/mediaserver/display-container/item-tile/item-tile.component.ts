@@ -7,7 +7,7 @@ import {
   inject,
 } from '@angular/core';
 import { ContentDirectoryService } from 'src/app/service/content-directory.service';
-import { ContainerDto, MusicItemDto } from 'src/app/service/dto';
+import { ContainerDto, ItemDto } from 'src/app/service/dto';
 import { SongOptionsServiceService } from '../../popup/song-options/song-options-service.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
@@ -43,9 +43,9 @@ export class ItemTileComponent {
   // When true, an additional "Genre" column (upnp:genre) is shown in list view.
   showGenre = input<boolean>(false);
 
-  playItemClicked = output<MusicItemDto>();
-  addItemToPlaylistClicked = output<MusicItemDto>();
-  addItemToPlaylistNextClicked = output<MusicItemDto>();
+  playItemClicked = output<ItemDto>();
+  addItemToPlaylistClicked = output<ItemDto>();
+  addItemToPlaylistNextClicked = output<ItemDto>();
 
   // some calculated constants
   allTracksSameDisc = computed(() =>
@@ -70,20 +70,20 @@ export class ItemTileComponent {
 
   lastDiscLabel = '';
 
-  playItem(item: MusicItemDto) {
+  playItem(item: ItemDto) {
     console.log('playitem clicked : ' + item.title);
     this.playItemClicked.emit(item);
   }
 
-  addItemToPlaylist(item: MusicItemDto) {
+  addItemToPlaylist(item: ItemDto) {
     this.addItemToPlaylistClicked.emit(item);
   }
 
-  addItemToPlaylistNext(item: MusicItemDto) {
+  addItemToPlaylistNext(item: ItemDto) {
     this.addItemToPlaylistNextClicked.emit(item);
   }
 
-  private checkAllTracksSameDisc(data: MusicItemDto[]): boolean {
+  private checkAllTracksSameDisc(data: ItemDto[]): boolean {
     if (data.length > 0) {
       const firstTrackDisc = data[0]?.numberOfThisDisc;
       const sameDisc = !data?.find(
@@ -96,7 +96,7 @@ export class ItemTileComponent {
     }
   }
 
-  private checkAllTracksSameAlbum(data: MusicItemDto[]): boolean {
+  private checkAllTracksSameAlbum(data: ItemDto[]): boolean {
     if (this.contentDirectoryService().albumIdExists()) {
       console.log(
         '[item-tile] : album identified by musicBrainz or discogs id, assuming all tracks have same album',
@@ -129,7 +129,7 @@ export class ItemTileComponent {
   // Filtering lives in browse-filter.ts because the header's play / shuffle /
   // add-to-queue actions have to narrow the listing exactly the same way — what
   // reaches the renderer must be what this list shows.
-  private filteredMusicTracks(data: MusicItemDto[]): MusicItemDto[] {
+  private filteredMusicTracks(data: ItemDto[]): ItemDto[] {
     return filterMusicItems(
       data,
       this.quickSearchString(),
@@ -160,11 +160,11 @@ export class ItemTileComponent {
     return `${firstAndTitle} minmax(150px, 1fr)${genre} 128px 80px 48px`;
   }
 
-  isBroadcast(item: MusicItemDto): boolean {
+  isBroadcast(item: ItemDto): boolean {
     return isBroadcastItem(item);
   }
 
-  artistLabel(item: MusicItemDto): string {
+  artistLabel(item: ItemDto): string {
     if (item.artistName) {
       return item.artistName;
     }
@@ -174,11 +174,11 @@ export class ItemTileComponent {
     return '';
   }
 
-  isSubstituteArtist(item: MusicItemDto): boolean {
+  isSubstituteArtist(item: ItemDto): boolean {
     return !item.artistName && this.artistLabel(item).length > 0;
   }
 
-  getDuration(item: MusicItemDto): string {
+  getDuration(item: ItemDto): string {
     if (item.audioFormat?.durationInSeconds) {
       return this.timeDisplayService.convertLongToDateStringShort(
         item.audioFormat.durationInSeconds,
@@ -188,7 +188,7 @@ export class ItemTileComponent {
     }
   }
 
-  showSongPopup(event: MouseEvent, item: MusicItemDto): void {
+  showSongPopup(event: MouseEvent, item: ItemDto): void {
     this.songOptionsServiceService
       .openOptionsDialog(event, item, this.currentContainer)
       .subscribe((result) => {
@@ -222,7 +222,7 @@ export class ItemTileComponent {
     return this.dtoGeneratorService.generateEmptyContainerDto();
   }
 
-  public selectedRowClass(musicItemDto: MusicItemDto): string {
+  public selectedRowClass(musicItemDto: ItemDto): string {
     if (this.isPlayingItem(musicItemDto)) {
       return 'selectRow';
     }
@@ -235,7 +235,7 @@ export class ItemTileComponent {
   // never fires for the local "This device" browser player, so the indicator had
   // stopped appearing for local playback. Reading the signal here keeps the row
   // in sync for both UPnP renderers and the local player.
-  public isPlayingItem(musicItemDto: MusicItemDto): boolean {
+  public isPlayingItem(musicItemDto: ItemDto): boolean {
     if (!musicItemDto) {
       return false;
     }
@@ -258,7 +258,7 @@ export class ItemTileComponent {
   // Audio items must be already sorted.
   // TODO : sort items in UI
 
-  getDiscLabel(item: MusicItemDto): string {
+  getDiscLabel(item: ItemDto): string {
     if (item.numberOfThisDisc !== this.lastDiscLabel) {
       this.lastDiscLabel = item.numberOfThisDisc;
       return `Disk ${item.numberOfThisDisc}`;
@@ -266,7 +266,7 @@ export class ItemTileComponent {
     return '';
   }
 
-  newDiscLabel(item: MusicItemDto): boolean {
+  newDiscLabel(item: ItemDto): boolean {
     if (item.numberOfThisDisc !== this.lastDiscLabel) {
       return true;
     }

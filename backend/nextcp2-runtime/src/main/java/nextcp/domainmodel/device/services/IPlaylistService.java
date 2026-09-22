@@ -3,7 +3,7 @@ package nextcp.domainmodel.device.services;
 import java.util.List;
 
 import nextcp.dto.ContainerItemDto;
-import nextcp.dto.MusicItemDto;
+import nextcp.dto.ItemDto;
 import nextcp.dto.PlaylistState;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.InsertInput;
 
@@ -51,7 +51,7 @@ public interface IPlaylistService
 
     PlaylistState getState();
 
-    List<MusicItemDto> getPlaylistItems();
+    List<ItemDto> getPlaylistItems();
 
     void insertContainer(ContainerItemDto items);
 

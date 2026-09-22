@@ -13,7 +13,7 @@ public class SearchResultDto
 {
 
     public String parentID;
-    public List<MusicItemDto> musicItems;
+    public List<ItemDto> musicItems;
     public List<ContainerDto> albumItems;
     public List<ContainerDto> artistItems;
     public List<ContainerDto> playlistItems;
@@ -26,7 +26,7 @@ public class SearchResultDto
     {
     }
 
-    public SearchResultDto(String parentID, List<MusicItemDto> musicItems, List<ContainerDto> albumItems, List<ContainerDto> artistItems, List<ContainerDto> playlistItems, Integer musicItemsTotal, Integer albumItemsTotal, Integer artistItemsTotal, Integer playlistItemsTotal)
+    public SearchResultDto(String parentID, List<ItemDto> musicItems, List<ContainerDto> albumItems, List<ContainerDto> artistItems, List<ContainerDto> playlistItems, Integer musicItemsTotal, Integer albumItemsTotal, Integer artistItemsTotal, Integer playlistItemsTotal)
     {
         this.parentID = parentID;
         this.musicItems = musicItems;

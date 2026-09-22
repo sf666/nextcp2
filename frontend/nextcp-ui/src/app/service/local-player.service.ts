@@ -1,5 +1,5 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { MusicItemDto } from './dto';
+import { ItemDto } from './dto';
 import { isBroadcastItem } from 'src/app/util/broadcast-item';
 import { ConfigurationService } from './configuration.service';
 import { PersistenceService } from './persistence/persistence.service';
@@ -8,8 +8,8 @@ import { WebStreamNowPlayingService } from './web-stream-now-playing.service';
 
 /** Snapshot persisted to localStorage so the queue and playback position survive a page reload. */
 interface PersistedPlayerState {
-  sourceQueue: MusicItemDto[];
-  queue: MusicItemDto[];
+  sourceQueue: ItemDto[];
+  queue: ItemDto[];
   currentIndex: number;
   /** Playback position in seconds; always 0 for live streams, which cannot be resumed at an offset. */
   position: number;
@@ -31,8 +31,8 @@ interface PersistedPlayerState {
 export class LocalPlayerService {
   private readonly audio = new Audio();
   // Original (unshuffled) order; the active playback order is derived from it.
-  private sourceQueue: MusicItemDto[] = [];
-  private queue: MusicItemDto[] = [];
+  private sourceQueue: ItemDto[] = [];
+  private queue: ItemDto[] = [];
   private currentIndex = -1;
 
   private readonly configurationService = inject(ConfigurationService);
@@ -80,7 +80,7 @@ export class LocalPlayerService {
   // Playback state, consumed by RendererService so the footer now-playing/transport reflects the
   // local browser player when the "This Device" renderer is selected.
   public readonly playing = signal<boolean>(false);
-  public readonly currentItem = signal<MusicItemDto | null>(null);
+  public readonly currentItem = signal<ItemDto | null>(null);
   public readonly currentTime = signal<number>(0);
   public readonly duration = signal<number>(0);
   // When true, playback restarts from the first queued track after the last one finishes.
@@ -89,7 +89,7 @@ export class LocalPlayerService {
   public readonly shuffle = signal<boolean>(false);
   // The active playback order and the position within it, mirrored as signals so the player queue
   // view can render the browser queue the same way it renders a renderer's OpenHome playlist.
-  public readonly queueItems = signal<MusicItemDto[]>([]);
+  public readonly queueItems = signal<ItemDto[]>([]);
   public readonly activeIndex = signal<number>(-1);
   // True while an endless / live source is loaded (web radio). Consumed by RendererService so the
   // footer knows there is no position to seek to.
@@ -156,12 +156,12 @@ export class LocalPlayerService {
   }
 
   /** Plays a single track (replaces the queue with just this item). */
-  public play(item: MusicItemDto): void {
+  public play(item: ItemDto): void {
     this.playQueue(item ? [item] : [], false);
   }
 
   /** Loads the given tracks as the queue and starts playback, optionally shuffled. */
-  public playQueue(items: MusicItemDto[], shuffle: boolean): void {
+  public playQueue(items: ItemDto[], shuffle: boolean): void {
     const playable = (items ?? []).filter((item) => !!item && !!item.streamingURL);
     if (playable.length === 0) {
       this.reportNothingPlayable(items);
@@ -175,7 +175,7 @@ export class LocalPlayerService {
   }
 
   /** Queues the given tracks (shown order) and starts at startItem, so the rest keeps playing after it. */
-  public playQueueFrom(items: MusicItemDto[], startItem: MusicItemDto): void {
+  public playQueueFrom(items: ItemDto[], startItem: ItemDto): void {
     const playable = (items ?? []).filter((item) => !!item && !!item.streamingURL);
     if (playable.length === 0 || !startItem) {
       this.play(startItem);
@@ -202,7 +202,7 @@ export class LocalPlayerService {
    * renderer's Playlist::Insert. Playback only starts when the queue was empty, so "add" never
    * hijacks the current track.
    */
-  public enqueue(items: MusicItemDto[]): void {
+  public enqueue(items: ItemDto[]): void {
     const playable = (items ?? []).filter((item) => !!item && !!item.streamingURL);
     if (playable.length === 0) {
       this.reportNothingPlayable(items);
@@ -227,7 +227,7 @@ export class LocalPlayerService {
    * Puts tracks directly after the one playing (Playlist::InsertNext). Falls back to appending
    * while nothing is loaded.
    */
-  public enqueueNext(items: MusicItemDto[]): void {
+  public enqueueNext(items: ItemDto[]): void {
     if (this.currentIndex < 0 || this.queue.length === 0) {
       this.enqueue(items);
       return;
@@ -310,7 +310,7 @@ export class LocalPlayerService {
    * did nothing at all. A missing stream URL means the media server offered this entry without a
    * usable resource - typical for web radio entries whose content format it does not declare.
    */
-  private reportNothingPlayable(items: MusicItemDto[]): void {
+  private reportNothingPlayable(items: ItemDto[]): void {
     const requested = (items ?? []).find((item) => !!item);
     console.warn('[local-player] nothing playable in request', items);
     this.toastService.error(
@@ -408,7 +408,7 @@ export class LocalPlayerService {
     }
   }
 
-  private describe(item: MusicItemDto | null | undefined): string {
+  private describe(item: ItemDto | null | undefined): string {
     return item?.title ? `"${item.title}"` : 'This entry';
   }
 
@@ -701,7 +701,7 @@ export class LocalPlayerService {
    * stored offset kills playback altogether, because its seekable range is empty. Also treats media
    * without a known length as non-seekable, which is the safe assumption.
    */
-  private isLiveStream(item: MusicItemDto | null | undefined): boolean {
+  private isLiveStream(item: ItemDto | null | undefined): boolean {
     if (!item) {
       return true;
     }
@@ -876,7 +876,7 @@ export class LocalPlayerService {
   }
 
   /** Fisher-Yates shuffle, returns a new array. */
-  private shuffleArray(items: MusicItemDto[]): MusicItemDto[] {
+  private shuffleArray(items: ItemDto[]): ItemDto[] {
     const arr = items.slice();
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));

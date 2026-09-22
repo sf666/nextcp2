@@ -3,7 +3,7 @@ import { HttpService } from './http.service';
 import { DeviceService } from './device.service';
 import { ServerFeature } from './server-feature';
 import { SseService } from './sse/sse.service';
-import { MusicItemDto, TrackInfoDto, WebStreamNowPlayingDto } from './dto.d';
+import { ItemDto, TrackInfoDto, WebStreamNowPlayingDto } from './dto.d';
 
 /**
  * What the continuous streams of the media server are playing right now, kept by objectID.
@@ -42,7 +42,7 @@ export class WebStreamNowPlayingService {
     if (!track || !live || !title) {
       return info;
     }
-    const currentTrack: MusicItemDto = {
+    const currentTrack: ItemDto = {
       ...track,
       album: track.title,
       title,
@@ -58,7 +58,7 @@ export class WebStreamNowPlayingService {
    * middle of a track - after a reload, or when a renderer is selected while it already runs -
    * would show the station name until the next track begins.
    */
-  public ensureKnown(track: MusicItemDto | null | undefined): void {
+  public ensureKnown(track: ItemDto | null | undefined): void {
     // Nothing here is worth breaking a caller for - this only fills in a title.
     try {
       const objectId = track?.objectID;

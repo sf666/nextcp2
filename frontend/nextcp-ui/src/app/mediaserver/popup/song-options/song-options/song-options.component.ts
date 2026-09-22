@@ -3,7 +3,7 @@ import { SongOptionsEvent } from './../song-options-event.d';
 import { PopupService } from './../../../../util/popup.service';
 import { DownloadService } from './../../../../util/download.service';
 import {
-  MusicItemDto,
+  ItemDto,
   ContainerDto,
   MusicItemIdDto,
 } from './../../../../service/dto.d';
@@ -61,7 +61,7 @@ export class SongOptionsComponent implements OnInit {
   musicLibraryService = inject(MusicLibraryService);
   private popupService = inject(PopupService);
 
-  private item: MusicItemDto;
+  private item: ItemDto;
   private readonly _matDialogRef: MatDialogRef<SongOptionsComponent>;
   private readonly triggerElementRef: ElementRef;
   private playlistDialogOpen: boolean;
@@ -79,7 +79,7 @@ export class SongOptionsComponent implements OnInit {
       inject<MatDialogRef<SongOptionsComponent>>(MatDialogRef);
     const data = inject<{
       trigger: ElementRef;
-      item: MusicItemDto;
+      item: ItemDto;
       event: PointerEvent;
       viewContainerRef: ViewContainerRef;
       currentContainer: ContainerDto;
@@ -231,7 +231,7 @@ export class SongOptionsComponent implements OnInit {
     this.closeThisPopup({ type: 'last', data: this.item });
   }
 
-  get selectedMusicItem(): MusicItemDto {
+  get selectedMusicItem(): ItemDto {
     return this.item;
   }
 

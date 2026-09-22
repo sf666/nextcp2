@@ -1,4 +1,4 @@
-import { MusicItemDto } from './../service/dto.d';
+import { ItemDto } from './../service/dto.d';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -8,7 +8,7 @@ export class TrackQualityService {
 
   constructor() { }
 
-  public isHifi(song: MusicItemDto) : boolean {
+  public isHifi(song: ItemDto) : boolean {
     let bps = this.getBitsPerSample(song);
     let sFreq = this.getSampleFreq(song);
     let bitrate = this.getBitrate(song);
@@ -25,7 +25,7 @@ export class TrackQualityService {
     return false;
   }
 
-  public getHifiString(song: MusicItemDto) : string | undefined {
+  public getHifiString(song: ItemDto) : string | undefined {
     let bps = this.getBitsPerSample(song);
     let sFreq = this.getSampleFreq(song);
     if (!this.isHifi) {
@@ -40,7 +40,7 @@ export class TrackQualityService {
     return undefined;
   }
 
-  public getBitrate(song: MusicItemDto): number {
+  public getBitrate(song: ItemDto): number {
     if (song?.audioFormat?.bitrate) {
       return song?.audioFormat?.bitrate;
     } else {
@@ -48,7 +48,7 @@ export class TrackQualityService {
     }
   }
 
-  public getBitsPerSample(song: MusicItemDto): number {
+  public getBitsPerSample(song: ItemDto): number {
     if (song?.audioFormat?.bitsPerSample) {
       return song?.audioFormat?.bitsPerSample
     } else {
@@ -56,7 +56,7 @@ export class TrackQualityService {
     }
   }
 
-  public getSampleFreq(song: MusicItemDto): number {
+  public getSampleFreq(song: ItemDto): number {
     if (song?.audioFormat?.sampleFrequency) {
       return song?.audioFormat?.sampleFrequency
     } else {

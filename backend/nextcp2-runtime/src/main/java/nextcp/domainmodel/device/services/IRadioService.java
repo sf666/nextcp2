@@ -2,14 +2,14 @@ package nextcp.domainmodel.device.services;
 
 import java.util.List;
 
-import nextcp.dto.MusicItemDto;
+import nextcp.dto.ItemDto;
 
 public interface IRadioService
 {
 
-    List<MusicItemDto> getRadioStations();
+    List<ItemDto> getRadioStations();
 
-    void play(MusicItemDto radioStation);
+    void play(ItemDto radioStation);
 
     /**
      * Plays an arbitrary stream URL (not a renderer preset) via the Radio service, using

@@ -13,13 +13,13 @@ public class PlayOpenHomeRadioDto
 {
 
     public MediaRendererDto mediaRendererDto;
-    public MusicItemDto radioStation;
+    public ItemDto radioStation;
 
     public PlayOpenHomeRadioDto()
     {
     }
 
-    public PlayOpenHomeRadioDto(MediaRendererDto mediaRendererDto, MusicItemDto radioStation)
+    public PlayOpenHomeRadioDto(MediaRendererDto mediaRendererDto, ItemDto radioStation)
     {
         this.mediaRendererDto = mediaRendererDto;
         this.radioStation = radioStation;

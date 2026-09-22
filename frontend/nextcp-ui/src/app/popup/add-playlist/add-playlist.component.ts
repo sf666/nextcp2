@@ -1,6 +1,6 @@
 import { ContentDirectoryService } from 'src/app/service/content-directory.service';
 import {
-  MusicItemDto,
+  ItemDto,
   ServerPlaylistDto,
   SearchResultDto,
   ContainerDto,
@@ -63,8 +63,8 @@ export class AddPlaylistComponent {
   /** Number of entries per playlist id, filled while the dialog is open. */
   private playlistCounts = signal<Record<string, number>>({});
   playlistFilter = model<string>('');
-  musicItemToAdd = signal<MusicItemDto>(
-    this.dtoGeneratorService.emptyMusicItemDto(),
+  musicItemToAdd = signal<ItemDto>(
+    this.dtoGeneratorService.emptyItemDto(),
   );
   newPlaylistName = model<string>('');
   playlistMode = signal<PlaylistMode>(PlaylistMode.Add);
@@ -117,7 +117,7 @@ export class AddPlaylistComponent {
 
   constructor() {
     const data = inject<{
-      item: MusicItemDto | undefined;
+      item: ItemDto | undefined;
       container: ContainerDto;
     }>(MAT_DIALOG_DATA);
     const deviceService = inject(DeviceService);

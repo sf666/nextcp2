@@ -16,7 +16,7 @@ public class ContainerItemDto
     public ContainerDto currentContainer;
     public List<ContainerDto> containerDto;
     public List<ContainerDto> albumDto;
-    public List<MusicItemDto> musicItemDto;
+    public List<ItemDto> items;
     public List<ContainerDto> minimServerSupportTags;
     public MusicAlbumIds allTracksSameAlbumIds;
     public Long totalMatches;
@@ -26,13 +26,13 @@ public class ContainerItemDto
     {
     }
 
-    public ContainerItemDto(String parentFolderTitle, ContainerDto currentContainer, List<ContainerDto> containerDto, List<ContainerDto> albumDto, List<MusicItemDto> musicItemDto, List<ContainerDto> minimServerSupportTags, MusicAlbumIds allTracksSameAlbumIds, Long totalMatches, String resourceId)
+    public ContainerItemDto(String parentFolderTitle, ContainerDto currentContainer, List<ContainerDto> containerDto, List<ContainerDto> albumDto, List<ItemDto> items, List<ContainerDto> minimServerSupportTags, MusicAlbumIds allTracksSameAlbumIds, Long totalMatches, String resourceId)
     {
         this.parentFolderTitle = parentFolderTitle;
         this.currentContainer = currentContainer;
         this.containerDto = containerDto;
         this.albumDto = albumDto;
-        this.musicItemDto = musicItemDto;
+        this.items = items;
         this.minimServerSupportTags = minimServerSupportTags;
         this.allTracksSameAlbumIds = allTracksSameAlbumIds;
         this.totalMatches = totalMatches;
@@ -48,7 +48,7 @@ public class ContainerItemDto
         sb.append("currentContainer=").append(this.currentContainer).append(", ");
         sb.append("containerDto=").append(this.containerDto).append(", ");
         sb.append("albumDto=").append(this.albumDto).append(", ");
-        sb.append("musicItemDto=").append(this.musicItemDto).append(", ");
+        sb.append("items=").append(this.items).append(", ");
         sb.append("minimServerSupportTags=").append(this.minimServerSupportTags).append(", ");
         sb.append("allTracksSameAlbumIds=").append(this.allTracksSameAlbumIds).append(", ");
         sb.append("totalMatches=").append(this.totalMatches).append(", ");

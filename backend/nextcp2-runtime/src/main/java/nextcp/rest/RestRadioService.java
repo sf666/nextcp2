@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import nextcp.dto.Config;
 import nextcp.dto.MediaRendererDto;
-import nextcp.dto.MusicItemDto;
+import nextcp.dto.ItemDto;
 import nextcp.dto.PlayOpenHomeRadioDto;
 import nextcp.dto.PlayRequestDto;
 import nextcp.dto.RadioStation;
@@ -42,13 +42,13 @@ public class RestRadioService extends BaseRestService
     }
 
     @PostMapping("/deviceRadioStations")
-    public List<MusicItemDto> getRadioStation(@RequestBody MediaRendererDto mediaRenderer)
+    public List<ItemDto> getRadioStation(@RequestBody MediaRendererDto mediaRenderer)
     {
     	log.info("entering deviceRadioStations");
         MediaRendererDevice device = getMediaRendererByUdn(mediaRenderer.udn);
         if (device.hasRadioService())
         {
-        	List<MusicItemDto> radioStationList = device.getRadioServiceBridge().getRadioStations();
+        	List<ItemDto> radioStationList = device.getRadioServiceBridge().getRadioStations();
         	log.info("radioStationList size {}", radioStationList.size());
             return radioStationList;
         }

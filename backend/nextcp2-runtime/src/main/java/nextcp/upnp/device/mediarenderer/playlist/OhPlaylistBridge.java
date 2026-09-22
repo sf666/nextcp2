@@ -16,7 +16,7 @@ import org.w3c.dom.Node;
 import nextcp.domainmodel.device.services.IPlaylistService;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MusicBrainzId;
-import nextcp.dto.MusicItemDto;
+import nextcp.dto.ItemDto;
 import nextcp.dto.PlaylistState;
 import nextcp.dto.TransportServiceStateDto;
 import nextcp.rest.DtoBuilder;
@@ -100,19 +100,19 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
     }
 
     @Override
-    public List<MusicItemDto> getPlaylistItems()
+    public List<ItemDto> getPlaylistItems()
     {
         byte[] ba = playlistService.idArray().Array;
         return convertIdArrayToMusicItemList(ba);
     }
 
-    public List<MusicItemDto> convertIdArrayToMusicItemList(byte[] ba)
+    public List<ItemDto> convertIdArrayToMusicItemList(byte[] ba)
     {
         this.playlistIds = ohUtil.convertUintByteArrayToLong(ba);
         ReadListOutput tracks = readList(ohUtil.makeStringList(this.playlistIds));
-        List<MusicItemDto> musicList = ohUtil.convertToMediaItemDto(tracks.TrackList, "TrackList");
+        List<ItemDto> musicList = ohUtil.convertToMediaItemDto(tracks.TrackList, "TrackList");
         playlistUrls.clear();
-        for (MusicItemDto musicItemDto : musicList)
+        for (ItemDto musicItemDto : musicList)
         {
             playlistUrls.add(musicItemDto.streamingURL);
 			log.debug("[convertIdArrayToMusicItemList] {} " , musicItemDto.title);
@@ -305,9 +305,9 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
         playlistService.previous();
     }
 
-    public MusicItemDto extractMusicItem(Node node)
+    public ItemDto extractMusicItem(Node node)
     {
-        MusicItemDto dto = new MusicItemDto();
+        ItemDto dto = new ItemDto();
         dto.musicBrainzId = new MusicBrainzId();
         dto.objectID = extractValue("Id", node);
         dto.streamingURL = extractValue("Uri", node);
@@ -340,7 +340,7 @@ public class OhPlaylistBridge extends PlaylistServiceEventListenerImpl implement
             int sumInsert = 0;
             Long lastid = getLastSongId();
 
-            for (MusicItemDto music : items.musicItemDto)
+            for (ItemDto music : items.items)
             {
                 InsertInput insertInput = new InsertInput();
                 insertInput.Metadata = music.currentTrackMetadata;

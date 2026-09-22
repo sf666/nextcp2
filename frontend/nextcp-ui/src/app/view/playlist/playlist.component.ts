@@ -2,7 +2,7 @@ import { CdsBrowsePathService } from './../../util/cds-browse-path.service';
 import { BackgroundImageService } from './../../util/background-image.service';
 import { SseService } from './../../service/sse/sse.service';
 import { DeviceService } from './../../service/device.service';
-import { MusicItemDto } from './../../service/dto.d';
+import { ItemDto } from './../../service/dto.d';
 import { PlaylistService } from '../../service/playlist.service';
 import {
   ChangeDetectionStrategy,
@@ -59,7 +59,7 @@ export class PlaylistComponent implements OnInit {
     );
   }
 
-  isActive(item: MusicItemDto, index: number): boolean {
+  isActive(item: ItemDto, index: number): boolean {
     return this.playlistService.isActiveEntry(item, index);
   }
 
@@ -73,7 +73,7 @@ export class PlaylistComponent implements OnInit {
    * Stops the click here: the row itself starts playback, and removing a track must not also start
    * the one that slid into its place.
    */
-  remove(event: Event, item: MusicItemDto, index: number): void {
+  remove(event: Event, item: ItemDto, index: number): void {
     event.stopPropagation();
     this.playlistService.removeEntry(item, index);
   }
@@ -84,7 +84,7 @@ export class PlaylistComponent implements OnInit {
    * UPnP reports a full clock with milliseconds ("0:03:32.000"), which is precision nobody queues
    * music by - and six glyphs of it are always the same three characters.
    */
-  trackLength(item: MusicItemDto): string {
+  trackLength(item: ItemDto): string {
     const seconds = item.audioFormat?.durationInSeconds ?? 0;
     if (seconds <= 0) {
       return '';

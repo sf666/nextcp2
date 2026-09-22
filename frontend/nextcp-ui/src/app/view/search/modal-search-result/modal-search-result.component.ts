@@ -5,7 +5,7 @@ import { ContentDirectoryService } from './../../../service/content-directory.se
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { QualityBadgeComponent } from '../../../util/comp/quality-badge/quality-badge.component';
 import { SongOptionsServiceService } from 'src/app/mediaserver/popup/song-options/song-options-service.service';
-import { MusicItemDto } from 'src/app/service/dto';
+import { ItemDto } from 'src/app/service/dto';
 
 @Component({
   selector: 'modal-search-result',
@@ -31,7 +31,7 @@ export class ModalSearchResultComponent {
     return this.gss;
   }
 
-  showSongPopup(event: MouseEvent, item: MusicItemDto): void {
+  showSongPopup(event: MouseEvent, item: ItemDto): void {
     this.songOptionsServiceService
       .openOptionsDialog(event, item, undefined)
       .subscribe((result) => {

@@ -15,18 +15,18 @@ public class PlaylistAddContainerRequest
     public Boolean shuffle;
     public ContainerDto containerDto;
     public String mediaRendererUdn;
-    public List<MusicItemDto> musicItemDto;
+    public List<ItemDto> items;
 
     public PlaylistAddContainerRequest()
     {
     }
 
-    public PlaylistAddContainerRequest(Boolean shuffle, ContainerDto containerDto, String mediaRendererUdn, List<MusicItemDto> musicItemDto)
+    public PlaylistAddContainerRequest(Boolean shuffle, ContainerDto containerDto, String mediaRendererUdn, List<ItemDto> items)
     {
         this.shuffle = shuffle;
         this.containerDto = containerDto;
         this.mediaRendererUdn = mediaRendererUdn;
-        this.musicItemDto = musicItemDto;
+        this.items = items;
     }
     
     @Override
@@ -37,7 +37,7 @@ public class PlaylistAddContainerRequest
         sb.append("shuffle=").append(this.shuffle).append(", ");
         sb.append("containerDto=").append(this.containerDto).append(", ");
         sb.append("mediaRendererUdn=").append(this.mediaRendererUdn).append(", ");
-        sb.append("musicItemDto=").append(this.musicItemDto).append(", ");
+        sb.append("items=").append(this.items).append(", ");
         sb.append("]");
         return sb.toString();
     }

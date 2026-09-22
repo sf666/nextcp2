@@ -3,7 +3,7 @@ import { ToastService } from './toast/toast.service';
 import { HttpService } from './http.service';
 import { SseService } from './sse/sse.service';
 import {
-  MusicItemDto,
+  ItemDto,
   PlayRequestDto,
   MediaRendererDto,
   UpnpAvTransportState,
@@ -32,7 +32,7 @@ export class TransportService {
   upnpAvTransportState = signal<UpnpAvTransportState>(
     this.dtoGeneratorService.emptyUpnpAvTransportState(),
   );
-  public lastPlayedMusicItem!: MusicItemDto;
+  public lastPlayedMusicItem!: ItemDto;
   baseUri = '/TransportService';
 
   constructor() {
@@ -103,7 +103,7 @@ export class TransportService {
     }
   }
 
-  public playResource(musicItemDto: MusicItemDto): void {
+  public playResource(musicItemDto: ItemDto): void {
     // When the synthetic "This Device" renderer is selected, play the stream in the browser itself
     // (HTML5 audio) instead of driving a UPnP renderer. This also covers broadcast/radio items - the
     // browser just fetches the stream URL.
@@ -122,12 +122,12 @@ export class TransportService {
     this._playResource(uri, musicItemDto);
   }
 
-  public playResourceNext(musicItemDto: MusicItemDto): void {
+  public playResourceNext(musicItemDto: ItemDto): void {
     const uri = '/playResourceNext';
     this._playResource(uri, musicItemDto);
   }
 
-  private _playResource(uri: string, musicItemDto: MusicItemDto) {
+  private _playResource(uri: string, musicItemDto: ItemDto) {
     if (this.selectedMediaRenderer?.udn?.length > 0) {
       const playReq: PlayRequestDto = {
         mediaRendererDto: this.selectedMediaRenderer,

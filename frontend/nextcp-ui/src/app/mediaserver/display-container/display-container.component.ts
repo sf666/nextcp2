@@ -7,7 +7,7 @@ import { LocalPlayerService } from './../../service/local-player.service';
 import { LocalVideoPlayerService } from 'src/app/service/local-video-player.service';
 import { TrackQualityService } from './../../util/track-quality.service';
 import {
-  MusicItemDto,
+  ItemDto,
   ContainerDto,
   ContainerItemDto,
 } from './../../service/dto.d';
@@ -85,7 +85,7 @@ export class DisplayContainerComponent {
   // Inform parent about actions
   containerSelected = output<ContainerDto>();
   browseFinish = output<ContainerItemDto>();
-  itemDeleted = output<MusicItemDto>();
+  itemDeleted = output<ItemDto>();
 
   /**
    * True while search hits are on screen instead of a browsed folder. Drives the
@@ -331,7 +331,7 @@ export class DisplayContainerComponent {
   // Accessor. Delivers the buckets for the display components
   //
 
-  get musicTracks(): MusicItemDto[] {
+  get musicTracks(): ItemDto[] {
     const handler = this.contentHandler();
     if (!handler?.contentDirectoryService) {
       return [];
@@ -408,7 +408,7 @@ export class DisplayContainerComponent {
    * With a filter active that is a subset, and the buttons have to respect it —
    * otherwise they play tracks the user has just filtered away.
    */
-  private displayedMusicTracks(): MusicItemDto[] {
+  private displayedMusicTracks(): ItemDto[] {
     return filterMusicItems(
       this.musicTracks,
       this.displayFilterString(),
@@ -548,11 +548,11 @@ export class DisplayContainerComponent {
     this.playlistService.addContainerToPlaylist(container);
   }
 
-  addItemToPlaylist(item: MusicItemDto): void {
+  addItemToPlaylist(item: ItemDto): void {
     this.playlistService.addToPlaylist(item);
   }
 
-  addItemToPlaylistNext(item: MusicItemDto): void {
+  addItemToPlaylistNext(item: ItemDto): void {
     this.playlistService.addToPlaylistNext(item);
   }
 
@@ -561,7 +561,7 @@ export class DisplayContainerComponent {
     this.startPlayback(container, false);
   }
 
-  playItem(musicItemDto: MusicItemDto): void {
+  playItem(musicItemDto: ItemDto): void {
     if (this.deviceService.isLocalBrowserSelected()) {
       // A video needs a picture, so it opens the overlay instead of joining the audio queue.
       if (LocalVideoPlayerService.isVideoItem(musicItemDto)) {

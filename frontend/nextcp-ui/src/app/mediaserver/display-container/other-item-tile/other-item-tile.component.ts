@@ -6,7 +6,7 @@ import {
   input,
   output,
 } from '@angular/core';
-import { MusicItemDto } from 'src/app/service/dto';
+import { ItemDto } from 'src/app/service/dto';
 import { AlbumArtService } from 'src/app/util/album-art.service';
 import { isBroadcastItem } from 'src/app/util/broadcast-item';
 
@@ -21,7 +21,7 @@ import { isBroadcastItem } from 'src/app/util/broadcast-item';
 export class OtherItemTileComponent {
   readonly albumArt = inject(AlbumArtService);
 
-  otherItems = input<MusicItemDto[]>([]);
+  otherItems = input<ItemDto[]>([]);
   quickSearchString = input<string>('');
   /** Off where the section heading already says what these are, e.g. the Videos section. */
   showKind = input<boolean>(true);
@@ -29,12 +29,12 @@ export class OtherItemTileComponent {
     this.getOtherItemsFilter(this.otherItems(), this.quickSearchString())
   );
 
-  playItemClicked = output<MusicItemDto>();
+  playItemClicked = output<ItemDto>();
 
   private getOtherItemsFilter(
-    data: MusicItemDto[],
+    data: ItemDto[],
     filterStr: string
-  ): MusicItemDto[] {
+  ): ItemDto[] {
     return data.filter((item) => this.doFilterText(item.title, this.quickSearchString()));
   }
 
@@ -50,11 +50,11 @@ export class OtherItemTileComponent {
     return title.toLowerCase().includes(filter.toLowerCase());
   }
 
-  playResource(otherItem: MusicItemDto) {
+  playResource(otherItem: ItemDto) {
     this.playItemClicked.emit(otherItem);
   }
 
-  getOtherItemHeadline(item: MusicItemDto): string {
+  getOtherItemHeadline(item: ItemDto): string {
     // object.item.audioItem
     if (item.objectClass?.startsWith('object.item.audioItem')) {
       if (isBroadcastItem(item)) {

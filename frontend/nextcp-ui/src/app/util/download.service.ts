@@ -1,4 +1,4 @@
-import { MusicItemDto } from './../service/dto.d';
+import { ItemDto } from './../service/dto.d';
 import { Injectable, inject } from '@angular/core';
 import { HttpService } from '../service/http.service';
 
@@ -11,7 +11,7 @@ export class DownloadService {
   baseUri = '/DownloadService';
 
   downloadFileByMBID(
-    song: MusicItemDto,
+    song: ItemDto,
     callback?: {
       close?: () => void;
       closeThisPopup?: (...args: any[]) => void;

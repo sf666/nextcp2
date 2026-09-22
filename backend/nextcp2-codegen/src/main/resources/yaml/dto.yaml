@@ -201,10 +201,10 @@ UpnpAvTransportState:
    mediaRenderer: MediaRendererDto 
    AbsoluteTimePosition: String
    CurrentTrackURI: String
-   CurrentTrackMetaData: MusicItemDto
+   CurrentTrackMetaData: ItemDto
    RelativeCounterPosition: Integer
    TransportStatus: String
-   AVTransportURIMetaData: MusicItemDto
+   AVTransportURIMetaData: ItemDto
    TransportState: String
    CurrentTrack: Long
    PlaybackStorageMedium: String
@@ -269,7 +269,7 @@ ContainerItemDto:
    currentContainer: ContainerDto
    containerDto: List<ContainerDto>
    albumDto: List<ContainerDto>
-   musicItemDto: List<MusicItemDto>
+   items: List<ItemDto>
    minimServerSupportTags: List<ContainerDto>
    allTracksSameAlbumIds: MusicAlbumIds
    totalMatches: Long
@@ -298,13 +298,18 @@ ContainerDto:
 
    mediaServerUDN: String
    albumartUri: String
-   # Mid sized variant of albumartUri, for grid tiles on high density displays (see MusicItemDto).
+   # Mid sized variant of albumartUri, for grid tiles on high density displays (see ItemDto).
    albumartUriMedium: String?
    artist: String
    rating: Integer
    creator: String
    media_date: String
    genre: String
+
+# What a video item carries beyond the generic fields. Room for resolution, codec and duration.
+VideoItemDto:
+   # HLS rendition, announced by the media server as a resource of its own.
+   hlsUrl: String
 
 AudioFormat:
    nrAudioChannels: Long 
@@ -346,9 +351,11 @@ MusicAlbumIds:
    musicBrainzAlbumId: String
    discogsReleaseId: Long?
    
-MusicItemDto:
+ItemDto:
    mediaServerUDN: String
    streamingURL: String
+   # Set on a video item, and only when the media server announces what a video needs.
+   video: VideoItemDto?
    objectID: String
    objectClass: String
    parentId: String
@@ -397,7 +404,7 @@ DiscogsId:
    
 RendererPlaylist:
    udn: String
-   musicItemDto: List<MusicItemDto>
+   items: List<ItemDto>
    
  # static track information
 TrackInfoDto:
@@ -409,7 +416,7 @@ TrackInfoDto:
    uri: String
    codecName: String
    metatext: String
-   currentTrack: MusicItemDto
+   currentTrack: ItemDto
    duration: String
    sampleRate: Long
    lossless: Boolean
@@ -514,7 +521,7 @@ PlaylistAddContainerRequest:
    # Optional explicit track list. Set by the UI when a browse filter narrows the
    # listing, so the renderer gets the tracks actually shown instead of the whole
    # container. Empty means: take everything the container holds.
-   musicItemDto: List<MusicItemDto>
+   items: List<ItemDto>
 
 BrowseRequestDto:
    mediaServerUDN: String
@@ -535,7 +542,7 @@ SearchRequestDto:
 
 SearchResultDto:
    parentID: String
-   musicItems: List<MusicItemDto>
+   musicItems: List<ItemDto>
    albumItems: List<ContainerDto>
    artistItems: List<ContainerDto>
    playlistItems: List<ContainerDto>
@@ -555,7 +562,7 @@ PlayRadioDto:
    
 PlayOpenHomeRadioDto:
    mediaRendererDto: MediaRendererDto
-   radioStation: MusicItemDto
+   radioStation: ItemDto
 
 MediaRendererSwitchPower:  
    rendererUDN: String

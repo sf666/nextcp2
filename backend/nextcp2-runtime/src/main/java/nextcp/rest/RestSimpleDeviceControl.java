@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import nextcp.dto.MusicItemDto;
+import nextcp.dto.ItemDto;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -61,7 +61,7 @@ public class RestSimpleDeviceControl extends BaseRestService
     {
         String station = URLDecoder.decode(encodedStation, "UTF-8");
         MediaRendererDevice device = getMediaRendererByUdn(udn);
-        Optional<MusicItemDto> radio = device.getRadioServiceBridge().getRadioStations().stream().filter(mi -> mi.title.toLowerCase().startsWith(station)).findFirst();
+        Optional<ItemDto> radio = device.getRadioServiceBridge().getRadioStations().stream().filter(mi -> mi.title.toLowerCase().startsWith(station)).findFirst();
         if (radio.isPresent())
         {
             log.info("playing radio ... " + station);

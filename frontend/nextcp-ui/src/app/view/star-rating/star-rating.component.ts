@@ -1,5 +1,5 @@
 import { RatingServiceService } from './../../service/rating-service.service';
-import { MusicItemDto } from './../../service/dto.d';
+import { ItemDto } from './../../service/dto.d';
 import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation, computed, input, model, signal, inject } from '@angular/core';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 
@@ -15,8 +15,8 @@ export class StarRatingComponent implements OnInit {
   private dtoGeneratorService = inject(DtoGeneratorService);
   private ratingServiceService = inject(RatingServiceService);
 
-  currentSong = input<MusicItemDto>(
-    this.dtoGeneratorService.emptyMusicItemDto(),
+  currentSong = input<ItemDto>(
+    this.dtoGeneratorService.emptyItemDto(),
   );
   isVisible = computed(() => this.currentSong().objectID?.length > 0 != null);
   rating = signal<number>(this.currentSong().rating);

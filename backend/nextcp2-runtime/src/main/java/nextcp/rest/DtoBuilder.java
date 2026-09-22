@@ -35,7 +35,8 @@ import nextcp.dto.DiscogsId;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.MediaServerDto;
 import nextcp.dto.MusicBrainzId;
-import nextcp.dto.MusicItemDto;
+import nextcp.dto.ItemDto;
+import nextcp.dto.VideoItemDto;
 import nextcp.dto.MusicItemIdDto;
 import nextcp.dto.UpnpAvTransportState;
 import nextcp.spotify.SpotifyArtistService;
@@ -49,6 +50,9 @@ public class DtoBuilder
     private static final Logger log = LoggerFactory.getLogger(DtoBuilder.class.getName());
 
     public static final String ASSET_FOLDER = "assets";
+
+    /** Both spellings of the HLS playlist media type carry it: application/x-mpegURL, application/vnd.apple.mpegURL. */
+    private static final String HLS_CONTENT_FORMAT_MARKER = "mpegurl";
 
     private SimpleDateFormat dispParse = new SimpleDateFormat("HH:mm:ss.SSS Z");
 
@@ -98,13 +102,13 @@ public class DtoBuilder
     /**
      * 
      * @param xml
-     * @return Empty MusicItemDto if xml is not supplied, otherwise DIDL Object is parsed and mapped.
+     * @return Empty ItemDto if xml is not supplied, otherwise DIDL Object is parsed and mapped.
      */
-    public MusicItemDto extractXmlAsMusicItem(String xml)
+    public ItemDto extractXmlAsMusicItem(String xml)
     {
         if (StringUtils.isBlank(xml) || "NOT_IMPLEMENTED".equalsIgnoreCase(xml))
         {
-            return new MusicItemDto();
+            return new ItemDto();
         }
 
         if (xml.startsWith("&lt;"))
@@ -119,7 +123,7 @@ public class DtoBuilder
                 xml = xml.replace("<item>", "<item>\n<upnp:class>" + "object.item.audioItem.musicTrack" + "</upnp:class>");
             }
             DIDLContent didlMeta = generateDidlContent(xml);
-            MusicItemDto itemDto = buildItemDto(didlMeta.getItems().get(0), "");   
+            ItemDto itemDto = buildItemDto(didlMeta.getItems().get(0), "");   
             return itemDto;
         }
         catch (Exception e)
@@ -224,9 +228,9 @@ public class DtoBuilder
         return list.stream().filter(p -> p.getDescriptorName().equalsIgnoreCase(name)).findFirst();
     }
 
-    public MusicItemDto buildItemDto(Item item, String mediaServerUdn)
+    public ItemDto buildItemDto(Item item, String mediaServerUdn)
     {
-        MusicItemDto itemDto = new MusicItemDto();
+        ItemDto itemDto = new ItemDto();
         itemDto.musicBrainzId = new MusicBrainzId();
         itemDto.title = item.getTitle();
         itemDto.parentId = item.getParentID();
@@ -258,9 +262,10 @@ public class DtoBuilder
         return itemDto;
     }
 
-    private void extractKnownProperties(MusicItemDto itemDto, Item item)
+    private void extractKnownProperties(ItemDto itemDto, Item item)
     {
         itemDto.streamingURL = readStreamingUrl(item);
+        itemDto.video = readVideo(item);
         // The bigger variants are separate fields: browse grids show hundreds of tiles and keep using
         // the small albumArtUrl (the medium one only on high density displays), while the now playing
         // view asks for the big cover.
@@ -334,12 +339,12 @@ public class DtoBuilder
     }
 
     // itemDto.musicBrainzId
-    private void extractDescMetadata(MusicItemDto itemDto, Item item)
+    private void extractDescMetadata(ItemDto itemDto, Item item)
     {
         extractMusicBrainzId(itemDto, item);
     }
 
-    private void extractMusicBrainzId(MusicItemDto itemDto, Item item)
+    private void extractMusicBrainzId(ItemDto itemDto, Item item)
     {
         //
         // Support for Mediaplayer Tags (https://petemanchester.github.io/MediaPlayer/)
@@ -488,7 +493,7 @@ public class DtoBuilder
         }
     }
 
-    private void addRating(MusicItemDto itemDto, String strRating)
+    private void addRating(ItemDto itemDto, String strRating)
     {
         if (NumberUtils.isParsable(strRating))
         {
@@ -613,7 +618,7 @@ public class DtoBuilder
         return n.getTextContent().equals("null") ? null : n.getTextContent();
     }
 
-    private void addAudioItem(AudioItem item, MusicItemDto itemDto)
+    private void addAudioItem(AudioItem item, ItemDto itemDto)
     {
         itemDto.creator = item.getCreator();
         itemDto.currentTrackMetadata = generateMetadataFromItem(item);
@@ -623,7 +628,7 @@ public class DtoBuilder
         }
     }
 
-    private void extractAudioFormat(Item item, MusicItemDto itemDto)
+    private void extractAudioFormat(Item item, ItemDto itemDto)
     {
         for (Res res : item.getResources())
         {
@@ -642,7 +647,7 @@ public class DtoBuilder
         markLiveBroadcast(itemDto);
     }
 
-    private void markLiveBroadcast(MusicItemDto itemDto)
+    private void markLiveBroadcast(ItemDto itemDto)
     {
         if (!StringUtils.startsWith(itemDto.objectClass, "object.item.audioItem.audioBroadcast"))
         {
@@ -685,6 +690,22 @@ public class DtoBuilder
         return "";
     }
 
+    /**
+     * What a video item carries beyond the generic fields, or null when the server announces nothing.
+     *
+     * A browser can only seek in a stream the server transcodes on the fly when it arrives as HLS,
+     * and which URL that is belongs to the server, not to a guess of ours.
+     */
+    public VideoItemDto readVideo(Item item)
+    {
+        Optional<String> hlsUrl = item.getResources().stream()
+                .filter(res -> StringUtils.containsIgnoreCase(contentFormatOf(res), HLS_CONTENT_FORMAT_MARKER))
+                .map(Res::getValue)
+                .filter(StringUtils::isNotBlank)
+                .findFirst();
+        return hlsUrl.map(VideoItemDto::new).orElse(null);
+    }
+
     private boolean isAudioResource(Res res)
     {
         String contentFormat = contentFormatOf(res);
@@ -710,7 +731,7 @@ public class DtoBuilder
         return res.getProtocolInfo() != null ? res.getProtocolInfo().getContentFormat() : null;
     }
 
-    public void addMusicTrack(MusicTrack item, MusicItemDto itemDto)
+    public void addMusicTrack(MusicTrack item, ItemDto itemDto)
     {
         itemDto.album = item.getAlbum();
         if (item.getFirstArtist() != null)

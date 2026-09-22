@@ -1,4 +1,4 @@
-import { ContainerDto, MusicItemDto } from './../../../service/dto.d';
+import { ContainerDto, ItemDto } from './../../../service/dto.d';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DefautPlaylistsComponent } from './defaut-playlists.component';
 import { Injectable, ElementRef, inject } from '@angular/core';
@@ -14,7 +14,7 @@ export class DefaultPlaylistService {
   private dialogRef: MatDialogRef<any, any> | undefined;
 
   public openAddGlobalPlaylistDialog(
-    item: MusicItemDto,
+    item: ItemDto,
     folder: ContainerDto,
   ): MatDialogRef<any, any> {
     this.dialogRef = this.dialog.open(AddPlaylistComponent, {
@@ -32,7 +32,7 @@ export class DefaultPlaylistService {
   }
 
   public openAddGlobalPlaylistDialogWithBackdrop(
-    item: MusicItemDto | undefined,
+    item: ItemDto | undefined,
     folder: ContainerDto,
   ): MatDialogRef<any, any> {
     this.dialogRef = this.dialog.open(AddPlaylistComponent, {

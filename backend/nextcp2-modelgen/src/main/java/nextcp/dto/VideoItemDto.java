@@ -9,29 +9,26 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Template: javadataclass.ftl
  *   
  */
-public class RendererPlaylist
+public class VideoItemDto
 {
 
-    public String udn;
-    public List<ItemDto> items;
+    public String hlsUrl;
 
-    public RendererPlaylist()
+    public VideoItemDto()
     {
     }
 
-    public RendererPlaylist(String udn, List<ItemDto> items)
+    public VideoItemDto(String hlsUrl)
     {
-        this.udn = udn;
-        this.items = items;
+        this.hlsUrl = hlsUrl;
     }
     
     @Override
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("RendererPlaylist [");
-        sb.append("udn=").append(this.udn).append(", ");
-        sb.append("items=").append(this.items).append(", ");
+        sb.append("VideoItemDto [");
+        sb.append("hlsUrl=").append(this.hlsUrl).append(", ");
         sb.append("]");
         return sb.toString();
     }

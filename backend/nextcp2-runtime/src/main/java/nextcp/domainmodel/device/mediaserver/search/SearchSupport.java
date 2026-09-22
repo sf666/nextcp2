@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.dto.ContainerDto;
-import nextcp.dto.MusicItemDto;
+import nextcp.dto.ItemDto;
 import nextcp.dto.SearchRequestDto;
 import nextcp.dto.SearchResultDto;
 import nextcp.upnp.GenActionException;
@@ -235,11 +235,11 @@ public class SearchSupport
         }
     }
 
-    private void addItemObjects(List<MusicItemDto> result, DIDLContent didl)
+    private void addItemObjects(List<ItemDto> result, DIDLContent didl)
     {
         for (Item item : didl.getItems())
         {
-            MusicItemDto itemDto = mediaServerDevice.getDtoBuilder().buildItemDto(item, mediaServerDevice.getUDN().getIdentifierString());
+            ItemDto itemDto = mediaServerDevice.getDtoBuilder().buildItemDto(item, mediaServerDevice.getUDN().getIdentifierString());
             result.add(itemDto);
         }
     }

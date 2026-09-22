@@ -5,7 +5,7 @@ import org.jupnp.model.gena.CancelReason;
 import org.jupnp.model.message.UpnpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import nextcp.dto.MusicItemDto;
+import nextcp.dto.ItemDto;
 import nextcp.dto.PlaylistState;
 import nextcp.dto.RendererPlaylist;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
@@ -57,7 +57,7 @@ public class OhPlaylistServiceEventListener extends PlaylistServiceEventListener
         super.idArrayChange(value);
         log.debug("idArrayChange : {} " , value);
         PlaylistChangedEvent event = new PlaylistChangedEvent();
-        List<MusicItemDto> playlistItems = playlist.convertIdArrayToMusicItemList(value);
+        List<ItemDto> playlistItems = playlist.convertIdArrayToMusicItemList(value);
         event.rendererPlaylist = new RendererPlaylist(device.getUDN().getIdentifierString(), playlistItems);
         device.getEventPublisher().publishEvent(event);
     }

@@ -52,7 +52,7 @@ import nextcp.dto.ContainerDto;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MediaServerDto;
 import nextcp.dto.MusicAlbumIds;
-import nextcp.dto.MusicItemDto;
+import nextcp.dto.ItemDto;
 import nextcp.dto.ServerDeviceConfiguration;
 import nextcp.dto.UpdateAlbumArtUriRequest;
 import nextcp.dto.UpdateStarRatingRequest;
@@ -680,9 +680,9 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		inp.RequestedCount = 999L;
 		inp.Filter = "*";
 		ContainerItemDto resultContainer = browseChildren(inp);
-		log.debug("container music-items count : " + resultContainer.musicItemDto.size());
+		log.debug("container music-items count : " + resultContainer.items.size());
 		log.debug("container countainer count : " + resultContainer.containerDto.size());
-		for (MusicItemDto item : resultContainer.musicItemDto) {
+		for (ItemDto item : resultContainer.items) {
 			log.debug("music item found named : {} ", item.title);
 			if (title.equalsIgnoreCase(item.title)) {
 				log.info("browseChildrenSearchItem : returning folderID {}", item.objectID);

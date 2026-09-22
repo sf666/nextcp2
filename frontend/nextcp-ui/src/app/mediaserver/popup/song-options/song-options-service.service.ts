@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { MusicItemDto, ContainerDto } from './../../../service/dto.d';
+import { ItemDto, ContainerDto } from './../../../service/dto.d';
 import { MatDialog } from '@angular/material/dialog';
 import { Injectable, ElementRef, inject } from '@angular/core';
 import { SongOptionsComponent } from './song-options/song-options.component';
@@ -12,7 +12,7 @@ export class SongOptionsServiceService {
 
   public openOptionsDialog(
     event: MouseEvent,
-    item: MusicItemDto,
+    item: ItemDto,
     currentContainer?: ContainerDto,
   ): Observable<any> {
     const target = new ElementRef(event.currentTarget);

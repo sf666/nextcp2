@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-09-22 09:37:26.
+// Generated using typescript-generator version 4.1.1 on 2026-09-22 09:56:06.
 
 export interface AddRadioStationRequest {
     serverUdn: string;
@@ -172,7 +172,7 @@ export interface ContainerItemDto {
     currentContainer: ContainerDto;
     containerDto: ContainerDto[];
     albumDto: ContainerDto[];
-    musicItemDto: MusicItemDto[];
+    items: ItemDto[];
     minimServerSupportTags: ContainerDto[];
     allTracksSameAlbumIds: MusicAlbumIds;
     totalMatches: number;
@@ -257,6 +257,39 @@ export interface InputSourceDto {
     Visible: boolean;
 }
 
+export interface ItemDto {
+    mediaServerUDN: string;
+    streamingURL: string;
+    video?: VideoItemDto;
+    objectID: string;
+    objectClass: string;
+    parentId: string;
+    refId: string;
+    songId: MusicItemIdDto;
+    resourceId: string;
+    conductor: string;
+    composer: string;
+    currentTrackMetadata: string;
+    creator: string;
+    title: string;
+    artistName: string;
+    numberOfThisDisc: string;
+    originalTrackNumber: string;
+    album: string;
+    date: string;
+    audioFormat: AudioFormat;
+    albumArtUrl: string;
+    albumArtUrlLarge?: string;
+    albumArtUrlMedium?: string;
+    genre: string;
+    rating: number;
+    musicBrainzId: MusicBrainzId;
+    discogsId?: DiscogsId;
+    audioAddictChannelId?: number;
+    audioAddictNetwork?: string;
+    audioAddictPlaylistId?: number;
+}
+
 export interface MediaPlayerConfig {
     workdir: string;
     script: string;
@@ -320,38 +353,6 @@ export interface MusicBrainzId {
     WorkId: string;
 }
 
-export interface MusicItemDto {
-    mediaServerUDN: string;
-    streamingURL: string;
-    objectID: string;
-    objectClass: string;
-    parentId: string;
-    refId: string;
-    songId: MusicItemIdDto;
-    resourceId: string;
-    conductor: string;
-    composer: string;
-    currentTrackMetadata: string;
-    creator: string;
-    title: string;
-    artistName: string;
-    numberOfThisDisc: string;
-    originalTrackNumber: string;
-    album: string;
-    date: string;
-    audioFormat: AudioFormat;
-    albumArtUrl: string;
-    albumArtUrlLarge?: string;
-    albumArtUrlMedium?: string;
-    genre: string;
-    rating: number;
-    musicBrainzId: MusicBrainzId;
-    discogsId?: DiscogsId;
-    audioAddictChannelId?: number;
-    audioAddictNetwork?: string;
-    audioAddictPlaylistId?: number;
-}
-
 export interface MusicItemIdDto {
     acoustID: string;
     musicBrainzIdTrackId: string;
@@ -365,7 +366,7 @@ export interface MusicbrainzSupport {
 
 export interface PlayOpenHomeRadioDto {
     mediaRendererDto: MediaRendererDto;
-    radioStation: MusicItemDto;
+    radioStation: ItemDto;
 }
 
 export interface PlayRadioDto {
@@ -383,7 +384,7 @@ export interface PlaylistAddContainerRequest {
     shuffle: boolean;
     containerDto: ContainerDto;
     mediaRendererUdn: string;
-    musicItemDto: MusicItemDto[];
+    items: ItemDto[];
 }
 
 export interface PlaylistState {
@@ -469,7 +470,7 @@ export interface RendererDeviceConfiguration {
 
 export interface RendererPlaylist {
     udn: string;
-    musicItemDto: MusicItemDto[];
+    items: ItemDto[];
 }
 
 export interface SearchRequestDto {
@@ -483,7 +484,7 @@ export interface SearchRequestDto {
 
 export interface SearchResultDto {
     parentID: string;
-    musicItems: MusicItemDto[];
+    musicItems: ItemDto[];
     albumItems: ContainerDto[];
     artistItems: ContainerDto[];
     playlistItems: ContainerDto[];
@@ -569,7 +570,7 @@ export interface TrackInfoDto {
     uri: string;
     codecName: string;
     metatext: string;
-    currentTrack: MusicItemDto;
+    currentTrack: ItemDto;
     duration: string;
     sampleRate: number;
     lossless: boolean;
@@ -624,10 +625,10 @@ export interface UpnpAvTransportState {
     mediaRenderer: MediaRendererDto;
     AbsoluteTimePosition: string;
     CurrentTrackURI: string;
-    CurrentTrackMetaData: MusicItemDto;
+    CurrentTrackMetaData: ItemDto;
     RelativeCounterPosition: number;
     TransportStatus: string;
-    AVTransportURIMetaData: MusicItemDto;
+    AVTransportURIMetaData: ItemDto;
     TransportState: string;
     CurrentTrack: number;
     PlaybackStorageMedium: string;
@@ -648,6 +649,10 @@ export interface UpnpAvTransportState {
     RecordMediumWriteStatus: string;
     CurrentTransportActions: string;
     PossibleRecordStorageMedia: string;
+}
+
+export interface VideoItemDto {
+    hlsUrl: string;
 }
 
 export interface WebStreamNowPlayingDto {

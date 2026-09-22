@@ -1,7 +1,7 @@
 import {
   ContainerDto,
   ContainerItemDto,
-  MusicItemDto,
+  ItemDto,
 } from './../../service/dto.d';
 import { GlobalSearchService } from './../../service/search/global-search.service';
 import {
@@ -279,7 +279,7 @@ export class MusicLibraryComponent implements AfterViewInit {
     // no special activities yet ...
   }
 
-  itemDeleted(event: MusicItemDto) {
+  itemDeleted(event: ItemDto) {
     // The row is already gone locally (item-tile did that); browse again so the
     // server has the last word - the playlist view does the same.
     this.contentDirectoryService.refreshCurrentContainer();

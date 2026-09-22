@@ -25,7 +25,7 @@ import nextcp.dto.ContainerUpdateIdsDto;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.MediaServerDto;
 import nextcp.dto.MusicAlbumIds;
-import nextcp.dto.MusicItemDto;
+import nextcp.dto.ItemDto;
 import nextcp.dto.SearchRequestDto;
 import nextcp.dto.SearchResultDto;
 import nextcp.dto.ServerDeviceConfiguration;
@@ -201,8 +201,8 @@ public class MediaServerDevice extends BaseDevice {
 		result.currentContainer = curContainer;
 		if (didl != null) {
 			addContainerObjects(result, didl);
-			addItemObjects(result.musicItemDto, didl);
-			result.allTracksSameAlbumIds = allSongsSameAlbum(result.musicItemDto);
+			addItemObjects(result.items, didl);
+			result.allTracksSameAlbumIds = allSongsSameAlbum(result.items);
 		} else {
 			log.warn("DIDL is null");
 		}
@@ -210,7 +210,7 @@ public class MediaServerDevice extends BaseDevice {
 		return result;
 	}
 
-	private MusicAlbumIds allSongsSameAlbum(List<MusicItemDto> musicItemDto) {
+	private MusicAlbumIds allSongsSameAlbum(List<ItemDto> musicItemDto) {
 		MusicAlbumIds result = new MusicAlbumIds();
 		if (musicItemDto.size() < 1) {
 			log.debug("allSongsSameAlbum: no music items found ... ");
@@ -230,7 +230,7 @@ public class MediaServerDevice extends BaseDevice {
 		boolean allSameMB = !StringUtils.isAllBlank(firstMB);
 		boolean allSameDiscogs = (firstDiscogs != null);
 
-		for (MusicItemDto item : musicItemDto) {
+		for (ItemDto item : musicItemDto) {
 			if (allSameMB && item.musicBrainzId != null && item.musicBrainzId.ReleaseTrackId != null) {
 				if (!firstMB.equals(item.musicBrainzId.ReleaseTrackId)) {
 					allSameMB = false;
@@ -370,7 +370,7 @@ public class MediaServerDevice extends BaseDevice {
 	private ContainerItemDto initEmptyContainerItemDto() {
 		ContainerItemDto result = new ContainerItemDto();
 		result.containerDto = new ArrayList<>();
-		result.musicItemDto = new ArrayList<>();
+		result.items = new ArrayList<>();
 		result.albumDto = new ArrayList<>();
 		result.parentFolderTitle = "";
 		result.minimServerSupportTags = new ArrayList<ContainerDto>();
@@ -430,12 +430,12 @@ public class MediaServerDevice extends BaseDevice {
 		return features;
 	}
 
-	private void addItemObjects(List<MusicItemDto> result, DIDLContent didl) {
+	private void addItemObjects(List<ItemDto> result, DIDLContent didl) {
 		if (didl == null) {
 			return;
 		}
 		for (Item item : didl.getItems()) {
-			MusicItemDto itemDto = getDtoBuilder().buildItemDto(item, getUDN().getIdentifierString());
+			ItemDto itemDto = getDtoBuilder().buildItemDto(item, getUDN().getIdentifierString());
 			result.add(itemDto);
 		}
 	}

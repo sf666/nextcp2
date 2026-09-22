@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteDeviceIdentity;
 import org.jupnp.model.types.UDN;
-import nextcp.dto.MusicItemDto;
+import nextcp.dto.ItemDto;
 import nextcp.rest.DtoBuilder;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 
@@ -56,7 +56,7 @@ public class NaimTest {
 	public void metadataTest() {
 		String meta = "<DIDL-Lite xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\"><item><dc:title>Thrift Shop</dc:title><upnp:artist>Macklemore &amp; Ryan Lewis feat. Wanz</upnp:artist><upnp:genre>Pop Rap</upnp:genre><upnp:album>The Heist</upnp:album><upnp:albumArtURI>http://10.138.12.15:9790/minimserver/*/music/Musiksammlung/Single/Macklemore*20*26*20Ryan*20Lewis/The*20Heist/03*20-*20Thrift*20Shop*20(feat.*20Wanz).flac/$!picture-6411-70666.jpg</upnp:albumArtURI><res size=\"28864996\" duration=\"0:03:56\" protocolInfo=\"http-get:*:audio/x-flac:*\">http://192.168.112.5:9790/minimserver/*/music/Musiksammlung/Single/Macklemore*20*26*20Ryan*20Lewis/The*20Heist/03*20-*20Thrift*20Shop*20(feat.*20Wanz).flac</res></item></DIDL-Lite>";
 		DtoBuilder dtoBuilder = new DtoBuilder();
-		MusicItemDto song = dtoBuilder.extractXmlAsMusicItem(meta);
+		ItemDto song = dtoBuilder.extractXmlAsMusicItem(meta);
 		assertFalse(song.albumArtUrl.isEmpty());
 	}
 }

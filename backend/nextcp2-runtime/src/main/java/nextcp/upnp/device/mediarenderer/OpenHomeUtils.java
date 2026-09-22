@@ -21,7 +21,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import nextcp.dto.InputSourceDto;
-import nextcp.dto.MusicItemDto;
+import nextcp.dto.ItemDto;
 import nextcp.rest.DtoBuilder;
 
 public class OpenHomeUtils
@@ -99,11 +99,11 @@ public class OpenHomeUtils
         return makeStringList(convertUintByteArrayToLong(ba));
     }
 
-    public List<MusicItemDto> convertToMediaItemDto(String xml, String rootNode)
+    public List<ItemDto> convertToMediaItemDto(String xml, String rootNode)
     {
     	log.info("radio station root node : " + rootNode);
 //    	log.info("radio station xml : " + xml);
-        List<MusicItemDto> result = new ArrayList<>();
+        List<ItemDto> result = new ArrayList<>();
         try
         {
             XPath xpath = XPathFactory.newInstance().newXPath();
@@ -127,7 +127,7 @@ public class OpenHomeUtils
                     {
                         Element eElement = (Element) nNode;
                         String meta = extractElementTextByTag(eElement, "Metadata");
-                        MusicItemDto dto = dtoBuilder.extractXmlAsMusicItem(meta);
+                        ItemDto dto = dtoBuilder.extractXmlAsMusicItem(meta);
                         if (dto != null)
                         {
                             dto.objectID = extractElementTextByTag(eElement, "Id");

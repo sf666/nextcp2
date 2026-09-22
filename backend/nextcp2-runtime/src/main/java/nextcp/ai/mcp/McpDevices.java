@@ -15,7 +15,7 @@ import nextcp.dto.AiConfig;
 import nextcp.dto.Config;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.MediaServerDto;
-import nextcp.dto.MusicItemDto;
+import nextcp.dto.ItemDto;
 import nextcp.rest.DtoBuilder;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
@@ -57,7 +57,7 @@ public class McpDevices {
 	@Autowired
 	private FileConfigPersistence configPersistence;
 
-	private Collection<MusicItemDto> availableMediaRendererRadioStations = null;
+	private Collection<ItemDto> availableMediaRendererRadioStations = null;
 	
 	private MediaRendererDevice selectedMediaRenderer = null;
 
@@ -110,7 +110,7 @@ public class McpDevices {
 		This tool can return NULL or an empty list, if no preset radio stations are available on the selected Media Renderer.
 		In that case, use the "play_radio_on_renderer" tool to play a station by name without preset.
 			""")
-	public Collection<MusicItemDto> listMediaRendererRadioStation() {
+	public Collection<ItemDto> listMediaRendererRadioStation() {
 		log.info("UPnP command received: list_renderer_radio_station. List Radio Stations provided by media renderer.");
 		
 		if (availableMediaRendererRadioStations == null) {
@@ -270,7 +270,7 @@ public class McpDevices {
 			Use this tool when:
 		      - The user asks to play a specific radio station which matches to a preset on the selected Media Renderer.
 		""")
-	public String playRadioStationPreset(@ToolParam(description = "The preset object of the radio station to play. ", required = true) MusicItemDto station) {
+	public String playRadioStationPreset(@ToolParam(description = "The preset object of the radio station to play. ", required = true) ItemDto station) {
 		log.info("Command received: play_preset_radio_on_renderer - {}", station.title);
 		if (selectedMediaRenderer.hasOhPlaylistService()) {
 			log.info("Request : Playing preset radio station '{}'", station.title);

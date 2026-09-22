@@ -20,7 +20,7 @@ public class TrackInfoDto
     public String uri;
     public String codecName;
     public String metatext;
-    public MusicItemDto currentTrack;
+    public ItemDto currentTrack;
     public String duration;
     public Long sampleRate;
     public Boolean lossless;
@@ -31,7 +31,7 @@ public class TrackInfoDto
     {
     }
 
-    public TrackInfoDto(String mediaRendererUdn, Long detailsCount, Long metatextCount, String metadata, Long trackCount, String uri, String codecName, String metatext, MusicItemDto currentTrack, String duration, Long sampleRate, Boolean lossless, Long bitDepth, Long bitrate)
+    public TrackInfoDto(String mediaRendererUdn, Long detailsCount, Long metatextCount, String metadata, Long trackCount, String uri, String codecName, String metatext, ItemDto currentTrack, String duration, Long sampleRate, Boolean lossless, Long bitDepth, Long bitrate)
     {
         this.mediaRendererUdn = mediaRendererUdn;
         this.detailsCount = detailsCount;
