@@ -32,3 +32,36 @@ export const ServerFeature = {
 
 export type ServerFeatureName =
   (typeof ServerFeature)[keyof typeof ServerFeature];
+
+/**
+ * What to tell someone whose media server cannot do this - in their words, not in tokens.
+ *
+ * Detection asks per action on purpose, but a user cannot act on "no ALBUM_LIKES"; they can act on
+ * "UMS 16 or newer". So the version belongs here, in the sentence, and nowhere in the logic.
+ */
+export const FEATURE_REQUIREMENT: Record<ServerFeatureName, string> = {
+  UPNP_SEARCH:
+    'Searching the whole library needs a media server that answers UPnP search, such as UMS or MinimServer.',
+  LIKED_PLAYLISTS:
+    'Liked playlists need a media server that can search on ratings. UMS 16 or newer can.',
+  ALBUM_LIKES:
+    'Liking albums and folders needs a media server that stores ratings. UMS 16 or newer does.',
+  RATING_TAG:
+    'Writing a star rating into the audio file needs UMS 16 or newer.',
+  RATING_BACKUP:
+    'Backing up and restoring ratings is done by the media server. UMS 16 or newer offers it.',
+  RADIO_BROWSER:
+    'Searching radio stations runs on the media server. UMS 16 or newer carries the radio-browser client.',
+  WEB_STREAM_NOW_PLAYING:
+    'Live titles of web streams are read by the media server. UMS 16 or newer does that.',
+  WEB_STREAM_ICY_ORDER:
+    'How a station announces its titles is stored by the media server. UMS 16 or newer can.',
+  AUDIO_ADDICT:
+    'The Audio Addict networks are streamed by the media server. UMS 16 or newer offers them.',
+  ARTIST_FOLDER:
+    'Storing the artist folder needs UMS 16 or newer.',
+  MEDIA_RESCAN:
+    'Rescanning the library is done by the media server. UMS 16 or newer offers it.',
+  PLAYLIST_NOW_PLAYING:
+    'What a curated playlist is playing is reported by the media server. UMS 16 or newer does that.',
+};

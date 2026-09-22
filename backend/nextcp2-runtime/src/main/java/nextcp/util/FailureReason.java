@@ -89,6 +89,11 @@ public final class FailureReason {
 
 	private static String reasonOfFrame(Throwable frame) {
 		if (frame instanceof GenActionException genAction) {
+			if (genAction.errorCode == GenActionException.ACTION_NOT_SUPPORTED) {
+				// Nothing failed here - the device never offered this. Said as such, because "action
+				// GetWebStreamIcyOrder of service UmsExtendedServices" is our vocabulary, not the user's.
+				return "This media server does not offer that function.";
+			}
 			if (StringUtils.isNotBlank(genAction.deviceReason)) {
 				// The device said something of its own. Everything we wrapped around it - which
 				// device, which action, the UPnP code - the user already knows or cannot act on,

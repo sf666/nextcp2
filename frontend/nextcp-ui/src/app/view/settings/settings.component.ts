@@ -6,6 +6,7 @@ import { SystemService } from './../../service/system.service';
 import { DeviceService } from './../../service/device.service';
 import { ServerFeature } from './../../service/server-feature';
 import { DeviceInfoComponent } from './../../popup/device-info/device-info.component';
+import { FeatureHintComponent } from './../../util/comp/feature-hint/feature-hint.component';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { RatingServiceService } from './../../service/rating-service.service';
 import {
@@ -68,6 +69,7 @@ interface SettingsFormModel {
     ReactiveFormsModule,
     AlertComponent,
     FormField,
+    FeatureHintComponent,
   ],
 })
 export class SettingsComponent implements OnInit {
@@ -84,6 +86,8 @@ export class SettingsComponent implements OnInit {
   dtoGeneratorService = inject(DtoGeneratorService);
   localPlayerService = inject(LocalPlayerService);
   private dialog = inject(MatDialog);
+  /** The template names the capability it explains. */
+  protected readonly ServerFeature = ServerFeature;
 
   amplifierInfoRendererUdn: string | null = null;
 

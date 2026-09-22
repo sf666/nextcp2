@@ -203,9 +203,7 @@
     @if(currentMediaServer.udn === undefined || currentMediaServer.udn === '') {
       <my-alert color="error" prefix="" [text]="currentMediaServer.friendlyName"></my-alert>
     } @else {
-      @if (extendedApiNotAvailable()) {
-        <my-alert color="warning" prefix="" text="Advanced actions are available only when using Universal Media Server."></my-alert>
-      }
+      <feature-hint [feature]="ServerFeature.RATING_BACKUP" variant="alert"></feature-hint>
     }
 
     <div class="config-panel mt-4">

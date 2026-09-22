@@ -46,6 +46,98 @@ To support the three-box setup, the UMS "authorization" feature has been disable
 :::
 
 
+### What depends on the media server
+
+nextCP/2 asks every media server what it can do and offers only that — per capability, read from the actions
+and search criteria the server announces, never from its version number. A function whose capability is
+missing is simply not shown; nothing is broken, the server just cannot do it. Which capabilities your server
+reports is listed in the device details dialog, see
+[Device details](/nextcp2/user_interface/app_settings/#device-details).
+
+<div class="relative overflow-x-auto">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">Function</th>
+                <th scope="col" class="px-6 py-3">What the media server has to offer</th>
+                <th scope="col" class="px-6 py-3">Where you see it</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Global search</td>
+                <td class="px-6 py-4">UPnP search. Offered by UMS and by other servers such as <a href="https://minimserver.com/">MinimServer</a>.</td>
+                <td class="px-6 py-4"><a href="/nextcp2/user_interface/music_library/#upnp-search">Search box</a> and its result pages</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">MY PLAYLISTS</td>
+                <td class="px-6 py-4">Search on <code>upnp:rating</code>, which is more than plain UPnP search: the server has to accept the rating as a search criterion. A server that searches but does not offer <code>upnp:rating</code> leaves the section empty. UMS 16 or newer offers it.</td>
+                <td class="px-6 py-4"><a href="/nextcp2/user_interface/music_library/#my-playlists-in-the-sidebar">Sidebar</a></td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Likes</td>
+                <td class="px-6 py-4">Storing a like for an album, a folder or a playlist. UMS 16 or newer.</td>
+                <td class="px-6 py-4">Heart in the browse header, tile menus, <a href="/nextcp2/user_interface/my_albums/">My Albums</a></td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Star ratings in the file</td>
+                <td class="px-6 py-4">Writing the rating into the audio file's metadata. UMS 16 or newer.</td>
+                <td class="px-6 py-4">Stars on tracks, <em>ID3 Rating</em> in the server settings</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Rating backup</td>
+                <td class="px-6 py-4">Writing all ratings and likes to a backup file on the server and reading them back. UMS 16 or newer.</td>
+                <td class="px-6 py-4"><a href="/nextcp2/user_interface/app_settings/#server-actions">Server Actions</a></td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Radio station search</td>
+                <td class="px-6 py-4">The radio-browser.info client, which runs on the server. UMS 16 or newer.</td>
+                <td class="px-6 py-4"><em>Add radio station</em> in the <a href="/nextcp2/user_interface/music_library/#folder-options">folder options</a> of a playlist</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Live titles of web streams</td>
+                <td class="px-6 py-4">Reading the ICY metadata of a stream and pushing every change. UMS 16 or newer.</td>
+                <td class="px-6 py-4">Player bar, <a href="/nextcp2/user_interface/now_listening/">Now Listening</a>, <a href="/nextcp2/user_interface/radio/#live-titles">Radio</a></td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Title order per station</td>
+                <td class="px-6 py-4">Storing how a station's ICY line is to be read. UMS 16 or newer.</td>
+                <td class="px-6 py-4"><em>Live title of this station</em> in the <a href="/nextcp2/user_interface/music_library/#song-options">song options</a></td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Live titles of curated channels</td>
+                <td class="px-6 py-4">Reporting what an Audio Addict channel is playing. UMS 16 or newer.</td>
+                <td class="px-6 py-4">Radio Networks</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Audio Addict networks</td>
+                <td class="px-6 py-4">Streaming the networks for the subscription nextCP/2 hands over. UMS 16 or newer.</td>
+                <td class="px-6 py-4"><em>Radio Networks</em> in the sidebar</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Artist folder</td>
+                <td class="px-6 py-4">Storing which folder holds the artist folders, for artist images. UMS 16 or newer.</td>
+                <td class="px-6 py-4"><em>Set artist folder</em> in the <a href="/nextcp2/user_interface/music_library/#folder-options">folder options</a></td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Video in the browser</td>
+                <td class="px-6 py-4">Delivering the video as an HLS stream. UMS 16 or newer.</td>
+                <td class="px-6 py-4"><a href="/nextcp2/user_interface/player_bar/#video-in-the-browser">This Device</a></td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Server side playlists</td>
+                <td class="px-6 py-4">Creating, filling and deleting <code>m3u</code> / <code>m3u8</code> playlists on its file system. UMS 16 or newer.</td>
+                <td class="px-6 py-4"><a href="/nextcp2/user_interface/music_library/#server-side-playlists">Music Library</a></td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Live library updates</td>
+                <td class="px-6 py-4">Reporting changes of its library while you browse. UMS 16 or newer.</td>
+                <td class="px-6 py-4">Every browse page</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
 ### Additional features supported by UMS 16
 
 <Aside type="tip">The features listed below are supported on the server side. This means you don't have to copy your files between your media library and you client machine or mount a network drive. UMS handles all the actions initiated by nextCP/2 on the server side!</Aside>

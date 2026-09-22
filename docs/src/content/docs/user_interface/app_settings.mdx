@@ -71,6 +71,24 @@ opens its settings in a dialog of their own. A renderer whose driver is not conf
   <Field name="UPnP/streamer max volume">If checked, sets the UPnP/streamer to maximum (100 %) on power-on, so all volume control happens in the amplifier.</Field>
 </Group>
 
+## Device details
+
+Every media server and media renderer can be asked what it is and what it can do: the
+<span class="material-symbols-outlined">info</span> button next to a device in the server and renderer
+selection popups, or **details** on its card here in the settings.
+
+<Group>
+  <Field name="Device">Manufacturer, model and model number — for UMS the model number is its version —, serial number, address, UDN and, if the device offers one, a link to its own web interface.</Field>
+  <Field name="Features">Media servers only: every capability nextCP/2 knows, the ones this server offers highlighted. This is the answer to "why does nextCP/2 not offer me X with this server". The line below lists the criteria the server can be searched on.</Field>
+  <Field name="Services">Every UPnP service the device announces, with its version; unfold one to see its actions and the state variables it sends events for. A service whose description could not be read shows no actions and says so.</Field>
+  <Field name="copy as text">Puts the whole dialog into the clipboard, for a bug report or a forum post.</Field>
+</Group>
+
+The capabilities are read from what a device announces, not from its version, so a server that is one
+release behind, a build with a feature switched off and a development build that is ahead of both each
+answer for themselves. What each capability enables is listed under
+[What depends on the media server](/nextcp2/overview/overview/#what-depends-on-the-media-server).
+
 ## Server Actions
 
 Additional UMS server actions, available when the active media server is a UMS instance.

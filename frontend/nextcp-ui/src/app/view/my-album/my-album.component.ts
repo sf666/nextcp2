@@ -18,6 +18,8 @@ import {
 } from '@angular/core';
 import { DisplayContainerComponent } from '../../mediaserver/display-container/display-container.component';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
+import { FeatureHintComponent } from '../../util/comp/feature-hint/feature-hint.component';
+import { ServerFeature } from '../../service/server-feature';
 import { toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -27,9 +29,11 @@ import { toObservable } from '@angular/core/rxjs-interop';
   providers: [ContentDirectoryService],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NavBarComponent, DisplayContainerComponent],
+  imports: [NavBarComponent, DisplayContainerComponent, FeatureHintComponent],
 })
 export class MyAlbumComponent implements OnInit {
+  /** The template names the capability it explains. */
+  protected readonly ServerFeature = ServerFeature;
   layoutService = inject(LayoutService);
   private deviceService = inject(DeviceService);
   contentDirectoryService = inject(ContentDirectoryService);

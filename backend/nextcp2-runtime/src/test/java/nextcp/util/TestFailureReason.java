@@ -47,6 +47,18 @@ public class TestFailureReason
     }
 
     @Test
+    public void anActionTheDeviceNeverOfferedIsNotReportedAsAFailure()
+    {
+        GenActionException notOffered = new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SearchRadioStations of service UmsExtendedServices");
+
+        String reason = FailureReason.of(notOffered);
+
+        assertEquals("This media server does not offer that function.", reason);
+        assertTrue(!reason.contains("SearchRadioStations"), "the action name is our vocabulary, not the user's");
+    }
+
+    @Test
     public void whatTheUserSeesCarriesNoDeviceNameActionNameOrErrorCode()
     {
         GenActionException fromDevice = deviceRefused("entry already in Playlist.");

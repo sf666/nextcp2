@@ -179,8 +179,11 @@ To put a playlist there, open its [folder options](#folder-options) — the
 the header once you are inside it — and choose **Like playlist**. **Unlike playlist** takes it out of
 the sidebar again; the playlist file itself is not touched.
 
-This requires a media server that can search on the rating, which means UMS 16 or newer. Without one
-the section stays empty.
+This requires a media server that accepts the **rating as a search criterion** — `upnp:rating` in its
+search capabilities. That is more than plain UPnP search: a server may answer searches and still not
+know about ratings, and then the section stays empty although the search box works. UMS 16 or newer
+offers it. The device details dialog shows what your server can be searched on, see
+[Device details](/nextcp2/user_interface/app_settings/#device-details).
 
 
 ### Create Server Side Playlist
@@ -313,6 +316,10 @@ stored with it on the media server, so it applies to every renderer and every br
 If the selected media server supports UPnP search, entering text into the **Global Search** box will initiate a server-side search request.  
 
 Known media servers with compatible UPnP search capabilities include [MinimServer](https://minimserver.com/) and [Universal Media Server (since 10.6.0)](https://www.universalmediaserver.com/). The search text is matched against tracks, albums, playlists, and artists. Artist covers are retrieved from Spotify if a connected account is available.
+
+Searching and searching *on ratings* are two different capabilities: the **MY PLAYLISTS** section needs the
+second one and stays empty without it, even on a server whose global search works. See
+[What depends on the media server](/nextcp2/overview/overview/#what-depends-on-the-media-server).
 
 Clicking on a song item will play that song immediately. Clicking on any other item will navigate into that content.
 

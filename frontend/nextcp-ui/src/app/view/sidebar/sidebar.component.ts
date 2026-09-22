@@ -6,6 +6,7 @@ import { MyPlaylistService } from './../my-playlists/my-playlist.service';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
 import { ServerFeature } from './../../service/server-feature';
+import { FeatureHintComponent } from './../../util/comp/feature-hint/feature-hint.component';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -24,7 +25,7 @@ import { MusicLibraryService } from 'src/app/service/music-library/music-library
   styleUrls: ['./sidebar.component.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, MatIcon],
+  imports: [RouterLink, MatIcon, FeatureHintComponent],
 })
 export class SidebarComponent {
   deviceService = inject(DeviceService);

@@ -1,0 +1,10 @@
+@if (visible()) {
+  @if (variant() === 'alert') {
+    <my-alert color="info" prefix="" [text]="text()"></my-alert>
+  } @else {
+    <div class="feature-hint flex items-start gap-2">
+      <span class="material-symbols-outlined hint-icon">info</span>
+      <span>{{ text() }}</span>
+    </div>
+  }
+}
