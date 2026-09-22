@@ -80,4 +80,9 @@ The optional `nextcp2-ma9000.jar` is the McIntosh MA9000/MA12000 device driver; 
 
 ## Media server setup
 
-nextCP/2 works with any DLNA-compatible media server, but the recommended one is [Universal Media Server (UMS)](https://www.universalmediaserver.com/) (a maintained fork is bundled in the Docker compose example).
+nextCP/2 works with any DLNA-compatible media server, but the recommended one is [Universal Media Server (UMS)](https://www.universalmediaserver.com/); the Docker compose example brings it along.
+
+The server side features — likes and star ratings, server side playlists, radio station search, live titles of web
+streams and video in the browser — need **UMS 16 or newer**. With any other media server, or an older UMS, nextCP/2
+browses and plays as usual and simply does not offer them. See
+[Preferred Media Server](/nextcp2/overview/overview/) for what UMS 16 adds.

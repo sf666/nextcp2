@@ -48,7 +48,7 @@ The right part selects the devices used and controls the amplifier.
   entry marked with <span class="material-symbols-outlined">check</span> is the current one. Disabled renderers (see
   [App Settings](/nextcp2/user_interface/app_settings/)) are not listed.
 - <span class="material-symbols-outlined">dns</span> **Media server** — selects the media server whose library is
-  browsed. Servers with the *Extended API* of the UMS fork are marked accordingly.
+  browsed. Servers with the *Extended API* of UMS 16 are marked accordingly.
 - <span class="material-symbols-outlined">power_settings_new</span> **Power** — switches the amplifier on or off. Shown
   only if a [device driver](/nextcp2/user_interface/app_settings/) is configured for the selected renderer. A green
   icon means the device is on, a red one that it is in standby.
@@ -73,7 +73,9 @@ Playback is started exactly as with a hardware renderer:
 - Clicking a single track starts with that track and continues with the remaining tracks of the displayed list.
 - All transport controls of the player bar — play/pause, previous/next, seek, repeat, shuffle and volume — control the
   browser player.
-- Radio stations and web streams work as well: the browser simply fetches the stream URL.
+- Radio stations and web streams work as well: the browser simply fetches the stream URL, and the
+  live title the station announces is shown just as on a hardware renderer — see
+  [Radio](/nextcp2/user_interface/radio/#live-titles).
 - Queue and playback position are stored in the browser, so a page reload resumes where playback left off.
 
 Differences to a UPnP renderer:
@@ -95,8 +97,29 @@ renderer profile: the proxy identifies itself with the user agent `next_cp_webpl
 matching `UserAgentSearch = next_cp_webplayer`). Formats the browser can play are passed through untouched, everything
 else is transcoded to MP3 by the media server.
 
+Which of the two happens is decided by *Audio format for the browser player* in the *Browser Player* section of
+[App Settings](/nextcp2/user_interface/app_settings/):
+
+- **Automatic** (default) streams lossless where the browser can decode it and falls back to transcoded audio where it
+  cannot — a browser without FLAC support, or one whose playback failed. App Settings says when automatic has switched
+  over and offers to try lossless again.
+- **Always lossless** never transcodes.
+- **Always transcoded** always does, which is the setting for a slow or metered connection.
+
 Because a transcoded stream is delivered without a known length, the browser can neither show the duration nor seek in
 it. nextCP/2 therefore transcodes such a track completely before playback starts and caches the result — the first play
 pays the transcoding delay, later plays and seeks are served from the cache. Pre-transcoding, cache directory, cache
 size and cache lifetime are configured in the *Browser Player* section of
 [App Settings](/nextcp2/user_interface/app_settings/).
+
+### Video in the browser
+
+**This Device** also plays video. A folder containing video files lists them in a **Videos** section
+of its own (see [Music Library](/nextcp2/user_interface/music_library/#videos)); clicking one opens a
+full screen player over the UI. <kbd>Esc</kbd> or the close button ends it, and the audio queue is
+left alone — video is not queued, one item plays at a time.
+
+The stream is delivered as HLS through the same proxy, which is what makes seeking in a video the
+media server transcodes on the fly possible. Safari plays HLS itself, every other browser through the
+bundled `hls.js`. Asking for that rendition relies on the way UMS names its transcoded streams, so
+video in the browser needs UMS (version 16 or newer) as media server.

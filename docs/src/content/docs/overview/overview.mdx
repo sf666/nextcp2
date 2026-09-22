@@ -22,23 +22,29 @@ export const Bullets = ({children, title}) => (
 This control point put's it focus on providing the best user experience for audio enthusiasts. Controlling other content is also supported but with less UI
 awareness.
 
-Please keep in mind, that only the <a href="https://github.com/ik666/UniversalMediaServer">Universal Media Server (UMS) fork</a>
-supports all additional features and is therefore the recommended media server.
+Please keep in mind, that all additional features need <a href="https://www.universalmediaserver.com/">Universal Media Server (UMS)</a>
+**version 16 or newer**, which is therefore the recommended media server. With any other media server, or an older UMS,
+nextCP/2 browses and plays as usual and simply does not offer them.
 
-### Why is the fork needed
+:::note
+These features used to require a <a href="https://github.com/ik666/UniversalMediaServer">fork of UMS</a>. They are part of
+Universal Media Server itself as of version 16, so a separate fork is no longer needed.
+:::
 
-The current implementation of Universal Media Server (UMS) hasn't migrated all needed features for the best integration scenario. Furthermore, it is primarily optimized for video playback on TVs in a 2-box setup. However, it lacks several key features necessary for a modern and versatile media server experience. This fork aims to address these limitations by introducing enhancements and new functionalities tailored to the needs of audiophile users.
+### What UMS 16 adds
 
-Major improvement over the original implementation is an accurate renderer identification in a 3-box setup — a configuration widely used by users who prioritize high quality audio playback. With this enhancement, you can control your UPnP streaming devices through your preferred control point application, such as BubbleUPnP, DENON HEOS App or the LINN App. The correct renderer configuration will be used, no matter to which renderer device you stream the content.
+Earlier UMS releases hadn't migrated all needed features for the best integration scenario. Furthermore, UMS is primarily optimized for video playback on TVs in a 2-box setup, and it lacked several key features necessary for a modern and versatile media server experience for audiophile users.
+
+Major improvement over the earlier implementation is an accurate renderer identification in a 3-box setup — a configuration widely used by users who prioritize high quality audio playback. With this enhancement, you can control your UPnP streaming devices through your preferred control point application, such as BubbleUPnP, DENON HEOS App or the LINN App. The correct renderer configuration will be used, no matter to which renderer device you stream the content.
 
 :::caution
 To support the three-box setup, the UMS "authorization" feature has been disabled on the server side. The UI let's you still configure it, but it will be ignored.
 :::
 
 
-### Additional features supported by UMS fork
+### Additional features supported by UMS 16
 
-<Aside type="tip">The features listed below are supported on the server side. This means you don't have to copy your files between your media library and you client machine or mount a network drive. The UMS fork handles all the actions initiated by nextCP/2 on the server side!</Aside>
+<Aside type="tip">The features listed below are supported on the server side. This means you don't have to copy your files between your media library and you client machine or mount a network drive. UMS handles all the actions initiated by nextCP/2 on the server side!</Aside>
 
 #### Like Music Albums
 
@@ -62,6 +68,9 @@ Additionally, audio files tagged with a MusicBrainz Track ID can export this rat
 Clicking the <span class="material-symbols-outlined">pending</span> icon in the sidebar opens a dialog where you can create or delete playlists stored on the server’s file system.
 New playlists are created in the currently displayed folder.
 
+Playlists can be liked just like albums, and the **MY PLAYLISTS** section of the sidebar is exactly that list of liked
+playlists — the server is asked for every playlist rated as liked, so it does not matter in which folder they are kept.
+
 Clicking the &#x22EE; button displays additional song options.
 
 <Image src={imgPlaylist} alt="like album" class="" />
@@ -82,6 +91,28 @@ If you have a paid subscription to the Audio Addict Network, you can access the 
     <li>Zen Radio</li>
     <li>DI.fm</li>
 </Bullets>
+
+The account is entered once in [App Settings](/nextcp2/user_interface/app_settings/#audio-addict-radio-network) and handed
+to the media server, which does the streaming — nextCP/2 itself holds no Audio Addict logic any more. The networks appear
+as **Radio Networks** in the sidebar.
+
+#### Web Radio with live titles
+
+The media server reads the ICY metadata of a web stream and pushes every title change to nextCP/2, so the running track
+of a station is shown even on renderers that do not read that metadata themselves — including the browser player. Stations
+can be searched at [radio-browser.info](https://www.radio-browser.info/) and added to a playlist from the UI. See
+[Radio](/nextcp2/user_interface/radio/).
+
+#### Video
+
+Video files are listed in a section of their own while browsing, and with **This Device** as player they are played in
+the browser — the media server delivers them as an HLS stream, which is what makes seeking in a video work. See
+[Video in the browser](/nextcp2/user_interface/player_bar/#video-in-the-browser).
+
+#### Live library updates
+
+The media server reports changes of its library — a new file, a cover that was replaced, a rating written from another
+browser — and nextCP/2 replaces just the entries concerned in the listing on screen, without reloading the page.
 
 #### Other Server Side Actions
 

@@ -2,16 +2,50 @@
 title: Media Player Queue
 order: 3
 ---
-import { Image } from 'astro:assets';
-import playlist from './img/playlist.png';
 
-Displays playlist of currently active media player. The active song is highlighted. NextCP/2 supports native
-OpenHome playlists, as well as self managed playlist for regular UPnP devices without internal playlist support.
+Shows the queue of the currently active media player. NextCP/2 supports native OpenHome playlists as
+well as a self managed queue for regular UPnP devices without internal playlist support.
 
-Click on any music item to listen to it. Playback will continue after the song ends.
+The line under the title says what is queued, how long it runs and where it plays — for example
+*12 tracks, 48 min on Living Room*.
 
-This page requires a UPnP media renderer. The built-in browser player (**This Device**) keeps its queue inside the
-browser instead — see [Player Bar](/nextcp2/user_interface/player_bar/).
+## The list
 
-<Image src={playlist} alt="" class="" />
+Every row carries its position in the queue, the cover, title and artist — album, the quality badge of
+the track and its playing time. Pointing at a row turns the position into a
+<span class="material-symbols-outlined">play_arrow</span>: click anywhere on the row to start there,
+and playback continues with the following tracks. The track that is playing is highlighted and shows
+a <span class="material-symbols-outlined">graphic_eq</span> instead of its number.
 
+The <span class="material-symbols-outlined">close</span> button at the end of a row takes that single
+track out of the queue without changing what is playing.
+
+## Actions
+
+<div class="relative overflow-x-auto">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">Button</th>
+                <th scope="col" class="px-6 py-3">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Play</td>
+                <td class="px-6 py-4">Starts the queue at its first track.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Clear queue</td>
+                <td class="px-6 py-4">Removes every track. Because this cannot be undone, it has to be confirmed once, and the confirmation says how many tracks are about to go.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+Tracks are added to the queue from the library — **Add to queue** and **Play next** in the
+[song options](/nextcp2/user_interface/music_library/#song-options), or the **PLAY** / **SHUFFLE**
+buttons of a browse page, which replace the queue with what that page shows.
+
+This page requires a UPnP media renderer. The built-in browser player (**This Device**) keeps its
+queue inside the browser instead — see [Player Bar](/nextcp2/user_interface/player_bar/).

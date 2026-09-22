@@ -30,9 +30,11 @@ Displays a card view of the detected media server.
   <Field name="Status">Previously discovered servers may appear as <code>OFFLINE</code> if not yet discovered on the network; active servers are <code>ONLINE</code>. Read only.</Field>
   <Field name="IP">IP address of the device. Read only.</Field>
   <Field name="UDN">Unique Device Name, identifies the device on the network. Read only.</Field>
-  <Field name="MY PLAYLIST — ObjectID">Media server ObjectID of a folder containing playlists. Usually configured automatically by the UI; once set, the playlists from that folder appear in the sidebar.<Note>If the server's database is recreated or reindexed, the ObjectID may change and has to be set again.</Note></Field>
-  <Field name="ID3 Rating">If checked, enables reading and writing star ratings to audio file metadata, if the format supports it.<Note>Only available for the UMS media server (fork).</Note></Field>
+  <Field name="ID3 Rating">If checked, enables reading and writing star ratings to audio file metadata, if the format supports it.<Note>Only available for the UMS media server (version 16 or newer).</Note></Field>
 </Group>
+
+The sidebar's **MY PLAYLISTS** section has no setting here any more: it lists the playlists you liked,
+wherever they are stored — see [Music Library](/nextcp2/user_interface/music_library/#my-playlists-in-the-sidebar).
 
 ## Renderer configuration
 
@@ -58,6 +60,9 @@ A **device driver** lets nextCP/2 control the device your streamer feeds its aud
 - Optionally, the streamer is forced to **100 %** (no attenuation, so it no longer controls the volume) via the *UPnP/streamer max volume* option — only the amplifier then changes the level.
 - Default **volume** and **balance** can be applied automatically when the amplifier is powered on.
 
+The driver is picked on the renderer's card; the <span class="material-symbols-outlined">tune</span> button next to it
+opens its settings in a dialog of their own. A renderer whose driver is not configured yet says so on the card.
+
 <Group title="Settings">
   <Field name="amplifier type">Select the device driver, e.g. <code>MA9000</code> for McIntosh amplifiers.</Field>
   <Field name="amplifier driver connection">Connection string (<code>host:port</code>) to the amplifier or, for serial-only amps, to the RS232 bridge — e.g. <code>192.168.112.37:12345</code>.</Field>
@@ -70,10 +75,12 @@ A **device driver** lets nextCP/2 control the device your streamer feeds its aud
 
 Additional UMS server actions, available when the active media server is a UMS instance.
 
-<Group>
-  <Field name="rescan media library">Rescans the UMS media library. Can be resource-intensive on large libraries.</Field>
-  <Field name="backup liked albums">Backs up UMS liked albums to a separate file on the UMS server, so they can be restored if the library is deleted.</Field>
-  <Field name="restore liked albums">Restores liked albums from a backup file, if one exists.</Field>
+<Group title="Rating Actions">
+  <Field name="backup ratings">Writes every rating the media server holds — star ratings and the likes of albums and playlists — to a backup file on the server, so they survive a library that has to be rebuilt.</Field>
+  <Field name="restore ratings">Reads that backup back into the media server's library.</Field>
+</Group>
+
+<Group title="Other Actions">
   <Field name="import rating from musicBrainz.org">Imports star ratings from the musicbrainz.org account configured under Accounts.</Field>
 </Group>
 
@@ -109,10 +116,23 @@ Additional UMS server actions, available when the active media server is a UMS i
 </Group>
 
 <Group title="Browser Player">
+  <Field name="Audio format for the browser player">How audio is delivered to <a href="/nextcp2/user_interface/player_bar/">This Device</a>. <code>Automatic</code> (default) streams lossless where the browser can decode it and transcodes where it cannot; <code>Always lossless</code> never transcodes; <code>Always transcoded</code> always does, which saves bandwidth. When automatic has fallen back to transcoded audio — no FLAC support in this browser, or a failed playback — a note below the field says so and offers to try lossless again.</Field>
   <Field name="transcode before streaming">Applies to the built-in browser player (<a href="/nextcp2/user_interface/player_bar/">This Device</a>). If checked (default), a track that needs transcoding is fully transcoded before playback starts, enabling correct duration display and seeking. Uncheck for lower latency, at the cost of seeking on transcoded tracks.</Field>
   <Field name="cache directory">Directory where transcoded audio for the browser player is cached. Leave empty to use the system temp directory.</Field>
   <Field name="cache max size">Maximum size of the transcode cache in MB. Set <code>0</code> for unlimited.</Field>
   <Field name="cache idle TTL">How long (in hours) a cached transcode is kept after its last use. Set <code>0</code> to keep entries until the next restart.</Field>
+</Group>
+
+## Audio Addict Radio Network
+
+Credentials of a paid [Audio Addict](https://www.audioaddict.com/) subscription (DI.fm, Radio Tunes, Jazz Radio, …).
+nextCP/2 does not stream these networks itself — it passes the account on to the media server, which then offers their
+stations under **Radio Networks** in the sidebar.
+
+<Group>
+  <Field name="username">Account name of the subscription.</Field>
+  <Field name="password">Account password. It is stored encoded in the nextCP/2 configuration and handed to the media server.</Field>
+  <Field name="prefer european server">If checked, the media server picks a European streaming server.</Field>
 </Group>
 
 ## AI Configuration
@@ -140,6 +160,12 @@ The AI feature is experimental and under active development — these settings m
 #### Spotify
 
 Connect your Spotify account to enable discovery of artist album art. If the browser is connected to localhost, a one-step linking process is available. Otherwise the <code>authCode</code> must be copied manually into the provided code block.
+
+#### MusicBrainz
+
+Username and password of your [musicbrainz.org](https://musicbrainz.org/) account. With it, star ratings of tracks
+carrying a MusicBrainz Track ID can be written to that account, and *import rating from musicBrainz.org* under
+[Server Actions](#server-actions) reads them back.
 
 #### Last.fm
 

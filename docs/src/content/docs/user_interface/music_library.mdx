@@ -34,9 +34,13 @@ The **Music Library** serves as the main entry point to your entire music collec
 </div>
 
 
-As you navigate through folders, the layout adapts based on the type of content being displayed. **Folders** are labeled with their names. **Playlists, images, and radio stations** are additionally highlighted for easier recognition.  
+As you navigate through folders, the layout adapts based on the type of content being displayed. **Folders** are labeled with their names. **Playlists, images, radio stations and videos** are additionally highlighted for easier recognition — each kind gets its own section with its own heading and count.
 
 You can also filter the displayed content by entering text into the **Search in this page** box.
+
+A listing keeps itself up to date: if the media server reports a change — a file added to the folder,
+a cover that was just updated, a rating written from another browser — only the entries that actually
+changed are replaced, so the page does not jump while you are reading it.
 
 
 ## Browse header
@@ -80,6 +84,50 @@ and the filters on the right. Scrolling down collapses it into a slim sticky bar
 The **like** button (heart) is not part of this bar — it sits next to the album title in the header and only appears if
 the album is identified by a MusicBrainz Release ID (all tracks must belong to the same release).
 
+### Folder options
+
+**OPTIONS** opens the options of the container you are currently in. The very same menu belongs to
+every tile of a listing: click the <span class="material-symbols-outlined">more_horiz</span> button
+on its cover, or press and hold the tile on a touch device — so a folder or playlist can be handled
+without entering it first. Only the rows that make sense for that container are shown.
+
+<div class="relative overflow-x-auto">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">Entry</th>
+                <th scope="col" class="px-6 py-3">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Like folder / playlist</td>
+                <td class="px-6 py-4">Marks the container with a heart, shown on its tile. A liked <em>playlist</em> appears under <strong>MY PLAYLISTS</strong> in the sidebar. Unliking clears the rating again. Requires a media server that stores ratings (UMS 16 or newer).</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Add to playlist</td>
+                <td class="px-6 py-4">Adds the tracks of this container to a server side playlist.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Update album art</td>
+                <td class="px-6 py-4">Replaces the cover of this container with the image behind the URL you enter. The listing picks up the new cover right away.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Add radio station</td>
+                <td class="px-6 py-4">Playlists only: searches <a href="https://www.radio-browser.info/">radio-browser.info</a> and appends the station you pick to this playlist — see <a href="/nextcp2/user_interface/radio/">Radio</a>.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Set artist folder</td>
+                <td class="px-6 py-4">Marks the current folder as the one holding your artist folders, so artist images are looked up there. Offered on folders that contain folders.</td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Select player playlist / folder</td>
+                <td class="px-6 py-4">Only with the optional media player module: the playlist or folder it writes what it records into.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
 ### Filters
 
 The right side of the header narrows down what the page shows. The filters apply to everything on the current page —
@@ -107,7 +155,7 @@ icon resets it. Only the filters that make sense for the current page are displa
             </tr>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">RATING</td>
-                <td class="px-6 py-4">Keeps only entries with exactly the chosen star rating: <code>5</code> (liked) down to <code>0</code> (disliked), or <code>Any</code> to switch the filter off. Requires a media server with the extended API (UMS fork).</td>
+                <td class="px-6 py-4">Keeps only entries with exactly the chosen star rating: <code>5</code> (liked) down to <code>0</code> (disliked), or <code>Any</code> to switch the filter off. Requires a media server with the extended API (UMS 16 or newer).</td>
             </tr>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">SORT</td>
@@ -119,13 +167,20 @@ icon resets it. Only the filters that make sense for the current page are displa
 
 ## Server Side Playlists
 
-### Configure MY PLAYLIST sidebar
+### MY PLAYLISTS in the sidebar
 
-<video src="/nextcp2/anim/playlist_sidebar.mp4" poster="/nextcp2/anim/playlist_sidebar.poster.webp"
-       autoplay loop muted playsinline controls preload="metadata"
-       class="block w-full h-auto my-4 rounded-lg" aria-label="Configuring the MY PLAYLISTS sidebar"></video>
+The **MY PLAYLISTS** section of the sidebar lists the playlists you have **liked**, wherever they are
+stored on the media server. There is no playlist folder to configure any more: nextCP/2 asks the
+media server for every playlist rated as liked, so a playlist appears no matter which directory it
+lives in.
 
-To configure the quick access **MY PLAYLISTS** section, navigate to the folder containing your playlists, then click on the three dots in the header and select **Set MY PLAYLISTS**. The sidebar will be refreshed and the playlists are directly accessible.
+To put a playlist there, open its [folder options](#folder-options) — the
+<span class="material-symbols-outlined">more_horiz</span> button on its tile, or the three dots in
+the header once you are inside it — and choose **Like playlist**. **Unlike playlist** takes it out of
+the sidebar again; the playlist file itself is not touched.
+
+This requires a media server that can search on the rating, which means UMS 16 or newer. Without one
+the section stays empty.
 
 
 ### Create Server Side Playlist
@@ -157,7 +212,11 @@ Click the three-dot menu next to **MY PLAYLISTS** to open the options dialog. Sw
        autoplay loop muted playsinline controls preload="metadata"
        class="block w-full h-auto my-4 rounded-lg" aria-label="Creating a server side playlist, adding and removing songs, deleting it again"></video>
 
-The animation shows how to create a new playlist. Because we are working inside the folder that feeds the **MY PLAYLISTS** sidebar, the new playlist appears there right away. After creating it, two songs are added, one of them is removed again, and finally the playlist itself is deleted.
+The animation shows how to create a new playlist. After creating it, two songs are added, one of them is removed again, and finally the playlist itself is deleted. To keep a playlist within reach, like it — it then shows up under **MY PLAYLISTS** in the sidebar.
+
+:::note
+The clip was recorded with an earlier version, which put the playlists of one configured folder into the sidebar. Creating, filling and deleting a playlist still works exactly as shown.
+:::
 
 ## View templates
 
@@ -185,6 +244,13 @@ To manage a multi-disc release, copy all audio files into a single folder. If th
 <Image src={imgPV} alt="" />
 
 When browsing server-based playlists, the display automatically switches to a track view with small album covers. Clicking **Switch View** will change the display to a full-sized album view.
+
+### Videos
+
+Video items are listed in a **Videos** section of their own. Clicking one hands it to the selected
+player: a UPnP renderer that can show video plays it, and with **This Device** selected it opens in a
+full screen player inside the browser tab — see
+[Video in the browser](/nextcp2/user_interface/player_bar/#video-in-the-browser).
 
 ## Song Options
 
@@ -226,6 +292,17 @@ When the current media player is in **playlist mode**, selecting **Play next** w
 
 You can `download` a resource, or `Update album art` on the server side.
 
+<Bullets title="Live title of this station">
+    <li>Detect automatically</li>
+    <li>Artist &ndash; Title</li>
+    <li>Title &ndash; Station</li>
+</Bullets>
+
+Web radio entries carry one more group. Stations announce the running track as a single line of text
+(ICY metadata), and they do not agree on what that line contains: most send `Artist - Title`, some
+send `Track - Station`. **Detect automatically** lets the media server guess; if a station is
+consistently shown the wrong way round, pin the order here. The setting belongs to the station and is
+stored with it on the media server, so it applies to every renderer and every browser.
 
 ## UPnP Search
 
@@ -238,3 +315,9 @@ If the selected media server supports UPnP search, entering text into the **Glob
 Known media servers with compatible UPnP search capabilities include [MinimServer](https://minimserver.com/) and [Universal Media Server (since 10.6.0)](https://www.universalmediaserver.com/). The search text is matched against tracks, albums, playlists, and artists. Artist covers are retrieved from Spotify if a connected account is available.
 
 Clicking on a song item will play that song immediately. Clicking on any other item will navigate into that content.
+
+The dropdown shows the first hits per kind. **show all (N)** next to a group turns the query into a
+full result page — a page like any other browse page, with the same control buttons and filters, so
+the hits can be played, shuffled, sorted or narrowed down further. The result page carries a bar with
+every kind of hit the query has (*Albums*, *Tracks*, *Artists*, *Playlists*) and their counts, so
+switching from albums to tracks is one click instead of searching again.
