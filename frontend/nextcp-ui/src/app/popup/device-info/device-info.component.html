@@ -1,0 +1,116 @@
+<div class="popupFrame glass-panel flex flex-col">
+    <div class="dialog-header flex items-center justify-between gap-4 px-5 py-3">
+        <div class="header-title">{{ friendlyName }}</div>
+        <div class="flex items-center gap-2">
+            @if (details()) {
+                <button type="button" class="icon-button" (click)="copyAsText()"
+                        title="copy as text" aria-label="copy as text">
+                    <span class="material-symbols-outlined thin">content_copy</span>
+                </button>
+            }
+            <button type="button" class="icon-button" (click)="close()" aria-label="close">
+                <span class="material-symbols-outlined thin">close</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="popupBody flex flex-col">
+        @if (loading()) {
+            <div class="hint">reading device …</div>
+        } @else if (failed()) {
+            <div class="hint">This device is not answering any more. It may have gone offline.</div>
+        } @else if (details(); as device) {
+            <div class="headline">{{ device.mediaServer ? 'media server' : 'media renderer' }}</div>
+            <div class="kv-grid">
+                @if (device.manufacturer) {
+                    <div class="kv-key">manufacturer</div>
+                    <div class="kv-value">
+                        @if (device.manufacturerUrl) {
+                            <a [href]="device.manufacturerUrl" target="_blank" rel="noopener">{{ device.manufacturer }}</a>
+                        } @else {
+                            {{ device.manufacturer }}
+                        }
+                    </div>
+                }
+                @if (device.modelName || device.modelNumber) {
+                    <div class="kv-key">model</div>
+                    <div class="kv-value">{{ device.modelName }} {{ device.modelNumber }}</div>
+                }
+                @if (device.modelDescription) {
+                    <div class="kv-key">description</div>
+                    <div class="kv-value">{{ device.modelDescription }}</div>
+                }
+                @if (device.serialNumber) {
+                    <div class="kv-key">serial</div>
+                    <div class="kv-value">{{ device.serialNumber }}</div>
+                }
+                @if (device.ipAddress) {
+                    <div class="kv-key">address</div>
+                    <div class="kv-value">{{ device.ipAddress }}</div>
+                }
+                <div class="kv-key">type</div>
+                <div class="kv-value">{{ device.deviceType }}</div>
+                <div class="kv-key">udn</div>
+                <div class="kv-value mono">{{ device.udn }}</div>
+                @if (device.presentationUrl) {
+                    <div class="kv-key">web interface</div>
+                    <div class="kv-value">
+                        <a [href]="device.presentationUrl" target="_blank" rel="noopener">{{ device.presentationUrl }}</a>
+                    </div>
+                }
+            </div>
+
+            @if (device.mediaServer) {
+                <div class="headline">features</div>
+                <div class="hint">
+                    What nextCP/2 offers for this server. Read from the actions it announces, not from its version.
+                </div>
+                <div class="chips flex flex-wrap gap-1">
+                    @for (feature of allFeatures; track feature) {
+                        <span class="chip" [class.on]="hasFeature(feature)">{{ feature }}</span>
+                    }
+                </div>
+                @if (device.searchCaps) {
+                    <div class="caps">searchable on: {{ device.searchCaps }}</div>
+                }
+            }
+
+            <div class="headline">services ({{ device.services.length }})</div>
+            <div class="service-list flex flex-col">
+                @for (service of device.services; track service.serviceId) {
+                    <button type="button" class="service-row flex items-center gap-3"
+                            (click)="toggleService(service)">
+                        <span class="material-symbols-outlined thin chevron"
+                              [class.open]="openService() === service.serviceId">chevron_right</span>
+                        <span class="flex flex-col min-w-0 grow">
+                            <span class="service-name">{{ service.serviceType }}</span>
+                            <span class="service-meta">{{ actionSummary(service) }}</span>
+                        </span>
+                    </button>
+                    @if (openService() === service.serviceId) {
+                        <div class="service-detail flex flex-col">
+                            @if (service.actions?.length) {
+                                <div class="detail-label">actions</div>
+                                <div class="chips flex flex-wrap gap-1">
+                                    @for (action of service.actions; track action) {
+                                        <span class="chip">{{ action }}</span>
+                                    }
+                                </div>
+                            }
+                            @if (service.eventedVariables?.length) {
+                                <div class="detail-label">sends events for</div>
+                                <div class="chips flex flex-wrap gap-1">
+                                    @for (variable of service.eventedVariables; track variable) {
+                                        <span class="chip">{{ variable }}</span>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                } @empty {
+                    <div class="hint">This device announces no services.</div>
+                }
+            </div>
+        }
+    </div>
+</div>

@@ -4,6 +4,9 @@ import { PopupService } from './../../util/popup.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, ElementRef, computed, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ConfigurationService } from 'src/app/service/configuration.service';
+import { MatDialog } from '@angular/material/dialog';
+import { MediaServerDto } from 'src/app/service/dto';
+import { DeviceInfoComponent } from '../device-info/device-info.component';
 
 @Component({
   selector: 'app-available-server',
@@ -14,6 +17,7 @@ import { ConfigurationService } from 'src/app/service/configuration.service';
 })
 export class AvailableServerComponent {
   private popupService = inject(PopupService);
+  private readonly infoDialog = inject(MatDialog);
   private persistenceService = inject(PersistenceService);
   deviceService = inject(DeviceService);
   configurationService = inject(ConfigurationService);
@@ -56,6 +60,19 @@ export class AvailableServerComponent {
 
   close(): void {
     this._matDialogRef.close();
+  }
+
+  /** Opens the info dialog for one server without switching to it. */
+  showInfo(device: MediaServerDto): void {
+    this.infoDialog.open(DeviceInfoComponent, {
+      width: '620px',
+      maxWidth: '92vw',
+      height: '640px',
+      maxHeight: '90vh',
+      panelClass: ['popup-glass'],
+      data: { udn: device.udn, friendlyName: device.friendlyName },
+    });
+    this.close();
   }
 
   selectServer(udn: string): void {

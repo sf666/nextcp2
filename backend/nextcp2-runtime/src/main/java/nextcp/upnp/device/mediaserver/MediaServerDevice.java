@@ -415,6 +415,11 @@ public class MediaServerDevice extends BaseDevice {
 		return new MediaServerDto(getBiggestIconUrl(), getUDN().getIdentifierString(), getFriendlyName(), false, getFeatures());
 	}
 
+	/** What the server answers when asked what it can be searched on; empty if it cannot be searched. */
+	public String getSearchCaps() {
+		return searchSupportDelegate == null ? "" : searchSupportDelegate.getSearchCaps();
+	}
+
 	/** What this server can do. A plain UPnP server only tells us its search capabilities. */
 	public List<String> getFeatures() {
 		List<String> features = new ArrayList<>();

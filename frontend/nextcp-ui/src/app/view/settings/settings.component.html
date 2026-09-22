@@ -70,6 +70,7 @@
         <div class="device-card-foot">
           <button type="button" class="glass-btn primary" (click)="saveServerConfig(serverConfig)">save</button>
           <button type="button" class="glass-btn danger" (click)="deleteServerConfig(serverConfig)">delete</button>
+          <button type="button" class="glass-btn" (click)="showDeviceInfo(serverConfig.mediaServer.udn, serverConfig.mediaServer.friendlyName)">details</button>
         </div>
       </div>
       }
@@ -182,6 +183,7 @@
         <div class="device-card-foot">
           <button type="button" class="glass-btn primary" (click)="saveRendererConfig(rendererConfig)">save</button>
           <button type="button" class="glass-btn danger" (click)="deleteRendererConfig(rendererConfig)">delete</button>
+          <button type="button" class="glass-btn" (click)="showDeviceInfo(rendererConfig.mediaRenderer.udn, rendererConfig.mediaRenderer.friendlyName)">details</button>
         </div>
       </div>
       }

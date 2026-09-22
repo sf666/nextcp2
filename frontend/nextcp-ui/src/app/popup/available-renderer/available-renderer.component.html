@@ -8,7 +8,8 @@
   <!-- Renderer list -->
   <div class="dialog-list flex flex-col">
     @for (device of filteredMediaRendererList(); track device.udn) {
-      <button type="button" class="device-item flex items-center gap-3"
+      <div class="device-row flex items-center">
+      <button type="button" class="device-item flex items-center gap-3 grow min-w-0"
         [class.selected]="deviceService.isMediaRendererSelected(device.udn)"
         (click)="selectRenderer(device.udn)">
         <span class="device-icon flex items-center justify-center">
@@ -36,6 +37,13 @@
         </span>
         <span class="material-symbols-outlined check-icon">check</span>
       </button>
+      @if (device.udn !== deviceService.LOCAL_BROWSER_UDN) {
+        <button type="button" class="info-button" (click)="showInfo(device)"
+          [attr.aria-label]="'Info about ' + device.friendlyName" title="device info">
+          <span class="material-symbols-outlined">info</span>
+        </button>
+      }
+      </div>
     }
   </div>
 </div>

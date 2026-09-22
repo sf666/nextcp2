@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { ConfigurationService } from './configuration.service';
 import { SseService } from './sse/sse.service';
 import {
+  DeviceDetailsDto,
   MediaServerDto,
   MediaRendererDto,
   InputSourceChangeDto,
@@ -129,6 +130,15 @@ export class DeviceService {
       return true;
     }
     return false;
+  }
+
+  /** What one device says about itself. Read on demand, for the device info dialog. */
+  public deviceDetails(udn: string): Subject<DeviceDetailsDto> {
+    return this.httpService.get<DeviceDetailsDto>(
+      this.baseUri,
+      `/deviceDetails/${encodeURIComponent(udn)}`,
+      'device info',
+    );
   }
 
   public isServerOnline(device: MediaServerDto): boolean {

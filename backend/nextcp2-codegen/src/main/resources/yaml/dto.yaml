@@ -258,6 +258,36 @@ MediaRendererDto:
    allSources: List<InputSourceDto>
 
 
+# One UPnP service a device offers, with what it announces in its service description.
+DeviceServiceDto:
+   serviceType: String
+   serviceId: String
+   version: Integer
+   # Empty when the device description was read but its service description was not reachable.
+   actions: List<String>
+   eventedVariables: List<String>
+
+# Everything the info dialog shows about one device. Read on demand: the action lists are large and
+# only interesting while the dialog is open.
+DeviceDetailsDto:
+   udn: String
+   friendlyName: String
+   deviceType: String
+   manufacturer: String?
+   manufacturerUrl: String?
+   modelName: String?
+   modelNumber: String?
+   modelDescription: String?
+   serialNumber: String?
+   presentationUrl: String?
+   descriptorUrl: String?
+   ipAddress: String?
+   mediaServer: Boolean
+   # Media server only: the capability tokens and the search criteria they are partly derived from.
+   features: List<String>
+   searchCaps: String?
+   services: List<DeviceServiceDto>
+
 MediaRendererServicesDto:
    namespace: String
    serviceName: String

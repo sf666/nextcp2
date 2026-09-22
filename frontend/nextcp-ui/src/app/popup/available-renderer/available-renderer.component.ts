@@ -3,6 +3,9 @@ import { PopupService } from './../../util/popup.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, ElementRef, computed, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ConfigurationService } from 'src/app/service/configuration.service';
+import { MatDialog } from '@angular/material/dialog';
+import { MediaRendererDto } from 'src/app/service/dto';
+import { DeviceInfoComponent } from '../device-info/device-info.component';
 
 @Component({
   selector: 'app-available-renderer',
@@ -13,6 +16,7 @@ import { ConfigurationService } from 'src/app/service/configuration.service';
 })
 export class AvailableRendererComponent {
   private popupService = inject(PopupService);
+  private readonly infoDialog = inject(MatDialog);
   deviceService = inject(DeviceService);
   configurationService = inject(ConfigurationService);
 
@@ -59,6 +63,19 @@ export class AvailableRendererComponent {
 
   close(): void {
     this._matDialogRef.close();
+  }
+
+  /** Opens the info dialog for one renderer without switching to it. */
+  showInfo(device: MediaRendererDto): void {
+    this.infoDialog.open(DeviceInfoComponent, {
+      width: '620px',
+      maxWidth: '92vw',
+      height: '640px',
+      maxHeight: '90vh',
+      panelClass: ['popup-glass'],
+      data: { udn: device.udn, friendlyName: device.friendlyName },
+    });
+    this.close();
   }
 
   selectRenderer(udn: string): void {

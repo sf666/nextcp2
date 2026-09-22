@@ -135,3 +135,34 @@
         'GRAD' 0,
         'opsz' 24;
 }
+
+// The row carries the select button and the info button side by side; the button keeps the
+// selected state, so the styling above still applies.
+.device-row {
+    width: 100%;
+    gap  : 2px;
+}
+
+.info-button {
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    flex           : 0 0 auto;
+    width          : 32px;
+    height         : 32px;
+    border         : none;
+    border-radius  : 50%;
+    background     : transparent;
+    color          : rgba(255, 255, 255, 0.35);
+    cursor         : pointer;
+    transition     : background-color 0.15s ease, color 0.15s ease;
+
+    .material-symbols-outlined {
+        font-size: 18px;
+    }
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.06);
+        color           : var(--primary-color);
+    }
+}

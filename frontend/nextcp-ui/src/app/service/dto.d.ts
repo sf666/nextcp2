@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-09-22 09:56:06.
+// Generated using typescript-generator version 4.1.1 on 2026-09-22 10:18:00.
 
 export interface AddRadioStationRequest {
     serverUdn: string;
@@ -190,6 +190,25 @@ export interface CreateServerPlaylistVO {
     playlistName: string;
 }
 
+export interface DeviceDetailsDto {
+    udn: string;
+    friendlyName: string;
+    deviceType: string;
+    manufacturer?: string;
+    manufacturerUrl?: string;
+    modelName?: string;
+    modelNumber?: string;
+    modelDescription?: string;
+    serialNumber?: string;
+    presentationUrl?: string;
+    descriptorUrl?: string;
+    ipAddress?: string;
+    mediaServer: boolean;
+    features: string[];
+    searchCaps?: string;
+    services: DeviceServiceDto[];
+}
+
 export interface DeviceDriverCapability {
     deviceType: string;
     deviceDescription: string;
@@ -207,6 +226,14 @@ export interface DeviceDriverState {
 export interface DevicePowerChanged {
     udn: string;
     isPowerOn: boolean;
+}
+
+export interface DeviceServiceDto {
+    serviceType: string;
+    serviceId: string;
+    version: number;
+    actions: string[];
+    eventedVariables: string[];
 }
 
 export interface DeviceVolumeChanged {

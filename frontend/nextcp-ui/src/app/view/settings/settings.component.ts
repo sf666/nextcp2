@@ -5,6 +5,7 @@ import { MyMusicService } from './../../service/my-music.service';
 import { SystemService } from './../../service/system.service';
 import { DeviceService } from './../../service/device.service';
 import { ServerFeature } from './../../service/server-feature';
+import { DeviceInfoComponent } from './../../popup/device-info/device-info.component';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { RatingServiceService } from './../../service/rating-service.service';
 import {
@@ -451,6 +452,18 @@ export class SettingsComponent implements OnInit {
     this.contentDirectoryService.rescanContent(
       this.deviceService.selectedMediaServerDevice().udn,
     );
+  }
+
+  /** Everything the device says about itself: services, actions and, for a server, its features. */
+  showDeviceInfo(udn: string, friendlyName: string): void {
+    this.dialog.open(DeviceInfoComponent, {
+      width: '620px',
+      maxWidth: '92vw',
+      height: '640px',
+      maxHeight: '90vh',
+      panelClass: ['popup-glass'],
+      data: { udn: udn, friendlyName: friendlyName },
+    });
   }
 
   /** Backing up ratings is an action of the server, not something every UMS build has. */

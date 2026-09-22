@@ -18,6 +18,9 @@ public class BackendException extends RuntimeException
 
     public static final int SERVICE_UNAVAILABLE_AVTRANSPORT = 3000;
 
+    /** Asked about a device the registry does not know, e.g. one that went offline meanwhile. */
+    public static final int DEVICE_NOT_FOUND = 1000;
+
     public static final int DEVICE_DRIVER_UNAVAILABLE = 4000;
 
     public static final int DEVICE_DRIVER_CONNECTION_STRING_ERROR = 4001;

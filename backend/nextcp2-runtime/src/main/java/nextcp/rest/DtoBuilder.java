@@ -3,7 +3,9 @@ package nextcp.rest;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -11,6 +13,15 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import java.net.URL;
+
+import org.jupnp.model.meta.Action;
+import org.jupnp.model.meta.DeviceDetails;
+import org.jupnp.model.meta.ManufacturerDetails;
+import org.jupnp.model.meta.ModelDetails;
+import org.jupnp.model.meta.RemoteDevice;
+import org.jupnp.model.meta.RemoteService;
+import org.jupnp.model.meta.StateVariable;
 import org.jupnp.support.contentdirectory.DIDLParser;
 import org.jupnp.support.model.DIDLContent;
 import org.jupnp.support.model.DIDLObject;
@@ -35,6 +46,8 @@ import nextcp.dto.DiscogsId;
 import nextcp.dto.MediaRendererDto;
 import nextcp.dto.MediaServerDto;
 import nextcp.dto.MusicBrainzId;
+import nextcp.dto.DeviceDetailsDto;
+import nextcp.dto.DeviceServiceDto;
 import nextcp.dto.ItemDto;
 import nextcp.dto.VideoItemDto;
 import nextcp.dto.MusicItemIdDto;
@@ -42,6 +55,7 @@ import nextcp.dto.UpnpAvTransportState;
 import nextcp.spotify.SpotifyArtistService;
 import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.device.mediarenderer.avtransport.AvTransportState;
+import nextcp.upnp.device.BaseDevice;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
 
 @Service
@@ -840,6 +854,63 @@ public class DtoBuilder
             mediaRenderer.add(device.getAsDto());
         }
         return mediaRenderer;
+    }
+
+    /**
+     * Everything the device info dialog shows: what the device says about itself, plus every service
+     * it announces with the actions of its service description.
+     */
+    public DeviceDetailsDto buildDeviceDetails(BaseDevice device, boolean isMediaServer, List<String> features, String searchCaps)
+    {
+        RemoteDevice remoteDevice = device.getDevice();
+        DeviceDetails details = remoteDevice.getDetails();
+        ManufacturerDetails manufacturer = details != null ? details.getManufacturerDetails() : null;
+        ModelDetails model = details != null ? details.getModelDetails() : null;
+        URL descriptorUrl = remoteDevice.getIdentity().getDescriptorURL();
+
+        DeviceDetailsDto dto = new DeviceDetailsDto();
+        dto.udn = device.getUdnAsString();
+        dto.friendlyName = device.getFriendlyName();
+        dto.deviceType = remoteDevice.getType() != null ? remoteDevice.getType().toString() : "";
+        dto.manufacturer = manufacturer != null ? manufacturer.getManufacturer() : null;
+        dto.manufacturerUrl = manufacturer != null && manufacturer.getManufacturerURI() != null
+                ? manufacturer.getManufacturerURI().toString()
+                : null;
+        dto.modelName = model != null ? model.getModelName() : null;
+        dto.modelNumber = model != null ? model.getModelNumber() : null;
+        dto.modelDescription = model != null ? model.getModelDescription() : null;
+        dto.serialNumber = details != null ? details.getSerialNumber() : null;
+        dto.presentationUrl = details != null && details.getPresentationURI() != null ? details.getPresentationURI().toString() : null;
+        dto.descriptorUrl = descriptorUrl != null ? descriptorUrl.toString() : null;
+        dto.ipAddress = descriptorUrl != null ? descriptorUrl.getHost() : null;
+        dto.mediaServer = isMediaServer;
+        dto.features = features != null ? features : new ArrayList<>();
+        dto.searchCaps = searchCaps;
+        dto.services = buildDeviceServices(remoteDevice);
+        return dto;
+    }
+
+    private List<DeviceServiceDto> buildDeviceServices(RemoteDevice remoteDevice)
+    {
+        List<DeviceServiceDto> services = new ArrayList<>();
+        for (RemoteService service : remoteDevice.findServices())
+        {
+            DeviceServiceDto dto = new DeviceServiceDto();
+            dto.serviceType = service.getServiceType().toFriendlyString();
+            dto.serviceId = service.getServiceId() != null ? service.getServiceId().toString() : "";
+            dto.version = service.getServiceType().getVersion();
+            // An action list stays empty when the service description was never read - the device was
+            // discovered, its SCPD was not reachable. Better an empty list than a wrong one.
+            dto.actions = Arrays.stream(service.getActions()).map(Action::getName).sorted().toList();
+            dto.eventedVariables = Arrays.stream(service.getStateVariables())
+                    .filter(variable -> variable.getEventDetails() != null && variable.getEventDetails().isSendEvents())
+                    .map(StateVariable::getName)
+                    .sorted()
+                    .toList();
+            services.add(dto);
+        }
+        services.sort(Comparator.comparing(service -> service.serviceType));
+        return services;
     }
 
     public List<MediaServerDto> getMediaServerAsDto(Collection<MediaServerDevice> mediaServerDevices)
