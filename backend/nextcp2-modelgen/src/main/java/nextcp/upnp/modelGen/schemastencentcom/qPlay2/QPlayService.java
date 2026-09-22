@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.schemastencentcom.qPlay2.actions.GetLyricSupportType;
@@ -133,6 +134,12 @@ public class QPlayService
         return qPlayService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return qPlayService != null && qPlayService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -143,6 +150,11 @@ public class QPlayService
 
     public GetLyricSupportTypeOutput getLyricSupportType()
     {
+        if (!hasAction("GetLyricSupportType"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetLyricSupportType of service QPlay");
+        }
         GetLyricSupportType getLyricSupportType = new GetLyricSupportType(qPlayService,  upnpService.getControlPoint());
         GetLyricSupportTypeOutput res = getLyricSupportType.executeAction();
         return res;        
@@ -150,6 +162,11 @@ public class QPlayService
 
     public GetMaxTracksOutput getMaxTracks()
     {
+        if (!hasAction("GetMaxTracks"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetMaxTracks of service QPlay");
+        }
         GetMaxTracks getMaxTracks = new GetMaxTracks(qPlayService,  upnpService.getControlPoint());
         GetMaxTracksOutput res = getMaxTracks.executeAction();
         return res;        
@@ -157,6 +174,11 @@ public class QPlayService
 
     public GetTracksCountOutput getTracksCount()
     {
+        if (!hasAction("GetTracksCount"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetTracksCount of service QPlay");
+        }
         GetTracksCount getTracksCount = new GetTracksCount(qPlayService,  upnpService.getControlPoint());
         GetTracksCountOutput res = getTracksCount.executeAction();
         return res;        
@@ -164,6 +186,11 @@ public class QPlayService
 
     public GetTracksInfoOutput getTracksInfo(GetTracksInfoInput inp)
     {
+        if (!hasAction("GetTracksInfo"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetTracksInfo of service QPlay");
+        }
         GetTracksInfo getTracksInfo = new GetTracksInfo(qPlayService, inp, upnpService.getControlPoint());
         GetTracksInfoOutput res = getTracksInfo.executeAction();
         return res;        
@@ -171,6 +198,11 @@ public class QPlayService
 
     public InsertTracksOutput insertTracks(InsertTracksInput inp)
     {
+        if (!hasAction("InsertTracks"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action InsertTracks of service QPlay");
+        }
         InsertTracks insertTracks = new InsertTracks(qPlayService, inp, upnpService.getControlPoint());
         InsertTracksOutput res = insertTracks.executeAction();
         return res;        
@@ -178,6 +210,11 @@ public class QPlayService
 
     public QPlayAuthOutput qPlayAuth(QPlayAuthInput inp)
     {
+        if (!hasAction("QPlayAuth"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action QPlayAuth of service QPlay");
+        }
         QPlayAuth qPlayAuth = new QPlayAuth(qPlayService, inp, upnpService.getControlPoint());
         QPlayAuthOutput res = qPlayAuth.executeAction();
         return res;        
@@ -185,6 +222,11 @@ public class QPlayService
 
     public RemoveTracksOutput removeTracks(RemoveTracksInput inp)
     {
+        if (!hasAction("RemoveTracks"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action RemoveTracks of service QPlay");
+        }
         RemoveTracks removeTracks = new RemoveTracks(qPlayService, inp, upnpService.getControlPoint());
         RemoveTracksOutput res = removeTracks.executeAction();
         return res;        
@@ -192,18 +234,33 @@ public class QPlayService
 
     public void setLyric(SetLyricInput inp)
     {
+        if (!hasAction("SetLyric"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetLyric of service QPlay");
+        }
         SetLyric setLyric = new SetLyric(qPlayService, inp, upnpService.getControlPoint());
         setLyric.executeAction();
     }
 
     public void setNetwork(SetNetworkInput inp)
     {
+        if (!hasAction("SetNetwork"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetNetwork of service QPlay");
+        }
         SetNetwork setNetwork = new SetNetwork(qPlayService, inp, upnpService.getControlPoint());
         setNetwork.executeAction();
     }
 
     public SetTracksInfoOutput setTracksInfo(SetTracksInfoInput inp)
     {
+        if (!hasAction("SetTracksInfo"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetTracksInfo of service QPlay");
+        }
         SetTracksInfo setTracksInfo = new SetTracksInfo(qPlayService, inp, upnpService.getControlPoint());
         SetTracksInfoOutput res = setTracksInfo.executeAction();
         return res;        

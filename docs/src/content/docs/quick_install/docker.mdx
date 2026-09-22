@@ -15,6 +15,8 @@ The quickest way to install nextcp/2 is by using a Docker container. This guide 
 
 The following example uses `docker compose` to set up nextcp/2 along with Universal Media Server (UMS) in a single command. While UMS 16 or newer is the recommended media server, you can also use any other DLNA-compatible media server, though with fewer features.
 
+The `ik6666/ums` image is built from the [UMS fork](https://github.com/ik666/UniversalMediaServer), where the features nextCP/2 relies on are developed before they are merged into UMS. It is therefore the build that matches the current nextCP/2 release most closely — an official UMS 16 image works as well, it may just lack the newest fixes.
+
 Create a `docker-compose.yml` file in your project directory and add the following content:
 
 ```yaml

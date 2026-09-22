@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl2.actions.GetMute;
@@ -123,6 +124,12 @@ public class RenderingControlService
         return renderingControlService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return renderingControlService != null && renderingControlService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -133,6 +140,11 @@ public class RenderingControlService
 
     public GetMuteOutput getMute(GetMuteInput inp)
     {
+        if (!hasAction("GetMute"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetMute of service RenderingControl");
+        }
         GetMute getMute = new GetMute(renderingControlService, inp, upnpService.getControlPoint());
         GetMuteOutput res = getMute.executeAction();
         return res;        
@@ -140,6 +152,11 @@ public class RenderingControlService
 
     public GetVolumeOutput getVolume(GetVolumeInput inp)
     {
+        if (!hasAction("GetVolume"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetVolume of service RenderingControl");
+        }
         GetVolume getVolume = new GetVolume(renderingControlService, inp, upnpService.getControlPoint());
         GetVolumeOutput res = getVolume.executeAction();
         return res;        
@@ -147,6 +164,11 @@ public class RenderingControlService
 
     public ListPresetsOutput listPresets(ListPresetsInput inp)
     {
+        if (!hasAction("ListPresets"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action ListPresets of service RenderingControl");
+        }
         ListPresets listPresets = new ListPresets(renderingControlService, inp, upnpService.getControlPoint());
         ListPresetsOutput res = listPresets.executeAction();
         return res;        
@@ -154,18 +176,33 @@ public class RenderingControlService
 
     public void selectPreset(SelectPresetInput inp)
     {
+        if (!hasAction("SelectPreset"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SelectPreset of service RenderingControl");
+        }
         SelectPreset selectPreset = new SelectPreset(renderingControlService, inp, upnpService.getControlPoint());
         selectPreset.executeAction();
     }
 
     public void setMute(SetMuteInput inp)
     {
+        if (!hasAction("SetMute"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetMute of service RenderingControl");
+        }
         SetMute setMute = new SetMute(renderingControlService, inp, upnpService.getControlPoint());
         setMute.executeAction();
     }
 
     public void setVolume(SetVolumeInput inp)
     {
+        if (!hasAction("SetVolume"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetVolume of service RenderingControl");
+        }
         SetVolume setVolume = new SetVolume(renderingControlService, inp, upnpService.getControlPoint());
         setVolume.executeAction();
     }

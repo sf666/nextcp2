@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-09-18 13:28:03.
+// Generated using typescript-generator version 4.1.1 on 2026-09-22 09:37:26.
 
 export interface AddRadioStationRequest {
     serverUdn: string;
@@ -304,6 +304,7 @@ export interface MediaServerDto {
     udn: string;
     friendlyName: string;
     extendedApi: boolean;
+    features: string[];
 }
 
 export interface MusicAlbumIds {

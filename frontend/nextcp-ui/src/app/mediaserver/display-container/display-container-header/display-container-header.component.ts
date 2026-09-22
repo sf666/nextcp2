@@ -30,6 +30,7 @@ import {
   RatingServiceService,
 } from 'src/app/service/rating-service.service';
 import { DeviceService } from 'src/app/service/device.service';
+import { ServerFeature } from 'src/app/service/server-feature';
 import { BackgroundImageService } from 'src/app/util/background-image.service';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
@@ -254,7 +255,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
   // Discogs id. The media server only needs the objectID.
   likePossible = computed(
     () =>
-      this.deviceService.selectedMediaServerDevice().extendedApi &&
+      this.deviceService.hasFeature(ServerFeature.ALBUM_LIKES) &&
       (this.currentContainer?.id ?? '').length > 0,
   );
   // An album wears its like next to the title — that is part of what the album

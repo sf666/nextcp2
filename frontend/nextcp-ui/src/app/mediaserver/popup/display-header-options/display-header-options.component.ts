@@ -22,6 +22,7 @@ import {
   InputPopupData,
 } from 'src/app/util/comp/input-popup/input-popup/input-popup.component';
 import { PopupService } from 'src/app/util/popup.service';
+import { ServerFeature } from 'src/app/service/server-feature';
 
 /** Menu width in px. Keep in step with `.dialog-root` in the component's SCSS. */
 const MENU_WIDTH = 320;
@@ -137,11 +138,9 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   }
 
   showAddRadioStation(): boolean {
-    return this.isPlaylist() && this.showExtendedApi();
-  }
-
-  showExtendedApi(): boolean {
-    return !!this.deviceService.selectedMediaServerDevice().extendedApi;
+    return (
+      this.isPlaylist() && this.deviceService.hasFeature(ServerFeature.RADIO_BROWSER)
+    );
   }
 
   /**
@@ -150,7 +149,9 @@ export class DisplayHeaderOptionsComponent implements OnInit {
    */
   showArtistFolderRow(): boolean {
     return (
-      this.showExtendedApi() && this.isFolder() && this.childFolderCount > 2
+      this.deviceService.hasFeature(ServerFeature.ARTIST_FOLDER) &&
+      this.isFolder() &&
+      this.childFolderCount > 2
     );
   }
 

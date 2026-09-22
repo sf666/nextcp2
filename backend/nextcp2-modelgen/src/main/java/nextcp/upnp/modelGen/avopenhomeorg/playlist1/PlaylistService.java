@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.actions.DeleteAll;
@@ -154,6 +155,12 @@ public class PlaylistService
         return playlistService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return playlistService != null && playlistService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -164,18 +171,33 @@ public class PlaylistService
 
     public void deleteAll()
     {
+        if (!hasAction("DeleteAll"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action DeleteAll of service Playlist");
+        }
         DeleteAll deleteAll = new DeleteAll(playlistService,  upnpService.getControlPoint());
         deleteAll.executeAction();
     }
 
     public void deleteId(DeleteIdInput inp)
     {
+        if (!hasAction("DeleteId"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action DeleteId of service Playlist");
+        }
         DeleteId deleteId = new DeleteId(playlistService, inp, upnpService.getControlPoint());
         deleteId.executeAction();
     }
 
     public IdOutput id()
     {
+        if (!hasAction("Id"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Id of service Playlist");
+        }
         Id id = new Id(playlistService,  upnpService.getControlPoint());
         IdOutput res = id.executeAction();
         return res;        
@@ -183,6 +205,11 @@ public class PlaylistService
 
     public IdArrayOutput idArray()
     {
+        if (!hasAction("IdArray"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action IdArray of service Playlist");
+        }
         IdArray idArray = new IdArray(playlistService,  upnpService.getControlPoint());
         IdArrayOutput res = idArray.executeAction();
         return res;        
@@ -190,6 +217,11 @@ public class PlaylistService
 
     public IdArrayChangedOutput idArrayChanged(IdArrayChangedInput inp)
     {
+        if (!hasAction("IdArrayChanged"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action IdArrayChanged of service Playlist");
+        }
         IdArrayChanged idArrayChanged = new IdArrayChanged(playlistService, inp, upnpService.getControlPoint());
         IdArrayChangedOutput res = idArrayChanged.executeAction();
         return res;        
@@ -197,6 +229,11 @@ public class PlaylistService
 
     public InsertOutput insert(InsertInput inp)
     {
+        if (!hasAction("Insert"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Insert of service Playlist");
+        }
         Insert insert = new Insert(playlistService, inp, upnpService.getControlPoint());
         InsertOutput res = insert.executeAction();
         return res;        
@@ -204,30 +241,55 @@ public class PlaylistService
 
     public void next()
     {
+        if (!hasAction("Next"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Next of service Playlist");
+        }
         Next next = new Next(playlistService,  upnpService.getControlPoint());
         next.executeAction();
     }
 
     public void pause()
     {
+        if (!hasAction("Pause"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Pause of service Playlist");
+        }
         Pause pause = new Pause(playlistService,  upnpService.getControlPoint());
         pause.executeAction();
     }
 
     public void play()
     {
+        if (!hasAction("Play"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Play of service Playlist");
+        }
         Play play = new Play(playlistService,  upnpService.getControlPoint());
         play.executeAction();
     }
 
     public void previous()
     {
+        if (!hasAction("Previous"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Previous of service Playlist");
+        }
         Previous previous = new Previous(playlistService,  upnpService.getControlPoint());
         previous.executeAction();
     }
 
     public ProtocolInfoOutput protocolInfo()
     {
+        if (!hasAction("ProtocolInfo"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action ProtocolInfo of service Playlist");
+        }
         ProtocolInfo protocolInfo = new ProtocolInfo(playlistService,  upnpService.getControlPoint());
         ProtocolInfoOutput res = protocolInfo.executeAction();
         return res;        
@@ -235,6 +297,11 @@ public class PlaylistService
 
     public ReadOutput read(ReadInput inp)
     {
+        if (!hasAction("Read"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Read of service Playlist");
+        }
         Read read = new Read(playlistService, inp, upnpService.getControlPoint());
         ReadOutput res = read.executeAction();
         return res;        
@@ -242,6 +309,11 @@ public class PlaylistService
 
     public ReadListOutput readList(ReadListInput inp)
     {
+        if (!hasAction("ReadList"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action ReadList of service Playlist");
+        }
         ReadList readList = new ReadList(playlistService, inp, upnpService.getControlPoint());
         ReadListOutput res = readList.executeAction();
         return res;        
@@ -249,6 +321,11 @@ public class PlaylistService
 
     public RepeatOutput repeat()
     {
+        if (!hasAction("Repeat"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Repeat of service Playlist");
+        }
         Repeat repeat = new Repeat(playlistService,  upnpService.getControlPoint());
         RepeatOutput res = repeat.executeAction();
         return res;        
@@ -256,42 +333,77 @@ public class PlaylistService
 
     public void seekId(SeekIdInput inp)
     {
+        if (!hasAction("SeekId"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SeekId of service Playlist");
+        }
         SeekId seekId = new SeekId(playlistService, inp, upnpService.getControlPoint());
         seekId.executeAction();
     }
 
     public void seekIndex(SeekIndexInput inp)
     {
+        if (!hasAction("SeekIndex"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SeekIndex of service Playlist");
+        }
         SeekIndex seekIndex = new SeekIndex(playlistService, inp, upnpService.getControlPoint());
         seekIndex.executeAction();
     }
 
     public void seekSecondAbsolute(SeekSecondAbsoluteInput inp)
     {
+        if (!hasAction("SeekSecondAbsolute"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SeekSecondAbsolute of service Playlist");
+        }
         SeekSecondAbsolute seekSecondAbsolute = new SeekSecondAbsolute(playlistService, inp, upnpService.getControlPoint());
         seekSecondAbsolute.executeAction();
     }
 
     public void seekSecondRelative(SeekSecondRelativeInput inp)
     {
+        if (!hasAction("SeekSecondRelative"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SeekSecondRelative of service Playlist");
+        }
         SeekSecondRelative seekSecondRelative = new SeekSecondRelative(playlistService, inp, upnpService.getControlPoint());
         seekSecondRelative.executeAction();
     }
 
     public void setRepeat(SetRepeatInput inp)
     {
+        if (!hasAction("SetRepeat"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetRepeat of service Playlist");
+        }
         SetRepeat setRepeat = new SetRepeat(playlistService, inp, upnpService.getControlPoint());
         setRepeat.executeAction();
     }
 
     public void setShuffle(SetShuffleInput inp)
     {
+        if (!hasAction("SetShuffle"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetShuffle of service Playlist");
+        }
         SetShuffle setShuffle = new SetShuffle(playlistService, inp, upnpService.getControlPoint());
         setShuffle.executeAction();
     }
 
     public ShuffleOutput shuffle()
     {
+        if (!hasAction("Shuffle"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Shuffle of service Playlist");
+        }
         Shuffle shuffle = new Shuffle(playlistService,  upnpService.getControlPoint());
         ShuffleOutput res = shuffle.executeAction();
         return res;        
@@ -299,12 +411,22 @@ public class PlaylistService
 
     public void stop()
     {
+        if (!hasAction("Stop"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Stop of service Playlist");
+        }
         Stop stop = new Stop(playlistService,  upnpService.getControlPoint());
         stop.executeAction();
     }
 
     public TracksMaxOutput tracksMax()
     {
+        if (!hasAction("TracksMax"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action TracksMax of service Playlist");
+        }
         TracksMax tracksMax = new TracksMax(playlistService,  upnpService.getControlPoint());
         TracksMaxOutput res = tracksMax.executeAction();
         return res;        
@@ -312,6 +434,11 @@ public class PlaylistService
 
     public TransportStateOutput transportState()
     {
+        if (!hasAction("TransportState"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action TransportState of service Playlist");
+        }
         TransportState transportState = new TransportState(playlistService,  upnpService.getControlPoint());
         TransportStateOutput res = transportState.executeAction();
         return res;        

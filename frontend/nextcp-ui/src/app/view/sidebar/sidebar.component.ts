@@ -5,6 +5,7 @@ import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { MyPlaylistService } from './../my-playlists/my-playlist.service';
 import { RendererService } from './../../service/renderer.service';
 import { DeviceService } from './../../service/device.service';
+import { ServerFeature } from './../../service/server-feature';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -27,6 +28,8 @@ import { MusicLibraryService } from 'src/app/service/music-library/music-library
 })
 export class SidebarComponent {
   deviceService = inject(DeviceService);
+  /** The template asks the device service for capabilities by these names. */
+  protected readonly ServerFeature = ServerFeature;
   serverPlaylistService = inject(ServerPlaylistService);
   private myPlaylistService = inject(MyPlaylistService);
   private router = inject(Router);

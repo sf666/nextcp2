@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.actions.ModeInfo;
@@ -137,6 +138,12 @@ public class TransportService
         return transportService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return transportService != null && transportService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -147,6 +154,11 @@ public class TransportService
 
     public ModeInfoOutput modeInfo()
     {
+        if (!hasAction("ModeInfo"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action ModeInfo of service Transport");
+        }
         ModeInfo modeInfo = new ModeInfo(transportService,  upnpService.getControlPoint());
         ModeInfoOutput res = modeInfo.executeAction();
         return res;        
@@ -154,6 +166,11 @@ public class TransportService
 
     public ModesOutput modes()
     {
+        if (!hasAction("Modes"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Modes of service Transport");
+        }
         Modes modes = new Modes(transportService,  upnpService.getControlPoint());
         ModesOutput res = modes.executeAction();
         return res;        
@@ -161,24 +178,44 @@ public class TransportService
 
     public void pause()
     {
+        if (!hasAction("Pause"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Pause of service Transport");
+        }
         Pause pause = new Pause(transportService,  upnpService.getControlPoint());
         pause.executeAction();
     }
 
     public void play()
     {
+        if (!hasAction("Play"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Play of service Transport");
+        }
         Play play = new Play(transportService,  upnpService.getControlPoint());
         play.executeAction();
     }
 
     public void playAs(PlayAsInput inp)
     {
+        if (!hasAction("PlayAs"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action PlayAs of service Transport");
+        }
         PlayAs playAs = new PlayAs(transportService, inp, upnpService.getControlPoint());
         playAs.executeAction();
     }
 
     public RepeatOutput repeat()
     {
+        if (!hasAction("Repeat"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Repeat of service Transport");
+        }
         Repeat repeat = new Repeat(transportService,  upnpService.getControlPoint());
         RepeatOutput res = repeat.executeAction();
         return res;        
@@ -186,30 +223,55 @@ public class TransportService
 
     public void seekSecondAbsolute(SeekSecondAbsoluteInput inp)
     {
+        if (!hasAction("SeekSecondAbsolute"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SeekSecondAbsolute of service Transport");
+        }
         SeekSecondAbsolute seekSecondAbsolute = new SeekSecondAbsolute(transportService, inp, upnpService.getControlPoint());
         seekSecondAbsolute.executeAction();
     }
 
     public void seekSecondRelative(SeekSecondRelativeInput inp)
     {
+        if (!hasAction("SeekSecondRelative"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SeekSecondRelative of service Transport");
+        }
         SeekSecondRelative seekSecondRelative = new SeekSecondRelative(transportService, inp, upnpService.getControlPoint());
         seekSecondRelative.executeAction();
     }
 
     public void setRepeat(SetRepeatInput inp)
     {
+        if (!hasAction("SetRepeat"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetRepeat of service Transport");
+        }
         SetRepeat setRepeat = new SetRepeat(transportService, inp, upnpService.getControlPoint());
         setRepeat.executeAction();
     }
 
     public void setShuffle(SetShuffleInput inp)
     {
+        if (!hasAction("SetShuffle"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetShuffle of service Transport");
+        }
         SetShuffle setShuffle = new SetShuffle(transportService, inp, upnpService.getControlPoint());
         setShuffle.executeAction();
     }
 
     public ShuffleOutput shuffle()
     {
+        if (!hasAction("Shuffle"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Shuffle of service Transport");
+        }
         Shuffle shuffle = new Shuffle(transportService,  upnpService.getControlPoint());
         ShuffleOutput res = shuffle.executeAction();
         return res;        
@@ -217,24 +279,44 @@ public class TransportService
 
     public void skipNext()
     {
+        if (!hasAction("SkipNext"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SkipNext of service Transport");
+        }
         SkipNext skipNext = new SkipNext(transportService,  upnpService.getControlPoint());
         skipNext.executeAction();
     }
 
     public void skipPrevious()
     {
+        if (!hasAction("SkipPrevious"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SkipPrevious of service Transport");
+        }
         SkipPrevious skipPrevious = new SkipPrevious(transportService,  upnpService.getControlPoint());
         skipPrevious.executeAction();
     }
 
     public void stop()
     {
+        if (!hasAction("Stop"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Stop of service Transport");
+        }
         Stop stop = new Stop(transportService,  upnpService.getControlPoint());
         stop.executeAction();
     }
 
     public StreamIdOutput streamId()
     {
+        if (!hasAction("StreamId"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action StreamId of service Transport");
+        }
         StreamId streamId = new StreamId(transportService,  upnpService.getControlPoint());
         StreamIdOutput res = streamId.executeAction();
         return res;        
@@ -242,6 +324,11 @@ public class TransportService
 
     public StreamInfoOutput streamInfo()
     {
+        if (!hasAction("StreamInfo"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action StreamInfo of service Transport");
+        }
         StreamInfo streamInfo = new StreamInfo(transportService,  upnpService.getControlPoint());
         StreamInfoOutput res = streamInfo.executeAction();
         return res;        
@@ -249,6 +336,11 @@ public class TransportService
 
     public TransportStateOutput transportState()
     {
+        if (!hasAction("TransportState"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action TransportState of service Transport");
+        }
         TransportState transportState = new TransportState(transportService,  upnpService.getControlPoint());
         TransportStateOutput res = transportState.executeAction();
         return res;        

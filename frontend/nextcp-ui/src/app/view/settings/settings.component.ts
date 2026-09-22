@@ -4,6 +4,7 @@ import { ToastService } from './../../service/toast/toast.service';
 import { MyMusicService } from './../../service/my-music.service';
 import { SystemService } from './../../service/system.service';
 import { DeviceService } from './../../service/device.service';
+import { ServerFeature } from './../../service/server-feature';
 import { ContentDirectoryService } from './../../service/content-directory.service';
 import { RatingServiceService } from './../../service/rating-service.service';
 import {
@@ -106,6 +107,7 @@ export class SettingsComponent implements OnInit {
     udn: '',
     friendlyName: '',
     extendedApi: false,
+    features: [],
   };
 
   none_renderdevice: MediaRendererDto = {
@@ -449,6 +451,11 @@ export class SettingsComponent implements OnInit {
     this.contentDirectoryService.rescanContent(
       this.deviceService.selectedMediaServerDevice().udn,
     );
+  }
+
+  /** Backing up ratings is an action of the server, not something every UMS build has. */
+  ratingBackupAvailable(): boolean {
+    return this.deviceService.hasFeature(ServerFeature.RATING_BACKUP);
   }
 
   extendedApiNotAvailable(): boolean {

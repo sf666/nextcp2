@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory2.actions.Browse;
@@ -126,6 +127,12 @@ public class ContentDirectoryService
         return contentDirectoryService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return contentDirectoryService != null && contentDirectoryService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -136,6 +143,11 @@ public class ContentDirectoryService
 
     public BrowseOutput browse(BrowseInput inp)
     {
+        if (!hasAction("Browse"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Browse of service ContentDirectory");
+        }
         Browse browse = new Browse(contentDirectoryService, inp, upnpService.getControlPoint());
         BrowseOutput res = browse.executeAction();
         return res;        
@@ -143,6 +155,11 @@ public class ContentDirectoryService
 
     public GetFeatureListOutput getFeatureList()
     {
+        if (!hasAction("GetFeatureList"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetFeatureList of service ContentDirectory");
+        }
         GetFeatureList getFeatureList = new GetFeatureList(contentDirectoryService,  upnpService.getControlPoint());
         GetFeatureListOutput res = getFeatureList.executeAction();
         return res;        
@@ -150,6 +167,11 @@ public class ContentDirectoryService
 
     public GetSearchCapabilitiesOutput getSearchCapabilities()
     {
+        if (!hasAction("GetSearchCapabilities"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetSearchCapabilities of service ContentDirectory");
+        }
         GetSearchCapabilities getSearchCapabilities = new GetSearchCapabilities(contentDirectoryService,  upnpService.getControlPoint());
         GetSearchCapabilitiesOutput res = getSearchCapabilities.executeAction();
         return res;        
@@ -157,6 +179,11 @@ public class ContentDirectoryService
 
     public GetSortCapabilitiesOutput getSortCapabilities()
     {
+        if (!hasAction("GetSortCapabilities"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetSortCapabilities of service ContentDirectory");
+        }
         GetSortCapabilities getSortCapabilities = new GetSortCapabilities(contentDirectoryService,  upnpService.getControlPoint());
         GetSortCapabilitiesOutput res = getSortCapabilities.executeAction();
         return res;        
@@ -164,6 +191,11 @@ public class ContentDirectoryService
 
     public GetSortExtensionCapabilitiesOutput getSortExtensionCapabilities()
     {
+        if (!hasAction("GetSortExtensionCapabilities"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetSortExtensionCapabilities of service ContentDirectory");
+        }
         GetSortExtensionCapabilities getSortExtensionCapabilities = new GetSortExtensionCapabilities(contentDirectoryService,  upnpService.getControlPoint());
         GetSortExtensionCapabilitiesOutput res = getSortExtensionCapabilities.executeAction();
         return res;        
@@ -171,6 +203,11 @@ public class ContentDirectoryService
 
     public GetSystemUpdateIDOutput getSystemUpdateID()
     {
+        if (!hasAction("GetSystemUpdateID"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetSystemUpdateID of service ContentDirectory");
+        }
         GetSystemUpdateID getSystemUpdateID = new GetSystemUpdateID(contentDirectoryService,  upnpService.getControlPoint());
         GetSystemUpdateIDOutput res = getSystemUpdateID.executeAction();
         return res;        
@@ -178,6 +215,11 @@ public class ContentDirectoryService
 
     public SearchOutput search(SearchInput inp)
     {
+        if (!hasAction("Search"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Search of service ContentDirectory");
+        }
         Search search = new Search(contentDirectoryService, inp, upnpService.getControlPoint());
         SearchOutput res = search.executeAction();
         return res;        
@@ -185,6 +227,11 @@ public class ContentDirectoryService
 
     public X_GetFeatureListOutput x_GetFeatureList()
     {
+        if (!hasAction("X_GetFeatureList"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action X_GetFeatureList of service ContentDirectory");
+        }
         X_GetFeatureList x_GetFeatureList = new X_GetFeatureList(contentDirectoryService,  upnpService.getControlPoint());
         X_GetFeatureListOutput res = x_GetFeatureList.executeAction();
         return res;        

@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.microsoft.com.x_MS_MediaReceiverRegistrar1.actions.GetAuthorizationDeniedUpdateID;
@@ -125,6 +126,12 @@ public class X_MS_MediaReceiverRegistrarService
         return x_MS_MediaReceiverRegistrarService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return x_MS_MediaReceiverRegistrarService != null && x_MS_MediaReceiverRegistrarService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -135,6 +142,11 @@ public class X_MS_MediaReceiverRegistrarService
 
     public GetAuthorizationDeniedUpdateIDOutput getAuthorizationDeniedUpdateID()
     {
+        if (!hasAction("GetAuthorizationDeniedUpdateID"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetAuthorizationDeniedUpdateID of service X_MS_MediaReceiverRegistrar");
+        }
         GetAuthorizationDeniedUpdateID getAuthorizationDeniedUpdateID = new GetAuthorizationDeniedUpdateID(x_MS_MediaReceiverRegistrarService,  upnpService.getControlPoint());
         GetAuthorizationDeniedUpdateIDOutput res = getAuthorizationDeniedUpdateID.executeAction();
         return res;        
@@ -142,6 +154,11 @@ public class X_MS_MediaReceiverRegistrarService
 
     public GetAuthorizationGrantedUpdateIDOutput getAuthorizationGrantedUpdateID()
     {
+        if (!hasAction("GetAuthorizationGrantedUpdateID"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetAuthorizationGrantedUpdateID of service X_MS_MediaReceiverRegistrar");
+        }
         GetAuthorizationGrantedUpdateID getAuthorizationGrantedUpdateID = new GetAuthorizationGrantedUpdateID(x_MS_MediaReceiverRegistrarService,  upnpService.getControlPoint());
         GetAuthorizationGrantedUpdateIDOutput res = getAuthorizationGrantedUpdateID.executeAction();
         return res;        
@@ -149,6 +166,11 @@ public class X_MS_MediaReceiverRegistrarService
 
     public GetValidationRevokedUpdateIDOutput getValidationRevokedUpdateID()
     {
+        if (!hasAction("GetValidationRevokedUpdateID"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetValidationRevokedUpdateID of service X_MS_MediaReceiverRegistrar");
+        }
         GetValidationRevokedUpdateID getValidationRevokedUpdateID = new GetValidationRevokedUpdateID(x_MS_MediaReceiverRegistrarService,  upnpService.getControlPoint());
         GetValidationRevokedUpdateIDOutput res = getValidationRevokedUpdateID.executeAction();
         return res;        
@@ -156,6 +178,11 @@ public class X_MS_MediaReceiverRegistrarService
 
     public GetValidationSucceededUpdateIDOutput getValidationSucceededUpdateID()
     {
+        if (!hasAction("GetValidationSucceededUpdateID"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetValidationSucceededUpdateID of service X_MS_MediaReceiverRegistrar");
+        }
         GetValidationSucceededUpdateID getValidationSucceededUpdateID = new GetValidationSucceededUpdateID(x_MS_MediaReceiverRegistrarService,  upnpService.getControlPoint());
         GetValidationSucceededUpdateIDOutput res = getValidationSucceededUpdateID.executeAction();
         return res;        
@@ -163,6 +190,11 @@ public class X_MS_MediaReceiverRegistrarService
 
     public IsAuthorizedOutput isAuthorized(IsAuthorizedInput inp)
     {
+        if (!hasAction("IsAuthorized"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action IsAuthorized of service X_MS_MediaReceiverRegistrar");
+        }
         IsAuthorized isAuthorized = new IsAuthorized(x_MS_MediaReceiverRegistrarService, inp, upnpService.getControlPoint());
         IsAuthorizedOutput res = isAuthorized.executeAction();
         return res;        
@@ -170,6 +202,11 @@ public class X_MS_MediaReceiverRegistrarService
 
     public IsValidatedOutput isValidated(IsValidatedInput inp)
     {
+        if (!hasAction("IsValidated"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action IsValidated of service X_MS_MediaReceiverRegistrar");
+        }
         IsValidated isValidated = new IsValidated(x_MS_MediaReceiverRegistrarService, inp, upnpService.getControlPoint());
         IsValidatedOutput res = isValidated.executeAction();
         return res;        
@@ -177,6 +214,11 @@ public class X_MS_MediaReceiverRegistrarService
 
     public RegisterDeviceOutput registerDevice(RegisterDeviceInput inp)
     {
+        if (!hasAction("RegisterDevice"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action RegisterDevice of service X_MS_MediaReceiverRegistrar");
+        }
         RegisterDevice registerDevice = new RegisterDevice(x_MS_MediaReceiverRegistrarService, inp, upnpService.getControlPoint());
         RegisterDeviceOutput res = registerDevice.executeAction();
         return res;        

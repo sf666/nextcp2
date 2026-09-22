@@ -1,6 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpService } from './http.service';
 import { DeviceService } from './device.service';
+import { ServerFeature } from './server-feature';
 import { SseService } from './sse/sse.service';
 import { MusicItemDto, TrackInfoDto, WebStreamNowPlayingDto } from './dto.d';
 
@@ -62,6 +63,10 @@ export class WebStreamNowPlayingService {
     try {
       const objectId = track?.objectID;
       if (!objectId || this.requested.has(objectId) || this.byObjectId()[objectId]) {
+        return;
+      }
+      if (!this.deviceService.hasFeature(ServerFeature.WEB_STREAM_NOW_PLAYING)) {
+        // This server does not follow web streams, so there is nothing to ask it for.
         return;
       }
       const udn = track.mediaServerUDN || this.deviceService.selectedMediaServerDevice()?.udn;

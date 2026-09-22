@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.avopenhomeorg.time1.actions.Time;
@@ -110,6 +111,12 @@ public class TimeService
         return timeService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return timeService != null && timeService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -120,6 +127,11 @@ public class TimeService
 
     public TimeOutput time()
     {
+        if (!hasAction("Time"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Time of service Time");
+        }
         Time time = new Time(timeService,  upnpService.getControlPoint());
         TimeOutput res = time.executeAction();
         return res;        

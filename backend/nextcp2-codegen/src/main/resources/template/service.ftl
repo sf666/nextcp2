@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 <#list importClasses as impClass>
@@ -111,6 +112,12 @@ public class ${className}
         return ${className?uncap_first};
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return ${className?uncap_first} != null && ${className?uncap_first}.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -124,6 +131,11 @@ public class ${className}
     <#assign inp = action + "Input">
     public <#if outputClasses?seq_contains(out)>${out}<#else>void</#if> ${action?uncap_first}(<#if inputClasses?seq_contains(inp)>${inp} inp</#if>)
     {
+        if (!hasAction("${action}"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action ${action} of service ${upnpService}");
+        }
         ${action} ${action?uncap_first} = new ${action}(${className?uncap_first}, <#if inputClasses?seq_contains(inp)>inp,</#if> upnpService.getControlPoint());
         <#if outputClasses?seq_contains(out)>
         ${action}Output res = ${action?uncap_first}.executeAction();

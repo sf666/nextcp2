@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.avopenhomeorg.receiver1.actions.Play;
@@ -118,6 +119,12 @@ public class ReceiverService
         return receiverService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return receiverService != null && receiverService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -128,12 +135,22 @@ public class ReceiverService
 
     public void play()
     {
+        if (!hasAction("Play"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Play of service Receiver");
+        }
         Play play = new Play(receiverService,  upnpService.getControlPoint());
         play.executeAction();
     }
 
     public ProtocolInfoOutput protocolInfo()
     {
+        if (!hasAction("ProtocolInfo"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action ProtocolInfo of service Receiver");
+        }
         ProtocolInfo protocolInfo = new ProtocolInfo(receiverService,  upnpService.getControlPoint());
         ProtocolInfoOutput res = protocolInfo.executeAction();
         return res;        
@@ -141,6 +158,11 @@ public class ReceiverService
 
     public SenderOutput sender()
     {
+        if (!hasAction("Sender"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Sender of service Receiver");
+        }
         Sender sender = new Sender(receiverService,  upnpService.getControlPoint());
         SenderOutput res = sender.executeAction();
         return res;        
@@ -148,18 +170,33 @@ public class ReceiverService
 
     public void setSender(SetSenderInput inp)
     {
+        if (!hasAction("SetSender"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetSender of service Receiver");
+        }
         SetSender setSender = new SetSender(receiverService, inp, upnpService.getControlPoint());
         setSender.executeAction();
     }
 
     public void stop()
     {
+        if (!hasAction("Stop"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Stop of service Receiver");
+        }
         Stop stop = new Stop(receiverService,  upnpService.getControlPoint());
         stop.executeAction();
     }
 
     public TransportStateOutput transportState()
     {
+        if (!hasAction("TransportState"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action TransportState of service Receiver");
+        }
         TransportState transportState = new TransportState(receiverService,  upnpService.getControlPoint());
         TransportStateOutput res = transportState.executeAction();
         return res;        

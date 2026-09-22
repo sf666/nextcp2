@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.schemasfokusfraunhoferde.translationService1.actions.GetLanguageIDList;
@@ -118,6 +119,12 @@ public class TranslationServiceService
         return translationServiceService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return translationServiceService != null && translationServiceService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -128,6 +135,11 @@ public class TranslationServiceService
 
     public GetLanguageIDListOutput getLanguageIDList()
     {
+        if (!hasAction("GetLanguageIDList"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetLanguageIDList of service TranslationService");
+        }
         GetLanguageIDList getLanguageIDList = new GetLanguageIDList(translationServiceService,  upnpService.getControlPoint());
         GetLanguageIDListOutput res = getLanguageIDList.executeAction();
         return res;        
@@ -135,6 +147,11 @@ public class TranslationServiceService
 
     public GetTranslationOutput getTranslation(GetTranslationInput inp)
     {
+        if (!hasAction("GetTranslation"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetTranslation of service TranslationService");
+        }
         GetTranslation getTranslation = new GetTranslation(translationServiceService, inp, upnpService.getControlPoint());
         GetTranslationOutput res = getTranslation.executeAction();
         return res;        
@@ -142,6 +159,11 @@ public class TranslationServiceService
 
     public GetTranslationListOutput getTranslationList(GetTranslationListInput inp)
     {
+        if (!hasAction("GetTranslationList"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetTranslationList of service TranslationService");
+        }
         GetTranslationList getTranslationList = new GetTranslationList(translationServiceService, inp, upnpService.getControlPoint());
         GetTranslationListOutput res = getTranslationList.executeAction();
         return res;        
@@ -149,6 +171,11 @@ public class TranslationServiceService
 
     public GetUpdateIDOutput getUpdateID()
     {
+        if (!hasAction("GetUpdateID"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetUpdateID of service TranslationService");
+        }
         GetUpdateID getUpdateID = new GetUpdateID(translationServiceService,  upnpService.getControlPoint());
         GetUpdateIDOutput res = getUpdateID.executeAction();
         return res;        

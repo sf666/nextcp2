@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 
@@ -107,6 +108,12 @@ public class webosSecondScreenService
     {
         return webosSecondScreenService;
     }    
+
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return webosSecondScreenService != null && webosSecondScreenService.getAction(actionName) != null;
+    }
 
 
 //

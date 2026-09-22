@@ -621,7 +621,38 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	}
 
 	public MediaServerDto getAsDto() {
-		return new MediaServerDto(getBiggestIconUrl(), getUDN().getIdentifierString(), getFriendlyName(), true);
+		return new MediaServerDto(getBiggestIconUrl(), getUDN().getIdentifierString(), getFriendlyName(), true, getFeatures());
+	}
+
+	/** The extended service grows action by action while its UPnP version stays at 1, so ask per action. */
+	@Override
+	public List<String> getFeatures() {
+		List<String> features = super.getFeatures();
+		addFeature(features, ServerFeature.ALBUM_LIKES, "LikeAlbum", "DislikeAlbum", "IsAlbumLiked");
+		addFeature(features, ServerFeature.RATING_TAG, "SetAudioUpdateRatingTag");
+		addFeature(features, ServerFeature.RATING_BACKUP, "BackupRatings", "RestoreRatings");
+		addFeature(features, ServerFeature.RADIO_BROWSER, "SearchRadioStations", "GetRadioFilterValues", "AddRadioStationToPlaylist");
+		addFeature(features, ServerFeature.WEB_STREAM_NOW_PLAYING, "GetWebStreamNowPlaying");
+		addFeature(features, ServerFeature.WEB_STREAM_ICY_ORDER, "GetWebStreamIcyOrder", "SetWebStreamIcyOrder");
+		addFeature(features, ServerFeature.AUDIO_ADDICT, "SetAudioAddictUser", "SetAudioAddictPass");
+		addFeature(features, ServerFeature.ARTIST_FOLDER, "GetAudioArtistDir", "SetAudioArtistDir");
+		addFeature(features, ServerFeature.MEDIA_RESCAN, "RescanMediaStore", "RescanMediaStoreFolder");
+		addFeature(features, ServerFeature.PLAYLIST_NOW_PLAYING, "GetPlaylistNowPlaying");
+		return features;
+	}
+
+	/** A feature counts as available only when every action it is made of is there. */
+	private void addFeature(List<String> features, String feature, String... actions) {
+		if (umsServices == null) {
+			return;
+		}
+		for (String action : actions) {
+			if (!umsServices.hasAction(action)) {
+				log.debug("media server {} has no action {}, so feature {} is off", getFriendlyName(), action, feature);
+				return;
+			}
+		}
+		features.add(feature);
 	}
 
 	@Override

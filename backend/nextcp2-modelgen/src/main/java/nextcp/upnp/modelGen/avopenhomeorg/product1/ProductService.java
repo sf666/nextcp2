@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.avopenhomeorg.product1.actions.Attributes;
@@ -137,6 +138,12 @@ public class ProductService
         return productService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return productService != null && productService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -147,6 +154,11 @@ public class ProductService
 
     public AttributesOutput attributes()
     {
+        if (!hasAction("Attributes"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Attributes of service Product");
+        }
         Attributes attributes = new Attributes(productService,  upnpService.getControlPoint());
         AttributesOutput res = attributes.executeAction();
         return res;        
@@ -154,6 +166,11 @@ public class ProductService
 
     public ManufacturerOutput manufacturer()
     {
+        if (!hasAction("Manufacturer"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Manufacturer of service Product");
+        }
         Manufacturer manufacturer = new Manufacturer(productService,  upnpService.getControlPoint());
         ManufacturerOutput res = manufacturer.executeAction();
         return res;        
@@ -161,6 +178,11 @@ public class ProductService
 
     public ModelOutput model()
     {
+        if (!hasAction("Model"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Model of service Product");
+        }
         Model model = new Model(productService,  upnpService.getControlPoint());
         ModelOutput res = model.executeAction();
         return res;        
@@ -168,6 +190,11 @@ public class ProductService
 
     public ProductOutput product()
     {
+        if (!hasAction("Product"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Product of service Product");
+        }
         Product product = new Product(productService,  upnpService.getControlPoint());
         ProductOutput res = product.executeAction();
         return res;        
@@ -175,30 +202,55 @@ public class ProductService
 
     public void setProductRoom(SetProductRoomInput inp)
     {
+        if (!hasAction("SetProductRoom"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetProductRoom of service Product");
+        }
         SetProductRoom setProductRoom = new SetProductRoom(productService, inp, upnpService.getControlPoint());
         setProductRoom.executeAction();
     }
 
     public void setSourceIndex(SetSourceIndexInput inp)
     {
+        if (!hasAction("SetSourceIndex"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetSourceIndex of service Product");
+        }
         SetSourceIndex setSourceIndex = new SetSourceIndex(productService, inp, upnpService.getControlPoint());
         setSourceIndex.executeAction();
     }
 
     public void setSourceIndexByName(SetSourceIndexByNameInput inp)
     {
+        if (!hasAction("SetSourceIndexByName"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetSourceIndexByName of service Product");
+        }
         SetSourceIndexByName setSourceIndexByName = new SetSourceIndexByName(productService, inp, upnpService.getControlPoint());
         setSourceIndexByName.executeAction();
     }
 
     public void setStandby(SetStandbyInput inp)
     {
+        if (!hasAction("SetStandby"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetStandby of service Product");
+        }
         SetStandby setStandby = new SetStandby(productService, inp, upnpService.getControlPoint());
         setStandby.executeAction();
     }
 
     public SourceOutput source(SourceInput inp)
     {
+        if (!hasAction("Source"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Source of service Product");
+        }
         Source source = new Source(productService, inp, upnpService.getControlPoint());
         SourceOutput res = source.executeAction();
         return res;        
@@ -206,6 +258,11 @@ public class ProductService
 
     public SourceCountOutput sourceCount()
     {
+        if (!hasAction("SourceCount"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SourceCount of service Product");
+        }
         SourceCount sourceCount = new SourceCount(productService,  upnpService.getControlPoint());
         SourceCountOutput res = sourceCount.executeAction();
         return res;        
@@ -213,6 +270,11 @@ public class ProductService
 
     public SourceIndexOutput sourceIndex()
     {
+        if (!hasAction("SourceIndex"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SourceIndex of service Product");
+        }
         SourceIndex sourceIndex = new SourceIndex(productService,  upnpService.getControlPoint());
         SourceIndexOutput res = sourceIndex.executeAction();
         return res;        
@@ -220,6 +282,11 @@ public class ProductService
 
     public SourceXmlOutput sourceXml()
     {
+        if (!hasAction("SourceXml"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SourceXml of service Product");
+        }
         SourceXml sourceXml = new SourceXml(productService,  upnpService.getControlPoint());
         SourceXmlOutput res = sourceXml.executeAction();
         return res;        
@@ -227,6 +294,11 @@ public class ProductService
 
     public SourceXmlChangeCountOutput sourceXmlChangeCount()
     {
+        if (!hasAction("SourceXmlChangeCount"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SourceXmlChangeCount of service Product");
+        }
         SourceXmlChangeCount sourceXmlChangeCount = new SourceXmlChangeCount(productService,  upnpService.getControlPoint());
         SourceXmlChangeCountOutput res = sourceXmlChangeCount.executeAction();
         return res;        
@@ -234,6 +306,11 @@ public class ProductService
 
     public StandbyOutput standby()
     {
+        if (!hasAction("Standby"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Standby of service Product");
+        }
         Standby standby = new Standby(productService,  upnpService.getControlPoint());
         StandbyOutput res = standby.executeAction();
         return res;        

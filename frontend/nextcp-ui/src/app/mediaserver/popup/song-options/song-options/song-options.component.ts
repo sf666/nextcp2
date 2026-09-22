@@ -26,6 +26,8 @@ import {
   RadioBrowserService,
 } from 'src/app/service/radio-browser.service';
 import { DefaultPlaylistService } from '../../defaut-playlists/default-playlist.service';
+import { DeviceService } from 'src/app/service/device.service';
+import { ServerFeature } from 'src/app/service/server-feature';
 import { TransportService } from 'src/app/service/transport.service';
 import { StarRatingComponent } from '../../../../view/star-rating/star-rating.component';
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
@@ -52,6 +54,7 @@ const MENU_WIDTH = 320;
 })
 export class SongOptionsComponent implements OnInit {
   private serverPlaylistService = inject(ServerPlaylistService);
+  private deviceService = inject(DeviceService);
   private downloadService = inject(DownloadService);
   private transportService = inject(TransportService);
   private defaultPlaylistService = inject(DefaultPlaylistService);
@@ -110,6 +113,10 @@ export class SongOptionsComponent implements OnInit {
    * differs per station, so the choice belongs here, at the station itself.
    */
   public isWebRadio(): boolean {
+    if (!this.deviceService.hasFeature(ServerFeature.WEB_STREAM_ICY_ORDER)) {
+      // Nothing to choose from: this server does not keep the reading order of a station.
+      return false;
+    }
     if (
       this.item?.objectClass?.startsWith(
         'object.item.audioItem.audioBroadcast',

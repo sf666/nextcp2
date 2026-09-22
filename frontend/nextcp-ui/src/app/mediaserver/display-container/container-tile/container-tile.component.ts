@@ -16,6 +16,7 @@ import { NgTemplateOutlet } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { ContainerDto } from 'src/app/service/dto';
 import { DeviceService } from 'src/app/service/device.service';
+import { ServerFeature } from 'src/app/service/server-feature';
 import {
   RATING_LIKED,
   RatingFilter,
@@ -82,7 +83,7 @@ export class ContainerTileComponent {
    * with nothing in it that works.
    */
   optionsPossible(): boolean {
-    return this.deviceService.selectedMediaServerDevice().extendedApi;
+    return this.deviceService.hasFeature(ServerFeature.ALBUM_LIKES);
   }
 
   // Ratings changed in this view. The browse result DTOs are plain objects, so

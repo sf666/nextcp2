@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.avopenhomeorg.pins1.actions.Clear;
@@ -129,6 +130,12 @@ public class PinsService
         return pinsService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return pinsService != null && pinsService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -139,12 +146,22 @@ public class PinsService
 
     public void clear(ClearInput inp)
     {
+        if (!hasAction("Clear"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Clear of service Pins");
+        }
         Clear clear = new Clear(pinsService, inp, upnpService.getControlPoint());
         clear.executeAction();
     }
 
     public GetDeviceAccountMaxOutput getDeviceAccountMax()
     {
+        if (!hasAction("GetDeviceAccountMax"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetDeviceAccountMax of service Pins");
+        }
         GetDeviceAccountMax getDeviceAccountMax = new GetDeviceAccountMax(pinsService,  upnpService.getControlPoint());
         GetDeviceAccountMaxOutput res = getDeviceAccountMax.executeAction();
         return res;        
@@ -152,6 +169,11 @@ public class PinsService
 
     public GetIdArrayOutput getIdArray()
     {
+        if (!hasAction("GetIdArray"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetIdArray of service Pins");
+        }
         GetIdArray getIdArray = new GetIdArray(pinsService,  upnpService.getControlPoint());
         GetIdArrayOutput res = getIdArray.executeAction();
         return res;        
@@ -159,6 +181,11 @@ public class PinsService
 
     public GetModesOutput getModes()
     {
+        if (!hasAction("GetModes"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetModes of service Pins");
+        }
         GetModes getModes = new GetModes(pinsService,  upnpService.getControlPoint());
         GetModesOutput res = getModes.executeAction();
         return res;        
@@ -166,18 +193,33 @@ public class PinsService
 
     public void invokeId(InvokeIdInput inp)
     {
+        if (!hasAction("InvokeId"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action InvokeId of service Pins");
+        }
         InvokeId invokeId = new InvokeId(pinsService, inp, upnpService.getControlPoint());
         invokeId.executeAction();
     }
 
     public void invokeIndex(InvokeIndexInput inp)
     {
+        if (!hasAction("InvokeIndex"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action InvokeIndex of service Pins");
+        }
         InvokeIndex invokeIndex = new InvokeIndex(pinsService, inp, upnpService.getControlPoint());
         invokeIndex.executeAction();
     }
 
     public ReadListOutput readList(ReadListInput inp)
     {
+        if (!hasAction("ReadList"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action ReadList of service Pins");
+        }
         ReadList readList = new ReadList(pinsService, inp, upnpService.getControlPoint());
         ReadListOutput res = readList.executeAction();
         return res;        
@@ -185,18 +227,33 @@ public class PinsService
 
     public void setAccount(SetAccountInput inp)
     {
+        if (!hasAction("SetAccount"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetAccount of service Pins");
+        }
         SetAccount setAccount = new SetAccount(pinsService, inp, upnpService.getControlPoint());
         setAccount.executeAction();
     }
 
     public void setDevice(SetDeviceInput inp)
     {
+        if (!hasAction("SetDevice"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetDevice of service Pins");
+        }
         SetDevice setDevice = new SetDevice(pinsService, inp, upnpService.getControlPoint());
         setDevice.executeAction();
     }
 
     public void swap(SwapInput inp)
     {
+        if (!hasAction("Swap"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Swap of service Pins");
+        }
         Swap swap = new Swap(pinsService, inp, upnpService.getControlPoint());
         swap.executeAction();
     }

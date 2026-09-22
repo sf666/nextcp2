@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.bubblesoftappscom.main1.actions.GetBaseLanURL;
@@ -112,6 +113,12 @@ public class MainService
         return mainService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return mainService != null && mainService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -122,6 +129,11 @@ public class MainService
 
     public GetBaseLanURLOutput getBaseLanURL()
     {
+        if (!hasAction("GetBaseLanURL"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetBaseLanURL of service Main");
+        }
         GetBaseLanURL getBaseLanURL = new GetBaseLanURL(mainService,  upnpService.getControlPoint());
         GetBaseLanURLOutput res = getBaseLanURL.executeAction();
         return res;        
@@ -129,6 +141,11 @@ public class MainService
 
     public GetVersionInfoOutput getVersionInfo()
     {
+        if (!hasAction("GetVersionInfo"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetVersionInfo of service Main");
+        }
         GetVersionInfo getVersionInfo = new GetVersionInfo(mainService,  upnpService.getControlPoint());
         GetVersionInfoOutput res = getVersionInfo.executeAction();
         return res;        

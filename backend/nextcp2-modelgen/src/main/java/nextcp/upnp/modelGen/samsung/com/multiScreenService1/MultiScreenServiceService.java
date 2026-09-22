@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.samsung.com.multiScreenService1.actions.SendKeyCode;
@@ -110,6 +111,12 @@ public class MultiScreenServiceService
         return multiScreenServiceService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return multiScreenServiceService != null && multiScreenServiceService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -120,6 +127,11 @@ public class MultiScreenServiceService
 
     public void sendKeyCode(SendKeyCodeInput inp)
     {
+        if (!hasAction("SendKeyCode"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SendKeyCode of service MultiScreenService");
+        }
         SendKeyCode sendKeyCode = new SendKeyCode(multiScreenServiceService, inp, upnpService.getControlPoint());
         sendKeyCode.executeAction();
     }

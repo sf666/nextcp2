@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.schemasupnporg.renderingControl1.actions.GetBlueVideoBlackLevel;
@@ -216,6 +217,12 @@ public class RenderingControlService
         return renderingControlService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return renderingControlService != null && renderingControlService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -226,6 +233,11 @@ public class RenderingControlService
 
     public GetBlueVideoBlackLevelOutput getBlueVideoBlackLevel(GetBlueVideoBlackLevelInput inp)
     {
+        if (!hasAction("GetBlueVideoBlackLevel"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetBlueVideoBlackLevel of service RenderingControl");
+        }
         GetBlueVideoBlackLevel getBlueVideoBlackLevel = new GetBlueVideoBlackLevel(renderingControlService, inp, upnpService.getControlPoint());
         GetBlueVideoBlackLevelOutput res = getBlueVideoBlackLevel.executeAction();
         return res;        
@@ -233,6 +245,11 @@ public class RenderingControlService
 
     public GetBlueVideoGainOutput getBlueVideoGain(GetBlueVideoGainInput inp)
     {
+        if (!hasAction("GetBlueVideoGain"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetBlueVideoGain of service RenderingControl");
+        }
         GetBlueVideoGain getBlueVideoGain = new GetBlueVideoGain(renderingControlService, inp, upnpService.getControlPoint());
         GetBlueVideoGainOutput res = getBlueVideoGain.executeAction();
         return res;        
@@ -240,6 +257,11 @@ public class RenderingControlService
 
     public GetBrightnessOutput getBrightness(GetBrightnessInput inp)
     {
+        if (!hasAction("GetBrightness"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetBrightness of service RenderingControl");
+        }
         GetBrightness getBrightness = new GetBrightness(renderingControlService, inp, upnpService.getControlPoint());
         GetBrightnessOutput res = getBrightness.executeAction();
         return res;        
@@ -247,6 +269,11 @@ public class RenderingControlService
 
     public GetColorTemperatureOutput getColorTemperature(GetColorTemperatureInput inp)
     {
+        if (!hasAction("GetColorTemperature"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetColorTemperature of service RenderingControl");
+        }
         GetColorTemperature getColorTemperature = new GetColorTemperature(renderingControlService, inp, upnpService.getControlPoint());
         GetColorTemperatureOutput res = getColorTemperature.executeAction();
         return res;        
@@ -254,6 +281,11 @@ public class RenderingControlService
 
     public GetContrastOutput getContrast(GetContrastInput inp)
     {
+        if (!hasAction("GetContrast"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetContrast of service RenderingControl");
+        }
         GetContrast getContrast = new GetContrast(renderingControlService, inp, upnpService.getControlPoint());
         GetContrastOutput res = getContrast.executeAction();
         return res;        
@@ -261,6 +293,11 @@ public class RenderingControlService
 
     public GetGreenVideoBlackLevelOutput getGreenVideoBlackLevel(GetGreenVideoBlackLevelInput inp)
     {
+        if (!hasAction("GetGreenVideoBlackLevel"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetGreenVideoBlackLevel of service RenderingControl");
+        }
         GetGreenVideoBlackLevel getGreenVideoBlackLevel = new GetGreenVideoBlackLevel(renderingControlService, inp, upnpService.getControlPoint());
         GetGreenVideoBlackLevelOutput res = getGreenVideoBlackLevel.executeAction();
         return res;        
@@ -268,6 +305,11 @@ public class RenderingControlService
 
     public GetGreenVideoGainOutput getGreenVideoGain(GetGreenVideoGainInput inp)
     {
+        if (!hasAction("GetGreenVideoGain"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetGreenVideoGain of service RenderingControl");
+        }
         GetGreenVideoGain getGreenVideoGain = new GetGreenVideoGain(renderingControlService, inp, upnpService.getControlPoint());
         GetGreenVideoGainOutput res = getGreenVideoGain.executeAction();
         return res;        
@@ -275,6 +317,11 @@ public class RenderingControlService
 
     public GetHorizontalKeystoneOutput getHorizontalKeystone(GetHorizontalKeystoneInput inp)
     {
+        if (!hasAction("GetHorizontalKeystone"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetHorizontalKeystone of service RenderingControl");
+        }
         GetHorizontalKeystone getHorizontalKeystone = new GetHorizontalKeystone(renderingControlService, inp, upnpService.getControlPoint());
         GetHorizontalKeystoneOutput res = getHorizontalKeystone.executeAction();
         return res;        
@@ -282,6 +329,11 @@ public class RenderingControlService
 
     public GetLoudnessOutput getLoudness(GetLoudnessInput inp)
     {
+        if (!hasAction("GetLoudness"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetLoudness of service RenderingControl");
+        }
         GetLoudness getLoudness = new GetLoudness(renderingControlService, inp, upnpService.getControlPoint());
         GetLoudnessOutput res = getLoudness.executeAction();
         return res;        
@@ -289,6 +341,11 @@ public class RenderingControlService
 
     public GetMuteOutput getMute(GetMuteInput inp)
     {
+        if (!hasAction("GetMute"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetMute of service RenderingControl");
+        }
         GetMute getMute = new GetMute(renderingControlService, inp, upnpService.getControlPoint());
         GetMuteOutput res = getMute.executeAction();
         return res;        
@@ -296,6 +353,11 @@ public class RenderingControlService
 
     public GetRedVideoBlackLevelOutput getRedVideoBlackLevel(GetRedVideoBlackLevelInput inp)
     {
+        if (!hasAction("GetRedVideoBlackLevel"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetRedVideoBlackLevel of service RenderingControl");
+        }
         GetRedVideoBlackLevel getRedVideoBlackLevel = new GetRedVideoBlackLevel(renderingControlService, inp, upnpService.getControlPoint());
         GetRedVideoBlackLevelOutput res = getRedVideoBlackLevel.executeAction();
         return res;        
@@ -303,6 +365,11 @@ public class RenderingControlService
 
     public GetRedVideoGainOutput getRedVideoGain(GetRedVideoGainInput inp)
     {
+        if (!hasAction("GetRedVideoGain"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetRedVideoGain of service RenderingControl");
+        }
         GetRedVideoGain getRedVideoGain = new GetRedVideoGain(renderingControlService, inp, upnpService.getControlPoint());
         GetRedVideoGainOutput res = getRedVideoGain.executeAction();
         return res;        
@@ -310,6 +377,11 @@ public class RenderingControlService
 
     public GetSharpnessOutput getSharpness(GetSharpnessInput inp)
     {
+        if (!hasAction("GetSharpness"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetSharpness of service RenderingControl");
+        }
         GetSharpness getSharpness = new GetSharpness(renderingControlService, inp, upnpService.getControlPoint());
         GetSharpnessOutput res = getSharpness.executeAction();
         return res;        
@@ -317,6 +389,11 @@ public class RenderingControlService
 
     public GetVerticalKeystoneOutput getVerticalKeystone(GetVerticalKeystoneInput inp)
     {
+        if (!hasAction("GetVerticalKeystone"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetVerticalKeystone of service RenderingControl");
+        }
         GetVerticalKeystone getVerticalKeystone = new GetVerticalKeystone(renderingControlService, inp, upnpService.getControlPoint());
         GetVerticalKeystoneOutput res = getVerticalKeystone.executeAction();
         return res;        
@@ -324,6 +401,11 @@ public class RenderingControlService
 
     public GetVolumeOutput getVolume(GetVolumeInput inp)
     {
+        if (!hasAction("GetVolume"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetVolume of service RenderingControl");
+        }
         GetVolume getVolume = new GetVolume(renderingControlService, inp, upnpService.getControlPoint());
         GetVolumeOutput res = getVolume.executeAction();
         return res;        
@@ -331,6 +413,11 @@ public class RenderingControlService
 
     public GetVolumeDBOutput getVolumeDB(GetVolumeDBInput inp)
     {
+        if (!hasAction("GetVolumeDB"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetVolumeDB of service RenderingControl");
+        }
         GetVolumeDB getVolumeDB = new GetVolumeDB(renderingControlService, inp, upnpService.getControlPoint());
         GetVolumeDBOutput res = getVolumeDB.executeAction();
         return res;        
@@ -338,6 +425,11 @@ public class RenderingControlService
 
     public GetVolumeDBRangeOutput getVolumeDBRange(GetVolumeDBRangeInput inp)
     {
+        if (!hasAction("GetVolumeDBRange"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetVolumeDBRange of service RenderingControl");
+        }
         GetVolumeDBRange getVolumeDBRange = new GetVolumeDBRange(renderingControlService, inp, upnpService.getControlPoint());
         GetVolumeDBRangeOutput res = getVolumeDBRange.executeAction();
         return res;        
@@ -345,6 +437,11 @@ public class RenderingControlService
 
     public ListPresetsOutput listPresets(ListPresetsInput inp)
     {
+        if (!hasAction("ListPresets"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action ListPresets of service RenderingControl");
+        }
         ListPresets listPresets = new ListPresets(renderingControlService, inp, upnpService.getControlPoint());
         ListPresetsOutput res = listPresets.executeAction();
         return res;        
@@ -352,108 +449,198 @@ public class RenderingControlService
 
     public void selectPreset(SelectPresetInput inp)
     {
+        if (!hasAction("SelectPreset"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SelectPreset of service RenderingControl");
+        }
         SelectPreset selectPreset = new SelectPreset(renderingControlService, inp, upnpService.getControlPoint());
         selectPreset.executeAction();
     }
 
     public void setBlueVideoBlackLevel(SetBlueVideoBlackLevelInput inp)
     {
+        if (!hasAction("SetBlueVideoBlackLevel"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetBlueVideoBlackLevel of service RenderingControl");
+        }
         SetBlueVideoBlackLevel setBlueVideoBlackLevel = new SetBlueVideoBlackLevel(renderingControlService, inp, upnpService.getControlPoint());
         setBlueVideoBlackLevel.executeAction();
     }
 
     public void setBlueVideoGain(SetBlueVideoGainInput inp)
     {
+        if (!hasAction("SetBlueVideoGain"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetBlueVideoGain of service RenderingControl");
+        }
         SetBlueVideoGain setBlueVideoGain = new SetBlueVideoGain(renderingControlService, inp, upnpService.getControlPoint());
         setBlueVideoGain.executeAction();
     }
 
     public void setBrightness(SetBrightnessInput inp)
     {
+        if (!hasAction("SetBrightness"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetBrightness of service RenderingControl");
+        }
         SetBrightness setBrightness = new SetBrightness(renderingControlService, inp, upnpService.getControlPoint());
         setBrightness.executeAction();
     }
 
     public void setColorTemperature(SetColorTemperatureInput inp)
     {
+        if (!hasAction("SetColorTemperature"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetColorTemperature of service RenderingControl");
+        }
         SetColorTemperature setColorTemperature = new SetColorTemperature(renderingControlService, inp, upnpService.getControlPoint());
         setColorTemperature.executeAction();
     }
 
     public void setContrast(SetContrastInput inp)
     {
+        if (!hasAction("SetContrast"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetContrast of service RenderingControl");
+        }
         SetContrast setContrast = new SetContrast(renderingControlService, inp, upnpService.getControlPoint());
         setContrast.executeAction();
     }
 
     public void setGreenVideoBlackLevel(SetGreenVideoBlackLevelInput inp)
     {
+        if (!hasAction("SetGreenVideoBlackLevel"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetGreenVideoBlackLevel of service RenderingControl");
+        }
         SetGreenVideoBlackLevel setGreenVideoBlackLevel = new SetGreenVideoBlackLevel(renderingControlService, inp, upnpService.getControlPoint());
         setGreenVideoBlackLevel.executeAction();
     }
 
     public void setGreenVideoGain(SetGreenVideoGainInput inp)
     {
+        if (!hasAction("SetGreenVideoGain"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetGreenVideoGain of service RenderingControl");
+        }
         SetGreenVideoGain setGreenVideoGain = new SetGreenVideoGain(renderingControlService, inp, upnpService.getControlPoint());
         setGreenVideoGain.executeAction();
     }
 
     public void setHorizontalKeystone(SetHorizontalKeystoneInput inp)
     {
+        if (!hasAction("SetHorizontalKeystone"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetHorizontalKeystone of service RenderingControl");
+        }
         SetHorizontalKeystone setHorizontalKeystone = new SetHorizontalKeystone(renderingControlService, inp, upnpService.getControlPoint());
         setHorizontalKeystone.executeAction();
     }
 
     public void setLoudness(SetLoudnessInput inp)
     {
+        if (!hasAction("SetLoudness"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetLoudness of service RenderingControl");
+        }
         SetLoudness setLoudness = new SetLoudness(renderingControlService, inp, upnpService.getControlPoint());
         setLoudness.executeAction();
     }
 
     public void setMute(SetMuteInput inp)
     {
+        if (!hasAction("SetMute"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetMute of service RenderingControl");
+        }
         SetMute setMute = new SetMute(renderingControlService, inp, upnpService.getControlPoint());
         setMute.executeAction();
     }
 
     public void setRedVideoBlackLevel(SetRedVideoBlackLevelInput inp)
     {
+        if (!hasAction("SetRedVideoBlackLevel"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetRedVideoBlackLevel of service RenderingControl");
+        }
         SetRedVideoBlackLevel setRedVideoBlackLevel = new SetRedVideoBlackLevel(renderingControlService, inp, upnpService.getControlPoint());
         setRedVideoBlackLevel.executeAction();
     }
 
     public void setRedVideoGain(SetRedVideoGainInput inp)
     {
+        if (!hasAction("SetRedVideoGain"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetRedVideoGain of service RenderingControl");
+        }
         SetRedVideoGain setRedVideoGain = new SetRedVideoGain(renderingControlService, inp, upnpService.getControlPoint());
         setRedVideoGain.executeAction();
     }
 
     public void setSharpness(SetSharpnessInput inp)
     {
+        if (!hasAction("SetSharpness"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetSharpness of service RenderingControl");
+        }
         SetSharpness setSharpness = new SetSharpness(renderingControlService, inp, upnpService.getControlPoint());
         setSharpness.executeAction();
     }
 
     public void setVerticalKeystone(SetVerticalKeystoneInput inp)
     {
+        if (!hasAction("SetVerticalKeystone"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetVerticalKeystone of service RenderingControl");
+        }
         SetVerticalKeystone setVerticalKeystone = new SetVerticalKeystone(renderingControlService, inp, upnpService.getControlPoint());
         setVerticalKeystone.executeAction();
     }
 
     public void setVolume(SetVolumeInput inp)
     {
+        if (!hasAction("SetVolume"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetVolume of service RenderingControl");
+        }
         SetVolume setVolume = new SetVolume(renderingControlService, inp, upnpService.getControlPoint());
         setVolume.executeAction();
     }
 
     public void setVolumeDB(SetVolumeDBInput inp)
     {
+        if (!hasAction("SetVolumeDB"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetVolumeDB of service RenderingControl");
+        }
         SetVolumeDB setVolumeDB = new SetVolumeDB(renderingControlService, inp, upnpService.getControlPoint());
         setVolumeDB.executeAction();
     }
 
     public X_Get3DFormatterOutput x_Get3DFormatter(X_Get3DFormatterInput inp)
     {
+        if (!hasAction("X_Get3DFormatter"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action X_Get3DFormatter of service RenderingControl");
+        }
         X_Get3DFormatter x_Get3DFormatter = new X_Get3DFormatter(renderingControlService, inp, upnpService.getControlPoint());
         X_Get3DFormatterOutput res = x_Get3DFormatter.executeAction();
         return res;        
@@ -461,6 +648,11 @@ public class RenderingControlService
 
     public X_GetAudioSelectionOutput x_GetAudioSelection(X_GetAudioSelectionInput inp)
     {
+        if (!hasAction("X_GetAudioSelection"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action X_GetAudioSelection of service RenderingControl");
+        }
         X_GetAudioSelection x_GetAudioSelection = new X_GetAudioSelection(renderingControlService, inp, upnpService.getControlPoint());
         X_GetAudioSelectionOutput res = x_GetAudioSelection.executeAction();
         return res;        
@@ -468,6 +660,11 @@ public class RenderingControlService
 
     public X_GetSubtitleOutput x_GetSubtitle(X_GetSubtitleInput inp)
     {
+        if (!hasAction("X_GetSubtitle"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action X_GetSubtitle of service RenderingControl");
+        }
         X_GetSubtitle x_GetSubtitle = new X_GetSubtitle(renderingControlService, inp, upnpService.getControlPoint());
         X_GetSubtitleOutput res = x_GetSubtitle.executeAction();
         return res;        
@@ -475,6 +672,11 @@ public class RenderingControlService
 
     public X_GetVideoSelectionOutput x_GetVideoSelection(X_GetVideoSelectionInput inp)
     {
+        if (!hasAction("X_GetVideoSelection"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action X_GetVideoSelection of service RenderingControl");
+        }
         X_GetVideoSelection x_GetVideoSelection = new X_GetVideoSelection(renderingControlService, inp, upnpService.getControlPoint());
         X_GetVideoSelectionOutput res = x_GetVideoSelection.executeAction();
         return res;        
@@ -482,24 +684,44 @@ public class RenderingControlService
 
     public void x_Set3DFormatter(X_Set3DFormatterInput inp)
     {
+        if (!hasAction("X_Set3DFormatter"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action X_Set3DFormatter of service RenderingControl");
+        }
         X_Set3DFormatter x_Set3DFormatter = new X_Set3DFormatter(renderingControlService, inp, upnpService.getControlPoint());
         x_Set3DFormatter.executeAction();
     }
 
     public void x_SetSubtitle(X_SetSubtitleInput inp)
     {
+        if (!hasAction("X_SetSubtitle"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action X_SetSubtitle of service RenderingControl");
+        }
         X_SetSubtitle x_SetSubtitle = new X_SetSubtitle(renderingControlService, inp, upnpService.getControlPoint());
         x_SetSubtitle.executeAction();
     }
 
     public void x_UpdateAudioSelection(X_UpdateAudioSelectionInput inp)
     {
+        if (!hasAction("X_UpdateAudioSelection"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action X_UpdateAudioSelection of service RenderingControl");
+        }
         X_UpdateAudioSelection x_UpdateAudioSelection = new X_UpdateAudioSelection(renderingControlService, inp, upnpService.getControlPoint());
         x_UpdateAudioSelection.executeAction();
     }
 
     public void x_UpdateVideoSelection(X_UpdateVideoSelectionInput inp)
     {
+        if (!hasAction("X_UpdateVideoSelection"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action X_UpdateVideoSelection of service RenderingControl");
+        }
         X_UpdateVideoSelection x_UpdateVideoSelection = new X_UpdateVideoSelection(renderingControlService, inp, upnpService.getControlPoint());
         x_UpdateVideoSelection.executeAction();
     }

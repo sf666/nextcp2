@@ -412,7 +412,22 @@ public class MediaServerDevice extends BaseDevice {
 	}
 
 	public MediaServerDto getAsDto() {
-		return new MediaServerDto(getBiggestIconUrl(), getUDN().getIdentifierString(), getFriendlyName(), false);
+		return new MediaServerDto(getBiggestIconUrl(), getUDN().getIdentifierString(), getFriendlyName(), false, getFeatures());
+	}
+
+	/** What this server can do. A plain UPnP server only tells us its search capabilities. */
+	public List<String> getFeatures() {
+		List<String> features = new ArrayList<>();
+		if (searchSupportDelegate == null) {
+			return features;
+		}
+		if (StringUtils.isNotBlank(searchSupportDelegate.getSearchCaps())) {
+			features.add(ServerFeature.UPNP_SEARCH);
+		}
+		if (searchSupportDelegate.supportsRatingSearch()) {
+			features.add(ServerFeature.LIKED_PLAYLISTS);
+		}
+		return features;
 	}
 
 	private void addItemObjects(List<MusicItemDto> result, DIDLContent didl) {

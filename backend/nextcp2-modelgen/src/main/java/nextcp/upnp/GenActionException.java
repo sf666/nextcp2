@@ -14,6 +14,9 @@ public class GenActionException extends RuntimeException
     public static final int ACTION_BAD_CONTROL_URL = 5001;
     public static final int ACTION_FAILED = 5002;
 
+    /** The device does not announce this action at all - it implements a part of the service only. */
+    public static final int ACTION_NOT_SUPPORTED = 5003;
+
     public int errorCode = 0;
 
     /**

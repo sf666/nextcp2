@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.avopenhomeorg.credentials1.actions.Clear;
@@ -129,6 +130,12 @@ public class CredentialsService
         return credentialsService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return credentialsService != null && credentialsService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -139,12 +146,22 @@ public class CredentialsService
 
     public void clear(ClearInput inp)
     {
+        if (!hasAction("Clear"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Clear of service Credentials");
+        }
         Clear clear = new Clear(credentialsService, inp, upnpService.getControlPoint());
         clear.executeAction();
     }
 
     public GetOutput get(GetInput inp)
     {
+        if (!hasAction("Get"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Get of service Credentials");
+        }
         Get get = new Get(credentialsService, inp, upnpService.getControlPoint());
         GetOutput res = get.executeAction();
         return res;        
@@ -152,6 +169,11 @@ public class CredentialsService
 
     public GetIdsOutput getIds()
     {
+        if (!hasAction("GetIds"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetIds of service Credentials");
+        }
         GetIds getIds = new GetIds(credentialsService,  upnpService.getControlPoint());
         GetIdsOutput res = getIds.executeAction();
         return res;        
@@ -159,6 +181,11 @@ public class CredentialsService
 
     public GetPublicKeyOutput getPublicKey()
     {
+        if (!hasAction("GetPublicKey"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetPublicKey of service Credentials");
+        }
         GetPublicKey getPublicKey = new GetPublicKey(credentialsService,  upnpService.getControlPoint());
         GetPublicKeyOutput res = getPublicKey.executeAction();
         return res;        
@@ -166,6 +193,11 @@ public class CredentialsService
 
     public GetSequenceNumberOutput getSequenceNumber()
     {
+        if (!hasAction("GetSequenceNumber"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetSequenceNumber of service Credentials");
+        }
         GetSequenceNumber getSequenceNumber = new GetSequenceNumber(credentialsService,  upnpService.getControlPoint());
         GetSequenceNumberOutput res = getSequenceNumber.executeAction();
         return res;        
@@ -173,6 +205,11 @@ public class CredentialsService
 
     public LoginOutput login(LoginInput inp)
     {
+        if (!hasAction("Login"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Login of service Credentials");
+        }
         Login login = new Login(credentialsService, inp, upnpService.getControlPoint());
         LoginOutput res = login.executeAction();
         return res;        
@@ -180,6 +217,11 @@ public class CredentialsService
 
     public ReLoginOutput reLogin(ReLoginInput inp)
     {
+        if (!hasAction("ReLogin"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action ReLogin of service Credentials");
+        }
         ReLogin reLogin = new ReLogin(credentialsService, inp, upnpService.getControlPoint());
         ReLoginOutput res = reLogin.executeAction();
         return res;        
@@ -187,12 +229,22 @@ public class CredentialsService
 
     public void set(SetInput inp)
     {
+        if (!hasAction("Set"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Set of service Credentials");
+        }
         Set set = new Set(credentialsService, inp, upnpService.getControlPoint());
         set.executeAction();
     }
 
     public void setEnabled(SetEnabledInput inp)
     {
+        if (!hasAction("SetEnabled"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetEnabled of service Credentials");
+        }
         SetEnabled setEnabled = new SetEnabled(credentialsService, inp, upnpService.getControlPoint());
         setEnabled.executeAction();
     }

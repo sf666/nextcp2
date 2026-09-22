@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport2.actions.GetCurrentTransportActions;
@@ -153,6 +154,12 @@ public class AVTransportService
         return aVTransportService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return aVTransportService != null && aVTransportService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -163,6 +170,11 @@ public class AVTransportService
 
     public GetCurrentTransportActionsOutput getCurrentTransportActions(GetCurrentTransportActionsInput inp)
     {
+        if (!hasAction("GetCurrentTransportActions"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetCurrentTransportActions of service AVTransport");
+        }
         GetCurrentTransportActions getCurrentTransportActions = new GetCurrentTransportActions(aVTransportService, inp, upnpService.getControlPoint());
         GetCurrentTransportActionsOutput res = getCurrentTransportActions.executeAction();
         return res;        
@@ -170,6 +182,11 @@ public class AVTransportService
 
     public GetDRMStateOutput getDRMState(GetDRMStateInput inp)
     {
+        if (!hasAction("GetDRMState"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetDRMState of service AVTransport");
+        }
         GetDRMState getDRMState = new GetDRMState(aVTransportService, inp, upnpService.getControlPoint());
         GetDRMStateOutput res = getDRMState.executeAction();
         return res;        
@@ -177,6 +194,11 @@ public class AVTransportService
 
     public GetDeviceCapabilitiesOutput getDeviceCapabilities(GetDeviceCapabilitiesInput inp)
     {
+        if (!hasAction("GetDeviceCapabilities"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetDeviceCapabilities of service AVTransport");
+        }
         GetDeviceCapabilities getDeviceCapabilities = new GetDeviceCapabilities(aVTransportService, inp, upnpService.getControlPoint());
         GetDeviceCapabilitiesOutput res = getDeviceCapabilities.executeAction();
         return res;        
@@ -184,6 +206,11 @@ public class AVTransportService
 
     public GetMediaInfoOutput getMediaInfo(GetMediaInfoInput inp)
     {
+        if (!hasAction("GetMediaInfo"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetMediaInfo of service AVTransport");
+        }
         GetMediaInfo getMediaInfo = new GetMediaInfo(aVTransportService, inp, upnpService.getControlPoint());
         GetMediaInfoOutput res = getMediaInfo.executeAction();
         return res;        
@@ -191,6 +218,11 @@ public class AVTransportService
 
     public GetMediaInfo_ExtOutput getMediaInfo_Ext(GetMediaInfo_ExtInput inp)
     {
+        if (!hasAction("GetMediaInfo_Ext"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetMediaInfo_Ext of service AVTransport");
+        }
         GetMediaInfo_Ext getMediaInfo_Ext = new GetMediaInfo_Ext(aVTransportService, inp, upnpService.getControlPoint());
         GetMediaInfo_ExtOutput res = getMediaInfo_Ext.executeAction();
         return res;        
@@ -198,6 +230,11 @@ public class AVTransportService
 
     public GetPositionInfoOutput getPositionInfo(GetPositionInfoInput inp)
     {
+        if (!hasAction("GetPositionInfo"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetPositionInfo of service AVTransport");
+        }
         GetPositionInfo getPositionInfo = new GetPositionInfo(aVTransportService, inp, upnpService.getControlPoint());
         GetPositionInfoOutput res = getPositionInfo.executeAction();
         return res;        
@@ -205,6 +242,11 @@ public class AVTransportService
 
     public GetTransportInfoOutput getTransportInfo(GetTransportInfoInput inp)
     {
+        if (!hasAction("GetTransportInfo"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetTransportInfo of service AVTransport");
+        }
         GetTransportInfo getTransportInfo = new GetTransportInfo(aVTransportService, inp, upnpService.getControlPoint());
         GetTransportInfoOutput res = getTransportInfo.executeAction();
         return res;        
@@ -212,6 +254,11 @@ public class AVTransportService
 
     public GetTransportSettingsOutput getTransportSettings(GetTransportSettingsInput inp)
     {
+        if (!hasAction("GetTransportSettings"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetTransportSettings of service AVTransport");
+        }
         GetTransportSettings getTransportSettings = new GetTransportSettings(aVTransportService, inp, upnpService.getControlPoint());
         GetTransportSettingsOutput res = getTransportSettings.executeAction();
         return res;        
@@ -219,60 +266,110 @@ public class AVTransportService
 
     public void next(NextInput inp)
     {
+        if (!hasAction("Next"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Next of service AVTransport");
+        }
         Next next = new Next(aVTransportService, inp, upnpService.getControlPoint());
         next.executeAction();
     }
 
     public void pause(PauseInput inp)
     {
+        if (!hasAction("Pause"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Pause of service AVTransport");
+        }
         Pause pause = new Pause(aVTransportService, inp, upnpService.getControlPoint());
         pause.executeAction();
     }
 
     public void play(PlayInput inp)
     {
+        if (!hasAction("Play"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Play of service AVTransport");
+        }
         Play play = new Play(aVTransportService, inp, upnpService.getControlPoint());
         play.executeAction();
     }
 
     public void previous(PreviousInput inp)
     {
+        if (!hasAction("Previous"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Previous of service AVTransport");
+        }
         Previous previous = new Previous(aVTransportService, inp, upnpService.getControlPoint());
         previous.executeAction();
     }
 
     public void seek(SeekInput inp)
     {
+        if (!hasAction("Seek"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Seek of service AVTransport");
+        }
         Seek seek = new Seek(aVTransportService, inp, upnpService.getControlPoint());
         seek.executeAction();
     }
 
     public void setAVTransportURI(SetAVTransportURIInput inp)
     {
+        if (!hasAction("SetAVTransportURI"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetAVTransportURI of service AVTransport");
+        }
         SetAVTransportURI setAVTransportURI = new SetAVTransportURI(aVTransportService, inp, upnpService.getControlPoint());
         setAVTransportURI.executeAction();
     }
 
     public void setNextAVTransportURI(SetNextAVTransportURIInput inp)
     {
+        if (!hasAction("SetNextAVTransportURI"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetNextAVTransportURI of service AVTransport");
+        }
         SetNextAVTransportURI setNextAVTransportURI = new SetNextAVTransportURI(aVTransportService, inp, upnpService.getControlPoint());
         setNextAVTransportURI.executeAction();
     }
 
     public void setPlayMode(SetPlayModeInput inp)
     {
+        if (!hasAction("SetPlayMode"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetPlayMode of service AVTransport");
+        }
         SetPlayMode setPlayMode = new SetPlayMode(aVTransportService, inp, upnpService.getControlPoint());
         setPlayMode.executeAction();
     }
 
     public void stop(StopInput inp)
     {
+        if (!hasAction("Stop"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Stop of service AVTransport");
+        }
         Stop stop = new Stop(aVTransportService, inp, upnpService.getControlPoint());
         stop.executeAction();
     }
 
     public X_DLNA_GetBytePositionInfoOutput x_DLNA_GetBytePositionInfo(X_DLNA_GetBytePositionInfoInput inp)
     {
+        if (!hasAction("X_DLNA_GetBytePositionInfo"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action X_DLNA_GetBytePositionInfo of service AVTransport");
+        }
         X_DLNA_GetBytePositionInfo x_DLNA_GetBytePositionInfo = new X_DLNA_GetBytePositionInfo(aVTransportService, inp, upnpService.getControlPoint());
         X_DLNA_GetBytePositionInfoOutput res = x_DLNA_GetBytePositionInfo.executeAction();
         return res;        

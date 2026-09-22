@@ -247,6 +247,7 @@ MediaServerDto:
    udn: String
    friendlyName: String
    extendedApi: Boolean
+   features: List<String>
 
 MediaRendererDto:
    img: String

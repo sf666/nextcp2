@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.avopenhomeorg.info1.actions.Counters;
@@ -116,6 +117,12 @@ public class InfoService
         return infoService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return infoService != null && infoService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -126,6 +133,11 @@ public class InfoService
 
     public CountersOutput counters()
     {
+        if (!hasAction("Counters"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Counters of service Info");
+        }
         Counters counters = new Counters(infoService,  upnpService.getControlPoint());
         CountersOutput res = counters.executeAction();
         return res;        
@@ -133,6 +145,11 @@ public class InfoService
 
     public DetailsOutput details()
     {
+        if (!hasAction("Details"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Details of service Info");
+        }
         Details details = new Details(infoService,  upnpService.getControlPoint());
         DetailsOutput res = details.executeAction();
         return res;        
@@ -140,6 +157,11 @@ public class InfoService
 
     public MetatextOutput metatext()
     {
+        if (!hasAction("Metatext"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Metatext of service Info");
+        }
         Metatext metatext = new Metatext(infoService,  upnpService.getControlPoint());
         MetatextOutput res = metatext.executeAction();
         return res;        
@@ -147,6 +169,11 @@ public class InfoService
 
     public TrackOutput track()
     {
+        if (!hasAction("Track"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Track of service Info");
+        }
         Track track = new Track(infoService,  upnpService.getControlPoint());
         TrackOutput res = track.executeAction();
         return res;        

@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.avopenhomeorg.sender1.actions.Attributes;
@@ -118,6 +119,12 @@ public class SenderService
         return senderService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return senderService != null && senderService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -128,6 +135,11 @@ public class SenderService
 
     public AttributesOutput attributes()
     {
+        if (!hasAction("Attributes"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Attributes of service Sender");
+        }
         Attributes attributes = new Attributes(senderService,  upnpService.getControlPoint());
         AttributesOutput res = attributes.executeAction();
         return res;        
@@ -135,6 +147,11 @@ public class SenderService
 
     public AudioOutput audio()
     {
+        if (!hasAction("Audio"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Audio of service Sender");
+        }
         Audio audio = new Audio(senderService,  upnpService.getControlPoint());
         AudioOutput res = audio.executeAction();
         return res;        
@@ -142,6 +159,11 @@ public class SenderService
 
     public MetadataOutput metadata()
     {
+        if (!hasAction("Metadata"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Metadata of service Sender");
+        }
         Metadata metadata = new Metadata(senderService,  upnpService.getControlPoint());
         MetadataOutput res = metadata.executeAction();
         return res;        
@@ -149,6 +171,11 @@ public class SenderService
 
     public PresentationUrlOutput presentationUrl()
     {
+        if (!hasAction("PresentationUrl"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action PresentationUrl of service Sender");
+        }
         PresentationUrl presentationUrl = new PresentationUrl(senderService,  upnpService.getControlPoint());
         PresentationUrlOutput res = presentationUrl.executeAction();
         return res;        
@@ -156,6 +183,11 @@ public class SenderService
 
     public StatusOutput status()
     {
+        if (!hasAction("Status"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Status of service Sender");
+        }
         Status status = new Status(senderService,  upnpService.getControlPoint());
         StatusOutput res = status.executeAction();
         return res;        

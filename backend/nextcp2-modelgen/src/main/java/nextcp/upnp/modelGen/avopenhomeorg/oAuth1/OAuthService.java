@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.avopenhomeorg.oAuth1.actions.BeginLimitedInputFlow;
@@ -138,6 +139,12 @@ public class OAuthService
         return oAuthService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return oAuthService != null && oAuthService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -148,6 +155,11 @@ public class OAuthService
 
     public BeginLimitedInputFlowOutput beginLimitedInputFlow(BeginLimitedInputFlowInput inp)
     {
+        if (!hasAction("BeginLimitedInputFlow"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action BeginLimitedInputFlow of service OAuth");
+        }
         BeginLimitedInputFlow beginLimitedInputFlow = new BeginLimitedInputFlow(oAuthService, inp, upnpService.getControlPoint());
         BeginLimitedInputFlowOutput res = beginLimitedInputFlow.executeAction();
         return res;        
@@ -155,42 +167,77 @@ public class OAuthService
 
     public void clearAllTokens(ClearAllTokensInput inp)
     {
+        if (!hasAction("ClearAllTokens"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action ClearAllTokens of service OAuth");
+        }
         ClearAllTokens clearAllTokens = new ClearAllTokens(oAuthService, inp, upnpService.getControlPoint());
         clearAllTokens.executeAction();
     }
 
     public void clearLonglivedLivedToken(ClearLonglivedLivedTokenInput inp)
     {
+        if (!hasAction("ClearLonglivedLivedToken"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action ClearLonglivedLivedToken of service OAuth");
+        }
         ClearLonglivedLivedToken clearLonglivedLivedToken = new ClearLonglivedLivedToken(oAuthService, inp, upnpService.getControlPoint());
         clearLonglivedLivedToken.executeAction();
     }
 
     public void clearLonglivedLivedTokens(ClearLonglivedLivedTokensInput inp)
     {
+        if (!hasAction("ClearLonglivedLivedTokens"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action ClearLonglivedLivedTokens of service OAuth");
+        }
         ClearLonglivedLivedTokens clearLonglivedLivedTokens = new ClearLonglivedLivedTokens(oAuthService, inp, upnpService.getControlPoint());
         clearLonglivedLivedTokens.executeAction();
     }
 
     public void clearShortLivedToken(ClearShortLivedTokenInput inp)
     {
+        if (!hasAction("ClearShortLivedToken"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action ClearShortLivedToken of service OAuth");
+        }
         ClearShortLivedToken clearShortLivedToken = new ClearShortLivedToken(oAuthService, inp, upnpService.getControlPoint());
         clearShortLivedToken.executeAction();
     }
 
     public void clearShortLivedTokens(ClearShortLivedTokensInput inp)
     {
+        if (!hasAction("ClearShortLivedTokens"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action ClearShortLivedTokens of service OAuth");
+        }
         ClearShortLivedTokens clearShortLivedTokens = new ClearShortLivedTokens(oAuthService, inp, upnpService.getControlPoint());
         clearShortLivedTokens.executeAction();
     }
 
     public void clearToken(ClearTokenInput inp)
     {
+        if (!hasAction("ClearToken"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action ClearToken of service OAuth");
+        }
         ClearToken clearToken = new ClearToken(oAuthService, inp, upnpService.getControlPoint());
         clearToken.executeAction();
     }
 
     public GetJobStatusOutput getJobStatus()
     {
+        if (!hasAction("GetJobStatus"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetJobStatus of service OAuth");
+        }
         GetJobStatus getJobStatus = new GetJobStatus(oAuthService,  upnpService.getControlPoint());
         GetJobStatusOutput res = getJobStatus.executeAction();
         return res;        
@@ -198,6 +245,11 @@ public class OAuthService
 
     public GetJobUpdateIdOutput getJobUpdateId(GetJobUpdateIdInput inp)
     {
+        if (!hasAction("GetJobUpdateId"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetJobUpdateId of service OAuth");
+        }
         GetJobUpdateId getJobUpdateId = new GetJobUpdateId(oAuthService, inp, upnpService.getControlPoint());
         GetJobUpdateIdOutput res = getJobUpdateId.executeAction();
         return res;        
@@ -205,6 +257,11 @@ public class OAuthService
 
     public GetPublicKeyOutput getPublicKey()
     {
+        if (!hasAction("GetPublicKey"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetPublicKey of service OAuth");
+        }
         GetPublicKey getPublicKey = new GetPublicKey(oAuthService,  upnpService.getControlPoint());
         GetPublicKeyOutput res = getPublicKey.executeAction();
         return res;        
@@ -212,6 +269,11 @@ public class OAuthService
 
     public GetServiceStatusOutput getServiceStatus()
     {
+        if (!hasAction("GetServiceStatus"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetServiceStatus of service OAuth");
+        }
         GetServiceStatus getServiceStatus = new GetServiceStatus(oAuthService,  upnpService.getControlPoint());
         GetServiceStatusOutput res = getServiceStatus.executeAction();
         return res;        
@@ -219,6 +281,11 @@ public class OAuthService
 
     public GetSupportedServicesOutput getSupportedServices()
     {
+        if (!hasAction("GetSupportedServices"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetSupportedServices of service OAuth");
+        }
         GetSupportedServices getSupportedServices = new GetSupportedServices(oAuthService,  upnpService.getControlPoint());
         GetSupportedServicesOutput res = getSupportedServices.executeAction();
         return res;        
@@ -226,6 +293,11 @@ public class OAuthService
 
     public GetUpdateIdOutput getUpdateId()
     {
+        if (!hasAction("GetUpdateId"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetUpdateId of service OAuth");
+        }
         GetUpdateId getUpdateId = new GetUpdateId(oAuthService,  upnpService.getControlPoint());
         GetUpdateIdOutput res = getUpdateId.executeAction();
         return res;        
@@ -233,6 +305,11 @@ public class OAuthService
 
     public void setToken(SetTokenInput inp)
     {
+        if (!hasAction("SetToken"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetToken of service OAuth");
+        }
         SetToken setToken = new SetToken(oAuthService, inp, upnpService.getControlPoint());
         setToken.executeAction();
     }

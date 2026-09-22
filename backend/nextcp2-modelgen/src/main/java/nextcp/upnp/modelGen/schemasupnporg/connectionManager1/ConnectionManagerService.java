@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.schemasupnporg.connectionManager1.actions.ConnectionComplete;
@@ -120,6 +121,12 @@ public class ConnectionManagerService
         return connectionManagerService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return connectionManagerService != null && connectionManagerService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -130,12 +137,22 @@ public class ConnectionManagerService
 
     public void connectionComplete(ConnectionCompleteInput inp)
     {
+        if (!hasAction("ConnectionComplete"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action ConnectionComplete of service ConnectionManager");
+        }
         ConnectionComplete connectionComplete = new ConnectionComplete(connectionManagerService, inp, upnpService.getControlPoint());
         connectionComplete.executeAction();
     }
 
     public GetCurrentConnectionIDsOutput getCurrentConnectionIDs()
     {
+        if (!hasAction("GetCurrentConnectionIDs"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetCurrentConnectionIDs of service ConnectionManager");
+        }
         GetCurrentConnectionIDs getCurrentConnectionIDs = new GetCurrentConnectionIDs(connectionManagerService,  upnpService.getControlPoint());
         GetCurrentConnectionIDsOutput res = getCurrentConnectionIDs.executeAction();
         return res;        
@@ -143,6 +160,11 @@ public class ConnectionManagerService
 
     public GetCurrentConnectionInfoOutput getCurrentConnectionInfo(GetCurrentConnectionInfoInput inp)
     {
+        if (!hasAction("GetCurrentConnectionInfo"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetCurrentConnectionInfo of service ConnectionManager");
+        }
         GetCurrentConnectionInfo getCurrentConnectionInfo = new GetCurrentConnectionInfo(connectionManagerService, inp, upnpService.getControlPoint());
         GetCurrentConnectionInfoOutput res = getCurrentConnectionInfo.executeAction();
         return res;        
@@ -150,6 +172,11 @@ public class ConnectionManagerService
 
     public GetProtocolInfoOutput getProtocolInfo()
     {
+        if (!hasAction("GetProtocolInfo"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action GetProtocolInfo of service ConnectionManager");
+        }
         GetProtocolInfo getProtocolInfo = new GetProtocolInfo(connectionManagerService,  upnpService.getControlPoint());
         GetProtocolInfoOutput res = getProtocolInfo.executeAction();
         return res;        
@@ -157,6 +184,11 @@ public class ConnectionManagerService
 
     public PrepareForConnectionOutput prepareForConnection(PrepareForConnectionInput inp)
     {
+        if (!hasAction("PrepareForConnection"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action PrepareForConnection of service ConnectionManager");
+        }
         PrepareForConnection prepareForConnection = new PrepareForConnection(connectionManagerService, inp, upnpService.getControlPoint());
         PrepareForConnectionOutput res = prepareForConnection.executeAction();
         return res;        

@@ -10,6 +10,7 @@ import {
 } from './dto.d';
 import { Injectable, computed, signal, inject } from '@angular/core';
 import { PersistenceService } from './persistence/persistence.service';
+import { ServerFeatureName } from './server-feature';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +29,7 @@ export class DeviceService {
     img: '',
     friendlyName: 'select Media-Server',
     extendedApi: false,
+    features: [],
   });
   public selectedMediaRendererDevice = signal<MediaRendererDto>({
     udn: '',
@@ -45,6 +47,19 @@ export class DeviceService {
   public mediaServerSelected = computed(() => {
     return this.selectedMediaServerDevice().udn.length > 0;
   });
+
+  /** Whether the selected media server offers one capability - asked per feature, not per server type. */
+  public hasFeature(feature: ServerFeatureName): boolean {
+    return this.selectedMediaServerDevice().features?.includes(feature) === true;
+  }
+
+  /** The same question for a server that is not the selected one, e.g. in a device list. */
+  public serverHasFeature(
+    device: MediaServerDto | undefined,
+    feature: ServerFeatureName,
+  ): boolean {
+    return device?.features?.includes(feature) === true;
+  }
 
   /**
    * Synthetic renderer that plays audio in this browser (HTML5 audio) instead of on a real UPnP

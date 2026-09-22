@@ -12,6 +12,7 @@ import org.jupnp.protocol.sync.SendingUnsubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nextcp.upnp.GenActionException;
 import nextcp.upnp.ISubscriptionEventListener;
 
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.actions.Balance;
@@ -134,6 +135,12 @@ public class VolumeService
         return volumeService;
     }    
 
+    /** Whether the device announces this action - most of a service is optional. */
+    public boolean hasAction(String actionName)
+    {
+        return volumeService != null && volumeService.getAction(actionName) != null;
+    }
+
 
 //
 // Actions
@@ -144,6 +151,11 @@ public class VolumeService
 
     public BalanceOutput balance()
     {
+        if (!hasAction("Balance"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Balance of service Volume");
+        }
         Balance balance = new Balance(volumeService,  upnpService.getControlPoint());
         BalanceOutput res = balance.executeAction();
         return res;        
@@ -151,18 +163,33 @@ public class VolumeService
 
     public void balanceDec()
     {
+        if (!hasAction("BalanceDec"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action BalanceDec of service Volume");
+        }
         BalanceDec balanceDec = new BalanceDec(volumeService,  upnpService.getControlPoint());
         balanceDec.executeAction();
     }
 
     public void balanceInc()
     {
+        if (!hasAction("BalanceInc"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action BalanceInc of service Volume");
+        }
         BalanceInc balanceInc = new BalanceInc(volumeService,  upnpService.getControlPoint());
         balanceInc.executeAction();
     }
 
     public CharacteristicsOutput characteristics()
     {
+        if (!hasAction("Characteristics"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Characteristics of service Volume");
+        }
         Characteristics characteristics = new Characteristics(volumeService,  upnpService.getControlPoint());
         CharacteristicsOutput res = characteristics.executeAction();
         return res;        
@@ -170,6 +197,11 @@ public class VolumeService
 
     public FadeOutput fade()
     {
+        if (!hasAction("Fade"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Fade of service Volume");
+        }
         Fade fade = new Fade(volumeService,  upnpService.getControlPoint());
         FadeOutput res = fade.executeAction();
         return res;        
@@ -177,18 +209,33 @@ public class VolumeService
 
     public void fadeDec()
     {
+        if (!hasAction("FadeDec"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action FadeDec of service Volume");
+        }
         FadeDec fadeDec = new FadeDec(volumeService,  upnpService.getControlPoint());
         fadeDec.executeAction();
     }
 
     public void fadeInc()
     {
+        if (!hasAction("FadeInc"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action FadeInc of service Volume");
+        }
         FadeInc fadeInc = new FadeInc(volumeService,  upnpService.getControlPoint());
         fadeInc.executeAction();
     }
 
     public MuteOutput mute()
     {
+        if (!hasAction("Mute"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Mute of service Volume");
+        }
         Mute mute = new Mute(volumeService,  upnpService.getControlPoint());
         MuteOutput res = mute.executeAction();
         return res;        
@@ -196,30 +243,55 @@ public class VolumeService
 
     public void setBalance(SetBalanceInput inp)
     {
+        if (!hasAction("SetBalance"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetBalance of service Volume");
+        }
         SetBalance setBalance = new SetBalance(volumeService, inp, upnpService.getControlPoint());
         setBalance.executeAction();
     }
 
     public void setFade(SetFadeInput inp)
     {
+        if (!hasAction("SetFade"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetFade of service Volume");
+        }
         SetFade setFade = new SetFade(volumeService, inp, upnpService.getControlPoint());
         setFade.executeAction();
     }
 
     public void setMute(SetMuteInput inp)
     {
+        if (!hasAction("SetMute"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetMute of service Volume");
+        }
         SetMute setMute = new SetMute(volumeService, inp, upnpService.getControlPoint());
         setMute.executeAction();
     }
 
     public void setVolume(SetVolumeInput inp)
     {
+        if (!hasAction("SetVolume"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action SetVolume of service Volume");
+        }
         SetVolume setVolume = new SetVolume(volumeService, inp, upnpService.getControlPoint());
         setVolume.executeAction();
     }
 
     public VolumeOutput volume()
     {
+        if (!hasAction("Volume"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action Volume of service Volume");
+        }
         Volume volume = new Volume(volumeService,  upnpService.getControlPoint());
         VolumeOutput res = volume.executeAction();
         return res;        
@@ -227,18 +299,33 @@ public class VolumeService
 
     public void volumeDec()
     {
+        if (!hasAction("VolumeDec"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action VolumeDec of service Volume");
+        }
         VolumeDec volumeDec = new VolumeDec(volumeService,  upnpService.getControlPoint());
         volumeDec.executeAction();
     }
 
     public void volumeInc()
     {
+        if (!hasAction("VolumeInc"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action VolumeInc of service Volume");
+        }
         VolumeInc volumeInc = new VolumeInc(volumeService,  upnpService.getControlPoint());
         volumeInc.executeAction();
     }
 
     public VolumeLimitOutput volumeLimit()
     {
+        if (!hasAction("VolumeLimit"))
+        {
+            throw new GenActionException(GenActionException.ACTION_NOT_SUPPORTED,
+                "device does not offer action VolumeLimit of service Volume");
+        }
         VolumeLimit volumeLimit = new VolumeLimit(volumeService,  upnpService.getControlPoint());
         VolumeLimitOutput res = volumeLimit.executeAction();
         return res;        
