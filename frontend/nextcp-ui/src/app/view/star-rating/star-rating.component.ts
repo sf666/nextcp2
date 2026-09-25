@@ -1,6 +1,6 @@
 import { RatingServiceService } from './../../service/rating-service.service';
 import { ItemDto } from './../../service/dto.d';
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation, computed, input, model, signal, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, effect, input, model, signal, inject } from '@angular/core';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 
 @Component({
@@ -28,8 +28,8 @@ export class StarRatingComponent implements OnInit {
       .map((x, i) => i + 1),
   );
 
-  ngOnInit(): void {
-    this.rating.set(this.currentSong().rating);
+  constructor() {
+    effect(() => this.rating.set(this.currentSong().rating));
   }
 
   starSelected(num: number): void {
