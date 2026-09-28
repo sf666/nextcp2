@@ -11,7 +11,7 @@ import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
   styleUrls: ['./star-rating.component.scss'],
   standalone: true,
 })
-export class StarRatingComponent implements OnInit {
+export class StarRatingComponent {
   private dtoGeneratorService = inject(DtoGeneratorService);
   private ratingServiceService = inject(RatingServiceService);
 
