@@ -22,7 +22,7 @@ import {
   RatingFilter,
   RatingServiceService,
 } from 'src/app/service/rating-service.service';
-import { filterContainers } from 'src/app/util/browse-filter';
+import { filterContainers, splitGenres } from 'src/app/util/browse-filter';
 import { AlbumArtService } from 'src/app/util/album-art.service';
 import { DisplayHeaderOptionsComponent } from '../../popup/display-header-options/display-header-options.component';
 
@@ -538,7 +538,7 @@ export class ContainerTileComponent {
     }
     if (criteria === 'GENRE') {
       // Use the first genre token only (e.g. "R&B / Soul" -> "R&B").
-      const genre = item.genre?.split('/')[0]?.trim();
+      const genre = splitGenres(item.genre)[0];
       return genre || 'Unknown';
     }
     return '';

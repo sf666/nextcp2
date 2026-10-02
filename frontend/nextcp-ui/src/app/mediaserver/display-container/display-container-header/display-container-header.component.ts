@@ -32,6 +32,7 @@ import {
 import { DeviceService } from 'src/app/service/device.service';
 import { ServerFeature } from 'src/app/service/server-feature';
 import { BackgroundImageService } from 'src/app/util/background-image.service';
+import { splitGenres } from 'src/app/util/browse-filter';
 import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { TimeDisplayService } from 'src/app/util/time-display.service';
 import { AlbumArtService } from 'src/app/util/album-art.service';
@@ -547,16 +548,14 @@ export class DisplayContainerHeaderComponent implements OnInit {
     const mySet = new Set<string>();
     this.musicTracks?.forEach((value) => {
       if (value?.genre) {
-        let aGenre = value.genre.split('/');
-        aGenre?.forEach((gen) => {
+        splitGenres(value.genre).forEach((gen) => {
           mySet.add(gen.trim());
         });
       }
     });
     this.albums?.forEach((value) => {
       if (value?.genre) {
-        let aGenre = value.genre.split('/');
-        aGenre?.forEach((gen) => {
+        splitGenres(value.genre).forEach((gen) => {
           mySet.add(gen.trim());
         });
       }

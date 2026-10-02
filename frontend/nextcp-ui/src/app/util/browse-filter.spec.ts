@@ -1,9 +1,13 @@
 import {
   BrowseFilterMemory,
   BrowseFilterState,
+  filterContainers,
+  filterMusicItems,
   isUnfiltered,
+  splitGenres,
   UNFILTERED,
 } from './browse-filter';
+import { DtoGeneratorService } from './dto-generator.service';
 
 describe('BrowseFilterMemory', () => {
   const rated4Plus: BrowseFilterState = { ...UNFILTERED, rating: '4' };
@@ -64,5 +68,32 @@ describe('isUnfiltered', () => {
     expect(isUnfiltered({ ...UNFILTERED, genres: ['Jazz'] })).toBe(false);
     expect(isUnfiltered({ ...UNFILTERED, sort: 'TITLE' })).toBe(false);
     expect(isUnfiltered({ ...UNFILTERED, rating: '4' })).toBe(false);
+  });
+});
+
+describe('splitGenres', () => {
+  it('splits the separators used by media servers and omits empty values', () => {
+    expect(splitGenres('Jazz / Jazz Rock;;;Alternative Rock;;;')).toEqual([
+      'Jazz',
+      'Jazz Rock',
+      'Alternative Rock',
+    ]);
+  });
+});
+
+describe('filterMusicItems', () => {
+  it('matches a genre separated by triple semicolons', () => {
+    const dtoGenerator = new DtoGeneratorService();
+    const musicItem = dtoGenerator.emptyMusicItem();
+    musicItem.genre = 'Jazz;;;Jazz Rock;;;Alternative Rock';
+    const container = dtoGenerator.generateEmptyContainerDto();
+    container.genre = musicItem.genre;
+
+    expect(
+      filterMusicItems([musicItem], '', ['Alternative Rock'], 'ANY'),
+    ).toEqual([musicItem]);
+    expect(
+      filterContainers([container], '', ['Alternative Rock'], 'ANY'),
+    ).toEqual([container]);
   });
 });

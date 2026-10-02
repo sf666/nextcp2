@@ -23,6 +23,29 @@ export function matchesTextFilter(
 }
 
 /**
+ * Splits genres as reported by media servers. While most servers delimit multiple
+ * values with "/", others use ";;;".
+ */
+export function splitGenres(genre: string | undefined): string[] {
+  return genre
+    ? genre
+        .split(/\/|;;;/)
+        .map((value) => value.trim())
+        .filter((value) => value.length > 0)
+    : [];
+}
+
+function matchesGenreFilter(
+  genre: string | undefined,
+  filter: string,
+): boolean {
+  const values = splitGenres(genre);
+  return values.length > 0
+    ? values.some((value) => matchesTextFilter(value, filter))
+    : matchesTextFilter(undefined, filter);
+}
+
+/**
  * Narrows a container listing by the criteria of the browse header.
  *
  * Shared by the tile that renders the listing and by the section heading that counts
@@ -41,7 +64,7 @@ export function filterContainers(
   }
   if (genres?.length) {
     result = result.filter((item) =>
-      genres.some((genre) => matchesTextFilter(item.genre, genre)),
+      genres.some((genre) => matchesGenreFilter(item.genre, genre)),
     );
   }
   if (rating !== 'ANY') {
@@ -69,7 +92,7 @@ export function filterMusicItems(
   }
   if (genres?.length) {
     result = result.filter((item) =>
-      genres.some((genre) => matchesTextFilter(item.genre, genre)),
+      genres.some((genre) => matchesGenreFilter(item.genre, genre)),
     );
   }
   if (rating !== 'ANY') {
