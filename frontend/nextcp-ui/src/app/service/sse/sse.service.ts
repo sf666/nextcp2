@@ -12,6 +12,8 @@ import { MediaServerDto, UpnpAvTransportState, Config, DeviceDriverState, TrackT
  */
 export class SseService {
 
+  connectionOpened$: Subject<void> = new Subject();
+
   configChanged$: Subject<Config> = new Subject();
 
   // Device Discovery Events [ Added and deleted UPnP devices ]
@@ -51,7 +53,10 @@ export class SseService {
 
   constructor() {
     const eventSource = new EventSource('/SSE');
-    eventSource.onopen = e => console.log('opened SSE connection.');
+    eventSource.onopen = () => {
+      console.log('opened SSE connection.');
+      this.connectionOpened$.next();
+    };
     eventSource.onerror = e => this.processError(e);
 
     eventSource.onmessage = event => {

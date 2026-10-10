@@ -15,6 +15,7 @@ import nextcp.upnp.modelGen.avopenhomeorg.playlist1.PlaylistService;
 import nextcp.upnp.modelGen.avopenhomeorg.product1.ProductService;
 import nextcp.upnp.modelGen.avopenhomeorg.radio1.RadioService;
 import nextcp.upnp.modelGen.avopenhomeorg.time1.TimeService;
+import nextcp.upnp.device.mediarenderer.ohtime.OhTimeServiceEventListener;
 import nextcp.upnp.modelGen.avopenhomeorg.transport1.TransportService;
 import nextcp.upnp.modelGen.avopenhomeorg.volume1.VolumeService;
 import nextcp.upnp.modelGen.schemasupnporg.aVTransport1.AVTransportService;
@@ -87,7 +88,10 @@ public class ServiceInitializer
                 }
                 else if (service.getServiceType().getType().equalsIgnoreCase(OH_Time))
                 {
-                    renderer.oh_timeService = new TimeService(upnpService, device);
+                    // Register before SUBSCRIBE: the first event can arrive inside the constructor.
+                    renderer.ohTimeServiceEventListener = new OhTimeServiceEventListener(
+                        renderer.getEventPublisher(), renderer);
+                    renderer.oh_timeService = new TimeService(upnpService, device, renderer.ohTimeServiceEventListener);
                 }
                 else if (service.getServiceType().getType().equalsIgnoreCase(OH_Volume))
                 {

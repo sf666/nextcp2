@@ -68,10 +68,9 @@ public class MediaServerDevice extends BaseDevice {
 	}
 
 	private void createContentDirectoryService() {
-		this.contentDirectoryService = new ContentDirectoryService(getUpnpService(), getDevice());
 		// Tells us when a container changed after we already browsed it.
 		this.contentDirectoryEventListener = new ContentDirectoryEventListener(getDevice(), this);
-		this.contentDirectoryService.addSubscriptionEventListener(contentDirectoryEventListener);
+		this.contentDirectoryService = new ContentDirectoryService(getUpnpService(), getDevice(), contentDirectoryEventListener);
 		try {
 			searchSupportDelegate = new SearchSupport(contentDirectoryService, this);
 		} catch (Exception e) {

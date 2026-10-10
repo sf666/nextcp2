@@ -2,6 +2,7 @@ package nextcp.upnp.device.mediarenderer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.StringUtils;
 import org.jupnp.model.meta.RemoteDevice;
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import nextcp.config.RendererConfig;
 import nextcp.domainmodel.device.services.IInfoService;
 import nextcp.domainmodel.device.services.IPlaylistService;
@@ -72,6 +74,8 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
     /** Ticks between two attempts to reach a device that was marked offline (one per minute). */
     private static final long OFFLINE_RETRY_TICKS = 60;
+    private static final long TIME_EVENT_MAX_AGE_MS = 5000;
+    private long lastTimeSubscriptionRetry = System.nanoTime();
     
     @Autowired
     private MediaRendererFactories factories = null;
@@ -213,8 +217,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         if (hasOhTimeService())
         {
         	log.info(String.format("[%s] initialize OpenHome time service ...", getFriendlyName()));
-            ohTimeServiceEventListener = new OhTimeServiceEventListener(getEventPublisher(), this);
-            oh_timeService.addSubscriptionEventListener(ohTimeServiceEventListener);
+            // ServiceInitializer attaches the listener before the first subscription event arrives.
         }
         else
         {
@@ -289,6 +292,14 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 
         // must be called after OH Services!
         updateDeviceDriver();
+        // OpenHome devices also need a watchdog when a GENA subscription stops delivering.
+        schedulerService.addNotifierOneSecond(this);
+    }
+
+    @PreDestroy
+    public void stopStateUpdates()
+    {
+        if (schedulerService != null) schedulerService.removeNotifierOneSecond(this);
     }
 
     
@@ -651,9 +662,12 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             lastTickPlaying = false;
             return;
         }
-        if (hasOhInfoService())
+        if (hasOhTimeService())
         {
-            // OpenHome devices push their time via GENA events, nothing to poll here.
+            if (tickWaitPeriodPassed(counter) && !ohTimeServiceEventListener.hasRecentEvents(TIME_EVENT_MAX_AGE_MS))
+            {
+                updateOpenHomeTime();
+            }
             lastTickPlaying = false;
             return;
         }
@@ -667,7 +681,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             boolean startedPlaying = playing && !lastTickPlaying;
             lastTickPlaying = playing;
 
-            if ((tickWaitPeriodPassed(counter) || startedPlaying) && playing)
+            if (avTransportBridge != null && (tickWaitPeriodPassed(counter) || startedPlaying) && playing)
             {
             	// no OpenHome -> need to poll time and transport state information from AVTransport
             	
@@ -693,6 +707,59 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     	return counter % 5 == 0;
     }
 
+    private void updateOpenHomeTime()
+    {
+        try
+        {
+            TransportServiceStateDto state = transportBridge.getCurrentTransportServiceState();
+            eventPublisher.publishEvent(state);
+            if (!isPlayingState(state.transportState))
+            {
+                return;
+            }
+            if (oh_timeService.hasAction("Time"))
+            {
+                try
+                {
+                    eventPublisher.publishEvent(ohTimeServiceEventListener.fromSnapshot(oh_timeService.time()));
+                }
+                catch (Exception e)
+                {
+                    log.debug("Time snapshot failed for {}", getFriendlyName(), e);
+                }
+            }
+            else if (avTransportBridge != null)
+            {
+                eventPublisher.publishEvent(avTransportBridge.generateTractTimeDto());
+            }
+            long now = System.nanoTime();
+            if (now - lastTimeSubscriptionRetry >= TimeUnit.SECONDS.toNanos(30))
+            {
+                lastTimeSubscriptionRetry = now;
+                log.info("Time events missing for {}, subscribing again", getFriendlyName());
+                try
+                {
+                    oh_timeService.unsubscribeService(getUpnpService(), getDevice());
+                }
+                catch (Exception e)
+                {
+                    log.debug("Could not remove previous Time subscription for {}", getFriendlyName(), e);
+                }
+                ohTimeServiceEventListener = new OhTimeServiceEventListener(getEventPublisher(), this);
+                oh_timeService = new TimeService(getUpnpService(), getDevice(), ohTimeServiceEventListener);
+            }
+        }
+        catch (Exception e)
+        {
+            log.debug("Could not recover Time updates for {}", getFriendlyName(), e);
+        }
+    }
+
+    static boolean isPlayingState(String state)
+    {
+        return "PLAYING".equalsIgnoreCase(state) || "TRANSITIONING".equalsIgnoreCase(state);
+    }
+
     /** Whether playback was running on the previous tick; used to detect the start of playback. */
     private boolean lastTickPlaying = false;
     
@@ -707,7 +774,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             }
             TransportServiceStateDto state = transportBridge.getCurrentTransportServiceState();
             log.trace("{}: Transport State is : {}", getFriendlyName(), state != null ? state.transportState : "NULL");
-            return "PLAYING".equals(state.transportState) || "TRANSITIONING".equals(state.transportState);
+            return state != null && isPlayingState(state.transportState);
         }
         catch (Exception e)
         {

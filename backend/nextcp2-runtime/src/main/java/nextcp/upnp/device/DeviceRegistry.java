@@ -24,6 +24,7 @@ import nextcp.upnp.device.mediarenderer.MediaRendererListChanged;
 import nextcp.upnp.device.mediaserver.IMediaServerExtendedSupport;
 import nextcp.upnp.device.mediaserver.MediaServerDevice;
 import nextcp.upnp.device.mediaserver.MediaServerListChanged;
+import nextcp.upnp.device.mediaserver.UmsServerDevice;
 
 @Component
 public class DeviceRegistry {
@@ -91,6 +92,7 @@ public class DeviceRegistry {
 		MediaRendererDevice device = mediaRendererList.remove(remoteFacade.getUDN(remoteDevice));
 		if (device != null) {
 			device.removed();
+			device.stopStateUpdates();
 			eventPublisher.publishEvent(new MediaRendererListChanged(getAvailableMediaRenderer()));
 		} else {
 			log.debug("device not found in registry {}", remoteFacade.getFriendlyName(remoteDevice));
@@ -168,11 +170,14 @@ public class DeviceRegistry {
 	 * help: a device that is already known lands in updatedMediaServerDevice, which only adds when it is
 	 * unknown. So a subscription that never came up stayed down for the rest of the run.
 	 */
-	@Scheduled(fixedRate = 2, timeUnit = TimeUnit.MINUTES)
+	@Scheduled(fixedRate = 30, timeUnit = TimeUnit.SECONDS)
 	public void ensureMediaServerSubscriptions() {
 		for (MediaServerDevice device : mediaServerList.values()) {
 			try {
 				device.ensureContentDirectorySubscription();
+				if (device instanceof UmsServerDevice ums) {
+					ums.ensureExtendedSubscription();
+				}
 			} catch (Exception e) {
 				log.warn("could not subscribe to the content directory of {}", device.getFriendlyName(), e);
 			}

@@ -1,12 +1,9 @@
 package nextcp.util;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Locale;
 
 public class DisplayUtils
 {
-    private static final SimpleDateFormat sdf_min = new SimpleDateFormat("mm:ss");
-    private static final SimpleDateFormat sdf_hour = new SimpleDateFormat("HH:mm:ss");
     private static final long hourInSeconds = 60 * 60; // 60 sec * 60 min
 
     public static String convertToDigitString(Long durationInSeconds)
@@ -15,13 +12,15 @@ public class DisplayUtils
         {
             return "00:00";
         }
-        if (durationInSeconds < hourInSeconds)
+        long seconds = Math.max(0L, durationInSeconds);
+        // A playback duration is not a date. Keep it independent of time zones and thread-safe.
+        if (seconds < hourInSeconds)
         {
-            return sdf_min.format(new Date(durationInSeconds * 1000));
+            return String.format(Locale.ROOT, "%02d:%02d", seconds / 60, seconds % 60);
         }
         else
         {
-            return sdf_hour.format(new Date(durationInSeconds * 1000));
+            return String.format(Locale.ROOT, "%02d:%02d:%02d", seconds / 3600, (seconds / 60) % 60, seconds % 60);
         }
     }
 }

@@ -33,6 +33,7 @@ import org.eclipse.jetty.http.HttpFields;
 import org.eclipse.jetty.http.MultiPart;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.jupnp.model.meta.RemoteDevice;
+import org.jupnp.model.types.ServiceType;
 import org.jupnp.support.contentdirectory.DIDLParser;
 import org.jupnp.support.model.DIDLContent;
 import org.jupnp.support.model.DIDLObject.Class;
@@ -67,7 +68,6 @@ import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateRefer
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.DestroyObjectInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.UpdateObjectInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.UmsExtendedServicesService;
-import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.UmsExtendedServicesServiceEventListenerImpl;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.DislikeAlbumInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetAudioArtistDirOutput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.IsAlbumLikedInput;
@@ -94,8 +94,10 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 	private HttpClient httpClient = null;
 
-	private UmsExtendedServicesService umsServices = null;
-	private UmsExtendedServicesServiceEventListenerImpl umsServiceEventListener = null;
+	private volatile UmsExtendedServicesService umsServices = null;
+	private volatile UmsExtendedServicesServiceEventListener umsServiceEventListener = null;
+	private volatile boolean subscribing = false;
+	private volatile boolean pendingConfigEvent = false;
 	
 	private static final Long BROWSE_PAGE_SIZE = 200l;
 
@@ -128,8 +130,7 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		}
 
 		try {
-			umsServiceEventListener = new UmsExtendedServicesServiceEventListener(getDevice(), this);
-			umsServices = new UmsExtendedServicesService(getUpnpService(), getDevice(), umsServiceEventListener);
+			createExtendedSubscription();
 			if (umsServices.getUmsExtendedServicesService() == null) {
 				umsServiceEventListener = null;
 				log.warn(
@@ -138,6 +139,41 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 		} catch (Exception e) {
 			log.info("This UMS version has no UPnP extended UMS services.");
 		}
+	}
+
+	private void createExtendedSubscription() {
+		subscribing = true;
+		try {
+			umsServiceEventListener = new UmsExtendedServicesServiceEventListener(getDevice(), this);
+			umsServices = new UmsExtendedServicesService(getUpnpService(), getDevice(), umsServiceEventListener);
+		} finally {
+			subscribing = false;
+		}
+		if (pendingConfigEvent) {
+			pendingConfigEvent = false;
+			newUmsConfig();
+		}
+	}
+
+	/** Restores metadata pushes after a failed initial subscription or a server restart. */
+	public synchronized void ensureExtendedSubscription() {
+		if (umsServices == null) {
+			if (getDevice().findService(new ServiceType("schemas-upnp-org", "UmsExtendedServices")) != null) {
+				createExtendedSubscription();
+			}
+			return;
+		}
+		if (umsServices.getUmsExtendedServicesService() == null ||
+			(umsServiceEventListener != null && umsServiceEventListener.isReceivingEvents())) {
+			return;
+		}
+		log.info("UMS extended events missing for {}, subscribing again", getFriendlyName());
+		try {
+			umsServices.unsubscribeService(getUpnpService(), getDevice());
+		} catch (Exception e) {
+			log.debug("Could not remove previous UMS extended subscription", e);
+		}
+		createExtendedSubscription();
 	}
 
 	@PreDestroy
@@ -239,6 +275,11 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 	 * received new UMS config ...
 	 */
 	public void newUmsConfig() {
+		// The initial event can arrive while the generated service constructor is still subscribing.
+		if (subscribing || umsServices == null) {
+			pendingConfigEvent = true;
+			return;
+		}
 		updateServerConfig();
 
 		if (!initialConfigUpdateDone) {

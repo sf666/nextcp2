@@ -292,6 +292,13 @@ export class RendererService {
       (data) => this.renderDeviceChanged(data),
     );
 
+    effect(() => {
+      const local = this.deviceService.isLocalBrowserSelected();
+      const track = local ? this.localPlayer.currentItem() : this.trackInfoUpnp().currentTrack;
+      const playing = local ? this.localPlayer.playing() : this.isPlaying();
+      this.webStreamNowPlaying.watch(track, playing);
+    });
+
     // Drive the interpolation, but only while it is actually needed: a real renderer is selected, it
     // is playing, and the app is visible. The app runs zoneless, so this signal write is what
     // repaints the footer.
