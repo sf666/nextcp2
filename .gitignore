@@ -35,3 +35,6 @@ GEMINI.md
 frontend/node_modules
 .idea
 .aider*
+AGENTS.md
+UMS-CODEX.md
+UMS-RELAY-ANALYSE.md
