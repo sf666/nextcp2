@@ -76,6 +76,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     private static final long OFFLINE_RETRY_TICKS = 60;
     private static final long TIME_EVENT_MAX_AGE_MS = 5000;
     private long lastTimeSubscriptionRetry = System.nanoTime();
+    private long lastInfoSubscriptionRetry = System.nanoTime();
     
     @Autowired
     private MediaRendererFactories factories = null;
@@ -188,9 +189,8 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         if (hasOhInfoService())
         {
         	log.info(String.format("[%s] initialize OpenHome info service ...", getFriendlyName()));
-            ohInfoServiceEventListener = new OhInfoServiceEventListener(this);
-            oh_infoService.addSubscriptionEventListener(ohInfoServiceEventListener);
-            this.infoService = new Oh_InfoServiceImpl(this, oh_infoService);
+            // ServiceInitializer attaches the listener before SUBSCRIBE can deliver an event.
+            this.infoService = new Oh_InfoServiceImpl(oh_infoService, ohInfoServiceEventListener);
         }
         else
         {
@@ -326,6 +326,7 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
     private void initDeviceServices()
     {
         updateRendererConfig();
+        services.clear();
         serviceInitializer.initializeServices(getUpnpService(), getDevice(), this, services);
         rendererConfig.mediaRenderer = getAsDto();
         rendererConfigService.updateRendererDevice(rendererConfig);
@@ -662,6 +663,10 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
             lastTickPlaying = false;
             return;
         }
+        if (hasOhInfoService() && tickWaitPeriodPassed(counter) && !ohInfoServiceEventListener.isReceivingEvents())
+        {
+            updateOpenHomeInfo();
+        }
         if (hasOhTimeService())
         {
             if (tickWaitPeriodPassed(counter) && !ohTimeServiceEventListener.hasRecentEvents(TIME_EVENT_MAX_AGE_MS))
@@ -752,6 +757,44 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
         catch (Exception e)
         {
             log.debug("Could not recover Time updates for {}", getFriendlyName(), e);
+        }
+    }
+
+    private void updateOpenHomeInfo()
+    {
+        try
+        {
+            // Keep now playing current while a failed subscription is being recovered. Reading a
+            // snapshot must not mark the subscription healthy; only actual GENA delivery does.
+            eventPublisher.publishEvent(getTrackInfo());
+        }
+        catch (Exception e)
+        {
+            log.debug("Could not read Info snapshot for {}", getFriendlyName(), e);
+        }
+        try
+        {
+            long now = System.nanoTime();
+            if (now - lastInfoSubscriptionRetry >= TimeUnit.SECONDS.toNanos(30))
+            {
+                lastInfoSubscriptionRetry = now;
+                log.info("Info events missing for {}, subscribing again", getFriendlyName());
+                try
+                {
+                    oh_infoService.unsubscribeService(getUpnpService(), getDevice());
+                }
+                catch (Exception e)
+                {
+                    log.debug("Could not remove previous Info subscription for {}", getFriendlyName(), e);
+                }
+                ohInfoServiceEventListener = new OhInfoServiceEventListener(this);
+                oh_infoService = new InfoService(getUpnpService(), getDevice(), ohInfoServiceEventListener);
+                infoService = new Oh_InfoServiceImpl(oh_infoService, ohInfoServiceEventListener);
+            }
+        }
+        catch (Exception e)
+        {
+            log.debug("Could not recover Info updates for {}", getFriendlyName(), e);
         }
     }
 
@@ -903,9 +946,11 @@ public class MediaRendererDevice extends BaseDevice implements ISchedulerService
 			return;
 		}
 		try {
-			initDeviceServices();
+			// Recreate bridges as well as subscriptions so listeners and action calls use the new services.
+			initServices();
 			setServicesOffline(false);
 		} catch (Exception e) {
+			setServicesOffline(true);
 			log.debug("{}: services are still not reachable", getFriendlyName(), e);
 		}
 	}

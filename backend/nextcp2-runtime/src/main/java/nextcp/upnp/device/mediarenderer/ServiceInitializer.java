@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nextcp.dto.MediaRendererServicesDto;
+import nextcp.upnp.device.mediarenderer.ohinfo.OhInfoServiceEventListener;
 import nextcp.upnp.modelGen.avopenhomeorg.credentials1.CredentialsService;
 import nextcp.upnp.modelGen.avopenhomeorg.info1.InfoService;
 import nextcp.upnp.modelGen.avopenhomeorg.playlist1.PlaylistService;
@@ -84,7 +85,9 @@ public class ServiceInitializer
             {
                 if (service.getServiceType().getType().equalsIgnoreCase(OH_Info))
                 {
-                    renderer.oh_infoService = new InfoService(upnpService, device);
+                    // The initial event can arrive before the service constructor returns.
+                    renderer.ohInfoServiceEventListener = new OhInfoServiceEventListener(renderer);
+                    renderer.oh_infoService = new InfoService(upnpService, device, renderer.ohInfoServiceEventListener);
                 }
                 else if (service.getServiceType().getType().equalsIgnoreCase(OH_Time))
                 {

@@ -2,7 +2,6 @@ package nextcp.upnp.device.mediarenderer.ohinfo;
 
 import nextcp.domainmodel.device.services.IInfoService;
 import nextcp.dto.TrackInfoDto;
-import nextcp.upnp.device.mediarenderer.MediaRendererDevice;
 import nextcp.upnp.modelGen.avopenhomeorg.info1.InfoService;
 import nextcp.upnp.modelGen.avopenhomeorg.info1.actions.CountersOutput;
 import nextcp.upnp.modelGen.avopenhomeorg.info1.actions.DetailsOutput;
@@ -12,12 +11,12 @@ import nextcp.upnp.modelGen.avopenhomeorg.info1.actions.TrackOutput;
 public class Oh_InfoServiceImpl implements IInfoService
 {
     private InfoService infoService = null;
-    private MediaRendererDevice device = null;
+    private final OhInfoServiceEventListener listener;
 
-    public Oh_InfoServiceImpl(MediaRendererDevice device, InfoService infoService)
+    public Oh_InfoServiceImpl(InfoService infoService, OhInfoServiceEventListener listener)
     {
-        this.device = device;
         this.infoService = infoService;
+        this.listener = listener;
     }
 
     public DetailsOutput details()
@@ -42,26 +41,11 @@ public class Oh_InfoServiceImpl implements IInfoService
 
     private TrackInfoDto createTrackInfoDto()
     {
-        TrackInfoDto dto = new TrackInfoDto();
-
         DetailsOutput details = details();
-        dto.mediaRendererUdn = device.getUdnAsString();
-        dto.codecName = details.CodecName;
-
         CountersOutput counter = counters();
-        dto.detailsCount = counter.DetailsCount;
-        dto.metatextCount = counter.MetatextCount;
-        dto.trackCount = counter.TrackCount;
-
         MetatextOutput meta = metatext();
-        dto.metatext = meta.Value;
-
         TrackOutput track = track();
-        dto.metadata = track.Metadata;
-        dto.uri = track.Uri;
-        dto.currentTrack = device.getDtoBuilder().extractXmlAsMusicItem(dto.metadata);
-
-        return dto;
+        return listener.fromSnapshot(details, counter, track, meta);
     }
 
     @Override
