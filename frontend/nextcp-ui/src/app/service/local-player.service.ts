@@ -1,4 +1,4 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { Injectable, computed, effect, inject, signal } from '@angular/core';
 import { ItemDto } from './dto';
 import { isBroadcastItem } from 'src/app/util/broadcast-item';
 import { ConfigurationService } from './configuration.service';
@@ -120,6 +120,13 @@ export class LocalPlayerService {
   });
 
   constructor() {
+    effect(() => {
+      this.updateMediaMetadata(this.currentItem());
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.playbackState = this.currentItem()
+          ? (this.playing() ? 'playing' : 'paused') : 'none';
+      }
+    });
     this.audio.setAttribute('x-webkit-airplay', 'allow');
     this.audio.addEventListener('webkitcurrentplaybacktargetiswirelesschanged', () => {
       this.airPlayActive.set(this.audio.webkitCurrentPlaybackTargetIsWireless === true);
@@ -177,6 +184,26 @@ export class LocalPlayerService {
     window.addEventListener('pagehide', () => this.persistState());
 
     this.restoreState();
+  }
+
+  /** Give the system playback controls the same title and cover as the browser player. */
+  private updateMediaMetadata(item: ItemDto | null): void {
+    if (!('mediaSession' in navigator) || typeof MediaMetadata === 'undefined') return;
+    const artwork: MediaImage[] = [];
+    const cover = item?.albumArtUrlLarge || item?.albumArtUrl;
+    if (cover) {
+      try {
+        artwork.push({ src: new URL(cover, document.baseURI).href });
+      } catch {
+        // Invalid cover URLs must not prevent title updates or playback.
+      }
+    }
+    navigator.mediaSession.metadata = item ? new MediaMetadata({
+      title: item.title || '',
+      artist: item.artistName || '',
+      album: item.album || '',
+      artwork,
+    }) : null;
   }
 
   /** Plays a single track (replaces the queue with just this item). */
