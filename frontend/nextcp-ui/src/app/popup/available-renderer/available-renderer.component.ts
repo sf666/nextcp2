@@ -6,19 +6,22 @@ import { ConfigurationService } from 'src/app/service/configuration.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MediaRendererDto } from 'src/app/service/dto';
 import { DeviceInfoComponent } from '../device-info/device-info.component';
+import { LocalPlayerService } from 'src/app/service/local-player.service';
+import { ToastService } from 'src/app/service/toast/toast.service';
 
 @Component({
   selector: 'app-available-renderer',
   templateUrl: './available-renderer.component.html',
   styleUrls: ['./available-renderer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
 })
 export class AvailableRendererComponent {
   private popupService = inject(PopupService);
   private readonly infoDialog = inject(MatDialog);
   deviceService = inject(DeviceService);
   configurationService = inject(ConfigurationService);
+  readonly localPlayer = inject(LocalPlayerService);
+  private readonly toastService = inject(ToastService);
 
   private readonly _matDialogRef: MatDialogRef<AvailableRendererComponent>;
   private readonly triggerElementRef: ElementRef;
@@ -79,7 +82,21 @@ export class AvailableRendererComponent {
   }
 
   selectRenderer(udn: string): void {
+    // Returning from AirPlay to the phone also requires the native route picker.
+    if (udn === this.deviceService.LOCAL_BROWSER_UDN && this.localPlayer.airPlayActive()) {
+      this.selectAirPlay();
+      return;
+    }
     this.deviceService.setMediaRendererByUdn(udn);
+    this.close();
+  }
+
+  selectAirPlay(): void {
+    if (!this.localPlayer.showAirPlayPicker()) {
+      this.toastService.error('Could not open the AirPlay device selection. Please try again.', 'AirPlay');
+      return;
+    }
+    this.deviceService.setMediaRendererByUdn(this.deviceService.LOCAL_BROWSER_UDN);
     this.close();
   }
 }

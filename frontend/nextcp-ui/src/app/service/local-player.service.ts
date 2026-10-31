@@ -18,6 +18,12 @@ interface PersistedPlayerState {
   repeat: boolean;
 }
 
+/** Safari extensions used by the native AirPlay route picker. */
+interface AirPlayAudioElement extends HTMLAudioElement {
+  webkitShowPlaybackTargetPicker?: () => void;
+  readonly webkitCurrentPlaybackTargetIsWireless?: boolean;
+}
+
 /**
  * Plays audio directly in the browser via an HTML5 audio element, used when the synthetic
  * "This Device" renderer is selected instead of a real UPnP media renderer. Holds a simple in-memory
@@ -29,7 +35,21 @@ interface PersistedPlayerState {
   providedIn: 'root',
 })
 export class LocalPlayerService {
-  private readonly audio = new Audio();
+  private readonly audio: AirPlayAudioElement = new Audio();
+  public readonly airPlaySupported = typeof this.audio.webkitShowPlaybackTargetPicker === 'function';
+  public readonly airPlayActive = signal(false);
+
+  /** Must run synchronously inside the user's click handler to retain Safari's user activation. */
+  public showAirPlayPicker(): boolean {
+    if (!this.airPlaySupported) return false;
+    try {
+      this.audio.webkitShowPlaybackTargetPicker!();
+      return true;
+    } catch (error) {
+      console.warn('[local-player] Could not open the AirPlay picker', error);
+      return false;
+    }
+  }
   // Original (unshuffled) order; the active playback order is derived from it.
   private sourceQueue: ItemDto[] = [];
   private queue: ItemDto[] = [];
@@ -100,6 +120,10 @@ export class LocalPlayerService {
   });
 
   constructor() {
+    this.audio.setAttribute('x-webkit-airplay', 'allow');
+    this.audio.addEventListener('webkitcurrentplaybacktargetiswirelesschanged', () => {
+      this.airPlayActive.set(this.audio.webkitCurrentPlaybackTargetIsWireless === true);
+    });
     this.audio.addEventListener('play', () => { this.playing.set(true); this.persistState(); });
     this.audio.addEventListener('playing', () => { this.playing.set(true); this.persistState(); });
     this.audio.addEventListener('pause', () => { this.playing.set(false); this.persistState(); this.maybeAdvanceAtEnd('pause'); });

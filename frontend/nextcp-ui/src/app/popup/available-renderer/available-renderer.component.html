@@ -10,7 +10,7 @@
     @for (device of filteredMediaRendererList(); track device.udn) {
       <div class="device-row flex items-center">
       <button type="button" class="device-item flex items-center gap-3 grow min-w-0"
-        [class.selected]="deviceService.isMediaRendererSelected(device.udn)"
+        [class.selected]="deviceService.isMediaRendererSelected(device.udn) && (device.udn !== deviceService.LOCAL_BROWSER_UDN || !localPlayer.airPlayActive())"
         (click)="selectRenderer(device.udn)">
         <span class="device-icon flex items-center justify-center">
           @if (device.udn === deviceService.LOCAL_BROWSER_UDN) {
@@ -44,6 +44,27 @@
         </button>
       }
       </div>
+      @if (device.udn === deviceService.LOCAL_BROWSER_UDN && localPlayer.airPlaySupported) {
+        <div class="device-row flex items-center">
+          <button type="button" class="device-item flex items-center gap-3 grow min-w-0"
+            [class.selected]="deviceService.isLocalBrowserSelected() && localPlayer.airPlayActive()"
+            (click)="selectAirPlay()">
+            <span class="device-icon flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+                aria-hidden="true">
+                <path d="M5 17H3V3h18v14h-2"></path>
+                <path d="m12 14 7 7H5Z"></path>
+              </svg>
+            </span>
+            <span class="device-text flex flex-col min-w-0">
+              <span class="device-name">AirPlay …</span>
+              <span class="device-sub">Choose audio output</span>
+            </span>
+            <span class="material-symbols-outlined check-icon">check</span>
+          </button>
+        </div>
+      }
     }
   </div>
 </div>
