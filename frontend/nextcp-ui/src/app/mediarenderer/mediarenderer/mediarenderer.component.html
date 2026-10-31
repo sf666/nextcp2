@@ -9,7 +9,7 @@
 
         <div class="np-meta">
           <div class="np-eyebrow">
-            Now Playing · {{ deviceService.selectedMediaRendererDevice().friendlyName }}
+            Now Playing · {{ rendererService.selectedRendererName() }}
           </div>
 
           <div class="np-headline">
@@ -73,7 +73,7 @@
           <!-- Player Info -->
           <div class="mb-6">
             <h3 class="text-sm text-gray-400 mb-3 uppercase tracking-wide">
-              Player: {{ deviceService.selectedMediaRendererDevice().friendlyName }}
+              Player: {{ rendererService.selectedRendererName() }}
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div class="np-info-cell">

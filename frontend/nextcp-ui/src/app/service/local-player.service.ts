@@ -39,6 +39,11 @@ export class LocalPlayerService {
   public readonly airPlaySupported = typeof this.audio.webkitShowPlaybackTargetPicker === 'function';
   public readonly airPlayActive = signal(false);
 
+  private syncAirPlayState(): void {
+    this.airPlayActive.set(this.audio.webkitCurrentPlaybackTargetIsWireless === true ||
+      (this.airPlaySupported && this.audio.remote?.state === 'connected'));
+  }
+
   /** Must run synchronously inside the user's click handler to retain Safari's user activation. */
   public showAirPlayPicker(): boolean {
     if (!this.airPlaySupported) return false;
@@ -128,9 +133,12 @@ export class LocalPlayerService {
       }
     });
     this.audio.setAttribute('x-webkit-airplay', 'allow');
-    this.audio.addEventListener('webkitcurrentplaybacktargetiswirelesschanged', () => {
-      this.airPlayActive.set(this.audio.webkitCurrentPlaybackTargetIsWireless === true);
-    });
+    this.audio.addEventListener('webkitcurrentplaybacktargetiswirelesschanged', () => this.syncAirPlayState());
+    // Browser implementations differ in which route-change notification they expose.
+    this.audio.remote?.addEventListener('connect', () => this.syncAirPlayState());
+    this.audio.remote?.addEventListener('disconnect', () => this.syncAirPlayState());
+    this.audio.addEventListener('playing', () => this.syncAirPlayState());
+    this.syncAirPlayState();
     this.audio.addEventListener('play', () => { this.playing.set(true); this.persistState(); });
     this.audio.addEventListener('playing', () => { this.playing.set(true); this.persistState(); });
     this.audio.addEventListener('pause', () => { this.playing.set(false); this.persistState(); this.maybeAdvanceAtEnd('pause'); });

@@ -82,8 +82,10 @@ export class AvailableRendererComponent {
   }
 
   selectRenderer(udn: string): void {
-    // Returning from AirPlay to the phone also requires the native route picker.
-    if (udn === this.deviceService.LOCAL_BROWSER_UDN && this.localPlayer.airPlayActive()) {
+    // iOS can route audio without reporting a wireless target to the page. Always offer
+    // the picker for the selected browser player so returning to the device remains possible.
+    if (udn === this.deviceService.LOCAL_BROWSER_UDN && this.localPlayer.airPlaySupported &&
+        (this.deviceService.isLocalBrowserSelected() || this.localPlayer.airPlayActive())) {
       this.selectAirPlay();
       return;
     }

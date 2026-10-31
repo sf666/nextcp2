@@ -41,6 +41,11 @@ export class RendererService {
   private genericResultService = inject(GenericResultService);
   private httpService = inject(HttpService);
   private localPlayer = inject(LocalPlayerService);
+  public readonly selectedRendererName = computed(() =>
+    this.deviceService.isLocalBrowserSelected() && this.localPlayer.airPlayActive()
+      ? 'AirPlay'
+      : this.deviceService.selectedMediaRendererDevice().friendlyName,
+  );
   private webStreamNowPlaying = inject(WebStreamNowPlayingService);
   private timeDisplayService = inject(TimeDisplayService);
   private appVisibilityService = inject(AppVisibilityService);

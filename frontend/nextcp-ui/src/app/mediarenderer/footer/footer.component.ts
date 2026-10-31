@@ -19,7 +19,6 @@ import {
 } from '@angular/core';
 import { QualityBadgeComponent } from '../../util/comp/quality-badge/quality-badge.component';
 import { BackgroundImageService } from '../../util/background-image.service';
-import { toObservable } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { ImgFallbackDirective } from 'src/app/directive/img-fallback.directive';
@@ -41,7 +40,7 @@ export class FooterComponent implements OnInit {
   rendererService = inject(RendererService);
   private backgroundImageService = inject(BackgroundImageService);
 
-  currentMediaRendererName = signal<string>('');
+  readonly currentMediaRendererName = this.rendererService.selectedRendererName;
   sliderPos = computed(() =>
     this.reverseLogVal(this.rendererService.deviceDriverState().volume),
   );
@@ -52,10 +51,6 @@ export class FooterComponent implements OnInit {
   volControl = new FormControl(0);
 
   constructor() {
-    toObservable(this.deviceService.selectedMediaRendererDevice).subscribe(
-      (data) => this.currentMediaRendererName.set(data.friendlyName),
-    );
-
     // Keep the frosted footer's album backdrop in sync with the now-playing
     // artwork. Driven by the reactive imgSrc() signal (same source as the footer
     // thumbnail) so it works for both UPnP renderers and the local "This device"

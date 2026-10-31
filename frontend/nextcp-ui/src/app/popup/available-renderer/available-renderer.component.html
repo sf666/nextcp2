@@ -32,7 +32,7 @@
         <span class="device-text flex flex-col min-w-0">
           <span class="device-name" title="{{device.friendlyName}}">{{device.friendlyName}}</span>
           @if (device.udn === deviceService.LOCAL_BROWSER_UDN) {
-            <span class="device-sub">This device</span>
+            <span class="device-sub">{{localPlayer.airPlaySupported && (deviceService.isLocalBrowserSelected() || localPlayer.airPlayActive()) ? 'Choose audio output in the AirPlay menu' : 'This device'}}</span>
           }
         </span>
         <span class="material-symbols-outlined check-icon">check</span>
