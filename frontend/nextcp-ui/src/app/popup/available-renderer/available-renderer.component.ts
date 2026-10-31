@@ -85,16 +85,16 @@ export class AvailableRendererComponent {
     // iOS can route audio without reporting a wireless target to the page. Always offer
     // the picker for the selected browser player so returning to the device remains possible.
     if (udn === this.deviceService.LOCAL_BROWSER_UDN && this.localPlayer.airPlaySupported &&
-        (this.deviceService.isLocalBrowserSelected() || this.localPlayer.airPlayActive())) {
-      this.selectAirPlay();
+        (this.deviceService.isLocalBrowserSelected() || this.localPlayer.airPlaySelected())) {
+      this.selectAirPlay('device');
       return;
     }
     this.deviceService.setMediaRendererByUdn(udn);
     this.close();
   }
 
-  selectAirPlay(): void {
-    if (!this.localPlayer.showAirPlayPicker()) {
+  selectAirPlay(output: 'airplay' | 'device' = 'airplay'): void {
+    if (!this.localPlayer.showAirPlayPicker(output)) {
       this.toastService.error('Could not open the AirPlay device selection. Please try again.', 'AirPlay');
       return;
     }

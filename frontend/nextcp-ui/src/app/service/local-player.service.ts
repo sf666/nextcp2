@@ -38,17 +38,24 @@ export class LocalPlayerService {
   private readonly audio: AirPlayAudioElement = new Audio();
   public readonly airPlaySupported = typeof this.audio.webkitShowPlaybackTargetPicker === 'function';
   public readonly airPlayActive = signal(false);
+  // The chosen UI output is separate from the route status: iOS may omit route notifications.
+  public readonly airPlaySelected = signal(false);
 
   private syncAirPlayState(): void {
-    this.airPlayActive.set(this.audio.webkitCurrentPlaybackTargetIsWireless === true ||
-      (this.airPlaySupported && this.audio.remote?.state === 'connected'));
+    const active = this.audio.webkitCurrentPlaybackTargetIsWireless === true ||
+      (this.airPlaySupported && this.audio.remote?.state === 'connected');
+    if (active !== this.airPlayActive()) {
+      this.airPlaySelected.set(active);
+    }
+    this.airPlayActive.set(active);
   }
 
   /** Must run synchronously inside the user's click handler to retain Safari's user activation. */
-  public showAirPlayPicker(): boolean {
+  public showAirPlayPicker(output: 'airplay' | 'device' = 'airplay'): boolean {
     if (!this.airPlaySupported) return false;
     try {
       this.audio.webkitShowPlaybackTargetPicker!();
+      this.airPlaySelected.set(output === 'airplay');
       return true;
     } catch (error) {
       console.warn('[local-player] Could not open the AirPlay picker', error);

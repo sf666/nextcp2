@@ -10,7 +10,7 @@
     @for (device of filteredMediaRendererList(); track device.udn) {
       <div class="device-row flex items-center">
       <button type="button" class="device-item flex items-center gap-3 grow min-w-0"
-        [class.selected]="deviceService.isMediaRendererSelected(device.udn) && (device.udn !== deviceService.LOCAL_BROWSER_UDN || !localPlayer.airPlayActive())"
+        [class.selected]="deviceService.isMediaRendererSelected(device.udn) && (device.udn !== deviceService.LOCAL_BROWSER_UDN || !localPlayer.airPlaySelected())"
         (click)="selectRenderer(device.udn)">
         <span class="device-icon flex items-center justify-center">
           @if (device.udn === deviceService.LOCAL_BROWSER_UDN) {
@@ -32,7 +32,7 @@
         <span class="device-text flex flex-col min-w-0">
           <span class="device-name" title="{{device.friendlyName}}">{{device.friendlyName}}</span>
           @if (device.udn === deviceService.LOCAL_BROWSER_UDN) {
-            <span class="device-sub">{{localPlayer.airPlaySupported && (deviceService.isLocalBrowserSelected() || localPlayer.airPlayActive()) ? 'Choose audio output in the AirPlay menu' : 'This device'}}</span>
+            <span class="device-sub">{{localPlayer.airPlaySupported && (deviceService.isLocalBrowserSelected() || localPlayer.airPlaySelected()) ? 'Choose audio output in the AirPlay menu' : 'This device'}}</span>
           }
         </span>
         <span class="material-symbols-outlined check-icon">check</span>
@@ -47,7 +47,7 @@
       @if (device.udn === deviceService.LOCAL_BROWSER_UDN && localPlayer.airPlaySupported) {
         <div class="device-row flex items-center">
           <button type="button" class="device-item flex items-center gap-3 grow min-w-0"
-            [class.selected]="deviceService.isLocalBrowserSelected() && localPlayer.airPlayActive()"
+            [class.selected]="deviceService.isLocalBrowserSelected() && localPlayer.airPlaySelected()"
             (click)="selectAirPlay()">
             <span class="device-icon flex items-center justify-center">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none"

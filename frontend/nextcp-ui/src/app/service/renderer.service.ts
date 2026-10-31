@@ -42,7 +42,7 @@ export class RendererService {
   private httpService = inject(HttpService);
   private localPlayer = inject(LocalPlayerService);
   public readonly selectedRendererName = computed(() =>
-    this.deviceService.isLocalBrowserSelected() && this.localPlayer.airPlayActive()
+    this.deviceService.isLocalBrowserSelected() && this.localPlayer.airPlaySelected()
       ? 'AirPlay'
       : this.deviceService.selectedMediaRendererDevice().friendlyName,
   );
