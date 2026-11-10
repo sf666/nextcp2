@@ -41,7 +41,7 @@
             <div class="search-field">
                 <span class="material-symbols-outlined thin search-icon">search</span>
                 <input [(ngModel)]="name" (ngModelChange)="filterChanged()" type="text" class="glass-input"
-                       placeholder="station name"/>
+                       placeholder="station name" cdkFocusInitial/>
             </div>
 
             <div class="filter-row flex items-center gap-2">
