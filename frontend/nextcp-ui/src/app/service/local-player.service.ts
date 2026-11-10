@@ -36,10 +36,18 @@ interface AirPlayAudioElement extends HTMLAudioElement {
 })
 export class LocalPlayerService {
   private readonly audio: AirPlayAudioElement = new Audio();
-  public readonly airPlaySupported = typeof this.audio.webkitShowPlaybackTargetPicker === 'function';
+  public get airPlaySupported(): boolean {
+    if (typeof this.audio.webkitShowPlaybackTargetPicker === 'function') return true;
+    // Remote Playback can also mean Cast in Chromium. Only expose it as AirPlay on Apple engines.
+    const applePlayback = navigator.vendor === 'Apple Computer, Inc.' ||
+      'WebKitPlaybackTargetAvailabilityEvent' in window ||
+      'webkitCurrentPlaybackTargetIsWireless' in this.audio;
+    return applePlayback && typeof this.audio.remote?.prompt === 'function';
+  }
   public readonly airPlayActive = signal(false);
   // The chosen UI output is separate from the route status: iOS may omit route notifications.
   public readonly airPlaySelected = signal(false);
+  private airPlayPickerRequest = 0;
 
   private syncAirPlayState(): void {
     const active = this.audio.webkitCurrentPlaybackTargetIsWireless === true ||
@@ -53,8 +61,21 @@ export class LocalPlayerService {
   /** Must run synchronously inside the user's click handler to retain Safari's user activation. */
   public showAirPlayPicker(output: 'airplay' | 'device' = 'airplay'): boolean {
     if (!this.airPlaySupported) return false;
+    const previousSelection = this.airPlaySelected();
+    const request = ++this.airPlayPickerRequest;
     try {
-      this.audio.webkitShowPlaybackTargetPicker!();
+      if (typeof this.audio.webkitShowPlaybackTargetPicker === 'function') {
+        this.audio.webkitShowPlaybackTargetPicker();
+      } else {
+        // Invoke prompt directly in the click handler; awaiting anything first loses user activation.
+        this.audio.remote.prompt().catch((error: unknown) => {
+          if (request !== this.airPlayPickerRequest) return;
+          this.airPlaySelected.set(previousSelection);
+          if (error instanceof DOMException && error.name === 'AbortError') return;
+          console.warn('[local-player] Could not open the remote playback picker', error);
+          this.toastService.error('Could not open the AirPlay device selection. Please try again.', 'AirPlay');
+        });
+      }
       this.airPlaySelected.set(output === 'airplay');
       return true;
     } catch (error) {

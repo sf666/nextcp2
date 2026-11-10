@@ -117,12 +117,16 @@ export class RadioBrowserService {
       request,
       'add radio station',
     );
-    // The media server writes the entry before it answers, so the browse that follows sees it.
-    // Announced rather than pushed: UMS re-reads the playlist file it was just told to change and
-    // bumps its update id several times over, and acting on that echo browses the listing away
-    // under the user again and again - the flicker.
+    // The media server has saved the entry. If it is still resolving the stream when we browse,
+    // its next container update will pick up the entry once it is ready.
     result.subscribe({
-      next: () => this.cdsUpdateService.announceContainerChange(playlistObjectId),
+      next: () => {
+        if (
+          this.deviceService.selectedMediaServerDevice().udn === request.serverUdn
+        ) {
+          this.cdsUpdateService.announcePlaylistChange(playlistObjectId);
+        }
+      },
       error: () => {},
     });
     return result;

@@ -65,4 +65,34 @@ describe('Browser player AirPlay selection', () => {
     expect(service.showAirPlayPicker('device')).toBe(false);
     expect(service.airPlaySelected()).toBe(true);
   });
+
+  it('uses Remote Playback on Apple engines without the legacy picker', () => {
+    Reflect.deleteProperty(audio, 'webkitShowPlaybackTargetPicker');
+    const prompt = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(audio, 'remote', { value: { prompt }, configurable: true });
+    expect(service.airPlaySupported).toBe(true);
+    expect(service.showAirPlayPicker()).toBe(true);
+    expect(prompt).toHaveBeenCalledOnce();
+    expect(service.airPlaySelected()).toBe(true);
+  });
+
+  it('restores the selection after the standard picker is cancelled', async () => {
+    Reflect.deleteProperty(audio, 'webkitShowPlaybackTargetPicker');
+    Object.defineProperty(audio, 'remote', {
+      value: { prompt: vi.fn().mockRejectedValue(new DOMException('Cancelled', 'AbortError')) },
+      configurable: true,
+    });
+    service.showAirPlayPicker();
+    await Promise.resolve();
+    expect(service.airPlaySelected()).toBe(false);
+  });
+
+  it('does not label a generic Cast-capable browser as AirPlay', () => {
+    Reflect.deleteProperty(audio, 'webkitShowPlaybackTargetPicker');
+    Reflect.deleteProperty(audio, 'webkitCurrentPlaybackTargetIsWireless');
+    vi.spyOn(navigator, 'vendor', 'get').mockReturnValue('Google Inc.');
+    Object.defineProperty(audio, 'remote', { value: { prompt: vi.fn() }, configurable: true });
+    expect(service.airPlaySupported).toBe(false);
+    expect(service.showAirPlayPicker()).toBe(false);
+  });
 });

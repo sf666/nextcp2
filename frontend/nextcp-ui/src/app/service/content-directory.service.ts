@@ -19,7 +19,11 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DtoGeneratorService } from './../util/dto-generator.service';
 import { BrowseThrottleService } from './browse-throttle.service';
-import { CdsUpdateService, RatingChange } from './cds-update.service';
+import {
+  CdsUpdateService,
+  ContainerChange,
+  RatingChange,
+} from './cds-update.service';
 import { HttpService } from './http.service';
 import {
   ContainerItemDto,
@@ -517,7 +521,7 @@ export class ContentDirectoryService {
 
     this.cdsUpdateService.containerContentChanged$
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((containerId) => this.afterContainerContentChanged(containerId));
+      .subscribe((change) => this.afterContainerContentChanged(change));
 
     // One browse for the whole burst: a tagger works through a folder and the media server reports
     // every entry in it, each one of them a reason to read the same listing again.
@@ -528,7 +532,7 @@ export class ContentDirectoryService {
       )
       .subscribe(() => {
         // A refresh that ran in the meantime has already fetched them - bustChangedArt takes every
-        // entry it handled out of the set. Browsing again would cost a second pass over a listing
+        // entry it handled out of the map. Browsing again would cost a second pass over a listing
         // that is already up to date, and a long one loses the scroll position over it.
         if (this.changedEntries.size > 0) {
           this.refreshCurrentContainer();
@@ -586,43 +590,44 @@ export class ContentDirectoryService {
   /** How long changed entries are collected before the listing is read again. */
   private static readonly LISTED_ENTRY_AUDIT_MS = 1000;
 
-  /**
-   * A cover is updated from a popup that knows nothing about the view behind
-   * it, and the item on screen still carries the picture of the last browse.
-   * Browse again, but only in the view that actually shows the container that
-   * changed - every view has its own instance of this service.
-   */
-  private afterContainerContentChanged(containerId: string): void {
+  /** Re-read the listing if it shows the changed object. */
+  private afterContainerContentChanged({
+    containerId,
+    kind,
+  }: ContainerChange): void {
     const current = this.currentContainerID;
     if (!current || current === SEARCH_RESULT_CONTAINER_ID) {
       return;
     }
-    if (containerId === current) {
-      // The folder on screen itself: its own picture is what the header shows, so it is invalidated
-      // like any other entry - keepShownArt would otherwise hand the old URL straight back.
-      this.changedEntries.add(containerId);
-      this.refreshCurrentContainer();
+    const isCurrent = containerId === current;
+    if (!isCurrent && !this.listsEntry(containerId)) {
       return;
     }
-    // Not the container on screen, but something listed in it - the album whose cover a tagger just
-    // replaced. What is displayed of that entry (its picture, its title, its rating) comes from the
-    // browse of the listing, so the change only arrives by reading the listing again. Without this
-    // the tile kept the old cover until the user walked into the album and back out.
-    if (this.listsEntry(containerId)) {
-      this.changedEntries.add(containerId);
+
+    // A playlist's update ID also changes when stations arrive. Preserve its cover unless it was
+    // explicitly edited. For other objects keep handling same-URL cover edits from external taggers.
+    const isPlaylist = isCurrent
+      ? this.currentContainerList().currentContainer.objectClass.startsWith(
+          PLAYLIST_CONTAINER_CLASS,
+        )
+      : this.playlistList_().some((playlist) => playlist.id === containerId);
+    const refreshArtwork = kind === 'artwork' || (kind === 'server' && !isPlaylist);
+    this.changedEntries.set(
+      containerId,
+      refreshArtwork || this.changedEntries.get(containerId) === true,
+    );
+    if (isCurrent) {
+      this.refreshCurrentContainer();
+    } else {
       this.listedEntryChanged$.next();
     }
   }
 
   /**
-   * Entries the media server reported as changed, waiting for the browse that fetches them.
-   *
-   * A media server names its artwork after the resource, not after the picture, so a cover that was
-   * replaced keeps the URL it had - and the browser, which has that URL in its cache, would go on
-   * showing the picture it already has however often the listing is read again. These entries
-   * therefore get their art asked for once with a query the URL did not have before.
+   * Changed entries waiting for a browse. True means their artwork must be fetched even if the
+   * media server still reports the same URL.
    */
-  private readonly changedEntries = new Set<string>();
+  private readonly changedEntries = new Map<string, boolean>();
 
   /**
    * The incoming listing, with every entry that is already on screen keeping the artwork URL it was
@@ -693,21 +698,26 @@ export class ContentDirectoryService {
     const version = Date.now();
     const bust = (url: string | undefined): string | undefined =>
       url ? url + (url.includes('?') ? '&' : '?') + 'nextcpArt=' + version : url;
+    const takeArtworkChange = (id: string): boolean => {
+      const refresh = this.changedEntries.get(id) === true;
+      this.changedEntries.delete(id);
+      return refresh;
+    };
     const shown = data.currentContainer;
-    if (shown && this.changedEntries.delete(CONTAINER_KEY(shown))) {
+    if (shown && takeArtworkChange(CONTAINER_KEY(shown))) {
       shown.albumartUri = bust(shown.albumartUri) as string;
       shown.albumartUriMedium = bust(shown.albumartUriMedium);
     }
     for (const list of [data.albumDto, data.containerDto]) {
       for (const container of list ?? []) {
-        if (this.changedEntries.delete(CONTAINER_KEY(container))) {
+        if (takeArtworkChange(CONTAINER_KEY(container))) {
           container.albumartUri = bust(container.albumartUri) as string;
           container.albumartUriMedium = bust(container.albumartUriMedium);
         }
       }
     }
     for (const item of data.items ?? []) {
-      if (this.changedEntries.delete(ITEM_KEY(item))) {
+      if (takeArtworkChange(ITEM_KEY(item))) {
         item.albumArtUrl = bust(item.albumArtUrl) as string;
         item.albumArtUrlMedium = bust(item.albumArtUrlMedium);
         item.albumArtUrlLarge = bust(item.albumArtUrlLarge);

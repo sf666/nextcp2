@@ -17,6 +17,11 @@ export interface RatingChange {
   containerId?: string;
 }
 
+export interface ContainerChange {
+  containerId: string;
+  kind: 'server' | 'playlist' | 'artwork';
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -27,12 +32,8 @@ export class CdsUpdateService {
 
   baseUri = '/ContentDirectoryService';
 
-  /**
-   * Object id of a container whose content changed metadata the browse result
-   * carries - a new cover for one of its entries, for instance. The view
-   * showing that container has to browse again for the change to appear.
-   */
-  public containerContentChanged$ = new Subject<string>();
+  /** A change that a view may need to pick up by browsing again. */
+  public containerContentChanged$ = new Subject<ContainerChange>();
 
   /**
    * A rating this browser has just written. Carries the new value, so the views patch the entry
@@ -78,7 +79,7 @@ export class CdsUpdateService {
         takeUntilDestroyed(),
       )
       .subscribe((containerId) =>
-        this.containerContentChanged$.next(containerId),
+        this.containerContentChanged$.next({ containerId, kind: 'server' }),
       );
   }
 
@@ -93,18 +94,14 @@ export class CdsUpdateService {
     this.itemRatingChanged$.next(change);
   }
 
-  /**
-   * Announces content this browser has written into a container - a radio station appended to a
-   * playlist, a cover replaced. The view showing it browses again once, here; the media server's
-   * echo of the same write is ignored, so the listing is not replaced another six times while the
-   * server re-reads the file it was just told to change.
-   */
-  public announceContainerChange(containerId: string): void {
+  public announcePlaylistChange(containerId: string): void {
     if (!containerId) {
       return;
     }
-    this.markOwnChange(containerId);
-    this.containerContentChanged$.next(containerId);
+    // A station may still be resolving when the first browse returns. Keep the server's later
+    // update even if a preceding rating or cover edit had marked this container as self-changed.
+    this.selfInflicted.delete(containerId);
+    this.containerContentChanged$.next({ containerId, kind: 'playlist' });
   }
 
   private markOwnChange(containerId: string): void {
@@ -156,10 +153,15 @@ export class CdsUpdateService {
       next: () => {
         // The entry whose picture was replaced, so the views holding it invalidate its art instead
         // of trusting the URL: a media server keeps the URL and only changes the picture behind it.
-        this.announceContainerChange(ids.objectID);
+        this.markOwnChange(ids.objectID);
+        this.containerContentChanged$.next({
+          containerId: ids.objectID,
+          kind: 'artwork',
+        });
         // The listing it is shown in, so that listing is read again.
         if (containerId && containerId !== ids.objectID) {
-          this.announceContainerChange(containerId);
+          this.markOwnChange(containerId);
+          this.containerContentChanged$.next({ containerId, kind: 'artwork' });
         }
       },
       error: () => {},
