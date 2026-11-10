@@ -299,7 +299,11 @@ export class RendererService {
 
     effect(() => {
       const local = this.deviceService.isLocalBrowserSelected();
-      const track = local ? this.localPlayer.currentItem() : this.trackInfoUpnp().currentTrack;
+      const rendererInfo = local ? null : this.trackInfoUpnp();
+      this.webStreamNowPlaying.resolveRendererStream(rendererInfo);
+      const track = local
+        ? this.localPlayer.currentItem()
+        : this.webStreamNowPlaying.rendererTrack(rendererInfo);
       const playing = local ? this.localPlayer.playing() : this.isPlaying();
       this.webStreamNowPlaying.watch(track, playing);
     });

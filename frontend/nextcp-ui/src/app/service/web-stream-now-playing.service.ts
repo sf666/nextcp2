@@ -1,7 +1,7 @@
 import { DestroyRef, Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { finalize, timeout } from 'rxjs';
+import { finalize, retry, Subscription, timeout } from 'rxjs';
 import { DeviceService } from './device.service';
 import { ServerFeature } from './server-feature';
 import { SseService } from './sse/sse.service';
@@ -33,6 +33,9 @@ export class WebStreamNowPlayingService {
   private readonly lastPush = new Map<string, number>();
   private readonly lastSnapshot = new Map<string, number>();
   private active: { udn: string; objectId: string; playing: boolean } | null = null;
+  private readonly rendererStream = signal<{ uri: string; item: ItemDto } | null>(null);
+  private rendererStreamUri: string | undefined;
+  private rendererStreamRequest?: Subscription;
 
   constructor() {
     this.sseService.webStreamNowPlaying$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((info) => {
@@ -63,11 +66,11 @@ export class WebStreamNowPlayingService {
    * name moves to the album so the context stays visible.
    */
   public withLiveTitle(info: TrackInfoDto): TrackInfoDto {
-    const track = info?.currentTrack;
+    const track = this.rendererTrack(info);
     const live = track?.objectID ? this.byObjectId()[track.objectID] : undefined;
     const title = live ? live.title || live.streamTitle : '';
     if (!track || !live || !title) {
-      return info;
+      return track && track !== info.currentTrack ? { ...info, currentTrack: track } : info;
     }
     const currentTrack: ItemDto = {
       ...track,
@@ -79,6 +82,46 @@ export class WebStreamNowPlayingService {
       albumArtUrlLarge: this.artworkUrl(live.artUrl) || track.albumArtUrlLarge,
     };
     return { ...info, currentTrack };
+  }
+
+  /** The library entry corresponding to the renderer's current URI, when resolved. */
+  public rendererTrack(info: TrackInfoDto | null): ItemDto | undefined {
+    const station = this.rendererStream();
+    return station && station.uri === info?.uri ? station.item : info?.currentTrack;
+  }
+
+  public resolveRendererStream(info: TrackInfoDto | null): void {
+    // Some AVTransport renderers replace the original DIDL item with ICY text and omit its ID.
+    const reportedId = info?.currentTrack?.objectID;
+    const uri = (!reportedId || reportedId === '0') &&
+      (info?.currentTrack?.audioFormat?.durationInSeconds ?? 0) <= 0 &&
+      info?.uri?.includes('/ums/media/') &&
+      this.deviceService.mediaServerList().some((server) =>
+        server.features?.includes(ServerFeature.WEB_STREAM_NOW_PLAYING),
+      ) ? info.uri : undefined;
+    if (uri === this.rendererStreamUri) {
+      return;
+    }
+    this.rendererStreamUri = uri;
+    this.rendererStreamRequest?.unsubscribe();
+    this.rendererStream.set(null);
+    if (!uri) {
+      return;
+    }
+    this.rendererStreamRequest = this.http.get<ItemDto | null>(`${this.baseUri}/getWebStreamSource`, {
+      params: { uri },
+    }).pipe(
+      timeout(10000),
+      retry({ count: 1, delay: 2000 }),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe({
+      next: (item) => {
+        if (item?.objectID && item.mediaServerUDN) {
+          this.rendererStream.set({ uri, item });
+        }
+      },
+      error: () => {},
+    });
   }
 
   /**
@@ -119,12 +162,20 @@ export class WebStreamNowPlayingService {
   }
 
   private referenceFor(track: ItemDto | null | undefined): { udn: string; objectId: string } | null {
-    if (!track?.objectID || (track.audioFormat?.durationInSeconds ?? 0) > 0 ||
-      !this.deviceService.hasFeature(ServerFeature.WEB_STREAM_NOW_PLAYING)) {
+    if (!track?.objectID || (track.audioFormat?.durationInSeconds ?? 0) > 0) {
       return null;
     }
-    const udn = track.mediaServerUDN || this.deviceService.selectedMediaServerDevice()?.udn;
-    return udn ? { udn, objectId: track.objectID } : null;
+    const selectedUdn = this.deviceService.selectedMediaServerDevice()?.udn;
+    const udn = track.mediaServerUDN || selectedUdn;
+    if (!udn) {
+      return null;
+    }
+    const supported = udn === selectedUdn
+      ? this.deviceService.hasFeature(ServerFeature.WEB_STREAM_NOW_PLAYING)
+      : this.deviceService.mediaServerList().some((server) =>
+          server.udn === udn && server.features?.includes(ServerFeature.WEB_STREAM_NOW_PLAYING),
+        );
+    return supported ? { udn, objectId: track.objectID } : null;
   }
 
   private readSnapshot(udn: string, objectId: string): void {

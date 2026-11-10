@@ -1,7 +1,9 @@
 package nextcp.rest;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import nextcp.dto.RadioBrowserStationDto;
 import nextcp.dto.RadioBrowserSearchRequest;
 import nextcp.dto.RadioBrowserFilterValueDto;
@@ -20,10 +22,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import nextcp.dto.ContainerDto;
 import nextcp.dto.ContainerItemDto;
 import nextcp.dto.CreateServerPlaylistVO;
+import nextcp.dto.ItemDto;
 import nextcp.dto.ServerDeleteObjectRequest;
 import nextcp.dto.ServerPlaylistDto;
 import nextcp.dto.ServerPlaylistEntry;
@@ -31,6 +35,9 @@ import nextcp.dto.ServerPlaylists;
 import nextcp.dto.WebStreamNowPlayingDto;
 import nextcp.service.ToastEventPublisher;
 import nextcp.service.WebRadioNowPlayingService;
+import nextcp.upnp.device.DeviceRegistry;
+import nextcp.upnp.device.mediaserver.ServerFeature;
+import nextcp.upnp.device.mediaserver.UmsServerDevice;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
@@ -47,6 +54,9 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 
 	@Autowired
 	private WebRadioNowPlayingService webRadioNowPlayingService = null;
+
+	@Autowired
+	private DeviceRegistry deviceRegistry;
 
 	private HashMap<String, LinkedList<String>> recentPlaylistsIds = new HashMap<>();
 
@@ -111,6 +121,25 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 			log.error("getWebStreamNowPlaying failed for object {}", objectId, e);
 			throw failed("Cannot read what that station is playing", e);
 		}
+	}
+
+	/** Resolves a renderer's playback URI against the discovered UMS instances. */
+	@GetMapping("/getWebStreamSource")
+	public ItemDto getWebStreamSource(@RequestParam("uri") String uri) {
+		URI playbackUri;
+		try {
+			playbackUri = URI.create(uri);
+		} catch (IllegalArgumentException e) {
+			return null;
+		}
+		return deviceRegistry.getAvailableMediaServer().stream()
+				.filter(UmsServerDevice.class::isInstance)
+				.map(UmsServerDevice.class::cast)
+				.filter(server -> server.getFeatures().contains(ServerFeature.WEB_STREAM_NOW_PLAYING))
+				.map(server -> server.findWebStream(playbackUri))
+				.filter(Objects::nonNull)
+				.findFirst()
+				.orElse(null);
 	}
 
 	/**

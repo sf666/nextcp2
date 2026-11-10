@@ -16,6 +16,8 @@ describe('WebStreamNowPlayingService', () => {
     albumArtUrl: 'station-small', albumArtUrlLarge: 'station-large',
     audioFormat: { durationInSeconds: 0 } } as ItemDto;
   const url = '/MediaServerPlaylistService/getWebStreamNowPlaying/ums/2044';
+  const sourceUrl = '/MediaServerPlaylistService/getWebStreamSource';
+  const streamUri = 'http://music:5001/ums/media/22a40c51-f735-4b62-a376-ab9450fcf1e2/2044/radio';
   const live: WebStreamNowPlayingDto = { objectID: '2044', streamTitle: 'Oli Silk - Sanctuary St.',
     artist: 'Oli Silk', title: 'Sanctuary St.', artUrl: '//cdn-images.audioaddict.com/cover.jpg' };
 
@@ -25,7 +27,11 @@ describe('WebStreamNowPlayingService', () => {
     opened = new Subject();
     TestBed.configureTestingModule({ providers: [
       provideHttpClient(), provideHttpClientTesting(),
-      { provide: DeviceService, useValue: { hasFeature: () => true, selectedMediaServerDevice: () => ({ udn: 'ums' }) } },
+      { provide: DeviceService, useValue: {
+        hasFeature: () => true,
+        selectedMediaServerDevice: () => ({ udn: 'ums' }),
+        mediaServerList: () => [{ udn: 'ums', features: ['WEB_STREAM_NOW_PLAYING'] }],
+      } },
       { provide: SseService, useValue: { webStreamNowPlaying$: pushes, connectionOpened$: opened } },
     ] });
     service = TestBed.inject(WebStreamNowPlayingService);
@@ -105,5 +111,37 @@ describe('WebStreamNowPlayingService', () => {
     pushes.next({ objectID: '2044', title: '', streamTitle: '', artist: '', artUrl: '' });
     const info = { currentTrack: station } as TrackInfoDto;
     expect(service.withLiveTitle(info)).toBe(info);
+  });
+
+  it('gets the current UMS title for a renderer that only reports the station URI', () => {
+    const info = {
+      uri: streamUri,
+      currentTrack: { title: 'Renderer title', artistName: station.title },
+    } as TrackInfoDto;
+    service.resolveRendererStream(info);
+    http.expectOne((request) => request.url === sourceUrl && request.params.get('uri') === streamUri)
+      .flush({ ...station, mediaServerUDN: 'ums' });
+    service.watch(service.rendererTrack(info), true);
+    http.expectOne(url).flush(live);
+
+    expect(service.withLiveTitle(info).currentTrack).toMatchObject({
+      objectID: station.objectID,
+      album: station.title,
+      title: live.title,
+      artistName: live.artist,
+    });
+    service.resolveRendererStream({ ...info, currentTrack: { ...info.currentTrack, title: 'Next ICY title' } });
+    http.expectNone((request) => request.url === sourceUrl);
+  });
+
+  it('drops the pending station lookup when the renderer switches to another URI', () => {
+    const info = { uri: streamUri } as TrackInfoDto;
+    service.resolveRendererStream(info);
+    const request = http.expectOne((candidate) => candidate.url === sourceUrl);
+
+    const other = { ...info, uri: 'https://radio.example/stream' };
+    service.resolveRendererStream(other);
+    expect(request.cancelled).toBe(true);
+    expect(service.withLiveTitle(other)).toBe(other);
   });
 });

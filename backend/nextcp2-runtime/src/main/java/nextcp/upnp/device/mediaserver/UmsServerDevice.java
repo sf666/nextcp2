@@ -1,6 +1,8 @@
 package nextcp.upnp.device.mediaserver;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URL;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetWebStreamIcyOrderInput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.GetWebStreamIcyOrderOutput;
 import nextcp.upnp.modelGen.schemasupnporg.umsExtendedServices1.actions.SetWebStreamIcyOrderInput;
@@ -21,6 +23,7 @@ import java.util.Base64;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -61,6 +64,7 @@ import nextcp.service.ToastEventPublisher;
 import nextcp.upnp.GenActionException;
 import nextcp.upnp.device.mediaserver.ums.UmsExtendedServicesServiceEventListener;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseInput;
+import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.BrowseOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateObjectInput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateObjectOutput;
 import nextcp.upnp.modelGen.schemasupnporg.contentDirectory1.actions.CreateReferenceInput;
@@ -268,6 +272,54 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, FailureReason.of(e), e);
 		} catch (Exception e) {
 			throw new BackendException(BackendException.DIDL_PARSE_ERROR, e.getMessage(), e);
+		}
+	}
+
+	private static final Pattern MEDIA_RESOURCE_PATH =
+			Pattern.compile("^/ums/media/[0-9a-fA-F-]{36}/([0-9]+)(?:/.*)?$");
+
+	/**
+	 * Recovers a live stream's library entry from the URI reported by a renderer. UMS puts a
+	 * renderer-specific UUID before the shared library ID in its playback URIs.
+	 */
+	public ItemDto findWebStream(URI uri) {
+		URL descriptor = getDevice().getIdentity().getDescriptorURL();
+		int defaultPort = descriptor.getDefaultPort();
+		int descriptorPort = descriptor.getPort() == -1 ? defaultPort : descriptor.getPort();
+		int streamPort = uri.getPort() == -1 ? defaultPort : uri.getPort();
+		if (uri.getHost() == null || !uri.getHost().equalsIgnoreCase(descriptor.getHost())
+				|| !descriptor.getProtocol().equalsIgnoreCase(uri.getScheme())
+				|| streamPort != descriptorPort) {
+			return null;
+		}
+		var resource = MEDIA_RESOURCE_PATH.matcher(uri.getPath());
+		if (!resource.matches()) {
+			return null;
+		}
+		BrowseInput input = new BrowseInput();
+		input.ObjectID = resource.group(1);
+		input.BrowseFlag = "BrowseMetadata";
+		input.StartingIndex = 0L;
+		input.RequestedCount = 0L;
+		input.SortCriteria = "";
+		input.Filter = "*";
+		try {
+			BrowseOutput output = getContentDirectoryService().browse(input);
+			if (output == null || StringUtils.isBlank(output.Result)) {
+				return null;
+			}
+			DIDLContent metadata = generateDidlContent(output.Result);
+			if (metadata == null || metadata.getItems().isEmpty()) {
+				return null;
+			}
+			ItemDto item = getDtoBuilder().buildItemDto(metadata.getItems().getFirst(), getUdnAsString());
+			boolean broadcast = item.objectClass != null
+					&& item.objectClass.startsWith("object.item.audioItem.audioBroadcast");
+			boolean streaming = item.audioFormat != null && Boolean.TRUE.equals(item.audioFormat.isStreaming);
+			return input.ObjectID.equals(item.objectID) && (broadcast || streaming) ? item : null;
+		} catch (Exception e) {
+			log.debug("Cannot recover radio metadata for object {}", input.ObjectID, e);
+			return null;
 		}
 	}
 
