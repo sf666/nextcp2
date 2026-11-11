@@ -48,40 +48,37 @@ export class UpdateAlbumArtComponent {
   private readonly cdsUpdateService = inject(CdsUpdateService);
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly source = signal<'url' | 'file'>('url');
   readonly url = signal('');
   readonly file = signal<File | null>(null);
   readonly fileError = signal('');
   readonly saving = signal(false);
   readonly acceptedTypes = IMAGE_TYPES.join(',');
   readonly canSave = computed(
-    () =>
-      !this.saving() &&
-      (this.source() === 'url' ? !!this.url().trim() : !!this.file()),
+    () => !this.saving() && (!!this.url().trim() || !!this.file()),
   );
 
-  selectSource(source: 'url' | 'file'): void {
-    this.source.set(source);
+  setUrl(value: string): void {
+    this.url.set(value);
     this.file.set(null);
     this.fileError.set('');
   }
 
   selectFile(input: HTMLInputElement): void {
     const file = input.files?.[0];
-    this.file.set(null);
-    this.fileError.set('');
     if (!file) {
       return;
     }
+    input.value = '';
+    this.file.set(null);
+    this.fileError.set('');
     if (!IMAGE_TYPES.includes(file.type) || !file.size) {
       this.fileError.set('Choose a JPEG or PNG image.');
     } else if (file.size > MAX_FILE_SIZE) {
       this.fileError.set('Choose an image no larger than 10 MiB.');
     } else {
+      this.url.set('');
       this.file.set(file);
-      return;
     }
-    input.value = '';
   }
 
   cancel(): void {

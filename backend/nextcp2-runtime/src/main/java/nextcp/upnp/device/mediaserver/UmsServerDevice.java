@@ -591,12 +591,14 @@ public class UmsServerDevice extends MediaServerDevice implements ExtendedApiMed
 			ContainerItemDto resultContainer = browseChildren(inp);
 			log.info("Reported total matches : {} ", resultContainer.totalMatches);
 			log.info("result container size : {} ", resultContainer.containerDto.size());
-			for (ContainerDto folder : resultContainer.containerDto) {
-				log.debug("Found folder named : {}", folder.title);
-				if (folder.title.equalsIgnoreCase(foldername)) {
-					log.debug("Found folder id : {}", folder.id);
-					return folder.id;
-				}
+			String folderId = findByTitle(resultContainer.containerDto, foldername);
+			if (folderId == null) {
+				// UMS can expose a filesystem folder as a music album.
+				folderId = findByTitle(resultContainer.albumDto, foldername);
+			}
+			if (folderId != null) {
+				log.debug("Found folder id : {}", folderId);
+				return folderId;
 			}
 			if (resultContainer.totalMatches != null && resultContainer.totalMatches > (start + BROWSE_PAGE_SIZE)) {
 				log.debug("extending search to items from {} to {}", start, start + BROWSE_PAGE_SIZE);

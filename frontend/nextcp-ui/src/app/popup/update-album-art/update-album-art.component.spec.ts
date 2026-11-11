@@ -36,16 +36,24 @@ describe('UpdateAlbumArtComponent', () => {
 
   afterEach(() => TestBed.resetTestingModule());
 
-  it('sends the selected file bytes unchanged through the artwork update', async () => {
-    element.querySelectorAll<HTMLInputElement>('input[type=radio]')[1].click();
-    await TestBed.tick();
+  it('opens the file picker directly and sends the selected image bytes unchanged', async () => {
     const input = element.querySelector<HTMLInputElement>('input[type=file]')!;
+    const openPicker = vi.spyOn(input, 'click').mockImplementation(() => {});
+    const button = Array.from(element.querySelectorAll('button')).find(
+      (button) => button.textContent?.trim() === 'Choose image…',
+    );
+    expect(button).toBeDefined();
+    button!.click();
+    expect(openPicker).toHaveBeenCalledOnce();
+
     const bytes = new Uint8Array([137, 80, 78, 71]);
     Object.defineProperty(input, 'files', {
       value: [new File([bytes], 'cover.png', { type: 'image/png' })],
     });
+    component.setUrl('https://example.com/cover.jpg');
     input.dispatchEvent(new Event('change'));
 
+    expect(component.url()).toBe('');
     await component.save();
 
     expect(setNewAlbumArtUri).toHaveBeenCalledWith(
