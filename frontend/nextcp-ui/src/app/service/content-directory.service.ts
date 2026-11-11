@@ -873,6 +873,7 @@ export class ContentDirectoryService {
     objectID: string,
     sortCriteria: string,
     mediaServerUdn?: string,
+    count = this.MAX_REQUEST_ITEMS,
   ): Observable<ContainerItemDto> {
     if (!mediaServerUdn) {
       mediaServerUdn = this.deviceService.selectedMediaServerDevice().udn;
@@ -891,7 +892,7 @@ export class ContentDirectoryService {
         this.httpService.post<ContainerItemDto>(this.baseUri, '/browseChildren', {
           ...browseRequestDto,
           start: 0,
-          count: this.MAX_REQUEST_ITEMS,
+          count,
         }),
       'loading folder',
     );

@@ -38,7 +38,7 @@
     cursor     : pointer;
     transition : background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
 
-    &:hover {
+    &:enabled:hover {
         color     : var(--snow-white);
         background: linear-gradient(90deg,
                     var(--primary-color-reduced-2) 0%,
@@ -50,6 +50,11 @@
             color  : var(--primary-color);
             opacity: 1;
         }
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor : default;
     }
 
     &:focus-visible {

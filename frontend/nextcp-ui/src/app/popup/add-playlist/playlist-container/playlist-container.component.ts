@@ -16,6 +16,7 @@ export class PlaylistContainerComponent {
 
   playlists = input<ServerPlaylistDto[]>();
   playlistMode = input<PlaylistMode>();
+  addLabel = input('add track');
 
   addClicked = output<ServerPlaylistDto>();
   deleteClicked = output<ServerPlaylistDto>();

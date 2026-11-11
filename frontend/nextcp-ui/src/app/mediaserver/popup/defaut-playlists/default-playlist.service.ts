@@ -3,7 +3,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DefautPlaylistsComponent } from './defaut-playlists.component';
 import { Injectable, ElementRef, inject } from '@angular/core';
 import { SongOptionsComponent } from '../song-options/song-options/song-options.component';
-import { AddPlaylistComponent } from 'src/app/popup/add-playlist/add-playlist.component';
+import { AddPlaylistComponent, AddPlaylistDialogData } from 'src/app/popup/add-playlist/add-playlist.component';
 
 @Injectable({
   providedIn: 'root',
@@ -35,12 +35,20 @@ export class DefaultPlaylistService {
     item: ItemDto | undefined,
     folder: ContainerDto,
   ): MatDialogRef<any, any> {
+    return this.openPlaylistDialogWithBackdrop({ item, container: folder });
+  }
+
+  public openPlaylistToPlaylistDialog(sourcePlaylist: ContainerDto): MatDialogRef<AddPlaylistComponent> {
+    return this.openPlaylistDialogWithBackdrop({ container: sourcePlaylist, sourcePlaylist });
+  }
+
+  private openPlaylistDialogWithBackdrop(data: AddPlaylistDialogData): MatDialogRef<AddPlaylistComponent> {
     this.dialogRef = this.dialog.open(AddPlaylistComponent, {
       hasBackdrop: true,
       maxWidth: '92vw',
       maxHeight: '90vh',
       panelClass: ['popup-glass', 'popup-morph'],
-      data: { item: item, container: folder },
+      data,
     });
 
     return this.dialogRef;

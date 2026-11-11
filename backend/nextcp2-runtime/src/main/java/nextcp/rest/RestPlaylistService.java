@@ -152,7 +152,18 @@ public class RestPlaylistService extends BaseRestService
 
     private MediaRendererDevice addSongsToRenderDevice(PlaylistAddContainerRequest req, MediaRendererDevice rendererDevice)
     {
-        rendererDevice.getPlaylistServiceBridge().insertContainer(getSongsToAdd(req));
+        ContainerItemDto items;
+        if ((req.items == null || req.items.isEmpty()) && req.containerDto.objectClass != null
+            && req.containerDto.objectClass.startsWith("object.container.playlistContainer"))
+        {
+            items = getMediaServerByUdn(req.containerDto.mediaServerUDN).browseChildren(req.containerDto.id, 0);
+            items.items.removeIf(item -> item.objectClass == null || !item.objectClass.startsWith("object.item.audioItem"));
+        }
+        else
+        {
+            items = getSongsToAdd(req);
+        }
+        rendererDevice.getPlaylistServiceBridge().insertContainer(items);
         return rendererDevice;
     }
 

@@ -14,7 +14,7 @@
             @if(isPlaylistMode(PlaylistModeEnum.Add)) {
             <button type="button" class="glass-btn" (click)="addTo(playlist)">
                 <span class="material-symbols-outlined thin">playlist_add</span>
-                <span>add track</span>
+                <span>{{addLabel()}}</span>
             </button>
             } @else {
             <button type="button" class="glass-btn danger" (click)="deletePlaylist(playlist)">

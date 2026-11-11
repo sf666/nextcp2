@@ -21,6 +21,8 @@ import {
 import { MediaPlayerService } from 'src/app/service/media-player/media-player.service';
 import { PopupService } from 'src/app/util/popup.service';
 import { ServerFeature } from 'src/app/service/server-feature';
+import { PlaylistService } from 'src/app/service/playlist.service';
+import { DefaultPlaylistService } from '../defaut-playlists/default-playlist.service';
 
 /** Menu width in px. Keep in step with `.dialog-root` in the component's SCSS. */
 const MENU_WIDTH = 320;
@@ -38,6 +40,8 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   private configurationService = inject(ConfigurationService);
   deviceService = inject(DeviceService);
   private popupService = inject(PopupService);
+  private playlistService = inject(PlaylistService);
+  private defaultPlaylistService = inject(DefaultPlaylistService);
 
   readonly inputDialog = inject(MatDialog);
 
@@ -104,6 +108,23 @@ export class DisplayHeaderOptionsComponent implements OnInit {
     this.close();
   }
 
+  addPlaylistToQueue(): void {
+    this.playlistService.addPlaylistToQueue(this.currentContainer);
+    this.close();
+  }
+
+  openAddToPlaylistDialog(): void {
+    this._matDialogRef.afterClosed().subscribe(() => {
+      this.defaultPlaylistService.openPlaylistToPlaylistDialog(this.currentContainer);
+    });
+    this.close();
+  }
+
+  showAddToServerPlaylist(): boolean {
+    const server = this.deviceService.selectedMediaServerDevice();
+    return server.extendedApi && server.udn === this.currentContainer.mediaServerUDN;
+  }
+
   /**
    * Names the action after what it acts on. Taking a like back clears the rating,
    * which is all there is to it - the app knows liked and not liked, nothing else.
@@ -126,15 +147,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
 
   /** Player rows exist for playlists and folders only - no header without rows. */
   showPlayerSection(): boolean {
-    return (
-      this.mediaPlayerService.mediaPlayerExists() &&
-      (this.isPlaylist() || this.isFolder())
-    );
-  }
-
-  /** Playlists only - a folder's like belongs under "General actions". */
-  showPlaylistSection(): boolean {
-    return this.isPlaylist() && (this.canLike || this.showAddRadioStation());
+    return this.isPlaylist() || (this.isFolder() && this.mediaPlayerService.mediaPlayerExists());
   }
 
   showAddRadioStation(): boolean {

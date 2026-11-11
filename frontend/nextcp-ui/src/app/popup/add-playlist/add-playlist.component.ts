@@ -36,6 +36,12 @@ export enum PlaylistMode {
   Delete,
 }
 
+export interface AddPlaylistDialogData {
+  item?: ItemDto;
+  container: ContainerDto;
+  sourcePlaylist?: ContainerDto;
+}
+
 @Component({
   selector: 'app-playlist-management',
   standalone: true,
@@ -58,6 +64,7 @@ export class AddPlaylistComponent {
 
   PlaylistModeEnum: typeof PlaylistMode = PlaylistMode;
   addToContainer: ContainerDto;
+  readonly sourcePlaylist: ContainerDto | undefined;
 
   otherPlaylists = signal<ServerPlaylistDto[]>([]);
   /** Number of entries per playlist id, filled while the dialog is open. */
@@ -73,15 +80,7 @@ export class AddPlaylistComponent {
     const counts = this.playlistCounts();
     return this.serverPlaylistService
       .serverPl()
-      .serverPlaylists.filter((pl) => {
-        if (this.playlistFilter().length > 0) {
-          return pl.playlistName
-            .toLowerCase()
-            .includes(this.playlistFilter().toLowerCase());
-        } else {
-          return true;
-        }
-      })
+      .serverPlaylists.filter((pl) => this.matchesDestination(pl))
       .map((pl) =>
         counts[pl.playlistId] === undefined
           ? pl
@@ -89,44 +88,28 @@ export class AddPlaylistComponent {
       );
   });
 
-  filteredOtherPlaylists = computed(() => {
-    if (this.playlistFilter().length > 0) {
-      return this.otherPlaylists().filter((pl) =>
-        pl.playlistName
-          .toLowerCase()
-          .includes(this.playlistFilter().toLowerCase()),
-      );
-    } else {
-      return this.otherPlaylists();
-    }
-  });
+  filteredOtherPlaylists = computed(() =>
+    this.otherPlaylists().filter((pl) => this.matchesDestination(pl)),
+  );
 
   filteredRecentPlaylists = computed(() => {
     return this.serverPlaylistService
       .recentServerPl()
-      .serverPlaylists.filter((pl) => {
-        if (this.playlistFilter().length > 0) {
-          return pl.playlistName
-            .toLowerCase()
-            .includes(this.playlistFilter().toLowerCase());
-        } else {
-          return true;
-        }
-      });
+      .serverPlaylists.filter((pl) => this.matchesDestination(pl));
   });
 
   constructor() {
-    const data = inject<{
-      item: ItemDto | undefined;
-      container: ContainerDto;
-    }>(MAT_DIALOG_DATA);
+    const data = inject<AddPlaylistDialogData>(MAT_DIALOG_DATA);
     const deviceService = inject(DeviceService);
     const dtoGeneratorService = this.dtoGeneratorService;
 
     this.addToContainer = data.container;
+    this.sourcePlaylist = data.sourcePlaylist;
     this.anchorDialog();
     if (data.item != undefined && data.item.objectID.length > 0) {
       this.musicItemToAdd.set(data.item);
+      this.setMode(PlaylistMode.Add);
+    } else if (this.sourcePlaylist) {
       this.setMode(PlaylistMode.Add);
     } else {
       this.setMode(PlaylistMode.Create);
@@ -140,6 +123,11 @@ export class AddPlaylistComponent {
       .searchPlaylistsMetadataOnly(sr)
       .subscribe((data) => this.updateOtherPlaylists(data));
     this.loadPlaylistCounts(deviceService.selectedMediaServerDevice().udn);
+  }
+
+  private matchesDestination(playlist: ServerPlaylistDto): boolean {
+    return playlist.playlistId !== this.sourcePlaylist?.id &&
+      playlist.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase());
   }
 
   /**
@@ -191,6 +179,10 @@ export class AddPlaylistComponent {
     this.dialogRef.close();
   }
 
+  get addActionLabel(): string {
+    return this.sourcePlaylist ? 'add to playlist' : 'add track';
+  }
+
   getRecentPlaylistsCount(): number {
     return this.filteredRecentPlaylists()?.length ?? 0;
   }
@@ -204,8 +196,12 @@ export class AddPlaylistComponent {
   }
 
   addTo(serverPlaylist: ServerPlaylistDto) {
+    if (this.sourcePlaylist?.id === serverPlaylist.playlistId) {
+      return;
+    }
+
     this.serverPlaylistService.addSongToServerPlaylist(
-      this.musicItemToAdd().objectID,
+      this.sourcePlaylist?.id ?? this.musicItemToAdd().objectID,
       serverPlaylist.playlistId,
     );
     this.close();

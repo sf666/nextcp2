@@ -1,17 +1,19 @@
 <div class="popupFrame glass-panel flex flex-col">
     <div class="dialog-header flex items-center justify-between gap-4 px-5 py-3">
         <div class="tab-bar flex items-center gap-1">
-            @if(musicItemToAddExists) {
+            @if (musicItemToAddExists || sourcePlaylist) {
                 <button type="button" class="tab" [class.active]="isPlaylistMode(PlaylistModeEnum.Add)" (click)="addPlaylistClick()">
                     add to playlist
                 </button>
             }
-            <button type="button" class="tab" [class.active]="isPlaylistMode(PlaylistModeEnum.Create)" (click)="newPlaylistClick()">
-                create playlist
-            </button>
-            <button type="button" class="tab" [class.active]="isPlaylistMode(PlaylistModeEnum.Delete)" (click)="deletePlaylistClick()">
-                delete playlist
-            </button>
+            @if (!sourcePlaylist) {
+                <button type="button" class="tab" [class.active]="isPlaylistMode(PlaylistModeEnum.Create)" (click)="newPlaylistClick()">
+                    create playlist
+                </button>
+                <button type="button" class="tab" [class.active]="isPlaylistMode(PlaylistModeEnum.Delete)" (click)="deletePlaylistClick()">
+                    delete playlist
+                </button>
+            }
         </div>
         <button type="button" class="icon-button" (click)="close()" aria-label="close">
             <span class="material-symbols-outlined thin">close</span>
@@ -32,6 +34,7 @@
                 <playlist-container
                     [playlists]="filteredRecentPlaylists()"
                     [playlistMode]="playlistMode()"
+                    [addLabel]="addActionLabel"
                     (addClicked)="addTo($event)"
                     (deleteClicked)="deletePlaylist($event)">
                 </playlist-container>
@@ -44,6 +47,7 @@
                 <playlist-container
                     [playlists]="filteredServerPlaylists()"
                     [playlistMode]="playlistMode()"
+                    [addLabel]="addActionLabel"
                     (addClicked)="addTo($event)"
                     (deleteClicked)="deletePlaylist($event)">
                 </playlist-container>
@@ -58,6 +62,7 @@
                 <playlist-container
                     [playlists]="filteredOtherPlaylists()"
                     [playlistMode]="playlistMode()"
+                    [addLabel]="addActionLabel"
                     (addClicked)="addTo($event)"
                     (deleteClicked)="deletePlaylist($event)">
                 </playlist-container>

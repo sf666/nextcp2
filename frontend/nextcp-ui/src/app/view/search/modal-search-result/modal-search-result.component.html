@@ -14,7 +14,7 @@
     @if (globalSearchService.quickSearchResultList().musicItems?.length > 0) {
       <div class="search-row">
         @for (item of globalSearchService.quickSearchResultList().musicItems; track item.objectID) {
-          <div class="flex justify-between">
+          <div class="search-result flex justify-between">
             <div class="search-row flex" (click)="globalSearchService.musicItemSelected(item)">
               <img src="{{item.albumArtUrl}}" class="cropImg searchImgHeight align-self-center" alt="">
               <div class="row-text">
@@ -25,9 +25,9 @@
                 <div class="artist">from {{item.artistName}}</div>
               </div>
             </div>
-            <div class="search-row flex items-center" (click)="showSongPopup($event, item)">
+            <div class="song-options" (click)="showSongPopup($event, item)">
                 <span class="material-symbols-outlined text-white text-2xl">more_vert</span>
-            </div>              
+            </div>
           </div>
         }
       </div>
@@ -47,7 +47,7 @@
       <div>
         @for (item of globalSearchService.quickSearchResultList().albumItems; track item.id) {
           <div
-            class="search-row flex" (click)="globalSearchService.containerSelected(item)">
+            class="search-result search-row flex" (click)="globalSearchService.containerSelected(item)">
             <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
             <div class="row-text">
               <div class="title">{{item.title}}</div>
@@ -71,7 +71,7 @@
       <div>
         @for (item of globalSearchService.quickSearchResultList().playlistItems; track item.id) {
           <div
-            class="search-row flex" (click)="globalSearchService.containerSelected(item)">
+            class="search-result search-row flex" (click)="globalSearchService.containerSelected(item)">
             <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
             <div class="row-text">
               <div class="title">{{item.title}}</div>
@@ -94,7 +94,7 @@
       <div class="search-row">
         @for (item of globalSearchService.quickSearchResultList().artistItems; track item.id) {
           <div
-            class="search-row flex" (click)="globalSearchService.containerSelected(item)">
+            class="search-result search-row flex" (click)="globalSearchService.containerSelected(item)">
             <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
             <div class="row-text">
               <div class="title">{{item.title}}</div>

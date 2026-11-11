@@ -12,6 +12,7 @@ import {
 } from './dto.d';
 import { DeviceService } from './device.service';
 import { LocalPlayerService } from './local-player.service';
+import { ContentDirectoryService } from './content-directory.service';
 import { HttpService } from './http.service';
 import { RadioService } from './radio.service';
 import { ToastService } from './toast/toast.service';
@@ -28,6 +29,7 @@ export class PlaylistService implements OnInit {
   private genericResultService = inject(GenericResultService);
   private deviceService = inject(DeviceService);
   private localPlayer = inject(LocalPlayerService);
+  private contentDirectoryService = inject(ContentDirectoryService);
   private radioService = inject(RadioService);
   private toastr = inject(ToastService);
 
@@ -300,6 +302,24 @@ export class PlaylistService implements OnInit {
     };
 
     this.httpService.post(this.baseUri, uri, playRequestDto).subscribe();
+  }
+
+  /** Appends every audio entry of a playlist, independently of the filters in the browse view. */
+  public addPlaylistToQueue(container: ContainerDto): void {
+    if (!this.deviceService.isLocalBrowserSelected()) {
+      this.addContainerToPlaylist(container);
+      return;
+    }
+
+    this.contentDirectoryService
+      .browseChildrenMetadataOnly(container.id, '', container.mediaServerUDN, 0)
+      .subscribe({
+        next: ({ items }) => this.localPlayer.enqueue(
+          items.filter((item) => item.objectClass?.startsWith('object.item.audioItem')),
+        ),
+        // HttpService already reports the browse error.
+        error: () => {},
+      });
   }
 
   /**

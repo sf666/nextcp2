@@ -1,5 +1,5 @@
 // Global search results — living-glass popup (frosted chrome over the album wash),
-// section-label headers with a cyan tab-underline, and cyan-tinted hover rows.
+// with section-label headers and a cyan tab-underline.
 
 .search-container {
     display      : flex;
@@ -138,14 +138,31 @@ img {
     padding-bottom: 4px;
 }
 
-// The clickable rows (title/album/playlist/artist and the kebab) get a rounded,
-// cyan-tinted hover highlight.
 .search-row.flex {
-    align-items   : center;
-    padding       : 8px 10px;
-    border-radius : 10px;
-    cursor        : pointer;
-    transition    : background-color .15s ease;
+    align-items: center;
+    padding    : 8px 10px;
+    cursor     : pointer;
+}
+
+.search-result {
+    border-radius: 8px;
+    transition   : background-color .15s ease;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.04);
+    }
+}
+
+.song-options {
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    align-self     : center;
+    flex           : 0 0 44px;
+    height         : 44px;
+    border-radius  : 8px;
+    cursor         : pointer;
+    transition     : background-color .15s ease;
 
     &:hover {
         background: rgba(0, 255, 255, 0.08);
