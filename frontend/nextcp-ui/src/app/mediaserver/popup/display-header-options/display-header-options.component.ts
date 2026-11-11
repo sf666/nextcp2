@@ -55,6 +55,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   /** Folders carry their like here instead of next to the title. */
   canLike = false;
   isLiked = false;
+  showAddToPlaylist: boolean;
   /** How many folders this container holds; albums and tracks do not count. */
   private childFolderCount = 0;
 
@@ -65,6 +66,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
       trigger: ElementRef;
       currentContainer: ContainerDto;
       addToPlaylistOutput: OutputEmitterRef<ContainerDto>;
+      showAddToPlaylist?: boolean;
       canLike: boolean;
       isLiked: boolean;
       childFolderCount: number;
@@ -78,6 +80,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
 
     this._matDialogRef = _matDialogRef;
     this.addToPlaylistOutput = data.addToPlaylistOutput;
+    this.showAddToPlaylist = data.showAddToPlaylist ?? true;
     this.currentContainer = data.currentContainer;
     this.listingContainerId =
       data.listingContainerId ?? data.currentContainer.id;

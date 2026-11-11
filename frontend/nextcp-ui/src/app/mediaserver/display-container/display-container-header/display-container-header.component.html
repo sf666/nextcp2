@@ -79,8 +79,8 @@
                   <div class="subtitle">{{currentContainer.artist}}</div>
                 }
                 <div class="meta-line meta-tracks">
-                  <span>{{musicItemsCount}} tracks</span>
-                  @if (totalPlaytime().length > 0) {
+                  <span>{{audioSummary()}}</span>
+                  @if (radioCount() === 0 && totalPlaytime().length > 0) {
                     <span class="meta-dot">·</span>
                     <span>{{totalPlaytime()}}</span>
                   }
@@ -164,17 +164,20 @@
             <div class="button-flex-container">
               <!-- Play and shuffle are equals, so they share one capsule. -->
               <div class="action-caps caps-action">
-                <button type="button" class="caps-cell" (click)="playContainer()" title="Play" aria-label="Play">
+                <button type="button" class="caps-cell" [disabled]="!audioActionsEnabled()"
+                  (click)="playContainer()" title="Play" aria-label="Play">
                   <span class="material-symbols-sharp filled">play_arrow</span>
                 </button>
-                <button type="button" class="caps-cell" (click)="shuffleContainer()" title="Shuffle"
+                <button type="button" class="caps-cell" [disabled]="!audioActionsEnabled()"
+                  (click)="shuffleContainer()" title="Shuffle"
                   aria-label="Shuffle">
                   <span class="material-symbols-sharp">shuffle</span>
                 </button>
               </div>
               <!-- Tools, held apart from the actions. -->
               <div class="action-caps caps-tools">
-                <button type="button" class="caps-cell" (click)="toggleListView()" title="Toggle view"
+                <button type="button" class="caps-cell" [disabled]="!audioActionsEnabled()"
+                  (click)="toggleListView()" title="Toggle view"
                   aria-label="Toggle view">
                   <span class="material-symbols-sharp">dashboard_customize</span>
                 </button>

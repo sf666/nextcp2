@@ -22,6 +22,7 @@ import {
 import {
   Component,
   computed,
+  linkedSignal,
   signal,
   ChangeDetectionStrategy,
   input,
@@ -43,6 +44,9 @@ import { DisplayContainerHeaderComponent } from './display-container-header/disp
 import { ItemTileComponent } from './item-tile/item-tile.component';
 import { OtherItemTileComponent } from './other-item-tile/other-item-tile.component';
 import { CdsBrowsePathService } from 'src/app/util/cds-browse-path.service';
+import { isBroadcastItem } from 'src/app/util/broadcast-item';
+
+type BrowseType = 'all' | 'playlist' | 'album' | 'artist' | 'track' | 'radio' | 'folder' | 'video' | 'other';
 
 @Component({
   selector: 'mediaServer-display-container',
@@ -113,6 +117,10 @@ export class DisplayContainerComponent {
       this.contentHandler()?.contentDirectoryService.currentContainerList()
         .currentContainer?.id ?? '',
   );
+  private selectedType = linkedSignal({
+    source: this.currentContainerId,
+    computation: (): BrowseType => 'all',
+  });
 
   /**
    * The hero only makes sense once there is a listing to describe. Without a
@@ -141,10 +149,11 @@ export class DisplayContainerComponent {
    * @param total how many the server delivered
    */
   countLabel(visible: number, total: number): string {
+    const items = total === 1 ? 'item' : 'items';
     if (!this.filterActive() || visible === total) {
-      return `${total} items`;
+      return `${total} ${items}`;
     }
-    return `${visible} of ${total} items`;
+    return `${visible} of ${total} ${items}`;
   }
 
   // The (virtualized) album, artist and folder grids — used to restore scroll to
@@ -165,25 +174,60 @@ export class DisplayContainerComponent {
   visibleFolders = computed(() => this.narrowed(this.container).length);
   visiblePlaylists = computed(() => this.narrowed(this.playlistList).length);
   visibleArtists = computed(() => this.narrowed(this.artists).length);
-  /**
-   * How many tracks survive the filter. The section itself is shown as long as the server delivered
-   * any, so a filter that matches none of them says "0 of 12 items" instead of leaving the album head
-   * standing over an empty space.
-   */
-  visibleTracks = computed(() => this.displayedMusicTracks().length);
-  visibleOtherItems = computed(
-    () =>
-      this.nonVideoItems_.filter((item) =>
-        matchesTextFilter(item.title, this.displayFilterString()),
-      ).length,
-  );
-  visibleVideoItems = computed(
-    () =>
-      this.videoItems_.filter((item) =>
-        matchesTextFilter(item.title, this.displayFilterString()),
-      ).length,
-  );
+  radioCount = computed(() => this.musicTracks.filter(isBroadcastItem).length);
+  typeOptions = computed(() => {
+    const options: { kind: BrowseType; label: string; total: number }[] = [
+      { kind: 'playlist', label: 'Playlists', total: this.playlistList.length },
+      { kind: 'album', label: 'Albums', total: this.albumList.length },
+      { kind: 'artist', label: 'Artists', total: this.artists.length },
+      { kind: 'track', label: 'Tracks', total: this.musicTracks.length - this.radioCount() },
+      { kind: 'radio', label: 'Web radio', total: this.radioCount() },
+      { kind: 'folder', label: 'Folders', total: this.container.length },
+      ...this.nonAudioGroups().map((group) => ({ ...group, total: group.items.length })),
+    ];
+    const present = options.filter((option) => option.total > 0);
+    return this.isSearchResult() || present.length < 2
+      ? []
+      : [{ kind: 'all' as const, label: 'All' }, ...present];
+  });
 
+  activeType = computed(() => {
+    const type = this.selectedType();
+    return this.typeOptions().some((option) => option.kind === type) ? type : 'all';
+  });
+
+  selectType(type: BrowseType): void {
+    this.selectedType.set(type);
+  }
+
+  showsType(type: BrowseType): boolean {
+    return this.activeType() === 'all' || this.activeType() === type;
+  }
+
+  audioItems = computed(() => {
+    const type = this.activeType();
+    if (type === 'all') {
+      return this.musicTracks;
+    }
+    if (type === 'track' || type === 'radio') {
+      return this.musicTracks.filter((item) => isBroadcastItem(item) === (type === 'radio'));
+    }
+    return [];
+  });
+
+  audioSections = computed(() => {
+    const audio = this.displayedMusicTracks();
+    const radio = audio.filter(isBroadcastItem).length;
+    const totalRadio = this.showsType('radio') ? this.radioCount() : 0;
+    return [
+      {
+        label: 'Tracks',
+        visible: audio.length - radio,
+        total: this.audioItems().length - totalRadio,
+      },
+      { label: 'Web radio', visible: radio, total: totalRadio },
+    ].filter((section) => section.total > 0);
+  });
   private narrowed(containers: ContainerDto[]): ContainerDto[] {
     return filterContainers(
       containers,
@@ -339,25 +383,31 @@ export class DisplayContainerComponent {
     return handler.contentDirectoryService.musicTracks_();
   }
 
-  get otherItems_() {
-    const handler = this.contentHandler();
-    if (!handler?.contentDirectoryService) {
-      return [];
+  private nonAudioGroups = computed(() => {
+    const videos: ItemDto[] = [];
+    const other: ItemDto[] = [];
+    const items = this.contentHandler()?.contentDirectoryService.otherItems_() ?? [];
+    for (const item of items) {
+      if (LocalVideoPlayerService.isVideoItem(item)) {
+        videos.push(item);
+      } else {
+        other.push(item);
+      }
     }
-    return handler.contentDirectoryService.otherItems_();
-  }
+    return [
+      { kind: 'video' as const, label: 'Videos', items: videos },
+      { kind: 'other' as const, label: 'Other items', items: other },
+    ].filter((group) => group.items.length > 0);
+  });
 
-  /**
-   * Videos get their own section. The server delivers them in the same bucket as bookmarks and text
-   * items, but they are the one kind in there this player can actually show.
-   */
-  get videoItems_() {
-    return this.otherItems_.filter((item) => LocalVideoPlayerService.isVideoItem(item));
-  }
-
-  get nonVideoItems_() {
-    return this.otherItems_.filter((item) => !LocalVideoPlayerService.isVideoItem(item));
-  }
+  nonAudioSections = computed(() => {
+    const filter = this.displayFilterString();
+    return this.nonAudioGroups().map((group) => ({
+      ...group,
+      total: group.items.length,
+      visible: group.items.filter((item) => matchesTextFilter(item.title, filter)).length,
+    }));
+  });
 
   get albums(): ContainerDto[] {
     const handler = this.contentHandler();
@@ -408,16 +458,19 @@ export class DisplayContainerComponent {
    * With a filter active that is a subset, and the buttons have to respect it —
    * otherwise they play tracks the user has just filtered away.
    */
-  private displayedMusicTracks(): ItemDto[] {
-    return filterMusicItems(
-      this.musicTracks,
+  private displayedMusicTracks = computed(() =>
+    filterMusicItems(
+      this.audioItems(),
       this.displayFilterString(),
       this.selectedGenres(),
       this.ratingFilter(),
-    );
-  }
+    ),
+  );
 
   private startPlayback(container: ContainerDto, shuffle: boolean): void {
+    if (this.activeType() !== 'all' && this.audioItems().length === 0) {
+      return;
+    }
     // For the local browser player there is no server-side playlist; queue the currently displayed
     // tracks and play them in the shown order.
     if (this.deviceService.isLocalBrowserSelected()) {
@@ -430,7 +483,7 @@ export class DisplayContainerComponent {
     this.playlistService.addContainerToPlaylistAndPlay(
       container,
       shuffle,
-      this.filterActive() ? this.displayedMusicTracks() : undefined,
+      this.filterActive() || this.activeType() !== 'all' ? this.displayedMusicTracks() : undefined,
     );
   }
 
@@ -527,6 +580,9 @@ export class DisplayContainerComponent {
   }
 
   addPlaylist(container: ContainerDto): void {
+    if (this.activeType() !== 'all' && this.audioItems().length === 0) {
+      return;
+    }
     // Same split as startPlayback: the browser player has no server-side queue, so it gets the
     // displayed tracks. A renderer browses the container itself unless a filter narrows it.
     if (this.deviceService.isLocalBrowserSelected()) {
@@ -535,7 +591,7 @@ export class DisplayContainerComponent {
     }
     this.playlistService.addContainerToPlaylist(
       container,
-      this.filterActive() ? this.displayedMusicTracks() : undefined,
+      this.filterActive() || this.activeType() !== 'all' ? this.displayedMusicTracks() : undefined,
     );
   }
 

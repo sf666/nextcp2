@@ -225,6 +225,8 @@ export class DisplayContainerHeaderComponent implements OnInit {
   /////////////////////////////////////
 
   contentDirectoryService = input.required<ContentDirectoryService>();
+  radioCount = input(0);
+  audioActionsEnabled = input(true);
 
   listView = model<boolean>();
   quickSearchString = model<string>();
@@ -670,12 +672,20 @@ export class DisplayContainerHeaderComponent implements OnInit {
   // ===============================================================================================
 
   public get musicItemsCount(): number {
-    if (this.musicTracks?.length) {
-      return this.musicTracks.length;
-    } else {
-      return 0;
-    }
+    return this.musicTracks.length;
   }
+
+  audioSummary = computed(() => {
+    const count = this.musicItemsCount;
+    const radio = this.radioCount();
+    if (radio === 0) {
+      return count === 1 ? '1 track' : `${count} tracks`;
+    }
+    if (radio === count) {
+      return count === 1 ? '1 web radio station' : `${count} web radio stations`;
+    }
+    return `${count} items`;
+  });
 
   private calcTotalPlaytimeLong(tracks: ItemDto[]): string {
     const completeTime = this.getTotalTimeSeconds(tracks);
@@ -739,6 +749,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
       data: {
         trigger: target,
         addToPlaylistOutput: this.addToPlaylistClicked,
+        showAddToPlaylist: this.audioActionsEnabled(),
         currentContainer: this.currentContainer,
         // The like only shows up here for containers that do not wear it next
         // to their title (see showTitleLike).

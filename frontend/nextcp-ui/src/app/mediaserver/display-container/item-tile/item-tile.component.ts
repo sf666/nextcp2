@@ -35,6 +35,7 @@ export class ItemTileComponent {
 
   isListView = input<boolean>(false);
   contentDirectoryService = input.required<ContentDirectoryService>();
+  allMusicTracks = input.required<ItemDto[]>({ alias: 'tracks' });
   quickSearchString = input<string>('');
   selectedGenres = input<Array<string>>([]);
   // Narrows the listing down by rating.
@@ -55,10 +56,6 @@ export class ItemTileComponent {
     this.checkAllTracksSameAlbum(this.allMusicTracks()),
   );
   musicTracks = computed(() => this.filteredMusicTracks(this.allMusicTracks()));
-
-  allMusicTracks = computed(() =>
-    this.contentDirectoryService().musicTracks_(),
-  );
 
   // True when the current view shows global "show all" search results.
   // Disc labels must not be rendered for search results (mixed albums/discs).

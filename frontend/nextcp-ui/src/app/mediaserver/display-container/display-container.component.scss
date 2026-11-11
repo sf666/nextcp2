@@ -33,15 +33,13 @@
     --dc-sticky-top: var(--dc-hero-min, 104px);
 }
 
-// Gap between the browse header and the content. Small for folder views, but
-// larger when the header shows the "half-out" action buttons (songs present)
-// so the first heading / the TITLE column clears the buttons.
+// Both layouts measure their content gap from the bottom edge of the header.
 #display-container-main-content {
     margin-top: 0.75rem;
 }
 
-#display-container-main-content.has-action-buttons {
-    margin-top: 2.5rem;
+#display-container-main-content:has(> div > .type-filter) {
+    margin-top: 0.5rem;
 }
 
 .title {
@@ -56,8 +54,60 @@
 // shared globally in app-styles.scss. Only the display-container-specific
 // spacing override lives here: the first section sits right under the browse
 // header, so keep its top gap small; the following sections need more room.
-#display-container-main-content > div > div:first-child .section-heading {
+#display-container-main-content > div > :first-child > .section-heading {
     margin-top: 0.6rem;
+}
+
+#display-container-main-content > div > .type-filter + div > .section-heading {
+    margin-top: 0;
+}
+
+.audio-heading {
+    flex-wrap: wrap;
+    column-gap: 1.5rem;
+}
+
+.audio-heading-group {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 0.7rem;
+    white-space: nowrap;
+}
+
+.type-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-block-end: 1.3rem;
+    margin-inline-start: 0.15rem;
+    padding-block-end: 0.5rem;
+    border-block-end: 1px solid rgba(255, 255, 255, 0.1);
+
+    button {
+        padding: 0.3rem 0.7rem;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        color: var(--snow-white);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    button[aria-pressed='true'] {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+
+    button:focus-visible {
+        outline: 2px solid var(--snow-white);
+        outline-offset: 2px;
+    }
 }
 
 .left-spacer {
