@@ -182,7 +182,7 @@ public class RestContentDirectoryService extends BaseRestService {
 			device.updateAlbumArtURI(updateRequest);
 			publisher.publishEvent(new ToastrMessage(null, "success", "album cover", "The album cover was updated."));
 		} catch (Exception e) {
-			log.error("updateAlbumArtUri failed : {}", updateRequest, e);
+			log.error("updateAlbumArtUri failed on media server {}", updateRequest.mediaServerDevice, e);
 			throw failed("Cannot update the album cover", e);
 		}
 	}

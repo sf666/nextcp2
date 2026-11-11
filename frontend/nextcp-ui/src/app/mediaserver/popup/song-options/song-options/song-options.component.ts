@@ -1,11 +1,9 @@
-import { CdsUpdateService } from './../../../../service/cds-update.service';
 import { SongOptionsEvent } from './../song-options-event.d';
 import { PopupService } from './../../../../util/popup.service';
 import { DownloadService } from './../../../../util/download.service';
 import {
   ItemDto,
   ContainerDto,
-  MusicItemIdDto,
 } from './../../../../service/dto.d';
 import {
   MatDialogRef,
@@ -33,9 +31,9 @@ import { StarRatingComponent } from '../../../../view/star-rating/star-rating.co
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
 import { MusicLibraryService } from 'src/app/service/music-library/music-library.service';
 import {
-  InputPopupComponent,
-  InputPopupData,
-} from 'src/app/util/comp/input-popup/input-popup/input-popup.component';
+  UpdateAlbumArtComponent,
+  UpdateAlbumArtDialogData,
+} from 'src/app/popup/update-album-art/update-album-art.component';
 import {
   ConfirmPopupComponent,
   ConfirmPopupData,
@@ -68,7 +66,6 @@ export class SongOptionsComponent implements OnInit {
   private currentContainer: ContainerDto | undefined;
 
   readonly dialog = inject(MatDialog);
-  readonly cdsUpdateService = inject(CdsUpdateService);
   private radioBrowserService = inject(RadioBrowserService);
 
   /** What the media server currently assumes for this station. */
@@ -246,38 +243,22 @@ export class SongOptionsComponent implements OnInit {
   }
 
   public updateAlbumArt(): void {
-    const inputTextData: InputPopupData = {
-      cancelText: 'cancel',
-      inputText: '',
-      inputTextExplanation:
-        'Enter full album art URL.',
-      labelInputText: '',
-      okText: 'update',
-      title: 'Update album art',
-    };
-    const dialogRef = this.dialog.open(InputPopupComponent, {
+    const dialogRef = this.dialog.open<
+      UpdateAlbumArtComponent,
+      UpdateAlbumArtDialogData,
+      boolean
+    >(UpdateAlbumArtComponent, {
       width: '480px',
-      maxWidth: '640px',
+      maxWidth: '92vw',
       panelClass: ['popup-glass'],
-      data: inputTextData,
+      data: {
+        objectId: this.item.objectID,
+        previousAlbumArtUri: this.item.albumArtUrl,
+        containerId: this.currentContainer?.id,
+      },
     });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result !== undefined) {
-        console.log('new URL : ' + result);
-
-        const mid: MusicItemIdDto = {
-          acoustID: '',
-          musicBrainzIdTrackId: '',
-          objectID: this.item.objectID,
-        };
-
-        this.cdsUpdateService.setNewAlbumArtUri(
-          mid,
-          this.item.albumArtUrl,
-          result,
-          this.currentContainer?.id,
-        );
+    dialogRef.afterClosed().subscribe((saved) => {
+      if (saved) {
         this._matDialogRef.close();
       }
     });

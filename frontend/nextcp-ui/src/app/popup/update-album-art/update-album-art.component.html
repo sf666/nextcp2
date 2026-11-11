@@ -1,0 +1,76 @@
+<form
+  class="glass-panel flex flex-col"
+  (ngSubmit)="save()"
+  [attr.aria-busy]="saving()"
+>
+  <h2 mat-dialog-title class="!text-white">Update album art</h2>
+  <mat-dialog-content class="!text-white/85">
+    <fieldset
+      class="flex flex-wrap gap-x-6 gap-y-2"
+      aria-label="Cover source"
+      [disabled]="saving()"
+    >
+      <label class="flex items-center gap-2">
+        <input
+          type="radio"
+          name="cover-source"
+          [checked]="source() === 'url'"
+          (change)="selectSource('url')"
+        />
+        Image URL
+      </label>
+      <label class="flex items-center gap-2">
+        <input
+          type="radio"
+          name="cover-source"
+          [checked]="source() === 'file'"
+          (change)="selectSource('file')"
+        />
+        Upload from this device
+      </label>
+    </fieldset>
+
+    @if (source() === "url") {
+      <input
+        class="mt-4 w-full rounded-md border border-white/25 bg-black/20 px-3 py-2"
+        type="url"
+        name="cover-url"
+        aria-label="Image URL"
+        placeholder="https://"
+        [(ngModel)]="url"
+        [disabled]="saving()"
+        cdkFocusInitial
+      />
+    } @else {
+      <input
+        #fileInput
+        class="mt-4 block w-full rounded-md border border-white/25 bg-black/20 text-sm file:me-3 file:border-0 file:bg-white/15 file:px-3 file:py-2 file:text-white"
+        type="file"
+        aria-label="Cover image"
+        aria-describedby="cover-file-help"
+        [accept]="acceptedTypes"
+        [disabled]="saving()"
+        (change)="selectFile(fileInput)"
+      />
+      <p id="cover-file-help" class="mt-2 text-sm text-white/65">
+        JPEG or PNG, up to 10 MiB
+      </p>
+      @if (fileError()) {
+        <p class="mt-2 text-sm text-red-300" role="alert">{{ fileError() }}</p>
+      }
+    }
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button
+      mat-stroked-button
+      type="button"
+      [disabled]="saving()"
+      (click)="cancel()"
+    >
+      Cancel
+    </button>
+    <button mat-button type="submit" [disabled]="!canSave()">
+      {{ saving() ? "Updating…" : "Update" }}
+    </button>
+  </mat-dialog-actions>
+</form>

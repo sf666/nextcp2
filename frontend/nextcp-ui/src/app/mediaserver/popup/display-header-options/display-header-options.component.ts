@@ -7,20 +7,18 @@ import {
 } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { AddRadioStationComponent } from 'src/app/popup/add-radio-station/add-radio-station.component';
-import { CdsUpdateService } from 'src/app/service/cds-update.service';
+import {
+  UpdateAlbumArtComponent,
+  UpdateAlbumArtDialogData,
+} from 'src/app/popup/update-album-art/update-album-art.component';
 import { ConfigurationService } from 'src/app/service/configuration.service';
 import { DeviceService } from 'src/app/service/device.service';
 import {
   ContainerDto,
   ContainerIdDto,
   MediaPlayerConfigDto,
-  MusicItemIdDto,
 } from 'src/app/service/dto';
 import { MediaPlayerService } from 'src/app/service/media-player/media-player.service';
-import {
-  InputPopupComponent,
-  InputPopupData,
-} from 'src/app/util/comp/input-popup/input-popup/input-popup.component';
 import { PopupService } from 'src/app/util/popup.service';
 import { ServerFeature } from 'src/app/service/server-feature';
 
@@ -42,7 +40,6 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   private popupService = inject(PopupService);
 
   readonly inputDialog = inject(MatDialog);
-  readonly cdsUpdateService = inject(CdsUpdateService);
 
   private readonly _matDialogRef: MatDialogRef<DisplayHeaderOptionsComponent>;
   private addToPlaylistOutput: OutputEmitterRef<ContainerDto>;
@@ -167,36 +164,22 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   }
 
   updateAlbumArt(): void {
-    const inputTextData: InputPopupData = {
-      cancelText: 'cancel',
-      inputText: '',
-      inputTextExplanation:
-        'Enter full album art URL.',
-      labelInputText: '',
-      okText: 'update',
-      title: 'Update album art',
-    };
-    const dialogRef = this.inputDialog.open(InputPopupComponent, {
+    const dialogRef = this.inputDialog.open<
+      UpdateAlbumArtComponent,
+      UpdateAlbumArtDialogData,
+      boolean
+    >(UpdateAlbumArtComponent, {
       width: '480px',
-      maxWidth: '640px',
+      maxWidth: '92vw',
       panelClass: ['popup-glass'],
-      data: inputTextData,
+      data: {
+        objectId: this.currentContainer.id,
+        previousAlbumArtUri: this.currentContainer.albumartUri,
+        containerId: this.listingContainerId,
+      },
     });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result !== undefined) {
-        const musicItemId: MusicItemIdDto = {
-          acoustID: '',
-          musicBrainzIdTrackId: '',
-          objectID: this.currentContainer.id,
-        };
-
-        this.cdsUpdateService.setNewAlbumArtUri(
-          musicItemId,
-          this.currentContainer.albumartUri,
-          result,
-          this.listingContainerId,
-        );
+    dialogRef.afterClosed().subscribe((saved) => {
+      if (saved) {
         this.close();
       }
     });
