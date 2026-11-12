@@ -191,9 +191,10 @@ public class MediaServerDevice extends BaseDevice {
 
 	private ContainerItemDto fillResultStructureExtracted(BrowseInput inp, DIDLContent didl, ContainerItemDto result) {
 		ContainerDto curContainer = browseMetadataMeta(inp.ObjectID);
-		if (!"-1".equals(curContainer.parentID)) {
+		if (curContainer.parentID != null && !"-1".equals(curContainer.parentID)) {
 			ContainerDto parentContainer = browseMetadataMeta(curContainer.parentID);
 			result.parentFolderTitle = parentContainer.title;
+			result.parentFolderObjectClass = parentContainer.objectClass;
 		} else {
 			result.parentFolderTitle = "";
 		}

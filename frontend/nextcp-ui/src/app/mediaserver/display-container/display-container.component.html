@@ -53,6 +53,7 @@ Main Content
         <span class="section-count">{{countLabel(visiblePlaylists(), playlistList.length)}}</span>
       </div>
       <container-tile class="flex grow"
+        [listingContainer]="listingContainer()"
         [smallIcons]="this.allMusicTracks.length > 0"
         [container]="playlistList"
         [quickSearchString]="displayFilterString()"
@@ -146,6 +147,7 @@ Main Content
         <span class="section-count">{{countLabel(visibleFolders(), container.length)}}</span>
       </div>
       <container-tile #folderTile class="flex grow"
+        [listingContainer]="listingContainer()"
         [smallIcons]="this.allMusicTracks.length > 0"
         [container]="container"
         [selectedGenres]="selectedGenres()"

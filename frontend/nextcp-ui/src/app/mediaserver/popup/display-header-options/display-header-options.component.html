@@ -35,6 +35,13 @@
         <span>Set artist folder</span>
       </button>
     }
+    @if (canRemovePlaylistLink) {
+      <button type="button" class="playlist-item flex items-center gap-3 px-4 py-2.5"
+        [disabled]="removingPlaylistLink()" (click)="removeFromPlaylist()">
+        <span class="item-icon material-symbols-outlined text-lg" aria-hidden="true">playlist_remove</span>
+        <span>Remove from playlist</span>
+      </button>
+    }
 
     @if (showPlayerSection()) {
       <div class="divider my-1"></div>

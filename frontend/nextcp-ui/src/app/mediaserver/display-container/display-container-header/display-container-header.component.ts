@@ -757,6 +757,7 @@ export class DisplayContainerHeaderComponent implements OnInit {
         addToPlaylistOutput: this.addToPlaylistClicked,
         showAddToPlaylist: this.audioActionsEnabled(),
         currentContainer: this.currentContainer,
+        parentObjectClass: this.currentContainerItem().parentFolderObjectClass,
         // The like only shows up here for containers that do not wear it next
         // to their title (see showTitleLike).
         canLike: this.likePossible() && !this.showTitleLike(),

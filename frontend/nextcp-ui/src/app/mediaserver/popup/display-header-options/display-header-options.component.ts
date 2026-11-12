@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OutputEmitterRef, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OutputEmitterRef, OnInit, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MAT_DIALOG_DATA,
@@ -22,6 +22,8 @@ import { MediaPlayerService } from 'src/app/service/media-player/media-player.se
 import { PopupService } from 'src/app/util/popup.service';
 import { ServerFeature } from 'src/app/service/server-feature';
 import { PlaylistService } from 'src/app/service/playlist.service';
+import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
+import { ConfirmPopupComponent, ConfirmPopupData } from 'src/app/util/comp/confirm-popup/confirm-popup.component';
 import { DefaultPlaylistService } from '../defaut-playlists/default-playlist.service';
 
 /** Menu width in px. Keep in step with `.dialog-root` in the component's SCSS. */
@@ -41,6 +43,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   deviceService = inject(DeviceService);
   private popupService = inject(PopupService);
   private playlistService = inject(PlaylistService);
+  private serverPlaylistService = inject(ServerPlaylistService);
   private defaultPlaylistService = inject(DefaultPlaylistService);
 
   readonly inputDialog = inject(MatDialog);
@@ -56,6 +59,8 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   /** Folders carry their like here instead of next to the title. */
   canLike = false;
   isLiked = false;
+  readonly canRemovePlaylistLink: boolean;
+  readonly removingPlaylistLink = signal(false);
   private readonly allowContainerQueue: boolean;
   /** How many folders this container holds; albums and tracks do not count. */
   private childFolderCount = 0;
@@ -71,6 +76,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
       canLike: boolean;
       isLiked: boolean;
       childFolderCount: number;
+      parentObjectClass?: string;
       /**
        * The container that is on screen. The header opens this menu on the container it is the
        * header of, a tile on one that is merely listed there - and what has to be re-read after a
@@ -91,6 +97,9 @@ export class DisplayHeaderOptionsComponent implements OnInit {
     this.triggerElementRef = data.trigger;
     this.mediaPlayerConfigDto =
       this.configurationService.mediaPlayerConfigDto();
+
+    this.canRemovePlaylistLink = this.showAddToServerPlaylist() &&
+      (data.parentObjectClass?.startsWith('object.container.playlistContainer') ?? false);
   }
 
   ngOnInit(): void {
@@ -117,6 +126,37 @@ export class DisplayHeaderOptionsComponent implements OnInit {
       this.defaultPlaylistService.openContainerToPlaylistDialog(this.currentContainer);
     });
     this.close();
+  }
+
+  removeFromPlaylist(): void {
+    if (!this.canRemovePlaylistLink || this.removingPlaylistLink()) {
+      return;
+    }
+    this.removingPlaylistLink.set(true);
+    const { id, title, mediaServerUDN } = this.currentContainer;
+    const data: ConfirmPopupData = {
+      title: 'Remove from playlist',
+      message: 'This removes the link from the playlist. The original stays on the media server.',
+      detail: title,
+      confirmText: 'remove',
+      cancelText: 'cancel',
+      danger: true,
+    };
+    this.inputDialog.open<ConfirmPopupComponent, ConfirmPopupData, boolean>(ConfirmPopupComponent, {
+      width: '420px',
+      maxWidth: '90vw',
+      panelClass: ['popup-glass'],
+      data,
+    }).afterClosed().subscribe((confirmed) => {
+      if (!confirmed) {
+        this.removingPlaylistLink.set(false);
+        return;
+      }
+      this.serverPlaylistService.removePlaylistLink(id, mediaServerUDN).subscribe({
+        next: () => this.close(),
+        error: () => this.removingPlaylistLink.set(false),
+      });
+    });
   }
 
   showAddToServerPlaylist(): boolean {

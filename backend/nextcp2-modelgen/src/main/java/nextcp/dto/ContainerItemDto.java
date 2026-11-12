@@ -13,6 +13,8 @@ public class ContainerItemDto
 {
 
     public String parentFolderTitle;
+    @nextcp.handcoded.Nullable
+    public String parentFolderObjectClass;
     public ContainerDto currentContainer;
     public List<ContainerDto> containerDto;
     public List<ContainerDto> albumDto;
@@ -26,9 +28,10 @@ public class ContainerItemDto
     {
     }
 
-    public ContainerItemDto(String parentFolderTitle, ContainerDto currentContainer, List<ContainerDto> containerDto, List<ContainerDto> albumDto, List<ItemDto> items, List<ContainerDto> minimServerSupportTags, MusicAlbumIds allTracksSameAlbumIds, Long totalMatches, String resourceId)
+    public ContainerItemDto(String parentFolderTitle, String parentFolderObjectClass, ContainerDto currentContainer, List<ContainerDto> containerDto, List<ContainerDto> albumDto, List<ItemDto> items, List<ContainerDto> minimServerSupportTags, MusicAlbumIds allTracksSameAlbumIds, Long totalMatches, String resourceId)
     {
         this.parentFolderTitle = parentFolderTitle;
+        this.parentFolderObjectClass = parentFolderObjectClass;
         this.currentContainer = currentContainer;
         this.containerDto = containerDto;
         this.albumDto = albumDto;
@@ -45,6 +48,7 @@ public class ContainerItemDto
         StringBuilder sb = new StringBuilder();
         sb.append("ContainerItemDto [");
         sb.append("parentFolderTitle=").append(this.parentFolderTitle).append(", ");
+        sb.append("parentFolderObjectClass=").append(this.parentFolderObjectClass).append(", ");
         sb.append("currentContainer=").append(this.currentContainer).append(", ");
         sb.append("containerDto=").append(this.containerDto).append(", ");
         sb.append("albumDto=").append(this.albumDto).append(", ");

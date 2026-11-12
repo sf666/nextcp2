@@ -111,12 +111,13 @@ export class DisplayContainerComponent {
   /** Keeps the narrowing of each listing apart; see the effect in the constructor. */
   private readonly filterMemory = new BrowseFilterMemory();
 
-  /** Id of the listing on screen; changes when stepping into a folder or when search hits arrive. */
-  private currentContainerId = computed(
+  /** Container shown by the current listing. */
+  readonly listingContainer = computed(
     () =>
       this.contentHandler()?.contentDirectoryService.currentContainerList()
-        .currentContainer?.id ?? '',
+        .currentContainer,
   );
+  private currentContainerId = computed(() => this.listingContainer()?.id ?? '');
   private selectedType = linkedSignal({
     source: this.currentContainerId,
     computation: (): BrowseType => 'all',

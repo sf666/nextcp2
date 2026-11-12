@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 4.1.1 on 2026-09-22 10:18:00.
+// Generated using typescript-generator version 4.1.1 on 2026-11-12 12:13:10.
 
 export interface AddRadioStationRequest {
     serverUdn: string;
@@ -169,6 +169,7 @@ export interface ContainerIdDto {
 
 export interface ContainerItemDto {
     parentFolderTitle: string;
+    parentFolderObjectClass?: string;
     currentContainer: ContainerDto;
     containerDto: ContainerDto[];
     albumDto: ContainerDto[];

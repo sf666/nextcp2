@@ -1,7 +1,7 @@
 import { ConfigurationService } from 'src/app/service/configuration.service';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { Injectable, computed, signal, inject } from '@angular/core';
-import { Observable, shareReplay, Subject } from 'rxjs';
+import { Observable, shareReplay, Subject, tap } from 'rxjs';
 import { CreateServerPlaylistVO, ServerDeleteObjectRequest, ServerPlaylistEntry, ServerPlaylists } from './dto';
 import { HttpService } from './http.service';
 import { SseService } from './sse/sse.service';
@@ -17,6 +17,7 @@ export interface PlaylistStructureChange {
   containerId?: string;
   /** Object (playlist or playlist entry) that was destroyed. */
   removedObjectId?: string;
+  mediaServerUdn?: string;
 }
 
 @Injectable({
@@ -222,5 +223,12 @@ export class ServerPlaylistService {
       this.playlistStructureChanged$.next({ removedObjectId: objectId });
     });
     return ret;
+  }
+
+  removePlaylistLink(objectId: string, serverUdn: string): Observable<void> {
+    const request: ServerDeleteObjectRequest = { objectId, serverUdn };
+    return this.httpService
+      .post<void>(this.baseUri, '/removePlaylistLink', request)
+      .pipe(tap(() => this.playlistStructureChanged$.next({ removedObjectId: objectId, mediaServerUdn: serverUdn })));
   }
 }

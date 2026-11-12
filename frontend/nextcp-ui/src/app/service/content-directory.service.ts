@@ -750,7 +750,8 @@ export class ContentDirectoryService {
     const current = this.currentContainerID;
     // Nothing shown yet, or what is shown are search hits — a container the
     // media server does not know, so it cannot be browsed again.
-    if (!current || current === SEARCH_RESULT_CONTAINER_ID) {
+    if (!current || current === SEARCH_RESULT_CONTAINER_ID ||
+        (change.mediaServerUdn && change.mediaServerUdn !== this.currentContainerList().currentContainer.mediaServerUDN)) {
       return;
     }
 

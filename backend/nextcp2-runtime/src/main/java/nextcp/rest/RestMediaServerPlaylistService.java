@@ -333,4 +333,36 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 		}
 	}
 
+	@PostMapping("/removePlaylistLink")
+	public void removePlaylistLink(@RequestBody ServerDeleteObjectRequest request) {
+		// Resolve the parent again before invoking DestroyObject. Outside a playlist the same
+		// UPnP action can delete the actual playlist file instead of an entry.
+		if (!(findExtendedMediaServerByUdn(request.serverUdn) instanceof UmsServerDevice server)
+				|| !isPlaylistLink(server, request.objectId)) {
+			throw failed("This object is not a link in a playlist", null);
+		}
+		try {
+			server.deleteObject(request.objectId);
+			toast.publishSuccessMessage(null, "playlist", "Link removed from playlist");
+		} catch (Exception e) {
+			log.warn("removing playlist link {}", request.objectId, e);
+			throw failed("Cannot remove the link from the playlist", e);
+		}
+	}
+
+	private boolean isPlaylistLink(UmsServerDevice server, String objectId) {
+		if (objectId == null || objectId.isBlank() || "0".equals(objectId)) {
+			return false;
+		}
+		ContainerDto entry = server.browseMetadataMeta(objectId);
+		String parentId = entry.parentID;
+		if (!objectId.equals(entry.id) || parentId == null || parentId.isBlank()
+				|| "0".equals(parentId) || "-1".equals(parentId) || objectId.equals(parentId)) {
+			return false;
+		}
+		ContainerDto parent = server.browseMetadataMeta(parentId);
+		return parentId.equals(parent.id) && parent.objectClass != null
+				&& parent.objectClass.startsWith("object.container.playlistContainer");
+	}
+
 }

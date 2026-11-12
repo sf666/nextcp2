@@ -44,6 +44,7 @@ export class ContainerTileComponent {
   ratingFilter = input<RatingFilter>('ANY');
   // Sort/group criteria: 'NONE' | 'TITLE' | 'ARTIST' | 'GENRE'
   sortCriteria = input<string>('NONE');
+  listingContainer = input<ContainerDto>();
   // Enable windowing (virtual scroll) for this grid. Only honoured for the flat
   // single-section case (NONE/TITLE). Set true only on the (large) album grid.
   virtualize = input<boolean>(false);
@@ -165,6 +166,9 @@ export class ContainerTileComponent {
    * button for a tap, the tile for a long press.
    */
   private openOptionsMenu(container: ContainerDto, trigger: EventTarget | null): void {
+    const listing = this.listingContainer();
+    const parentObjectClass = listing && listing.id === container.parentID &&
+      listing.mediaServerUDN === container.mediaServerUDN ? listing.objectClass : undefined;
     const dialogRef = this.dialog.open(DisplayHeaderOptionsComponent, {
       hasBackdrop: true,
       panelClass: ['popup-glass'],
@@ -172,6 +176,7 @@ export class ContainerTileComponent {
         trigger: new ElementRef(trigger),
         addToPlaylistOutput: this.addToPlaylistClicked,
         currentContainer: container,
+        parentObjectClass,
         // What is on screen is the container this one is listed in, so that is what a change here
         // has to re-read.
         listingContainerId: container.parentID,
