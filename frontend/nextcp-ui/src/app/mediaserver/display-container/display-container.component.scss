@@ -5,9 +5,9 @@
 // only one of them knew the number, changing it left a gap the size of the
 // difference.
 #display-container-component-top-id {
-    --dc-hero-max   : 310px;
+    --dc-hero-max   : clamp(210px, 24cqw, 310px);
     --dc-hero-min   : 104px;
-    --dc-hero-indent: 100px;
+    --dc-hero-indent: clamp(72px, 8cqw, 100px);
 }
 
 // Search results keep the full hero height — a shorter one read as cramped next
@@ -62,7 +62,7 @@
     margin-top: 0;
 }
 
-@container app-viewport (height < #{av.$compact-viewport-height}) {
+@container app-viewport (height < #{av.$compact-viewport-height}) or (width < #{av.$compact-browse-width}) {
     #display-container-component-top-id {
         --dc-hero-max   : 76px;
         --dc-hero-min   : var(--dc-hero-max);
@@ -83,6 +83,24 @@
     }
 
     #head_browse_result_general_container_ID:only-child > .section-heading {
+        display: none;
+    }
+}
+
+@container app-viewport (width < #{av.$phone-width}) {
+    #display-container-component-top-id {
+        --dc-hero-max: 68px;
+    }
+
+    #display-container-component-top-id.is-search {
+        --dc-hero-max: 106px;
+    }
+
+    #display-container-main-content {
+        margin-inline: 0.75rem;
+    }
+
+    #head_browse_result_items_ID:only-child > .audio-heading:not(:has(.audio-heading-group + .audio-heading-group)) {
         display: none;
     }
 }

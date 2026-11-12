@@ -2,11 +2,11 @@
 @if (musicTracks()?.length > 0) {
 <div id="Browse_Result_Music_Items" tabindex="-1" class="flex grow font-['HK_Grotesk']">
     @if (isListView()) {
-    <div id="head_browse_result_items_list_view_ID" class="w-full px-4">
+    <div id="head_browse_result_items_list_view_ID" class="track-list w-full"
+         [class.same-album]="allTracksSameAlbum()" [class.with-genre]="showGenre()" [class.with-rating]="extendedApi()">
         <!-- Header Row - Using CSS Grid for perfect alignment -->
         @if (allTracksSameAlbum()) {
-        <div class="grid gap-4 list-col-header text-xs uppercase tracking-wider text-gray-300 font-bold py-3 border-b border-white/15"
-             [style.grid-template-columns]="gridColumns(true)">
+        <div class="track-grid list-col-header text-xs uppercase tracking-wider text-gray-300 font-bold py-3 border-b border-white/15">
             <div class="text-center">#</div>
             <div>Title</div>
             <div class="hidden md:block">Artist</div>
@@ -15,8 +15,7 @@
             <div class="text-right">Duration</div>
         </div>
         } @else {
-        <div class="grid gap-4 list-col-header text-xs uppercase tracking-wider text-gray-300 font-bold py-3 border-b border-white/15"
-             [style.grid-template-columns]="gridColumns(false)">
+        <div class="track-grid list-col-header text-xs uppercase tracking-wider text-gray-300 font-bold py-3 border-b border-white/15">
             <div></div>
             <div>Title</div>
             <div class="hidden md:block">Artist</div>
@@ -37,8 +36,7 @@
 
         <!-- Row for Same Album View -->
         @if (allTracksSameAlbum()) {
-        <div class="grid gap-4 items-center text-sm py-2.5 px-2 rounded-lg hover:bg-white/5 transition-all duration-200 group {{selectedRowClass(item)}}"
-             [style.grid-template-columns]="gridColumns(true)">
+        <div class="track-grid track-row items-center text-sm rounded-lg hover:bg-white/5 transition-all duration-200 group {{selectedRowClass(item)}}">
             <!-- Track Number -->
             <div id="col_1_num_{{item.objectID}}" class="text-center text-gray-400 group-hover:text-white transition-colors">
                 @if (isPlayingItem(item)) {
@@ -55,7 +53,7 @@
             <!-- Title -->
             <div id="{{item.objectID}}" (click)="playItem(item)" class="flex items-center gap-2 cursor-pointer min-w-0">
                 <div class="truncate text-white group-hover:text-aqua transition-colors font-medium">{{item.title}}</div>
-                <quality-badge class="flex-shrink-0" [item]="item"></quality-badge>
+                <quality-badge class="track-quality flex-shrink-0" [item]="item"></quality-badge>
             </div>
 
             <!-- Artist -->
@@ -88,17 +86,17 @@
             </div>
 
             <!-- Options Menu -->
-            <div id="OPT_OPTIONS_{{item.objectID}}" class="flex justify-center cursor-pointer" (click)="showSongPopup($event, item)">
-                <span class="material-symbols-outlined text-gray-400 text-xl">more_vert</span>
-            </div>
+            <button type="button" id="OPT_OPTIONS_{{item.objectID}}" class="track-options" aria-label="More options"
+                    (click)="showSongPopup($event, item)">
+                <span class="material-symbols-outlined text-gray-400 text-xl" aria-hidden="true">more_vert</span>
+            </button>
         </div>
         } @else {
         <!-- Row for Mixed Album View -->
-        <div class="grid gap-4 items-center text-sm py-2.5 px-2 rounded-lg hover:bg-white/5 transition-all duration-200 group {{selectedRowClass(item)}}"
-             [style.grid-template-columns]="gridColumns(false)">
+        <div class="track-grid track-row items-center text-sm rounded-lg hover:bg-white/5 transition-all duration-200 group {{selectedRowClass(item)}}">
             <!-- Album Art (with now-playing overlay) -->
             <div id="col_1_img_{{item.objectID}}" class="playing-art-wrap" (click)="playItem(item)">
-                <img class="w-14 h-14 rounded-md object-cover shadow-md cursor-pointer transition-all"
+                <img class="track-thumb rounded-md object-cover shadow-md cursor-pointer transition-all"
                      src="{{item.albumArtUrl}}">
                 @if (isPlayingItem(item)) {
                     <span class="playing-art-overlay" aria-label="Playing">
@@ -115,10 +113,11 @@
             <div id="{{item.objectID}}" (click)="playItem(item)" class="flex flex-col gap-1 cursor-pointer min-w-0">
                 <div class="flex items-center gap-2 min-w-0">
                     <div class="truncate text-white group-hover:text-aqua transition-colors font-medium">{{item.title}}</div>
-                    <quality-badge class="flex-shrink-0" [item]="item"></quality-badge>
+                    <quality-badge class="track-quality flex-shrink-0" [item]="item"></quality-badge>
                 </div>
                 <div id="OPT_ALBUM_{{item.objectID}}" class="truncate text-gray-400 text-xs">
-                    {{item.album}}
+                    <span class="md:hidden">{{artistLabel(item) || item.album}}</span>
+                    <span class="hidden md:inline">{{item.album}}</span>
                 </div>
             </div>
             
@@ -152,9 +151,10 @@
             </div>
 
             <!-- Options Menu -->
-            <div id="OPT_OPTIONS_{{item.objectID}}" class="flex justify-center cursor-pointer" (click)="showSongPopup($event, item)">
-                <span class="material-symbols-outlined text-gray-400 text-xl">more_vert</span>
-            </div>
+            <button type="button" id="OPT_OPTIONS_{{item.objectID}}" class="track-options" aria-label="More options"
+                    (click)="showSongPopup($event, item)">
+                <span class="material-symbols-outlined text-gray-400 text-xl" aria-hidden="true">more_vert</span>
+            </button>
         </div>
         }
         }

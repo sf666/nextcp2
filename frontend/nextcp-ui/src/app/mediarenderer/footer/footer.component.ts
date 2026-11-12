@@ -1,7 +1,8 @@
 import { SongOptionsServiceService } from './../../mediaserver/popup/song-options/song-options-service.service';
 import { AvailableServerComponent } from './../../popup/available-server/available-server.component';
 import { VolumeControlComponent } from './../../popup/volume-control/volume-control.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogClose } from '@angular/material/dialog';
+import { NgTemplateOutlet } from '@angular/common';
 import { AvailableRendererComponent } from './../../popup/available-renderer/available-renderer.component';
 import { PlaylistService } from './../../service/playlist.service';
 import { RendererService } from './../../service/renderer.service';
@@ -12,6 +13,7 @@ import {
   Component,
   ElementRef,
   OnInit,
+  TemplateRef,
   computed,
   effect,
   signal,
@@ -27,9 +29,8 @@ import { ImgFallbackDirective } from 'src/app/directive/img-fallback.directive';
   selector: 'renderer-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [QualityBadgeComponent, ReactiveFormsModule, ImgFallbackDirective],
+  imports: [QualityBadgeComponent, ReactiveFormsModule, ImgFallbackDirective, NgTemplateOutlet, MatDialogClose],
 })
 export class FooterComponent implements OnInit {
   private dialog = inject(MatDialog);
@@ -99,6 +100,18 @@ export class FooterComponent implements OnInit {
   // advances every second, so without holding the dragged value the thumb would fight the finger.
   private seekPreviewPercent = signal<number | null>(null);
   displayPercent = computed(() => this.seekPreviewPercent() ?? this.trackTimePercent());
+
+  openMobilePlayer(controls: TemplateRef<unknown>): void {
+    this.dialog.open(controls, {
+      position: { bottom: '0' },
+      width: '100%',
+      maxWidth: '36rem',
+      maxHeight: '100dvh',
+      panelClass: ['popup-glass'],
+      backdropClass: 'glass-backdrop',
+      ariaLabelledBy: 'mobile-player-title',
+    }).afterClosed().subscribe(() => this.seekPreviewPercent.set(null));
+  }
 
   public rendererClicked(event: Event): void {
     const target = new ElementRef(event.currentTarget);

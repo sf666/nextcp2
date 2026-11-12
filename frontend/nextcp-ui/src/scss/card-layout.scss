@@ -71,11 +71,11 @@ $imgCardWidthSmall : 6rem;
     }
 }
 
-@media only screen and (width < 1024px) {
+@media only screen and (width < av.$compact-browse-width) {
     @include dense-tile-grid;
 }
 
-@container app-viewport (height < #{av.$compact-viewport-height}) {
+@container app-viewport (height < #{av.$compact-viewport-height}) or (width < #{av.$compact-browse-width}) {
     @include dense-tile-grid;
 
     .albumTile {

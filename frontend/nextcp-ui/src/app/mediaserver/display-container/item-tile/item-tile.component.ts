@@ -135,28 +135,6 @@ export class ItemTileComponent {
     );
   }
 
-  //
-  // CSS support like responsive grid layout counting in respect to first image visible or not
-  // ===============================================================================================
-  getColNumber(): number {
-    let num = 5;
-    if (this.extendedApi()) {
-      num = num + 1;
-    }
-    if (!this.allTracksSameAlbum()) {
-      num = num + 1;
-    }
-    return num;
-  }
-
-  // Builds the CSS grid template for the list view rows/header.
-  // An optional genre column is inserted between Artist and Rating when showGenre() is set.
-  gridColumns(sameAlbum: boolean): string {
-    const firstAndTitle = sameAlbum ? '48px 2fr' : '64px minmax(100px, 2fr)';
-    const genre = this.showGenre() ? ' minmax(120px, 1fr)' : '';
-    return `${firstAndTitle} minmax(150px, 1fr)${genre} 128px 80px 48px`;
-  }
-
   isBroadcast(item: ItemDto): boolean {
     return isBroadcastItem(item);
   }

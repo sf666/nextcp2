@@ -1,4 +1,25 @@
 @use "card-layout";
+@use "app-variables" as av;
+
+@media (width < av.$phone-width) {
+    .tile-grid {
+        --tile-min: min(100%, 8rem);
+        --tile-text-pad: 8px 10px 10px;
+        gap: 0.75rem;
+    }
+
+    .albumTile {
+        flex-direction: column;
+        margin        : 0;
+        padding       : 0;
+        min-width     : 0;
+    }
+
+    .albumDesc {
+        margin-left: 0;
+        min-width  : 0;
+    }
+}
 
 // Card look, grid and hover come from card-layout (shared). Only the
 // component-specific text bits live here.

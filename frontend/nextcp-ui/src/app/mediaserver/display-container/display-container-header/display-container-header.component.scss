@@ -1149,7 +1149,7 @@
     }
 }
 
-@container app-viewport (height < #{av.$compact-viewport-height}) {
+@container app-viewport (height < #{av.$compact-viewport-height}) or (width < #{av.$compact-browse-width}) {
     // Keep the live controls in the sticky header at every scroll position.
     #outer {
         position  : sticky;
@@ -1194,6 +1194,7 @@
     .info-wrap {
         min-width: 0;
         margin-inline-end: 0.5rem;
+        margin-bottom: 0;
 
         > * {
             min-width: 0;
@@ -1269,6 +1270,34 @@
         gap      : 0.3rem;
         padding  : 0.25rem 0.4rem;
         font-size: 0.8rem;
+    }
+}
+
+@container app-viewport (width < #{av.$phone-width}) {
+    #outer .top-img-container .img-top {
+        margin-inline: 10px;
+    }
+
+    .right-section {
+        padding-right: 0.75rem;
+    }
+
+    .title,
+    .search-info .search-query {
+        font-size: 1.125rem;
+    }
+
+    .caps-action .caps-cell,
+    .caps-tools .caps-cell {
+        width: clamp(32px, 9vw, 40px);
+    }
+
+    .header-bottom-row {
+        column-gap: 0.35rem;
+    }
+
+    .is-search .right-section {
+        padding-block: 4px;
     }
 }
 

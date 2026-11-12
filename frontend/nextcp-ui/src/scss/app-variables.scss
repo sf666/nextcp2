@@ -18,6 +18,8 @@ $border-primary                : $blue-pantone-2;
 $top-header-Height              : 310px;
 $top-header-Vertical-Indent     : 120px;
 $compact-viewport-height        : 700px;
+$compact-browse-width            : 1024px;
+$phone-width                     : 768px;
 
 //
 // Root imports.
@@ -70,4 +72,11 @@ $compact-viewport-height        : 700px;
     --sidebar-width-mid: 220px;
     --sidebar-width-min: 55px;
     --nav-height       : 75px;
+}
+
+@media (width < $phone-width) {
+    :root {
+        --nav-height: 56px;
+        --footer-height: calc(4rem + env(safe-area-inset-bottom, 0px));
+    }
 }

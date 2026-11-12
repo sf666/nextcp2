@@ -1,103 +1,159 @@
-<div class="footer flex items-center flex-nowrap justify-between fixed inset-x-0 bottom-0">
-  <!-- Left: now playing -->
-  <div id="left-section" class="now-playing flex items-center min-w-0 grow-3 basis-0">
-    <button type="button" class="artwork-wrap" (click)="showSongPopup($event)" title="{{getCurrentSongTitle()}}">
-      <img class="artwork" src="{{rendererService.imgSrc()}}" alt="" imgFallback>
-    </button>
+<div class="footer fixed inset-x-0 bottom-0">
+  <div class="desktop-player items-center">
+    <!-- Left: now playing -->
+    <div id="left-section" class="now-playing flex items-center min-w-0">
+      <button type="button" class="artwork-wrap" (click)="showSongPopup($event)" title="{{getCurrentSongTitle()}}">
+        <img class="artwork" src="{{rendererService.imgSrc()}}" alt="" imgFallback>
+      </button>
 
-    <div class="track-meta flex flex-col justify-center min-w-0">
-      <div class="title no-wrap">{{getCurrentSongTitle()}}</div>
+      <div class="track-meta flex flex-col justify-center min-w-0">
+        <div class="title no-wrap">{{getCurrentSongTitle()}}</div>
+        @if (rendererService.trackInfo().currentTrack?.artistName) {
+          <div class="artist no-wrap">{{rendererService.trackInfo().currentTrack?.artistName}}</div>
+        }
+        @if (rendererService.trackInfo().currentTrack?.album) {
+          <div class="album no-wrap">{{rendererService.trackInfo().currentTrack?.album}}</div>
+        }
+      </div>
+
+      <div class="quality-badge-slot">
+        <quality-badge [item]="rendererService.trackInfo().currentTrack"></quality-badge>
+      </div>
+    </div>
+
+    <div id="middle-section" class="transport flex flex-col items-center justify-center">
+      <ng-container [ngTemplateOutlet]="transportControls"></ng-container>
+      <ng-container [ngTemplateOutlet]="seekBar"></ng-container>
+    </div>
+
+    <div id="right-section" class="outputs flex items-center justify-end">
+      <ng-container [ngTemplateOutlet]="rendererChip"></ng-container>
+      <button type="button" class="out-btn renderer-compact" (click)="rendererClicked($event)" title="Media renderer">
+        <span class="material-symbols-outlined">speaker</span>
+      </button>
+      <ng-container [ngTemplateOutlet]="outputControls"></ng-container>
+    </div>
+  </div>
+
+  <div class="mobile-player">
+    @if (!streaming() && trackTimePercent() > 0) {
+      <div class="mini-progress" aria-hidden="true" [style.width.%]="trackTimePercent()"></div>
+    }
+    <button type="button" class="mini-track" aria-haspopup="dialog" title="Now Playing"
+      (click)="openMobilePlayer(mobileControls)">
+      <img class="artwork" [src]="rendererService.imgSrc()" alt="" imgFallback>
+      <span class="mini-meta">
+        <span class="title no-wrap">{{getCurrentSongTitle() || 'No track currently playing'}}</span>
+        <span class="artist no-wrap">{{rendererService.trackInfo().currentTrack?.artistName || currentMediaRendererName()}}</span>
+      </span>
+      <span class="material-symbols-outlined expand-player" aria-hidden="true">keyboard_arrow_up</span>
+    </button>
+    <ng-container [ngTemplateOutlet]="playPause"></ng-container>
+  </div>
+</div>
+
+<ng-template #mobileControls>
+  <div class="player-sheet">
+    <div class="sheet-heading">
+      <button type="button" class="ctrl-btn" mat-dialog-close aria-label="Close">
+        <span class="material-symbols-outlined" aria-hidden="true">keyboard_arrow_down</span>
+      </button>
+      <h2 id="mobile-player-title">Now Playing</h2>
+      @if (rendererService.trackInfo().currentTrack?.streamingURL) {
+        <button type="button" class="ctrl-btn" (click)="showSongPopup($event)" aria-label="More options">
+          <span class="material-symbols-outlined" aria-hidden="true">more_horiz</span>
+        </button>
+      }
+    </div>
+    @if (getCurrentSongTitle()) {
+      <img class="sheet-artwork" [src]="rendererService.imgSrcLarge()" alt="" imgFallback>
+    }
+    <div class="sheet-track">
+      <div class="title no-wrap">{{getCurrentSongTitle() || 'No track currently playing'}}</div>
       @if (rendererService.trackInfo().currentTrack?.artistName) {
         <div class="artist no-wrap">{{rendererService.trackInfo().currentTrack?.artistName}}</div>
       }
-      @if (rendererService.trackInfo().currentTrack?.album) {
-        <div class="album no-wrap">{{rendererService.trackInfo().currentTrack?.album}}</div>
-      }
-    </div>
-
-    <div class="quality-badge-slot">
       <quality-badge [item]="rendererService.trackInfo().currentTrack"></quality-badge>
     </div>
-  </div>
-
-  <!-- Middle: transport -->
-  <div id="middle-section" class="transport flex flex-col items-center justify-center grow-2 min-w-0 basis-0 mx-4">
-    <div class="control-row flex items-center">
-      <button type="button" class="ctrl-btn {{shuffleClass}}" (click)="playlistService.toggleShuffle()" title="Shuffle">
-        <span class="material-symbols-outlined">shuffle</span>
-      </button>
-      <button type="button" class="ctrl-btn" (click)="playlistService.previous()" title="Previous">
-        <span class="material-symbols-outlined">skip_previous</span>
-      </button>
-      @if (!rendererService.isPlaying()) {
-        <button type="button" class="play-btn" (click)="rendererService.play()" title="Play">
-          <span class="material-symbols-outlined">play_arrow</span>
-        </button>
-      } @else {
-        <button type="button" class="play-btn" (click)="rendererService.pause()" title="Pause">
-          <span class="material-symbols-outlined">pause</span>
-        </button>
-      }
-      <button type="button" class="ctrl-btn" (click)="rendererService.next()" title="Next">
-        <span class="material-symbols-outlined">skip_next</span>
-      </button>
-      <button type="button" class="ctrl-btn {{repeatClass}}" (click)="playlistService.toggleRepeat()" title="Repeat">
-        <span class="material-symbols-outlined">repeat</span>
-      </button>
+    <ng-container [ngTemplateOutlet]="seekBar"></ng-container>
+    <ng-container [ngTemplateOutlet]="transportControls"></ng-container>
+    <div class="sheet-outputs">
+      <ng-container [ngTemplateOutlet]="rendererChip"></ng-container>
+      <ng-container [ngTemplateOutlet]="outputControls"></ng-container>
     </div>
+  </div>
+</ng-template>
 
-    <div class="progress-row flex items-center">
-      <span class="time-text">{{rendererService.trackTime().secondsDisp}}</span>
-      <div class="slider-box">
-        @if (!streaming()) {
-          <input
-            type="range"
-            min="0"
-            max="100"
-            step="1"
-            [value]="displayPercent()"
-            (input)="onSeekInput($event.target.value)"
-            (change)="onSeekCommit($event.target.value)"
-            class="time-range-slider"
-            style="--value: {{displayPercent()}}%"
-          />
-        } @else {
-          <div class="time-progress-static w-full"></div>
-        }
-      </div>
+<ng-template #playPause>
+  <button type="button" class="play-btn" [attr.aria-label]="rendererService.isPlaying() ? 'Pause' : 'Play'"
+    (click)="rendererService.isPlaying() ? rendererService.pause() : rendererService.play()">
+    <span class="material-symbols-outlined" aria-hidden="true">{{rendererService.isPlaying() ? 'pause' : 'play_arrow'}}</span>
+  </button>
+</ng-template>
+
+<ng-template #transportControls>
+  <div class="control-row flex items-center">
+    <button type="button" class="ctrl-btn {{shuffleClass}}" (click)="playlistService.toggleShuffle()" title="Shuffle">
+      <span class="material-symbols-outlined">shuffle</span>
+    </button>
+    <button type="button" class="ctrl-btn" (click)="playlistService.previous()" title="Previous">
+      <span class="material-symbols-outlined">skip_previous</span>
+    </button>
+    <ng-container [ngTemplateOutlet]="playPause"></ng-container>
+    <button type="button" class="ctrl-btn" (click)="rendererService.next()" title="Next">
+      <span class="material-symbols-outlined">skip_next</span>
+    </button>
+    <button type="button" class="ctrl-btn {{repeatClass}}" (click)="playlistService.toggleRepeat()" title="Repeat">
+      <span class="material-symbols-outlined">repeat</span>
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #seekBar>
+  <div class="progress-row flex items-center">
+    <span class="time-text">{{rendererService.trackTime().secondsDisp}}</span>
+    <div class="slider-box">
       @if (!streaming()) {
-        <span class="time-text">{{getFinishTime()}}</span>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          step="1"
+          [value]="displayPercent()"
+          (input)="onSeekInput($event.target.value)"
+          (change)="onSeekCommit($event.target.value)"
+          class="time-range-slider"
+          style="--value: {{displayPercent()}}%"
+        />
+      } @else {
+        <div class="time-progress-static w-full"></div>
       }
     </div>
+    @if (!streaming()) {
+      <span class="time-text">{{getFinishTime()}}</span>
+    }
   </div>
+</ng-template>
 
-  <!-- Right: outputs -->
-  <div id="right-section" class="outputs flex items-center justify-end grow-3 min-w-0 basis-0">
-    <!-- Active renderer pill (name shown on XL+ screens) -->
-    <button type="button" class="device-chip hidden lg:flex items-center gap-2" (click)="rendererClicked($event)" title="{{currentMediaRendererName()}}">
-      <span class="material-symbols-outlined chip-icon">speaker</span>
-      <span class="chip-name truncate">{{currentMediaRendererName()}}</span>
-    </button>
-    <!-- Renderer icon only on smaller screens (the named chip replaces it on lg+) -->
-    <button type="button" class="out-btn renderer-compact" (click)="rendererClicked($event)" title="Media renderer">
-      <span class="material-symbols-outlined">speaker</span>
-    </button>
+<ng-template #rendererChip>
+  <button type="button" class="device-chip" (click)="rendererClicked($event)" title="{{currentMediaRendererName()}}">
+    <span class="material-symbols-outlined chip-icon">speaker</span>
+    <span class="chip-name truncate">{{currentMediaRendererName()}}</span>
+  </button>
+</ng-template>
 
-    <!-- Source, power and volume are one thing — what plays where — so they read
-         as one control instead of three loose icons at the edge. The renderer
-         stays outside: it is the compact form of the device chip, not a tool. -->
-    <div class="out-group">
-      <button type="button" class="out-btn" (click)="serverClicked($event)" title="Media server">
-        <span class="material-symbols-outlined">dns</span>
+<ng-template #outputControls>
+  <div class="out-group">
+    <button type="button" class="out-btn" (click)="serverClicked($event)" title="Media server">
+      <span class="material-symbols-outlined">dns</span>
+    </button>
+    @if (hasDeviceDriver()) {
+      <button type="button" class="out-btn {{getStandbyClass()}}" (click)="powerClicked()" title="Power">
+        <span class="material-symbols-outlined">power_settings_new</span>
       </button>
-      @if (hasDeviceDriver()) {
-        <button type="button" class="out-btn {{getStandbyClass()}}" (click)="powerClicked()" title="Power">
-          <span class="material-symbols-outlined">power_settings_new</span>
-        </button>
-      }
-      <button type="button" class="out-btn" (click)="volumeClicked($event)" title="Volume">
-        <span class="material-symbols-outlined">volume_up</span>
-      </button>
-    </div>
+    }
+    <button type="button" class="out-btn" (click)="volumeClicked($event)" title="Volume">
+      <span class="material-symbols-outlined">volume_up</span>
+    </button>
   </div>
-</div>
+</ng-template>

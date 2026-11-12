@@ -1,4 +1,86 @@
 @use "card-layout";
+@use "app-variables" as av;
+
+.track-list {
+    --track-leading: 3.5rem;
+    padding-inline: clamp(0px, 1.4vw, 1rem);
+}
+
+.track-list.same-album {
+    --track-leading: 2.5rem;
+}
+
+.track-grid {
+    display: grid;
+    grid-template-columns: var(--track-leading) minmax(0, 2fr)
+        var(--track-artist,) var(--track-genre,) var(--track-rating,) 3.75rem 2.75rem;
+    gap: clamp(0.4rem, 1.2vw, 1rem);
+    padding-inline: 0.5rem;
+}
+
+.track-row {
+    min-height: 3.25rem;
+    padding-block: 0.4rem;
+}
+
+.track-thumb {
+    width: var(--track-leading);
+    aspect-ratio: 1;
+}
+
+.track-options {
+    display: grid;
+    place-items: center;
+    min-height: 44px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:focus-visible {
+        outline: 2px solid var(--primary-color);
+        outline-offset: -2px;
+    }
+}
+
+@media (width >= av.$phone-width) {
+    .track-list {
+        --track-artist: minmax(0, 1fr);
+    }
+
+    .track-list.with-genre {
+        --track-genre: minmax(0, 0.85fr);
+    }
+}
+
+@media (width >= 1024px) {
+    .track-list.with-rating {
+        --track-rating: 8rem;
+    }
+}
+
+@media (width < av.$phone-width) {
+    .track-list {
+        --track-leading: 2.75rem;
+        padding-inline: 0;
+    }
+
+    .track-list.same-album {
+        --track-leading: 1.5rem;
+    }
+
+    .track-grid {
+        grid-template-columns: var(--track-leading) minmax(0, 1fr) 2.75rem 2.75rem;
+        padding-inline: 0;
+    }
+
+    .track-row {
+        padding-block: 0.3rem;
+    }
+
+    .track-list .list-col-header,
+    .track-quality {
+        display: none;
+    }
+}
 
 // The browse view provides the height of the pinned bar above these columns.
 .list-col-header {

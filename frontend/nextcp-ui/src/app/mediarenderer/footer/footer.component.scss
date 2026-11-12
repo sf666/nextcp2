@@ -1,11 +1,15 @@
 @use "custom_variables"as cv;
+@use "app-variables" as av;
 
-.footer {
+.footer,
+.player-sheet {
     // Single interactive accent for the whole bar — the app-wide cyan. Reserved
     // for meaning: progress fill, active toggles (shuffle/repeat), active output.
     --accent      : var(--primary-color);
     --accent-soft : var(--primary-color-reduced-2);
+}
 
+.footer {
     height         : var(--footer-height);
     width          : 100%;
     padding        : 0 1rem;
@@ -16,6 +20,17 @@
     border-top     : 1px solid var(--chrome-hair);
     box-shadow     : 0 -4px 24px rgba(0, 0, 0, 0.4);
     letter-spacing : 0.01rem;
+}
+
+.desktop-player {
+    display              : grid;
+    grid-template-columns: minmax(0, 3fr) minmax(15rem, 2fr) minmax(max-content, 3fr);
+    gap                  : clamp(0.5rem, 1.3vw, 1.25rem);
+    height               : 100%;
+}
+
+.mobile-player {
+    display: none;
 }
 
 //
@@ -216,7 +231,7 @@
     position   : relative;
     display    : flex;
     width      : 100%;
-    min-width  : 120px;
+    min-width  : 0;
     height     : 20px;
     align-items: center;
 }
@@ -311,6 +326,9 @@
 
 // Active-output pill: subtle secondary button, accent icon signals routing.
 .device-chip {
+    display       : inline-flex;
+    align-items   : center;
+    gap           : 0.5rem;
     max-width     : 16rem;
     padding       : 0.4rem 0.75rem;
     margin-right  : 0.5rem;
@@ -356,4 +374,157 @@
 
 .spacer {
     height: var(--footer-height);
+}
+
+@media (width < 1024px) {
+    .outputs .device-chip,
+    .quality-badge-slot {
+        display: none;
+    }
+}
+
+@media (width < av.$phone-width) {
+    .footer {
+        padding: 0 0.75rem env(safe-area-inset-bottom, 0px);
+        background: color-mix(in srgb, var(--ambient-color) 22%, #101017);
+    }
+
+    .desktop-player {
+        display: none;
+    }
+
+    .mobile-player {
+        display              : grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items          : center;
+        gap                  : 0.5rem;
+        height               : 100%;
+
+        .play-btn {
+            margin: 0;
+        }
+    }
+
+    .mini-progress {
+        position     : absolute;
+        inset        : 0 auto auto 0;
+        height       : 2px;
+        background   : var(--accent);
+        pointer-events: none;
+    }
+
+    .mini-track {
+        display              : grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items          : center;
+        gap                  : 0.6rem;
+        min-height           : 48px;
+        text-align           : start;
+        cursor               : pointer;
+        border-radius        : 8px;
+
+        &:focus-visible {
+            outline: 2px solid var(--accent);
+        }
+
+        .artwork {
+            width        : 44px;
+            height       : 44px;
+            border-radius: 7px;
+        }
+    }
+
+    .mini-meta {
+        display: grid;
+        gap    : 2px;
+    }
+
+    .expand-player {
+        color    : var(--glas-white-3);
+        font-size: 20px;
+    }
+}
+
+.player-sheet {
+    display          : flex;
+    flex-direction   : column;
+    align-items      : center;
+    gap              : clamp(0.65rem, 2dvh, 1.25rem);
+    padding          : 0.55rem clamp(0.85rem, 5vw, 2rem) calc(1rem + env(safe-area-inset-bottom, 0px));
+    border-radius    : 18px 18px 0 0;
+    border-top       : 1px solid rgba(255, 255, 255, 0.15);
+    background       : linear-gradient(160deg, color-mix(in srgb, var(--ambient-color) 42%, #171721), #101016 78%);
+    color            : var(--snow-white);
+
+    .ctrl-btn,
+    .out-group .out-btn {
+        width : 44px;
+        height: 44px;
+    }
+
+    .play-btn {
+        width : 54px;
+        height: 54px;
+    }
+
+    .progress-row {
+        margin: 0;
+    }
+
+    .time-range-slider {
+        &::-webkit-slider-thumb { opacity: 1; }
+        &::-moz-range-thumb { opacity: 1; }
+    }
+}
+
+.sheet-heading {
+    display              : grid;
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
+    align-items          : center;
+    width                : 100%;
+
+    h2 {
+        text-align : center;
+        font-size  : 0.95rem;
+        font-weight: 600;
+    }
+}
+
+.sheet-artwork {
+    width        : min(100%, 19rem, 38dvh);
+    aspect-ratio : 1;
+    object-fit   : cover;
+    border-radius: 10px;
+    box-shadow   : 0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+.sheet-track {
+    display   : grid;
+    gap       : 4px;
+    max-width : 100%;
+    text-align: center;
+
+    .title {
+        font-size: clamp(1.05rem, 5vw, 1.5rem);
+    }
+
+    quality-badge {
+        justify-self: center;
+    }
+}
+
+.sheet-outputs {
+    display              : grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items          : center;
+    gap                  : 0.6rem;
+    width                : 100%;
+    padding-top          : 0.6rem;
+    border-top           : 1px solid var(--chrome-hair);
+
+    .device-chip {
+        min-width   : 0;
+        min-height  : 44px;
+        margin-right: 0;
+    }
 }
