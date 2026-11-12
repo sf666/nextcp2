@@ -39,7 +39,7 @@ export enum PlaylistMode {
 export interface AddPlaylistDialogData {
   item?: ItemDto;
   container: ContainerDto;
-  sourcePlaylist?: ContainerDto;
+  sourceContainer?: ContainerDto;
 }
 
 @Component({
@@ -64,7 +64,7 @@ export class AddPlaylistComponent {
 
   PlaylistModeEnum: typeof PlaylistMode = PlaylistMode;
   addToContainer: ContainerDto;
-  readonly sourcePlaylist: ContainerDto | undefined;
+  readonly sourceContainer: ContainerDto | undefined;
 
   otherPlaylists = signal<ServerPlaylistDto[]>([]);
   /** Number of entries per playlist id, filled while the dialog is open. */
@@ -104,12 +104,12 @@ export class AddPlaylistComponent {
     const dtoGeneratorService = this.dtoGeneratorService;
 
     this.addToContainer = data.container;
-    this.sourcePlaylist = data.sourcePlaylist;
+    this.sourceContainer = data.sourceContainer;
     this.anchorDialog();
     if (data.item != undefined && data.item.objectID.length > 0) {
       this.musicItemToAdd.set(data.item);
       this.setMode(PlaylistMode.Add);
-    } else if (this.sourcePlaylist) {
+    } else if (this.sourceContainer) {
       this.setMode(PlaylistMode.Add);
     } else {
       this.setMode(PlaylistMode.Create);
@@ -126,7 +126,7 @@ export class AddPlaylistComponent {
   }
 
   private matchesDestination(playlist: ServerPlaylistDto): boolean {
-    return playlist.playlistId !== this.sourcePlaylist?.id &&
+    return playlist.playlistId !== this.sourceContainer?.id &&
       playlist.playlistName.toLowerCase().includes(this.playlistFilter().toLowerCase());
   }
 
@@ -180,7 +180,7 @@ export class AddPlaylistComponent {
   }
 
   get addActionLabel(): string {
-    return this.sourcePlaylist ? 'add to playlist' : 'add track';
+    return this.sourceContainer ? 'add to playlist' : 'add track';
   }
 
   getRecentPlaylistsCount(): number {
@@ -196,12 +196,12 @@ export class AddPlaylistComponent {
   }
 
   addTo(serverPlaylist: ServerPlaylistDto) {
-    if (this.sourcePlaylist?.id === serverPlaylist.playlistId) {
+    if (this.sourceContainer?.id === serverPlaylist.playlistId) {
       return;
     }
 
     this.serverPlaylistService.addSongToServerPlaylist(
-      this.sourcePlaylist?.id ?? this.musicItemToAdd().objectID,
+      this.sourceContainer?.id ?? this.musicItemToAdd().objectID,
       serverPlaylist.playlistId,
     );
     this.close();

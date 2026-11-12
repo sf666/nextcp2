@@ -56,7 +56,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   /** Folders carry their like here instead of next to the title. */
   canLike = false;
   isLiked = false;
-  showAddToPlaylist: boolean;
+  private readonly allowContainerQueue: boolean;
   /** How many folders this container holds; albums and tracks do not count. */
   private childFolderCount = 0;
 
@@ -81,7 +81,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
 
     this._matDialogRef = _matDialogRef;
     this.addToPlaylistOutput = data.addToPlaylistOutput;
-    this.showAddToPlaylist = data.showAddToPlaylist ?? true;
+    this.allowContainerQueue = data.showAddToPlaylist ?? true;
     this.currentContainer = data.currentContainer;
     this.listingContainerId =
       data.listingContainerId ?? data.currentContainer.id;
@@ -103,26 +103,30 @@ export class DisplayHeaderOptionsComponent implements OnInit {
     );
   }
 
-  addToPlaylist(): void {
-    this.addToPlaylistOutput.emit(this.currentContainer);
-    this.close();
-  }
-
-  addPlaylistToQueue(): void {
-    this.playlistService.addPlaylistToQueue(this.currentContainer);
+  addToQueue(): void {
+    if (this.isPlaylist()) {
+      this.playlistService.addPlaylistToQueue(this.currentContainer);
+    } else {
+      this.addToPlaylistOutput.emit(this.currentContainer);
+    }
     this.close();
   }
 
   openAddToPlaylistDialog(): void {
     this._matDialogRef.afterClosed().subscribe(() => {
-      this.defaultPlaylistService.openPlaylistToPlaylistDialog(this.currentContainer);
+      this.defaultPlaylistService.openContainerToPlaylistDialog(this.currentContainer);
     });
     this.close();
   }
 
   showAddToServerPlaylist(): boolean {
     const server = this.deviceService.selectedMediaServerDevice();
-    return server.extendedApi && server.udn === this.currentContainer.mediaServerUDN;
+    return (
+      (this.isPlaylist() || this.isFolder()) &&
+      this.currentContainer.id !== '0' &&
+      server.extendedApi &&
+      server.udn === this.currentContainer.mediaServerUDN
+    );
   }
 
   /**
@@ -145,9 +149,12 @@ export class DisplayHeaderOptionsComponent implements OnInit {
     return this.isAlbum() ? 'album' : 'item';
   }
 
-  /** Player rows exist for playlists and folders only - no header without rows. */
+  showAddToQueue(): boolean {
+    return this.isPlaylist() || this.allowContainerQueue;
+  }
+
   showPlayerSection(): boolean {
-    return this.isPlaylist() || (this.isFolder() && this.mediaPlayerService.mediaPlayerExists());
+    return this.showAddToQueue() || (this.isFolder() && this.mediaPlayerService.mediaPlayerExists());
   }
 
   showAddRadioStation(): boolean {

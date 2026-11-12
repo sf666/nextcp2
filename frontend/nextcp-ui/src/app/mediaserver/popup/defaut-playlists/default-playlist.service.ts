@@ -38,8 +38,8 @@ export class DefaultPlaylistService {
     return this.openPlaylistDialogWithBackdrop({ item, container: folder });
   }
 
-  public openPlaylistToPlaylistDialog(sourcePlaylist: ContainerDto): MatDialogRef<AddPlaylistComponent> {
-    return this.openPlaylistDialogWithBackdrop({ container: sourcePlaylist, sourcePlaylist });
+  public openContainerToPlaylistDialog(sourceContainer: ContainerDto): MatDialogRef<AddPlaylistComponent> {
+    return this.openPlaylistDialogWithBackdrop({ container: sourceContainer, sourceContainer });
   }
 
   private openPlaylistDialogWithBackdrop(data: AddPlaylistDialogData): MatDialogRef<AddPlaylistComponent> {

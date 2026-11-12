@@ -179,14 +179,14 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 	@PostMapping("/addToServerPlaylist")
 	public void addToServerPlaylist(@RequestBody ServerPlaylistEntry addRequest) {
 		try {
-			log.info("adding song id {} to playlist with id {}", addRequest.songObjectId, addRequest.playlistObjectId);
+			log.info("adding object id {} to playlist with id {}", addRequest.songObjectId, addRequest.playlistObjectId);
 			getExtendedMediaServerByUdn(addRequest.serverUdn).addSongToPlaylist(addRequest.songObjectId, addRequest.playlistObjectId);
-			toast.publishSuccessMessage(null, "playlist", "song added to playlist");
+			toast.publishSuccessMessage(null, "playlist", "entry added to playlist");
 			addPlaylistToRecent(addRequest.serverUdn, addRequest.playlistObjectId);
 			mediaServerSseEvents.mediaServerRecentPlaylistChanged(getRecentServerPlaylists(addRequest.serverUdn));
 		} catch (Exception e) {
-			log.warn("adding song to server playlist", e);
-			throw failed("Cannot add the song to the playlist", e);
+			log.warn("adding entry to server playlist", e);
+			throw failed("Cannot add the entry to the playlist", e);
 		}
 	}
 
