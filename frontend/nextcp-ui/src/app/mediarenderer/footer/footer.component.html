@@ -28,10 +28,7 @@
 
     <div id="right-section" class="outputs flex items-center justify-end">
       <ng-container [ngTemplateOutlet]="rendererChip"></ng-container>
-      <button type="button" class="out-btn renderer-compact" (click)="rendererClicked($event)" title="Media renderer">
-        <span class="material-symbols-outlined">speaker</span>
-      </button>
-      <ng-container [ngTemplateOutlet]="outputControls"></ng-container>
+      <ng-container [ngTemplateOutlet]="outputControls" [ngTemplateOutletContext]="{ compactRenderer: true }"></ng-container>
     </div>
   </div>
 
@@ -142,8 +139,13 @@
   </button>
 </ng-template>
 
-<ng-template #outputControls>
+<ng-template #outputControls let-compactRenderer="compactRenderer">
   <div class="out-group">
+    @if (compactRenderer) {
+      <button type="button" class="out-btn renderer-compact" (click)="rendererClicked($event)" title="Media renderer">
+        <span class="material-symbols-outlined" aria-hidden="true">speaker</span>
+      </button>
+    }
     <button type="button" class="out-btn" (click)="serverClicked($event)" title="Media server">
       <span class="material-symbols-outlined">dns</span>
     </button>
