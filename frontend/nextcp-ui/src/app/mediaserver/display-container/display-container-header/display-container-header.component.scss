@@ -406,25 +406,6 @@
     z-index   : 5;
 }
 
-// Short viewports run a 210px header. Its band cannot hold the metadata plus a
-// full-height action row, so the capsules and the block's bottom margin give way
-// rather than the layout.
-@media (max-height: 800px) {
-    .info-wrap {
-        margin-bottom: 0;
-    }
-
-    .caps-action .caps-cell {
-        width : 52px;
-        height: 42px;
-    }
-
-    .caps-tools .caps-cell {
-        width : 42px;
-        height: 36px;
-    }
-}
-
 .button-flex-container {
     display    : flex;
     align-items: center;
@@ -1150,6 +1131,145 @@
 
 .dc-compact-bar .bar-actions {
     flex-shrink: 0;
+}
+
+@container app-viewport (height <= 800px) {
+    .info-wrap {
+        margin-bottom: 0;
+    }
+
+    .caps-action .caps-cell {
+        width : 52px;
+        height: 42px;
+    }
+
+    .caps-tools .caps-cell {
+        width : 42px;
+        height: 36px;
+    }
+}
+
+@container app-viewport (height < #{av.$compact-viewport-height}) {
+    // Keep the live controls in the sticky header at every scroll position.
+    #outer {
+        position  : sticky;
+        top       : 0;
+        flex      : none;
+        background: var(--chrome-bg);
+        box-shadow: inset 0 -1px var(--chrome-hair);
+    }
+
+    .dc-compact-bar,
+    .bg-img-header,
+    .search-bloom,
+    .eyebrow,
+    .meta-line,
+    .middle-spacer {
+        display: none;
+    }
+
+    #middle_wrapper,
+    .header-content {
+        min-width: 0;
+    }
+
+    #outer .top-img-container .img-top {
+        min-width    : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
+        min-height   : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
+        max-width    : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
+        max-height   : calc(var(--top-header-Height) - var(--top-header-Vertical-Indent));
+        margin-inline: 12px;
+    }
+
+    #outer .search-symbol .material-symbols-outlined {
+        font-size: 24px;
+    }
+
+    .right-section {
+        flex-direction: row;
+        align-items   : center;
+        padding-right : 1rem;
+    }
+
+    .info-wrap {
+        min-width: 0;
+        margin-inline-end: 0.5rem;
+
+        > * {
+            min-width: 0;
+        }
+    }
+
+    .title-row {
+        gap           : 0.5rem;
+        padding-bottom: 0;
+    }
+
+    .title,
+    .search-info .search-query {
+        font-size     : 1.25rem;
+        line-height   : 1.2;
+        overflow     : hidden;
+        text-overflow: ellipsis;
+        white-space  : nowrap;
+    }
+
+    .subtitle {
+        margin-top: 2px;
+        font-size : 0.85rem;
+    }
+
+    .header-bottom-row {
+        flex       : 1 0 48%;
+        min-width  : min-content;
+        margin-top : 0;
+        align-items: center;
+    }
+
+    .header-tools:not(:has(.tool-options)) {
+        min-width: 0;
+    }
+
+    .button-row {
+        margin-top: 0;
+    }
+
+    .action-caps + .action-caps {
+        margin-left: 0.4rem;
+    }
+
+    .caps-action .caps-cell,
+    .caps-tools .caps-cell {
+        width : 40px;
+        height: 40px;
+    }
+
+    .is-search .right-section {
+        flex-direction : column;
+        align-items    : stretch;
+        justify-content: center;
+        min-height     : var(--top-header-Height);
+        max-height     : none;
+        padding-block  : 6px;
+        gap            : 4px;
+    }
+
+    .is-search .header-bottom-row {
+        flex: none;
+    }
+
+    .search-tabs {
+        margin-top     : 0;
+        max-height     : none;
+        overflow-x     : auto;
+        scrollbar-width: none;
+    }
+
+    .search-tab {
+        gap      : 0.3rem;
+        padding  : 0.25rem 0.4rem;
+        font-size: 0.8rem;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

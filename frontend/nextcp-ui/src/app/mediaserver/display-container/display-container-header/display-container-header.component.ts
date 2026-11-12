@@ -214,8 +214,14 @@ export class DisplayContainerHeaderComponent implements OnInit {
       this.scrollParent?.addEventListener('scroll', this.onScroll, {
         passive: true,
       });
+      const hero = this.heroEl();
+      const resizeObserver = hero ? new ResizeObserver(this.onScroll) : null;
+      if (hero) {
+        resizeObserver?.observe(hero);
+      }
       this.destroyRef.onDestroy(() => {
         this.scrollParent?.removeEventListener('scroll', this.onScroll);
+        resizeObserver?.disconnect();
       });
     });
   }

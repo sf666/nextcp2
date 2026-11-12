@@ -1,3 +1,4 @@
+@use "app-variables" as av;
 
 // The hero's height, declared once here because two things have to agree on it:
 // the header itself, and the offsets that stay glued to its bottom edge. When
@@ -16,7 +17,7 @@
     --dc-hero-indent: 44px;
 }
 
-@media (max-height: 800px) {
+@container app-viewport (height <= 800px) {
     #display-container-component-top-id {
         --dc-hero-max   : 210px;
         --dc-hero-indent: 80px;
@@ -27,8 +28,7 @@
     }
 }
 
-// The browse header is not pinned - it scrolls away and a compact bar inside it takes the top.
-// The sticky track-list column header therefore parks under that bar, whose height is constant.
+// The track column headings pin below whichever browse bar stays at the top.
 #display-container-main-content.with-sticky-header {
     --dc-sticky-top: var(--dc-hero-min, 104px);
 }
@@ -60,6 +60,31 @@
 
 #display-container-main-content > div > .type-filter + div > .section-heading {
     margin-top: 0;
+}
+
+@container app-viewport (height < #{av.$compact-viewport-height}) {
+    #display-container-component-top-id {
+        --dc-hero-max   : 76px;
+        --dc-hero-min   : var(--dc-hero-max);
+        --dc-hero-indent: 24px;
+    }
+
+    #display-container-component-top-id.is-search {
+        --dc-hero-max   : 112px;
+        --dc-hero-indent: 60px;
+    }
+
+    #display-container-main-content > div > .type-filter {
+        margin-block-end: 0.5rem;
+    }
+
+    #display-container-main-content .section-heading {
+        margin-block: 0.75rem 0.5rem;
+    }
+
+    #head_browse_result_general_container_ID:only-child > .section-heading {
+        display: none;
+    }
 }
 
 .audio-heading {

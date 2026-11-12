@@ -263,7 +263,6 @@ export class ContainerTileComponent {
   );
 
   private scrollParent: HTMLElement | null = null;
-  private resizeObs: ResizeObserver | null = null;
   private rafScheduled = false;
   // Identity of the listing the window currently shows, so that a page being
   // appended can be told apart from a different list being browsed.
@@ -290,13 +289,17 @@ export class ContainerTileComponent {
       this.scheduleUpdate();
     });
 
-    // (Re)attach a ResizeObserver on the window grid whenever it appears —
-    // re-measures cols + rowH when the viewport width (column count) changes.
-    effect(() => {
+    // Recompute the window when either the tile geometry or the visible scroll area changes.
+    effect((onCleanup) => {
       const grid = this.vgrid()?.nativeElement;
-      if (grid && !this.resizeObs && typeof ResizeObserver !== 'undefined') {
-        this.resizeObs = new ResizeObserver(() => this.scheduleUpdate(true));
-        this.resizeObs.observe(grid);
+      if (grid && typeof ResizeObserver !== 'undefined') {
+        const resizeObserver = new ResizeObserver(() => this.scheduleUpdate(true));
+        resizeObserver.observe(grid);
+        const parent = document.getElementById('mainContent');
+        if (parent) {
+          resizeObserver.observe(parent);
+        }
+        onCleanup(() => resizeObserver.disconnect());
       }
     });
 
@@ -352,7 +355,6 @@ export class ContainerTileComponent {
 
     this.destroyRef.onDestroy(() => {
       this.scrollParent?.removeEventListener('scroll', this.onScroll);
-      this.resizeObs?.disconnect();
     });
   }
 

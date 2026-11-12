@@ -34,6 +34,9 @@
 .app-root {
     background-color: rgba(0, 0, 0, 1);
     display         : flex;
+    // Height queries need to follow retractable browser toolbars as the scroll area does.
+    height          : 100dvh;
+    container       : app-viewport / size;
 }
 
 // Sidebar tint — the far-left edge sits over the darkest part of the album

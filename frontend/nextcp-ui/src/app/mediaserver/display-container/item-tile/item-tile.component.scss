@@ -1,13 +1,8 @@
 @use "card-layout";
 
-// Sticky column header. Sits just below the collapsing browse header, which
-// publishes its expanded/collapsed heights as --dc-sticky-max/-min and writes
-// the current collapse progress (0..1) straight onto this element. Both bounds
-// default to 0, so without a browse header this simply sticks to the top.
+// The browse view provides the height of the pinned bar above these columns.
 .list-col-header {
     position: sticky;
-    // Parks under the pinned browse bar, whose height is fixed. The hero above is not sticky, so by
-    // the time these labels reach the top the bar is the only thing there.
     top     : var(--dc-sticky-top, 0px);
     z-index : 10;
     // No fill — just bold labels over the living canvas with a thin bottom rule.
