@@ -197,7 +197,7 @@ export class ServerPlaylistService {
       playlistObjectId: playlistId,
     };
     let ret = this.httpService.post(this.baseUri, uri, req);
-    ret.subscribe();
+    ret.subscribe({ error: () => { /* HttpService already displays the error. */ } });
     return ret;
   }
 

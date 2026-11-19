@@ -38,6 +38,8 @@ import nextcp.service.WebRadioNowPlayingService;
 import nextcp.upnp.device.DeviceRegistry;
 import nextcp.upnp.device.mediaserver.ServerFeature;
 import nextcp.upnp.device.mediaserver.UmsServerDevice;
+import nextcp.util.BackendException;
+import nextcp.util.FailureReason;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
@@ -186,6 +188,10 @@ public class RestMediaServerPlaylistService extends BaseRestService {
 			mediaServerSseEvents.mediaServerRecentPlaylistChanged(getRecentServerPlaylists(addRequest.serverUdn));
 		} catch (Exception e) {
 			log.warn("adding entry to server playlist", e);
+			if (FailureReason.of(e).contains("The container has no persistent file path or URL")) {
+				throw new BackendException(BackendException.GENERIC_ERROR,
+					"Cannot add this album or folder to the playlist because the media server cannot store a link to it. Try adding its tracks individually.", e);
+			}
 			throw failed("Cannot add the entry to the playlist", e);
 		}
 	}
