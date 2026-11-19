@@ -162,7 +162,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   showAddToServerPlaylist(): boolean {
     const server = this.deviceService.selectedMediaServerDevice();
     return (
-      (this.isPlaylist() || this.isFolder()) &&
+      (this.isPlaylist() || this.isFolder() || this.isAlbum()) &&
       this.currentContainer.id !== '0' &&
       server.extendedApi &&
       server.udn === this.currentContainer.mediaServerUDN

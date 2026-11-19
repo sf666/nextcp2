@@ -1,7 +1,9 @@
+import { ConfigurationService } from './../configuration.service';
 import { DeviceService } from './../device.service';
-import { Subject } from 'rxjs';
+import { distinctUntilChanged, map, merge, startWith, Subject, switchMap } from 'rxjs';
 import { HttpService } from './../http.service';
 import { Injectable, signal, inject } from '@angular/core';
+import { SseService } from './../sse/sse.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,15 +12,28 @@ export class MediaPlayerService {
   private deviceService = inject(DeviceService);
   private httpService = inject(HttpService);
 
-  baseUri = 'MediaRendererService';
+  baseUri = '/MediaRendererService';
 
   public mediaPlayerExists = signal<boolean>(false);
 
   constructor() {
-    this.mediaPlayerExistsRequest().subscribe((status) => {
-      console.log('mediaPlayerExists : ' + status);
-      this.mediaPlayerExists.set(status);
-    });
+    const configService = inject(ConfigurationService);
+    const sseService = inject(SseService);
+    const mediaPlayerSettingChanged$ = sseService.configChanged$.pipe(
+      map((config) => config.applicationConfig?.mediaPlayerEnabled ?? true),
+      distinctUntilChanged(),
+    );
+
+    merge(
+      configService.applicationConfigChanged$,
+      mediaPlayerSettingChanged$,
+      sseService.connectionOpened$,
+    )
+      .pipe(
+        startWith(undefined),
+        switchMap(() => this.mediaPlayerExistsRequest()),
+      )
+      .subscribe((status) => this.mediaPlayerExists.set(status));
   }
 
   public mediaPlayerExistsRequest(): Subject<boolean> {
