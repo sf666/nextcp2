@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
+import { finalize } from 'rxjs';
 import { ContainerDto } from 'src/app/service/dto';
 import { DeviceService } from 'src/app/service/device.service';
 import { ServerFeature } from 'src/app/service/server-feature';
@@ -75,7 +76,7 @@ export class ContainerTileComponent {
   private pressStart: { x: number; y: number } | undefined;
   private pressHandled = false;
 
-  private canLike(): boolean {
+  protected canLike(): boolean {
     return this.deviceService.hasFeature(ServerFeature.ALBUM_LIKES);
   }
 
@@ -91,6 +92,7 @@ export class ContainerTileComponent {
   // Ratings changed in this view. The browse result DTOs are plain objects, so
   // mutating them would not repaint an OnPush component.
   private ratingOverrides = signal<Map<string, number | undefined>>(new Map());
+  private readonly pendingRatings = new Set<string>();
 
   /**
    * What this container is rated right now, as far as this view knows.
@@ -109,6 +111,11 @@ export class ContainerTileComponent {
 
   isLiked(container: ContainerDto): boolean {
     return this.effectiveRating(container) === RATING_LIKED;
+  }
+
+  protected toggleLikeFromTile(event: MouseEvent, container: ContainerDto): void {
+    event.stopPropagation();
+    this.toggleLike(container);
   }
 
   onPressStart(event: PointerEvent, container: ContainerDto): void {
@@ -200,11 +207,12 @@ export class ContainerTileComponent {
    * dislike. Same two states as everywhere else in the app.
    */
   private toggleLike(container: ContainerDto): void {
-    if (!this.canLike()) {
+    if (!this.canLike() || this.pendingRatings.has(container.id)) {
       return;
     }
     const previousRating = this.effectiveRating(container);
     const newRating = this.isLiked(container) ? undefined : RATING_LIKED;
+    this.pendingRatings.add(container.id);
     this.ratingService
       .setResourceRating(
         container.id,
@@ -213,6 +221,7 @@ export class ContainerTileComponent {
         container.parentID,
         container.objectClass,
       )
+      .pipe(finalize(() => this.pendingRatings.delete(container.id)))
       .subscribe({
         next: () => {
           // Reflect the new state on the tile without re-browsing.

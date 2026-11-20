@@ -17,8 +17,14 @@
       <img src="{{albumArt.tile(container.albumartUri, container.albumartUriMedium)}}"
            alt="{{container.title}}" class="imgContainer"
            loading="lazy" decoding="async">
-      @if (isLiked(container)) {
-        <span class="likeBadge material-symbols-outlined" aria-label="Liked">favorite</span>
+      @if (canLike() && (isAlbum(container) || isLiked(container))) {
+        <button type="button" class="tileLike" (click)="toggleLikeFromTile($event, container)"
+                (pointerdown)="$event.stopPropagation()"
+                [attr.aria-pressed]="isLiked(container)"
+                [attr.aria-label]="'Favourite ' + container.title"
+                [title]="isLiked(container) ? 'Remove from favourites' : 'Add to favourites'">
+          <span class="material-symbols-outlined" aria-hidden="true">favorite</span>
+        </button>
       }
       <!--
         Makes the options menu findable. On the artwork, like Roon's overflow

@@ -20,14 +20,15 @@ import { DisplayContainerComponent } from '../../mediaserver/display-container/d
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { FeatureHintComponent } from '../../util/comp/feature-hint/feature-hint.component';
 import { ServerFeature } from '../../service/server-feature';
-import { toObservable } from '@angular/core/rxjs-interop';
+import { CdsUpdateService } from '../../service/cds-update.service';
+import { RATING_LIKED } from '../../service/rating-service.service';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'myAlbums',
   templateUrl: './my-album.component.html',
   styleUrls: ['./my-album.component.scss'],
   providers: [ContentDirectoryService],
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NavBarComponent, DisplayContainerComponent, FeatureHintComponent],
 })
@@ -37,12 +38,23 @@ export class MyAlbumComponent implements OnInit {
   layoutService = inject(LayoutService);
   private deviceService = inject(DeviceService);
   contentDirectoryService = inject(ContentDirectoryService);
+  private myAlbumsRootId?: string;
 
   constructor() {
     console.log('constructor call : MyAlbumComponent');
     toObservable(this.deviceService.selectedMediaServerDevice).subscribe(
       (data) => this.mediaServerChanged(data),
     );
+    inject(CdsUpdateService).itemRatingChanged$
+      .pipe(takeUntilDestroyed())
+      .subscribe(({ objectID, rating }) => {
+        const directory = this.contentDirectoryService;
+        if (directory.currentContainerID === this.myAlbumsRootId &&
+            rating !== RATING_LIKED &&
+            directory.albumList_().some((album) => album.id === objectID)) {
+          directory.refreshCurrentContainer();
+        }
+      });
   }
 
   mediaServerChanged(data: MediaServerDto): void {
@@ -65,11 +77,10 @@ export class MyAlbumComponent implements OnInit {
         )
         // This view's top level is the MyMusic node — register it so the
         // breadcrumb shows just the home icon here instead of an ellipsis.
-        .subscribe((data) =>
-          this.contentDirectoryService.setBrowseRoot(
-            data?.currentContainer?.id,
-          ),
-        );
+        .subscribe((data) => {
+          this.myAlbumsRootId = data?.currentContainer?.id;
+          this.contentDirectoryService.setBrowseRoot(this.myAlbumsRootId);
+        });
     }
   }
 
