@@ -20,6 +20,7 @@ import {
   matchesTextFilter,
 } from 'src/app/util/browse-filter';
 import {
+  afterNextRender,
   Component,
   computed,
   linkedSignal,
@@ -55,7 +56,6 @@ type BrowseType = 'all' | 'playlist' | 'album' | 'artist' | 'track' | 'radio' | 
   providers: [
     { provide: CdsBrowsePathService, useClass: CdsBrowsePathService },
   ], // non singleton injections
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatButtonModule,
@@ -238,6 +238,7 @@ export class DisplayContainerComponent {
     );
   }
   private readonly destroyRef = inject(DestroyRef);
+  protected readonly showBackToTop = signal(false);
   private subscribedCds: ContentDirectoryService | null = null;
   private restoreSub?: Subscription;
   /**
@@ -250,6 +251,26 @@ export class DisplayContainerComponent {
   private keepScrollTop: number | null = null;
 
   constructor() {
+    afterNextRender(() => {
+      const parent = this.scrollParent();
+      if (!parent) {
+        return;
+      }
+      let threshold = parent.clientHeight;
+      const update = () => this.showBackToTop.set(parent.scrollTop >= threshold);
+      const observer = new ResizeObserver(() => {
+        threshold = parent.clientHeight;
+        update();
+      });
+      observer.observe(parent);
+      parent.addEventListener('scroll', update, { passive: true });
+      this.destroyRef.onDestroy(() => {
+        parent.removeEventListener('scroll', update);
+        observer.disconnect();
+      });
+      update();
+    });
+
     // Restore scroll after a browse settles. browseFinished$ fires once per
     // loaded page, so debounce until the last page has arrived — otherwise the
     // restore target (e.g. a mid-list album) may not be loaded yet. Prefer the
@@ -333,6 +354,19 @@ export class DisplayContainerComponent {
   /** The page's scroll container; every browse view lives inside it. */
   private scrollParent(): HTMLElement | null {
     return document.getElementById('mainContent');
+  }
+
+  protected backToTop(event: MouseEvent, browseTop: HTMLElement): void {
+    const parent = this.scrollParent();
+    if (parent) {
+      parent.scrollTop = 0;
+    }
+    if (this.keepScrollTop !== null) {
+      this.keepScrollTop = 0;
+    }
+    if (event.detail === 0) {
+      browseTop.focus({ preventScroll: true });
+    }
   }
 
   private restoreScrollTop(top: number): void {

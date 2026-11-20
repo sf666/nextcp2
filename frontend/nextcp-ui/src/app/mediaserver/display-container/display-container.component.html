@@ -7,7 +7,7 @@
 <!-- ############################################################## -->
 
 <!-- Top browsing element: Displays image and information about current container -->
-<div id="display-container-component-top-id" class="flex flex-col w-full"
+<div id="display-container-component-top-id" #browseTop tabindex="-1" class="flex flex-col w-full"
   [class.is-search]="isSearchResult()">
 @if (headerVisible()) {
     <display-container-header
@@ -26,6 +26,15 @@
     (shuffleClicked)="shufflePlaylist($event)"
     (addToPlaylistClicked)="addPlaylist($event)"
   />
+}
+
+@if (showBackToTop()) {
+  <div class="browse-back-to-top" [class.below-header]="headerVisible()">
+    <button type="button" aria-label="Back to top" title="Back to top"
+      (click)="backToTop($event, browseTop)">
+      <span class="material-symbols-outlined" aria-hidden="true">arrow_upward</span>
+    </button>
+  </div>
 }
 
 <!--

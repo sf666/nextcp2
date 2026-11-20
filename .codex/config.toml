@@ -4,3 +4,6 @@ args = [
     "-y",
     "chrome-devtools-mcp@latest",
 ]
+
+[mcp_servers.chrome-devtools.tools.new_page]
+approval_mode = "approve"

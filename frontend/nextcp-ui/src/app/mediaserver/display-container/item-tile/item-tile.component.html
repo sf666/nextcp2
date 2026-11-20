@@ -26,13 +26,15 @@
         }
 
         <!-- Track Rows -->
-        <div class="mt-1">
-        @for (item of musicTracks(); track item.objectID) {
-            @if (allTracksSameAlbum() && !allTracksSameDisc() && !isSearchResult()) {
-                @if (newDiscLabel(item)) {
-                    <div class="text-sm font-semibold text-gray-400 mt-6 mb-3">{{getDiscLabel(item)}}</div>
-                }
-            }
+        <div class="mt-1" [browseWindow]="trackRows()" [browseWindowEnabled]="windowed()"
+             #listWindow="browseWindow" [class.windowed-list]="listWindow.active()">
+        <div [style.height.px]="listWindow.before()"></div>
+        <div data-window-rows>
+        @for (row of listWindow.visibleItems(); track row.key) {
+        @if ('disc' in row) {
+            <div class="disc-label text-sm font-semibold text-gray-400 mt-6 mb-3">Disk {{row.disc}}</div>
+        } @else {
+        @let item = row.item;
 
         <!-- Row for Same Album View -->
         @if (allTracksSameAlbum()) {
@@ -97,7 +99,7 @@
             <!-- Album Art (with now-playing overlay) -->
             <div id="col_1_img_{{item.objectID}}" class="playing-art-wrap" (click)="playItem(item)">
                 <img class="track-thumb rounded-md object-cover shadow-md cursor-pointer transition-all"
-                     src="{{item.albumArtUrl}}">
+                     src="{{item.albumArtUrl}}" loading="lazy" decoding="async">
                 @if (isPlayingItem(item)) {
                     <span class="playing-art-overlay" aria-label="Playing">
                         <span class="playing-eq">
@@ -158,16 +160,23 @@
         </div>
         }
         }
+        }
+        </div>
+        <div [style.height.px]="listWindow.after()"></div>
         </div>
     </div>
     } @else { <!-- CARD Layout -->
-    <div id="head_browse_result_items_mixed_titles_ID" class="grid grid-cols-2 mt-6 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-6 p-4">
-        @for (item of musicTracks(); track item.objectID) {
+    <div class="mt-6 w-full p-4">
+      <div [browseWindow]="musicTracks()" [browseWindowEnabled]="windowed()"
+           #cardWindow="browseWindow" [class.windowed-cards]="cardWindow.active()">
+      <div [style.height.px]="cardWindow.before()"></div>
+      <div id="head_browse_result_items_mixed_titles_ID" data-window-rows class="grid grid-cols-2 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-6">
+        @for (item of cardWindow.visibleItems(); track item.objectID) {
         <div id="{{item.objectID}}" class="group flex flex-col cursor-pointer">
             <div class="relative overflow-hidden rounded-xl shadow-lg transition-transform duration-300 hover:scale-105">
                 <img class="w-full aspect-square object-cover" 
                      src="{{item.albumArtUrl}}" 
-                     alt="{{item.title}}">
+                     alt="{{item.title}}" loading="lazy" decoding="async">
                 <!--
                   The buttons carry a plain translucent fill, not a backdrop
                   blur: they exist on every card in the grid, and a blur there
@@ -193,12 +202,15 @@
             </div>
             <div class="mt-3 px-1">
                 <h3 class="text-white font-medium text-sm truncate group-hover:text-aqua transition-colors">{{item.title}}</h3>
-                @if (artistLabel(item)) {
-                    <p class="text-gray-400 text-xs truncate mt-1" [class.italic]="isSubstituteArtist(item)">{{artistLabel(item)}}</p>
+                @if (artistLabel(item) || cardWindow.active()) {
+                    <p class="card-artist text-gray-400 text-xs truncate mt-1" [class.italic]="isSubstituteArtist(item)">{{artistLabel(item)}}</p>
                 }
             </div>
         </div>
         }
+      </div>
+      <div [style.height.px]="cardWindow.after()"></div>
+      </div>
     </div>
     }
 </div>

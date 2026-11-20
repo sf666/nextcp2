@@ -2,9 +2,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   input,
   output,
   inject,
+  untracked,
 } from '@angular/core';
 import { ContentDirectoryService } from 'src/app/service/content-directory.service';
 import { ContainerDto, ItemDto } from 'src/app/service/dto';
@@ -18,12 +20,16 @@ import { QualityBadgeComponent } from 'src/app/util/comp/quality-badge/quality-b
 import { LiveBadgeComponent } from 'src/app/util/comp/live-badge/live-badge.component';
 import { isBroadcastItem } from 'src/app/util/broadcast-item';
 import { RendererService } from 'src/app/service/renderer.service';
+import { BrowseWindowDirective } from '../browse-window.directive';
+
+const WINDOW_THRESHOLD = 100;
+
+type TrackRow = { key: string; item: ItemDto } | { key: string; disc: string };
 
 @Component({
   selector: 'item-tile',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [StarRatingComponent, QualityBadgeComponent, LiveBadgeComponent],
+  imports: [StarRatingComponent, QualityBadgeComponent, LiveBadgeComponent, BrowseWindowDirective],
   templateUrl: './item-tile.component.html',
   styleUrl: './item-tile.component.scss',
 })
@@ -65,7 +71,43 @@ export class ItemTileComponent {
         ?.id === 'search_result',
   );
 
-  lastDiscLabel = '';
+  protected readonly windowed = computed(() => {
+    const listing = this.contentDirectoryService().currentContainerList();
+    return listing.currentContainer?.objectClass?.startsWith('object.container.playlistContainer') === true &&
+      Math.max(listing.totalMatches ?? 0, this.allMusicTracks().length) >= WINDOW_THRESHOLD;
+  });
+
+  protected readonly trackRows = computed(() => {
+    const withDiscs = this.allTracksSameAlbum() && !this.allTracksSameDisc() && !this.isSearchResult();
+    const rows: TrackRow[] = [];
+    let lastDisc = '';
+    for (const item of this.musicTracks()) {
+      const disc = item.numberOfThisDisc;
+      if (withDiscs && disc && disc !== lastDisc) {
+        rows.push({ key: 'disc:' + item.objectID, disc });
+      }
+      lastDisc = disc;
+      rows.push({ key: item.objectID, item });
+    }
+    return rows;
+  });
+
+  constructor() {
+    // Keep the filter in view and start at the first match when narrowing a long playlist.
+    let initialized = false;
+    effect(() => {
+      this.quickSearchString();
+      this.selectedGenres();
+      this.ratingFilter();
+      if (initialized && untracked(this.windowed)) {
+        const parent = document.getElementById('mainContent');
+        if (parent) {
+          parent.scrollTop = 0;
+        }
+      }
+      initialized = true;
+    });
+  }
 
   playItem(item: ItemDto) {
     console.log('playitem clicked : ' + item.title);
@@ -229,22 +271,4 @@ export class ItemTileComponent {
     return matchByUrl || matchByObjectId;
   }
 
-  // Disc Label support
-  // Audio items must be already sorted.
-  // TODO : sort items in UI
-
-  getDiscLabel(item: ItemDto): string {
-    if (item.numberOfThisDisc !== this.lastDiscLabel) {
-      this.lastDiscLabel = item.numberOfThisDisc;
-      return `Disk ${item.numberOfThisDisc}`;
-    }
-    return '';
-  }
-
-  newDiscLabel(item: ItemDto): boolean {
-    if (item.numberOfThisDisc !== this.lastDiscLabel) {
-      return true;
-    }
-    return false;
-  }
 }

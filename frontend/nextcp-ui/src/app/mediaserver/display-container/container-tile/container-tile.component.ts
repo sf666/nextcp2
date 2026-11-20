@@ -25,6 +25,7 @@ import {
 import { filterContainers, splitGenres } from 'src/app/util/browse-filter';
 import { AlbumArtService } from 'src/app/util/album-art.service';
 import { DisplayHeaderOptionsComponent } from '../../popup/display-header-options/display-header-options.component';
+import { browseRowRange } from '../browse-window.directive';
 
 @Component({
   selector: 'container-tile',
@@ -235,7 +236,6 @@ export class ContainerTileComponent {
   // Scoped to the flat single-section case — grouped views render fully.
 
   private readonly destroyRef = inject(DestroyRef);
-  private readonly BUFFER_ROWS = 3;
   private readonly ROW_H_FALLBACK = 300; // px, until a real tile is measured
   // Land a restored album this far below the top, clearing the collapsed header.
   private readonly RESTORE_TOP_MARGIN = 120;
@@ -425,18 +425,13 @@ export class ContainerTileComponent {
       return;
     }
     const rowH = this.rowH() || this.ROW_H_FALLBACK;
-    const total = this.totalRows();
-    const totalHeight = total * rowH;
     // Distance scrolled past the top of this grid section. getBoundingClientRect
     // already accounts for the current (collapsing) header height, so no offset
     // arithmetic against --collapse is needed.
-    const startPx = Math.min(
-      Math.max(parent.getBoundingClientRect().top - wrap.getBoundingClientRect().top, 0),
-      Math.max(0, totalHeight),
+    const offset = parent.getBoundingClientRect().top - wrap.getBoundingClientRect().top;
+    const { first, last } = browseRowRange(
+      this.totalRows(), rowH, parent.clientHeight, offset,
     );
-    const first = Math.max(0, Math.floor(startPx / rowH) - this.BUFFER_ROWS);
-    const visRows = Math.ceil(parent.clientHeight / rowH);
-    const last = Math.min(total, first + visRows + this.BUFFER_ROWS * 2);
     this.firstRow.set(first);
     this.lastRow.set(last);
   }

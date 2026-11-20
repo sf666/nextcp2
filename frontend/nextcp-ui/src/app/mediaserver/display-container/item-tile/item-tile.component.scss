@@ -3,11 +3,14 @@
 
 .track-list {
     --track-leading: 3.5rem;
+    --track-row-padding: 0.4rem;
+    --track-thumb-height: var(--track-leading);
     padding-inline: clamp(0px, 1.4vw, 1rem);
 }
 
 .track-list.same-album {
     --track-leading: 2.5rem;
+    --track-thumb-height: 0px;
 }
 
 .track-grid {
@@ -20,7 +23,32 @@
 
 .track-row {
     min-height: 3.25rem;
-    padding-block: 0.4rem;
+    padding-block: var(--track-row-padding);
+}
+
+.windowed-list,
+.windowed-cards {
+    overflow-anchor: none;
+}
+
+.windowed-list {
+    // The spacer height uses the same row pitch for tracks and disc headings.
+    .track-row,
+    .disc-label {
+        block-size: max(3.25rem, calc(max(44px, var(--track-thumb-height)) + 2 * var(--track-row-padding)));
+    }
+
+    .disc-label {
+        display: flex;
+        align-items: flex-end;
+        margin: 0;
+        padding-block: var(--track-row-padding);
+    }
+}
+
+.windowed-cards .card-artist {
+    // An omitted artist line would make the height depend on which cards are currently mounted.
+    min-block-size: 1lh;
 }
 
 .track-thumb {
@@ -60,6 +88,7 @@
 @media (width < av.$phone-width) {
     .track-list {
         --track-leading: 2.75rem;
+        --track-row-padding: 0.3rem;
         padding-inline: 0;
     }
 
@@ -70,10 +99,6 @@
     .track-grid {
         grid-template-columns: var(--track-leading) minmax(0, 1fr) 2.75rem 2.75rem;
         padding-inline: 0;
-    }
-
-    .track-row {
-        padding-block: 0.3rem;
     }
 
     .track-list .list-col-header,
