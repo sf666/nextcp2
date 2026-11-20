@@ -61,7 +61,7 @@ Main Content
         <span class="section-label">Playlists</span>
         <span class="section-count">{{countLabel(visiblePlaylists(), playlistList.length)}}</span>
       </div>
-      <container-tile class="flex grow"
+      <container-tile #playlistTile class="flex grow"
         [listingContainer]="listingContainer()"
         [smallIcons]="this.allMusicTracks.length > 0"
         [container]="playlistList"
@@ -91,7 +91,6 @@ Main Content
         [selectedGenres]="selectedGenres()"
         [ratingFilter]="ratingFilter()"
         [sortCriteria]="sortCriteria()"
-        [virtualize]="true"
         (browseClicked)="browseTo($event)"
         (addToPlaylistClicked)="addContainerToPlaylist($event)">
       </container-tile>
@@ -114,7 +113,6 @@ Main Content
         [quickSearchString]="displayFilterString()"
         [selectedGenres]="selectedGenres()"
         [ratingFilter]="ratingFilter()"
-        [virtualize]="true"
         (browseClicked)="browseTo($event)"
         (addToPlaylistClicked)="addContainerToPlaylist($event)">
       </container-tile>
@@ -164,7 +162,6 @@ Main Content
         [selectedGenres]="selectedGenres()"
         [ratingFilter]="ratingFilter()"
         [quickSearchString]="displayFilterString()"
-        [virtualize]="true"
         (browseClicked)="browseTo($event)"
         (addToPlaylistClicked)="addContainerToPlaylist($event)">
       </container-tile>

@@ -4,11 +4,14 @@
       <span class="section-label">Radio stations provided by {{deviceService.selectedMediaRendererDevice().friendlyName}}</span>
       <span class="section-count">{{radioService.radioItems()?.length ?? 0}} stations</span>
     </div>
-    <div class="tile-grid">
-      @for (item of radioService.radioItems(); track item.objectID) {
+    <div [browseWindow]="radioService.radioItems()" #rendererWindow="browseWindow"
+         [browseWindowEnabled]="radioService.radioItems().length >= windowThreshold">
+      <div [style.height.px]="rendererWindow.before()"></div>
+      <div class="tile-grid" data-window-rows>
+      @for (item of rendererWindow.visibleItems(); track item.objectID) {
         <div class="albumTile">
           <div class="albumImageContainer">
-            <img src="{{item.albumArtUrl}}" class="imgContainer" alt="{{item.title}}">
+            <img src="{{item.albumArtUrl}}" class="imgContainer" alt="{{item.title}}" loading="lazy" decoding="async">
             <div class="overlay-child flex justify-center items-center">
               <span class="material-symbols-outlined md-48" (click)="playOh(item)">play_arrow</span>
             </div>
@@ -19,17 +22,23 @@
           </div>
         </div>
       }
+      </div>
+      <div [style.height.px]="rendererWindow.after()"></div>
     </div>
   </div>
 }
 
 @if (configurationService.serverConfig?.radioStation?.length ?? 0 > 0) {
   <div class="mb-4">
-    <div class="tile-grid px-4">
-      @for (item of configurationService.serverConfig.radioStation; track item.id) {
+    <div class="px-4" [browseWindow]="configurationService.serverConfig.radioStation"
+         #stationWindow="browseWindow"
+         [browseWindowEnabled]="configurationService.serverConfig.radioStation.length >= windowThreshold">
+      <div [style.height.px]="stationWindow.before()"></div>
+      <div class="tile-grid" data-window-rows>
+      @for (item of stationWindow.visibleItems(); track item.id) {
         <div class="albumTile">
           <div class="albumImageContainer">
-            <img src="{{item.artworkUrl}}" class="imgContainer" alt="{{item.stationName}}">
+            <img src="{{item.artworkUrl}}" class="imgContainer" alt="{{item.stationName}}" loading="lazy" decoding="async">
             <div class="overlay-child flex justify-center items-center">
               <span class="material-symbols-outlined md-48" (click)="play(item)">play_arrow</span>
             </div>
@@ -40,6 +49,8 @@
           </div>
         </div>
       }
+      </div>
+      <div [style.height.px]="stationWindow.after()"></div>
     </div>
   </div>
 } 

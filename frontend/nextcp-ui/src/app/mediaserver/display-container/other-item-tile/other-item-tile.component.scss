@@ -10,3 +10,7 @@
     font-weight   : 600;
     padding-bottom: 6px;
 }
+
+.windowed-items .playlistText {
+    min-block-size: calc(1lh + 6px);
+}

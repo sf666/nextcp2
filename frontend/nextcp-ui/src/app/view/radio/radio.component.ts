@@ -11,15 +11,17 @@ import {
   inject,
 } from '@angular/core';
 import { LayoutService } from 'src/app/service/layout.service';
+import { BROWSE_WINDOW_THRESHOLD, BrowseWindowDirective } from 'src/app/mediaserver/display-container/browse-window.directive';
 
 @Component({
   selector: 'app-radio',
   templateUrl: './radio.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./radio.component.scss'],
-  standalone: true,
+  imports: [BrowseWindowDirective],
 })
 export class RadioComponent implements OnInit {
+  protected readonly windowThreshold = BROWSE_WINDOW_THRESHOLD;
   configurationService = inject(ConfigurationService);
   radioService = inject(RadioService);
   private layoutService = inject(LayoutService);

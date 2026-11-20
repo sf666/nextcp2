@@ -10,6 +10,7 @@ button {
 
 .sidebar {
      height         : calc(100dvh - var(--footer-height));
+     overflow-anchor: none;
 
      // Keep the nav list scrollable but hide the scrollbar — on macOS an
      // unstyled overlay bar flashes in over the frosted sidebar and looks off.

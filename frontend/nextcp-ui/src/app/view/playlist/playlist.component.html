@@ -22,10 +22,15 @@
     </header>
 
     @if (hasPlaylistItems) {
-      <ol class="queue-list">
-        @for (item of playlistService.playlistItems(); track item.objectID; let i = $index) {
+      <div class="queue-list" [browseWindow]="playlistService.playlistItems()" [browseWindowEnabled]="windowed()"
+           #queueWindow="browseWindow">
+      <div [style.height.px]="queueWindow.before()"></div>
+      <ol class="m-0 list-none p-0" role="list" data-window-rows>
+        @for (item of queueWindow.visibleItems(); track queueKey(item, $index)) {
+          @let i = queueWindow.firstIndex() + $index;
           <li class="queue-row" [class.queue-row--playing]="isActive(item, i)"
               (click)="playlistService.playEntry(item, i)"
+              [attr.aria-posinset]="i + 1" [attr.aria-setsize]="playlistService.playlistItems().length"
               id="PL-{{ item.objectID }}" tabindex="0">
 
             <!-- Position at rest, transport when pointed at or playing. -->
@@ -38,7 +43,7 @@
               }
             </span>
 
-            <img class="queue-art" [src]="item.albumArtUrl" [alt]="" loading="lazy">
+            <img class="queue-art" [src]="item.albumArtUrl" [alt]="" loading="lazy" decoding="async">
 
             <div class="min-w-0 flex-1">
               <div class="flex items-baseline gap-2">
@@ -58,6 +63,8 @@
           </li>
         }
       </ol>
+      <div [style.height.px]="queueWindow.after()"></div>
+      </div>
     } @else {
       <div class="queue-empty">
         <span class="material-symbols-outlined queue-empty__icon">queue_music</span>

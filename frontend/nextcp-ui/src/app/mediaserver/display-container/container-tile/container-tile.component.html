@@ -42,7 +42,7 @@
         <div class="albumSubheader no-wrap">{{container.artist}}</div>
         <div class="albumYear no-wrap">{{container.media_date}}</div>
       } @else {
-        @if (getOtherContainerHeadline(container)) {
+        @if (getOtherContainerHeadline(container) || reserveBadgeSpace()) {
           <div class="playlistText">{{getOtherContainerHeadline(container)}}</div>
         }
         <div class="albumTitle">{{container.title}}</div>
@@ -54,15 +54,20 @@
 <div class="flex flex-col grow w-full">
 
 @if (virtualActive()) {
-  <!-- Windowed (virtual scroll): only the visible rows are in the DOM; the two
-       spacers reserve the full scroll height. -->
-  <div #vwrap class="w-full">
+  <div #vwrap class="windowed-grid w-full">
+    <div #headingMeasure aria-hidden="true" class="heading-measure albumSectionHeader w-full text-lg mt-6 mb-2 px-1">&nbsp;</div>
     <div [style.height.px]="spacerTopPx()"></div>
-    <div #vgrid class="tile-grid">
-      @for (container of visibleItems(); track container.id) {
-        <ng-container *ngTemplateOutlet="tile; context: { $implicit: container }"></ng-container>
+    @for (row of visibleRows(); track row.key) {
+      @if ('heading' in row) {
+        <div class="albumSectionHeader w-full truncate text-lg font-semibold text-gray-300 mt-6 mb-2 px-1">{{row.heading}}</div>
+      } @else {
+        <div class="tile-grid" [style.margin-bottom.px]="row.gapAfter">
+          @for (container of row.items; track container.id) {
+            <ng-container *ngTemplateOutlet="tile; context: { $implicit: container }"></ng-container>
+          }
+        </div>
       }
-    </div>
+    }
     <div [style.height.px]="spacerBottomPx()"></div>
   </div>
 } @else {

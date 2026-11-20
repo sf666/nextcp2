@@ -162,6 +162,7 @@ export class DisplayContainerComponent {
   private albumTile = viewChild<ContainerTileComponent>('albumTile');
   private folderTile = viewChild<ContainerTileComponent>('folderTile');
   private artistTile = viewChild<ContainerTileComponent>('artistTile');
+  private playlistTile = viewChild<ContainerTileComponent>('playlistTile');
 
   /**
    * How many rows a section shows after filtering.
@@ -307,6 +308,7 @@ export class DisplayContainerComponent {
             !this.cdsBrowsePathService.isScrollToTop(id) &&
             (this.albumTile()?.scrollToId(id) ||
               this.artistTile()?.scrollToId(id) ||
+              this.playlistTile()?.scrollToId(id) ||
               this.folderTile()?.scrollToId(id))
           ) {
             return;

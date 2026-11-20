@@ -1,6 +1,32 @@
 @use "card-layout";
 @use "app-variables" as av;
 
+.windowed-grid {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    min-width: 0;
+
+    .album {
+        min-block-size: calc(1lh + 0.4rem);
+    }
+
+    .albumSubheader,
+    .albumYear {
+        min-block-size: 1lh;
+    }
+
+    .playlistText {
+        min-block-size: calc(1lh + 6px);
+    }
+}
+
+.heading-measure {
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
+}
+
 @media (width < av.$phone-width) {
     .tile-grid {
         --tile-min: min(100%, 8rem);

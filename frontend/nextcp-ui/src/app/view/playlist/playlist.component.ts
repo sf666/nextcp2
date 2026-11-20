@@ -10,7 +10,11 @@ import {
   OnInit,
   computed,
   inject,
+  viewChild,
+  DestroyRef,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BROWSE_WINDOW_THRESHOLD, BrowseWindowDirective } from 'src/app/mediaserver/display-container/browse-window.directive';
 import { LayoutService } from 'src/app/service/layout.service';
 import { QualityBadgeComponent } from '../../util/comp/quality-badge/quality-badge.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -28,8 +32,7 @@ import {
     CdsBrowsePathService,
     { provide: 'uniqueId', useValue: 'cds_playlist' },
   ],
-  standalone: true,
-  imports: [QualityBadgeComponent],
+  imports: [QualityBadgeComponent, BrowseWindowDirective],
 })
 export class PlaylistComponent implements OnInit {
   deviceService = inject(DeviceService);
@@ -38,15 +41,28 @@ export class PlaylistComponent implements OnInit {
   private backgroundImageService = inject(BackgroundImageService);
   private confirmDialog = inject(MatDialog);
   playlistService = inject(PlaylistService);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly queueWindow = viewChild<BrowseWindowDirective<ItemDto>>(BrowseWindowDirective);
+  protected readonly windowed = computed(() => this.playlistService.playlistItems().length >= BROWSE_WINDOW_THRESHOLD);
+
+  protected queueKey(item: ItemDto, index: number): string | number {
+    return this.deviceService.isLocalBrowserSelected()
+      ? (this.queueWindow()?.firstIndex() ?? 0) + index
+      : item.objectID;
+  }
 
   constructor() {
     const deviceService = this.deviceService;
     const sseService = this.sseService;
     const scrollViewService = inject(CdsBrowsePathService);
 
-    sseService.mediaRendererPlaylistStateChanged$.subscribe((data) => {
+    sseService.mediaRendererPlaylistStateChanged$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data) => {
       if (deviceService.isMediaRendererSelected(data.udn)) {
-        scrollViewService.scrollIntoViewID(`PL-${data.Id}`);
+        const id = String(data.Id);
+        const index = this.playlistService.playlistItems().findIndex((item) => item.objectID === id);
+        if (!this.queueWindow()?.scrollToIndex(index, 120)) {
+          scrollViewService.scrollIntoViewID(`PL-${id}`);
+        }
       }
     });
   }

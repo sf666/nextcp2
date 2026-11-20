@@ -20,9 +20,7 @@ import { QualityBadgeComponent } from 'src/app/util/comp/quality-badge/quality-b
 import { LiveBadgeComponent } from 'src/app/util/comp/live-badge/live-badge.component';
 import { isBroadcastItem } from 'src/app/util/broadcast-item';
 import { RendererService } from 'src/app/service/renderer.service';
-import { BrowseWindowDirective } from '../browse-window.directive';
-
-const WINDOW_THRESHOLD = 100;
+import { BROWSE_WINDOW_THRESHOLD, BrowseWindowDirective } from '../browse-window.directive';
 
 type TrackRow = { key: string; item: ItemDto } | { key: string; disc: string };
 
@@ -73,8 +71,7 @@ export class ItemTileComponent {
 
   protected readonly windowed = computed(() => {
     const listing = this.contentDirectoryService().currentContainerList();
-    return listing.currentContainer?.objectClass?.startsWith('object.container.playlistContainer') === true &&
-      Math.max(listing.totalMatches ?? 0, this.allMusicTracks().length) >= WINDOW_THRESHOLD;
+    return Math.max(listing.totalMatches ?? 0, this.allMusicTracks().length) >= BROWSE_WINDOW_THRESHOLD;
   });
 
   protected readonly trackRows = computed(() => {
@@ -93,7 +90,7 @@ export class ItemTileComponent {
   });
 
   constructor() {
-    // Keep the filter in view and start at the first match when narrowing a long playlist.
+    // Keep the filter in view and start at the first match when narrowing a long list.
     let initialized = false;
     effect(() => {
       this.quickSearchString();

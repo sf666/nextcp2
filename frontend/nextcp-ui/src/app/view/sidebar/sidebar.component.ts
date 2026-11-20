@@ -18,16 +18,17 @@ import { MatIcon } from '@angular/material/icon';
 import { ServerPlaylistService } from 'src/app/service/server-playlist.service';
 import { DefaultPlaylistService } from 'src/app/mediaserver/popup/defaut-playlists/default-playlist.service';
 import { MusicLibraryService } from 'src/app/service/music-library/music-library.service';
+import { BROWSE_WINDOW_THRESHOLD, BrowseWindowDirective } from 'src/app/mediaserver/display-container/browse-window.directive';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, MatIcon, FeatureHintComponent],
+  imports: [RouterLink, MatIcon, FeatureHintComponent, BrowseWindowDirective],
 })
 export class SidebarComponent {
+  protected readonly windowThreshold = BROWSE_WINDOW_THRESHOLD;
   deviceService = inject(DeviceService);
   /** The template asks the device service for capabilities by these names. */
   protected readonly ServerFeature = ServerFeature;
@@ -124,7 +125,7 @@ export class SidebarComponent {
   }
 
   get serverPlaylists() {
-    return this.serverPlaylistService.serverPl().serverPlaylists;
+    return this.serverPlaylistService.serverPl().serverPlaylists ?? [];
   }
 
   public getTextClass(url: string): string {

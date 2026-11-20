@@ -10,6 +10,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 const BUFFER_ROWS = 3;
+export const BROWSE_WINDOW_THRESHOLD = 100;
 
 export function browseRowRange(
   totalRows: number,
@@ -36,17 +37,20 @@ export function browseRowRange(
 @Directive({ selector: '[browseWindow]', exportAs: 'browseWindow' })
 export class BrowseWindowDirective<T> {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
-  // The embedded view can be detached when its directives are constructed.
-  private readonly parent = inject(DOCUMENT).getElementById('mainContent');
+  private readonly document = inject(DOCUMENT);
   private readonly range = signal({ start: 0, end: 20, before: 0, after: 0 }, {
     equal: (a, b) => a.start === b.start && a.end === b.end &&
       a.before === b.before && a.after === b.after,
   });
   private schedule?: (measure: boolean) => void;
+  private pendingScroll?: { index: number; margin: number };
 
   items = input.required<readonly T[]>({ alias: 'browseWindow' });
   enabled = input(false, { alias: 'browseWindowEnabled' });
-  active = computed(() => this.enabled() && this.parent !== null);
+  scrollParentId = input('mainContent', { alias: 'browseWindowScrollParentId' });
+  // The embedded view can be detached when its directives are constructed.
+  private readonly parent = computed(() => this.document.getElementById(this.scrollParentId()));
+  active = computed(() => this.enabled() && this.parent() !== null);
   visibleItems = computed(() => {
     const items = this.items();
     const { start, end } = this.range();
@@ -54,10 +58,11 @@ export class BrowseWindowDirective<T> {
   });
   before = computed(() => this.active() ? this.range().before : 0);
   after = computed(() => this.active() ? this.range().after : 0);
+  firstIndex = computed(() => this.active() ? this.range().start : 0);
 
   constructor() {
     effect((onCleanup) => {
-      const parent = this.parent;
+      const parent = this.parent();
       if (!parent || !this.active()) {
         return;
       }
@@ -86,7 +91,9 @@ export class BrowseWindowDirective<T> {
             const style = getComputedStyle(grid);
             columns = style.gridTemplateColumns === 'none'
               ? 1 : Math.max(1, style.gridTemplateColumns.split(' ').length);
-            rowHeight = row.getBoundingClientRect().height + (parseFloat(style.rowGap) || 0);
+            const rowStyle = getComputedStyle(row);
+            rowHeight = row.getBoundingClientRect().height + (parseFloat(style.rowGap) || 0) +
+              (parseFloat(rowStyle.marginTop) || 0) + (parseFloat(rowStyle.marginBottom) || 0);
             needsMeasure = rowHeight <= 0;
           }
           if (needsMeasure) {
@@ -94,7 +101,15 @@ export class BrowseWindowDirective<T> {
           }
 
           const totalRows = Math.ceil(count / columns);
-          const offset = parent.getBoundingClientRect().top - this.host.getBoundingClientRect().top;
+          let offset = parent.getBoundingClientRect().top - this.host.getBoundingClientRect().top;
+          if (this.pendingScroll) {
+            const { index, margin } = this.pendingScroll;
+            this.pendingScroll = undefined;
+            if (index < count) {
+              parent.scrollTop += Math.floor(index / columns) * rowHeight - offset - margin;
+              offset = parent.getBoundingClientRect().top - this.host.getBoundingClientRect().top;
+            }
+          }
           const { first, last } = browseRowRange(totalRows, rowHeight, parent.clientHeight, offset);
           this.range.set({
             start: first * columns,
@@ -118,11 +133,21 @@ export class BrowseWindowDirective<T> {
           cancelAnimationFrame(frame);
         }
         this.schedule = undefined;
+        this.pendingScroll = undefined;
       });
     });
     effect(() => {
       this.items();
       this.schedule?.(true);
     });
+  }
+
+  scrollToIndex(index: number, margin = 0): boolean {
+    if (!this.schedule || index < 0 || index >= this.items().length) {
+      return false;
+    }
+    this.pendingScroll = { index, margin };
+    this.schedule(false);
+    return true;
   }
 }

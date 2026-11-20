@@ -1,8 +1,11 @@
-<div class="tile-grid">
-    @for (item of items(); track item.objectID) {
+<div class="w-full" [browseWindow]="items()" [browseWindowEnabled]="windowed()"
+     #itemWindow="browseWindow" [class.windowed-items]="itemWindow.active()">
+  <div [style.height.px]="itemWindow.before()"></div>
+  <div class="tile-grid" data-window-rows>
+    @for (item of itemWindow.visibleItems(); track item.objectID) {
     <div class="albumTile" id="{{item.objectID}}" tabindex="-1" (click)="playResource(item)">
       <div class="albumImageContainer">
-        <img src="{{albumArt.tile(item.albumArtUrl, item.albumArtUrlMedium)}}" alt="{{item.title}}">
+        <img src="{{albumArt.tile(item.albumArtUrl, item.albumArtUrlMedium)}}" alt="{{item.title}}" loading="lazy" decoding="async">
         @if (isPlaylist() && item.objectID) {
         <button type="button" aria-label="More options"
                 class="absolute end-2 top-2 grid size-11 cursor-pointer place-items-center rounded-full border border-white/20 bg-black/75 text-white hover:border-[var(--primary-color)] focus-visible:outline-2 focus-visible:outline-[var(--primary-color)]"
@@ -20,3 +23,5 @@
     </div>
     }
   </div>
+  <div [style.height.px]="itemWindow.after()"></div>
+</div>

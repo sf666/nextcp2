@@ -1,5 +1,4 @@
 import {
-  afterNextRender,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -12,7 +11,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { NgTemplateOutlet } from '@angular/common';
+import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { ContainerDto } from 'src/app/service/dto';
 import { DeviceService } from 'src/app/service/device.service';
@@ -25,7 +24,8 @@ import {
 import { filterContainers, splitGenres } from 'src/app/util/browse-filter';
 import { AlbumArtService } from 'src/app/util/album-art.service';
 import { DisplayHeaderOptionsComponent } from '../../popup/display-header-options/display-header-options.component';
-import { browseRowRange } from '../browse-window.directive';
+import { BROWSE_WINDOW_THRESHOLD } from '../browse-window.directive';
+import { browseGridRowAt, layoutBrowseGrid } from '../browse-grid-layout';
 
 @Component({
   selector: 'container-tile',
@@ -45,9 +45,6 @@ export class ContainerTileComponent {
   // Sort/group criteria: 'NONE' | 'TITLE' | 'ARTIST' | 'GENRE'
   sortCriteria = input<string>('NONE');
   listingContainer = input<ContainerDto>();
-  // Enable windowing (virtual scroll) for this grid. Only honoured for the flat
-  // single-section case (NONE/TITLE). Set true only on the (large) album grid.
-  virtualize = input<boolean>(false);
   containerList = computed(() => this.filteredContainer(this.container()));
 
   // Containers grouped into sections according to sortCriteria.
@@ -229,48 +226,41 @@ export class ContainerTileComponent {
 
   //
   // Virtual scrolling (windowing)
-  // ============================================================================
-  // Only the visible rows are rendered into the DOM; a top and a bottom spacer
-  // preserve the total scroll height. Coupled to the page-level #mainContent
-  // scroll (NOT a nested scroller) so the collapsing header keeps working.
-  // Scoped to the flat single-section case — grouped views render fully.
-
   private readonly destroyRef = inject(DestroyRef);
-  private readonly ROW_H_FALLBACK = 300; // px, until a real tile is measured
-  // Land a restored album this far below the top, clearing the collapsed header.
+  private readonly scrollParent = inject(DOCUMENT).getElementById('mainContent');
   private readonly RESTORE_TOP_MARGIN = 120;
+  private readonly BUFFER_ROWS = 3;
 
-  private vgrid = viewChild<ElementRef<HTMLElement>>('vgrid');
   private vwrap = viewChild<ElementRef<HTMLElement>>('vwrap');
+  private headingMeasure = viewChild<ElementRef<HTMLElement>>('headingMeasure');
 
-  rowH = signal<number>(this.ROW_H_FALLBACK);
-  cols = signal<number>(1);
-  firstRow = signal<number>(0);
-  lastRow = signal<number>(0);
+  protected readonly virtualActive = computed(() => this.scrollParent !== null &&
+    this.container().length >= BROWSE_WINDOW_THRESHOLD);
+  protected readonly reserveBadgeSpace = computed(() => this.virtualActive() &&
+    this.container().some((item) => !this.isAlbum(item) && !!this.getOtherContainerHeadline(item)));
+  private readonly geometry = signal({ columns: 1, tileHeight: 300, gap: 16, headingHeight: 60 }, {
+    equal: (a, b) => a.columns === b.columns && a.tileHeight === b.tileHeight &&
+      a.gap === b.gap && a.headingHeight === b.headingHeight,
+  });
+  private readonly range = signal({ first: 0, last: 2 }, {
+    equal: (a, b) => a.first === b.first && a.last === b.last,
+  });
+  private readonly gridRows = computed(() => {
+    const { columns, tileHeight, gap, headingHeight } = this.geometry();
+    return this.virtualActive()
+      ? layoutBrowseGrid(this.groupedContainers(), columns, tileHeight, gap, headingHeight)
+      : [];
+  });
+  protected readonly visibleRows = computed(() => {
+    const rows = this.gridRows();
+    const { first, last } = this.range();
+    return first < rows.length ? rows.slice(first, last) : rows.slice(0, 2);
+  });
+  protected readonly spacerTopPx = computed(() => this.visibleRows()[0]?.top ?? 0);
+  protected readonly spacerBottomPx = computed(() =>
+    (this.gridRows().at(-1)?.end ?? 0) - (this.visibleRows().at(-1)?.end ?? 0));
 
-  // Windowing is active only for a single flat section (no group headers).
-  virtualActive = computed(
-    () => this.virtualize() && this.groupedContainers().length === 1,
-  );
-  private flatItems = computed<ContainerDto[]>(() =>
-    this.virtualActive() ? this.groupedContainers()[0].items : [],
-  );
-  totalRows = computed(() =>
-    this.cols() > 0 ? Math.ceil(this.flatItems().length / this.cols()) : 0,
-  );
-  visibleItems = computed(() =>
-    this.flatItems().slice(
-      this.firstRow() * this.cols(),
-      this.lastRow() * this.cols(),
-    ),
-  );
-  spacerTopPx = computed(() => this.firstRow() * this.rowH());
-  spacerBottomPx = computed(() =>
-    Math.max(0, this.totalRows() - this.lastRow()) * this.rowH(),
-  );
-
-  private scrollParent: HTMLElement | null = null;
-  private rafScheduled = false;
+  private frame?: number;
   // Identity of the listing the window currently shows, so that a page being
   // appended can be told apart from a different list being browsed.
   private listAnchorId: string | undefined;
@@ -287,27 +277,21 @@ export class ContainerTileComponent {
   private readonly onScroll = () => this.scheduleUpdate();
 
   constructor() {
-    // Attach the page scroll listener once the view exists.
-    afterNextRender(() => {
-      this.scrollParent = document.getElementById('mainContent');
-      this.scrollParent?.addEventListener('scroll', this.onScroll, {
-        passive: true,
-      });
-      this.scheduleUpdate();
-    });
-
-    // Recompute the window when either the tile geometry or the visible scroll area changes.
     effect((onCleanup) => {
-      const grid = this.vgrid()?.nativeElement;
-      if (grid && typeof ResizeObserver !== 'undefined') {
-        const resizeObserver = new ResizeObserver(() => this.scheduleUpdate(true));
-        resizeObserver.observe(grid);
-        const parent = document.getElementById('mainContent');
-        if (parent) {
-          resizeObserver.observe(parent);
-        }
-        onCleanup(() => resizeObserver.disconnect());
+      const wrap = this.vwrap()?.nativeElement;
+      const parent = this.scrollParent;
+      if (!wrap || !parent) {
+        return;
       }
+      const resizeObserver = new ResizeObserver(() => this.scheduleUpdate(true));
+      resizeObserver.observe(wrap);
+      resizeObserver.observe(parent);
+      parent.addEventListener('scroll', this.onScroll, { passive: true });
+      this.scheduleUpdate(true);
+      onCleanup(() => {
+        resizeObserver.disconnect();
+        parent.removeEventListener('scroll', this.onScroll);
+      });
     });
 
     // A different listing starts at the top again. An appended page does not:
@@ -319,7 +303,7 @@ export class ContainerTileComponent {
     effect(() => {
       const raw = this.container();
       const criteria = this.sortCriteria();
-      this.virtualActive(); // track
+      const active = this.virtualActive();
       // Pages are appended to the same listing, so its first entry stays put and
       // its length only grows. Anything else is a new list.
       const anchorId = raw.length > 0 ? raw[0].id : undefined;
@@ -332,9 +316,11 @@ export class ContainerTileComponent {
       this.listCriteria = criteria;
       if (!appended) {
         this.pendingFocusId = null;
-        this.firstRow.set(0);
+        this.range.set({ first: 0, last: 2 });
       }
-      this.scheduleUpdate(true);
+      if (active) {
+        this.scheduleUpdate(true);
+      }
     });
 
     // When the filter / genre selection changes, scroll back to the top so the
@@ -352,8 +338,8 @@ export class ContainerTileComponent {
       if (!this.virtualActive()) {
         return;
       }
-      this.firstRow.set(0);
-      const parent = this.scrollParent ?? document.getElementById('mainContent');
+      this.range.set({ first: 0, last: 2 });
+      const parent = this.scrollParent;
       if (parent) {
         parent.scrollTop = 0;
       }
@@ -361,7 +347,9 @@ export class ContainerTileComponent {
     });
 
     this.destroyRef.onDestroy(() => {
-      this.scrollParent?.removeEventListener('scroll', this.onScroll);
+      if (this.frame !== undefined) {
+        cancelAnimationFrame(this.frame);
+      }
     });
   }
 
@@ -371,12 +359,11 @@ export class ContainerTileComponent {
     if (remeasure) {
       this.needsMeasure = true;
     }
-    if (this.rafScheduled) {
+    if (this.frame !== undefined) {
       return;
     }
-    this.rafScheduled = true;
-    requestAnimationFrame(() => {
-      this.rafScheduled = false;
+    this.frame = requestAnimationFrame(() => {
+      this.frame = undefined;
       this.measureAndRecompute();
     });
   }
@@ -387,79 +374,63 @@ export class ContainerTileComponent {
    * until the numbers are real instead of staying on the fallback row height.
    */
   private measure(): boolean {
-    const grid = this.vgrid()?.nativeElement;
-    if (!grid) {
+    const grid = this.vwrap()?.nativeElement.querySelector<HTMLElement>('.tile-grid');
+    const tile = grid?.firstElementChild;
+    const header = this.headingMeasure()?.nativeElement;
+    if (!grid || !tile || !header) {
       return false;
     }
-    const cs = getComputedStyle(grid);
-    // auto-fill columns resolve to a concrete list; count them (exact).
-    const template = cs.gridTemplateColumns;
-    if (template && template !== 'none') {
-      const c = template.split(' ').filter((s) => s.length > 0).length;
-      if (c > 0) {
-        this.cols.set(c);
-      }
-    }
-    // Row height from the first rendered tile (art has aspect-ratio, so its
-    // height is known before images load); include the grid's row gap.
-    const tile = grid.querySelector('.albumTile') as HTMLElement | null;
-    if (!tile) {
+    const tileHeight = tile.getBoundingClientRect().height;
+    if (tileHeight <= 0) {
       return false;
     }
-    const gap = parseFloat(cs.rowGap) || 0;
-    const h = tile.offsetHeight + gap;
-    if (h > 0) {
-      this.rowH.set(h);
-    }
+    const gridStyle = getComputedStyle(grid);
+    const headingStyle = getComputedStyle(header);
+    this.geometry.set({
+      columns: Math.max(1, gridStyle.gridTemplateColumns.split(' ').length),
+      tileHeight,
+      gap: parseFloat(gridStyle.rowGap) || 0,
+      headingHeight: header.getBoundingClientRect().height +
+        (parseFloat(headingStyle.marginTop) || 0) + (parseFloat(headingStyle.marginBottom) || 0),
+    });
     return true;
   }
 
-  private recomputeWindow(): void {
-    if (!this.virtualActive()) {
-      return;
-    }
-    const wrap = this.vwrap()?.nativeElement;
-    const parent =
-      this.scrollParent ?? document.getElementById('mainContent');
-    if (!wrap || !parent) {
-      return;
-    }
-    const rowH = this.rowH() || this.ROW_H_FALLBACK;
-    // Distance scrolled past the top of this grid section. getBoundingClientRect
-    // already accounts for the current (collapsing) header height, so no offset
-    // arithmetic against --collapse is needed.
-    const offset = parent.getBoundingClientRect().top - wrap.getBoundingClientRect().top;
-    const { first, last } = browseRowRange(
-      this.totalRows(), rowH, parent.clientHeight, offset,
-    );
-    this.firstRow.set(first);
-    this.lastRow.set(last);
-  }
-
   private measureAndRecompute(): void {
-    if (!this.virtualActive()) {
+    const wrap = this.vwrap()?.nativeElement;
+    const parent = this.scrollParent;
+    if (!wrap || !parent) {
       return;
     }
     if (this.needsMeasure && this.measure()) {
       this.needsMeasure = false;
     }
-    this.recomputeWindow();
-    // If a restore is pending, the target row should now be rendered — correct
-    // to the exact position using the real element on the next frame.
-    if (this.pendingFocusId) {
+    const rows = this.gridRows();
+    let offset = parent.getBoundingClientRect().top - wrap.getBoundingClientRect().top;
+    const target = this.pendingFocusId && !this.needsMeasure
+      ? rows.find((row) => 'items' in row && row.items.some((item) => item.id === this.pendingFocusId))
+      : undefined;
+    if (target) {
+      parent.scrollTop += target.top - offset - this.RESTORE_TOP_MARGIN;
+      offset = parent.getBoundingClientRect().top - wrap.getBoundingClientRect().top;
       requestAnimationFrame(() => this.correctRestore());
     }
+    const firstVisible = Math.min(browseGridRowAt(rows, offset), Math.max(0, rows.length - 1));
+    const first = Math.max(0, firstVisible - this.BUFFER_ROWS);
+    const last = Math.min(rows.length, Math.max(firstVisible, browseGridRowAt(rows,
+      offset + parent.clientHeight)) + this.BUFFER_ROWS + 1);
+    this.range.set({ first, last });
   }
 
   private correctRestore(): void {
     const id = this.pendingFocusId;
-    if (!id) {
+    if (!id || this.destroyRef.destroyed) {
       return;
     }
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ block: 'start' });
       this.pendingFocusId = null;
+      el.scrollIntoView({ block: 'start' });
     }
     // else: element not rendered yet — a later update() will retry.
   }
@@ -471,29 +442,10 @@ export class ContainerTileComponent {
    * id is not part of this (virtualized) list, so the caller can fall back.
    */
   public scrollToId(id: string): boolean {
-    if (!this.virtualActive()) {
+    if (!this.virtualActive() || !this.vwrap() || !this.scrollParent ||
+      !this.containerList().some((item) => item.id === id)) {
       return false;
     }
-    const idx = this.flatItems().findIndex((c) => c.id === id);
-    if (idx < 0) {
-      return false;
-    }
-    const wrap = this.vwrap()?.nativeElement;
-    const parent =
-      this.scrollParent ?? document.getElementById('mainContent');
-    if (!wrap || !parent) {
-      return false;
-    }
-    const rowH = this.rowH() || this.ROW_H_FALLBACK;
-    const rowIndex = Math.floor(idx / (this.cols() || 1));
-    // Absolute offset of this grid section within the scroll content.
-    const wrapOffset =
-      parent.scrollTop +
-      (wrap.getBoundingClientRect().top - parent.getBoundingClientRect().top);
-    parent.scrollTop = Math.max(
-      0,
-      wrapOffset + rowIndex * rowH - this.RESTORE_TOP_MARGIN,
-    );
     this.pendingFocusId = id;
     this.scheduleUpdate();
     return true;

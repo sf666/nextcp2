@@ -2,19 +2,23 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   inject,
   input,
   output,
+  untracked,
 } from '@angular/core';
 import { ContainerDto, ItemDto } from 'src/app/service/dto';
 import { AlbumArtService } from 'src/app/util/album-art.service';
 import { isBroadcastItem } from 'src/app/util/broadcast-item';
+import { matchesTextFilter } from 'src/app/util/browse-filter';
 import { SongOptionsServiceService } from '../../popup/song-options/song-options-service.service';
+import { BROWSE_WINDOW_THRESHOLD, BrowseWindowDirective } from '../browse-window.directive';
 
 @Component({
   selector: 'other-item-tile',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [],
+  imports: [BrowseWindowDirective],
   templateUrl: './other-item-tile.component.html',
   styleUrl: './other-item-tile.component.scss',
 })
@@ -30,29 +34,26 @@ export class OtherItemTileComponent {
   quickSearchString = input<string>('');
   /** Off where the section heading already says what these are, e.g. the Videos section. */
   showKind = input<boolean>(true);
-  items = computed(() =>
-    this.getOtherItemsFilter(this.otherItems(), this.quickSearchString())
-  );
+  items = computed(() => {
+    const query = this.quickSearchString();
+    return this.otherItems().filter((item) => matchesTextFilter(item.title, query));
+  });
+  protected readonly windowed = computed(() => this.otherItems().length >= BROWSE_WINDOW_THRESHOLD);
 
   playItemClicked = output<ItemDto>();
 
-  private getOtherItemsFilter(
-    data: ItemDto[],
-    filterStr: string
-  ): ItemDto[] {
-    return data.filter((item) => this.doFilterText(item.title, this.quickSearchString()));
-  }
-
-  private doFilterText(title: string, filter: string): boolean {
-    if (!filter) {
-      return true;
-    }
-    if (!title && 'NONE' == filter) {
-      return true;
-    } else if (!title) {
-      return false;
-    }
-    return title.toLowerCase().includes(filter.toLowerCase());
+  constructor() {
+    let previous = this.quickSearchString();
+    effect(() => {
+      const query = this.quickSearchString();
+      if (query !== previous && untracked(this.windowed)) {
+        const parent = document.getElementById('mainContent');
+        if (parent) {
+          parent.scrollTop = 0;
+        }
+      }
+      previous = query;
+    });
   }
 
   playResource(otherItem: ItemDto) {
