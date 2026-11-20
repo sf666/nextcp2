@@ -75,6 +75,7 @@ Main Content
         <span class="section-count">{{countLabel(visibleAlbums(), albumList.length)}}</span>
       </div>
       <container-tile #albumTile class="flex grow"
+        [listingContainer]="listingContainer()"
         [smallIcons]="this.allMusicTracks.length > 0"
         [container]="albumList"
         [quickSearchString]="displayFilterString()"
@@ -98,6 +99,7 @@ Main Content
         <span class="section-count">{{countLabel(visibleArtists(), artists.length)}}</span>
       </div>
       <container-tile #artistTile class="flex grow"
+        [listingContainer]="listingContainer()"
         [smallIcons]="this.allMusicTracks.length > 0"
         [container]="artists"
         [quickSearchString]="displayFilterString()"
@@ -169,6 +171,7 @@ Main Content
         </div>
         <other-item-tile class="flex grow"
           [otherItems]="section.items"
+          [currentContainer]="listingContainer()"
           [showKind]="section.kind === 'other'"
           [quickSearchString]="displayFilterString()"
           (playItemClicked)="playItem($event)"

@@ -28,7 +28,6 @@ import { DisplayHeaderOptionsComponent } from '../../popup/display-header-option
 
 @Component({
   selector: 'container-tile',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgTemplateOutlet],
   templateUrl: './container-tile.component.html',
@@ -78,13 +77,17 @@ export class ContainerTileComponent {
   private pressStart: { x: number; y: number } | undefined;
   private pressHandled = false;
 
-  /**
-   * Everything the menu offers - the like, the radio station, the album art - is an extension of
-   * the standard the media server either has or has not. Without it the button would open a menu
-   * with nothing in it that works.
-   */
-  optionsPossible(): boolean {
+  private canLike(): boolean {
     return this.deviceService.hasFeature(ServerFeature.ALBUM_LIKES);
+  }
+
+  optionsPossible(container: ContainerDto): boolean {
+    const server = this.deviceService.selectedMediaServerDevice();
+    return this.canLike() || (
+      !!container.id && container.id !== '0' &&
+      this.parentObjectClass(container)?.startsWith('object.container.playlistContainer') === true &&
+      server.extendedApi && server.udn === container.mediaServerUDN
+    );
   }
 
   // Ratings changed in this view. The browse result DTOs are plain objects, so
@@ -111,7 +114,7 @@ export class ContainerTileComponent {
   }
 
   onPressStart(event: PointerEvent, container: ContainerDto): void {
-    if (!this.optionsPossible()) {
+    if (!this.optionsPossible(container)) {
       return;
     }
     this.cancelPress();
@@ -158,17 +161,16 @@ export class ContainerTileComponent {
     this.openOptionsMenu(container, event.currentTarget);
   }
 
+  private parentObjectClass(container: ContainerDto): string | undefined {
+    const listing = this.listingContainer();
+    return listing && listing.id === container.parentID &&
+      listing.mediaServerUDN === container.mediaServerUDN ? listing.objectClass : undefined;
+  }
+
   /**
-   * The menu the header opens for the container being browsed, on the tile of one that is not -
-   * the two offer the same actions, so there is one component for both.
-   *
-   * The menu places itself next to what it came out of, so the trigger goes along: the options
-   * button for a tap, the tile for a long press.
+   * Opens the shared container menu beside the options button or the long-pressed tile.
    */
   private openOptionsMenu(container: ContainerDto, trigger: EventTarget | null): void {
-    const listing = this.listingContainer();
-    const parentObjectClass = listing && listing.id === container.parentID &&
-      listing.mediaServerUDN === container.mediaServerUDN ? listing.objectClass : undefined;
     const dialogRef = this.dialog.open(DisplayHeaderOptionsComponent, {
       hasBackdrop: true,
       panelClass: ['popup-glass'],
@@ -176,11 +178,11 @@ export class ContainerTileComponent {
         trigger: new ElementRef(trigger),
         addToPlaylistOutput: this.addToPlaylistClicked,
         currentContainer: container,
-        parentObjectClass,
+        parentObjectClass: this.parentObjectClass(container),
         // What is on screen is the container this one is listed in, so that is what a change here
         // has to re-read.
         listingContainerId: container.parentID,
-        canLike: this.optionsPossible(),
+        canLike: this.canLike(),
         isLiked: this.isLiked(container),
         // A tile knows the container, not what is in it - and "Set artist folder" is decided by the
         // number of folders inside. It stays with the header of the folder itself.
@@ -200,7 +202,7 @@ export class ContainerTileComponent {
    * dislike. Same two states as everywhere else in the app.
    */
   private toggleLike(container: ContainerDto): void {
-    if (!this.optionsPossible()) {
+    if (!this.canLike()) {
       return;
     }
     const previousRating = this.effectiveRating(container);

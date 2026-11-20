@@ -5,7 +5,9 @@
     <div class="flex flex-col justify-center albumAndTitle">
       <div class="title">{{selectedMusicItem.title}}</div>
       <div class="artist mt-1">{{selectedMusicItem.artistName}}</div>
-      <star-rating class="mt-2 scale-90 origin-left" [currentSong]="selectedMusicItem"></star-rating>
+      @if (hasValidSongId()) {
+        <star-rating class="mt-2 scale-90 origin-left" [currentSong]="selectedMusicItem"></star-rating>
+      }
     </div>
   </div>
 

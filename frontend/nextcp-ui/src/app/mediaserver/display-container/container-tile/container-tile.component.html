@@ -27,7 +27,7 @@
         tablet, where the long press was the only way in and nothing announced
         it.
       -->
-      @if (optionsPossible()) {
+      @if (optionsPossible(container)) {
         <button type="button" class="tileOptions" (click)="openOptions($event, container)"
                 (pointerdown)="$event.stopPropagation()"
                 [title]="'Options for ' + container.title"

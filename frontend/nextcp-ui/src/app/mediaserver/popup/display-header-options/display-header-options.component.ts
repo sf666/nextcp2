@@ -31,7 +31,6 @@ const MENU_WIDTH = 320;
 
 @Component({
   selector: 'app-display-header-options',
-  standalone: true,
   imports: [MatIconModule, MatButtonModule],
   templateUrl: './display-header-options.component.html',
   styleUrl: './display-header-options.component.scss',
@@ -59,7 +58,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   /** Folders carry their like here instead of next to the title. */
   canLike = false;
   isLiked = false;
-  readonly canRemovePlaylistLink: boolean;
+  private readonly parentObjectClass?: string;
   readonly removingPlaylistLink = signal(false);
   private readonly allowContainerQueue: boolean;
   /** How many folders this container holds; albums and tracks do not count. */
@@ -98,8 +97,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
     this.mediaPlayerConfigDto =
       this.configurationService.mediaPlayerConfigDto();
 
-    this.canRemovePlaylistLink = this.showAddToServerPlaylist() &&
-      (data.parentObjectClass?.startsWith('object.container.playlistContainer') ?? false);
+    this.parentObjectClass = data.parentObjectClass;
   }
 
   ngOnInit(): void {
@@ -160,9 +158,23 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   }
 
   showAddToServerPlaylist(): boolean {
-    const server = this.deviceService.selectedMediaServerDevice();
     return (
       (this.isPlaylist() || this.isFolder() || this.isAlbum()) &&
+      this.supportsServerPlaylist()
+    );
+  }
+
+  get canRemovePlaylistLink(): boolean {
+    return (
+      this.parentObjectClass?.startsWith('object.container.playlistContainer') === true &&
+      this.supportsServerPlaylist()
+    );
+  }
+
+  private supportsServerPlaylist(): boolean {
+    const server = this.deviceService.selectedMediaServerDevice();
+    return (
+      !!this.currentContainer.id &&
       this.currentContainer.id !== '0' &&
       server.extendedApi &&
       server.udn === this.currentContainer.mediaServerUDN

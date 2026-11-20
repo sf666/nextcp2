@@ -6,13 +6,13 @@ import {
   input,
   output,
 } from '@angular/core';
-import { ItemDto } from 'src/app/service/dto';
+import { ContainerDto, ItemDto } from 'src/app/service/dto';
 import { AlbumArtService } from 'src/app/util/album-art.service';
 import { isBroadcastItem } from 'src/app/util/broadcast-item';
+import { SongOptionsServiceService } from '../../popup/song-options/song-options-service.service';
 
 @Component({
   selector: 'other-item-tile',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   templateUrl: './other-item-tile.component.html',
@@ -20,8 +20,13 @@ import { isBroadcastItem } from 'src/app/util/broadcast-item';
 })
 export class OtherItemTileComponent {
   readonly albumArt = inject(AlbumArtService);
+  private readonly songOptions = inject(SongOptionsServiceService);
 
   otherItems = input<ItemDto[]>([]);
+  currentContainer = input<ContainerDto>();
+  protected readonly isPlaylist = computed(
+    () => this.currentContainer()?.objectClass?.startsWith('object.container.playlistContainer'),
+  );
   quickSearchString = input<string>('');
   /** Off where the section heading already says what these are, e.g. the Videos section. */
   showKind = input<boolean>(true);
@@ -52,6 +57,11 @@ export class OtherItemTileComponent {
 
   playResource(otherItem: ItemDto) {
     this.playItemClicked.emit(otherItem);
+  }
+
+  protected showSongPopup(event: MouseEvent, item: ItemDto): void {
+    event.stopPropagation();
+    this.songOptions.openOptionsDialog(event, item, this.currentContainer());
   }
 
   getOtherItemHeadline(item: ItemDto): string {

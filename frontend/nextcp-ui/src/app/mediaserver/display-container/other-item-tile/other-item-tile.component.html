@@ -3,6 +3,13 @@
     <div class="albumTile" id="{{item.objectID}}" tabindex="-1" (click)="playResource(item)">
       <div class="albumImageContainer">
         <img src="{{albumArt.tile(item.albumArtUrl, item.albumArtUrlMedium)}}" alt="{{item.title}}">
+        @if (isPlaylist() && item.objectID) {
+        <button type="button" aria-label="More options"
+                class="absolute end-2 top-2 grid size-11 cursor-pointer place-items-center rounded-full border border-white/20 bg-black/75 text-white hover:border-[var(--primary-color)] focus-visible:outline-2 focus-visible:outline-[var(--primary-color)]"
+                (click)="showSongPopup($event, item)">
+          <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
+        </button>
+        }
       </div>
       <div class="flex flex-col albumDesc">
         @if (showKind()) {

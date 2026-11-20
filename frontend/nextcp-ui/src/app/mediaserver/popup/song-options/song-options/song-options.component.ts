@@ -46,7 +46,6 @@ const MENU_WIDTH = 320;
   selector: 'app-song-options',
   templateUrl: './song-options.component.html',
   styleUrls: ['./song-options.component.scss'],
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [StarRatingComponent],
 })
@@ -233,13 +232,7 @@ export class SongOptionsComponent implements OnInit {
   }
 
   get isParentPlaylist(): boolean {
-    if (this.currentContainer != undefined) {
-      return (
-        this.currentContainer.objectClass ===
-        'object.container.playlistContainer'
-      );
-    }
-    return false;
+    return this.currentContainer?.objectClass?.startsWith('object.container.playlistContainer') === true;
   }
 
   public updateAlbumArt(): void {

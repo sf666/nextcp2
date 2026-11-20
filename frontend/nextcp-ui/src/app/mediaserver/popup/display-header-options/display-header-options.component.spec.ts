@@ -1,3 +1,6 @@
+import { signal } from '@angular/core';
+import { of } from 'rxjs';
+
 import { DisplayHeaderOptionsComponent } from './display-header-options.component';
 
 describe('container playlist menu', () => {
@@ -15,5 +18,28 @@ describe('container playlist menu', () => {
     });
 
     expect(menu.showAddToServerPlaylist()).toBe(expected);
+  });
+
+  it('removes a container link even when its type cannot be added to a playlist', () => {
+    const removePlaylistLink = vi.fn(() => of(undefined));
+    const menu = Object.create(DisplayHeaderOptionsComponent.prototype) as DisplayHeaderOptionsComponent;
+    Object.assign(menu, {
+      currentContainer: {
+        id: 'artist-link',
+        objectClass: 'object.container.person.musicArtist',
+        mediaServerUDN: 'ums',
+      },
+      parentObjectClass: 'object.container.playlistContainer',
+      deviceService: { selectedMediaServerDevice: () => ({ udn: 'ums', extendedApi: true }) },
+      serverPlaylistService: { removePlaylistLink },
+      inputDialog: { open: () => ({ afterClosed: () => of(true) }) },
+      removingPlaylistLink: signal(false),
+      _matDialogRef: { close: vi.fn() },
+    });
+
+    expect(menu.canRemovePlaylistLink).toBe(true);
+    menu.removeFromPlaylist();
+
+    expect(removePlaylistLink).toHaveBeenCalledExactlyOnceWith('artist-link', 'ums');
   });
 });
