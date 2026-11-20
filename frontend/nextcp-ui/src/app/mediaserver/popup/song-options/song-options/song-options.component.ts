@@ -94,8 +94,7 @@ export class SongOptionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Width only - the rows depend on whether the track has a server-side id and
-    // on where it is being shown from, so the height comes from the content.
+    // The available actions depend on the item and its location, so size to the content.
     this.popupService.configurePopupAtTrigger(
       this._matDialogRef,
       this.triggerElementRef,
@@ -151,10 +150,16 @@ export class SongOptionsComponent implements OnInit {
   }
 
   public hasValidSongId(): boolean {
-    if (this.item?.songId?.objectID) {
-      return true;
-    }
-    return false;
+    return !!this.item.songId?.objectID;
+  }
+
+  get canEditOnServer(): boolean {
+    const server = this.deviceService.selectedMediaServerDevice();
+    return (
+      !!this.item.objectID &&
+      server.extendedApi &&
+      (!this.item.mediaServerUDN || this.item.mediaServerUDN === server.udn)
+    );
   }
 
   download(): void {
@@ -162,28 +167,28 @@ export class SongOptionsComponent implements OnInit {
     this.closeThisPopup({ type: 'download', data: this.item });
   }
 
-  openAddToPlaylistDialog(event: Event): void {
-    if (this.item?.songId.objectID != null) {
-      const dialogRef =
-        this.defaultPlaylistService.openAddGlobalPlaylistDialogWithBackdrop(
-          this.item,
-          this.musicLibraryService.currentContainer(),
-        );
-      dialogRef.afterClosed().subscribe(() => {
-        this._matDialogRef.close();
-      });
+  openAddToPlaylistDialog(): void {
+    if (!this.canEditOnServer) {
+      return;
     }
+    const dialogRef =
+      this.defaultPlaylistService.openAddGlobalPlaylistDialogWithBackdrop(
+        this.item,
+        this.currentContainer ?? this.musicLibraryService.currentContainer(),
+      );
+    dialogRef.afterClosed().subscribe(() => {
+      this._matDialogRef.close();
+    });
   }
 
   /**
-   * Removes the track from the server-side playlist — irreversible, so ask
-   * first and name the track. The menu stays open when the user cancels.
+   * Confirm removal of the entry. The menu stays open when the user cancels.
    */
   deleteFromPlaylist(): void {
     const confirmData: ConfirmPopupData = {
       title: 'Delete from playlist',
       message:
-        'This removes the track from the playlist on the media server. It cannot be undone.',
+        'This removes the entry from the playlist on the media server. It cannot be undone.',
       detail: this.item.title,
       confirmText: 'delete',
       cancelText: 'cancel',
@@ -231,11 +236,15 @@ export class SongOptionsComponent implements OnInit {
     return this.item;
   }
 
-  get isParentPlaylist(): boolean {
-    return this.currentContainer?.objectClass?.startsWith('object.container.playlistContainer') === true;
+  get canRemoveFromPlaylist(): boolean {
+    return !!this.item.objectID &&
+      this.currentContainer?.objectClass?.startsWith('object.container.playlistContainer') === true;
   }
 
   public updateAlbumArt(): void {
+    if (!this.canEditOnServer) {
+      return;
+    }
     const dialogRef = this.dialog.open<
       UpdateAlbumArtComponent,
       UpdateAlbumArtDialogData,

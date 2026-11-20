@@ -180,7 +180,7 @@ export class AddPlaylistComponent {
   }
 
   get addActionLabel(): string {
-    return this.sourceContainer ? 'add to playlist' : 'add track';
+    return this.musicItemToAdd().songId?.objectID ? 'add track' : 'add to playlist';
   }
 
   getRecentPlaylistsCount(): number {

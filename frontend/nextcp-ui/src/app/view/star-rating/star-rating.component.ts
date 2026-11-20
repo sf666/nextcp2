@@ -18,7 +18,7 @@ export class StarRatingComponent {
   currentSong = input<ItemDto>(
     this.dtoGeneratorService.emptyItemDto(),
   );
-  isVisible = computed(() => this.currentSong().objectID?.length > 0 != null);
+  isVisible = computed(() => !!(this.currentSong().objectID || this.currentSong().songId?.objectID));
   rating = signal<number>(this.currentSong().rating);
   size = input<string>('sm');
 
@@ -33,17 +33,14 @@ export class StarRatingComponent {
   }
 
   starSelected(num: number): void {
-    this.ratingServiceService
-      .setStarRating(
-        this.currentSong().songId,
-        this.rating(),
-        num,
-        this.currentSong().parentId,
-      )
-      .subscribe({
-        next: () => this.rating.set(num),
-        error: (err) => console.log('error star selected : ' + err),
-      });
+    const item = this.currentSong();
+    const request = item.songId?.objectID
+      ? this.ratingServiceService.setStarRating(item.songId, this.rating(), num, item.parentId)
+      : this.ratingServiceService.setResourceRating(item.objectID, this.rating(), num, item.parentId);
+    request.subscribe({
+      next: () => this.rating.set(num),
+      error: (err) => console.log('error star selected : ' + err),
+    });
   }
 
   isActive(num: number): string {
