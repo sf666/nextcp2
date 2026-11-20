@@ -1,12 +1,14 @@
 import { SpinnerService } from './service/spinner.service';
 import { LayoutService } from './service/layout.service';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { FooterComponent } from './mediarenderer/footer/footer.component';
 import { LocalVideoPlayerComponent } from './mediaserver/local-video-player/local-video-player.component';
 import { SidebarComponent } from './view/sidebar/sidebar.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { RouterOutlet } from '@angular/router';
 import { AppVisibilityService } from './service/app-visibility/app-visibility-service.service';
+import { LocalVideoPlayerService } from './service/local-video-player.service';
 import { supportsBackdropFilter } from './util/browser-capabilities';
 
 @Component({
@@ -14,9 +16,9 @@ import { supportsBackdropFilter } from './util/browser-capabilities';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     RouterOutlet,
+    NgTemplateOutlet,
     MatProgressSpinner,
     SidebarComponent,
     FooterComponent,
@@ -26,6 +28,7 @@ import { supportsBackdropFilter } from './util/browser-capabilities';
 export class AppComponent {
   layoutService = inject(LayoutService);
   spinnerService = inject(SpinnerService);
+  protected readonly videoPlayer = inject(LocalVideoPlayerService);
 
   title = 'nextCP/2';
   // AppVisibilityService instance is injected to track app visibility and trigger route reloads when the app becomes visible again

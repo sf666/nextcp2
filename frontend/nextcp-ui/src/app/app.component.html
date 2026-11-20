@@ -32,7 +32,32 @@
 </div>
 
 <!-- Above the footer: a video fills the screen and the footer must not sit on top of it. -->
-<local-video-player></local-video-player>
+@if (videoPlayer.currentItem(); as item) {
+  <ng-template #videoLoadState let-loading>
+    <div class="fixed inset-0 z-2000 flex flex-col bg-black/95 text-white"
+         role="dialog" [attr.aria-label]="item.title" (keydown.escape)="videoPlayer.close()">
+      <div class="flex items-center gap-4 px-4 py-2">
+        <span class="grow truncate text-lg">{{item.title}}</span>
+        <button type="button" class="shrink-0 px-3 py-1 text-2xl leading-none"
+          aria-label="close" (click)="videoPlayer.close()">&times;</button>
+      </div>
+      <div class="grid grow place-items-center">
+        @if (loading) {
+          <mat-spinner [diameter]="50" aria-label="Loading video player"></mat-spinner>
+        } @else {
+          <p role="alert">Could not load the video player.</p>
+        }
+      </div>
+    </div>
+  </ng-template>
+  @defer (on immediate) {
+    <local-video-player></local-video-player>
+  } @loading (after 150ms) {
+    <ng-container [ngTemplateOutlet]="videoLoadState" [ngTemplateOutletContext]="{$implicit: true}"></ng-container>
+  } @error {
+    <ng-container [ngTemplateOutlet]="videoLoadState"></ng-container>
+  }
+}
 
 @if (layoutService.footerVisible()) {
 <renderer-footer class="z-1000"></renderer-footer>
