@@ -7,14 +7,18 @@ import {
 } from './server-playlist.service';
 import {
   auditTime,
+  catchError,
+  concatMap,
   map,
   mergeMap,
   Observable,
+  of,
   range,
   shareReplay,
   Subject,
   take,
   takeUntil,
+  toArray,
 } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DtoGeneratorService } from './../util/dto-generator.service';
@@ -60,6 +64,12 @@ export interface BrowseCrumb {
  * shares are rarely nested this far.
  */
 const ANCESTOR_LOOKUP_LIMIT = 12;
+
+// Keep the first page responsive and respect custom page sizes. With the default
+// configuration UMS can serve larger background blocks without repeated browse metadata.
+const DEFAULT_UMS_PAGE_SIZE = 100;
+const UMS_BACKGROUND_PAGE_SIZE = 400;
+const UMS_BACKGROUND_MIN_ITEMS = DEFAULT_UMS_PAGE_SIZE + 2 * UMS_BACKGROUND_PAGE_SIZE;
 
 /**
  * Object id of the synthetic container that holds search hits. It exists only in
@@ -496,6 +506,7 @@ export class ContentDirectoryService {
   private TURN_PAGE_AFTER = 60;
   private MAX_REQUEST_ITEMS = 200;
   private PAGE_REQUEST_CONCURRENCY = 4;
+  private readonly UMS_BACKGROUND_CONCURRENCY = 2;
   private turn_page_id: string | undefined;
   private browseRequestAbort$ = new Subject<void>();
   private searchRequestAbort$ = new Subject<void>();
@@ -967,20 +978,24 @@ export class ContentDirectoryService {
     this.searchRequestAbort$.next();
     this.searchContext.set(undefined);
     const browseStartedAt = performance.now();
+    const pageSize = this.MAX_REQUEST_ITEMS;
+    const server = this.deviceService.selectedMediaServerDevice();
+    const canBatchUmsBrowse = pageSize === DEFAULT_UMS_PAGE_SIZE &&
+      server.udn === browseRequestDto.mediaServerUDN && server.extendedApi;
+    const readPage = (start: number, count: number, label: string) =>
+      this.browseThrottle.schedule(
+        () => this.httpService.post<ContainerItemDto>(this.baseUri, '/browseChildren', {
+          ...browseRequestDto,
+          start,
+          count,
+        }),
+        label,
+      );
 
     // Shared, because this method both subscribes below (to render the result and drive paging)
     // and hands the same stream to its caller. Cold, every caller that subscribed sent the
     // identical request a second time.
-    const firstPage$ = this.browseThrottle
-      .schedule(
-        () =>
-          this.httpService.post<ContainerItemDto>(this.baseUri, '/browseChildren', {
-            ...browseRequestDto,
-            start: 0,
-            count: this.MAX_REQUEST_ITEMS,
-          }),
-        'loading folder',
-      )
+    const firstPage$ = readPage(0, pageSize, 'loading folder')
       .pipe(shareReplay({ bufferSize: 1, refCount: false }));
 
     firstPage$
@@ -1025,7 +1040,10 @@ export class ContentDirectoryService {
           );
 
           const totalItems = firstPage.totalMatches;
-          const totalPages = Math.ceil(totalItems / this.MAX_REQUEST_ITEMS);
+          const batchUmsBrowse = canBatchUmsBrowse && totalItems >= UMS_BACKGROUND_MIN_ITEMS;
+          const backgroundPageSize = batchUmsBrowse ? UMS_BACKGROUND_PAGE_SIZE : pageSize;
+          const remainingItems = Math.max(0, totalItems - pageSize);
+          const totalPages = 1 + Math.ceil(remainingItems / backgroundPageSize);
           console.log(
             'total items: ' + totalItems + ', total pages: ' + totalPages,
           );
@@ -1044,41 +1062,55 @@ export class ContentDirectoryService {
             this.id + ' : loading ' + (totalPages - 1) + ' remaining pages',
           );
 
-          const bufferedPages = new Map<number, ContainerItemDto>();
+          const bufferedPages = new Map<number, ContainerItemDto[]>();
           let nextPageToApply = 1;
+          let largeBlocksSupported = batchUmsBrowse;
+
+          const readBackgroundPage = (page: number): Observable<ContainerItemDto[]> => {
+            const start = pageSize + (page - 1) * backgroundPageSize;
+            const count = Math.min(backgroundPageSize, totalItems - start);
+            const label = 'loading page ' + (page + 1);
+            if (count <= pageSize) {
+              return readPage(start, pageSize, label).pipe(take(1), map((result) => [result]));
+            }
+            const readStandardPages = () => range(0, Math.ceil(count / pageSize)).pipe(
+              concatMap((part) => readPage(start + part * pageSize, pageSize, label).pipe(take(1))),
+              toArray(),
+            );
+            if (!largeBlocksSupported) {
+              return readStandardPages();
+            }
+            return readPage(start, count, label).pipe(
+              take(1),
+              catchError(() => of(null)),
+              concatMap((result) => {
+                if (result?.totalMatches === totalItems && this.getPageItemCount(result) === count) {
+                  return of([result]);
+                }
+                // Some server versions may cap a browse response. Read the same range
+                // at the standard page size before applying any of its entries.
+                largeBlocksSupported = false;
+                return readStandardPages();
+              }),
+            );
+          };
 
           range(1, totalPages - 1)
             .pipe(
               mergeMap(
-                (page) =>
-                  this.browseThrottle
-                    .schedule(
-                      () =>
-                        this.httpService.post<ContainerItemDto>(
-                          this.baseUri,
-                          '/browseChildren',
-                          {
-                            ...browseRequestDto,
-                            start: page * this.MAX_REQUEST_ITEMS,
-                            count: this.MAX_REQUEST_ITEMS,
-                          },
-                        ),
-                      'loading page ' + (page + 1),
-                    )
-                    .pipe(
-                      take(1),
-                      map((data) => ({ page, data })),
-                    ),
-                this.PAGE_REQUEST_CONCURRENCY,
+                (page) => readBackgroundPage(page).pipe(map((result) => ({ page, result }))),
+                batchUmsBrowse ? this.UMS_BACKGROUND_CONCURRENCY : this.PAGE_REQUEST_CONCURRENCY,
               ),
               takeUntil(this.browseRequestAbort$),
               takeUntilDestroyed(this.destroyRef),
             )
             .subscribe({
-              next: ({ page, data }) => {
-                bufferedPages.set(page, data);
+              next: ({ page, result }) => {
+                bufferedPages.set(page, result);
                 while (bufferedPages.has(nextPageToApply)) {
-                  applyPage(bufferedPages.get(nextPageToApply)!, false);
+                  for (const data of bufferedPages.get(nextPageToApply)!) {
+                    applyPage(data, false);
+                  }
                   bufferedPages.delete(nextPageToApply);
                   nextPageToApply++;
                 }

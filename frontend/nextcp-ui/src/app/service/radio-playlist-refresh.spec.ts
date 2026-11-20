@@ -3,6 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { Subject } from 'rxjs';
 import { DtoGeneratorService } from '../util/dto-generator.service';
+import { filterMusicItems } from '../util/browse-filter';
 import { CdsUpdateService } from './cds-update.service';
 import { ConfigurationService } from './configuration.service';
 import { ContentDirectoryService } from './content-directory.service';
@@ -21,6 +22,7 @@ describe('Radio playlist refresh', () => {
   let dtos: DtoGeneratorService;
   let http: HttpTestingController;
   let serverUpdates: Subject<ContainerUpdateIdsDto>;
+  let extendedApi: boolean;
 
   function playlist(version: number, stationIds: string[] = ['existing']) {
     return {
@@ -44,14 +46,15 @@ describe('Radio playlist refresh', () => {
 
   beforeEach(() => {
     vi.useFakeTimers();
+    extendedApi = false;
     serverUpdates = new Subject();
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
         ContentDirectoryService,
-        { provide: ConfigurationService, useValue: { applicationConfig: {} } },
-        { provide: DeviceService, useValue: { selectedMediaServerDevice: () => ({ udn: 'ums' }) } },
+        { provide: ConfigurationService, useValue: { applicationConfig: { itemsPerPage: 100 } } },
+        { provide: DeviceService, useValue: { selectedMediaServerDevice: () => ({ udn: 'ums', extendedApi }) } },
         { provide: ServerPlaylistService, useValue: { playlistStructureChanged$: new Subject() } },
         { provide: SseService, useValue: { mediaServerContainerUpdateIds$: serverUpdates } },
         { provide: GenericResultService, useValue: {} },
@@ -68,6 +71,79 @@ describe('Radio playlist refresh', () => {
     http.verify();
     TestBed.resetTestingModule();
     vi.useRealTimers();
+  });
+
+  function page(start: number, count: number, total: number) {
+    const result = playlist(1, Array.from({ length: count }, (_, index) => String(start + index)));
+    result.totalMatches = total;
+    for (const item of result.items) {
+      item.title = 'Station ' + item.objectID;
+      item.genre = 'Jazz';
+      item.rating = 5;
+    }
+    return result;
+  }
+
+  function expectPage(start: number, count: number) {
+    return http.expectOne((request) => request.url === browseUrl &&
+      request.body.start === start && request.body.count === count);
+  }
+
+  it('applies UMS blocks in order and includes the final block in combined filters', () => {
+    extendedApi = true;
+    cds.browseChildren(playlistId, '', 'ums');
+    expectPage(0, 100).flush(page(0, 100, 1050));
+    expectPage(500, 400).flush(page(500, 400, 1050));
+    expectPage(900, 150).flush(page(900, 150, 1050));
+    expect(cds.musicTracks_()).toHaveLength(100);
+    expectPage(100, 400).flush(page(100, 400, 1050));
+
+    expect(cds.musicTracks_().map((item) => item.objectID))
+      .toEqual(Array.from({ length: 1050 }, (_, index) => String(index)));
+    const filtered = filterMusicItems(cds.musicTracks_(), 'station 1049', ['jazz'], '5');
+    expect(filtered.map((item) => item.objectID)).toEqual(['1049']);
+  });
+
+  it('retries an incomplete UMS block at the original page size', () => {
+    extendedApi = true;
+    cds.browseChildren(playlistId, '', 'ums');
+    expectPage(0, 100).flush(page(0, 100, 1050));
+    expectPage(100, 400).flush(page(100, 100, 1050));
+    expectPage(500, 400).flush(page(500, 400, 1050));
+    for (const start of [100, 200, 300, 400, 900, 1000]) {
+      expectPage(start, 100).flush(page(start, Math.min(100, 1050 - start), 1050));
+    }
+
+    expect(cds.musicTracks_().map((item) => item.objectID))
+      .toEqual(Array.from({ length: 1050 }, (_, index) => String(index)));
+  });
+
+  it.each([
+    { extended: true, total: 250 },
+    { extended: false, total: 950 },
+  ])('keeps the standard page size for $total entries with extendedApi=$extended', ({ extended, total }) => {
+    extendedApi = extended;
+    cds.browseChildren(playlistId, '', 'ums');
+    for (let start = 0; start < total; start += 100) {
+      expectPage(start, 100).flush(page(start, Math.min(100, total - start), total));
+    }
+    expect(cds.musicTracks_()).toHaveLength(total);
+  });
+
+  it('keeps an open listing intact until its UMS refresh is complete', () => {
+    extendedApi = true;
+    cds.updateContainer(page(0, 949, 949));
+    const original = cds.musicTracks_();
+    cds.refreshCurrentContainer();
+    expectPage(0, 100).flush(page(0, 100, 950));
+    expectPage(500, 400).flush(page(500, 400, 950));
+    expectPage(900, 100).flush(page(900, 50, 950));
+    expect(cds.musicTracks_()).toBe(original);
+    expectPage(100, 400).flush(page(100, 400, 950));
+
+    expect(cds.musicTracks_()).toHaveLength(950);
+    expect(cds.musicTracks_()[948]).toBe(original[948]);
+    expect(cds.musicTracks_().at(-1)?.objectID).toBe('949');
   });
 
   it('picks up a late station with one refresh per server burst and keeps the existing artwork', () => {
