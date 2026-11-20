@@ -56,18 +56,12 @@ export class ItemTileComponent {
   allTracksSameDisc = computed(() =>
     this.checkAllTracksSameDisc(this.allMusicTracks()),
   );
+  // Search hits have their own covers even if they all come from one album.
   allTracksSameAlbum = computed(() =>
+    !this.contentDirectoryService().isSearchResultDisplayed() &&
     this.checkAllTracksSameAlbum(this.allMusicTracks()),
   );
   musicTracks = computed(() => this.filteredMusicTracks(this.allMusicTracks()));
-
-  // True when the current view shows global "show all" search results.
-  // Disc labels must not be rendered for search results (mixed albums/discs).
-  isSearchResult = computed(
-    () =>
-      this.contentDirectoryService().currentContainerList().currentContainer
-        ?.id === 'search_result',
-  );
 
   protected readonly windowed = computed(() => {
     const listing = this.contentDirectoryService().currentContainerList();
@@ -75,7 +69,7 @@ export class ItemTileComponent {
   });
 
   protected readonly trackRows = computed(() => {
-    const withDiscs = this.allTracksSameAlbum() && !this.allTracksSameDisc() && !this.isSearchResult();
+    const withDiscs = this.allTracksSameAlbum() && !this.allTracksSameDisc();
     const rows: TrackRow[] = [];
     let lastDisc = '';
     for (const item of this.musicTracks()) {
