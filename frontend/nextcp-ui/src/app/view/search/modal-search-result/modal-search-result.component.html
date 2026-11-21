@@ -1,6 +1,26 @@
 <!-- Global search service visible if text is entered in the search box -->
 <!-- ------------------------------------------------------------------ -->
 
+<ng-template #containerResult let-item let-showArtist="showArtist">
+  <div class="search-result flex justify-between">
+    <div class="search-row flex flex-1 min-w-0" (click)="globalSearchService.containerSelected(item)">
+      <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
+      <div class="row-text">
+        <div class="title">{{item.title}}</div>
+        @if (showArtist) {
+          <div class="artist">from {{item.artist}}</div>
+        }
+      </div>
+    </div>
+    @if (canOpenContainerOptions(item)) {
+      <button type="button" class="result-options" (click)="showContainerPopup($event, item)"
+              [attr.aria-label]="'Options for ' + item.title">
+        <span class="material-symbols-outlined text-white text-2xl" aria-hidden="true">more_vert</span>
+      </button>
+    }
+  </div>
+</ng-template>
+
 <div class="search-container searchBoxWidth ps-3 pe-3">
 
   <!-- First section : Title matches -->
@@ -25,9 +45,10 @@
                 <div class="artist">from {{item.artistName}}</div>
               </div>
             </div>
-            <div class="song-options" (click)="showSongPopup($event, item)">
-                <span class="material-symbols-outlined text-white text-2xl">more_vert</span>
-            </div>
+            <button type="button" class="result-options" (click)="showSongPopup($event, item)"
+                    [attr.aria-label]="'Options for ' + item.title">
+              <span class="material-symbols-outlined text-white text-2xl" aria-hidden="true">more_vert</span>
+            </button>
           </div>
         }
       </div>
@@ -46,14 +67,8 @@
     @if (globalSearchService.quickSearchResultList().albumItems?.length > 0) {
       <div>
         @for (item of globalSearchService.quickSearchResultList().albumItems; track item.id) {
-          <div
-            class="search-result search-row flex" (click)="globalSearchService.containerSelected(item)">
-            <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
-            <div class="row-text">
-              <div class="title">{{item.title}}</div>
-              <div class="artist">from {{item.artist}}</div>
-            </div>
-          </div>
+          <ng-container [ngTemplateOutlet]="containerResult"
+                        [ngTemplateOutletContext]="{ $implicit: item, showArtist: true }"></ng-container>
         }
       </div>
     } @else {
@@ -70,13 +85,8 @@
     @if (globalSearchService.quickSearchResultList().playlistItems?.length > 0) {
       <div>
         @for (item of globalSearchService.quickSearchResultList().playlistItems; track item.id) {
-          <div
-            class="search-result search-row flex" (click)="globalSearchService.containerSelected(item)">
-            <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
-            <div class="row-text">
-              <div class="title">{{item.title}}</div>
-            </div>
-          </div>
+          <ng-container [ngTemplateOutlet]="containerResult"
+                        [ngTemplateOutletContext]="{ $implicit: item }"></ng-container>
         }
       </div>
     } @else {
@@ -93,13 +103,8 @@
     @if (globalSearchService.quickSearchResultList().artistItems?.length > 0) {
       <div class="search-row">
         @for (item of globalSearchService.quickSearchResultList().artistItems; track item.id) {
-          <div
-            class="search-result search-row flex" (click)="globalSearchService.containerSelected(item)">
-            <img src="{{item.albumartUri}}" class="cropImg searchImgHeight align-self-center" alt="">
-            <div class="row-text">
-              <div class="title">{{item.title}}</div>
-            </div>
-          </div>
+          <ng-container [ngTemplateOutlet]="containerResult"
+                        [ngTemplateOutletContext]="{ $implicit: item }"></ng-container>
         }
       </div>
     } @else {

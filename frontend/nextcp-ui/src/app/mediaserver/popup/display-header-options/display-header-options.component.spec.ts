@@ -9,7 +9,8 @@ describe('container playlist menu', () => {
     ['object.container.album.musicAlbum', '0', 'ums', true, false],
     ['object.container.album.musicAlbum', 'album', 'other', true, false],
     ['object.container.album.musicAlbum', 'album', 'ums', false, false],
-    ['object.container.person.musicArtist', 'artist', 'ums', true, false],
+    ['object.container.person.musicArtist', 'artist', 'ums', true, true],
+    ['object.container.person', 'person', 'ums', false, false],
   ])('checks playlist support for %s', (objectClass, id, udn, extendedApi, expected) => {
     const menu = Object.create(DisplayHeaderOptionsComponent.prototype) as DisplayHeaderOptionsComponent;
     Object.assign(menu, {
@@ -26,7 +27,7 @@ describe('container playlist menu', () => {
     Object.assign(menu, {
       currentContainer: {
         id: 'artist-link',
-        objectClass: 'object.container.person.musicArtist',
+        objectClass: 'object.container.genre.musicGenre',
         mediaServerUDN: 'ums',
       },
       parentObjectClass: 'object.container.playlistContainer',

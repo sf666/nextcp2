@@ -8,7 +8,12 @@ import { DtoGeneratorService } from 'src/app/util/dto-generator.service';
 import { AddPlaylistComponent } from './add-playlist.component';
 
 describe('Add a container as a playlist entry', () => {
-  it.each(['object.container.playlistContainer', 'object.container.storageFolder', 'object.container.album.musicAlbum'])(
+  it.each([
+    'object.container.playlistContainer',
+    'object.container.storageFolder',
+    'object.container.album.musicAlbum',
+    'object.container.person.musicArtist',
+  ])(
     'sends the source object ID once for %s',
     (objectClass) => {
       const source = {

@@ -29,6 +29,19 @@ import { DefaultPlaylistService } from '../defaut-playlists/default-playlist.ser
 /** Menu width in px. Keep in step with `.dialog-root` in the component's SCSS. */
 const MENU_WIDTH = 320;
 
+export interface DisplayHeaderOptionsDialogData {
+  trigger: ElementRef;
+  currentContainer: ContainerDto;
+  addToPlaylistOutput?: OutputEmitterRef<ContainerDto>;
+  showAddToPlaylist?: boolean;
+  canLike: boolean;
+  isLiked: boolean;
+  childFolderCount: number;
+  parentObjectClass?: string;
+  /** The listing to refresh after a change. Defaults to the container itself. */
+  listingContainerId?: string;
+}
+
 @Component({
   selector: 'app-display-header-options',
   imports: [MatIconModule, MatButtonModule],
@@ -48,7 +61,7 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   readonly inputDialog = inject(MatDialog);
 
   private readonly _matDialogRef: MatDialogRef<DisplayHeaderOptionsComponent>;
-  private addToPlaylistOutput: OutputEmitterRef<ContainerDto>;
+  private addToPlaylistOutput?: OutputEmitterRef<ContainerDto>;
   private currentContainer: ContainerDto;
   /** The container whose listing this menu was opened from - see the data below. */
   private listingContainerId: string;
@@ -67,26 +80,11 @@ export class DisplayHeaderOptionsComponent implements OnInit {
   constructor() {
     const _matDialogRef =
       inject<MatDialogRef<DisplayHeaderOptionsComponent>>(MatDialogRef);
-    const data = inject<{
-      trigger: ElementRef;
-      currentContainer: ContainerDto;
-      addToPlaylistOutput: OutputEmitterRef<ContainerDto>;
-      showAddToPlaylist?: boolean;
-      canLike: boolean;
-      isLiked: boolean;
-      childFolderCount: number;
-      parentObjectClass?: string;
-      /**
-       * The container that is on screen. The header opens this menu on the container it is the
-       * header of, a tile on one that is merely listed there - and what has to be re-read after a
-       * change is the listing, not the entry. Defaults to the container itself.
-       */
-      listingContainerId?: string;
-    }>(MAT_DIALOG_DATA);
+    const data = inject<DisplayHeaderOptionsDialogData>(MAT_DIALOG_DATA);
 
     this._matDialogRef = _matDialogRef;
     this.addToPlaylistOutput = data.addToPlaylistOutput;
-    this.allowContainerQueue = data.showAddToPlaylist ?? true;
+    this.allowContainerQueue = !!data.addToPlaylistOutput && (data.showAddToPlaylist ?? true);
     this.currentContainer = data.currentContainer;
     this.listingContainerId =
       data.listingContainerId ?? data.currentContainer.id;
@@ -114,12 +112,15 @@ export class DisplayHeaderOptionsComponent implements OnInit {
     if (this.isPlaylist()) {
       this.playlistService.addPlaylistToQueue(this.currentContainer);
     } else {
-      this.addToPlaylistOutput.emit(this.currentContainer);
+      this.addToPlaylistOutput?.emit(this.currentContainer);
     }
     this.close();
   }
 
   openAddToPlaylistDialog(): void {
+    if (!this.showAddToServerPlaylist()) {
+      return;
+    }
     this._matDialogRef.afterClosed().subscribe(() => {
       this.defaultPlaylistService.openContainerToPlaylistDialog(this.currentContainer);
     });
@@ -159,7 +160,8 @@ export class DisplayHeaderOptionsComponent implements OnInit {
 
   showAddToServerPlaylist(): boolean {
     return (
-      (this.isPlaylist() || this.isFolder() || this.isAlbum()) &&
+      (this.isPlaylist() || this.isFolder() || this.isAlbum() ||
+        this.currentContainer.objectClass.startsWith('object.container.person')) &&
       this.supportsServerPlaylist()
     );
   }
